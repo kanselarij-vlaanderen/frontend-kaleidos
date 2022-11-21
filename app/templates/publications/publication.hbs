@@ -1,0 +1,55 @@
+{{page-title
+  (concat (t "publication-flow") " " this.model.identification.idName)
+}}
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
+          <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced auk-u-mb-2">
+            <Publications::EditablePublicationStatusPill
+              @publicationFlow={{this.model}}
+              @onChange={{this.refreshRoute}}
+            />
+            <span class="auk-overline auk-u-text-muted" data-test-route-publications-publication-header-number>
+              {{uppercase (t "publication-flow")}}
+              -
+              {{#if this.isViaCouncilOfMinisters}}
+                {{uppercase (t "via-cabinet")}}
+              {{else}}
+                {{uppercase (t "not-via-cabinet")}}
+              {{/if}}
+              -
+              {{uppercase this.model.identification.idName}}
+            </span>
+          </span>
+          <Auk::AbbreviatedText
+            @text={{or
+            this.model.shortTitle
+            this.model.longTitle
+          }}
+            @maxLength={{150}}
+            as |abbreviatedText|>
+            <div
+              data-test-route-publications-publication-header-short-title
+              class="auk-toolbar-complex__title"
+            >
+              {{abbreviatedText}}
+            </div>
+          </Auk::AbbreviatedText>
+          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<div class="auk-panel-layout">
+  <div class="auk-panel-layout__main-content">
+    <div class="auk-scroll-wrapper">
+      <div class="auk-scroll-wrapper__body">
+        {{outlet}}
+      </div>
+    </div>
+  </div>
+</div>

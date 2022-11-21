@@ -28,16 +28,11 @@ export default Component.extend({
       .focus();
   },
 
-  showIcon: computed('buttonType', function() {
+  showDestructiveIcon: computed('buttonType', function() {
     return this.buttonType !== 'warning';
   }),
 
-  buttonSkin: computed('buttonType', function() {
-    if (this.buttonType === 'danger') {
-      return 'danger-primary';
-    }
-    return 'primary';
-  }),
+  isAlertButton: computed.equal('buttonType', 'danger'),
 
   keyDown(event) {
     if (event.key === 'Escape') {

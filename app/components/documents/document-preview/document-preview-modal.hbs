@@ -7,13 +7,21 @@
   <:title>
     <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       {{this.selectedVersion.name}}
-      <AuLink href={{this.selectedVersion.file.namedDownloadLink}} @skin="button-naked" @icon="download" @iconAlignment="left" download>Downloaden</AuLink>
+      {{#if this.selectedVersion.file}}
+        <AuLinkExternal
+          {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
+          @icon="download"
+          @iconAlignment="left"
+          href={{this.selectedVersion.file.namedDownloadLink}}
+          download
+        >{{t "download-2"}}</AuLinkExternal>
+      {{/if}}
     </span>
   </:title>
   <:body>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
-        <Documents::DocumentView @file={{await this.selectedVersion.file}} />
+        <Documents::DocumentView @file={{this.selectedVersion.file}} />
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
@@ -21,10 +29,11 @@
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
-          @transitionBack={{@onClose}}
           @onSelectVersion={{this.setSelectedVersion}}
+          @transitionBack={{@onClose}}
           @markForSignature={{@markForSignature}}
           @unmarkForSignature={{@unmarkForSignature}}
+          @didDeletePiece={{@didDeletePiece}}
         />
       </div>
     </div>

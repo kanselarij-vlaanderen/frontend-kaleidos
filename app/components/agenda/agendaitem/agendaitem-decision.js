@@ -5,19 +5,21 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+/**
+ * @argument agendaitem
+ * @argument decisionActivity
+ */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
   @service store;
+  @service pieceAccessLevelService;
 
   @tracked report;
   @tracked previousReport;
 
   @tracked isEditing = false;
-  @tracked isVerifyingDelete = null;
   @tracked isAddingReport = false;
-  @tracked treatmentToDelete = null;
 
-  @tracked defaultAccessLevel;
   @tracked decisionDocType;
 
   constructor() {
@@ -28,8 +30,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
-    this.decisionDocType = yield this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION);
+    this.decisionDocType = yield this.store.findRecordByUri('concept', CONSTANTS.DOCUMENT_TYPES.DECISION);
   }
 
   @action
@@ -42,16 +43,22 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isAddingReport = !this.isAddingReport;
   }
 
-  @action
-  promptDeleteTreatment(treatment) {
-    this.treatmentToDelete = treatment;
-    this.isVerifyingDelete = true;
+  @task
+  *loadReport() {
+    this.report = yield this.args.decisionActivity.report;
+    this.previousReport = yield this.report?.previousPiece;
   }
 
   @task
-  *loadReport() {
-    this.report = yield this.args.treatment.report;
-    this.previousReport = yield this.report?.previousPiece;
+  *updateAgendaitemPiecesAccessLevels() {
+    const decisionResultCode = yield this.args.decisionActivity.decisionResultCode;
+    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCode.uri)) {
+      const pieces = this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+      }
+    }
+    this.toggleEdit();
   }
 
   @action
@@ -61,14 +68,24 @@ export default class AgendaitemDecisionComponent extends Component {
       created: now,
       type: this.decisionDocType,
     });
+
+    const subcase = await this.args.decisionActivity.subcase;
+    const subcaseIsConfidential = subcase?.confidential;
+
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept', subcaseIsConfidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
+
     await documentContainer.save();
     piece.setProperties({
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: defaultAccessLevel,
       documentContainer,
     });
     await piece.save();
-    this.args.treatment.report = piece;
-    await this.args.treatment.save();
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
   }
@@ -76,43 +93,12 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async attachNewReportVersion(piece) {
     await piece.save();
-    this.args.treatment.report = piece;
-    await this.args.treatment.save();
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
     // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
     // when deleting the full container right after adding a new report version without the version history open.
     const documentContainer = await piece.documentContainer;
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
-  }
-
-  @action
-  // eslint-disable-next-line no-unused-vars
-  async attachPreviousReportVersion(piece) {
-    /*
-      the deleted piece comes in from params, but not used here because we tracked the previous version.
-      Note: this used to be a task but something kept going wrong.
-      Trying to get piece.documentContainer after piece was destroyed kept failing after an ember upgrade:
-      "Cannot create a new tag for '<(unknown):ember890>' after it has been destroyed"
-    */
-    if (this.previousReport) {
-      this.args.treatment.report = this.previousReport;
-      await this.args.treatment.save();
-    } // else no previous version available. Treatment no longer has a report
-    await this.loadReport.perform();
-  }
-
-  @action
-  async deleteTreatment() {
-    await this.treatmentToDelete.destroyRecord();
-    if (this.args.onDeleteTreatment) {
-      await this.args.onDeleteTreatment(this.treatmentToDelete);
-    }
-    this.isVerifyingDelete = false;
-  }
-
-  @action
-  cancel() {
-    this.treatmentToDelete = null;
-    this.isVerifyingDelete = false;
   }
 }

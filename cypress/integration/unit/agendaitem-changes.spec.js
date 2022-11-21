@@ -50,7 +50,7 @@ context('Agendaitem changes tests', () => {
   it('should add an agendaitem and highlight it as changed', () => {
     cy.visitAgendaWithLink(agendaURL);
     // when toggling show changes  the agendaitem added since current agenda should show
-    cy.addAgendaitemToAgenda(subcaseTitle2, false);
+    cy.addAgendaitemToAgenda(subcaseTitle2);
     cy.setFormalOkOnItemWithIndex(2); // punt 3
     cy.toggleShowChanges();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 3);
@@ -60,7 +60,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add a piece to an item and highlight it as changed', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda'); // switch from agenda B to ontwerpagenda C
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
@@ -71,12 +71,13 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
-    cy.openCase(caseTitle);
+    const caseLink = 'dossiers/E14FB4CE-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers';
+    cy.visit(caseLink);
     cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show
-    cy.addAgendaitemToAgenda(subcaseTitle3, false);
+    cy.addAgendaitemToAgenda(subcaseTitle3);
     cy.setFormalOkOnItemWithIndex(4);
     cy.toggleShowChanges();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
@@ -85,7 +86,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add a document version to a remark and highlight it as changed', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addDocumentsToAgendaitem(subcaseTitle3, files);
@@ -96,7 +97,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should add a document to the approval (verslag) and highlight it as changed', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
     // TODO-command new command to add documentsToApprovals (no subcase)
@@ -111,7 +112,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should verify that only changes are shown by approving with no changes', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.approveDesignAgenda();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 5);
@@ -120,11 +121,11 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should check the printable version of the agenda', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {
       timeout: 80000,
@@ -225,7 +226,7 @@ context('Agendaitem changes tests', () => {
   });
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     const ministerTitle = 'Minister-president van de Vlaamse Regering';
     cy.changeSelectedAgenda('Ontwerpagenda');
     // TODO-users CHECK WITH USERS, should there be a mandatee header between approval and first item without mandatee
@@ -248,7 +249,7 @@ context('Agendaitem changes tests', () => {
     const title = 'Cypress test dossier 1 test stap 3';
     const visibleTitle = 'Cypress test dossier 1 test stap 2';
     const approvalTitle = 'verslag';
-    cy.visit(agendaURL);
+    cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.get(agenda.agendaOverview.notesSectionTitle).should('be.visible');
     cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)

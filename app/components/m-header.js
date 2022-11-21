@@ -1,7 +1,6 @@
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 
@@ -29,10 +28,6 @@ export default class MHeader extends Component {
     }
   }
 
-  get isShownPublications() {
-    return this.currentSession.may('manage-publication-flows');
-  }
-
   get isShownSignatureFolder() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
@@ -42,12 +37,5 @@ export default class MHeader extends Component {
   @action
   logout() {
     this.session.invalidate();
-  }
-
-  @tracked showSwitch = false;
-
-  @action
-  switch() {
-    this.showSwitch = !this.showSwitch;
   }
 }

@@ -5,7 +5,7 @@
       this.loadPieces.isRunning
       this.loadCase.isRunning
       this.loadMandatees.isRunning
-      this.loadAgendaItemTreatment.isRunning
+      this.loadDecisionActivity.isRunning
     }}>
       {{!-- template-lint-disable table-groups --}}
       <table class="auk-table auk-table--styled auk-table--bordered">
@@ -52,7 +52,7 @@
 {{#if this.isOpenNewPublicationModal}}
   <Publications::NewPublicationModal
     @agendaitem={{@agendaitem}}
-    @agendaItemTreatment={{this.agendaItemTreatment}}
+    @decisionActivity={{this.decisionActivity}}
     @onSave={{perform this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />
 {{/if}}

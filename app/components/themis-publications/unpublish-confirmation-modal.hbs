@@ -4,19 +4,29 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    {{#if @newsletter}}
-    <p>{{@newsletter}}</p>
-    {{else}}
-    <p>Bent u zeker dat u de publicatie van de documenten wil terugtrekken?</p>
-    {{/if}}
+    <fieldset>
+      <legend class="auk-label">
+        {{t "unpublish-publication-scope-selection"}}
+      </legend>
+      <Auk::RadioList as |List|>
+        {{#each this.options as |option|}}
+          <List.Radio
+            @label={{option.label}}
+            @checked={{eq this.selectedOption.value option.value}}
+            value={{option.value}}
+            {{on "change" this.selectOption}}
+          />
+        {{/each}}
+      </Auk::RadioList>
+    </fieldset>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}
       {{on "click" (perform this.confirmUnpublish)}}
     >
       {{t "retract-from-public"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

@@ -1,0 +1,25 @@
+<div class="auk-u-m-8 auk-o-flex auk-o-flex--wrap">
+  <div class="auk-u-m-2">
+    <AuLink
+      data-test-route-settings-overview-manage-emails
+      @skin="button-secondary"
+      @icon="pencil"
+      @route="settings.emails"
+    >
+      {{t "manage-emails"}}
+    </AuLink>
+  </div>
+  {{#if (user-may "manage-alerts")}}
+    <div class="auk-u-m-2">
+      <AuLink
+        data-test-route-settings-overview-manage-alerts
+        @skin="button-secondary"
+        @icon="pencil"
+        @route="settings.system-alerts"
+      >
+        {{t "manage-alerts"}}
+      </AuLink>
+    </div>
+  {{/if}}
+</div>
+{{outlet}}

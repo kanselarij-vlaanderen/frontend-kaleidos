@@ -3,11 +3,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -17,77 +18,49 @@ export default class DocumentsDocumentCardComponent extends Component {
    *
    * @argument piece: a Piece object
    * @argument documentContainer: a DocumentContainer object
-   * @argument hideNewerVersions: boolean indicating if pieces newer than @piece should be hidden in the history
-   * @argument didDeletePiece: action triggered when a piece has been deleted
    * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
+   * @argument bordered: determines if the card has a border
    */
   @service store;
   @service currentSession;
   @service fileService;
   @service toaster;
   @service intl;
+  @service pieceAccessLevelService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
 
   @tracked piece;
-  @tracked accessLevel;
   @tracked documentContainer;
+  @tracked isDraftAccessLevel;
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
   @tracked newPiece;
-  @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
   @tracked pieces = A();
-
-  @tracked hasReplacePDF;
-  @tracked hasReplaceDOCX;
-
-  @action
-  replacePDF() {
-    this.hasReplacePDF = !this.hasReplacePDF;
-  }
-
-  @action
-  replaceDOCX() {
-    this.hasReplaceDOCX = !this.hasReplaceDOCX;
-  }
 
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
+    this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
-  get userMayManagePublicationFlows() {
-    return this.currentSession.may('manage-publication-flows');
+  get bordered() {
+    return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
-      'access-level',
+      'concept',
       CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
-  }
-
-  @task
-  *loadSignatureRelatedData() {
-    if (this.args.hasMarkForSignature) {
-      this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    }
-  }
-
-  @task
-  *loadPublicationFlowRelatedData() {
-    if (this.userMayManagePublicationFlows) {
-      const publicationFlow = yield this.piece.publicationFlow;
-      yield publicationFlow?.identification;
-    }
   }
 
   @task
@@ -98,32 +71,57 @@ export default class DocumentsDocumentCardComponent extends Component {
         include: 'document-container,document-container.type,access-level',
       });
 
-    const piece = this.args.piece;
-    if (piece) {
+    if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
-      this.accessLevel = yield this.piece.accessLevel;
+      yield this.loadVersionHistory.perform();
     } else if (this.args.documentContainer) {
-      // TODO KAS-2777 This else does not seem used (no <Documents::DocumentCard> that passes this arg)
+      // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      // TODO KAS-2777 does this work? Where is this.piece coming from if args.piece was not given?
-      this.piece = yield loadPiece(this.piece.id);
-      this.accessLevel = yield this.piece.accessLevel;
+      const lastPiece = this.reverseSortedPieces.lastObject;
+      this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
       );
     }
     // When this task is done, we can trigger the other less important tasks
+    this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+  }
+
+
+  @task
+  *loadAccessLevelRelatedData() {
+    const accessLevel = yield this.piece.accessLevel;
+    const context = Object.assign({}, this.args.agendaContext || {}, { piece: this.piece });
+    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+  }
+
+  @task
+  *loadPublicationFlowRelatedData() {
+    if (this.currentSession.may('manage-publication-flows')) {
+      const publicationFlow = yield this.piece.publicationFlow;
+      yield publicationFlow?.identification;
+    }
+  }
+
+  @task
+  *loadSignatureRelatedData() {
+    if (this.args.hasMarkForSignature) {
+      this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    }
   }
 
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
+    for (const piece of this.pieces.toArray()) {
+      yield piece.belongsTo('accessLevel').reload();
+    }
   }
 
   get sortedPieces() {
@@ -134,16 +132,9 @@ export default class DocumentsDocumentCardComponent extends Component {
     return this.sortedPieces.slice(0).reverse(); // slice(0) as a hack to create a new array, since "reverse" happens in-place
   }
 
-  get showPieces() {
-    return this.sortedPieces.length > 1;
-  }
-
   get visiblePieces() {
-    if (this.args.hideNewerVersions) {
-      const idx = this.reverseSortedPieces.indexOf(this.piece);
-      return A(this.reverseSortedPieces.slice(idx));
-    }
-    return this.reverseSortedPieces;
+    const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
+    return A(this.reverseSortedPieces.slice(idx));
   }
 
   @action
@@ -159,7 +150,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
-    const now = moment().utc().toDate();
+    const now = new Date();
     this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
@@ -177,6 +168,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *addPiece() {
     try {
       yield this.args.onAddPiece(this.newPiece);
+      this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;
@@ -200,30 +192,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   *cancelUploadPiece() {
     yield this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
-  }
-
-  @action
-  enableEditPieceName() {
-    if (this.currentSession.isEditor) {
-      this.pieceNameBuffer = this.piece.name;
-      this.isEditingPiece = true;
-    }
-  }
-
-  @action
-  cancelEditPieceName() {
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
-  }
-
-  @task
-  *savePieceName() {
-    const now = moment().toDate();
-    this.piece.set('modified', now);
-    this.piece.set('name', this.pieceNameBuffer);
-    yield this.piece.save();
-    this.isEditingPiece = false;
-    this.pieceNameBuffer = null;
   }
 
   @task
@@ -277,21 +245,27 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  changeAccessLevel(al) {
-    this.piece.set('accessLevel', al);
-    this.accessLevel = al;
-  }
-
-  @action
-  showPieceViewer() {
-    window.open(`/document/${this.piece.id}`);
+  changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevel() {
     // TODO make sure not to overwrite things
     await this.piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  changeAccessLevelOfPiece(piece, accessLevel) {
+    piece.accessLevel = accessLevel;
+  }
+
+  @action
+  async saveAccessLevelOfPiece(piece) {
+    await piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
   }
 
   @action

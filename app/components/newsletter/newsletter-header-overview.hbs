@@ -3,34 +3,20 @@
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical">
-            <div class="auk-o-flex auk-o-flex--vertical-center">
-              <h4
-                class="auk-toolbar-complex__title auk-u-text-capitalize"
-                data-test-newsletter-header-overview-title
-              >
-                {{t "newsletter-overview-pdf-name"}}
-                -
-                {{@meeting.kind.label}}
-                {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
-              </h4>
-            </div>
-            <div>
-              {{#if this.isAlreadyPublished}}
-               <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
-                  Gepubliceerd op de website
-                </AuPill>
-              {{/if}}
-              {{#if this.mailCampaign}}
-                <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
-                  Gepubliceerd via mail
-                </AuPill>
-              {{/if}}
-            </div>
+          <div class="auk-o-flex auk-o-flex--vertical-center">
+            <h4
+              class="auk-toolbar-complex__title auk-u-text-capitalize"
+              data-test-newsletter-header-overview-title
+            >
+              {{t "newsletter-overview-pdf-name"}}
+              -
+              {{@meeting.kind.label}}
+              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+            </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
-            {{#if this.currentSession.isEditor}}
+            {{#if (user-may "manage-newsletter-infos")}}
               <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
                 {{t "overview"}}
               </Auk::Tab>
@@ -48,10 +34,7 @@
               >
                 {{t "definite"}}
               </Auk::Tab>
-              <Auk::Tab
-                @route="newsletter.nota-updates"
-                data-test-newsletter-header-overview-nota-updates
-              >
+              <Auk::Tab @route="newsletter.nota-updates">
                 {{t "newsletter-update-notas"}}
               </Auk::Tab>
             {{/if}}
@@ -61,63 +44,106 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
-        <Auk::DropdownMenu
+        <AuDropdown
           @skin="secondary"
-          @label={{t "actions"}}
+          @title={{t "actions"}}
+          @alignment="right"
           class="auk-u-hidden@print"
-          as |Menu|
         >
-          {{#if this.currentSession.isEditor}}
+          {{#if (user-may "manage-newsletter-infos")}}
             {{#if this.loadMailCampaign.isRunning}}
-              <Menu.Item @textOnly={{true}}>
+              <div role="menuitem">
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
-              </Menu.Item>
+              </div>
             {{else}}
-              <Menu.Item {{on "click" this.openConfirmPublishAll}}>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishAll}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-all"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishMail}}>
+              </AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishMail}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-mail"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishBelga}}>
+              </AuButton>
+              <AuButton
+                @skin="link"
+                {{on "click" this.openConfirmPublishBelga}}
+                role="menuitem"
+              >
                 {{t "send-newsitem-to-belga"}}
-              </Menu.Item>
-              <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
-                {{t "send-newsitem-to-web"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
+          {{/if}}
+          {{#if (user-may "manage-themis-publications")}}
+            <AuButton
+              @skin="link"
+              {{on "click" this.openConfirmPublishThemis}}
+              role="menuitem"
+            >
+              {{t "send-newsitem-to-web"}}
+            </AuButton>
           {{/if}}
           {{#if this.shouldShowPrintButton}}
-            <Menu.Divider />
-            <Menu.Item {{on "click" this.print}}>
+            <AuHr />
+            <AuButton
+              @skin="link"
+              {{on "click" this.print}}
+              role="menuitem"
+            >
               {{t "print"}}
-            </Menu.Item>
+            </AuButton>
           {{/if}}
-          {{#if this.currentSession.isEditor}}
-            {{! TODO These are for developers use - in comments for follow up }}
-            {{!-- <Menu.Divider />  --}}
+          {{! TODO These are for developers use - in comments for follow up }}
+            {{!-- <AuHr />  --}}
             {{!--
-            <Menu.Item {{on "click" (perform this.loadNewsletterHTML)}}>
+            <AuButton
+              @skin="link"
+              {{on "click" (perform this.loadNewsletterHTML)}}
+              role="menuitem"
+            >
               {{t "show-newsletter"}}
-            </Menu.Item>
-            <Menu.Item {{on "click" (perform this.downloadBelgaXML)}}>
+            </AuButton>
+
+            <AuButton
+              @skin="link"
+              {{on "click" (perform this.downloadBelgaXML)}}
+              role="menuitem"
+            >
               {{t "generate-xml"}}
-            </Menu.Item>
+            </AuButton>
             --}}
+          {{#if (user-may "manage-newsletter-infos")}}
             {{#if this.mailCampaign}}
-              <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" (perform this.deleteCampaign)}}>
+              <AuHr />
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" (perform this.deleteCampaign)}}
+                role="menuitem"
+              >
                 {{t "delete-campaign"}}
-              </Menu.Item>
-            {{/if}}
-            {{#if this.isAlreadyPublished}}
-              <Menu.Divider />
-              <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
-                <AuIcon @icon="undo" @alignment="left" /> {{t "retract-newsitem-from-web"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
           {{/if}}
-        </Auk::DropdownMenu>
+          {{#if (user-may "manage-themis-publications")}}
+            {{#if this.isAlreadyPublished}}
+              <AuHr />
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" this.openConfirmUnpublishThemis}}
+                role="menuitem"
+              >
+                {{t "retract-newsitem-from-web"}}
+              </AuButton>
+            {{/if}}
+          {{/if}}
+        </AuDropdown>
       </Group.Item>
     </Toolbar.Group>
   </Auk::Toolbar>
@@ -147,22 +173,21 @@
 {{/if}}
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
-    @newsletter="Bent u zeker dat u de nieuwsbrief op de website wil publiceren?"
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
 {{/if}}
 {{#if this.showConfirmUnpublishThemis}}
   <ThemisPublications::UnpublishConfirmationModal
-    @newsletter="Bent u zeker dat u de publicatie van de nieuwsbrief wil terugtrekken?"
     @onCancel={{this.cancelUnpublishThemis}}
     @onConfirm={{perform this.unpublishThemis}}
   />
 {{/if}}
 {{#if this.showConfirmPublishAll}}
   <ThemisPublications::PublishConfirmationModal
-    @newsletter="Bent u zeker dat u de nieuwsbrief via alle kanalen (Belga, website en mail) wil publiceren? Dit Kort Bestek zal naar alle ingeschreven groepen verstuurd worden."
     @title={{t "send-newsitem-to-all"}}
+    @scope={{this.themisPublicationScopes}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />
@@ -175,7 +200,9 @@
       {{#if this.loadNewsletterHTML.isRunning}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
-        <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />
+        </AuContent>
       {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>

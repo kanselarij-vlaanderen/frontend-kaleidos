@@ -10,6 +10,7 @@ export default class AccessLevelPillComponent extends Component {
    * An access-level pill component.
    *
    * @argument accessLevel: an accessLevel object or null
+   * @argument isEditable: provide editing option (with built-in role check)
    * @argument onChangeAccessLevel
    * @argument onConfirmChangeAccessLevel
    * @argument onCancelChangeAccessLevel
@@ -27,11 +28,11 @@ export default class AccessLevelPillComponent extends Component {
   get pillIcon() {
     let icon = '';
     if (this.args.accessLevel) {
-      switch (this.args.accessLevel.uri) {
+      switch (this.args.accessLevel.get('uri')) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           icon = 'user';
           break;
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
@@ -52,11 +53,11 @@ export default class AccessLevelPillComponent extends Component {
   get pillSkin() {
     let skin = 'warning';
     if (this.args.accessLevel) {
-      switch (this.args.accessLevel.uri) {
+      switch (this.args.accessLevel.get('uri')) {
         case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
           skin = 'warning';
           break;
-        case CONSTANTS.ACCESS_LEVELS.MINISTERRAAD:
+        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
@@ -75,10 +76,7 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   get accessLevelLabel() {
-    if (this.args.accessLevel) {
-      return this.args.accessLevel.label;
-    }
-    return this.intl.t('no-accessLevel');
+    return this.args.accessLevel ? this.args.accessLevel.get('label') : this.intl.t('no-accessLevel');
   }
 
   get canEdit() {

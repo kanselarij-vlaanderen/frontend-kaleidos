@@ -1,0 +1,33 @@
+<div class="auk-u-m-8">
+  {{page-title (t "manage-ministers")}}
+  <table class="auk-table auk-table--striped">
+    <thead>
+      <tr>
+        <th class="auk-table__col--6">
+          {{t "minister"}}
+        </th>
+        <th class="auk-table__col--3">
+          {{t "newsletter-name"}}
+        </th>
+        <th class="auk-table__col--1">
+          {{t "priority"}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each this.model as |mandatee|}}
+        <tr>
+          <td class="mandatee-draggable-row">
+            {{mandatee.fullDisplayName}}
+          </td>
+          <td class="mandatee-draggable-row">
+            {{mandatee.newsletterTitle}}
+          </td>
+          <td class="mandatee-draggable-row">
+            {{mandatee.priority}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

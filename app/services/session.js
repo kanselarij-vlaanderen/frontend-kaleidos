@@ -12,10 +12,11 @@ export default class ExtendedSessionService extends SessionService {
     } catch (error) { // eslint-disable-line no-unused-vars
       this.invalidate();
     }
-    super.handleAuthentication('agendas');
+    super.handleAuthentication('index');
   }
 
   handleInvalidation() {
+    this.currentSession.clear();
     const logoutUrl = ENV.torii.providers['acmidm-oauth2'].logoutUrl;
     try {
       const url = new URL(logoutUrl);

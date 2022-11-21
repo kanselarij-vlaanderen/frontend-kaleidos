@@ -14,6 +14,7 @@ import Component from '@glimmer/component';
  * ```
  *
  * @argument checked {Boolean}
+ * @argument indeterminate {Boolean}
  * @argument disabled {Boolean}
  * @argument label {String}
  * @argument labelSkin {String}

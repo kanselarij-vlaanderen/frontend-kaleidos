@@ -1,0 +1,43 @@
+<div class="auk-scroll-wrapper">
+  <Auk::Navbar>
+    <Auk::Tabs data-test-agendaitem-nav-tabs>
+      <Auk::Tab
+        @route="agenda.agendaitems.agendaitem.index"
+        data-test-agendaitem-nav-case-tab
+      >
+        {{capitalize (t "case")}}
+      </Auk::Tab>
+      <Auk::Tab
+        @route="agenda.agendaitems.agendaitem.documents"
+        data-test-agendaitem-nav-documents-tab
+      >
+        {{capitalize (t "documents")}}
+      </Auk::Tab>
+      {{#if this.canShowDecisionTab}}
+        <Auk::Tab
+          @route="agenda.agendaitems.agendaitem.decisions"
+          data-test-agendaitem-nav-decision-tab
+        >
+          {{capitalize (t "decision")}}
+        </Auk::Tab>
+      {{/if}}
+      {{#if (not @model.isApproval)}}
+        {{#if this.canShowNewsletterTab}}
+          <Auk::Tab
+            @route="agenda.agendaitems.agendaitem.news-item"
+            data-test-agendaitem-nav-newsletter-tab
+          >
+            {{capitalize (t "newsletter")}}
+          </Auk::Tab>
+        {{/if}}
+      {{/if}}
+    </Auk::Tabs>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+    <div class="auk-u-m-4">
+      <div class="auk-u-mb-3">
+        {{outlet}}
+      </div>
+    </div>
+  </div>
+</div>

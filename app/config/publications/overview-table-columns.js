@@ -16,8 +16,7 @@ export default [
     translationKeySmall: 'publications-table-publication-number-small',
     sortKey: 'identification.structured-identifier.local-identifier,-created',
     apiFieldPaths: [
-      'identification.structured-identifier.local-identifier',
-      'identification.structured-identifier.version-identifier',
+      'identification.id-name',
       'created',
     ],
   },
@@ -26,7 +25,10 @@ export default [
     translationKey: 'publications-table-numac-number',
     translationKeySmall: 'publications-table-numac-number-small',
     sortKey: 'numac-numbers.id-name,-created',
-    apiFieldPaths: ['numac-numbers.id-name', 'created'],
+    apiFieldPaths: [
+      'numac-numbers.id-name',
+      'created'
+    ],
   },
   {
     keyName: 'shortTitle',
@@ -52,8 +54,8 @@ export default [
     keyName: 'decisionDate',
     translationKey: 'publications-table-decision-date',
     translationKeySmall: 'publications-table-decision-date-small',
-    sortKey: 'agenda-item-treatment.start-date',
-    apiFieldPaths: ['agenda-item-treatment.start-date'],
+    sortKey: 'decision-activity.start-date',
+    apiFieldPaths: ['decision-activity.start-date'],
   },
   {
     keyName: 'openingDate',
@@ -132,7 +134,7 @@ export default [
     keyName: 'source',
     translationKey: 'publications-table-source',
     translationKeySmall: 'publications-table-source-small',
-    apiFieldPaths: ['case.subcases.uri'],
+    apiFieldPaths: [], // data is fetched using queryOne in publication-service
   },
   {
     keyName: 'lastEdited',
@@ -146,6 +148,6 @@ export default [
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
     sortKey: 'status.position,publication-status-change.started-at',
-    apiFieldPaths: ['status.position', 'publication-status-change.started-at'],
+    apiFieldPaths: ['status.position'],
   },
 ];

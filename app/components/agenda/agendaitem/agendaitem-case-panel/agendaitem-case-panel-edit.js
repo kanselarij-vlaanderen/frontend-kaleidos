@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument subcase
@@ -15,6 +14,9 @@ import CONFIG from 'frontend-kaleidos/utils/config';
  */
 export default class AgendaitemCasePanelEdit extends Component {
   @service store;
+  @service pieceAccessLevelService;
+  @service agendaitemAndSubcasePropertiesSync;
+
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
   get newsletterInfo() {
@@ -22,7 +24,7 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   @action
-  async cancelEditing() {
+  cancelEditing() {
     if (this.args.agendaitem.hasDirtyAttributes) {
       this.args.agendaitem.rollbackAttributes();
     }
@@ -53,39 +55,28 @@ export default class AgendaitemCasePanelEdit extends Component {
       confidential: this.args.subcase?.confidential,
     };
 
-    yield saveSubcaseTitles(
+    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      shouldResetFormallyOk
+      shouldResetFormallyOk,
     );
-    if (
-      this.newsletterInfo &&
-      (this.newsletterInfo.hasDirtyAttributes ||
-        this.args.agendaitem.showAsRemark)
-    ) {
-      if (this.args.agendaitem.showAsRemark) {
-        // Keep generated newsletterInfo for announcement in sync
+    if (this.args.subcase && this.args.subcase.confidential) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
+
+    if (this.newsletterInfo) {
+      const agendaItemType = yield this.args.agendaitem.type;
+      const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+      if (isAnnouncement) {
+        // Keep generated newsletterInfo for announcement automatically in sync
         this.newsletterInfo.richtext = trimmedTitle;
         this.newsletterInfo.title = trimmedShortTitle;
+        yield this.newsletterInfo.save();
+      } else if (this.newsletterInfo.hasDirtyAttributes) {
+        yield this.newsletterInfo.save();
       }
-      yield this.newsletterInfo.save();
     }
     this.args.onSave();
-  }
-
-  @action
-  async setAndSaveFormallyOkStatus(newFormallyOkUri) {
-    this.args.agendaitem.formallyOk = newFormallyOkUri;
-    const status = CONFIG.formallyOkOptions.find((type) => type.uri === newFormallyOkUri);
-    try {
-      await this.args.agendaitem.save();
-      this.toaster.success(this.intl.t('successfully-modified-formally-ok-status', {
-        status: status.label,
-      }));
-    } catch {
-      this.args.agendaitem.rollbackAttributes();
-      this.toaster.error();
-    }
   }
 }

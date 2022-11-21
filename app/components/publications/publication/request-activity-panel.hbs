@@ -11,15 +11,23 @@
     <Header.Actions as |Actions|>
       <Actions.Item>
         {{#unless @isDisabledDelete}}
-          <Auk::DropdownMenu data-test-request-activity-panel-dropdown @skin="borderless" @icon="three-dots" as |Menu|>
-            <Menu.Item
+          <AuDropdown
+            data-test-request-activity-panel-dropdown
+            @icon="three-dots"
+            @title={{t "more"}}
+            @hideText={{true}}
+            @alignment="right"
+          >
+            <AuButton
               data-test-request-activity-panel-delete
-              @skin="danger"
+              @skin="link"
+              @alert={{true}}
               {{on "click" this.openConfirmDeleteAlert}}
+              role="menuitem"
             >
               {{t "delete"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         {{/unless}}
       </Actions.Item>
     </Header.Actions>

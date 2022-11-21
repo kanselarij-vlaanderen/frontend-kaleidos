@@ -9,16 +9,17 @@ import { task } from 'ember-concurrency';
 
 export default class CasesNewSubcase extends Component {
   @service store;
+  @service conceptStore;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
-  @tracked caseTypes;
+  @tracked agendaItemTypes;
   @tracked title;
   @tracked shortTitle;
   @tracked confidential;
 
-  @tracked showAsRemark;
+  @tracked agendaItemType;
   @tracked selectedShortcut;
   @tracked subcaseName;
   @tracked type;
@@ -27,29 +28,22 @@ export default class CasesNewSubcase extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadCaseTypes.perform();
+    this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
   }
 
   @task
-  *loadCaseTypes() {
-    this.caseTypes = yield this.store.query('case-type', {
-      sort: '-label',
-      filter: {
-        deprecated: false,
-      },
-      page: {
-        size: PAGE_SIZE.CODE_LISTS,
-      },
-    });
+  *loadAgendaItemTypes() {
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
+    this.agendaItemType = yield this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @task
   *loadLatestSubcase() {
     this.latestSubcase = yield this.store.queryOne('subcase', {
       filter: {
-        case: {
-          ':id:': this.args.case.id,
+        'decisionmaking-flow': {
+          ':id:': this.args.decisionmakingFlow.id,
         },
       },
       sort: '-created',
@@ -64,15 +58,16 @@ export default class CasesNewSubcase extends Component {
       this.shortTitle = this.latestSubcase.shortTitle;
       this.confidential = this.latestSubcase.confidential;
     } else {
-      this.title = this.args.case.title;
-      this.shortTitle = this.args.case.shortTitle;
+      const _case = yield this.args.decisionmakingFlow.case;
+      this.title = _case.title;
+      this.shortTitle = _case.shortTitle;
       this.confidential = false;
     }
   }
 
   get areLoadingTasksRunning() {
     return (
-      this.loadCaseTypes.isRunning ||
+      this.loadAgendaItemTypes.isRunning ||
       this.loadLatestSubcase.isRunning ||
       this.loadTitleData.isRunning
     );
@@ -108,8 +103,8 @@ export default class CasesNewSubcase extends Component {
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
       confidential: this.confidential,
-      showAsRemark: this.showAsRemark || false,
-      case: this.args.case,
+      agendaItemType: this.agendaItemType,
+      decisionmakingFlow: this.args.decisionmakingFlow,
       created: date,
       modified: date,
       isArchived: false,
@@ -131,7 +126,7 @@ export default class CasesNewSubcase extends Component {
     // We save here in order to set the belongsTo relation between submission-activity and subcase
     await subcase.save();
     // reload the list of subcases on case, list is not updated automatically
-    await this.args.case.hasMany('subcases').reload();
+    await this.args.decisionmakingFlow.hasMany('subcases').reload();
 
     if (this.latestSubcase && fullCopy) {
       await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
@@ -141,18 +136,24 @@ export default class CasesNewSubcase extends Component {
 
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
+    const type = await subcase.type;
+    const subcaseTypeWithoutMandatees = [
+      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
+    ].includes(type?.uri);
     // Everything to copy from latest subcase
-    subcase.mandatees = await latestSubcase.mandatees;
-    subcase.requestedBy = await latestSubcase.requestedBy;
-
+    if (!subcaseTypeWithoutMandatees) {
+      subcase.mandatees = await latestSubcase.mandatees;
+      subcase.requestedBy = await latestSubcase.requestedBy;
+    }
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
-      subcase.showAsRemark = latestSubcase.showAsRemark;
+      subcase.agendaItemType = await latestSubcase.agendaItemType;
       subcase.confidential = latestSubcase.confidential;
     } else {
       subcase.linkedPieces = pieces;
     }
+    subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
 
@@ -191,10 +192,9 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  typeChanged(event) {
+  selectAgendaItemType(event) {
     const id = event.target.value;
-    const type = this.store.peekRecord('case-type', id);
-    this.showAsRemark = type.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
+    this.agendaItemType = this.store.peekRecord('concept', id);
   }
 
   @action

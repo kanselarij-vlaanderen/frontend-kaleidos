@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { saveChanges as saveSubcaseTitles } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 
@@ -12,6 +11,9 @@ import { task } from 'ember-concurrency';
  */
 export default class SubcaseTitlesPanelEdit extends Component {
   @service store;
+  @service pieceAccessLevelService;
+  @service agendaitemAndSubcasePropertiesSync;
+
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
 
   @action
@@ -24,6 +26,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
 
   @task
   *saveChanges() {
+
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
@@ -37,12 +40,15 @@ export default class SubcaseTitlesPanelEdit extends Component {
       confidential: this.args.subcase.confidential,
     };
 
-    yield saveSubcaseTitles(
+    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      true
+      true,
     );
+    if (this.args.subcase.confidential) {
+      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+    }
     this.args.onSave();
   }
 }

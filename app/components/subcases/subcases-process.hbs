@@ -1,16 +1,16 @@
 <div class="auk-u-m-8">
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @case={{@case}} @subcase={{subcase}}>
+    <Subcases::SubcaseItem @decisionmakingFlow={{@decisionmakingFlow}} @subcase={{subcase}}>
       <div class="auk-hr">
         <hr />
       </div>
       <div class="auk-u-mb-2">
         <p class="auk-overline">
-          {{if subcase.showAsRemark (t "announcement") (t "note")}}
+          {{if (is-announcement subcase.agendaItemType) (t "announcement") (t "note")}}
         </p>
       </div>
       <div class="auk-u-mb-2">
-        <div class="auk-h4">
+        <div data-test-subcases-process-shorttitle class="auk-h4">
           {{subcase.shortTitle}}
         </div>
       </div>

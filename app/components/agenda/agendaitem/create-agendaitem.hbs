@@ -1,101 +1,113 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<WebComponents::VlModal
-  @isOverlay={{true}}
-  @large={{true}}
-  @closeModal={{action "close"}}
-  @title={{t "add-agendaitems"}}
->
-  {{#if (or (is-pending this.model) this.loading)}}
-    <Auk::Modal::Body>
-      {{#if (is-pending this.model)}}
-        <WebComponents::VlLoader @text={{concat (t "cases-loading-text") " " (t "please-be-patient")}} />
-      {{else}}
-        <WebComponents::VlLoader @text={{concat (t "agendaitems-creating-text") " " (t "please-be-patient")}} />
-      {{/if}}
-    </Auk::Modal::Body>
-  {{else}}
-    <Auk::Modal::Body>
+<Auk::Modal @size="large">
+  <Auk::Modal::Header @title={{t "add-agendaitems"}} @onClose={{@onClose}} />
+  <Auk::Modal::Body>
+    {{#if this.addSubcasesToAgenda.isRunning}}
+      <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+        <Auk::Loader @message={{concat (t "agendaitems-creating-text") " " (t "please-be-patient")}} />
+      </div>
+    {{else}}
       <div class="auk-o-grid auk-o-grid--vertical-center">
         <div class="auk-o-grid-col-8">
           <Auk::Toolbar @auto={{true}}>
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item class="auk-u-maximize-width">
-                <Auk::Input
+                <AuInput
+                  data-test-create-agendaitem-input={{true}}
                   @icon="search"
-                  @block={{true}}
-                  @value={{this.filterParam}}
+                  @width="block"
+                  @value={{this.filter}}
+                  @disabled={{this.showPostponed}}
                   id="searchId"
                   placeholder={{t "search-placeholder"}}
-                  disabled={{this.showPostponed}}
-                  data-test-create-agendaitem-input={{true}}
                   {{on "input" (perform this.searchTask)}}
                 />
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </div>
-        <div class="auk-o-grid-col-4">
-          <div class="auk-form-group">
-            <Auk::Checkbox
-              @label={{t "title-postponed-subcases"}}
-              @checked={{this.showPostponed}}
-              data-test-create-agendaitem-postponed-checkbox={{true}}
-              {{on "input" (action "checkShowPostponedValue")}}
-            />
-          </div>
-        </div>
       </div>
       <div>
-        {{#if this.searchTask.isRunning}}
+        {{#if (or this.findAll.isRunning this.searchTask.isRunning)}}
           <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
             <Auk::Loader @message={{t "loading"}} />
           </div>
         {{else}}
-          <DataTable
-            data-test-create-agendaitem-data-table={{true}}
-            @content={{this.model}}
-            @sort={{this.sortParam}}
-            @page={{this.pageParam}}
-            @size={{this.sizeParam}}
-            @isLoading={{this.findAll.isRunning}}
-            @noDataMessage={{t "no-results-found"}}
-            @onClickRow={{action "selectPostponed"}}
-          as |table|>
-            <table.content as |c|>
-              <c.header>
-                <th></th>
-                <ThSortable @field="shortTitle" @currentSorting={{this.sortParam}} @label={{t "short-title-case"}} />
-                <th></th>
-              </c.header>
-              <c.body as |subcase|>
-                <td class="auk-table__col--1">
-                  <Auk::Checkbox
-                    data-test-create-agendaitem-row-subcase-checkbox={{true}}
-                    @checked={{subcase.selected}}
-                    {{on "input" (action "selectAvailableSubcase" subcase)}}
+          <table class="auk-table auk-table--striped">
+            <thead>
+              <tr>
+                <th class="auk-table__col--1"></th>
+                <Utils::ThSortable
+                  @field="short-title"
+                  @currentSorting={{this.sort}}
+                  @onChange={{this.onSortChange}}
+                  @label={{t "short-title-case"}}
+                />
+              </tr>
+            </thead>
+            <tbody class="auk-table--clickable-rows">
+              {{#each this.subcases as |subcase|}}
+                <tr data-test-create-agendaitem-row>
+                  <td class="auk-table__col--1">
+                    <Auk::Checkbox
+                      data-test-create-agendaitem-row-subcase-checkbox={{true}}
+                      @checked={{includes subcase this.selectedSubcases}}
+                      {{on "input" (fn this.selectSubcase subcase)}}
+                    />
+                  </td>
+                  <td class="auk-table__col--11">
+                    {{subcase.shortTitle}}
+                    <br />
+                    <p
+                      data-test-create-agendaitem-row-subcase-name
+                      class="auk-u-text-muted"
+                    >
+                      {{capitalize subcase.subcaseName}}
+                    </p>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          <div class="auk-u-mx-4">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <Auk::Pagination
+                    @page={{this.page}}
+                    @size={{this.size}}
+                    @nbOfItems={{this.subcases.length}}
+                    @total={{this.subcases.meta.count}}
+                    @onNextPage={{this.nextPage}}
+                    @onPreviousPage={{this.prevPage}}
                   />
-                </td>
-                <td class="auk-table__col--11">
-                  {{subcase.shortTitle}}
-                  <br>
-                  <p data-test-create-agendaitem-row-subcase-name class="auk-u-text-muted">
-                    {{capitalize subcase.subcaseName}}
-                  </p>
-                </td>
-              </c.body>
-            </table.content>
-          </DataTable>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  {{t "amount-per-page"}}
+                </Auk::Toolbar::Item>
+                <Auk::Toolbar::Item>
+                  <WebComponents::AuPageSize
+                    @selectedSize={{this.size}}
+                    @onChange={{this.selectSize}}
+                  />
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </div>
         {{/if}}
       </div>
-    </Auk::Modal::Body>
-    <WebComponents::VlModalFooter
-      @isLoading={{this.isLoading}}
-      @disableSave={{this.noItemsSelected}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "add-to-agenda"}}
-      @cancelAction={{action "close"}}
-      @saveAction={{action "addSubcasesToAgenda"}}
-    />
-  {{/if}}
-</WebComponents::VlModal>
+    {{/if}}
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onClose}}>
+    <AuButton
+      data-test-create-agendaitem-save
+      @skin="primary"
+      @loading={{this.addSubcasesToAgenda.isRunning}}
+      @disabled={{this.isSaveDisabled}}
+      {{on "click" (perform this.addSubcasesToAgenda)}}
+    >
+      {{t "add-to-agenda"}}
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>

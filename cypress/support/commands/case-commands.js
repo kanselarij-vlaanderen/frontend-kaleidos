@@ -19,7 +19,7 @@ import route from '../../selectors/route.selectors';
  */
 function createCase(shortTitle) {
   cy.log('createCase');
-  cy.intercept('POST', '/cases').as('createNewCase');
+  cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
   cy.visit('/dossiers');
 
   cy.get(cases.casesHeader.addCase).click();
@@ -55,6 +55,7 @@ function createCase(shortTitle) {
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.log('addSubcase');
   cy.intercept('POST', '/subcases').as('addSubcase-createNewSubcase');
+  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as('addSubcase-reloadDecisionmakingFlow');
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
@@ -83,8 +84,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step type
   if (step) {
-    cy.get(cases.newSubcase.procedureStep).find(dependency.emberPowerSelect.trigger)
-      .click();
+    cy.get(cases.newSubcase.procedureStep).click();
     cy.get(dependency.emberPowerSelect.option).contains(step)
       .scrollIntoView()
       .trigger('mouseover')
@@ -94,8 +94,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step name
   if (stepName) {
-    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
-      .click();
+    cy.get(cases.newSubcase.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(stepName)
       .scrollIntoView()
       .trigger('mouseover')
@@ -111,7 +110,8 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     .its('response.body')
     .then((responseBody) => {
       subcaseId = responseBody.data.id;
-    })
+    });
+  cy.wait('@addSubcase-reloadDecisionmakingFlow')
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         subcaseId,
@@ -143,16 +143,16 @@ function openCase(caseTitle) {
  * @param {String} caseTitle The title to search in the list of cases, should be unique
  */
 function searchCase(caseTitle) {
-  cy.log('seachCsearchCasease');
+  cy.log('searchCase');
   cy.visit('zoeken/dossiers');
   cy.get(route.search.input).type(caseTitle);
   const splitCaseTitle =  `${caseTitle.split(' ', 1)}`;
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = encodeURIComponent(splitCaseTitle);
-  cy.intercept('GET', `/cases/search?**${encodedCaseTitle}**`).as('getCaseSearchResult');
+  cy.intercept('GET', `/decisionmaking-flows/search?**${encodedCaseTitle}**`).as('decisionmakingSearchResult');
   cy.get(route.search.trigger)
     .click()
-    .wait('@getCaseSearchResult');
+    .wait('@decisionmakingSearchResult');
   cy.get(auk.loader).should('not.exist');
   cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
   cy.get(route.searchCases.dataTable).contains(caseTitle)

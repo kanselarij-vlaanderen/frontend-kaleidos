@@ -6,65 +6,52 @@
     @icon="document"
   />
   <div class="vl-uploaded-document__title-container">
-    <div class="title auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center auk-o-flex--justify-between">
-      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
-        <h6 class="auk-h4 auk-u-m-0"
-          data-test-vl-uploaded-document-filename>
-          {{this.name}}
-        </h6>
-        {{#if this.view}}
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="book"
-            {{action "view"}}
-          >
-            {{t "show-piece"}}
-          </Auk::Button>
-        {{/if}}
-        {{#if this.download}}
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="download"
-            {{action "download"}}
-          >
-            {{t "download"}}
-          </Auk::Button>
-        {{else if this.downloadLink}}
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
-            @icon="download"
-            @href={{this.downloadLink}}
-            download={{if this.downloadName this.downloadName this.name}}
-          >
-            {{t "download"}}
-          </Auk::Button>
-        {{/if}}
-      </div>
-      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
-        <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-          <Auk::Toggle
-            id="signatureToggle"
-            @checked={{false}}
-          />
-          <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
-            Gehandtekend
-          </label>
-        </div>
-        {{#if this.delete}}
-          <Auk::Button
-            @skin="danger-borderless"
-            @layout="icon-only"
-            @icon="trash"
-            {{action "delete"}}
-            data-test-vl-uploaded-document-delete-piece
-          >
-            {{t "delete"}}
-          </Auk::Button>
-        {{/if}}
-      </div>
+    <div class="title">
+      <h6 class="auk-h4 auk-u-m-0"
+        data-test-vl-uploaded-document-filename>
+        {{this.name}}
+      </h6>
+      {{#if this.view}}
+        <AuButton
+          @skin="naked"
+          @icon="book"
+          @hideText={{true}}
+          {{action "view"}}
+        >
+          {{t "show-piece"}}
+        </AuButton>
+      {{/if}}
+      {{#if this.download}}
+        <AuButton
+          @skin="naked"
+          @icon="download"
+          @hideText={{true}}
+          {{action "download"}}
+        >
+          {{t "download"}}
+        </AuButton>
+      {{else if this.downloadLink}}
+        <AuLinkExternal
+          @icon="download"
+          @hideText={{true}}
+          href={{this.downloadLink}}
+          download={{if this.downloadName this.downloadName this.name}}
+        >
+          {{t "download"}}
+        </AuLinkExternal>
+      {{/if}}
+      {{#if this.delete}}
+        <AuButton
+          data-test-vl-uploaded-document-delete-piece
+          @skin="naked"
+          @alert={{true}}
+          @icon="trash"
+          @hideText={{true}}
+          {{action "delete"}}
+        >
+          {{t "delete"}}
+        </AuButton>
+      {{/if}}
     </div>
     <div class="auk-u-text-muted">
       {{this.extension}}

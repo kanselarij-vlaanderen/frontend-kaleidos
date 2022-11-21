@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
-import { getLatestDate } from 'frontend-kaleidos/utils/date-util';
+import maxDate from 'date-fns/max';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -65,24 +65,24 @@ export default class PublicationsTableRowComponent extends Component {
   async getTranslationRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.translationSubcase;
     const translationActivities = await publicationSubcase.translationActivities;
-    const requestDates = translationActivities.mapBy('startDate');
-    return getLatestDate(requestDates);
+    const requestDates = translationActivities.mapBy('startDate').filter(d => d);
+    return requestDates.length ? maxDate(requestDates) : null;
   }
 
   /** @returns {Date?} undefined if no ProofingActivities */
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const requestDates = proofingActivities.mapBy('startDate');
-    return getLatestDate(requestDates);
+    const requestDates = proofingActivities.mapBy('startDate').filter(d => d);
+    return requestDates.length ? maxDate(requestDates) : null;
   }
 
   /** @returns {Date?} undefined if no ProofingActivities or a ProofingActivity is not finished */
   async getProofReceivedDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const receivedDates = proofingActivities.mapBy('endDate');
-    return getLatestDate(receivedDates);
+    const receivedDates = proofingActivities.mapBy('endDate').filter(d => d);
+    return receivedDates.length ? maxDate(receivedDates) : null;
   }
 
   // TODO: review async getter once ember-resources can be used

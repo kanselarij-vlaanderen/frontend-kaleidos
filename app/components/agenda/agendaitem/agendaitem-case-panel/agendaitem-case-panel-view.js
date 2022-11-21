@@ -5,23 +5,32 @@ import { task } from 'ember-concurrency';
 /**
  * @argument subcase
  * @argument agendaitem
+ * @argument agenda
  * @argument newsletterInfo
- * @argument shouldShowDetails - shouldShowDetails should only be false when the agendaitem is to approve minutes
  * @argument allowEditing
  * @argument onClickEdit
  */
 export default class AgendaitemCasePanelView extends Component {
-  @tracked case;
+  @tracked decisionmakingFlow;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
-    this.loadCase.perform();
+    this.loadDecisionmakingFlow.perform();
+    this.loadDecisionActivity.perform();
   }
 
   @task
-  *loadCase() {
+  *loadDecisionmakingFlow() {
     if (this.args.subcase) {
-      this.case = yield this.args.subcase.case;
+      this.decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
     }
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 }

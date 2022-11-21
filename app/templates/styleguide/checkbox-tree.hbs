@@ -1,0 +1,59 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Checkbox tree" />
+
+<StyleguideSample
+        @title="Default"
+        @snippet="default.hbs">
+  {{!-- BEGIN-SNIPPET default --}}
+  <Auk::CheckboxTree
+    @label="Label"
+    @items={{this.sampleItems}}
+    @didUpdate={{this.stateChange}}
+  />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@label</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"></td>
+      <td>Determines the label of the grouping checkbox.</td>
+    </tr>
+    <tr>
+      <td><code>@items</code></td>
+      <td>array (of objects)</td>
+      <td class="auk-table__col--3"></td>
+      <td>Determines the items displayed within the group. Objects must contain an <code>id</code> and <code>label</code> value.</td>
+    </tr>
+    <tr>
+      <td><code>@selectedItems</code></td>
+      <td>array (of strings) </td>
+      <td class="auk-table__col--3"></td>
+      <td>Subset of @items determining what items are checked by default.</td>
+    </tr>
+    <tr>
+      <td><code>@didUpdate</code></td>
+      <td>function</td>
+      <td class="auk-table__col--3"></td>
+      <td>Action called whenever the selection is updated. Returns the checked item objects.</td>
+    </tr>
+    <tr>
+      <td><code>@disabled</code></td>
+      <td>boolean</td>
+      <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+      <td>Determines wether the checkbox tree is disabled.</td>
+    </tr>
+  </tbody>
+</table>

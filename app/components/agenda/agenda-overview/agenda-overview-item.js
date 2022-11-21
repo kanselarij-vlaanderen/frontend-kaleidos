@@ -11,6 +11,8 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -35,17 +37,17 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
 
+  @tracked decisionActivity;
   @tracked isShowingAllDocuments = false;
+  @tracked documentsAreVisible = false;
 
   constructor() {
     super(...arguments);
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
-  }
-
-  get documentsAreReleased() {
-    return this.args.meeting.releasedDocuments < new Date();
+    this.loadDecisionActivity.perform();
+    this.loadDocumentsPublicationStatus.perform();
   }
 
   get documentListSize() {
@@ -69,16 +71,39 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   }
 
   @task
+  *loadDocumentsPublicationStatus() {
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // is not necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
+    if (this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true;
+    } else {
+      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = yield documentPublicationActivity?.status;
+      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    }
+  }
+
+  @task
   *loadDocuments() {
     let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else if (this.args.meeting.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
     }
     this.agendaitemDocuments = sortedPieces;
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @dropTask

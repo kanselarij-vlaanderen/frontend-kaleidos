@@ -59,10 +59,8 @@ export default class Button extends Component {
   }
 
   get size() {
-    if (this.args.size === 'small') {
-      return 'auk-button--size-s';
-    } else if (this.args.size === 'tiny') {
-      return 'auk-button--tiny';
+    if (this.args.size) {
+      return `auk-button--size-${this.args.size}`;
     }
     return null;
   }

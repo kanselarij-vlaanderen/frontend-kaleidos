@@ -1,0 +1,70 @@
+{{#let
+  this.model.treatment.decisionActivity
+  as |decisionActivity|
+}}
+  {{#if decisionActivity.isRetracted}}
+    <Auk::Alert @skin="warning" @message={{t "retracted-item"}} />
+  {{else if decisionActivity.isPostponed}}
+    <Agenda::Agendaitem::AgendaitemPostponed
+      @meeting={{this.meeting}}
+      @subcase={{this.subcase}}
+      @agendaActivity={{this.agendaActivity}}
+    />
+  {{/if}}
+{{/let}}
+
+<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+  <Toolbar.Group @position="left" as |Group|>
+    <Group.Item>
+      <h3 class="auk-toolbar__title">
+        {{t "agendaitem-case"}}
+      </h3>
+    </Group.Item>
+  </Toolbar.Group>
+  <Toolbar.Group @position="right" as |Group|>
+    <Group.Item>
+      {{#if (user-may "manage-agendaitems")}}
+        {{#if (not this.agenda.status.isFinal)}}
+          <Agenda::Agendaitem::AgendaitemControls
+            @agendaitem={{this.model}}
+            @agendaActivity={{this.agendaActivity}}
+            @currentAgenda={{this.agenda}}
+            @reverseSortedAgendas={{this.reverseSortedAgendas}}
+            @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+          />
+        {{/if}}
+      {{/if}}
+    </Group.Item>
+  </Toolbar.Group>
+</Auk::Toolbar>
+
+<Agenda::Agendaitem::AgendaitemCasePanel
+  @agendaitem={{this.model}}
+  @subcase={{this.subcase}}
+  @agenda={{this.agenda}}
+  @newsletterInfo={{this.newsletterInfo}}
+  @allowEditing={{user-may "manage-agendaitems"}}
+/>
+{{#if (is-announcement @model.type)}}
+  <Mandatees::MandateesPanel
+    @referenceDate={{this.meeting.plannedStart}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+    @onSave={{this.saveMandateeData}}
+  />
+{{else if this.subcase}}
+  <Mandatees::MandateesPanel
+    @referenceDate={{this.meeting.plannedStart}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+    @onSave={{this.saveMandateeData}}
+  />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
+    @governmentAreas={{this.subcase.governmentAreas}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
+{{/if}}

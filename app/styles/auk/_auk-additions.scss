@@ -1,20 +1,6 @@
 /* Framework & external component fixes
    ========================================================================== */
 
-// Auk icons font styling placeholder
-
-%auk-icons-font-style {
-  font-family: auk-icons !important;
-  font-style: normal;
-  font-weight: normal !important;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-
 // Modal
 
 .auk-modal-backdrop > .ember-view {
@@ -62,6 +48,20 @@
   }
 }
 
+.auk-table--noactions {
+  .data-table tbody tr:hover {
+    background-color: transparent !important;
+  }
+}
+
+.auk-panel .au-c-table-wrapper {
+  border: 0;
+
+  tr:last-child {
+    border-bottom: 0;
+  }
+}
+
 .data-table__actions--top {
   border-bottom: none;
 }
@@ -71,7 +71,6 @@ table tr.lt-expanded-row {
     background-color: $auk-white !important;
   }
 }
-
 
 // When using auk-modal, the ember power select wormhole is behind the modal
 // auk-modal has z-index of 1600;
@@ -94,13 +93,6 @@ table tr.lt-expanded-row {
   &.is-dropping {
     z-index: $z-index-drag;
   }
-}
-
-
-// Ember tooltip
-
-.auk-tooltip {
-  z-index: $z-index-tooltip !important;
 }
 
 
@@ -141,7 +133,177 @@ table tr.lt-expanded-row {
   padding: 0;
 }
 
-.auk-button--tiny {
-  padding: .25rem !important;
-  margin-left: .3rem;
+
+// File uploader
+
+.auk-file-upload input[type="file"] {
+  &:hover,
+  &:focus,
+  &:active {
+    &:not([disabled]) ~ .auk-file-upload__content {
+      .auk-file-upload__action-button {
+        box-shadow: none;
+
+        color: $au-button-secondary-hover-color;
+        background-color: transparent;
+        border-color: $au-button-secondary-hover-color;
+      }
+    }
+  }
+}
+
+
+// Temporary overrides for AuButton & AuLink refactor
+
+// List
+
+.auk-list--view {
+  .auk-list__item {
+    .au-c-button,
+    .au-c-link {
+      margin-left: auto;
+    }
+  }
+}
+
+// Table
+
+.auk-table {
+  .auk-button-toolbar {
+    .au-c-button,
+    .au-c-link {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Button toolbar
+
+.auk-button-toolbar {
+  .au-c-button {
+    margin: 0.4rem 0.8rem 0.4rem 0;
+  }
+
+  .au-c-button:last-child {
+    margin-right: 0;
+  }
+
+  .au-c-link {
+    margin: 0.4rem 1.6rem 0.4rem 0;
+  }
+
+  .au-c-link:last-child {
+    margin-right: 0;
+  }
+}
+
+.auk-button-toolbar--compact {
+  .au-c-button,
+  .au-c-button:last-child,
+  .au-c-link,
+  .au-c-link:last-child {
+    margin: 0 -0.1rem 0 0;
+  }
+
+  .au-c-button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .au-c-button:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+// Button
+
+.auk-button {
+  &:focus {
+    box-shadow: none;
+
+    outline: var(--au-outline);
+    outline-offset: var(--au-outline-offset);
+  }
+}
+
+.auk-button--secondary {
+  &:focus {
+    box-shadow: inset 0 0 0 0.2rem $auk-blue-500;
+
+    &:hover {
+      box-shadow: inset 0 0 0 0.2rem $auk-blue-700;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 0.2rem $auk-blue-800;
+    }
+  }
+}
+
+.auk-button--tertiary {
+  &:focus {
+    box-shadow: inset 0 0 0 0.1rem $auk-gray-300;
+
+    &:hover {
+      box-shadow: inset 0 0 0 0.1rem $auk-blue-500;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 0.1rem $auk-blue-800;
+    }
+  }
+}
+
+.auk-button-link {
+  border-radius: $au-button-border-radius;
+
+  &:focus {
+    box-shadow: none;
+
+    outline: var(--au-outline);
+    outline-offset: var(--au-outline-offset);
+  }
+}
+
+.auk-button--muted {
+  &.au-c-button--naked {
+    &,
+    &:visited {
+      color: $auk-gray-600;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      color: $auk-gray-800;
+    }
+
+    &.is-disabled,
+    &.is-disabled:hover,
+    &.is-disabled:focus-visible,
+    &.is-disabled:active {
+      color: $auk-gray-700;
+    }
+
+    &.is-loading,
+    &.is-loading:hover,
+    &.is-loading:focus-visible {
+      color: $auk-gray-700;
+    }
+  }
+}
+
+// Input with clear action
+
+.auk-input-with-clear-action {
+  > .au-c-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    outline-offset: calc(var(--au-outline-offset) * -1);
+  }
 }

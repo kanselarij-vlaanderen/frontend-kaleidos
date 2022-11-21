@@ -42,7 +42,7 @@
           <tbody>
             {{#if @isLoading}}
               <tr data-test-route-publications-index-loading>
-                <td colspan={{add @tableColumns.length 1}}>
+                <td colspan={{add @tableConfig.visibleColumns.length 1}}>
                   {{t "loading"}}
                 </td>
               </tr>
@@ -91,13 +91,15 @@
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <Auk::Button
+        <AuButton
           data-test-route-publications-index-config-modal-icon
+          @skin="naked"
           @icon="gear"
-          @skin="borderless"
-          @layout="icon-only"
+          @hideText={{true}}
           {{on "click" this.toggleColumnsDisplayConfigPanel}}
-        />
+        >
+          {{t "config"}}
+        </AuButton>
         <AttachPopover
           @class="auk-popover"
           @showOn=""

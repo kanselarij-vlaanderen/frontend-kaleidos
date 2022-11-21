@@ -19,9 +19,6 @@
 // AUK ICONS STYLING
 @import 'auk-icons'; // sourced from "au-kaleidos-icons" npm package
 
-// AU STYLING
-@import 'au/au-base';
-@import 'au/au-components';
 
 // AU STYLING
 @import 'au/au-base';
@@ -50,6 +47,7 @@
 
 
 // CUSTOM STYLING
+@import 'custom-application/pdf-viewer';
 @import 'custom-application/toast';
 @import 'custom-application/uploaded-document';
 
@@ -79,10 +77,3 @@
 
 // PRINT STYLING
 @import 'print/general';
-
-// Prototype
-@import 'prototype/signatures';
-@import 'prototype/agenda';
-@import 'prototype/document-card';
-@import 'prototype/search';
-@import 'prototype/settings';

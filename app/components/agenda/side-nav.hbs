@@ -5,7 +5,7 @@
   class={{if @isOpen "auk-scroll-wrapper"}}
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @skin="gray-200">
+  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}}>
     <Auk::Toolbar as |Toolbar|>
       {{#if @isOpen}}
         <Toolbar.Group @position="left">
@@ -16,22 +16,25 @@
         <Group.Item
           class={{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}
         >
-          <Auk::Button
-            @skin="borderless"
-            @layout="icon-only"
+          <AuButton
+            @skin="naked"
             @icon={{if @isOpen "chevron-left" "chevron-right"}}
+            @hideText={{true}}
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           >
-            {{t "toggle"}}
-          </Auk::Button>
+            {{#if @isOpen}}
+              {{t "hide"}}
+            {{else}}
+              {{t "show"}}
+            {{/if}}
+          </AuButton>
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <ul>
-      {{#each @reverseSortedAgendas as |agenda index|}}
-        {{#if (or agenda.isDesignAgenda (eq index 0))}}
+      {{#each (take 1 @reverseSortedAgendas) as |agenda|}}
         <li
           class="auk-sidebar__item auk-sidebar__item--styled
             {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
@@ -50,12 +53,12 @@
                     {{t "agenda"}}
                   {{/if}}
                 </strong>
-                <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                   {{or agenda.serialnumber "-"}}
                 </AuPill>
               </div>
               <div class="auk-sidebar__sublabel">
-                {{#if agenda.isDesignAgenda}}
+                {{#if agenda.status.isDesignAgenda}}
                   {{t "latest-modified-on"}}
                   <br />
                   {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
@@ -69,30 +72,26 @@
               </div>
             {{else}}
               <div class="auk-sidebar__label">
-                <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                   {{or agenda.serialnumber "-"}}
                 </AuPill>
               </div>
             {{/if}}
           </LinkTo>
         </li>
-        {{/if}}
       {{/each}}
     </ul>
-    {{#if @isOpen}}
-    {{#each @reverseSortedAgendas as |agenda index|}}
-    {{#if (eq index 1)}}
-    <Auk::Navbar @skin="gray-200">
-      <AuHeading @level="3" @skin="functional">
-        Vorige agenda's
-      </AuHeading>
-    </Auk::Navbar>
+
+    {{#if (and @isOpen (gt (get @reverseSortedAgendas "length") 1))}}
+      <Auk::Navbar @skin="gray-200" class="auk-u-border-top">
+        <AuHeading @level="3" @skin="functional">
+          {{t "previous-agendas"}}
+        </AuHeading>
+      </Auk::Navbar>
     {{/if}}
-    {{/each}}
-    {{/if}}
+
     <ul>
-      {{#each @reverseSortedAgendas as |agenda index|}}
-        {{#unless (or agenda.isDesignAgenda (eq index 0))}}
+      {{#each (drop 1 @reverseSortedAgendas) as |agenda|}}
         <li
           class="auk-sidebar__item auk-sidebar__item--styled
             {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
@@ -111,12 +110,12 @@
                     {{t "agenda"}}
                   {{/if}}
                 </strong>
-                <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                   {{or agenda.serialnumber "-"}}
                 </AuPill>
               </div>
               <div class="auk-sidebar__sublabel">
-                {{#if agenda.isDesignAgenda}}
+                {{#if agenda.status.isDesignAgenda}}
                   {{t "latest-modified-on"}}
                   <br />
                   {{moment-format agenda.modified "dd DD-MM-YYYY HH:mm"}}
@@ -130,14 +129,13 @@
               </div>
             {{else}}
               <div class="auk-sidebar__label">
-                <AuPill @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
+                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                   {{or agenda.serialnumber "-"}}
                 </AuPill>
               </div>
             {{/if}}
           </LinkTo>
         </li>
-        {{/unless}}
       {{/each}}
     </ul>
   </div>

@@ -57,7 +57,7 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
     cy.createCase(newShortTitle);
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, newShortTitle);
     cy.changeSubcaseAccessLevel(true);
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
     // TODO-BUG, saving and then moving away too soon (going back, closing browser) could leave the editor open
@@ -67,20 +67,22 @@ context('Create case as Admin user', () => {
     // ensure type is the same after copy to new subcase
     // ensure confidentiality is the same after copy to new subcase
     cy.intercept('POST', '/subcases').as('createNewSubcase');
+    cy.intercept('POST', '/submission-activities').as('createSubmission');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');
+    cy.wait('@createSubmission');
     cy.openSubcase(0);
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
-  it('Een dossier maken zonder korte titel geeft een error', () => {
+  it('Een dossier maken zonder korte titel kan niet', () => {
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(cases.newCase.save).click();
-    cy.get(cases.newCase.shorttitleError).should('be.visible')
-      .contains('Kijk het formulier na');
+    cy.get(cases.newCase.save).should('be.disabled');
+    cy.get(cases.newCase.shorttitle).type('Dossier X');
+    cy.get(cases.newCase.save).should('not.be.disabled');
   });
 });

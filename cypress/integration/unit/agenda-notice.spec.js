@@ -37,13 +37,17 @@ context('agenda notice test', () => {
     cy.createAgenda(null, dateToCreateAgenda, 'add minister to notice');
     cy.createCase(caseShortTitle);
     cy.addSubcase(type, subcaseShortTitle, subcaseLongTitle, null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseShortTitle);
     // add mandatees to notice
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
     // add fields
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
+    // await retrieval of government-fields in multiple pages
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
       .find(utils.governmentAreaSelectorForm.field)

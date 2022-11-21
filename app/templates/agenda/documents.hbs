@@ -1,0 +1,88 @@
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <h4 class="auk-toolbar__title">
+              {{t "documents"}}
+            </h4>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          {{#if this.model.length}}
+            <Group.Item>
+              {{#if (user-may "manage-documents")}}
+                <AuButton
+                  @icon="pencil"
+                  {{on "click" this.openBatchDetails}}
+                >
+                  {{t "batch-edit"}}
+                </AuButton>
+              {{/if}}
+            </Group.Item>
+          {{/if}}
+        </Toolbar.Group>
+      </Auk::Toolbar>
+
+      <Documents::DocumentCardList
+        @pieces={{this.model}}
+        @agendaContext={{hash meeting=this.meeting agenda=this.agenda}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeleteContainer={{this.refresh}}
+      />
+
+      {{#if (user-may "manage-documents")}}
+        <div class="auk-u-mb-4">
+          <AuButton
+            data-test-route-agenda-documents-add-documents
+            @skin="naked"
+            @icon="plus"
+            {{on "click" this.openPieceUploadModal}}
+          >
+            {{t "documents-add"}}
+          </AuButton>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+{{#if this.isOpenPieceUploadModal}}
+  <WebComponents::VlModal
+    @closeModal={{perform this.cancelUploadPieces}}
+    @isOverlay={{true}}
+    @large={{true}}
+    @title={{t "documents-add"}} >
+    <Auk::Modal::Body>
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}} />
+        {{/each}}
+      </div>
+    </Auk::Modal::Body>
+    <WebComponents::VlModalFooter
+      @isLoading={{this.savePieces.isRunning}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}} />
+  </WebComponents::VlModal>
+{{/if}}
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}

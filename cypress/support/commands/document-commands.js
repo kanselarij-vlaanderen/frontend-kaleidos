@@ -131,7 +131,9 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(utils.vlModalFooter.save).click()
+  cy.get(utils.vlModalFooter.save).click({
+    force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
+  })
     .wait(`@createNewPiece_${randomInt}`);
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
@@ -239,6 +241,7 @@ function addNewPieceToMeeting(oldFileName, file) {
  */
 function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false, isAdmin = true) {
   cy.log('openAgendaitemDocumentTab');
+  // TODO-command the next command switches to case tab if when we are already on the documents tab.
   cy.openDetailOfAgendaitem(agendaitemTitle, isAdmin);
   cy.get(agenda.agendaitemNav.documentsTab)
     .click()
@@ -381,37 +384,6 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 }
 
 /**
- * @description Uploads a csv file with users..
- * @name uploadUsersFile
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
- * @param {String} fileName - The name of the file without the extension
- * @param {String} extension - The extension of the file
- */
-function uploadUsersFile(folder, fileName, extension) {
-  cy.log('uploadUsersFile');
-  cy.intercept('POST', 'user-management/import-users').as('createNewFile');
-  cy.intercept('GET', 'users?include**').as('getNewFile');
-  const fileFullName = `${fileName}.${extension}`;
-  const filePath = `${folder}/${fileFullName}`;
-
-  cy.fixture(filePath).then((fileContent) => {
-    cy.get('[type=file]').attachFile(
-      {
-        fileContent, fileName: fileFullName, mimeType: 'application/pdf',
-      },
-      {
-        uploadType: 'input',
-      }
-    );
-  });
-  cy.wait('@createNewFile');
-  cy.wait('@getNewFile');
-  cy.log('/uploadUsersFile');
-}
-
-/**
  * @description Add a new piece to a decision.
  * @name addNewPieceToDecision
  * @memberOf Cypress.Chainable#
@@ -422,7 +394,9 @@ function uploadUsersFile(folder, fileName, extension) {
 function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
+  cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -443,7 +417,10 @@ function addNewPieceToDecision(oldFileName, file) {
     })
       .wait(`@createNewPiece_${randomInt}`);
   });
-  cy.wait(2500); // need to wait for model reload
+  cy.wait(`@patchDecisionActivity_${randomInt}`);
+  cy.wait(`@getPreviousPiece_${randomInt}`);
+  cy.get(auk.modal.container).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
 
@@ -457,8 +434,10 @@ function addNewPieceToDecision(oldFileName, file) {
 function addLinkedDocument(filenames) {
   // NOTE: this works in subcase view, untested in agendaitem view
   cy.intercept('GET', 'pieces').as('createNewPiece');
+  cy.intercept('GET', '/pieces?page**').as('getPiecesList');
   cy.log('addLinkedDocument');
   cy.get(document.linkedDocuments.add).click();
+  cy.wait('@getPiecesList');
   cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
@@ -467,11 +446,13 @@ function addLinkedDocument(filenames) {
       .type(name)
       .wait(`@getFilteredPiece${name}`);
     // For every char typed, a call to "/pieces?filter" occurs, causing constant reloads of the dom.
-    cy.wait(3000);
+    cy.wait(1000);
     cy.get(document.addExistingPiece.checkbox).parent()
       .click();
   });
+  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(utils.vlModalFooter.save).click();
+  cy.wait('@patchSubcase');
   cy.log('/addLinkedDocument');
 }
 
@@ -506,6 +487,37 @@ function deleteSinglePiece(fileName, indexToDelete) {
   }).wait(`@putRestoreAgendaitems${randomInt}`);
   cy.wait(2000);
   cy.log('/deleteSinglePiece');
+}
+
+/**
+ * @description delete a piece row from the document batch editing view
+ * @name deletePieceBatchEditRow
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param String fileName - The exact name of the file (as seen in document-card title)
+ * @param Number indexToDelete - The index of the row in the list
+ */
+function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
+  cy.log('deletePieceBatchEditRow');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
+  cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
+  cy.get(editSelector).click();
+  cy.get(document.documentDetailsRow.row).as('documentRows');
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.input)
+    .should('have.value', fileName); // check if name matches
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.delete)
+    .click();
+  cy.get('@documentRows').eq(indexToDelete)
+    .find(document.documentDetailsRow.undoDelete);
+  cy.get(document.batchDocumentsDetails.save).click();
+  cy.wait(`@deletePiece${randomInt}`, {
+    timeout: 40000,
+  }).wait(`@putRestoreAgendaitems${randomInt}`);
+  cy.wait(2000);
+  cy.log('/deletePieceBatchEditRow');
 }
 
 /**
@@ -557,9 +569,9 @@ Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
 Cypress.Commands.add('uploadFile', uploadFile);
-Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
 Cypress.Commands.add('isPieceDeletable', isPieceDeletable);
+Cypress.Commands.add('deletePieceBatchEditRow', deletePieceBatchEditRow);

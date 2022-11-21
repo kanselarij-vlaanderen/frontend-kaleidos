@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubcaseItemSubcasesComponent extends Component {
@@ -16,18 +18,19 @@ export default class SubcaseItemSubcasesComponent extends Component {
   @service store;
   @service intl;
   @service subcasesService;
+  @service subcaseIsApproved;
+  @service currentSession;
 
   @tracked isShowingAllDocuments = false;
   @tracked hasDocumentsToShow = false;
   @tracked subcaseDocuments;
   @tracked phases;
-  @tracked approved;
+  @tracked approved; // or acknowledged
+  @tracked documentsAreVisible = false;
 
   constructor() {
     super(...arguments);
     this.updateHasDocumentsToShow.perform();
-    this.loadRelatedMeeting.perform();
-    this.loadSubcasePhases.perform();
     this.loadSubcaseIsApproved.perform();
   }
 
@@ -70,22 +73,52 @@ export default class SubcaseItemSubcasesComponent extends Component {
       'filter[:has:pieces]': 'true',
     });
     this.hasDocumentsToShow = doc !== null;
+    yield this.loadRelatedMeeting.perform();
+    // Additional failsafe check on document visibility. Strictly speaking this check
+    // should not be necessary since documents are not propagated by Yggdrasil if they
+    // should not be visible yet for a specific profile.
+    // There is however a different situation when a subcase has been postponed.
+    // In that case no documents should be showing (as the subcase in still progress)
+    // but those from the first meeting are already propagated and are visible. 
+    if (!this.currentSession.may('view-documents-before-release')) {
+      const documentPublicationActivity = yield this.latestMeeting?.internalDocumentPublicationActivity;
+      const documentPublicationStatus = yield documentPublicationActivity?.status;
+      if (documentPublicationStatus?.uri !== CONSTANTS.RELEASE_STATUSES.RELEASED) {
+        this.hasDocumentsToShow = false;
+      }
+    };
   }
 
   @task
   *loadRelatedMeeting() {
-    yield this.args.subcase.requestedForMeeting;
+    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    const agenda = yield latestAgendaitem?.agenda;
+    this.latestMeeting = yield agenda?.createdFor;
   }
 
   @task
   *loadSubcaseDocuments() {
+    // proceed to get the documents
+    const queryParams = {
+      page: {
+        size: PAGE_SIZE.ACTIVITIES,
+      },
+      include: 'pieces', // Make sure we have all pieces, unpaginated
+      'filter[subcase][:id:]': this.args.subcase.id,
+    };
+    // only get the documents on latest agendaActivity if applicable
+    const agendaActivities = yield this.args.subcase.agendaActivities;
+    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    if (latestActivity) {
+      queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
+    }
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
-    const submissionActivities = yield this.store.query('submission-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'page[size]': PAGE_SIZE.ACTIVITIES,
-      include: 'pieces', // Make sure we have all pieces, unpaginated
-    });
+    const submissionActivities = yield this.store.query('submission-activity', queryParams);
 
     const pieces = [];
     for (const submissionActivity of submissionActivities.toArray()) {
@@ -94,38 +127,16 @@ export default class SubcaseItemSubcasesComponent extends Component {
       pieces.push(...submissionPieces);
     }
 
-    this.subcaseDocuments = sortPieces(pieces);
-  }
-
-  @task
-  *loadSubcasePhases() {
-    this.phases = yield this.subcasesService.getSubcasePhases(
-      this.args.subcase
-    );
+    if (this.latestMeeting?.isPreKaleidos) {
+      this.subcaseDocuments = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
+    } else {
+      this.subcaseDocuments = sortPieces(pieces);
+    }
   }
 
   @task
   *loadSubcaseIsApproved() {
-    const meeting = yield this.args.subcase.requestedForMeeting;
-    if (meeting?.isFinal) {
-      const approvedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-      );
-      const acknowledgedDecisionResultCode = yield this.store.findRecordByUri(
-        'decision-result-code',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      );
-      this.approved = !!(yield this.store.queryOne('agenda-item-treatment', {
-        'filter[subcase][id]': this.args.subcase.id,
-        'filter[decision-result-code][:id:]': [
-          approvedDecisionResultCode.id,
-          acknowledgedDecisionResultCode.id,
-        ].join(','),
-      }));
-    } else {
-      this.approved = false;
-    }
+    this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
   }
 
   @action

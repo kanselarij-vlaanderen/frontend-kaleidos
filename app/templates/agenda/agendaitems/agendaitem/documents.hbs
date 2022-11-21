@@ -1,0 +1,139 @@
+<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+  <Toolbar.Group @position="left" as |Group|>
+    <Group.Item>
+      <h4 class="auk-toolbar__title">
+        {{t "documents"}}
+      </h4>
+    </Group.Item>
+  </Toolbar.Group>
+  <Toolbar.Group @position="right" as |Group|>
+    {{#if this.model.pieces.length}}
+      <Group.Item>
+        {{#if (user-may "manage-documents")}}
+          <AuButton
+            data-test-route-agenda---agendaitem-documents-batch-edit
+            @icon="pencil"
+            @loading={{this.ensureFreshData.isRunning}}
+            {{on "click" this.openBatchDetails}}
+          >
+            {{t "batch-edit"}}
+          </AuButton>
+        {{/if}}
+      </Group.Item>
+    {{/if}}
+    {{#if this.isShownOpenPublicationModal}}
+      <Group.Item>
+        <AuButton
+          data-test-route-agenda---agendaitem-documents-open-publication
+          @icon="copy"
+          {{on "click" this.openPublicationModal}}
+        >
+          {{t "agendaitem-documents-documents-for-publication"}}
+        </AuButton>
+      </Group.Item>
+    {{/if}}
+  </Toolbar.Group>
+</Auk::Toolbar>
+{{#unless this.loadData.isRunning}}
+  {{#if this.documentsAreVisible}}
+    <Documents::DocumentCardList
+      @pieces={{this.model.pieces}}
+      @highlightedPieces={{this.newAgendaitemPieces}}
+      @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
+      @onOpenUploadModal={{perform this.ensureFreshData}}
+      @onAddPiece={{perform this.addPiece}}
+      @didDeleteContainer={{this.refresh}}
+      @markForSignature={{this.markForSignature}}
+      @unmarkForSignature={{this.unmarkForSignature}}
+    />
+  {{else}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
+  {{/if}}
+{{/unless}}
+{{#if (user-may "manage-documents")}}
+  <div class="auk-u-mb-4">
+    <AuButton
+      data-test-route-agenda---agendaitem-documents-add
+      @skin="naked"
+      @icon="plus"
+      {{on "click" this.openPieceUploadModal}}
+    >
+      {{t "documents-add"}}
+    </AuButton>
+  </div>
+{{/if}}
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model.pieces}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @agendaitem={{this.agendaitem}}
+    @onClose={{this.closePublicationModal}}
+  />
+{{/if}}
+
+{{#if this.isOpenPieceUploadModal}}
+  <WebComponents::VlModal
+    @closeModal={{perform this.cancelUploadPieces}}
+    @isOverlay={{true}}
+    @large={{true}}
+    @title={{t "document-add"}}
+  >
+    <Auk::Modal::Body>
+      {{#if this.savePieces.isRunning}}
+        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      {{else}}
+        <Auk::FileUploader
+          @multiple={{true}}
+          @reusable={{true}}
+          @onUpload={{this.uploadPiece}}
+        />
+        <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::UploadedDocument
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}}
+            />
+          {{/each}}
+        </div>
+      {{/if}}
+    </Auk::Modal::Body>
+    <WebComponents::VlModalFooter
+      @isLoading={{this.savePieces.isRunning}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}}
+    />
+  </WebComponents::VlModal>
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyUploadOnApproved}}
+  @onConfirm={{this.verifyUploadOnApproved}}
+  @onCancel={{set this "isOpenVerifyUploadOnApproved" false}}
+>
+  <:title>
+    {{t "documents-on-approved-agenda-title"}}
+  </:title>
+  <:body>
+      {{#if this.currentAgenda.nextVersion}}
+        <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
+      {{/if}}
+      <p>{{t "documents-on-approved-agenda-message"}}</p>
+  </:body>
+</ConfirmationModal>
+
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />

@@ -11,7 +11,9 @@
       @sortField="label"
       @selectedAgenda={{this.agendaOne}}
       @selectModel={{this.chooseAgendaOne}}
-    />
+    as |agenda|>
+      {{agenda.agendaName}}
+    </Utils::AgendaSelector>
     <Utils::AgendaSelector
       data-test-compare-agenda-right={{true}}
       @agendas={{@reverseSortedAgendas}}
@@ -22,13 +24,15 @@
       @sortField="label"
       @selectedAgenda={{this.agendaTwo}}
       @selectModel={{this.chooseAgendaTwo}}
-    />
+    as |agenda|>
+      {{agenda.agendaName}}
+    </Utils::AgendaSelector>
   </div>
 
   {{#if (or (await this.combinedAgendaitems) (await this.combinedAnnouncements))}}
     {{#each (await this.combinedAgendaitems) as |combinedAgendaitem|}}
       {{#if
-        (or (not @isShowingChanges) (and @isShowingChanges (await combinedAgendaitem.right.hasChanges)))
+        (or (not @isShowingChanges) (and @isShowingChanges (await (this.hasChanges combinedAgendaitem.right))))
       }}
         <div class="l-compare-agenda-list__item">
           {{#if combinedAgendaitem.groupName}}
@@ -82,7 +86,7 @@
       </div>
       {{#each (await this.combinedAnnouncements) as |combinedAnnouncement|}}
         {{#if
-          (or (not @isShowingChanges) (and @isShowingChanges (await combinedAnnouncement.right.hasChanges)))
+          (or (not @isShowingChanges) (and @isShowingChanges (await (this.hasChanges combinedAnnouncement.right))))
         }}
           <div class="l-compare-agenda-list__item">
             <div class="l-compare-agenda-list__block">

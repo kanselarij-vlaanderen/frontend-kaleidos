@@ -1,12 +1,12 @@
 import Service, { inject as service } from '@ember/service';
-import moment from 'moment';
 import fetch from 'fetch';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterService extends Service {
   @service store;
   @service toaster;
   @service intl;
-  @service formatter;
   @service currentSession;
 
   async createCampaign(meeting, silent = false) {
@@ -16,10 +16,10 @@ export default class NewsletterService extends Service {
         type: 'mail-campaigns',
         relationships: {
           meeting: {
-            data: { type: 'meetings', id: meeting.id }
-          }
-        }
-      }
+            data: { type: 'meetings', id: meeting.id },
+          },
+        },
+      },
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -36,20 +36,16 @@ export default class NewsletterService extends Service {
           this.intl.t('warning-title')
         );
       }
-     throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
+      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     }
     const mailCampaign = this.store.createRecord('mail-campaign', {
       campaignId: result.data.id,
       campaignWebId: result.data.attributes.webId,
       archiveUrl: result.data.attributes.archiveUrl,
+      meeting: meeting,
     });
 
     await mailCampaign.save();
-    const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = mailCampaign;
-    await reloadedMeeting.save();
     return mailCampaign;
   }
 
@@ -78,10 +74,10 @@ export default class NewsletterService extends Service {
         type: 'belga-newsletters',
         relationships: {
           meeting: {
-            data: { type: 'meetings', id: meetingId }
-          }
-        }
-      }
+            data: { type: 'meetings', id: meetingId },
+          },
+        },
+      },
     };
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -124,52 +120,85 @@ export default class NewsletterService extends Service {
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
-    if (this.currentSession.isEditor) {
-      // FIXME: The relationship 'agendaitem' to 'agenda-item-treatment' is "inverse: null",
-      // hence the requirement for the "reload" here. Without it, adding a new
-      // newsletterInfo immediately after adding a treatment can break data.
-      const agendaItemTreatments = await agendaitem
-        .hasMany('treatments')
-        .reload();
-      const news = this.store.createRecord('newsletter-info', {
-        agendaItemTreatment: agendaItemTreatments,
-        inNewsletter,
-      });
-      if (agendaitem.showAsRemark) {
-        const content = agendaitem.title;
-        news.title = agendaitem.shortTitle || content;
-        news.richtext = content;
-        news.finished = true;
-        news.inNewsletter = true;
-      } else {
-        news.title = agendaitem.shortTitle;
-        news.subtitle = agendaitem.title;
-        news.finished = false;
-        news.inNewsletter = false;
-        // Use news item "of previous subcase" as a default
-        try {
-          const activity = await agendaitem.get('agendaActivity');
-          const subcase = await activity.get('subcase');
-          const _case = await subcase.get('case');
-          const previousNewsItem = await this.store.queryOne(
-            'newsletter-info',
-            {
-              'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
-              'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
-              sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
-            }
-          );
-          if (previousNewsItem) {
-            news.richtext = previousNewsItem.richtext;
-            news.title = previousNewsItem.title;
-            news.themes = await previousNewsItem.get('themes');
+    const agendaItemTreatment = await agendaitem.treatment;
+    const news = this.store.createRecord('newsletter-info', {
+      agendaItemTreatment,
+      inNewsletter,
+    });
+    const agendaItemType = await agendaitem.type;
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      const content = agendaitem.title;
+      news.title = agendaitem.shortTitle || content;
+      news.richtext = content;
+      news.finished = true;
+      news.inNewsletter = true;
+    } else {
+      news.title = agendaitem.shortTitle;
+      news.subtitle = agendaitem.title;
+      news.finished = false;
+      news.inNewsletter = false;
+      // Use news item "of previous subcase" as a default
+      try {
+        const activity = await agendaitem.agendaActivity;
+        const subcase = await activity.subcase;
+        const decisionmakingFlow = await subcase.decisionmakingFlow;
+        const previousNewsItem = await this.store.queryOne(
+          'newsletter-info',
+          {
+            'filter[agenda-item-treatment][decision-activity][subcase][decisionmaking-flow][:id:]': decisionmakingFlow.id,
+            'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
+            sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
           }
-        } catch (error) {
-          console.log(error);
+        );
+        if (previousNewsItem) {
+          news.richtext = previousNewsItem.richtext;
+          news.title = previousNewsItem.title;
+          news.themes = await previousNewsItem.themes;
         }
+      } catch (error) {
+        console.log(error);
       }
-      return news;
     }
+    return news;
+  }
+
+  async generateNewsItemMandateeProposalText(newsItem) {
+    const treatment = await newsItem.agendaItemTreatment;
+    if (treatment) {
+      let mandatees = await this.store.query('mandatee', {
+        'filter[subcases][decision-activities][treatment][:id:]': treatment.id,
+        sort: 'priority',
+        page: {
+          size: PAGE_SIZE.MANDATEES_IN_GOV_BODY,
+        },
+      });
+
+      if (!mandatees.length) {
+        const mandatee = await this.store.queryOne('mandatee', {
+          'filter[requested-subcases][decision-activities][treatment][:id:]': treatment.id,
+        });
+        mandatees = mandatee ? [mandatee] : [];
+      }
+
+      if (mandatees.length) {
+        const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
+        let proposalText;
+        if (titles.length > 1) {
+          // construct string like "mandatee_1, mandatee_2, mandatee_3 en mandatee_4"
+          proposalText = [
+            titles.slice(0, titles.length - 1).join(', '), // all elements but last one
+            titles.slice(titles.length - 1) // last element
+          ].join(' en ');
+        } else {
+          proposalText = titles[0] || '';
+        }
+
+        let proposalPrefix = this.intl.t('proposal-text');
+        return `${proposalPrefix}${proposalText}`;
+      }
+    }
+
+    return null;
   }
 
   async deleteCampaign(id) {
@@ -187,31 +216,6 @@ export default class NewsletterService extends Service {
         this.intl.t('error-delete-newsletter'),
         this.intl.t('warning-title')
       );
-    }
-  }
-
-
-  async createNewsItemForMeeting(meeting) {
-    if (this.currentSession.isEditor) {
-      const plannedStart = await meeting.get('plannedStart');
-      const pubDate = moment(plannedStart).set({
-        hour: 14,
-        minute: 0,
-      });
-      const pubDocDate = moment(plannedStart).weekday(7).set({
-        hour: 14,
-        minute: 0,
-      });
-      const newsletter = this.store.createRecord('newsletter-info', {
-        meeting,
-        finished: false,
-        mandateeProposal: null,
-        publicationDate: this.formatter.formatDate(pubDate),
-        publicationDocDate: this.formatter.formatDate(pubDocDate),
-      });
-      await newsletter.save();
-      meeting.newsletter = newsletter;
-      return await meeting.save();
     }
   }
 

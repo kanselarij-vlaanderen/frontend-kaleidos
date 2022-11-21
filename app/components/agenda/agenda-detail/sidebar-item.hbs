@@ -1,6 +1,6 @@
 <LinkTo
   class={{this.class}}
-  @route={{this.currentRoute}}
+  @route={{this.currentRouteName}}
   @model={{@agendaitem.id}}
 >
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
@@ -23,63 +23,45 @@
       <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-start">
         <h4 class="vlc-agenda-detail-sidebar__subject">
           <pre data-test-agenda-detail-sidebar-item-short-title class="auk-u-text-pre-line">
-            {{!-- Fallback for legacy data that doesnt have a short title --}}
+            {{!-- Fallback for legacy data that doesn't have a short title --}}
             {{or @agendaitem.shortTitle @agendaitem.title}}
           </pre>
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
-            {{#if (and (and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow) @isNew)}}
-              {{#if this.newsletterIsVisible}}
-                <AuPill @skin="border"  @icon="website" @draft={{true}}>
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "on-the-website"}}
-                    </p>
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-
-              {{#if this.subcase.confidential}}
-                <AuPill @skin="warning" @icon="not-visible" @draft={{true}} data-test-agenda-detail-sidebar-item-confidential={{true}}>
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "confidential"}}
-                    </p>
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-            {{else}}
-              {{#if this.newsletterIsVisible}}
-                <AuPill @skin="border" @icon="website">
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "on-the-website"}}
-                    </p>
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
-
-              {{#if this.subcase.confidential}}
-                <AuPill @skin="warning" @icon="not-visible" data-test-agenda-detail-sidebar-item-confidential={{true}}>
-                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                    <p>
-                      {{t "confidential"}}
-                    </p>
-                  </EmberTooltip>
-                </AuPill>
-              {{/if}}
+            {{#if this.newsletterIsVisible}}
+              <AuPill
+                @size="small"
+                @skin="border"
+                @icon="website"
+                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+              >
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  {{t "on-the-website"}}
+                </EmberTooltip>
+              </AuPill>
+            {{/if}}
+            {{#if this.subcase.confidential}}
+              <AuPill
+                @size="small"
+                @skin="warning"
+                @icon="lock-closed"
+                data-test-agenda-detail-sidebar-item-confidential
+              >
+                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+                  {{t "limited-access"}}
+                </EmberTooltip>
+              </AuPill>
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
-              <Auk::Pill data-test-agenda-detail-sidebar-item-status-pill @skin="blank" @layout="icon-only" class="{{@agendaitem.formallyOkToShow.classNames}}">
-                <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
+              {{!-- TODO: Needs to be replaced with AuPill component with 'blank' skin, but option is not available yet --}}
+              <div class="au-c-pill au-c-pill--blank au-c-pill--small" data-test-agenda-detail-sidebar-item-status-pill>
+                <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} class="{{if @agendaitem.formallyOkToShow.svg.color (concat "au-u-" @agendaitem.formallyOkToShow.svg.color)}}" />
                 <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
-                  <p>
-                    {{@agendaitem.formallyOkToShow.label}}
-                  </p>
+                  {{@agendaitem.formallyOkToShow.label}}
                 </EmberTooltip>
-              </Auk::Pill>
+              </div>
             {{/if}}
           </div>
         {{/unless}}
@@ -88,10 +70,12 @@
       {{#if (and (not @agendaitem.aboutToDelete) @isNew)}}
         <div>
           <div class="auk-o-flex auk-o-flex--justify-between">
-            <div class="auk-o-flex auk-o-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              <p class="auk-u-text-small au-u-muted">
-                <Auk::ColorBadge @skin="success" /> {{t "added-agendaitem-text"}}
-              </p>
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-u-text-small auk-u-muted">
+              <Auk::ColorBadge
+                @skin="success"
+                class="auk-u-mr"
+              />
+              {{t "added-agendaitem-text"}}
             </div>
           </div>
         </div>

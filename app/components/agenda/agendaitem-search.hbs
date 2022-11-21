@@ -1,19 +1,30 @@
-<Auk::Toolbar::Item class="auk-u-maximize-width">
-  <div class="auk-form-group">
-    {{!-- template-lint-disable no-redundant-fn --}}
-    {{!-- TODO: Using plain decorated action for Input's @enter doesn't work for some reason --}}
-    <Auk::Input
-      @icon="search"
-      @block={{true}}
-      data-test-agendaitem-search-input
-      placeholder={{t "search-placeholder"}}
-      value={{this.searchText}}
-      @enter={{fn this.search}}
-      {{on "input" this.debouncedSearch}}
-    />
-    {{!-- template-lint-enable no-redundant-fn --}}
-  </div>
-</Auk::Toolbar::Item>
-{{#if this.debouncedSearchTask.isRunning}}
-  <div class="auk-loader" role="alert" aria-busy="true"></div>
-{{/if}}
+<Auk::Navbar @skin="gray-100" class="auk-u-hidden@print">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item class="auk-u-maximize-width">
+        <div class="auk-form-group">
+          <AuInput
+            data-test-agendaitem-search-input
+            @icon="search"
+            @width="block"
+            @value={{this.searchText}}
+            @enter={{perform this.search}}
+            {{on "input" (perform this.debouncedSearch)}}
+            placeholder={{t "search-placeholder"}}
+          />
+        </div>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="auk-u-m-0">
+        <AuButton
+          @skin="primary"
+          @icon="search"
+          @hideText={{@hideButtonText}}
+          @loading={{this.search.isRunning}}
+          {{on "click" (perform this.search)}}
+        >
+          {{t "search"}}
+        </AuButton>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>

@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
   @service currentSession;
@@ -10,18 +9,6 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
 
   @tracked signMarkingActivity;
   @tracked agendaitem;
-
-  @tracked isShowAddCC = false;
-
-  @action
-  showAddCC() {
-    this.isShowAddCC = true;
-  }
-
-  @action
-  closeAddCC() {
-    this.isShowAddCC = false;
-  }
 
   constructor() {
     super(...arguments);
@@ -46,41 +33,12 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @task
   *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
-      const treatments = yield this.agendaitem.treatments;
-      const agendaItemTreatment = treatments.firstObject;
-      yield this.args.markForSignature(this.args.piece, agendaItemTreatment);
+      const agendaItemTreatment = yield this.agendaitem.treatment;
+      const decisionActivity = yield agendaItemTreatment.decisionActivity;
+      yield this.args.markForSignature(this.args.piece, decisionActivity);
     } else {
       yield this.args.unmarkForSignature(this.args.piece);
     }
     yield this.loadSignatureRelatedData.perform();
-  }
-
-  @tracked isShowAddMinister = false;
-  @tracked isShowCancelSignatures = false;
-  @tracked isInEditMode = false;
-
-  @action
-  showAddMinister() {
-    this.isShowAddMinister = true;
-  }
-
-  @action
-  closeAddMinister() {
-    this.isShowAddMinister = false;
-  }
-
-  @action
-  showCancelSignatures() {
-    this.isShowCancelSignatures = true;
-  }
-
-  @action
-  closeCancelSignatures() {
-    this.isShowCancelSignatures = false;
-  }
-
-  @action
-  putInEditMode() {
-    this.isInEditMode = !this.isInEditMode;
   }
 }

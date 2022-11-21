@@ -1,60 +1,45 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import moment from 'moment';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  store: inject(),
-  agendaService: inject(),
-  router: inject(),
-  currentSession: inject(),
-  isAssigningToOtherAgenda: false,
-  isAssigningToOtherCase: false,
-  promptDeleteCase: false,
-  isShowingOptions: false,
-  isLoading: false,
-  isAssigning: false,
-  subcase: null,
-  caseToDelete: null,
-  onMoveSubcase: null, // from args, the parent route subcases needs to be refreshed after subcase is moved/deleted
+/*
+ * @argument subcase
+ * @argument onMoveSubcase: from args, the parent route subcases needs to be refreshed after subcase is moved/deleted
+ */
+export default class SubcasesSubcaseHeaderComponent extends Component {
+  @service store;
+  @service agendaService;
+  @service router;
+  @service currentSession;
 
-  canPropose: computed('subcase.{requestedForMeeting,hasActivity}', 'isAssigningToOtherAgenda', async function() {
-    const {
-      isAssigningToOtherAgenda, isLoading,
-    } = this;
-    const {
-      subcase,
-    } = this;
-    const requestedForMeeting = await subcase.get('requestedForMeeting');
-    const hasActivity = await subcase.get('hasActivity');
+  @tracked isAssigningToOtherAgenda = false;
+  @tracked isAssigningToOtherCase = false;
+  @tracked promptDeleteCase = false;
+  @tracked isDeletingSubcase = false;
+  @tracked isShowingOptions = false;
+  @tracked isLoading = false;
+  @tracked isAssigning = false;
+  @tracked caseToDelete = null;
+  @tracked subcaseToDelete = null;
+  @tracked canPropose = false;
+  @tracked canDelete = false;
+  @tracked meetings;
 
-    if (hasActivity || requestedForMeeting || isAssigningToOtherAgenda || isLoading) {
-      return false;
-    }
+  constructor() {
+    super(...arguments);
 
-    return true;
-  }),
+    this.loadData.perform();
+  }
 
-  canDelete: computed('canPropose', 'isAssigningToOtherAgenda', async function() {
-    const canPropose = await this.get('canPropose');
-    const {
-      isAssigningToOtherAgenda,
-    } = this;
+  @task
+  *loadData() {
+    const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
+    this.canPropose = !(activities?.length || this.isAssigningToOtherAgenda || this.isLoading);
+    this.canDelete = (this.canPropose && !this.isAssigningToOtherAgenda);
 
-    if (canPropose && !isAssigningToOtherAgenda) {
-      return true;
-    }
-
-    return false;
-  }),
-
-  meetings: computed('store', function() {
     const dateOfToday = moment().utc()
       .subtract(1, 'weeks')
       .format();
@@ -62,7 +47,7 @@ export default Component.extend({
       .add(20, 'weeks')
       .format();
 
-    return this.store.query('meeting', {
+    this.meetings = yield this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
         ':lte:planned-start': futureDate,
@@ -70,13 +55,98 @@ export default Component.extend({
       },
       sort: 'planned-start',
     });
-  }),
+  }
 
-  async deleteSubcase(subcase) {
-    const itemToDelete = await this.store.findRecord('subcase', subcase.get('id'), {
+  triggerDeleteCaseDialog() {
+    this.promptDeleteCase = true;
+  }
+
+  navigateToSubcaseOverview(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+  }
+
+  toggleAllPropertiesBackToDefault() {
+    this.isAssigningToOtherAgenda = false;
+    this.isDeletingSubcase = false;
+    this.selectedSubcase = null;
+    this.subcaseToDelete = null;
+    this.isLoading = false;
+    this.isAssigningToOtherCase = false;
+  }
+
+  // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
+  @task
+  *deleteCase(_case) {
+    const decisionmakingFlow = yield _case.decisionmakingFlow;
+    yield _case.destroyRecord();
+    yield decisionmakingFlow.destroyRecord();
+    this.promptDeleteCase = false;
+    this.caseToDelete = null;
+    this.router.transitionTo('cases');
+  }
+
+  @action
+  cancel() {
+    this.toggleAllPropertiesBackToDefault();
+  }
+
+  @action
+  showMultipleOptions() {
+    this.isShowingOptions = !this.isShowingOptions;
+  }
+
+  @action
+  requestDeleteSubcase(subcase) {
+    this.isDeletingSubcase = true;
+    this.subcaseToDelete = subcase;
+  }
+
+  @action
+  proposeForOtherAgenda(subcase) {
+    this.isAssigningToOtherAgenda = !this.isAssigningToOtherAgenda;
+    this.selectedSubcase = subcase;
+  }
+
+  @action
+  async proposeForAgenda(subcase, meeting) {
+    this.isLoading = true;
+    let submissionActivities = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': subcase.id,
+      'filter[:has-no:agenda-activity]': true,
+    });
+    submissionActivities = submissionActivities.toArray();
+    if (!submissionActivities.length) {
+      const now = new Date();
+      const submissionActivity = this.store.createRecord('submission-activity', {
+        startDate: now,
+        subcase,
+      });
+      await submissionActivity.save();
+      submissionActivities = [submissionActivity];
+    }
+    await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
+    this.toggleAllPropertiesBackToDefault();
+    this.loadData.perform();
+    this.args.onProposedForAgenda();
+  }
+
+  @action
+  async deleteSubcase() {
+    this.isLoading = true;
+    const subcaseToDelete = await this.subcaseToDelete;
+    const decisionmakingFlow = await subcaseToDelete.decisionmakingFlow;
+
+    subcaseToDelete.hasMany('agendaActivities').reload();
+    const agendaActivities = await subcaseToDelete.agendaActivities;
+
+    if (agendaActivities?.length > 0) {
+      return;
+    }
+
+    const itemToDelete = await this.store.findRecord('subcase', subcaseToDelete.id, {
       reload: true,
     });
-    const newsletterInfo = await itemToDelete.get('newsletterInfo');
+    const newsletterInfo = await itemToDelete.newsletterInfo;
     if (newsletterInfo) {
       await newsletterInfo.destroyRecord();
     }
@@ -89,124 +159,51 @@ export default Component.extend({
     */
     itemToDelete.deleteRecord();
     await itemToDelete.save();
-  },
 
-  triggerDeleteCaseDialog() {
-    this.set('promptDeleteCase', true);
-  },
+    this.navigateToSubcaseOverview(decisionmakingFlow);
+    this.args.onMoveSubcase();
+  }
 
-  navigateToSubcaseOverview(caze) {
-    this.router.transitionTo('cases.case.subcases', caze.id);
-  },
+  @action
+  cancelDeleteSubcase() {
+    this.isDeletingSubcase = false;
+  }
 
-  toggleAllPropertiesBackToDefault() {
-    this.set('isAssigningToOtherAgenda', false);
-    this.set('isDeletingSubcase', false);
-    this.set('selectedSubcase', null);
-    this.set('subcaseToDelete', null);
-    this.set('isLoading', false);
-    this.set('isAssigningToOtherCase', false);
-  },
+  @action
+  triggerMoveSubcaseDialog() {
+    this.isAssigningToOtherCase = true;
+  }
 
-  // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
-  deleteCase: task(function *(_case) {
-    yield _case.destroyRecord();
-    this.set('promptDeleteCase', false);
-    this.set('caseToDelete', null);
-    this.get('router').transitionTo('cases');
-  }),
+  @action
+  async moveSubcase(_newDecisionmakingFlow) {
+    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    cancel() {
-      this.toggleAllPropertiesBackToDefault();
-    },
+    const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
+    await this.args.subcase.save();
+    this.isAssigningToOtherCase = false;
 
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
-    },
-
-    requestDeleteSubcase(subcase) {
-      this.set('isDeletingSubcase', true);
-      this.set('subcaseToDelete', subcase);
-    },
-
-    proposeForOtherAgenda(subcase) {
-      this.toggleProperty('isAssigningToOtherAgenda');
-      this.set('selectedSubcase', subcase);
-    },
-
-    async proposeForAgenda(subcase, meeting) {
-      this.set('isLoading', true);
-      let submissionActivities = await this.store.query('submission-activity', {
-        'filter[subcase][:id:]': subcase.id,
-        'filter[:has-no:agenda-activity]': true,
+    const subCases = await oldDecisionmakingFlow.hasMany('subcases').reload();
+    if (subCases.length === 0) {
+      const oldCase = await oldDecisionmakingFlow.case;
+      const publicationFlow = await this.store.queryOne('publication-flow', {
+        'filter[case][:id:]': oldCase.id,
       });
-      submissionActivities = submissionActivities.toArray();
-      if (!submissionActivities.length) {
-        const now = new Date();
-        const submissionActivity = this.store.createRecord('submission-activity', {
-          startDate: now,
-          subcase,
-        });
-        await submissionActivity.save();
-        submissionActivities = [submissionActivity];
-      }
-      await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
-      this.toggleAllPropertiesBackToDefault();
-    },
-
-    async deleteSubcase() {
-      this.set('isLoading', true);
-      const subcaseToDelete = await this.get('subcaseToDelete');
-      const caze = await subcaseToDelete.get('case');
-
-      subcaseToDelete.hasMany('agendaActivities').reload();
-      const agendaActivities = await subcaseToDelete.get('agendaActivities');
-
-      if (agendaActivities && agendaActivities.length > 0) {
+      // TODO KAS-3315 The deletion of case is only possible in this situation
+      if (!publicationFlow) {
+        this.caseToDelete = oldCase;
+        this.triggerDeleteCaseDialog();
         return;
       }
-      await this.deleteSubcase(subcaseToDelete);
-      this.navigateToSubcaseOverview(caze);
-      this.onMoveSubcase();
-    },
-    cancelDeleteSubcase() {
-      this.set('isDeletingSubcase', false);
-    },
+    }
+    this.router.transitionTo('cases.case.subcases');
+    this.args.onMoveSubcase();
+  }
 
-    triggerMoveSubcaseDialog() {
-      this.set('isAssigningToOtherCase', true);
-    },
-    async moveSubcase(newCase) {
-      const edCase = await this.store.findRecord('case', newCase.id); // ensure we have an ember-data case
-
-      const oldCase = await this.subcase.get('case');
-      this.subcase.set('case', edCase);
-      await this.subcase.save();
-      this.set('isAssigningToOtherCase', false);
-
-      const subCases = await oldCase.hasMany('subcases').reload();
-      if (subCases.length === 0) {
-        const publicationFlow = await this.store.queryOne('publication-flow', {
-          'filter[case][:id:]': oldCase.id,
-        });
-        // TODO KAS-3315 The deletion of case is only possible in this situation
-        if (!publicationFlow) {
-          this.set('caseToDelete', oldCase);
-          this.triggerDeleteCaseDialog();
-          return;
-        }
-      }
-      this.router.transitionTo('cases.case.subcases');
-      this.onMoveSubcase();
-    },
-
-    cancelDeleteCase() {
-      this.set('promptDeleteCase', false);
-      this.set('caseToDelete', null);
-      this.get('router').transitionTo('cases.case.subcases');
-    },
-  },
-});
+  @action
+  cancelDeleteCase() {
+    this.promptDeleteCase = false;
+    this.caseToDelete = null;
+    this.router.transitionTo('cases.case.subcases');
+  }
+}

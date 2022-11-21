@@ -1,114 +1,83 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import {
-  task, timeout
-} from 'ember-concurrency';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
+import { task, timeout } from 'ember-concurrency';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
+export default class UtilsModelSelectorComponent extends Component {
   /**
    * @argument modelName
+   * @argument field
    * @argument searchField
    * @argument sortField
-   * @argument readOnly
+   * @argument displayField
+   * @argument includeField
+   * @argument placeholder
+   * @argument disabled
    * @argument allowClear
+   * @argument multiple
    * @argument isLoading
-   * @argument selectedItems
-   * @argument selectModel
+   * @argument selected
+   * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
+   * @argument renderInPlace
    */
-  classNameBindings: ['classes'],
-  store: inject(),
-  modelName: null,
-  searchField: null,
-  propertyToShow: null,
-  placeholder: null,
-  sortField: null,
-  filter: null,
-  loadingMessage: 'Even geduld aub..',
-  noMatchesMessage: 'Geen zoekresultaten gevonden',
-  selectedItems: null,
+  @service store;
+  @tracked items;
 
-  init() {
-    this._super(...arguments);
+  constructor () {
+    super(...arguments);
+
     this.findAll.perform();
-  },
+  }
 
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      let items = yield this.store.query(modelName, queryOptions);
-      if (this.filterOptions) {
-        items = this.filterOptions(items);
-      }
-      this.set('items', items);
-    }
-  }),
-
-  searchEnabled: computed('searchField', function() {
+  get searchEnabled() {
     // default searchEnabled = false on powerSelect
     // to avoid adding @searchEnabled={{true}} on all uses of this component, we assume search should be enabled when a searchField is given
-    return isPresent(this.searchField);
-  }),
+    return isPresent(this.args.searchField);
+  }
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
+  get queryOptions() {
     const options = {};
-    const {
-      filter, sortField, includeField,
-    } = this;
-    if (sortField) {
-      options.sort = sortField;
+    if (this.args.sortField) {
+      options.sort = this.args.sortField;
     }
-    if (filter) {
-      options.filter = filter;
+    if (this.args.filter) {
+      options.filter = this.args.filter;
     }
-    if (includeField) {
-      options.include = includeField;
+    if (this.args.includeField) {
+      options.include = this.args.includeField;
     }
     return options;
-  }),
+  }
 
-  searchTask: task(function *(searchValue) {
+  @task
+  *findAll() {
+    if (this.args.modelName) {
+      let items = yield this.store.query(this.args.modelName, this.queryOptions);
+      if (this.args.filterOptions) {
+        items = this.args.filterOptions(items);
+      }
+      this.items = items;
+    }
+  }
+
+  @task
+  *searchTask (searchValue) {
     yield timeout(300);
-    const {
-      queryOptions, searchField, modelName,
-    } = this;
+    const queryOptions = this.queryOptions;
     if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
+      queryOptions.filter[this.args.searchField] = searchValue;
     } else {
       const filter = {};
-      filter[searchField] = searchValue;
+      filter[this.args.searchField] = searchValue;
       queryOptions.filter = filter;
     }
 
-    let results = yield this.store.query(modelName, queryOptions);
-    if (this.filterOptions) {
-      results = this.filterOptions(results);
+    let results = yield this.store.query(this.args.modelName, queryOptions);
+    if (this.args.filterOptions) {
+      results = this.args.filterOptions(results);
     }
     return results;
-  }),
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    selectModel(items) {
-      this.selectModel(items);
-    },
-
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
-          sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+  }
+}

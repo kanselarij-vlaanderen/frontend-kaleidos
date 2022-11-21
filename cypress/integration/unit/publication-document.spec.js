@@ -14,7 +14,7 @@ context('Publications documents tests', () => {
   }
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {
@@ -54,7 +54,7 @@ context('Publications documents tests', () => {
 
     // proofs modals
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('getProofingModel');
-    cy.get(publication.publicationNav.publishpreview).click()
+    cy.get(publication.publicationNav.proofs).click()
       .wait('@getProofingModel');
     // Make sure the page transitioned
     cy.url().should('contain', '/drukproeven');

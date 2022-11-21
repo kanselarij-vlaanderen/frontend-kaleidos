@@ -7,7 +7,7 @@ export default class AgendaOverview extends Component {
   /**
    * @argument notaGroups: Array of AgendaitemGroup-objects
    * @argument isLoadingNotaGroups: boolean indicating whether to show the loading state for nota's
-   * @argument announcements: Array of agendaitems with boolean 'showAsRemark' == true
+   * @argument announcements: Array of agendaitems with type announcements
    * @argument newItems: items to be marked as "new on this agenda"
    * @argument meeting: the meeting that is currently open
    * @argument currentAgenda: the agenda that is currently open
@@ -23,12 +23,8 @@ export default class AgendaOverview extends Component {
 
   @tracked isEditingOverview = null;
 
-  get isDraggingEnabled() {
-    return this.currentSession.isEditor && this.isDesignAgenda;
-  }
-
-  get isDesignAgenda() {
-    return this.args.currentAgenda.isDesignAgenda;
+  get canEdit() {
+    return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   @action

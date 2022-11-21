@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import {
   task,
-  timeout
+  timeout,
+  restartableTask,
 } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -61,7 +62,7 @@ export default class AddExistingPiece extends Component {
     this.setSelectedToFalse();
   }
 
-  @task
+  @restartableTask
   *searchTask() {
     yield timeout(300);
     this.pieces = yield this.store.query('piece', this.queryOptions());

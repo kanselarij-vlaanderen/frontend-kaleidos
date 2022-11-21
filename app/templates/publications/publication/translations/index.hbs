@@ -1,0 +1,94 @@
+<div class="auk-u-mt-4">
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <h4 class="auk-panel__title">
+              {{t "translations"}}
+            </h4>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            <AuButton
+              data-test-route-publications---translations-upload-translation
+              @skin="secondary"
+              @icon="plus"
+              {{on "click" this.openTranslationUploadModal}}
+            >
+              {{t "upload-translation"}}
+            </AuButton>
+          </Group.Item>
+          <Group.Item>
+            <AuButton
+              data-test-route-publications---translations-request-translation
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.openTranslationRequestModal}}
+            >
+              {{t "request-translations"}}
+            </AuButton>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+
+    <Auk::Panel::Body
+      data-test-route-publications---translations-panel-body
+      class="auk-u-bg-alt"
+    >
+      {{#each this.shownActivities as |event|}}
+        {{#if event.isRequestActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="mail"
+            @badgeSkin="primary"
+            @event={{event}} as |event|>
+            <Publications::Publication::RequestActivityPanel
+              @title={{t "requested-translation"}}
+              @requestActivity={{event.activity}}
+              @isDisabledDelete={{event.activity.translationActivity.isFinished}}
+              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+            />
+          </Utils::Timeline::Event>
+        {{else if event.isTranslationActivity}}
+          <Utils::Timeline::Event
+            @badgeIcon="check"
+            @badgeSkin="success"
+            @event={{event}} as |event|>
+            <Publications::Publication::Translations::TranslationReceivedPanel
+              @translationActivity={{event.activity}}
+              @publicationFlow={{this.publicationFlow}}
+              @onEditTranslationActivity={{perform
+                this.editTranslationActivity
+              }}
+              @onDeletePiece={{if
+                event.canDeletePieces
+                (perform this.deleteReceivedPiece event)
+              }}
+              @onCreateProofRequest={{perform this.saveProofRequest}}
+            />
+          </Utils::Timeline::Event>
+        {{/if}}
+      {{else}}
+        <Auk::EmptyState @bordered={{true}} @message={{t "no-translations-yet"}} />
+      {{/each}}
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>
+
+{{#if this.showTranslationRequestModal}}
+  <Publications::Publication::Translations::TranslationRequestModal
+    @dueDate={{this.translationSubcase.dueDate}}
+    @publicationFlow={{this.publicationFlow}}
+    @onSave={{perform this.saveTranslationRequest}}
+    @onCancel={{this.closeTranslationRequestModal}}
+  />
+{{/if}}
+
+{{#if this.showTranslationUploadModal}}
+  <Publications::Publication::Translations::TranslationUploadModal
+    @onSave={{perform this.saveTranslationUpload}}
+    @onCancel={{this.closeTranslationUploadModal}}
+  />
+{{/if}}

@@ -1,66 +1,27 @@
-import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { lower as lowerCaseAlphabet } from 'alphabet';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  store: service(),
-  toaster: service(),
-  intl: service(),
+export default class Mandatee extends Model {
+  @attr title;
+  @attr newsletterTitle;
+  @attr('number') priority;
+  @attr('datetime') start;
+  @attr('datetime') end;
 
-  title: attr('string'),
-  newsletterTitle: attr('string'),
+  @belongsTo('person') person;
+  @belongsTo('mandate') mandate;
 
-  priority: attr('number'),
-  start: attr('datetime'),
-  end: attr('datetime'),
+  @hasMany('subcase', { inverse: 'mandatees' }) subcases;
+  @hasMany('subcase', { inverse: 'requestedBy' }) requestedSubcases;
+  @hasMany('agendaitem') agendaitems;
+  @hasMany('publication-flow') publicationFlows;
+  @hasMany('sign-signing-activity') signSigningActivities;
 
-  person: belongsTo('person'),
-  mandate: belongsTo('mandate'),
-
-  subcases: hasMany('subcase', {
-    inverse: null,
-  }),
-  requestedSubcases: hasMany('subcase', {
-    inverse: null,
-  }),
-  agendaitems: hasMany('agendaitem', {
-    inverse: null,
-  }),
-  publicationFlows: hasMany('publication-flow', {
-    serialize: false,
-  }),
-  signSigningActivities: hasMany('sign-signing-activity'),
-
-  fullDisplayName: computed('person', 'title', 'person.nameToDisplay', function() {
-    const nameToDisplay = this.get('person.nameToDisplay');
-    if (nameToDisplay) {
-      return `${nameToDisplay}, ${this.get('title')}`;
+  get fullDisplayName() {
+    const fullName = this.person.get('fullName');
+    const title = this.title ?? this.mandate.get('role.label');
+    if (fullName) {
+      return `${fullName}, ${title}`;
     }
-    return `${this.get('title')}`;
-  }),
-
-  /**
-   * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
-   * TODO: clean up hacky map-to-alphabet sorting
-   */
-  priorityAlpha: computed('priority', 'fullDisplayName', function() {
-    const priority = this.get('priority');
-    if (typeof priority === 'number') {
-      const alphaNumeric = lowerCaseAlphabet[priority - 1];
-      return alphaNumeric;
-    }
-    const errorMessage = this.intl.t('mandatee-without-priority-message', {
-      name: this.get('fullDisplayName'),
-    });
-    this.toaster.error(errorMessage,
-      this.intl.t('warning-title'),
-      {
-        timeOut: 60000,
-      });
-    return null;
-  }),
-});
+    return `${title}`;
+  }
+}

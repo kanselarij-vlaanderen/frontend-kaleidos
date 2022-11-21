@@ -6,18 +6,19 @@
   <Auk::Modal::Body>
     <div class="auk-form-group ">
       <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      <Auk::Textarea @rows="2" @value={{mut @case.shortTitle}} />
+      <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @cancelDisabled={{this.save.isRunning}}
     @onCancel={{this.close}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
-      {{on "click" (perform this.save)}}>
+      {{on "click" (perform this.save)}}
+    >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

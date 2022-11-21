@@ -3,9 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class UploadedDocument extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked documentTypes = [];
   @tracked documentContainer;
@@ -18,18 +19,14 @@ export default class UploadedDocument extends Component {
 
   @task
   *loadData() {
-    this.documentTypes = yield this.store.query('document-type', {
-      page: {
-        size: 50,
-      },
-    });
+    this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
 
     this.documentContainer = yield this.args.piece.documentContainer;
     this.selectedDocumentType = yield this.documentContainer.type;
   }
 
   get sortedDocumentTypes() {
-    return this.documentTypes.sortBy('priority');
+    return this.documentTypes.sortBy('position');
   }
 
   @action

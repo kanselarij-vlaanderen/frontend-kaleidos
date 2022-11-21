@@ -11,16 +11,16 @@
       @linkedPieces={{this.linkedPieces}}
       @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
   {{/unless}}
-  {{#if (and this.currentSession.isEditor @isDesignAgenda)}}
+  {{#if (user-may "manage-documents")}}
     <div class="auk-u-mb-4">
-      <Auk::Button
-        @skin="tertiary"
+      <AuButton
+        data-test-linked-documents-add
+        @skin="naked"
         @icon="plus"
         {{on "click" this.openLinkedPieceModal}}
-        data-test-linked-documents-add
       >
         {{t "document-link-old"}}
-      </Auk::Button>
+      </AuButton>
     </div>
   {{/if}}
 </div>

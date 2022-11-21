@@ -1,0 +1,52 @@
+{{!-- template-lint-disable no-bare-strings --}}
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-p-4">
+      <div class="auk-o-flex auk-o-flex--horizontal-center">
+        <div class="auk-content auk-u-maximize-width auk-u-max-width-xlarge">
+          <div class="auk-u-my-4">
+            <h4 class="auk-u-mb-2">Aanmelden als bepaald profiel (generiek)</h4>
+            <p class="auk-u-mb-4">Kies een type gebruiker om mee aan te melden:</p>
+            <div class="auk-panel auk-u-mb-8">
+              <MockLogin as |login|>
+                {{#if login.errorMessage}}
+                  {{#if (includes "403" (w (lowercase login.errorMessage)))}}
+                    <Auk::Alert
+                      @skin="error"
+                      @message={{t "application-unauthorized-message"}}
+                    />
+                  {{else}}
+                    <Auk::Alert
+                      @skin="error"
+                      @message={{login.errorMessage}}
+                    />
+                  {{/if}}
+                {{/if}}
+                {{#if this.model.length}}
+                  <ul class="auk-list auk-list--view" data-test-mock-login-list>
+                    <login.each-account @accounts={{this.model}} as |account|>
+                      <Auk::List::Item>
+                        <div class="auk-u-mx-2">
+                          <span>{{account.user.firstName}} {{account.user.lastName}}</span>
+                        </div>
+                        <AuButton
+                          @skin="naked"
+                          @icon="chevron-right"
+                          @hideText={{true}}
+                        >
+                          {{t "login"}}
+                        </AuButton>
+                      </Auk::List::Item>
+                    </login.each-account>
+                  </ul>
+                {{else}}
+                  Geen accounts gevonden.
+                {{/if}}
+              </MockLogin>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

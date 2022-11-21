@@ -1,0 +1,35 @@
+<div class="auk-u-maximize-width auk-u-maximize-height u-padding--left--large u-padding--right--large auk-o-flex auk-o-flex--center">
+  <div class="auk-container--small">
+    <h1 class="auk-heading auk-heading--jumbo auk-u-text-normal auk-u-mb-10">{{t "kaleidos"}}</h1>
+    <h2 class="auk-h3 auk-u-text-normal auk-u-text-line-height-small auk-u-mb-8">
+      {{t "kaleidos-login-info"}}
+    </h2>
+    <div>
+      <p class="u-spacer--tiny">
+        {{t "kaleidos-login-info2"}}
+        <a href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer">{{t "kaleidos-login-info-gebruikersbeheer-vlaanderen"}}</a>.
+      </p>
+      <p class="u-spacer--tiny">
+        {{t "kaleidos-login-info-popup-message"}}
+      </p>
+      <div data-test-route-login-acmidm-container class="u-padding--top--large">
+        <Acmidm::Login as |acmidm|>
+          <AuButton
+            @skin="primary"
+            @loading={{acmidm.isAuthenticating}}
+            @disabled={{acmidm.isAuthenticating}}
+            {{on "click" acmidm.login}}
+          >
+            Meld u aan
+          </AuButton>
+          {{#if acmidm.errorMessage}}
+            <div class="auk-u-mt-2">
+              <Auk::Alert @skin="error" @message={{acmidm.errorMessage}} />
+            </div>
+          {{/if}}
+      </Acmidm::Login>
+      </div>
+    </div>
+
+  </div>
+</div>

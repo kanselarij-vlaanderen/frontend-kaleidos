@@ -1,0 +1,283 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <AuLink
+        data-test-auk-back-button
+        @skin="button-naked"
+        @icon="hierarchical-back"
+        @hideText={{true}}
+        @route="settings.users.index"
+        class="auk-u-mr-2"
+      >
+        {{t "back"}}
+      </AuLink>
+      <Auk::Toolbar::Item>
+        <h4 data-test-settings-header-title class="auk-toolbar-complex__title">
+          {{t "manage-user" firstName=this.model.firstName lastName=this.model.lastName}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      {{yield}}
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<div class="au-o-grid">
+  <div class="au-o-grid__item au-u-3-4@medium au-u-2-3@large">
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <AuToolbar class="auk-u-maximize-width" as |Group|>
+            <Group>
+              <h4 data-test-route-settings---user-general-info class="auk-panel__title">
+                {{t "manage-users-general-info"}}
+              </h4>
+            </Group>
+            <Group>
+              {{#if @model.isBlocked}}
+                <AuButton
+                  {{on "click" (toggle "showUnblockUser" this)}}
+                >
+                  {{t "unblock-user"}}
+                </AuButton>
+              {{else}}
+                <AuButton
+                  @alert={{true}}
+                  {{on "click" (toggle "showBlockUser" this)}}
+                >
+                  {{t "block-user"}}
+                </AuButton>
+              {{/if}}
+            </Group>
+          </AuToolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <div class="auk-key-value-item__label">{{t "manage-users-full-name"}}</div>
+              <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                {{this.model.fullName}}
+              </div>
+            </div>
+          </dl>
+          <dl>
+            <Auk::KeyValue
+              @key={{t "last-seen"}}
+              @value={{if
+                @model.loginActivity.startDate
+                (concat
+                  (moment-format @model.loginActivity.startDate)
+                  " "
+                  (t "at")
+                  " "
+                  (moment-format @model.loginActivity.startDate "HH:mm")
+                )
+                "-"
+              }}
+              @layout="horizontal"
+            />
+          </dl>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
+            {{t "user-rights"}}
+          </h4>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="au-u-padding-none">
+          <AuTable>
+            <:header>
+              <tr>
+                <th>{{capitalize (t "organization")}}</th>
+                <th>{{t "ovo-code"}}</th>
+                <th>{{capitalize (t "group")}}</th>
+                <th></th>
+              </tr>
+            </:header>
+            <:body>
+              {{#each this.model.memberships as |membership|}}
+                <tr class="{{if membership.isBlocked "au-u-muted"}}">
+                  <td>{{membership.organization.name}}</td>
+                  <td>{{membership.organization.identifier}}</td>
+                  <td>{{membership.role.label}}</td>
+                  <td class="au-u-text-right">
+                    {{#if membership.isBlocked}}
+                      <AuButton
+                        @skin="naked"
+                        @icon="circle-full"
+                        {{on "click" (queue (toggle "showUnblockMembership" this) (set this "membershipBeingBlocked" membership))}}
+                      >
+                        {{t "unblock-membership"}}
+                      </AuButton>
+                    {{else}}
+                      <AuButton
+                        @skin="naked"
+                        @icon="circle-x"
+                        @alert={{true}}
+                        {{on "click" (queue (toggle "showBlockMembership" this) (set this "membershipBeingBlocked" membership))}}
+                      >
+                        {{t "block-membership"}}
+                      </AuButton>
+                    {{/if}}
+                  </td>
+                </tr>
+              {{/each}}
+            </:body>
+          </AuTable>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+  </div>
+</div>
+
+<AuModal
+  @modalOpen={{this.showBlockMembership}}
+  @closeModal={{toggle "showBlockMembership" this}}
+>
+  <:title>
+    {{t "block-membership"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "block-membership-explanation"}}</p>
+      <p>{{t "block-membership-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showBlockMembership" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.blockMembership (toggle "showBlockMembership" this))}}
+        >
+          {{t "block-membership"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showUnblockMembership}}
+  @closeModal={{toggle "showUnblockMembership" this}}
+>
+  <:title>
+    {{t "unblock-membership"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-membership-explanation"}}</p>
+      <p>{{t "unblock-membership-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnblockMembership" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.unblockMembership (toggle "showUnblockMembership" this))}}
+        >
+          {{t "unblock-membership"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showBlockUser}}
+  @closeModal={{toggle "showBlockUser" this}}
+>
+  <:title>
+    {{t "block-user"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "block-user-explanation"}}</p>
+      <p>{{t "block-user-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showBlockUser" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
+        >
+          {{t "block-user"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showUnblockUser}}
+  @closeModal={{toggle "showUnblockUser" this}}
+>
+  <:title>
+    {{t "unblock-user"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>{{t "unblock-user-explanation"}}</p>
+      <p>{{t "unblock-user-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnblockUser" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          @alert={{true}}
+          {{on "click" (queue this.unblockUser (toggle "showUnblockUser" this))}}
+        >
+          {{t "unblock-user"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>

@@ -1,0 +1,46 @@
+{{page-title (t "subcases")}}
+
+<Subcases::SubcasesOverviewHeader
+  @decisionmakingFlow={{this.decisionmakingFlow}}
+  @onCreateSubcase={{this.refreshSubcases}}
+  @onSaveCase={{perform this.saveCase}}
+/>
+<div class="auk-scroll-wrapper__body">
+  {{#if @model}}
+    <Subcases::SubcasesProcess @decisionmakingFlow={{this.decisionmakingFlow}} @subcases={{@model}} />
+  {{else}}
+    <div class="auk-u-m-8">
+      <Auk::EmptyState @message={{t "no-subcases"}} />
+    </div>
+  {{/if}}
+</div>
+{{#if @model}}
+  <hr/>
+  <div class="auk-u-mx-4">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <Auk::Pagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{@model.length}}
+            @total={{@model.meta.count}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.prevPage}}
+          />
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          {{t "amount-per-page"}}
+        </Group.Item>
+        <Group.Item>
+          <WebComponents::AuPageSize
+            @selectedSize={{this.size}}
+            @onChange={{this.setSizeOption}}
+          />
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </div>
+{{/if}}

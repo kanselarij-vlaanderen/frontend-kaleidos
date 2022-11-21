@@ -1,319 +1,209 @@
 <div
-  class="auk-u-mb-2
-    {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state"}}"
+  class="vlc-document-card {{if (not this.bordered) 'vlc-document-card--borderless'}} {{if this.documentContainer.aboutToDelete 'vlc-document--deleted-state'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
-  {{did-update (perform this.loadVersionHistory) this.documentContainer}}
+  data-test-document-card
 >
-  <div class="vlc-document-card" data-test-document-card>
-    <div class="vlc-document-card__summary">
-      <div class="vlc-document-card__content">
-        <Auk::Toolbar @auto={{true}} as |Toolbar|>
-          <Toolbar.Group @position="left">
-            <Auk::Toolbar::Item>
-              {{#if @isHighlighted}}
-              <Auk::Badge @icon="document-added" @size="large" />
-              {{else if @piece.confidential }}
-              <Auk::Badge @icon="not-visible" @size="large" />
-              {{ else }}
+  <div class="vlc-document-card__summary">
+    <div class="vlc-document-card__content">
+      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            {{#if @isHighlighted}}
+              <Auk::Badge @skin="success" @icon="document-added" @size="large" />
+            {{else}}
               <Auk::Badge @icon="document" @size="large" />
-              {{/if}}
-            </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item class="auk-u-maximize-width">
-              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-                {{#if this.documentContainer.type.label}}
-                <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-                  {{#unless this.loadPieceRelatedData.isRunning}}
-                    {{this.documentContainer.type.label}}
-                  {{/unless}}
+            {{/if}}
+          </Group.Item>
+          <Group.Item class="auk-u-maximize-width">
+            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+              <span data-test-document-card-type class="auk-overline">
+                {{#unless this.loadPieceRelatedData.isRunning}}
+                  {{this.documentContainer.type.label}}
+                {{/unless}}
+              </span>
+            </div>
+            <LinkTo @route="document" @model={{this.piece.id}}
+              class="auk-h4" data-test-document-card-name-value>
+              {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
+            </LinkTo>
+            <div class="vlc-document-card-content__meta">
+              {{! no piece.created in legacy data }}
+              {{#if this.piece.created}}
+                <p>
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.created "HH:mm"}}
                 </p>
-                {{/if}}
-                {{#if @isHighlighted}}
-                  <p class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
-                    <Auk::ColorBadge @skin="success" /> {{t "util.new-document"}}
-                  </p>
-                {{/if}}
-              </div>
-              <h6 class="auk-h4" data-test-document-card-name-value>
-                {{! template-lint-disable no-invalid-interactive }}
-                <AuButton @skin="naked" class="au-c-button--document" {{on "click" this.showPieceViewer}}>
-                  {{this.piece.name}}.{{#if (eq this.piece.file.extension "docx")}}pdf{{else}}{{this.piece.file.extension}}{{/if}}
-                </AuButton>
-                {{! template-lint-enable no-invalid-interactive }}
-              </h6>
-            </Auk::Toolbar::Item>
-          </Toolbar.Group>
-          <Toolbar.Group @position="right" as |Group|>
+              {{/if}}
+              {{#if this.piece.file.primarySource.created}}
+                <p data-test-document-card-primary-source-created>
+                  {{t "uploaded-at"}}
+                  {{moment-format this.piece.file.primarySource.created}}
+                  {{t "at"}}
+                  {{moment-format this.piece.file.primarySource.created "HH:mm"}}
+                  {{t "as"}}
+                  <AuLinkExternal
+                    data-test-document-card-primary-source-link
+                    href={{this.piece.file.primarySource.namedDownloadLink}}
+                    download
+                  >
+                    {{t (if (eq this.piece.file.primarySource.extension "docx") "word-document" "source-file-lowercase")}}
+                  </AuLinkExternal>
+                </p>
+              {{/if}}
+            </div>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
           {{#if
             (and
-              this.userMayManagePublicationFlows
+              (user-may "manage-publication-flows")
               (not this.loadPieceRelatedData.isRunning)
               (not this.loadPublicationFlowRelatedData.isRunning)
             )
           }}
             {{#if this.piece.publicationFlow}}
-              <LinkTo
+              <AuPill
+                @size="small"
                 @route="publications.publication"
                 @model={{this.piece.publicationFlow.id}}
-                class="auk-pill auk-pill--default auk-u-mr-2"
                 data-test-document-card-publication-link
               >
-                {{! TODO: remove style attributes and replace classes with auk-status-pill }}
-                {{! template-lint-disable no-inline-styles }}
-                <Auk::Icon @name="link" style="display: none;" />
-                <span class="auk-status-pill__label" style="padding: 0;">
-                  {{this.piece.publicationFlow.identification.idName}}
-                </span>
-                {{! template-lint-enable no-inline-styles }}
-              </LinkTo>
+                {{this.piece.publicationFlow.identification.idName}}
+              </AuPill>
             {{/if}}
           {{/if}}
-          <Group.Item class="auk-o-flex">
-            {{#unless this.loadPieceRelatedData.isRunning}}
-              {{#if @isDesignAgenda}}
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <AccessLevelPill
-                  @accessLevel={{this.accessLevel}}
-                  @isEditable={{true}}
-                  @onChangeAccessLevel={{this.changeAccessLevel}}
-                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                  @isDesignAgenda={{@isDesignAgenda}}
-                  @isNew={{@isNew}}
-                  @isFinal={{@isFinal}}
-                />
-              </div>
-              {{/if}}
+          <Group.Item
+            class="auk-o-flex"
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDecisionPublicationActivity.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDocumentPublicationActivity.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.status}}
+            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.previousVersion}}
+          >
+            {{#unless this.loadAccessLevelRelatedData.isRunning}}
+              <AccessLevelPill
+                @accessLevel={{this.piece.accessLevel}}
+                @isDraft={{this.isDraftAccessLevel}}
+                @isEditable={{true}}
+                @onChangeAccessLevel={{this.changeAccessLevel}}
+                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+              />
             {{/unless}}
           </Group.Item>
-          {{#if
-            (and
-              @hasMarkForSignature
-              (not this.loadSignatureRelatedData.isRunning)
-              (not this.loadPieceRelatedData.isRunning)
-            )
-          }}
-            {{#if @isDesignAgenda}}
-            <Group.Item>
-              <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                <Auk::Toggle
-                  id="signatureToggle"
-                  @checked={{if this.signMarkingActivity true false}}
-                  {{on "click" (perform this.markOrUnmarkForSignature)}}
-                />
-                <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
-                  {{#if this.markOrUnmarkForSignature.isRunning}}
-                  <Auk::Loader />
-                  {{else}}
-                  Te handtekenen
-                  {{/if}}
-                </label>
-              </div>
-            </Group.Item>
+          {{#if this.signaturesEnabled}} {{! feature flag }}
+            {{#if
+              (and
+                (user-may "manage-signatures")
+                (not this.loadSignatureRelatedData.isRunning)
+                (not this.loadPieceRelatedData.isRunning)
+              )
+            }}
+              <Group.Item>
+                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
+                  <Auk::Toggle
+                    id="signatureToggle"
+                    @checked={{if this.signMarkingActivity true false}}
+                    {{on "click" (perform this.markOrUnmarkForSignature)}}
+                  />
+                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
+                    {{#if this.markOrUnmarkForSignature.isRunning}}
+                      <Auk::Loader />
+                    {{else}}
+                      Te handtekenen
+                    {{/if}}
+                  </label>
+                </div>
+              </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if (and this.currentSession.isEditor @isDesignAgenda)}}
+          {{#if (user-may "manage-documents")}}
             <Group.Item>
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                @disabled={{this.loadPieceRelatedData.isRunning}}
+              <AuDropdown
                 data-test-document-card-actions={{true}}
-                as |Menu|
+                @icon="three-dots"
+                @title={{t "more"}}
+                @hideText={{true}}
+                @disabled={{this.loadPieceRelatedData.isRunning}}
+                @alignment="right"
               >
-                <Menu.Item
+                <AuButton
                   data-test-document-upload-new-piece
+                  @skin="link"
                   {{on "click" this.openUploadModal}}
+                  role="menuitem"
                 >
                   {{t "new-version"}}
-                </Menu.Item>
-                <Menu.Item {{on "click" this.enableEditPieceName}}>
-                  Wijzigen
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  @skin="danger"
+                </AuButton>
+                <AuButton
+                  data-test-document-edit-piece
+                  @skin="link"
+                  {{on "click" (toggle "isEditingPiece" this)}}
+                  role="menuitem"
+                >
+                  {{t "edit"}}
+                </AuButton>
+                <AuHr />
+                <AuButton
                   data-test-document-card-delete
+                  @skin="link"
+                  @alert={{true}}
                   {{on "click" this.deleteDocumentContainer}}
+                  role="menuitem"
                 >
                   {{t "document-delete"}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
+                </AuButton>
+              </AuDropdown>
             </Group.Item>
           {{/if}}
         </Toolbar.Group>
-        </Auk::Toolbar>
-        {{#if this.piece.created}}
-        {{#if (eq this.piece.file.extension "docx")}}
-        <div class="vlc-document-card-content__meta auk-u-mt-2">
-          {{! no piece.created in legacy data }}
-          {{! TODO: when created date is absent, the layout seems irregular
-                this will be addressed with new document card styling }}
-          <div>
-            Geüpload als <a href="#!">Word document</a>
-          </div>
-        </div>
-        {{/if}}
-        {{/if}}
-      </div>
+      </Auk::Toolbar>
     </div>
-    {{#if (await this.showPieces)}}
-    <div class="vlc-document-card-versions">
-      <Auk::Accordion>
-        <Auk::Accordion::Item
-          @title="Vorige versies"
-          @disabled={{this.loadPieceRelatedData.isRunning}}
-          @expandTask={{this.loadVersionHistory}}
-          data-test-document-card-version-history
-        >
-          {{#if this.loadVersionHistory.isRunning}}
-            <div class="auk-u-p-3">
-              <Auk::Loader />
-            </div>
-          {{else}}
-            {{#each this.visiblePieces as |piece|}}
-              {{! TODO: also disable delete when piece linked to other agenda-items while maintaining DDAU }}
-              {{#if (eq piece.name this.piece.name)}}
-              {{else}}
-              <WebComponents::VlDocument
-                @piece={{piece}}
-                @enableDelete={{eq piece @piece}}
-                @didDeletePiece={{@didDeletePiece}}
-                @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
-                @isDesignAgenda={{@isDesignAgenda}}
-                @isNew={{false}}
-                @isFinal={{@isFinal}}
-                @isVersion={{true}}
-              />
-              {{/if}}
-            {{/each}}
-          {{/if}}
-        </Auk::Accordion::Item>
-      </Auk::Accordion>
-    </div>
-    {{/if}}
   </div>
-</div>
-
-{{#if this.isEditingPiece}}
-<WebComponents::VlModal
-  @closeModal={{this.cancelEditPieceName}}
-  @isOverlay={{true}}
-  @title="Document wijzigen"
->
-  <Auk::Modal::Body>
-    <AuCard
-      @flex={{true}}
-      @size="small"
-      as |c|
-    >
-      <c.header
-        @badgeIcon="pdf"
-      >
-        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-          PDF
-        </p>
-        <div class="au-u-flex au-u-flex--spaced-small">
-          <Auk::Input
-            data-test-document-card-name-input={{true}}
-            @block={{true}}
-            @value={{this.pieceNameBuffer}}
-          />
-          <AuButtonGroup class="au-u-flex--no-wrap">
-            <AuButton @skin="secondary" {{on "click" this.replacePDF}}>
-              Vervangen
-            </AuButton>
-          </AuButtonGroup>
-        </div>
-        {{#if this.piece.created}}
-        <AuHelpText @skin="secondary">
-          {{t "uploaded-at"}}
-          {{moment-format this.piece.created}}
-          {{t "at"}}
-          {{moment-format this.piece.created "HH:mm"}}
-        </AuHelpText>
-        {{/if}}
-      </c.header>
-      {{#if this.hasReplacePDF}}
-      <c.content>
-        <Auk::FileUploader />
-      </c.content>
-      {{/if}}
-    </AuCard>
-    {{#if (eq this.piece.file.extension "docx")}}
-    <AuCard
-      @flex={{true}}
-      @size="small"
-      class="au-u-margin-top-small"
-      as |c|
-    >
-      <c.header
-        @badgeIcon="word"
-      >
-        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-          DOCX
-        </p>
-        <div class="au-u-flex au-u-flex--spaced-small">
-          <Auk::Input
-            data-test-document-card-name-input={{true}}
-            @block={{true}}
-            @value={{this.pieceNameBuffer}}
-          />
-          <AuButtonGroup class="au-u-flex--no-wrap">
-            <AuButton @skin="secondary" {{on "click" this.replaceDOCX}}>
-              Vervangen
-            </AuButton>
-            <AuButton @alert={{true}} @hideText={{true}} @icon="bin" @skin="secondary">
-              Verwijderen
-            </AuButton>
-          </AuButtonGroup>
-        </div>
-        {{#if this.piece.created}}
-        <AuHelpText @skin="secondary">
-          {{t "uploaded-at"}}
-          {{moment-format this.piece.created}}
-          {{t "at"}}
-          {{moment-format this.piece.created "HH:mm"}}
-        </AuHelpText>
-        {{/if}}
-      </c.header>
-      {{#if this.hasReplaceDOCX}}
-      <c.content>
-        <Auk::FileUploader />
-      </c.content>
-      {{/if}}
-    </AuCard>
-    {{else}}
-    <AuCard
-      @flex={{true}}
-      @size="small"
-      class="au-u-margin-top-small"
-      as |c|
-    >
-      <c.header
-        @badgeIcon="word"
-      >
-        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-          DOCX
-        </p>
-        <div class="au-u-flex au-u-flex--spaced-small">
-          <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
-        </div>
-      </c.header>
-      <c.content>
-        <Auk::FileUploader />
-      </c.content>
-    </AuCard>
+  {{#if (user-may "view-document-version-info")}}
+    {{#if (gt this.visiblePieces.length 0)}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            @disabled={{this.loadPieceRelatedData.isRunning}}
+            @expandTask={{this.loadVersionHistory}}
+            data-test-document-card-version-history
+          >
+            {{#if this.loadVersionHistory.isRunning}}
+              <div class="auk-u-p-3">
+                <Auk::Loader />
+              </div>
+            {{else}}
+              {{#each this.visiblePieces as |piece|}}
+                <div
+                  class="vlc-document-holder"
+                  {{did-update (perform this.loadPieceRelatedData) piece}}
+                >
+                  <Documents::DocumentVersionHistoryItem
+                    @piece={{piece}}
+                    @agendaContext={{@agendaContext}}
+                    @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
+                    @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
+                    @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                  />
+                </div>
+              {{/each}}
+            {{/if}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
     {{/if}}
-  </Auk::Modal::Body>
-  <WebComponents::VlModalFooter
-    @cancelButtonText={{t "cancel"}}
-    @saveButtonText={{t "save"}}
-    @cancelAction={{this.cancelEditPieceName}}
-    @saveAction={{perform this.savePieceName}}
+  {{/if}}
+</div>
+{{#if this.isEditingPiece}}
+  <Documents::DocumentCard::EditModal
+    @piece={{this.piece}}
+    @onCancel={{toggle "isEditingPiece" this}}
+    @onSave={{toggle "isEditingPiece" this}}
   />
-</WebComponents::VlModal>
-
 {{/if}}
 
 {{#if this.isOpenUploadModal}}
@@ -325,7 +215,7 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <Auk::Input @block={{true}} @value={{this.newPiece.name}} />
+        <AuInput @width="block" @value={{this.newPiece.name}} />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}}
@@ -346,8 +236,8 @@
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}
   <WebComponents::VlModalVerify
-    @title={{t "document-delete"}}
-    @message={{t "delete-document-message"}}
+    @title={{t "document-container-delete"}}
+    @message={{t "delete-document-container-message"}}
     @cancel={{this.cancelDeleteDocumentContainer}}
     @verify={{this.verifyDeleteDocumentContainer}}
   />

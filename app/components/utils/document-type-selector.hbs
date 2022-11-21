@@ -1,0 +1,27 @@
+{{#if this.isLoading}}
+  <div class="auk-u-text-muted">
+    {{t "please-be-patient"}}
+    <div class="auk-loader" role="alert" aria-busy="true"></div>
+  </div>
+{{else}}
+  <div class="auk-form-group">
+    <Auk::Label>{{t "document-type"}}</Auk::Label>
+    <PowerSelect
+      @options={{this.options}}
+      @selected={{@selectedDocumentType}}
+      @onChange={{@onChange}}
+      @disabled={{@disabled}}
+      @allowClear={{true}}
+      @renderInPlace={{@renderInPlace}}
+      @searchField="label"
+      @searchEnabled={{true}}
+      @searchMessage={{null}}
+      @loadingMessage={{t "please-be-patient"}}
+      @noMatchesMessage={{t "no-results-found"}}
+      ...attributes
+      as |option|
+    >
+      {{option.label}}
+    </PowerSelect>
+  </div>
+{{/if}}

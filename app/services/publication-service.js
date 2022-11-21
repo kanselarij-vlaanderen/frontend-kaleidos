@@ -41,7 +41,7 @@ export default class PublicationService extends Service {
    * }} publicationProperties
    * @param {{
    *  case: Case,
-   *  agendaItemTreatment: AgendaItemTreatment,
+   *  decisionActivity: DecisionActivity,
    * }|undefined} viaCouncilOfMinisterOptions passed when via ministerial council
    * @param {undefined|{
    *  decisionDate: Date,
@@ -56,28 +56,36 @@ export default class PublicationService extends Service {
   ) {
     const now = new Date();
 
-    let case_;
-    let agendaItemTreatment;
+    let _case;
+    let governmentAreas;
+    let decisionActivity;
     let mandatees;
     let regulationType;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
-      case_ = viaCouncilOfMinisterOptions.case;
-      agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
+      _case = viaCouncilOfMinisterOptions.case;
+      decisionActivity = viaCouncilOfMinisterOptions.decisionActivity;
       mandatees = viaCouncilOfMinisterOptions.mandatees;
       regulationType = viaCouncilOfMinisterOptions.regulationType;
+
+      const latestSubcase = await this.store.queryOne('subcase', {
+        'filter[decisionmaking-flow][case][:id:]': _case.id,
+        sort: '-created',
+      });
+      governmentAreas = await latestSubcase.governmentAreas;
     } else {
-      case_ = this.store.createRecord('case', {
+      _case = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
         created: now,
       });
-      await case_.save();
-      agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
+      await _case.save();
+      decisionActivity = this.store.createRecord('decision-activity', {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });
-      await agendaItemTreatment.save();
+      await decisionActivity.save();
       mandatees = [];
+      governmentAreas = [];
     }
 
     const initialStatus = await this.store.findRecordByUri(
@@ -109,18 +117,26 @@ export default class PublicationService extends Service {
     });
     await identifier.save();
 
+    const standardUrgencyLevel = await this.store.findRecordByUri(
+      'urgency-level',
+      CONSTANTS.URGENCY_LEVELS.STANDARD,
+    );
+
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
-      case: case_,
-      agendaItemTreatment: agendaItemTreatment,
+      case: _case,
+      decisionActivity: decisionActivity,
       mandatees: mandatees,
       status: initialStatus,
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
+      numberOfExtracts: 1,
       created: now,
       openingDate: publicationProperties.openingDate,
       modified: now,
       regulationType: regulationType,
+      urgencyLevel: standardUrgencyLevel,
+      governmentAreas: governmentAreas,
     });
     await publicationFlow.save();
 
@@ -191,8 +207,8 @@ export default class PublicationService extends Service {
 
   async getIsViaCouncilOfMinisters(publicationFlow) {
     const _case = await publicationFlow.case;
-    const subcases = await _case.subcases;
-    return !!subcases.length;
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    return decisionmakingFlow != null;
   }
 
   async updatePublicationStatus(publicationFlow, targetStatusUri, changeDate) {
@@ -453,18 +469,18 @@ export default class PublicationService extends Service {
    * For publications, we want to show a link to the agendaitem but loading the models agendaitem/agenda/meeting should be avoided.
    * Mainly because some of the relations should be loaded a certain way and we just want to generate a link, not work with the models.
    *
-   * @param {AgendaItemTreatment} agendaItemTreatment
+   * @param {DecisionActivity} decisionActivity
    * @returns [meetingId, agendaId, agendaitemId] an array of id's for a linkTo to route "agenda.agendaitems.agendaitem"
    */
-  async getModelsForAgendaitemFromTreatment(agendaItemTreatment) {
+  async getModelsForAgendaitemFromDecisionActivity(decisionActivity) {
     const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatments][:id:]': agendaItemTreatment.id,
+      'filter[treatment][decision-activity][:id:]': decisionActivity.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
     const agenda = await agendaitem?.agenda;
     const meeting = await agenda?.createdFor;
-    return [meeting.id, agenda.id, agendaitem.id];
+    return [meeting?.id, agenda?.id, agendaitem?.id];
   }
 
   async ensureDecision(publicationSubcase, date) {

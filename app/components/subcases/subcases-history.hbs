@@ -7,7 +7,7 @@
 </div>
 {{#if @subcases.length}}
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @case={{@case}} @subcase={{subcase}}>
+    <Subcases::SubcaseItem @decisionmakingFlow={{@decisionmakingFlow}} @subcase={{subcase}}>
       <div class="auk-hr">
         <hr />
       </div>
@@ -18,6 +18,36 @@
       </div>
     </Subcases::SubcaseItem>
   {{/each}}
+  {{#if (gt @subcases.meta.count @subcases.length)}}
+    <hr/>
+    <div class="auk-u-mx-4">
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <Auk::Pagination
+              @page={{@page}}
+              @size={{@size}}
+              @nbOfItems={{@subcases.length}}
+              @total={{@subcases.meta.count}}
+              @onNextPage={{@onNextPage}}
+              @onPreviousPage={{@onPreviousPage}}
+            />
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            {{t "subcases-per-page"}}
+          </Group.Item>
+          <Group.Item>
+            <WebComponents::AuPageSize
+              @selectedSize={{@size}}
+              @onChange={{@onSetSizeOption}}
+            />
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </div>
+  {{/if}}
 {{else}}
   <div class="auk-u-mt-2">
     <WebComponents::VlAlert @message={{t "no-subcases-yet"}} />

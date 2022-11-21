@@ -9,6 +9,7 @@ export default class MandateesMandateesPanelComponent extends Component {
    * @argument submitter
    * @argument allowEditing
    * @argument onSave
+   * @argument {Date} referenceDate: Date to get active Mandatees for
    */
   @tracked isEditing = false;
 

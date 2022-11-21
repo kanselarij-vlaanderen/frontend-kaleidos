@@ -2,8 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import CONSTANTS from '../../config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Concept} selectedKind The meeting kind to set the dropdown to
@@ -11,7 +10,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
  * @argument {boolean} disabled
  */
 export default class UtilsKindSelector extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked options;
 
@@ -27,16 +26,9 @@ export default class UtilsKindSelector extends Component {
 
   @task
   *loadKinds() {
-    this.options = yield this.store.query('concept', {
-      filter: {
-        'concept-schemes': {
-          ':uri:': CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT,
-        },
-        ':has-no:narrower': true, // Only the most specific concepts, i.e. the actual meeting kinds (so no "Annex")
-      },
-      include: 'broader,narrower',
-      'page[size]': PAGE_SIZE.CODE_LISTS,
-      sort: 'position',
+    this.options = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+      'filter[:has-no:narrower]': true,
+      include: 'broader',
     });
   }
 }

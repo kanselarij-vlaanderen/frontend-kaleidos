@@ -5,9 +5,10 @@
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
-            {{#if (and this.isEditingEnabled @isDesignAgenda)}}
+            {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
                 <Auk::Checkbox
+                  data-test-batch-documents-details-select-all
                   @checked={{this.areAllSelected}}
                   {{on "input" this.toggleAllSelection}}
                 />
@@ -15,7 +16,7 @@
             {{/if}}
             <th>{{t "document-name"}}</th>
             <th>{{t "document-type"}}</th>
-            {{#if (and this.isEditingEnabled @isDesignAgenda)}}
+            {{#if (user-may "manage-documents")}}
               <th>{{t "publicity"}}</th>
             {{else}}
               <th>{{t "file-type"}}</th>
@@ -24,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#if (and this.isEditingEnabled @isDesignAgenda)}}
+          {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
             />
@@ -32,10 +33,9 @@
           {{#each this.rows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
-              @isEditingEnabled={{this.isEditingEnabled}}
+              @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
-              @isDesignAgenda={{@isDesignAgenda}}
             />
           {{/each}}
         </tbody>
@@ -43,8 +43,8 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    {{#if this.isEditingEnabled}}
-      <Auk::Button
+    {{#if (user-may "manage-documents")}}
+      <AuButton
         data-test-batch-documents-details-save
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
@@ -52,7 +52,7 @@
         {{on "click" (perform this.save)}}
       >
         {{t "save"}}
-      </Auk::Button>
+      </AuButton>
     {{/if}}
   </Auk::Modal::Footer>
 </Auk::Modal>

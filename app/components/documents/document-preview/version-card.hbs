@@ -1,22 +1,23 @@
-<li data-test-version-card-container class="auk-document-card auk-document-card--clickable {{if @isHighlighted "active"}}" {{on "click" (fn @onSelectVersion @piece)}}>
+<li ...attributes data-test-version-card-container class="auk-document-card auk-document-card--clickable {{if @isHighlighted "active"}}">
   <div class="auk-document-card__content">
     {{#if @documentContainer.type}}
-    <div
-      data-test-version-card-details
-      class="auk-document-card__details auk-u-m-0"
-    >
-      <span class="auk-overline">{{@documentContainer.type.label}}</span>
-    </div>
+      <div
+        data-test-version-card-details
+        class="auk-document-card__details"
+      >
+          <span class="auk-overline">{{@documentContainer.type.label}}</span>
+      </div>
     {{/if}}
     <h4
       data-test-version-card-name
-      class="auk-document-card__title auk-u-m-0">{{@piece.name}}.{{@piece.file.extension}}
+      class="auk-document-card__title auk-u-m-0">
+      {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
     </h4>
     <div class="auk-u-mb-2 au-u-muted auk-u-text-small">
       <p>
         {{#if @piece.created}}
           {{t "uploaded-at"}}
-          {{moment-format @piece.created "DD-MM-YYYY"}}
+          {{moment-format @piece.created}}
           -
           {{moment-format @piece.created "HH:mm"}}
         {{/if}}
@@ -24,7 +25,7 @@
       {{#if @piece.accessLevelLastModified}}
         <p>
           {{t "access-level-last-modified"}}
-          {{moment-format @piece.accessLevelLastModified "DD-MM-YYYY"}}
+          {{moment-format @piece.accessLevelLastModified}}
           -
           {{moment-format @piece.accessLevelLastModified "HH:mm"}}
         </p>

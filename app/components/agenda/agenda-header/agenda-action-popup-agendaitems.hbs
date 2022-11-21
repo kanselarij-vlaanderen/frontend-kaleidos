@@ -10,16 +10,8 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              {{#if (await agendaitem.checkAdded)}}
+              {{#if (await (this.checkAdded agendaitem))}}
                 <Auk::Icon @name="calendar-new" @skin="muted" />
-              {{/if}}
-              {{!-- This does not seem to work properly without the #let, newsletterInfo.inNewsletter is undefined --}}
-              {{#if (await agendaitem.newsletterInfo)}}
-                {{#let (await agendaitem.newsletterInfo) as |newsletterInfo|}}
-                  {{#if (eq (await newsletterInfo.inNewsletter) false)}}
-                    <Auk::Icon @name="not-visible" @skin="muted" />
-                  {{/if}}
-                {{/let}}
               {{/if}}
               {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
                 <Auk::Icon @name="lock-closed" @skin="muted" />
@@ -29,7 +21,10 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <p class="{{agendaitem.formallyOkToShow.classNames}}">
-                <i class="{{agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
+                <Auk::Icon
+                  @name={{agendaitem.formallyOkToShow.svg.icon}}
+                  class="formally-ok-icon"
+                />
                 {{agendaitem.formallyOkToShow.label}}
               </p>
             </Auk::Toolbar::Item>

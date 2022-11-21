@@ -1,0 +1,40 @@
+{{page-title (t "settings")}}
+
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <Auk::Navbar @skin="gray-100">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Tabs>
+            <Auk::Tab
+              @route="settings.overview"
+              data-test-route-settings-general-settings
+            >
+              {{t "general-settings"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="settings.ministers"
+              data-test-route-settings-manage-ministers
+            >
+              {{t "manage-ministers"}}
+            </Auk::Tab>
+            {{#if (user-may "manage-users")}}
+              <Auk::Tab
+                @route="settings.users"
+                data-test-route-settings-manage-users
+              >
+                {{t "manage-users"}}
+              </Auk::Tab>
+            {{/if}}
+            <Auk::Tab
+              @route="settings.organizations"
+            >
+              {{t "manage-organizations"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+  {{outlet}}
+</div>

@@ -18,7 +18,7 @@ export default class ThrottledLoadingService extends Service {
     return yield this.store.query('piece', {
       'filter[agendaitems][:id:]': agendaitem.id,
       'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
-      include: 'document-container',
+      include: 'access-level,document-container',
     });
   }
 }

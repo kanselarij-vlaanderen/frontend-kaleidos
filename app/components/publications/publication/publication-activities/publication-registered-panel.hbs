@@ -14,22 +14,25 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right">
-        <Auk::DropdownMenu
-          @skin="borderless"
+        <AuDropdown
           @icon="three-dots"
+          @title={{t "more"}}
+          @hideText={{true}}
           @disabled={{and this.loadData.isIdle this.isEditDisabled}}
-          as |Menu|
+          @alignment="right"
         >
           {{!avoid render issues}}
           {{#if this.loadData.isIdle}}
-            <Menu.Item
+            <AuButton
+              @skin="link"
               @disabled={{this.isEditDisabled}}
               {{on "click" this.openPublicationEditModal}}
+              role="menuitem"
             >
               {{t "edit-2"}}
-            </Menu.Item>
+            </AuButton>
           {{/if}}
-        </Auk::DropdownMenu>
+        </AuDropdown>
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
@@ -43,12 +46,15 @@
             {{moment-format decision.publicationDate}}
           </h5>
           {{#if decision.isStaatsbladResource}}
-            <Auk::ButtonLink
-              @href={{decision.uri}}
-              @layout="icon-only"
+            <AuLinkExternal
+              @skin="primary"
               @icon="external-link"
+              @hideText={{true}}
+              href={{decision.uri}}
               target="_blank"
-            />
+            >
+              {{t "open-publication"}}
+            </AuLinkExternal>
           {{/if}}
         </Auk::List::Item>
       {{/each}}

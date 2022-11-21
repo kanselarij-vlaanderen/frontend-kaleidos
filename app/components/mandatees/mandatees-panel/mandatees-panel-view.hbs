@@ -6,16 +6,17 @@
           <h4 class="auk-panel__title">{{t "ministers"}}</h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      {{#if (and @showEditButton @isDesignAgenda)}}
+      {{#if @showEditButton}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary"
-              @icon="pencil"
-              @layout="icon-only"
+            <AuButton
               data-test-mandatee-panel-view-edit={{true}}
+              @skin="naked"
+              @icon="pencil"
               {{on "click" @onClickEdit}}
-            />
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{/if}}
@@ -40,7 +41,7 @@
                 <div class="auk-o-flex auk-o-flex--vertical-center">
                   <Auk::Badge @icon="user" />
                   <span class="auk-u-mx-2">
-                    {{mandatee.person.nameToDisplay}}
+                    {{mandatee.person.fullName}}
                   </span>
                 </div>
               </td>
@@ -61,7 +62,7 @@
     </Auk::Panel::Body>
   {{else}}
     <Auk::Panel::Body>
-      <Auk::EmptyState @message={{t "no-ministers-added"}} />
+      <Auk::EmptyState @message={{or @emptyStateMessage (t "no-ministers-added")}} />
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>

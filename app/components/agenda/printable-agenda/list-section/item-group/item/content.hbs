@@ -12,19 +12,24 @@
     {{! prettier-ignore }}
     <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
   {{/if}}
-  <Auk::PillList
-    class="{{if
-        (or @item.retracted (await @item.agendaActivity.subcase.confidential))
-        "auk-u-mt-2"
-      }}"
-  >
-    {{#if (await @item.agendaActivity.subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-left" @icon="not-visible">
-        {{t "confidential"}}
-      </Auk::Pill>
-    {{/if}}
-    {{#if @item.retracted}}
-      <Auk::Pill>{{t "postponed"}}</Auk::Pill>
-    {{/if}}
-  </Auk::PillList>
+  {{#let @item.treatment.decisionActivity as |decisionActivity| }}
+    <div
+      class="{{if
+          (or decisionActivity.isPostponed decisionActivity.isRetracted @item.agendaActivity.subcase.confidential)
+          "auk-u-mt-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
+        }}"
+    >
+      {{#if @item.agendaActivity.subcase.confidential}}
+        <AuPill @size="small" @skin="danger" @icon="lock-closed">
+          {{t "limited-access"}}
+        </AuPill>
+      {{/if}}
+      {{#if decisionActivity.isPostponed}}
+        <AuPill @size="small">{{t "postponed"}}</AuPill>
+      {{/if}}
+      {{#if decisionActivity.isRetracted}}
+        <AuPill @size="small">{{t "retracted"}}</AuPill>
+      {{/if}}
+    </div>
+  {{/let}}
 </div>

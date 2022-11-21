@@ -1,53 +1,76 @@
-<div class="auk-box">
-  <div class="auk-u-mb-4">
-    <div class="auk-form-group">
-      <div class="auk-u-mb-4">
-        <fieldset>
-          <legend class="auk-label">{{t "subcase-type"}}</legend>
-          <Auk::RadioList data-test-subcase-description-edit-type @layout="inline" as |List|>
-            {{#each this.caseTypes as |type|}}
-              <List.Radio
-                @label={{type.label}}
-                @checked={{eq type.uri this.caseType.uri}}
-                value={{type.id}}
-                {{on "change" this.selectCaseType}}
-              />
-            {{/each}}
-          </Auk::RadioList>
-        </fieldset>
+<Auk::Panel class="auk-panel--editing auk-u-mb-8">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "subcase"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <div class="auk-u-mb-4">
+          <fieldset>
+            <legend class="auk-label">{{t "subcase-type"}}</legend>
+            <Auk::RadioList data-test-subcase-description-edit-type @layout="inline" as |List|>
+              {{#each this.agendaItemTypes as |type|}}
+                <List.Radio
+                  @label={{type.label}}
+                  @checked={{eq type.uri this.agendaItemType.uri}}
+                  value={{type.id}}
+                  {{on "change" this.selectAgendaItemType}}
+                />
+              {{/each}}
+            </Auk::RadioList>
+          </fieldset>
+        </div>
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+        <Utils::ModelSelector
+          @modelName="subcase-type"
+          @searchField="label"
+          @sortField="label"
+          @displayField="label"
+          @selected={{this.subcaseType}}
+          @onChange={{this.selectSubcaseType}}
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+        <AuInput
+          @width="block"
+          @value={{mut this.subcaseName}}
+        />
       </div>
     </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
-      <Utils::ModelSelector
-        @modelName="subcase-type"
-        @searchField="label"
-        @sortField="label"
-        @propertyToShow="label"
-        @selectedItems={{this.subcaseType}}
-        @selectModel={{this.selectSubcaseType}}
-      />
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-      <Auk::Input @block={{true}} @value={{mut this.subcaseName}} />
-    </div>
-  </div>
-  <Auk::Toolbar @auto={{true}}>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::ButtonLink {{on "click" @onCancel}}>
-          {{t "cancel"}}
-        </Auk::ButtonLink>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::VlSaveButton
-          data-test-subcase-description-edit-save={{true}}
-          @text={{t "save"}}
-          @isLoading={{this.isSaving}}
-          @saveAction={{this.saveChanges}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <WebComponents::VlSaveButton
+            data-test-subcase-description-edit-save={{true}}
+            @text={{t "save"}}
+            @isLoading={{this.isSaving}}
+            @saveAction={{this.saveChanges}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>

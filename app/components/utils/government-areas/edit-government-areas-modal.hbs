@@ -13,7 +13,6 @@
       {{#unless this.loadGovernmentAreas.isRunning}}
         <Auk::Label>{{t "government-domains-government-fields"}}</Auk::Label>
         <Utils::GovernmentAreas::AreaSelector::GovernmentAreaSelectorForm
-          data-test-edit-government-fields-modal-selector-form
           @availableFields={{this.governmentFields}}
           @selectedFields={{this.selectedGovernmentFields}}
           @onSelectFields={{this.selectField}}
@@ -30,13 +29,13 @@
     @cancelDisabled={{this.save.isRunning}}
     @onCancel={{@onCancel}}
   >
-    <Auk::Button
+    <AuButton
       data-test-edit-government-fields-modal-save
       @skin="primary"
       @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

@@ -4,7 +4,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -13,34 +12,23 @@ export default class SubcaseDescriptionEdit extends Component {
    * @argument onSave
    */
   @service store;
+  @service conceptStore;
   @service newsletterService;
+  @service agendaitemAndSubcasePropertiesSync;
 
   @tracked subcaseName;
-  @tracked caseTypes;
   @tracked subcaseType;
-  @tracked caseType;
-  @tracked showAsRemark;
+  @tracked agendaItemType;
+  @tracked agendaItemTypes;
 
   @tracked isSaving = false;
 
   constructor() {
     super(...arguments);
-    this.showAsRemark = this.args.subcase.showAsRemark;
     this.subcaseName = this.args.subcase.subcaseName;
     this.loadSubcaseType.perform();
-    this.loadCaseTypes.perform();
-    this.loadCaseType.perform();
-  }
-
-  @task
-  *loadCaseType() {
-    let uri = '';
-    if (this.showAsRemark) {
-      uri = CONSTANTS.CASE_TYPES.REMARK;
-    } else {
-      uri = CONSTANTS.CASE_TYPES.NOTA;
-    }
-    this.caseType = yield this.store.findRecordByUri('case-type', uri);
+    this.loadAgendaItemType.perform();
+    this.loadAgendaItemTypes.perform();
   }
 
   @task
@@ -49,13 +37,13 @@ export default class SubcaseDescriptionEdit extends Component {
   }
 
   @task
-  *loadCaseTypes() {
-    this.caseTypes = yield this.store.query('case-type', {
-      sort: '-label',
-      filter: {
-        deprecated: false,
-      },
-    });
+  *loadAgendaItemType() {
+    this.agendaItemType = yield this.args.subcase.agendaItemType;
+  }
+
+  @task
+  *loadAgendaItemTypes() {
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
   }
 
   @action
@@ -65,11 +53,9 @@ export default class SubcaseDescriptionEdit extends Component {
   }
 
   @action
-  selectCaseType(event) {
+  selectAgendaItemType(event) {
     const id = event.target.value;
-    this.caseType = this.store.peekRecord('case-type', id);
-    this.showAsRemark =
-      this.caseType.get('uri') === CONSTANTS.CASE_TYPES.REMARK;
+    this.agendaItemType = this.store.peekRecord('concept', id);
   }
 
   @action
@@ -78,23 +64,23 @@ export default class SubcaseDescriptionEdit extends Component {
     this.isSaving = true;
 
     const propertiesToSetOnAgendaitem = {
-      showAsRemark: this.showAsRemark,
+      type: this.agendaItemType,
     };
 
     const propertiesToSetOnSubCase = {
       subcaseName: this.subcaseName,
       type: this.subcaseType,
-      showAsRemark: this.showAsRemark,
+      agendaItemType: this.agendaItemType,
     };
-    const oldShowAsRemark = this.args.subcase.showAsRemark;
-    await saveChanges(
+    const oldAgendaItemType = this.args.subcase.oldAgendaItemType;
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk
+      resetFormallyOk,
     );
 
-    if (this.showAsRemark !== oldShowAsRemark) {
+    if (this.agendaItemType !== oldAgendaItemType) {
       await this.updateNewsletterAfterRemarkChange();
     }
 
@@ -111,12 +97,12 @@ export default class SubcaseDescriptionEdit extends Component {
     });
     if (latestAgendaitem) {
       const newsletterInfo = await this.store.queryOne('newsletter-info', {
-        'filter[agenda-item-treatment][agendaitem][:id:]': latestAgendaitem.id,
+        'filter[agenda-item-treatment][agendaitems][:id:]': latestAgendaitem.id,
       });
       if (newsletterInfo?.id) {
         await newsletterInfo.destroyRecord();
       }
-      if (this.showAsRemark) {
+      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         const newNewsletterInfo =
           await this.newsletterService.createNewsItemForAgendaitem(
             latestAgendaitem,

@@ -1,0 +1,110 @@
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <h4 class="auk-toolbar__title">
+              {{t "documents"}}
+            </h4>
+          </Group.Item>
+          <AuPill
+            @size="small"
+            @skin="border"
+            @icon="comment"
+          >
+            <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+              {{t "filtered-subcase-documents"}}
+            </EmberTooltip>
+          </AuPill>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          {{#if this.model.pieces.length}}
+            <Group.Item>
+              {{#if (user-may "manage-documents")}}
+                <AuButton
+                  data-test-route-cases---subcase-documents-batch-edit
+                  @icon="pencil"
+                  {{on "click" this.openBatchDetails}}
+                >
+                  {{t "batch-edit"}}
+                </AuButton>
+              {{/if}}
+            </Group.Item>
+          {{/if}}
+        </Toolbar.Group>
+      </Auk::Toolbar>
+
+      {{#if this.documentsAreVisible}}
+        <Documents::DocumentCardList
+          @pieces={{this.model.pieces}}
+          @onAddPiece={{perform this.addPiece}}
+          @didDeleteContainer={{this.refresh}}
+        />
+      {{else}}
+        <div class="auk-u-mt-2">
+          <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+        </div>
+      {{/if}}
+
+      {{#if (user-may "manage-documents")}}
+        <div class="auk-u-mb-4">
+          <AuButton
+            data-test-route-cases---subcase-documents-add
+            @skin="naked"
+            @icon="plus"
+            {{on "click" this.openPieceUploadModal}}
+          >
+            {{t "documents-add"}}
+          </AuButton>
+        </div>
+      {{/if}}
+
+      <Documents::LinkedDocuments @agendaitemOrSubcase={{this.subcase}}/>
+    </div>
+  </div>
+</div>
+
+{{#if this.isOpenPieceUploadModal}}
+  <WebComponents::VlModal
+    @closeModal={{perform this.cancelUploadPieces}}
+    @isOverlay={{true}}
+    @large={{true}}
+    @title={{t "document-add"}} >
+    <Auk::Modal::Body>
+      {{#if this.savePieces.isRunning}}
+        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      {{else}}
+        <Auk::FileUploader
+          @multiple={{true}}
+          @reusable={{true}}
+          @onUpload={{this.uploadPiece}}
+        />
+        <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::UploadedDocument
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}} />
+          {{/each}}
+        </div>
+      {{/if}}
+    </Auk::Modal::Body>
+    <WebComponents::VlModalFooter
+      @isLoading={{this.savePieces.isRunning}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}} />
+  </WebComponents::VlModal>
+{{/if}}
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model.pieces}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}

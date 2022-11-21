@@ -10,6 +10,7 @@ export default class MandateesMandateesPanelEditComponent extends Component {
    * @argument submitter
    * @argument onCancel
    * @argument onSave
+   * @argument {Date} referenceDate: Date to get active Mandatees for
    */
   @service store;
 
@@ -24,7 +25,9 @@ export default class MandateesMandateesPanelEditComponent extends Component {
   }
 
   initBuffers() {
-    this.mandateesBuffer = this.args.mandatees ? this.args.mandatees.slice() : []; // Shallow copy
+    this.mandateesBuffer = this.args.mandatees
+      ? this.args.mandatees.slice()
+      : []; // Shallow copy
     this.submitterBuffer = this.args.submitter;
   }
 
@@ -40,14 +43,15 @@ export default class MandateesMandateesPanelEditComponent extends Component {
 
   @action
   async removeMandatee(mandatee) {
-    this.mandateesBuffer = this.mandateesBuffer.filter((item) => item !== mandatee);
+    this.mandateesBuffer = this.mandateesBuffer.filter(
+      (item) => item !== mandatee
+    );
     // eslint-disable-next-line no-self-assign
     this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
     // Once removed from related mandatees, a mandatee can no longer be a submitter either
     if (this.submitterBuffer === mandatee) {
       this.submitterBuffer = null;
     }
-
   }
 
   @action
@@ -58,12 +62,13 @@ export default class MandateesMandateesPanelEditComponent extends Component {
 
   @action
   async addMandatee(mandatee) {
-      this.mandateesBuffer.push(mandatee);
-      if (this.mandateesBuffer.length === 1) { // if this was the first mandatee added, make this one submitter by default
-        this.submitterBuffer = mandatee;
-      }
-      // eslint-disable-next-line no-self-assign
-      this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
+    this.mandateesBuffer.push(mandatee);
+    if (this.mandateesBuffer.length === 1) {
+      // if this was the first mandatee added, make this one submitter by default
+      this.submitterBuffer = mandatee;
+    }
+    // eslint-disable-next-line no-self-assign
+    this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
 
     // Reset interface state
     this.showSelectMandateeModal = false;

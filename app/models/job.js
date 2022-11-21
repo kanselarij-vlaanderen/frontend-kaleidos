@@ -2,11 +2,12 @@ import Model, { attr } from '@ember-data/model';
 // eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import { computed } from '@ember/object';
 import Evented from '@ember/object/evented';
+import CONFIG from 'frontend-kaleidos/config/constants';
 
 export default class JobModel extends Model.extend(Evented) {
-  RUNNING = 'http://vocab.deri.ie/cogs#Running';
-  SUCCESS = 'http://vocab.deri.ie/cogs#Success';
-  FAILED = 'http://vocab.deri.ie/cogs#Fail';
+  RUNNING = CONFIG.JOB_STATUSSES.RUNNING;
+  SUCCESS = CONFIG.JOB_STATUSSES.SUCCESS;
+  FAILED = CONFIG.JOB_STATUSSES.FAILED;
 
   @attr('datetime') created;
   @attr('string') status;
@@ -17,7 +18,6 @@ export default class JobModel extends Model.extend(Evented) {
     super(...arguments);
     // eslint-disable-next-line ember/no-observers, ember/classic-decorator-no-classic-methods
     this.addObserver('hasEnded', function() {
-      console.log('In observer');
       if (this.hasEnded) {
         this.trigger('didEnd', this.status);
       }

@@ -27,13 +27,13 @@
     @onCancel={{@onCancel}}
     @cancelDisabled={{this.save.isRunning}}
   >
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

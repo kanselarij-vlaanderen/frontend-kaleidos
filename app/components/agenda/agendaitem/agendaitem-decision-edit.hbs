@@ -5,28 +5,28 @@
 >
   <Auk::Label class="auk-u-sr-only">{{t "result-decision"}}</Auk::Label>
   <Decision::DecisionResultSelect
-    @selected={{this.treatment.decisionResultCode}}
+    @selected={{this.decisionActivity.decisionResultCode}}
     @onChange={{this.changeDecisionResultCode}}
   />
-  <Auk::Button
-    @skin="tertiary"
-    @layout="icon-only"
-    @icon="check"
-    @size="tiny"
-    @loading={{this.saveTreatment.isRunning}}
-    {{on "click" (perform this.saveTreatment)}}
+  <AuButton
     data-test-agendaitem-decision-edit-save
+    @skin="naked"
+    @icon="check"
+    @hideText={{true}}
+    @loading={{this.saveDecisionActivity.isRunning}}
+    {{on "click" (perform this.saveDecisionActivity)}}
+    class="auk-u-ml"
   >
     {{t "save"}}
-  </Auk::Button>
-  <Auk::Button
-    @skin="tertiary"
-    @layout="icon-only"
-    @icon="x"
-    @size="tiny"
-    {{on "click" this.cancelEdit}}
+  </AuButton>
+  <AuButton
     data-test-access-level-pill-cancel
+    @skin="naked"
+    @icon="x"
+    @hideText={{true}}
+    @loading={{this.saveDecisionActivity.isRunning}}
+    {{on "click" this.cancelEdit}}
   >
     {{t "cancel"}}
-  </Auk::Button>
+  </AuButton>
 </div>

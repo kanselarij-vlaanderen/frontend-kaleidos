@@ -6,7 +6,7 @@
     {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar>
+  <Auk::Navbar @noPadding={{not @isOpen}}>
     <Auk::Toolbar as |toolbar|>
       {{#if @isOpen}}
         <toolbar.Group @position="left" as |group|>
@@ -21,7 +21,6 @@
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
-                  data-test-document-preview-sidebar-tab-signatures
                   {{on "click" (fn this.setActiveTab "signatures")}}
                   @active={{eq this.activeTab "signatures"}}
                 >
@@ -40,25 +39,28 @@
         </toolbar.Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              data-test-document-preview-sidebar-close
-              @skin="borderless"
+            <AuButton
+              @skin="naked"
               @icon="chevron-right"
-              @layout="icon-only"
+              @hideText={{true}}
               {{on "click" @onCollapse}}
-            />
+            >
+              {{t "hide"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{else}}
         <Auk::Toolbar::Group @position="center">
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
-            <Auk::Button
+            <AuButton
               data-test-document-preview-sidebar-open
-              @skin="borderless"
+              @skin="naked"
               @icon="chevron-left"
-              @layout="icon-only"
+              @hideText={{true}}
               {{on "click" @onOpen}}
-            />
+            >
+              {{t "show"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{/if}}
@@ -73,6 +75,7 @@
           <Documents::DocumentPreview::DetailsTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
+            @didDeletePiece={{@didDeletePiece}}
           />
           {{! SIGNATURES }}
         {{else if (eq this.activeTab "signatures")}}

@@ -11,9 +11,8 @@ RUN ember build -prod
 
 FROM semtech/ember-proxy-service:1.5.1
 
-ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|ember-pdfjs-wrapper|@appuniversum)/"
-ENV EMBER_ENABLE_PUBLICATIONS_TAB=""
-ENV EMBER_ENABLE_SIGNATURES="true"
+ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|@appuniversum)/"
+ENV EMBER_ENABLE_SIGNATURES=""
 
 COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf

@@ -1,75 +1,72 @@
-<div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
-  {{#if @isEditingOverview}}
-    <Auk::Alert
-      @skin="warning"
+<div class="vlc-agenda-items auk-u-m-8">
+  {{#if this.isEditingOverview}}
+    <ChangesAlert
       @message={{t "editing-agenda-overview"}}
+      @buttonText={{t "end-editing-overview"}}
+      @clearAction={{this.toggleIsEditingOverview}}
     />
   {{/if}}
-  <Auk::Toolbar class="vlc-agenda-items-section-header">
+  <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <h3
           data-test-agenda-overview-section-title-notes
-          class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title"
+          class="auk-h3 auk-u-m-0"
         >
           {{t "agendaitems-subtitle"}}
         </h3>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{!-- <Auk::Toolbar::Item>
-        <Auk::ButtonLink
-          data-test-agenda-overview-show-changes={{true}}
-          class="vlc-agenda-items-section-header__link"
-          {{on "click" @toggleShowModifiedOnly}}
-        >
-          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-        </Auk::ButtonLink>
-      </Auk::Toolbar::Item> --}}
-      {{!-- <Auk::Toolbar::Item>
-        {{#if (and this.currentSession.isEditor this.isDesignAgenda)}}
-          {{#unless this.isEditingOverview}}
-            <div class="auk-u-ml-2">
-              <Auk::ButtonLink
+      <Auk::Toolbar::Item>
+        <AuButtonGroup>
+          <AuButton
+            data-test-agenda-overview-show-changes={{true}}
+            @skin="naked"
+            {{on "click" @toggleShowModifiedOnly}}
+          >
+            {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+          </AuButton>
+          {{#if this.canEdit}}
+            {{#unless this.isEditingOverview}}
+              <AuButton
                 data-test-agenda-overview-formally-ok-edit={{true}}
-                class="vlc-agenda-items-section-header__link"
+                @skin="naked"
+                @icon="pencil"
                 {{on "click" this.toggleIsEditingOverview}}
               >
-                Volgorde aanpassen
-              </Auk::ButtonLink>
-            </div>
-          {{/unless}}
-        {{/if}}
-      </Auk::Toolbar::Item> --}}
+                {{t "edit"}}
+              </AuButton>
+            {{/unless}}
+          {{/if}}
+        </AuButtonGroup>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
-      <div>
-        {{#if @isEditingOverview}}
+      <div class="auk-u-mb-8">
         <ul {{sortable-group onChange=@onReorderAgendaitems}}>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{! template-lint-disable simple-unless }}
             {{#unless
               (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
             }}
-              {{#unless this.isDraggingEnabled}}
-              <Agenda::AgendaOverview::AgendaitemGroupHeader
-                @mandatees={{agendaitemGroup.sortedMandatees}}
-                @isEditingFormallyOkStatus={{@isEditingOverview}}
-              />
-              {{/unless}}
+              <div class="auk-u-mt-3">
+                <Agenda::AgendaOverview::AgendaitemGroupHeader
+                  @mandatees={{agendaitemGroup.sortedMandatees}}
+                />
+              </div>
             {{/unless}}
             {{! template-lint-enable simple-unless }}
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{#if (includes agendaitem @newItems)}}
               <li
                 class="vlc-agenda-items__sub-item"
                 {{sortable-item
                   model=agendaitem
                   distance="30"
                   handle=this.dragHandleClass
-                  isDraggingDisabled=(not this.isDraggingEnabled)
+                  disabled=(not this.canEdit)
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
@@ -78,51 +75,14 @@
                   @currentAgenda={{@currentAgenda}}
                   @previousAgenda={{@previousAgenda}}
                   @isNew={{includes agendaitem @newItems}}
-                  @showFormallyOkStatus={{this.isDesignAgenda}}
-                  @isEditingFormallyOkStatus={{@isEditingOverview}}
-                  @showDragHandle={{this.isDraggingEnabled}}
-                />
-              </li>
-              {{else}}
-              {{!-- This shows multiple times. Quick fix with CSS, not suitable for production --}}
-              <li class="auk-u-show-last"><WebComponents::VlAlert @message="Er zijn geen nieuwe nota's" /></li>
-              {{/if}}
-            {{/each}}
-          {{/each}}
-        </ul>
-        {{else}}
-        <ul>
-          {{#each @notaGroups as |agendaitemGroup index|}}
-            {{! template-lint-disable simple-unless }}
-            {{#unless
-              (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
-            }}
-              <Agenda::AgendaOverview::AgendaitemGroupHeader
-                @mandatees={{agendaitemGroup.sortedMandatees}}
-                @isEditingFormallyOkStatus={{this.isEditingOverview}}
-              />
-            {{/unless}}
-            {{! template-lint-enable simple-unless }}
-            {{#each agendaitemGroup.agendaitems as |agendaitem index|}}
-              <li
-                class="vlc-agenda-items__sub-item"
-              >
-                <Agenda::AgendaOverview::AgendaOverviewItem
-                  @agendaitem={{agendaitem}}
-                  @meeting={{@meeting}}
-                  @currentAgenda={{@currentAgenda}}
-                  @previousAgenda={{@previousAgenda}}
-                  @isNew={{includes agendaitem @newItems}}
-                  @showFormallyOkStatus={{this.isDesignAgenda}}
+                  @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{this.isEditingOverview}}
-                  @showDragHandle={{this.isDraggingEnabled}}
-                  @isAnnouncement={{false}}
+                  @showDragHandle={{this.canEdit}}
                 />
               </li>
             {{/each}}
           {{/each}}
         </ul>
-        {{/if}}
       </div>
     {{else}}
       <div class="auk-u-mt-2">
@@ -132,24 +92,22 @@
   {{else}}
     <Auk::Loader @message={{t "agendaitem-grouping-message"}} />
   {{/if}}
-  <div class="vlc-agenda-items-section-header au-u-margin-top au-u-margin-bottom-small">
-    <h3 class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title">
+  <div class="auk-u-mb-3">
+    <h3 class="auk-h3 auk-u-m-0">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
   <div class="auk-u-mb-4">
     {{#if @announcements.length}}
-      {{#if @isEditingOverview}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}}>
-        {{#each @announcements as |announcement index|}}
-          {{#if (includes announcement @newItems)}}
+        {{#each @announcements as |announcement|}}
           <li
             class="vlc-agenda-items__sub-item"
             {{sortable-item
               model=announcement
               distance="30"
               handle=this.dragHandleClass
-              isDraggingDisabled=(not this.isDraggingEnabled)
+              disabled=(not this.canEdit)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -158,38 +116,13 @@
               @currentAgenda={{@currentAgenda}}
               @previousAgenda={{@previousAgenda}}
               @isNew={{includes announcement @newItems}}
-              @showFormallyOkStatus={{this.isDesignAgenda}}
-              @isEditingFormallyOkStatus={{@isEditingOverview}}
-              @showDragHandle={{this.isDraggingEnabled}}
-              @isAnnouncement={{true}}
-            />
-          </li>
-          {{else}}
-            {{#unless index}}
-            <WebComponents::VlAlert @message="Er zijn geen nieuwe mededelingen" />
-            {{/unless}}
-          {{/if}}
-        {{/each}}
-      </ul>
-      {{else}}
-      <ul>
-        {{#each @announcements as |announcement|}}
-          <li
-            class="vlc-agenda-items__sub-item"
-          >
-            <Agenda::AgendaOverview::AgendaOverviewItem
-              @agendaitem={{announcement}}
-              @meeting={{@meeting}}
-              @currentAgenda={{@currentAgenda}}
-              @previousAgenda={{@previousAgenda}}
-              @isNew={{includes announcement @newItems}}
-              @showFormallyOkStatus={{this.isDesignAgenda}}
+              @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{this.isEditingOverview}}
+              @showDragHandle={{this.canEdit}}
             />
           </li>
         {{/each}}
       </ul>
-      {{/if}}
     {{else}}
       <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}

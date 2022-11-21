@@ -1,0 +1,41 @@
+<Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
+  <div>
+    <h4 class="auk-h4 auk-u-m-0">{{@title}}</h4>
+    {{#if @lastJob}}
+      <div>
+        <div class="auk-u-text-muted">
+          {{t
+            "publication-reports-last-request"
+            date=(moment-format @lastJob.created)
+            time=(moment-format @lastJob.created "HH:mm")
+            user=@lastJob.generatedBy.fullName
+          }}
+        </div>
+          <AuLinkExternal
+            @icon="download"
+            href={{@lastJob.generated.namedDownloadLink}}
+            download
+          >
+            {{@lastJob.generated.downloadFilename}}
+          </AuLinkExternal>
+      </div>
+    {{/if}}
+  </div>
+  <div>
+    <AuButton
+      @skin="primary"
+      {{on "click" this.openGenerateReportModal}}
+    >
+      {{t "generate-report"}}
+    </AuButton>
+  </div>
+</Auk::Panel::Body>
+
+{{#if this.isOpenGenerateReportModal}}
+  <Publications::Overview::Reports::GenerateReportModal
+    @title={{@title}}
+    @userInputFields={{@userInputFields}}
+    @onClose={{this.closeGenerateReportModal}}
+    @onGenerateReport={{this.generateReport}}
+  />
+{{/if}}

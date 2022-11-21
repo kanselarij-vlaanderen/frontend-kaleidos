@@ -1,0 +1,75 @@
+<Auk::Modal @size="small">
+  <Auk::Modal::Header
+    @title={{t "agenda-publish-planned"}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
+  />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{or this.ensureFreshData.isRunning this.save.isRunning}}
+      @reserveSpace={{true}}
+    >
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "agenda-publication-internal-documents-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <Auk::Datepicker
+              class="auk-o-flex__item"
+              @enableTime={{true}}
+              @date={{this.documentPublicationPlannedDate}}
+              @onChange={{set this "documentPublicationPlannedDate"}}
+              @disabled={{this.isDisabledDocumentPublication}}
+            />
+            <AuButton
+              data-test-publication-planning-release-documents-now
+              class="auk-u-ml-2"
+              @skin="primary"
+              @disabled={{this.isDisabledDocumentPublication}}
+              {{on "click" this.setDocumentPublicationDateNow}}
+            >
+              {{t "now"}}
+            </AuButton>
+          </div>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "agenda-publication-website-question"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <Auk::Datepicker
+              class="auk-o-flex__item"
+              @enableTime={{true}}
+              @date={{this.themisPublicationPlannedDate}}
+              @onChange={{set this "themisPublicationPlannedDate"}}
+              @disabled={{this.isDisabledThemisPublication}}
+            />
+            <AuButton
+              class="auk-u-ml-2"
+              @skin="primary"
+              @disabled={{this.isDisabledThemisPublication}}
+              {{on "click" this.setThemisPublicationDateNow}}
+            >
+              {{t "now"}}
+            </AuButton>
+          </div>
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+  >
+    <AuButton
+      data-test-publication-planning-release-documents-confirm
+      @skin="primary"
+      @disabled={{this.isDisabledSave}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "confirm"}}
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>

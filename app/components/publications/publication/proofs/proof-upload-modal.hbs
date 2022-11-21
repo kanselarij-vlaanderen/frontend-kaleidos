@@ -22,10 +22,7 @@
         {{on "input" this.setMustUpdatePublicationStatus}}
       />
     </div>
-    <div
-      data-test-proof-upload-received-date
-      class="auk-form-group"
-    >
+    <div class="auk-form-group">
       <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
         {{t "date"}}
       </Auk::Label>
@@ -39,9 +36,9 @@
       <Auk::Label for="proofPrintCorrector">
         {{t "who-proof-reads"}}
       </Auk::Label>
-      <Auk::Input
-        id="proofPrintCorrector"
+      <AuInput
         @value={{mut this.proofPrintCorrector}}
+        id="proofPrintCorrector"
       />
     </div>
   </Auk::Modal::Body>
@@ -49,7 +46,7 @@
     @onCancel={{perform this.cancel}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
-    <Auk::Button
+    <AuButton
       data-test-proof-upload-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
@@ -57,6 +54,6 @@
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

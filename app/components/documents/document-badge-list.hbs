@@ -1,13 +1,13 @@
 <Documents::DocumentList
   @pieces={{@pieces}}
 as |documents|>
-  <ul class="list-container">
+  <ul>
     {{#each documents as |doc|}}
       <li class="vlc-document-list__item">
         <Documents::DocumentBadge
           @doc={{doc}}
-          @accessLevel={{await doc.accessLevel}}
           @isShowingAccessLevel={{this.shouldShowAccessLevel (await doc.accessLevel)}}
+          @agendaContext={{@agendaContext}}
           @isHighlighted={{includes doc @highlightedPieces}}
         />
       </li>

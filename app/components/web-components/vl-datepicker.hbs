@@ -5,7 +5,7 @@
   {{#if (not this.await this.dateObjectsToEnable)}}
     <EmberFlatpickr
       data-test-vl-datepicker
-      class="auk-input auk-input--block"
+      class="auk-input auk-input--block {{if @error "auk-input--error"}}"
       @locale="nl"
       @date={{readonly this.selectedDate}} {{!-- Required Option --}}
       @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
@@ -13,6 +13,8 @@
       @time_24hr={{true}}
       @defaultHour={{@defaultHour}}
       @defaultMinute={{@defaultMinute}}
+      @minDate={{@min}}
+      @maxDate={{@max}}
       @nextArrow=""
       @prevArrow=""
       @noCalendar={{false}}
@@ -34,6 +36,8 @@
       @time_24hr={{true}}
       @defaultHour={{@defaultHour}}
       @defaultMinute={{@defaultMinute}}
+      @minDate={{@min}}
+      @maxDate={{@max}}
       @nextArrow=""
       @prevArrow=""
       @noCalendar={{false}}
@@ -45,11 +49,14 @@
     />
   {{/if}}
   {{#if @enableClear}}
-    <Auk::Button
-      @skin="muted-borderless"
-      @layout="icon-only"
+    <AuButton
+      @skin="naked"
       @icon="x"
+      @hideText={{true}}
       {{on "click" @onClear}}
-    />
+      class="auk-button--muted"
+    >
+      {{t "reset"}}
+    </AuButton>
   {{/if}}
 </div>

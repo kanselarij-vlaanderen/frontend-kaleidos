@@ -8,6 +8,7 @@ const selectors = {
   newsItem: {
     edit: '[data-test-route-agenda---news-item-edit]',
     create: '[data-test-route-agenda---news-item-create]',
+    alert: '[data-test-route-agenda---news-item-alert]',
   },
 
   // component agendaitem-news-item
@@ -43,15 +44,13 @@ const selectors = {
   // component newsletter-header-overview
   newsletterHeaderOverview: {
     title: '[data-test-newsletter-header-overview-title]',
-    notaUpdates: '[data-test-newsletter-header-overview-nota-updates]',
   },
 
   // component table-row
   tableRow: {
     newsletterRow: '[data-test-table-row-newsletter-row]',
     agendaitemNumber: '[data-test-table-row-newsletter-row-agendaitem-number]',
-    // TODO-selector this div contains more than just the title, rename
-    newsletterTitle: '[data-test-table-row-newsletter-row-title]',
+    titleContent: '[data-test-table-row-newsletter-row-title-content]',
     inNewsletterCheckbox: '[data-test-table-row-newsletter-row-checkbox-in-newsletter]',
   },
 
@@ -63,15 +62,20 @@ const selectors = {
   },
 
   // component item-content
-  itemContent: {
-    container: '[data-test-newsletter-item-content-container]',
-    title: '[data-test-newsletter-item-content-title]',
-    edit: '[data-test-newsletter-item-content-edit]',
-    noContent: '[data-test-newsletter-item-content-no-content]',
-    printItemProposal: '[data-test-newsletter-item-content-print-item-proposal]',
-    richtext: '[data-test-newsletter-item-content-richtext]',
-    remark: '[data-test-newsletter-item-content-remark]',
-    theme: '[data-test-newsletter-item-content-theme]',
+  newsletterPrint: {
+    container: '[data-test-newsletter-item-print-container]',
+    title: '[data-test-newsletter-item-print-title]',
+    edit: '[data-test-newsletter-item-print-edit]',
+    noContent: '[data-test-newsletter-item-print-no-content]',
+    printItemProposal: '[data-test-newsletter-item-print-proposal]',
+    richtext: '[data-test-newsletter-item-print-richtext]',
+    remark: '[data-test-newsletter-item-print-remark]',
+    theme: '[data-test-newsletter-item-print-theme]',
+  },
+
+  // component newsletter-print-header
+  newsletterPrintHeader: {
+    publicationPlannedDate: '[data-test-newsletter-print-header-publication-planned-date]',
   },
 };
 export default selectors;

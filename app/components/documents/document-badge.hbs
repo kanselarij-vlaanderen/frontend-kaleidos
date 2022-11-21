@@ -1,4 +1,4 @@
-<span class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+<div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
   <a
     href={{@doc.viewDocumentURL}} target="_blank" rel="noreferrer noopener"
     data-test-document-badge-link
@@ -10,12 +10,14 @@
   </a>
   {{#if @isHighlighted}}
     <span class="auk-o-flex auk-o-flex--spaced auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
-      <Auk::ColorBadge @skin="success" /> <span>{{t "util.new-document"}}</span>
+      <Auk::ColorBadge @skin="success" />
+      <span>{{t "new-document"}}</span>
     </span>
   {{/if}}
   {{#if @isShowingAccessLevel}}
     <AccessLevelPill
-      @accessLevel={{@accessLevel}}
+      @accessLevel={{@doc.accessLevel}}
+      @isDraft={{this.isDraftAccessLevel}}
     />
   {{/if}}
-</span>
+</div>

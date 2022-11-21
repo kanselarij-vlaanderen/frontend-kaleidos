@@ -1,72 +1,79 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{this.subcase.shortTitle}}</h4>
+            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{@subcase.shortTitle}}</h4>
           </div>
           <Subcases::SubcaseDetailNav/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if this.currentSession.isEditor}}
+      {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
-          {{#if (or (is-pending this.canPropose) this.isLoading)}}
+          {{#if (or this.loadData.isRunning this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
-          {{else if (await this.canPropose)}}
-            <Auk::DropdownMenu
-              @skin="primary"
-              @label={{t "propose-for-agenda"}}
+          {{else if this.canPropose}}
+            <AuDropdown
               data-test-subcase-header-show-proposed-agendas={{true}}
-            as |Menu|>
-              {{#each
-                (await this.meetings)
-              as |meeting|
-              }}
-                <Menu.Item
+              @skin="primary"
+              @title={{t "propose-for-agenda"}}
+              @alignment="right"
+            >
+              {{#each this.meetings as |meeting|}}
+                <AuButton
                   data-test-subcase-header-propose-for-agenda
-                  {{action "proposeForAgenda" this.subcase meeting}}
+                  @skin="link"
+                  {{on "click" (fn this.proposeForAgenda @subcase meeting)}}
+                  role="menuitem"
                 >
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}
-                </Menu.Item>
+                </AuButton>
               {{/each}}
-              {{#if (gt (await this.meetings.length) 0)}}
-                <Menu.Divider />
+              {{#if (gt this.meetings.length 0)}}
+                <AuHr />
               {{/if}}
-              <Menu.Item {{action "proposeForOtherAgenda" this.subcase}}>
+              <AuButton
+                @skin="link"
+                {{on "click" (fn this.proposeForOtherAgenda @subcase)}}
+                role="menuitem"
+              >
                 {{t "other-agenda"}}
-              </Menu.Item>
-            </Auk::DropdownMenu>
+              </AuButton>
+            </AuDropdown>
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::DropdownMenu
-            @skin="secondary"
-            @label={{t "actions"}}
+          <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
-          as |Menu|>
-            {{#if (await this.canDelete)}}
-              <Menu.Item
-                @skin="danger"
+            @skin="secondary"
+            @title={{t "actions"}}
+            @alignment="right"
+          >
+            {{#if this.canDelete}}
+              <AuButton
                 data-test-subcase-header-action-delete-subcase
-                {{action "requestDeleteSubcase" this.subcase}}
+                @skin="link"
+                @alert={{true}}
+                {{on "click" (fn this.requestDeleteSubcase @subcase)}}
+                role="menuitem"
               >
                 {{t "delete-subcase"}}
-              </Menu.Item>
+              </AuButton>
             {{/if}}
-            <Menu.Item
+            <AuButton
               data-test-subcase-header-action-move-subcase
-              {{action "triggerMoveSubcaseDialog" }}
+              @skin="link"
+              {{on "click" this.triggerMoveSubcaseDialog}}
+              role="menuitem"
             >
               {{t "move-subcase"}}
-            </Menu.Item>
-          </Auk::DropdownMenu>
+            </AuButton>
+          </AuDropdown>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
@@ -82,7 +89,7 @@
       this.caseToDelete.shortTitle
       "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?"
     }}
-    @cancel={{action "cancelDeleteCase"}}
+    @cancel={{this.cancelDeleteCase}}
     @verify={{perform this.deleteCase this.caseToDelete}}
     @isLoading={{this.deleteCase.isRunning}}
   />
@@ -90,11 +97,11 @@
 
 {{#if this.isAssigningToOtherCase}}
   <WebComponents::VlModal
-    @closeModal={{action "cancel"}}
+    @closeModal={{this.cancel}}
     @isOverlay={{true}}
     @title={{t "move-subcase-to-other-case"}}
   >
-    <Utils::CaseSearch @onSelect={{action "moveSubcase"}} />
+    <Utils::CaseSearch @onSelect={{this.moveSubcase}} />
   </WebComponents::VlModal>
 {{/if}}
 
@@ -102,13 +109,13 @@
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "propose-for-agenda"}}
-    @closeModal={{action "cancel"}}
+    @closeModal={{this.cancel}}
   >
     <Subcases::AssignToMeetingForm
       @subcase={{this.selectedSubcase}}
-      @proposeForAgenda={{action "proposeForAgenda"}}
-      @cancel={{action "cancel"}}
-      @closeModal={{action "cancel"}}
+      @proposeForAgenda={{this.proposeForAgenda}}
+      @cancel={{this.cancel}}
+      @closeModal={{this.cancel}}
     />
   </WebComponents::VlModal>
 {{/if}}
@@ -117,7 +124,7 @@
     @isLoading={{this.isLoading}}
     @title={{t "delete-subcase"}}
     @message={{t "delete-subcase-confirmation"}}
-    @cancel={{action "cancel"}}
-    @verify={{action "deleteSubcase"}}
+    @cancel={{this.cancel}}
+    @verify={{this.deleteSubcase}}
   />
 {{/if}}

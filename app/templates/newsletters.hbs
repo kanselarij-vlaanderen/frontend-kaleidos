@@ -1,0 +1,23 @@
+{{page-title (t "newsletter")}}
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h1 class="auk-toolbar__title" data-test-newsletter-header-title>
+          {{t "newsletter"}}
+        </h1>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="newsletters.index">
+            {{t "newsletters-tabs-overview"}}
+          </Auk::Tab>
+          <Auk::Tab @route="newsletters.search" @icon="search">
+            {{t "newsletters-tabs-search"}}
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+{{outlet}}

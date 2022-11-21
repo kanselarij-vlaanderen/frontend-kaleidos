@@ -1,0 +1,15 @@
+{{#if this.model.shortTitle}}
+  {{page-title this.model.shortTitle}}
+{{else if this.model.title}}
+  {{page-title this.model.title}}
+{{else}}
+  {{page-title (capitalize this.model.subcaseName)}}
+{{/if}}
+<div class="auk-u-bg-alt">
+  <Subcases::SubcaseHeader
+    @subcase={{this.model}}
+    @onMoveSubcase={{this.refreshSubcases}}
+    @onProposedForAgenda={{this.refreshSubcases}}
+  />
+</div>
+{{outlet}}

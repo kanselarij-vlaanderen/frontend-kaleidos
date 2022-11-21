@@ -31,7 +31,6 @@ export default class GovernmentAreaSelectorForm extends Component {
     );
 
     let uniqueDomains = domainsFromAvailableFields
-      .filterBy('deprecated', false)
       .uniq()
       .sortBy('label');
 
@@ -45,7 +44,7 @@ export default class GovernmentAreaSelectorForm extends Component {
     this.domainSelections = uniqueDomains.map((domain) => {
       const availableFieldsForDomain = availableFields.filter(
         (_, index) => domainsFromAvailableFields[index] === domain
-      );
+      ).sortBy('position');
       const selectedFieldsForDomain = selectedFields.filter(
         (_, index) => domainsFromSelectedFields[index] === domain
       );

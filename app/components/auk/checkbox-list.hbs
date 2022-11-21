@@ -1,16 +1,3 @@
 <div class="auk-checkbox-list {{this.layout}}" ...attributes>
-  {{#if @checkable}}
-    <Auk::Checkbox
-      @label={{@label}}
-      @labelSkin="bold"
-      @checked={{@checked}}
-      disabled={{@disabled}}
-      {{on "input" this.onToggle}}
-    />
-    <div class="auk-u-ml-2">
-      {{yield}}
-    </div>
-  {{else}}
-    {{yield}}
-  {{/if}}
+  {{yield}}
 </div>

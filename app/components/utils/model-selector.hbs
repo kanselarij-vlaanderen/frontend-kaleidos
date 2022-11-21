@@ -1,47 +1,47 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if (not this.multiSelect)}}
-  <PowerSelect
-    @options={{this.items}}
-    @selected={{this.selectedItems}}
-    @disabled={{this.readOnly}}
-    @allowClear={{this.allowClear}}
-    @searchField={{this.searchField}}
-    @placeholder={{this.placeholder}}
-    @loadingMessage={{this.loadingMessage}}
-    @noMatchesMessage={{this.noMatchesMessage}}
-    @searchEnabled={{this.searchEnabled}}
-    @searchMessage={{null}}
-    @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onChange={{action "selectModel"}}
-  as |model|>
-    {{#if (has-block)}}
-      {{yield model}}
-    {{else}}
-      {{model-property-to-show model this.propertyToShow}}
-    {{/if}}
-  </PowerSelect>
-{{else}}
+{{#if @multiple}}
   <PowerSelectMultiple
     @options={{this.items}}
-    @selected={{this.selectedItems}}
-    @disabled={{this.readOnly}}
-    @searchField={{this.searchField}}
-    @placeholder={{this.placeholder}}
-    @loadingMessage={{this.loadingMessage}}
+    @selected={{@selected}}
+    @disabled={{@disabled}}
+    @searchField={{@searchField}}
+    @placeholder={{@placeholder}}
+    @loadingMessage={{t "please-be-patient"}}
+    @noMatchesMessage={{t "no-results-found"}}
     @searchEnabled={{this.searchEnabled}}
     @searchMessage={{null}}
-    @noMatchesMessage={{this.noMatchesMessage}}
     @closeOnSelect={{false}}
     @search={{perform this.searchTask}}
-    @oninput={{action "resetValueIfEmpty"}}
-    @onChange={{action "selectModel"}}
+    @onChange={{@onChange}}
+    @renderInPlace={{@renderInPlace}}
+    ...attributes
   as |model|>
     {{#if (has-block)}}
       {{yield model}}
     {{else}}
-      {{model-property-to-show model this.propertyToShow}}
+      {{get model @displayField}}
     {{/if}}
   </PowerSelectMultiple>
+{{else}}
+  <PowerSelect
+    @options={{this.items}}
+    @selected={{@selected}}
+    @disabled={{@disabled}}
+    @allowClear={{@allowClear}}
+    @searchField={{@searchField}}
+    @placeholder={{@placeholder}}
+    @loadingMessage={{t "please-be-patient"}}
+    @noMatchesMessage={{t "no-results-found"}}
+    @searchEnabled={{this.searchEnabled}}
+    @searchMessage={{null}}
+    @search={{perform this.searchTask}}
+    @onChange={{@onChange}}
+    @renderInPlace={{@renderInPlace}}
+    ...attributes
+  as |model|>
+    {{#if (has-block)}}
+      {{yield model}}
+    {{else}}
+      {{get model @displayField}}
+    {{/if}}
+  </PowerSelect>
 {{/if}}

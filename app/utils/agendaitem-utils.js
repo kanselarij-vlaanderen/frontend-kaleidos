@@ -1,6 +1,5 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
-import moment from 'moment';
 import { A } from '@ember/array';
 
 /**
@@ -10,91 +9,6 @@ import { A } from '@ember/array';
 export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
   if (subcaseOrAgendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK) {
     subcaseOrAgendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
-  }
-};
-
-/**
- *@name setAgendaitemFormallyOk
- *@description Zet een agendapunt naar formeel Ok.
- * @param agendaitem
- */
-export const setAgendaitemFormallyOk = async(agendaitem) => {
-  if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
-    agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.OK);
-    await agendaitem.save();
-  }
-};
-
-/**
- * @description Set some properties on a model.
- * @param model Kan van het type agendaitem of subcase zijn
- * @param propertiesToSet de properties die we dienen aan te passen
- * @param resetFormallyOk Dient de formaliteit aangepast te worden of niet (default true)
- * @returns {Promise<*>}
- */
-export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
-  if (resetFormallyOk) {
-    setNotYetFormallyOk(model);
-  }
-
-  const keys = Object.keys(propertiesToSet);
-  for (const key of keys) {
-    model.set(key, propertiesToSet[key]);
-  }
-
-  await model.save();
-  return model.reload();
-};
-
-/**
- * @description Zet de modified date property van een agenda op basis van de doorgegeven agendaitem
- * @param agendaitem Het agendaitem om de agenda mee op te vragen.
- * @returns {Promise<void>}
- */
-export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
-  const agenda = await agendaitem.get('agenda');
-  const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
-  if (agenda && isDesignAgenda) {
-    agenda.set('modified', moment().utc()
-      .toDate());
-    agenda.save();
-  }
-};
-
-/**
- * Save Changes on agenda item or subcase.
- *
- * @param agendaitemOrSubcase
- * @param propertiesToSetOnAgendaitem
- * @param propertiesToSetOnSubcase
- * @param resetFormallyOk
- * @returns {Promise<void>}
- */
-export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) => {
-  const item = agendaitemOrSubcase;
-  const isAgendaitem = item.get('modelName') === 'agendaitem';
-
-  await item.preEditOrSaveCheck();
-  if (isAgendaitem) {
-    const agenda = await item.agenda;
-    const agendaStatus = await agenda.status;
-    const agendaActivity = await item.agendaActivity;
-    if (agendaActivity && (agendaStatus.isDesignAgenda || agendaStatus.isFinal)) {
-      const agendaitemSubcase = await agendaActivity.subcase;
-      await agendaitemSubcase.preEditOrSaveCheck();
-      await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);
-    }
-    await setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, resetFormallyOk);
-    await setModifiedOnAgendaOfAgendaitem(item);
-  } else {
-    await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-    const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
-    if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
-      await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
-        await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
-        await setModifiedOnAgendaOfAgendaitem(agendaitem);
-      }));
-    }
   }
 };
 
@@ -113,8 +27,9 @@ export const setCalculatedGroupNumbers = (agendaitems) => Promise.all(
       agendaitem.set('groupNumber', 'ZZZZZZZZ');
       return;
     }
-    const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
-    mandateePriorities.sort(); // should sort on letters A - Z
+    const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+    // there can be max 11 mandatees, a normal sort() would yield [1,11,3]
+    mandateePriorities.sort((a, b) => (a - b));
     agendaitem.set('groupNumber', mandateePriorities.join());
   })
 );
@@ -145,25 +60,6 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
     }
   });
   return groups;
-};
-
-/**
- * For a set of agendaitems, will fetch the drafts, and will group them by number
- * @param  {Array}  agendaitems   Agenda items to parse from
- * @return {Object}               An object containing drafts and groups
- */
-export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
-  // Drafts are items without an approval or remark
-  const draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
-
-  // Calculate the priorities on the drafts
-  await setCalculatedGroupNumbers(draftAgendaitems);
-
-  const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
-  return {
-    draftAgendaitems,
-    groupedAgendaitems,
-  };
 };
 
 /**
@@ -206,10 +102,18 @@ export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda)
 export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
-  const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('number');
-  const actualAnnouncements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
-    .sortBy('number');
+  const actualAgendaitems = [];
+  const actualAnnouncements = [];
+  for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+    if (!agendaitem.isDeleted) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        actualAgendaitems.push(agendaitem);
+      } else {
+        actualAnnouncements.push(agendaitem);
+      }
+    }
+  }
   await setAgendaitemsNumber(actualAgendaitems, isEditor, true);
   await setAgendaitemsNumber(actualAnnouncements, isEditor, true);
 };

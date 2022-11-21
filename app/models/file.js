@@ -8,7 +8,8 @@ export default class File extends Model {
   @attr('string') extension;
   @attr('datetime') created;
 
-  @belongsTo('piece') piece;
+  @belongsTo('file', { inverse: 'primarySourceOf' }) primarySource;
+  @belongsTo('file', { inverse: 'primarySource' }) primarySourceOf;
 
   // *NOTE Don't use this getter, use filename instead
   // Possible unused getter since it had an error throwing 'deprecate' method for 2 months but no support issues were ever logged
@@ -27,6 +28,10 @@ export default class File extends Model {
 
   get downloadLink() {
     return `/files/${this.id}/download`;
+  }
+
+  get inlineViewLink() {
+    return `/files/${this.id}/download?content-disposition=inline`;
   }
 
   get namedDownloadLink() {

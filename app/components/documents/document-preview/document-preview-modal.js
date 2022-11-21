@@ -3,30 +3,27 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
-  @tracked selectedVersion;
+  /**
+   * @argument piece
+   */
+
   @tracked sidebarIsOpen = true;
+  @tracked selectedVersion;
 
   constructor() {
     super(...arguments);
     this.selectedVersion = this.args.piece;
-
-    this.sidebarStorage = JSON.parse(localStorage.getItem('documentViewerSidebar'))
-
-    if (this.sidebarStorage == false) {
-      this.sidebarIsOpen = true
-    } else {
-      this.sidebarIsOpen = true;
-    }
-  }
-
-  @action
-  setSelectedVersion(piece) {
-    this.selectedVersion = piece;
+    this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar'))
   }
 
   @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;
     localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
+  }
+
+  @action
+  setSelectedVersion(piece) {
+    this.selectedVersion = piece;
   }
 }

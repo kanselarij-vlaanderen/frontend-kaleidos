@@ -1,0 +1,146 @@
+{{page-title (t "manage-emails")}}
+
+<div class="auk-u-m-8">
+  <div class="auk-u-mb-3">
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <h4 class="auk-panel__title">{{t "manage-emails"}}</h4>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>{{t "translation-requests"}}</h4>
+          <div class="auk-form-group-layout--horizontal">
+            <div class="auk-form-group">
+              <Auk::Label @required={{true}}>
+                {{t "email-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.translationRequestToEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-cc"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.translationRequestCcEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.translationRequestReplyToEmail}}
+                @width="block"
+              />
+            </div>
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>{{t "proof-requests"}}</h4>
+          <div class="auk-form-group-layout--horizontal">
+            <div class="auk-form-group">
+              <Auk::Label @required={{true}}>
+                {{t "email-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.proofRequestToEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-cc"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.proofRequestCcEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.proofRequestReplyToEmail}}
+                @width="block"
+              />
+            </div>
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>{{t "publication-requests"}}</h4>
+          <div class="auk-form-group-layout--horizontal">
+            <div class="auk-form-group">
+              <Auk::Label @required={{true}}>
+                {{t "email-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.publicationRequestToEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-cc"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.publicationRequestCcEmail}}
+                @width="block"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>
+                {{t "email-reply-to"}}
+              </Auk::Label>
+              <AuInput
+                @value={{mut this.model.publicationRequestReplyToEmail}}
+                @width="block"
+              />
+            </div>
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <AuButton
+                @skin="naked"
+                @disable={{this.save.isRunning}}
+                {{on "click" this.cancel}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
+              <AuButton
+                @skin="primary"
+                @disabled={{this.isDisabled}}
+                @loading={{this.save.isRunning}}
+                {{on "click" (perform this.save)}}
+              >
+                {{t "save"}}
+              </AuButton>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    </Auk::Panel>
+  </div>
+</div>

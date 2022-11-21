@@ -1,0 +1,63 @@
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <div class="auk-o-flex auk-o-flex--vertical">
+          <h4
+            data-test-route-publications-index-title
+            class="auk-toolbar-complex__title"
+          >{{t "publications"}}</h4>
+        </div>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="publications.overview.all">
+            {{t "publications-tabs-all"}}
+          </Auk::Tab>
+          <Auk::Tab  data-test-route-publications-index-tabs-urgent @route="publications.overview.urgent">
+            {{t "publications-tabs-urgent"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.translation">
+            {{t "publications-tabs-translation"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.proof">
+            {{t "publications-tabs-proof"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.proofread">
+            {{t "publications-tabs-proofread"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.late">
+            {{t "publications-tabs-late"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.reports">
+            {{t "publications-tabs-reports"}}
+          </Auk::Tab>
+          <Auk::Tab @route="publications.overview.search" @icon="search">
+            {{t "publications-tabs-search"}}
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <AuButton
+          data-test-route-publications-index-new-publication
+          @skin="primary"
+          @icon="plus"
+          {{on "click" this.showPublicationModal}}
+        >
+          {{t "publications-new"}}
+        </AuButton>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+{{outlet}}
+
+{{#if this.isShowPublicationModal}}
+  <Publications::NewPublicationModal
+    @onCancel={{this.closePublicationModal}}
+    @onSave={{this.saveNewPublication}}
+  />
+{{/if}}

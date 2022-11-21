@@ -1,0 +1,76 @@
+<Auk::Panel>
+  <Auk::Panel::Header @size="auto">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <AuHeading @level="4" @skin="5" data-test-agendaitem-news-item-title>
+            {{@newsletterItem.title}}
+          </AuHeading>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          {{#if @newsletterItem.inNewsletter}}
+            <AuPill @skin="default" @icon="visible">
+              {{t "on-the-website"}}
+            </AuPill>
+          {{else}}
+            <AuPill @skin="default" @icon="not-visible">
+              {{t "not-on-the-website"}}
+            </AuPill>
+          {{/if}}
+        </Group.Item>
+        <Group.Item>
+          {{#if @newsletterItem.finished}}
+            <AuPill @skin="success">
+              {{t "finished"}}
+            </AuPill>
+          {{else}}
+            <AuPill @skin="warning">
+              {{t "not-finished"}}
+            </AuPill>
+          {{/if}}
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <AuContent>
+      <p class="au-u-italic">
+        {{this.proposalText}}
+      </p>
+      <SanitizeHtml
+        class="auk-u-overflow-wrap-anywhere"
+        @raw={{true}}
+        @value={{@newsletterItem.richtext}}
+      />
+    </AuContent>
+  </Auk::Panel::Body>
+  {{#if @newsletterItem.remark}}
+    <Auk::Panel::Body>
+      <p class="au-u-muted auk-u-text-capitalize auk-u-text-small">
+        <strong>{{t "remark"}}</strong>: {{@newsletterItem.remark}}
+      </p>
+    </Auk::Panel::Body>
+  {{/if}}
+  <Auk::Panel::Body>
+    <div data-test-agendaitem-news-item-themes>
+      {{#if (is-pending @newsletterItem.themes)}}
+        <Auk::Loader @message={{t "themes-loading-text"}} />
+      {{else if (await @newsletterItem.themes.length)}}
+        <div class="auk-o-flex auk-o-flex--spaced">
+          <strong>Thema's:</strong>
+          <div class="auk-o-flex auk-o-flex--wrap auk-o-flex-gap--small">
+            {{#each (await @newsletterItem.themes) as |theme|}}
+              <AuPill>{{theme.label}}</AuPill>
+            {{/each}}
+          </div>
+        </div>
+      {{else}}
+        <div class="auk-u-mt-2">
+          <Auk::Alert @message={{t "no-themes-yet"}} />
+        </div>
+      {{/if}}
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>

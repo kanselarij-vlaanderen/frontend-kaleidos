@@ -6,9 +6,17 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
+}
+
+function checkMandateesInList(mandatees, dateRange) {
+  mandatees.forEach((mandatee) => {
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee)
+      .contains(dateRange);
+  });
 }
 
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
@@ -34,9 +42,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
 
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);
@@ -72,9 +80,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0);
+    cy.openSubcase(0, SubcaseTitleShort);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
@@ -110,11 +118,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openAgendaForDate(agendaDate);
 
-    cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
+    cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
@@ -144,7 +152,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if subcase has the same amount of mandatees
     cy.intercept('GET', '/subcases?filter**').as('getSubcase');
-    cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
+    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.wait('@getSubcase');
     cy.openSubcase(0);
 
@@ -288,10 +296,15 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
-
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -299,6 +312,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(2)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
@@ -306,14 +322,17 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(3)
       .click();
+    cy.get(auk.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
 
-    cy.get(agenda.agendaHeader.showOptions).click();
-    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -331,21 +350,140 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.wait(`@patchNewsletterInfo${randomInt}`);
 
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees1');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees2');
+    cy.intercept('GET', '/mandatees?filter**').as('getMandatees3');
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
+    cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals')
+      .should('have.length', 3);
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
+    cy.wait('@getMandatees1');
+    cy.wait('@getMandatees2');
+    cy.wait('@getMandatees3');
+    cy.wait(2000);
+    cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Wouter Beke');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+  });
+
+  it('check list of mandatees in 2020 agenda', () => {
+    // const agendaDate2020 = Cypress.dayjs('2020-04-07');
+    // const subcaseShortTitle = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
+    const agendaitemLink = 'vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008';
+    const mandateeNames2020 = [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ];
+    const dateRange = '02-10-2019 tot 09-05-2021';
+
+    cy.visitAgendaWithLink(agendaitemLink);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
+    checkMandateesInList(mandateeNames2020, dateRange);
+  });
+
+  it('check list of mandatees in 2022 agenda before may', () => {
+    // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    // const subcaseShortTitle = 'testId=1653051342: korte titel';
+    const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
+    const mandateeNames2022BeforeMay = [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ];
+    // TODO-BUG only in jenkins, this is 15-05-2022. Not sure why.
+    // const dateRange = '10-05-2021 tot 16-05-2022';
+    const dateRange = '10-05-2021 tot';
+
+    cy.visitAgendaWithLink(agendaitemLink);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
+    checkMandateesInList(mandateeNames2022BeforeMay, dateRange);
+  });
+
+  it('check if current list of mandatees contains heden', () => {
+    const subcaseShortTitle = 'Cypress test: assign mandatee'; // partial match to subcases used earlier
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(subcaseShortTitle);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+      timeout: 50000,
+    });
+    cy.get(dependency.emberPowerSelect.option).contains('heden');
+  });
+
+  it('check free search', () => {
+    // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
+    // const subcaseShortTitle = 'testId=1653051342: korte titel';
+    const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
+
+    cy.visitAgendaWithLink(agendaitemLink);
+
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(utils.mandateesSelector.openSearch).parent()
+      .click();
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.searchInput).clear()
+      .type('Martens');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+      timeout: 50000,
+    });
+    cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
+    cy.get(dependency.emberPowerSelect.option).contains('Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn');
+    cy.get(dependency.emberPowerSelect.option).contains('28-09-1998 tot 12-07-1999');
+    cy.get(dependency.emberPowerSelect.option).contains('01-01-1998 tot 27-09-1998');
+    cy.get(dependency.emberPowerSelect.option).contains('22-09-1997 tot 31-12-1997');
+    cy.get(dependency.emberPowerSelect.option).contains('20-06-1995 tot 21-09-1997')
+      .parent()
+      .click();
+    cy.get(utils.mandateesSelector.add).click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitems');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgendas');
+    cy.get(mandatee.mandateePanelEdit.actions.save).click()
+      .wait('@patchSubcases')
+      .wait('@patchAgendaitems')
+      .wait('@patchAgendas');
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 1)
+      .contains('Luc Martens');
   });
 });

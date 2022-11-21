@@ -3,7 +3,9 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {Meeting} meeting
@@ -32,6 +34,19 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     this.loadLatestPublicationActivity.perform();
   }
 
+  // Scope of the Themis publication from the newsletter-side depends on the most recent publication.
+  // - if it's the first publication, only newsitems are published
+  // - if latest publication includes documents, republication should also include documents
+  get themisPublicationScopes() {
+    const scope = [ CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS ];
+    const latestPublicationIncludesDocuments = this.latestPublicationActivity?.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    if (latestPublicationIncludesDocuments) {
+      scope.push(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS);
+    }
+
+    return scope;
+  }
+
   @task
   *loadMailCampaign() {
     this.mailCampaign = yield this.args.meeting.mailCampaign;
@@ -40,8 +55,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *loadLatestPublicationActivity() {
     this.latestPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-      sort: '-start-date',
       'filter[meeting][:uri:]': this.args.meeting.uri,
+      'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      sort: '-start-date',
     });
   }
 
@@ -50,7 +66,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   get isAlreadyPublished() {
-    return this.latestPublicationActivity != null;
+    return this.latestPublicationActivity != null &&
+      this.latestPublicationActivity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS);
   }
 
   @action
@@ -61,25 +78,32 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *publishToMail() {
     try {
-      yield this.ensureMailCampaign();
+      if (yield this.canSendMailCampaign()) {
+        yield this.ensureMailCampaign();
 
-      if (this.mailCampaign?.isSent) {
-        this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      } else {
-        if (yield this.validateMailCampaign()) {
-          try {
-            yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-            this.mailCampaign.sentAt = new Date();
-            yield this.mailCampaign.save();
-            this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
-          } catch(e) {
-            console.log("error sending newsletter", e);
-            this.toaster.error(
-              this.intl.t('error-send-newsletter'),
-              this.intl.t('warning-title')
-            );
+        if (this.mailCampaign.isSent) {
+          this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+        } else {
+          if (yield this.validateMailCampaign()) {
+            try {
+              yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
+              this.mailCampaign.sentAt = new Date();
+              yield this.mailCampaign.save();
+              this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
+            } catch(e) {
+              console.log("error sending newsletter", e);
+              this.toaster.error(
+                this.intl.t('error-send-newsletter'),
+                this.intl.t('warning-title')
+              );
+            }
           }
         }
+      } else {
+        this.toaster.error(
+          this.intl.t('error-cannot-send-newsletter'),
+          this.intl.t('warning-title')
+        );
       }
       this.showConfirmPublishMail = false;
     } catch (error) {
@@ -105,11 +129,15 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *publishThemis(scope) {
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
       yield this.loadLatestPublicationActivity.perform();
@@ -125,13 +153,18 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *unpublishThemis(scope) {
+    const status = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.RELEASED);
+    const now = new Date();
     try {
       const themisPublicationActivity = this.store.createRecord('themis-publication-activity', {
-        startDate: new Date(),
+        plannedDate: now,
+        startDate: now,
         meeting: this.args.meeting,
-        scope
+        scope,
+        status
       });
       yield themisPublicationActivity.save();
+      this.loadLatestPublicationActivity.perform();
       this.toaster.success(this.intl.t('success-unpublish-from-web'));
     } catch(e) {
       this.toaster.error(
@@ -149,9 +182,35 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
     // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
     yield this.publishToBelga.perform();
-    yield this.publishThemis.perform(scope);
+    if (this.currentSession.may('manage-themis-publications')) {
+      yield this.publishThemis.perform(scope);
+    }
 
     this.showConfirmPublishAll = false;
+  }
+
+  async canSendMailCampaign() {
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-created', // serialnumber
+    });
+    const themisPublicationActivities = await this.store.queryAll('themis-publication-activity', {
+      'filter[meeting][:id:]': this.args.meeting.id,
+    });
+    const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
+
+    const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
+    const hasNotas = (await this.store.count('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      'filter[type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+    })) > 0;
+
+    const hasThemes = (await this.store.count('newsletter-info', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[:has:themes]': true,
+    })) > 0;
+
+    return hasDocumentPublicationPlanned && hasThemes && hasNotas;
   }
 
   async validateMailCampaign() {
@@ -193,19 +252,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *deleteCampaign() {
-    const meeting = this.args.meeting;
-
     if (this.mailCampaign?.campaignId) {
       yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
       this.toaster.success(this.intl.t('success-delete-newsletter'));
     }
     this.mailCampaign.destroyRecord();
-    const reloadedMeeting = yield this.store.findRecord('meeting', meeting.id, {
-      reload: true,
-    });
-    reloadedMeeting.mailCampaign = null;
-
-    yield reloadedMeeting.save();
+    yield this.args.meeting.belongsTo('mailCampaign').reload();
     yield this.loadMailCampaign.perform();
   }
 

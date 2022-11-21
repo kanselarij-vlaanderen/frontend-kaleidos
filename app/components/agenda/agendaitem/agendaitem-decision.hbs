@@ -1,62 +1,23 @@
-<Auk::Panel data-test-agendaitem-decision-container>
-  <Auk::Panel::Header @size="no-size">
+<Auk::Panel>
+  <Auk::Panel::Header @size="auto">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
           <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
           {{#if (not this.isEditing)}}
-            <div class="auk-o-flex auk-u-my-2">
-              {{#if @treatment.decisionResultCode}}
-                <Decision::DecisionResultPill
-                  @decisionResultCode={{@treatment.decisionResultCode}}
-                />
-              {{else}}
-                <Auk::Pill>
-                  {{t "no-decision-set"}}
-                </Auk::Pill>
-              {{/if}}
-              {{#if this.currentSession.isEditor}}
-                <Auk::Button
-                  @skin="tertiary"
-                  @icon="pencil"
-                  @size="tiny"
-                  @layout="icon-only"
-                  {{on "click" this.toggleEdit}}
-                  data-test-agendaitem-decision-edit
-                >
-                  {{t "edit"}}
-                </Auk::Button>
-              {{/if}}
+            <div class="auk-u-my-2">
+              <Decision::DecisionResultPill
+                @decisionResultCode={{@decisionActivity.decisionResultCode}}
+                @isEditable={{user-may "manage-decisions"}}
+                @onEdit={{this.toggleEdit}}
+              />
             </div>
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
-              @agendaItemTreatment={{@treatment}}
-              @onSave={{this.toggleEdit}}
+              @decisionActivity={{@decisionActivity}}
+              @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
               @onCancel={{this.toggleEdit}}
-              @isTableRow={{@isTableRow}}
             />
-          {{/if}}
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          {{#if this.currentSession.isEditor}}
-            {{#if @allowDelete}}
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                data-test-agendaitem-decision-dropdown-menu-options
-                as |Menu|
-              >
-                <Menu.Item
-                  @skin="danger"
-                  data-test-agendaitem-decision-delete
-                  {{on "click" (fn this.promptDeleteTreatment @treatment)}}
-                >
-                  {{t "delete-decision"}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
-            {{/if}}
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
@@ -67,43 +28,43 @@
       {{#if this.report}}
         <Documents::DocumentCard
           @piece={{this.report}}
+          @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
           @onOpenUploadModal={{@onOpenUploadModal}}
           @onAddPiece={{this.attachNewReportVersion}}
-          @didDeletePiece={{this.attachPreviousReportVersion}}
           @didDeleteContainer={{perform this.loadReport}}
+          @bordered={{false}}
         />
-      {{else}}
-        {{#if this.currentSession.isEditor}}
-          <div class="auk-u-p-2">
-            <Auk::Button
-              @skin="borderless"
-              @icon="upload"
-              {{on "click" this.toggleIsAddingReport}}
-              data-test-agendaitem-decision-upload-file
-            >
-              {{t "signed-decision-add"}}
-            </Auk::Button>
-          </div>
-        {{/if}}
+      {{else if (user-may "manage-decisions")}}
+        <div class="auk-u-p-2">
+          <AuButton
+            data-test-agendaitem-decision-upload-file
+            @skin="naked"
+            @icon="upload"
+            {{on "click" this.toggleIsAddingReport}}
+          >
+            {{t "signed-decision-add"}}
+          </AuButton>
+        </div>
       {{/if}}
     {{else}}
       <Auk::Loader />
     {{/if}}
   </Auk::Panel::Body>
 </Auk::Panel>
-{{#if this.isVerifyingDelete}}
-  <WebComponents::VlModalVerify
-    @title={{t "delete-decision"}}
-    @message={{t "delete-decision-message"}}
-    @cancel={{this.cancel}}
-    @verify={{this.deleteTreatment}}
-  />
-{{/if}}
 {{#if this.isAddingReport}}
   <Utils::AddDocument
     @title={{t "signed-decision-add"}}
     @onSave={{this.attachReport}}
     @onCancel={{this.toggleIsAddingReport}}
   />
+{{/if}}
+
+{{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-decision-result-message"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
 {{/if}}

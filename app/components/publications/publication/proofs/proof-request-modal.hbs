@@ -23,7 +23,6 @@
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList
-            data-test-proof-request-translation-pieces
             @pieces={{this.transferredPieces}}
             @viewable={{true}}
             @onDeletePiece={{this.unlinkTransferredPiece}}
@@ -45,11 +44,11 @@
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
-          <Auk::Input
+          <AuInput
             data-test-proof-request-subject
-            id="proofRequestSubject"
-            @block={{true}}
+            @width="block"
             @value={{mut this.subject}}
+            id="proofRequestSubject"
           />
         </div>
         <div class="auk-form-group">
@@ -70,7 +69,7 @@
     @onCancel={{perform this.cancel}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
-    <Auk::Button
+    <AuButton
       data-test-proof-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
@@ -78,6 +77,6 @@
       {{on "click" (perform this.save)}}
     >
       {{t "request-it"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

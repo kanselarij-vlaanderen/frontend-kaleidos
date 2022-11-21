@@ -2,67 +2,59 @@
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
   {{#if (not this.isEditing)}}
-    {{#if (and this.canEdit @isDesignAgenda)}}
-    <span class="au-c-pill-container">
+    {{#if (not this.canEdit)}}
       <AuPill
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
-        @draft={{if (and (and (eq @isFinal false) (eq @isNew true))(or (eq this.accessLevelLabel "Ministerraad")(eq this.accessLevelLabel "Intern Overheid")(eq this.accessLevelLabel "Intern Regering")(eq this.accessLevelLabel "Publiek"))) true}}
+        @draft={{@isDraft}}
         data-test-access-level-pill
       >
-        {{#if (eq this.accessLevelLabel "Ministerraad")}}
-        Vertrouwelijk
-        {{else}}
         {{this.accessLevelLabel}}
-        {{/if}}
       </AuPill>
-      {{#if this.canEdit}}
-      <button class="au-c-pill-action au-c-pill--{{this.pillSkin}}" type="button" {{on "click" this.openEditMode}}>
-        <AuIcon @icon="pencil" />
-        <span class="au-u-hidden-visually">Edit</span>
-      </button>
-      {{/if}}
-    </span>
     {{else}}
-    <AuPill
-      @skin={{this.pillSkin}}
-      @draft={{if (or (eq this.accessLevelLabel "Ministerraad")(eq this.accessLevelLabel "Intern Overheid")) true}}
-      @icon={{this.pillIcon}}
-      data-test-access-level-pill
-    >
-      {{#if (eq this.accessLevelLabel "Ministerraad")}}
-      Vertrouwelijk
-      {{else}}
-      {{this.accessLevelLabel}}
-      {{/if}}
-    </AuPill>
+      <AuPill
+        @skin={{this.pillSkin}}
+        @icon={{this.pillIcon}}
+        @draft={{@isDraft}}
+        @onClickAction={{this.openEditMode}}
+        @actionIcon="pencil"
+        data-test-access-level-pill
+      >
+        {{this.accessLevelLabel}}
+      </AuPill>
     {{/if}}
   {{else}}
-    <div class="auk-u-maximize-width">
-      <Utils::ModelSelector
-        @modelName="access-level"
-        @propertyToShow="label"
-        @sortField="priority"
-        @selectedItems={{@accessLevel}}
-        @selectModel={{this.changeAccessLevel}}
-        data-test-access-level-pill-selector
-      />
+    <div class="auk-o-flex auk-o-flex--vertical-center">
+      <div class="auk-u-maximize-width">
+        <Utils::AccessLevelSelector
+          @allowClear={{true}}
+          @displayField="label"
+          @sortField="position"
+          @selected={{@accessLevel}}
+          @onChange={{this.changeAccessLevel}}
+          data-test-access-level-pill-selector
+        />
+      </div>
+      <AuButton
+        data-test-access-level-pill-save
+        @skin="naked"
+        @icon="check"
+        @hideText={{true}}
+        {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+        class="auk-o-flex__item--fix auk-u-ml"
+      >
+        {{t "save"}}
+      </AuButton>
+      <AuButton
+        data-test-access-level-pill-cancel
+        @skin="naked"
+        @icon="x"
+        @hideText={{true}}
+        {{on "click" (perform this.cancelChangeAccessLevel)}}
+        class="auk-o-flex__item--fix"
+      >
+        {{t "cancel"}}
+      </AuButton>
     </div>
-    <Auk::Button
-      @skin="tertiary"
-      @layout="icon-only"
-      @icon="check"
-      @size="tiny"
-      {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
-      data-test-access-level-pill-save
-    />
-    <Auk::Button
-      @skin="tertiary"
-      @layout="icon-only"
-      @icon="x"
-      @size="tiny"
-      {{on "click" (perform this.cancelChangeAccessLevel)}}
-      data-test-access-level-pill-cancel
-    />
   {{/if}}
 {{/if}}

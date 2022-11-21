@@ -9,15 +9,26 @@ const selectors = {
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
     form: '[data-test-new-case-form]',
-    shorttitleError: '[data-test-new-case-shorttitle-error]',
     cancel: '[data-test-new-case-cancel]',
     save: '[data-test-new-case-save]',
+  },
+
+  // subcase-detail-nav
+  subcaseDetailNav: {
+    overview: '[data-test-subcase-detail-nav-overview]',
+    documents: '[data-test-subcase-detail-nav-documents]',
+    decisions: '[data-test-subcase-detail-nav-decisions]',
   },
 
   // subcase-overview-header
   subcaseOverviewHeader: {
     titleContainer: '[data-test-subcase-overview-header-title-container]',
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
+  },
+
+  // subcase-process
+  subcaseProcess: {
+    shorttitle: '[data-test-subcases-process-shorttitle]',
   },
 
   // new-subcase
@@ -31,17 +42,18 @@ const selectors = {
     save: '[data-test-new-subcase-save]',
   },
 
+  subcaseTimeline: {
+    item: '[data-test-subcase-timeline-item]',
+  },
+
   // subcase-description
   subcaseDescription: {
-    timelineItem: '[data-test-subcase-description-timeline-item]',
+    panel: '[data-test-subcase-description-panel]',
     decidedOn: '[data-test-subcase-description-decided-on]',
     requestedBy: '[data-test-subcase-description-requested-by]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
     agendaLink: '[data-test-subcase-description-agenda-link]',
-    agendaLinkContainer: '[data-test-subcase-description-agenda-link-container]',
-    // TODO-selector unused selector
-    modified: '[data-test-subcase-description-modified]',
     edit: '[data-test-subcase-description-edit]',
     subcaseName: '[data-test-subcase-description-subcase-name]',
   },
@@ -53,13 +65,10 @@ const selectors = {
   },
 
   // subcase-item
-  // TODO-selector better names
   subcaseItem: {
     container: '[data-test-subcase-item-container]',
     link: '[data-test-subcase-item-link]',
     approved: '[data-test-subcase-item-approved]',
-    // TODO-selector unused selector
-    notApproved: '[data-test-subcase-item-not-approved]',
   },
 
   // subcase-header
@@ -87,8 +96,6 @@ const selectors = {
     confidential: '[data-test-subcase-titles-edit-confidential]',
     actions: {
       save: '[data-test-subcase-titles-edit-save]',
-      // TODO-selector unused selector
-      cancel: '[data-test-subcase-titles-edit-cancel]',
     },
   },
 };

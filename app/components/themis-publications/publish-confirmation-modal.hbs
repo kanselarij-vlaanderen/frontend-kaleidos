@@ -4,29 +4,15 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    {{#if @newsletter}}
-    <p>{{@newsletter}}</p>
-    {{else}}
-    <div class="auk-form-group" data-test-edit-meeting-datepicker>
-      <Auk::Label>Wanneer wilt u de documenten publiceren?</Auk::Label>
-      <div class="auk-o-flex auk-o-flex--spaced">
-        <WebComponents::VlDatepicker
-          @enableTime={{true}}
-          @date={{now}}
-          class="auk-u-maximize-width"
-        />
-        <Auk::Button>Nu</Auk::Button>
-      </div>
-    </div>
-    {{/if}}
+    {{this.confirmationMessage}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
-    <Auk::Button
+    <AuButton
       @skin="primary"
       @loading={{this.confirmPublish.isRunning}}
       {{on "click" (perform this.confirmPublish)}}
     >
       {{t "publish-to-public"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

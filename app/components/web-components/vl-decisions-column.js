@@ -1,21 +1,30 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
+export default class WebComponentsVlDecisionsColumn extends Component {
+  @service store;
+  @service subcaseIsApproved;
 
-  textToShow: computed('row', 'value', 'row.agendaActivity.subcase.decisions.[]', async function() {
-    const agendaitem = await this.row;
-    const agendaActivity = await agendaitem.get('agendaActivity');
-    const subcase = await agendaActivity.get('subcase');
-    const approved = await subcase.get('approved');
+  @tracked textToShow;
 
+  constructor() {
+    super(...arguments);
+
+    this.loadTextToShow.perform();
+  }
+
+  @task
+  *loadTextToShow() {
+    const agendaitem = yield this.args.row?.content || this.args.row;
+    const agendaActivity = yield agendaitem?.agendaActivity;
+    const subcase = yield agendaActivity?.subcase;
+    const approved = yield this.subcaseIsApproved.isApproved(subcase);
     if (approved) {
-      return 'Beslist';
+      this.textToShow = 'Beslist';
+      return;
     }
-    return 'Niet beslist';
-  }),
-});
+    this.textToShow = 'Niet beslist';
+  }
+}

@@ -2,9 +2,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DecisionResultSelect extends Component {
-  @service store;
+  @service conceptStore;
 
   @tracked decisionResultCodes;
 
@@ -15,10 +16,6 @@ export default class DecisionResultSelect extends Component {
 
   @task
   *loadDecisionResultCodes() {
-    const codes = yield this.store.findAll('decision-result-code', {
-      reload: true,
-      sort: 'priority',
-    });
-    this.decisionResultCodes = codes;
+    this.decisionResultCodes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES);
   }
 }

@@ -18,12 +18,14 @@
 .vlc-agenda-detail-sidebar__sub-item > span { // a
   display: block;
   position: relative;
-  padding: 1.8rem 1.5rem;
-  font-size: 1.3rem;
-  text-decoration: none;
-  color: $auk-gray-600;
+
+  padding: 1rem 1.5rem;
   background: $auk-gray-100;
   border-bottom: 0.01rem solid $auk-gray-300;
+
+  color: $auk-gray-600;
+  font-size: 1.3rem;
+  text-decoration: none;
 }
 
 .vlc-agenda-detail-sidebar__sub-item a {
@@ -62,10 +64,26 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
 .vlc-agenda-detail-sidebar__subject {
   display: flex;
   justify-content: flex-start;
+
+  color: $auk-blue-500;
   font-size: 1.4rem;
-  line-height: 130%;
-  color: $auk-color-text;
+  font-weight: 500;
+  line-height: 1.4;
+
+  .vlc-agenda-detail-sidebar__sub-item:hover &,
+  .vlc-agenda-detail-sidebar__sub-item:focus & {
+    color: $auk-blue-700;
+  }
+
+  .vlc-agenda-detail-sidebar__sub-item--active &,
+  .vlc-agenda-detail-sidebar__sub-item--active:hover &,
+  .vlc-agenda-detail-sidebar__sub-item--active:focus & {
+    color: $auk-color-text;
+  }
 }
+
+// $auk-blue-500
+// color: $auk-color-text;
 
 .vlc-agenda-detail-sidebar__text-container {
   width: calc(100% - 3rem);
@@ -87,11 +105,14 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
 }
 
 .vlc-agenda-detail-sidebar-sub-item__numbering {
-  min-width: 3rem;
-  text-align: right;
   margin-right: 0.5rem;
-  line-height: 140%;
-  color: #333332;
+  min-width: 2.5rem;
+
+  color: $auk-color-text;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: left;
+  line-height: 1.4;
 }
 
 // 'No items available' item
@@ -112,4 +133,5 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
 .vlc-agenda-detail-sidebar__labels {
   display: flex;
   gap: .25rem;
+  margin-left: .25rem;
 }

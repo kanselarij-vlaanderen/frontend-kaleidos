@@ -2,12 +2,14 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group>
       <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="borderless"
+        <AuLink
+          @skin="button-naked"
           @icon="chevron-left"
-          @layout="icon-only"
+          @hideText={{true}}
           @route="cases"
-        />
+        >
+          {{t "back"}}
+        </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div data-test-subcase-overview-header-title-container class="auk-u-my">
@@ -15,7 +17,7 @@
             {{t "case"}}
           </span>
           <Auk::AbbreviatedText
-            @text={{or @case.shortTitle @case.title}}
+            @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
             @maxLength={{250}}
           />
         </div>
@@ -32,43 +34,41 @@
             <span class="auk-u-block auk-overline">
               {{t "publications"}}
             </span>
-            <Auk::PillList>
+            <div>
               {{#each this.publicationFlows as |publicationFlow|}}
-                <LinkTo
-                  class="auk-u-mr-2"
+                <AuPill
+                  @size="small"
                   @route="publications.publication"
                   @model={{publicationFlow.id}}
                 >
-                  <Auk::Pill @skin="white">
-                    {{publicationFlow.identification.idName}}
-                  </Auk::Pill>
-                </LinkTo>
+                  {{publicationFlow.identification.idName}}
+                </AuPill>
               {{/each}}
-            </Auk::PillList>
+            </div>
           </div>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if this.currentSession.isEditor}}
+    {{#if (user-may "manage-cases")}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             @skin="primary"
             @icon="pencil"
             {{on "click" this.openEditCaseModal}}
           >
             {{t "edit-case"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             data-test-subcase-overview-header-create-subcase
             @skin="primary"
             @icon="plus"
             {{on "click" this.openAddSubcaseModal}}
           >
             {{t "create-subcase"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
@@ -79,7 +79,7 @@
   <Cases::NewSubcase
     @onClose={{this.closeAddSubcaseModal}}
     @onCreate={{this.onCreateSubcase}}
-    @case={{@case}}
+    @decisionmakingFlow={{@decisionmakingFlow}}
   />
 {{/if}}
 
@@ -87,6 +87,6 @@
   <Cases::EditCase
     @onClose={{this.closeEditCaseModal}}
     @onSave={{this.saveCase}}
-    @case={{@case}}
+    @case={{this.case}}
   />
 {{/if}}

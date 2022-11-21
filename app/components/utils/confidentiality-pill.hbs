@@ -1,15 +1,15 @@
 {{#if @confidential}}
-  <Auk::Pill
+  <AuPill
     data-test-confidentiality-pill-icon-locked
+    @size="small"
     @skin="danger"
-    @layout="icon-only"
-    @icon="not-visible"
+    @icon="lock-closed"
   />
 {{else}}
-  <Auk::Pill
+  <AuPill
     data-test-confidentiality-pill-icon-unlocked
+    @size="small"
     @skin="success"
-    @layout="icon-only"
-    @icon="visible"
+    @icon="lock-open"
   />
 {{/if}}

@@ -1,0 +1,79 @@
+<AuToolbar class="au-u-margin-bottom" as |Group|>
+  <Group>
+    <AuHeading @level="3" @skin="4">
+      {{t "newsletter-title"}}
+    </AuHeading>
+  </Group>
+  {{#if (user-may "manage-newsletter-infos")}}
+    <Group>
+      {{#if this.isEditing}}
+        <AuButton
+          @skin="link"
+          {{on "click" this.closeEdit}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      {{else if this.model}}
+        <AuButtonGroup>
+          <AuButton
+            @skin="link"
+            @icon="expand"
+            {{on "click" this.openFullscreenEdit}}
+          >
+            {{t "edit-text"}}
+          </AuButton>
+          <AuButton
+            data-test-route-agenda---news-item-edit
+            @skin="link"
+            @icon="pencil"
+            {{on "click" this.openEdit}}
+          >
+            {{t "edit"}}
+          </AuButton>
+        </AuButtonGroup>
+      {{else}}
+        <AuButton
+          data-test-route-agenda---news-item-create
+          @skin="secondary"
+          @icon="add"
+          {{on "click" this.openEdit}}
+        >
+          {{t "create"}}
+        </AuButton>
+      {{/if}}
+    </Group>
+  {{/if}}
+</AuToolbar>
+
+{{#if this.showNotaModificationWarning}}
+  <ChangesAlert
+    @message={{t
+      "nota-changed-message"
+      date=(moment-format this.notaModifiedTime "D MMMM YYYY")
+      time=(moment-format this.notaModifiedTime "H:mm")
+    }}
+    @buttonText={{t "close"}}
+    @clearAction={{this.dismissNotaModifiedWarning}} />
+{{/if}}
+{{#if this.isEditing}}
+  <NewsletterItem::EditPanel
+    @newsletterItem={{this.model}}
+    @agendaitem={{this.agendaitem}}
+    @isFullscreen={{this.isFullscreen}}
+    @onCancel={{this.closeEdit}}
+    @onSave={{perform this.saveNewsletterItem}}
+  />
+{{else}}
+  {{#if this.model}}
+    <NewsletterItem::ViewPanel
+      @newsletterItem={{this.model}}
+    />
+  {{else}}
+    <div class="auk-u-mt-2">
+      <Auk::EmptyState
+        @message={{t "no-newsletter-info"}}
+        data-test-route-agenda---news-item-alert
+      />
+    </div>
+  {{/if}}
+{{/if}}

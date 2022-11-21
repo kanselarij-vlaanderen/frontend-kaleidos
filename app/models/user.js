@@ -1,16 +1,22 @@
-import Model, { belongsTo, attr } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class User extends Model {
   @attr('string') firstName;
   @attr('string') lastName;
-  @attr('email') email;
-  @attr('phone') phone;
+  @attr('string') identifier;
 
   @belongsTo('account') account;
-  @belongsTo('account-group', { inverse: null }) group;
-  @belongsTo('organization') organization;
+  @belongsTo('concept') status;
+  @belongsTo('login-activity') loginActivity;
+
+  @hasMany('membership') memberships;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  get isBlocked() {
+    return this.status.get('uri') === CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;
   }
 }

@@ -14,7 +14,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked isEditing;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
-  @tracked agendaItemTreatment;
+  @tracked decisionActivity;
   @tracked modelsForAgendaitemRoute;
 
   @tracked numberIsAlreadyUsed = false;
@@ -25,32 +25,33 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   constructor() {
     super(...arguments);
 
-    this.initFields();
+    this.initFields.perform();
   }
 
-  async initFields() {
+  @task
+  *initFields() {
     this.isViaCouncilOfMinisters =
-      await this.publicationService.getIsViaCouncilOfMinisters(
+      yield this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
     // Publication number
-    this.identification = await this.args.publicationFlow.identification;
-    this.structuredIdentifier = await this.identification.structuredIdentifier;
+    this.identification = yield this.args.publicationFlow.identification;
+    this.structuredIdentifier = yield this.identification.structuredIdentifier;
     // using local tracked values because validation of these fields is delayed.
     // identification and structured-identifier are only updated after validation succeeds
     this.publicationNumber = this.structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     // Numac-nummers
-    this.numacNumbers = await this.args.publicationFlow.numacNumbers;
+    this.numacNumbers = yield this.args.publicationFlow.numacNumbers;
     // Datum beslissing
-    this.agendaItemTreatment = await this.args.publicationFlow
-      .agendaItemTreatment;
+    this.decisionActivity = yield this.args.publicationFlow
+      .decisionActivity;
     // Limiet publicatie
-    this.publicationSubcase = await this.args.publicationFlow
+    this.publicationSubcase = yield this.args.publicationFlow
       .publicationSubcase;
-    if (this.isViaCouncilOfMinisters) {
+    if (this.isViaCouncilOfMinisters && this.decisionActivity) {
       // get the models meeting/agenda/agendaitem for clickable link
-      this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromTreatment(this.agendaItemTreatment);
+      this.modelsForAgendaitemRoute = yield this.publicationService.getModelsForAgendaitemFromDecisionActivity(this.decisionActivity);
     }
   }
 
@@ -166,7 +167,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     this.identification.rollbackAttributes();
     this.structuredIdentifier.rollbackAttributes();
-    this.agendaItemTreatment.rollbackAttributes();
+    this.decisionActivity.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
     yield this.args.publicationFlow.belongsTo('mode').reload();
@@ -205,7 +206,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     // Datum beslissing
     if (!this.isViaCouncilOfMinisters) {
-      saves.push(this.agendaItemTreatment.save());
+      saves.push(this.decisionActivity.save());
     }
 
     // Dringend + Datum ontvangst

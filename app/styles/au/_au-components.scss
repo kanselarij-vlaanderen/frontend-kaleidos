@@ -1,66 +1,76 @@
 /* Appuniversum components
    ========================================================================== */
 
+// SCSS variables (to override)
+
+$au-button-height: 3.4rem;
+
+
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
-// COMPONENTS
-// @import "ember-appuniversum/c-accordion";
-// @import "ember-appuniversum/c-alert";
-// @import "ember-appuniversum/c-app";
-@import "ember-appuniversum/c-badge";
-@import "ember-appuniversum/c-body-container";
-// @import "ember-appuniversum/c-brand";
-@import "ember-appuniversum/c-button";
-@import "ember-appuniversum/c-button-group";
-@import "ember-appuniversum/c-card";
-@import "ember-appuniversum/c-content";
-// @import "ember-appuniversum/c-content-header";
-@import "ember-appuniversum/c-control";
-// @import "ember-appuniversum/c-data-table";
-// @import "ember-appuniversum/c-dropdown";
-@import "ember-appuniversum/c-fieldset";
-// @import "ember-appuniversum/c-file-upload";
-// @import "ember-appuniversum/c-form";
-// @import "ember-appuniversum/c-form-row";
-@import "ember-appuniversum/c-heading";
-@import "ember-appuniversum/c-help-text";
-@import "ember-appuniversum/c-hr";
-@import "ember-appuniversum/c-icon";
-// @import "ember-appuniversum/c-input";
-@import "ember-appuniversum/c-label";
-@import "ember-appuniversum/c-link";
-@import "ember-appuniversum/c-list";
-@import "ember-appuniversum/c-list-horizontal";
-@import "ember-appuniversum/c-list-navigation";
-// @import "ember-appuniversum/c-loader";
-// @import "ember-appuniversum/c-pagination";
-@import "ember-appuniversum/c-pill";
-@import "ember-appuniversum/c-main-container";
-// @import "ember-appuniversum/c-main-header";
-// @import "ember-appuniversum/c-main-footer";
-@import "ember-appuniversum/c-modal";
-@import "ember-appuniversum/c-sidebar";
-// @import "ember-appuniversum/c-sidebar-action";
-@import "ember-appuniversum/c-table";
-// @import "ember-appuniversum/c-textarea";
-// @import "ember-appuniversum/c-timepicker";
-@import "ember-appuniversum/c-toolbar";
-@import "ember-appuniversum/c-toggle-switch";
+@import 'ember-appuniversum/c-badge';
+@import 'ember-appuniversum/c-button';
+@import 'ember-appuniversum/c-button-group';
+@import 'ember-appuniversum/c-card';
+@import 'ember-appuniversum/c-content';
+@import 'ember-appuniversum/c-control';
+@import 'ember-appuniversum/c-dropdown';
+@import 'ember-appuniversum/c-heading';
+@import 'ember-appuniversum/c-help-text';
+@import 'ember-appuniversum/c-hr';
+@import 'ember-appuniversum/c-fieldset';
+@import 'ember-appuniversum/c-icon';
+@import 'ember-appuniversum/c-input';
+@import 'ember-appuniversum/c-link';
+@import 'ember-appuniversum/c-list';
+@import 'ember-appuniversum/c-list-horizontal';
+@import 'ember-appuniversum/c-loader';
+@import 'ember-appuniversum/c-pill';
+@import 'ember-appuniversum/c-modal';
+@import 'ember-appuniversum/c-table';
+@import 'ember-appuniversum/c-toolbar';
+@import 'ember-appuniversum/c-toggle-switch';
 
 
-// PLUGINS
-// @import "ember-appuniversum/p-ember-power-select";
-// @import "ember-appuniversum/p-duet-datepicker";
+// CSS variables (to override)
+
+:root {
+  --au-outline: 0.3rem solid #{$auk-yellow-500};
+  --au-outline-color: #{$auk-yellow-500};
+
+  --au-icon-size: 1.6rem;
+  --au-icon-size-medium: 1.8rem;
+  --au-icon-size-large: 2.2rem;
+}
+
+
+// Fixes
+
+.au-c-modal__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
+.au-c-dropdown__button {
+  background-color: transparent; // fix UA default background-color styling
+}
 
 
 // Overrides
+
 .au-c-pill {
   line-height: 1; // vertical alignment is a bit off in Kaleidos
+  border-radius: .5rem; // default border radius is .5rem in Kaleidos
+  padding-top: 0;
 }
 
-// Change button link to Kaleidos style
-.au-c-button--link {
+.au-c-pill--link {
+  cursor: pointer;
+}
+
+.au-c-link,
+.au-c-button--link,
+.au-c-button--link-secondary { // change button link to Kaleidos style
   text-decoration: none;
   font-weight: 500;
 
@@ -70,11 +80,175 @@
   }
 }
 
-// Fix alignment of icons in helptext
-.au-c-help-text {
-  .au-c-icon {
-    top: .2rem;
+.au-c-link {
+  border-radius: $au-button-border-radius;
+}
+
+.au-c-modal__header {
+  padding: .7rem 2rem;
+
+  @include mq(medium) {
+    padding: 1.4rem 2rem;
   }
+}
+
+.au-c-modal__title {
+  @include au-font-size(var(--au-h5-small));
+
+  @include mq(medium) {
+    @include au-font-size(var(--au-h5));
+  }
+}
+
+.au-c-content {
+  @include au-font-size(1.5rem, 1.6); // default font size in Kaleidos
+  color: $auk-color-text; // default text color in Kaleidos
+
+  h1, h2, h3, h4, h5, h6, // default heading styling in Kaleidos
+  .au-c-heading--1,
+  .au-c-heading--2,
+  .au-c-heading--3,
+  .au-c-heading--4,
+  .au-c-heading--5,
+  .au-c-heading--6 {
+    color: $auk-color-heading;
+    font-weight: 500;
+  }
+
+  // override heading font sizes so media queries don't apply
+  h1,
+  .au-c-heading--1 {
+    @include au-font-size($au-content-heading-1);
+  }
+
+  h2,
+  .au-c-heading--2 {
+    @include au-font-size($au-content-heading-2);
+  }
+
+  h3,
+  .au-c-heading--3 {
+    @include au-font-size($au-content-heading-3);
+  }
+
+  h4,
+  .au-c-heading--4 {
+    @include au-font-size($au-content-heading-4);
+  }
+
+  h5,
+  .au-c-heading--5 {
+    @include au-font-size($au-content-heading-5);
+  }
+
+  h6,
+  .au-c-heading--6 {
+    @include au-font-size($au-content-heading-6);
+  }
+
+  ul:not(.au-c-list-horizontal) li + li { // override list item spacing to match the one in Kaleidos a bit more
+    margin-top: 0.3rem;
+  }
+
+  ul.au-c-list  li + li { // this styling needs to be reset again unfortunately
+    margin-top: 0;
+  }
+
+  // override child (and heading) spacing to match the one in Kaleidos a bit more
+  > * + * {
+    margin-top: 1.5rem;
+  }
+
+  > * + h1,
+  > * + h2,
+  > * + h3 {
+    margin-top: 3rem;
+  }
+
+  > * + h4,
+  > * + h5,
+  > * + h6 {
+    margin-top: 1.5rem;
+  }
+
+  .sanitized-value { // because rdfa editor output adds an extra parent element (<div id="ember490" class="sanitized-value ember-view">), we need te declare the overrides above again
+    > * + * {
+      margin-top: 1.5rem;
+    }
+
+    > * + h1,
+    > * + h2,
+    > * + h3 {
+      margin-top: 3rem;
+    }
+
+    > * + h4,
+    > * + h5,
+    > * + h6 {
+      margin-top: 1.5rem;
+    }
+  }
+
+  em { // default text color in Kaleidos
+    color: $auk-color-text;
+  }
+}
+
+.au-c-button,
+.au-c-link {
+  vertical-align: middle;
+}
+
+.au-c-button--link,
+.au-c-button--tertiary,
+.au-c-link {
+  font-size: $au-button-font-size;
+}
+
+.au-c-icon {
+  bottom: 0;
+}
+
+.au-c-dropdown > .au-c-button--naked { // TODO: delete when `.au-c-dropdown > .au-c-button--naked` override inside ember-appuniversum is removed
+  &.au-c-button--icon-only {
+    padding: 0 $au-unit-small;
+    height: $au-button-height;
+    line-height: $au-button-height - $au-button-border * 2;
+
+    padding: 0 calc((#{$au-button-icon-only-width - ($au-button-border * 2)} - var(--au-icon-size-medium)) / 2);
+  }
+
+  &.au-c-button--icon-only.au-c-button--large {
+    padding: 0 calc((#{$au-button-icon-only-width-large - ($au-button-border * 2)} - var(--au-icon-size-large)) / 2);
+  }
+}
+
+.au-c-dropdown__menu {
+  min-width: 23rem;
+}
+
+.au-c-dropdown__menu [role="menuitem"] {
+  padding: 1rem 1.5rem;
+  border: none;
+}
+
+.au-c-dropdown__menu > [role="menuitem"] + [role="menuitem"],
+.au-c-dropdown__menu > [role="group"] + [role="group"],
+.au-c-dropdown__menu > [role="group"] + [role="menuitem"],
+.au-c-dropdown__menu > [role="menuitem"] + [role="group"] {
+  border-top: none;
+}
+
+.au-c-input:focus {
+  border-color: $au-input-border-color !important;
+  box-shadow: none !important;
+
+  outline: var(--au-outline);
+  outline-offset: var(--au-outline-offset);
+}
+
+.au-c-control__indicator {
+  margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
 // Fix icons in menu
@@ -97,10 +271,6 @@
   border-radius: 0;
 }
 
-.au-c-modal__body {
-  overflow: hidden;
-}
-
 .au-c-modal__title {
   @include au-font-size($au-h5);
 }
@@ -109,12 +279,23 @@
   background-color: $au-white;
 }
 
-// Make appuniversum button pointer consistent with kaleidos
-.au-c-button {
-  cursor: pointer;
-}
-
 // Fix missing noactions class
 .auk-table--noactions .data-table__actions--top {
   display: none;
+}
+
+
+// Additions
+
+.au-c-pill--blank {
+  color: $au-pill-color;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+@media print {
+  .au-c-pill {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 }

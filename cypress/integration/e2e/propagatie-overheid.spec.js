@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -14,6 +15,7 @@ function currentTimestamp() {
 }
 
 context('Propagation to other graphs', () => {
+  const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
@@ -38,16 +40,15 @@ context('Propagation to other graphs', () => {
       'Cypress test voor het propageren naar overheid',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(subcaseTitle1, false);
+    cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
-    cy.approveDesignAgenda();
-    cy.closeAgenda();
+    cy.approveAndCloseDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
@@ -73,8 +74,18 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.wait('@patchAgendaitem');
 
+    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).should('not.exist');
+    });
+
     cy.releaseDecisions();
-    cy.wait(60000);
+    cy.wait(80000);
+    // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
+    });
+
     cy.logoutFlow();
   });
 
@@ -94,8 +105,8 @@ context('Propagation to other graphs', () => {
     cy.get(document.linkedDocuments.add).should('not.exist');
   });
 
-  it('Test as Overheid', () => {
-    cy.login('Overheid');
+  it('Test as Overheidsorganisatie', () => {
+    cy.login('Overheidsorganisatie');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
@@ -110,12 +121,20 @@ context('Propagation to other graphs', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
-    cy.wait(60000);
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Publicatie documenten gepland op ${todayFormatted}`);
+    });
+    cy.wait(80000);
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).eq(1)
+        .contains(`Documenten zijn vrijgegeven op ${todayFormatted}`);
+    });
     cy.logoutFlow();
   });
 
-  it('Test as Overheid', () => {
-    cy.login('Overheid');
+  it('Test as Overheidsorganisatie', () => {
+    cy.login('Overheidsorganisatie');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();

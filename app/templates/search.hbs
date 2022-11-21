@@ -1,0 +1,110 @@
+{{page-title (t "search")}}
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <Auk::Navbar @skin="gray-100">
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h2 data-test-route-search-title class="auk-toolbar__title">
+            {{capitalize (t "search")}}
+          </h2>
+        </Group.Item>
+        <Group.Item>
+          <Auk::Tabs as |Tabs|>
+            {{! Page-number reset when clicking a search type.
+                It is assumed that users don't want
+                to go back and forth between search results
+                for the different types while keeping the
+                page-number. }}
+            <Tabs.Tab
+              @route="search.agenda-items"
+              @current-when="search.agenda-items"
+              @query={{hash page=0}}
+            >
+              {{t "agendaitems"}}
+            </Tabs.Tab>
+            <Tabs.Tab
+              @route="search.cases"
+              @current-when="search.cases"
+              @query={{hash page=0}}
+            >
+              {{t "cases"}}
+            </Tabs.Tab>
+          </Auk::Tabs>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+
+  <Auk::Navbar>
+    <form {{on "submit" this.search}} class="auk-o-grid auk-o-grid--align-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <div class="auk-o-grid-col-4">
+        <div class="auk-form-group">
+          <div class="auk-o-flex auk-o-flex--align-baseline">
+            <Auk::Label for="keyword" class="auk-u-mr">
+              {{capitalize (t "keyword")}}
+            </Auk::Label>
+            <Utils::SearchTooltip />
+          </div>
+          <AuInput
+            data-test-route-search-input
+            @width="block"
+            @value={{this.searchTextBuffer}}
+            id="keyword"
+            placeholder={{t "search-placeholder"}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-from>
+          <Auk::Label>{{t "from"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.dateFromBuffer}}
+            @onChange={{set this "dateFromBuffer"}}
+            @enableClear={{this.dateFromBuffer}}
+            @onClear={{set this "dateFromBuffer" undefined}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-to>
+          <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+          <Auk::Datepicker
+            @date={{this.dateToBuffer}}
+            @onChange={{set this "dateToBuffer"}}
+            @enableClear={{this.dateToBuffer}}
+            @onClear={{set this "dateToBuffer" undefined}}
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <Auk::Label for="ministerName">
+            {{t "minister"}}
+          </Auk::Label>
+          <AuInput
+            data-test-route-search-mandatee-input
+            @width="block"
+            @value={{this.mandateesBuffer}}
+            id="ministerName"
+          />
+        </div>
+      </div>
+      <div class="auk-o-grid-col-2">
+        <AuButton
+          data-test-route-search-trigger
+          @skin="primary"
+          @icon="search"
+          @width="block"
+          type="submit"
+        >
+          {{t "search"}}
+        </AuButton>
+      </div>
+    </form>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-4">
+      {{outlet}}
+    </div>
+  </div>
+</div>

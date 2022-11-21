@@ -18,11 +18,28 @@ export default class SidebarItem extends Component {
 
   @service router;
 
+  defaultAgendaitemSubroute = 'agenda.agendaitems.agendaitem.index';
+  @tracked currentRouteName;
   @tracked subcase;
   @tracked newsletterIsVisible;
+  @tracked decisionActivity;
 
-  get isRetracted() {
-      return this.args.agendaitem.retracted;
+  constructor() {
+    super(...arguments);
+
+    // Keeping track of the current route name for rerouting
+    // from one agendaitem to another while keeping the selected subroute.
+    //
+    // Note: we tried defining a getter around this.route.currentRouteName before,
+    // but that approach didn't work since it gets messed up by intermediate loading routes
+    this.currentRouteName = this.defaultAgendaitemSubroute;
+    this.router.on('routeDidChange', (transition) => {
+      if (transition.to.name && transition.to.name.startsWith('agenda.agendaitems.agendaitem.')) {
+        this.currentRouteName = transition.to.name;
+      } else {
+        this.currentRouteName = this.defaultAgendaitemSubroute;
+      }
+    });
   }
 
   get class() {
@@ -30,28 +47,14 @@ export default class SidebarItem extends Component {
     if (this.args.isActive) {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
-    if (this.isRetracted) {
+    // Needed in order to change the sidebar classes when editing in the agendaitem detail route
+    if (this.decisionActivity?.get('isPostponed')) {
+      classes.push('auk-u-opacity--1/3');
+    }
+    if (this.decisionActivity?.get('isRetracted')) {
       classes.push('auk-u-opacity--1/3');
     }
     return classes.join(' ');
-  }
-
-  get defaultRoute() {
-    return 'agenda.agendaitems.agendaitem.index';
-  }
-
-  /**
-   * This method will get the route name for rerouting from one agendaitem to another while keeping the selected subroute.
-   */
-  get currentRoute() {
-    // There used to be a fix here to prevent the user from getting stuck in loading by using the currentRouter property from router.
-    // This fix broke after an ember update so now we default to index instead of creating a link to the /loading route.
-    // A better solution would be to remember the last correct route but that would mean keeping state somewhere..
-    const currentRouteName = this.router.currentRouteName;
-    if (currentRouteName.includes('.loading')){
-      return this.defaultRoute;
-    }
-    return currentRouteName;
   }
 
   @dropTask
@@ -59,7 +62,8 @@ export default class SidebarItem extends Component {
     yield timeout(350);
     const tasks = [
       this.loadNewsletterVisibility,
-      this.loadSubcase
+      this.loadSubcase,
+      this.loadDecisionActivity
     ].filter((task) => task.performCount === 0);
     yield Promise.all(tasks.map((task) => task.perform()));
   }
@@ -78,18 +82,21 @@ export default class SidebarItem extends Component {
 
   @task
   *loadNewsletterVisibility() {
-    const treatments = yield this.args.agendaitem.treatments;
-    const treatment = treatments.firstObject;
-    if (treatment) { // TODO: this is only the case for the first item of the agenda (approval, older data)
-      const newsletterInfo = yield treatment.newsletterInfo;
-      if (newsletterInfo) {
-        this.newsletterIsVisible = newsletterInfo.inNewsletter;
-      } else {
-        this.newsletterIsVisible = false;
-      }
+    const treatment = yield this.args.agendaitem.treatment;
+    // not all agendaitems have treatments (mainly in legacy)
+    const newsletterInfo = yield treatment?.newsletterInfo;
+    if (newsletterInfo) {
+      this.newsletterIsVisible = newsletterInfo.inNewsletter;
     } else {
       this.newsletterIsVisible = false;
     }
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @action

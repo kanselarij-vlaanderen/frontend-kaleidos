@@ -1,6 +1,7 @@
 /* global  cy, Cypress */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -55,17 +56,19 @@ function getTranslatedMonth(month) {
  * @name openSubcase
  * @function
  * @param {number} [index] The list index of the subcase to select, default 0
+ * @param {string} - the short title to check if a new subcase is fully created before trying to open the latest one
  */
-function openSubcase(index = 0) {
+function openSubcase(index = 0, shortTitle) {
   cy.log('openSubcase');
   // cy.intercept('GET', '/subcases?**').as('getSubcases');
-  // cy.intercept('GET', '/cases/**/subcases').as('getCaseSubcases');
   // cy.wait('@getSubcases', { timeout: 12000 });
   cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
+  if (shortTitle) {
+    cy.get(cases.subcaseProcess.shorttitle).should('contain', shortTitle);
+  }
   cy.get(cases.subcaseItem.container).eq(index)
     .find(cases.subcaseItem.link)
     .click();
-  // cy.wait('@getCaseSubcases', { timeout: 12000 });
   cy.log('/openSubcase');
 }
 
@@ -117,21 +120,19 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
  */
 function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addSubcaseMandatee');
-  cy.intercept('GET', '/mandatees**').as('getMandatees');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
 
-  if (mandateeSearchText) {
-    cy.intercept('GET', `/mandatees**?filter**${mandateeSearchText.split(' ', 1)}**`).as('getFilteredMandatees');
-  }
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
-  cy.wait('@getMandatees');
+  cy.wait(`@getGovernmentBodies${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`);
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
-  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // only use this when default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText)
-      .wait('@getFilteredMandatees');
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
   }
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   // we can search or select by number
@@ -192,7 +193,6 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.log('proposeSubcaseForAgenda');
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
-  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
   const monthDutch = getTranslatedMonth(agendaDate.month());
   let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
@@ -202,18 +202,23 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
 
   cy.get(cases.subcaseHeader.showProposedAgendas).click();
 
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaData_${randomInt}`);
+  cy.intercept('GET', '/subcases?filter**decisionmaking-flow**').as(`loadSubcase_${randomInt}`);
   cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
     .click();
   cy.get(cases.subcaseHeader.showProposedAgendas)
     .should('not.exist');
   cy.wait('@createAgendaActivity')
     .wait('@createNewAgendaitem')
-    .wait('@patchSubcase', {
-      timeout: 24000,
-    })
     .wait('@patchAgenda', {
       timeout: 24000,
     });
+  // refresh happens
+  cy.wait(`@loadAgendaData_${randomInt}`);
+  cy.wait(`@loadSubcase_${randomInt}`);
+  cy.get(auk.loader).should('not.exist');
+  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
   cy.log('/proposeSubcaseForAgenda');
 }
 

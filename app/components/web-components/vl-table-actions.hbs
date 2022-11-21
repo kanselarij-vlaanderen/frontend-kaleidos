@@ -1,9 +1,11 @@
-<div class="auk-o-flex--justify-between">
-  <Auk::Button
-    @skin="borderless"
-    @layout="icon-only"
+<AuButtonGroup>
+  <AuButton
+    @skin="naked"
     @icon="pencil"
-  />
+    @hideText={{true}}
+  >
+    {{t "edit"}}
+  </AuButton>
   {{#if (not (is-pending (await this.row.nota)))}}
     <Auk::Button
       @skin="borderless"
@@ -31,10 +33,10 @@
       </EmberTooltip>
     </div>
   {{/if}}
-  <Auk::Button
-    @skin="borderless"
-    @layout="icon-only"
+  <AuLink
+    @skin="button-naked"
     @icon="chevron-right"
+    @hideText={{true}}
     @route="agenda.agendaitems.agendaitem"
     @models={{array
       (await this.latestMeetingId)
@@ -43,5 +45,7 @@
     }}
     @bubbles={{false}}
     target="_blank"
-  />
-</div>
+  >
+    {{t "open"}}
+  </AuLink>
+</AuButtonGroup>

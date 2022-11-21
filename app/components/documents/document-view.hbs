@@ -1,6 +1,11 @@
 {{#if @file}}
   {{#if this.isPdfDocument}}
-    <PdfView data-test-document-view-pdfview @filePath={{@file.downloadLink}} />
+    <object
+      type="application/pdf"
+      data={{@file.inlineViewLink}}
+      class="pdf-view"
+    >
+    </object>
   {{else}}
     <div class="auk-u-p-4">
       <Auk::Alert

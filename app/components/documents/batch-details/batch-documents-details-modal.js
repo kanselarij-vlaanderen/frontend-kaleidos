@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { restorePiecesFromPreviousAgendaitem } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
 
 /**
@@ -12,8 +11,8 @@ import { task } from 'ember-concurrency';
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service store;
-  @service currentSession;
   @service fileService;
+  @service pieceAccessLevelService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -29,10 +28,6 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
-  }
-
-  get isEditingEnabled() {
-    return this.currentSession.isEditor;
   }
 
   @task
@@ -102,10 +97,9 @@ export default class BatchDocumentsDetailsModal extends Component {
       if (row.isToBeDeleted) {
         await this.fileService.deletePiece(piece);
 
-        await restorePiecesFromPreviousAgendaitem(
-          this.args.agendaitem,
-          row.documentContainer
-        );
+        if (this.args.didDeletePiece) {
+          await this.args.didDeletePiece(piece);
+        }
 
         const piecesInContainer = await row.documentContainer.pieces;
         if (piecesInContainer.length === 0) {
@@ -114,6 +108,7 @@ export default class BatchDocumentsDetailsModal extends Component {
       } else {
         piece.name = row.name;
         // does not check for relationship changes
+        let accessLevelHasChanged = false;
         let hasChanged = piece.dirtyType === 'updated';
         if (documentContainer.type !== row.documentType) {
           hasChanged = true;
@@ -121,11 +116,15 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
+          accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
         }
         if (hasChanged) {
           await piece.save();
           await documentContainer.save();
+          if (accessLevelHasChanged) {
+            await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+          }
         }
       }
     });

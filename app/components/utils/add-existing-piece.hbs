@@ -4,20 +4,20 @@
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="auk-u-maximize-width auk-u-overflow-hidden">
-        <Auk::Input
+        <AuInput
+          data-test-add-existing-piece-search-input={{true}}
           @icon="search"
-          @block={{true}}
+          @width="block"
           @value={{this.filter}}
+          {{on "input" (perform this.searchTask)}}
           id="searchId"
           placeholder={{t "search-placeholder"}}
-          data-test-add-existing-piece-search-input={{true}}
-          {{on "input" (perform this.searchTask)}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
   <div>
-    {{#if this.performSearch.isRunning}}
+    {{#if this.searchTask.isRunning}}
       <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
         <Auk::Loader @message={{t "loading"}} />
       </div>

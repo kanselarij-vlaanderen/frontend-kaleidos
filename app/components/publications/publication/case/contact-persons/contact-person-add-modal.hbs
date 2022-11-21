@@ -11,26 +11,35 @@
             <Auk::Label for="firstNameInput" @required={{true}}>
               {{t "first-name"}}
             </Auk::Label>
-            <Auk::Input data-test-contact-person-add-first-name id="firstNameInput"
-              @block={{true}}
+            <AuInput
+              data-test-contact-person-add-first-name
+              @width="block"
               @value={{this.firstName}}
-              {{on "input" this.validators.firstName.enableError}} />
+              {{on "input" this.validators.firstName.enableError}}
+              id="firstNameInput"
+            />
           </div>
           <div class={{this.validators.lastName.errorClass}}>
             <Auk::Label for="lastNameInput" @required={{true}}>
               {{t "last-name"}}
             </Auk::Label>
-            <Auk::Input data-test-contact-person-add-last-name id="lastNameInput"
-              @block={{true}}
+            <AuInput
+              data-test-contact-person-add-last-name
+              @width="block"
               @value={{this.lastName}}
-              {{on "input" this.validators.lastName.enableError}} />
+              {{on "input" this.validators.lastName.enableError}}
+              id="lastNameInput"
+            />
           </div>
         </div>
         <div class="auk-form-group">
           <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
-          <Auk::Input data-test-contact-person-add-email id="emailInput"
-            @block={{true}}
-            @value={{this.email}} />
+          <AuInput
+            data-test-contact-person-add-email
+            @width="block"
+            @value={{this.email}}
+            id="emailInput"
+          />
         </div>
         <div class="auk-form-group">
           <Auk::Label>
@@ -49,13 +58,16 @@
               as |organization|>
               {{ organization.name }}
             </PowerSelect>
-            <Auk::Button
+            <AuButton
               data-test-contact-person-add-organization
-              @layout="icon-only" @icon="plus"
-              class="auk-u-ml-2"
-              {{on "click" this.openOrganizationAddModal}}>
+              @skin="primary"
+              @icon="plus"
+              @hideText={{true}}
+              class="auk-o-flex__item--fix auk-u-ml-2"
+              {{on "click" this.openOrganizationAddModal}}
+            >
               {{t "add-organization"}}
-            </Auk::Button>
+            </AuButton>
           </div>
         </div>
       </div>
@@ -65,23 +77,27 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            disabled={{this.save.isRunning}}
-            {{on "click" @onCancel}}>
+          <AuButton
+            @skin="naked"
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="primary" @icon="plus" @size="small"
-            {{on "click" (perform this.save)}}
-            disabled={{not this.validators.areValid}}
+          <AuButton
+            data-test-contact-person-add-submit
+            @skin="primary"
+            @icon="plus"
+            @disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
-            data-test-contact-person-add-submit>
+            {{on "click" (perform this.save)}}
+          >
             {{t "add"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

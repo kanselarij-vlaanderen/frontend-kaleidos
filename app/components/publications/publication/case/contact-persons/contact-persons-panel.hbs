@@ -11,12 +11,14 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary" @icon="plus"
+            <AuButton
+              data-test-contact-persons-view-add
+              @skin="naked"
+              @icon="plus"
               {{on "click" this.openAddModal}}
-              data-test-contact-persons-view-add>
+            >
               {{t "add-contact"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -36,7 +38,7 @@
               <tr data-test-contact-persons-row>
                 <td>
                   <Auk::Avatar @icon="user">
-                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.nameToDisplay}}</div>
+                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.fullName}}</div>
                     {{#if contactPerson.person.organization}}
                       <div data-test-contact-persons-row-organization-name class="auk-u-text-muted auk-u-text-size--small">
                         {{contactPerson.person.organization.name}}
@@ -52,10 +54,16 @@
                   {{/if}}
                 </td>
                 <td class="auk-u-text-align--right">
-                  <Auk::Button
+                  <AuButton
                     data-test-contact-persons-row-delete
-                    @layout="icon-only" @icon="trash" @skin="danger-borderless"
-                    {{on "click" (fn this.delete contactPerson)}} />
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn this.delete contactPerson)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
                 </td>
               </tr>
             {{/each}}

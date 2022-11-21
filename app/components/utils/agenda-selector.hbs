@@ -9,7 +9,11 @@
     @onChange={{action "selectModel"}}
     as |model|
   >
-    {{model-property-to-show model this.propertyToShow}}
+    {{#if (has-block)}}
+      {{yield model}}
+    {{else}}
+      {{get model this.propertyToShow}}
+    {{/if}}
   </PowerSelect>
 {{else}}
   <PowerSelectMultiple
@@ -20,6 +24,10 @@
     @onChange={{action "selectModel"}}
     as |model|
   >
-    {{model-property-to-show model this.propertyToShow}}
+    {{#if (has-block)}}
+      {{yield model}}
+    {{else}}
+      {{get model this.propertyToShow}}
+    {{/if}}
   </PowerSelectMultiple>
 {{/if}}

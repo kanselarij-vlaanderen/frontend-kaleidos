@@ -1,0 +1,64 @@
+<WebComponents::VlModal
+  @isOverlay={{true}}
+  @title={{t "manage-alerts"}}
+  @closeModal={{this.cancel}}
+>
+  <Auk::Modal::Body>
+    <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
+      <PowerSelect
+        @options={{@model}}
+        @selected={{this.selectedAlert}}
+        @onChange={{this.selectAlert}}
+        as |alert|
+      >
+        {{alert.title}}
+      </PowerSelect>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-naked"
+            @route="settings.overview"
+          >
+            {{t "cancel"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{#if this.selectedAlert}}
+            <AuLink
+              @skin="button-secondary"
+              @icon="pencil"
+              @route="settings.system-alerts.edit"
+              @model={{this.selectedAlert.id}}
+            >
+              {{t "edit"}}
+            </AuLink>
+            <AuButton
+              data-test-route-settings-system-alerts-index-remove
+              @skin="secondary"
+              @alert={{true}}
+              @icon="trash"
+              {{on "click" (perform this.remove this.selectedAlert)}}
+            >
+              {{t "delete"}}
+            </AuButton>
+          {{/if}}
+          <AuLink
+            data-test-route-settings-system-alerts-index-add
+            @skin="button"
+            @icon="plus"
+            @route="settings.system-alerts.new"
+            class="auk-u-ml-2"
+          >
+            {{t "add"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</WebComponents::VlModal>

@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 
 context('Publications proofs tests', () => {
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
     cy.visit('/publicaties');
   });
 
@@ -40,7 +40,7 @@ context('Publications proofs tests', () => {
     // new request
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(publication.translationRequest.save).should('be.disabled');
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.get(publication.translationRequest.numberOfPages).should('be.empty')
       .type(numberOfPages);
@@ -73,7 +73,7 @@ context('Publications proofs tests', () => {
       .wait('@reloadTranslationModel');
 
     // check rollback after cancel request
-    cy.get(publication.publicationNav.publishpreview).click();
+    cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofsIndex.newRequest).click();
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 2);
@@ -81,7 +81,7 @@ context('Publications proofs tests', () => {
     cy.get(auk.modal.container).find(publication.documentsList.piece)
       .should('have.length', 3);
     cy.get(publication.proofRequest.message).scrollIntoView()
-      .should('have.value', `Beste,\n\nIn bijlage voor drukproef:\nTitel: test drukproefaanvraag\t\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
+      .should('have.value', `Beste,\n\nIn bijlage voor drukproef:\n\nTitel: test drukproefaanvraag\t\n\nVO-dossier: ${fields.number}\n\nVragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n`);
     cy.intercept('DELETE', 'files/*').as('deleteFile');
     cy.get(auk.modal.footer.cancel).click();
     // these p
@@ -169,9 +169,11 @@ context('Publications proofs tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
     // check edit and rollback
     cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
+    // TODO flaky dropdown opening: Attempted to access the computed <frontend-kaleidos@component:attach-popover::ember486>._hideOn on a destroyed object, which is not allowed
+    cy.wait(1000);
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
       .type(corrector);
@@ -181,7 +183,7 @@ context('Publications proofs tests', () => {
     // save
     cy.get(publication.proofReceivedPanel.dropdown).click();
     cy.get(publication.proofReceivedPanel.edit).click();
-    cy.get(auk.datepicker).click();
+    cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
       .type(corrector);
@@ -225,12 +227,12 @@ context('Publications proofs tests', () => {
     cy.intercept('GET', '/proofing-activities?filter**subcase**').as('getProofingModel');
 
     cy.createPublication(fields);
-    cy.get(publication.publicationNav.publishpreview).click()
+    cy.get(publication.publicationNav.proofs).click()
       .wait('@getProofingModel');
     // Make sure the page transitioned
     cy.url().should('contain', '/drukproeven');
 
-    // upload proofwithout request
+    // upload proof without request
     cy.get(publication.proofsIndex.upload).click();
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('GET', '/pieces/**').as('getPieces');
@@ -242,14 +244,16 @@ context('Publications proofs tests', () => {
 
     // request proof
     cy.get(publication.proofsIndex.newRequest).click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.wait('@createNewPiece');
+    cy.get(auk.modal.container).find(publication.documentsList.piece)
+      .should('have.length', 1);
     cy.intercept('POST', 'proofing-activities').as('createRequestActivity');
     cy.intercept('POST', 'emails').as('createEmail');
     cy.intercept('GET', 'request-activities/**/proofing-activity').as('getProofingsActivity');
     cy.get(publication.proofRequest.save).click();
-    cy.wait('@createNewPiece')
-      .wait('@createRequestActivity')
+    cy.wait('@createRequestActivity')
       .wait('@createEmail')
       .wait('@getProofingsActivity');
 
@@ -262,5 +266,68 @@ context('Publications proofs tests', () => {
     cy.get('@panels').eq(1)
       .find(publication.proofReceivedPanel.panel)
       .contains('Drukproef ontvangen');
+  });
+
+  it('should start a proofrequest from a translation', () => {
+    const fields = {
+      number: 1662,
+      shortTitle: 'test drukproefaanvraag via vertaling',
+    };
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+
+    // setup
+    cy.createPublication(fields);
+    cy.get(publication.publicationNav.translations).click();
+    cy.get(publication.translationsIndex.upload).click();
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.intercept('PATCH', '/translation-subcases/**').as('patchtranslationSubcase');
+    cy.get(publication.translationUpload.save).click()
+      .wait('@patchtranslationSubcase');
+
+    // open upload modal via received translation
+    cy.get(publication.translationReceivedPanel.dropdown).click();
+    cy.get(publication.translationReceivedPanel.proofRequest).click();
+
+    // check data
+    cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);
+    cy.get(publication.proofRequest.subject).should('have.value', `Drukproefaanvraag VO-dossier: ${fields.number} - ${fields.shortTitle}`);
+  });
+
+  it('should check the duedate field in proofs', () => {
+    const lateDueDate = Cypress.dayjs().subtract(5, 'days');
+    const formattedLateDueDate = lateDueDate.format('DD-MM-YYYY');
+
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/drukproeven');
+
+    // set duedate
+    cy.get(publication.proofInfoPanel.edit).click();
+    cy.get(publication.proofInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
+      .click();
+    cy.setDateInFlatpickr(lateDueDate);
+    cy.get(publication.proofInfoPanel.save).click();
+    // check if warning shows
+    cy.get(publication.proofInfoPanel.view.dueDate).contains(formattedLateDueDate);
+    cy.get(auk.formHelpText).contains('Datum verstreken');
+
+    // go to publicationinfopanel and check duedate field
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.publicationCaseInfo.dueDate).contains(formattedLateDueDate);
+    // remove duedate
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
+      .click()
+      .clear()
+      .type('{enter}');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    // check if proofinfopanel duedate is updated correctly
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofInfoPanel.view.dueDate).contains('-');
+    cy.get(auk.formHelpText).should('not.exist');
   });
 });

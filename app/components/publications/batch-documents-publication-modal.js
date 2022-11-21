@@ -12,19 +12,21 @@ import { task } from 'ember-concurrency';
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   @service store;
   @service publicationService;
+  @service toaster;
+  @service intl;
 
   @tracked isOpenNewPublicationModal = false;
 
   @tracked referenceDocument;
   @tracked case;
-  @tracked agendaItemTreatment;
+  @tracked decisionActivity;
   @tracked mandatees;
 
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
     this.loadCase.perform();
-    this.loadAgendaItemTreatment.perform();
+    this.loadDecisionActivity.perform();
     this.loadMandatees.perform();
   }
 
@@ -42,7 +44,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @task
   *loadCase() {
     this.case = yield this.store.queryOne('case', {
-      'filter[subcases][agenda-activities][agendaitems][:id:]':
+      'filter[decisionmaking-flow][subcases][agenda-activities][agendaitems][:id:]':
         this.args.agendaitem.id,
     });
   }
@@ -53,11 +55,11 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   @task
-  *loadAgendaItemTreatment() {
-    this.agendaItemTreatment = yield this.store.queryOne(
-      'agenda-item-treatment',
+  *loadDecisionActivity() {
+    this.decisionActivity = yield this.store.queryOne(
+      'decision-activity',
       {
-        'filter[agendaitem][:id:]': this.args.agendaitem.id,
+        'filter[treatment][agendaitems][:id:]': this.args.agendaitem.id,
         sort: '-start-date',
       }
     );
@@ -93,7 +95,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
         publicationProperties,
         {
           case: this.case,
-          agendaItemTreatment: this.agendaItemTreatment,
+          decisionActivity: this.decisionActivity,
           mandatees: this.mandatees,
           regulationType: regulationType,
         }
@@ -104,15 +106,53 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @action
   async linkPublicationFlow(piece, publicationFlow) {
+    let publicationFlowHasChanged = false;
+
+    const _case = await publicationFlow.case;
+    if (this.case.id != _case.id) {
+      const decisionActivity = await publicationFlow.decisionActivity;
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[treatment][decision-activity][:id:]': decisionActivity.id
+      });
+      if (!agendaitem) {
+        // Selected publication-flow is currently linked to another case (not via MR).
+        // We need to relink the publication-flow to this case and cleanup the dummy data
+        // that was created for the publication-flow back then.
+        publicationFlow.case = this.case;
+        publicationFlow.decisionActivity = this.decisionActivity;
+        publicationFlowHasChanged = true;
+        await Promise.all([
+          _case.destroyRecord(),
+          decisionActivity.destroyRecord(),
+        ]);
+      } else {
+        // Publication-flow is already linked to an decision-activity that has been
+        // handled on an agenda. We cannot relink the publication-flow in that case.
+        // In practice this scenario will only occur in concurrency scenarios where
+        // multiple users try to link the same publication at the same time to
+        // different cases.
+        this.toaster.error(
+          this.intl.t('unable-to-relink-publication-flow'),
+          this.intl.t('warning-title')
+        );
+        return;
+      }
+    }
+
     const regulationType = await publicationFlow.regulationType;
     if (!regulationType) {
       const regulationTypeFromDocument =
         await this.getRegulationTypeThroughReferenceDocument(piece);
       if (regulationTypeFromDocument) {
         publicationFlow.regulationType = regulationTypeFromDocument;
-        await publicationFlow.save();
+        publicationFlowHasChanged = true;
       }
     }
+
+    if (publicationFlowHasChanged) {
+      await publicationFlow.save();
+    }
+
     piece.publicationFlow = publicationFlow;
     await piece.save();
   }

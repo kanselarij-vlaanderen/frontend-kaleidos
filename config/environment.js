@@ -3,7 +3,6 @@
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'frontend-kaleidos',
-    podModulePrefix: 'frontend-kaleidos/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',
@@ -56,8 +55,7 @@ module.exports = function (environment) {
             'vo',
             'profile',
             'openid',
-            'dkbkaleidos',
-            'phone'
+            'dkbkaleidos'
           ].join(' '),
         },
       },

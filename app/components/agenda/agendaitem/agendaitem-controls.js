@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -15,12 +17,21 @@ export default class AgendaitemControls extends Component {
   @service intl;
   @service agendaService;
   @service currentSession;
+  @service pieceAccessLevelService;
 
-  @tracked isSavingRetracted = false;
   @tracked isVerifying = false;
   @tracked showLoader = false;
+  @tracked isDesignAgenda;
+  @tracked decisionActivity;
 
-  get isPostPonable() {
+  constructor() {
+    super(...arguments);
+
+    this.loadAgendaData.perform();
+    this.loadDecisionActivity.perform();
+  }
+
+  get areDecisionActionsEnabled() {
     const agendaActivity = this.args.agendaActivity;
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
@@ -35,9 +46,8 @@ export default class AgendaitemControls extends Component {
 
   // TODO document this
   get isDeletable() {
-    const designAgenda = this.args.currentAgenda.get('isDesignAgenda');
     const agendaActivity = this.args.agendaActivity;
-    if (!designAgenda) {
+    if (!this.isDesignAgenda) {
       return false;
     }
     if (agendaActivity) {
@@ -57,6 +67,19 @@ export default class AgendaitemControls extends Component {
     return null;
   }
 
+  @task
+  *loadAgendaData() {
+    const status = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = status.isDesignAgenda;
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
+  }
+
   async deleteItem(agendaitem) {
     this.isVerifying = false;
     this.showLoader = true;
@@ -72,20 +95,15 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
-  @action
-  async postponeAgendaitem(agendaitem) {
-    this.isSavingRetracted = true;
-    agendaitem.set('retracted', true);
-    await agendaitem.save();
-    this.isSavingRetracted = false;
+  @task
+  *postponeAgendaitem() {
+    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
   }
 
-  @action
-  async advanceAgendaitem(agendaitem) {
-    this.isSavingRetracted = true;
-    agendaitem.set('retracted', false);
-    await agendaitem.save();
-    this.isSavingRetracted = false;
+
+  @task
+  *retractAgendaitem() {
+    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
   }
 
   @action
@@ -96,5 +114,32 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @task
+  *resetDecisionResultCode() {
+    const agendaItemType = yield this.args.agendaitem.type;
+    const isAnnouncement =
+      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const defaultDecisionResultCodeUri = isAnnouncement
+      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    yield this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
+  }
+
+  @task
+  *setDecisionResultCode(decisionResultCodeUri) {
+    const decisionResultCodeConcept = yield this.store.findRecordByUri(
+      'concept',
+      decisionResultCodeUri
+    );
+    this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
+    yield this.decisionActivity.save();
+    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
+      const pieces = yield this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+      }
+    }
   }
 }

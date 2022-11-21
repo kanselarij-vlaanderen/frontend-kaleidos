@@ -1,99 +1,31 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-export default ModelWithModifier.extend({
-  modelName: alias('constructor.modelName'),
-  store: inject(),
-  intl: inject(),
-  subcasesService: inject(),
+export default class Subcase extends ModelWithModifier {
+  @attr('datetime') created;
+  @attr('datetime') modified;
+  @attr shortTitle;
+  @attr title;
+  @attr('boolean') confidential; // this is now "limited access"
+  @attr('boolean') isArchived;
+  @attr subcaseName;
 
-  created: attr('datetime'),
-  modified: attr('datetime'),
-  shortTitle: attr('string'),
-  title: attr('string'),
-  showAsRemark: attr('boolean'),
-  confidential: attr('boolean'),
-  isArchived: attr('boolean'),
-  subcaseName: attr('string'),
+  get modelName() {
+    return this.constructor.modelName;
+  }
 
-  agendaActivities: hasMany('agenda-activity', {
-    inverse: null,
-  }),
-  submissionActivities: hasMany('submission-activity', {
-    serialize: false,
-  }),
-  linkedPieces: hasMany('piece'),
-  mandatees: hasMany('mandatee'),
-  treatments: hasMany('agenda-item-treatment', {
-    inverse: null,
-  }),
+  @belongsTo('subcase-type') type;
+  @belongsTo('decisionmaking-flow') decisionmakingFlow;
+  @belongsTo('mandatee', { inverse: 'requestedSubcases' }) requestedBy;
+  @belongsTo('concept') agendaItemType;
 
-  type: belongsTo('subcase-type'),
-  case: belongsTo('case'),
-  requestedForMeeting: belongsTo('meeting', {
-    inverse: null,
-  }),
-  requestedBy: belongsTo('mandatee', {
-    inverse: null,
-  }),
-
-  // TODO don't use this computed, used in 1 controller
-  latestActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
-    const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
-    if (activities && activities.length > 0) {
-      return activities.get('lastObject');
-    }
-    return null;
-  }),
-
-  // TODO don't use this computed, refactor subcase-description-view.hbs && subcase-item.hbs
-  // eslint-disable-next-line ember/use-brace-expansion
-  phases: computed('agendaActivities.agendaitems', 'agendaActivities.agendaitems.[]', 'latestActivity.agendaitems.@each.retracted', 'approved', async function() {
-    return await this.get('subcasesService').getSubcasePhases(this);
-  }),
-
-  // TODO don't use this computed, refactor subcase-header.js
-  hasActivity: computed('agendaActivities', 'agendaActivities.[]', async function() {
-    const activities = await this.get('agendaActivities');
-    if (activities && activities.length > 0) {
-      return true;
-    }
-    return false;
-  }),
-
-  // TODO don't use this computed, refactor agendaitem-utils.js
-  agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
-    return await this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.get('id'),
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
-  }),
-
-  // TODO don't use this computed, used in 5 places, make util?
-  approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
-    const meeting = await this.get('requestedForMeeting');
-    if (meeting?.isFinal) {
-      const treatments = await this.get('treatments');
-      if (treatments && treatments.get('length') > 0) {
-        const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
-        const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
-          'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
-        });
-        const acknowledgedTreatment = await this.store.queryOne('agenda-item-treatment', {
-          'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME,
-        });
-        return !!approvedTreatment || !!acknowledgedTreatment;
-      }
-    }
-    return false;
-  }),
-
-});
+  // inverse: null or serialize: false is used for possible concurrency issues when saving without reloading possible stale relations.
+  @hasMany('agenda-activity', { serialize: false })
+  agendaActivities;
+  @hasMany('submission-activity', { serialize: false }) submissionActivities;
+  @hasMany('piece') linkedPieces;
+  @hasMany('mandatee', { inverse: 'subcases' }) mandatees;
+  @hasMany('decision-activity', { serialize: false })
+  decisionActivities;
+  @hasMany('concept') governmentAreas;
+}

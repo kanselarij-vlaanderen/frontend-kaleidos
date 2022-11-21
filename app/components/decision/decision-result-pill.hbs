@@ -1,7 +1,22 @@
-<Auk::Pill
-  data-test-decision-result-pill={{true}}
-  @skin={{this.skin}}
-  @icon={{this.icon}}
->
-  {{@decisionResultCode.label}}
-</Auk::Pill>
+{{#if (not @isEditable)}}
+  <AuPill
+    @size="small"
+    @skin={{this.skin}}
+    @icon={{this.icon}}
+    data-test-decision-result-pill
+  >
+    {{this.label}}
+  </AuPill>
+{{else}}
+  <AuPill
+    @size="small"
+    @skin={{this.skin}}
+    @icon={{this.icon}}
+    @onClickAction={{@onEdit}}
+    @actionIcon="pencil"
+    @actionText={{t "edit"}}
+    data-test-decision-result-pill
+  >
+    {{this.label}}
+  </AuPill>
+{{/if}}

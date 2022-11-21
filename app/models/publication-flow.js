@@ -11,6 +11,7 @@ export default class PublicationFlow extends Model {
   @attr('datetime') created;
   @attr('datetime') modified;
   @attr('number') numberOfPages;
+  @attr('number') numberOfExtracts; // = aantal uittreksels
 
   @belongsTo('case') case;
   @belongsTo('identification', {
@@ -27,7 +28,7 @@ export default class PublicationFlow extends Model {
   }) publicationStatusChange;
   @belongsTo('publication-subcase') publicationSubcase;
   @belongsTo('translation-subcase') translationSubcase;
-  @belongsTo('agenda-item-treatment') agendaItemTreatment;
+  @belongsTo('decision-activity') decisionActivity;
 
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',
@@ -37,4 +38,5 @@ export default class PublicationFlow extends Model {
     serialize: true,
   }) mandatees;
   @hasMany('piece') referenceDocuments;
+  @hasMany('concept') governmentAreas;
 }

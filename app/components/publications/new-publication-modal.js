@@ -7,7 +7,7 @@ import { isBlank } from '@ember/utils';
 
 /**
  * @argument { undefined|AgendaItem } agendaitem: for a publication that passes the Council of Ministers
- * @argument { undefined|AgendaItemTreatment } agendaItemTreatment: for a publication that passes the Council of Ministers
+ * @argument { undefined|decisionActivity } decisionActivity: for a publication that passes the Council of Ministers
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
  *  number: number,
@@ -42,7 +42,7 @@ export default class NewPublicationModal extends Component {
     if (this.isViaCouncilOfMinisters) {
       this.shortTitle = this.args.agendaitem.shortTitle;
       this.longTitle = this.args.agendaitem.title;
-      this.decisionDate = this.args.agendaItemTreatment.startDate;
+      this.decisionDate = this.args.decisionActivity.startDate;
     }
     this.openingDate = new Date();
   }

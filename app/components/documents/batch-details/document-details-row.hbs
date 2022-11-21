@@ -2,7 +2,7 @@
   data-test-document-details-row
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
 >
-  {{#if (and @isEditingEnabled @isDesignAgenda)}}
+  {{#if @isEditingEnabled}}
     <td class="auk-table-checkbox-col">
       <Auk::Checkbox
         @checked={{@isSelected}}
@@ -11,38 +11,36 @@
     </td>
   {{/if}}
   <td>
-    {{#if (and @isEditingEnabled @isDesignAgenda)}}
-      <Auk::Input data-test-document-details-input type="text" @block @value={{mut @row.name}} class="auk-u-maximize-width" />
+    {{#if @isEditingEnabled}}
+      <AuInput
+        data-test-document-details-input
+        @width="block"
+        @value={{mut @row.name}}
+      />
     {{else}}
       {{@row.name}}
     {{/if}}
   </td>
   <td>
-    {{#if (and @isEditingEnabled @isDesignAgenda)}}
-      <Utils::ModelSelector
+    {{#if @isEditingEnabled}}
+      <Utils::DocumentTypeSelector
         data-test-document-details-row-type
-        @modelName="document-type"
-        @allowClear={{true}}
-        @searchField="label"
-        @propertyToShow="label"
-        @sortField="priority"
-        @selectedItems={{@row.documentType}}
-        @selectModel={{@row.setDocumentType}}
+        @selectedDocumentType={{@row.documentType}}
+        @onChange={{@row.setDocumentType}}
       />
     {{else}}
       {{@row.documentType.label}}
     {{/if}}
   </td>
-  {{#if (and @isEditingEnabled @isDesignAgenda)}}
+  {{#if @isEditingEnabled}}
     <td>
-      <Utils::ModelSelector
+      <Utils::AccessLevelSelector
         data-test-document-details-row-access-level
-        @modelName="access-level"
         @allowClear={{true}}
-        @propertyToShow="label"
-        @sortField="priority"
-        @selectedItems={{@row.accessLevel}}
-        @selectModel={{@row.setAccessLevel}}
+        @displayField="label"
+        @sortField="position"
+        @selected={{@row.accessLevel}}
+        @onChange={{@row.setAccessLevel}}
       />
     </td>
   {{else}}
@@ -54,38 +52,34 @@
   {{/if}}
   <td>
     <WebComponents::AuButtonToolbar>
-      {{#if (not @isDesignAgenda)}}
-        <Auk::Button
-          @layout="icon-only"
+      {{#if (not @isEditingEnabled)}}
+        <AuLinkExternal
           @icon="book"
-          @skin="borderless"
-          @href={{@row.piece.viewDocumentURL}}
-          target="_blank"
-        />
-      {{else if (not @isEditingEnabled)}}
-        <Auk::Button
-          @layout="icon-only"
-          @icon="book"
-          @skin="borderless"
-          @href={{@row.piece.viewDocumentURL}}
+          @hideText={{true}}
+          href={{@row.piece.viewDocumentURL}}
           target="_blank"
         />
       {{else if @row.isToBeDeleted}}
-        <Auk::Button
+        <AuButton
           data-test-document-details-row-undo-delete
-          @icon="redo"
-          @layout="icon-only"
-          @skin="borderless"
+          @skin="naked"
+          @icon="undo"
+          @hideText={{true}}
           {{on "click" (fn @row.setToBeDeleted false)}}
-        />
+        >
+          {{t "undo"}}
+        </AuButton>
       {{else}}
-        <Auk::Button
+        <AuButton
           data-test-document-details-row-delete
+          @skin="naked"
+          @alert={{true}}
           @icon="trash"
-          @layout="icon-only"
-          @skin="danger-borderless"
+          @hideText={{true}}
           {{on "click" (fn @row.setToBeDeleted true)}}
-        />
+        >
+          {{t "delete"}}
+        </AuButton>
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>

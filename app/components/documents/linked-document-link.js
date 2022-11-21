@@ -5,16 +5,15 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 
-
 export default class LinkedDocumentLink extends Component {
   @service store;
   @service currentSession;
+  @service pieceAccessLevelService;
 
   @tracked isOpenVerifyDeleteModal = false;
 
   @tracked sortedPieces = [];
   @tracked accessLevel;
-  @tracked piece;
 
   constructor() {
     super(...arguments);
@@ -23,12 +22,13 @@ export default class LinkedDocumentLink extends Component {
 
   @task
   *loadData() {
-    const containerPieces = yield this.args.documentContainer.sortedPieces;
+    const containerPieces = yield this.args.documentContainer.pieces;
+    const sortedContainerPieces = containerPieces.sortBy('created');
     if (this.args.lastPiece) {
-      const idx = containerPieces.indexOf(this.args.lastPiece);
-      this.sortedPieces = A(containerPieces.slice(0, idx + 1));
+      const idx = sortedContainerPieces.indexOf(this.args.lastPiece);
+      this.sortedPieces = A(sortedContainerPieces.slice(0, idx + 1));
     } else {
-      this.sortedPieces = A(containerPieces);
+      this.sortedPieces = A(sortedContainerPieces);
     }
     this.accessLevel = yield this.lastPiece.accessLevel;
   }
@@ -37,8 +37,8 @@ export default class LinkedDocumentLink extends Component {
     return this.sortedPieces.length && this.sortedPieces.lastObject;
   }
 
-  get reverseSortedPieces() {
-    return this.sortedPieces.slice(0).reverse();
+  get reverseSortedPieceHistory() {
+    return this.sortedPieces.reverse().slice(1);
   }
 
   @action
@@ -65,16 +65,12 @@ export default class LinkedDocumentLink extends Component {
   @action
   async saveAccessLevel() {
     await this.lastPiece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     this.loadData.perform();
   }
 
   @action
   async reloadAccessLevel() {
     this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
-  }
-
-  @action
-  showPieceViewer() {
-    window.open(`/document/${this.lastPiece.id}`);
   }
 }

@@ -1,4 +1,4 @@
-<tr data-test-batch-editing-row class="auk-table--batch-edit">
+<tr class="auk-table--batch-edit">
   <td></td>
   <td>
     {{#if @selectedRows}}
@@ -6,46 +6,47 @@
     {{/if}}
   </td>
   <td>
-    <Utils::ModelSelector
-      @modelName="document-type"
-      @allowClear={{true}}
-      @searchField="label"
-      @propertyToShow="label"
-      @sortField="priority"
-      @readOnly={{this.isDisabled}}
-      @selectedItems={{this.documentType}}
-      @selectModel={{this.setDocumentType}}
+    <Utils::DocumentTypeSelector
+      data-test-batch-editing-row-type
+      @disabled={{this.isDisabled}}
+      @selectedDocumentType={{this.documentType}}
+      @onChange={{this.setDocumentType}}
     />
   </td>
   <td>
-    <Utils::ModelSelector
-      @modelName="access-level"
+    <Utils::AccessLevelSelector
+      data-test-batch-editing-row-access-level
       @allowClear={{true}}
-      @propertyToShow="label"
-      @sortField="priority"
-      @readOnly={{this.isDisabled}}
-      @selectedItems={{this.accessLevel}}
-      @selectModel={{this.setAccessLevel}}
+      @displayField="label"
+      @sortField="position"
+      @disabled={{this.isDisabled}}
+      @selected={{this.accessLevel}}
+      @onChange={{this.setAccessLevel}}
     />
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if this.isToBeDeleted}}
-        <Auk::Button
-          @icon="redo"
-          @layout="icon-only"
-          @skin="borderless"
+        <AuButton
+          @skin="naked"
+          @icon="undo"
+          @hideText={{true}}
           @disabled={{this.isDisabled}}
           {{on "click" (fn this.setToBeDeleted false)}}
-        />
+        >
+          {{t "undo"}}
+        </AuButton>
       {{else}}
-        <Auk::Button
+        <AuButton
+          @skin="naked"
+          @alert={{true}}
           @icon="trash"
-          @layout="icon-only"
-          @skin="danger-borderless"
+          @hideText={{true}}
           @disabled={{this.isDisabled}}
           {{on "click" (fn this.setToBeDeleted true)}}
-        />
+        >
+          {{t "delete"}}
+        </AuButton>
       {{/if}}
     </WebComponents::AuButtonToolbar>
   </td>

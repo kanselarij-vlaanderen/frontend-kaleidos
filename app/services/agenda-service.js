@@ -1,181 +1,24 @@
 import Service, { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
-import { A } from '@ember/array';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-export default Service.extend({
-  store: service(),
-  toaster: service(),
-  intl: service(),
-  currentSession: service(),
-  newsletterService: service(),
+export default class AgendaService extends Service {
+  @service store;
+  @service toaster;
+  @service intl;
+  @service currentSession;
+  @service newsletterService;
 
-  addedPieces: null,
-  addedAgendaitems: null,
-
-  /* API: agenda-approve-service */
-
-  async createNewDesignAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/createDesignAgenda', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-
-    const newAgenda = await this.store.find('agenda', payload.data.id);
-    return newAgenda;
-  },
-
-  async approveDesignAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/approveAgenda', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const newAgenda = await this.store.find('agenda', payload.data.id);
-    return newAgenda;
-  },
-
-  async approveAgendaAndCloseMeeting(currentMeeting) {
-    const response = await fetch(
-      '/agenda-approve/approveAgendaAndCloseMeeting',
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-        },
-        body: JSON.stringify({
-          meetingId: currentMeeting.id,
-        }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-  },
-
-  async closeMeeting(currentMeeting) {
-    const response = await fetch('/agenda-approve/closeMeeting', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const lastApprovedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': payload.data.id,
-    });
-    return lastApprovedAgenda;
-  },
-
-  async reopenPreviousAgenda(currentMeeting) {
-    const response = await fetch('/agenda-approve/reopenPreviousAgenda', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    const reopenedAgenda = await this.store.queryOne('agenda', {
-      'filter[:id:]': payload.data.id,
-    });
-    return reopenedAgenda;
-  },
-
-  async deleteAgenda(currentMeeting, currentAgenda) {
-    const response = await fetch('/agenda-approve/deleteAgenda', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        meetingId: currentMeeting.id,
-        agendaId: currentAgenda.id,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const payload = await response.json();
-    if (payload.error) {
-      throw new Error(payload.error.detail);
-    }
-
-    if (payload.data?.id) {
-      return await this.store.queryOne('agenda', {
-        'filter[:id:]': payload.data.id,
-      });
-    }
-  },
+  @tracked addedPieces = null;
+  @tracked addedAgendaitems = null;
 
   /* API: agenda-sort-service */
 
   async agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    const endpoint = new URL('/agenda-sort/agenda-with-changes', window.location.origin);
+    const endpoint = new URL('/agenda-comparison/agenda-with-changes', window.location.origin);
     const queryParams = new URLSearchParams(Object.entries({
       agendaToCompare: agendaToCompareID,
       selectedAgenda: currentAgendaID,
@@ -184,10 +27,10 @@ export default Service.extend({
     const response = await fetch(endpoint);
     if (response.ok) {
       const result = await response.json();
-      this.set('addedPieces', result.addedDocuments);
-      this.set('addedAgendaitems', result.addedAgendaitems);
+      this.addedPieces = result.addedDocuments;
+      this.addedAgendaitems = result.addedAgendaitems;
     }
-  },
+  }
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
@@ -202,7 +45,7 @@ export default Service.extend({
       itemsFromStore.push(itemFromStore);
     }
     return itemsFromStore;
-  },
+  }
 
   async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
     // scopefields specify which fields to base upon for determining if an item was modified
@@ -218,9 +61,12 @@ export default Service.extend({
       itemsFromStore.push(itemFromStore);
     }
     return itemsFromStore;
-  },
+  }
 
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
+    if (!this.currentSession.may('view-document-version-info')) {
+      return [];
+    }
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
     const payload = await response.json();
@@ -233,21 +79,21 @@ export default Service.extend({
       piecesFromStore.push(pieceFromStore);
     }
     return piecesFromStore;
-  },
+  }
 
   /* No API */
 
-  async computeNextItemNumber(agenda, isAnnouncement) {
+  async computeNextItemNumber(agenda, agendaItemType) {
     const lastItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      'filter[show-as-remark]': isAnnouncement,
+      'filter[type][:id:]': agendaItemType.get('id'),
       sort: '-number',
     });
     if (lastItem) {
       return lastItem.number + 1;
     }
     return 1;
-  },
+  }
 
   /**
    * @argument meeting
@@ -261,15 +107,10 @@ export default Service.extend({
       'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       sort: '-created', // serialnumber
     });
-    const isAnnouncement = subcase.get('showAsRemark');
-    const numberToAssign = await this.computeNextItemNumber(lastAgenda, isAnnouncement);
-
-    // Generate press text
+    const agendaItemType = await subcase.agendaItemType;
+    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
     const mandatees = await subcase.get('mandatees');
-    const sortedMandatees = await mandatees.sortBy('priority');
-    const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
-    const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
-
     const now = new Date();
 
     // Placement on agenda activity
@@ -279,23 +120,27 @@ export default Service.extend({
     });
     await agendaActivity.save();
     for (const submissionActivity of submissionActivities) {
-      submissionActivity.set('agendaActivity', agendaActivity);
+      submissionActivity.agendaActivity = agendaActivity;
       await submissionActivity.save();
     }
 
     // load code-list item
     const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.queryOne('decision-result-code', {
-      'filter[:uri:]': defaultDecisionResultCodeUri,
-    });
+    const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
 
-    // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: now,
-      modified: now,
+    // decision-activity
+    const decisionActivity = await this.store.createRecord('decision-activity', {
       subcase,
       startDate: meeting.plannedStart,
       decisionResultCode,
+    });
+    await decisionActivity.save();
+
+    // Treatment
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      decisionActivity,
     });
     await agendaItemTreatment.save();
 
@@ -308,37 +153,32 @@ export default Service.extend({
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
     const agendaitem = await this.store.createRecord('agendaitem', {
-      retracted: false,
-      titlePress: subcase.shortTitle,
-      textPress: pressText,
       created: now,
       number: numberToAssign,
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
-      showAsRemark: isAnnouncement,
+      type: agendaItemType,
       mandatees,
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
       agendaActivity,
-      treatments: A([agendaItemTreatment]),
+      treatment: agendaItemTreatment,
     });
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
-    await subcase.hasMany('treatments').reload();
-    subcase.set('requestedForMeeting', meeting);
-    await subcase.save();
+    await subcase.hasMany('submissionActivities').reload();
     updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
-    if (agendaitem.showAsRemark) {
+    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
     return agendaitem;
-  },
+  }
 
   async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
@@ -369,63 +209,50 @@ export default Service.extend({
         agendaitem.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
-  },
+  }
 
   async deleteAgendaitem(agendaitem) {
     const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
       reload: true,
     });
     agendaitemToDelete.set('aboutToDelete', true);
-    const agendaActivity = await agendaitemToDelete.get('agendaActivity');
-    const treatments = await agendaitemToDelete.get('treatments');
+    const agendaActivity = await agendaitemToDelete.agendaActivity;
+    const treatment = await agendaitemToDelete.treatment;
 
     if (agendaActivity) {
-      const subcase = await agendaActivity.get('subcase');
+      const subcase = await agendaActivity.subcase;
       await agendaActivity.hasMany('agendaitems').reload();
-      const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
-      if (treatments) {
-        await Promise.all(treatments.map(async(treatment) => {
-          const newsletter = await treatment.get('newsletterInfo');
-          if (newsletter) {
-            await newsletter.destroyRecord();
-          }
-          // TODO DELETE REPORT !
-          await treatment.destroyRecord();
-        }));
+      const agendaitemsFromActivity = await agendaActivity.agendaitems;
+      if (treatment) {
+        const decisionActivity = await treatment.decisionActivity;
+        const newsletter = await treatment.newsletterInfo;
+        if (newsletter) {
+          await newsletter.destroyRecord();
+        }
+        if (decisionActivity) {
+          await decisionActivity.destroyRecord();
+        }
+        // TODO DELETE REPORT !
+        await treatment.destroyRecord();
       }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
-        const agenda = await agendaitem.get('agenda');
+        const agenda = await agendaitem.agenda;
         await agendaitem.destroyRecord();
         await agenda.hasMany('agendaitems').reload();
       }));
       await agendaActivity.destroyRecord();
-      await subcase.set('requestedForMeeting', null);
-      await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
-      await subcase.hasMany('treatments').reload();
+      await subcase.hasMany('decisionActivities').reload();
     } else {
       await agendaitemToDelete.destroyRecord();
     }
-  },
+  }
 
   async deleteAgendaitemFromMeeting(agendaitem) {
     if (this.currentSession.isAdmin) {
-      return await this.deleteAgendaitem(agendaitem);
+      await this.deleteAgendaitem(agendaitem);
+    } else {
+      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
     }
-    this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
-  },
-
-  async retrieveModifiedDateFromNota(agendaitem) {
-    const nota = await agendaitem.get('nota');
-    if (!nota) {
-      return null;
-    }
-    const pieces = await nota.get('pieces');
-    const hasRevision = pieces.length > 1;
-    if (hasRevision) {
-      const lastPiece = await nota.get('lastPiece');
-      return lastPiece.created;
-    }
-    return null;
-  },
-});
+  }
+}

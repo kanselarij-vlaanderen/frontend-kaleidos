@@ -12,13 +12,14 @@
         {{#unless this.isEditing}}
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-decisions-info-panel-view-edit
-                @skin="tertiary"
+                @skin="naked"
                 @icon="pencil"
-                @layout="icon-only"
                 {{on "click" this.openEditingPanel}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         {{/unless}}
@@ -56,29 +57,27 @@
 
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-decisions-info-panel-edit-decision-date
-                  class="auk-form-group"
-                >
+                <div class="auk-form-group">
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                    <Auk::ButtonLink
-                      target="_blank"
+                    <AuLink
+                      @skin="primary"
                       @icon="chevron-right"
-                      @layout="icon-right"
+                      @iconAlignment="right"
                       @route="agenda.agendaitems.agendaitem"
                       @models={{this.modelsForAgendaitemRoute}}
+                      target="_blank"
                     >
-                      {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                        {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                      {{#if @publicationFlow.decisionActivity.startDate}}
+                        {{moment-format @publicationFlow.decisionActivity.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
-                    </Auk::ButtonLink>
+                    </AuLink>
                   {{else}}
                     <Auk::Datepicker
-                      @date={{this.agendaItemTreatment.startDate}}
-                      @onChange={{set this.agendaItemTreatment "startDate"}}
+                      @date={{this.decisionActivity.startDate}}
+                      @onChange={{set this.decisionActivity "startDate"}}
                     />
                   {{/if}}
                 </div>
@@ -91,9 +90,25 @@
                   class="auk-form-group"
                 >
                   <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
-                  <Auk::Input
+                  <AuInput
                     @type="number"
+                    @width="block"
                     @value={{@publicationFlow.numberOfPages}}
+                  />
+                </div>
+              </div>
+
+              {{! Aantal uittreksels }}
+              <div class="auk-o-grid-col-3">
+                <div
+                  class="auk-form-group"
+                >
+                  <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
+                  <AuInput
+                    data-test-decisions-info-panel-edit-number-of-extracts
+                    @type="number"
+                    @width="block"
+                    @value={{@publicationFlow.numberOfExtracts}}
                   />
                 </div>
               </div>
@@ -128,23 +143,24 @@
                 class="auk-u-m-0"
               >
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                  <Auk::ButtonLink
+                  <AuLink
                     data-test-decisions-info-panel-view-decision-link
-                    target="_blank"
+                    @skin="primary"
                     @icon="chevron-right"
-                    @layout="icon-right"
+                    @iconAlignment="right"
                     @route="agenda.agendaitems.agendaitem"
                     @models={{this.modelsForAgendaitemRoute}}
+                    target="_blank"
                   >
-                    {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                      {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                    {{#if @publicationFlow.decisionActivity.startDate}}
+                      {{moment-format @publicationFlow.decisionActivity.startDate}}
                     {{else}}
                       {{t "to-agenda"}}
                     {{/if}}
-                  </Auk::ButtonLink>
+                  </AuLink>
                 {{else}}
-                  {{#if @publicationFlow.agendaItemTreatment.startDate}}
-                    {{moment-format @publicationFlow.agendaItemTreatment.startDate}}
+                  {{#if @publicationFlow.decisionActivity.startDate}}
+                    {{moment-format @publicationFlow.decisionActivity.startDate}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
@@ -169,6 +185,23 @@
               </p>
             </div>
           </div>
+
+          {{! Aantal uittreksels }}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "publication-flow-number-of-extracts"}}</h4>
+              <p
+                data-test-decisions-info-panel-view-number-of-extracts
+                class="auk-u-m-0"
+              >
+                {{#if @publicationFlow.numberOfExtracts}}
+                  {{@publicationFlow.numberOfExtracts}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </p>
+            </div>
+          </div>
         </div>
       {{/if}}
     </Auk::Panel::Body>
@@ -177,9 +210,9 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-decisions-info-panel-edit-cancel
-                @skin="borderless"
+                @skin="naked"
                 @disabled={{or
                   this.closeEditingPanel.isRunning
                   this.save.isRunning
@@ -187,12 +220,12 @@
                 {{on "click" (perform this.closeEditingPanel)}}
               >
                 {{t "cancel"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-decisions-info-panel-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
@@ -203,7 +236,7 @@
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}
-              </Auk::Button>
+              </AuButton>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>

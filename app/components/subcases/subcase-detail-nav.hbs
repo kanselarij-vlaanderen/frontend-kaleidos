@@ -3,13 +3,13 @@
     @route="cases.case.subcases.overview"
     @isHierarchicalBack={{true}}
   />
-  <Auk::Tab @route="cases.case.subcases.subcase.overview">
+  <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.overview">
     {{t "overview"}}
   </Auk::Tab>
-  <Auk::Tab @route="cases.case.subcases.subcase.documents">
+  <Auk::Tab data-test-subcase-detail-nav-documents @route="cases.case.subcases.subcase.documents">
     {{t "documents"}}
   </Auk::Tab>
-  <Auk::Tab @route="cases.case.subcases.subcase.decision">
+  <Auk::Tab data-test-subcase-detail-nav-decisions @route="cases.case.subcases.subcase.decision">
     {{capitalize (t "decision")}}
   </Auk::Tab>
 </Auk::Tabs>

@@ -82,7 +82,7 @@ context('Agenda-Header actions tests', () => {
     // verify delete agenda A works
     cy.deleteAgenda(true);
     // verify subcase can be proposed for different agenda
-    cy.visit('/dossiers/5EB287A9F359DD0009000005/deeldossiers/5EB287BBF359DD0009000007/overzicht');
+    cy.visit('/dossiers/E14FB460-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EB287BBF359DD0009000007/overzicht');
     cy.get(cases.subcaseHeader.showProposedAgendas);
   });
 
@@ -94,6 +94,7 @@ context('Agenda-Header actions tests', () => {
     const subcaseTitleShortNew = 'Cypress test: Approve Approve and close - formal not ok: new item - 1651751749';
     const subcaseTitleShortApproved = 'Cypress test: Approve Approve and close - formal not ok: approved item - 1651751749';
     const subcaseTitleShortApprovedEdited = `${subcaseTitleShortApproved} EDITED`;
+    const approvalTitle = 'Goedkeuring van het verslag';
 
     // *Setup of this test:
     // Agenda A has 1 approval and 1 agendaitem
@@ -109,9 +110,9 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaActions.messages.approveAndCloseAgenda.rollbackItems);
-    cy.get(agenda.agendaActions.messages.approveAndCloseAgenda.deleteItems);
-    cy.get(agenda.agendaActions.confirm.approveAndCloseAgenda).click();
+    cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.rollbackItems);
+    cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.deleteItems);
+    cy.get(agenda.agendaVersionActions.confirm.approveAndCloseAgenda).click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
@@ -128,6 +129,8 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShortApproved);
     cy.get(agenda.agendaitemTitlesView.shortTitle).contains(subcaseTitleShortApprovedEdited)
       .should('not.exist');
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(approvalTitle);
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShortApproved);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShortNew)
       .should('not.exist');
   });
@@ -159,9 +162,9 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
-    cy.get(agenda.agendaActions.messages.approveAgenda.rollbackItems);
-    cy.get(agenda.agendaActions.messages.approveAgenda.moveItems);
-    cy.get(agenda.agendaActions.confirm.approveAgenda).click();
+    cy.get(agenda.agendaVersionActions.messages.approveAgenda.rollbackItems);
+    cy.get(agenda.agendaVersionActions.messages.approveAgenda.moveItems);
+    cy.get(agenda.agendaVersionActions.confirm.approveAgenda).click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');

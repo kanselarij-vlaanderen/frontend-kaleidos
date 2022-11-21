@@ -4,14 +4,47 @@
       "relationships": {
         "account": {
           "data": {
-            "id": "f445824e-69d6-46ff-8803-718137ccbbad",
+            "id": "00b774e4-2c79-4bb8-b352-b38af19df8c1",
             "type": "accounts"
           }
-        },
-        "group": {
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Secretarie": {
+    "data": {
+      "relationships": {
+        "account": {
           "data": {
-            "id": "71c068e6-d2f0-43de-93ab-cd1e7156ac4b",
-            "type": "groups"
+            "id": "33924ed8-ceab-42d7-8855-92aef3d15437",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "OVRB": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "f19a2d90-c3a6-4be2-882e-79b5b25deaee",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
+  "Kort bestek": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "404b7c2c-8037-4db6-9792-117f840fda03",
+            "type": "accounts"
           }
         }
       },
@@ -23,109 +56,73 @@
       "relationships": {
         "account": {
           "data": {
-            "id": "d8b2c243-8d17-4d0d-9194-9ed6a0b1b63a",
+            "id": "0bcabd92-8c30-4b69-bdbd-6e7b0bcee211",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "1cc0710c-1b28-4e23-b3ff-399c8089bc71",
-            "type": "groups"
           }
         }
       },
       "type": "sessions"
     }
   },
-  "Overheid": {
+  "Kabinetdossierbeheerder": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "0644e559-29b8-4c3c-8e93-3f48a3d8d4ca",
+            "id": "c076573e-a252-4358-b3b3-23f63eb946ba",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "3e824494-bbe7-45cf-aed8-5828970a10dc",
-            "type": "groups"
           }
         }
       },
       "type": "sessions"
     }
   },
-  "User": {
+  "Kabinetmedewerker": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "5c57db0a-0d48-4d58-9de6-5603d3f5992e",
+            "id": "3e3b52a3-bf34-4fa4-b49d-3ebb3efd734d",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "450915b2-4c64-4b03-9caa-71180400f831",
-            "type": "groups"
           }
         }
       },
       "type": "sessions"
     }
   },
-  "Kanselarij": {
+  "Overheidsorganisatie": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "86930340-1be5-4d72-87af-affebfc5b281",
+            "id": "a335add2-c129-46aa-9e5b-a97496d11757",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "50f4c79c-902d-4ad2-bca1-0f37a69f0c13",
-            "type": "groups"
           }
         }
       },
       "type": "sessions"
     }
   },
-  "Kabinet": {
+  "Overlegcomité raadgever": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "39fbd86f-45d2-41b3-ac21-485e8b285d0e",
+            "id": "1adf0580-3779-4123-9f36-2186c99c94a8",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb",
-            "type": "groups"
           }
         }
       },
       "type": "sessions"
     }
   },
-  "Ondersteuning Vlaamse Regering en Betekeningen": {
+  "Vlaams Parlement": {
     "data": {
       "relationships": {
         "account": {
           "data": {
-            "id": "80d93017-b9e5-4973-a8aa-9431dc5fbab7",
+            "id": "5eb1f49e-1c32-417b-9432-6d8b7f7afc12",
             "type": "accounts"
-          }
-        },
-        "group": {
-          "data": {
-            "id": "600d9d07-3368-4e6b-abbb-f5be5c2531a5",
-            "type": "groups"
           }
         }
       },

@@ -1,14 +1,30 @@
 <Auk::Modal @size="large">
   <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
+    <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
+      <Auk::Checkbox
+        data-test-mandatees-selector-open-search
+        @label={{t "open-search-for-mandatee"}}
+        @checked={{this.openSearch}}
+        {{on "input" this.setOpenSearch}}
+      />
+      <Auk::Icon @skin="muted" @name="circle-info" class="auk-u-ml">
+        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+          <p>
+            {{t "open-search-for-mandatee-tooltip"}}
+          </p>
+        </EmberTooltip>
+      </Auk::Icon>
+    </div>
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}
       @reserveSpace={{true}}
     >
       <Auk::Label>{{t "minister"}}</Auk::Label>
-      <Utils::MandateeSelector
-        @chooseMandatee={{fn (mut this.selectedMandatee)}}
-        @singleSelect={{true}}
+      <Mandatees::MandateeSelector
+        @referenceDate={{@referenceDate}}
+        @openSearch={{this.openSearch}}
+        @onSelectMandatee={{fn (mut this.selectedMandatee)}}
         @selectedMandatees={{this.selectedMandatee}}
       />
     </Utils::LoadableContent>
@@ -17,28 +33,27 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            data-test-mandatees-selector-cancel
-            {{on "click" @onClose}}
+          <AuButton
+            @skin="naked"
             @disabled={{this.onAdd.isRunning}}
+            {{on "click" @onClose}}
           >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             data-test-mandatees-selector-add
             @skin="primary"
             @icon="plus"
-            @size="small"
             @disabled={{not this.canAdd}}
             @loading={{this.onAdd.isRunning}}
             {{on "click" (perform this.onAdd)}}
           >
             {{t "add"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

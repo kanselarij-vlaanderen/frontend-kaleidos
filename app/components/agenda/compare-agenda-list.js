@@ -3,6 +3,8 @@ import Component from '@glimmer/component';
 import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import bind from 'frontend-kaleidos/utils/bind';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CompareAgendaList extends Component {
   /**
@@ -31,6 +33,29 @@ export default class CompareAgendaList extends Component {
   @tracked combinedAgendaitems = [] ;
   @tracked combinedAnnouncements = [] ;
 
+  @bind
+  async hasChanges(agendaitem) {
+    let hasAddedPieces = false;
+    const pieces = await agendaitem?.pieces;
+    if (pieces?.length) {
+      const documentContainers = await this.store.query('document-container', {
+        filter: {
+          pieces: {
+            agendaitems: {
+              id: agendaitem?.id,
+            },
+          },
+        },
+        page: {
+          size: pieces.length, // # documentContainers will always be <= # pieces
+        },
+        include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+      });
+      hasAddedPieces = documentContainers?.any((dc) => this.agendaService.addedPieces?.includes(dc.uri));
+    }
+    const checkAdded = agendaitem && this.agendaService.addedAgendaitems.includes(agendaitem.id);
+    return checkAdded || hasAddedPieces;
+  }
 
   async bothAgendasSelected() {
     if (this.agendaOne && this.agendaTwo) {
@@ -87,7 +112,9 @@ export default class CompareAgendaList extends Component {
         agenda: {
           id,
         },
-        'show-as-remark': false,
+        'type': {
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+        },
       },
       sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',
@@ -100,7 +127,9 @@ export default class CompareAgendaList extends Component {
         agenda: {
           id,
         },
-        'show-as-remark': true,
+        'type': {
+          ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT,
+        },
       },
       sort: 'number',
       include: 'agenda,agenda-activity,agenda-activity.subcase,mandatees',

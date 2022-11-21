@@ -12,10 +12,13 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  // mock-login-route as name to avoid collision with mock-login component provided by addon
-  this.route('mock-login-route', { path: '/mock-login', });
+  this.route('mock-login');
   this.route('login', { path: '/aanmelden', });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
+
+  // Redirect routes
+  this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' });
+  this.route('meeting', { path: '/vergaderingen/:meeting_id' });
 
   this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
@@ -26,7 +29,6 @@ Router.map(function() {
         this.route('documents', { path: '/documenten', });
         this.route('decisions', { path: '/beslissingen', });
         this.route('news-item', { path: '/kort-bestek', });
-        this.route('press-agenda', { path: '/persagenda', });
       });
     });
     this.route('compare', { path: '/vergelijken', });
@@ -49,45 +51,25 @@ Router.map(function() {
   });
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
-    this.route('index', { path: '/', });
-    this.route('search', { path: '/bericht-zoeken' }, function() {
-      this.route('newsletter-infos', { path: '/', });
-    });
+    this.route('search', { path: '/zoeken', });
   });
+
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
     this.route('index', { path: '/', });
     this.route('print', { path: '/afdrukken', });
     this.route('nota-updates');
   });
 
-  this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
-    this.route('decisions', { path: '/beslissingen/:agenda_id', }, function() {
-      this.route('agendaitems', { path: '/agendapunten', });
-    });
-    this.route('press-agenda', { path: '/persagenda/:agenda_id', }, function() {
-      this.route('overview', { path: '/klad', });
-      this.route('agendaitems', { path: '/agendapunten', });
-    });
-    this.route('newsletter', { path: '/kort-bestek/:agenda_id', }, function() {
-      this.route('overview', { path: '/klad', });
-      this.route('loading', { path: '/laden', });
-    });
-    this.route('loading', { path: '/laden', });
-  });
-
   this.route('publications', { path: '/publicaties', }, function() {
     this.route('overview', { path: '/overzicht' }, function () {
       this.route('all', { path: '/alle-dossiers' });
-      this.route('start', { path: '/op-te-starten' });
       this.route('urgent', { path: '/dringend' });
       this.route('translation', { path: '/in-vertaling' });
       this.route('proof', { path: '/aanvraag-drukproef' });
       this.route('proofread', { path: '/nalezen' });
       this.route('late', { path: '/te-laat-in-bs' });
       this.route('reports', { path: '/rapporten' });
-      this.route('search', { path: '/dossier-zoeken' }, function() {
-        this.route('publication-flows', { path: '/', });
-      });
+      this.route('search', { path: '/zoeken' });
     });
     this.route('publication', { path: ':publication_id', }, function() {
       this.route('case', { path: '/dossier', });
@@ -99,31 +81,17 @@ Router.map(function() {
   });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekeningen', }, function() {
+    this.route('signatures', { path: '/handtekenmap', }, function() {
       this.route('index', { path: '/overzicht', });
-      this.route('busy', { path: '/overzicht-bezig', });
-      this.route('success', { path: '/overzicht-notificatie', });
-      this.route('sign', { path: '/tekenen', });
-      this.route('multiple', { path: '/meerdere-tekenen', });
-      this.route('signature', { path: '/handtekenen', });
-      this.route('signed', { path: '/overzicht-gehandtekend', });
-      this.route('email', { path: '/email', });
+      this.route('signing-flow', { path: '/:signingflow_id' }, function() {
+        this.route('documents', { path: '/documenten' });
+      });
     });
   }
 
   this.route('search', { path: '/zoeken', }, function() {
-    this.route('agenda-items', { path: '/agendapunten', });
     this.route('cases', { path: '/dossiers', });
-  });
-
-  this.route('search-future', { path: '/zoeken-toekomst', }, function() {
-    this.route('all', { path: '/alle-types', });
     this.route('agenda-items', { path: '/agendapunten', });
-    this.route('cases', { path: '/dossiers', });
-    this.route('documents', { path: '/documenten', });
-    this.route('decisions', { path: '/beslissingen', });
-    this.route('newsletter-infos', { path: '/kort-bestek', });
-    this.route('announcements', { path: '/mededelingen', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
@@ -132,18 +100,12 @@ Router.map(function() {
     this.route('users', { path: '/gebruikers', }, function() {
       this.route('user', { path: '/:id', });
     });
-    this.route('organisations', { path: '/organisaties', });
+    this.route('organizations', { path: '/organisaties' }, () => {});
     this.route('system-alerts', { path: '/systeemmeldingen', }, function() {
       this.route('edit', { path: '/:alert_id', });
       this.route('new', { path: '/nieuw', });
     });
-    this.route('government-domains', () => {});
-    this.route('government-fields', () => {});
-    this.route('ise-codes', () => {});
     this.route('emails', { path: '/emailberichten', });
-    this.route('document-types', () => {});
-    this.route('case-types', () => {});
-    this.route('subcase-types', () => {});
   });
 
   this.route('document', { path: '/document/:piece_id', });
@@ -166,6 +128,7 @@ Router.map(function() {
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
+    this.route('checkbox-tree');
     this.route('checkboxes-radio-buttons');
     this.route('colors');
     this.route('color-badge');
@@ -185,7 +148,6 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('pill');
     this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
