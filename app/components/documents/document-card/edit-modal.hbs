@@ -10,11 +10,7 @@
       as |c|
     >
       <c.header
-        @badgeIcon={{
-          if (eq @piece.file.extension "pdf") "pdf"
-          (if (eq @piece.file.extension "docx") "word"
-          "document")
-        }}
+        @badgeIcon={{document-icon @piece.file.extension}}
       >
         <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
           {{uppercase @piece.file.extension}}
@@ -60,11 +56,7 @@
         as |c|
       >
         <c.header
-          @badgeIcon={{
-            if (eq @piece.file.derived.extension "pdf") "pdf"
-            (if (eq @piece.file.derived.extension "docx") "word"
-            "document")
-          }}
+          @badgeIcon={{document-icon @piece.file.derived.extension}}
         >
           <p class="vlc-subline au-u-medium au-u-muted">
             {{uppercase @piece.file.derived.extension}}
