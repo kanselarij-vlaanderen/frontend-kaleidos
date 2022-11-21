@@ -49,6 +49,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *saveDetails() {
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
+      const derivedFile = yield oldFile.derived;
+      if (derivedFile) {
+        oldFile.derived = null;
+        this.replacementSourceFile.derived = derivedFile;
+        yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+      }
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
       yield this.args.piece.save();
