@@ -1,78 +1,122 @@
 <div class="auk-panel-layout__main-content">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8">
-      <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
-          <Group.Item>
-            <h4 class="auk-toolbar__title">
-              Notulen
-            </h4>
-          </Group.Item>
-        </Toolbar.Group>
-        <Toolbar.Group @position="right" as |Group|>
-          <Group.Item>
-            <AuButton
-              @icon="pdf"
-              @skin="secondary"
-            >
-              Exporteren als pdf
-            </AuButton>
-          </Group.Item>
-        </Toolbar.Group>
-      </Auk::Toolbar>
-      <div class="au-o-flow">
-        <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
-          <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
-            {{#if this.isFullscreen}}
-              <AuToggleSwitch
-                @label="Ondertekend"
-                @identifier="signature"
-                @name="signature"
-                @checked={{false}}
-              />
-              <AuButtonGroup>
-                <AuButton
-                  @skin="naked"
-                  @icon="minimize"
-                  @iconAlignment="left"
-                  {{on "click" this.toggleFullscreen}}
-                >
-                  {{t "close-fullscreen"}}
-                </AuButton>
+      <Auk::Panel>
+        <Auk::Panel::Header class="{{if this.isEditing 'au-u-background-gray-100'}}">
+          <Auk::Toolbar as |Toolbar|>
+            <Toolbar.Group @position="left" as |Group|>
+              <h4 class="auk-toolbar__title">
+                Notulen
+              </h4>
+            </Toolbar.Group>
+            <Toolbar.Group @position="right" as |Group|>
+              <Group.Item>
                 <AuButton
                   @icon="pdf"
-                  @skin="secondary"
+                  @skin="naked"
                 >
                   Exporteren als pdf
                 </AuButton>
-              </AuButtonGroup>
-            {{else}}
-              <span></span>
-              <AuButton
-                @skin="naked"
-                @icon="expand"
-                @iconAlignment="left"
-                {{on "click" this.toggleFullscreen}}
-              >
-                {{t "fullscreen"}}
-              </AuButton>
-            {{/if}}
+              </Group.Item>
+              {{#unless this.isEditing}}
+              <Group.Item>
+                <AuButton
+                  @skin="naked"
+                  @icon="pencil"
+                  @iconAlignment="left"
+                  {{on "click" this.toggleEdit}}
+                >
+                  Wijzigen
+                </AuButton>
+              </Group.Item>
+              {{/unless}}
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}">
+          {{#if this.isEditing}}
+          <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
+            <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
+              {{#if this.isFullscreen}}
+                <h4 class="auk-toolbar__title">
+                  Notulen
+                </h4>
+                <AuButtonGroup>
+                  <AuButton
+                    @skin="naked"
+                    @icon="minimize"
+                    @iconAlignment="left"
+                    {{on "click" this.toggleFullscreen}}
+                  >
+                    {{t "close-fullscreen"}}
+                  </AuButton>
+                  <AuButton
+                    @skin="primary"
+                    {{on "click" this.toggleAll}}
+                  >
+                    {{t "save"}}
+                  </AuButton>
+                </AuButtonGroup>
+              {{else}}
+                <span></span>
+                <AuButton
+                  @skin="naked"
+                  @icon="expand"
+                  @iconAlignment="left"
+                  {{on "click" this.toggleFullscreen}}
+                >
+                  {{t "fullscreen"}}
+                </AuButton>
+              {{/if}}
+            </div>
+            <WebComponents::VlRdfaEditor
+              data-test-newsletter-edit-item-rdfa-editor
+              @richtext="{{this.richtext}}"
+              @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+            />
           </div>
-          <WebComponents::VlRdfaEditor
-            data-test-newsletter-edit-item-rdfa-editor
-            @richtext="{{this.richtext}}"
-            @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
-          />
-        </div>
-        <div>
-          <AuToggleSwitch
-            @label="Ondertekend"
-            @identifier="signature"
-            @name="signature"
-            @checked={{false}}
-          />
-        </div>
-      </div>
+          <div>
+            <AuToggleSwitch
+              @label="Ondertekend"
+              @identifier="signature"
+              @name="signature"
+              @checked={{false}}
+            />
+          </div>
+          {{else}}
+          <p class="au-u-muted">Nog geen inhoud</p>
+          <p>
+            <AuPill @icon="no-sign">Niet getekend</AuPill>
+          </p>
+          {{/if}}
+        </Auk::Panel::Body>
+        {{#if this.isEditing}}
+          <Auk::Panel::Footer class="au-u-background-gray-100">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="naked"
+                    {{on "click" this.toggleEdit}}
+                  >
+                    {{t "cancel"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="primary"
+                    {{on "click" this.toggleEdit}}
+                  >
+                    {{t "save"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Footer>
+        {{/if}}
+      </Auk::Panel>
     </div>
   </div>
 </div>
