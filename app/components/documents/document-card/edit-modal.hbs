@@ -25,7 +25,7 @@
             <AuButton
               data-test-document-edit-replace
               @skin="secondary"
-              {{on "click" this.toggleUploadReplacementFile}}
+              {{on "click" this.toggleUploadReplacementSourceFile}}
             >
               {{t "replace"}}
             </AuButton>
@@ -40,10 +40,10 @@
           </AuHelpText>
         {{/if}}
       </c.header>
-      {{#if this.isUploadingReplacementFile}}
+      {{#if this.isUploadingReplacementSourceFile}}
         <c.content data-test-document-edit-pdf-file-uploader>
           <Auk::FileUploader
-            @onUpload={{set this "replacementFile"}}
+            @onUpload={{set this "replacementSourceFile"}}
           />
         </c.content>
       {{/if}}

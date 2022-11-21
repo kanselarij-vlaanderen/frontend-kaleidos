@@ -10,13 +10,13 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
 
-  @tracked isUploadingReplacementFile = false;
+  @tracked isUploadingReplacementSourceFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
   @tracked isDeletingDerivedFile = false;
 
   @tracked name;
   @tracked uploadedDerivedFile;
-  @tracked replacementFile;
+  @tracked replacementSourceFile;
   @tracked replacementDerivedFile;
 
   constructor() {
@@ -26,10 +26,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   }
 
   @action
-  async toggleUploadReplacementFile() {
-    await this.replacementFile?.destroyRecord();
-    this.replacementFile = null;
-    this.isUploadingReplacementFile = !this.isUploadingReplacementFile;
+  async toggleUploadReplacementSourceFile() {
+    await this.replacementSourceFile?.destroyRecord();
+    this.replacementSourceFile = null;
+    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
   }
 
   @action
@@ -43,9 +43,9 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   async cancelEdit() {
     this.name = null;
 
-    await this.replacementFile?.destroyRecord();
-    this.isUploadingReplacementFile = false;
-    this.replacementFile = null;
+    await this.replacementSourceFile?.destroyRecord();
+    this.isUploadingReplacementSourceFile = false;
+    this.replacementSourceFile = null;
 
     await this.replacementDerivedFile?.destroyRecord();
     this.isUploadingReplacementDerivedFile = false;
@@ -64,10 +64,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     const now = new Date();
     this.args.piece.modified = now;
     this.args.piece.name = this.name;
-    if (this.replacementFile) {
+    if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
       yield oldFile.destroyRecord();
-      this.args.piece.file = this.replacementFile;
+      this.args.piece.file = this.replacementSourceFile;
     }
     if (this.replacementDerivedFile) {
       const file = yield this.args.piece.file;
@@ -92,8 +92,8 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
 
     this.name = null;
 
-    this.isUploadingReplacementFile = false;
-    this.replacementFile = null;
+    this.isUploadingReplacementSourceFile = false;
+    this.replacementSourceFile = null;
 
     this.isUploadingReplacementDerivedFile = false;
     this.replacementDerivedFile = false;
