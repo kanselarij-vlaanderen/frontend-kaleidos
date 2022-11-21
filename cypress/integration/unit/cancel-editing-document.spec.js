@@ -483,9 +483,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(1)
       .find(document.documentDetailsRow.type)
       .click();
-    cy.intercept('GET', '/concepts?filter**Advies**').as('getDocumentType');
     cy.get(dependency.emberPowerSelect.searchInput).type(typeSearchOption);
-    cy.wait('@getDocumentType');
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .contains(typeSearchOption)
       .click();

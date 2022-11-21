@@ -97,13 +97,13 @@ export default class AgendaitemControls extends Component {
 
   @task
   *postponeAgendaitem() {
-    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
+    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
   }
 
 
   @task
   *retractAgendaitem() {
-    yield this.setDecisionResultCode(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
+    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
   }
 
   @action
@@ -124,20 +124,21 @@ export default class AgendaitemControls extends Component {
     const defaultDecisionResultCodeUri = isAnnouncement
       ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    yield this.setDecisionResultCode(defaultDecisionResultCodeUri);
+    yield this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
   }
 
-  async setDecisionResultCode(decisionResultCodeUri) {
-    const decisionResultCodeConcept = await this.store.findRecordByUri(
+  @task
+  *setDecisionResultCode(decisionResultCodeUri) {
+    const decisionResultCodeConcept = yield this.store.findRecordByUri(
       'concept',
       decisionResultCodeUri
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
-    await this.decisionActivity.save();
+    yield this.decisionActivity.save();
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
-      const pieces = await this.args.agendaitem.pieces;
+      const pieces = yield this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
       }
     }
   }

@@ -76,10 +76,7 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   get accessLevelLabel() {
-    if (this.args.accessLevel) {
-      return this.args.accessLevel.get('label');
-    }
-    return this.intl.t('no-accessLevel');
+    return this.args.accessLevel ? this.args.accessLevel.get('label') : this.intl.t('no-accessLevel');
   }
 
   get canEdit() {

@@ -10,6 +10,7 @@ export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
 
+  agenda;
   meeting;
   defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;

@@ -70,7 +70,6 @@ context('Testing the application as Kort bestek user', () => {
     cy.get(agenda.agendaActions.showOptions).click();
     // Allowed actions
     cy.get(agenda.agendaActions.navigateToNewsletter).should('exist');
-    cy.get(agenda.agendaActions.navigateToPrintablePressAgenda).should('exist');
     cy.get(agenda.agendaActions.navigateToPrintableAgenda).should('exist');
     cy.get(agenda.agendaActions.downloadDocuments).should('exist');
     // TODO Plan publication / withdraw publication should not be done by KB?

@@ -16,7 +16,8 @@
   {{/if}}
   {{#if @isShowingAccessLevel}}
     <AccessLevelPill
-      @accessLevel={{@accessLevel}}
+      @accessLevel={{@doc.accessLevel}}
+      @isDraft={{this.isDraftAccessLevel}}
     />
   {{/if}}
 </div>
