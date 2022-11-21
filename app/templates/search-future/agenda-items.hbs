@@ -331,19 +331,6 @@
             </div>
           </div>
           <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "type"}}</Auk::Label>
-            <Auk::Checkbox
-              @checked={{this.includeNotas}}
-              @label={{t "note"}}
-              {{on "input" this.toggleIncludeNotas}}
-            />
-            <Auk::Checkbox
-              @checked={{this.includeMededelingen}}
-              @label={{capitalize (t "announcement")}}
-              {{on "input" this.toggleIncludeMededelingen}}
-            />
-          </div>
-          <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>Agenda versie</Auk::Label>
             <Auk::Checkbox
               @checked={{this.latestOnly}}
@@ -362,7 +349,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"{{this.searchTextBuffer}}"</strong> in <strong>agendapunten</strong>
+            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"keyword"</strong> in <strong>agendapunten</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">{{t "sort-by"}}</AuLabel>
@@ -423,7 +410,7 @@
                 >
                   <c.header>
                     <p class="au-u-para-small au-u-muted au-u-medium">
-                      {{t "on-agenda-of"}} {{moment-format row.sessionDates}}
+                      {{moment-format row.sessionDates}}
                     </p>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
@@ -438,24 +425,29 @@
                       </AuLink>
                     </AuHeading>
                   </c.header>
-                  {{#if (eq row.agendaSerialNumber.length 1)}}
                   <c.content>
-                    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center au-u-margin-bottom-tiny">
-                      <p class="au-u-para-small au-u-muted au-u-medium">
-                        <AuPill>
-                          {{#if (eq row.type 'nota')}}
-                            {{capitalize (t "announcement")}}
-                          {{else}}
-                            {{t "note"}}
-                          {{/if}}
-                        </AuPill>
-                      </p>
-                      <p class="au-u-para-small au-u-muted">
-                        {{t "agenda-version"}} {{row.agendaSerialNumber}}
-                      </p>
-                    </div>
+                    <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
+                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+                      Uit
+                      <AuLink @skin="secondary">
+                        Agenda versie C
+                        {{!-- {{#if (eq row.agendaSerialNumber.length 1)}}
+                          {{t "agenda"}} {{row.agendaSerialNumber}}
+                        {{else}}
+                          {{t "agenda"}}
+                        {{/if}} --}}
+                      </AuLink>
+                    </p>
+                    <p class="au-u-para-small au-u-margin-top-none au-u-muted">
+                      Ook gevonden in
+                      <AuLink @skin="secondary">
+                        Versie B
+                      </AuLink>,
+                      <AuLink @skin="secondary">
+                        Versie A
+                      </AuLink>
+                    </p>
                   </c.content>
-                  {{/if}}
                 </AuCard>
               </td>
             </c.body>

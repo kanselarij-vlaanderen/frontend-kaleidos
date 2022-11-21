@@ -330,21 +330,11 @@
               </select>
             </div>
           </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "type"}}</Auk::Label>
+          <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+            <Auk::Label>Beperkt toegankelijk</Auk::Label>
             <Auk::Checkbox
-              @checked={{this.decisionsOnly}}
-              @label={{t "search-in-decisions-only"}}
-              data-test-route-search-cases-toggle-decisions={{true}}
-              {{on "input" this.toggleDecisionsOnly}}
-            />
-          </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "archive"}}</Auk::Label>
-            <Auk::Checkbox
-              @checked={{this.includeArchived}}
-              @label={{t "search-include-archived"}}
-              {{on "input" this.toggleIncludeArchived}}
+              @checked=""
+              @label="Enkel beperkt toegankelijk"
             />
           </div>
         </div>
@@ -358,7 +348,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"{{this.searchTextBuffer}}"</strong> in <strong>dossiers</strong>
+            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"keyword"</strong> in <strong>dossiers</strong>
           </p>
           <div>
             <AuLabel for="sort-type" class="au-u-hidden-visually">
@@ -420,7 +410,7 @@
                 >
                   <card.header>
                     <p class="au-u-para-small au-u-muted au-u-medium">
-                      {{t "on-agenda-of"}} {{moment-format row.sessionDates}}
+                      {{moment-format row.sessionDates}}
                     </p>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
@@ -436,8 +426,13 @@
                     </AuHeading>
                   </card.header>
                   <card.content>
-                    <p class="au-u-para-small au-u-muted">
-                      {{t "created-on"}} {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+                    <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
+                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+                      Gevonden in
+                      <AuLink @skin="secondary">
+                        Agendapunt ...
+                      </AuLink>
+                      en nog 4 andere plaatsen
                     </p>
                   </card.content>
                 </AuCard>

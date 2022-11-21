@@ -1,21 +1,13 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
-import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
+import formatDate from '../../utils/format-date-search-param';
 
-export default class NewsletterinfosSearchFutureController extends Controller {
+export default class NewsletterInfosSearchFutureController extends Controller {
   @service router;
-  @service intl;
 
   queryParams = {
-    types: {
-      type: 'array',
-    },
-    latestOnly: {
-      type: 'boolean',
-    },
     page: {
       type: 'number',
     },
@@ -27,54 +19,32 @@ export default class NewsletterinfosSearchFutureController extends Controller {
     },
   };
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
-  sortOptions = [
-    { value: '-session-dates', label: this.intl.t('meeting-date') },
-    { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
-  ];
+  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
+  @tracked mandatees;
+  @tracked dateFrom;
+  @tracked dateTo;
+  @tracked mandateesBuffer;
+  @tracked dateFromBuffer;
+  @tracked dateToBuffer;
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked types;
-  @tracked latestOnly; // Only show the most recent version of an agenda-item
-  @tracked emptySearch;
+  @tracked isLoadingModel;
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = this.sortOptions[0].value;
-    this.types = A(['nota', 'mededeling']);
-    this.latestOnly = true;
+    this.sort = '-agendaitems.meetingDate';
   }
 
-  get includeNotas() {
-    return this.types.includes('nota');
-  }
-
-  set includeNotas(value) {
-    if (value === true) {
-      if (!this.types.includes('nota')) {
-        this.types.addObject('nota');
-      }
-    } else {
-      this.types.removeObject('nota');
-    }
-  }
-
-  get includeMededelingen() {
-    return this.types.includes('mededeling');
-  }
-
-  set includeMededelingen(value) {
-    if (value === true) {
-      if (!this.types.includes('mededeling')) {
-        this.types.addObject('mededeling');
-      }
-    } else {
-      this.types.removeObject('mededeling');
-    }
+  @action
+  search(e) {
+    e.preventDefault();
+    this.mandatees = this.mandateesBuffer;
+    this.dateFrom = formatDate(this.dateFromBuffer);
+    this.dateTo = formatDate(this.dateToBuffer);
   }
 
   @action
@@ -83,34 +53,15 @@ export default class NewsletterinfosSearchFutureController extends Controller {
   }
 
   @action
-  selectSort(event) {
-    this.sort = event.target.value;
-  }
-
-  @action
-  toggleIncludeNotas() {
-    this.includeNotas = !this.includeNotas;
-  }
-
-  @action
-  toggleIncludeMededelingen() {
-    this.includeMededelingen = !this.includeMededelingen;
-  }
-
-  @action
-  toggleLatestOnly() {
-    this.latestOnly = !this.latestOnly;
-  }
-
-  @action
-  navigateToAgendaitem(searchEntry) {
-    if (searchEntry.meetingId) {
-      this.router.transitionTo('agenda.agendaitems.agendaitem',
-        searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);
-    } else {
-      warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
-        id: 'agendaitem.no-meeting',
-      });
+  navigateToNewsletter(searchEntry) {
+    const latestAgendaitem = searchEntry.latestAgendaitem;
+    if (latestAgendaitem) {
+      this.router.transitionTo(
+        'agenda.agendaitems.agendaitem.news-item',
+        latestAgendaitem['meetingId'],
+        latestAgendaitem['agendaId'],
+        latestAgendaitem['id']
+      );
     }
   }
 }

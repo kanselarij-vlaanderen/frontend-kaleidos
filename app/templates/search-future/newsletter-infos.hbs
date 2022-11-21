@@ -330,27 +330,6 @@
               </select>
             </div>
           </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "type"}}</Auk::Label>
-            <Auk::Checkbox
-              @checked={{this.includeNotas}}
-              @label={{t "note"}}
-              {{on "input" this.toggleIncludeNotas}}
-            />
-            <Auk::Checkbox
-              @checked={{this.includeMededelingen}}
-              @label={{capitalize (t "announcement")}}
-              {{on "input" this.toggleIncludeMededelingen}}
-            />
-          </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>Agenda versie</Auk::Label>
-            <Auk::Checkbox
-              @checked={{this.latestOnly}}
-              @label={{t "only-on-final-agenda"}}
-              {{on "input" this.toggleLatestOnly}}
-            />
-          </div>
         </div>
       </div>
     </div>
@@ -362,25 +341,26 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"{{this.searchTextBuffer}}"</strong> in <strong>agendapunten</strong>
+            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"keyword"</strong> in <strong>kort bestek</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">{{t "sort-by"}}</AuLabel>
             <select
-              data-test-route-search-agendaitems-sidebar-sort-options
-              name="sort-type"
-              id="sort-type"
-              class="auk-select auk-select--block"
-              {{on "input" this.selectSort}}
-            >
-              {{#each this.sortOptions as |sortType|}}
-                <option
-                  value={{sortType.value}}
-                  selected={{eq sortType.value this.sort}}>
-                  {{sortType.label}}
-                </option>
-              {{/each}}
-            </select>
+            name="sort"
+            id="sort"
+            class="auk-select">
+              <option
+                value="relevantie"
+                selected="selected"
+              >
+                Relevantie
+              </option>
+              <option
+                value="datum-aflopend"
+              >
+                Datum aflopend
+              </option>
+          </select>
           </div>
         </div>
         <DataTable
@@ -423,39 +403,32 @@
                 >
                   <c.header>
                     <p class="au-u-para-small au-u-muted au-u-medium">
-                      {{t "on-agenda-of"}} {{moment-format row.sessionDates}}
+                      12-11-2022
                     </p>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
                         class="au-u-padding-none"
-                        @route="agenda.agendaitems.agendaitem"
-                        @models={{array row.meetingId row.agendaId row.id}}>
-                        {{#if row.shortTitle}}
-                          {{row.shortTitle}}
-                        {{else}}
-                          {{row.title}}
-                        {{/if}}
+                        @route="agenda.agendaitems.agendaitem.news-item"
+                        @models={{array
+                          latestAgendaitem.meetingId
+                          latestAgendaitem.agendaId
+                          latestAgendaitem.id
+                        }}>
+                        {{row.title}}
                       </AuLink>
                     </AuHeading>
                   </c.header>
-                  {{#if (eq row.agendaSerialNumber.length 1)}}
                   <c.content>
-                    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center au-u-margin-bottom-tiny">
-                      <p class="au-u-para-small au-u-muted au-u-medium">
-                        <AuPill>
-                          {{#if (eq row.type 'nota')}}
-                            {{capitalize (t "announcement")}}
-                          {{else}}
-                            {{t "note"}}
-                          {{/if}}
-                        </AuPill>
-                      </p>
-                      <p class="au-u-para-small au-u-muted">
-                        {{t "agenda-version"}} {{row.agendaSerialNumber}}
-                      </p>
-                    </div>
+                    <p class="au-u-para"><SanitizeHtml @raw={{true}} @value={{row.richtext}} /></p>
+
+                    <p class="au-u-para-small au-u-margin-top-tiny au-u-muted">
+                      {{#each row.mandatees as |mandatee|}}
+                        {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
+                          {{fullName}}{{if (has-next mandatee row.mandatees) ", "}}
+                        {{/let}}
+                      {{/each}}
+                    </p>
                   </c.content>
-                  {{/if}}
                 </AuCard>
               </td>
             </c.body>

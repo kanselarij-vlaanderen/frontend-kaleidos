@@ -330,25 +330,52 @@
               </select>
             </div>
           </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "type"}}</Auk::Label>
-            <Auk::Checkbox
-              @checked={{this.includeNotas}}
-              @label={{t "note"}}
-              {{on "input" this.toggleIncludeNotas}}
-            />
-            <Auk::Checkbox
-              @checked={{this.includeMededelingen}}
-              @label={{capitalize (t "announcement")}}
-              {{on "input" this.toggleIncludeMededelingen}}
-            />
-          </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>Agenda versie</Auk::Label>
+          <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+            <Auk::Label>Vertrouwelijk?</Auk::Label>
             <Auk::Checkbox
               @checked={{this.latestOnly}}
-              @label={{t "only-on-final-agenda"}}
+              @label="Enkel vertrouwelijk"
               {{on "input" this.toggleLatestOnly}}
+            />
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small au-u-margin-top-tiny">
+            <Auk::Label>Type document</Auk::Label>
+            <AuLink>Alles selecteren</AuLink>
+            <Auk::Checkbox
+              @checked=""
+              @label="Decreet"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="BVR"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="MB"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Besluit leidend ambtenaar"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Bericht"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Omzendbrief"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Koninklijk besluit"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Erratum"
+            />
+            <Auk::Checkbox
+              @checked=""
+              @label="Andere"
             />
           </div>
         </div>
@@ -362,7 +389,7 @@
       {{#if this.model.length}}
         <div class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
           <p class="au-u-muted">
-            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"{{this.searchTextBuffer}}"</strong> in <strong>agendapunten</strong>
+            <strong class="au-u-medium">1-{{this.size}}</strong> resultaten voor <strong class="au-u-medium">"keyword"</strong> in <strong>documenten</strong>
           </p>
           <div>
             <AuLabel for="sort" class="au-u-hidden-visually">{{t "sort-by"}}</AuLabel>
@@ -422,9 +449,18 @@
                   as |c|
                 >
                   <c.header>
-                    <p class="au-u-para-small au-u-muted au-u-medium">
-                      {{t "on-agenda-of"}} {{moment-format row.sessionDates}}
-                    </p>
+                    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                      {{!-- <AuPill @size="small">
+                        {{#if (eq row.showAsAnnouncement "true")}}
+                          {{capitalize (t "announcement")}}
+                        {{else}}
+                          {{t "note"}}
+                        {{/if}}
+                      </AuPill> --}}
+                      <p class="au-u-para-small au-u-muted au-u-medium">
+                        {{moment-format row.sessionDates}}
+                      </p>
+                    </div>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
                         class="au-u-padding-none"
@@ -438,24 +474,14 @@
                       </AuLink>
                     </AuHeading>
                   </c.header>
-                  {{#if (eq row.agendaSerialNumber.length 1)}}
                   <c.content>
-                    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center au-u-margin-bottom-tiny">
-                      <p class="au-u-para-small au-u-muted au-u-medium">
-                        <AuPill>
-                          {{#if (eq row.type 'nota')}}
-                            {{capitalize (t "announcement")}}
-                          {{else}}
-                            {{t "note"}}
-                          {{/if}}
-                        </AuPill>
-                      </p>
-                      <p class="au-u-para-small au-u-muted">
-                        {{t "agenda-version"}} {{row.agendaSerialNumber}}
-                      </p>
-                    </div>
+                    <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p>
+                    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+                      <AuLink @skin="secondary" @icon="document" @iconAlignment="left">
+                        Documentnaam.pdf
+                      </AuLink>
+                    </p>
                   </c.content>
-                  {{/if}}
                 </AuCard>
               </td>
             </c.body>
