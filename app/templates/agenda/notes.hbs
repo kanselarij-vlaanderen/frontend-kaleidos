@@ -80,13 +80,24 @@
               @label="Ondertekend"
               @identifier="signature"
               @name="signature"
-              @checked={{false}}
+              @checked={{if (eq this.isSigned true) "true" ""}}
+              {{on "click" this.toggleSigned}}
             />
           </div>
           {{else}}
-          <p class="au-u-muted">Nog geen inhoud</p>
+          <AuAlert
+            @title="Geen inhoud"
+            @icon="circle-info"
+            @skin="info"
+            @size="small"
+            @closable={{false}}
+          />
           <p>
-            <AuPill @icon="no-sign">Niet getekend</AuPill>
+            {{#if this.isSigned}}
+            <AuPill @icon="sign" @size="small" @skin="success">Getekend</AuPill>
+            {{else}}
+            <AuPill @icon="no-sign" @size="small">Niet getekend</AuPill>
+            {{/if}}
           </p>
           {{/if}}
         </Auk::Panel::Body>

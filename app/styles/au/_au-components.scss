@@ -9,6 +9,7 @@ $au-button-height: 3.4rem;
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
+@import 'ember-appuniversum/c-alert';
 @import 'ember-appuniversum/c-badge';
 @import "ember-appuniversum/c-body-container";
 @import 'ember-appuniversum/c-button';

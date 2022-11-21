@@ -10,6 +10,8 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument decisionActivity
  */
 export default class AgendaitemDecisionComponent extends Component {
+  editorInstance;
+
   @service currentSession;
   @service store;
   @service pieceAccessLevelService;
@@ -18,9 +20,28 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
 
   @tracked isEditing = false;
+  @tracked isEditingPill = false;
+  @tracked isSigned = false;
+  @tracked isFullscreen = false;
   @tracked isAddingReport = false;
 
   @tracked decisionDocType;
+
+  @action
+  toggleAll() {
+    this.isFullscreen = false;
+    this.isEditing = false;
+  }
+
+  @action
+  toggleFullscreen() {
+    this.isFullscreen = !this.isFullscreen;
+  }
+
+  @action
+  toggleSigned() {
+    this.isSigned = !this.isSigned;
+  }
 
   constructor() {
     super(...arguments);
@@ -36,6 +57,11 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   toggleEdit() {
     this.isEditing = !this.isEditing;
+  }
+
+  @action
+  toggleEditPill() {
+    this.isEditingPill = !this.isEditingPill;
   }
 
   @action
@@ -100,5 +126,10 @@ export default class AgendaitemDecisionComponent extends Component {
     const documentContainer = await piece.documentContainer;
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
+  }
+
+  @action
+  handleRdfaEditorInit(editorInterface) {
+    this.editorInstance = editorInterface;
   }
 }

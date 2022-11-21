@@ -1,70 +1,186 @@
 <Auk::Panel>
-  <Auk::Panel::Header @size="auto">
+  <Auk::Panel::Header class="{{if this.isEditing 'au-u-background-gray-100'}}">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <h4 class="auk-toolbar__title">
+          Voorbereidende tekst voor de beslissing
+        </h4>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @icon="pdf"
+            @skin="naked"
+          >
+            Exporteren als pdf
+          </AuButton>
+        </Group.Item>
+        {{#unless this.isEditing}}
+        <Group.Item>
+          <AuButton
+            @skin="naked"
+            @icon="pencil"
+            @iconAlignment="left"
+            {{on "click" this.toggleEdit}}
+          >
+            Wijzigen
+          </AuButton>
+        </Group.Item>
+        {{/unless}}
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
-          <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
-          {{#if (not this.isEditing)}}
-            <div class="auk-u-my-2">
-              <Decision::DecisionResultPill
-                @decisionResultCode={{@decisionActivity.decisionResultCode}}
-                @isEditable={{user-may "manage-decisions"}}
-                @onEdit={{this.toggleEdit}}
-              />
-            </div>
+          <h4 class="auk-u-mb-2">{{t "result-decision"}}</h4>
+          {{#if this.isEditing}}
+          {{#if (not this.isEditingPill)}}
+            <Decision::DecisionResultPill
+              @decisionResultCode={{@decisionActivity.decisionResultCode}}
+              @isEditable={{user-may "manage-decisions"}}
+              @onEdit={{this.toggleEditPill}}
+            />
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
               @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
-              @onCancel={{this.toggleEdit}}
+              @onCancel={{this.toggleEditPill}}
+            />
+          {{/if}}
+          {{else}}
+            <Decision::DecisionResultPill
+              @decisionResultCode={{@decisionActivity.decisionResultCode}}
+              @isEditable={{false}}
+              @onEdit={{this.toggleEdit}}
             />
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
-  </Auk::Panel::Header>
-  <Auk::Panel::Body @noPadding={{true}}>
-    {{#if this.loadReport.isIdle}}
-      {{#if this.report}}
-        <Documents::DocumentCard
-          @piece={{this.report}}
-          @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
-          @onOpenUploadModal={{@onOpenUploadModal}}
-          @onAddPiece={{this.attachNewReportVersion}}
-          @didDeleteContainer={{perform this.loadReport}}
-          @bordered={{false}}
-        />
-      {{else if (user-may "manage-decisions")}}
-        <div class="auk-u-p-2">
-          <AuButton
-            data-test-agendaitem-decision-upload-file
+  </Auk::Panel::Body>
+  <Auk::Panel::Body class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}">
+    {{#if this.isEditing}}
+    <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
+      <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
+        {{#if this.isFullscreen}}
+          <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+            <h4 class="auk-toolbar__title">
+              Voorbereidende tekst voor de beslissing
+            </h4>
+            <AuDropdown
+              @title="Huidige versie"
+              @alignment="left"
+              @skin="naked"
+              @icon="chevron-down"
+              @iconAlignment="right"
+            >
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 18-11-2022
+              </AuButton>
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 13-11-2022
+              </AuButton>
+            </AuDropdown>
+          </div>
+          <AuButtonGroup>
+            <AuButton
+              @skin="naked"
+              @icon="minimize"
+              @iconAlignment="left"
+              {{on "click" this.toggleFullscreen}}
+            >
+              {{t "close-fullscreen"}}
+            </AuButton>
+            <AuButton
+              @skin="primary"
+              {{on "click" this.toggleAll}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </AuButtonGroup>
+        {{else}}
+          <AuDropdown
+            @title="Huidige versie"
+            @alignment="left"
             @skin="naked"
-            @icon="upload"
-            {{on "click" this.toggleIsAddingReport}}
+            @icon="chevron-down"
+            @iconAlignment="right"
           >
-            {{t "signed-decision-add"}}
+            <AuButton @skin="link-secondary" role="menuitem">
+              Versie van 18-11-2022
+            </AuButton>
+            <AuButton @skin="link-secondary" role="menuitem">
+              Versie van 13-11-2022
+            </AuButton>
+          </AuDropdown>
+          <AuButton
+            @skin="naked"
+            @icon="expand"
+            @iconAlignment="left"
+            {{on "click" this.toggleFullscreen}}
+          >
+            {{t "fullscreen"}}
           </AuButton>
-        </div>
-      {{/if}}
+        {{/if}}
+      </div>
+      <WebComponents::VlRdfaEditor
+        data-test-newsletter-edit-item-rdfa-editor
+        @richtext="{{this.richtext}}"
+        @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+      />
+    </div>
+    <div>
+      <AuToggleSwitch
+        @label="Ondertekend"
+        @identifier="signature"
+        @name="signature"
+        @checked={{if (eq this.isSigned true) "true" ""}}
+        {{on "click" this.toggleSigned}}
+      />
+    </div>
     {{else}}
-      <Auk::Loader />
+    <AuAlert
+      @title="Geen inhoud"
+      @icon="circle-info"
+      @skin="info"
+      @size="small"
+      @closable={{false}}
+    />
+    <p>
+      {{#if this.isSigned}}
+      <AuPill @icon="sign" @size="small" @skin="success">Getekend</AuPill>
+      {{else}}
+      <AuPill @icon="no-sign" @size="small">Niet getekend</AuPill>
+      {{/if}}
+    </p>
     {{/if}}
   </Auk::Panel::Body>
+  {{#if this.isEditing}}
+    <Auk::Panel::Footer class="au-u-background-gray-100">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton
+              @skin="naked"
+              {{on "click" this.toggleEdit}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              @skin="primary"
+              {{on "click" this.toggleEdit}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  {{/if}}
 </Auk::Panel>
-{{#if this.isAddingReport}}
-  <Utils::AddDocument
-    @title={{t "signed-decision-add"}}
-    @onSave={{this.attachReport}}
-    @onCancel={{this.toggleIsAddingReport}}
-  />
-{{/if}}
-
-{{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
-  <Auk::Modal @size="medium">
-    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
-    <Auk::Modal::Body>
-      <Auk::Loader @message={{t "saving-decision-result-message"}} />
-    </Auk::Modal::Body>
-  </Auk::Modal>
-{{/if}}
