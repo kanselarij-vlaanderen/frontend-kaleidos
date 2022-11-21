@@ -84,7 +84,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.decisionDate}}
     <td data-test-publication-table-row-decision-date class="auk-u-text-nowrap">
       {{#if @publicationFlow.decisionActivity.startDate}}
-        {{moment-format @publicationFlow.decisionActivity.startDate}}
+        {{date @publicationFlow.decisionActivity.startDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -93,7 +93,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.openingDate}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.openingDate}}
-        {{moment-format @publicationFlow.openingDate}}
+        {{date @publicationFlow.openingDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -105,7 +105,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.translationRequestDate}}
-        {{moment-format this.translationRequestDate}}
+        {{date this.translationRequestDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -118,7 +118,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     >
       {{#if @publicationFlow.translationSubcase.dueDate}}
         <div class="{{if this.isTranslationOverdue 'auk-u-text-bold'}}">
-          {{moment-format @publicationFlow.translationSubcase.dueDate}}
+          {{date @publicationFlow.translationSubcase.dueDate}}
         </div>
         {{#if this.isTranslationOverdue}}
           <Auk::FormHelpText
@@ -138,7 +138,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.proofRequestDate}}
-        {{moment-format this.proofRequestDate}}
+        {{date this.proofRequestDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -150,7 +150,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if this.proofReceivedDate}}
-        {{moment-format this.proofReceivedDate}}
+        {{date this.proofReceivedDate}}
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -173,7 +173,7 @@ request the whole row and not only the arrow at the end to be clickable }}
       class="auk-u-text-nowrap"
     >
       {{#if @publicationFlow.publicationSubcase.targetEndDate}}
-        {{moment-format @publicationFlow.publicationSubcase.targetEndDate}}
+        {{date @publicationFlow.publicationSubcase.targetEndDate}}
         {{#if
           (and
             (not @publicationFlow.status.isFinal)
@@ -197,7 +197,7 @@ request the whole row and not only the arrow at the end to be clickable }}
         ...
       {{else}}
         {{#if this.publicationDate}}
-          {{moment-format this.publicationDate}}
+          {{date this.publicationDate}}
         {{else}}
           {{t "dash"}}
         {{/if}}
@@ -208,7 +208,7 @@ request the whole row and not only the arrow at the end to be clickable }}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.publicationSubcase.dueDate}}
         <div>
-          {{moment-format @publicationFlow.publicationSubcase.dueDate}}
+          {{date @publicationFlow.publicationSubcase.dueDate}}
         </div>
       {{else}}
         {{t "dash"}}
@@ -241,9 +241,9 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.lastEdited}}
     <td>
-      {{moment-format @publicationFlow.modified}}<br />
+      {{date @publicationFlow.modified}}<br />
       <span class="auk-u-text-size--small auk-u-text-muted">
-        {{moment-format @publicationFlow.modified "HH:mm"}}
+        {{time @publicationFlow.modified}}
       </span>
     </td>
   {{/if}}

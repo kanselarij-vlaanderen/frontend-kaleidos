@@ -32,17 +32,13 @@
               {{#if this.piece.created}}
                 <p>
                   {{t "uploaded-at"}}
-                  {{moment-format this.piece.created}}
-                  {{t "at"}}
-                  {{moment-format this.piece.created "HH:mm"}}
+                  {{datetime-at this.piece.created}}
                 </p>
               {{/if}}
               {{#if this.piece.file.primarySource.created}}
                 <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
-                  {{moment-format this.piece.file.primarySource.created}}
-                  {{t "at"}}
-                  {{moment-format this.piece.file.primarySource.created "HH:mm"}}
+                  {{datetime-at this.piece.file.primarySource.created}}
                   {{t "as"}}
                   <AuLinkExternal
                     data-test-document-card-primary-source-link

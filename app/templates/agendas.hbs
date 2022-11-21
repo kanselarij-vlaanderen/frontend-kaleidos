@@ -130,7 +130,7 @@
                       {{/if}}
                       <span>–</span>
                       <span>
-                        {{moment-format agenda.createdFor.plannedStart}}
+                        {{date agenda.createdFor.plannedStart}}
                       </span>
                     </span>
                   </td>
@@ -152,10 +152,7 @@
                         aria-busy="true"
                       ></div>
                     {{else}}
-                      {{moment-format
-                        agenda.modified
-                        "DD-MM-YYYY — HH:mm"
-                      }}
+                      {{datetime-at agenda.modified "-"}}
                     {{/if}}
                   </td>
                   <td class="auk-u-text-align--center">

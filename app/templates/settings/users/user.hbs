@@ -64,17 +64,7 @@
           <dl>
             <Auk::KeyValue
               @key={{t "last-seen"}}
-              @value={{if
-                @model.loginActivity.startDate
-                (concat
-                  (moment-format @model.loginActivity.startDate)
-                  " "
-                  (t "at")
-                  " "
-                  (moment-format @model.loginActivity.startDate "HH:mm")
-                )
-                "-"
-              }}
+              @value={{if @model.loginActivity.startDate (datetime-at @model.loginActivity.startDate) "-"}}
               @layout="horizontal"
             />
           </dl>

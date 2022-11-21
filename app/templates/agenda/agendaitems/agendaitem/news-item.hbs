@@ -49,8 +49,8 @@
   <ChangesAlert
     @message={{t
       "nota-changed-message"
-      date=(moment-format this.notaModifiedTime "D MMMM YYYY")
-      time=(moment-format this.notaModifiedTime "H:mm")
+      date=(date-phrase this.notaModifiedTime)
+      time=(time this.notaModifiedTime)
     }}
     @buttonText={{t "close"}}
     @clearAction={{this.dismissNotaModifiedWarning}} />

@@ -17,7 +17,7 @@
         @models={{this.modelsForProposedAgenda}}
       >
         {{t "open-agenda"}}
-        {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+        {{date-phrase this.latestMeeting.plannedStart}}
       </Auk::Button>
     {{else}}
       {{#if (user-may "manage-agendaitems")}}
@@ -29,7 +29,7 @@
             }}
               <Menu.Item {{on "click" (perform this.reProposeForAgenda meeting)}}>
                 {{t "agenda-for"}}
-                {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                {{date-phrase meeting.plannedStart}}
                 {{concat " - " meeting.numberRepresentation}}
               </Menu.Item>
             {{/each}}

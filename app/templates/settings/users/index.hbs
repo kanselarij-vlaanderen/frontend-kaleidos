@@ -145,9 +145,7 @@
             <td>
               {{#let user.loginActivity.startDate as |lastLoginDate|}}
                 {{#if lastLoginDate}}
-                  {{moment-format lastLoginDate}}
-                  {{t "at"}}
-                  {{moment-format lastLoginDate "HH:mm"}}
+                  {{datetime-at lastLoginDate}}
                 {{/if}}
               {{/let}}
             </td>

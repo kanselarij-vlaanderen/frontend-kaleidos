@@ -9,11 +9,11 @@
               data-test-agenda-header-title
             >
               {{t "agenda-of"}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
-              {{#unless @meeting.isPreKaleidos}}
-                {{t "at"}}
-                {{moment-format @meeting.plannedStart "HH:mm"}}
-              {{/unless}}
+              {{#if @meeting.isPreKaleidos}}
+                {{date-phrase @meeting.plannedStart}}
+              {{else}}
+                {{datetime-at-phrase @meeting.plannedStart}}
+              {{/if}}
             </h4>
             {{#if @meeting.kind.label}}
               <span

@@ -5,8 +5,8 @@
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "decisions-were-released-at"
-            date=(moment-format @meeting.internalDecisionPublicationActivity.startDate "DD-MM-YYYY")
-            time=(moment-format @meeting.internalDecisionPublicationActivity.startDate "HH:mm")
+            date=(data @meeting.internalDecisionPublicationActivity.startDate)
+            time=(time @meeting.internalDecisionPublicationActivity.startDate)
           }}
         </AuPill>
       {{/if}}
@@ -16,8 +16,8 @@
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-were-released-at"
-            date=(moment-format @meeting.internalDocumentPublicationActivity.plannedDate "DD-MM-YYYY")
-            time=(moment-format @meeting.internalDocumentPublicationActivity.plannedDate "HH:mm")
+            date=(date @meeting.internalDocumentPublicationActivity.plannedDate)
+            time=(time @meeting.internalDocumentPublicationActivity.plannedDate)
           }}
         </AuPill>
       {{else}}
@@ -25,8 +25,8 @@
           <AuPill @skin="default" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
             {{t
               "documents-are-planned-to-release-at"
-               date=(moment-format @meeting.internalDocumentPublicationActivity.plannedDate "DD-MM-YYYY")
-               time=(moment-format @meeting.internalDocumentPublicationActivity.plannedDate "HH:mm")
+               date=(date @meeting.internalDocumentPublicationActivity.plannedDate)
+               time=(time @meeting.internalDocumentPublicationActivity.plannedDate)
             }}
           </AuPill>
         {{/if}}
@@ -37,16 +37,16 @@
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-were-published-at"
-            date=(moment-format this.latestThemisPublicationActivity.plannedDate "DD-MM-YYYY")
-            time=(moment-format this.latestThemisPublicationActivity.plannedDate "HH:mm")
+            date=(date this.latestThemisPublicationActivity.plannedDate)
+            time=(time this.latestThemisPublicationActivity.plannedDate)
           }}
         </AuPill>
       {{else if this.isConfirmedThemisPublicationActivity}}
         <AuPill @skin="default" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-are-planned-to-release-at"
-            date=(moment-format this.latestThemisPublicationActivity.plannedDate "DD-MM-YYYY")
-            time=(moment-format this.latestThemisPublicationActivity.plannedDate "HH:mm")
+            date=(date this.latestThemisPublicationActivity.plannedDate)
+            time=(time this.latestThemisPublicationActivity.plannedDate)
           }}
         </AuPill>
       {{/if}}
