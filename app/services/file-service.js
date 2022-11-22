@@ -99,9 +99,10 @@ export default class FileService extends Service {
       console.warn(`Couldn't convert file with id ${sourceFile.id}`);
       throw new Error('An exception occurred while converting a file: ' + JSON.stringify(result.errors));
     } else {
+      const oldDerivedFile = await sourceFile.derived;
       const derivedFile = await this.store.findRecord('file', result.data[0].id)
       sourceFile.derived = derivedFile;
-      await sourceFile.save();
+      await Promise.all([sourceFile.save(), oldDerivedFile?.destroyRecord()]);
     }
   }
 
