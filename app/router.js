@@ -139,7 +139,6 @@ Router.map(function() {
     this.route('layout-grid');
     this.route('heading');
     this.route('icons');
-    this.route('inputs');
     this.route('key-value');
     this.route('link-button');
     this.route('list');
