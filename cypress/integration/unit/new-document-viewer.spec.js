@@ -34,11 +34,11 @@ context('new document viewer tests', () => {
     cy.get(auk.fileUpload).within(() => {
       cy.uploadFile(folder, fileName, fileExtension);
     });
-    cy.intercept('PATCH', '/files/*').as(`patchFiles_${randomInt}`);
+    cy.intercept('DELETE', '/files/*').as(`deleteOldFile_${randomInt}`);
     cy.intercept('PATCH', '/pieces/*').as(`patchPieces_${randomInt}`);
     cy.intercept('PATCH', '/document-containers/*').as(`patchDocumentContainers_${randomInt}`);
     cy.get(document.previewDetailsTab.save).click();
-    cy.wait(`@patchFiles_${randomInt}`);
+    cy.wait(`@deleteOldFile_${randomInt}`);
     cy.wait(`@patchPieces_${randomInt}`);
     cy.wait(`@patchDocumentContainers_${randomInt}`);
   }
