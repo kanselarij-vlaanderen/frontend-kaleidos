@@ -106,6 +106,10 @@
                 <AuPill @size="small" @skin="border" @icon="website">
                   {{t "on-the-website"}}
                 </AuPill>
+              {{else}}
+                <AuPill @size="small" @skin="border">
+                  {{t "not-on-the-website"}}
+                </AuPill>
               {{/if}}
             {{else}}
               <AuPill @size="small">
