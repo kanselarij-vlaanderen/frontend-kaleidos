@@ -40,7 +40,7 @@ export default class Datepicker extends Component {
 
   get error() {
     if (this.args.error) {
-      return 'auk-input--error';
+      return 'au-c-input--error';
     }
     return null;
   }
