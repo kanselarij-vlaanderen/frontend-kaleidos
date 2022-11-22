@@ -47,12 +47,18 @@
     </AuLink>
   {{/if}}
   <AuButton
-    data-test-agenda-actions-download-documents
     @skin="link"
-    {{on "click" this.downloadAllDocuments}}
+    {{on "click" this.downloadAllDocumentsModal}}
     role="menuitem"
   >
     {{t "download-documents"}}
+  </AuButton>
+  <AuButton
+    @skin="link"
+    {{on "click" this.downloadAllDecisionsModal}}
+    role="menuitem"
+  >
+    Download beslissingsfiches
   </AuButton>
   {{#if (user-may "manage-meetings")}}
     <AuHr />
@@ -211,4 +217,538 @@
     @onCancel={{this.cancelUnpublishThemis}}
     @onConfirm={{perform this.unpublishThemis}}
   />
+{{/if}}
+
+{{#if this.showDownloadAllDocumentsModal}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Download alle documenten"
+      @onClose={{this.cancelDownloadAllDocumentsModal}}
+    />
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label for="ministerName">
+          Minister
+        </Auk::Label>
+        <select
+          name="login"
+          id="ministerName"
+          class="auk-select auk-select--block"
+          value={{this.mandateesBuffer}}
+        >
+          <option value="alleministers">Alle ministers</option>
+          <optgroup label="Huidige ministers">
+            <option id="ember148">
+              Jan Jambon
+            </option>
+            <option id="ember149">
+              Hilde Crevits
+            </option>
+            <option id="ember150">
+              Bart Somers
+            </option>
+            <option id="ember151">
+              Ben Weyts
+            </option>
+            <option id="ember152">
+              Zuhal Demir
+            </option>
+            <option id="ember153">
+              Matthias Diependaele
+            </option>
+            <option id="ember154">
+              Lydia Peeters
+            </option>
+            <option id="ember155">
+              Benjamin Dalle
+            </option>
+            <option id="ember156">
+              Jo Brouns
+            </option>
+          </optgroup>
+          <optgroup label="Vorige ministers">
+            <option id="ember265">
+              Paul Akkermans
+            </option>
+            <option id="ember266">
+              Bert Anciaux
+            </option>
+            <option id="ember267">
+              Eddy Baldewijns
+            </option>
+            <option id="ember268">
+              Wouter Beke
+            </option>
+            <option id="ember269">
+              Edward Beysen
+            </option>
+            <option id="ember270">
+              Gilbert Bossuyt
+            </option>
+            <option id="ember271">
+              Geert Bourgeois
+            </option>
+            <option id="ember272">
+              Paul Breyne
+            </option>
+            <option id="ember273">
+              Jacky Buchmann
+            </option>
+            <option id="ember274">
+              Adelheid Byttebier
+            </option>
+            <option id="ember275">
+              Patricia Ceysens
+            </option>
+            <option id="ember276">
+              Daniël Coens
+            </option>
+            <option id="ember277">
+              Norbert De Batselier
+            </option>
+            <option id="ember278">
+              Roger De Wulf
+            </option>
+            <option id="ember279">
+              Wivina Demeester-De Meyer
+            </option>
+            <option id="ember280">
+              Paul Deprez
+            </option>
+            <option id="ember281">
+              Leona Detiège
+            </option>
+            <option id="ember282">
+              Patrick Dewael
+            </option>
+            <option id="ember283">
+              Vera Dua
+            </option>
+            <option id="ember284">
+              Jos Dupré
+            </option>
+            <option id="ember285">
+              Jaak Gabriëls
+            </option>
+            <option id="ember286">
+              Mark Galle
+            </option>
+            <option id="ember287">
+              Sven Gatz
+            </option>
+            <option id="ember288">
+              Gaston Geens
+            </option>
+            <option id="ember289">
+              Brigitte Grouwels
+            </option>
+            <option id="ember290">
+              Veerle Heeren
+            </option>
+            <option id="ember291">
+              Liesbeth Homans
+            </option>
+            <option id="ember292">
+              Theo Kelchtermans
+            </option>
+            <option id="ember293">
+              Marino Keulen
+            </option>
+            <option id="ember294">
+              Renaat Landuyt
+            </option>
+            <option id="ember295">
+              Jan Lenssens
+            </option>
+            <option id="ember296">
+              Yves Leterme
+            </option>
+            <option id="ember297">
+              Ingrid Lieten
+            </option>
+            <option id="ember298">
+              Luc Martens
+            </option>
+            <option id="ember299">
+              Fientje Moerman
+            </option>
+            <option id="ember300">
+              Philippe Muyters
+            </option>
+            <option id="ember301">
+              Jean Pede
+            </option>
+            <option id="ember302">
+              Leo Peeters
+            </option>
+            <option id="ember303">
+              Kris Peeters
+            </option>
+            <option id="ember304">
+              Karel Poma
+            </option>
+            <option id="ember305">
+              Ludo Sannen
+            </option>
+            <option id="ember306">
+              Johan Sauwens
+            </option>
+            <option id="ember307">
+              Joke Schauvliege
+            </option>
+            <option id="ember308">
+              Hugo Schiltz
+            </option>
+            <option id="ember309">
+              Pascal Smet
+            </option>
+            <option id="ember310">
+              Steve Stevaert
+            </option>
+            <option id="ember311">
+              Rika Steyaert
+            </option>
+            <option id="ember312">
+              Jef Tavernier
+            </option>
+            <option id="ember313">
+              Bart Tommelein
+            </option>
+            <option id="ember314">
+              Annemie Turtelboom
+            </option>
+            <option id="ember315">
+              Anne Van Asbroeck
+            </option>
+            <option id="ember316">
+              Kathleen Van Brempt
+            </option>
+            <option id="ember317">
+              Freya Van den Bossche
+            </option>
+            <option id="ember318">
+              Luc Van den Bossche
+            </option>
+            <option id="ember319">
+              Luc Van den Brande
+            </option>
+            <option id="ember320">
+              Koen Van den Heuvel
+            </option>
+            <option id="ember321">
+              Paul Van Grembergen
+            </option>
+            <option id="ember322">
+              Dirk Van Mechelen
+            </option>
+            <option id="ember323">
+              Eric Van Rompuy
+            </option>
+            <option id="ember324">
+              Steven Vanackere
+            </option>
+            <option id="ember325">
+              Frank Vandenbroucke
+            </option>
+            <option id="ember326">
+              Marleen Vanderpoorten
+            </option>
+            <option id="ember327">
+              Jo Vandeurzen
+            </option>
+            <option id="ember328">
+              Guy Vanhengel
+            </option>
+            <option id="ember329">
+              Inge Vervotte
+            </option>
+            <option id="ember330">
+              Mieke Vogels
+            </option>
+            <option id="ember331">
+              Louis Waltniel
+            </option>
+            <option id="ember332">
+              Hugo Weckx
+            </option>
+          </optgroup>
+        </select>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelDownloadAllDocumentsModal}}>
+      <AuButton
+        @skin="primary"
+        {{on "click" this.downloadAllDocuments}}
+      >
+        Download alle documenten
+      </AuButton>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.showDownloadAllDecisionsModal}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title="Download alle beslissingen"
+      @onClose={{this.cancelDownloadAllDecisionsModal}}
+    />
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label for="ministerName">
+          Minister
+        </Auk::Label>
+        <select
+          name="login"
+          id="ministerName"
+          class="auk-select auk-select--block"
+          value={{this.mandateesBuffer}}
+        >
+          <option value="alleministers">Alle ministers</option>
+          <optgroup label="Huidige ministers">
+            <option id="ember148">
+              Jan Jambon
+            </option>
+            <option id="ember149">
+              Hilde Crevits
+            </option>
+            <option id="ember150">
+              Bart Somers
+            </option>
+            <option id="ember151">
+              Ben Weyts
+            </option>
+            <option id="ember152">
+              Zuhal Demir
+            </option>
+            <option id="ember153">
+              Matthias Diependaele
+            </option>
+            <option id="ember154">
+              Lydia Peeters
+            </option>
+            <option id="ember155">
+              Benjamin Dalle
+            </option>
+            <option id="ember156">
+              Jo Brouns
+            </option>
+          </optgroup>
+          <optgroup label="Vorige ministers">
+            <option id="ember265">
+              Paul Akkermans
+            </option>
+            <option id="ember266">
+              Bert Anciaux
+            </option>
+            <option id="ember267">
+              Eddy Baldewijns
+            </option>
+            <option id="ember268">
+              Wouter Beke
+            </option>
+            <option id="ember269">
+              Edward Beysen
+            </option>
+            <option id="ember270">
+              Gilbert Bossuyt
+            </option>
+            <option id="ember271">
+              Geert Bourgeois
+            </option>
+            <option id="ember272">
+              Paul Breyne
+            </option>
+            <option id="ember273">
+              Jacky Buchmann
+            </option>
+            <option id="ember274">
+              Adelheid Byttebier
+            </option>
+            <option id="ember275">
+              Patricia Ceysens
+            </option>
+            <option id="ember276">
+              Daniël Coens
+            </option>
+            <option id="ember277">
+              Norbert De Batselier
+            </option>
+            <option id="ember278">
+              Roger De Wulf
+            </option>
+            <option id="ember279">
+              Wivina Demeester-De Meyer
+            </option>
+            <option id="ember280">
+              Paul Deprez
+            </option>
+            <option id="ember281">
+              Leona Detiège
+            </option>
+            <option id="ember282">
+              Patrick Dewael
+            </option>
+            <option id="ember283">
+              Vera Dua
+            </option>
+            <option id="ember284">
+              Jos Dupré
+            </option>
+            <option id="ember285">
+              Jaak Gabriëls
+            </option>
+            <option id="ember286">
+              Mark Galle
+            </option>
+            <option id="ember287">
+              Sven Gatz
+            </option>
+            <option id="ember288">
+              Gaston Geens
+            </option>
+            <option id="ember289">
+              Brigitte Grouwels
+            </option>
+            <option id="ember290">
+              Veerle Heeren
+            </option>
+            <option id="ember291">
+              Liesbeth Homans
+            </option>
+            <option id="ember292">
+              Theo Kelchtermans
+            </option>
+            <option id="ember293">
+              Marino Keulen
+            </option>
+            <option id="ember294">
+              Renaat Landuyt
+            </option>
+            <option id="ember295">
+              Jan Lenssens
+            </option>
+            <option id="ember296">
+              Yves Leterme
+            </option>
+            <option id="ember297">
+              Ingrid Lieten
+            </option>
+            <option id="ember298">
+              Luc Martens
+            </option>
+            <option id="ember299">
+              Fientje Moerman
+            </option>
+            <option id="ember300">
+              Philippe Muyters
+            </option>
+            <option id="ember301">
+              Jean Pede
+            </option>
+            <option id="ember302">
+              Leo Peeters
+            </option>
+            <option id="ember303">
+              Kris Peeters
+            </option>
+            <option id="ember304">
+              Karel Poma
+            </option>
+            <option id="ember305">
+              Ludo Sannen
+            </option>
+            <option id="ember306">
+              Johan Sauwens
+            </option>
+            <option id="ember307">
+              Joke Schauvliege
+            </option>
+            <option id="ember308">
+              Hugo Schiltz
+            </option>
+            <option id="ember309">
+              Pascal Smet
+            </option>
+            <option id="ember310">
+              Steve Stevaert
+            </option>
+            <option id="ember311">
+              Rika Steyaert
+            </option>
+            <option id="ember312">
+              Jef Tavernier
+            </option>
+            <option id="ember313">
+              Bart Tommelein
+            </option>
+            <option id="ember314">
+              Annemie Turtelboom
+            </option>
+            <option id="ember315">
+              Anne Van Asbroeck
+            </option>
+            <option id="ember316">
+              Kathleen Van Brempt
+            </option>
+            <option id="ember317">
+              Freya Van den Bossche
+            </option>
+            <option id="ember318">
+              Luc Van den Bossche
+            </option>
+            <option id="ember319">
+              Luc Van den Brande
+            </option>
+            <option id="ember320">
+              Koen Van den Heuvel
+            </option>
+            <option id="ember321">
+              Paul Van Grembergen
+            </option>
+            <option id="ember322">
+              Dirk Van Mechelen
+            </option>
+            <option id="ember323">
+              Eric Van Rompuy
+            </option>
+            <option id="ember324">
+              Steven Vanackere
+            </option>
+            <option id="ember325">
+              Frank Vandenbroucke
+            </option>
+            <option id="ember326">
+              Marleen Vanderpoorten
+            </option>
+            <option id="ember327">
+              Jo Vandeurzen
+            </option>
+            <option id="ember328">
+              Guy Vanhengel
+            </option>
+            <option id="ember329">
+              Inge Vervotte
+            </option>
+            <option id="ember330">
+              Mieke Vogels
+            </option>
+            <option id="ember331">
+              Louis Waltniel
+            </option>
+            <option id="ember332">
+              Hugo Weckx
+            </option>
+          </optgroup>
+        </select>
+      </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelDownloadAllDecisionsModal}}>
+      <AuButton
+        @skin="primary"
+        {{on "click" this.downloadAllDecisions}}
+      >
+        Download alle beslissingen
+      </AuButton>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
 {{/if}}

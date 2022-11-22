@@ -36,6 +36,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
 
+  @tracked showDownloadAllDocumentsModal = false;
+  @tracked showDownloadAllDecisionsModal = false;
+
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
   @tracked themisPublicationActivity;
@@ -237,6 +240,72 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   async downloadAllDocuments() {
+    this.showDownloadAllDocumentsModal = false;
+    // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
+    const fileDownloadToast = {
+      title: this.intl.t('file-ready'),
+      message: this.intl.t('agenda-documents-download-ready'),
+      type: 'download-file',
+      options: {
+        timeOut: 60 * 10 * 1000,
+      },
+    };
+
+    const namePromise = constructArchiveName(this.args.currentAgenda);
+    debug('Checking if archive exists ...');
+    const jobPromise = fetchArchivingJobForAgenda(
+      this.args.currentAgenda,
+      this.store
+    );
+    const [name, job] = await all([namePromise, jobPromise]);
+    if (!job) {
+      this.toaster.warning(
+        this.intl.t('no-documents-to-download-warning-text'),
+        this.intl.t('no-documents-to-download-warning-title'),
+        {
+          timeOut: 10000,
+        }
+      );
+      return;
+    }
+    if (!job.hasEnded) {
+      debug('Archive in creation ...');
+      const inCreationToast = this.toaster.loading(
+        this.intl.t('archive-in-creation-message'),
+        this.intl.t('archive-in-creation-title'),
+        {
+          timeOut: 3 * 60 * 1000,
+        }
+      );
+      this.jobMonitor.register(job);
+      job.on('didEnd', this, async function (status) {
+        this.toaster.clear(inCreationToast);
+        if (status === job.SUCCESS) {
+          const url = await fileDownloadUrlFromJob(job, name);
+          debug(`Archive ready. Prompting for download now (${url})`);
+          fileDownloadToast.options.downloadLink = url;
+          fileDownloadToast.options.fileName = name;
+          this.toaster.displayToast.perform(fileDownloadToast);
+        } else {
+          debug('Something went wrong while generating archive.');
+          this.toaster.error(
+            this.intl.t('error'),
+            this.intl.t('warning-title')
+          );
+        }
+      });
+    } else {
+      const url = await fileDownloadUrlFromJob(job, name);
+      debug(`Archive ready. Prompting for download now (${url})`);
+      fileDownloadToast.options.downloadLink = url;
+      fileDownloadToast.options.fileName = name;
+      this.toaster.displayToast.perform(fileDownloadToast);
+    }
+  }
+
+  @action
+  async downloadAllDecisions() {
+    this.showDownloadAllDecisionsModal = false;
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const fileDownloadToast = {
       title: this.intl.t('file-ready'),
@@ -379,5 +448,25 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   closeAddAgendaitemsModal() {
     this.isAddingAgendaitems = false;
+  }
+
+  @action
+  downloadAllDocumentsModal() {
+    this.showDownloadAllDocumentsModal = true;
+  }
+
+  @action
+  cancelDownloadAllDocumentsModal() {
+    this.showDownloadAllDocumentsModal = false;
+  }
+
+  @action
+  downloadAllDecisionsModal() {
+    this.showDownloadAllDecisionsModal = true;
+  }
+
+  @action
+  cancelDownloadAllDecisionsModal() {
+    this.showDownloadAllDecisionsModal = false;
   }
 }
