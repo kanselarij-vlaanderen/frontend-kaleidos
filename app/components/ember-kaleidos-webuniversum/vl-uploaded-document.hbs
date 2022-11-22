@@ -31,15 +31,14 @@
           {{t "download"}}
         </AuButton>
       {{else if this.downloadLink}}
-        <AuLink
-          @skin="button-naked"
+        <AuLinkExternal
           @icon="download"
           @hideText={{true}}
-          @href={{this.downloadLink}}
+          href={{this.downloadLink}}
           download={{if this.downloadName this.downloadName this.name}}
         >
           {{t "download"}}
-        </AuLink>
+        </AuLinkExternal>
       {{/if}}
       {{#if this.delete}}
         <AuButton

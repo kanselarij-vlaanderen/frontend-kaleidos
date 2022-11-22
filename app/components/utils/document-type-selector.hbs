@@ -5,7 +5,6 @@
   </div>
 {{else}}
   <div class="auk-form-group">
-    <Auk::Label>{{t "document-type"}}</Auk::Label>
     <PowerSelect
       @options={{this.options}}
       @selected={{@selectedDocumentType}}
@@ -13,7 +12,6 @@
       @disabled={{@disabled}}
       @allowClear={{true}}
       @renderInPlace={{@renderInPlace}}
-      @search={{perform this.searchTask}}
       @searchField="label"
       @searchEnabled={{true}}
       @searchMessage={{null}}

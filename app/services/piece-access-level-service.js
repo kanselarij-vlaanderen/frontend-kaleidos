@@ -6,6 +6,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * or confidentiality of a piece, subcase, ... is edited.
  */
 export default class PieceAccessLevelService extends Service {
+  @service agendaService;
   @service store;
 
 /*
@@ -85,16 +86,24 @@ export default class PieceAccessLevelService extends Service {
 
   /**
    * Strengthen the access level of the piece to intern regering (unless the
-   * access level was already higher) and then update all the previous access
+   * access level was already this level or higher) and then update all the previous access
    * levels.
    */
   async strengthenAccessLevelToInternRegering(piece) {
     const accessLevel = await piece.accessLevel;
-    if (![CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE, CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK].includes(accessLevel.uri)) {
-      const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    if (
+      ![
+        CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+        CONSTANTS.ACCESS_LEVELS.INTERN_REGERING,
+      ].includes(accessLevel.uri)
+    ) {
+      const internRegering = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+      );
       piece.accessLevel = internRegering;
       await piece.save();
-
       await this.updatePreviousAccessLevels(piece);
     }
   }
@@ -118,5 +127,70 @@ export default class PieceAccessLevelService extends Service {
         return piece.save();
       }
     }));
+  }
+
+  /*
+   * Returns whether the given access level already applies in the given agenda-context.
+   * I.e. whether the document has already been propagated based on the access-level
+   * or if propagation still needs to be executed at a later time.
+   * E.g. a public document is publicly available only after the documents of a meeting
+   * have been published on Themis, even though it is already marked as public in Kaleidos before.
+  */
+  async isDraftAccessLevel(accessLevel, { meeting, agenda, agendaitem, piece }) {
+    if ([accessLevel, meeting, agenda, piece].includes(undefined)) {
+      // Propagation status is based on agenda-related rules.
+      // If any of the arguments is undefined, this access level is not related
+      // to an agenda so it will always be in non-draft status.
+      return false;
+    } else {
+      if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
+        // no propagation required, so never in draft
+        return false;
+      } else if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+        // draft iff:
+        // - design-agenda without previous version
+        // - new document on an agendaitem of a design agenda with a previous version
+        const isDesignAgenda = (await agenda.status).isDesignAgenda;
+        if (isDesignAgenda) {
+          const previousAgenda = await agenda.previousVersion;
+          if (previousAgenda) {
+            if (agendaitem) {
+              const newPiecesOnAgenda = await this.agendaService.changedPieces(
+                agenda.id,
+                previousAgenda.id,
+                agendaitem.id
+              );
+              return newPiecesOnAgenda.includes(piece);
+            } else {
+              return false; // document not related to an agendaitem. Eg. agenda documents
+            }
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      } else if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_REGERING) {
+        // draft iff decisions are not yet released internally
+        const decisionPublicationActivity = await meeting.internalDecisionPublicationActivity;
+        const status = await decisionPublicationActivity.status;
+        return status.uri != CONSTANTS.RELEASE_STATUSES.RELEASED;
+      } else if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID) {
+        // draft iff documents are not yet released internally
+        const documentPublicationActivity = await meeting.internalDocumentPublicationActivity;
+        const status = await documentPublicationActivity.status;
+        return status.uri != CONSTANTS.RELEASE_STATUSES.RELEASED;
+      } else if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.PUBLIEK) {
+        // draft iff no released themis-publication-activity with scope documents yet
+        const nbOfDocumentPublications = await this.store.count('themis-publication-activity', {
+          'filter[meeting][:uri:]': meeting.uri,
+          'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+          'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+        });
+        return nbOfDocumentPublications === 0;
+      } else {
+        return false;
+      }
+    }
   }
 }

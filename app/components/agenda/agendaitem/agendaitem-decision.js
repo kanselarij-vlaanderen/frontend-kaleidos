@@ -51,13 +51,13 @@ export default class AgendaitemDecisionComponent extends Component {
     this.previousReport = yield this.report?.previousPiece;
   }
 
-  @action
-  async updateAgendaitemPiecesAccessLevels() {
-    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+  @task
+  *updateAgendaitemPiecesAccessLevels() {
+    const decisionResultCode = yield this.args.decisionActivity.decisionResultCode;
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCode.uri)) {
       const pieces = this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
       }
     }
     this.toggleEdit();

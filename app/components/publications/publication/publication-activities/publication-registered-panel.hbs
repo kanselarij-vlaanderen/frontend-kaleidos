@@ -46,15 +46,15 @@
             {{moment-format decision.publicationDate}}
           </h5>
           {{#if decision.isStaatsbladResource}}
-            <AuLink
+            <AuLinkExternal
               @skin="primary"
               @icon="external-link"
               @hideText={{true}}
-              @href={{decision.uri}}
+              href={{decision.uri}}
               target="_blank"
             >
               {{t "open-publication"}}
-            </AuLink>
+            </AuLinkExternal>
           {{/if}}
         </Auk::List::Item>
       {{/each}}

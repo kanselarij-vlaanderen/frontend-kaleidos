@@ -5,22 +5,6 @@ import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 
 // TODO-command could be command
-// function selectFromDropdown(item) {
-//   cy.get(dependency.emberPowerSelect.option, {
-//     timeout: 5000,
-//   }).wait(500)
-//     .contains(item)
-//     .scrollIntoView()
-//     .trigger('mouseover')
-//     .click({
-//       force: true,
-//     });
-//   cy.get(dependency.emberPowerSelect.option, {
-//     timeout: 15000,
-//   }).should('not.exist');
-// }
-
-// TODO-command could be command
 // function selectConfidentialityLevel(docName, confLevel) {
 //   cy.get(document.documentCard.name.value).contains(docName)
 //     .parents(document.documentCard.card)
@@ -28,7 +12,7 @@ import document from '../../selectors/document.selectors';
 //     .click();
 //   cy.get(document.accessLevelPill.selector)
 //     .click();
-//   selectFromDropdown(confLevel);
+//   cy.selectFromDropdown(confLevel);
 //   // TODO randomint
 //   // cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
 //   cy.get(document.accessLevelPill.save).click();

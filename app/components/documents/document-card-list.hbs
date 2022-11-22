@@ -3,6 +3,7 @@
     <div class="auk-u-mb-2">
       <Documents::DocumentCard
         @piece={{doc}}
+        @agendaContext={{@agendaContext}}
         @isHighlighted={{includes doc @highlightedPieces}}
         @isEditable={{@isEditable}}
         @hideNewerVersions={{false}}

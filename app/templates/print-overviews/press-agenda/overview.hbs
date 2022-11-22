@@ -1,8 +1,0 @@
-{{page-title (await this.documentTitle) replace=true}}
-<div class="auk-scroll-wrapper__body">
-  <Agenda::PressAgenda
-    @title={{await this.title}}
-    @definite={{this.definite}}
-    @agendaitemGroups={{await this.model.groups}}
-  />
-</div>

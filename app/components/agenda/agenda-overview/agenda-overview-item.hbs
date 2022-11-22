@@ -16,6 +16,7 @@
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
           <AuIcon
+            data-test-agenda-overview-item-dragging
             class="auk-u-cursor-grab auk-u-text-muted"
             @icon="drag-handle-2"
             @size="large"
@@ -122,6 +123,7 @@
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
+            @agendaContext={{hash meeting=@meeting agenda=@currentAgenda agendaitem=@agendaitem}}
           />
         </div>
         {{#if this.enableShowMore}}

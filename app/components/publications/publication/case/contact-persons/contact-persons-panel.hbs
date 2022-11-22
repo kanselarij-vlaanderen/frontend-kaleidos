@@ -38,7 +38,7 @@
               <tr data-test-contact-persons-row>
                 <td>
                   <Auk::Avatar @icon="user">
-                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.nameToDisplay}}</div>
+                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.fullName}}</div>
                     {{#if contactPerson.person.organization}}
                       <div data-test-contact-persons-row-organization-name class="auk-u-text-muted auk-u-text-size--small">
                         {{contactPerson.person.organization.name}}

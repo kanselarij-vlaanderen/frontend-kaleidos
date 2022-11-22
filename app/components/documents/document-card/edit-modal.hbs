@@ -10,11 +10,7 @@
       as |c|
     >
       <c.header
-        @badgeIcon={{
-          if (eq @piece.file.extension "pdf") "pdf"
-          (if (eq @piece.file.extension "docx") "word"
-          "document")
-        }}
+        @badgeIcon={{document-icon @piece.file.extension}}
       >
         <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
           {{uppercase @piece.file.extension}}
@@ -29,7 +25,7 @@
             <AuButton
               data-test-document-edit-source-file-replace
               @skin="secondary"
-              {{on "click" this.toggleUploadReplacementFile}}
+              {{on "click" this.toggleUploadReplacementSourceFile}}
             >
               {{t "replace"}}
             </AuButton>
@@ -44,10 +40,10 @@
           </AuHelpText>
         {{/if}}
       </c.header>
-      {{#if this.isUploadingReplacementFile}}
+      {{#if this.isUploadingReplacementSourceFile}}
         <c.content data-test-document-edit-source-file-replacer>
           <Auk::FileUploader
-            @onUpload={{set this "replacementFile"}}
+            @onUpload={{set this "replacementSourceFile"}}
           />
         </c.content>
       {{/if}}
@@ -60,11 +56,7 @@
         as |c|
       >
         <c.header
-          @badgeIcon={{
-            if (eq @piece.file.derived.extension "pdf") "pdf"
-            (if (eq @piece.file.derived.extension "docx") "word"
-            "document")
-          }}
+          @badgeIcon={{document-icon @piece.file.derived.extension}}
         >
           <p class="vlc-subline au-u-medium au-u-muted">
             {{uppercase @piece.file.derived.extension}}

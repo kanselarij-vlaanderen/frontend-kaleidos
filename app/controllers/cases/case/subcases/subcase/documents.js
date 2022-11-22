@@ -142,13 +142,23 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // since we query them from the backend on addition of new pieces
   }
 
+  /**
+   * When deleting a piece with multiple versions, we have to ensure that the agendaitem on the latest agenda is updated.
+   * This will only work correctly if only 1 agendaitem version needs to be corrected.
+   * this will not yield the correct results if multiple agenda versions (or with multiple agenda-activities) need corrections.
+   * @param {Piece} deletedPiece - the deleted piece from the store (after a destroyRecord)
+   */
   @action
   async setPreviousPiecesFromAgendaitem(deletedPiece) {
-    // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
     const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
-      const lastPiece = await documentContainer.lastPiece; // TODO: what is the purpose of getting lastPiece here
-      if (this.subcase && lastPiece) {
+      // deletedPiece.previousPiece might not work after delete, lastPiece query should return the same piece.
+      const lastPiece = await this.store.queryOne('piece', {
+        'filter[document-container][:id:]': documentContainer.id,
+        sort: '-created',
+      })
+      // only continue if there is a piece left in the container (a container could have 0 pieces left)
+      if (lastPiece) {
         const agendaActivities = await this.subcase.agendaActivities;
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {

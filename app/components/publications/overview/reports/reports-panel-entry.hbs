@@ -11,13 +11,13 @@
             user=@lastJob.generatedBy.fullName
           }}
         </div>
-          <AuLink
+          <AuLinkExternal
             @icon="download"
-            @href={{@lastJob.generated.namedDownloadLink}}
+            href={{@lastJob.generated.namedDownloadLink}}
             download
           >
             {{@lastJob.generated.downloadFilename}}
-          </AuLink>
+          </AuLinkExternal>
       </div>
     {{/if}}
   </div>

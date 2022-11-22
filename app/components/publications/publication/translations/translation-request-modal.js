@@ -73,6 +73,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     const urgencyLevel = yield publicationFlow.urgencyLevel;
     const mailParams = {
       identifier: identification.idName,
+      shortTitle: publicationFlow.shortTitle,
       title: publicationFlow.longTitle || publicationFlow.shortTitle,
       isUrgent: urgencyLevel?.isUrgent,
       dueDate: this.translationDueDate,

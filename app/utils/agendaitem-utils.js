@@ -27,8 +27,9 @@ export const setCalculatedGroupNumbers = (agendaitems) => Promise.all(
       agendaitem.set('groupNumber', 'ZZZZZZZZ');
       return;
     }
-    const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
-    mandateePriorities.sort(); // should sort on letters A - Z
+    const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
+    // there can be max 11 mandatees, a normal sort() would yield [1,11,3]
+    mandateePriorities.sort((a, b) => (a - b));
     agendaitem.set('groupNumber', mandateePriorities.join());
   })
 );
@@ -59,31 +60,6 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
     }
   });
   return groups;
-};
-
-/**
- * For a set of agendaitems, will fetch the drafts, and will group them by number
- * @param  {Array}  agendaitems   Agenda items to parse from
- * @return {Object}               An object containing drafts and groups
- */
-export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
-  // Drafts are items without an approval or remark
-  const draftAgendaitems = [];
-  for (const agendaitem of agendaitems.toArray()) {
-    const type = await agendaitem.type;
-    if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA && !agendaitem.isApproval) {
-      draftAgendaitems.push(agendaitem);
-    }
-  }
-
-  // Calculate the priorities on the drafts
-  await setCalculatedGroupNumbers(draftAgendaitems);
-
-  const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
-  return {
-    draftAgendaitems,
-    groupedAgendaitems,
-  };
 };
 
 /**

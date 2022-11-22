@@ -19,25 +19,23 @@
         {{/if}}
         <div>
           <AuButtonGroup>
-            <AuLink
-              @skin="button-naked"
+            <AuLinkExternal
               @icon="download"
               @hideText={{true}}
-              @href={{piece.file.namedDownloadLink}}
+              href={{piece.file.namedDownloadLink}}
               download={{piece.file.downloadFilename}}
             >
               {{t "download"}}
-            </AuLink>
+            </AuLinkExternal>
             {{#if @viewable}}
-              <AuLink
-                @skin="button-naked"
+              <AuLinkExternal
                 @icon="book"
                 @hideText={{true}}
-                @href={{piece.viewDocumentURL}}
+                href={{piece.viewDocumentURL}}
                 target="_blank"
               >
                 {{t "read"}}
-              </AuLink>
+              </AuLinkExternal>
             {{/if}}
             {{#if @onDeletePiece}}
               <AuButton

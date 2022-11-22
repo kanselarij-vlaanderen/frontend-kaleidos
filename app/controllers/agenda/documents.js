@@ -12,6 +12,7 @@ export default class AgendaDocumentsController extends Controller {
   @service toaster;
   @service fileService;
 
+  agenda;
   meeting;
   defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;
