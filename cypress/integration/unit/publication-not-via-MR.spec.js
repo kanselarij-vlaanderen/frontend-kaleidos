@@ -6,22 +6,6 @@ import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-function selectFromDropdown(item) {
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(item)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.exist');
-}
-
-
 context('link publication not via MR to MR', () => {
   // const nameToCheck = 'Jambon';
   const agendaDetailLink = 'vergadering/62C5974E03A74CBB92D216A3/agenda/62C5974F03A74CBB92D216A4/agendapunten/62C5975303A74CBB92D216A7';
@@ -83,7 +67,7 @@ context('link publication not via MR to MR', () => {
 
     cy.get((publication.batchDocumentsPublicationRow.linkOption)).eq(0)
       .click();
-    selectFromDropdown('Bestaand');
+    cy.selectFromDropdown('Bestaand');
     cy.get((publication.publicationsFlowSelector)).eq(0)
       .click();
     // check if publication linked to other case can't be found

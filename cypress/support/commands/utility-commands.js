@@ -143,6 +143,29 @@ function addDomainsAndFields(domains) {
   cy.log('/addDomainsAndFields');
 }
 
+/**
+ * Select an option of the dropdown
+ * @memberOf Cypress.Chainable#
+ * @name selectFromDropdown
+ * @function
+ */
+function selectFromDropdown(item) {
+  cy.log('selectFromDropdown');
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 5000,
+  }).wait(500)
+    .contains(item)
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click({
+      force: true,
+    });
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 15000,
+  }).should('not.exist');
+  cy.log('/selectFromDropdown');
+}
+
 // ***********************************************
 // Commands
 
@@ -153,3 +176,4 @@ Cypress.Commands.add('setDateInFlatpickr', setDateInFlatpickr);
 Cypress.Commands.add('openSettingsModal', openSettingsModal);
 Cypress.Commands.add('closeSettingsModal', closeSettingsModal);
 Cypress.Commands.add('addDomainsAndFields', addDomainsAndFields);
+Cypress.Commands.add('selectFromDropdown', selectFromDropdown);
