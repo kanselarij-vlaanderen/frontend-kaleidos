@@ -132,7 +132,6 @@ Router.map(function() {
     this.route('checkboxes-radio-buttons');
     this.route('colors');
     this.route('color-badge');
-    this.route('dropdown');
     this.route('datepicker');
     this.route('empty-state');
     this.route('form-group');
