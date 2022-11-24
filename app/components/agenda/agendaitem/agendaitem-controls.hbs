@@ -70,21 +70,12 @@
   />
 {{/if}}
 {{#if this.setDecisionResultCode.isRunning}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @showCloseButton={{false}}
-    @title={{t "saving-decision-result-title"}}
-  >
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
     <Auk::Modal::Body>
-      <WebComponents::VlLoader
-        @text={{concat
-          (t "saving-decision-result-message")
-          " "
-          (t "please-be-patient")
-        }}
-      />
+      <Auk::Loader @message={{t "saving-decision-result-message"}} />
     </Auk::Modal::Body>
-  </WebComponents::VlModal>
+  </Auk::Modal>
 {{/if}}
 {{#if this.showLoader}}
   <WebComponents::LoadingOverlay />

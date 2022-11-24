@@ -53,11 +53,10 @@
   <td>
     <WebComponents::AuButtonToolbar>
       {{#if (not @isEditingEnabled)}}
-        <AuLink
-          @skin="button-naked"
+        <AuLinkExternal
           @icon="book"
           @hideText={{true}}
-          @href={{@row.piece.viewDocumentURL}}
+          href={{@row.piece.viewDocumentURL}}
           target="_blank"
         />
       {{else if @row.isToBeDeleted}}

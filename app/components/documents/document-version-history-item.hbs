@@ -1,0 +1,44 @@
+<div class="vlc-document-card-item" data-test-vl-document-piece>
+  <div class="vlc-document-card-item__title">
+    {{#if @piece.file}}
+      <LinkTo @route="document" @model={{@piece.id}}
+        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+        data-test-vl-document-name>
+        {{#let (or piece.file.derived.extension piece.file.extension) as |extension|}}
+          {{piece.name}}.{{extension}}
+        {{/let}}
+      </LinkTo>
+    {{else}}
+      <h6
+        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+        data-test-vl-document-name
+      >
+        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+          {{t "document-not-consultable"}}
+        </EmberTooltip>
+        {{@piece.name}}
+      </h6>
+    {{/if}}
+    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+    <AccessLevelPill
+      @accessLevel={{@piece.accessLevel}}
+      @isDraft={{this.isDraftAccessLevel}}
+      @isEditable={{true}}
+      @onChangeAccessLevel={{this.changeAccessLevel}}
+      @onConfirmChangeAccessLevel={{@onConfirmChangeAccessLevel}}
+      @onCancelChangeAccessLevel={{@onCancelChangeAccessLevel}}
+    />
+  </div>
+  <div class="vlc-document-card-item__meta au-u-muted">
+    {{!-- no piece.created in legacy data --}}
+    {{#if @piece.created}}
+      {{t "uploaded-at"}}
+      {{moment-format @piece.created}}
+      {{t "at"}}
+      {{moment-format @piece.created "HH:mm"}}
+    {{/if}}
+  </div>
+  <div class="vlc-document-card-item__icon">
+    <Auk::Icon @name="clock-rewind" @size="small" />
+  </div>
+</div>

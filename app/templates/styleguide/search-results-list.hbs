@@ -8,7 +8,7 @@
 >
   {{!-- BEGIN-SNIPPET search-results-list-default --}}
   <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::Input @icon="search" />
+    <AuInput @icon="search" />
     <Auk::SearchResultsList>
       <Auk::SearchResultsList::Item @route="styleguide.accordion" @skin="multiline">
         Accordion
@@ -47,7 +47,7 @@
 >
   {{!-- BEGIN-SNIPPET search-results-list-multiline-and-position --}}
   <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::Input @icon="search" />
+    <AuInput @icon="search" />
     <Auk::SearchResultsList @position="right">
       <Auk::SearchResultsList::Item @route="styleguide.accordion" @skin="multiline">
         <:default>Accordion</:default>
@@ -77,7 +77,7 @@
 >
   {{!-- BEGIN-SNIPPET search-results-list-loading --}}
   <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::Input @icon="search" />
+    <AuInput @icon="search" />
     <Auk::SearchResultsList @isLoading={{true}}></Auk::SearchResultsList>
   </div>
   {{!-- END-SNIPPET --}}
@@ -90,7 +90,7 @@
 >
   {{!-- BEGIN-SNIPPET search-results-list-no-results --}}
   <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::Input @icon="search" />
+    <AuInput @icon="search" />
     <Auk::SearchResultsList @hasNoResults={{true}}>{{t "agendaitems-empty-result"}}</Auk::SearchResultsList>
   </div>
   {{!-- END-SNIPPET --}}

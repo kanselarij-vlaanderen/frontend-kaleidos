@@ -26,21 +26,6 @@ context('Publications tests', () => {
     cy.get(publication.newPublication.longTitle).should('be.empty');
   }
 
-  function selectFromDropdown(item) {
-    cy.get(dependency.emberPowerSelect.option, {
-      timeout: 5000,
-    }).wait(500)
-      .contains(item)
-      .scrollIntoView()
-      .trigger('mouseover')
-      .click({
-        force: true,
-      });
-    cy.get(dependency.emberPowerSelect.option, {
-      timeout: 15000,
-    }).should('not.exist');
-  }
-
   beforeEach(() => {
     cy.login('OVRB');
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
@@ -511,7 +496,7 @@ context('Publications tests', () => {
     cy.get(publication.urgencyLevelCheckbox).parent()
       .click();
     cy.get(publication.publicationCaseInfo.editView.publicationMode).click();
-    selectFromDropdown(publicationMode1);
+    cy.selectFromDropdown(publicationMode1);
     cy.get(publication.publicationCaseInfo.editView.decisionDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(decisionDate);
@@ -527,7 +512,7 @@ context('Publications tests', () => {
     cy.get(publication.publicationCaseInfo.edit).click();
     // publication mode can't be changed to default again, set to second value
     cy.get(publication.publicationCaseInfo.editView.publicationMode).click();
-    selectFromDropdown(publicationMode2);
+    cy.selectFromDropdown(publicationMode2);
     // change other values to default again
     cy.get(publication.urgencyLevelCheckbox).parent()
       .click();

@@ -35,8 +35,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isEditingPiece = false;
 
   @tracked piece;
-  @tracked accessLevel;
   @tracked documentContainer;
+  @tracked isDraftAccessLevel;
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
@@ -64,21 +64,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @task
-  *loadSignatureRelatedData() {
-    if (this.args.hasMarkForSignature) {
-      this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    }
-  }
-
-  @task
-  *loadPublicationFlowRelatedData() {
-    if (this.currentSession.may('manage-publication-flows')) {
-      const publicationFlow = yield this.piece.publicationFlow;
-      yield publicationFlow?.identification;
-    }
-  }
-
-  @task
   *loadPieceRelatedData() {
     const loadPiece = (id) =>
       this.store.queryOne('piece', {
@@ -90,7 +75,6 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
-      this.accessLevel = yield this.piece.accessLevel;
       yield this.loadVersionHistory.perform();
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
@@ -98,15 +82,38 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       const lastPiece = this.reverseSortedPieces.lastObject;
       this.piece = yield loadPiece(lastPiece.id);
-      this.accessLevel = yield this.piece.accessLevel;
     } else {
       throw new Error(
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
       );
     }
     // When this task is done, we can trigger the other less important tasks
+    this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+  }
+
+
+  @task
+  *loadAccessLevelRelatedData() {
+    const accessLevel = yield this.piece.accessLevel;
+    const context = Object.assign({}, this.args.agendaContext || {}, { piece: this.piece });
+    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+  }
+
+  @task
+  *loadPublicationFlowRelatedData() {
+    if (this.currentSession.may('manage-publication-flows')) {
+      const publicationFlow = yield this.piece.publicationFlow;
+      yield publicationFlow?.identification;
+    }
+  }
+
+  @task
+  *loadSignatureRelatedData() {
+    if (this.args.hasMarkForSignature) {
+      this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    }
   }
 
   @task
@@ -240,7 +247,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   changeAccessLevel(accessLevel) {
     this.piece.accessLevel = accessLevel;
-    this.accessLevel = accessLevel;
   }
 
   @action
@@ -253,7 +259,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   changeAccessLevelOfPiece(piece, accessLevel) {
-    piece.set('accessLevel', accessLevel);
+    piece.accessLevel = accessLevel;
   }
 
   @action

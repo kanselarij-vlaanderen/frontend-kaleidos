@@ -4,16 +4,9 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
-import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
-
-function checkDecisionPage(headerText) {
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.navigateToDecisions).click();
-  cy.get(utils.overviewsHeaderDecision.title).contains(headerText);
-}
 
 function checkNewsletterPage(headerText, newsletterTitle) {
   cy.get(agenda.agendaActions.showOptions).click();
@@ -24,22 +17,6 @@ function checkNewsletterPage(headerText, newsletterTitle) {
   cy.clickReverseTab('Definitief');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
 }
-
-function selectFromDropdown(item) {
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(item)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.exist');
-}
-
 context('Different session kinds should show different titles', () => {
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
   const special = '/vergadering/5EC525AC5B08050008000005/agenda/5EC525AD5B08050008000006/agendapunten';
@@ -54,24 +31,6 @@ context('Different session kinds should show different titles', () => {
   });
 
   // TODO-printableAgenda shows session-kind
-
-  it('should show the correct translations for normal session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
-    cy.visit(regular);
-    checkDecisionPage(headerText);
-  });
-
-  it('should show the correct translations for special session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad van';
-    cy.visit(special);
-    checkDecisionPage(headerText);
-  });
-
-  it('should show the correct translations for electronic session in decision print overview', () => {
-    const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure van';
-    cy.visit(electronic);
-    checkDecisionPage(headerText);
-  });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
     cy.visit('/kort-bestek?size=100');
@@ -114,7 +73,6 @@ context('Different session kinds should show different titles', () => {
       .minute(0);
     const formattedAgendaDate = agendaDate.format('DD-MM-YYYY');
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
-    const decisionHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const formattedMeetingDateDots = agendaDate.format('DD-MM-YYYY');
     // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
@@ -133,10 +91,10 @@ context('Different session kinds should show different titles', () => {
     // set kind to PVV
     cy.get(route.agendas.action.newMeeting).click();
     cy.get(utils.kindSelector.kind).click();
-    selectFromDropdown(vvKind);
+    cy.selectFromDropdown(vvKind);
     // select related main meeting
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
-    selectFromDropdown(formattedAgendaDate);
+    cy.selectFromDropdown(formattedAgendaDate);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('POST', '/meetings').as('createMeeting');
     cy.intercept('POST', '/agendas').as('createAgenda');
@@ -157,8 +115,6 @@ context('Different session kinds should show different titles', () => {
 
     // check if different views show correct header
     cy.get(agenda.agendaHeader.kind).contains(vvKind);
-    checkDecisionPage(decisionHeader);
-    cy.get(auk.tab.hierarchicalBack).click();
     checkNewsletterPage(vvKind, newsletterHeader);
 
     // check kort bestek overview and order

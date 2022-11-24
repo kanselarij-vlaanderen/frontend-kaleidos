@@ -682,7 +682,7 @@ function releaseDocuments(now = true) {
   cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchDocPubActivity');
 
   cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.releaseDocuments).click();
+  cy.get(agenda.agendaActions.planReleaseDocuments).click();
   if (now) {
     cy.get(agenda.publicationPlanning.actions.releaseDocumentsNow).click();
   }

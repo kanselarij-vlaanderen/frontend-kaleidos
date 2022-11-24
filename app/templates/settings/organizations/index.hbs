@@ -1,129 +1,127 @@
-<div class="auk-scroll-wrapper__body au-u-background-gray-100">
-  <div class="auk-o-grid au-o-grid--stretch">
-    <div class="auk-o-grid-col-2">
-      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
-        <div class="au-c-card au-o-box au-o-box--small">
-          {{#if this.loadSelectedOrganizations.isRunning}}
-            <Auk::Loader />
-          {{else}}
-            <OrganizationFilter
-              @selected={{this.selectedOrganizations}}
-              @onChange={{this.setOrganizations}}
-            />
-          {{/if}}
-        </div>
-        <div class="au-c-card au-o-box au-o-box--small">
-          <AuToggleSwitch
-            @label={{t "show-only-blocked"}}
-            @identifier="blocked"
-            @name="blocked"
-            @checked={{this.showBlockedOrganizationsOnly}}
+<div class="auk-o-grid au-o-grid--stretch">
+  <div class="auk-o-grid-col-2">
+    <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+      <div class="au-c-card au-o-box au-o-box--small">
+        {{#if this.loadSelectedOrganizations.isRunning}}
+          <Auk::Loader />
+        {{else}}
+          <OrganizationFilter
+            @selected={{this.selectedOrganizations}}
+            @onChange={{this.setOrganizations}}
           />
-        </div>
+        {{/if}}
+      </div>
+      <div class="au-c-card au-o-box au-o-box--small">
+        <AuToggleSwitch
+          @label={{t "show-only-blocked"}}
+          @identifier="blocked"
+          @name="blocked"
+          @checked={{this.showBlockedOrganizationsOnly}}
+        />
       </div>
     </div>
-    <div class="auk-o-grid-col-10">
-      <DataTable
-        @content={{@model}}
-        @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
-        @page={{this.page}}
-        @size={{this.size}}
-        @sort={{this.sort}}
-        @noDataMessage={{t "no-results-found"}}
-        @isLoading={{this.isLoadingModel}}
-        as |table|
-      >
-        <table.content as |c|>
-          <c.header>
-            <ThSortable
-              @currentSorting={{this.sort}}
-              @field="name"
-              @label={{t "organization"}}
-            />
-            <ThSortable
-              @currentSorting={{this.sort}}
-              @field="identifier"
-              @label={{t "ovo-code"}}
-            />
-            <th>{{t "users-seen"}}</th>
-            <th></th>
-          </c.header>
-          <c.body as |organization|>
-            <td class={{if organization.isBlocked "au-u-muted"}}>
-              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                {{organization.name}}
-                {{#if organization.isBlocked}}
-                  <AuPill
-                    @icon="circle-x"
-                    @skin="error"
-                    @size="small"
-                  >
-                    {{t "blocked"}}
-                  </AuPill>
-                {{/if}}
-              </span>
-            </td>
-            <td class={{if organization.isBlocked "au-u-muted"}}>
-              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                {{organization.identifier}}
-              </span>
-            </td>
-            <td class={{if organization.isBlocked "au-u-muted"}}>
-              <div>
-                <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  <LinkTo
-                    @route="settings.users"
-                    @query={{hash
-                      organizations=(array organization.id)
-                      filter=null
-                      page=0
-                      dateFrom=null
-                      dateTo=null
-                      roles=(array)
-                      showBlockedUsers=false
-                      showBlockedMembership=false
-                    }}
-                  >
-                    <OrganizationMembershipsCount
-                      @organization={{organization}}
-                    />
-                  </LinkTo>
-                </span>
-              </div>
-            </td>
-            <td class="auk-u-text-align--right">
-              <div class="auk-o-flex auk-o-flex--justify-end">
-                <AuDropdown
-                  @skin="naked"
-                  @hideText={{true}}
-                  @alignment="right"
-                  @icon="three-dots"
+  </div>
+  <div class="auk-o-grid-col-10">
+    <DataTable
+      @content={{@model}}
+      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
+      @page={{this.page}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @noDataMessage={{t "no-results-found"}}
+      @isLoading={{this.isLoadingModel}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="name"
+            @label={{t "organization"}}
+          />
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="identifier"
+            @label={{t "ovo-code"}}
+          />
+          <th>{{t "users-seen"}}</th>
+          <th></th>
+        </c.header>
+        <c.body as |organization|>
+          <td class={{if organization.isBlocked "au-u-muted"}}>
+            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              {{organization.name}}
+              {{#if organization.isBlocked}}
+                <AuPill
+                  @icon="circle-x"
+                  @skin="error"
+                  @size="small"
                 >
-                  {{#if organization.isBlocked}}
-                    <AuButton
-                      @skin="naked"
-                      role="menuitem"
-                      {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
-                    >
-                      {{t "unblock-organization"}}
-                    </AuButton>
-                  {{else}}
-                    <AuButton
-                      @skin="naked"
-                      @alert={{true}}
-                      role="menuitem"
-                      {{on "click" (queue (toggle "showBlockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
-                    >
-                      {{t "block-organization"}}
-                    </AuButton>
-                  {{/if}}
-                </AuDropdown>
-              </div>
-            </td>
-          </c.body>
-        </table.content>
-      </DataTable>
-    </div>
+                  {{t "blocked"}}
+                </AuPill>
+              {{/if}}
+            </span>
+          </td>
+          <td class={{if organization.isBlocked "au-u-muted"}}>
+            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              {{organization.identifier}}
+            </span>
+          </td>
+          <td class={{if organization.isBlocked "au-u-muted"}}>
+            <div>
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <LinkTo
+                  @route="settings.users"
+                  @query={{hash
+                    organizations=(array organization.id)
+                    filter=null
+                    page=0
+                    dateFrom=null
+                    dateTo=null
+                    roles=(array)
+                    showBlockedUsers=false
+                    showBlockedMembership=false
+                  }}
+                >
+                  <OrganizationMembershipsCount
+                    @organization={{organization}}
+                  />
+                </LinkTo>
+              </span>
+            </div>
+          </td>
+          <td class="auk-u-text-align--right">
+            <div class="auk-o-flex auk-o-flex--justify-end">
+              <AuDropdown
+                @skin="naked"
+                @hideText={{true}}
+                @alignment="right"
+                @icon="three-dots"
+              >
+                {{#if organization.isBlocked}}
+                  <AuButton
+                    @skin="naked"
+                    role="menuitem"
+                    {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
+                  >
+                    {{t "unblock-organization"}}
+                  </AuButton>
+                {{else}}
+                  <AuButton
+                    @skin="naked"
+                    @alert={{true}}
+                    role="menuitem"
+                    {{on "click" (queue (toggle "showBlockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
+                  >
+                    {{t "block-organization"}}
+                  </AuButton>
+                {{/if}}
+              </AuDropdown>
+            </div>
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
   </div>
 </div>
 

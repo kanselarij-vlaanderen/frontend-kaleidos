@@ -1,53 +1,55 @@
 {{!-- TODO: octane-refactor --}}
 {{!-- template-lint-disable no-action --}}
-<div class="auk-input-with-icon {{if @enableClear "auk-input-with-clear-action"}}">
-  <Auk::Icon @name="calendar" />
-  {{#if (not this.await this.dateObjectsToEnable)}}
-    <EmberFlatpickr
-      data-test-vl-datepicker
-      class="auk-input auk-input--block {{if @error "auk-input--error"}}"
-      @locale="nl"
-      @date={{readonly this.selectedDate}} {{!-- Required Option --}}
-      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
-      @enableTime={{@enableTime}}
-      @time_24hr={{true}}
-      @defaultHour={{@defaultHour}}
-      @defaultMinute={{@defaultMinute}}
-      @minDate={{@min}}
-      @maxDate={{@max}}
-      @nextArrow=""
-      @prevArrow=""
-      @noCalendar={{false}}
-      @onChange={{action "dateChanged"}} {{!-- Required Option --}}
-      @onReady={{this.onReady}}
-      @shorthandCurrentMonth={{true}}
-      @disabled={{@disabled}}
-      @allowInput={{@allowInput}}
-    />
-  {{else}}
-    <EmberFlatpickr
-      data-test-vl-datepicker
-      class="auk-input auk-input--block"
-      @locale="nl"
-      @date={{readonly this.selectedDate}} {{!-- Required Option --}}
-      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
-      @enable={{this.datesToEnable}}
-      @enableTime={{@enableTime}}
-      @time_24hr={{true}}
-      @defaultHour={{@defaultHour}}
-      @defaultMinute={{@defaultMinute}}
-      @minDate={{@min}}
-      @maxDate={{@max}}
-      @nextArrow=""
-      @prevArrow=""
-      @noCalendar={{false}}
-      @onChange={{action "dateChanged"}} {{!-- Required Option --}}
-      @onReady={{this.onReady}}
-      @shorthandCurrentMonth={{true}}
-      @disabled={{@disabled}}
-      @allowInput={{@allowInput}}
-    />
-  {{/if}}
+<div class="{{if @enableClear "auk-input-with-clear-action"}}">
+  <span class="au-c-input-wrapper au-c-input-wrapper--left auk-u-block auk-u-maximize-width">
+    <AuIcon @icon="calendar"/>
+    {{#if (not this.await this.dateObjectsToEnable)}}
+      <EmberFlatpickr
+        data-test-vl-datepicker
+        class="au-c-input au-c-input--block {{if @error "au-c-input--error"}}"
+        @locale="nl"
+        @date={{readonly this.selectedDate}} {{!-- Required Option --}}
+        @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+        @enableTime={{@enableTime}}
+        @time_24hr={{true}}
+        @defaultHour={{@defaultHour}}
+        @defaultMinute={{@defaultMinute}}
+        @minDate={{@min}}
+        @maxDate={{@max}}
+        @nextArrow=""
+        @prevArrow=""
+        @noCalendar={{false}}
+        @onChange={{action "dateChanged"}} {{!-- Required Option --}}
+        @onReady={{this.onReady}}
+        @shorthandCurrentMonth={{true}}
+        @disabled={{@disabled}}
+        @allowInput={{@allowInput}}
+      />
+    {{else}}
+      <EmberFlatpickr
+        data-test-vl-datepicker
+        class="au-c-input au-c-input--block"
+        @locale="nl"
+        @date={{readonly this.selectedDate}} {{!-- Required Option --}}
+        @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+        @enable={{this.datesToEnable}}
+        @enableTime={{@enableTime}}
+        @time_24hr={{true}}
+        @defaultHour={{@defaultHour}}
+        @defaultMinute={{@defaultMinute}}
+        @minDate={{@min}}
+        @maxDate={{@max}}
+        @nextArrow=""
+        @prevArrow=""
+        @noCalendar={{false}}
+        @onChange={{action "dateChanged"}} {{!-- Required Option --}}
+        @onReady={{this.onReady}}
+        @shorthandCurrentMonth={{true}}
+        @disabled={{@disabled}}
+        @allowInput={{@allowInput}}
+      />
+    {{/if}}
+  </span>
   {{#if @enableClear}}
     <AuButton
       @skin="naked"

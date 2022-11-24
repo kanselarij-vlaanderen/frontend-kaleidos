@@ -298,10 +298,16 @@ table tr.lt-expanded-row {
 // Input with clear action
 
 .auk-input-with-clear-action {
+  > .au-c-input-wrapper {
+    > .au-c-input {
+      padding-right: 3.5rem;
+    }
+  }
+
   > .au-c-button {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: .1rem;
+    right: .1rem;
     bottom: 0;
 
     outline-offset: calc(var(--au-outline-offset) * -1);

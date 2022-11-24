@@ -52,17 +52,35 @@
         <td>Data punt</td>
         <td>
           <WebComponents::AuButtonToolbar>
-            <Auk::DropdownMenu
-              @skin="borderless"
-              @layout="icon-only"
+            <AuDropdown
+              @skin="naked"
               @icon="three-dots"
-              @label="Acties"
-              @placement="bottom-end"
-            as |Menu|>
-              <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-              <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-              <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-            </Auk::DropdownMenu>
+              @title="Acties"
+              @hideText={{true}}
+              @alignment="right"
+            >
+              <AuLink
+                @skin="primary"
+                @route="styleguide.brand"
+                role="menuitem"
+              >
+                Actie
+              </AuLink>
+              <AuLink
+                @skin="primary"
+                @route="styleguide.brand"
+                role="menuitem"
+              >
+                Actie
+              </AuLink>
+              <AuLink
+                @skin="primary"
+                @route="styleguide.brand"
+                role="menuitem"
+              >
+                Actie
+              </AuLink>
+            </AuDropdown>
           </WebComponents::AuButtonToolbar>
         </td>
       </tr>
