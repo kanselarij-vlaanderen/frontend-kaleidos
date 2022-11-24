@@ -55,13 +55,16 @@ export default class FileService extends Service {
   }
 
   async deleteFile(file) {
-    const fileToDelete = await file;
-    if (!fileToDelete) {
+    const sourceFileToDelete = await file;
+    if (!sourceFileToDelete) {
       return;
     }
-    const derivedFileToDelete = await file.derived;
-    await derivedFileToDelete?.destroyRecord();
-    return fileToDelete.destroyRecord();
+    const derivedFileToDelete = await sourceFileToDelete.derived;
+    if (derivedFileToDelete) {
+      sourceFileToDelete.derived = null;
+      await sourceFileToDelete.save();
+    }
+    return Promise.all([sourceFileToDelete.destroyRecord(), derivedFileToDelete?.destroyRecord()]);
   }
 
   async reverseDelete(id) {

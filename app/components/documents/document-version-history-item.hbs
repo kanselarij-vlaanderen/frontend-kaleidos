@@ -1,11 +1,13 @@
 <div class="vlc-document-card-item" data-test-vl-document-piece>
   <div class="vlc-document-card-item__title">
-    {{#if @piece.file}}
+    {{#if this.loadFiles.isRunning}}
+      <AuLoader @padding="small" />
+    {{else if @piece.file}}
       <LinkTo @route="document" @model={{@piece.id}}
         class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
         data-test-vl-document-name>
-        {{#let (or piece.file.derived.extension piece.file.extension) as |extension|}}
-          {{piece.name}}.{{extension}}
+        {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
+          {{@piece.name}}.{{extension}}
         {{/let}}
       </LinkTo>
     {{else}}
