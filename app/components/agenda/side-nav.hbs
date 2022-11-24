@@ -56,6 +56,7 @@
                 <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
                   {{or agenda.serialnumber "-"}}
                 </AuPill>
+               
               </div>
               <div class="auk-sidebar__sublabel">
                 {{#if agenda.status.isDesignAgenda}}
@@ -69,6 +70,8 @@
                 {{else}}
                   {{t "approved"}}
                 {{/if}}
+                <br />
+                <span class="au-u-medium">Geopend</span>
               </div>
             {{else}}
               <div class="auk-sidebar__label">
@@ -126,6 +129,8 @@
                 {{else}}
                   {{t "approved"}}
                 {{/if}}
+                <br />
+                <span class="au-u-medium">Afgesloten</span>
               </div>
             {{else}}
               <div class="auk-sidebar__label">
