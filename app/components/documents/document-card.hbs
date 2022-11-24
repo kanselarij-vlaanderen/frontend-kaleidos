@@ -22,12 +22,30 @@
                   {{this.documentContainer.type.label}}
                 {{/unless}}
               </span>
+              <span class="auk-overline">
+                {{slice-text this.piece.name start=8 limit=2}}-{{slice-text this.piece.name start=10 limit=2}}-{{slice-text this.piece.name start=3 limit=4}}
+              </span>
+              <span class="auk-overline">
+                 {{slice-text this.piece.name start=12 limit=11}}
+              </span>
             </div>
             <LinkTo @route="document" @model={{this.piece.id}}
-              class="auk-h4" data-test-document-card-name-value>
-              {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
+              class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny" data-test-document-card-name-value>
+              {{#if (eq this.documentContainer.type.label "Nota")}}
+                {{slice-text this.piece.name start=23 limit=50 remove=" - nota" removeType=true}}              
+                <AuPill @skin="ongoing" @size="small">BIS</AuPill>
+              {{else if (eq this.documentContainer.type.label "Decreet") }}
+                {{slice-text this.piece.name start=23 limit=50 remove=" - decreet" removeType=true}}
+              {{else if (eq this.documentContainer.type.label "Advies") }}
+                {{slice-text this.piece.name start=23 limit=50 remove=" - advies" removeType=true}}
+              {{else if (eq this.documentContainer.type.label "Bijlage") }}
+                {{slice-text this.piece.name start=23 limit=50 remove=" - memorie" removeSecond=" - bijlage" removeType=true}}
+              {{else}}
+                {{slice-text this.piece.name start=23 limit=50 remove=" - memorie" removeType=true}}
+              {{/if}}
+              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{this.piece.file.extension}}</AuPill>{{/if}}
             </LinkTo>
-            <div class="vlc-document-card-content__meta">
+            <div class="vlc-document-card-content__meta au-u-margin-top-tiny">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
                 <p>
