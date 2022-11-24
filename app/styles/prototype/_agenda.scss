@@ -1,0 +1,13 @@
+.au-agenda-items-edit {
+  position: relative;
+  margin-top: 0 !important;
+
+  .vl-alert--warning:first-child {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    margin-left: -4rem;
+    margin-right: -4rem;
+  }
+}
