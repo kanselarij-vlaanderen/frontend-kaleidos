@@ -68,31 +68,32 @@ export default class CasesCaseSubcasesOverview extends Controller {
 
   @action
   async archiveCase() {
-    const caseModel = await this.store.findRecord('case', this.selectedCase.id);
+    const caseModel = await this.store.findRecord('case', this.selectedCase.get('id')); // this.selectedCase is a proxy
     caseModel.isArchived = true;
-    const subcases = await caseModel.subcases;
+    const decisionmakingFlow = await caseModel.decisionmakingFlow;
+    const subcases = await decisionmakingFlow.subcases;
     await Promise.all(subcases.map(async(subcase) => {
       subcase.isArchived = true;
       return await subcase.save();
     }));
-    caseModel.save()
-      .then(() => {
-        this.selectedCase = null;
-        this.send('refreshModel');
-        this.isArchivingCase = false;
-      });
+    await caseModel.save();
+    this.selectedCase = null;
+    this.router.refresh();
+    this.isArchivingCase = false;
   }
 
   @action
   async unarchiveCase(_case) {
-    _case.isArchived = false;
-    const decisionmakingFlow = await _case.decisionmakingFlow;
+    const caseModel = await this.store.findRecord('case', _case.get('id')); // _case is a proxy
+    caseModel.isArchived = false;
+    const decisionmakingFlow = await caseModel.decisionmakingFlow;
     const subcases = await decisionmakingFlow.subcases;
     await Promise.all(subcases.map(async(subcase) => {
       subcase.isArchived = false;
       return await subcase.save();
     }));
-    await _case.save();
+    await caseModel.save();
+    this.router.refresh();
   }
 
   @action
