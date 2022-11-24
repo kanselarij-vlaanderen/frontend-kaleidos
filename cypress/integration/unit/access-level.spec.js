@@ -5,7 +5,6 @@ import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 function setPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, openSidebar = false) {
   // Open correct versionHistory
@@ -83,26 +82,15 @@ context('Access level tests', () => {
       .as('thirdCard');
 
     // set acceslevel to public
-    cy.get('@thirdCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@thirdCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    cy.get('@thirdCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
 
     // upload document
-    cy.get('@thirdCard').find(document.documentCard.actions)
-      .click();
-    cy.get('@thirdCard').find(document.documentCard.uploadPiece)
-      .click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'submission-activities').as('postSubmissionActivities');
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
-    cy.get(utils.vlModalFooter.save).click()
-      .wait('@postSubmissionActivities')
-      .wait('@patchAgendaitems');
-    cy.wait(2000);
+    cy.addNewPieceToAgendaitem(subcaseTitle, 'bestaandePublicatie', file);
 
     checkPreviousVersionAccesLevel('bestaandePublicatieBIS.pdf', 'bestaandePublicatie', 'Intern Regering');
   });
@@ -121,57 +109,31 @@ context('Access level tests', () => {
       .as('secondCard');
 
     // add BIS and TER
-    cy.get('@secondCard').find(document.documentCard.actions)
-      .click();
-    cy.get('@secondCard').find(document.documentCard.uploadPiece)
-      .click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'submission-activities').as('postSubmissionActivities');
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
-    cy.get(utils.vlModalFooter.save).click()
-      .wait('@postSubmissionActivities')
-      .wait('@patchAgendaitems');
-    cy.wait(2000);
+    cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieMB', file);
     // set accesLevels to publiek
-    cy.get('@secondCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    // ensure data is loaded
+    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+      .should('not.be.disabled');
+    cy.get('@secondCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.save).click();
     setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Publiek', true);
 
     // add BIS and TER
-    cy.get('@firstCard').find(document.documentCard.actions)
-      .click();
-    cy.get('@firstCard').find(document.documentCard.uploadPiece)
-      .click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'submission-activities').as('postSubmissionActivities2');
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems2');
-    cy.get(utils.vlModalFooter.save).click()
-      .wait('@postSubmissionActivities2')
-      .wait('@patchAgendaitems2');
-    cy.wait(2000);
-    cy.get('@firstCard').find(document.documentCard.actions)
-      .click();
-    cy.get('@firstCard').find(document.documentCard.uploadPiece)
-      .click();
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'submission-activities').as('postSubmissionActivities3');
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems3');
-    cy.get(utils.vlModalFooter.save).click()
-      .wait('@postSubmissionActivities3')
-      .wait('@patchAgendaitems3');
-    cy.wait(2000);
+    cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieDecreet', file);
+    cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieDecreetBIS', file);
     // set accesLevels to publiek
-    cy.get('@secondCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    // ensure data is loaded
+    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+      .should('not.be.disabled');
+    cy.get('@secondCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.save).click();
@@ -180,22 +142,26 @@ context('Access level tests', () => {
     setPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', 'Publiek');
 
     // change access level on VlDocument
-    cy.get('@secondCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    // ensure data is loaded
+    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+      .should('not.be.disabled');
+    cy.get('@secondCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
     cy.get(document.accessLevelPill.save).click();
     cy.get(auk.loader).should('not.exist');
     checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB', 'Intern Regering');
 
-    cy.get('@firstCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@firstCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    // ensure data is loaded
+    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+      .should('not.be.disabled');
+    cy.get('@firstCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Intern Regering')
       .click();
     cy.get(document.accessLevelPill.save).click();
@@ -245,11 +211,13 @@ context('Access level tests', () => {
     checkPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Intern Secretarie');
 
     // change access level to a lower one and check that there are no changes to underlying level
-    cy.get('@secondCard').find(document.accessLevelPill.edit)
-      .eq(0)
-      .click();
-    cy.get('@secondCard').find(dependency.emberPowerSelect.trigger)
-      .click();
+    // ensure data is loaded
+    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+      .should('not.be.disabled');
+    cy.get('@secondCard').within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
     cy.get(document.accessLevelPill.save).click();

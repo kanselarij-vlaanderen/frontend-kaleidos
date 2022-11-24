@@ -103,11 +103,11 @@
           <div class="auk-u-mt-2">
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
-                <AuPill @size="small" @skin="success" @icon="visible">
+                <AuPill @size="small" @skin="border" @icon="website">
                   {{t "on-the-website"}}
                 </AuPill>
               {{else}}
-                <AuPill @size="small" @skin="danger" @icon="not-visible">
+                <AuPill @size="small" @skin="border">
                   {{t "not-on-the-website"}}
                 </AuPill>
               {{/if}}

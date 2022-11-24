@@ -144,14 +144,12 @@ Router.map(function() {
     this.route('checkboxes-radio-buttons');
     this.route('colors');
     this.route('color-badge');
-    this.route('dropdown');
     this.route('datepicker');
     this.route('empty-state');
     this.route('form-group');
     this.route('layout-grid');
     this.route('heading');
     this.route('icons');
-    this.route('inputs');
     this.route('key-value');
     this.route('link-button');
     this.route('list');
