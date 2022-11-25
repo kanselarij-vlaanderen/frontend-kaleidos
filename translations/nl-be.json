@@ -1125,6 +1125,8 @@
   "documents-on-approved-agenda-message": "Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?",
   "filtered-subcase-documents": "Hier worden enkel de documenten getoond die op de meest recente agenda staan + documenten die niet op een agenda staan.",
   "to-sign": "Te handtekenen",
+  "copy": "Kopiëren",
+  "text-copied": "Tekst gekopieerd naar klembord.",
   "impersonate-user": "Gebruiker nabootsen",
   "you-see-the-app-as": "Je ziet de app als: {name}"
 }
