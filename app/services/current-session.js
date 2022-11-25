@@ -9,25 +9,25 @@ export default class CurrentSessionService extends Service {
   @service store;
   @service impersonation;
 
-  @tracked ownUser;
-  @tracked ownRole;
-  @tracked ownOrganization;
-  @tracked ownMembership;
+  @tracked user;
+  @tracked role;
+  @tracked organization;
+  @tracked membership;
 
-  get user() {
-    return this.impersonation.user ?? this.ownUser;
+  get ownUser() {
+    return this.impersonation.user ?? this.user;
   }
 
-  get role() {
-    return this.impersonation.role ?? this.ownRole;
+  get ownRole() {
+    return this.impersonation.role ?? this.role;
   }
 
-  get organization() {
-    return this.impersonation.organization ?? this.ownOrganization;
+  get ownOrganization() {
+    return this.impersonation.organization ?? this.organization;
   }
 
-  get memberhsip() {
-    return this.impersonation.membership ?? this.ownMembership;
+  get ownMembership() {
+    return this.impersonation.membership ?? this.membership;
   }
 
   /* eslint-disable ember/no-get */
@@ -35,17 +35,17 @@ export default class CurrentSessionService extends Service {
     if (this.session.isAuthenticated) {
       const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
       if (membershipId) {
-        this.ownMembership = await this.store.findRecord('membership', membershipId, {
+        this.membership = await this.store.findRecord('membership', membershipId, {
           include: 'role,organization,user'
         });
         const [role, organization, user] = await Promise.all([
-          this.ownMembership.role,
-          this.ownMembership.organization,
-          this.ownMembership.user
+          this.membership.role,
+          this.membership.organization,
+          this.membership.user
         ]);
-        this.ownRole = role;
-        this.ownOrganization = organization;
-        this.ownUser = user;
+        this.role = role;
+        this.organization = organization;
+        this.user = user;
       }
       await this.impersonation.load();
     }
@@ -53,9 +53,9 @@ export default class CurrentSessionService extends Service {
   /* eslint-enable ember/no-get */
 
   clear() {
-    this.ownUser = null;
-    this.ownRole = null;
-    this.ownOrganization = null;
+    this.user = null;
+    this.role = null;
+    this.organization = null;
     this.impersonation.clear();
   }
 

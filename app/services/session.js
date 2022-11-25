@@ -4,6 +4,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ExtendedSessionService extends SessionService {
   @service currentSession;
+  @service impersonation;
   @service router;
 
   async handleAuthentication() {
@@ -24,5 +25,10 @@ export default class ExtendedSessionService extends SessionService {
     } catch (error) { // eslint-disable-line no-unused-vars
       this.router.transitionTo('login');
     }
+  }
+
+  async invalidate() {
+    await this.impersonation.stopImpersonation();
+    return super.invalidate(...arguments);
   }
 }

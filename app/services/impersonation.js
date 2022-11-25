@@ -13,7 +13,7 @@ export default class ImpersonationService extends Service {
   @tracked membership;
 
   async load() {
-    const response = await fetch('/impersonate/current', {
+    const response = await fetch('/who-am-i', {
       method: 'GET',
       headers: {
         'Accept': 'application/vnd.api+json',
@@ -21,13 +21,13 @@ export default class ImpersonationService extends Service {
     });
     const result = await response.json();
     if (!response.ok) {
-      // Spooky error 👻
+      throw new Error('An exception occurred while loading impersonation data: ' + JSON.stringify(result.errors));
     } else {
-      const impersonatedAccountId = result.data.relationships?.acount?.data?.id;
-      const impersonatedMembershipId = result.data.relationships?.membership?.data?.id;
-      if (impersonatedAccountId && impersonatedMembershipId) {
-        this.account = await this.store.findRecord('account', impersonatedAccountId);
-        this.membership = await this.store.findRecord('membership', impersonatedMembershipId);
+      const impersonatorAccountId = result.data.relationships?.account?.data?.id;
+      const impersonatorMembershipId = result.data.relationships?.membership?.data?.id;
+      if (impersonatorAccountId && impersonatorMembershipId) {
+        this.account = await this.store.findRecord('account', impersonatorAccountId);
+        this.membership = await this.store.findRecord('membership', impersonatorMembershipId);
         this.user = await this.account.user;
         this.organization = await this.membership.organization;
         this.role = await this.membership.role;
@@ -44,22 +44,56 @@ export default class ImpersonationService extends Service {
   }
 
   async impersonate(account, membership) {
-    const response = await fetch('/impersonate/current', {
+    const response = await fetch('/impersonate', {
       method: 'POST',
       headers: {
         'Accept': 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      body: JSON.stringify({ impersonatedAccount: account.uri, impersonatedMembership: membership.uri }),
+      body: JSON.stringify({
+        data: {
+          type: 'sessions',
+          relationships: {
+            account: {
+              type: 'accounts',
+              id: account.id,
+              attributes: {
+                uri: account.uri,
+              }
+            },
+            membership: {
+              type: 'memberships',
+              id: membership.id,
+              attributes: {
+                uri: membership.uri,
+              }
+            }
+          }
+        }
+      }),
     });
+    const result = await response.json();
     if (!response.ok) {
-      // Spooky error 👻
+      throw new Error('An exception occurred while impersonating someone: ' + JSON.stringify(result.errors));
     } else {
-      this.account = account;
-      this.membership = membership;
-      this.user = await this.account.user;
-      this.organization = await this.membership.organization;
-      this.role = await this.membership.role;
+      const impersonatorAccountId = result.data.relationships?.account?.data?.id;
+      const impersonatorMembershipId = result.data.relationships?.membership?.data?.id;
+      if (impersonatorAccountId && impersonatorMembershipId) {
+        this.account = await this.store.findRecord('account', impersonatorAccountId);
+        this.membership = await this.store.findRecord('membership', impersonatorMembershipId);
+        this.user = await this.account.user;
+        this.organization = await this.membership.organization;
+        this.role = await this.membership.role;
+      }
+    }
+  }
+
+  async stopImpersonation() {
+    const response = await fetch('/impersonate', {
+      method: 'DELETE',
+    });
+    if (response.ok) {
+      this.clear();
     }
   }
 }

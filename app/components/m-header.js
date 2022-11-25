@@ -18,8 +18,9 @@ export default class MHeader extends Component {
   @service router;
   @service session;
   @service store;
+  @service toaster;
+  @service intl;
 
-  @tracked showImpersonateUserModal = false;
   @tracked showImpersonateUsers = false;
   @tracked memberships;
 
@@ -56,10 +57,18 @@ export default class MHeader extends Component {
 
   @action
   async impersonate(membership) {
+    this.showImpersonateUsers = false;
     const user = await membership.user;
     const account = await user.account;
-    await this.impersonation.impersonate(account, membership);
-    this.router.refresh();
+    try {
+      await this.impersonation.impersonate(account, membership);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-impersonation', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+    await this.router.refresh();
   }
 
   @task
@@ -73,6 +82,7 @@ export default class MHeader extends Component {
         }
       },
       sort: 'user.last-name,user.first-name',
+      include: 'user',
     });
   }
 }
