@@ -142,7 +142,7 @@
                 </Auk::Avatar>
               </div>
               <AuHr />
-              {{#if (user-really-may "impersonate-users")}}
+              {{#if this.canImpersonate}}
                 <AuButton
                   @skin="link"
                   @icon="chevron-right"

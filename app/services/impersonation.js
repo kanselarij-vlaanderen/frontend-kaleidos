@@ -2,6 +2,9 @@ import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
+import ENV from 'frontend-kaleidos/config/environment';
+
+const IMPERSONATION_ENABLED = ENV.APP.ENABLE_IMPERSONATION;
 
 export default class ImpersonationService extends Service {
   @service store;
@@ -13,6 +16,10 @@ export default class ImpersonationService extends Service {
   @tracked membership;
 
   async load() {
+    if (!IMPERSONATION_ENABLED) {
+      return;
+    }
+
     const response = await fetch('/who-am-i', {
       method: 'GET',
       headers: {
@@ -44,6 +51,10 @@ export default class ImpersonationService extends Service {
   }
 
   async impersonate(account, membership) {
+    if (!IMPERSONATION_ENABLED) {
+      return;
+    }
+
     const response = await fetch('/impersonate', {
       method: 'POST',
       headers: {
@@ -89,6 +100,10 @@ export default class ImpersonationService extends Service {
   }
 
   async stopImpersonation() {
+    if (!IMPERSONATION_ENABLED) {
+      return;
+    }
+
     const response = await fetch('/impersonate', {
       method: 'DELETE',
     });

@@ -38,6 +38,12 @@ export default class MHeader extends Component {
     }
   }
 
+  get canImpersonate() {
+    const isEnabled = ENV.APP.ENABLE_IMPERSONATION;
+    const hasPermission = this.currentSession.reallyMay('impersonate-users');
+    return isEnabled && hasPermission;
+  }
+
   get isShownSignatureFolder() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
