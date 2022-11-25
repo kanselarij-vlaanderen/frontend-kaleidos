@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DocumentsDocumentCardEditModalComponent extends Component {
   /**
@@ -19,10 +21,34 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @tracked replacementFile;
   @tracked replacementSourceFile;
 
+  @service conceptStore;
+  @tracked documentTypes = [];
+  @tracked documentContainer;
+  @tracked selectedDocumentType;
+
   constructor() {
     super(...arguments);
 
-    this.name = this.args.piece.name;
+    this.name = this.args.piece.name.substr(24, 50).replace('- nota', '').replace('- decreet', '').replace('- memorie', '').replace('- advies', '').replace('- bijlage', '').replace('- BVR', '').replace('BIS', '').replace('TRIS', '').replace('QUAD', '');
+    this.loadData.perform();
+  }
+
+  @task
+  *loadData() {
+    this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+
+    this.documentContainer = yield this.args.piece.documentContainer;
+    this.selectedDocumentType = yield this.documentContainer.type;
+  }
+
+  get sortedDocumentTypes() {
+    return this.documentTypes.sortBy('position');
+  }
+
+  @action
+  selectDocumentType(value) {
+    this.selectedDocumentType = value;
+    this.documentContainer.type = value;
   }
 
   @action

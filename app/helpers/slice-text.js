@@ -4,21 +4,15 @@ export function sliceText(params, hash) {
   var value = params[0];
   var left = hash.start;
   var right = hash.limit;
-  var remove = hash.remove;
-  var removeSecond = hash.removeSecond;
   var removeType = hash.removeType;
   var out = '';
 
   if (value !== undefined) {
-    if (remove !== undefined) {
-      if (removeType !== undefined) {
-        out = value.substr(left, right).replace(remove, '').replace(removeSecond, '').replace('BIS', '').replace('TRIS', '').replace('QUAD', '');
-      }
-      else {
-        out = value.substr(left, right).replace(remove, '').replace(removeSecond, '');
-      }
-    } else {
-      out = value.substr(left, right);
+    if (removeType !== undefined) {
+      out = value.substr(left, right).replace('BIS', '').replace('TRIS', '').replace('QUAD', '').replace('- nota', '').replace('- decreet', '').replace('- memorie', '').replace('- advies', '').replace('- bijlage', '').replace('- BVR', '');
+    }
+    else {
+      out = value.substr(left, right).replace('- nota', '').replace('- decreet', '').replace('- memorie', '').replace('- advies', '').replace('- bijlage', '').replace('- BVR', '');
     }
   } else {
     out = '';

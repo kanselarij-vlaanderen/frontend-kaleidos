@@ -11,3 +11,11 @@
     margin-right: -4rem;
   }
 }
+
+.au-c-checkboxlist-column {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  > * {width: calc(33% - 2rem);}
+}

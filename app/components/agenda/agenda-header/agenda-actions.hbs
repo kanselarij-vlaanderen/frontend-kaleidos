@@ -222,260 +222,268 @@
 {{/if}}
 
 {{#if this.showDownloadAllDocumentsModal}}
-  <Auk::Modal @size="small">
+  <Auk::Modal @size="large">
     <Auk::Modal::Header
       @title="Download alle documenten"
       @onClose={{this.cancelDownloadAllDocumentsModal}}
     />
     <Auk::Modal::Body>
       <div class="auk-form-group">
-        <Auk::Label for="ministerName">
-          Minister
-        </Auk::Label>
-        <select
-          name="login"
-          id="ministerName"
-          class="auk-select auk-select--block"
-          value={{this.mandateesBuffer}}
-        >
-          <option value="alleministers">Alle ministers</option>
-          <optgroup label="Huidige ministers">
-            <option id="ember148">
-              Jan Jambon
-            </option>
-            <option id="ember149">
-              Hilde Crevits
-            </option>
-            <option id="ember150">
-              Bart Somers
-            </option>
-            <option id="ember151">
-              Ben Weyts
-            </option>
-            <option id="ember152">
-              Zuhal Demir
-            </option>
-            <option id="ember153">
-              Matthias Diependaele
-            </option>
-            <option id="ember154">
-              Lydia Peeters
-            </option>
-            <option id="ember155">
-              Benjamin Dalle
-            </option>
-            <option id="ember156">
-              Jo Brouns
-            </option>
-          </optgroup>
-          <optgroup label="Vorige ministers">
-            <option id="ember265">
-              Paul Akkermans
-            </option>
-            <option id="ember266">
-              Bert Anciaux
-            </option>
-            <option id="ember267">
-              Eddy Baldewijns
-            </option>
-            <option id="ember268">
-              Wouter Beke
-            </option>
-            <option id="ember269">
-              Edward Beysen
-            </option>
-            <option id="ember270">
-              Gilbert Bossuyt
-            </option>
-            <option id="ember271">
-              Geert Bourgeois
-            </option>
-            <option id="ember272">
-              Paul Breyne
-            </option>
-            <option id="ember273">
-              Jacky Buchmann
-            </option>
-            <option id="ember274">
-              Adelheid Byttebier
-            </option>
-            <option id="ember275">
-              Patricia Ceysens
-            </option>
-            <option id="ember276">
-              Daniël Coens
-            </option>
-            <option id="ember277">
-              Norbert De Batselier
-            </option>
-            <option id="ember278">
-              Roger De Wulf
-            </option>
-            <option id="ember279">
-              Wivina Demeester-De Meyer
-            </option>
-            <option id="ember280">
-              Paul Deprez
-            </option>
-            <option id="ember281">
-              Leona Detiège
-            </option>
-            <option id="ember282">
-              Patrick Dewael
-            </option>
-            <option id="ember283">
-              Vera Dua
-            </option>
-            <option id="ember284">
-              Jos Dupré
-            </option>
-            <option id="ember285">
-              Jaak Gabriëls
-            </option>
-            <option id="ember286">
-              Mark Galle
-            </option>
-            <option id="ember287">
-              Sven Gatz
-            </option>
-            <option id="ember288">
-              Gaston Geens
-            </option>
-            <option id="ember289">
-              Brigitte Grouwels
-            </option>
-            <option id="ember290">
-              Veerle Heeren
-            </option>
-            <option id="ember291">
-              Liesbeth Homans
-            </option>
-            <option id="ember292">
-              Theo Kelchtermans
-            </option>
-            <option id="ember293">
-              Marino Keulen
-            </option>
-            <option id="ember294">
-              Renaat Landuyt
-            </option>
-            <option id="ember295">
-              Jan Lenssens
-            </option>
-            <option id="ember296">
-              Yves Leterme
-            </option>
-            <option id="ember297">
-              Ingrid Lieten
-            </option>
-            <option id="ember298">
-              Luc Martens
-            </option>
-            <option id="ember299">
-              Fientje Moerman
-            </option>
-            <option id="ember300">
-              Philippe Muyters
-            </option>
-            <option id="ember301">
-              Jean Pede
-            </option>
-            <option id="ember302">
-              Leo Peeters
-            </option>
-            <option id="ember303">
-              Kris Peeters
-            </option>
-            <option id="ember304">
-              Karel Poma
-            </option>
-            <option id="ember305">
-              Ludo Sannen
-            </option>
-            <option id="ember306">
-              Johan Sauwens
-            </option>
-            <option id="ember307">
-              Joke Schauvliege
-            </option>
-            <option id="ember308">
-              Hugo Schiltz
-            </option>
-            <option id="ember309">
-              Pascal Smet
-            </option>
-            <option id="ember310">
-              Steve Stevaert
-            </option>
-            <option id="ember311">
-              Rika Steyaert
-            </option>
-            <option id="ember312">
-              Jef Tavernier
-            </option>
-            <option id="ember313">
-              Bart Tommelein
-            </option>
-            <option id="ember314">
-              Annemie Turtelboom
-            </option>
-            <option id="ember315">
-              Anne Van Asbroeck
-            </option>
-            <option id="ember316">
-              Kathleen Van Brempt
-            </option>
-            <option id="ember317">
-              Freya Van den Bossche
-            </option>
-            <option id="ember318">
-              Luc Van den Bossche
-            </option>
-            <option id="ember319">
-              Luc Van den Brande
-            </option>
-            <option id="ember320">
-              Koen Van den Heuvel
-            </option>
-            <option id="ember321">
-              Paul Van Grembergen
-            </option>
-            <option id="ember322">
-              Dirk Van Mechelen
-            </option>
-            <option id="ember323">
-              Eric Van Rompuy
-            </option>
-            <option id="ember324">
-              Steven Vanackere
-            </option>
-            <option id="ember325">
-              Frank Vandenbroucke
-            </option>
-            <option id="ember326">
-              Marleen Vanderpoorten
-            </option>
-            <option id="ember327">
-              Jo Vandeurzen
-            </option>
-            <option id="ember328">
-              Guy Vanhengel
-            </option>
-            <option id="ember329">
-              Inge Vervotte
-            </option>
-            <option id="ember330">
-              Mieke Vogels
-            </option>
-            <option id="ember331">
-              Louis Waltniel
-            </option>
-            <option id="ember332">
-              Hugo Weckx
-            </option>
-          </optgroup>
-        </select>
+        <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <Auk::Label for="ministerName">
+            Ministers
+          </Auk::Label>
+          <p>
+            <AuLink class="au-u-h-functional">Alles selecteren</AuLink>
+          </p>
+        </div>
+        <Auk::CheckboxList class="au-c-checkboxlist-column">
+          <Auk::Checkbox @checked={{false}}>
+            Jan Jambon
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hilde Crevits
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bart Somers
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ben Weyts
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Zuhal Demir
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Matthias Diependaele
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Lydia Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Benjamin Dalle
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jo Brouns
+          </Auk::Checkbox>
+        </Auk::CheckboxList>
       </div>
+      {{!-- <AuHr />
+      <div class="auk-form-group">
+        <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <Auk::Label for="ministerPast">
+            Vorige ministers
+          </Auk::Label>
+          <p>
+            <AuLink class="au-u-small">Alles selecteren</AuLink>
+          </p>
+        </div>
+        <Auk::CheckboxList class="au-c-checkboxlist-column">
+          <Auk::Checkbox @checked={{false}}>
+            Paul Akkermans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bert Anciaux
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Eddy Baldewijns
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Wouter Beke
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Edward Beysen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Gilbert Bossuyt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Geert Bourgeois
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Breyne
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jacky Buchmann
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Adelheid Byttebier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Patricia Ceysens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Daniël Coens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Norbert De Batselier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Roger De Wulf
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Wivina Demeester-De Meyer
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Deprez
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Leona Detiège
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Patrick Dewael
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Vera Dua
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jos Dupré
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jaak Gabriëls
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Mark Galle
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Sven Gatz
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Gaston Geens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Brigitte Grouwels
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Veerle Heeren
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Liesbeth Homans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Theo Kelchtermans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Marino Keulen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Renaat Landuyt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jan Lenssens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Yves Leterme
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ingrid Lieten
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Martens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Fientje Moerman
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Philippe Muyters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jean Pede
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Leo Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Kris Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Karel Poma
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ludo Sannen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Johan Sauwens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Joke Schauvliege
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hugo Schiltz
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Pascal Smet
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Steve Stevaert
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Rika Steyaert
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jef Tavernier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bart Tommelein
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Annemie Turtelboom
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Anne Van Asbroeck
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Kathleen Van Brempt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Freya Van den Bossche
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Van den Bossche
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Van den Brande
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Koen Van den Heuvel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Van Grembergen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Dirk Van Mechelen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Eric Van Rompuy
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Steven Vanackere
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Frank Vandenbroucke
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Marleen Vanderpoorten
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jo Vandeurzen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Guy Vanhengel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Inge Vervotte
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Mieke Vogels
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Louis Waltniel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hugo Weckx
+          </Auk::Checkbox>
+        </Auk::CheckboxList>
+      </div> --}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDownloadAllDocumentsModal}}>
       <AuButton
@@ -489,260 +497,268 @@
 {{/if}}
 
 {{#if this.showDownloadAllDecisionsModal}}
-  <Auk::Modal @size="small">
+  <Auk::Modal @size="large">
     <Auk::Modal::Header
       @title="Download alle beslissingen"
       @onClose={{this.cancelDownloadAllDecisionsModal}}
     />
     <Auk::Modal::Body>
       <div class="auk-form-group">
-        <Auk::Label for="ministerName">
-          Minister
-        </Auk::Label>
-        <select
-          name="login"
-          id="ministerName"
-          class="auk-select auk-select--block"
-          value={{this.mandateesBuffer}}
-        >
-          <option value="alleministers">Alle ministers</option>
-          <optgroup label="Huidige ministers">
-            <option id="ember148">
-              Jan Jambon
-            </option>
-            <option id="ember149">
-              Hilde Crevits
-            </option>
-            <option id="ember150">
-              Bart Somers
-            </option>
-            <option id="ember151">
-              Ben Weyts
-            </option>
-            <option id="ember152">
-              Zuhal Demir
-            </option>
-            <option id="ember153">
-              Matthias Diependaele
-            </option>
-            <option id="ember154">
-              Lydia Peeters
-            </option>
-            <option id="ember155">
-              Benjamin Dalle
-            </option>
-            <option id="ember156">
-              Jo Brouns
-            </option>
-          </optgroup>
-          <optgroup label="Vorige ministers">
-            <option id="ember265">
-              Paul Akkermans
-            </option>
-            <option id="ember266">
-              Bert Anciaux
-            </option>
-            <option id="ember267">
-              Eddy Baldewijns
-            </option>
-            <option id="ember268">
-              Wouter Beke
-            </option>
-            <option id="ember269">
-              Edward Beysen
-            </option>
-            <option id="ember270">
-              Gilbert Bossuyt
-            </option>
-            <option id="ember271">
-              Geert Bourgeois
-            </option>
-            <option id="ember272">
-              Paul Breyne
-            </option>
-            <option id="ember273">
-              Jacky Buchmann
-            </option>
-            <option id="ember274">
-              Adelheid Byttebier
-            </option>
-            <option id="ember275">
-              Patricia Ceysens
-            </option>
-            <option id="ember276">
-              Daniël Coens
-            </option>
-            <option id="ember277">
-              Norbert De Batselier
-            </option>
-            <option id="ember278">
-              Roger De Wulf
-            </option>
-            <option id="ember279">
-              Wivina Demeester-De Meyer
-            </option>
-            <option id="ember280">
-              Paul Deprez
-            </option>
-            <option id="ember281">
-              Leona Detiège
-            </option>
-            <option id="ember282">
-              Patrick Dewael
-            </option>
-            <option id="ember283">
-              Vera Dua
-            </option>
-            <option id="ember284">
-              Jos Dupré
-            </option>
-            <option id="ember285">
-              Jaak Gabriëls
-            </option>
-            <option id="ember286">
-              Mark Galle
-            </option>
-            <option id="ember287">
-              Sven Gatz
-            </option>
-            <option id="ember288">
-              Gaston Geens
-            </option>
-            <option id="ember289">
-              Brigitte Grouwels
-            </option>
-            <option id="ember290">
-              Veerle Heeren
-            </option>
-            <option id="ember291">
-              Liesbeth Homans
-            </option>
-            <option id="ember292">
-              Theo Kelchtermans
-            </option>
-            <option id="ember293">
-              Marino Keulen
-            </option>
-            <option id="ember294">
-              Renaat Landuyt
-            </option>
-            <option id="ember295">
-              Jan Lenssens
-            </option>
-            <option id="ember296">
-              Yves Leterme
-            </option>
-            <option id="ember297">
-              Ingrid Lieten
-            </option>
-            <option id="ember298">
-              Luc Martens
-            </option>
-            <option id="ember299">
-              Fientje Moerman
-            </option>
-            <option id="ember300">
-              Philippe Muyters
-            </option>
-            <option id="ember301">
-              Jean Pede
-            </option>
-            <option id="ember302">
-              Leo Peeters
-            </option>
-            <option id="ember303">
-              Kris Peeters
-            </option>
-            <option id="ember304">
-              Karel Poma
-            </option>
-            <option id="ember305">
-              Ludo Sannen
-            </option>
-            <option id="ember306">
-              Johan Sauwens
-            </option>
-            <option id="ember307">
-              Joke Schauvliege
-            </option>
-            <option id="ember308">
-              Hugo Schiltz
-            </option>
-            <option id="ember309">
-              Pascal Smet
-            </option>
-            <option id="ember310">
-              Steve Stevaert
-            </option>
-            <option id="ember311">
-              Rika Steyaert
-            </option>
-            <option id="ember312">
-              Jef Tavernier
-            </option>
-            <option id="ember313">
-              Bart Tommelein
-            </option>
-            <option id="ember314">
-              Annemie Turtelboom
-            </option>
-            <option id="ember315">
-              Anne Van Asbroeck
-            </option>
-            <option id="ember316">
-              Kathleen Van Brempt
-            </option>
-            <option id="ember317">
-              Freya Van den Bossche
-            </option>
-            <option id="ember318">
-              Luc Van den Bossche
-            </option>
-            <option id="ember319">
-              Luc Van den Brande
-            </option>
-            <option id="ember320">
-              Koen Van den Heuvel
-            </option>
-            <option id="ember321">
-              Paul Van Grembergen
-            </option>
-            <option id="ember322">
-              Dirk Van Mechelen
-            </option>
-            <option id="ember323">
-              Eric Van Rompuy
-            </option>
-            <option id="ember324">
-              Steven Vanackere
-            </option>
-            <option id="ember325">
-              Frank Vandenbroucke
-            </option>
-            <option id="ember326">
-              Marleen Vanderpoorten
-            </option>
-            <option id="ember327">
-              Jo Vandeurzen
-            </option>
-            <option id="ember328">
-              Guy Vanhengel
-            </option>
-            <option id="ember329">
-              Inge Vervotte
-            </option>
-            <option id="ember330">
-              Mieke Vogels
-            </option>
-            <option id="ember331">
-              Louis Waltniel
-            </option>
-            <option id="ember332">
-              Hugo Weckx
-            </option>
-          </optgroup>
-        </select>
+        <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <Auk::Label for="ministerName">
+            Ministers
+          </Auk::Label>
+          <p>
+            <AuLink class="au-u-h-functional">Alles selecteren</AuLink>
+          </p>
+        </div>
+        <Auk::CheckboxList class="au-c-checkboxlist-column">
+          <Auk::Checkbox @checked={{false}}>
+            Jan Jambon
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hilde Crevits
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bart Somers
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ben Weyts
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Zuhal Demir
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Matthias Diependaele
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Lydia Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Benjamin Dalle
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jo Brouns
+          </Auk::Checkbox>
+        </Auk::CheckboxList>
       </div>
+      {{!-- <AuHr />
+      <div class="auk-form-group">
+        <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
+          <Auk::Label for="ministerPast">
+            Vorige ministers
+          </Auk::Label>
+          <p>
+            <AuLink class="au-u-small">Alles selecteren</AuLink>
+          </p>
+        </div>
+        <Auk::CheckboxList class="au-c-checkboxlist-column">
+          <Auk::Checkbox @checked={{false}}>
+            Paul Akkermans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bert Anciaux
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Eddy Baldewijns
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Wouter Beke
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Edward Beysen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Gilbert Bossuyt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Geert Bourgeois
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Breyne
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jacky Buchmann
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Adelheid Byttebier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Patricia Ceysens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Daniël Coens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Norbert De Batselier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Roger De Wulf
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Wivina Demeester-De Meyer
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Deprez
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Leona Detiège
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Patrick Dewael
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Vera Dua
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jos Dupré
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jaak Gabriëls
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Mark Galle
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Sven Gatz
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Gaston Geens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Brigitte Grouwels
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Veerle Heeren
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Liesbeth Homans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Theo Kelchtermans
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Marino Keulen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Renaat Landuyt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jan Lenssens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Yves Leterme
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ingrid Lieten
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Martens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Fientje Moerman
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Philippe Muyters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jean Pede
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Leo Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Kris Peeters
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Karel Poma
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Ludo Sannen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Johan Sauwens
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Joke Schauvliege
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hugo Schiltz
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Pascal Smet
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Steve Stevaert
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Rika Steyaert
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jef Tavernier
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Bart Tommelein
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Annemie Turtelboom
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Anne Van Asbroeck
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Kathleen Van Brempt
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Freya Van den Bossche
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Van den Bossche
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Luc Van den Brande
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Koen Van den Heuvel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Paul Van Grembergen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Dirk Van Mechelen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Eric Van Rompuy
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Steven Vanackere
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Frank Vandenbroucke
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Marleen Vanderpoorten
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Jo Vandeurzen
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Guy Vanhengel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Inge Vervotte
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Mieke Vogels
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Louis Waltniel
+          </Auk::Checkbox>
+          <Auk::Checkbox @checked={{false}}>
+            Hugo Weckx
+          </Auk::Checkbox>
+        </Auk::CheckboxList>
+      </div> --}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelDownloadAllDecisionsModal}}>
       <AuButton

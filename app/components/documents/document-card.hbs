@@ -32,16 +32,10 @@
             <LinkTo @route="document" @model={{this.piece.id}}
               class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny" data-test-document-card-name-value>
               {{#if (eq this.documentContainer.type.label "Nota")}}
-                {{slice-text this.piece.name start=23 limit=50 remove=" - nota" removeType=true}}              
+                {{slice-text this.piece.name start=23 limit=50 removeType=true}}
                 <AuPill @skin="ongoing" @size="small">BIS</AuPill>
-              {{else if (eq this.documentContainer.type.label "Decreet") }}
-                {{slice-text this.piece.name start=23 limit=50 remove=" - decreet" removeType=true}}
-              {{else if (eq this.documentContainer.type.label "Advies") }}
-                {{slice-text this.piece.name start=23 limit=50 remove=" - advies" removeType=true}}
-              {{else if (eq this.documentContainer.type.label "Bijlage") }}
-                {{slice-text this.piece.name start=23 limit=50 remove=" - memorie" removeSecond=" - bijlage" removeType=true}}
               {{else}}
-                {{slice-text this.piece.name start=23 limit=50 remove=" - memorie" removeType=true}}
+                {{slice-text this.piece.name start=23 limit=50 removeType=true}}
               {{/if}}
               {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{this.piece.file.extension}}</AuPill>{{/if}}
             </LinkTo>

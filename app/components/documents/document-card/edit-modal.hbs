@@ -5,18 +5,19 @@
 >
   <Auk::Modal::Body>
     <AuCard
-      @flex={{true}}
       @size="small"
       as |c|
     >
-      <c.header
-        @badgeIcon={{if (eq @piece.file.extension "pdf") "pdf" "document"}}
-      >
-        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-          {{uppercase @piece.file.extension}}
-        </p>
+      <c.header>
+        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+          <AuLabel for="name">
+            Naam wijzigen
+          </AuLabel>
+           {{@piece.type.label}}
+        </div>
         <div class="au-u-flex au-u-flex--spaced-small">
           <AuInput
+            id="name"
             data-test-document-edit-name-input
             @width="block"
             @value={{this.name}}
@@ -33,6 +34,10 @@
         </div>
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
+            <AuPill @size="small">{{uppercase @piece.file.extension}}</AuPill>
+            {{slice-text @piece.name start=8 limit=2}}-{{slice-text @piece.name start=10 limit=2}}-{{slice-text @piece.name start=3 limit=4}}
+            {{slice-text @piece.name start=12 limit=11}}
+            /
             {{t "uploaded-at"}}
             {{moment-format @piece.created}}
             {{t "at"}}
@@ -47,6 +52,18 @@
           />
         </c.content>
       {{/if}}
+    </AuCard>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="type">{{t "document-type"}}</AuLabel>
+          <Utils::RadioDropdownComboSelect
+            @options={{this.sortedDocumentTypes}}
+            @onSelect={{this.selectDocumentType}}
+            @selected="Nota"
+          />
+        </div>
+      </c.content>
     </AuCard>
     {{#if @piece.file.primarySource}}
       <AuCard
@@ -103,16 +120,13 @@
       </AuCard>
     {{else}}
       <AuCard
-        @flex={{true}}
         @size="small"
         class="au-u-margin-top-small"
         as |c|
       >
-        <c.header
-          @badgeIcon="document"
-        >
+        <c.header>
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
+            <AuHeading @skin="6" @level="3">Bronbestand opladen</AuHeading>
           </div>
         </c.header>
         <c.content data-test-document-edit-source-file-uploader>

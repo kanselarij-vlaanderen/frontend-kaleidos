@@ -11,14 +11,18 @@
     </td>
   {{/if}}
   <td>
+    {{slice-text @row.name start=8 limit=2}}-{{slice-text @row.name start=10 limit=2}}-{{slice-text @row.name start=3 limit=4}}
+  </td>
+  <td>{{slice-text @row.name start=12 limit=11}}</td>
+  <td>
     {{#if @isEditingEnabled}}
       <AuInput
         data-test-document-details-input
         @width="block"
-        @value={{mut @row.name}}
+        @value={{slice-text @row.name start=23 limit=50 removeType=true}}
       />
     {{else}}
-      {{@row.name}}
+      {{slice-text @row.name start=23 limit=50 removeType=true}}
     {{/if}}
   </td>
   <td>
