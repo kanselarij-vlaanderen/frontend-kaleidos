@@ -9,27 +9,43 @@ export default class CurrentSessionService extends Service {
   @service store;
   @service impersonation;
 
-  @tracked user;
-  @tracked role;
-  @tracked organization;
-  @tracked membership;
+  @tracked ownUser;
+  @tracked ownRole;
+  @tracked ownOrganization;
+  @tracked ownMembership;
+
+  get user() {
+    return this.impersonation.user ?? this.ownUser;
+  }
+
+  get role() {
+    return this.impersonation.role ?? this.ownRole;
+  }
+
+  get organization() {
+    return this.impersonation.organization ?? this.ownOrganization;
+  }
+
+  get memberhsip() {
+    return this.impersonation.membership ?? this.ownMembership;
+  }
 
   /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
       const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
       if (membershipId) {
-        this.membership = await this.store.findRecord('membership', membershipId, {
+        this.ownMembership = await this.store.findRecord('membership', membershipId, {
           include: 'role,organization,user'
         });
         const [role, organization, user] = await Promise.all([
-          this.membership.role,
-          this.membership.organization,
-          this.membership.user
+          this.ownMembership.role,
+          this.ownMembership.organization,
+          this.ownMembership.user
         ]);
-        this.role = role;
-        this.organization = organization;
-        this.user = user;
+        this.ownRole = role;
+        this.ownOrganization = organization;
+        this.ownUser = user;
       }
       await this.impersonation.load();
     }
@@ -37,9 +53,9 @@ export default class CurrentSessionService extends Service {
   /* eslint-enable ember/no-get */
 
   clear() {
-    this.user = null;
-    this.role = null;
-    this.organization = null;
+    this.ownUser = null;
+    this.ownRole = null;
+    this.ownOrganization = null;
     this.impersonation.clear();
   }
 
@@ -60,7 +76,7 @@ export default class CurrentSessionService extends Service {
   }
 
   get ownUserGroup() {
-    return this.impersonation.impersonator.role && findGroupByRole(this.impersonation.impersonator.role.uri);
+    return this.ownRole && findGroupByRole(this.ownRole.uri);
   }
 
   get isAdmin() {

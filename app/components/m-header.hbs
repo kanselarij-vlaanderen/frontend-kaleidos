@@ -58,10 +58,10 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
-      {{#if this.currentSession.impersonation.impersonated.user}}
+      {{#if this.currentSession.impersonation.user}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill">
-            Je ziet de app als: {{this.currentSession.impersonation.impersonated.user.firstName}}
+            Je ziet de app als: {{this.currentSession.impersonation.user.firstName}}
           </div>
         </Auk::Toolbar::Item>
       {{/if}}
@@ -100,9 +100,9 @@
         </AuDropdown>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.impersonation.impersonator.user}}
+        {{#if this.currentSession.user}}
           <AuDropdown
-            @title={{this.currentSession.impersonation.impersonator.user.firstName}}
+            @title={{this.currentSession.user.firstName}}
             @alignment="right"
             data-test-m-header-user-actions
           >
@@ -130,14 +130,14 @@
               <div role="menuitem">
                 <Auk::Avatar
                   @icon="user"
-                  @name={{this.currentSession.impersonation.impersonator.user.fullName}}
+                  @name={{this.currentSession.user.fullName}}
                 >
-                  <p>{{this.currentSession.impersonation.impersonator.user.fullName}}</p>
+                  <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-text-muted auk-u-text-size--small">
-                    {{or this.currentSession.impersonation.impersonator.organization.name this.currentSession.impersonation.impoersonator.organization.identifier}}
+                    {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
                   </p>
                   <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
-                    {{this.currentSession.impersonation.impersonator.role.label}}
+                    {{this.currentSession.role.label}}
                   </p>
                 </Auk::Avatar>
               </div>
@@ -176,8 +176,3 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-
-<ImpersonateUserModal
-  @modalOpen={{this.showImpersonateUserModal}}
-  @closeModal={{toggle "showImpersonateUserModal" this}}
-/>
