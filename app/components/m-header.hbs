@@ -58,6 +58,13 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
+      {{#if this.currentSession.impersonation.impersonated.user}}
+        <Auk::Toolbar::Item class="auk-u-mr-3">
+          <div class="vlc-environment-pill">
+            Je ziet de app als: {{this.currentSession.impersonation.impersonated.user.firstName}}
+          </div>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if this.environmentName}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
@@ -93,35 +100,68 @@
         </AuDropdown>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.user}}
+        {{#if this.currentSession.impersonation.impersonator.user}}
           <AuDropdown
-            @title={{this.currentSession.user.firstName}}
+            @title={{this.currentSession.impersonation.impersonator.user.firstName}}
             @alignment="right"
             data-test-m-header-user-actions
           >
-            <div role="menuitem">
-              <Auk::Avatar
-                @icon="user"
-                @name={{this.currentSession.user.fullName}}
+            {{#if this.showImpersonateUsers}}
+              <AuButton
+                @skin="link"
+                @icon="chevron-left"
+                role="menuitem"
+                {{on "click" this.toggleShowImpersonateUsers}}
               >
-                <p>{{this.currentSession.user.fullName}}</p>
-                <p class="auk-u-text-muted auk-u-text-size--small">
-                  {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
-                </p>
-                <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
-                  {{this.currentSession.role.label}}
-                </p>
-              </Auk::Avatar>
-            </div>
-            <AuHr />
-            <AuButton
-              data-test-m-header-user-action-logout
-              @skin="link"
-              {{on "click" this.logout}}
-              role="menuitem"
-            >
-              {{t "sign-out"}}
-            </AuButton>
+                Ga terug
+              </AuButton>
+              <AuHr />
+              {{#each this.memberships as |membership|}}
+                <AuButton
+                  @icon="user"
+                  @skin="link"
+                  role="menuitem"
+                  {{on "click" (fn this.impersonate membership)}}
+                >
+                  {{membership.user.firstName}}
+                </AuButton>
+              {{/each}}
+            {{else}}
+              <div role="menuitem">
+                <Auk::Avatar
+                  @icon="user"
+                  @name={{this.currentSession.impersonation.impersonator.user.fullName}}
+                >
+                  <p>{{this.currentSession.impersonation.impersonator.user.fullName}}</p>
+                  <p class="auk-u-text-muted auk-u-text-size--small">
+                    {{or this.currentSession.impersonation.impersonator.organization.name this.currentSession.impersonation.impoersonator.organization.identifier}}
+                  </p>
+                  <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
+                    {{this.currentSession.impersonation.impersonator.role.label}}
+                  </p>
+                </Auk::Avatar>
+              </div>
+              <AuHr />
+              {{! {{#if (user-really-may "impersonate-users")}}
+                <AuButton
+                  @skin="link"
+                  @icon="chevron-right"
+                  @iconAlignment="right"
+                  {{on "click" this.toggleShowImpersonateUsers}}
+                  role="menuitem"
+                >
+                  Gebruiker nabootsen
+                </AuButton>
+              {{! {{/if}}
+              <AuButton
+                data-test-m-header-user-action-logout
+                @skin="link"
+                {{on "click" this.logout}}
+                role="menuitem"
+              >
+                {{t "sign-out"}}
+              </AuButton>
+            {{/if}}
           </AuDropdown>
         {{else}}
           <AuLink
@@ -136,3 +176,8 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
+
+<ImpersonateUserModal
+  @modalOpen={{this.showImpersonateUserModal}}
+  @closeModal={{toggle "showImpersonateUserModal" this}}
+/>

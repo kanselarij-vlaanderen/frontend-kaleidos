@@ -1,0 +1,27 @@
+<AuModal
+  @modalOpen={{@modalOpen}}
+  @closeModal={{@closeModal}}
+>
+<:title>Gebruiker nabootsen</:title>
+<:body>
+  <AuToolbar as |Group|>
+    <Group>
+      <AuInput
+        @icon="search"
+        @width="block"
+      />
+    </Group>
+  </AuToolbar>
+  {{#if this.searchMemberships.isRunning}}
+    <AuLoader />
+  {{else}}
+    {{#each this.memberships as |membership|}}
+      <div>
+        {{membership.user.fullName}}
+      </div>
+    {{/each}}
+  {{/if}}
+</:body>
+<:footer>
+</:footer>
+</AuModal>

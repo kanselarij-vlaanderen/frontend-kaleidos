@@ -73,7 +73,7 @@ export default class ApplicationRoute extends Route {
 
     if (
       this.fileService.get('deleteDocumentContainerWithUndo.isRunning')
-        && !confirm(this.intl.t('leave-page-message'))
+      && !confirm(this.intl.t('leave-page-message'))
     ) {
       transition.abort();
     }
