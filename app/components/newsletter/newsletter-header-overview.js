@@ -106,7 +106,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *publishToBelga() {
     try {
-      yield this.ensureMailCampaign(true);
       yield this.newsletterService.sendToBelga(this.args.meeting.id);
       this.toaster.success(this.intl.t('success-publish-newsletter-to-belga'));
     } catch(e) {
