@@ -1,18 +1,20 @@
 <div
-  class={{if
+  class="{{if
     (or
       this.decisionActivity.isPostponed
       this.decisionActivity.isRetracted
     )
     "auk-u-opacity--1/3"
   }}
+  {{if (and @collapsed (eq @showDragHandle false)) 'auk-u-opacity--1/3'}}
+  "
   {{in-viewport
     onEnter=(perform this.lazyLoadSideData)
     onExit=this.cancelLazyLoad
   }}
 >
   <div data-test-agenda-overview-item-container class="vlc-agenda-items__body">
-    <h4 class="vlc-agenda-items__subject">
+    <h4 class="vlc-agenda-items__subject {{if @collapsed 'au-u-margin-bottom-none'}}">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
           <AuIcon
@@ -83,107 +85,109 @@
         </div>
       </div>
 
-      {{#if @agendaitem.shortTitle}}
-        {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
-        <pre
-          data-test-agenda-overview-item-title
-          class="vlc-agenda-items__body-padding auk-u-text-pre-line"
-        >
-          {{@agendaitem.title}}
-        </pre>
-      {{/if}}
-
-      <div class="auk-o-flex auk-o-flex--justify-between">
-        {{#if this.subcase.subcaseName}}
-          <AuPill @size="small" class="vlc-agenda-meta__times-passed" data-test-agenda-overview-item-subcase-name>
-            {{!capitalization using helper instead of css class:
-                  because of `display: inline-flex` property of Auk::Pill
-                  it is not affected by the `::first-letter` selector
-                  used in the auk-u-text-capitalize class }}
-            {{capitalize this.subcase.subcaseName}}
-          </AuPill>
-        {{else}}
-          {{!  TODO: Only here because required for alignment of flex items }}
-          <span class="vlc-agenda-meta__times-passed"></span>
+      {{#unless @collapsed}}
+        {{#if @agendaitem.shortTitle}}
+          {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
+          <pre
+            data-test-agenda-overview-item-title
+            class="vlc-agenda-items__body-padding auk-u-text-pre-line"
+          >
+            {{@agendaitem.title}}
+          </pre>
         {{/if}}
-        {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-          {{#if @isEditingFormallyOkStatus}}
-            <div class="vlc-agenda-meta__status-holder">
-              <Utils::FormallyOkSelector
-                data-test-agenda-overview-item-formally-ok={{true}}
-                @formallyOkStatusUri={{@agendaitem.formallyOk}}
-                @onChange={{this.setAndSaveFormallyOkStatus}}
-              />
-            </div>
+      
+        <div class="auk-o-flex auk-o-flex--justify-between">
+          {{#if this.subcase.subcaseName}}
+            <AuPill @size="small" class="vlc-agenda-meta__times-passed" data-test-agenda-overview-item-subcase-name>
+              {{!capitalization using helper instead of css class:
+                    because of `display: inline-flex` property of Auk::Pill
+                    it is not affected by the `::first-letter` selector
+                    used in the auk-u-text-capitalize class }}
+              {{capitalize this.subcase.subcaseName}}
+            </AuPill>
+          {{else}}
+            {{!  TODO: Only here because required for alignment of flex items }}
+            <span class="vlc-agenda-meta__times-passed"></span>
+          {{/if}}
+          {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
+            {{#if @isEditingFormallyOkStatus}}
+              <div class="vlc-agenda-meta__status-holder">
+                <Utils::FormallyOkSelector
+                  data-test-agenda-overview-item-formally-ok={{true}}
+                  @formallyOkStatusUri={{@agendaitem.formallyOk}}
+                  @onChange={{this.setAndSaveFormallyOkStatus}}
+                />
+              </div>
+            {{/if}}
+          {{/if}}
+        </div>
+        {{#if this.documentsAreVisible}}
+          <div class="auk-u-mt-4">
+            <Documents::DocumentBadgeList
+              @pieces={{this.limitedAgendaitemDocuments}}
+              @highlightedPieces={{this.newAgendaitemDocuments}}
+              @agendaContext={{hash meeting=@meeting agenda=@currentAgenda agendaitem=@agendaitem}}
+            />
+          </div>
+          {{#if this.enableShowMore}}
+            <AuButton
+              class="auk-u-mt-2"
+              @skin="link"
+              @icon={{if this.isShowingAllDocuments "dash" "plus"}}
+              {{on "click" this.toggleShowingAllDocuments}}
+            >
+              {{#if this.isShowingAllDocuments}}
+                {{t "show-less"}}
+              {{else}}
+                {{t "show-more"}}
+              {{/if}}
+            </AuButton>
           {{/if}}
         {{/if}}
-      </div>
-      {{#if this.documentsAreVisible}}
-        <div class="auk-u-mt-4">
-          <Documents::DocumentBadgeList
-            @pieces={{this.limitedAgendaitemDocuments}}
-            @highlightedPieces={{this.newAgendaitemDocuments}}
-            @agendaContext={{hash meeting=@meeting agenda=@currentAgenda agendaitem=@agendaitem}}
-          />
-        </div>
-        {{#if this.enableShowMore}}
-          <AuButton
-            class="auk-u-mt-2"
-            @skin="link"
-            @icon={{if this.isShowingAllDocuments "dash" "plus"}}
-            {{on "click" this.toggleShowingAllDocuments}}
-          >
-            {{#if this.isShowingAllDocuments}}
-              {{t "show-less"}}
-            {{else}}
-              {{t "show-more"}}
-            {{/if}}
-          </AuButton>
-        {{/if}}
-      {{/if}}
-      {{#unless @isEditingFormallyOkStatus}}
-        {{#if @agendaitem.comment}}
-          <p>
-            <strong class="auk-u-text-bold">
-              {{t "comment-title"}}:
-            </strong>
-            {{@agendaitem.comment}}
-          </p>
-        {{/if}}
-        <div class="auk-hr">
-          <hr />
-        </div>
-        <div class="vlc-agenda-items__remarks">
-          {{!-- Empty container below so that, when it is empty, the adjacent element is still pushed to the right  --}}
-          <div>
-            {{#if @agendaitem.privateComment}}
-              <p class="auk-u-text-muted">
-                <strong class="auk-u-text-bold">
-                  <Auk::Icon @name="lock-closed" @size="small" />
-                  {{t "private-comment-title"}}:
-                </strong>
-                {{@agendaitem.privateComment}}
-              </p>
-            {{/if}}
+        {{#unless @isEditingFormallyOkStatus}}
+          {{#if @agendaitem.comment}}
+            <p>
+              <strong class="auk-u-text-bold">
+                {{t "comment-title"}}:
+              </strong>
+              {{@agendaitem.comment}}
+            </p>
+          {{/if}}
+          <div class="auk-hr">
+            <hr />
           </div>
-          <div class="vlc-agenda-items__icons">
-            <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
-              {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-                <p
-                  class={{@agendaitem.formallyOkToShow.classNames}}
-                  data-test-agenda-overview-item-status
-                >
-                  <Auk::Icon
-                    @name={{@agendaitem.formallyOkToShow.svg.icon}}
-                    class="formally-ok-icon"
-                  />
-                  {{@agendaitem.formallyOkToShow.label}}
+          <div class="vlc-agenda-items__remarks">
+            {{!-- Empty container below so that, when it is empty, the adjacent element is still pushed to the right  --}}
+            <div>
+              {{#if @agendaitem.privateComment}}
+                <p class="auk-u-text-muted">
+                  <strong class="auk-u-text-bold">
+                    <Auk::Icon @name="lock-closed" @size="small" />
+                    {{t "private-comment-title"}}:
+                  </strong>
+                  {{@agendaitem.privateComment}}
                 </p>
               {{/if}}
             </div>
-          </div>
+            <div class="vlc-agenda-items__icons">
+              <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
+                {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
+                  <p
+                    class={{@agendaitem.formallyOkToShow.classNames}}
+                    data-test-agenda-overview-item-status
+                  >
+                    <Auk::Icon
+                      @name={{@agendaitem.formallyOkToShow.svg.icon}}
+                      class="formally-ok-icon"
+                    />
+                    {{@agendaitem.formallyOkToShow.label}}
+                  </p>
+                {{/if}}
+              </div>
+            </div>
 
-        </div>
+          </div>
+        {{/unless}}
       {{/unless}}
     </div>
   </div>

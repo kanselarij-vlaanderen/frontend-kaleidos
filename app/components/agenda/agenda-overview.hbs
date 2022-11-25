@@ -81,6 +81,23 @@
                   @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{false}}
                   @showDragHandle={{this.canEdit}}
+                  @collapsed={{true}}
+                />
+              </li>
+              {{else}}
+              <li
+                class="vlc-agenda-items__sub-item"
+              >
+                <Agenda::AgendaOverview::AgendaOverviewItem
+                  @agendaitem={{agendaitem}}
+                  @meeting={{@meeting}}
+                  @currentAgenda={{@currentAgenda}}
+                  @previousAgenda={{@previousAgenda}}
+                  @isNew={{includes agendaitem @newItems}}
+                  @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
+                  @isEditingFormallyOkStatus={{false}}
+                  @showDragHandle={{false}}
+                  @collapsed={{true}}
                 />
               </li>
               {{/if}}
