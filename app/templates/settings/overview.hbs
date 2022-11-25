@@ -1,55 +1,25 @@
 <div class="auk-u-m-8 auk-o-flex auk-o-flex--wrap">
   <div class="auk-u-m-2">
-    <Auk::Button
-      @skin="tertiary"
+    <AuLink
+      data-test-route-settings-overview-manage-emails
+      @skin="button-secondary"
       @icon="pencil"
       @route="settings.emails"
-      data-test-route-settings-overview-manage-emails
     >
       {{t "manage-emails"}}
-    </Auk::Button>
+    </AuLink>
   </div>
   {{#if (user-may "manage-alerts")}}
     <div class="auk-u-m-2">
-      <Auk::Button
-        @skin="tertiary"
+      <AuLink
+        data-test-route-settings-overview-manage-alerts
+        @skin="button-secondary"
         @icon="pencil"
         @route="settings.system-alerts"
-        data-test-route-settings-overview-manage-alerts
       >
         {{t "manage-alerts"}}
-      </Auk::Button>
+      </AuLink>
     </div>
   {{/if}}
-  <div class="auk-u-m-2">
-    <Auk::Button
-      @skin="tertiary"
-      @icon="pencil"
-      @route="settings.document-types"
-      data-test-route-settings-overview-manage-document-types
-    >
-      {{t "manage-document-types"}}
-    </Auk::Button>
-  </div>
-  <div class="auk-u-m-2">
-    <Auk::Button
-      @skin="tertiary"
-      @icon="pencil"
-      @route="settings.case-types"
-      data-test-route-settings-overview-manage-case-types
-    >
-      {{t "manage-case-types"}}
-    </Auk::Button>
-  </div>
-  <div class="auk-u-m-2">
-    <Auk::Button
-      @skin="tertiary"
-      @icon="pencil"
-      @route="settings.subcase-types"
-      data-test-route-settings-overview-manage-subcase-types
-    >
-      {{t "manage-subcase-types"}}
-    </Auk::Button>
-  </div>
 </div>
 {{outlet}}

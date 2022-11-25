@@ -15,6 +15,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-card';
 @import 'ember-appuniversum/c-content';
 @import 'ember-appuniversum/c-control';
+@import 'ember-appuniversum/c-dropdown';
 @import 'ember-appuniversum/c-heading';
 @import 'ember-appuniversum/c-help-text';
 @import 'ember-appuniversum/c-hr';
@@ -24,6 +25,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-link';
 @import 'ember-appuniversum/c-list';
 @import 'ember-appuniversum/c-list-horizontal';
+@import 'ember-appuniversum/c-loader';
 @import 'ember-appuniversum/c-pill';
 @import 'ember-appuniversum/c-modal';
 @import 'ember-appuniversum/c-table';
@@ -35,7 +37,9 @@ $au-button-height: 3.4rem;
 
 :root {
   --au-outline: 0.3rem solid #{$auk-yellow-500};
+  --au-outline-color: #{$auk-yellow-500};
 
+  --au-icon-size: 1.6rem;
   --au-icon-size-medium: 1.8rem;
   --au-icon-size-large: 2.2rem;
 }
@@ -44,6 +48,10 @@ $au-button-height: 3.4rem;
 // Fixes
 
 .au-c-modal__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
+.au-c-dropdown__button {
   background-color: transparent; // fix UA default background-color styling
 }
 
@@ -60,7 +68,9 @@ $au-button-height: 3.4rem;
   cursor: pointer;
 }
 
-.au-c-button--link { // change button link to Kaleidos style
+.au-c-link,
+.au-c-button--link,
+.au-c-button--link-secondary { // change button link to Kaleidos style
   text-decoration: none;
   font-weight: 500;
 
@@ -68,6 +78,10 @@ $au-button-height: 3.4rem;
   &:focus {
     text-decoration: none;
   }
+}
+
+.au-c-link {
+  border-radius: $au-button-border-radius;
 }
 
 .au-c-modal__header {
@@ -178,6 +192,63 @@ $au-button-height: 3.4rem;
   em { // default text color in Kaleidos
     color: $auk-color-text;
   }
+}
+
+.au-c-button,
+.au-c-link {
+  vertical-align: middle;
+}
+
+.au-c-button--link,
+.au-c-button--tertiary,
+.au-c-link {
+  font-size: $au-button-font-size;
+}
+
+.au-c-icon {
+  bottom: 0;
+}
+
+.au-c-dropdown > .au-c-button--naked { // TODO: delete when `.au-c-dropdown > .au-c-button--naked` override inside ember-appuniversum is removed
+  &.au-c-button--icon-only {
+    padding: 0 $au-unit-small;
+    height: $au-button-height;
+    line-height: $au-button-height - $au-button-border * 2;
+
+    padding: 0 calc((#{$au-button-icon-only-width - ($au-button-border * 2)} - var(--au-icon-size-medium)) / 2);
+  }
+
+  &.au-c-button--icon-only.au-c-button--large {
+    padding: 0 calc((#{$au-button-icon-only-width-large - ($au-button-border * 2)} - var(--au-icon-size-large)) / 2);
+  }
+}
+
+.au-c-dropdown__menu {
+  min-width: 23rem;
+}
+
+.au-c-dropdown__menu [role="menuitem"] {
+  padding: 1rem 1.5rem;
+  border: none;
+}
+
+.au-c-dropdown__menu > [role="menuitem"] + [role="menuitem"],
+.au-c-dropdown__menu > [role="group"] + [role="group"],
+.au-c-dropdown__menu > [role="group"] + [role="menuitem"],
+.au-c-dropdown__menu > [role="menuitem"] + [role="group"] {
+  border-top: none;
+}
+
+.au-c-input:focus {
+  border-color: $au-input-border-color !important;
+  box-shadow: none !important;
+
+  outline: var(--au-outline);
+  outline-offset: var(--au-outline-offset);
+}
+
+.au-c-control__indicator {
+  margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
 // Fix icons in menu

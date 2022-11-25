@@ -8,18 +8,27 @@
               {{t "documents"}}
             </h4>
           </Group.Item>
+          <AuPill
+            @size="small"
+            @skin="border"
+            @icon="comment"
+          >
+            <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+              {{t "filtered-subcase-documents"}}
+            </EmberTooltip>
+          </AuPill>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
           {{#if this.model.pieces.length}}
             <Group.Item>
               {{#if (user-may "manage-documents")}}
-                <Auk::Button
+                <AuButton
                   data-test-route-cases---subcase-documents-batch-edit
                   @icon="pencil"
                   {{on "click" this.openBatchDetails}}
                 >
                   {{t "batch-edit"}}
-                </Auk::Button>
+                </AuButton>
               {{/if}}
             </Group.Item>
           {{/if}}
@@ -40,14 +49,14 @@
 
       {{#if (user-may "manage-documents")}}
         <div class="auk-u-mb-4">
-          <Auk::Button
+          <AuButton
             data-test-route-cases---subcase-documents-add
-            @skin="tertiary"
+            @skin="naked"
             @icon="plus"
             {{on "click" this.openPieceUploadModal}}
           >
             {{t "documents-add"}}
-          </Auk::Button>
+          </AuButton>
         </div>
       {{/if}}
 

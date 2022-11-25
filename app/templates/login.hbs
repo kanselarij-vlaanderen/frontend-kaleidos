@@ -14,14 +14,14 @@
       </p>
       <div data-test-route-login-acmidm-container class="u-padding--top--large">
         <Acmidm::Login as |acmidm|>
-          <Auk::Button
+          <AuButton
             @skin="primary"
             @loading={{acmidm.isAuthenticating}}
             @disabled={{acmidm.isAuthenticating}}
             {{on "click" acmidm.login}}
           >
             Meld u aan
-          </Auk::Button>
+          </AuButton>
           {{#if acmidm.errorMessage}}
             <div class="auk-u-mt-2">
               <Auk::Alert @skin="error" @message={{acmidm.errorMessage}} />

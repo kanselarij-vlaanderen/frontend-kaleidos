@@ -15,27 +15,29 @@
   {{!-- template-lint-enable require-input-label --}}
   <div class="auk-file-upload__content">
     {{#if (and (not this.uploadIsRunning) (and this.uploadIsCompleted @reusable))}}
-      <Auk::Button
-        @skin="tertiary"
-        @icon="redo"
-        @layout="icon-only"
+      <AuButton
         class="auk-button--redo"
+        @skin="naked"
+        @icon="redo"
+        @hideText={{true}}
         {{on "click" this.clickInput}}
         {{on "key-up" this.clickInputOnEnter}}
-      />
+      >
+        {{t "redo"}}
+      </AuButton>
     {{/if}}
     <div class="auk-u-mb-2">
       {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
-        <Auk::Button
-          @skin="tertiary"
-          @icon="paperclip"
+        <AuButton
           class="auk-file-upload__action-button"
           tabindex="-1"
+          @skin="secondary"
+          @icon="paperclip"
           {{on "click" this.clickInput}}
           {{on "key-up" this.clickInputOnEnter}}
         >
           {{t "upload-files" numFiles=(if @multiple "multiple" "one")}}
-        </Auk::Button>
+        </AuButton>
       {{else if this.uploadIsRunning}}
         {{t "uploading-files" numFiles=this.fileQueue.files.length}}
       {{else if this.uploadIsCompleted}}

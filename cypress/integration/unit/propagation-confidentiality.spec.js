@@ -78,8 +78,8 @@ context('Propagation of confidentiality setup', () => {
   // 1 agendaitem with 5 documents, 1 of each accessLevel
   // 1 agendaitem with 5 documents, 1 of each accessLevel, subcase is confidential
 
-  it('login as kanselarij and check access', () => {
-    cy.login('Kanselarij');
+  it('login as Secretarie and check access', () => {
+    cy.login('Secretarie');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1);
     checkAccess(docName2);
@@ -95,7 +95,7 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
     cy.releaseDocuments();
     // wait for yggie a bit, the next 2 profiles will succeed, enough time should have passed for overheid profile
-    cy.wait(60000);
+    cy.wait(80000);
   });
 
   it('login as minister and check access', () => {
@@ -115,8 +115,8 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
   });
 
-  it('login as kabinet and check access', () => {
-    cy.login('Kabinet');
+  it('login as Kabinetdossierbeheerder and check access', () => {
+    cy.login('Kabinetdossierbeheerder');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
@@ -132,8 +132,25 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked5);
   });
 
-  it('login as overheid and check access', () => {
-    cy.login('Overheid');
+  it('login as Kabinetmedewerker and check access', () => {
+    cy.login('Kabinetmedewerker');
+    cy.visitAgendaWithLink(agendaitem1Link);
+    checkAccess(docName1, false);
+    checkAccess(docName2, false);
+    checkAccess(docName3);
+    checkAccess(docName4);
+    checkAccess(docName5);
+
+    cy.openAgendaitemDocumentTab(subcaseTitle2);
+    checkAccess(docNameLocked1, false);
+    checkAccess(docNameLocked2, false);
+    checkAccess(docNameLocked3);
+    checkAccess(docNameLocked4);
+    checkAccess(docNameLocked5);
+  });
+
+  it('login as Overheidsorganisatie and check access', () => {
+    cy.login('Overheidsorganisatie');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);

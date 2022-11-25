@@ -9,12 +9,12 @@
           </Auk::Label>
           <Utils::SearchTooltip />
         </div>
-        <Auk::Input
-          @block={{true}}
-          placeholder={{t "search-placeholder"}}
+        <AuInput
+          data-test-route-search-input
+          @width="block"
           @value={{this.searchTextBuffer}}
           id="keyword"
-          data-test-route-search-input
+          placeholder={{t "search-placeholder"}}
         />
       </div>
       <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6" data-test-route-search-date-from>
@@ -39,23 +39,23 @@
         <Auk::Label for="ministerName">
           {{t "minister"}}
         </Auk::Label>
-        <Auk::Input
+        <AuInput
           data-test-route-search-mandatee-input
-          @block={{true}}
+          @width="block"
           @value={{this.mandateesBuffer}}
           id="ministerName"
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
-        <Auk::Button
+        <AuButton
+          data-test-route-search-trigger
           @skin="primary"
           @icon="search"
-          @block="true"
-          data-test-route-search-trigger
+          @width="block"
           type="submit"
         >
           {{t "search"}}
-        </Auk::Button>
+        </AuButton>
       </div>
     </form>
   </Auk::Navbar>
@@ -127,17 +127,19 @@
                     class="auk-u-text-align--right"
                   >
                     {{#if latestAgendaitem}}
-                      <Auk::Button
-                        @skin="borderless"
-                        @layout="icon-only"
+                      <AuLink
+                        @skin="button-naked"
                         @icon="chevron-right"
+                        @hideText={{true}}
                         @route="agenda.agendaitems.agendaitem.news-item"
                         @models={{array
                           latestAgendaitem.meetingId
                           latestAgendaitem.agendaId
                           latestAgendaitem.id
                         }}
-                      />
+                      >
+                        {{t "open"}}
+                      </AuLink>
                     {{/if}}
                   </td>
                 {{/let}}

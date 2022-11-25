@@ -4,6 +4,7 @@
 import publication from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 // ***********************************************
 // Functions
@@ -27,18 +28,18 @@ function fillInNewPublicationFields(fields) {
       .type(fields.suffix);
   }
   if (fields.decisionDate) {
-    cy.get(auk.datepicker).eq(0)
+    cy.get(auk.datepicker.datepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
   }
   if (fields.receptionDate) {
-    cy.get(auk.datepicker).eq(1)
+    cy.get(auk.datepicker.datepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(fields.receptionDate);
   }
   // Limiet publicatie
   if (fields.publicationDueDate) {
-    cy.get(auk.datepicker).eq(2)
+    cy.get(auk.datepicker.datepicker).eq(2)
       .click();
     cy.setDateInFlatpickr(fields.publicationDueDate);
   }
@@ -153,7 +154,7 @@ function addPublicationDocuments(files) {
         .within(() => {
           if (file.newFileName) {
             cy.get('.auk-form-group').eq(0)
-              .find('.auk-input')
+              .find(appuniversum.input)
               .clear()
               .type(file.newFileName);
           }

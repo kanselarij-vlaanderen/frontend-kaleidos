@@ -34,13 +34,13 @@
                 >
                   {{t "number-of-pages-to-translate"}}
                 </Auk::Label>
-                <Auk::Input
+                <AuInput
                   data-test-publication-translation-request-number-of-pages
                   @type="number"
-                  id="translationNumberOfPages"
-                  @block={{true}}
+                  @width="block"
                   @value={{mut this.numberOfPages}}
                   {{on "focusout" (perform this.setEmailFields)}}
+                  id="translationNumberOfPages"
                 />
               </div>
             </div>
@@ -52,13 +52,13 @@
                 >
                   {{t "number-of-words-to-translate"}}
                 </Auk::Label>
-                <Auk::Input
+                <AuInput
                   data-test-publication-translation-request-number-of-words
                   @type="number"
-                  id="translationNumberOfWords"
-                  @block={{true}}
+                  @width="block"
                   @value={{mut this.numberOfWords}}
                   {{on "focusout" (perform this.setEmailFields)}}
+                  id="translationNumberOfWords"
                 />
               </div>
             </div>
@@ -91,10 +91,10 @@
         <Auk::Label for="translationRequestSubject" @required={{true}}>
           {{t "subject"}}
         </Auk::Label>
-        <Auk::Input
-          id="translationRequestSubject"
-          @block={{true}}
+        <AuInput
+          @width="block"
           @value={{mut this.subject}}
+          id="translationRequestSubject"
         />
       </div>
       <div class="auk-form-group">
@@ -114,7 +114,7 @@
     @onCancel={{perform this.cancel}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
-    <Auk::Button
+    <AuButton
       data-test-publication-translation-request-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
@@ -122,6 +122,6 @@
       {{on "click" (perform this.save)}}
     >
       {{t "request-it"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

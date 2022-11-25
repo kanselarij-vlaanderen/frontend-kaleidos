@@ -14,13 +14,14 @@
           {{#if this.showCloseButton}}
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
-                <Auk::Button
+                <AuButton
+                  @skin="naked"
                   @icon="x"
-                  @skin="borderless"
-                  @layout="icon-only"
+                  @hideText={{true}}
                   {{action "cancel"}}
                 >
-                </Auk::Button>
+                  {{t "cancel"}}
+                </AuButton>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           {{/if}}
@@ -34,27 +35,29 @@
           <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
-                <Auk::ButtonLink
-                  disabled={{this.isLoading}}
-                  {{action "cancel"}}
+                <AuButton
                   data-test-vl-modal-verify-cancel
+                  @skin="naked"
+                  @disabled={{this.isLoading}}
+                  {{action "cancel"}}
                 >
                   {{t "cancel"}}
-                </Auk::ButtonLink>
+                </AuButton>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             {{#if this.showVerify}}
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
-                  <Auk::Button
-                    @skin={{this.buttonSkin}}
-                    @icon={{if this.showIcon "trash"}}
+                  <AuButton
+                    data-test-vl-modal-verify-save
+                    @skin="primary"
+                    @alert={{this.isAlertButton}}
+                    @icon={{if this.showDestructiveIcon "trash"}}
                     @loading={{this.isLoading}}
                     {{action "verify"}}
-                    data-test-vl-modal-verify-save
                   >
                     {{this.verifyButtonText}}
-                  </Auk::Button>
+                  </AuButton>
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
             {{/if}}

@@ -12,13 +12,14 @@
         <Auk::Toolbar::Group @position="right">
           {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
             <Auk::Toolbar::Item>
-              <Auk::Button
+              <AuButton
                 data-test-government-areas-panel-edit
-                @skin="tertiary"
+                @skin="naked"
                 @icon="pencil"
-                @layout="icon-only"
                 {{on "click" this.showEditModal}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Auk::Toolbar::Item>
           {{/if}}
         </Auk::Toolbar::Group>
@@ -53,7 +54,7 @@
       </Auk::Panel::Body>
     {{else}}
       <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-added-government-fields"}} />
+        <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
       </Auk::Panel::Body>
     {{/if}}
   </Auk::Panel>

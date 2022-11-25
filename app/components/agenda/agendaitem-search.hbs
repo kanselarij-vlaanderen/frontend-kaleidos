@@ -3,28 +3,28 @@
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="auk-u-maximize-width">
         <div class="auk-form-group">
-          <Auk::Input
-            @icon="search"
-            @block={{true}}
+          <AuInput
             data-test-agendaitem-search-input
-            placeholder={{t "search-placeholder"}}
+            @icon="search"
+            @width="block"
             @value={{this.searchText}}
             @enter={{perform this.search}}
             {{on "input" (perform this.debouncedSearch)}}
+            placeholder={{t "search-placeholder"}}
           />
         </div>
       </Auk::Toolbar::Item>
-      <Auk::Button
-        @icon="search"
-        @skin="primary"
-        @loading={{this.search.isRunning}}
-        @layout={{if @hideButtonText "icon-only"}}
-        {{on "click" (perform this.search)}}
-      >
-        {{#if (not @hideButtonText)}}
+      <Auk::Toolbar::Item class="auk-u-m-0">
+        <AuButton
+          @skin="primary"
+          @icon="search"
+          @hideText={{@hideButtonText}}
+          @loading={{this.search.isRunning}}
+          {{on "click" (perform this.search)}}
+        >
           {{t "search"}}
-        {{/if}}
-      </Auk::Button>
+        </AuButton>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

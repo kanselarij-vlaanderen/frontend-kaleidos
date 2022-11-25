@@ -23,7 +23,7 @@
                 {{/unless}}
               </span>
             </div>
-            <LinkTo @route="document" @model={{this.piece.id}} target="_blank"
+            <LinkTo @route="document" @model={{this.piece.id}}
               class="auk-h4" data-test-document-card-name-value>
               {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
             </LinkTo>
@@ -38,13 +38,14 @@
                 </p>
               {{/if}}
               {{#if this.piece.file.primarySource.created}}
-                <p>
+                <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
                   {{moment-format this.piece.file.primarySource.created}}
                   {{t "at"}}
                   {{moment-format this.piece.file.primarySource.created "HH:mm"}}
                   {{t "as"}}
                   <AuLinkExternal
+                    data-test-document-card-primary-source-link
                     href={{this.piece.file.primarySource.namedDownloadLink}}
                     download
                   >
@@ -76,15 +77,13 @@
           {{/if}}
           <Group.Item class="auk-o-flex">
             {{#unless this.loadPieceRelatedData.isRunning}}
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <AccessLevelPill
-                  @accessLevel={{this.accessLevel}}
-                  @isEditable={{true}}
-                  @onChangeAccessLevel={{this.changeAccessLevel}}
-                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                />
-              </div>
+              <AccessLevelPill
+                @accessLevel={{this.accessLevel}}
+                @isEditable={{true}}
+                @onChangeAccessLevel={{this.changeAccessLevel}}
+                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+              />
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}} {{! feature flag }}
@@ -115,34 +114,41 @@
           {{/if}}
           {{#if (user-may "manage-documents")}}
             <Group.Item>
-              <Auk::DropdownMenu
-                @skin="borderless"
-                @icon="three-dots"
-                @disabled={{this.loadPieceRelatedData.isRunning}}
+              <AuDropdown
                 data-test-document-card-actions={{true}}
-                as |Menu|
+                @icon="three-dots"
+                @title={{t "more"}}
+                @hideText={{true}}
+                @disabled={{this.loadPieceRelatedData.isRunning}}
+                @alignment="right"
               >
-                <Menu.Item
+                <AuButton
                   data-test-document-upload-new-piece
+                  @skin="link"
                   {{on "click" this.openUploadModal}}
+                  role="menuitem"
                 >
                   {{t "new-version"}}
-                </Menu.Item>
-                <Menu.Item
+                </AuButton>
+                <AuButton
                   data-test-document-edit-piece
+                  @skin="link"
                   {{on "click" (toggle "isEditingPiece" this)}}
+                  role="menuitem"
                 >
                   {{t "edit"}}
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  @skin="danger"
+                </AuButton>
+                <AuHr />
+                <AuButton
                   data-test-document-card-delete
+                  @skin="link"
+                  @alert={{true}}
                   {{on "click" this.deleteDocumentContainer}}
+                  role="menuitem"
                 >
                   {{t "document-delete"}}
-                </Menu.Item>
-              </Auk::DropdownMenu>
+                </AuButton>
+              </AuDropdown>
             </Group.Item>
           {{/if}}
         </Toolbar.Group>
@@ -172,7 +178,7 @@
                   <div class="vlc-document-card-item" data-test-vl-document-piece>
                     <div class="vlc-document-card-item__title">
                       {{#if piece.file}}
-                        <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                        <LinkTo @route="document" @model={{piece.id}}
                           class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
                           data-test-vl-document-name>
                           {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
@@ -189,15 +195,13 @@
                         </h6>
                       {{/if}}
                       <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
-                      <div class="auk-o-flex auk-o-flex--vertical-center">
-                        <AccessLevelPill
-                          @accessLevel={{piece.accessLevel}}
-                          @isEditable={{true}}
-                          @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
-                          @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
-                          @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                        />
-                      </div>
+                      <AccessLevelPill
+                        @accessLevel={{piece.accessLevel}}
+                        @isEditable={{true}}
+                        @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
+                        @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
+                        @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                      />
                     </div>
                     <div class="vlc-document-card-item__meta au-u-muted">
                       {{!-- no piece.created in legacy data --}}
@@ -238,7 +242,7 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <Auk::Input @block={{true}} @value={{this.newPiece.name}} />
+        <AuInput @width="block" @value={{this.newPiece.name}} />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}}

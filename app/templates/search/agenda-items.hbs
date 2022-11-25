@@ -9,6 +9,7 @@
           {{t "sort-by"}}
         </Auk::Label>
         <select
+          data-test-route-search-agendaitems-sidebar-sort-options
           name="sort-type"
           id="sort-type"
           class="auk-select auk-select--block"
@@ -82,7 +83,7 @@
             </c.header>
             <c.body class="auk-table--clickable-rows" as |row|>
               <td>
-                <p>
+                <p data-test-route-search-agendaitems-row-shorttitle>
                   {{#if row.shortTitle}}
                     {{row.shortTitle}}
                   {{else}}
@@ -108,13 +109,15 @@
                 {{moment-format row.sessionDates}}
               </td>
               <td class="auk-u-text-align--right">
-                <Auk::Button
-                  @skin="borderless"
-                  @layout="icon-only"
+                <AuLink
+                  @skin="button-naked"
                   @icon="chevron-right"
+                  @hideText={{true}}
                   @route="agenda.agendaitems.agendaitem"
                   @models={{array row.meetingId row.agendaId row.id}}
-                />
+                >
+                  {{t "open"}}
+                </AuLink>
               </td>
             </c.body>
           </table.content>

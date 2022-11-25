@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrLegacyDocumentName,
@@ -11,15 +10,30 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
   @service currentSession;
 
+  // Query for pieces of submission-activity is a 2-step process (submission-activity -> pieces). 
+  // Querying pieces directly doesn't work since the inverse isn't present in API config
   async model() {
     this.subcase = this.modelFor('cases.case.subcases.subcase');
-    // 2-step process (submission-activity -> pieces). Querying pieces directly doesn't
-    // work since the inverse isn't present in API config
-    const submissionActivities = await this.store.query('submission-activity', {
+    // Get any submission that is not yet on a meeting
+    const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
+      'filter[:has-no:agenda-activity]': true,
       'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
+    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    // Get the submission from latest meeting if applicable
+    const agendaActivities = await this.subcase.agendaActivities;
+    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    if (latestActivity) {
+      const submissionActivitiesFromLatestMeeting = await this.store.query('submission-activity', {
+        'filter[subcase][:id:]': this.subcase.id,
+        'filter[agenda-activity][:id:]': latestActivity.id,
+        'page[size]': PAGE_SIZE.ACTIVITIES,
+        include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+      });
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+    }
 
     const pieces = [];
     for (const submissionActivity of submissionActivities.toArray()) {
@@ -29,8 +43,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     }
 
     let sortedPieces;
-    this.meeting = await this.subcase.requestedForMeeting;
-    if (this.meeting?.isPreKaleidos) {
+    if (this.latestMeeting?.isPreKaleidos) {
       sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
     } else {
       sortedPieces = sortPieces(pieces);
@@ -53,14 +66,12 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
-    if (this.currentSession.isOverheid) {
-      const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
-      if (documentPublicationActivity) {
-        const documentPublicationStatus = await documentPublicationActivity?.status;
-        this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-      }
-    } else {
+    if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else {
+      const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
+      const documentPublicationStatus = await documentPublicationActivity?.status;
+      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
     const decisionmakingFlow = this.modelFor('cases.case');
     this.case = await decisionmakingFlow.case;
@@ -73,10 +84,5 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     controller.case = this.case;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }

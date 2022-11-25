@@ -33,27 +33,27 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            {{on "click" @onClose}}
+          <AuButton
+            @skin="naked"
             @disabled={{this.onAdd.isRunning}}
+            {{on "click" @onClose}}
           >
             {{t "cancel"}}
-          </Auk::ButtonLink>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button
+          <AuButton
             data-test-mandatees-selector-add
             @skin="primary"
             @icon="plus"
-            @size="small"
             @disabled={{not this.canAdd}}
             @loading={{this.onAdd.isRunning}}
             {{on "click" (perform this.onAdd)}}
           >
             {{t "add"}}
-          </Auk::Button>
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

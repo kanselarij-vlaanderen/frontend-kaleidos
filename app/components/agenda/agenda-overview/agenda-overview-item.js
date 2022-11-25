@@ -37,6 +37,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
 
+  @tracked decisionActivity;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
 
@@ -45,6 +46,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.agendaitemDocuments = [];
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
+    this.loadDecisionActivity.perform();
     this.loadDocumentsPublicationStatus.perform();
   }
 
@@ -73,14 +75,12 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
-    if (this.currentSession.isOverheid) {
-      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-      if (documentPublicationActivity) {
-        const documentPublicationStatus = yield documentPublicationActivity?.status;
-        this.documentsAreVisible = documentPublicationStatus.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-      }
-    } else {
+    if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else {
+      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
+      const documentPublicationStatus = yield documentPublicationActivity?.status;
+      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
   }
 
@@ -97,6 +97,13 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       sortedPieces = sortPieces(pieces);
     }
     this.agendaitemDocuments = sortedPieces;
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   @dropTask

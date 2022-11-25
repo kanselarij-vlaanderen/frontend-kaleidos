@@ -15,7 +15,7 @@
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
-              @onSave={{this.toggleEdit}}
+              @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
               @onCancel={{this.toggleEdit}}
             />
           {{/if}}
@@ -36,14 +36,14 @@
         />
       {{else if (user-may "manage-decisions")}}
         <div class="auk-u-p-2">
-          <Auk::Button
-            @skin="borderless"
+          <AuButton
+            data-test-agendaitem-decision-upload-file
+            @skin="naked"
             @icon="upload"
             {{on "click" this.toggleIsAddingReport}}
-            data-test-agendaitem-decision-upload-file
           >
             {{t "signed-decision-add"}}
-          </Auk::Button>
+          </AuButton>
         </div>
       {{/if}}
     {{else}}
@@ -57,4 +57,13 @@
     @onSave={{this.attachReport}}
     @onCancel={{this.toggleIsAddingReport}}
   />
+{{/if}}
+
+{{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-decision-result-message"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
 {{/if}}

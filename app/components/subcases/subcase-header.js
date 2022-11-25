@@ -36,10 +36,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @task
   *loadData() {
-    const meeting = yield this.args.subcase.requestedForMeeting;
-    const activities = yield this.args.subcase.agendaActivities;
-
-    this.canPropose = !(activities?.length || meeting || this.isAssigningToOtherAgenda || this.isLoading);
+    const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
+    this.canPropose = !(activities?.length || this.isAssigningToOtherAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToOtherAgenda);
 
     const dateOfToday = moment().utc()
@@ -129,6 +127,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
     this.toggleAllPropertiesBackToDefault();
     this.loadData.perform();
+    this.args.onProposedForAgenda();
   }
 
   @action

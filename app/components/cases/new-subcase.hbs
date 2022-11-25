@@ -30,14 +30,14 @@
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
-                <Auk::Button
+                <AuButton
+                  data-test-new-subcase-clone-previous-subcase
                   @skin="secondary"
                   @icon="copy-paste"
                   {{on "click" (perform this.copyFullSubcase)}}
-                  data-test-new-subcase-clone-previous-subcase
                 >
                   {{t "clone-previous-subcase"}}
-                </Auk::Button>
+                </AuButton>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
@@ -82,7 +82,7 @@
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        <div class="auk-o-flex auk-o-flex--vertical-center">
+        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small">
           {{#if (not this.isEditing)}}
             <Utils::ModelSelector
               data-test-new-subcase-procedure-name
@@ -96,28 +96,28 @@
             as |model|>
               {{capitalize model.label}}
             </Utils::ModelSelector>
-            <Auk::Button
-              @skin="secondary"
-              @layout="icon-only"
+            <AuButton
+              @skin="naked"
               @icon="pencil"
+              @hideText={{true}}
               {{on "click" this.toggleIsEditing}}
             >
               {{t "edit"}}
-            </Auk::Button>
+            </AuButton>
           {{else}}
-            <Auk::Input
-              @block={{true}}
+            <AuInput
+              @width="block"
               @value={{this.subcaseName}}
               id="subcaseNameId"
             />
-            <Auk::Button
-              @skin="secondary"
-              @layout="icon-only"
+            <AuButton
+              @skin="naked"
               @icon="x"
+              @hideText={{true}}
               {{on "click" this.toggleIsEditing}}
             >
               {{t "cancel"}}
-            </Auk::Button>
+            </AuButton>
           {{/if}}
         </div>
       </div>
@@ -127,7 +127,7 @@
     @cancelDisabled={{this.saveSubcase.isRunning}}
     @onCancel={{@onClose}}
   >
-    <Auk::Button
+    <AuButton
       data-test-new-subcase-save
       @skin="primary"
       @disabled={{this.areSavingTasksRunning}}
@@ -135,6 +135,6 @@
       {{on "click" (perform this.saveSubcase)}}
     >
       {{t "new-subcase"}}
-    </Auk::Button>
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

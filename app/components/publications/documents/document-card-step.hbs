@@ -13,7 +13,7 @@
                   {{@piece.documentContainer.type.label}}
                 </span>
               </div>
-              <LinkTo @route="document" @model={{@piece.id}} target="_blank" class="auk-h4">
+              <LinkTo @route="document" @model={{@piece.id}} class="auk-h4">
                 {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
               </LinkTo>
               <div class="vlc-document-card-content__meta">
@@ -27,18 +27,21 @@
           <Toolbar.Group @position="right" as |Group|>
             <Group.Item class="auk-o-flex">
               {{#if (and @isEnabledDelete @piece.file)}}
-                <Auk::DropdownMenu
-                  @skin="borderless"
+                <AuDropdown
                   @icon="three-dots"
-                  as |Menu|
+                  @title={{t "more"}}
+                  @hideText={{true}}
+                  @alignment="right"
                 >
-                  <Menu.Item
-                    @skin="danger"
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
                     {{on "click" (perform this.deletePiece)}}
+                    role="menuitem"
                   >
                     {{t "document-delete"}}
-                  </Menu.Item>
-                </Auk::DropdownMenu>
+                  </AuButton>
+                </AuDropdown>
               {{/if}}
             </Group.Item>
           </Toolbar.Group>

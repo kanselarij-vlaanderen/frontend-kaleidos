@@ -1,118 +1,150 @@
-<Auk::DropdownMenu
-  @skin="secondary"
-  @label={{t "actions"}}
-  class="auk-u-hidden@print"
+<AuDropdown
   data-test-agenda-actions-show-options={{true}}
-  as |Menu|
+  @skin="secondary"
+  @title={{t "actions"}}
+  @alignment="right"
+  class="auk-u-hidden@print"
 >
   {{#if this.canEditDesignAgenda}}
-    <Menu.Item
+    <AuButton
       data-test-agenda-actions-add-agendaitems
+      @skin="link"
       {{on "click" this.openAddAgendaitemsModal}}
+      role="menuitem"
     >
       {{t "add-to-agenda"}}
-    </Menu.Item>
-    <Menu.Divider />
+    </AuButton>
+    <AuHr />
   {{/if}}
   {{#if (user-may "manage-decisions")}}
-    <Menu.Item
+    <AuLink
       data-test-agenda-actions-navigate-to-decisions
       @route="print-overviews.decisions.agendaitems"
       @models={{array @meeting.id @currentAgenda.id}}
+      role="menuitem"
     >
       {{t "print-decisions"}}
-    </Menu.Item>
+    </AuLink>
   {{/if}}
-  <Menu.Item
+  <AuLink
     data-test-agenda-actions-navigate-to-newsletter
     @route="newsletter"
     @model={{@meeting.id}}
+    role="menuitem"
   >
     {{t "print-newsletter"}}
-  </Menu.Item>
-  <Menu.Item
+  </AuLink>
+  <AuLink
     data-test-agenda-actions-printable-press-agenda
     @route="print-overviews.press-agenda.agendaitems"
     @models={{array @meeting.id @currentAgenda.id}}
+    role="menuitem"
   >
     {{t "printable-press-agenda"}}
-  </Menu.Item>
+  </AuLink>
+
+
+
   {{#if this.showPrintButton}}
-    <Menu.Item
+    <AuLink
       @route="agenda.agendaitems"
+      role="menuitem"
     >
       {{t "agenda-view"}}
-    </Menu.Item>
-    <Menu.Item {{on "click" this.print}}>
+    </AuLink>
+   <AuButton
+      {{on "click" this.print}}
+      role="menuitem"
+    >
       {{t "print"}}
-    </Menu.Item>
+    </AuButton>
   {{else}}
-    <Menu.Item
-      @route="agenda.print"
+    <AuLink
       data-test-agenda-actions-navigate-to-printable-agenda
+      @route="agenda.print"
+      role="menuitem"
     >
       {{t "printable-version"}}
-    </Menu.Item>
+    </AuLink>
   {{/if}}
-  <Menu.Item
+  <AuButton
     data-test-agenda-actions-download-documents
+    @skin="link"
     {{on "click" this.downloadAllDocuments}}
+    role="menuitem"
   >
     {{t "download-documents"}}
-  </Menu.Item>
+  </AuButton>
   {{#if (user-may "manage-meetings")}}
-    <Menu.Divider />
-    <Menu.Item
+    <AuHr />
+    <AuButton
       data-test-agenda-actions-toggle-editing-meeting
+      @skin="link"
       {{on "click" this.toggleEditingMeeting}}
+      role="menuitem"
     >
       {{t "edit-meeting"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
   {{#if this.canEditDesignAgenda}}
-    <Menu.Item
+    <AuButton
       data-test-agenda-actions-approve-all-agendaitems
+      @skin="link"
       {{on "click" this.openConfirmApproveAllAgendaitems}}
+      role="menuitem"
     >
       {{t "approve-all-agendaitems"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
   {{#if this.canPublishDecisions}}
-    <Menu.Divider />
-    <Menu.Item
-      @skin="danger"
+    <AuHr />
+    <AuButton
       data-test-agenda-actions-release-decisions
+      @skin="link"
+      @alert={{true}}
       {{on "click" this.openConfirmPublishDecisions}}
+      role="menuitem"
     >
       {{t "agenda-release-decisions"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
   {{#if this.canPlanDocumentPublication}}
-    <Menu.Item
+    <AuButton
       data-test-agenda-actions-release-documents
+      @skin="link"
       {{on "click" this.openPlanDocumentPublicationModal}}
+      role="menuitem"
     >
       {{t "agenda-publish-planned"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
   {{#if this.canPublishThemis}}
-    <Menu.Divider />
-    <Menu.Item {{on "click" this.openConfirmPublishThemis}}>
+    <AuHr />
+    <AuButton
+      @skin="link"
+      {{on "click" this.openConfirmPublishThemis}}
+      role="menuitem"
+    >
       {{t "publish-to-web"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
   {{#if this.canUnpublishThemis}}
-    <Menu.Divider />
-    <Menu.Item @skin="danger" {{on "click" this.openConfirmUnpublishThemis}}>
+    <AuHr />
+    <AuButton
+      @skin="link"
+      @alert={{true}}
+      {{on "click" this.openConfirmUnpublishThemis}}
+      role="menuitem"
+    >
       {{t "unpublish-from-web"}}
-    </Menu.Item>
+    </AuButton>
   {{/if}}
-</Auk::DropdownMenu>
+</AuDropdown>
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
     @meeting={{@meeting}}
-    @isAddingAgendaitems={{this.isAddingAgendaitems}}
+    @onClose={{this.closeAddAgendaitemsModal}}
     @onCreate={{@didApproveAgendaitems}}
   />
 {{/if}}
@@ -145,14 +177,14 @@
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-actions-approve-all-agendaitems-confirm
         @skin="primary"
         @disabled={{this.reloadAgendaitemsData.isRunning}}
         {{on "click" this.approveAllAgendaitems}}
       >
         {{t "approve"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
@@ -167,13 +199,13 @@
       <p>{{t "release-decisions-message"}}</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelPublishDecisions}}>
-      <Auk::Button
+      <AuButton
         data-test-agenda-actions-release-decisions-confirm
         @skin="primary"
         {{on "click" this.publishDecisions}}
       >
         {{t "release-to-public"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

@@ -5,14 +5,26 @@ const selectors = {
     type: '[data-test-document-card-type]',
     name: {
       value: '[data-test-document-card-name-value]',
-      input: '[data-test-document-card-name-input]',
     },
+    primarySourceCreated: '[data-test-document-card-primary-source-created]',
+    primarySourceLink: '[data-test-document-card-primary-source-link]',
     pubLink: '[data-test-document-card-publication-link]',
     versionHistory: '[data-test-document-card-version-history]',
     actions: '[data-test-document-card-actions]',
     delete: '[data-test-document-card-delete]',
     uploadPiece: '[data-test-document-upload-new-piece]',
     editPiece: '[data-test-document-edit-piece]',
+  },
+
+  // document-edit-modal
+  documentEdit: {
+    nameInput: '[data-test-document-edit-name-input]',
+    replace: '[data-test-document-edit-replace]',
+    sourceFileReplace: '[data-test-document-edit-source-file-replace]',
+    sourceFileDelete: '[data-test-document-edit-source-file-delete]',
+    pdfFileUploader: '[data-test-document-edit-pdf-file-uploader]',
+    sourceFileReplacer: '[data-test-document-edit-source-file-replacer]',
+    sourceFileUploader: '[data-test-document-edit-source-file-uploader]',
   },
 
   // vl-document
@@ -97,14 +109,17 @@ const selectors = {
   previewDetailsTab: {
     cancel: '[data-test-details-tab-cancel]',
     save: '[data-test-details-tab-save]',
+    delete: '[data-test-details-tab-delete]',
     edit: '[data-test-details-tab-edit]',
     name: '[data-test-details-tab-name]',
     documentType: '[data-test-details-tab-document-type]',
     accessLevel: '[data-test-details-tab-access-level]',
+    sourceFile: '[data-test-document-details-panel-source-file]',
     editing: {
       name: '[data-test-details-tab-edit-name]',
       documentType: '[data-test-details-tab-edit-document-type]',
       accessLevel: '[data-test-details-tab-edit-access-level]',
+      upload: '[data-test-document-details-panel-upload]',
     },
   },
 

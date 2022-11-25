@@ -9,15 +9,15 @@
   >
     <div class="vl-alert__message auk-u-text-capitalize">
       <p>{{@message}}</p>
-      <Auk::Button
-        @skin="secondary"
-        @href={{@options.downloadLink}}
-        download
-        class="auk-u-mt-4"
+      <AuLinkExternal
+        @skin="button-secondary"
+        href={{@options.downloadLink}}
         {{on "click" @options.onClose}}
+        class="auk-u-mt-4"
+        download
       >
         {{t "download"}}
-      </Auk::Button>
+      </AuLinkExternal>
     </div>
   </WebComponents::VlAlert>
 </ClickOutside>

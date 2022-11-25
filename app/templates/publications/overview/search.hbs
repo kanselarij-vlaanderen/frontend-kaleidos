@@ -9,12 +9,12 @@
           </Auk::Label>
           <Utils::SearchTooltip />
         </div>
-        <Auk::Input
-          @block={{true}}
-          placeholder={{t "search-placeholder"}}
+        <AuInput
+          data-test-route-search-input
+          @width="block"
           @value={{this.searchTextBuffer}}
           id="keyword"
-          data-test-route-search-input
+          placeholder={{t "search-placeholder"}}
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none auk-u-position-relative au-u-1-6">
@@ -56,15 +56,15 @@
         />
       </div>
       <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
-        <Auk::Button
+        <AuButton
+          data-test-route-search-trigger
           @skin="primary"
           @icon="search"
-          @block="true"
-          data-test-route-search-trigger
+          @width="block"
           type="submit"
         >
           {{capitalize (t "search")}}
-        </Auk::Button>
+        </AuButton>
       </div>
     </form>
   </Auk::Navbar>
@@ -183,13 +183,15 @@
                       </Auk::StatusPill>
                     </td>
                     <td class="auk-u-text-align--right">
-                      <Auk::Button
-                        @skin="borderless"
-                        @layout="icon-only"
+                      <AuLink
+                        @skin="button-naked"
                         @icon="chevron-right"
+                        @hideText={{true}}
                         @route="publications.publication.index"
                         @model={{row.id}}
-                      />
+                      >
+                        {{t "open"}}
+                      </AuLink>
                     </td>
                   </c.body>
                 </table.content>

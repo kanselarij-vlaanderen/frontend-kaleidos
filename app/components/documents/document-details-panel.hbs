@@ -16,16 +16,11 @@
         data-test-details-tab-document-type
         @key={{t "document-type"}}
       >
-        <Utils::ModelSelector
+        <Utils::DocumentTypeSelector
           data-test-details-tab-edit-document-type
-          @modelName="document-type"
-          @allowClear={{true}}
-          @searchField="label"
-          @displayField="label"
-          @sortField="priority"
-          @selected={{this.documentType}}
+          @selectedDocumentType={{this.documentType}}
           @onChange={{this.setDocumentType}}
-          @renderInPlace={{true}} {{! Required to make the seach box focusable }}
+          @renderInPlace={{true}}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
@@ -47,6 +42,7 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t "source-file"}}
       >
         <div class="au-u-flex au-u-flex--between">
@@ -58,6 +54,7 @@
             </p>
           {{/if}}
           <AuButton
+            data-test-document-details-panel-upload
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"
@@ -75,19 +72,19 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-cancel
-              @skin="borderless"
+              @skin="naked"
               @disabled={{this.isProcessing}}
               {{on "click" (perform this.cancelEditDetails)}}
             >
               {{t "cancel"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button
+            <AuButton
               data-test-details-tab-save
               @skin="primary"
               @disabled={{this.isProcessing}}
@@ -95,7 +92,7 @@
               {{on "click" (perform this.saveDetails)}}
             >
               {{t "save"}}
-            </Auk::Button>
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -118,22 +115,26 @@
               <Group.Item>
                 <AuButton
                   data-test-details-tab-delete
-                  @skin="secondary"
+                  @skin="naked"
                   @alert={{true}}
                   @icon="trash"
                   @hideText={{true}}
                   {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
-                />
+                >
+                  {{t "delete"}}
+                </AuButton>
               </Group.Item>
             {{/if}}
             <Group.Item>
               <AuButton
                 data-test-details-tab-edit
-                @skin="secondary"
+                @skin="naked"
                 @icon="pencil"
                 @hideText={{true}}
                 {{on "click" this.openEditDetails}}
-              />
+              >
+                {{t "edit"}}
+              </AuButton>
             </Group.Item>
           </Toolbar.Group>
         {{/if}}
@@ -158,24 +159,25 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue
+        data-test-document-details-panel-source-file
         @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
       >
         {{#if @piece.file.primarySource}}
-          <AuLink
+          <AuLinkExternal
             href={{@piece.file.primarySource.namedDownloadLink}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
             download
-          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLink>
+          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLinkExternal>
         {{else if @piece.file}}
-          <AuLink
+          <AuLinkExternal
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
             download
-          >{{@piece.name}}.{{@piece.file.extension}}</AuLink>
+          >{{@piece.name}}.{{@piece.file.extension}}</AuLinkExternal>
           {{else}}
           {{@piece.name}}
         {{/if}}

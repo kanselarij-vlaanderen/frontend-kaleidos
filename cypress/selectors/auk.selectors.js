@@ -33,10 +33,10 @@ const selectors = {
     body: '.auk-modal__body',
     header: {
       title: '.auk-modal__header .auk-toolbar__title',
-      close: '.auk-modal__header .auk-button .auk-icon .ki-x',
+      close: '.auk-modal__header .au-c-button .au-c-icon--x',
     },
     footer: {
-      cancel: '.auk-modal__footer .auk-toolbar-complex__left .auk-button-link',
+      cancel: '.auk-modal__footer .auk-toolbar-complex__left .au-c-button',
       // there is no default footer-save available (yet), use a custom selector for your use case
     },
   },
@@ -63,8 +63,8 @@ const selectors = {
 
   pagination: {
     count: '.auk-pagination__element:nth-child(1) > p',
-    previous: '.auk-pagination__element:nth-child(2) > .auk-button-link',
-    next: '.auk-pagination__element:nth-child(3) > .auk-button-link',
+    previous: '.auk-pagination__element:nth-child(2) > .au-c-button',
+    next: '.auk-pagination__element:nth-child(3) > .au-c-button',
   },
 
   header: {
@@ -77,12 +77,17 @@ const selectors = {
     checkbox: '.auk-checkbox__toggle',
   },
   loader: '.auk-loader',
-  input: '.auk-input',
 
-  datepicker: '[data-test-auk-datepickr]',
+  datepicker: {
+    datepicker: '[data-test-auk-datepickr]',
+    clear: '[data-test-auk-datepickr-clear]',
+  },
 
   formHelpText: '.auk-form-help-text',
   formGroup: '.auk-form-group',
+
+  fileUpload: '.auk-file-upload',
+
   icon: {
     warning: '.auk-icon--warning',
   },

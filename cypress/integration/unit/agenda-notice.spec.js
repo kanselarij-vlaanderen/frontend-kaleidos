@@ -37,7 +37,7 @@ context('agenda notice test', () => {
     cy.createAgenda(null, dateToCreateAgenda, 'add minister to notice');
     cy.createCase(caseShortTitle);
     cy.addSubcase(type, subcaseShortTitle, subcaseLongTitle, null, null);
-    cy.openSubcase(0);
+    cy.openSubcase(0, subcaseShortTitle);
     // add mandatees to notice
     cy.addSubcaseMandatee(1);
     cy.addSubcaseMandatee(2);

@@ -15,31 +15,36 @@
         class="auk-o-flex"
       >
         {{#if this.filterAgendas}}
-          <Auk::Button @icon="redo" @layout="icon-only" @skin="muted-borderless" {{on "click" this.clearFilter}}>
+          <AuButton
+            @skin="naked"
+            @icon="undo"
+            @hideText={{true}}
+            {{on "click" this.clearFilter}}
+          >
             {{t "clear-filter"}}
-          </Auk::Button>
+          </AuButton>
         {{/if}}
-        <Auk::Input
+        <AuInput
           data-test-route-agendas-overview-filter-input
-          @block={{true}}
+          @width="block"
           @icon="search"
-          placeholder={{t "date-example"}}
-          value={{this.filterAgendas}}
-          {{on "input" (perform this.debouncedSetFilter)}}
+          @value={{this.filterAgendas}}
           @enter={{this.setFilter}}
+          {{on "input" (perform this.debouncedSetFilter)}}
+          placeholder={{t "date-example"}}
           autocomplete="off"
         />
       </Group.Item>
       {{#if (user-may "manage-meetings")}}
         <Group.Item>
-          <Auk::Button
+          <AuButton
+            data-test-route-agendas-new-meeting
             @skin="primary"
             @icon="plus"
-            data-test-route-agendas-new-meeting
             {{on "click" this.openNewSessionModal}}
           >
             {{t "new-agenda"}}
-          </Auk::Button>
+          </AuButton>
         </Group.Item>
       {{/if}}
     </Toolbar.Group>
@@ -154,17 +159,19 @@
                     {{/if}}
                   </td>
                   <td class="auk-u-text-align--center">
-                    <Auk::Button
+                    <AuLink
                       data-test-route-agendas-overview-row-nav-button
-                      @skin="borderless"
-                      @layout="icon-only"
+                      @skin="button-naked"
                       @icon="chevron-right"
+                      @hideText={{true}}
                       @route="agenda.agendaitems"
                       @models={{array
                         agenda.createdFor.id
                         agenda.id
                       }}
-                    />
+                    >
+                      {{t "open"}}
+                    </AuLink>
                   </td>
                 </tr>
               {{/each}}

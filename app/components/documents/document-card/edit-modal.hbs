@@ -16,13 +16,14 @@
           {{uppercase @piece.file.extension}}
         </p>
         <div class="au-u-flex au-u-flex--spaced-small">
-          <Auk::Input
-            data-test-document-card-name-input={{true}}
-            @block={{true}}
+          <AuInput
+            data-test-document-edit-name-input
+            @width="block"
             @value={{this.name}}
           />
           <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton
+              data-test-document-edit-replace
               @skin="secondary"
               {{on "click" this.toggleUploadReplacementFile}}
             >
@@ -40,7 +41,7 @@
         {{/if}}
       </c.header>
       {{#if this.isUploadingReplacementFile}}
-        <c.content>
+        <c.content data-test-document-edit-pdf-file-uploader>
           <Auk::FileUploader
             @onUpload={{set this "replacementFile"}}
           />
@@ -66,12 +67,14 @@
             </p>
             <AuButtonGroup class="au-u-flex--no-wrap">
               <AuButton
+                data-test-document-edit-source-file-replace
                 @skin="secondary"
                 {{on "click" this.toggleUploadReplacementSourceFile}}
               >
                 {{t "replace"}}
               </AuButton>
               <AuButton
+                data-test-document-edit-source-file-delete
                 @skin="secondary"
                 @alert={{true}}
                 @icon="trash"
@@ -91,7 +94,7 @@
           {{/if}}
         </c.header>
         {{#if this.isUploadingReplacementSourceFile}}
-          <c.content>
+          <c.content data-test-document-edit-source-file-replacer>
             <Auk::FileUploader
               @onUpload={{set this "replacementSourceFile"}}
             />
@@ -112,7 +115,7 @@
             <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
           </div>
         </c.header>
-        <c.content>
+        <c.content data-test-document-edit-source-file-uploader>
           <Auk::FileUploader
             @onUpload={{set this "uploadedSourceFile"}}
           />

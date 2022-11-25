@@ -12,27 +12,31 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
-        <Auk::DropdownMenu
+        <AuDropdown
           data-test-proof-received-panel-dropdown
-          @skin="borderless"
           @icon="three-dots"
-          as |Menu|
+          @title={{t "more"}}
+          @hideText={{true}}
+          @alignment="right"
         >
-          <Menu.Item
-            @skin="primary"
+          <AuButton
             data-test-proof-received-panel-publication-request
+            @skin="link"
             @disabled={{@isCreatePublicationRequestDisabled}}
             {{on "click" this.openPublicationRequestModal}}
+            role="menuitem"
           >
             {{t "request-publication"}}
-          </Menu.Item>
-          <Menu.Item
+          </AuButton>
+          <AuButton
             data-test-proof-received-panel-edit
-            @skin="primary" {{on "click" this.openEditProofModal}}
+            @skin="link"
+            {{on "click" this.openEditProofModal}}
+            role="menuitem"
           >
             {{t "edit-2"}}
-          </Menu.Item>
-        </Auk::DropdownMenu>
+          </AuButton>
+        </AuDropdown>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
@@ -76,10 +80,10 @@
         <Auk::Label for="proofPrintCorrector">
           {{t "who-proof-reads"}}
         </Auk::Label>
-        <Auk::Input
+        <AuInput
           data-test-proof-received-panel-edit-corrector
-          id="proofPrintCorrector"
           @value={{mut this.newProofPrintCorrector}}
+          id="proofPrintCorrector"
         />
       </div>
     </Auk::Modal::Body>
@@ -87,7 +91,7 @@
       @cancelDisabled={{this.isCancelDisabled}}
       @onCancel={{this.closeEditProofModal}}
     >
-      <Auk::Button
+      <AuButton
         data-test-proof-received-panel-edit-save
         @skin="primary"
         @disabled={{this.isSaveDisabled}}
@@ -95,7 +99,7 @@
         {{on "click" (perform this.save)}}
       >
         {{t "save"}}
-      </Auk::Button>
+      </AuButton>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

@@ -6,6 +6,7 @@ import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -37,7 +38,7 @@ context('Publications via MR tests', () => {
   // 1 nota, 1 BVR, 1 MB, 1 Decreet
 
   beforeEach(() => {
-    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
+    cy.login('OVRB');
   });
 
   afterEach(() => {
@@ -161,7 +162,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.get(publication.publicationCaseInfo.editView.cancel).click();
@@ -177,7 +178,7 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
-    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker)
+    cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
@@ -319,7 +320,7 @@ context('Publications via MR tests', () => {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(auk.input)
+    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(appuniversum.input)
       .click()
       .type(numberOfPages);
     cy.get(publication.decisionsInfoPanel.cancel).click();
@@ -333,7 +334,7 @@ context('Publications via MR tests', () => {
       .scrollIntoView()
       .trigger('mouseover')
       .click();
-    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(auk.input)
+    cy.get(publication.decisionsInfoPanel.edit.numberOfPages).find(appuniversum.input)
       .click()
       .type(numberOfPages);
     cy.get(publication.decisionsInfoPanel.save).click();

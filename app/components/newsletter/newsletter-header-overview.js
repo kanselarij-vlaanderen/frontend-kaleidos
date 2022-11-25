@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -77,25 +78,32 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @task
   *publishToMail() {
     try {
-      yield this.ensureMailCampaign();
+      if (yield this.canSendMailCampaign()) {
+        yield this.ensureMailCampaign();
 
-      if (this.mailCampaign?.isSent) {
-        this.toaster.error(this.intl.t('error-already-sent-newsletter'));
-      } else {
-        if (yield this.validateMailCampaign()) {
-          try {
-            yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-            this.mailCampaign.sentAt = new Date();
-            yield this.mailCampaign.save();
-            this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
-          } catch(e) {
-            console.log("error sending newsletter", e);
-            this.toaster.error(
-              this.intl.t('error-send-newsletter'),
-              this.intl.t('warning-title')
-            );
+        if (this.mailCampaign.isSent) {
+          this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+        } else {
+          if (yield this.validateMailCampaign()) {
+            try {
+              yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
+              this.mailCampaign.sentAt = new Date();
+              yield this.mailCampaign.save();
+              this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
+            } catch(e) {
+              console.log("error sending newsletter", e);
+              this.toaster.error(
+                this.intl.t('error-send-newsletter'),
+                this.intl.t('warning-title')
+              );
+            }
           }
         }
+      } else {
+        this.toaster.error(
+          this.intl.t('error-cannot-send-newsletter'),
+          this.intl.t('warning-title')
+        );
       }
       this.showConfirmPublishMail = false;
     } catch (error) {
@@ -178,6 +186,30 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     }
 
     this.showConfirmPublishAll = false;
+  }
+
+  async canSendMailCampaign() {
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-created', // serialnumber
+    });
+    const themisPublicationActivities = await this.store.queryAll('themis-publication-activity', {
+      'filter[meeting][:id:]': this.args.meeting.id,
+    });
+    const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
+
+    const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
+    const hasNotas = (await this.store.count('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      'filter[type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
+    })) > 0;
+
+    const hasThemes = (await this.store.count('newsletter-info', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[:has:themes]': true,
+    })) > 0;
+
+    return hasDocumentPublicationPlanned && hasThemes && hasNotas;
   }
 
   async validateMailCampaign() {

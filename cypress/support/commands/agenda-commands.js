@@ -75,7 +75,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the start date
   if (!kind || kind !== 'Ministerraad - Plan Vlaamse Veerkracht') {
-    cy.get(agenda.editMeeting.datepicker).find(auk.datepicker)
+    cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
       .click();
     cy.setDateAndTimeInFlatpickr(date);
     // At this point, the flatpickr is still open and covers the other fields
@@ -87,7 +87,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the planned document release
   if (plannedRelease) {
-    cy.get(agenda.editMeeting.documentPublicationDate).find(auk.datepicker)
+    cy.get(agenda.editMeeting.documentPublicationDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateAndTimeInFlatpickr(plannedRelease);
     cy.get(agenda.editMeeting.meetingNumber).click({
@@ -409,7 +409,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
   cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
-  cy.intercept('PATCH', '/subcases/**').as('patchSubcase');
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
@@ -422,7 +421,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.modal.container).within(() => {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
@@ -441,17 +440,15 @@ function addAgendaitemToAgenda(subcaseTitle) {
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // select the found row (title should always match only 1 result to avoid using the wrong subcase)
-    cy.get(agenda.createAgendaitem.dataTable).find('tbody')
-      .children('tr')
-      .as('rows');
-
-    cy.get('@rows', {
+    cy.get(agenda.createAgendaitem.rows, {
       timeout: 12000,
     }).eq(0)
-      .click()
       .get(agenda.createAgendaitem.row.checkBox)
-      .should('be.checked');
-    cy.get(utils.vlModalFooter.save).click();
+      .as('checkbox')
+      .parent()
+      .click();
+    cy.get('@checkbox').should('be.checked');
+    cy.get(agenda.createAgendaitem.save).click();
   });
 
   cy.wait('@createAgendaActivity', {
@@ -461,9 +458,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait('@createNewAgendaitem', {
     timeout: 30000,
   })
-    .wait('@patchSubcase', {
-      timeout: 20000,
-    })
     .wait('@patchAgenda', {
       timeout: 20000,
     });

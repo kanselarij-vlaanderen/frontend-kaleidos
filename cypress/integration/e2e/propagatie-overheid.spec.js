@@ -105,8 +105,8 @@ context('Propagation to other graphs', () => {
     cy.get(document.linkedDocuments.add).should('not.exist');
   });
 
-  it('Test as Overheid', () => {
-    cy.login('Overheid');
+  it('Test as Overheidsorganisatie', () => {
+    cy.login('Overheidsorganisatie');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
@@ -125,7 +125,7 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).eq(1)
         .contains(`Publicatie documenten gepland op ${todayFormatted}`);
     });
-    cy.wait(60000);
+    cy.wait(80000);
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).eq(1)
         .contains(`Documenten zijn vrijgegeven op ${todayFormatted}`);
@@ -133,8 +133,8 @@ context('Propagation to other graphs', () => {
     cy.logoutFlow();
   });
 
-  it('Test as Overheid', () => {
-    cy.login('Overheid');
+  it('Test as Overheidsorganisatie', () => {
+    cy.login('Overheidsorganisatie');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
