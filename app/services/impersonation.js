@@ -66,17 +66,21 @@ export default class ImpersonationService extends Service {
           type: 'sessions',
           relationships: {
             account: {
-              type: 'accounts',
-              id: account.id,
-              attributes: {
-                uri: account.uri,
+              data: {
+                type: 'accounts',
+                id: account.id,
+                attributes: {
+                  uri: account.uri,
+                }
               }
             },
             membership: {
-              type: 'memberships',
-              id: membership.id,
-              attributes: {
-                uri: membership.uri,
+              data: {
+                type: 'memberships',
+                id: membership.id,
+                attributes: {
+                  uri: membership.uri,
+                }
               }
             }
           }
