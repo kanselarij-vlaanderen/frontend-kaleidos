@@ -1,10 +1,6 @@
 import { helper } from '@ember/component/helper';
-import { format } from 'date-fns';
-import { dateHelper } from 'frontend-kaleidos/utils/date-helper';
+import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 export default helper(function datetimeAt([datetimeOrString, at="om"]) {
-  const datetimeObject = dateHelper(datetimeOrString);
-  if (datetimeObject) {
-    return format(datetimeObject, `dd-MM-yyyy '${at}' HH:mm`);
-  }
+  return dateFormat(datetimeOrString, `dd-MM-yyyy ${at} HH:mm`);
 });
