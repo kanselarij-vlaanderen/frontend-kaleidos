@@ -5,22 +5,6 @@ import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
-import dependency from  '../../selectors/dependency.selectors';
-
-function selectFromDropdown(item) {
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 5000,
-  }).wait(500)
-    .contains(item)
-    .scrollIntoView()
-    .trigger('mouseover')
-    .click({
-      force: true,
-    });
-  cy.get(dependency.emberPowerSelect.option, {
-    timeout: 15000,
-  }).should('not.exist');
-}
 
 function getTranslatedMonth(month) {
   switch (month) {
@@ -319,11 +303,11 @@ context('Agenda tests', () => {
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
     cy.get(utils.kindSelector.kind).click();
-    selectFromDropdown(vvKind);
+    cy.selectFromDropdown(vvKind);
     cy.get(agenda.editMeeting.relatedMainMeeting).click();
-    // selectFromDropdown(formattedAgendaDatePVV);
+    // cy.selectFromDropdown(formattedAgendaDatePVV);
     // cy.get(dependency.emberPowerSelect.option).should('not.contain', formattedAgendaDatePVV);
-    selectFromDropdown(formattedAgendaDateMR);
+    cy.selectFromDropdown(formattedAgendaDateMR);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
     cy.get(agenda.editMeeting.save).click();
@@ -340,7 +324,7 @@ context('Agenda tests', () => {
     cy.wait('@getThemisPubActivity');
     cy.wait('@loadConcepts');
     cy.get(utils.kindSelector.kind).click();
-    selectFromDropdown(mrKind);
+    cy.selectFromDropdown(mrKind);
     cy.get(agenda.editMeeting.datepicker).click();
     cy.setDateInFlatpickr(agendaDatePVV);
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumber);
