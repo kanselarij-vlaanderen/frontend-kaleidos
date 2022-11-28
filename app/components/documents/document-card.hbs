@@ -37,7 +37,7 @@
               {{else}}
                 {{slice-text this.piece.name start=23 limit=50 removeType=true}}
               {{/if}}
-              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{this.piece.file.extension}}</AuPill>{{/if}}
+              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{uppercase this.piece.file.extension}}</AuPill>{{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta au-u-margin-top-tiny">
               {{! no piece.created in legacy data }}

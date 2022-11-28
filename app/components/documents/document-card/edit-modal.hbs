@@ -34,14 +34,15 @@
         </div>
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
-            <AuPill @size="small">{{uppercase @piece.file.extension}}</AuPill>
             {{slice-text @piece.name start=8 limit=2}}-{{slice-text @piece.name start=10 limit=2}}-{{slice-text @piece.name start=3 limit=4}}
             {{slice-text @piece.name start=12 limit=11}}
+            <AuPill @size="small" @skin="ongoing">BIS</AuPill>
             /
             {{t "uploaded-at"}}
             {{moment-format @piece.created}}
             {{t "at"}}
             {{moment-format @piece.created "HH:mm"}}
+            <AuPill @size="small">{{uppercase @piece.file.extension}}</AuPill>
           </AuHelpText>
         {{/if}}
       </c.header>
