@@ -134,7 +134,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   }
 
   @action
-  setPublicationRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setPublicationRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 }

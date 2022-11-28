@@ -39,10 +39,10 @@
           </c.header>
           <c.body as |row|>
             <td class="auk-table__col--1">
-              <Auk::Checkbox
+              <AuControlCheckbox
                 data-test-add-existing-piece-checkbox={{true}}
                 @checked={{row.selected}}
-                {{on "input" (action "select" row)}}
+                @onChange={{fn this.select row}}
               />
             </td>
             <td class="auk-table__col--8">

@@ -25,11 +25,11 @@ export default class ThemesSelector extends Component {
   }
 
   @action
-  toggleTheme(theme, wasChecked) {
-    if (wasChecked) {
-      this.args.selectedThemes.removeObject(theme);
-    } else {
+  toggleTheme(theme, checked) {
+    if (checked) {
       this.args.selectedThemes.addObject(theme);
+    } else {
+      this.args.selectedThemes.removeObject(theme);
     }
   }
 }

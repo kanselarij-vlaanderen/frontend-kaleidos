@@ -159,7 +159,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @action
-  setProofRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setProofRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 }

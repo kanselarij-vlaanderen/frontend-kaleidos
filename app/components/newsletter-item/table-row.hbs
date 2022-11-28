@@ -41,14 +41,14 @@
     {{/each}}
   </td>
   <td class="lt-cell align-left">
-    <Auk::Checkbox
+    <AuControlCheckbox
+      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
       @checked={{@newsletterItem.inNewsletter}}
       @disabled={{or
         (not @newsletterItem)
         this.saveNewsletterItem.isRunning
       }}
-      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
-      {{on "input" this.toggleInNewsletterFlag}}
+      @onChange={{this.toggleInNewsletterFlag}}
     />
   </td>
   <td class="lt-cell align-left">

@@ -41,11 +41,11 @@
                   {{t "publication-urgent"}}
                 </Auk::Label>
                 <div class="auk-form-group">
-                  <Auk::Checkbox
+                  <AuControlCheckbox
                     data-test-urgency-level-checkbox
                     @label={{t "priority-procedure"}}
                     @checked={{@publicationFlow.urgencyLevel.isUrgent}}
-                    {{on "input" this.changeIsUrgent}}
+                    @onChange={{this.changeIsUrgent}}
                   />
                 </div>
               </div>
