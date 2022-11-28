@@ -61,8 +61,10 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces2');
+    cy.get(document.documentCard.name.value)
+      .should('contain', `.${wordExtension}`);
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${file.fileName}.${wordExtension}`);
+      .should('contain', `.${pdfExtension}`);
 
     // upload word file as source file and ensure derived pdf file is generated
     cy.get(document.documentCard.actions).should('not.be.disabled')
@@ -75,8 +77,10 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces3');
+    cy.get(document.documentCard.name.value)
+      .should('contain', `.${wordExtension}`);
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${file.fileName}.${pdfExtension}`);
+      .should('contain', `.${wordExtension}`);
 
     // replace derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')
@@ -89,8 +93,10 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces4');
+    cy.get(document.documentCard.name.value)
+      .should('contain', `.${wordExtension}`);
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${replaceFilename}.${wordExtension}`);
+      .should('contain', `.${wordExtension}`);
 
     // delete derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')
