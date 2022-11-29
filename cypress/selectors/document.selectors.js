@@ -19,12 +19,12 @@ const selectors = {
   // document-edit-modal
   documentEdit: {
     nameInput: '[data-test-document-edit-name-input]',
-    replace: '[data-test-document-edit-replace]',
     sourceFileReplace: '[data-test-document-edit-source-file-replace]',
-    sourceFileDelete: '[data-test-document-edit-source-file-delete]',
-    pdfFileUploader: '[data-test-document-edit-pdf-file-uploader]',
     sourceFileReplacer: '[data-test-document-edit-source-file-replacer]',
-    sourceFileUploader: '[data-test-document-edit-source-file-uploader]',
+    derivedFileReplace: '[data-test-document-edit-derived-file-replace]',
+    derivedFileReplacer: '[data-test-document-edit-derived-file-replacer]',
+    derivedFileDelete: '[data-test-document-edit-derived-file-delete]',
+    derivedFileUploader: '[data-test-document-edit-derived-file-uploader]',
   },
 
   // vl-document

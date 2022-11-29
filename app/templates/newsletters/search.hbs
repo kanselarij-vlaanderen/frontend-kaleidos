@@ -126,21 +126,31 @@
                     data-test-route-search-newsletter-infos-row-go-to-agendaitem
                     class="auk-u-text-align--right"
                   >
-                    {{#if latestAgendaitem}}
-                      <AuLink
-                        @skin="button-naked"
-                        @icon="chevron-right"
+                    <AuButtonGroup class="auk-o-flex--no-wrap">
+                      <AuButton
+                        @skin="naked"
+                        @icon="copy"
                         @hideText={{true}}
-                        @route="agenda.agendaitems.agendaitem.news-item"
-                        @models={{array
-                          latestAgendaitem.meetingId
-                          latestAgendaitem.agendaId
-                          latestAgendaitem.id
-                        }}
+                        {{on "click" (fn this.copyText row)}}
                       >
-                        {{t "open"}}
-                      </AuLink>
-                    {{/if}}
+                        {{t "copy"}}
+                      </AuButton>
+                      {{#if latestAgendaitem}}
+                        <AuLink
+                          @skin="button-naked"
+                          @icon="chevron-right"
+                          @hideText={{true}}
+                          @route="agenda.agendaitems.agendaitem.news-item"
+                          @models={{array
+                            latestAgendaitem.meetingId
+                            latestAgendaitem.agendaId
+                            latestAgendaitem.id
+                          }}
+                        >
+                          {{t "open"}}
+                        </AuLink>
+                      {{/if}}
+                    </AuButtonGroup>
                   </td>
                 {{/let}}
               </c.body>

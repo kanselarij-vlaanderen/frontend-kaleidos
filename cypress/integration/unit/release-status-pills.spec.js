@@ -27,7 +27,7 @@ context('Testing internal and themis document release pills', () => {
 
     // check if planned release date is the changed value
     cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.releaseDocuments).click({
+    cy.get(agenda.agendaActions.planReleaseDocuments).click({
       force: true,
     });
     cy.get(auk.datepicker.datepicker).eq(0)
@@ -48,7 +48,7 @@ context('Testing internal and themis document release pills', () => {
 
     // change release date and check if value changed
     cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.releaseDocuments).click({
+    cy.get(agenda.agendaActions.planReleaseDocuments).click({
       force: true,
     });
     cy.get(auk.datepicker.datepicker).eq(0)

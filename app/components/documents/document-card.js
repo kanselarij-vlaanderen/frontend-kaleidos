@@ -48,6 +48,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
+    this.loadFiles.perform();
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
@@ -91,6 +92,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+  }
+
+  @task
+  *loadFiles() {
+    const sourceFile = yield this.args.piece.file;
+    yield sourceFile?.derived;
   }
 
 

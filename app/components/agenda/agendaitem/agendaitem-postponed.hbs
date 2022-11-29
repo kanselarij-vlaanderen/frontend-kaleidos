@@ -21,20 +21,29 @@
       </Auk::Button>
     {{else}}
       {{#if (user-may "manage-agendaitems")}}
-        <Auk::DropdownMenu @skin="primary" @label={{t "propose-again"}} as |Menu|>
+        <AuDropdown
+          @skin="primary"
+          @title={{t "propose-again"}}
+          @alignment="right"
+        >
           {{#if this.loadProposableMeetings.isRunning}}
-            {{t "agenda-loading"}}
+            <div role="menuitem">
+              <Auk::Loader @message={{t "agenda-loading"}} />
+            </div>
           {{else}}
-            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|
-            }}
-              <Menu.Item {{on "click" (perform this.reProposeForAgenda meeting)}}>
+            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
+              <AuButton
+                @skin="link"
+                {{on "click" (perform this.reProposeForAgenda meeting)}}
+                role="menuitem"
+              >
                 {{t "agenda-for"}}
                 {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                 {{concat " - " meeting.numberRepresentation}}
-              </Menu.Item>
+              </AuButton>
             {{/each}}
           {{/if}}
-        </Auk::DropdownMenu>
+        </AuDropdown>
       {{/if}}
     {{/if}}
   {{/if}}

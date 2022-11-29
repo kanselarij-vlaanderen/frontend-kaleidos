@@ -1,35 +1,35 @@
 <div
-  class="auk-input-with-icon
-    {{@class}}
-    {{if @enableClear "auk-input-with-clear-action"}}"
+  class="{{@class}} {{if @enableClear "auk-input-with-clear-action"}}"
   {{did-update this.updateEnable this.enable}}
 >
-  <Auk::Icon @name="calendar" />
-  <EmberFlatpickr
-    data-test-auk-datepickr
-    class="auk-input auk-input--block {{this.error}}"
-    placeholder={{this.placeholder}}
-    @allowInput={{true}}
-    @clickOpens={{true}}
-    @date={{this.date}} {{!-- Required Option --}}
-    @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
-    @locale="nl"
-    @mode={{this.mode}}
-    @enable={{this.enable}}
-    @nextArrow=""
-    @prevArrow=""
-    @noCalendar={{false}}
-    @onChange={{this.onChange}} {{!-- Required Option --}}
-    @onReady={{this.onReady}}
-    @shorthandCurrentMonth={{true}}
-    @disabled={{@disabled}}
-    @minDate={{@min}}
-    @maxDate={{@max}}
-    @enableTime={{@enableTime}}
-    @time_24hr={{true}}
-    @defaultHour={{@defaultHour}}
-    @defaultMinute={{@defaultMinute}}
-  />
+  <span class="au-c-input-wrapper au-c-input-wrapper--left auk-u-block auk-u-maximize-width">
+    <AuIcon @icon="calendar"/>
+    <EmberFlatpickr
+      data-test-auk-datepickr
+      class="au-c-input au-c-input--block {{this.error}}"
+      placeholder={{this.placeholder}}
+      @allowInput={{true}}
+      @clickOpens={{true}}
+      @date={{this.date}} {{!-- Required Option --}}
+      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+      @locale="nl"
+      @mode={{this.mode}}
+      @enable={{this.enable}}
+      @nextArrow=""
+      @prevArrow=""
+      @noCalendar={{false}}
+      @onChange={{this.onChange}} {{!-- Required Option --}}
+      @onReady={{this.onReady}}
+      @shorthandCurrentMonth={{true}}
+      @disabled={{@disabled}}
+      @minDate={{@min}}
+      @maxDate={{@max}}
+      @enableTime={{@enableTime}}
+      @time_24hr={{true}}
+      @defaultHour={{@defaultHour}}
+      @defaultMinute={{@defaultMinute}}
+    />
+  </span>
   {{#if @enableClear}}
     <AuButton
       data-test-auk-datepickr-clear
