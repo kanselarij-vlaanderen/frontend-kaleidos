@@ -124,14 +124,33 @@
           <Auk::Button @skin="primary">Ontwerpagenda goedkeuren</Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <Auk::DropdownMenu
-            @label="Acties"
-            @placement="bottom-end"
-          as |Menu|>
-            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-            <Menu.Item @route="styleguide.table">Actie</Menu.Item>
-          </Auk::DropdownMenu>
+          <AuDropdown
+            @skin="secondary"
+            @title="Acties"
+            @alignment="right"
+          >
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
+            >
+              Actie
+            </AuLink>
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
+            >
+              Actie
+            </AuLink>
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
+            >
+              Actie
+            </AuLink>
+            </AuDropdown>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

@@ -194,31 +194,26 @@ context('new document viewer tests', () => {
     // check, upload source pdf, check again
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
     openEditAndAddDocument(pdfFile.folder, pdfFile.fileName, pdfFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('Bronbestand');
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
 
     // replace pdf with new pdf, check again
     openEditAndAddDocument(newPdfFile.folder, newPdfFile.fileName, newPdfFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('Bronbestand');
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
 
     // replace pdf with word file and check again
     openEditAndAddDocument(wordFile.folder, wordFile.fileName, wordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
 
     // replace word file with new word file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
 
     // replace word file with new pdf file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('Word document');
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
 
     // delete document and check
-    cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
+    cy.get(document.previewDetailsTab.name).contains('new name test.docx');
     cy.get(document.previewDetailsTab.delete).click();
     cy.intercept('DELETE', '/files/**').as('deleteFile');
     cy.intercept('DELETE', '/pieces/**').as('deletePieces');
