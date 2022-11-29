@@ -36,6 +36,10 @@ $say-editor-padding: 1rem;
     @include au-font-size(1.8rem);
     font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
+
+  ol {
+    margin-left: $au-unit;
+  }
 }
 
 // Reduce height of inner
