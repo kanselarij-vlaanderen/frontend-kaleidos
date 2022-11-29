@@ -27,7 +27,6 @@ export default {
     KABINET_DOSSIERBEHEERDER: 'http://themis.vlaanderen.be/id/gebruikersrol/6bcebe59-0cb5-4c5e-ab40-ca98b65887a4',
     KABINET_MEDEWERKER: 'http://themis.vlaanderen.be/id/gebruikersrol/33dbca4a-7e57-41d2-a26c-aedef422ff84',
     OVERHEIDSORGANISATIE: 'http://themis.vlaanderen.be/id/gebruikersrol/06cfd67b-1637-47d3-811f-97aa23a83644',
-    OVERLEGCOMITE_RAADGEVER: 'http://themis.vlaanderen.be/id/gebruikersrol/a12965ec-e95a-4f7b-8911-7bbb41ce29d9',
     VLAAMS_PARLEMENT: 'http://themis.vlaanderen.be/id/gebruikersrol/12543581-7f02-4166-87d2-ab15ddfce642',
   },
   USER_ACCESS_STATUSES: {
