@@ -10,7 +10,7 @@
       as |c|
     >
       <c.header
-        @badgeIcon={{if (eq @piece.file.extension "pdf") "pdf" "document"}}
+        @badgeIcon={{document-icon @piece.file.extension}}
       >
         <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
           {{uppercase @piece.file.extension}}
@@ -23,9 +23,9 @@
           />
           <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton
-              data-test-document-edit-replace
+              data-test-document-edit-source-file-replace
               @skin="secondary"
-              {{on "click" this.toggleUploadReplacementFile}}
+              {{on "click" this.toggleUploadReplacementSourceFile}}
             >
               {{t "replace"}}
             </AuButton>
@@ -40,26 +40,26 @@
           </AuHelpText>
         {{/if}}
       </c.header>
-      {{#if this.isUploadingReplacementFile}}
-        <c.content data-test-document-edit-pdf-file-uploader>
+      {{#if this.isUploadingReplacementSourceFile}}
+        <c.content data-test-document-edit-source-file-replacer>
           <Auk::FileUploader
-            @onUpload={{set this "replacementFile"}}
+            @onUpload={{set this "replacementSourceFile"}}
           />
         </c.content>
       {{/if}}
     </AuCard>
-    {{#if @piece.file.primarySource}}
+    {{#if @piece.file.derived}}
       <AuCard
         @flex={{true}}
         @size="small"
-        class="au-u-margin-top-small {{if this.isDeletingSourceFile 'vlc-document--deleted-state'}}"
+        class="au-u-margin-top-small {{if this.isDeletingDerivedFile 'vlc-document--deleted-state'}}"
         as |c|
       >
         <c.header
-          @badgeIcon={{if (eq @piece.file.primarySource.extension "docx") "word" "document"}}
+          @badgeIcon={{document-icon @piece.file.derived.extension}}
         >
           <p class="vlc-subline au-u-medium au-u-muted">
-            {{uppercase @piece.file.primarySource.extension}}
+            {{uppercase @piece.file.derived.extension}}
           </p>
           <div class="au-u-flex au-u-flex--between au-u-flex--spaced-small">
             <p>
@@ -67,36 +67,36 @@
             </p>
             <AuButtonGroup class="au-u-flex--no-wrap">
               <AuButton
-                data-test-document-edit-source-file-replace
+                data-test-document-edit-derived-file-replace
                 @skin="secondary"
-                {{on "click" this.toggleUploadReplacementSourceFile}}
+                {{on "click" this.toggleUploadReplacementDerivedFile}}
               >
                 {{t "replace"}}
               </AuButton>
               <AuButton
-                data-test-document-edit-source-file-delete
+                data-test-document-edit-derived-file-delete
                 @skin="secondary"
                 @alert={{true}}
                 @icon="trash"
                 @hideText={{true}}
-                {{on "click" (toggle "isDeletingSourceFile" this)}}
+                {{on "click" (toggle "isDeletingDerivedFile" this)}}
               >
               </AuButton>
             </AuButtonGroup>
           </div>
-          {{#if @piece.file.primarySource.created}}
+          {{#if @piece.file.derived.created}}
             <AuHelpText @skin="secondary">
               {{t "uploaded-at"}}
-              {{moment-format @piece.file.primarySource.created}}
+              {{moment-format @piece.file.derived.created}}
               {{t "at"}}
-              {{moment-format @piece.file.primarySource.created "HH:mm"}}
+              {{moment-format @piece.file.derived.created "HH:mm"}}
             </AuHelpText>
           {{/if}}
         </c.header>
-        {{#if this.isUploadingReplacementSourceFile}}
-          <c.content data-test-document-edit-source-file-replacer>
+        {{#if this.isUploadingReplacementDerivedFile}}
+          <c.content data-test-document-edit-derived-file-replacer>
             <Auk::FileUploader
-              @onUpload={{set this "replacementSourceFile"}}
+              @onUpload={{set this "replacementDerivedFile"}}
             />
           </c.content>
         {{/if}}
@@ -112,12 +112,12 @@
           @badgeIcon="document"
         >
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">Bronbestand opladen</AuHeading>
+            <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
           </div>
         </c.header>
-        <c.content data-test-document-edit-source-file-uploader>
+        <c.content data-test-document-edit-derived-file-uploader>
           <Auk::FileUploader
-            @onUpload={{set this "uploadedSourceFile"}}
+            @onUpload={{set this "uploadedDerivedFile"}}
           />
         </c.content>
       </AuCard>
