@@ -4,7 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import fetch from 'fetch';
 import {
   DOCUMENT_DELETE_UNDO_TIME_MS,
-  SUPPORTED_MIME_TYPES,
+  DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES,
 } from 'frontend-kaleidos/config/config';
 
 export default class FileService extends Service {
@@ -82,27 +82,30 @@ export default class FileService extends Service {
   }
 
   async convertSourceFile(sourceFile) {
-    if (!SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
-      // The source file MIME type is unsupported, don't try to send it to the backend
-      return
-    }
+    if (DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
+      const response = await fetch(`/files/${sourceFile.id}/convert`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+        },
+      });
 
-    const response = await fetch(`/files/${sourceFile.id}/convert`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    const result = await response.json();
-    if (!response.ok) {
-      console.warn(`Couldn't convert file with id ${sourceFile.id}`);
-      throw new Error('An exception occurred while converting a file: ' + JSON.stringify(result.errors));
-    } else {
-      const oldDerivedFile = await sourceFile.derived;
-      const derivedFile = await this.store.findRecord('file', result.data[0].id)
-      sourceFile.derived = derivedFile;
-      await Promise.all([sourceFile.save(), oldDerivedFile?.destroyRecord()]);
+      if (response.ok) {
+        const result = await response.json();
+        const oldDerivedFile = await sourceFile.derived;
+        const derivedFile = await this.store.findRecord('file', result.data[0].id)
+        sourceFile.derived = derivedFile;
+        await Promise.all([sourceFile.save(), oldDerivedFile?.destroyRecord()]);
+      } else {
+        console.warn(`Couldn't convert file with id ${sourceFile.id}`);
+        let errorMessage = response.status;
+        if (response.headers.get('Content-Type') === 'application/vnd.api+json') {
+          const { errors } = await response.json();
+          errorMessage = JSON.stringify(errors);
+        }
+        throw new Error(`An exception occurred while converting a file: ${errorMessage}`);
+      }
     }
   }
 
