@@ -10,24 +10,12 @@ export default class CurrentSessionService extends Service {
   @service impersonation;
 
   @tracked user;
-  @tracked role;
   @tracked organization;
   @tracked membership;
+  @tracked ownRole;
 
-  get ownUser() {
-    return this.impersonation.user ?? this.user;
-  }
-
-  get ownRole() {
-    return this.impersonation.role ?? this.role;
-  }
-
-  get ownOrganization() {
-    return this.impersonation.organization ?? this.organization;
-  }
-
-  get ownMembership() {
-    return this.impersonation.membership ?? this.membership;
+  get impersonatedRole() {
+    return this.impersonation.role;
   }
 
   /* eslint-disable ember/no-get */
@@ -43,9 +31,9 @@ export default class CurrentSessionService extends Service {
           this.membership.organization,
           this.membership.user
         ]);
-        this.role = role;
         this.organization = organization;
         this.user = user;
+        this.role = role;
       }
       await this.impersonation.load();
     }
@@ -72,11 +60,11 @@ export default class CurrentSessionService extends Service {
   }
 
   get userGroup() {
-    return this.role && findGroupByRole(this.role.uri);
+    return this.impersonatedRole && findGroupByRole(this.impersonatedRole.uri);
   }
 
   get ownUserGroup() {
-    return this.ownRole && findGroupByRole(this.ownRole.uri);
+    return this.role && findGroupByRole(this.role.uri);
   }
 
   get isAdmin() {

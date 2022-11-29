@@ -5,6 +5,7 @@ import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const environmentNames = {
   localhost: 'LOCAL',
@@ -21,12 +22,12 @@ export default class MHeader extends Component {
   @service toaster;
   @service intl;
 
-  @tracked showImpersonateUsers = false;
-  @tracked memberships;
+  @tracked showRoles = false;
+  @tracked roles;
 
   constructor() {
     super(...arguments);
-    this.loadMemberships.perform();
+    this.loadRoles.perform();
 
     const hostname = window.location.hostname;
     if (environmentNames[hostname]) {
@@ -56,21 +57,19 @@ export default class MHeader extends Component {
   }
 
   @action
-  toggleShowImpersonateUsers(e) {
+  toggleShowRoles(e) {
     e.stopPropagation();
-    this.showImpersonateUsers = !this.showImpersonateUsers;
+    this.showRoles = !this.showRoles;
   }
 
   @action
-  async impersonate(membership) {
-    this.showImpersonateUsers = false;
-    const user = await membership.user;
-    const account = await user.account;
+  async impersonate(role) {
+    this.showRoles = false;
     try {
-      await this.impersonation.impersonate(account, membership);
+      await this.impersonation.impersonate(role);
     } catch (error) {
       this.toaster.error(
-        this.intl.t('error-impersonation', { message: error.message }),
+        this.intl.t('error-change-roles', { message: error.message }),
         this.intl.t('warning-title'),
       );
     }
@@ -78,17 +77,10 @@ export default class MHeader extends Component {
   }
 
   @task
-  *loadMemberships() {
-    this.memberships = yield this.store.query('membership', {
-      filter: {
-        user: {
-          account: {
-            provider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
-          }
-        }
-      },
-      sort: 'user.last-name,user.first-name',
-      include: 'user',
+  *loadRoles() {
+    this.roles = yield this.store.queryAll('role', {
+      'filter[concept-scheme][:uri:]': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
+      sort: 'position'
     });
   }
 }

@@ -58,10 +58,13 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
-      {{#if (not-eq this.currentSession.user this.currentSession.ownUser)}}
+      {{#if
+           (and this.currentSession.impersonatedRole
+           (not-eq this.currentSession.role this.currentSession.impersonatedRole))
+      }}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill">
-            {{t "you-see-the-app-as" name=this.currentSession.user.firstName}}
+            {{t "you-see-the-app-as" name=this.currentSession.impersonatedRole.label}}
           </div>
         </Auk::Toolbar::Item>
       {{/if}}
@@ -100,44 +103,44 @@
         </AuDropdown>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.ownUser}}
+        {{#if this.currentSession.user}}
           <AuDropdown
-            @title={{this.currentSession.ownUser.firstName}}
+            @title={{this.currentSession.user.firstName}}
             @alignment="right"
             data-test-m-header-user-actions
           >
-            {{#if this.showImpersonateUsers}}
+            {{#if this.showRoles}}
               <AuButton
                 @skin="link"
                 @icon="chevron-left"
                 role="menuitem"
-                {{on "click" this.toggleShowImpersonateUsers}}
+                {{on "click" this.toggleShowRoles}}
               >
                 {{t "back"}}
               </AuButton>
               <AuHr />
-              {{#each this.memberships as |membership|}}
+              {{#each this.roles as |role|}}
                 <AuButton
                   @icon="user"
                   @skin="link"
                   role="menuitem"
-                  {{on "click" (fn this.impersonate membership)}}
+                  {{on "click" (fn this.impersonate role)}}
                 >
-                  {{membership.user.firstName}}
+                  {{role.label}}
                 </AuButton>
               {{/each}}
             {{else}}
               <div role="menuitem">
                 <Auk::Avatar
                   @icon="user"
-                  @name={{this.currentSession.ownUser.fullName}}
+                  @name={{this.currentSession.user.fullName}}
                 >
-                  <p>{{this.currentSession.ownUser.fullName}}</p>
+                  <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-text-muted auk-u-text-size--small">
-                    {{or this.currentSession.ownOrganization.name this.currentSession.ownOrganization.identifier}}
+                    {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
                   </p>
                   <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
-                    {{this.currentSession.ownRole.label}}
+                    {{this.currentSession.role.label}}
                   </p>
                 </Auk::Avatar>
               </div>
@@ -147,10 +150,10 @@
                   @skin="link"
                   @icon="chevron-right"
                   @iconAlignment="right"
-                  {{on "click" this.toggleShowImpersonateUsers}}
+                  {{on "click" this.toggleShowRoles}}
                   role="menuitem"
                 >
-                  {{t "impersonate-user"}}
+                  {{t "change-role"}}
                 </AuButton>
               {{/if}}
               <AuButton
