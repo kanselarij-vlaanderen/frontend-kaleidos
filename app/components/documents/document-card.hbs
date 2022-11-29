@@ -23,34 +23,40 @@
                 {{/unless}}
               </span>
             </div>
-            <LinkTo @route="document" @model={{this.piece.id}}
-              class="auk-h4" data-test-document-card-name-value>
-              {{this.piece.name}}{{#if this.piece.file}}.{{this.piece.file.extension}}{{/if}}
+            <LinkTo
+              @route="document"
+              @model={{this.piece.id}}
+              class="auk-h4"
+              data-test-document-card-name-value
+            >
+              {{#if this.loadFiles.isRunning}}
+                <AuLoader @padding="small"/>
+              {{else}}
+                {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
+                  {{this.piece.name}}.{{extension}}
+                {{/let}}
+              {{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
-                <p>
+                <p data-test-document-card-primary-source-created={{if this.piece.file.derived ""}}>
                   {{t "uploaded-at"}}
                   {{moment-format this.piece.created}}
                   {{t "at"}}
                   {{moment-format this.piece.created "HH:mm"}}
-                </p>
-              {{/if}}
-              {{#if this.piece.file.primarySource.created}}
-                <p data-test-document-card-primary-source-created>
-                  {{t "uploaded-at"}}
-                  {{moment-format this.piece.file.primarySource.created}}
-                  {{t "at"}}
-                  {{moment-format this.piece.file.primarySource.created "HH:mm"}}
-                  {{t "as"}}
-                  <AuLinkExternal
-                    data-test-document-card-primary-source-link
-                    href={{this.piece.file.primarySource.namedDownloadLink}}
-                    download
-                  >
-                    {{t (if (eq this.piece.file.primarySource.extension "docx") "word-document" "source-file-lowercase")}}
-                  </AuLinkExternal>
+                  {{#if this.piece.file.derived}}
+                    {{t "as"}}
+                    {{!-- TODO: AuLinkExternal has a font-size of 16px (because it uses the same size as buttons), but that's larger than normal text (which uses 14px).
+                    Currently this link looks a little larger than the surrounding text. --}}
+                    <AuLinkExternal
+                      data-test-document-card-primary-source-link
+                      href={{this.piece.file.namedDownloadLink}}
+                      download
+                    >
+                      {{t "source-file-lowercase"}}
+                    </AuLinkExternal>
+                  {{/if}}
                 </p>
               {{/if}}
             </div>
