@@ -15,6 +15,7 @@
               {{#if (user-may "manage-documents")}}
                 <AuButton
                   data-test-route-agenda-documents-batch-edit
+                  @skin="secondary"
                   @icon="pencil"
                   {{on "click" this.openBatchDetails}}
                 >
