@@ -16,6 +16,7 @@
             {{/if}}
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
+            {{#if @nameMockup}}
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
               <span data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
@@ -39,6 +40,13 @@
               {{/if}}
               {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{uppercase this.piece.file.extension}}</AuPill>{{/if}}
             </LinkTo>
+            {{else}}
+            <LinkTo @route="document" @model={{this.piece.id}}
+              class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny" data-test-document-card-name-value>
+                {{this.piece.name}}
+              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{uppercase this.piece.file.extension}}</AuPill>{{/if}}
+            </LinkTo>
+            {{/if}}
             <div class="vlc-document-card-content__meta au-u-margin-top-tiny">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
