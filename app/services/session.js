@@ -4,7 +4,6 @@ import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ExtendedSessionService extends SessionService {
   @service currentSession;
-  @service impersonation;
   @service router;
 
   async handleAuthentication() {
@@ -16,8 +15,8 @@ export default class ExtendedSessionService extends SessionService {
     super.handleAuthentication('index');
   }
 
-  handleInvalidation() {
-    this.currentSession.clear();
+  async handleInvalidation() {
+    await this.currentSession.clear();
     const logoutUrl = ENV.torii.providers['acmidm-oauth2'].logoutUrl;
     try {
       const url = new URL(logoutUrl);
@@ -28,7 +27,7 @@ export default class ExtendedSessionService extends SessionService {
   }
 
   async invalidate() {
-    await this.impersonation.stopImpersonation();
+    await this.currentSession.clear();
     return super.invalidate(...arguments);
   }
 }

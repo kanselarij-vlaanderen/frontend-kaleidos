@@ -31,10 +31,6 @@ export default class ImpersonationService extends Service {
     }
   }
 
-  clear() {
-    this.role = null;
-  }
-
   async impersonate(role) {
     if (IMPERSONATION_ENABLED) {
       const response = await fetch('/impersonate', {
@@ -75,7 +71,7 @@ export default class ImpersonationService extends Service {
         method: 'DELETE',
       });
       if (response.ok) {
-        this.clear();
+        this.role = null;
       }
     }
   }

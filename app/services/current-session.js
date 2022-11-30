@@ -40,7 +40,7 @@ export default class CurrentSessionService extends Service {
     this.user = null;
     this.role = null;
     this.organization = null;
-    this.impersonation.clear();
+    this.impersonation.stopImpersonation();
   }
 
   may(permission, checkImpersonator=false) {
