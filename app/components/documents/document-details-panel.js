@@ -12,6 +12,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
   @service fileService;
+  @service intl;
+  @service toaster;
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -61,7 +63,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.piece.file = this.replacementSourceFile;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      try {
+        yield this.fileService.convertSourceFile(sourceFile);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-convert-file', { message: error.message }),
+          this.intl.t('warning-title'),
+        );
+      }
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
