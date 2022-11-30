@@ -93,6 +93,7 @@ pipeline {
             sh "mkdir -p ${WORKSPACE}/reports/cypress_screenshots/"
             sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
             sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+            sh "ls ${workspace}/kaleidos-project/data/files"
 
             // Cypress reports and screenshots
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
