@@ -6,6 +6,9 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
+  identifier:
+    networks:
+      - default
   elasticsearch:
     volumes:
       - /usr/share/elasticsearch/data
