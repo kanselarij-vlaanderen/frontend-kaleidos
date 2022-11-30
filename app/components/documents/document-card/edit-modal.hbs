@@ -34,9 +34,7 @@
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
             {{t "uploaded-at"}}
-            {{moment-format @piece.created}}
-            {{t "at"}}
-            {{moment-format @piece.created "HH:mm"}}
+            {{datetime-at @piece.created}}
           </AuHelpText>
         {{/if}}
       </c.header>
@@ -87,9 +85,7 @@
           {{#if @piece.file.derived.created}}
             <AuHelpText @skin="secondary">
               {{t "uploaded-at"}}
-              {{moment-format @piece.file.derived.created}}
-              {{t "at"}}
-              {{moment-format @piece.file.derived.created "HH:mm"}}
+              {{datetime-at @piece.file.derived.created}}
             </AuHelpText>
           {{/if}}
         </c.header>
