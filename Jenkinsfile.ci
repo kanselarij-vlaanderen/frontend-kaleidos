@@ -102,7 +102,9 @@ pipeline {
             sh "mkdir -p ${WORKSPACE}/service-logs"
             sh '''
             cd $WORKSPACE/kaleidos-project &&
-            pwd &&
+            docker-compose ps &&
+            docker-compose ps | awk '{print $1}' &&
+            docker-compose ps | awk '{print \$1}' &&
             for container_name in $(docker-compose ps | awk '{print $1}' | tail -n +3); do cp $(docker inspect --format='{{.LogPath}}' $container_name) $WORKSPACE/service-logs/"$container_name".log; done
             '''
             archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
