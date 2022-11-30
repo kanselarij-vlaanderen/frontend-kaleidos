@@ -13,7 +13,7 @@ export default class ImpersonationService extends Service {
 
   async load() {
     if (IMPERSONATION_ENABLED) {
-      const response = await fetch('/who-am-i', {
+      const response = await fetch('/impersonations/current', {
         method: 'GET',
         headers: {
           'Accept': 'application/vnd.api+json',
@@ -21,7 +21,7 @@ export default class ImpersonationService extends Service {
       });
       const result = await response.json();
       if (response.ok) {
-        const impersonatedRoleId = result.data.relationships?.role?.data?.id;
+        const impersonatedRoleId = result.data.relationships?.['impersonated-role']?.data?.id;
         if (impersonatedRoleId) {
           this.role = await this.store.findRecord('role', impersonatedRoleId);
         }
@@ -33,7 +33,7 @@ export default class ImpersonationService extends Service {
 
   async impersonate(role) {
     if (IMPERSONATION_ENABLED) {
-      const response = await fetch('/impersonate', {
+      const response = await fetch('/impersonations', {
         method: 'POST',
         headers: {
           'Accept': 'application/vnd.api+json',
@@ -43,13 +43,10 @@ export default class ImpersonationService extends Service {
           data: {
             type: 'sessions',
             relationships: {
-              role: {
+              'impersonated-role': {
                 data: {
-                  type: 'accounts',
-                  id: role.id,
-                  attributes: {
-                    uri: role.uri,
-                  }
+                  type: 'roles',
+                  id: role.id
                 }
               }
             }
@@ -67,7 +64,7 @@ export default class ImpersonationService extends Service {
 
   async stopImpersonation() {
     if (IMPERSONATION_ENABLED) {
-      const response = await fetch('/impersonate', {
+      const response = await fetch('/impersonations/current', {
         method: 'DELETE',
       });
       if (response.ok) {
