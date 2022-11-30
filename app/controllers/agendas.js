@@ -128,7 +128,7 @@ export default class AgendasController extends Controller {
 
   @action
   sortTable(sortField) {
-    this.sort = sortField;
+    this.sortAgendas = sortField;
   }
 
   @action

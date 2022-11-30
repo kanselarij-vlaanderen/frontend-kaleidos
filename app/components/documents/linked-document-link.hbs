@@ -24,9 +24,7 @@
               {{! no lastPiece.created in legacy data }}
               {{#if this.lastPiece.created}}
                 {{t "uploaded-at"}}
-                {{moment-format this.lastPiece.created}}
-                {{t "at"}}
-                {{moment-format this.lastPiece.created "HH:mm"}}
+                {{datetime-at this.lastPiece.created}}
               {{/if}}
             </div>
           </Group.Item>
@@ -94,9 +92,7 @@
                     {{!-- no piece.created in legacy data --}}
                     {{#if piece.created}}
                       {{t "uploaded-at"}}
-                      {{moment-format piece.created}}
-                      {{t "at"}}
-                      {{moment-format piece.created "HH:mm"}}
+                      {{datetime-at piece.created}}
                     {{/if}}
                   </div>
                   <div class="vlc-document-card-item__icon">

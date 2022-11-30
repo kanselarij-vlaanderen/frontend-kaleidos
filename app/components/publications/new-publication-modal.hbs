@@ -101,7 +101,7 @@
             </Auk::Label>
             {{#if this.isViaCouncilOfMinisters}}
               <span class="auk-u-text-muted">
-                {{moment-format this.decisionDate}}
+                {{date this.decisionDate}}
               </span>
             {{else}}
               <Auk::Datepicker
