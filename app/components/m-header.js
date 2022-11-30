@@ -41,7 +41,7 @@ export default class MHeader extends Component {
 
   get canImpersonate() {
     const isEnabled = ENV.APP.ENABLE_IMPERSONATION;
-    const hasPermission = this.currentSession.reallyMay('impersonate-users');
+    const hasPermission = this.currentSession.may('impersonate-users', true);
     return isEnabled && hasPermission;
   }
 

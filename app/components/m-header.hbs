@@ -58,13 +58,10 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
-      {{#if
-           (and this.currentSession.impersonatedRole
-           (not-eq this.currentSession.role this.currentSession.impersonatedRole))
-      }}
+      {{#if this.currentSession.isImpersonated}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill">
-            {{t "you-see-the-app-as" name=this.currentSession.impersonatedRole.label}}
+            {{t "you-see-the-app-as" name=this.impersonation.role.label}}
           </div>
         </Auk::Toolbar::Item>
       {{/if}}
