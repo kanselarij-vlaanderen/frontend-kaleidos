@@ -1127,6 +1127,7 @@
   "copy": "Kopiëren",
   "text-copied": "Tekst gekopieerd naar klembord.",
   "change-role": "Profiel switchen",
+  "revert-role": "Ga terug naar origineel profiel",
   "error-change-roles": "Er ging iets mis met de aanvraag om van profiel te switchen.\nDetail: {message}",
   "you-see-the-app-as": "Je ziet de app als: {name}"
 }

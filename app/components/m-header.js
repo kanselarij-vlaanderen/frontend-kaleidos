@@ -76,6 +76,12 @@ export default class MHeader extends Component {
     await this.router.refresh();
   }
 
+  @action
+  async stopImpersonation() {
+    await this.impersonation.stopImpersonation();
+    await this.router.refresh();
+  }
+
   @task
   *loadRoles() {
     this.roles = yield this.store.queryAll('role', {
