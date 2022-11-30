@@ -83,6 +83,7 @@ export default class FileService extends Service {
 
   async convertSourceFile(sourceFile) {
     if (DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
+      const oldDerivedFile = await sourceFile.derived;
       const response = await fetch(`/files/${sourceFile.id}/convert`, {
         method: 'POST',
         headers: {
@@ -93,7 +94,6 @@ export default class FileService extends Service {
 
       if (response.ok) {
         const result = await response.json();
-        const oldDerivedFile = await sourceFile.derived;
         const derivedFile = await this.store.findRecord('file', result.data[0].id)
         sourceFile.derived = derivedFile;
         await Promise.all([sourceFile.save(), oldDerivedFile?.destroyRecord()]);
