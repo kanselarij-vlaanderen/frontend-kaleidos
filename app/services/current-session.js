@@ -12,11 +12,7 @@ export default class CurrentSessionService extends Service {
   @tracked user;
   @tracked organization;
   @tracked membership;
-  @tracked ownRole;
-
-  get impersonatedRole() {
-    return this.impersonation.role;
-  }
+  @tracked role;
 
   /* eslint-disable ember/no-get */
   async load() {
@@ -47,12 +43,10 @@ export default class CurrentSessionService extends Service {
     this.impersonation.clear();
   }
 
-  may(permission) {
-    return this.userGroup?.permissions.includes(permission);
-  }
-
-  reallyMay(permission) {
-    return this.ownUserGroup?.permissions.includes(permission);
+  may(permission, checkImpersonator=false) {
+    return checkImpersonator
+      ? this.impersonatorUserGroup?.permissions.includes(permission)
+      : this.userGroup?.permissions.includes(permission);
   }
 
   hasAccessToApplication() {
@@ -60,10 +54,12 @@ export default class CurrentSessionService extends Service {
   }
 
   get userGroup() {
-    return this.impersonatedRole && findGroupByRole(this.impersonatedRole.uri);
+    return this.impersonation.role
+      ? findGroupByRole(this.impersonation.role.uri)
+      : this.impersonatorUserGroup;
   }
 
-  get ownUserGroup() {
+  get impersonatorUserGroup() {
     return this.role && findGroupByRole(this.role.uri);
   }
 
@@ -71,7 +67,5 @@ export default class CurrentSessionService extends Service {
     return this.userGroup.name == 'ADMIN';
   }
 
-  get isReallyAdmin() {
-    return this.ownUserGroup.name == 'ADMIN';
   }
 }
