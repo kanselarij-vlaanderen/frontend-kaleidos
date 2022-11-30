@@ -76,13 +76,13 @@ pipeline {
                 sh "sleep 60"
             }
         }
-        stage('Automated tests: Cypress') {
-            steps {
-                 // sh "npx cypress run"
-                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
-            }
-        }
+        // stage('Automated tests: Cypress') {
+        //     steps {
+        //          // sh "npx cypress run"
+        //          sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+        //          sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+        //     }
+        // }
 
     }
 
@@ -94,9 +94,19 @@ pipeline {
             sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
 
             // Cypress reports and screenshots
-
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+
+            // Stack service logs
+            sh "mkdir -p ${WORKSPACE}/service-logs"
+            sh """
+            cd ${WORKSPACE}/kaleidos-project &&
+            for container_name in $\(docker-compose ps | awk '{print \$1} | tail -n +3'\)
+            do
+              log_path=$\(docker inspect --format='{{.LogPath}} $container_name'\)
+              cp $log_path ${WORKSPACE}/service-logs/"$container_name".log
+            """
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
         }
         cleanup {
           sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
