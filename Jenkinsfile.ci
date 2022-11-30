@@ -99,13 +99,13 @@ pipeline {
 
             // Stack service logs
             sh "mkdir -p ${WORKSPACE}/service-logs"
-            sh """
-            cd ${WORKSPACE}/kaleidos-project &&
-            for container_name in $\(docker-compose ps | awk '{print \$1} | tail -n +3'\)
+            sh '''
+            cd $WORKSPACE/kaleidos-project &&
+            for container_name in $(docker-compose ps | awk '{print $1}' | tail -n +3)
             do
-              log_path=$\(docker inspect --format='{{.LogPath}} $container_name'\)
-              cp $log_path ${WORKSPACE}/service-logs/"$container_name".log
-            """
+              log_path=$(docker inspect --format='{{.LogPath}}' $container_name)
+              cp $log_path $WORKSPACE/service-logs/"$container_name".log
+            '''
             archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
         }
         cleanup {
