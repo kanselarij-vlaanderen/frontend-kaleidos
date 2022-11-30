@@ -104,7 +104,7 @@ pipeline {
             cd $WORKSPACE/kaleidos-project &&
             for container_name in $(docker-compose -p $projectName ps | awk '{print $1}' | tail -n +3)
             do
-              docker logs $container_name &> $WORKSPACE/service-logs/$container_name.log
+              docker logs -t $container_name 2&1> | tee $WORKSPACE/service-logs/$container_name.log
             done
             '''
             archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
