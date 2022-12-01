@@ -36,11 +36,12 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 
 const groups = [
   {
     name: 'ADMIN',
-    roles: [ ADMIN ],
+    roles: [ADMIN],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -63,11 +64,12 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'impersonate-users',
     ]
   },
   {
     name: 'SECRETARIE',
-    roles: [ SECRETARIE ],
+    roles: [SECRETARIE],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -90,7 +92,7 @@ const groups = [
   },
   {
     name: 'OVRB',
-    roles: [ OVRB ],
+    roles: [OVRB],
     defaultRoute: 'publications',
     permissions: [
       'manage-signatures',
@@ -103,7 +105,7 @@ const groups = [
   },
   {
     name: 'KORT_BESTEK',
-    roles: [ KORT_BESTEK ],
+    roles: [KORT_BESTEK],
     defaultRoute: 'newsletters',
     permissions: [
       'manage-newsletter-infos',
@@ -114,7 +116,7 @@ const groups = [
   },
   {
     name: 'MINISTER',
-    roles: [ MINISTER ],
+    roles: [MINISTER],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -124,7 +126,7 @@ const groups = [
   },
   {
     name: 'KABINET',
-    roles: [ KABINET_DOSSIERBEHEERDER, KABINET_MEDEWERKER ],
+    roles: [KABINET_DOSSIERBEHEERDER, KABINET_MEDEWERKER],
     defaultRoute: 'agendas',
     permissions: [
       'view-document-version-info',
@@ -133,7 +135,7 @@ const groups = [
   },
   {
     name: 'OVERHEID',
-    roles: [ OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT ],
+    roles: [OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT],
     defaultRoute: 'agendas',
     permissions: [],
   },

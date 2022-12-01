@@ -7,11 +7,12 @@ import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
 export default class CurrentSessionService extends Service {
   @service session;
   @service store;
+  @service impersonation;
 
   @tracked user;
-  @tracked role;
   @tracked organization;
   @tracked membership;
+  @tracked role;
 
   /* eslint-disable ember/no-get */
   async load() {
@@ -26,10 +27,11 @@ export default class CurrentSessionService extends Service {
           this.membership.organization,
           this.membership.user
         ]);
-        this.role = role;
         this.organization = organization;
         this.user = user;
+        this.role = role;
       }
+      await this.impersonation.load();
     }
   }
   /* eslint-enable ember/no-get */
@@ -38,10 +40,13 @@ export default class CurrentSessionService extends Service {
     this.user = null;
     this.role = null;
     this.organization = null;
+    this.impersonation.stopImpersonation();
   }
 
-  may(permission) {
-    return this.userGroup?.permissions.includes(permission);
+  may(permission, checkImpersonator=false) {
+    return checkImpersonator
+      ? this.impersonatorUserGroup?.permissions.includes(permission)
+      : this.userGroup?.permissions.includes(permission);
   }
 
   hasAccessToApplication() {
@@ -49,10 +54,20 @@ export default class CurrentSessionService extends Service {
   }
 
   get userGroup() {
+    return this.impersonation.role
+      ? findGroupByRole(this.impersonation.role.uri)
+      : this.impersonatorUserGroup;
+  }
+
+  get impersonatorUserGroup() {
     return this.role && findGroupByRole(this.role.uri);
   }
 
   get isAdmin() {
     return this.userGroup.name == 'ADMIN';
+  }
+
+  get isImpersonator() {
+    return isPresent(this.impersonation.role);
   }
 }
