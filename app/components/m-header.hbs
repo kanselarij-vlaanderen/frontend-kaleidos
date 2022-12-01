@@ -58,6 +58,13 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
+      {{#if this.currentSession.isImpersonator}}
+        <Auk::Toolbar::Item class="auk-u-mr-3">
+          <div class="vlc-environment-pill">
+            {{t "you-see-the-app-as" name=this.impersonation.role.label}}
+          </div>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if this.environmentName}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
@@ -99,29 +106,72 @@
             @alignment="right"
             data-test-m-header-user-actions
           >
-            <div role="menuitem">
-              <Auk::Avatar
-                @icon="user"
-                @name={{this.currentSession.user.fullName}}
+            {{#if this.showRoles}}
+              <AuButton
+                @skin="link"
+                @icon="chevron-left"
+                role="menuitem"
+                {{on "click" this.toggleShowRoles}}
               >
-                <p>{{this.currentSession.user.fullName}}</p>
-                <p class="auk-u-text-muted auk-u-text-size--small">
-                  {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
-                </p>
-                <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
-                  {{this.currentSession.role.label}}
-                </p>
-              </Auk::Avatar>
-            </div>
-            <AuHr />
-            <AuButton
-              data-test-m-header-user-action-logout
-              @skin="link"
-              {{on "click" this.logout}}
-              role="menuitem"
-            >
-              {{t "sign-out"}}
-            </AuButton>
+                {{t "back"}}
+              </AuButton>
+              <AuHr />
+              {{#each this.roles as |role|}}
+                <AuButton
+                  @icon="user"
+                  @skin="link"
+                  role="menuitem"
+                  {{on "click" (fn this.impersonate role)}}
+                >
+                  {{role.label}}
+                </AuButton>
+              {{/each}}
+            {{else}}
+              <div role="menuitem">
+                <Auk::Avatar
+                  @icon="user"
+                  @name={{this.currentSession.user.fullName}}
+                >
+                  <p>{{this.currentSession.user.fullName}}</p>
+                  <p class="auk-u-text-muted auk-u-text-size--small">
+                    {{or this.currentSession.organization.name this.currentSession.organization.identifier}}
+                  </p>
+                  <p class="au-u-margin-top-tiny auk-u-text-muted auk-u-text-size--small">
+                    {{this.currentSession.role.label}}
+                  </p>
+                </Auk::Avatar>
+              </div>
+              <AuHr />
+              {{#if this.canImpersonate}}
+                <AuButton
+                  @skin="link"
+                  @icon="chevron-right"
+                  @iconAlignment="right"
+                  {{on "click" this.toggleShowRoles}}
+                  role="menuitem"
+                >
+                  {{t "change-role"}}
+                </AuButton>
+                {{#if this.currentSession.isImpersonator}}
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.stopImpersonation}}
+                    role="menuitem"
+                  >
+                    {{t "revert-role"}}
+                  </AuButton>
+                {{/if}}
+              {{/if}}
+              <AuButton
+                data-test-m-header-user-action-logout
+                @skin="link"
+                {{on "click" this.logout}}
+                role="menuitem"
+              >
+                {{t "sign-out"}}
+              </AuButton>
+            {{/if}}
           </AuDropdown>
         {{else}}
           <AuLink
