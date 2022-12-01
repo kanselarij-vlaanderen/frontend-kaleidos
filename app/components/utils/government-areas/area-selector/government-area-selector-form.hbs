@@ -5,25 +5,25 @@
   {{#each this.domainSelections as |domainSelection index|}}
     {{! template-lint-disable simple-unless }}
     {{#unless (eq index 0)}}
-      <hr class="auk-u-my-2" />
+      <hr class="auk-u-my-2"/>
     {{/unless}}
     {{! template-lint-enable simple-unless }}
-    <Auk::Checkbox
+    <AuControlCheckbox
       data-test-government-area-selector-form-domain
       @checked={{domainSelection.isSelected}}
-      {{on "input" (fn this.toggleDomainSelection domainSelection)}}
+      @onChange={{fn this.toggleDomainSelection domainSelection}}
     >
       {{domainSelection.domain.label}}
-      <Auk::CheckboxList class="auk-u-mt">
-        {{#each domainSelection.availableFields as |field|}}
-          <Auk::Checkbox
-            data-test-government-area-selector-form-field
-            @checked={{includes field domainSelection.selectedFields}}
-            @label={{field.label}}
-            {{on "input" (fn this.toggleFieldSelection field)}}
-          />
-        {{/each}}
-      </Auk::CheckboxList>
-    </Auk::Checkbox>
+    </AuControlCheckbox>
+    <Auk::CheckboxList>
+      {{#each domainSelection.availableFields as |field|}}
+        <AuControlCheckbox
+          data-test-government-area-selector-form-field
+          @label={{field.label}}
+          @checked={{includes field domainSelection.selectedFields}}
+          @onChange={{fn this.toggleFieldSelection field}}
+        />
+      {{/each}}
+    </Auk::CheckboxList>
   {{/each}}
 </Auk::CheckboxList>
