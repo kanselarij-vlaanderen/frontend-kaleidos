@@ -9,6 +9,7 @@ export const PAGE_SIZE = {
   CASES: 500,
   SELECT: 10,
   MANDATEES_IN_GOV_BODY: 300, // assumes max +- 20 gov body config changes for a 15-mandatee government (15 including doubles for vice-mp etc)
+  MEETINGS: 100,
 };
 
 export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
