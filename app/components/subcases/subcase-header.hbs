@@ -26,7 +26,7 @@
                 <AuButton
                   data-test-subcase-header-propose-for-agenda
                   @skin="link"
-                  {{on "click" (fn this.proposeForAgenda @subcase meeting)}}
+                  {{on "click" (perform this.proposeForAgenda meeting)}}
                   role="menuitem"
                 >
                   {{t "agenda-for"}}
@@ -34,12 +34,12 @@
                   {{concat " - " meeting.numberRepresentation}}
                 </AuButton>
               {{/each}}
-              {{#if (gt this.meetings.length 0)}}
+              {{#if this.meetings}}
                 <AuHr />
               {{/if}}
               <AuButton
                 @skin="link"
-                {{on "click" (fn this.proposeForOtherAgenda @subcase)}}
+                {{on "click" this.proposeForOtherAgenda}}
                 role="menuitem"
               >
                 {{t "other-agenda"}}
@@ -111,11 +111,9 @@
     @title={{t "propose-for-agenda"}}
     @closeModal={{this.cancel}}
   >
-    <Subcases::AssignToMeetingForm
-      @subcase={{this.selectedSubcase}}
-      @proposeForAgenda={{this.proposeForAgenda}}
-      @cancel={{this.cancel}}
-      @closeModal={{this.cancel}}
+    <Subcases::ProposableMeetings
+      @onProposeForMeeting={{perform this.proposeForAgenda}}
+      @onCancel={{this.cancel}}
     />
   </WebComponents::VlModal>
 {{/if}}

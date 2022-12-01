@@ -301,7 +301,6 @@
   "print-newsletter": "Kort bestek bekijken",
   "priority": "Prioriteit",
   "process": "Verloop",
-  "propose-for": "Aanvragen voor de vergadering van",
   "propose-for-agenda": "Indienen voor agendering",
   "public": "Publiek",
   "publicity": "Openbaarheid",
@@ -1127,5 +1126,6 @@
   "to-sign": "Te handtekenen",
   "copy": "Kopiëren",
   "text-copied": "Tekst gekopieerd naar klembord.",
-  "view-case": "Dossier bekijken"
+  "view-case": "Dossier bekijken",
+  "no-recent-meetings": "Geen recente open agenda’s"
 }
