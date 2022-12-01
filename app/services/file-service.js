@@ -93,10 +93,15 @@ export default class FileService extends Service {
       });
 
       if (response.ok) {
+        if (oldDerivedFile) {
+          oldDerivedFile.source = null;
+          await oldDerivedFile.save();
+          await oldDerivedFile.destroyRecord();
+        }
         const result = await response.json();
         const derivedFile = await this.store.findRecord('file', result.data[0].id)
         sourceFile.derived = derivedFile;
-        await Promise.all([sourceFile.save(), oldDerivedFile?.destroyRecord()]);
+        await sourceFile.save();
       } else {
         console.warn(`Couldn't convert file with id ${sourceFile.id}`);
         let errorMessage = response.status;
