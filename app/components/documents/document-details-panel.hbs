@@ -46,13 +46,9 @@
         @key={{t "source-file"}}
       >
         <div class="au-u-flex au-u-flex--between">
-          {{#if @piece.file.primarySource}}
-            <p>
-              {{! Note that showing this composed name as "source file name" might be confusing.
-              Better show original source file (not document) name?}}
-              {{@piece.name}}.{{@piece.file.primarySource.extension}}
-            </p>
-          {{/if}}
+          <p>
+            {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
+          </p>
           <AuButton
             data-test-document-details-panel-upload
             @icon="upload"
@@ -60,7 +56,7 @@
             @skin="secondary"
             {{on "click" (toggle "isUploadingReplacementSourceFile" this)}}
           >
-            {{t (if @piece.file.primarySource "replace" "upload")}}
+            {{t (if @piece.file "replace" "upload")}}
           </AuButton>
         </div>
       </Auk::KeyValue>
@@ -150,7 +146,9 @@
         </Auk::KeyValue>
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
-        {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
+        {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
+          {{@piece.name}}.{{extension}}
+        {{/let}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
         <AccessLevelPill
@@ -160,24 +158,18 @@
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-document-details-panel-source-file
-        @key={{t (if (eq @piece.file.primarySource.extension "docx") "word-document" "source-file")}}
+        @key={{t "source-file"}}
       >
-        {{#if @piece.file.primarySource}}
-          <AuLinkExternal
-            href={{@piece.file.primarySource.namedDownloadLink}}
-            @skin="primary"
-            @icon="download"
-            @iconAlignment="left"
-            download
-          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLinkExternal>
-        {{else if @piece.file}}
+        {{#if @piece.file}}
           <AuLinkExternal
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
             download
-          >{{@piece.name}}.{{@piece.file.extension}}</AuLinkExternal>
+          >
+            {{@piece.name}}.{{@piece.file.extension}}
+          </AuLinkExternal>
           {{else}}
           {{@piece.name}}
         {{/if}}

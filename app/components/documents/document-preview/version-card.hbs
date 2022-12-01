@@ -17,17 +17,13 @@
       <p>
         {{#if @piece.created}}
           {{t "uploaded-at"}}
-          {{moment-format @piece.created}}
-          -
-          {{moment-format @piece.created "HH:mm"}}
+          {{datetime-at @piece.created "-"}}
         {{/if}}
       </p>
       {{#if @piece.accessLevelLastModified}}
         <p>
           {{t "access-level-last-modified"}}
-          {{moment-format @piece.accessLevelLastModified}}
-          -
-          {{moment-format @piece.accessLevelLastModified "HH:mm"}}
+          {{datetime-at @piece.accessLevelLastModified "-"}}
         </p>
       {{/if}}
     </div>
