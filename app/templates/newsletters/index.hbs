@@ -46,7 +46,7 @@
                     "newsletter-for-meeting-of"
                     kind=(lowercase (kind-print-label meeting.kind))
                   }}
-                  {{moment-format meeting.plannedStart}}
+                  {{date meeting.plannedStart}}
                 {{/if}}
               </td>
               <td>
@@ -58,10 +58,7 @@
                   ></div>
                 {{else if meeting.mailCampaign}}
                   {{#if meeting.mailCampaign.isSent}}
-                    {{moment-format
-                      meeting.mailCampaign.sentAt
-                      "DD-MM-YYYY [om] HH:mm"
-                    }}
+                    {{datetime-at meeting.mailCampaign.sentAt}}
                   {{else}}
                     {{t "not-sent-yet"}}
                   {{/if}}
@@ -78,10 +75,7 @@
                       aria-busy="true"
                     ></div>
                   {{else}}
-                    {{moment-format
-                      (get (await latestAgenda) "modified")
-                      "DD-MM-YYYY HH:mm"
-                    }}
+                    {{datetime (get (await latestAgenda) "modified")}}
                   {{/if}}
                 {{/let}}
               </td>

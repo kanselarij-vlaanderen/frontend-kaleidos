@@ -11,7 +11,7 @@
               {{t "newsletter-overview-pdf-name"}}
               -
               {{@meeting.kind.label}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+              {{date @meeting.plannedStart}}
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>

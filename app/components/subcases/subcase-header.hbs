@@ -30,7 +30,7 @@
                   role="menuitem"
                 >
                   {{t "agenda-for"}}
-                  {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                  {{date-phrase meeting.plannedStart}}
                   {{concat " - " meeting.numberRepresentation}}
                 </AuButton>
               {{/each}}

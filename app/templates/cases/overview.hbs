@@ -57,7 +57,7 @@
             </p>
           </td>
           <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
-            {{moment-format row.opened "DD-MM-YYYY HH:mm"}}
+            {{datetime row.opened}}
           </td>
           <td class="auk-u-text-align--right">
             {{#if (user-may "manage-cases")}}

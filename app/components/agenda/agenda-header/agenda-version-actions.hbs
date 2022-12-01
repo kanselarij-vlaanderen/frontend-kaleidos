@@ -341,9 +341,7 @@
                       </div>
                       <div class="vlc-document-card-item__meta au-u-muted">
                         {{t "uploaded-at"}}
-                        {{moment-format piece.created}}
-                        {{t "at"}}
-                        {{moment-format piece.created "HH:mm"}}
+                        {{datetime-at piece.created}}
                       </div>
                       <div class="vlc-document-card-item__icon">
                         <Auk::Icon @name="clock-rewind" @size="small" />
