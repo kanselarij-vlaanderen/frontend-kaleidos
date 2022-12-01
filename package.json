@@ -67,7 +67,7 @@
     "broccoli-funnel": "^3.0.8",
     "cypress": "^9.4.1",
     "cypress-file-upload": "^5.0.8",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.0",
     "dayjs": "^1.10.7",
     "ember-attacher": "git+https://github.com/erikap/ember-attacher.git#7697e098c911a5224557ec464d176f600dfe1d2f",
     "ember-auto-import": "^2.0.0",

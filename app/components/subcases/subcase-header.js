@@ -102,16 +102,16 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
-  proposeForOtherAgenda(subcase) {
+  proposeForOtherAgenda() {
     this.isAssigningToOtherAgenda = !this.isAssigningToOtherAgenda;
-    this.selectedSubcase = subcase;
   }
 
-  @action
-  async proposeForAgenda(subcase, meeting) {
+  @task
+  *proposeForAgenda(meeting) {
+    this.isAssigningToOtherAgenda = false;
     this.isLoading = true;
-    let submissionActivities = await this.store.query('submission-activity', {
-      'filter[subcase][:id:]': subcase.id,
+    let submissionActivities = yield this.store.query('submission-activity', {
+      'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:agenda-activity]': true,
     });
     submissionActivities = submissionActivities.toArray();
@@ -119,14 +119,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       const now = new Date();
       const submissionActivity = this.store.createRecord('submission-activity', {
         startDate: now,
-        subcase,
+        subcase: this.args.subcase,
       });
-      await submissionActivity.save();
+      yield submissionActivity.save();
       submissionActivities = [submissionActivity];
     }
-    await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
+    yield this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
     this.toggleAllPropertiesBackToDefault();
-    this.loadData.perform();
+    yield this.loadData.perform();
     this.args.onProposedForAgenda();
   }
 
