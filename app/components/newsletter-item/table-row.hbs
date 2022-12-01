@@ -52,8 +52,8 @@
     />
   </td>
   <td class="lt-cell align-left">
-    {{#if @newsletterItem}}
-      {{moment-format @newsletterItem.modified "DD-MM-YYYY - HH:mm"}}
+    {{#if @newsletterItem.modified}}
+      {{datetime @newsletterItem.modified}}
     {{else}}
       -
     {{/if}}

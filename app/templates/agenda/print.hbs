@@ -10,14 +10,11 @@
         data-test-printable-agenda-header-title
       >
         {{t "agenda-of"}}
-        {{moment-format
-          @model.meeting.plannedStart
-          (if
-            @model.meeting.isPreKaleidos
-            "dddd DD MMMM YYYY"
-            "dddd DD MMMM YYYY \o\m HH:mm"
-          )
-        }}
+        {{#if @model.meeting.isPreKaleidos}}
+          {{date @model.meeting.plannedStart}}
+        {{else}}
+          {{datetime-at @model.meeting.plannedStart}}
+        {{/if}}
         -
         {{kind-print-label @model.meeting.kind}}
       </h2>

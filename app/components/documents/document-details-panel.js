@@ -32,7 +32,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *loadDetailsData() {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
-     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
+    this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
   }
 
   @task
@@ -48,11 +48,16 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @task
   *saveDetails() {
     if (this.replacementSourceFile) {
-      const file = yield this.args.piece.file;
-      const oldSourceFile = yield file.primarySource;
-      yield oldSourceFile?.destroyRecord();
-      file.primarySource = this.replacementSourceFile;
-      yield file.save();
+      const oldFile = yield this.args.piece.file;
+      const derivedFile = yield oldFile.derived;
+      if (derivedFile) {
+        oldFile.derived = null;
+        this.replacementSourceFile.derived = derivedFile;
+        yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+      }
+      yield oldFile.destroyRecord();
+      this.args.piece.file = this.replacementSourceFile;
+      yield this.args.piece.save();
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();

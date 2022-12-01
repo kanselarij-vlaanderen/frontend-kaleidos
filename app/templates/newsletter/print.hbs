@@ -2,7 +2,7 @@
   (if this.showDraft "Klad ")
   (t "newsletter-overview-pdf-name")
   " "
-  (moment-format this.meeting.plannedStart)
+  (date this.meeting.plannedStart)
   replace=true
 }}
 <div class="auk-scroll-wrapper__body vlc-hide-scrollbar-on-print">

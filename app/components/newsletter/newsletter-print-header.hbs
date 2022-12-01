@@ -1,6 +1,6 @@
 <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
   <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-title>
-    {{t "newsletter-overview-pdf-name"}} - {{kind-print-label @meeting.kind}} {{t "of"}} {{moment-format @meeting.plannedStart "dddd DD-MM-YYYY"}}
+    {{t "newsletter-overview-pdf-name"}} - {{kind-print-label @meeting.kind}} {{t "of"}} {{date-format @meeting.plannedStart "EEEE dd-MM-yyyy"}}
   </h2>
 </div>
 <div class="auk-u-mb-4 auk-o-flex auk-o-flex--justify-between">
@@ -9,7 +9,7 @@
       {{t "date-publication"}}
     </h4>
     <p class="auk-u-italic">
-      {{moment-format @meeting.plannedStart "DD MMMM YYYY - HH:mm"}}
+      {{datetime-at-phrase @meeting.plannedStart "-"}}
     </p>
   </div>
   <div>
@@ -17,7 +17,7 @@
       {{t "newsletter-doc-date"}}
     </h4>
     <p data-test-newsletter-print-header-publication-planned-date class="auk-u-italic">
-      {{moment-format this.themisPublicationActivity.plannedDate "DD MMMM YYYY - HH:mm"}}
+      {{datetime-at-phrase this.themisPublicationActivity.plannedDate "-"}}
     </p>
   </div>
 </div>

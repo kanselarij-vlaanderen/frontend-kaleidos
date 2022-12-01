@@ -1064,6 +1064,7 @@
   "newsletters-tabs-search": "Bericht zoeken",
   "newsletters-tabs-overview": "Alle berichten",
   "source-file-lowercase": "bronbestand",
+  "upload-derived-document": "Afgeleid document opladen",
   "word-document": "Word document",
   "as": "als",
   "limited-access": "Beperkte toegang",
@@ -1125,5 +1126,6 @@
   "filtered-subcase-documents": "Hier worden enkel de documenten getoond die op de meest recente agenda staan + documenten die niet op een agenda staan.",
   "to-sign": "Te handtekenen",
   "copy": "Kopiëren",
-  "text-copied": "Tekst gekopieerd naar klembord."
+  "text-copied": "Tekst gekopieerd naar klembord.",
+  "view-case": "Dossier bekijken"
 }

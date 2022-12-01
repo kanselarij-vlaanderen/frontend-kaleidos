@@ -103,7 +103,7 @@
               class="auk-u-m-0"
             >
               {{#if @publicationSubcase.dueDate}}
-                {{moment-format @publicationSubcase.dueDate}}
+                {{date @publicationSubcase.dueDate}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
