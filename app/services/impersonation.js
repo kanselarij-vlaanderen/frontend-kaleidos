@@ -41,7 +41,7 @@ export default class ImpersonationService extends Service {
         },
         body: JSON.stringify({
           data: {
-            type: 'sessions',
+            type: 'impersonations',
             relationships: {
               'impersonated-role': {
                 data: {
