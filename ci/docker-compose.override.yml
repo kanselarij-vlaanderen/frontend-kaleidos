@@ -14,8 +14,6 @@ services:
     ipc: host
     environment:
       NO_COLOR: 1
-    links:
-      - frontend:frontend
     volumes:
       - ../cypress:/app/cypress
       - ../cypress.test.json:/app/cypress.json
