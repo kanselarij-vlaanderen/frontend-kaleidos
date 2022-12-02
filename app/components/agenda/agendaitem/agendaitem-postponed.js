@@ -2,8 +2,9 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import addWeeks from 'date-fns/addWeeks';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { action } from '@ember/object';
+import subDays from 'date-fns/subDays';
 
 /**
  * @argument subcase
@@ -16,6 +17,7 @@ export default class AgendaitemPostponed extends Component {
 
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;
+  @tracked isProposingForOtherMeeting = false;
 
   constructor() {
     super(...arguments);
@@ -55,19 +57,23 @@ export default class AgendaitemPostponed extends Component {
   }
   @task
   *loadProposableMeetings() {
-    const futureDate = addWeeks(new Date(), 20);
-    return yield this.store.query('meeting', {
+    const aWeekAgo = subDays(new Date(), 7, this.args.meeting.plannedStart);
+    const meetings = yield this.store.query('meeting', {
       filter: {
-        ':gt:planned-start': this.args.meeting.plannedStart.toISOString(),
-        ':lte:planned-start': futureDate.toISOString(),
+        ':gt:planned-start': aWeekAgo.toISOString(),
         'is-final': false,
       },
-      sort: 'planned-start',
+      sort: '-planned-start',
     });
+    const allRecentMeetings = meetings.toArray();
+    // filter our own meeting if present
+    allRecentMeetings.removeObject(this.args.meeting);
+    return allRecentMeetings;
   }
 
   @task
-  *reProposeForAgenda(meeting) {
+  *reProposeForMeeting(meeting) {
+    this.closeProposingForOtherMeetingModal();
     const submissionActivitiesFromAgendaActivity = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
@@ -98,5 +104,15 @@ export default class AgendaitemPostponed extends Component {
       submissionActivity,
     ]);
     yield this.loadProposedStatus.perform();
+  }
+
+  @action
+  openProposingForOtherMeetingModal() {
+    this.isProposingForOtherMeeting = true;
+  }
+
+  @action
+  closeProposingForOtherMeetingModal() {
+    this.isProposingForOtherMeeting = false;
   }
 }

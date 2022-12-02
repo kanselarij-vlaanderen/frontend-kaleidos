@@ -50,7 +50,7 @@
             </td>
             <td class="auk-table__col--3">
               {{#if row.created}}
-                {{moment-format row.created "dd DD-MM-YYYY HH:mm"}}
+                {{date-format row.created "EEEEEE dd-MM-yyyy HH:mm"}}
               {{else}}
                 {{t "dash"}}
               {{/if}}

@@ -61,7 +61,7 @@
               {{#if @publicationFlow.status.isPublished}}
                 {{#if this.decision.isStaatsbladResource}}
                   {{#if this.decision.publicationDate}}
-                    {{moment-format this.decision.publicationDate}}
+                    {{date this.decision.publicationDate}}
                   {{else}}
                     {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
                     <div class="auk-u-text-muted auk-u-italic">
@@ -122,7 +122,7 @@
               class="auk-u-m-0"
             >
               {{#if @publicationSubcase.targetEndDate}}
-                {{moment-format @publicationSubcase.targetEndDate}}
+                {{date @publicationSubcase.targetEndDate}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
@@ -151,7 +151,7 @@
               {{#unless this.loadDecision.isRunning}}
                 {{#if @publicationFlow.status.isPublished}}
                   {{#if this.decision.publicationDate}}
-                    {{moment-format this.decision.publicationDate}}
+                    {{date this.decision.publicationDate}}
                   {{else}}
                     {{#if this.decision.isStaatsbladResource}}
                       <div class="auk-u-text-muted auk-u-italic">

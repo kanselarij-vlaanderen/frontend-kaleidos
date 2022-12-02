@@ -37,12 +37,12 @@
         <div class="vlc-procedure-step__meta">
           <p>
             {{t "latest-modified"}}
-            {{moment-format @subcase.modified}}
+            {{date @subcase.modified}}
           </p>
           {{#if this.latestMeeting.plannedStart}}
             <p>
               {{t "on-agenda-for-meeting"}}
-              {{moment-format this.latestMeeting.plannedStart}}
+              {{date this.latestMeeting.plannedStart}}
             </p>
           {{/if}}
         </div>
