@@ -13,6 +13,7 @@
               {{t "show-archived"}}
             </Auk::Label>
             <Auk::Toggle
+              data-test-route-cases-overview-show-archived
               id="show-cases-archived"
               @checked={{this.showArchived}}
             />
@@ -48,7 +49,7 @@
         {{! template-lint-disable no-invalid-interactive }}
         <c.body class="auk-table--clickable-rows" as |row|>
           <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
-            <p>
+            <p data-test-route-cases-overview-row-case-title>
               {{#if row.case.shortTitle}}
                 {{row.case.shortTitle}}
               {{else}}
@@ -62,12 +63,14 @@
           <td class="auk-u-text-align--right">
             {{#if (user-may "manage-cases")}}
               <AuDropdown
+                data-test-route-cases-overview-row-actions-dropdown
                 @icon="three-dots"
                 @title={{t "more"}}
                 @hideText={{true}}
                 @alignment="right"
               >
                 <AuButton
+                  data-test-route-cases-overview-row-actions-edit
                   @skin="link"
                   {{on "click" (fn this.openEditCaseModal row.case)}}
                   role="menuitem"
@@ -75,6 +78,7 @@
                   {{t "edit-case"}}
                 </AuButton>
                 <AuButton
+                  data-test-route-cases-overview-row-actions-archive
                   @skin="link"
                   @alert={{true}}
                   {{on
