@@ -140,7 +140,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async openUploadModal() {
     if (this.args.onOpenUploadModal) {
-      await this.args.onOpenUploadModal();
+      // opening model depending on calculations made in parent
+      const shouldOpen = await this.args.onOpenUploadModal();
+      if (shouldOpen === false) { // explicit checking on boolean
+        return;
+      }
     }
     this.isOpenUploadModal = true;
   }
