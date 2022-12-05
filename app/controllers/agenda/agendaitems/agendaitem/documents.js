@@ -56,8 +56,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openPieceUploadModal() {
     await this.ensureFreshData.perform();
-    const mayDocsBeEdited = await this.checkIfDocumentsMayBeEdited();
-    if (mayDocsBeEdited) {
+    const canDocsBeEdited = await this.checkIfDocumentsCanBeEdited();
+    if (canDocsBeEdited) {
       this.isOpenPieceUploadModal = true;
     }
   }
@@ -65,15 +65,15 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openUploadModalForNewPiece() {
     await this.ensureFreshData.perform();
-    const mayDocsBeEdited = await this.checkIfDocumentsMayBeEdited();
-    if (mayDocsBeEdited) {
+    const canDocsBeEdited = await this.checkIfDocumentsCanBeEdited();
+    if (canDocsBeEdited) {
       return true;
     }
     return false;
   }
 
   @action
-  async checkIfDocumentsMayBeEdited() {
+  async checkIfDocumentsCanBeEdited() {
     const agendaStatus = await this.currentAgenda.belongsTo('status').reload();
     const isAgendaDraftOrLegacy = agendaStatus.isDesignAgenda || this.meeting.isPreKaleidos;
     if (!isAgendaDraftOrLegacy) {
@@ -211,8 +211,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   *updateRelatedAgendaitemsAndSubcase(pieces) {
     yield this.ensureFreshData.perform(); // some other user could have saved agendaitem before we pressed save
     if (!this.hasConfirmedDocEditOnApproved) {
-      const mayDocsBeEdited = yield this.checkIfDocumentsMayBeEdited();
-      if (!mayDocsBeEdited) {
+      const canDocsBeEdited = yield this.checkIfDocumentsCanBeEdited();
+      if (!canDocsBeEdited) {
         // delete without a warning, upload not allowed or confirmed
         if (this.newPieces.length) {
           yield this.cancelUploadPieces.perform();
