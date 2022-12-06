@@ -146,9 +146,9 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     const itemToDelete = await this.store.findRecord('subcase', subcaseToDelete.id, {
       reload: true,
     });
-    const newsletterInfo = await itemToDelete.newsletterInfo;
-    if (newsletterInfo) {
-      await newsletterInfo.destroyRecord();
+    const newsItem = await itemToDelete.newsItem;
+    if (newsItem) {
+      await newsItem.destroyRecord();
     }
     /*
     In v3.26.x, we used to call `await itemToDelete.destroyRecord();` here

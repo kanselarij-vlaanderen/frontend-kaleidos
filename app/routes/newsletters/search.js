@@ -109,7 +109,7 @@ export default class NewsletterInfosSearchRoute extends Route {
       return [];
     }
     return search(
-      'newsletter-infos',
+      'news-items',
       params.page,
       params.size,
       params.sort,

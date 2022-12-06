@@ -60,7 +60,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 

@@ -17,7 +17,7 @@
       </div>
       <div class="auk-u-mb-2">
         <AuContent>
-          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.htmlContent}} />
         </AuContent>
       </div>
       {{#if @newsletterItem.remark}}
@@ -27,7 +27,7 @@
       {{/if}}
     {{else}}
       <p class="auk-u-text-muted auk-u-italic">
-        {{t "no-newsletter-info"}}
+        {{t "no-news-item"}}
       </p>
     {{/if}}
   </td>
@@ -69,7 +69,7 @@
       >
         {{t "copy"}}
       </AuButton>
-      {{#if (user-may "manage-newsletter-infos")}}
+      {{#if (user-may "manage-news-items")}}
         <AuButton
           data-test-newsletter-table-button-toolbar-edit={{true}}
           @skin="naked"

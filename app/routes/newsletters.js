@@ -9,7 +9,7 @@ export default class NewslettersRoute extends Route {
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
 
-    if (!this.currentSession.may('manage-newsletter-infos')) {
+    if (!this.currentSession.may('manage-news-items')) {
       this.router.transitionTo('index');
     }
   }

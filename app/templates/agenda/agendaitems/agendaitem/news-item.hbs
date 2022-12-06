@@ -4,7 +4,7 @@
       {{t "newsletter-title"}}
     </AuHeading>
   </Group>
-  {{#if (user-may "manage-newsletter-infos")}}
+  {{#if (user-may "manage-news-items")}}
     <Group>
       {{#if this.isEditing}}
         <AuButton
@@ -72,7 +72,7 @@
   {{else}}
     <div class="auk-u-mt-2">
       <Auk::EmptyState
-        @message={{t "no-newsletter-info"}}
+        @message={{t "no-news-item"}}
         data-test-route-agenda---news-item-alert
       />
     </div>

@@ -104,14 +104,14 @@ const selectors = {
     dataTable: '[data-test-route-search-cases-data-table]',
   },
 
-  // search/newsletterInfos
+  // search/newsItems
   searchNewsletterInfos: {
-    dataTable: '[data-test-route-search-newsletter-infos-data-table]',
+    dataTable: '[data-test-route-search-news-items-data-table]',
     row: {
-      title: '[data-test-route-search-newsletter-infos-row-title]',
-      mandatees: '[data-test-route-search-newsletter-infos-row-mandatees]',
-      decisionResult: '[data-test-route-search-newsletter-infos-row-decision-result]',
-      goToAgendaitem: '[data-test-route-search-newsletter-infos-row-go-to-agendaitem]',
+      title: '[data-test-route-search-news-items-row-title]',
+      mandatees: '[data-test-route-search-news-items-row-mandatees]',
+      decisionResult: '[data-test-route-search-news-items-row-decision-result]',
+      goToAgendaitem: '[data-test-route-search-news-items-row-go-to-agendaitem]',
     },
   },
 

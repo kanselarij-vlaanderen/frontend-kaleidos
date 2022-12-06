@@ -26,18 +26,18 @@ function changeSubcaseType(subcaseLink, type) {
   cy.intercept('PATCH', '/subcases/**').as(`patchSubcase${randomInt}`);
   cy.intercept('PATCH', '/agendaitems/**').as(`patchAgendaitem${randomInt}`);
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda${randomInt}`);
-  cy.intercept('DELETE', '/newsletter-infos/**').as(`deleteNewsletterInfo${randomInt}`);
-  cy.intercept('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
+  cy.intercept('DELETE', '/news-items/**').as(`deleteNewsItem${randomInt}`);
+  cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
   cy.get(cases.subcaseDescriptionEdit.save).click();
   cy.wait(`@patchSubcase${randomInt}`);
   cy.wait(`@patchAgendaitem${randomInt}`);
   cy.wait(`@patchAgenda${randomInt}`);
   // When switching to type announcement, we delete (only if ony exists) and create a new one with defaults
   if (type === 'Mededeling') {
-    cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.wait(`@postNewsItem${randomInt}`);
   } else {
     // When switching to note, we delete the existing default one from announcement
-    cy.wait(`@deleteNewsletterInfo${randomInt}`);
+    cy.wait(`@deleteNewsItem${randomInt}`);
   }
 }
 
@@ -56,7 +56,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   // tests in newsletter route
 
   it('Should toggle the box "in kort bestek" and patch the model', () => {
-    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
@@ -70,7 +70,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // checkbox is checked, toggle it back
     cy.get('@checkboxValue').should('be.checked');
     cy.get('@checkboxContainer').click();
-    cy.wait('@patchNewsletterInfo');
+    cy.wait('@patchNewsItems');
     // checkbox is unchecked
     cy.get('@checkboxValue').should('not.be.checked');
   });
@@ -102,10 +102,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
-    cy.intercept('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@patchNewsletterInfo');
+    cy.wait('@patchNewsItems');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.alert).should('not.exist');
@@ -138,14 +138,14 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
     cy.get(newsletter.editItem.toggleFinished).click();
-    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
     cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
     cy.get(agenda.agendaActions.showOptions).click();
     cy.get(agenda.agendaActions.navigateToNewsletter).click();
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -190,7 +190,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(addedText);
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
       .click();
-    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
   });
@@ -266,7 +266,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseRichtext);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
-    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@postNewsItem');
     // check KB views for in-newsletter toggle
@@ -436,7 +436,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@getThemes');
     cy.get(newsletter.editItem.toggleFinished).click();
-    cy.intercept('POST', '/newsletter-infos').as('postNewsItem');
+    cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@postNewsItem');
@@ -472,11 +472,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.get(dependency.rdfa.editorInner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type(richtext);
-    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('POST', '/news-items').as('newsItemPost');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@newsletterInfosPost');
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.wait('@newsItemPost');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.wait(2000); // TODO-BUG rare flaky where parent is not longer connected to dom, data reload happening?
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -496,7 +496,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkText);
     cy.get(newsletter.editItem.toggleFinished).click();
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem2');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem2');
     // existence of proposal is checked in mandatee-assigning
@@ -540,7 +540,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.remark).type(remarkTextMededeling);
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click()
       .wait('@patchNewsItem');
 
@@ -562,11 +562,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(richtextNota);
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkTextNota);
-    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('POST', '/news-items').as('newsItemPost');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait('@newsletterInfosPost');
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem1');
+    cy.wait('@newsItemPost');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
@@ -581,7 +581,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink(agendaLinkMed);
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem2');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
       .wait('@patchNewsItem2');
 
@@ -600,7 +600,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@getThemes_2');
     cy.get(newsletter.editItem.themesSelector).contains(theme2)
       .click();
-    cy.intercept('PATCH', '/newsletter-infos/**').as('patchNewsItem3');
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem3');
     cy.get(newsletter.editItem.save).click()
       .wait('@patchNewsItem3');
 

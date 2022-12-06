@@ -33,7 +33,7 @@ export default class PrintNewsletterRoute extends Route {
           ':uri:': params.showDraft ? CONSTANTS.AGENDA_ITEM_TYPES.NOTA : undefined,
         },
       },
-      include: 'treatment.newsletter-info',
+      include: 'treatment.news-item',
       sort: 'number',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
@@ -71,7 +71,7 @@ export default class PrintNewsletterRoute extends Route {
 
     const newsItemMapper = async (agendaitem) => {
       const agendaItemTreatment = await agendaitem.treatment;
-      const newsletterItem = await agendaItemTreatment.newsletterInfo;
+      const newsletterItem = await agendaItemTreatment.newsItem;
       return {
         agendaitem,
         newsletterItem,

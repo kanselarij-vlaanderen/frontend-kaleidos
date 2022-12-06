@@ -8,15 +8,17 @@ export default class NewsletterController extends Controller {
 
   @service intl;
   @service toaster;
+  @service router;
+  @service newsletterService;
 
   @tracked sort = 'number';
 
   @task
-  *saveNewsletterItem(newsletterItem) {
-    const mustReloadModel = newsletterItem.isNew;
-    yield newsletterItem.save();
+  *saveNewsletterItem(agendaitem, newsItem) {
+    const mustReloadModel = newsItem.isNew;
+    yield this.newsletterService.saveNewsItemForAgendaitem(agendaitem, newsItem);
     if (mustReloadModel) {
-      this.send('reloadModel');
+      this.router.refresh();
     }
     this.toaster.success(this.intl.t('successfully-saved'));
   }

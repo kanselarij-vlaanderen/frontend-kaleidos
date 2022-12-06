@@ -96,19 +96,19 @@ export default class SubcaseDescriptionEdit extends Component {
       sort: '-created',
     });
     if (latestAgendaitem) {
-      const newsletterInfo = await this.store.queryOne('newsletter-info', {
-        'filter[agenda-item-treatment][agendaitems][:id:]': latestAgendaitem.id,
+      const newsItem = await this.store.queryOne('news-item', {
+        'filter[agenda-item-treatments][agendaitems][:id:]': latestAgendaitem.id,
       });
-      if (newsletterInfo?.id) {
-        await newsletterInfo.destroyRecord();
+      if (newsItem?.id) {
+        await newsItem.destroyRecord();
       }
       if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-        const newNewsletterInfo =
+        const newNewsItem =
           await this.newsletterService.createNewsItemForAgendaitem(
             latestAgendaitem,
             true
           );
-        await newNewsletterInfo.save();
+        await newNewsItem.save();
       }
     }
   }

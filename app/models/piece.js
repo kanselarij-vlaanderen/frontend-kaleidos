@@ -36,7 +36,7 @@ export default class Piece extends Model {
   @belongsTo('decision-activity', {
     inverse: null
   }) decisionActivity;
-  @belongsTo('newsletter-info') newsletter;
+  @belongsTo('news-item') newsItem;
   @belongsTo('meeting', {
     inverse: null
   }) meeting;

@@ -19,7 +19,7 @@
                 {{@agendaitem.shortTitle}}
               {{/if}}
             </h4>
-            {{#if (and @newsletterItem (user-may "manage-newsletter-infos"))}}
+            {{#if (and @newsletterItem (user-may "manage-news-items"))}}
               <div class="auk-o-flex auk-o-flex--justify-between ">
                 <div class="auk-u-ml-2">
                   <AuButton
@@ -54,15 +54,15 @@
     </div>
 
     {{#if (is-nota @agendaitem.type)}}
-      {{#if @newsletterItem.richtext}}
+      {{#if @newsletterItem.htmlContent}}
         <p data-test-newsletter-item-print-richtext class="auk-u-mb-2">
           <AuContent>
-            <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+            <SanitizeHtml @raw={{true}} @value={{@newsletterItem.htmlContent}} />
           </AuContent>
         </p>
       {{else}}
         <p data-test-newsletter-item-print-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
-          {{t "no-newsletter-info"}}
+          {{t "no-news-item"}}
         </p>
       {{/if}}
     {{/if}}

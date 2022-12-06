@@ -120,16 +120,14 @@ export default class NewsletterService extends Service {
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
-    const agendaItemTreatment = await agendaitem.treatment;
-    const news = this.store.createRecord('newsletter-info', {
-      agendaItemTreatment,
-      inNewsletter,
+    const news = this.store.createRecord('news-item', {
+      inNewsletter: inNewsletter,
     });
     const agendaItemType = await agendaitem.type;
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
       news.title = agendaitem.shortTitle || content;
-      news.richtext = content;
+      news.htmlContent = content;
       news.finished = true;
       news.inNewsletter = true;
     } else {
@@ -143,15 +141,15 @@ export default class NewsletterService extends Service {
         const subcase = await activity.subcase;
         const decisionmakingFlow = await subcase.decisionmakingFlow;
         const previousNewsItem = await this.store.queryOne(
-          'newsletter-info',
+          'news-item',
           {
-            'filter[agenda-item-treatment][decision-activity][subcase][decisionmaking-flow][:id:]': decisionmakingFlow.id,
-            'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
-            sort: '-agenda-item-treatment.agendaitems.agenda-activity.start-date',
+            'filter[agenda-item-treatments][decision-activity][subcase][decisionmaking-flow][:id:]': decisionmakingFlow.id,
+            'filter[agenda-item-treatments][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
+            sort: '-agenda-item-treatments.agendaitems.agenda-activity.start-date',
           }
         );
         if (previousNewsItem) {
-          news.richtext = previousNewsItem.richtext;
+          news.htmlContent = previousNewsItem.htmlContent;
           news.title = previousNewsItem.title;
           news.themes = await previousNewsItem.themes;
         }
@@ -162,8 +160,19 @@ export default class NewsletterService extends Service {
     return news;
   }
 
+  async saveNewsItemForAgendaitem(agendaitem, newsItem) {
+    await newsItem.save();
+    await newsItem.reload();
+    const agendaItemTreatment = await agendaitem.treatment;
+    agendaItemTreatment.newsItem = newsItem;
+    await agendaItemTreatment.save();
+  }
+
   async generateNewsItemMandateeProposalText(newsItem) {
-    const treatment = await newsItem.agendaItemTreatment;
+    const treatment = await this.store.queryOne('agenda-item-treatment', {
+      'filter[news-item][:id:]': newsItem.id,
+      sort: '-agendaitems.agenda-activity.start-date',
+    });
     if (treatment) {
       let mandatees = await this.store.query('mandatee', {
         'filter[subcases][decision-activities][treatment][:id:]': treatment.id,

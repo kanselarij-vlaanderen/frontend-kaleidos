@@ -5,8 +5,8 @@ export default class AgendaItemTreatment extends Model {
   @attr('datetime') created;
 
   @belongsTo('decision-activity') decisionActivity;
+  @belongsTo('news-item') newsItem;
 
   // Merely hasMany because agenda-item can have different versions (one per agenda-version)
   @hasMany('agendaitem', { serialize: false }) agendaitems;
-  @belongsTo('newsletter-info', { serialize: false }) newsletterInfo;
 }

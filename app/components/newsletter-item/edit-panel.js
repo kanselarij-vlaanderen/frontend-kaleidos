@@ -16,7 +16,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
   // Local copy of newsletterItem attributes/relations to facilitate rollback
   @tracked title;
   @tracked remark;
-  @tracked richText;
+  @tracked htmlContent;
   @tracked isFinished;
   @tracked selectedThemes = [];
 
@@ -37,7 +37,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
     this.remark = this.newsletterItem.remark;
     // rdfa-editor doesn't correctly handle 'undefined' as initial value.
     // Therefore we pass an empty string instead.
-    this.richtext = this.newsletterItem.richtext || '';
+    this.htmlContent = this.newsletterItem.htmlContent || '';
     this.isFinished = this.newsletterItem.finished;
     this.selectedThemes = (yield this.newsletterItem.themes).toArray();
 
@@ -77,9 +77,9 @@ export default class NewsletterItemEditPanelComponent extends Component {
       // we send it off via Mailchimp, because it also has impact on the layout
       // in mail readers. For that reason, we now strip ALL &nbsp; regardless of
       // whether they hug html tags or not.
-      const richtext = this.editorInstance.htmlContent;
-      const cleanedHtml = richtext.replaceAll(/&nbsp;/gm, ' ');
-      this.newsletterItem.richtext = cleanedHtml;
+      const htmlContent = this.editorInstance.htmlContent;
+      const cleanedHtml = htmlContent.replaceAll(/&nbsp;/gm, ' ');
+      this.newsletterItem.htmlContent = cleanedHtml;
     } catch {
       // pass
     }
@@ -110,6 +110,6 @@ export default class NewsletterItemEditPanelComponent extends Component {
   @action
   handleRdfaEditorInit(editorInterface) {
     this.editorInstance = editorInterface;
-    editorInterface.setHtmlContent(this.richtext);
+    editorInterface.setHtmlContent(this.htmlContent);
   }
 }

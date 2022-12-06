@@ -21,7 +21,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -46,14 +46,14 @@ context('Search tests', () => {
 
   it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/kort-bestek/zoeken');
-    // ! depends on newsletter-info.spec and could fail
-    // *note: this test searches for data from newsletter-info.spec and could fail
+    // ! depends on news-item.spec and could fail
+    // *note: this test searches for data from news-item.spec and could fail
     // the reasoning behind this is for making sure that the index updates still work
     const searchTerm = 'this nota info should be visible in definitief';
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -70,7 +70,7 @@ context('Search tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
@@ -88,7 +88,7 @@ context('Search tests', () => {
     cy.get(route.search.input).type(searchTerm);
     cy.get(route.search.mandatee).type(mandateeSearchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 

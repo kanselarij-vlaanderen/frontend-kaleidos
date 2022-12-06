@@ -204,8 +204,8 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       'filter[type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
     })) > 0;
 
-    const hasThemes = (await this.store.count('newsletter-info', {
-      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+    const hasThemes = (await this.store.count('news-item', {
+      'filter[agenda-item-treatments][agendaitems][agenda][:id:]': agenda.id,
       'filter[:has:themes]': true,
     })) > 0;
 

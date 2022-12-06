@@ -6,6 +6,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
+  @service router;
 
   async beforeModel() {
     // Check if a treatment exists, otherwise redirect gracefully.
@@ -16,13 +17,13 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       warn(`Agenda item "${this.agendaitem.id}" is missing a treatment`, {
         id: 'broken-data.missing-agenda-item-treatment',
       });
-      this.transitionTo('agenda.agendaitems.agendaitem.index');
+      this.router.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
 
   model() {
-    return this.store.queryOne('newsletter-info', {
-      'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
+    return this.store.queryOne('news-item', {
+      'filter[agenda-item-treatments][:id:]': this.agendaItemTreatment.id,
     });
   }
 

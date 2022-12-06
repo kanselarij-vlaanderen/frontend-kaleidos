@@ -54,7 +54,7 @@ export default class NewsletterItemTableRowComponent extends Component {
 
     copyText +=
       sanitizeHtml(
-        newsletterItem.richtext
+        newsletterItem.htmlContent
           .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
           .trim() // Trim whitespaces at start & end of the string
         , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
