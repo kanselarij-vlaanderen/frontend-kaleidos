@@ -12,6 +12,7 @@ export default class DocumentsDocumentVersionHistoryItemComponent extends Compon
   constructor() {
     super(...arguments);
     this.loadData.perform();
+    this.loadFiles.perform();
   }
 
   @keepLatestTask
@@ -19,6 +20,12 @@ export default class DocumentsDocumentVersionHistoryItemComponent extends Compon
     const accessLevel = yield this.args.piece.accessLevel;
     const context = Object.assign({}, this.args.agendaContext || {}, { piece: this.args.piece });
     this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+  }
+
+  @keepLatestTask
+  *loadFiles() {
+    const sourceFile = yield this.args.piece.file;
+    yield sourceFile?.derived;
   }
 
   @action

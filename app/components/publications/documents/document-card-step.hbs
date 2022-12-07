@@ -19,7 +19,7 @@
               <div class="vlc-document-card-content__meta">
                 {{#if @piece.receivedDate}}
                   {{t "received-at"}}
-                  {{moment-format @piece.receivedDate}}
+                  {{date @piece.receivedDate}}
                 {{/if}}
               </div>
             </Group.Item>

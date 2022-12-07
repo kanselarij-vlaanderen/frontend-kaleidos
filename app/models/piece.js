@@ -13,9 +13,6 @@ export default class Piece extends Model {
   @belongsTo('concept') accessLevel;
   @belongsTo('language') language;
   @belongsTo('file') file;
-  @belongsTo('file', {
-    inverse: null
-  }) convertedFile;
   @belongsTo('document-container', {
     inverse: null
   }) documentContainer;

@@ -6,8 +6,8 @@
         <div class="auk-u-text-muted">
           {{t
             "publication-reports-last-request"
-            date=(moment-format @lastJob.created)
-            time=(moment-format @lastJob.created "HH:mm")
+            date=(date @lastJob.created)
+            time=(time @lastJob.created)
             user=@lastJob.generatedBy.fullName
           }}
         </div>

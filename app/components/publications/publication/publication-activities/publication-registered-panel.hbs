@@ -9,7 +9,7 @@
             {{t "registered-publication"}}
           </h4>
           <span class="auk-u-text-small auk-u-m-0">
-            {{moment-format this.latestDecision.publicationDate}}
+            {{date this.latestDecision.publicationDate}}
           </span>
         </Group.Item>
       </Toolbar.Group>
@@ -43,7 +43,7 @@
           <Auk::Badge @icon="document" @size="regular" />
           <h5 class="auk-u-m-0">
             {{t "published-in-belgian-official-gazette-on"}}
-            {{moment-format decision.publicationDate}}
+            {{date decision.publicationDate}}
           </h5>
           {{#if decision.isStaatsbladResource}}
             <AuLinkExternal

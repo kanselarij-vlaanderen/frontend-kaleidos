@@ -88,9 +88,6 @@ const selectors = {
     cancel: '[data-test-vl-modal-footer-cancel]',
   },
 
-  // vl-datepicker
-  vlDatepicker: '[data-test-vl-datepicker]',
-
   // vl-modal
   vlModal: {
     container: '[data-test-vl-modal-container]',

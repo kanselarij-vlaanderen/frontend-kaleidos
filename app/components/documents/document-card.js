@@ -48,6 +48,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
+    this.loadFiles.perform();
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
@@ -91,6 +92,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+  }
+
+  @task
+  *loadFiles() {
+    const sourceFile = yield this.args.piece.file;
+    yield sourceFile?.derived;
   }
 
 
@@ -140,7 +147,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async openUploadModal() {
     if (this.args.onOpenUploadModal) {
-      await this.args.onOpenUploadModal();
+      // opening model depending on calculations made in parent
+      const shouldOpen = await this.args.onOpenUploadModal();
+      if (shouldOpen === false) { // explicit checking on boolean
+        return;
+      }
     }
     this.isOpenUploadModal = true;
   }

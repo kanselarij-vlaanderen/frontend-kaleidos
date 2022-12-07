@@ -130,7 +130,7 @@
     <AuButton
       data-test-new-subcase-save
       @skin="primary"
-      @disabled={{this.areSavingTasksRunning}}
+      @disabled={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
       @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
       {{on "click" (perform this.saveSubcase)}}
     >
