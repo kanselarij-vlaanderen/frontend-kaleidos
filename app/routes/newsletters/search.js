@@ -42,7 +42,7 @@ export default class NewsletterInfosSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'subTitle', 'richtext']);
+  textSearchFields = Object.freeze(['title', 'subtitle', 'htmlContent']);
 
   constructor() {
     super(...arguments);
