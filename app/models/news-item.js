@@ -4,8 +4,8 @@ import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 export default class NewsItem extends ModelWithModifier {
   @attr title;
   @attr subtitle;
-  @attr htmlContent; // Was richtext
-  @attr plainText; // was text
+  @attr htmlContent;
+  @attr plainText;
   @attr remark;
   @attr('datetime') publicationDate;
   @attr('boolean') finished;
