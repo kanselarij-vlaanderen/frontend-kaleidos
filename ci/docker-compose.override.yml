@@ -48,3 +48,9 @@ services:
   document-release:
     environment:
       RELEASE_CRON_PATTERN: "0/30 * * * * *"
+  cache-warmup:
+    environment:
+      AUTO_RUN: "true"
+      ENABLE_RECENT_AGENDAS_CACHE: "false"
+      ENABLE_LARGE_AGENDAS_CACHE: "false"
+      ENABLE_CONCEPTS_CACHE: "true"
