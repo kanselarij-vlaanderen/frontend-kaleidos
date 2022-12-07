@@ -31,28 +31,50 @@
               <Auk::Loader @message={{t "agenda-loading"}} />
             </div>
           {{else}}
-            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
-              <AuButton
-                @skin="link"
-                {{on "click" (perform this.reProposeForAgenda meeting)}}
-                role="menuitem"
-              >
-                {{t "agenda-for"}}
-                {{date-phrase meeting.plannedStart}}
-                {{concat " - " meeting.numberRepresentation}}
-              </AuButton>
-            {{/each}}
+            {{#if this.loadProposableMeetings.lastSuccessful.value}}
+              {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
+                <AuButton
+                  @skin="link"
+                  {{on "click" (perform this.reProposeForMeeting meeting)}}
+                  role="menuitem"
+                >
+                  {{t "agenda-for"}}
+                  {{date-phrase meeting.plannedStart}}
+                  {{concat " - " meeting.numberRepresentation}}
+                </AuButton>
+              {{/each}}
+            {{else}}
+              <div role="menuitem">
+                <p>{{t "no-recent-meetings"}}</p>
+              </div>
+            {{/if}}
+            <AuHr />
+            <AuButton
+              @skin="link"
+              {{on "click" this.openProposingForOtherMeetingModal}}
+              role="menuitem"
+            >
+              {{t "other-agenda"}}
+            </AuButton>
           {{/if}}
         </AuDropdown>
       {{/if}}
     {{/if}}
   {{/if}}
 </div>
-{{#if this.reProposeForAgenda.isRunning}}
+{{#if this.reProposeForMeeting.isRunning}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />
     <Auk::Modal::Body>
       <Auk::Loader @message={{t "please-be-patient"}} />
     </Auk::Modal::Body>
   </Auk::Modal>
+{{/if}}
+
+{{#if this.isProposingForOtherMeeting}}
+  <Subcases::ProposableMeetings
+    @meeting={{@meeting}}
+    @onProposeForMeeting={{perform this.reProposeForMeeting}}
+    @onCancel={{this.closeProposingForOtherMeetingModal}}
+  />
 {{/if}}

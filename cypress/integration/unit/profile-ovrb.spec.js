@@ -170,7 +170,7 @@ context('Testing the application as OVRB', () => {
       // The only thing that changes is the visibility of decisions/documents but that is for a propagation test
     });
 
-    it.only('check agenda route on fully released agenda', () => {
+    it('check agenda route on fully released agenda', () => {
       // Note: not everything is tested again to avoid some needless repetition
       cy.visitAgendaWithLink(agendaReleasedLink);
 
