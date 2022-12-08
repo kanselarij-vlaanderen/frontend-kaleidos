@@ -11,7 +11,7 @@
           />
         {{/if}}
       </div>
-      <div class="au-c-card au-o-box au-o-box--small">
+      <div data-test-route-settings-organizations-filter-blocked class="au-c-card au-o-box au-o-box--small">
         <AuToggleSwitch
           @label={{t "show-only-blocked"}}
           @identifier="blocked"
@@ -23,6 +23,7 @@
   </div>
   <div class="auk-o-grid-col-10">
     <DataTable
+      data-test-route-settings-organizations-table
       @content={{@model}}
       @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
       @page={{this.page}}
@@ -35,11 +36,13 @@
       <table.content as |c|>
         <c.header>
           <ThSortable
+            data-test-route-settings-organizations-tablecontent-organization
             @currentSorting={{this.sort}}
             @field="name"
             @label={{t "organization"}}
           />
           <ThSortable
+            data-test-route-settings-organizations-tablecontent-ovo-code
             @currentSorting={{this.sort}}
             @field="identifier"
             @label={{t "ovo-code"}}
@@ -48,7 +51,7 @@
           <th></th>
         </c.header>
         <c.body as |organization|>
-          <td class={{if organization.isBlocked "au-u-muted"}}>
+          <td data-test-route-settings-organizations-row-name class={{if organization.isBlocked "au-u-muted"}}>
             <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
               {{organization.name}}
               {{#if organization.isBlocked}}
@@ -62,7 +65,7 @@
               {{/if}}
             </span>
           </td>
-          <td class={{if organization.isBlocked "au-u-muted"}}>
+          <td data-test-route-settings-organizations-row-ovo-code class={{if organization.isBlocked "au-u-muted"}}>
             <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
               {{organization.identifier}}
             </span>
@@ -90,9 +93,10 @@
               </span>
             </div>
           </td>
-          <td class="auk-u-text-align--right">
+          <td data-test-route-settings-organizations-row-actions class="auk-u-text-align--right">
             <div class="auk-o-flex auk-o-flex--justify-end">
               <AuDropdown
+                data-test-route-settings-organizations-row-actions-dropdown
                 @skin="naked"
                 @hideText={{true}}
                 @alignment="right"
@@ -100,6 +104,7 @@
               >
                 {{#if organization.isBlocked}}
                   <AuButton
+                    data-test-route-settings-organizations-unblock-organization
                     @skin="naked"
                     role="menuitem"
                     {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
@@ -108,6 +113,7 @@
                   </AuButton>
                 {{else}}
                   <AuButton
+                    data-test-route-settings-organizations-block-organization
                     @skin="naked"
                     @alert={{true}}
                     role="menuitem"

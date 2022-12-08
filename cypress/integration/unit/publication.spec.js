@@ -215,8 +215,7 @@ context('Publications tests', () => {
   });
 
   // Beleidsvelden are no longer in publications, only in dossier
-  // TODO reenable after cache warmup implements pre-loading the cache for conceptschemens
-  it.skip('publications:dossier: Add and delete beleidsdomein', () => {
+  it('publications:dossier: Add and delete beleidsdomein', () => {
     const noGovernmentFields = 'Er zijn nog geen beleidsvelden toegevoegd';
     const labelName = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName = 'Media';
@@ -227,11 +226,16 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
+    // when loading the page, the areas panel may not be showing yet
+    cy.get(utils.governmentAreasPanel.edit);
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
 
     // reset after cancel
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
+    cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
       .find(utils.governmentAreaSelectorForm.field)
@@ -261,6 +265,8 @@ context('Publications tests', () => {
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
     cy.wait('@patchPublicationFlows');
+    // when loading the page, the areas panel may not be showing yet
+    cy.get(utils.governmentAreasPanel.edit);
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
 

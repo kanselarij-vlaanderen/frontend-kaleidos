@@ -41,6 +41,7 @@ const selectors = {
   // number-pagination
   numberPagination: {
     container: '[data-test-number-pagination-container]',
+    size: '[data-test-number-pagination-size]',
   },
 
   // radio-dropdown
