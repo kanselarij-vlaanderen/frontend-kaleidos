@@ -1,35 +1,35 @@
-<div class="auk-o-grid au-o-grid--stretch">
-  <div class="auk-o-grid-col-2">
-    <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
-      <div class="au-c-card au-o-box au-o-box--small">
-        {{#if this.loadSelectedOrganizations.isRunning}}
-          <Auk::Loader />
-        {{else}}
-          <OrganizationFilter
-            @selected={{this.selectedOrganizations}}
-            @onChange={{this.setOrganizations}}
-          />
-        {{/if}}
-      </div>
-      <div class="au-c-card au-o-box au-o-box--small">
-        <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
-        <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
-          <Auk::Label>{{t "from"}}</Auk::Label>
-          <Auk::Datepicker
-            @date={{this.dateFromBuffer}}
-            @onChange={{set this "dateFromBuffer"}}
-            @enableClear={{this.dateFromBuffer}}
-            @onClear={{set this "dateFromBuffer" null}}
-          />
+  <div class="auk-o-grid au-o-grid--stretch">
+    <div class="auk-o-grid-col-2">
+      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+        <div class="au-c-card au-o-box au-o-box--small">
+          {{#if this.loadSelectedOrganizations.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <OrganizationFilter
+              @selected={{this.selectedOrganizations}}
+              @onChange={{this.setOrganizations}}
+            />
+          {{/if}}
         </div>
-        <div class="auk-form-group auk-u-position-relative">
-          <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-          <Auk::Datepicker
-            @date={{this.dateToBuffer}}
-            @onChange={{set this "dateToBuffer"}}
-            @enableClear={{this.dateToBuffer}}
-            @onClear={{set this "dateToBuffer" null}}
-          />
+        <div class="au-c-card au-o-box au-o-box--small">
+          <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
+          <div data-test-route-settings-user-date-from class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+            <Auk::Label>{{t "from"}}</Auk::Label>
+            <Auk::Datepicker 
+              @date={{this.dateFromBuffer}}
+              @onChange={{set this "dateFromBuffer"}}
+              @enableClear={{this.dateFromBuffer}}
+              @onClear={{set this "dateFromBuffer" null}}
+            />
+          </div>
+          <div data-test-route-settings-user-date-to class="auk-form-group auk-u-position-relative">
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <Auk::Datepicker
+              @date={{this.dateToBuffer}}
+              @onChange={{set this "dateToBuffer"}}
+              @enableClear={{this.dateToBuffer}}
+              @onClear={{set this "dateToBuffer" null}}
+            />
         </div>
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
@@ -91,6 +91,7 @@
       <table.content as |c|>
         <c.header>
           <ThSortable
+            data-test-route-settings-users-table-content-name
             @currentSorting={{this.sort}}
             @field="first-name"
             @label={{t "name"}}
@@ -98,6 +99,7 @@
           <th>{{t "organization"}}</th>
           <th>{{t "group"}}</th>
           <ThSortable
+            data-test-route-settings-users-table-content-last-seen
             @currentSorting={{this.sort}}
             @field="login-activity.start-date"
             @label={{t "last-seen"}}
@@ -148,9 +150,10 @@
               {{/if}}
             {{/let}}
           </td>
-          <td class="auk-u-text-align--right">
+          <td data-test-route-settings-users-row-actions class="auk-u-text-align--right">
             <div class="auk-o-flex auk-o-flex--justify-end">
               <AuDropdown
+                data-test-route-settings-users-row-actions-dropdown
                 @skin="naked"
                 @hideText={{true}}
                 @alignment="right"
@@ -158,6 +161,7 @@
               >
                 {{#if (not (is-empty (filter-by "isBlocked" user.memberships)))}}
                   <AuButton
+                    data-test-route-settings-users-row-action-unblock-membership
                     @skin="naked"
                     role="menuitem"
                     {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
@@ -167,6 +171,7 @@
                 {{/if}}
                 {{#if (not (is-empty (reject-by "isBlocked" user.memberships)))}}
                   <AuButton
+                    data-test-route-settings-users-row-action-block-membership
                     @skin="naked"
                     @alert={{true}}
                     role="menuitem"
@@ -177,6 +182,7 @@
                 {{/if}}
                 {{#if user.isBlocked}}
                   <AuButton
+                    data-test-route-settings-users-row-action-unblock-user
                     @skin="naked"
                     role="menuitem"
                     {{on "click" (queue (toggle "showUnblockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
@@ -185,6 +191,7 @@
                   </AuButton>
                 {{else}}
                   <AuButton
+                    data-test-route-settings-users-row-action-block-user
                     @skin="naked"
                     @alert={{true}}
                     role="menuitem"
@@ -195,12 +202,12 @@
                 {{/if}}
               </AuDropdown>
               <AuLink
+                data-test-button-user-detail
                 @skin="button-naked"
                 @icon="chevron-right"
                 @hideText={{true}}
                 @route="settings.users.user"
                 @model={{user.id}}
-                data-test-button-user-detail
               />
             </div>
           </td>
