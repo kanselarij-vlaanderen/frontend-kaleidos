@@ -100,23 +100,17 @@ context('Decision tests', () => {
       .wait('@postDecisionActivities')
       .wait('@postAgendaItemTreatments')
       .wait('@patchSubmissonActivities');
-    cy.get(auk.loader, {
-      timeout: 60000,
-    }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
 
     // click link to latest meeting
     cy.get(agenda.agendaitemPostponed.latestMeeting).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaHeader.title).contains(agendaDateFormatted);
-    cy.get(auk.loader, {
-      timeout: 60000,
-    }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
 
     // click link to subcase
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(auk.loader, {
-      timeout: 60000,
-    }).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
 
     // check if timeline contains multiple phase blocks
     cy.get(cases.subcaseTimeline.item).eq(0)
