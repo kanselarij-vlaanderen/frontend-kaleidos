@@ -1131,5 +1131,8 @@
   "error-change-roles": "Er ging iets mis met de aanvraag om van profiel te switchen.\nDetail: {message}",
   "you-see-the-app-as": "Je ziet de app als: {name}",
   "view-case": "Dossier bekijken",
-  "no-recent-meetings": "Geen recente open agenda’s"
+  "no-recent-meetings": "Geen recente open agenda’s",
+  "attachment-was-too-large": "Er zijn bestanden opgeladen die groter zijn dan 30 MB. Het is niet mogelijk om bestanden van deze grootte te mailen.",
+  "sum-of-attachments-exceeds-warning-threshold": "De som van alle bestanden is groter dan 10 MB. Hierdoor komt deze mail mogelijk niet aan bij de ontvanger.",
+  "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden."
 }
