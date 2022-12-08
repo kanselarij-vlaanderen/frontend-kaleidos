@@ -1,0 +1,17 @@
+<Auk::FileUploader
+  @multiple={{true}}
+  @reusable={{true}}
+  @onUpload={{@onUpload}}
+  @validateFile={{this.validateFile}}
+/>
+{{#if this.triedToUploadTooLargeFile}}
+  <Auk::Alert
+    @title={{t "warning-title"}}
+    @message={{t "attachment-was-too-large"}}
+    @skin="error"
+    @icon="alert-triangle"
+    @isClosable={{true}}
+    @onClose={{toggle "triedToUploadTooLargeFile" this}}
+    class="au-u-margin-top-tiny"
+  />
+{{/if}}
