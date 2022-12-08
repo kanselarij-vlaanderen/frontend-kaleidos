@@ -103,19 +103,6 @@
       "type": "sessions"
     }
   },
-  "Overlegcomité raadgever": {
-    "data": {
-      "relationships": {
-        "account": {
-          "data": {
-            "id": "1adf0580-3779-4123-9f36-2186c99c94a8",
-            "type": "accounts"
-          }
-        }
-      },
-      "type": "sessions"
-    }
-  },
   "Vlaams Parlement": {
     "data": {
       "relationships": {

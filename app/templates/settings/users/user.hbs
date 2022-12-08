@@ -38,12 +38,14 @@
               <Group>
                 {{#if @model.isBlocked}}
                   <AuButton
+                    data-test-route-settings---user-unblock
                     {{on "click" (toggle "showUnblockUser" this)}}
                   >
                     {{t "unblock-user"}}
                   </AuButton>
                 {{else}}
                   <AuButton
+                    data-test-route-settings---user-block
                     @alert={{true}}
                     {{on "click" (toggle "showBlockUser" this)}}
                   >
@@ -102,6 +104,7 @@
                     <td class="au-u-text-right">
                       {{#if membership.isBlocked}}
                         <AuButton
+                          data-test-route-settings---user-unblock-membership
                           @skin="naked"
                           @icon="circle-full"
                           {{on "click" (queue (toggle "showUnblockMembership" this) (set this "membershipBeingBlocked" membership))}}
@@ -110,6 +113,7 @@
                         </AuButton>
                       {{else}}
                         <AuButton
+                          data-test-route-settings---user-block-membership
                           @skin="naked"
                           @icon="circle-x"
                           @alert={{true}}
@@ -157,6 +161,7 @@
       </Group>
       <Group>
         <AuButton
+          data-test-route-settings---user-confirm-block-membership
           @alert={{true}}
           {{on "click" (queue this.blockMembership (toggle "showBlockMembership" this))}}
         >
@@ -194,6 +199,7 @@
       </Group>
       <Group>
         <AuButton
+          data-test-route-settings---user-confirm-unblock-membership
           @alert={{true}}
           {{on "click" (queue this.unblockMembership (toggle "showUnblockMembership" this))}}
         >
@@ -231,6 +237,7 @@
       </Group>
       <Group>
         <AuButton
+          data-test-route-settings---user-confirm-block-user
           @alert={{true}}
           {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
         >
@@ -268,6 +275,7 @@
       </Group>
       <Group>
         <AuButton
+          data-test-route-settings---user-confirm-unblock-user
           @alert={{true}}
           {{on "click" (queue this.unblockUser (toggle "showUnblockUser" this))}}
         >

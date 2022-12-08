@@ -71,6 +71,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
+    controller.hasConfirmedDocEditOnApproved = false;
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;

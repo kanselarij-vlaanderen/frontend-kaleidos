@@ -4,23 +4,68 @@ const selectors = {
     generalSettings: '[data-test-route-settings-general-settings]',
     manageMinisters: '[data-test-route-settings-manage-ministers]',
     manageUsers: '[data-test-route-settings-manage-users]',
+    manageOrganizations: '[data-test-route-settings-manage-organizations]',
   },
 
   // route settings/users/index
   usersIndex: {
     searchInput: '[data-test-route-settings-users-search-input]',
     searchButton: '[data-test-route-settings-users-search-button]',
+    dateFilterFrom: '[data-test-route-settings-user-date-from]',
+    dateFilterTo: '[data-test-route-settings-user-date-to]',
     table: '[data-test-route-settings-users-table]',
+    tableContent: {
+      name: '[data-test-route-settings-users-table-content-name]',
+      lastSeen: '[data-test-route-settings-users-table-content-last-seen]',
+    },
     row: {
       name: '[data-test-route-settings-users-row-name]',
       group: '[data-test-route-settings-users-row-group]',
+      actions: '[data-test-route-settings-users-row-actions]',
+      actionsDropdown: '[data-test-route-settings-users-row-actions-dropdown]',
+      action: {
+        unblockMembership: 'data-test-route-settings-users-row-action-unblock-membership',
+        blockMembership: 'data-test-route-settings-users-row-action-block-membership',
+        unblockUser: 'data-test-route-settings-users-row-action-unblock-user',
+        blockUser: 'data-test-route-settings-users-row-action-block-user',
+      },
+    },
+  },
+
+  // route settings/organizations/index
+  organizationsIndex: {
+    filterBlocked: '[data-test-route-settings-organizations-filter-blocked]',
+    table: '[data-test-route-settings-organizations-table]',
+    tableContent: {
+      organization: '[data-test-route-settings-organizations-tablecontent-organization]',
+      ovoCode: '[data-test-route-settings-organizations-tablecontent-ovo-code]',
+    },
+    row: {
+      name: '[data-test-route-settings-organizations-row-name]',
+      ovoCode: '[data-test-route-settings-organizations-row-ovo-code]',
+      actions: '[data-test-route-settings-organizations-row-actions]',
+      actionsDropdown: '[data-test-route-settings-organizations-row-actions-dropdown]',
+      action: {
+        unblockOrganization: '[data-test-route-settings-organizations-unblock-organization]',
+        blockOrganization: '[data-test-route-settings-organizations-block-organization]',
+      },
     },
   },
 
   // route settings/users/user/index
   user: {
     generalInfo: '[data-test-route-settings---user-general-info]',
+    unblock: '[data-test-route-settings---user-unblock]',
+    block: '[data-test-route-settings---user-block]',
+    unblockMembership: '[data-test-route-settings---user-unblock-membership]',
+    blockMembership: '[data-test-route-settings---user-block-membership]',
     technicalInfo: '[data-test-route-settings---user-technical-info]',
+    confirm: {
+      blockMembership: '[data-test-route-settings---user-confirm-block-membership]',
+      unblockMembership: '[data-test-route-settings---user-confirm-unblock-membership]',
+      blockUser: '[data-test-route-settings---user-confirm-block-user]',
+      unblockUser: '[data-test-route-settings---user-confirm-unblock-user]',
+    },
   },
 
   // component settings-header (only used for users route headers)
@@ -60,5 +105,13 @@ const selectors = {
 
   // component next-button
   goToUserDetail: '[data-test-button-user-detail]',
+
+  // component organization-filter
+  organizationFilter: {
+    filter: '[data-test-settings-organization-filter]',
+    search: '.ember-power-select-search > input',
+    ovoListLink: '[data-test-settings-organization-filter-OVO-list-link]',
+    clearFilter: '[data-test-settings-organization-clear-filter]',
+  },
 };
 export default selectors;
