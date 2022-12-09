@@ -53,8 +53,8 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
       .click();
-    cy.get(utils.governmentAreaSelectorForm.container).contains('Cultuur, Jeugd, Sport en Media')
-      .find(utils.governmentAreaSelectorForm.field)
+    cy.get(utils.governmentAreaSelectorForm.container)
+      .contains('Cultuur, Jeugd, Sport en Media')
       .contains('Media')
       .click();
     cy.get(auk.modal.footer.cancel).click();

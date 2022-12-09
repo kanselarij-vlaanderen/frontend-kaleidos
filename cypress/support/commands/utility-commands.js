@@ -130,7 +130,7 @@ function addDomainsAndFields(domains) {
     }
     if (domain.fields) {
       domain.fields.forEach((field)  => {
-        cy.get('@container').find(utils.governmentAreaSelectorForm.field)
+        cy.get('@container')
           .contains(field)
           .click();
       });

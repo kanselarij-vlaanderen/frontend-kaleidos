@@ -238,7 +238,6 @@ context('Publications tests', () => {
     cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(auk.modal.footer.cancel).click();
@@ -249,7 +248,6 @@ context('Publications tests', () => {
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlows');
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
@@ -260,7 +258,6 @@ context('Publications tests', () => {
     // unlink government field
     cy.get(utils.governmentAreasPanel.edit).click();
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
-      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();

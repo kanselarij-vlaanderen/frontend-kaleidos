@@ -50,11 +50,9 @@ context('agenda notice test', () => {
     cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName1)
-      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName1)
       .click();
     cy.get(utils.governmentAreaSelectorForm.container).contains(labelName2)
-      .find(utils.governmentAreaSelectorForm.field)
       .contains(fieldsName2)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
