@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class EditGovernmentAreasModal extends Component {
   @service conceptStore;
@@ -21,7 +20,7 @@ export default class EditGovernmentAreasModal extends Component {
 
   @task
   *loadGovernmentAreas() {
-    const concepts = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD);
+    const concepts = yield this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
     for (const concept of concepts.toArray()) {
       const isInDateRange =

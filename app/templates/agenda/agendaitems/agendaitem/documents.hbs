@@ -40,7 +40,7 @@
       @pieces={{this.model.pieces}}
       @highlightedPieces={{this.newAgendaitemPieces}}
       @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
-      @onOpenUploadModal={{perform this.ensureFreshData}}
+      @onOpenUploadModal={{this.openUploadModalForNewPiece}}
       @onAddPiece={{perform this.addPiece}}
       @didDeleteContainer={{this.refresh}}
       @markForSignature={{this.markForSignature}}
@@ -122,9 +122,9 @@
 {{/if}}
 
 <ConfirmationModal
-  @modalOpen={{this.isOpenVerifyUploadOnApproved}}
-  @onConfirm={{this.verifyUploadOnApproved}}
-  @onCancel={{set this "isOpenVerifyUploadOnApproved" false}}
+  @modalOpen={{this.isOpenWarnDocEditOnApproved}}
+  @onConfirm={{this.confirmDocEditOnApproved}}
+  @onCancel={{this.closeWarnDocEditOnApproved}}
 >
   <:title>
     {{t "documents-on-approved-agenda-title"}}

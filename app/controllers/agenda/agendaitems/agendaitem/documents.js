@@ -28,7 +28,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenPublicationModal = false;
-  @tracked isOpenVerifyUploadOnApproved = false;
+  @tracked isOpenWarnDocEditOnApproved = false;
+  @tracked hasConfirmedDocEditOnApproved = false;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
@@ -57,30 +58,57 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openPieceUploadModal() {
     await this.ensureFreshData.perform();
-    // warn users if they are uploading on an approved agenda
-    const agendaStatus = await this.currentAgenda.belongsTo('status').reload();
-    if (agendaStatus.isDesignAgenda || this.meeting.isPreKaleidos) {
+    const canDocsBeEdited = await this.checkIfDocumentsCanBeEdited();
+    if (canDocsBeEdited) {
       this.isOpenPieceUploadModal = true;
-    } else {
-      await this.currentAgenda.nextVersion;
-      this.openVerifyUploadOnApproved();
     }
   }
 
   @action
-  openVerifyUploadOnApproved() {
-    this.isOpenVerifyUploadOnApproved = true;
+  async openUploadModalForNewPiece() {
+    await this.ensureFreshData.perform();
+    const canDocsBeEdited = await this.checkIfDocumentsCanBeEdited();
+    if (canDocsBeEdited) {
+      return true;
+    }
+    return false;
   }
 
   @action
-  verifyUploadOnApproved() {
-    this.isOpenVerifyUploadOnApproved = false;
-    this.isOpenPieceUploadModal = true;
+  async checkIfDocumentsCanBeEdited() {
+    const agendaStatus = await this.currentAgenda.belongsTo('status').reload();
+    const isAgendaDraftOrLegacy = agendaStatus.isDesignAgenda || this.meeting.isPreKaleidos;
+    if (!isAgendaDraftOrLegacy) {
+      await this.currentAgenda.belongsTo('nextVersion').reload();
+      await this.openWarnUploadOnApproved.perform();
+    }
+    return isAgendaDraftOrLegacy || this.hasConfirmedDocEditOnApproved;
+  }
+
+
+  @task
+  *openWarnUploadOnApproved() {
+    this.isOpenWarnDocEditOnApproved = true;
+    this.hasConfirmedDocEditOnApproved = false;
+    // The user has about 60 seconds to confirm
+    for (let index = 0; index < 120; index++) {
+      if (this.isOpenWarnDocEditOnApproved) {
+        yield timeout(500);
+      }
+    }
+    this.isOpenWarnDocEditOnApproved = false;
   }
 
   @action
-  async () {
-    this.isOpenPieceUploadModal = true;
+  closeWarnDocEditOnApproved() {
+    this.isOpenWarnDocEditOnApproved = false;
+    this.hasConfirmedDocEditOnApproved = false;
+  }
+
+  @action
+  confirmDocEditOnApproved() {
+    this.isOpenWarnDocEditOnApproved = false;
+    this.hasConfirmedDocEditOnApproved = true;
   }
 
   @action
@@ -164,6 +192,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @task
+  *cancelAddPiece(piece) {
+    const file = yield piece.file;
+    yield file.destroyRecord();
+    yield piece.destroyRecord();
+  }
+
+  @task
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
@@ -195,6 +230,22 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @task
   *updateRelatedAgendaitemsAndSubcase(pieces) {
     yield this.ensureFreshData.perform(); // some other user could have saved agendaitem before we pressed save
+    if (!this.hasConfirmedDocEditOnApproved) {
+      const canDocsBeEdited = yield this.checkIfDocumentsCanBeEdited();
+      if (!canDocsBeEdited) {
+        // delete without a warning, upload not allowed or confirmed
+        if (this.newPieces.length) {
+          yield this.cancelUploadPieces.perform();
+        } else {
+          const deletePromises = pieces.map(async (piece) => {
+            await this.cancelAddPiece.perform(piece);
+          });
+          yield all(deletePromises);
+        }
+        return;
+      }
+    }
+
     // Failsafe, if we got to a situation where the user has old pieces data when saving new pieces, we refresh the relation to avoid stale data
     // The improved concurrency check should be enough, but as long as we save here, the risk of saving old data exists
     yield this.agendaitem.hasMany('pieces').reload();

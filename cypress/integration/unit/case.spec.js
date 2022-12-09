@@ -85,4 +85,46 @@ context('Create case as Admin user', () => {
     cy.get(cases.newCase.shorttitle).type('Dossier X');
     cy.get(cases.newCase.save).should('not.be.disabled');
   });
+
+  it('Archive and restore case', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    const caseTitle = `test verwijderen - ${randomInt}`;
+
+    cy.visit('/dossiers');
+    cy.createCase(caseTitle);
+    cy.addSubcase();
+
+    // archive case
+    cy.visit('/dossiers');
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitle)
+      .parents('tr')
+      .as('currentRow');
+    cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .click();
+    cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
+      .click();
+    cy.intercept('PATCH', '/cases/**').as('patchCases1');
+    cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
+    cy.get(utils.vlModalVerify.save).click()
+      .wait('@patchCases1')
+      .wait('@patchSubcases1');
+    cy.get(auk.loader).should('not.exist');
+    cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
+
+    cy.get(route.casesOverview.showArchived).click();
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
+
+    // restore case
+    cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .click();
+    cy.intercept('PATCH', '/cases/**').as('patchCases2');
+    cy.intercept('PATCH', '/subcases/**').as('patchSubcases2');
+    cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
+      .click()
+      .wait('@patchCases2')
+      .wait('@patchSubcases2');
+
+    cy.get(route.casesOverview.showArchived).click();
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
+  });
 });
