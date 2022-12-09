@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 /**
  * @argument subcase
  */
-export default class AgendaitemPostponed extends Component {
+export default class AgendaitemRetracted extends Component {
   @tracked decisionmakingFlow;
 
   constructor() {

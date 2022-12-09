@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class ConceptStoreService extends Service {
   @service store;
@@ -30,6 +31,23 @@ export default class ConceptStoreService extends Service {
         ...query.filter,
       },
       sort: query.sort ?? 'position',
+    });
+  }
+
+  /** Fetches all government fields concepts that are part of the concept scheme.
+   *
+   * The results are sorted on start-date and label to ensure unique sorting.
+   * Sorting on position (if needed) should be done after.
+   * 
+   * Note that this call is pre-loaded by the cache-warmup-service.
+   * If you make changes to this call, make sure to also update the cache-warmup-service.
+   */
+  queryAllGovernmentFields() {
+    return this.store.queryAll('concept', {
+      'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+      filter: {
+      },
+      sort: 'start-date,label',
     });
   }
 }
