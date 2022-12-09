@@ -5,7 +5,6 @@ import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 
 export default class FileService extends Service {
   @service store;
-  @service toaster;
   @tracked objectsToDelete = [];
 
   @task
@@ -17,19 +16,6 @@ export default class FileService extends Service {
       yield this.deleteDocumentContainer(documentContainerToDelete);
     } else {
       documentContainerToDelete.aboutToDelete = false;
-    }
-  }
-
-  // TODO KAS-3588 DELETE if not used in KAS-3587 (last version delete)
-  @task
-  *deletePieceWithUndo(pieceToDelete) {
-    this.objectsToDelete.push(pieceToDelete);
-    pieceToDelete.aboutToDelete = true;
-    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
-    if (this.findObjectToDelete(pieceToDelete.id)) {
-      yield this.deletePiece(pieceToDelete);
-    } else {
-      pieceToDelete.aboutToDelete = false;
     }
   }
 
