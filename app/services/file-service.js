@@ -1,16 +1,6 @@
 import Service from '@ember/service';
 
 export default class FileService extends Service {
-  async deleteDocumentContainer(documentContainer) {
-    const documentContainerToDelete = await documentContainer;
-    if (!documentContainerToDelete) {
-      return;
-    }
-    const pieces = await documentContainerToDelete.pieces;
-    await Promise.all(pieces.map(async (piece) => this.deletePiece(piece)));
-    documentContainerToDelete.destroyRecord();
-  }
-
   async deletePiece(piece) {
     const pieceToDelete = await piece;
     if (!pieceToDelete) {

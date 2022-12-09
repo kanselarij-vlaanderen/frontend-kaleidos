@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
+import { deleteDocumentContainer } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -103,7 +104,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
         const piecesInContainer = await row.documentContainer.pieces;
         if (piecesInContainer.length === 0) {
-          await this.fileService.deleteDocumentContainer(row.documentContainer);
+          await deleteDocumentContainer(row.documentContainer);
         }
       } else {
         piece.name = row.name;
