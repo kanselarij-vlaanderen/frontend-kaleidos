@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class UtilsAddDocument extends Component {
   /**
@@ -12,7 +13,6 @@ export default class UtilsAddDocument extends Component {
    * @argument onSave: receives pieceInCreation as an argument
    */
   @service store;
-  @service fileService;
   @service currentSession;
 
   @tracked pieceInCreation = null;
@@ -30,7 +30,7 @@ export default class UtilsAddDocument extends Component {
   @action
   async deletePieceInCreation() {
     const file = await this.pieceInCreation.file;
-    await this.fileService.deleteFile(file);
+    await deleteFile(file);
     this.pieceInCreation.deleteRecord();
     this.pieceInCreation = null;
   }
