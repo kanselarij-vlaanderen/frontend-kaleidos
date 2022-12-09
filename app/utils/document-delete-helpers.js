@@ -16,6 +16,7 @@ export async function deletePiece(pieceOrPromise) {
     await deleteFile(file);
     return piece.destroyRecord();
   }
+  // TODO: delete container in case we just orphaned it
 }
 
 export async function deleteFile(fileOrPromise) {
