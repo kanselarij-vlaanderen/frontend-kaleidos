@@ -114,6 +114,7 @@
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^6.2.2",
+    "ember-plausible": "^0.1.1",
     "ember-power-select": "^5.0.4",
     "ember-prism": "^0.7.0",
     "ember-promise-helpers": "^1.0.9",
