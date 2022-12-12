@@ -251,16 +251,6 @@ $au-button-height: 3.4rem;
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
-// Fix icons in menu
-.auk-menu__item {
-  display: flex;
-  align-items: center;
-}
-
-.auk-menu__item--danger {
-  font-weight: 500;
-}
-
 // Modal fixes
 .au-c-modal--fullscreen {
   max-width: 100%;
