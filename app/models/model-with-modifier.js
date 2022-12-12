@@ -67,11 +67,11 @@ export default class ModelWithModifier extends Model {
    */
   async preEditOrSaveCheck() {
     if (!(await this._saveAllowed())) {
-      const {
-        oldModelData, oldModelModifiedMoment,
-      } = await this._getOldModelData();
+      const { oldModelData, oldModelModifiedMoment } =
+        await this._getOldModelData();
       this.mustRefresh = true;
-      const userId = oldModelData.data[0].relationships['modified-by'].links.self;
+      const userId =
+        oldModelData.data[0].relationships['modified-by'].links.self;
       const userData = await fetch(userId);
       const userDataFields = await userData.json();
       const vals = userDataFields.data.attributes;
@@ -81,14 +81,17 @@ export default class ModelWithModifier extends Model {
         lastname: vals['last-name'],
         time: oldModelModifiedMoment.locale('nl').fromNow(),
       });
-      this.toaster.error(errorMessage,
+      this.toaster.error(
+        errorMessage,
         this.intl.t('changes-could-not-be-saved-title'),
         {
           timeOut: 600000,
-        });
+        }
+      );
       const modifiedOldDataErrorException = new ModifiedOldDataError();
-      modifiedOldDataErrorException.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
-      throw (modifiedOldDataErrorException);
+      modifiedOldDataErrorException.message =
+        'Editing concurrency protection. Data in the db was altered under your feet.';
+      throw modifiedOldDataErrorException;
     }
   }
 
@@ -107,21 +110,21 @@ export default class ModelWithModifier extends Model {
       return false;
     }
 
-    const {
-      oldModelData, oldModelModifiedMoment,
-    } = await this._getOldModelData();
+    const { oldModelData, oldModelModifiedMoment } =
+      await this._getOldModelData();
     // If the record has no modified and modifiedBy data it's a brand new record
     // that has no backend data and we can always save it.
     // If the record's modified and modifiedBy data matches the backend data, we
     // can save the record since we wouldn't be overwriting any other changes.
     // Otherwise, disallow saving the record.
-    return (typeof modified === 'undefined'
-            || modifiedBy === null
-            || (typeof modified !== 'undefined'
-                && currentModifiedModel.isSame(oldModelModifiedMoment)
-                && typeof oldModelData.data[0].relationships['modified-by'] !== 'undefined'
-               )
-           );
+    return (
+      typeof modified === 'undefined' ||
+      modifiedBy === null ||
+      (typeof modified !== 'undefined' &&
+        currentModifiedModel.isSame(oldModelModifiedMoment) &&
+        typeof oldModelData.data[0].relationships['modified-by'] !==
+          'undefined')
+    );
   }
 
   /**
@@ -136,15 +139,19 @@ export default class ModelWithModifier extends Model {
     // our own record since it's cached. And causing the store to reload the
     // current record might have nefarious effects since we're using the current
     // record.
-    const oldModelData = await this.store.adapterFor(this.constructor.modelName)
+    const oldModelData = await this.store
+      .adapterFor(this.constructor.modelName)
       .queryRecord(this.store, this.constructor, {
-          filter: {
-            id: this.id,
-            },
-        });
-    const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
+        filter: {
+          id: this.id,
+        },
+      });
+    const oldModelModifiedMoment = moment.utc(
+      oldModelData.data[0].attributes.modified
+    );
     return {
-      oldModelData, oldModelModifiedMoment,
+      oldModelData,
+      oldModelModifiedMoment,
     };
   }
 }
