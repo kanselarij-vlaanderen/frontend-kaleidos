@@ -322,6 +322,10 @@ table tr.lt-expanded-row {
   > .auk-checkbox-list {
     margin-left: 2.5rem;
   }
+
+  + .auk-checkbox-list {
+    margin-top: .5rem;
+  }
 }
 
 .auk-checkbox-list--inline {

@@ -25,8 +25,8 @@
 </div>
 <div class="auk-popover__body">
   {{#each this.optionColumns as |column|}}
-    {{#each column as |option|}}
-      <div>
+    <Auk::CheckboxList>
+      {{#each column as |option|}}
         <AuControlCheckbox
           data-test-overview-table-display-config-option-checkbox={{option.keyName}}
           @checked={{includes option @tableConfig.visibleColumns}}
@@ -45,8 +45,8 @@
             {{/if}}
           </span>
         </AuControlCheckbox>
-      </div>
-    {{/each}}
+      {{/each}}
+    </Auk::CheckboxList>
   {{/each}}
   <AuButton
     class="auk-u-mt-2"
