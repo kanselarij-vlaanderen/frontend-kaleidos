@@ -120,17 +120,17 @@ function addDomainsAndFields(domains) {
   cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
-    cy.get(utils.governmentAreaSelectorForm.domain).contains(domain.name)
-      .parent()
-      .as('container');
+    cy.get(utils.governmentAreaSelectorForm.container)
+      .contains(domain.name)
+      .as('domain');
     if (domain.selected) {
-      cy.get('@container').find(utils.governmentAreaSelectorForm.domain)
-        .contains(domain.name)
+      cy.get('@domain')
         .click();
     }
     if (domain.fields) {
       domain.fields.forEach((field)  => {
-        cy.get('@container')
+        cy.get('@domain')
+          .siblings(utils.governmentAreaSelectorForm.domainList)
           .contains(field)
           .click();
       });

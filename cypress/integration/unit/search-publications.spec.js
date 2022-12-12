@@ -1,6 +1,7 @@
 /* global context, xit, it, cy, beforeEach, afterEach, Cypress, it */
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 // import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
@@ -69,8 +70,7 @@ function checkPagination(optionsToCheck) {
 function checkPublicationSearchForStatusType(status, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.get(auk.checkbox.checkbox).parent()
-    .contains(status)
+  cy.contains(appuniversum.checkbox, status)
     .click()
     .wait(`@publicationSearchCall${randomInt}`);
   if (pubNumber) {
@@ -96,8 +96,7 @@ function checkPublicationSearchForStatusType(status, pubNumber) {
 function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.get(auk.checkbox.checkbox).parent()
-    .contains(regulationType)
+  cy.contains(appuniversum.checkbox, regulationType)
     .click()
     .wait(`@publicationSearchCall${randomInt}`);
   if (pubNumber) {
@@ -252,8 +251,7 @@ context('Search tests', () => {
 
     // check urgent
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Dringend')
+    cy.contains(appuniversum.checkbox, 'Dringend')
       .click();
     cy.get(route.search.trigger).click();
     cy.wait('@publicationSearchCall2');
@@ -261,8 +259,7 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 1);
     // remove urgent
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains('Dringend')
+    cy.contains(appuniversum.checkbox, 'Dringend')
       .click();
 
     // search with double date
@@ -285,11 +282,9 @@ context('Search tests', () => {
 
     // search with status and regulation type
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains(fieldsWithDoubleDates.status)
+    cy.contains(appuniversum.checkbox, fieldsWithDoubleDates.status)
       .click();
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains(fieldsWithDoubleDates.regulationType)
+    cy.contains(appuniversum.checkbox, fieldsWithDoubleDates.regulationType)
       .click()
       .wait('@publicationSearchCall4');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
@@ -300,12 +295,10 @@ context('Search tests', () => {
 
     // change status
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall5');
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains(fieldsWithDoubleDates.status)
+    cy.contains(appuniversum.checkbox, fieldsWithDoubleDates.status)
       .click();
     // search with searchterm + decisionDate + regulation-type but with different status
-    cy.get(auk.checkbox.checkbox).parent()
-      .contains(fields2.status)
+    cy.contains(appuniversum.checkbox, fields2.status)
       .click()
       .wait('@publicationSearchCall5');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');

@@ -7,13 +7,14 @@ import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function checkRoleFilterSingle(name, numberOfResults) {
-  cy.get(auk.checkbox.label).contains(name)
+  cy.contains(appuniversum.checkbox, name)
     .click();
   cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
   cy.get(utils.numberPagination.container).contains(`van ${numberOfResults}`);
-  cy.get(auk.checkbox.label).contains(name)
+  cy.contains(appuniversum.checkbox, name)
     .click();
 }
 
@@ -170,16 +171,16 @@ context('testing user and organisation management', () => {
 
     it('test the datatable', () => {
       // check if no result possible
-      cy.get(auk.checkbox.label).contains('Werkrelatie')
+      cy.contains(appuniversum.checkbox, 'Werkrelatie')
         .click();
-      cy.get(auk.checkbox.label).contains('Gebruiker')
+      cy.contains(appuniversum.checkbox, 'Gebruiker')
         .click();
 
       cy.get(settings.usersIndex.table).contains('Geen resultaten gevonden');
 
-      cy.get(auk.checkbox.label).contains('Werkrelatie')
+      cy.contains(appuniversum.checkbox, 'Werkrelatie')
         .click();
-      cy.get(auk.checkbox.label).contains('Gebruiker')
+      cy.contains(appuniversum.checkbox, 'Gebruiker')
         .click();
 
       // check sort by name

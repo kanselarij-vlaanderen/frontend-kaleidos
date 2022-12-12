@@ -9,16 +9,14 @@
     {{/unless}}
     {{! template-lint-enable simple-unless }}
     <AuControlCheckbox
-      data-test-government-area-selector-form-domain
       @checked={{domainSelection.isSelected}}
       @onChange={{fn this.toggleDomainSelection domainSelection}}
     >
       {{domainSelection.domain.label}}
     </AuControlCheckbox>
-    <Auk::CheckboxList>
+    <Auk::CheckboxList data-test-government-area-selector-form-domain-list>
       {{#each domainSelection.availableFields as |field|}}
         <AuControlCheckbox
-          data-test-government-area-selector-form-field
           @label={{field.label}}
           @checked={{includes field domainSelection.selectedFields}}
           @onChange={{fn this.toggleFieldSelection field}}

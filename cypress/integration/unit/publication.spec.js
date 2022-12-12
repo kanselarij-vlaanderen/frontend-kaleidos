@@ -237,7 +237,9 @@ context('Publications tests', () => {
     cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
     cy.wait('@getConceptSchemes');
-    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+    cy.get(utils.governmentAreaSelectorForm.container)
+      .contains(labelName)
+      .siblings(utils.governmentAreaSelectorForm.domainList)
       .contains(fieldsName)
       .click();
     cy.get(auk.modal.footer.cancel).click();
@@ -247,7 +249,9 @@ context('Publications tests', () => {
     // link government field
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlows');
     cy.get(utils.governmentAreasPanel.edit).click();
-    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+    cy.get(utils.governmentAreaSelectorForm.container)
+      .contains(labelName)
+      .siblings(utils.governmentAreaSelectorForm.domainList)
       .contains(fieldsName)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
@@ -257,7 +261,9 @@ context('Publications tests', () => {
     cy.get(utils.governmentAreasPanel.row.fields).contains(fieldsName);
     // unlink government field
     cy.get(utils.governmentAreasPanel.edit).click();
-    cy.get(utils.governmentAreaSelectorForm.container).contains(labelName)
+    cy.get(utils.governmentAreaSelectorForm.container)
+      .contains(labelName)
+      .siblings(utils.governmentAreaSelectorForm.domainList)
       .contains(fieldsName)
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
