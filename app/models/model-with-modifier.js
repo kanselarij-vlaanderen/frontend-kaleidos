@@ -9,7 +9,7 @@ import ModifiedOldDataError from 'frontend-kaleidos/errors/modified-old-data-err
  * preventing the user from persisting edits of the record data if another user
  * persisted their edits before us.
  */
-export default class ModelWithModified extends Model {
+export default class ModelWithModifier extends Model {
   @service currentSession;
   @service intl;
   @service store;
