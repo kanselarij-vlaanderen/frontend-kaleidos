@@ -62,6 +62,7 @@ function checkPagination(optionsToCheck) {
     cy.get(dependency.emberPowerSelect.option).contains(option)
       .click();
     cy.wait(`@publicationSearchCall${randomInt}`);
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.url().should('include', `aantal=${option}`);
   });
 }

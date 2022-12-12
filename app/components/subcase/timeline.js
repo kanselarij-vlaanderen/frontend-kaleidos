@@ -57,12 +57,6 @@ export default class SubcaseTimeline extends Component {
             )}`,
             date: moment.utc(meeting.plannedStart).toDate(),
           });
-          // phase 4: add an extra fase in case of a postponed subcase
-          if (decisionActivity.isPostponed) {
-            phases.push({
-              label: this.intl.t('decision-activity-result-postponed'),
-            });
-          }
         }
       }
     }
