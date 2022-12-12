@@ -41,9 +41,11 @@ export default class Agendaitem extends ModelWithModifier {
     return this.constructor.modelName;
   }
 
-  get formallyOk() {
+  get formallyOkToShow() {
     const options = CONFIG.formallyOkOptions;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === this.formallyOk);
-    return EmberObject.create(foundOption); 
+    const test =  EmberObject.create(foundOption); 
+    console.log('formallyok', test)
+    return test;
   }
 }
