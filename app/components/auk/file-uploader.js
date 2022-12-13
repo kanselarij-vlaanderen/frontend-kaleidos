@@ -12,7 +12,7 @@ import { enqueueTask } from 'ember-concurrency';
  * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *  Setting this name will allow you to access this queue from the file-queue service outside of this component.
  * @argument {Function} onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
- * @argument {Fuctnion} validateFile: function run to validate files before sending them to the backend.
+ * @argument {Function} validateFile: function run to validate files before sending them to the backend.
  *  Takes in a File and should return a boolean (whether the file is valid or not). See: https://developer.mozilla.org/en-US/docs/Web/API/File
  */
 export default class FileUploader extends Component {
