@@ -3,14 +3,11 @@ import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import { inject as service } from '@ember/service';
 import parseDate from '../../utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
 import endOfDay from 'date-fns/endOfDay';
 
 export default class NewsletterInfosSearchRoute extends Route {
-  @service metrics;
-
   queryParams = {
     searchText: {
       refreshModel: true,
@@ -123,21 +120,6 @@ export default class NewsletterInfosSearchRoute extends Route {
         return entry;
       }
     );
-  }
-
-  afterModel(model) {
-    const keyword = this.filterParams.searchText;
-    let count;
-    if (model && model.meta && isPresent(model.meta.count)) {
-      count = model.meta.count;
-    } else {
-      count = false;
-    }
-    this.metrics.invoke('trackSiteSearch', {
-      keyword,
-      category: 'newslettersSearch',
-      searchCount: count,
-    });
   }
 
   setupController(controller, model) {
