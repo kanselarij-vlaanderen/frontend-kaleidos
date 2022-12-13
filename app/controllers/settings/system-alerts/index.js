@@ -23,6 +23,6 @@ export default class SystemAlertsController extends Controller {
 
   @action
   cancel() {
-    this.router.transitionTo('settings.overview');
+    this.router.transitionTo('settings');
   }
 }

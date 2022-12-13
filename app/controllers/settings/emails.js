@@ -10,13 +10,13 @@ export default class SettingsEmailController extends Controller {
   @task
   *save() {
     yield this.model.save();
-    this.router.transitionTo('settings.overview');
+    this.router.transitionTo('settings');
   }
 
   @action
   cancel() {
     this.model.rollbackAttributes();
-    this.router.transitionTo('settings.overview');
+    this.router.transitionTo('settings');
   }
 
   get isDisabled() {

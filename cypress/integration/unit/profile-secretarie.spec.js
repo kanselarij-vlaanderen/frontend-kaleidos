@@ -11,7 +11,7 @@ import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
-context('Testing the application as Kanselarij user', () => {
+context('Testing the application as Secretarie user', () => {
   beforeEach(() => {
     cy.login('Secretarie');
   });
@@ -55,7 +55,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(utils.mHeader.settings).click();
       cy.get(settings.settings.generalSettings).should('exist');
       cy.get(settings.settings.manageMinisters).should('exist');
-      cy.url().should('include', '/instellingen/overzicht');
+      cy.url().should('include', '/instellingen');
     });
   });
 
