@@ -200,20 +200,17 @@ context('new document viewer tests', () => {
     openEditAndAddDocument(newPdfFile.folder, newPdfFile.fileName, newPdfFile.fileExtension);
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
 
-    // replace pdf with word file and check that it gets converted to pdf
+    // replace pdf with word file and check again
     openEditAndAddDocument(wordFile.folder, wordFile.fileName, wordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
+    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // replace word file with new word file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
-
-    // replace word file with new pdf file and check again
-    openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.pdf');
+    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // delete document and check
-    cy.get(document.previewDetailsTab.name).contains('new name test.docx');
     cy.get(document.previewDetailsTab.delete).click();
     cy.intercept('DELETE', '/files/**').as('deleteFile');
     cy.intercept('DELETE', '/pieces/**').as('deletePieces');
