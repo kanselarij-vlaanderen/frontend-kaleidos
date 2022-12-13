@@ -12,14 +12,12 @@ export default class ApplicationRoute extends Route {
   @service currentSession;
   @service fileService;
   @service router;
-  @service metrics;
   @service userAgent;
   @service plausible;
 
   constructor() {
     super(...arguments);
     this.setupPlausible();
-    this.setupTracking();
   }
 
   async beforeModel() {
@@ -57,15 +55,6 @@ export default class ApplicationRoute extends Route {
       || browser.isChrome
       || browser.isSafari
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
-  }
-
-  setupTracking() {
-    this.router.on('routeDidChange', () => {
-      this.metrics.trackPage({
-        page: this.router.currentURL,
-        title: this.router.currentRouteName,
-      });
-    });
   }
 
   setupPlausible() {
