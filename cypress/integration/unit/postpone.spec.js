@@ -9,7 +9,7 @@ import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Decision tests', () => {
+context('Decision postponing tests', () => {
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -110,10 +110,10 @@ context('Decision tests', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get(auk.loader).should('not.exist');
 
-    // check if timeline contains multiple phase blocks
+    // check if timeline contains multiple phase blocks (1 block has max 3 phases)
     cy.get(cases.subcaseTimeline.item).eq(0)
       .contains('Ingediend voor');
-    cy.get(cases.subcaseTimeline.item).eq(4)
+    cy.get(cases.subcaseTimeline.item).eq(3)
       .contains('Ingediend voor');
 
     // check if meeting number contains multiple numbers
