@@ -73,7 +73,7 @@ function openSubcase(index = 0, shortTitle) {
 }
 
 /**
- * Changes the subcase access levels and titles when used in the subcase view (/dossiers/..id../overzicht)
+ * Changes the subcase access levels and titles when used in the subcase view
  * shortTitle is required to find the dom element
  * @name changeSubcaseAccessLevel
  * @memberOf Cypress.Chainable#
@@ -109,7 +109,7 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
 }
 
 /**
- * Adds a mandatees to a sucase when used in the subcase view (/dossiers/..id../overzicht)
+ * Adds a mandatees to a sucase when used in the subcase view
  * Pass the title of the mandatee to get a specific person
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#

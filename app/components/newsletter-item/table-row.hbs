@@ -80,7 +80,7 @@
           {{t "edit"}}
         </AuButton>
       {{/if}}
-      {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
+      {{#if this.loadNotaOrVisienota.isRunning}}
         <div class="auk-loader" role="alert" aria-busy="true">
           <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
             {{t "nota-loading-text"}}
@@ -92,13 +92,13 @@
           @skin="borderless"
           @layout="icon-only"
           @icon="document"
-          @disabled={{not (await @agendaitem.notaOrVisienota)}}
+          @disabled={{not this.notaOrVisieNota}}
           {{on "click" this.openNota}}
         >
           <:floater>
             <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
               {{if
-                  (await @agendaitem.notaOrVisienota)
+                  this.notaOrVisieNota
                   (t "open-note")
                   (t "no-nota")
               }}

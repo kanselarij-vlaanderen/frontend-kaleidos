@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { setDefaultOptions } from 'date-fns';
 import { nlBE } from 'date-fns/locale';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ApplicationRoute extends Route {
   @service conceptStore;
@@ -13,12 +14,12 @@ export default class ApplicationRoute extends Route {
   @service currentSession;
   @service fileService;
   @service router;
-  @service metrics;
   @service userAgent;
+  @service plausible;
 
   constructor() {
     super(...arguments);
-    this.setupTracking();
+    this.setupPlausible();
   }
 
   async beforeModel() {
@@ -61,13 +62,17 @@ export default class ApplicationRoute extends Route {
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
   }
 
-  setupTracking() {
-    this.router.on('routeDidChange', () => {
-      this.metrics.trackPage({
-        page: this.router.currentURL,
-        title: this.router.currentRouteName,
+  setupPlausible() {
+    const { domain, apiHost } = ENV.plausible;
+    if (
+      domain !== '{{ANALYTICS_APP_DOMAIN}}' &&
+      apiHost !== '{{ANALYTICS_API_HOST}}'
+    ) {
+      this.plausible.enable({
+        domain,
+        apiHost,
       });
-    });
+    }
   }
 
   @action

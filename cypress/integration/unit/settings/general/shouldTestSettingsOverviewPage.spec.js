@@ -8,7 +8,7 @@ context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.login('Admin');
     cy.get(utils.mHeader.settings).click();
-    cy.url().should('include', 'instellingen/overzicht');
+    cy.url().should('include', 'instellingen');
   });
 
   // TODO-settings test 2-9 are duplicated in their own specs

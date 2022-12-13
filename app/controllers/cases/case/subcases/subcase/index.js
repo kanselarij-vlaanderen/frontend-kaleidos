@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
+export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
   @service currentSession;
 

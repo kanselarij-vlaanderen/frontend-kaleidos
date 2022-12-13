@@ -11,18 +11,6 @@ module.exports = function (environment) {
       allowEmpty: true,
       outputFormat:'DD-MM-YYYY',
     },
-    metricsAdapters: [
-      {
-        name: 'Matomo',
-        environments: ['production'],
-        config: {
-          scriptUrl: 'https://dev-kaleidos-matomo.redpencil.io', // Can optionally be CDN-sourced
-          trackerUrl: 'https://dev-kaleidos-matomo.redpencil.io',
-          siteId: '{{METRICS_SITE_ID}}',
-          disableCookies: true, // <- for GDPR
-        },
-      }
-    ],
     featureFlags: {
       'editor-html-paste': false,
       'editor-browser-delete': true,
@@ -60,6 +48,13 @@ module.exports = function (environment) {
           ].join(' '),
         },
       },
+    },
+    'ember-plausible': {
+      enabled: false,
+    },
+    plausible: {
+      domain: '{{ANALYTICS_APP_DOMAIN}}',
+      apiHost: '{{ANALYTICS_API_HOST}}',
     },
   };
 
