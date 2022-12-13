@@ -119,6 +119,7 @@
     "ember-promise-helpers": "^1.0.9",
     "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.0.3",
+    "ember-resources": "^5.6.0",
     "ember-responsive": "^3.0.6",
     "ember-router-service-refresh-polyfill": "^1.0.1",
     "ember-set-helper": "^2.0.1",
