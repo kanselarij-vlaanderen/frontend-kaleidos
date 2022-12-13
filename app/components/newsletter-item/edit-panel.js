@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 
 export default class NewsletterItemEditPanelComponent extends Component {
   @service newsletterService;
+  @service agendaitemNota;
 
   editorInstance;
   @tracked newsletterItem;
@@ -19,11 +20,13 @@ export default class NewsletterItemEditPanelComponent extends Component {
   @tracked htmlContent;
   @tracked isFinished;
   @tracked selectedThemes = [];
+  @tracked notaOrVisieNota;
 
   constructor() {
     super(...arguments);
     this.isFullscreen = this.args.isFullscreen;
     this.ensureNewsletterItem.perform();
+    this.loadNotaOrVisienota.perform();
   }
 
   @task
@@ -42,6 +45,11 @@ export default class NewsletterItemEditPanelComponent extends Component {
     this.selectedThemes = (yield this.newsletterItem.themes).toArray();
 
     this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsletterItem);
+  }
+
+  @task
+  *loadNotaOrVisienota() {
+    this.notaOrVisieNota = yield this.agendaitemNota.notaOrVisieNota(this.args.agendaitem);
   }
 
   @action
@@ -94,11 +102,8 @@ export default class NewsletterItemEditPanelComponent extends Component {
 
   @action
   async openNota() {
-    const nota = await this.args.agendaitem.notaOrVisienota;
-    if (nota) {
-      const pieces = await nota.pieces;
-      const lastPiece = pieces.sortBy('created').lastObject;
-      window.open(`/document/${lastPiece.id}`);
+    if (this.notaOrVisieNota) {
+      window.open(`/document/${this.notaOrVisieNota.id}`);
     }
   }
 

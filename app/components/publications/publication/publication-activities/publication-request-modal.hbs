@@ -17,9 +17,7 @@
           <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
-          <Auk::FileUploader
-            @multiple={{true}}
-            @reusable={{true}}
+          <Publications::Publication::RequestUploader
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList

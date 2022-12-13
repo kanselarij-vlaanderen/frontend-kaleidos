@@ -10,19 +10,14 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if (not (is-pending @agendaitem.notaOrVisienota))}}
-            {{#if (not (await @agendaitem.notaOrVisienota))}}
-              <AuButton
-                data-test-newsletter-edit-item-no-nota
-                @skin="naked"
-                @icon="document"
-                @iconAlignment="left"
-                @disabled={{true}}
-                class="au-u-padding-right-none"
-              >
-                {{t "no-nota"}}
-              </AuButton>
-            {{else}}
+          {{#if this.loadNotaOrVisienota.isRunning}}
+            <div class="auk-loader" role="alert" aria-busy="true">
+              <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+                {{t "nota-loading-text"}}
+              </EmberTooltip>
+            </div>
+          {{else}}
+            {{#if this.notaOrVisieNota}}
               <AuButton
                 data-test-newsletter-edit-item-nota
                 @skin="naked"
@@ -33,13 +28,18 @@
               >
                 {{t "open-note"}}
               </AuButton>
+            {{else}}
+            <AuButton
+                data-test-newsletter-edit-item-no-nota
+                @skin="naked"
+                @icon="document"
+                @iconAlignment="left"
+                @disabled={{true}}
+                class="au-u-padding-right-none"
+              >
+                {{t "no-nota"}}
+              </AuButton>
             {{/if}}
-          {{else}}
-            <div class="auk-loader" role="alert" aria-busy="true">
-              <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-                {{t "nota-loading-text"}}
-              </EmberTooltip>
-            </div>
           {{/if}}
         </Group.Item>
       </Toolbar.Group>

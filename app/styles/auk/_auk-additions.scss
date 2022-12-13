@@ -298,6 +298,10 @@ table tr.lt-expanded-row {
 // Input with clear action
 
 .auk-input-with-clear-action {
+  display: block;
+  position: relative;
+  width: 100%;
+
   > .au-c-input-wrapper {
     > .au-c-input {
       padding-right: 3.5rem;
@@ -311,5 +315,16 @@ table tr.lt-expanded-row {
     bottom: 0;
 
     outline-offset: calc(var(--au-outline-offset) * -1);
+  }
+}
+
+// Help text + Errors on forms
+
+.auk-form-help-text {
+  .au-c-input + &,
+  .au-c-input-wrapper + &,
+  .auk-input-with-clear-action + &,
+  .auk-datepicker + &  {
+    margin-top: 0.5rem;
   }
 }

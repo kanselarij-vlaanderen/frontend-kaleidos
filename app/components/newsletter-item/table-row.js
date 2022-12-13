@@ -9,13 +9,27 @@ export default class NewsletterItemTableRowComponent extends Component {
   @service currentSession;
   @service toaster;
   @service intl;
+  @service agendaitemNota;
 
   @tracked isOpenEditView = false;
+  @tracked notaOrVisieNota;
+
+  constructor() {
+    super(...arguments);
+    this.loadNotaOrVisienota.perform();
+  }
 
   @task
   *saveNewsletterItem(newsletterItem) {
     yield this.args.onSave(newsletterItem);
     this.closeEditView();
+  }
+
+  @task
+  *loadNotaOrVisienota() {
+    this.notaOrVisieNota = yield this.agendaitemNota.notaOrVisieNota(
+      this.args.agendaitem
+    );
   }
 
   @action
@@ -26,11 +40,8 @@ export default class NewsletterItemTableRowComponent extends Component {
 
   @action
   async openNota() {
-    const nota = await this.args.agendaitem.notaOrVisienota;
-    if (nota) {
-      const pieces = await nota.pieces;
-      const lastPiece = pieces.sortBy('created').lastObject;
-      window.open(`/document/${lastPiece.id}`);
+    if (this.notaOrVisieNota) {
+      window.open(`/document/${this.notaOrVisieNota.id}`);
     }
   }
 
