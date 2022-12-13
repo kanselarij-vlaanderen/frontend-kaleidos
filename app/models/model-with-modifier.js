@@ -1,25 +1,39 @@
+import Model, { belongsTo, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import Model, { belongsTo, attr } from '@ember-data/model';
 import fetch from 'fetch';
-import ModifiedOldDataError from '../errors/modified-old-data-error';
+import ModifiedOldDataError from 'frontend-kaleidos/errors/modified-old-data-error';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-classes
-export default Model.extend({
-  currentSession: service(),
-  intl: service(),
-  store: service(),
-  toaster: service(),
-  modified: attr('datetime'),
-  modifiedBy: belongsTo('user'),
+/**
+ * Abstract model which implements a form of optimistic locking for the record,
+ * preventing the user from persisting edits of the record data if another user
+ * persisted their edits before us.
+ */
+export default class ModelWithModifier extends Model {
+  @service currentSession;
+  @service intl;
+  @service store;
+  @service toaster;
 
-  async save() {
-    const parentSave = this._super;
-    const dirtyType = this.get('dirtyType');
+  @attr('datetime') modified;
+  @belongsTo('user') modifiedBy;
 
-    switch (dirtyType) {
+  setModified() {
+    this.modified = new Date();
+    this.modifiedBy = this.currentSession.user;
+  }
+
+  /**
+   * Persist the record's data to the backend using Ember's built-in save method
+   * or throw if the record's has changed in the backend before saving.
+   *
+   * @param {Object} options
+   * @throws {ModifiedOldDataError} If the record's data was modified
+   * @return {Promise} a promise that will be resolved when the adapter returns
+   * successfully or rejected if the adapter returns with an error
+   */
+  async save(options) {
+    switch (this.dirtyType) {
       case 'created': {
         this.setModified();
         break;
@@ -42,80 +56,102 @@ export default Model.extend({
       }
     }
 
-    return parentSave.call(this, ...arguments);
-  },
+    return super.save(options);
+  }
 
-  setModified() {
-    this.set('modified', new Date());
-    this.set('modifiedBy', this.currentSession.user);
-  },
-
+  /**
+   * Check if the record can be saved, otherwise show a toast and throw an error.
+   *
+   * @throws {ModifiedOldDataError}
+   * @returns {Promise<Boolean>}
+   */
   async preEditOrSaveCheck() {
-    if (!(await this.saveAllowed())) {
-      const {
-        oldModelData, oldModelModifiedMoment,
-      } = await this.getOldModelData();
-      this.set('mustRefresh', true);
-      const userId = oldModelData.data[0].relationships['modified-by'].links.self;
+    if (!(await this._saveAllowed())) {
+      const { oldModelData, oldModelModifiedMoment } =
+        await this._getOldModelData();
+      this.mustRefresh = true;
+      const userId =
+        oldModelData.data[0].relationships['modified-by'].links.self;
       const userData = await fetch(userId);
       const userDataFields = await userData.json();
       const vals = userDataFields.data.attributes;
       const errorMessage = this.intl.t('changes-could-not-be-saved-message', {
-        modelName: this.intl.t(this.get('constructor.modelName')),
+        modelName: this.intl.t(this.constructor.modelName),
         firstname: vals['first-name'],
         lastname: vals['last-name'],
         time: oldModelModifiedMoment.locale('nl').fromNow(),
       });
-      this.toaster.error(errorMessage,
+      this.toaster.error(
+        errorMessage,
         this.intl.t('changes-could-not-be-saved-title'),
         {
           timeOut: 600000,
-        });
+        }
+      );
       const modifiedOldDataErrorException = new ModifiedOldDataError();
-      modifiedOldDataErrorException.message = 'Editing concurrency protection. Data in the db was altered under your feet.';
-      throw (modifiedOldDataErrorException);
+      modifiedOldDataErrorException.message =
+        'Editing concurrency protection. Data in the db was altered under your feet.';
+      throw modifiedOldDataErrorException;
     }
-  },
+  }
 
-  async saveAllowed() {
-    const modified = this.get('modified');
-    const modifiedBy = await this.get('modifiedBy');
-    const currentModifiedModel = moment.utc(this.get('modified'));
-    const mustRefresh = this.get('mustRefresh');
-    if (mustRefresh) {
+  /**
+   * Check if the record can be saved. This is determined by comparing the
+   * modified and modifiedBy properties of the record with the data residing in
+   * the backend.
+   *
+   * @returns {Promise<Boolean>}
+   */
+  async _saveAllowed() {
+    const modified = this.modified;
+    const modifiedBy = await this.modifiedBy;
+    const currentModifiedModel = moment.utc(this.modified);
+    if (this.mustRefresh) {
       return false;
     }
 
-    const {
-      oldModelData, oldModelModifiedMoment,
-    } = await this.getOldModelData();
-    // Deze test test eigenlijk of het item hetzelfde is:
-    // item is hetzelfde
-    // Indien modified nog niet bestaat (old data)
-    // Indien modifiedBy nog niet bestaat (old data)
-    // Indien    de modified van het huidige model currentModifiedModel
-    //           == de modified van het model op DB oldModelModifiedMoment
-    const allowSave = (typeof modified === 'undefined' || modifiedBy === null
-      || (
-        typeof modified !== 'undefined'
-        && currentModifiedModel.isSame(oldModelModifiedMoment)
-        && typeof oldModelData.data[0].relationships['modified-by'] !== 'undefined')
+    const { oldModelData, oldModelModifiedMoment } =
+      await this._getOldModelData();
+    // If the record has no modified and modifiedBy data it's a brand new record
+    // that has no backend data and we can always save it.
+    // If the record's modified and modifiedBy data matches the backend data, we
+    // can save the record since we wouldn't be overwriting any other changes.
+    // Otherwise, disallow saving the record.
+    return (
+      typeof modified === 'undefined' ||
+      modifiedBy === null ||
+      (typeof modified !== 'undefined' &&
+        currentModifiedModel.isSame(oldModelModifiedMoment) &&
+        typeof oldModelData.data[0].relationships['modified-by'] !==
+          'undefined')
     );
-    return allowSave;
-  },
+  }
 
-  async getOldModelData() {
-    const oldModelData = await this.store.adapterFor(this.get('constructor.modelName'))
-      .queryRecord(this.store, this.get('constructor'),
-        {
-          filter:
-            {
-              id: this.get('id'),
-            },
-        });
-    const oldModelModifiedMoment = moment.utc(oldModelData.data[0].attributes.modified);
+  /**
+   * Return the record's data as it is found in the backend.
+   *
+   * @returns {Promise}
+   */
+  async _getOldModelData() {
+    // We use the adapter here (via store.adapterFor) instead of the store
+    // outright because we want to get the record's data, without affecting or
+    // being affected by the store. E.g. store.findRecord() would just return
+    // our own record since it's cached. And causing the store to reload the
+    // current record might have nefarious effects since we're using the current
+    // record.
+    const oldModelData = await this.store
+      .adapterFor(this.constructor.modelName)
+      .queryRecord(this.store, this.constructor, {
+        filter: {
+          id: this.id,
+        },
+      });
+    const oldModelModifiedMoment = moment.utc(
+      oldModelData.data[0].attributes.modified
+    );
     return {
-      oldModelData, oldModelModifiedMoment,
+      oldModelData,
+      oldModelModifiedMoment,
     };
-  },
-});
+  }
+}

@@ -54,9 +54,9 @@
                       @item={{announcement}}
                     />
                   </div>
-                  {{#if @item.sortedPieces}}
+                  {{#if @item.pieces}}
                     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                      @pieces={{announcement.sortedPieces}}
+                      @pieces={{announcement.pieces}}
                     />
                   {{/if}}
                 </div>
