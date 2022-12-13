@@ -238,5 +238,12 @@ const selectors = {
       subcaseName: '[data-test-create-agendaitem-row-subcase-name]',
     },
   },
+
+  // agendaitem-postponed
+  agendaitemPostponed: {
+    latestMeeting: '[data-test-agendaitem-postponed-latest-meeting]',
+    repropose: '[data-test-agendaitem-postponed-repropose]',
+    proposableMeeting: '[data-test-agendaitem-postponed-proposable-meeting]',
+  },
 };
 export default selectors;
