@@ -5,6 +5,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaPrintRoute extends Route {
   @service store;
+  @service throttledLoadingService;
 
   async model() {
     const { meeting, agenda } = this.modelFor('agenda');
@@ -16,7 +17,7 @@ export default class AgendaPrintRoute extends Route {
       },
       include: 'mandatees',
     });
-    const notas = []
+    const notas = [];
     const announcements = [];
     for (const agendaitem of agendaitems.sortBy('number').toArray()) {
       const type = await agendaitem.type;
@@ -26,8 +27,7 @@ export default class AgendaPrintRoute extends Route {
         announcements.push(agendaitem);
       }
     }
-    await this.ensureDocuments.perform(notas);
-    await this.ensureDocuments.perform(announcements);
+    await this.loadDocuments.perform(agendaitems);
 
     return {
       meeting,
@@ -37,22 +37,11 @@ export default class AgendaPrintRoute extends Route {
   }
 
   @task
-  *ensureDocuments(agendaitems) {
-    const tasks = [];
-    for (const agendaitem of agendaitems) {
-      if (!agendaitem.hasMany('pieces').value()) {
-        tasks.push(this.loadDocuments.perform(agendaitem));
-      }
-    }
-    yield all(tasks);
-  }
-
-  @task({ maxConcurrency: 2, enqueue: true })
-  *loadDocuments(agendaitem) {
-    yield agendaitem.hasMany('pieces').reload({
-      adapterOptions: {
-        namesOnly: true,
-      },
-    });
+  *loadDocuments(agendaitems) {
+    yield all(
+      agendaitems.map(async (agendaitem) => {
+        await this.throttledLoadingService.loadPieces.perform(agendaitem);
+      })
+    );
   }
 }
