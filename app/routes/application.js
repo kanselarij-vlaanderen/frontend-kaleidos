@@ -2,13 +2,9 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { setDefaultOptions } from 'date-fns';
-import { nlBE } from 'date-fns/locale';
-
 
 export default class ApplicationRoute extends Route {
   @service conceptStore;
-  @service moment;
   @service intl;
   @service session;
   @service currentSession;
@@ -17,13 +13,6 @@ export default class ApplicationRoute extends Route {
   @service userAgent;
 
   async beforeModel() {
-    // Set default locale for date-fns
-    setDefaultOptions({ locale: nlBE });
-
-    this.moment.setLocale('nl-be');
-
-    this.intl.setLocale(['nl-be']);
-
     if (!this.isSupportedBrowser) {
       this.transitionTo('not-supported');
     }
