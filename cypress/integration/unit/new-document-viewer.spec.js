@@ -220,6 +220,5 @@ context('new document viewer tests', () => {
     cy.get(utils.vlModalVerify.save).click()
       .wait('@deleteFile')
       .wait('@deletePieces');
-    cy.get(document.previewDetailsTab.name).contains('test pdf.pdf');
   });
 });
