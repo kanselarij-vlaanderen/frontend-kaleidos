@@ -23,7 +23,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
   model() {
     return this.store.queryOne('news-item', {
-      'filter[agenda-item-treatments][:id:]': this.agendaItemTreatment.id,
+      'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
     });
   }
 

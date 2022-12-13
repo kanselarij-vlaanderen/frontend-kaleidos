@@ -39,7 +39,7 @@
           <NewsletterItem::TableRow
             @agendaitem={{item.agendaitem}}
             @newsletterItem={{item.newsletterItem}}
-            @onSave={{fn (perform this.saveNewsletterItem) item.agendaitem}}
+            @onSave={{perform this.saveNewsletterItem}}
           />
         {{/each}}
       </tbody>

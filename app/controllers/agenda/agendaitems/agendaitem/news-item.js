@@ -1,12 +1,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
-  @service newsletterService;
-  @service router;
 
   @tracked agendaitem;
   @tracked notaModifiedTime;
@@ -43,7 +40,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @task
   *saveNewsletterItem(newsletterItem) {
     const mustReloadModel = newsletterItem.isNew;
-    yield this.newsletterService.saveNewsItemForAgendaitem(this.agendaitem, newsletterItem);
+    yield newsletterItem.save();
     this.isEditing = false;
     if (mustReloadModel) {
       this.send('reloadModel');

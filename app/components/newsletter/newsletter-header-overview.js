@@ -205,7 +205,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     })) > 0;
 
     const hasThemes = (await this.store.count('news-item', {
-      'filter[agenda-item-treatments][agendaitems][agenda][:id:]': agenda.id,
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
       'filter[:has:themes]': true,
     })) > 0;
 

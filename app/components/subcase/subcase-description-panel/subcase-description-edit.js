@@ -97,7 +97,7 @@ export default class SubcaseDescriptionEdit extends Component {
     });
     if (latestAgendaitem) {
       const newsItem = await this.store.queryOne('news-item', {
-        'filter[agenda-item-treatments][agendaitems][:id:]': latestAgendaitem.id,
+        'filter[agenda-item-treatment][agendaitems][:id:]': latestAgendaitem.id,
       });
       if (newsItem?.id) {
         await newsItem.destroyRecord();

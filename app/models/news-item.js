@@ -1,4 +1,4 @@
-import { hasMany, attr } from '@ember-data/model';
+import { attr, belongsTo, hasMany } from '@ember-data/model';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 export default class NewsItem extends ModelWithModifier {
@@ -15,7 +15,8 @@ export default class NewsItem extends ModelWithModifier {
     return this.constructor.modelName;
   }
 
-  @hasMany('agenda-item-treatment') agendaItemTreatments;
+  @belongsTo('agenda-item-treatment') agendaItemTreatment;
+
   @hasMany('piece', { inverse: null }) attachments;
   @hasMany('themes', { inverse: null }) themes;
 }
