@@ -4,7 +4,7 @@ import {
   DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES,
 } from 'frontend-kaleidos/config/config';
 
-export default class FileService extends Service {
+export default class FileConversionService extends Service {
   @service store;
 
   async convertSourceFile(sourceFile) {

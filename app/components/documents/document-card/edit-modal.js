@@ -12,7 +12,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    */
   @service intl;
   @service toaster;
-  @service fileService;
+  @service fileConversionService;
 
   @tracked isUploadingReplacementSourceFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
@@ -79,7 +79,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
       try {
-        yield this.fileService.convertSourceFile(this.replacementSourceFile);
+        yield this.fileConversionService.convertSourceFile(this.replacementSourceFile);
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-convert-file', { message: error.message }),

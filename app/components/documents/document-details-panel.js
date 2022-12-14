@@ -11,7 +11,7 @@ import { task } from 'ember-concurrency';
 export default class DocumentsDocumentDetailsPanel extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
-  @service fileService;
+  @service fileConversionService;
   @service intl;
   @service toaster;
 
@@ -64,7 +64,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
       try {
-        yield this.fileService.convertSourceFile(sourceFile);
+        yield this.fileConversionService.convertSourceFile(sourceFile);
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-convert-file', { message: error.message }),
