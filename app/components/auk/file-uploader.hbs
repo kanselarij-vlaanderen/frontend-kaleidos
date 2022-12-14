@@ -1,6 +1,7 @@
 <FileDropzone
   @queue={{this.fileQueue}}
   @multiple={{@multiple}}
+  @filter={{this.validateFile}}
   class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
   as |dropzone|
 >
@@ -10,7 +11,7 @@
     type="file"
     disabled={{or this.uploadIsRunning (and this.uploadIsCompleted (not @reusable))}}
     multiple={{@multiple}}
-    {{this.fileQueue.selectFile}}
+    {{this.fileQueue.selectFile filter=this.validateFile}}
   >
   {{!-- template-lint-enable require-input-label --}}
   <div class="auk-file-upload__content">

@@ -89,8 +89,8 @@
             {{#unless this.loadAccessLevelRelatedData.isRunning}}
               <AccessLevelPill
                 @accessLevel={{this.piece.accessLevel}}
+                @isEditable={{@isEditable}}
                 @isDraft={{this.isDraftAccessLevel}}
-                @isEditable={{true}}
                 @onChangeAccessLevel={{this.changeAccessLevel}}
                 @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                 @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
@@ -100,6 +100,7 @@
           {{#if this.signaturesEnabled}} {{! feature flag }}
             {{#if
               (and
+                @isEditable
                 (user-may "manage-signatures")
                 (not this.loadSignatureRelatedData.isRunning)
                 (not this.loadPieceRelatedData.isRunning)
@@ -123,7 +124,12 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if (user-may "manage-documents")}}
+          {{#if
+              (and
+                @isEditable
+                (user-may "manage-documents")
+              )
+          }}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
@@ -189,6 +195,7 @@
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
                     @agendaContext={{@agendaContext}}
+                    @isEditable={{@isEditable}}
                     @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
                     @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}

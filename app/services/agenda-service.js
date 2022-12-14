@@ -185,17 +185,18 @@ export default class AgendaService extends Service {
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
         let currentAgendaitemGroupName;
-        const mandatees = await agendaitem.get('sortedMandatees');
+        const mandatees = await agendaitem.mandatees;
+        const sortedMandatees = mandatees.sortBy('priority');
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);
           return;
         }
-        if (mandatees.length === 0) {
+        if (sortedMandatees.length === 0) {
           agendaitem.set('groupName', this.intl.t('no-mandatee-assigned'));
           currentAgendaitemGroupName = this.intl.t('no-mandatee-assigned');
         } else {
-          currentAgendaitemGroupName = mandatees
+          currentAgendaitemGroupName = sortedMandatees
             .map((mandatee) => mandatee.title)
             .join('<br/>');
         }

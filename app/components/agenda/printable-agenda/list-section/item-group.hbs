@@ -7,7 +7,7 @@
   {{#let (object-at 0 @items) as |first|}}
     <div class="l-printable-agenda__faux-item">
       <div class="auk-u-non-breakable-group@print">
-        {{#let first.sortedMandatees as |mandatees|}}
+        {{#let this.sortedMandateesFromFirst as |mandatees|}}
           <h3
             class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
               {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
@@ -30,9 +30,9 @@
           />
         </div>
       </div>
-      {{#if first.sortedPieces}}
+      {{#if first.pieces}}
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-          @pieces={{first.sortedPieces}}
+          @pieces={{first.pieces}}
         />
       {{/if}}
     </div>
@@ -45,9 +45,9 @@
             @item={{agendaitem}}
           />
         </div>
-        {{#if @item.sortedPieces}}
+        {{#if @item.pieces}}
           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-            @pieces={{agendaitem.sortedPieces}}
+            @pieces={{agendaitem.pieces}}
           />
         {{/if}}
       </div>

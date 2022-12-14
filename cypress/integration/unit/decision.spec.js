@@ -88,64 +88,6 @@ context('Decision tests', () => {
     cy.get(document.documentCard.card).should('have.length', 0);
   });
 
-  it('should postpone an agendaitem and change the status of the treatment', () => {
-    // const agendaDate = Cypress.dayjs('2022-04-17');
-    const SubcaseTitleShort = 'Cypress test: Decision postponing - postpone agendaitem & decision - 1652780867';
-
-    cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
-    // TODO-bug, cypress cannot press button right after page load, getters are async and not awaited
-    cy.wait(2000);
-    // postpone agendaitem on agenda B
-    cy.intercept('PATCH', '/decision-activities/**').as('patchActivity1');
-    cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.postpone).click();
-    cy.wait('@patchActivity1');
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
-    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
-    cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 1);
-
-    // advance agendaitem
-    cy.intercept('PATCH', '/decision-activities/**').as('patchActivity2');
-    cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.postponeRevert).click();
-    cy.wait('@patchActivity2');
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
-    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
-    cy.get(agenda.agendaDetailSidebarItem.postponed).should('have.length', 0);
-
-    // change decision result
-    cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.url().should('contain', '/beslissingen');
-    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivity');
-    cy.get(agenda.decisionResultPill.edit).click();
-    cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
-      cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-        .click();
-    });
-    cy.get(dependency.emberPowerSelect.option).contains('Uitgesteld')
-      .scrollIntoView()
-      .click();
-    cy.get(agenda.agendaitemDecisionEdit.save).click()
-      .wait('@patchDecisionActivity');
-
-    // check if the sidebar item is now greyed out because the decision is "postponed"
-    cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.postponed)
-      .should('exist');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
-      .as('phases');
-    cy.get('@phases').eq(0)
-      .contains(/Ingediend voor agendering op/);
-    cy.get('@phases').eq(1)
-      .contains(/Geagendeerd op de agenda van/);
-    cy.get('@phases').eq(2)
-      .contains(/Uitgesteld op de agenda van/);
-    cy.get('@phases').eq(3)
-      .contains(/Er is beslist om dit agendapunt uit te stellen/);
-    cy.get(auk.loader).should('not.exist');
-  });
-
   it('should test the decision CRUD', () => {
     const agendaDate = Cypress.dayjs('2022-04-19').hour(10);
     const file = {
@@ -240,7 +182,7 @@ context('Decision tests', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277/overzicht');
+    cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277');
     cy.get(cases.subcaseTitlesView.edit).click();
     cy.get(cases.subcaseTitlesEdit.confidential).click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');

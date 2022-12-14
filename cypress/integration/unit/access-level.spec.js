@@ -121,6 +121,7 @@ context('Access level tests', () => {
     cy.get(dependency.emberPowerSelect.option).contains('Publiek')
       .click();
     cy.get(document.accessLevelPill.save).click();
+    cy.get(auk.loader).should('not.exist');
     setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', 'Publiek', true);
 
     // add BIS and TER

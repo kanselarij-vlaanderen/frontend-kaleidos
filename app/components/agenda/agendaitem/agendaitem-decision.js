@@ -13,6 +13,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
   @service store;
   @service pieceAccessLevelService;
+  @service toaster;
+  @service fileService;
 
   @tracked report;
   @tracked previousReport;
@@ -84,6 +86,15 @@ export default class AgendaitemDecisionComponent extends Component {
       documentContainer,
     });
     await piece.save();
+    try {
+      const sourceFile = await piece.file;
+      await this.fileService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     this.args.decisionActivity.report = piece;
     await this.args.decisionActivity.save();
     this.isAddingReport = false;
@@ -93,6 +104,15 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async attachNewReportVersion(piece) {
     await piece.save();
+    try {
+      const sourceFile = await piece.file;
+      await this.fileService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     this.args.decisionActivity.report = piece;
     await this.args.decisionActivity.save();
     // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
