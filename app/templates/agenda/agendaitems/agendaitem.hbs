@@ -17,6 +17,7 @@
         <Auk::Tab
           @route="agenda.agendaitems.agendaitem.decisions"
           data-test-agendaitem-nav-decision-tab
+          {{plausible-click "Actie" category="Beslissingfiche van agendapunt opvragen"}}
         >
           {{capitalize (t "decision")}}
         </Auk::Tab>
@@ -26,6 +27,7 @@
           <Auk::Tab
             @route="agenda.agendaitems.agendaitem.news-item"
             data-test-agendaitem-nav-newsletter-tab
+            {{plausible-click "Actie" category="Kort bestek van agendapunt opvragen"}}
           >
             {{capitalize (t "newsletter")}}
           </Auk::Tab>
