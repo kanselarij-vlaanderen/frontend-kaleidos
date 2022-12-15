@@ -1,10 +1,10 @@
 <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
-  {{#each @pieces as |piece|}}
+  {{#each this.sortedPieces as |piece|}}
     <li>
       <span class="auk-o-flex--inline auk-o-flex--vertical-center">
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Document
           @piece={{piece}}
-          @accessLevel={{await piece.accessLevel}}
+          @accessLevel={{piece.accessLevel}}
         />
       </span>
     </li>
