@@ -13,8 +13,8 @@ export default class NewsletterItemTableRowComponent extends Component {
   @tracked isOpenEditView = false;
 
   @task
-  *saveNewsletterItem(newsletterItem) {
-    yield this.args.onSave(newsletterItem);
+  *saveNewsletterItem(newsletterItem, wasNewsItemNew) {
+    yield this.args.onSave(newsletterItem, wasNewsItemNew);
     this.closeEditView();
   }
 
@@ -35,12 +35,14 @@ export default class NewsletterItemTableRowComponent extends Component {
   }
 
   @action
-  openEditView() {
+  async openEditView() {
+    await this.args.newsletterItem?.preEditOrSaveCheck();
     this.isOpenEditView = true;
   }
 
   @action
-  closeEditView() {
+  closeEditView(wasNewsItemNew) {
+    this.args.onCancel(wasNewsItemNew);
     this.isOpenEditView = false;
   }
 

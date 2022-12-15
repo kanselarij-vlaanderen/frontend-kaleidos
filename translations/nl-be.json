@@ -1125,5 +1125,7 @@
   "filtered-subcase-documents": "Hier worden enkel de documenten getoond die op de meest recente agenda staan + documenten die niet op een agenda staan.",
   "to-sign": "Te handtekenen",
   "copy": "Kopiëren",
-  "text-copied": "Tekst gekopieerd naar klembord."
-}
+  "text-copied": "Tekst gekopieerd naar klembord.",
+  "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
+  "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten."
+} 

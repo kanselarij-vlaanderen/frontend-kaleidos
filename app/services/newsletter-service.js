@@ -121,6 +121,17 @@ export default class NewsletterService extends Service {
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     const agendaItemTreatment = await agendaitem.treatment;
+    const existingNewsItem = await agendaItemTreatment.belongsTo('newsletterInfo').reload();
+    if (existingNewsItem) {
+      // some other user may have created a newsItem concurrently
+      const modifiedBy = await existingNewsItem.modifiedBy;
+      this.toaster.error(
+        this.intl.t('error-create-newsitem', {user: modifiedBy.fullName}),
+        this.intl.t('warning-title')
+      );
+      // if someone else created a newsItem we don't want to return it here
+      return;
+    }
     const news = this.store.createRecord('newsletter-info', {
       agendaItemTreatment,
       inNewsletter,

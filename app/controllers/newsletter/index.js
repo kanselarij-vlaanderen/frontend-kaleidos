@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class NewsletterController extends Controller {
   queryParams = ['sort'];
@@ -12,12 +13,18 @@ export default class NewsletterController extends Controller {
   @tracked sort = 'number';
 
   @task
-  *saveNewsletterItem(newsletterItem) {
-    const mustReloadModel = newsletterItem.isNew;
+  *saveNewsletterItem(newsletterItem, wasNewsItemNew) {
     yield newsletterItem.save();
-    if (mustReloadModel) {
+    if (wasNewsItemNew) {
       this.send('reloadModel');
     }
     this.toaster.success(this.intl.t('successfully-saved'));
+  }
+
+  @action
+  cancelEdit(wasNewsItemNew) {
+    if (wasNewsItemNew) {
+      this.send('reloadModel');
+    }
   }
 }
