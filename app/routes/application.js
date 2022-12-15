@@ -2,34 +2,17 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { setDefaultOptions } from 'date-fns';
-import { nlBE } from 'date-fns/locale';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ApplicationRoute extends Route {
   @service conceptStore;
-  @service moment;
   @service intl;
   @service session;
   @service currentSession;
   @service fileService;
   @service router;
   @service userAgent;
-  @service plausible;
-
-  constructor() {
-    super(...arguments);
-    this.setupPlausible();
-  }
 
   async beforeModel() {
-    // Set default locale for date-fns
-    setDefaultOptions({ locale: nlBE });
-
-    this.moment.setLocale('nl-be');
-
-    this.intl.setLocale(['nl-be']);
-
     if (!this.isSupportedBrowser) {
       this.transitionTo('not-supported');
     }
@@ -60,19 +43,6 @@ export default class ApplicationRoute extends Route {
       || browser.isChrome
       || browser.isSafari
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
-  }
-
-  setupPlausible() {
-    const { domain, apiHost } = ENV.plausible;
-    if (
-      domain !== '{{ANALYTICS_APP_DOMAIN}}' &&
-      apiHost !== '{{ANALYTICS_API_HOST}}'
-    ) {
-      this.plausible.enable({
-        domain,
-        apiHost,
-      });
-    }
   }
 
   @action

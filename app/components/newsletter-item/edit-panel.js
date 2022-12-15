@@ -13,6 +13,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
   @tracked isFullscreen = false;
   @tracked proposalText;
   @tracked isOpenMissingThemesModal = false;
+  @tracked newsItemIsNew = false;
 
   // Local copy of newsletterItem attributes/relations to facilitate rollback
   @tracked title;
@@ -33,7 +34,15 @@ export default class NewsletterItemEditPanelComponent extends Component {
   *ensureNewsletterItem() {
     this.newsletterItem = this.args.newsletterItem;
     if (!this.newsletterItem) {
+      this.newsItemIsNew = true;
       this.newsletterItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
+      if (this.newsletterItem) {
+        // If the service call returned a newsItem, it is new and we save immediately to avoid concurrency issues
+        yield this.newsletterItem.save();
+      } else {
+        // If the service call returned nothing, it means someone else created a newsitem and we have to refresh
+        return this.args.onCancel(this.newsItemIsNew);
+      }
     }
 
     this.title = this.newsletterItem.title;
@@ -91,7 +100,7 @@ export default class NewsletterItemEditPanelComponent extends Component {
     } catch {
       // pass
     }
-    yield this.args.onSave(this.newsletterItem);
+    yield this.args.onSave(this.newsletterItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
   }
 

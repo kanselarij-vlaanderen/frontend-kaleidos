@@ -549,6 +549,7 @@
   "error-delete-newsletter": "Er ging iets mis tijdens het verwijderen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-fetch-newsletter": "Er ging iets mis tijdens het ophalen van de nieuwsbrief. Contacteer de administrator of probeer het opnieuw.",
   "error-download-XML": "Er ging iets mis bij het ophalen van de Belga XML",
+  "error-convert-file": "Er ging iets mis bij het converteren van het opgeladen bestand.\nDetail: {message}",
   "newsletter-loading-text": "De nieuwsbrief wordt aangemaakt. Dit kan even duren..",
   "not-applicable": "Niet van toepassing",
   "active": "Actieve",
@@ -1133,5 +1134,7 @@
   "no-recent-meetings": "Geen recente open agenda’s",
   "attachment-was-too-large": "Er zijn bestanden opgeladen die groter zijn dan 30 MB. Het is niet mogelijk om bestanden van deze grootte te mailen.",
   "sum-of-attachments-exceeds-warning-threshold": "De som van alle bestanden is groter dan 10 MB. Hierdoor komt deze mail mogelijk niet aan bij de ontvanger.",
-  "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden."
-}
+  "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden.",
+  "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
+  "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten."
+} 

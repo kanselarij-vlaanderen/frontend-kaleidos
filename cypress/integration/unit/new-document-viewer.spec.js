@@ -203,23 +203,19 @@ context('new document viewer tests', () => {
     // replace pdf with word file and check again
     openEditAndAddDocument(wordFile.folder, wordFile.fileName, wordFile.fileExtension);
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // replace word file with new word file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
-
-    // replace word file with new pdf file and check again
-    openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
-    cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // delete document and check
-    cy.get(document.previewDetailsTab.name).contains('new name test.docx');
     cy.get(document.previewDetailsTab.delete).click();
     cy.intercept('DELETE', '/files/**').as('deleteFile');
     cy.intercept('DELETE', '/pieces/**').as('deletePieces');
     cy.get(utils.vlModalVerify.save).click()
       .wait('@deleteFile')
       .wait('@deletePieces');
-    cy.get(document.previewDetailsTab.name).contains('test pdf.pdf');
   });
 });
