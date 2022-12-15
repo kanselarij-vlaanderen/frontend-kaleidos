@@ -30,7 +30,12 @@ export default Model.extend({
       // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
       // No set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
       // We still want to change modified data to reflect that a change has happened (so other users can't save without refreshing page)
-      case undefined: {
+      case '': { // only relations are dirty (f.e. themes on newsItem)
+        await this.preEditOrSaveCheck();
+        this.setModified();
+        break;
+      }
+      case undefined: { // only relations are dirty? this used to work but now we seem to be getting an empty string instead
         await this.preEditOrSaveCheck();
         this.setModified();
         break;
