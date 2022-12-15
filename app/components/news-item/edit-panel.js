@@ -4,18 +4,18 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class NewsletterItemEditPanelComponent extends Component {
+export default class NewsItemEditPanelComponent extends Component {
   @service newsletterService;
   @service agendaitemNota;
 
   editorInstance;
-  @tracked newsletterItem;
+  @tracked newsItem;
   @tracked isFullscreen = false;
   @tracked proposalText;
   @tracked isOpenMissingThemesModal = false;
   @tracked newsItemIsNew = false;
 
-  // Local copy of newsletterItem attributes/relations to facilitate rollback
+  // Local copy of newsItem attributes/relations to facilitate rollback
   @tracked title;
   @tracked remark;
   @tracked htmlContent;
@@ -26,34 +26,35 @@ export default class NewsletterItemEditPanelComponent extends Component {
   constructor() {
     super(...arguments);
     this.isFullscreen = this.args.isFullscreen;
-    this.ensureNewsletterItem.perform();
+    this.ensureNewsItem.perform();
     this.loadNotaOrVisienota.perform();
   }
 
   @task
-  *ensureNewsletterItem() {
-    this.newsletterItem = this.args.newsletterItem;
-    if (!this.newsletterItem) {
+  *ensureNewsItem() {
+    this.newsItem = this.args.newsItem;
+    if (!this.newsItem) {
       this.newsItemIsNew = true;
-      this.newsletterItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
-      if (this.newsletterItem) {
+      this.newsItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
+      if (this.newsItem) {
         // If the service call returned a newsItem, it is new and we save immediately to avoid concurrency issues
-        yield this.newsletterItem.save();
+        yield this.newsItem.save();
       } else {
         // If the service call returned nothing, it means someone else created a newsitem and we have to refresh
         return this.args.onCancel(this.newsItemIsNew);
       }
     }
 
-    this.title = this.newsletterItem.title;
-    this.remark = this.newsletterItem.remark;
+    this.title = this.newsItem.title;
+    this.remark = this.newsItem.remark;
     // rdfa-editor doesn't correctly handle 'undefined' as initial value.
     // Therefore we pass an empty string instead.
-    this.htmlContent = this.newsletterItem.htmlContent || '';
-    this.isFinished = this.newsletterItem.finished;
-    this.selectedThemes = (yield this.newsletterItem.themes).toArray();
+    this.htmlContent = this.newsItem.htmlContent || '';
+    this.isFinished = this.newsItem.finished;
+    yield this.newsItem.hasMany('themes').reload(); // concurrency in some cases
+    this.selectedThemes = (yield this.newsItem.themes).toArray();
 
-    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsletterItem);
+    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsItem);
   }
 
   @task
@@ -76,10 +77,10 @@ export default class NewsletterItemEditPanelComponent extends Component {
       throw new Error("Can't get rich text since editor-instance isn't available!");
     }
 
-    this.newsletterItem.title = this.title;
-    this.newsletterItem.remark = this.remark;
-    this.newsletterItem.finished = this.isFinished;
-    this.newsletterItem.themes = this.selectedThemes;
+    this.newsItem.title = this.title;
+    this.newsItem.remark = this.remark;
+    this.newsItem.finished = this.isFinished;
+    this.newsItem.themes = this.selectedThemes;
     try {
       // As of v0.59.1, the editor inserts &nbsp; whenever a user selects text
       // and makes it bold. It also inserts &nbsp; when a user starts typing
@@ -96,11 +97,11 @@ export default class NewsletterItemEditPanelComponent extends Component {
       // whether they hug html tags or not.
       const htmlContent = this.editorInstance.htmlContent;
       const cleanedHtml = htmlContent.replaceAll(/&nbsp;/gm, ' ');
-      this.newsletterItem.htmlContent = cleanedHtml;
+      this.newsItem.htmlContent = cleanedHtml;
     } catch {
       // pass
     }
-    yield this.args.onSave(this.newsletterItem, this.newsItemIsNew);
+    yield this.args.onSave(this.newsItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
   }
 

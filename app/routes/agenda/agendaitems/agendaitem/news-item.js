@@ -26,6 +26,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   model() {
     return this.store.queryOne('news-item', {
       'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
+      include: 'themes',
     });
   }
 

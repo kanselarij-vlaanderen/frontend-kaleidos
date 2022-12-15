@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import sanitizeHtml from 'ember-cli-sanitize-html';
 
-export default class NewsletterItemTableRowComponent extends Component {
+export default class NewsItemTableRowComponent extends Component {
   @service currentSession;
   @service toaster;
   @service intl;
@@ -20,8 +20,8 @@ export default class NewsletterItemTableRowComponent extends Component {
   }
 
   @task
-  *saveNewsletterItem(newsletterItem, wasNewsItemNew) {
-    yield this.args.onSave(newsletterItem, wasNewsItemNew);
+  *saveNewsItem(newsItem, wasNewsItemNew) {
+    yield this.args.onSave(newsItem, wasNewsItemNew);
     this.closeEditView();
   }
 
@@ -34,8 +34,8 @@ export default class NewsletterItemTableRowComponent extends Component {
 
   @action
   async toggleInNewsletterFlag(event) {
-    this.args.newsletterItem.inNewsletter = event.target.checked;
-    await this.saveNewsletterItem.perform(this.args.newsletterItem);
+    this.args.newsItem.inNewsletter = event.target.checked;
+    await this.saveNewsItem.perform(this.args.newsItem);
   }
 
   @action
@@ -47,7 +47,7 @@ export default class NewsletterItemTableRowComponent extends Component {
 
   @action
   async openEditView() {
-    await this.args.newsletterItem?.preEditOrSaveCheck();
+    await this.args.newsItem?.preEditOrSaveCheck();
     this.isOpenEditView = true;
   }
 
@@ -58,23 +58,23 @@ export default class NewsletterItemTableRowComponent extends Component {
   }
 
   @action
-  copyText(newsletterItem) {
+  copyText(newsItem) {
     let copyText = '';
 
-    if (newsletterItem.title) {
-      copyText += `${newsletterItem.title}\n\n`;
+    if (newsItem.title) {
+      copyText += `${newsItem.title}\n\n`;
     }
 
     copyText +=
       sanitizeHtml(
-        newsletterItem.htmlContent
+        newsItem.htmlContent
           .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
           .trim() // Trim whitespaces at start & end of the string
         , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
       );
 
-    if (newsletterItem.remark) {
-      copyText += `\n\n${newsletterItem.remark}`;
+    if (newsItem.remark) {
+      copyText += `\n\n${newsItem.remark}`;
     }
 
     navigator.clipboard.writeText(copyText);

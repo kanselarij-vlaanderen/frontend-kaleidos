@@ -20,21 +20,21 @@ const selectors = {
 
   // component edit-item
   editItem: {
-    noNota: '[data-test-newsletter-edit-item-no-nota]',
-    nota: '[data-test-newsletter-edit-item-nota]',
-    // the property subtitle from newsletter info is actually the long title (confusing)
+    noNota: '[data-test-news-item-edit-item-no-nota]',
+    nota: '[data-test-news-item-edit-item-nota]',
+    // the property subtitle from news item is actually the long title (confusing)
     // we expect the subtitle from newletter info but we get the title from agendaitem
-    longTitle: '[data-test-newsletter-edit-item-long-title]',
-    // the property title from newsletter info is actually the short title (confusing)
-    shortTitle: '[data-test-newsletter-edit-item-short-title]',
-    mandateeProposal: '[data-test-newsletter-edit-item-mandatee-proposal]',
-    rdfaEditor: '[data-test-newsletter-edit-item-rdfa-editor]',
-    remark: '[data-test-newsletter-edit-item-remark]',
-    toggleFinished: '[data-test-newsletter-edit-item-toggle-finished]',
-    save: '[data-test-newsletter-edit-item-save]',
-    cancel: '[data-test-newsletter-edit-item-cancel]',
-    checkedThemes: '[data-test-newsletter-edit-item-themes-selector] input:checked',
-    themesSelector: '[data-test-newsletter-edit-item-themes-selector]',
+    longTitle: '[data-test-news-item-edit-item-long-title]',
+    // the property title from news item is actually the short title (confusing)
+    shortTitle: '[data-test-news-item-edit-item-short-title]',
+    mandateeProposal: '[data-test-news-item-edit-item-mandatee-proposal]',
+    rdfaEditor: '[data-test-news-item-edit-item-rdfa-editor]',
+    remark: '[data-test-news-item-edit-item-remark]',
+    toggleFinished: '[data-test-news-item-edit-item-toggle-finished]',
+    save: '[data-test-news-item-edit-item-save]',
+    cancel: '[data-test-news-item-edit-item-cancel]',
+    checkedThemes: '[data-test-news-item-edit-item-themes-selector] input:checked',
+    themesSelector: '[data-test-news-item-edit-item-themes-selector]',
   },
 
   // component newsletter-meeting
@@ -49,29 +49,29 @@ const selectors = {
 
   // component table-row
   tableRow: {
-    newsletterRow: '[data-test-table-row-newsletter-row]',
-    agendaitemNumber: '[data-test-table-row-newsletter-row-agendaitem-number]',
-    titleContent: '[data-test-table-row-newsletter-row-title-content]',
-    inNewsletterCheckbox: '[data-test-table-row-newsletter-row-checkbox-in-newsletter]',
+    newsletterRow: '[data-test-table-row-news-item-row]',
+    agendaitemNumber: '[data-test-table-row-news-item-row-agendaitem-number]',
+    titleContent: '[data-test-table-row-news-item-row-title-content]',
+    inNewsletterCheckbox: '[data-test-table-row-news-item-row-checkbox-in-newsletter]',
   },
 
   // component button-toolbar
   buttonToolbar: {
-    edit: '[data-test-newsletter-table-button-toolbar-edit]',
-    openNota: '[data-test-newsletter-table-button-toolbar-open-nota]',
-    linkToAgendaitem: '[data-test-newsletter-table-button-toolbar-link-to-agendaitem]',
+    edit: '[data-test-news-item-table-button-toolbar-edit]',
+    openNota: '[data-test-news-item-table-button-toolbar-open-nota]',
+    linkToAgendaitem: '[data-test-news-item-table-button-toolbar-link-to-agendaitem]',
   },
 
   // component item-content
   newsletterPrint: {
-    container: '[data-test-newsletter-item-print-container]',
-    title: '[data-test-newsletter-item-print-title]',
-    edit: '[data-test-newsletter-item-print-edit]',
-    noContent: '[data-test-newsletter-item-print-no-content]',
-    printItemProposal: '[data-test-newsletter-item-print-proposal]',
-    richtext: '[data-test-newsletter-item-print-richtext]',
-    remark: '[data-test-newsletter-item-print-remark]',
-    theme: '[data-test-newsletter-item-print-theme]',
+    container: '[data-test-news-item-print-container]',
+    title: '[data-test-news-item-print-title]',
+    edit: '[data-test-news-item-print-edit]',
+    noContent: '[data-test-news-item-print-no-content]',
+    printItemProposal: '[data-test-news-item-print-proposal]',
+    richtext: '[data-test-news-item-print-richtext]',
+    remark: '[data-test-news-item-print-remark]',
+    theme: '[data-test-news-item-print-theme]',
   },
 
   // component newsletter-print-header

@@ -14,7 +14,7 @@ export default class NewsletterController extends Controller {
   @tracked sort = 'number';
 
   @task
-  *saveNewsletterItem(newsItem, wasNewsItemNew) {
+  *saveNewsItem(newsItem, wasNewsItemNew) {
     yield newsItem.save();
     if (wasNewsItemNew) {
       this.send('reloadModel');

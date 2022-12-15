@@ -36,10 +36,10 @@
       </thead>
       <tbody>
         {{#each this.model as |item|}}
-          <NewsletterItem::TableRow
+          <NewsItem::TableRow
             @agendaitem={{item.agendaitem}}
-            @newsletterItem={{item.newsletterItem}}
-            @onSave={{perform this.saveNewsletterItem}}
+            @newsItem={{item.newsItem}}
+            @onSave={{perform this.saveNewsItem}}
             @onCancel={{this.cancelEdit}}
           />
         {{/each}}

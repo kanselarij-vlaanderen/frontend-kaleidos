@@ -19,7 +19,7 @@
           {{else}}
             {{#if this.notaOrVisieNota}}
               <AuButton
-                data-test-newsletter-edit-item-nota
+                data-test-news-item-edit-item-nota
                 @skin="naked"
                 @icon="document"
                 @iconAlginment="left"
@@ -30,7 +30,7 @@
               </AuButton>
             {{else}}
             <AuButton
-                data-test-newsletter-edit-item-no-nota
+                data-test-news-item-edit-item-no-nota
                 @skin="naked"
                 @icon="document"
                 @iconAlignment="left"
@@ -46,21 +46,21 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Utils::LoadableContent
-    @isLoading={{this.ensureNewsletterItem.isRunning}}
+    @isLoading={{this.ensureNewsItem.isRunning}}
     @reserveSpace={{true}}
   >
-    {{#unless this.ensureNewsletterItem.isRunning}}
+    {{#unless this.ensureNewsItem.isRunning}}
       <Auk::Panel::Body class="au-u-background-gray-100">
         <div class="auk-form-group">
           <Auk::Label>{{t "title"}}</Auk::Label>
-          <p data-test-newsletter-edit-item-long-title>
+          <p data-test-news-item-edit-item-long-title>
             {{@agendaitem.title}}
           </p>
         </div>
         <div class="auk-form-group">
           <Auk::Label>{{t "short-title"}}</Auk::Label>
           <AuInput
-            data-test-newsletter-edit-item-short-title
+            data-test-news-item-edit-item-short-title
             @width="block"
             @value={{this.title}}
           />
@@ -68,7 +68,7 @@
         <div class="auk-form-group">
           <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
           <p
-            data-test-newsletter-edit-item-mandatee-proposal
+            data-test-news-item-edit-item-mandatee-proposal
           >
             {{#if this.proposalText}}
               {{this.proposalText}}
@@ -95,7 +95,7 @@
                     {{t "close-fullscreen"}}
                   </AuButton>
                   <AuButton
-                    data-test-newsletter-edit-item-save
+                    data-test-news-item-edit-item-save
                     @loading={{this.confirmSave.isRunning}}
                     {{on "click" this.save}}
                   >
@@ -114,7 +114,7 @@
               {{/if}}
             </div>
             <WebComponents::VlRdfaEditor
-              data-test-newsletter-edit-item-rdfa-editor
+              data-test-news-item-edit-item-rdfa-editor
               @richtext={{this.htmlContent}}
               @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
             />
@@ -125,7 +125,7 @@
         <div class="auk-form-group auk-u-text-capitalize">
           <Auk::Label>Opmerking</Auk::Label>
           <AuInput
-            data-test-newsletter-edit-item-remark
+            data-test-news-item-edit-item-remark
             @width="block"
             @value={{this.remark}}
           />
@@ -133,12 +133,12 @@
         <div class="auk-form-group">
           <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
           <Auk::Toggle
-            data-test-newsletter-edit-item-toggle-finished
+            data-test-news-item-edit-item-toggle-finished
             id="item-finished"
             @checked={{this.isFinished}}
           />
         </div>
-        <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
+        <div class="auk-form-group" data-test-news-item-edit-item-themes-selector>
           <Auk::Label>{{t "themes"}}</Auk::Label>
           <Utils::ThemesSelector @selectedThemes={{this.selectedThemes}} />
         </div>
@@ -148,7 +148,7 @@
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <AuButton
-                data-test-newsletter-edit-item-cancel
+                data-test-news-item-edit-item-cancel
                 @skin="naked"
                 {{on "click" @onCancel}}
               >
@@ -159,7 +159,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
-                data-test-newsletter-edit-item-save
+                data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
               >

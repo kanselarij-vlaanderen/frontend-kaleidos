@@ -12,7 +12,7 @@ export default class PrintNewsletterController extends Controller {
   @tracked showDraft = false;
 
   @task
-  *saveNewsletterItem(newsItem) {
+  *saveNewsItem(newsItem) {
     yield newsItem.save();
   }
 }

@@ -57,17 +57,17 @@
     @clearAction={{this.dismissNotaModifiedWarning}} />
 {{/if}}
 {{#if this.isEditing}}
-  <NewsletterItem::EditPanel
-    @newsletterItem={{this.model}}
+  <NewsItem::EditPanel
+    @newsItem={{this.model}}
     @agendaitem={{this.agendaitem}}
     @isFullscreen={{this.isFullscreen}}
     @onCancel={{this.closeEdit}}
-    @onSave={{perform this.saveNewsletterItem}}
+    @onSave={{perform this.saveNewsItem}}
   />
 {{else}}
   {{#if this.model}}
-    <NewsletterItem::ViewPanel
-      @newsletterItem={{this.model}}
+    <NewsItem::ViewPanel
+      @newsItem={{this.model}}
     />
   {{else}}
     <div class="auk-u-mt-2">

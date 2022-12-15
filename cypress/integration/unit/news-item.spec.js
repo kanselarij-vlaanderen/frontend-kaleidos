@@ -213,7 +213,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
-    // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
+    // value of subtitle from news item is empty, but we show agendaitem title in frontend
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
@@ -235,7 +235,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
-    // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
+    // value of subtitle from news item is empty, but we show agendaitem title in frontend
     // TODO-newsletter are these contains correct?
     cy.get(newsletter.editItem.longTitle).should('contain', '');
     // TODO-KAS-3270 check if editor empty
@@ -302,7 +302,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
-    // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
+    // value of subtitle from news item is empty, but we show agendaitem title in frontend
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
@@ -320,7 +320,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.shortTitle).should('have.value', subcaseTitleShort);
     cy.get(newsletter.editItem.toggleFinished).should('be.checked');
-    // value of subtitle from newsletter info is empty, but we show agendaitem title in frontend
+    // value of subtitle from news item is empty, but we show agendaitem title in frontend
     cy.get(newsletter.editItem.longTitle).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.rdfaEditor).contains(subcaseTitleLong);
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');

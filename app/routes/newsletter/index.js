@@ -41,10 +41,10 @@ export default class IndexNewsletterRoute extends Route {
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
         const agendaItemTreatment = await agendaitem.treatment;
-        const newsletterItem = await agendaItemTreatment.newsItem;
+        const newsItem = await agendaItemTreatment.newsItem;
         return {
           agendaitem,
-          newsletterItem,
+          newsItem,
         };
       })
     );

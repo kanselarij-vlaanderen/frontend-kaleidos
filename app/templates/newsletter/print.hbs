@@ -10,7 +10,6 @@
     <div class="auk-container auk-container--center l-printable-newsletter">
       <Utils::LogoHeader />
       <Newsletter::NewsletterPrintHeader
-        data-test-newsletter-print---header
         @meeting={{this.meeting}}
       />
       <h1 class="auk-h1 auk-u-text-family-serif">
@@ -18,11 +17,11 @@
       </h1>
       {{#each this.model.notas as |nota|}}
         <div class="auk-u-mb-10">
-          <NewsletterItem::Print
-            @newsletterItem={{nota.newsletterItem}}
+          <NewsItem::Print
+            @newsItem={{nota.newsItem}}
             @agendaitem={{nota.agendaitem}}
             @isDraftView={{this.showDraft}}
-            @onSave={{perform this.saveNewsletterItem nota.newsletterItem}}
+            @onSave={{perform this.saveNewsItem nota.newsItem}}
           />
         </div>
       {{/each}}
@@ -32,11 +31,11 @@
         </h2>
         {{#each this.model.announcements as |announcement|}}
           <div class="auk-u-mb-10">
-            <NewsletterItem::Print
-              @newsletterItem={{announcement.newsletterItem}}
+            <NewsItem::Print
+              @newsItem={{announcement.newsItem}}
               @agendaitem={{announcement.agendaitem}}
               @isDraftView={{this.showDraft}}
-              @onSave={{perform this.saveNewsletterItem announcement.newsletterItem}}
+              @onSave={{perform this.saveNewsItem announcement.newsItem}}
             />
           </div>
         {{/each}}

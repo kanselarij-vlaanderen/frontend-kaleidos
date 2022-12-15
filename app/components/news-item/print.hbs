@@ -1,29 +1,29 @@
 {{#if this.isEditing}}
-  <NewsletterItem::EditPanel
-    @newsletterItem={{@newsletterItem}}
+  <NewsItem::EditPanel
+    @newsItem={{@newsItem}}
     @agendaitem={{@agendaitem}}
     @onCancel={{this.closeEdit}}
     @onSave={{this.save}}
   />
 {{else}}
-  {{#if (or @isDraftView @newsletterItem.inNewsletter)}}
-    <div data-test-newsletter-item-print-container class="auk-u-non-breakable-group@print">
+  {{#if (or @isDraftView @newsItem.inNewsletter)}}
+    <div data-test-news-item-print-container class="auk-u-non-breakable-group@print">
       <div class="auk-u-mb-2">
         {{#if @isDraftView}}
           <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
             <h4 class="auk-h4 auk-u-m-0">
               {{@agendaitem.number}}.
-              {{#if @newsletterItem}}
-                {{@newsletterItem.title}}
+              {{#if @newsItem}}
+                {{@newsItem.title}}
               {{else}}
                 {{@agendaitem.shortTitle}}
               {{/if}}
             </h4>
-            {{#if (and @newsletterItem (user-may "manage-news-items"))}}
+            {{#if (and @newsItem (user-may "manage-news-items"))}}
               <div class="auk-o-flex auk-o-flex--justify-between ">
                 <div class="auk-u-ml-2">
                   <AuButton
-                    data-test-newsletter-item-print-edit
+                    data-test-news-item-print-edit
                     @skin="link"
                     @icon="pencil"
                     {{on "click" this.openEdit}}
@@ -34,51 +34,51 @@
               </div>
             {{/if}}
           </div>
-          {{#if (and (not @newsletterItem) @agendaitem.title)}}
+          {{#if (and (not @newsItem) @agendaitem.title)}}
             <div class="auk-u-mt auk-u-border-left l-printable-newsletter__title">
               {{@agendaitem.title}}
             </div>
           {{/if}}
         {{else}}
-          <h4 data-test-newsletter-item-print-title class="auk-h4 auk-u-m-0">
-            {{@newsletterItem.title}}
+          <h4 data-test-news-item-print-title class="auk-h4 auk-u-m-0">
+            {{@newsItem.title}}
           </h4>
         {{/if}}
       </div>
 
       {{#if this.proposalText}}
-        <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-newsletter-item-print-proposal>
+        <div class="auk-u-mb-3 l-printable-newsletter__proposal-label" data-test-news-item-print-proposal>
           {{this.proposalText}}
         </div>
       {{/if}}
     </div>
 
     {{#if (is-nota @agendaitem.type)}}
-      {{#if @newsletterItem.htmlContent}}
-        <p data-test-newsletter-item-print-richtext class="auk-u-mb-2">
+      {{#if @newsItem.htmlContent}}
+        <p data-test-news-item-print-richtext class="auk-u-mb-2">
           <AuContent>
-            <SanitizeHtml @raw={{true}} @value={{@newsletterItem.htmlContent}} />
+            <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
           </AuContent>
         </p>
       {{else}}
-        <p data-test-newsletter-item-print-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
+        <p data-test-news-item-print-no-content class="auk-u-italic auk-u-text-muted auk-u-mb-2">
           {{t "no-news-item"}}
         </p>
       {{/if}}
     {{/if}}
 
-    {{#if (and @isDraftView @newsletterItem.remark)}}
-      <p data-test-newsletter-item-print-remark class="auk-u-text-muted auk-u-text-capitalize">
-        {{t "remark"}}: {{@newsletterItem.remark}}
+    {{#if (and @isDraftView @newsItem.remark)}}
+      <p data-test-news-item-print-remark class="auk-u-text-muted auk-u-text-capitalize">
+        {{t "remark"}}: {{@newsItem.remark}}
       </p>
     {{/if}}
 
-    {{#if @newsletterItem.themes}}
+    {{#if @newsItem.themes}}
       <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
-        {{#each @newsletterItem.themes as |theme|}}
+        {{#each @newsItem.themes as |theme|}}
           <AuPill
             @size="small"
-            data-test-newsletter-item-print-theme
+            data-test-news-item-print-theme
           >
             {{theme.label}}
           </AuPill>

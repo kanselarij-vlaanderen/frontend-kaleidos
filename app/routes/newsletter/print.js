@@ -71,10 +71,10 @@ export default class PrintNewsletterRoute extends Route {
 
     const newsItemMapper = async (agendaitem) => {
       const agendaItemTreatment = await agendaitem.treatment;
-      const newsletterItem = await agendaItemTreatment.newsItem;
+      const newsItem = await agendaItemTreatment.newsItem;
       return {
         agendaitem,
-        newsletterItem,
+        newsItem,
       };
     };
 
