@@ -113,8 +113,8 @@ const selectors = {
     dataTable: '[data-test-route-search-cases-data-table]',
   },
 
-  // search/newsItems
-  searchNewsletterInfos: {
+  // search/newsletters
+  searchNewsletters: {
     dataTable: '[data-test-route-search-news-items-data-table]',
     row: {
       title: '[data-test-route-search-news-items-row-title]',

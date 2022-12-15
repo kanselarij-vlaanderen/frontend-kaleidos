@@ -6,7 +6,7 @@ import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
 import sanitizeHtml from 'ember-cli-sanitize-html';
 
-export default class NewsletterInfosSearchController extends Controller {
+export default class NewslettersSearchController extends Controller {
   @service router;
   @service toaster;
   @service intl;

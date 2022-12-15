@@ -64,12 +64,12 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1);
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Uitgesteld');
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.decisionResult).contains('Uitgesteld');
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .click();

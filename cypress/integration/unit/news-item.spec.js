@@ -66,7 +66,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // checkbox is unchecked, toggle it
     cy.get('@checkboxValue').should('not.be.checked');
     cy.get('@checkboxContainer').click();
-    cy.wait('@patchNewsletterInfo');
+    cy.wait('@patchNewsItems');
     // checkbox is checked, toggle it back
     cy.get('@checkboxValue').should('be.checked');
     cy.get('@checkboxContainer').click();
@@ -380,7 +380,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check cancel
     cy.get(newsletter.editItem.cancel).click();
     cy.intercept('GET', '/themes**').as('getThemes2');
-    cy.get(newsletter.newsItem.create).click();
+    cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes2');
     cy.get(dependency.rdfa.editorInner).should('be.empty');
     cy.get(newsletter.editItem.remark).should('be.empty');
@@ -397,7 +397,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.visitAgendaWithLink(agendaitemKBLink);
     cy.intercept('GET', '/themes**').as('getThemes3');
-    cy.get(newsletter.newsItem.create).click();
+    cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes3');
     cy.get(newsletter.editItem.mandateeProposal).contains(proposalText);
     cy.get(newsletter.editItem.nota);

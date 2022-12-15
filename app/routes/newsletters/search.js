@@ -7,7 +7,7 @@ import parseDate from '../../utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
 import endOfDay from 'date-fns/endOfDay';
 
-export default class NewsletterInfosSearchRoute extends Route {
+export default class NewslettersSearchRoute extends Route {
   queryParams = {
     searchText: {
       refreshModel: true,

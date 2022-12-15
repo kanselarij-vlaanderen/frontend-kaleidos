@@ -25,18 +25,18 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 3);
     // The search results are randomly sorted between each test run (mainly because of bad test data)
     // So we can't know what info is showing in each row, but we do know what should be showing in the 3 rows
     // the title and decision result will be the same for all 3, contains() gets the first one
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Goedgekeurd');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jan Jambon, Hilde Crevits');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jan Jambon, Hilde Crevits, Matthias Diependaele');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jan Jambon, Hilde Crevits, Bart Somers, Ben Weyts, Zuhal Demir');
-    cy.get(route.searchNewsletterInfos.row.goToAgendaitem).eq(0)
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.decisionResult).contains('Goedgekeurd');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Matthias Diependaele');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Bart Somers, Ben Weyts, Zuhal Demir');
+    cy.get(route.searchNewsletters.row.goToAgendaitem).eq(0)
       .click();
     cy.url().should('contain', '/vergadering/');
     cy.url().should('contain', '/agenda/');
@@ -57,10 +57,10 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1);
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
   });
 
   it('Search for kort-bestek items that have links to multiple agendaitem/agenda versions', () => {
@@ -76,7 +76,7 @@ context('Search tests', () => {
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
     cy.get(utils.vlAlert.container).should('not.exist');
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
   });
 
   it('Search for mandatee in kort-bestek', () => {
@@ -94,6 +94,6 @@ context('Search tests', () => {
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
     cy.get(utils.vlAlert.container).should('not.exist');
-    cy.get(route.searchNewsletterInfos.row.mandatees).contains('Jan Jambon');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon');
   });
 });
