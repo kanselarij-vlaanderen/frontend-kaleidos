@@ -1,23 +1,3 @@
-async function sortLinkedItemsInPlace(list, propertyString) {
-  let head = null;
-  for (let i = 0; i < list.length; i++) {
-    for (let j = i; j < list.length; j++) {
-      const maybeHead = list[j];
-      const previous = await maybeHead[propertyString];
-      if (previous === head) {
-        // maybeHead is the head of the list, as it's previous link is the head of the list
-        if (i !== j) {
-          const temp = list[i];
-          list[i] = list[j];
-          list[j] = temp;
-        }
-        head = maybeHead;
-        break;
-      }
-    }
-  }
-}
-
 /**
  * Deletes the provided document container's pieces, and also itself.
  *
@@ -28,9 +8,18 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
   const documentContainer = await documentContainerOrPromise;
   if (documentContainer) {
     const pieces = await documentContainer.pieces.toArray();
-    await sortLinkedItemsInPlace(pieces, 'nextPiece');
+    let latestPiece = null;
     for (let piece of pieces) {
-      await deletePiece(piece);
+      const next = await piece.nextPiece;
+      if (!next) {
+        latestPiece = piece;
+        break;
+      }
+    }
+    while (latestPiece) {
+      const previousPiece = await latestPiece.previousPiece;
+      await deletePiece(latestPiece);
+      latestPiece = previousPiece;
     }
   }
 }
