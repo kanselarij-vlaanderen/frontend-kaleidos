@@ -307,9 +307,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
+    // cy.get(newsletter.editItem.save).click();
+    // cy.get(utils.vlModalVerify.save).click();
+    // cy.wait(`@patchNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auk.loader, {
@@ -317,9 +319,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
+    // cy.get(newsletter.editItem.save).click();
+    // cy.get(utils.vlModalVerify.save).click();
+    // cy.wait(`@patchNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
@@ -327,9 +331,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
     cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
+    // cy.get(newsletter.editItem.save).click();
+    // cy.get(utils.vlModalVerify.save).click();
+    // cy.wait(`@postNewsletterInfo${randomInt}`);
 
     cy.get(agenda.agendaActions.showOptions).click();
     cy.get(agenda.agendaActions.navigateToNewsletter).click();

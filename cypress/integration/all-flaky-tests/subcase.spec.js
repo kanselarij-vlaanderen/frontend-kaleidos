@@ -239,7 +239,9 @@ context('Subcase tests', () => {
 
     // open themes ediging pane.
     cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
-    cy.get(newsletter.newsItem.create).click();
+    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.get(newsletter.newsItem.create).click()
+      .wait('@newsletterInfosPost');
     cy.wait('@getAgendaitemThemes');
 
     // Toggle some themes.
@@ -255,9 +257,9 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    cy.intercept('POST', '/newsletter-infos').as('newsletterInfosPost');
+    cy.intercept('PATCH', '/newsletter-infos/*').as('newsletterInfosPatch');
     cy.get(newsletter.editItem.save).click()
-      .wait('@newsletterInfosPost');
+      .wait('@newsletterInfosPatch');
 
     // Assert the save is done.
     cy.get(newsletter.agendaitemNewsItem.themes).contains('Wonen');

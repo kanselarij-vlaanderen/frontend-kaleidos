@@ -51,7 +51,7 @@ export default class DocumentController extends Controller {
       });
       await this.fileService.deletePiece(piece);
       if (agendaitem) {
-        await this._didDeletePieceFromAgendaitem(agendaitem, piece);
+        await this._didDeletePieceFromAgendaitem(agendaitem, previousPiece);
       }
     }
 
@@ -62,14 +62,9 @@ export default class DocumentController extends Controller {
     }
   }
 
-  async _didDeletePieceFromAgendaitem(agendaitem, piece) {
-    const documentContainer = await piece.documentContainer;
-    if (documentContainer) {
-      const pieces = await documentContainer.pieces;
-      if (pieces.length && agendaitem) {
-        await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
-      }
-    }
+  async _didDeletePieceFromAgendaitem(agendaitem, previousPiece) {
+    const documentContainer = await previousPiece.documentContainer;
+    await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
   }
 
   async _didDeletePieceFromDecision(decisionActivity, previousPiece) {
