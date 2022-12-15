@@ -1,14 +1,12 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { isEmpty, isPresent } from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaitemSearchRoute extends Route {
-  @service metrics;
   queryParams = {
     types: {
       refreshModel: true,
@@ -105,21 +103,6 @@ export default class AgendaitemSearchRoute extends Route {
       const entry = agendaitem.attributes;
       entry.id = agendaitem.id;
       return entry;
-    });
-  }
-
-  afterModel(model) {
-    const keyword = this.paramsFor('search').searchText;
-    let count;
-    if (model && model.meta && isPresent(model.meta.count)) {
-      count = model.meta.count;
-    } else {
-      count = false;
-    }
-    this.metrics.invoke('trackSiteSearch', {
-      keyword,
-      category: 'agendaItemsSearch',
-      searchCount: count,
     });
   }
 

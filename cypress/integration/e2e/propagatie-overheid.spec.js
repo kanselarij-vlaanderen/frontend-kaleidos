@@ -94,7 +94,6 @@ context('Propagation to other graphs', () => {
     cy.searchCase(caseTitle);
     cy.openSubcase(0);
     cy.url().should('contain', '/deeldossiers/');
-    cy.url().should('contain', '/overzicht');
     cy.get(cases.subcaseDescription.edit).should('not.exist');
     cy.get(cases.subcaseTitlesView.edit).should('not.exist');
     cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');

@@ -9,6 +9,8 @@ import { all } from 'ember-concurrency';
 export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
+  @service toaster;
+  @service fileService;
 
   agenda;
   meeting;
@@ -64,6 +66,15 @@ export default class AgendaDocumentsController extends Controller {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     yield piece.save();
+    try {
+      const sourceFile = yield piece.file;
+      yield this.fileService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
   }
 
   /**
@@ -73,6 +84,15 @@ export default class AgendaDocumentsController extends Controller {
   *addPiece(piece) {
     piece.meeting = this.meeting;
     yield piece.save();
+    try {
+      const sourceFile = yield piece.file;
+      yield this.fileService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     this.send('reloadModel');
   }
 

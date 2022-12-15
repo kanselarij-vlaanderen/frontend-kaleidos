@@ -32,6 +32,7 @@
         @agendaContext={{hash meeting=this.meeting agenda=this.agenda}}
         @onAddPiece={{perform this.addPiece}}
         @didDeleteContainer={{this.refresh}}
+        @isEditable={{true}}
       />
 
       {{#if (user-may "manage-documents")}}
