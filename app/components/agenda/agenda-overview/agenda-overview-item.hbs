@@ -14,12 +14,13 @@
   <div data-test-agenda-overview-item-container class="vlc-agenda-items__body">
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
-        <div class="vlc-agenda-items__cursor" {{sortable-handle}}>
+        <div class="vlc-agenda-items__cursor">
           <AuIcon
             data-test-agenda-overview-item-dragging
             class="auk-u-cursor-grab auk-u-text-muted"
             @icon="drag-handle-2"
             @size="large"
+            {{sortable-handle}}
           />
         </div>
       {{/if}}
