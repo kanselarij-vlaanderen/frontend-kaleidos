@@ -5,6 +5,7 @@ import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service router;
   @service store;
   @service toaster;
   @service intl;
@@ -18,7 +19,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       warn(`Agenda item "${this.agendaitem.id}" is missing a treatment`, {
         id: 'broken-data.missing-agenda-item-treatment',
       });
-      this.transitionTo('agenda.agendaitems.agendaitem.index');
+      this.router.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
 

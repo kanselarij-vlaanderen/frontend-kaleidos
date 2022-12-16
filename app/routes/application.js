@@ -14,7 +14,7 @@ export default class ApplicationRoute extends Route {
 
   async beforeModel() {
     if (!this.isSupportedBrowser) {
-      this.transitionTo('not-supported');
+      this.router.transitionTo('not-supported');
     }
 
     try {
@@ -24,7 +24,7 @@ export default class ApplicationRoute extends Route {
     }
 
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
-      this.transitionTo('accountless-users');
+      this.router.transitionTo('accountless-users');
     }
 
     // Fire and forget these two calls so we load in the concepts without blocking loading of the routes
@@ -48,7 +48,7 @@ export default class ApplicationRoute extends Route {
   @action
   willTransition(transition) {
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
-      this.transitionTo('accountless-users');
+      this.router.transitionTo('accountless-users');
     }
 
     if (
