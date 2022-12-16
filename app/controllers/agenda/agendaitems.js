@@ -43,6 +43,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked documentLoadCount = 0;
   @tracked totalCount = 0;
   @tracked isLoading;
+  @tracked isEditingOverview = false;
 
   // @tracked filter; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   // @tracked showModifiedOnly;

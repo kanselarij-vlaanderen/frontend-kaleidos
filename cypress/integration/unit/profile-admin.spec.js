@@ -144,6 +144,7 @@ context('Testing the application as Admin user', () => {
       cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
       cy.get(agenda.agendaActions.publishToWeb).should('not.exist');
       cy.get(agenda.agendaActions.unpublishFromWeb).should('not.exist');
+      cy.clickReverseTab('Overzicht'); // close dropdown
 
       // Main view - Search
       cy.get(agenda.agendaitemSearch.input);
@@ -151,6 +152,10 @@ context('Testing the application as Admin user', () => {
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit);
+
+      // Overview Tab - General action - Dragging
+      cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit).click();
       cy.get(agenda.agendaOverviewItem.dragging);
 
       // Detail Tab - tabs
