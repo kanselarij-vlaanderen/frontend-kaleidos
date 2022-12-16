@@ -10,7 +10,7 @@ export default class AgendaDocumentsController extends Controller {
   @service currentSession;
   @service store;
   @service toaster;
-  @service fileService;
+  @service fileConversionService;
 
   agenda;
   meeting;
@@ -68,7 +68,7 @@ export default class AgendaDocumentsController extends Controller {
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -86,7 +86,7 @@ export default class AgendaDocumentsController extends Controller {
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),

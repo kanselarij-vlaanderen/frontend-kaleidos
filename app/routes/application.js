@@ -8,7 +8,6 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service session;
   @service currentSession;
-  @service fileService;
   @service router;
   @service userAgent;
 
@@ -46,16 +45,9 @@ export default class ApplicationRoute extends Route {
   }
 
   @action
-  willTransition(transition) {
+  willTransition() {
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
       this.transitionTo('accountless-users');
-    }
-
-    if (
-      this.fileService.get('deleteDocumentContainerWithUndo.isRunning')
-      && !confirm(this.intl.t('leave-page-message'))
-    ) {
-      transition.abort();
     }
   }
 }

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 export default class PrintNewsletterController extends Controller {
   queryParams = {
@@ -12,7 +12,7 @@ export default class PrintNewsletterController extends Controller {
   @tracked showDraft = false;
 
   @task
-  *saveNewsletterItem(newsletterItem) {
-    yield newsletterItem.save();
+  *saveNewsItem(newsItem) {
+    yield newsItem.save();
   }
 }

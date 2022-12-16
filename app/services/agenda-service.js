@@ -172,7 +172,7 @@ export default class AgendaService extends Service {
     await subcase.hasMany('submissionActivities').reload();
     updateModifiedProperty(lastAgenda);
 
-    // Create default newsletterInfo for announcements with inNewsLetter = true
+    // Create default newsItem for announcements with inNewsLetter = true
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
@@ -226,9 +226,9 @@ export default class AgendaService extends Service {
       const agendaitemsFromActivity = await agendaActivity.agendaitems;
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
-        const newsletter = await treatment.newsletterInfo;
-        if (newsletter) {
-          await newsletter.destroyRecord();
+        const newsItem = await treatment.newsItem;
+        if (newsItem) {
+          await newsItem.destroyRecord();
         }
         if (decisionActivity) {
           await decisionActivity.destroyRecord();

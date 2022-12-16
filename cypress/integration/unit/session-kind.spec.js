@@ -44,21 +44,21 @@ context('Different session kinds should show different titles', () => {
     });
   });
 
-  it('should show the correct translations for normal session in newsletter-info print overview', () => {
+  it('should show the correct translations for normal session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad';
     const newsletterTitle = headerText;
     cy.visit(regular);
     checkNewsletterPage(headerText, newsletterTitle);
   });
 
-  it('should show the correct translations for special session in newsletter-info print overview', () => {
+  it('should show the correct translations for special session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad';
     const newsletterTitle = headerText;
     cy.visit(special);
     checkNewsletterPage(headerText, newsletterTitle);
   });
 
-  it('should show the correct translations for electronic session in newsletter-info print overview', () => {
+  it('should show the correct translations for electronic session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Elektronische procedure';
     const newsletterTitle = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.visit(electronic);

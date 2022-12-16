@@ -259,7 +259,7 @@
   "no-ise-codes-yet": "Er zijn nog geen geselecteerde inhoudelijke structuurelementen.",
   "no-meetings": "Er zijn nog geen agenda’s aangemaakt.",
   "no-ministers": "Geen ministers",
-  "no-newsletter-info": "Nog geen kort bestek voor dit agendapunt.",
+  "no-news-item": "Nog geen kort bestek voor dit agendapunt.",
   "no-number-yet": "Nog geen nummer",
   "user-rights": "Rechten",
   "no-rights": "Geen rechten",
@@ -424,7 +424,7 @@
   "gender": "geslacht",
   "government-function": "beleidsfunctie",
   "identification": "identificatie",
-  "newsletter-info": "kort bestek",
+  "news-item": "kort bestek",
   "theme": "thema",
   "time-period": "tijdsspanne",
   "meeting": "vergadering",
@@ -442,7 +442,7 @@
   "agendaitems-creating-text": "De agendapunten worden aangemaakt.",
   "agendaitems-loading-text": "De agendapunten worden geladen.",
   "agenda-approving-text": "De agenda wordt goedgekeurd.",
-  "newsletter-info-loading-text": "Het kort bestek wordt geladen.",
+  "news-item-loading-text": "Het kort bestek wordt geladen.",
   "notification": "Notificatie",
   "no-notification-yet": "Nog geen notificatie beschikbaar",
   "no-results-found": "Geen resultaten gevonden",
@@ -1115,7 +1115,7 @@
   "filter-on-last-seen": "Filteren op laatst gezien",
   "blocked-on": "Geblokkeerd op",
   "filter-on-organization": "Filteren op organisatie",
-  "ovo-or-organization": "OVO of organisatie",
+  "id-or-organization": "Organisatie ID of naam",
   "list-of-ovo-codes": "Lijst met OVO codes",
   "search-on-ovo-or-organization": "Zoek op organisatienaam of OVO-code",
   "show-only-blocked": "Toon enkel geblokkeerde",
@@ -1134,5 +1134,8 @@
   "no-recent-meetings": "Geen recente open agenda’s",
   "attachment-was-too-large": "Er zijn bestanden opgeladen die groter zijn dan 30 MB. Het is niet mogelijk om bestanden van deze grootte te mailen.",
   "sum-of-attachments-exceeds-warning-threshold": "De som van alle bestanden is groter dan 10 MB. Hierdoor komt deze mail mogelijk niet aan bij de ontvanger.",
-  "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden."
-}
+  "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden.",
+  "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
+  "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
+  "organization-id": "Organisatie ID"
+} 

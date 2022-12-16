@@ -101,8 +101,8 @@
         {{/if}}
         {{#if (is-announcement @agendaitem.type)}}
           <div class="auk-u-mt-2">
-            {{#if @newsletterInfo}}
-              {{#if @newsletterInfo.inNewsletter}}
+            {{#if @newsItem}}
+              {{#if @newsItem.inNewsletter}}
                 <AuPill @size="small" @skin="border" @icon="website">
                   {{t "on-the-website"}}
                 </AuPill>
@@ -113,7 +113,7 @@
               {{/if}}
             {{else}}
               <AuPill @size="small">
-                {{t "no-newsletter-info"}}
+                {{t "no-news-item"}}
               </AuPill>
             {{/if}}
           </div>

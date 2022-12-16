@@ -284,10 +284,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
   });
 
-  it('should create newsletter-info for the agendaitems to check the sorting', () => {
+  it('should create news-item for the agendaitems to check the sorting', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.intercept('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
-    cy.intercept('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
+    cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
+    cy.intercept('PATCH', '/news-items/*').as(`patchNewsItem${randomInt}`);
     cy.openAgendaForDate(agendaDate);
     cy.get(auk.loader, {
       timeout: 60000,
@@ -307,9 +307,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.wait(`@postNewsItem${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auk.loader, {
@@ -317,9 +316,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.wait(`@postNewsItem${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
@@ -327,9 +325,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
-    cy.wait(`@postNewsletterInfo${randomInt}`);
+    cy.wait(`@postNewsItem${randomInt}`);
+    cy.get(newsletter.editItem.cancel).click();
 
     cy.get(agenda.agendaActions.showOptions).click();
     cy.get(agenda.agendaActions.navigateToNewsletter).click();
@@ -338,17 +335,17 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
       .click();
-    cy.wait(`@patchNewsletterInfo${randomInt}`);
+    cy.wait(`@patchNewsItem${randomInt}`);
     cy.get(newsletter.tableRow.newsletterRow).eq(1)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
       .click();
-    cy.wait(`@patchNewsletterInfo${randomInt}`);
+    cy.wait(`@patchNewsItem${randomInt}`);
     cy.get(newsletter.tableRow.newsletterRow).eq(2)
       .find(newsletter.tableRow.inNewsletterCheckbox)
       .parent()
       .click();
-    cy.wait(`@patchNewsletterInfo${randomInt}`);
+    cy.wait(`@patchNewsItem${randomInt}`);
 
     cy.intercept('GET', '/mandatees?filter**').as('getMandatees1');
     cy.intercept('GET', '/mandatees?filter**').as('getMandatees2');

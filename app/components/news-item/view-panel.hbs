@@ -4,13 +4,13 @@
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item>
           <AuHeading @level="4" @skin="5" data-test-agendaitem-news-item-title>
-            {{@newsletterItem.title}}
+            {{@newsItem.title}}
           </AuHeading>
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if @newsletterItem.inNewsletter}}
+          {{#if @newsItem.inNewsletter}}
             <AuPill @skin="default" @icon="visible">
               {{t "on-the-website"}}
             </AuPill>
@@ -21,7 +21,7 @@
           {{/if}}
         </Group.Item>
         <Group.Item>
-          {{#if @newsletterItem.finished}}
+          {{#if @newsItem.finished}}
             <AuPill @skin="success">
               {{t "finished"}}
             </AuPill>
@@ -42,26 +42,26 @@
       <SanitizeHtml
         class="auk-u-overflow-wrap-anywhere"
         @raw={{true}}
-        @value={{@newsletterItem.richtext}}
+        @value={{@newsItem.htmlContent}}
       />
     </AuContent>
   </Auk::Panel::Body>
-  {{#if @newsletterItem.remark}}
+  {{#if @newsItem.remark}}
     <Auk::Panel::Body>
       <p class="au-u-muted auk-u-text-capitalize auk-u-text-small">
-        <strong>{{t "remark"}}</strong>: {{@newsletterItem.remark}}
+        <strong>{{t "remark"}}</strong>: {{@newsItem.remark}}
       </p>
     </Auk::Panel::Body>
   {{/if}}
   <Auk::Panel::Body>
     <div data-test-agendaitem-news-item-themes>
-      {{#if (is-pending @newsletterItem.themes)}}
+      {{#if (is-pending @newsItem.themes)}}
         <Auk::Loader @message={{t "themes-loading-text"}} />
-      {{else if (await @newsletterItem.themes.length)}}
+      {{else if (await @newsItem.themes.length)}}
         <div class="auk-o-flex auk-o-flex--spaced">
           <strong>Thema's:</strong>
           <div class="auk-o-flex auk-o-flex--wrap auk-o-flex-gap--small">
-            {{#each (await @newsletterItem.themes) as |theme|}}
+            {{#each (await @newsItem.themes) as |theme|}}
               <AuPill>{{theme.label}}</AuPill>
             {{/each}}
           </div>

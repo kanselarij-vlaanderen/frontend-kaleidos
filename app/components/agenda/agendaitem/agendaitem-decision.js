@@ -14,7 +14,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service store;
   @service pieceAccessLevelService;
   @service toaster;
-  @service fileService;
+  @service fileConversionService;
 
   @tracked report;
   @tracked previousReport;
@@ -88,7 +88,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await piece.save();
     try {
       const sourceFile = await piece.file;
-      await this.fileService.convertSourceFile(sourceFile);
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -106,7 +106,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await piece.save();
     try {
       const sourceFile = await piece.file;
-      await this.fileService.convertSourceFile(sourceFile);
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),

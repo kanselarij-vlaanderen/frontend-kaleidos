@@ -53,23 +53,23 @@ context('Search tests', () => {
     cy.get(route.search.input).should('have.value', '');
   });
 
-  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+  it('Search for htmlContent in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/kort-bestek/zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1);
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Uitgesteld');
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.decisionResult).contains('Uitgesteld');
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .click();

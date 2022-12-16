@@ -38,11 +38,11 @@ const selectors = {
     table: '[data-test-route-settings-organizations-table]',
     tableContent: {
       organization: '[data-test-route-settings-organizations-tablecontent-organization]',
-      ovoCode: '[data-test-route-settings-organizations-tablecontent-ovo-code]',
+      organizationId: '[data-test-route-settings-organizations-tablecontent-organization-id]',
     },
     row: {
       name: '[data-test-route-settings-organizations-row-name]',
-      ovoCode: '[data-test-route-settings-organizations-row-ovo-code]',
+      organizationId: '[data-test-route-settings-organizations-row-organization-id]',
       actions: '[data-test-route-settings-organizations-row-actions]',
       actionsDropdown: '[data-test-route-settings-organizations-row-actions-dropdown]',
       action: {

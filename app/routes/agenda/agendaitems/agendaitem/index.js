@@ -29,7 +29,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
       await this.subcase.governmentAreas;
     }
     const agendaItemTreatment = await model.treatment;
-    this.newsletterInfo = await agendaItemTreatment?.newsletterInfo;
+    this.newsItem = await agendaItemTreatment?.newsItem;
     const decisionActivity = await agendaItemTreatment?.decisionActivity;
     await decisionActivity?.decisionResultCode;
     // When routing here from agenda overview with stale data, we need to reload several relations
@@ -47,7 +47,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
-    controller.newsletterInfo = this.newsletterInfo;
+    controller.newsItem = this.newsItem;
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
   }
