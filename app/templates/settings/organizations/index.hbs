@@ -42,10 +42,10 @@
             @label={{t "organization"}}
           />
           <ThSortable
-            data-test-route-settings-organizations-tablecontent-ovo-code
+            data-test-route-settings-organizations-tablecontent-organization-id
             @currentSorting={{this.sort}}
             @field="identifier"
-            @label={{t "ovo-code"}}
+            @label={{t "organization-id"}}
           />
           <th>{{t "users-seen"}}</th>
           <th></th>
@@ -65,7 +65,7 @@
               {{/if}}
             </span>
           </td>
-          <td data-test-route-settings-organizations-row-ovo-code class={{if organization.isBlocked "au-u-muted"}}>
+          <td data-test-route-settings-organizations-row-organization-id class={{if organization.isBlocked "au-u-muted"}}>
             <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
               {{organization.identifier}}
             </span>
