@@ -154,14 +154,14 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .should('not.be.checked') // this is the default setting for nota
       .parent()
       .click();
-    // the richtext is also showing in the "title"
+    // the htmlContent is also showing in the "title"
     cy.get(newsletter.tableRow.titleContent).contains(text);
     cy.wait('@patchNewsItem');
   });
 
   it('should test default newsletter values on new nota', () => {
     const previousSubcaseShortTitle = 'Cypress test: KB defaults 2 - Nota - 1651582137';
-    const previousSubcaseRichtext = 'Tekst om te checken of default overname correct werkt.';
+    const previousSubcaseHtmlContent = 'Tekst om te checken of default overname correct werkt.';
     const addedText = ' Toegevoegd op bestaande tekst.';
     const addedTitle = ' Toegevoegd op bestaande titel.';
 
@@ -186,7 +186,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
     cy.get(newsletter.editItem.shortTitle).should('have.value', previousSubcaseShortTitle);
-    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseRichtext);
+    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseHtmlContent);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     // edit
@@ -239,14 +239,14 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // TODO-newsletter are these contains correct?
     cy.get(newsletter.editItem.longTitle).should('contain', '');
     // TODO-KAS-3270 check if editor empty
-    // TODO-KAS-3367 default richText to shorttitle?
+    // TODO-KAS-3367 default htmlContent to shorttitle?
     cy.get(newsletter.editItem.rdfaEditor).should('contain', '');
     cy.get(newsletter.editItem.checkedThemes).should('not.exist');
   });
 
   it('should test default newsletter values on new nota after multiple announcements', () => {
     const previousSubcaseShortTitle = 'Cypress test: KB defaults 5 - Nota - 1651585885';
-    const previousSubcaseRichtext = 'Tekst om te checken of default overname correct werkt met mededelingen ertussen.';
+    const previousSubcasehtmlContent = 'Tekst om te checken of default overname correct werkt met mededelingen ertussen.';
     const subcaseTitleShort = 'Cypress test: KB defaults 5 - Nota - na mededeling - 1651586158';
     const subcaseTitleLong = 'Cypress test: KB defaults 5 - lange titel Nota - na mededeling - 1651586158';
 
@@ -269,7 +269,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
     // check inherited values
     cy.get(newsletter.editItem.shortTitle).should('have.value', previousSubcaseShortTitle);
-    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcaseRichtext);
+    cy.get(newsletter.editItem.rdfaEditor).contains(previousSubcasehtmlContent);
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
@@ -465,7 +465,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // const agendaDate = Cypress.dayjs('2022-04-03');
     // const agendaLink = '/vergadering/62726CBED600B7FF7F95BBF0/agenda/62726CBFD600B7FF7F95BBF1/agendapunten';
     const newsletterLink = '/vergadering/62726CBED600B7FF7F95BBF0/kort-bestek';
-    const richtext = 'this richtext should be visible in klad';
+    const htmlContent = 'this htmlContent should be visible in klad';
     const remarkText = 'this remark should be visible in klad';
     // const subcaseTitleMededeling = 'Cypress test: KB klad - mededeling - 1651673428';
     // const subcaseTitleNota = 'Cypress test: KB klad - nota - 1651673428';
@@ -481,7 +481,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItem');
     cy.get(dependency.rdfa.editorInner).clear();
-    cy.get(newsletter.editItem.rdfaEditor).type(richtext);
+    cy.get(newsletter.editItem.rdfaEditor).type(htmlContent);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.get(utils.vlModalVerify.save).click();
@@ -494,7 +494,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     cy.wait('@patchNewsItem');
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.newsletterPrint.richtext).contains(richtext);
+    cy.get(newsletter.newsletterPrint.htmlContent).contains(htmlContent);
     cy.get(newsletter.newsletterPrint.remark).should('not.exist');
     cy.get(newsletter.newsletterPrint.theme).should('not.exist');
     cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');
@@ -519,11 +519,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const agendaLinkMed = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289BFE536C464112FFE91';
     const agendaLinkNota = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289D3E536C464112FFE96';
     const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
-    // *note the next richtext is used in search.spec, keep them identical
-    const richtextNota = 'this nota info should be visible in definitief';
+    // *note the next htmlContent is used in search.spec, keep them identical
+    const htmlContentNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
     const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';
-    const richtextMededeling = 'this announcement info should be visible in definitief';
+    const htmlContentMededeling = 'this announcement info should be visible in definitief';
     const remarkTextMededeling = 'this announcement remark should not be visible in definitief';
     const proposalTextMededeling = 'Op voorstel van viceminister-president Hilde Crevits';
     const subcaseTitleMededeling = 'Cypress test: KB Definitief view - mededeling - 1651673497';
@@ -546,7 +546,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes**').as('getThemes_1');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes_1');
-    cy.get(newsletter.editItem.rdfaEditor).type(richtextMededeling);
+    cy.get(newsletter.editItem.rdfaEditor).type(htmlContentMededeling);
     cy.get(newsletter.editItem.remark).type(remarkTextMededeling);
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
@@ -559,7 +559,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.newsletterPrint.printItemProposal).contains(proposalTextMededeling);
     cy.get(newsletter.newsletterPrint.theme).contains(theme);
-    cy.get(newsletter.newsletterPrint.richtext).should('not.exist');
+    cy.get(newsletter.newsletterPrint.htmlContent).should('not.exist');
     cy.get(newsletter.newsletterPrint.remark).should('not.exist');
 
     // check if nota is visible when selected
@@ -571,7 +571,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(dependency.rdfa.editorInner).clear({
       force: true,
     });
-    cy.get(newsletter.editItem.rdfaEditor).type(richtextNota);
+    cy.get(newsletter.editItem.rdfaEditor).type(htmlContentNota);
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkTextNota);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
@@ -621,7 +621,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleNota);
     cy.get(newsletter.newsletterPrint.printItemProposal).contains(proposalTextNota);
     cy.get(newsletter.newsletterPrint.theme).contains(theme2);
-    cy.get(newsletter.newsletterPrint.richtext).contains(richtextNota);
+    cy.get(newsletter.newsletterPrint.htmlContent).contains(htmlContentNota);
     cy.get(newsletter.newsletterPrint.remark).should('not.exist');
   });
 

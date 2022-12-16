@@ -44,7 +44,7 @@ context('Search tests', () => {
     cy.url().should('contain', '/kort-bestek');
   });
 
-  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+  it('Search for htmlContent in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/kort-bestek/zoeken');
     // ! depends on news-item.spec and could fail
     // *note: this test searches for data from news-item.spec and could fail

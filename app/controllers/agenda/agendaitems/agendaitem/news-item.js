@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
-
   @tracked agendaitem;
   @tracked notaModifiedTime;
   @tracked hideNotaModificationWarning = false;

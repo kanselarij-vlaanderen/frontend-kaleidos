@@ -69,7 +69,7 @@ const selectors = {
     edit: '[data-test-news-item-print-edit]',
     noContent: '[data-test-news-item-print-no-content]',
     printItemProposal: '[data-test-news-item-print-proposal]',
-    richtext: '[data-test-news-item-print-richtext]',
+    htmlContent: '[data-test-news-item-print-htmlContent]',
     remark: '[data-test-news-item-print-remark]',
     theme: '[data-test-news-item-print-theme]',
   },

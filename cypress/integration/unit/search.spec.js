@@ -53,7 +53,7 @@ context('Search tests', () => {
     cy.get(route.search.input).should('have.value', '');
   });
 
-  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+  it('Search for htmlContent in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/kort-bestek/zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';

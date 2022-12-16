@@ -55,7 +55,7 @@
 
     {{#if (is-nota @agendaitem.type)}}
       {{#if @newsItem.htmlContent}}
-        <p data-test-news-item-print-richtext class="auk-u-mb-2">
+        <p data-test-news-item-print-htmlContent class="auk-u-mb-2">
           <AuContent>
             <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
           </AuContent>
