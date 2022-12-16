@@ -1,7 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 export default class AgendaOverview extends Component {
   /**
@@ -15,22 +13,17 @@ export default class AgendaOverview extends Component {
    * @argument onReorderAgendaitems: trigger the parent's action when we reorder agendaitems (by dragging)
    * @argument showModifiedOnly: if we should filter only on modified agendaitems
    * @argument toggleShowModifiedOnly: toggle the parent to set the modified filter on or off
+   * @argument isEditingOverview {Boolean} If the overview is in edit mode
+   * @argument toggleIsEditingOverview {Function} Function to call to toggle editing state
    */
 
   @service currentSession;
-
-  @tracked isEditingOverview = null;
 
   get canEdit() {
     return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
   get canDragAgendaitems() {
-    return this.canEdit && this.isEditingOverview;
-  }
-
-  @action
-  toggleIsEditingOverview() {
-    this.isEditingOverview = !this.isEditingOverview;
+    return this.canEdit && this.args.isEditingOverview;
   }
 }

@@ -54,6 +54,8 @@
             @onReorderAgendaitems={{perform this.assignNewPriorities}}
             @showModifiedOnly={{this.showModifiedOnly}}
             @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+            @isEditingOverview={{this.isEditingOverview}}
+            @toggleIsEditingOverview={{toggle "isEditingOverview" this}}
           />
           {{#if this.assignNewPriorities.isRunning}}
             <WebComponents::LoadingOverlay />
