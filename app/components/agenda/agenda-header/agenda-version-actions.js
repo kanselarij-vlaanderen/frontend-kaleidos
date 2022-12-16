@@ -16,6 +16,7 @@ import {
   reopenPreviousAgenda,
 } from 'frontend-kaleidos/utils/agenda-approval';
 import bind from 'frontend-kaleidos/utils/bind';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -32,7 +33,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @service store;
   @service currentSession;
   @service agendaService;
-  @service fileService;
   @service router;
   @service intl;
   @service toaster;
@@ -503,7 +503,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       if (this.piecesToDeleteReopenPreviousAgenda) {
         await all(
           this.piecesToDeleteReopenPreviousAgenda.map(async (piece) => {
-            await this.fileService.deletePiece(piece);
+            await deletePiece(piece);
           })
         );
         this.piecesToDeleteReopenPreviousAgenda = null;

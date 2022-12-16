@@ -20,7 +20,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service intl;
   @service store;
   @service router;
-  @service fileService;
+  @service fileConversionService;
 
   case;
   subcase;
@@ -82,7 +82,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -100,7 +100,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
