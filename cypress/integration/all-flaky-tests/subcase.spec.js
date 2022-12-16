@@ -237,13 +237,6 @@ context('Subcase tests', () => {
     cy.get(newsletter.newsItem.create).click()
       .wait('@newsItemsPost');
     cy.wait('@getAgendaitemThemes');
-    cy.get(newsletter.editItem.cancel).click();
-
-    // open themes ediging pane.
-    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
-    cy.intercept('POST', '/news-items').as('newsItemsPost');
-    cy.get(newsletter.newsItem.edit);
-    cy.wait('@getAgendaitemThemes');
 
     // Toggle some themes.
     cy.get(newsletter.editItem.themesSelector).contains('Wonen')
