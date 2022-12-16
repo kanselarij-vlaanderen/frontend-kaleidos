@@ -66,7 +66,7 @@
                   model=agendaitem
                   distance="30"
                   handle=this.dragHandleClass
-                  disabled=(not this.canEdit)
+                  disabled=(not this.canDragAgendaitems)
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
@@ -77,7 +77,7 @@
                   @isNew={{includes agendaitem @newItems}}
                   @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{this.isEditingOverview}}
-                  @showDragHandle={{this.canEdit}}
+                  @showDragHandle={{this.canDragAgendaitems}}
                 />
               </li>
             {{/each}}
@@ -107,7 +107,7 @@
               model=announcement
               distance="30"
               handle=this.dragHandleClass
-              disabled=(not this.canEdit)
+              disabled=(not this.canDragAgendaitems)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -118,7 +118,7 @@
               @isNew={{includes announcement @newItems}}
               @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{this.isEditingOverview}}
-              @showDragHandle={{this.canEdit}}
+              @showDragHandle={{this.canDragAgendaitems}}
             />
           </li>
         {{/each}}
