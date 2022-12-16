@@ -13,13 +13,12 @@ export default class ExtendedPlausibleService extends PlausibleService {
 
     this.router.on('routeDidChange', (transition) => {
       if (this.session.isAuthenticated && this.currentSession.role) {
-        if (transition.from?.name === 'login') {
-          super.trackEvent('Aanmelding (per rol)', { rol: this.currentSession.role.label });
-        }
         if (!transition.from) {
           // transition.from === undefined when opening the app (by navigating to it or refreshing)
-          super.trackEvent('Gebruikssessie (per rol)', { rol: this.currentSession.role.label });
-        } else if (transition.from?.name !== transition.to?.name) {
+          super.trackEvent('Gebruikerssessie (per rol)', { rol: this.currentSession.role.label });
+        } else if (transition.from.name === 'login') {
+          super.trackEvent('Aanmelding (per rol)', { rol: this.currentSession.role.label });
+        } else if (transition.from.name !== transition.to?.name) {
           // Some buttons let you go to the current route, that shouldn't count as a page view
           super.trackEvent('Pageview (per rol)', { rol: this.currentSession.role.label });
         }
