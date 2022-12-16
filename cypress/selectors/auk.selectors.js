@@ -38,9 +38,19 @@ const selectors = {
     },
     footer: {
       cancel: '.auk-modal__footer .auk-toolbar-complex__left .au-c-button',
-      confirm: '[data-test-confirmation-modal-confirm]',
       // there is no default footer-save available (yet), use a custom selector for your use case
     },
+  },
+
+  confirmationModal: {
+    footer: {
+      confirm: '[data-test-confirmation-modal-confirm]',
+      cancel: '[data-test-confirmation-modal-cancel]',
+    },
+  },
+
+  auModal: {
+    body: '.au-c-modal__body',
   },
 
   accordion: {
