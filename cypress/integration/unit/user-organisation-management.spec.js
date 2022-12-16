@@ -34,7 +34,7 @@ context('testing user and organisation management', () => {
       cy.wait('@getRoles');
     });
 
-    it('check filter by organization or OVO-code', () => {
+    it('check filter by organization or ID', () => {
       // filter by organization name
       cy.get(settings.organizationFilter.filter).click();
       cy.get(settings.organizationFilter.search).type('Kaleidos Test Organisatie Alternatief');
@@ -47,7 +47,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.organizationFilter.clearFilter).click();
       cy.get(utils.numberPagination.container).contains('van 12');
 
-      // filter by OVO-code
+      // filter by organization ID
       cy.get(settings.organizationFilter.filter).click();
       cy.intercept('GET', '/user-organizations?filter=OVO0**').as('filterOrg');
       cy.get(settings.organizationFilter.search).type('OVO0')
@@ -301,7 +301,7 @@ context('testing user and organisation management', () => {
       // cy.wait('@getRoles');
     });
 
-    it('check filter by organization or OVO-code', () => {
+    it('check filter by organization or organization ID', () => {
       // filter by organization name
       cy.get(settings.organizationFilter.filter).click();
       cy.get(settings.organizationFilter.search).type('Kaleidos Test Organisatie Alternatief');
@@ -315,7 +315,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.organizationFilter.clearFilter).click();
       cy.get(settings.organizationsIndex.row.name).should('have.length', 3);
 
-      // filter by OVO-code
+      // filter by organization ID
       cy.get(settings.organizationFilter.filter).click();
       cy.intercept('GET', '/user-organizations?filter=OVO0**').as('filterOrg');
       cy.get(settings.organizationFilter.search).type('OVO0')
@@ -323,7 +323,7 @@ context('testing user and organisation management', () => {
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
-      cy.get(settings.organizationsIndex.row.ovoCode).should('have.length', 1)
+      cy.get(settings.organizationsIndex.row.organizationId).should('have.length', 1)
         .contains('OVO0BOGUS');
 
       // site can throw errors which fail our test
@@ -337,7 +337,7 @@ context('testing user and organisation management', () => {
 
     it('check filter by blocked', () => {
       cy.get(settings.organizationsIndex.filterBlocked).click();
-      cy.get(settings.organizationsIndex.row.ovoCode).should('have.length', 1)
+      cy.get(settings.organizationsIndex.row.organizationId).should('have.length', 1)
         .contains('OVO2BOGUS');
     });
 
@@ -415,15 +415,15 @@ context('testing user and organisation management', () => {
       // check sort by last seen
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
     });
 

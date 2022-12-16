@@ -1115,7 +1115,7 @@
   "filter-on-last-seen": "Filteren op laatst gezien",
   "blocked-on": "Geblokkeerd op",
   "filter-on-organization": "Filteren op organisatie",
-  "ovo-or-organization": "OVO of organisatie",
+  "id-or-organization": "Organisatie ID of naam",
   "list-of-ovo-codes": "Lijst met OVO codes",
   "search-on-ovo-or-organization": "Zoek op organisatienaam of OVO-code",
   "show-only-blocked": "Toon enkel geblokkeerde",
@@ -1136,5 +1136,6 @@
   "sum-of-attachments-exceeds-warning-threshold": "De som van alle bestanden is groter dan 10 MB. Hierdoor komt deze mail mogelijk niet aan bij de ontvanger.",
   "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden.",
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
-  "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten."
+  "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
+  "organization-id": "Organisatie ID"
 } 
