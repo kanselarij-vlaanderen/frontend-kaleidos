@@ -1,33 +1,33 @@
-<tr data-test-table-row-newsletter-row class="lt-row">
+<tr data-test-table-row-news-item-row class="lt-row">
   <td
-    data-test-table-row-newsletter-row-agendaitem-number
+    data-test-table-row-news-item-row-agendaitem-number
     class="lt-cell align-left"
   >
     {{@agendaitem.number}}
   </td>
   <td
-    data-test-table-row-newsletter-row-title-content
+    data-test-table-row-news-item-row-title-content
     class="lt-cell align-left auk-table__col--7"
   >
-    {{#if @newsletterItem}}
+    {{#if @newsItem}}
       <div class="auk-u-mb-2">
         <p class="auk-u-text-bold">
-          {{@newsletterItem.title}}
+          {{@newsItem.title}}
         </p>
       </div>
       <div class="auk-u-mb-2">
         <AuContent>
-          <SanitizeHtml @raw={{true}} @value={{@newsletterItem.richtext}} />
+          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
         </AuContent>
       </div>
-      {{#if @newsletterItem.remark}}
+      {{#if @newsItem.remark}}
         <p class="auk-u-text-muted auk-u-text-capitalize auk-u-text-size--small">
-          {{@newsletterItem.remark}}
+          {{@newsItem.remark}}
         </p>
       {{/if}}
     {{else}}
       <p class="auk-u-text-muted auk-u-italic">
-        {{t "no-newsletter-info"}}
+        {{t "no-news-item"}}
       </p>
     {{/if}}
   </td>
@@ -42,18 +42,18 @@
   </td>
   <td class="lt-cell align-left">
     <AuControlCheckbox
-      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
-      @checked={{@newsletterItem.inNewsletter}}
+      data-test-table-row-news-item-row-checkbox-in-newsletter={{true}}
+      @checked={{@newsItem.inNewsletter}}
       @disabled={{or
-        (not @newsletterItem)
-        this.saveNewsletterItem.isRunning
+        (not @newsItem)
+        this.saveNewsItem.isRunning
       }}
       @onChange={{this.toggleInNewsletterFlag}}
     />
   </td>
   <td class="lt-cell align-left">
-    {{#if @newsletterItem.modified}}
-      {{datetime @newsletterItem.modified}}
+    {{#if @newsItem.modified}}
+      {{datetime @newsItem.modified}}
     {{else}}
       -
     {{/if}}
@@ -64,14 +64,14 @@
         @skin="naked"
         @icon="copy"
         @hideText={{true}}
-        @disabled={{not @newsletterItem}}
-        {{on "click" (fn this.copyText @newsletterItem)}}
+        @disabled={{not @newsItem}}
+        {{on "click" (fn this.copyText @newsItem)}}
       >
         {{t "copy"}}
       </AuButton>
-      {{#if (user-may "manage-newsletter-infos")}}
+      {{#if (user-may "manage-news-items")}}
         <AuButton
-          data-test-newsletter-table-button-toolbar-edit={{true}}
+          data-test-news-item-table-button-toolbar-edit={{true}}
           @skin="naked"
           @icon="pencil"
           @hideText={{true}}
@@ -88,7 +88,7 @@
         </div>
       {{else}}
         <Auk::Button
-          data-test-newsletter-table-button-toolbar-open-nota
+          data-test-news-item-table-button-toolbar-open-nota
           @skin="borderless"
           @layout="icon-only"
           @icon="document"
@@ -107,7 +107,7 @@
         </Auk::Button>
       {{/if}}
       <AuLink
-        data-test-newsletter-table-button-toolbar-link-to-agendaitem
+        data-test-news-item-table-button-toolbar-link-to-agendaitem
         @skin="button-naked"
         @icon="chevron-right"
         @hideText={{true}}
@@ -125,11 +125,11 @@
   <tr class="lt-row lt-expanded-row">
     <td colspan="5">
       <div class="auk-container auk-container--center">
-        <NewsletterItem::EditPanel
-          @newsletterItem={{@newsletterItem}}
+        <NewsItem::EditPanel
+          @newsItem={{@newsItem}}
           @agendaitem={{@agendaitem}}
           @onCancel={{this.closeEditView}}
-          @onSave={{perform this.saveNewsletterItem}}
+          @onSave={{perform this.saveNewsItem}}
         />
       </div>
     </td>

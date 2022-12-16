@@ -7,7 +7,7 @@ import parseDate from '../../utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
 import endOfDay from 'date-fns/endOfDay';
 
-export default class NewsletterInfosSearchRoute extends Route {
+export default class NewslettersSearchRoute extends Route {
   queryParams = {
     searchText: {
       refreshModel: true,
@@ -39,7 +39,7 @@ export default class NewsletterInfosSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'subTitle', 'richtext']);
+  textSearchFields = Object.freeze(['title', 'subtitle', 'htmlContent']);
 
   constructor() {
     super(...arguments);
@@ -106,7 +106,7 @@ export default class NewsletterInfosSearchRoute extends Route {
       return [];
     }
     return search(
-      'newsletter-infos',
+      'news-items',
       params.page,
       params.size,
       params.sort,

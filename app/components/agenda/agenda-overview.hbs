@@ -1,9 +1,9 @@
 <div class="vlc-agenda-items auk-u-m-8">
-  {{#if this.isEditingOverview}}
+  {{#if @isEditingOverview}}
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "end-editing-overview"}}
-      @clearAction={{this.toggleIsEditingOverview}}
+      @clearAction={{@toggleIsEditingOverview}}
     />
   {{/if}}
   <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">
@@ -28,12 +28,12 @@
             {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
           </AuButton>
           {{#if this.canEdit}}
-            {{#unless this.isEditingOverview}}
+            {{#unless @isEditingOverview}}
               <AuButton
                 data-test-agenda-overview-formally-ok-edit={{true}}
                 @skin="naked"
                 @icon="pencil"
-                {{on "click" this.toggleIsEditingOverview}}
+                {{on "click" @toggleIsEditingOverview}}
               >
                 {{t "edit"}}
               </AuButton>
@@ -65,8 +65,7 @@
                 {{sortable-item
                   model=agendaitem
                   distance="30"
-                  handle=this.dragHandleClass
-                  disabled=(not this.canEdit)
+                  disabled=(not this.canDragAgendaitems)
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
@@ -76,8 +75,8 @@
                   @previousAgenda={{@previousAgenda}}
                   @isNew={{includes agendaitem @newItems}}
                   @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
-                  @isEditingFormallyOkStatus={{this.isEditingOverview}}
-                  @showDragHandle={{this.canEdit}}
+                  @isEditingFormallyOkStatus={{@isEditingOverview}}
+                  @showDragHandle={{this.canDragAgendaitems}}
                 />
               </li>
             {{/each}}
@@ -106,8 +105,7 @@
             {{sortable-item
               model=announcement
               distance="30"
-              handle=this.dragHandleClass
-              disabled=(not this.canEdit)
+              disabled=(not this.canDragAgendaitems)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -117,8 +115,8 @@
               @previousAgenda={{@previousAgenda}}
               @isNew={{includes announcement @newItems}}
               @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
-              @isEditingFormallyOkStatus={{this.isEditingOverview}}
-              @showDragHandle={{this.canEdit}}
+              @isEditingFormallyOkStatus={{@isEditingOverview}}
+              @showDragHandle={{this.canDragAgendaitems}}
             />
           </li>
         {{/each}}

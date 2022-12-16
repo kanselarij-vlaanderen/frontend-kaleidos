@@ -31,7 +31,6 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.log('createAgenda');
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
-  cy.intercept('POST', '/newsletter-infos').as('createNewsletter');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
   cy.visit('/overzicht?size=2');
