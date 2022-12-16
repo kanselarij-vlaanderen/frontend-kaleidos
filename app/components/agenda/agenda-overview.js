@@ -19,8 +19,6 @@ export default class AgendaOverview extends Component {
 
   @service currentSession;
 
-  dragHandleClass = '.ki-drag-handle-2';
-
   @tracked isEditingOverview = null;
 
   get canEdit() {
