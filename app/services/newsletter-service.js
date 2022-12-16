@@ -121,7 +121,7 @@ export default class NewsletterService extends Service {
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     const agendaItemTreatment = await agendaitem.treatment;
-    const existingNewsItem = await agendaItemTreatment.belongsTo('newsletterInfo').reload();
+    const existingNewsItem = await agendaItemTreatment.belongsTo('newsItem').reload();
     if (existingNewsItem) {
       // some other user may have created a newsItem concurrently
       const modifiedBy = await existingNewsItem.modifiedBy;
@@ -132,7 +132,7 @@ export default class NewsletterService extends Service {
       // if someone else created a newsItem we don't want to return it here
       return;
     }
-    const news = this.store.createRecord('newsletter-info', {
+    const news = this.store.createRecord('news-item', {
       agendaItemTreatment,
       inNewsletter,
     });
@@ -140,7 +140,7 @@ export default class NewsletterService extends Service {
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
       news.title = agendaitem.shortTitle || content;
-      news.richtext = content;
+      news.htmlContent = content;
       news.finished = true;
       news.inNewsletter = true;
     } else {
@@ -154,7 +154,7 @@ export default class NewsletterService extends Service {
         const subcase = await activity.subcase;
         const decisionmakingFlow = await subcase.decisionmakingFlow;
         const previousNewsItem = await this.store.queryOne(
-          'newsletter-info',
+          'news-item',
           {
             'filter[agenda-item-treatment][decision-activity][subcase][decisionmaking-flow][:id:]': decisionmakingFlow.id,
             'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // Don't copy over news item from announcement
@@ -162,7 +162,7 @@ export default class NewsletterService extends Service {
           }
         );
         if (previousNewsItem) {
-          news.richtext = previousNewsItem.richtext;
+          news.htmlContent = previousNewsItem.htmlContent;
           news.title = previousNewsItem.title;
           news.themes = await previousNewsItem.themes;
         }
@@ -174,7 +174,10 @@ export default class NewsletterService extends Service {
   }
 
   async generateNewsItemMandateeProposalText(newsItem) {
-    const treatment = await newsItem.agendaItemTreatment;
+    const treatment = await this.store.queryOne('agenda-item-treatment', {
+      'filter[news-item][:id:]': newsItem.id,
+      sort: '-agendaitems.agenda-activity.start-date',
+    });
     if (treatment) {
       let mandatees = await this.store.query('mandatee', {
         'filter[subcases][decision-activities][treatment][:id:]': treatment.id,

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
-export default class NewsletterItemPrintComponent extends Component {
+export default class NewsItemPrintComponent extends Component {
   @service newsletterService;
 
   @tracked proposalText;
@@ -17,8 +17,8 @@ export default class NewsletterItemPrintComponent extends Component {
 
   @task
   *loadData() {
-    if (this.args.newsletterItem) {
-      this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsletterItem);
+    if (this.args.newsItem) {
+      this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
     }
   }
 

@@ -18,7 +18,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked reverseSortedAgendas;
   @tracked subcase;
   @tracked submitter;
-  @tracked newsletterInfo;
+  @tracked newsItem;
   @tracked mandatees;
   @tracked decisionActivity;
 

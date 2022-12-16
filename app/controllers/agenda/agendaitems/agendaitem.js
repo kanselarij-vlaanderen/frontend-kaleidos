@@ -13,8 +13,8 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
     return isPresent(this.treatment?.decisionActivity.get('id'));
   }
 
-  get hasNewsitem() {
-    return isPresent(this.treatment?.newsletterInfo.get('id'));
+  get hasNewsItem() {
+    return isPresent(this.treatment?.newsItem.get('id'));
   }
 
   get canShowDecisionTab() {
@@ -23,7 +23,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   }
 
   get canShowNewsletterTab() {
-    return this.currentSession.may('manage-newsletter-infos')
-      || (this.meeting.isFinal && this.hasNewsitem);
+    return this.currentSession.may('manage-news-items')
+      || (this.meeting.isFinal && this.hasNewsItem);
   }
 }

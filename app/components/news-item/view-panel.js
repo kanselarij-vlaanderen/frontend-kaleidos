@@ -3,7 +3,7 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
-export default class NewsletterItemViewPanelComponent extends Component {
+export default class NewsItemViewPanelComponent extends Component {
   @service newsletterService;
 
   @tracked proposalText;
@@ -15,6 +15,6 @@ export default class NewsletterItemViewPanelComponent extends Component {
 
   @task
   *loadData() {
-    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsletterItem);
+    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
   }
 }

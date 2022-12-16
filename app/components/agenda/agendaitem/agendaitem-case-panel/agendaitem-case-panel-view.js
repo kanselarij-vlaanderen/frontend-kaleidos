@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
  * @argument subcase
  * @argument agendaitem
  * @argument agenda
- * @argument newsletterInfo
+ * @argument newsItem
  * @argument allowEditing
  * @argument onClickEdit
  */

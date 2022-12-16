@@ -6,7 +6,7 @@ import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
 import sanitizeHtml from 'ember-cli-sanitize-html';
 
-export default class NewsletterInfosSearchController extends Controller {
+export default class NewslettersSearchController extends Controller {
   @service router;
   @service toaster;
   @service intl;
@@ -102,7 +102,7 @@ export default class NewsletterInfosSearchController extends Controller {
 
     copyText +=
       sanitizeHtml(
-        row.richtext
+        row.htmlContent
           .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
           .trim() // Trim whitespaces at start & end of the string
         , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
