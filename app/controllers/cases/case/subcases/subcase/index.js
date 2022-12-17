@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
@@ -47,6 +48,14 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
     await this.model.subcase.save();
+    const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
+    });
+    await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
+      setNotYetFormallyOk(agendaitem);
+      return agendaitem.save();
+    }));
   }
 
   @action
