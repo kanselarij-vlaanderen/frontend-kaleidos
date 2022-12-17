@@ -16,7 +16,7 @@ export default class MockLoginRoute extends Route {
       filter: {
         provider: CONSTANTS.SERVICE_PROVIDERS.MOCK_LOGIN,
       },
-      sort: 'user.last-name,user.first-name',
+      sort: 'user.memberships.role.position',
       page: {
         size: 100,
         number: 0,
