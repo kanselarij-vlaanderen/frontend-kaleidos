@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 
 export default class NewSystemAlertsRoute extends Route {
+  @service router;
   @service store;
 
   beforeModel() {
@@ -10,6 +11,6 @@ export default class NewSystemAlertsRoute extends Route {
       beginDate: moment(),
       endDate: moment().add(1, 'days'),
     });
-    this.transitionTo('settings.system-alerts.edit', alert);
+    this.router.transitionTo('settings.system-alerts.edit', alert);
   }
 }

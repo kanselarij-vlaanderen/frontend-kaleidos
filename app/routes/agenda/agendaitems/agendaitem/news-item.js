@@ -5,6 +5,7 @@ import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service router;
   @service store;
   @service router;
   @service toaster;

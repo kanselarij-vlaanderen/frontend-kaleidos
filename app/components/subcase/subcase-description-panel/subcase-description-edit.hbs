@@ -63,12 +63,14 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <WebComponents::VlSaveButton
-            data-test-subcase-description-edit-save={{true}}
-            @text={{t "save"}}
-            @isLoading={{this.isSaving}}
-            @saveAction={{this.saveChanges}}
-          />
+          <AuButton
+            data-test-subcase-description-edit-save
+            @skin="primary"
+            @loading={{this.isSaving}}
+            {{on "click" this.saveChanges}}
+          >
+            {{t "save"}}
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
