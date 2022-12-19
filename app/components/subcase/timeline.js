@@ -51,12 +51,15 @@ export default class SubcaseTimeline extends Component {
 
         if (decisionActivity) {
           const decisionResultCode = yield decisionActivity.belongsTo('decisionResultCode').reload();
-          phases.push({
-            label: `${decisionResultCode.label} ${this.intl.t(
-              'decision-activity-result'
-            )}`,
-            date: moment.utc(meeting.plannedStart).toDate(),
-          });
+          // legacy subcases might not have a decisionResultCode. In that case we don't show anything in the timeline.
+          if (decisionResultCode) {
+            phases.push({
+              label: `${decisionResultCode.label} ${this.intl.t(
+                'decision-activity-result'
+              )}`,
+              date: moment.utc(meeting.plannedStart).toDate(),
+            });
+          }
           // phase 4: add an extra fase in case of a postponed subcase
           if (decisionActivity.isPostponed) {
             phases.push({
