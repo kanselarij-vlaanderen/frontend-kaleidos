@@ -33,8 +33,8 @@ export default class NewsItemTableRowComponent extends Component {
   }
 
   @action
-  async toggleInNewsletterFlag(event) {
-    this.args.newsItem.inNewsletter = event.target.checked;
+  async toggleInNewsletterFlag(checked) {
+    this.args.newsItem.inNewsletter = checked;
     await this.saveNewsItem.perform(this.args.newsItem);
   }
 

@@ -2,11 +2,11 @@
   <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
-      <Auk::Checkbox
+      <AuControlCheckbox
         data-test-mandatees-selector-open-search
         @label={{t "open-search-for-mandatee"}}
         @checked={{this.openSearch}}
-        {{on "input" this.setOpenSearch}}
+        @onChange={{this.setOpenSearch}}
       />
       <Auk::Icon @skin="muted" @name="circle-info" class="auk-u-ml">
         <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
