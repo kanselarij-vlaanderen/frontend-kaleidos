@@ -45,7 +45,7 @@ context('testing user and organisation management', () => {
 
       // remove filter
       cy.get(settings.organizationFilter.clearFilter).click();
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       // filter by organization ID
       cy.get(settings.organizationFilter.filter).click();
@@ -55,7 +55,7 @@ context('testing user and organisation management', () => {
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
-      cy.get(utils.numberPagination.container).contains('van 9');
+      cy.get(utils.numberPagination.container).contains('van 10');
 
 
       // site can throw errors which fail our test
@@ -76,13 +76,13 @@ context('testing user and organisation management', () => {
         .click();
       cy.setDateInFlatpickr(dateEarlier);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
@@ -93,20 +93,20 @@ context('testing user and organisation management', () => {
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.clear)
         .click();
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       // filter by end date
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(dateLater);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
@@ -130,7 +130,7 @@ context('testing user and organisation management', () => {
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
@@ -144,7 +144,7 @@ context('testing user and organisation management', () => {
     });
 
     it('check filter by group', () => {
-      checkRoleFilterSingle('Admin', 8);
+      checkRoleFilterSingle('Admin', 10);
       checkRoleFilterSingle('Secretarie', 11);
       checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 11);
       checkRoleFilterSingle('Kort bestek redactie', 11);
