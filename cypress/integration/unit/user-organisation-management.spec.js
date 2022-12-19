@@ -144,7 +144,7 @@ context('testing user and organisation management', () => {
     });
 
     it('check filter by group', () => {
-      checkRoleFilterSingle('Admin', 10);
+      checkRoleFilterSingle('Admin', 9);
       checkRoleFilterSingle('Secretarie', 11);
       checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 11);
       checkRoleFilterSingle('Kort bestek redactie', 11);
