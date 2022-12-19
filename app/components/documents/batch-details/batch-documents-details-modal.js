@@ -5,13 +5,13 @@ import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
+import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service store;
-  @service fileService;
   @service pieceAccessLevelService;
 
   @tracked rows;
@@ -95,15 +95,11 @@ export default class BatchDocumentsDetailsModal extends Component {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
-        await this.fileService.deletePiece(piece);
-
-        if (this.args.didDeletePiece) {
-          await this.args.didDeletePiece(piece);
-        }
-
+        await deletePiece(piece);
+        await this.args.didDeletePiece?.(piece);
         const piecesInContainer = await row.documentContainer.pieces;
         if (piecesInContainer.length === 0) {
-          await this.fileService.deleteDocumentContainer(row.documentContainer);
+          await deleteDocumentContainer(row.documentContainer);
         }
       } else {
         piece.name = row.name;

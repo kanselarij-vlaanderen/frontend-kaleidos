@@ -1,0 +1,137 @@
+<tr data-test-table-row-news-item-row class="lt-row">
+  <td
+    data-test-table-row-news-item-row-agendaitem-number
+    class="lt-cell align-left"
+  >
+    {{@agendaitem.number}}
+  </td>
+  <td
+    data-test-table-row-news-item-row-title-content
+    class="lt-cell align-left auk-table__col--7"
+  >
+    {{#if @newsItem}}
+      <div class="auk-u-mb-2">
+        <p class="auk-u-text-bold">
+          {{@newsItem.title}}
+        </p>
+      </div>
+      <div class="auk-u-mb-2">
+        <AuContent>
+          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
+        </AuContent>
+      </div>
+      {{#if @newsItem.remark}}
+        <p class="auk-u-text-muted auk-u-text-capitalize auk-u-text-size--small">
+          {{@newsItem.remark}}
+        </p>
+      {{/if}}
+    {{else}}
+      <p class="auk-u-text-muted auk-u-italic">
+        {{t "no-news-item"}}
+      </p>
+    {{/if}}
+  </td>
+  <td class="lt-cell align-left">
+    {{#each (await @agendaitem.mandatees) as |mandatee|}}
+      {{mandatee.person.fullName}}<br />
+    {{else}}
+      <p class="auk-u-text-muted auk-u-italic">
+        {{t "no-ministers"}}
+      </p>
+    {{/each}}
+  </td>
+  <td class="lt-cell align-left">
+    <Auk::Checkbox
+      @checked={{@newsItem.inNewsletter}}
+      @disabled={{or
+        (not @newsItem)
+        this.saveNewsItem.isRunning
+      }}
+      data-test-table-row-news-item-row-checkbox-in-newsletter={{true}}
+      {{on "input" this.toggleInNewsletterFlag}}
+    />
+  </td>
+  <td class="lt-cell align-left">
+    {{#if @newsItem.modified}}
+      {{datetime @newsItem.modified}}
+    {{else}}
+      -
+    {{/if}}
+  </td>
+  <td class="lt-cell align-left">
+    <AuButtonGroup class="auk-o-flex--no-wrap">
+      <AuButton
+        @skin="naked"
+        @icon="copy"
+        @hideText={{true}}
+        @disabled={{not @newsItem}}
+        {{on "click" (fn this.copyText @newsItem)}}
+      >
+        {{t "copy"}}
+      </AuButton>
+      {{#if (user-may "manage-news-items")}}
+        <AuButton
+          data-test-news-item-table-button-toolbar-edit={{true}}
+          @skin="naked"
+          @icon="pencil"
+          @hideText={{true}}
+          {{on "click" this.openEditView}}
+        >
+          {{t "edit"}}
+        </AuButton>
+      {{/if}}
+      {{#if this.loadNotaOrVisienota.isRunning}}
+        <div class="auk-loader" role="alert" aria-busy="true">
+          <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+            {{t "nota-loading-text"}}
+          </EmberTooltip>
+        </div>
+      {{else}}
+        <Auk::Button
+          data-test-news-item-table-button-toolbar-open-nota
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="document"
+          @disabled={{not this.notaOrVisieNota}}
+          {{on "click" this.openNota}}
+        >
+          <:floater>
+            <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+              {{if
+                  this.notaOrVisieNota
+                  (t "open-note")
+                  (t "no-nota")
+              }}
+            </EmberTooltip>
+          </:floater>
+        </Auk::Button>
+      {{/if}}
+      <AuLink
+        data-test-news-item-table-button-toolbar-link-to-agendaitem
+        @skin="button-naked"
+        @icon="chevron-right"
+        @hideText={{true}}
+        @route="agendaitem"
+        @model={{@agendaitem.id}}
+        target="_blank"
+      >
+        {{t "open-agendaitem"}}
+      </AuLink>
+    </AuButtonGroup>
+  </td>
+</tr>
+
+{{#if this.isOpenEditView}}
+  <tr class="lt-row lt-expanded-row">
+    <td colspan="5">
+      <div class="auk-container auk-container--center">
+        <NewsItem::EditPanel
+          @newsItem={{@newsItem}}
+          @agendaitem={{@agendaitem}}
+          @onCancel={{this.closeEditView}}
+          @onSave={{perform this.saveNewsItem}}
+        />
+      </div>
+    </td>
+  </tr>
+{{/if}}

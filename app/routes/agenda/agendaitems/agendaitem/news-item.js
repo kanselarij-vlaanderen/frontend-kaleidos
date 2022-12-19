@@ -5,7 +5,11 @@ import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
+  @service router;
   @service store;
+  @service router;
+  @service toaster;
+  @service intl;
 
   async beforeModel() {
     // Check if a treatment exists, otherwise redirect gracefully.
@@ -16,13 +20,14 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       warn(`Agenda item "${this.agendaitem.id}" is missing a treatment`, {
         id: 'broken-data.missing-agenda-item-treatment',
       });
-      this.transitionTo('agenda.agendaitems.agendaitem.index');
+      this.router.transitionTo('agenda.agendaitems.agendaitem.index');
     }
   }
 
   model() {
-    return this.store.queryOne('newsletter-info', {
+    return this.store.queryOne('news-item', {
       'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
+      include: 'themes',
     });
   }
 
@@ -45,6 +50,14 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     });
 
     this.notaModifiedTime = latestNotaVersion?.created;
+    // It is possible to concurrently create multiple newsItems
+    // While searching for a proper fix, we inform the users of this problem
+    const hasMultipleNewsItems = (await this.store.count('news-item', {
+      'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
+    })) > 1;
+    if (hasMultipleNewsItems) {
+      this.toaster.error(this.intl.t('error-multiple-newsitem'));
+    }
   }
 
   setupController(controller) {

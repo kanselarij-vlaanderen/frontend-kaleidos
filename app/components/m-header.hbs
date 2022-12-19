@@ -25,7 +25,7 @@
             <Auk::Tab @route="cases" data-test-m-header-cases>
               {{t "cases"}}
             </Auk::Tab>
-            {{#if (user-may "manage-newsletter-infos")}}
+            {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 @route="newsletters"
                 @current-when="newsletters newsletter"
@@ -46,8 +46,7 @@
             {{/if}}
             {{#if (user-may "manage-settings")}}
               <Auk::Tab
-                @route="settings.overview"
-                @current-when="settings"
+                @route="settings"
                 data-test-m-header-settings
               >
                 {{t "settings"}}

@@ -1,128 +1,49 @@
-import { hasMany, belongsTo, attr } from '@ember-data/model';
-import { PromiseObject } from '@ember-data/store/-private';
-import EmberObject, { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import { alias } from '@ember/object/computed';
+import { belongsTo, hasMany, attr } from '@ember-data/model';
+import EmberObject from '@ember/object';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
-import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
-import { A } from '@ember/array';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-export default ModelWithModifier.extend({
-  modelName: alias('constructor.modelName'),
+export default class Agendaitem extends ModelWithModifier {
+  @attr('number') number;
+  @attr('datetime') created;
+  @attr('datetime') modified;
+  @attr shortTitle;
+  @attr title;
+  @attr formallyOk;
+  @attr('boolean') isApproval; // isGoedkeuringVanDeNotulen
+  @attr comment;
+  @attr privateComment;
 
-  store: inject(),
-  number: attr('number'),
-  created: attr('datetime'),
-  modified: attr('datetime'),
-  shortTitle: attr('string'),
-  title: attr('string'),
-  formallyOk: attr('string'),
-  isApproval: attr('boolean'), // isGoedkeuringVanDeNotulen
-  comment: attr('string'),
-  privateComment: attr('string'),
 
-  agenda: belongsTo('agenda', {
+  @belongsTo('agenda', {
     inverse: null,
-  }),
+  }) agenda;
   // the next and previous version of agendaitem is set in agenda-approve-service, read-only in frontend
-  nextVersion: belongsTo('agendaitem', {
+  @belongsTo('agendaitem', {
     inverse: 'previousVersion',
     serialize: false,
-  }),
-  previousVersion: belongsTo('agendaitem', {
+  }) nextVersion;
+  @belongsTo('agendaitem', {
     inverse: 'nextVersion',
     serialize: false,
-  }),
-  agendaActivity: belongsTo('agenda-activity', {
+  }) previousVersion;
+  @belongsTo('agenda-activity', {
     inverse: null,
-  }),
-  treatment: belongsTo('agenda-item-treatment'),
-  type: belongsTo('concept'),
+  }) agendaActivity;
+  @belongsTo('agenda-item-treatment') treatment;
+  @belongsTo('concept') type;
 
-  mandatees: hasMany('mandatee'),
-  pieces: hasMany('piece'),
-  linkedPieces: hasMany('piece'),
+  @hasMany('mandatee') mandatees;
+  @hasMany('piece') pieces;
+  @hasMany('piece') linkedPieces;
 
-  // TODO this computed property is used in:
-  // - Agenda::PrintableAgenda::ListSection::ItemGroup
-  // - Agenda::PrintableAgenda::ListSection::ItemGroup::Item
-  // Refactor these uses and remove this computed property
-  sortedPieces: computed('pieces.@each.name', function() {
-    return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
-  }),
+  get modelName() {
+    return this.constructor.modelName;
+  }
 
-  // TODO this computed property is used in:
-  // - agendaitem#notaOrVisienota
-  // Refactor these usages and remove this computed property
-  nota: computed('id', function() {
-    return PromiseObject.create({
-      promise: this.store.queryOne('document-container', {
-        filter: {
-          pieces: {
-            agendaitems: {
-              id: this.id,
-            },
-          },
-          type: {
-            ':uri:': CONSTANTS.DOCUMENT_TYPES.NOTA,
-          },
-        },
-        include: 'pieces,type,pieces.access-level',
-      }),
-    });
-  }),
-
-  // TODO this computed property is used in:
-  // - NewsletterItem::EditPanel
-  // - NewsletterItem::TableRow
-  // Refactor these usages and remove this computed property
-  notaOrVisienota: computed('id', 'nota', function() {
-    return PromiseObject.create({
-      promise: this.nota.then((nota) => {
-        if (nota) {
-          return nota;
-        }
-        return this.store.queryOne('document-container', {
-          filter: {
-            pieces: {
-              agendaitems: {
-                id: this.id,
-              },
-            },
-            type: {
-              ':uri:': CONSTANTS.DOCUMENT_TYPES.VISIENOTA,
-            },
-          },
-          include: 'pieces,type,pieces.access-level',
-        });
-      }),
-    });
-  }),
-
-  // TODO this computed property is used in:
-  // - agenda.print controller#notaGroups
-  // - Agenda::AgendaDetail::Sidebar
-  // - Agenda::AgendaOverview
-  // - Agenda::PrintableAgenda::ListSection::ItemGroup
-  // - agenda-service#groupAgendaitemsOnGroupName
-  // Refactor these usages and remove this computed property
-  sortedMandatees: computed('mandatees.[]', function() {
-    return this.get('mandatees').sortBy('priority');
-  }),
-
-  // TODO this computed property is used in:
-  // - Agenda::AgendaOverview::AgendaOverviewItem
-  // - Agenda::AgendaDetail::SidebarItem
-  // - Agenda::Agendaheader::AgendaActionPopupAgendaitems
-  // - Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
-  // Refactor these usages and remove this computed property
-  formallyOkToShow: computed('formallyOk', function() {
+  get formallyOkToShow() {
     const options = CONFIG.formallyOkOptions;
     const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === this.formallyOk);
     return EmberObject.create(foundOption);
-  }),
-});
+  }
+}

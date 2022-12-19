@@ -15,7 +15,7 @@ export default class IndexNewsletterRoute extends Route {
 
   /* Although counterintuitive for a route named "newsletter", this model needs to
    * be centered around agenda-items, since we need to provide "blank rows" for the items
-   * that don't have a newsletter-info yet.
+   * that don't have a news-item yet.
    */
   async model(params) {
     const newsletterModel = this.modelFor('newsletter');
@@ -29,7 +29,7 @@ export default class IndexNewsletterRoute extends Route {
           ':uri:': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
         },
       },
-      include: 'treatment.newsletter-info',
+      include: 'treatment.news-item',
       sort: params.sort,
       'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
@@ -41,10 +41,10 @@ export default class IndexNewsletterRoute extends Route {
     return Promise.all(
       agendaitems.map(async (agendaitem) => {
         const agendaItemTreatment = await agendaitem.treatment;
-        const newsletterItem = await agendaItemTreatment.newsletterInfo;
+        const newsItem = await agendaItemTreatment.newsItem;
         return {
           agendaitem,
-          newsletterItem,
+          newsItem,
         };
       })
     );

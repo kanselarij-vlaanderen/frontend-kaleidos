@@ -11,7 +11,7 @@ import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
-context('Testing the application as Kanselarij user', () => {
+context('Testing the application as Secretarie user', () => {
   beforeEach(() => {
     cy.login('Secretarie');
   });
@@ -55,7 +55,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(utils.mHeader.settings).click();
       cy.get(settings.settings.generalSettings).should('exist');
       cy.get(settings.settings.manageMinisters).should('exist');
-      cy.url().should('include', '/instellingen/overzicht');
+      cy.url().should('include', '/instellingen');
     });
   });
 
@@ -124,6 +124,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
       cy.get(agenda.agendaActions.publishToWeb).should('not.exist');
       cy.get(agenda.agendaActions.unpublishFromWeb).should('not.exist');
+      cy.clickReverseTab('Overzicht'); // close dropdown
 
       // Main view - Search
       cy.get(agenda.agendaitemSearch.input);
@@ -131,6 +132,10 @@ context('Testing the application as Kanselarij user', () => {
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit);
+
+      // Overview Tab - General action - Dragging
+      cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit).click();
       cy.get(agenda.agendaOverviewItem.dragging);
 
       // Detail Tab - tabs

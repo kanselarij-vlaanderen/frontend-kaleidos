@@ -20,28 +20,32 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @action
-  openFullscreenEdit() {
+  async openFullscreenEdit() {
+    await this.model?.preEditOrSaveCheck();
     this.isFullscreen = true;
     this.isEditing = true;
   }
 
   @action
-  openEdit() {
+  async openEdit() {
+    await this.model?.preEditOrSaveCheck();
     this.isFullscreen = false;
     this.isEditing = true;
   }
 
   @action
-  closeEdit() {
+  closeEdit(wasNewsItemNew) {
     this.isEditing = false;
+    if (wasNewsItemNew) {
+      this.send('reloadModel');
+    }
   }
 
   @task
-  *saveNewsletterItem(newsletterItem) {
-    const mustReloadModel = newsletterItem.isNew;
-    yield newsletterItem.save();
+  *saveNewsItem(newsItem, wasNewsItemNew) {
+    yield newsItem.save();
     this.isEditing = false;
-    if (mustReloadModel) {
+    if (wasNewsItemNew) {
       this.send('reloadModel');
     }
   }

@@ -20,6 +20,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service intl;
   @service store;
   @service router;
+  @service fileConversionService;
 
   case;
   subcase;
@@ -79,6 +80,15 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     yield piece.save();
+    try {
+      const sourceFile = yield piece.file;
+      yield this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
   }
 
   /**
@@ -88,6 +98,15 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   *addPiece(piece) {
     piece.cases.pushObject(this.case);
     yield piece.save();
+    try {
+      const sourceFile = yield piece.file;
+      yield this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     yield this.handleSubmittedPieces.perform([piece]);
     this.refresh();
   }

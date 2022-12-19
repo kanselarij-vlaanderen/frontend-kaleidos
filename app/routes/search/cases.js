@@ -1,14 +1,11 @@
 import Route from '@ember/routing/route';
-import { isEmpty, isPresent } from '@ember/utils';
+import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import { inject as service } from '@ember/service';
 
 export default class CasesSearchRoute extends Route {
-  @service metrics;
-
   queryParams = {
     includeArchived: {
       refreshModel: true,
@@ -124,21 +121,6 @@ export default class CasesSearchRoute extends Route {
       entry.id = searchData.id;
       postProcessDates(searchData);
       return entry;
-    });
-  }
-
-  afterModel(model) {
-    const keyword = this.paramsFor('search').searchText;
-    let count;
-    if (model && model.meta && isPresent(model.meta.count)) {
-      count = model.meta.count;
-    } else {
-      count = false;
-    }
-    this.metrics.invoke('trackSiteSearch', {
-      keyword,
-      category: 'CasesSearch',
-      searchCount: count,
     });
   }
 

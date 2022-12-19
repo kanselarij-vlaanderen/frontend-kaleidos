@@ -61,10 +61,12 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces2');
+    // Derived file should link to uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
+    // Source file should still link to pdf
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `.${pdfExtension}`);
+      .should('contain', `${file.fileName}.${pdfExtension}`);
 
     // upload word file as source file and ensure derived pdf file is generated
     cy.get(document.documentCard.actions).should('not.be.disabled')
@@ -77,10 +79,12 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces3');
+    // Derived file should be converted pdf file
     cy.get(document.documentCard.name.value)
-      .should('contain', `.${wordExtension}`);
+      .should('contain', `.${pdfExtension}`);
+    // Source file should link to the uploaded word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `.${wordExtension}`);
+      .should('contain', `${file.fileName}.${wordExtension}`);
 
     // replace derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')
@@ -93,10 +97,12 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
     cy.get(utils.vlModalFooter.save).click()
       .wait('@patchPieces4');
+    // Derived file should now be uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
+    // Source file should still link to the word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `.${wordExtension}`);
+      .should('contain', `${file.fileName}.${wordExtension}`);
 
     // delete derived file
     cy.get(document.documentCard.actions).should('not.be.disabled')

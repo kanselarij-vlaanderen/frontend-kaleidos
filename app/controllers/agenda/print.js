@@ -9,17 +9,18 @@ function equalContentArrays(array1, array2) {
 }
 
 export default class AgendaPrintController extends Controller {
-
   get notaGroups() {
     const agendaitems = this.model.notas;
     if (agendaitems.length > 0) {
-      let currentSubmittersArray = agendaitems.firstObject.sortedMandatees;
+      const mandatees = agendaitems.firstObject.mandatees;
+      let currentSubmittersArray = mandatees.sortBy('priority');
       let currentItemArray = A([]);
       const groups = [];
       groups.pushObject(currentItemArray);
       for (let index = 0; index < agendaitems.length; index++) {
         const agendaitem = agendaitems.objectAt(index);
-        const subm = agendaitem.sortedMandatees;
+        const mandatees = agendaitem.mandatees;
+        const subm = mandatees.sortBy('priority');
         if (equalContentArrays(currentSubmittersArray, subm)) {
           currentItemArray.pushObject(agendaitem);
         } else {

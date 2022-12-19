@@ -22,13 +22,13 @@
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsletterInfo.inNewsletter,number"
+            @field="treatment.newsItem.inNewsletter,number"
             @label={{t "show-in-newsletter"}}
           />
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsletterInfo.modified"
+            @field="treatment.newsItem.modified"
             @label={{t "latest-modified"}}
           />
           <th class="c-table__header c-table__header--actions"></th>
@@ -36,10 +36,11 @@
       </thead>
       <tbody>
         {{#each this.model as |item|}}
-          <NewsletterItem::TableRow
+          <NewsItem::TableRow
             @agendaitem={{item.agendaitem}}
-            @newsletterItem={{item.newsletterItem}}
-            @onSave={{perform this.saveNewsletterItem}}
+            @newsItem={{item.newsItem}}
+            @onSave={{perform this.saveNewsItem}}
+            @onCancel={{this.cancelEdit}}
           />
         {{/each}}
       </tbody>

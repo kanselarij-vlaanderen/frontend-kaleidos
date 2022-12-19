@@ -172,7 +172,7 @@ export default class AgendaService extends Service {
     await subcase.hasMany('submissionActivities').reload();
     updateModifiedProperty(lastAgenda);
 
-    // Create default newsletterInfo for announcements with inNewsLetter = true
+    // Create default newsItem for announcements with inNewsLetter = true
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
@@ -185,17 +185,18 @@ export default class AgendaService extends Service {
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
         let currentAgendaitemGroupName;
-        const mandatees = await agendaitem.get('sortedMandatees');
+        const mandatees = await agendaitem.mandatees;
+        const sortedMandatees = mandatees.sortBy('priority');
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);
           return;
         }
-        if (mandatees.length === 0) {
+        if (sortedMandatees.length === 0) {
           agendaitem.set('groupName', this.intl.t('no-mandatee-assigned'));
           currentAgendaitemGroupName = this.intl.t('no-mandatee-assigned');
         } else {
-          currentAgendaitemGroupName = mandatees
+          currentAgendaitemGroupName = sortedMandatees
             .map((mandatee) => mandatee.title)
             .join('<br/>');
         }
@@ -225,9 +226,9 @@ export default class AgendaService extends Service {
       const agendaitemsFromActivity = await agendaActivity.agendaitems;
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
-        const newsletter = await treatment.newsletterInfo;
-        if (newsletter) {
-          await newsletter.destroyRecord();
+        const newsItem = await treatment.newsItem;
+        if (newsItem) {
+          await newsItem.destroyRecord();
         }
         if (decisionActivity) {
           await decisionActivity.destroyRecord();
