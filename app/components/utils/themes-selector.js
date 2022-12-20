@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /**
  * @param {Array<Theme>} selectedThemes The themes that are already selected
@@ -17,19 +16,18 @@ export default class ThemesSelector extends Component {
 
   @task
   *findAll() {
-    this.themes = yield this.store.query('theme', {
+    this.themes = yield this.store.queryAll('theme', {
       filter: { deprecated: false },
       sort: 'label',
-      size: PAGE_SIZE.CODE_LISTS,
     });
   }
 
   @action
-  toggleTheme(theme, wasChecked) {
-    if (wasChecked) {
-      this.args.selectedThemes.removeObject(theme);
-    } else {
+  toggleTheme(theme, checked) {
+    if (checked) {
       this.args.selectedThemes.addObject(theme);
+    } else {
+      this.args.selectedThemes.removeObject(theme);
     }
   }
 }

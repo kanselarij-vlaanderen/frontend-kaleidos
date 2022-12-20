@@ -64,7 +64,7 @@
       <div class="auk-u-mb-2">
         {{#if this.model.length}}
           <DataTable
-            data-test-route-search-newsletter-infos-data-table={{true}}
+            data-test-route-search-news-items-data-table={{true}}
             @content={{this.model}}
             @page={{this.page}}
             @noDataMessage={{t "no-results-found"}}
@@ -99,31 +99,31 @@
                 {{! each row has been processed to have 1 decision (object) as well as 1 latestAgendaitem (object)}}
                 {{! see postProcess methods in route}}
                 {{#let row.latestAgendaitem as |latestAgendaitem|}}
-                  <td data-test-route-search-newsletter-infos-row-title>
+                  <td data-test-route-search-news-items-row-title>
                     <h3 class="auk-h4 auk-u-mb">
                       {{row.title}}
                     </h3>
                     <p class="auk-u-mr-2">
                       <AuContent>
-                        <SanitizeHtml @raw={{true}} @value={{row.richtext}} />
+                        <SanitizeHtml @raw={{true}} @value={{row.htmlContent}} />
                       </AuContent>
                     </p>
                   </td>
                   <td>
-                    {{moment-format latestAgendaitem.meetingDate}}
+                    {{date latestAgendaitem.meetingDate}}
                   </td>
-                  <td data-test-route-search-newsletter-infos-row-mandatees>
+                  <td data-test-route-search-news-items-row-mandatees>
                     {{#each row.mandatees as |mandatee|}}
                       {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
                         {{fullName}}{{if (has-next mandatee row.mandatees) ", "}}
                       {{/let}}
                     {{/each}}
                   </td>
-                  <td data-test-route-search-newsletter-infos-row-decision-result>
+                  <td data-test-route-search-news-items-row-decision-result>
                     {{row.decision.decisionResultCodeLabel}}
                   </td>
                   <td
-                    data-test-route-search-newsletter-infos-row-go-to-agendaitem
+                    data-test-route-search-news-items-row-go-to-agendaitem
                     class="auk-u-text-align--right"
                   >
                     <AuButtonGroup class="auk-o-flex--no-wrap">

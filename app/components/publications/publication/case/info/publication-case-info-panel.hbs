@@ -41,11 +41,11 @@
                   {{t "publication-urgent"}}
                 </Auk::Label>
                 <div class="auk-form-group">
-                  <Auk::Checkbox
+                  <AuControlCheckbox
                     data-test-urgency-level-checkbox
                     @label={{t "priority-procedure"}}
                     @checked={{@publicationFlow.urgencyLevel.isUrgent}}
-                    {{on "input" this.changeIsUrgent}}
+                    @onChange={{this.changeIsUrgent}}
                   />
                 </div>
               </div>
@@ -146,7 +146,7 @@
                       target="_blank"
                     >
                       {{#if @publicationFlow.decisionActivity.startDate}}
-                        {{moment-format  @publicationFlow.decisionActivity.startDate}}
+                        {{date  @publicationFlow.decisionActivity.startDate}}
                       {{else}}
                         {{t "to-agenda"}}
                       {{/if}}
@@ -197,7 +197,7 @@
                     {{t "case-created"}}
                   </Auk::Label>
                   {{#if @publicationFlow.created}}
-                    {{moment-format @publicationFlow.created}}
+                    {{date @publicationFlow.created}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
@@ -293,14 +293,14 @@
                     target="_blank"
                   >
                     {{#if @publicationFlow.decisionActivity.startDate}}
-                      {{moment-format @publicationFlow.decisionActivity.startDate}}
+                      {{date @publicationFlow.decisionActivity.startDate}}
                     {{else}}
                       {{t "to-agenda"}}
                     {{/if}}
                   </AuLink>
                 {{else}}
                   {{#if @publicationFlow.decisionActivity.startDate}}
-                    {{moment-format @publicationFlow.decisionActivity.startDate}}
+                    {{date @publicationFlow.decisionActivity.startDate}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
@@ -318,7 +318,7 @@
                 class="auk-u-m-0"
               >
                 {{#if @publicationFlow.openingDate}}
-                  {{moment-format @publicationFlow.openingDate}}
+                  {{date @publicationFlow.openingDate}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -334,7 +334,7 @@
               </h4>
               <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
                 {{#if @publicationFlow.publicationSubcase.dueDate}}
-                  {{moment-format @publicationFlow.publicationSubcase.dueDate}}
+                  {{date @publicationFlow.publicationSubcase.dueDate}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -348,7 +348,7 @@
               <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
               <p class="auk-u-m-0">
                 {{#if @publicationFlow.created}}
-                  {{moment-format @publicationFlow.created}}
+                  {{date @publicationFlow.created}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}

@@ -42,8 +42,8 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @task
-  *saveNewsletterItem(newsletterItem, wasNewsItemNew) {
-    yield newsletterItem.save();
+  *saveNewsItem(newsItem, wasNewsItemNew) {
+    yield newsItem.save();
     this.isEditing = false;
     if (wasNewsItemNew) {
       this.send('reloadModel');

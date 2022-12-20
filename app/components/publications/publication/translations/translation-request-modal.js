@@ -6,6 +6,7 @@ import { task, dropTask } from 'ember-concurrency';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
+import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
@@ -32,6 +33,14 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.setEmailFields.perform();
   }
 
+  get sumOfUploadedPiecesIsTooLarge() {
+    const sizeSum = this.uploadedPieces
+                        .map((piece) => piece.get('file.size'))
+                        .reduce((total, size) => total + size, 0);
+    return sizeSum > EMAIL_ATTACHMENT_MAX_SIZE;
+  }
+
+
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
   }
@@ -39,6 +48,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   get isSaveDisabled() {
     return (
       this.uploadedPieces.length === 0 ||
+      this.sumOfUploadedPiecesIsTooLarge ||
       !this.validators.areValid ||
       this.cancel.isRunning
     );
@@ -102,8 +112,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @action
-  setTranslationRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setTranslationRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 
   @task

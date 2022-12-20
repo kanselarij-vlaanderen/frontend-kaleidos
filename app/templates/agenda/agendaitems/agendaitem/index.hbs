@@ -3,7 +3,9 @@
   as |decisionActivity|
 }}
   {{#if decisionActivity.isRetracted}}
-    <Auk::Alert @skin="warning" @message={{t "retracted-item"}} />
+    <Agenda::Agendaitem::AgendaitemRetracted
+      @subcase={{this.subcase}}
+    />
   {{else if decisionActivity.isPostponed}}
     <Agenda::Agendaitem::AgendaitemPostponed
       @meeting={{this.meeting}}
@@ -42,7 +44,7 @@
   @agendaitem={{this.model}}
   @subcase={{this.subcase}}
   @agenda={{this.agenda}}
-  @newsletterInfo={{this.newsletterInfo}}
+  @newsItem={{this.newsItem}}
   @allowEditing={{user-may "manage-agendaitems"}}
 />
 {{#if (is-announcement @model.type)}}

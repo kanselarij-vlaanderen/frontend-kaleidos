@@ -64,7 +64,7 @@ context('Testing the application as Admin user', () => {
       cy.get(settings.settings.generalSettings).should('exist');
       cy.get(settings.settings.manageMinisters).should('exist');
       cy.get(settings.settings.manageUsers).should('exist');
-      cy.url().should('include', '/instellingen/overzicht');
+      cy.url().should('include', '/instellingen');
     });
   });
 

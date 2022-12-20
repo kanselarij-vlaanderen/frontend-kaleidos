@@ -11,12 +11,12 @@
               {{t "newsletter-overview-pdf-name"}}
               -
               {{@meeting.kind.label}}
-              {{moment-format @meeting.plannedStart "DD MMMM YYYY"}}
+              {{date @meeting.plannedStart}}
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
-            {{#if (user-may "manage-newsletter-infos")}}
+            {{#if (user-may "manage-news-items")}}
               <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
                 {{t "overview"}}
               </Auk::Tab>
@@ -50,7 +50,7 @@
           @alignment="right"
           class="auk-u-hidden@print"
         >
-          {{#if (user-may "manage-newsletter-infos")}}
+          {{#if (user-may "manage-news-items")}}
             {{#if this.loadMailCampaign.isRunning}}
               <div role="menuitem">
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
@@ -117,7 +117,7 @@
               {{t "generate-xml"}}
             </AuButton>
             --}}
-          {{#if (user-may "manage-newsletter-infos")}}
+          {{#if (user-may "manage-news-items")}}
             {{#if this.mailCampaign}}
               <AuHr />
               <AuButton

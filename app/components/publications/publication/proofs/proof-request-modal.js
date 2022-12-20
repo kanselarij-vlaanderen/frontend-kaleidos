@@ -6,6 +6,7 @@ import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
+import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
@@ -32,6 +33,13 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     this.initValidators();
   }
 
+  get sumOfUploadedPiecesIsTooLarge() {
+    const sizeSum = this.uploadedPieces
+                        .map((piece) => piece.get('file.size'))
+                        .reduce((total, size) => total + size, 0);
+    return sizeSum > EMAIL_ATTACHMENT_MAX_SIZE;
+  }
+
   get isLoading() {
     return (
       this.loadTranslationPieces.isRunning ||
@@ -50,7 +58,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   get isSaveDisabled() {
     return (
-      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
+      !this.validators.areValid ||
+      this.sumOfUploadedPiecesIsTooLarge ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
@@ -159,7 +170,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   }
 
   @action
-  setProofRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setProofRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 }

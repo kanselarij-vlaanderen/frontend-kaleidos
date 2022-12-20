@@ -17,9 +17,7 @@
           <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
-          <Auk::FileUploader
-            @multiple={{true}}
-            @reusable={{true}}
+          <Publications::Publication::RequestUploader
             @onUpload={{this.uploadPiece}}
           />
           <Publications::Publication::PublicationDocumentsList
@@ -33,10 +31,10 @@
           />
         </div>
         <div class="auk-form-group auk-u-mt-4">
-          <Auk::Checkbox
+          <AuControlCheckbox
             @label={{t "update-publication-status-publication-requested"}}
             @checked={{this.mustUpdatePublicationStatus}}
-            {{on "input" this.setPublicationRequestedStatus}}
+            @onChange={{this.setPublicationRequestedStatus}}
           />
         </div>
         <div class="auk-form-group">

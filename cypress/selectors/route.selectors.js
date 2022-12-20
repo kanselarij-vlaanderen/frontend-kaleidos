@@ -60,7 +60,16 @@ const selectors = {
 
   // cases/overview/template
   casesOverview: {
+    showArchived: '[data-test-route-cases-overview-show-archived]',
     dataTable: '[data-test-route-cases-overview-data-table]',
+    row: {
+      caseTitle: '[data-test-route-cases-overview-row-case-title]',
+      actionsDropdown: '[data-test-route-cases-overview-row-actions-dropdown]',
+      actions: {
+        edit: '[data-test-route-cases-overview-row-actions-edit]',
+        archive: '[data-test-route-cases-overview-row-actions-archive]',
+      },
+    },
   },
 
   // cases/case/subcase/subcase/overview/template
@@ -104,14 +113,14 @@ const selectors = {
     dataTable: '[data-test-route-search-cases-data-table]',
   },
 
-  // search/newsletterInfos
-  searchNewsletterInfos: {
-    dataTable: '[data-test-route-search-newsletter-infos-data-table]',
+  // search/newsletters
+  searchNewsletters: {
+    dataTable: '[data-test-route-search-news-items-data-table]',
     row: {
-      title: '[data-test-route-search-newsletter-infos-row-title]',
-      mandatees: '[data-test-route-search-newsletter-infos-row-mandatees]',
-      decisionResult: '[data-test-route-search-newsletter-infos-row-decision-result]',
-      goToAgendaitem: '[data-test-route-search-newsletter-infos-row-go-to-agendaitem]',
+      title: '[data-test-route-search-news-items-row-title]',
+      mandatees: '[data-test-route-search-news-items-row-mandatees]',
+      decisionResult: '[data-test-route-search-news-items-row-decision-result]',
+      goToAgendaitem: '[data-test-route-search-news-items-row-go-to-agendaitem]',
     },
   },
 

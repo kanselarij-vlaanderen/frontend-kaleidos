@@ -18,8 +18,9 @@ const selectors = {
 
   governmentAreaSelectorForm: {
     container: '[data-test-government-area-selector-form]',
-    domain: '[data-test-government-area-selector-form-domain]~span',
-    field: '[data-test-government-area-selector-form-field]~span',
+    // domain: '[data-test-government-area-selector-form-domain]~span',
+    domainList: '[data-test-government-area-selector-form-domain-list]',
+    // field: '[data-test-government-area-selector-form-field]~span',
   },
 
   // utils/overviews-header-decision
@@ -41,6 +42,7 @@ const selectors = {
   // number-pagination
   numberPagination: {
     container: '[data-test-number-pagination-container]',
+    size: '[data-test-number-pagination-size]',
   },
 
   // radio-dropdown
@@ -86,9 +88,6 @@ const selectors = {
     save: '[data-test-vl-modal-footer-save]',
     cancel: '[data-test-vl-modal-footer-cancel]',
   },
-
-  // vl-datepicker
-  vlDatepicker: '[data-test-vl-datepicker]',
 
   // vl-modal
   vlModal: {

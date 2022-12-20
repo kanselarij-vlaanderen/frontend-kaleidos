@@ -20,9 +20,9 @@
     >
       {{mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
-        {{moment-format mandatee.start}}
+        {{date mandatee.start}}
         {{t "until"}}
-        {{if mandatee.end (moment-format mandatee.end) (t "present-time")}}
+        {{if mandatee.end (date mandatee.end) (t "present-time")}}
       </span>
     </PowerSelectMultiple>
   {{else}}
@@ -42,9 +42,9 @@
     >
       {{mandatee.fullDisplayName}}
       <span class="auk-u-text-muted auk-u-text-size--small">
-        {{moment-format mandatee.start}}
+        {{date mandatee.start}}
         {{t "until"}}
-        {{if mandatee.end (moment-format mandatee.end) (t "present-time")}}
+        {{if mandatee.end (date mandatee.end) (t "present-time")}}
       </span>
     </PowerSelect>
   {{/if}}

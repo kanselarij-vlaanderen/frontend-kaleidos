@@ -8,7 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 /**
  * @argument subcase
  * @argument agendaitem
- * @argument newsletterInfo
+ * @argument newsItem
  * @argument onSave
  * @argument onCancel
  */
@@ -19,8 +19,8 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
-  get newsletterInfo() {
-    return this.args.newsletterInfo;
+  get newsItem() {
+    return this.args.newsItem;
   }
 
   @action
@@ -32,8 +32,8 @@ export default class AgendaitemCasePanelEdit extends Component {
     if (this.args.subcase?.hasDirtyAttributes) {
       this.args.subcase.rollbackAttributes();
     }
-    if (this.newsletterInfo && this.newsletterInfo.hasDirtyAttributes) {
-      this.newsletterInfo.rollbackAttributes();
+    if (this.newsItem && this.newsItem.hasDirtyAttributes) {
+      this.newsItem.rollbackAttributes();
     }
     this.args.onCancel();
   }
@@ -65,16 +65,16 @@ export default class AgendaitemCasePanelEdit extends Component {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
     }
 
-    if (this.newsletterInfo) {
+    if (this.newsItem) {
       const agendaItemType = yield this.args.agendaitem.type;
       const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       if (isAnnouncement) {
-        // Keep generated newsletterInfo for announcement automatically in sync
-        this.newsletterInfo.richtext = trimmedTitle;
-        this.newsletterInfo.title = trimmedShortTitle;
-        yield this.newsletterInfo.save();
-      } else if (this.newsletterInfo.hasDirtyAttributes) {
-        yield this.newsletterInfo.save();
+        // Keep generated newsItem for announcement automatically in sync
+        this.newsItem.htmlContent = trimmedTitle;
+        this.newsItem.title = trimmedShortTitle;
+        yield this.newsItem.save();
+      } else if (this.newsItem.hasDirtyAttributes) {
+        yield this.newsItem.save();
       }
     }
     this.args.onSave();

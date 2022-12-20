@@ -3,10 +3,28 @@
    ========================================================================== */
 
 .emberTagInput {
-  @extend .auk-input;
-  @extend .auk-filter-pill-list;
-
+  border: 0.1rem solid $auk-gray-300;
+  border-radius: .3rem;
   width: 100%;
+  background-color: $auk-white;
+  padding: .7rem;
+
+  font-family: $g-base-font-family;
+  font-size: 1.5rem;
+  color: $auk-gray-800;
+
+  &::placeholder {
+    color: $auk-gray-500;
+  }
+
+  &:focus-within {
+    box-shadow: none;
+
+    outline: var(--au-outline);
+    outline-offset: var(--au-outline-offset);
+  }
+
+  @extend .auk-filter-pill-list;
 }
 
 .emberTagInput-tag {

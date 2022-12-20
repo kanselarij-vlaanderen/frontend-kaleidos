@@ -5,7 +5,7 @@ import { action } from '@ember/object';
  * @argument subcase
  * @argument agendaitem
  * @argument agenda
- * @argument newsletterInfo
+ * @argument newsItem
  * @argument allowEditing
  */
 export default class AgendaitemCasePanel extends Component {

@@ -2,9 +2,10 @@
 <div class="au-u-flex au-u-flex--spaced-tiny">
   <div class="au-u-1-1">
     <PowerSelect
-      @placeholder={{t "ovo-or-organization"}}
+      data-test-settings-organization-filter
+      @placeholder={{t "id-or-organization"}}
       @search={{perform this.search}}
-      @searchMessage={{t "ovo-or-organization"}}
+      @searchMessage={{t "id-or-organization"}}
       @searchEnabled={{true}}
       @noMatchesMessage={{t "no-results-found"}}
       @loadingMessage={{t "please-be-patient"}}
@@ -18,6 +19,7 @@
 </div>
 <p class="au-u-h-functional au-u-margin-top-tiny">
   <AuLinkExternal
+    data-test-settings-organization-filter-OVO-list-link
     @icon="external"
     @iconAlignment="right"
     href="https://wegwijs.vlaanderen.be/#/organisations"
@@ -41,6 +43,7 @@
       </div>
       <div class="auk-o-flex__item--fix">
         <AuButton
+          data-test-settings-organization-clear-filter
           @skin="naked"
           @icon="x"
           @hideText={{true}}

@@ -1,6 +1,7 @@
 /* global context, xit, it, cy, beforeEach, afterEach, Cypress, it */
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 // import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
@@ -62,6 +63,7 @@ function checkPagination(optionsToCheck) {
     cy.get(dependency.emberPowerSelect.option).contains(option)
       .click();
     cy.wait(`@publicationSearchCall${randomInt}`);
+    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.url().should('include', `aantal=${option}`);
   });
 }
@@ -252,7 +254,7 @@ context('Search tests', () => {
 
     // check urgent
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall2');
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains('Dringend')
       .click();
     cy.get(route.search.trigger).click();
@@ -261,7 +263,7 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 1);
     // remove urgent
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains('Dringend')
       .click();
 

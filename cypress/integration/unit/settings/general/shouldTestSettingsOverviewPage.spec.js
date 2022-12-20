@@ -8,7 +8,7 @@ context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.login('Admin');
     cy.get(utils.mHeader.settings).click();
-    cy.url().should('include', 'instellingen/overzicht');
+    cy.url().should('include', 'instellingen');
   });
 
   // TODO-settings test 2-9 are duplicated in their own specs
@@ -43,6 +43,8 @@ context('Settings overview page tests', () => {
     cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
 
     cy.get(settings.settings.manageUsers).click();
+    cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
+    cy.get(utils.numberPagination.container).contains('van 12'); // page loaded
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(settings.usersIndex.searchInput).type('Minister');
     cy.get(settings.usersIndex.searchButton).click()

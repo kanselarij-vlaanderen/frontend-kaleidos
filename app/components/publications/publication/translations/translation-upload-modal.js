@@ -50,8 +50,8 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   }
 
   @action
-  setTranslationReceivedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setTranslationReceivedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 
   @task

@@ -25,19 +25,19 @@
       </div>
       <div class="auk-u-mb-2">
         <Auk::Label>{{t "type"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.decisionsOnly}}
-          @label={{t "search-in-decisions-only"}}
+        <AuControlCheckbox
           data-test-route-search-cases-toggle-decisions={{true}}
-          {{on "input" this.toggleDecisionsOnly}}
+          @label={{t "search-in-decisions-only"}}
+          @checked={{this.decisionsOnly}}
+          @onChange={{this.toggleDecisionsOnly}}
         />
       </div>
       <div>
         <Auk::Label>{{t "archive"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.includeArchived}}
+        <AuControlCheckbox
           @label={{t "search-include-archived"}}
-          {{on "input" this.toggleIncludeArchived}}
+          @checked={{this.includeArchived}}
+          @onChange={{this.toggleIncludeArchived}}
         />
       </div>
     </div>
@@ -87,10 +87,10 @@
                 </p>
               </td>
               <td>
-                {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+                {{datetime row.created "DD-MM-YYYY HH:mm"}}
               </td>
               <td>
-                {{moment-format row.sessionDates}}
+                {{date row.sessionDates}}
               </td>
               <td class="auk-u-text-align--right">
                 <AuLink

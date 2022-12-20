@@ -36,8 +36,8 @@ export default class PublicationDetailsModal extends Component {
   }
 
   @action
-  setMustUpdatePublicationStatus(e) {
-    this.mustUpdatePublicationStatus = e.target.checked;
+  setMustUpdatePublicationStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 
   @task

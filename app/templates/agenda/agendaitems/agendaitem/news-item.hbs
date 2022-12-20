@@ -4,7 +4,7 @@
       {{t "newsletter-title"}}
     </AuHeading>
   </Group>
-  {{#if (user-may "manage-newsletter-infos")}}
+  {{#if (user-may "manage-news-items")}}
     <Group>
       {{#if this.isEditing}}
         <AuButton
@@ -50,29 +50,29 @@
   <ChangesAlert
     @message={{t
       "nota-changed-message"
-      date=(moment-format this.notaModifiedTime "D MMMM YYYY")
-      time=(moment-format this.notaModifiedTime "H:mm")
+      date=(date-phrase this.notaModifiedTime)
+      time=(time this.notaModifiedTime)
     }}
     @buttonText={{t "close"}}
     @clearAction={{this.dismissNotaModifiedWarning}} />
 {{/if}}
 {{#if this.isEditing}}
-  <NewsletterItem::EditPanel
-    @newsletterItem={{this.model}}
+  <NewsItem::EditPanel
+    @newsItem={{this.model}}
     @agendaitem={{this.agendaitem}}
     @isFullscreen={{this.isFullscreen}}
     @onCancel={{this.closeEdit}}
-    @onSave={{perform this.saveNewsletterItem}}
+    @onSave={{perform this.saveNewsItem}}
   />
 {{else}}
   {{#if this.model}}
-    <NewsletterItem::ViewPanel
-      @newsletterItem={{this.model}}
+    <NewsItem::ViewPanel
+      @newsItem={{this.model}}
     />
   {{else}}
     <div class="auk-u-mt-2">
       <Auk::EmptyState
-        @message={{t "no-newsletter-info"}}
+        @message={{t "no-news-item"}}
         data-test-route-agenda---news-item-alert
       />
     </div>

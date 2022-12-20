@@ -2,7 +2,7 @@
   "chromeWebSecurity": false,
   "defaultCommandTimeout": 20000,
   "requestTimeout": 20000,
-  "baseUrl": "http://frontend:80",
+  "baseUrl": "http://identifier:80",
   "env": {
     "KALEIDOS_PROJECT": "kaleidos-project"
   },

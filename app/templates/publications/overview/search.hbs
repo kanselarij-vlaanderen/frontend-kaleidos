@@ -89,12 +89,12 @@
                 @didUpdate={{this.updateSelectedPublicationStatuses}}
               />
             </div>
-            <Auk::Checkbox
+            <AuControlCheckbox
               @checked={{this.urgentOnly}}
-              @label={{t "publication-urgent"}}
-              @labelSkin="bold"
-              {{on "input" this.toggleUrgentOnly}}
-            />
+              @onChange={{this.toggleUrgentOnly}}
+            >
+              <span class="au-u-medium">{{t "publication-urgent"}}</span>
+            </AuControlCheckbox>
           </div>
         </div>
         <div class="auk-o-grid-col-10">
@@ -172,7 +172,7 @@
                       {{/if}}
                     </td>
                     <td>
-                      {{moment-format row.openingDate}}
+                      {{date row.openingDate}}
                     </td>
                     <td>
                       <Auk::StatusPill

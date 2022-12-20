@@ -13,9 +13,6 @@ export default class Piece extends Model {
   @belongsTo('concept') accessLevel;
   @belongsTo('language') language;
   @belongsTo('file') file;
-  @belongsTo('file', {
-    inverse: null
-  }) convertedFile;
   @belongsTo('document-container', {
     inverse: null
   }) documentContainer;
@@ -39,7 +36,7 @@ export default class Piece extends Model {
   @belongsTo('decision-activity', {
     inverse: null
   }) decisionActivity;
-  @belongsTo('newsletter-info') newsletter;
+  @belongsTo('news-item') newsItem;
   @belongsTo('meeting', {
     inverse: null
   }) meeting;

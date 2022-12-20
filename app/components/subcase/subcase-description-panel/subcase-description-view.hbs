@@ -70,7 +70,7 @@
             >
               {{#if this.latestMeeting.plannedStart}}
                 {{t "requested-for-agenda"}}
-                {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+                {{date-phrase this.latestMeeting.plannedStart}}
               {{else}}
                 <p>{{t "not-yet-requested"}}</p>
               {{/if}}
@@ -98,7 +98,7 @@
                       }}
                     >
                       {{! prettier-ignore}}
-                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                      {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
                     </AuLink>
                   {{/let}}
                 {{/each}}
@@ -115,7 +115,7 @@
               data-test-subcase-description-modified
               class="auk-key-value-item__value"
             >
-              {{moment-format @subcase.modified "DD MMMM YYYY"}}
+              {{date-phrase @subcase.modified}}
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@
                 <div class="auk-skeleton auk-skeleton--rectangle" role="alert" aria-busy="true"></div>
               {{else if this.canShowDecisionStatus}}
                 {{#if (or this.latestDecisionActivity.isApproved this.latestDecisionActivity.isAcknowledged)}}
-                  {{moment-format this.latestMeeting.plannedStart}}
+                  {{date this.latestMeeting.plannedStart}}
                 {{else if this.latestDecisionActivity.isPostponed}}
                   {{t "postponed"}}
                 {{else if this.latestDecisionActivity.isRetracted}}

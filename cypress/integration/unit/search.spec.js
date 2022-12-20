@@ -53,23 +53,23 @@ context('Search tests', () => {
     cy.get(route.search.input).should('have.value', '');
   });
 
-  it('Search for richText in kort-bestek and open the detail view by clicking row', () => {
+  it('Search for htmlContent in kort-bestek and open the detail view by clicking row', () => {
     cy.visit('/kort-bestek/zoeken');
     // Testdata available in default data
     const searchTerm = 'Dit is een leuke beslissing';
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
 
-    cy.intercept('GET', '/newsletter-infos/search?**').as('newsletterSearchCall');
+    cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
     cy.wait('@newsletterSearchCall');
 
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1);
-    cy.get(route.searchNewsletterInfos.row.title).contains(searchTerm);
-    cy.get(route.searchNewsletterInfos.row.decisionResult).contains('Uitgesteld');
-    cy.get(route.searchNewsletterInfos.dataTable).find('tbody')
+    cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+    cy.get(route.searchNewsletters.row.decisionResult).contains('Uitgesteld');
+    cy.get(route.searchNewsletters.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .click();
@@ -86,7 +86,7 @@ context('Search tests', () => {
 
     // *data case 1
     // link to case: '/dossiers/E14FB529-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers'
-    // link to subcase: '/dossiers/E14FB529-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62879183E1ADA5F6A459AC04/overzicht'
+    // link to subcase: '/dossiers/E14FB529-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62879183E1ADA5F6A459AC04'
     // link to agendaitem detail: '/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/6287924CE1ADA5F6A459AC09/documenten'
     const case1TitleShort = 'testId=1653051049: Cypress search dossier 1';
     const subcase1TitleShortNoIcon = 'testId=1653051049: dit is de korte titel for search'; // used for opening agendaitem
@@ -104,7 +104,7 @@ context('Search tests', () => {
 
     // *data case 2
     // link to case: '/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers'
-    // link to subcase: '/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht'
+    // link to subcase: '/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05'
     // link to agendaitem detail: '/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D/documenten'
     const case2TitleShort = 'testId=1653051342: Cypress search dossier 2';
     const newSubcase2TitleShort = 'testId=1653051342: korte titel for batterij';
@@ -128,7 +128,7 @@ context('Search tests', () => {
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
-      cy.visit('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05/overzicht');
+      cy.visit('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05');
       cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
       cy.changeSubcaseAccessLevel(null, newSubcase2TitleShort, subcase2TitleLong);
       cy.wait('@patchAgendaitem');

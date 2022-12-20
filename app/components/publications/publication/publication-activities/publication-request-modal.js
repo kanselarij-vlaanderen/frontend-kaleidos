@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
+import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
   @service store;
@@ -26,6 +27,13 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     this.initValidators();
   }
 
+  get sumOfUploadedPiecesIsTooLarge() {
+    const sizeSum = this.uploadedPieces
+                        .map((piece) => piece.get('file.size'))
+                        .reduce((total, size) => total + size, 0);
+    return sizeSum > EMAIL_ATTACHMENT_MAX_SIZE;
+  }
+
   get isLoading() {
     return (
       this.loadProofPieces.isRunning ||
@@ -44,7 +52,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   get isSaveDisabled() {
     return (
-      !this.validators.areValid || this.cancel.isRunning || this.save.isRunning
+      !this.validators.areValid ||
+      this.sumOfUploadedPiecesIsTooLarge ||
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
@@ -134,7 +145,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   }
 
   @action
-  setPublicationRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setPublicationRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 }

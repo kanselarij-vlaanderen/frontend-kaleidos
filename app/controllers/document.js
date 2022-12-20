@@ -4,11 +4,11 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { restorePiecesFromPreviousAgendaitem } from 'frontend-kaleidos/utils/documents';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class DocumentController extends Controller {
   @service router;
   @service store;
-  @service fileService;
   @service signatureService;
 
   @tracked decisionActivity;
@@ -37,7 +37,7 @@ export default class DocumentController extends Controller {
   async didDeletePiece(piece) {
     const previousPiece = await piece.previousPiece;
     if (isPresent(this.decisionActivity)) {
-      await this.fileService.deletePiece(piece);
+      await deletePiece(piece);
       await this._didDeletePieceFromDecision(this.decisionActivity, previousPiece);
     } else {
       // Fetch linked agendaitem before the piece is deleted and we lose the link
@@ -49,7 +49,7 @@ export default class DocumentController extends Controller {
           ':has-no:next-version': true,
         },
       });
-      await this.fileService.deletePiece(piece);
+      await deletePiece(piece);
       if (agendaitem) {
         await this._didDeletePieceFromAgendaitem(agendaitem, previousPiece);
       }

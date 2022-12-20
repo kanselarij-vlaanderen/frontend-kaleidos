@@ -22,10 +22,10 @@ const {
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
 // - manage-document-access-levels: modifying document access levels
-// - manage-newsletter-infos: General viewing and editing of newsletter info
+// - manage-news-items: General viewing and editing of news items
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
-// - manage-themis-publications: Publishing newsletter-info and related documents to Themis (general public).
+// - manage-themis-publications: Publishing news-items and related documents to Themis (general public).
 // - manage-meetings: Create and update meetings
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
@@ -36,11 +36,12 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 
 const groups = [
   {
     name: 'ADMIN',
-    roles: [ ADMIN ],
+    roles: [ADMIN],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -53,7 +54,7 @@ const groups = [
       'manage-document-access-levels',
       'manage-publication-flows',
       'search-publication-flows',
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
@@ -63,11 +64,12 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'impersonate-users',
     ]
   },
   {
     name: 'SECRETARIE',
-    roles: [ SECRETARIE ],
+    roles: [SECRETARIE],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -78,7 +80,7 @@ const groups = [
       'manage-meetings',
       'manage-documents',
       'manage-document-access-levels',
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
@@ -90,7 +92,7 @@ const groups = [
   },
   {
     name: 'OVRB',
-    roles: [ OVRB ],
+    roles: [OVRB],
     defaultRoute: 'publications',
     permissions: [
       'manage-signatures',
@@ -103,10 +105,10 @@ const groups = [
   },
   {
     name: 'KORT_BESTEK',
-    roles: [ KORT_BESTEK ],
+    roles: [KORT_BESTEK],
     defaultRoute: 'newsletters',
     permissions: [
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-themis-publications',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -114,7 +116,7 @@ const groups = [
   },
   {
     name: 'MINISTER',
-    roles: [ MINISTER ],
+    roles: [MINISTER],
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
@@ -124,7 +126,7 @@ const groups = [
   },
   {
     name: 'KABINET',
-    roles: [ KABINET_DOSSIERBEHEERDER, KABINET_MEDEWERKER ],
+    roles: [KABINET_DOSSIERBEHEERDER, KABINET_MEDEWERKER],
     defaultRoute: 'agendas',
     permissions: [
       'view-document-version-info',
@@ -133,7 +135,7 @@ const groups = [
   },
   {
     name: 'OVERHEID',
-    roles: [ OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT ],
+    roles: [OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT],
     defaultRoute: 'agendas',
     permissions: [],
   },

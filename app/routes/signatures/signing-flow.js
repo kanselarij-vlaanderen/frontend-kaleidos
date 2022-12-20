@@ -6,12 +6,12 @@ export default class SignaturesSignFlowRoute extends Route {
 
   model(params) {
     return this.store.queryOne('sign-flow', {
-      'filter[:id:]': params.signflow_id,
+      'filter[:id:]': params.signingflow_id,
       include: [
         'sign-subcase',
         'sign-subcase.sign-marking-activity',
         'sign-subcase.sign-marking-activity.piece',
-      ]
+      ].join(',')
     });
   }
 }

@@ -15,11 +15,11 @@
       @onDeletePiece={{perform this.deleteUploadedPiece}}
     />
     <div class="auk-form-group auk-u-mt-4">
-      <Auk::Checkbox
+      <AuControlCheckbox
         data-test-proof-upload-update-status
         @label={{t "update-publication-status-proof-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
-        {{on "input" this.setMustUpdatePublicationStatus}}
+        @onChange={{this.setMustUpdatePublicationStatus}}
       />
     </div>
     <div class="auk-form-group">

@@ -68,14 +68,14 @@
             <Auk::Label for="item-show-in-newsletter">
               {{t "on-the-website"}}
             </Auk::Label>
-            {{#if this.newsletterInfo}}
+            {{#if this.newsItem}}
               <Auk::Toggle
                 id="item-show-in-newsletter"
-                @checked={{this.newsletterInfo.inNewsletter}}
+                @checked={{this.newsItem.inNewsletter}}
                 data-test-agendaitem-titles-edit-showInNewsletter
               />
             {{else}}
-              {{t "no-newsletter-info"}}
+              {{t "no-news-item"}}
             {{/if}}
           </div>
         </div>

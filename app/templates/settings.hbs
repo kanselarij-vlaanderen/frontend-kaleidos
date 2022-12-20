@@ -7,7 +7,7 @@
         <Auk::Toolbar::Item>
           <Auk::Tabs>
             <Auk::Tab
-              @route="settings.overview"
+              @route="settings.index"
               data-test-route-settings-general-settings
             >
               {{t "general-settings"}}
@@ -28,6 +28,7 @@
             {{/if}}
             <Auk::Tab
               @route="settings.organizations"
+              data-test-route-settings-manage-organizations
             >
               {{t "manage-organizations"}}
             </Auk::Tab>

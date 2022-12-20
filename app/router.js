@@ -25,7 +25,6 @@ Router.map(function() {
     this.route('print', { path: '/afdrukken', });
     this.route('agendaitems', { path: '/agendapunten', }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id', }, function() {
-        this.route('index', { path: '/', });
         this.route('documents', { path: '/documenten', });
         this.route('decisions', { path: '/beslissingen', });
         this.route('news-item', { path: '/kort-bestek', });
@@ -38,16 +37,12 @@ Router.map(function() {
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
       this.route('subcases', { path: '/deeldossiers', }, function() {
-        this.route('overview', { path: '', });
         this.route('subcase', { path: ':subcase_id', }, function() {
           this.route('documents', { path: '/documenten', });
-          this.route('overview', { path: '/overzicht', });
           this.route('decision', { path: '/beslissing', });
         });
-        this.route('loading', { path: '/laden', });
       });
     });
-    this.route('overview', { path: '', });
   });
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
@@ -55,7 +50,6 @@ Router.map(function() {
   });
 
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
-    this.route('index', { path: '/', });
     this.route('print', { path: '/afdrukken', });
     this.route('nota-updates');
   });
@@ -82,7 +76,6 @@ Router.map(function() {
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekenmap', }, function() {
-      this.route('index', { path: '/overzicht', });
       this.route('signing-flow', { path: '/:signingflow_id' }, function() {
         this.route('documents', { path: '/documenten' });
       });
@@ -96,7 +89,6 @@ Router.map(function() {
 
   this.route('settings', { path: '/instellingen', }, function() {
     this.route('ministers');
-    this.route('overview', { path: '/overzicht', });
     this.route('users', { path: '/gebruikers', }, function() {
       this.route('user', { path: '/:id', });
     });
@@ -110,7 +102,6 @@ Router.map(function() {
 
   this.route('document', { path: '/document/:piece_id', });
 
-  this.route('loading', { path: '/laden', });
   this.route('not-supported');
   this.route('help');
   this.route('manual', { path: '/handleiding', });
@@ -129,7 +120,7 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('checkboxes-radio-buttons');
+    this.route('radio-buttons');
     this.route('colors');
     this.route('color-badge');
     this.route('datepicker');

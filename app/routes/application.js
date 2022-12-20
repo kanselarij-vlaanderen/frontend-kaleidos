@@ -2,31 +2,18 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ApplicationRoute extends Route {
   @service conceptStore;
-  @service moment;
   @service intl;
   @service session;
   @service currentSession;
-  @service fileService;
   @service router;
   @service userAgent;
-  @service plausible;
-
-  constructor() {
-    super(...arguments);
-    this.setupPlausible();
-  }
 
   async beforeModel() {
-    this.moment.setLocale('nl-be');
-
-    this.intl.setLocale(['nl-be']);
-
     if (!this.isSupportedBrowser) {
-      this.transitionTo('not-supported');
+      this.router.transitionTo('not-supported');
     }
 
     try {
@@ -36,7 +23,7 @@ export default class ApplicationRoute extends Route {
     }
 
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
-      this.transitionTo('accountless-users');
+      this.router.transitionTo('accountless-users');
     }
 
     // Fire and forget these two calls so we load in the concepts without blocking loading of the routes
@@ -57,30 +44,10 @@ export default class ApplicationRoute extends Route {
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
   }
 
-  setupPlausible() {
-    const { domain, apiHost } = ENV.plausible;
-    if (
-      domain !== '{{ANALYTICS_APP_DOMAIN}}' &&
-      apiHost !== '{{ANALYTICS_API_HOST}}'
-    ) {
-      this.plausible.enable({
-        domain,
-        apiHost,
-      });
-    }
-  }
-
   @action
-  willTransition(transition) {
+  willTransition() {
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
-      this.transitionTo('accountless-users');
-    }
-
-    if (
-      this.fileService.get('deleteDocumentContainerWithUndo.isRunning')
-        && !confirm(this.intl.t('leave-page-message'))
-    ) {
-      transition.abort();
+      this.router.transitionTo('accountless-users');
     }
   }
 }

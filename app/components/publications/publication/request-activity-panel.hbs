@@ -5,7 +5,7 @@
   <AccordionPanel.Header
     @size="large"
     @title={{@title}}
-    @subtitle={{moment-format @requestActivity.startDate}}
+    @subtitle={{date @requestActivity.startDate}}
     as |Header|
   >
     <Header.Actions as |Actions|>

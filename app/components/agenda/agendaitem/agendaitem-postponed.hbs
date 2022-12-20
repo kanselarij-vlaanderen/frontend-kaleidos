@@ -10,6 +10,7 @@
   {{#if (and @meeting.internalDecisionPublicationActivity.startDate this.loadProposedStatus.isIdle)}}
     {{#if this.modelsForProposedAgenda}}
       <Auk::Button
+        data-test-agendaitem-postponed-latest-meeting
         @skin="primary"
         @layout="icon-right"
         @icon="chevron-right"
@@ -17,11 +18,12 @@
         @models={{this.modelsForProposedAgenda}}
       >
         {{t "open-agenda"}}
-        {{moment-format this.latestMeeting.plannedStart "DD MMMM YYYY"}}
+        {{date-phrase this.latestMeeting.plannedStart}}
       </Auk::Button>
     {{else}}
       {{#if (user-may "manage-agendaitems")}}
         <AuDropdown
+          data-test-agendaitem-postponed-repropose
           @skin="primary"
           @title={{t "propose-again"}}
           @alignment="right"
@@ -31,28 +33,51 @@
               <Auk::Loader @message={{t "agenda-loading"}} />
             </div>
           {{else}}
-            {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
-              <AuButton
-                @skin="link"
-                {{on "click" (perform this.reProposeForAgenda meeting)}}
-                role="menuitem"
-              >
-                {{t "agenda-for"}}
-                {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                {{concat " - " meeting.numberRepresentation}}
-              </AuButton>
-            {{/each}}
+            {{#if this.loadProposableMeetings.lastSuccessful.value}}
+              {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
+                <AuButton
+                  data-test-agendaitem-postponed-proposable-meeting
+                  @skin="link"
+                  {{on "click" (perform this.reProposeForMeeting meeting)}}
+                  role="menuitem"
+                >
+                  {{t "agenda-for"}}
+                  {{date-phrase meeting.plannedStart}}
+                  {{concat " - " meeting.numberRepresentation}}
+                </AuButton>
+              {{/each}}
+            {{else}}
+              <div role="menuitem">
+                <p>{{t "no-recent-meetings"}}</p>
+              </div>
+            {{/if}}
+            <AuHr />
+            <AuButton
+              @skin="link"
+              {{on "click" this.openProposingForOtherMeetingModal}}
+              role="menuitem"
+            >
+              {{t "other-agenda"}}
+            </AuButton>
           {{/if}}
         </AuDropdown>
       {{/if}}
     {{/if}}
   {{/if}}
 </div>
-{{#if this.reProposeForAgenda.isRunning}}
+{{#if this.reProposeForMeeting.isRunning}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />
     <Auk::Modal::Body>
       <Auk::Loader @message={{t "please-be-patient"}} />
     </Auk::Modal::Body>
   </Auk::Modal>
+{{/if}}
+
+{{#if this.isProposingForOtherMeeting}}
+  <Subcases::ProposableMeetings
+    @meeting={{@meeting}}
+    @onProposeForMeeting={{perform this.reProposeForMeeting}}
+    @onCancel={{this.closeProposingForOtherMeetingModal}}
+  />
 {{/if}}

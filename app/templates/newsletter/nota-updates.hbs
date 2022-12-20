@@ -51,8 +51,8 @@
                 <p>
                   {{t
                     "newsletter-update-notas-edited-text"
-                    date=(moment-format row.modified)
-                    time=(moment-format row.modified "HH:mm")
+                    date=(date row.modified)
+                    time=(time row.modified)
                   }}
                 </p>
               </td>

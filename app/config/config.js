@@ -9,6 +9,7 @@ export const PAGE_SIZE = {
   CASES: 500,
   SELECT: 10,
   MANDATEES_IN_GOV_BODY: 300, // assumes max +- 20 gov body config changes for a 15-mandatee government (15 including doubles for vice-mp etc)
+  MEETINGS: 100,
 };
 
 export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
@@ -27,3 +28,11 @@ export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;
 export const PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS = 60 * 1000;
 
 export const DOCUMENT_DELETE_UNDO_TIME_MS = 15000;
+
+export const DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES = [
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/octet-stream',
+];
+export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
+export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB
