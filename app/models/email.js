@@ -1,6 +1,4 @@
-import Model, {
-  attr, belongsTo, hasMany
-} from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class Email extends Model {
   // @attr() messageId;
@@ -17,9 +15,11 @@ export default class Email extends Model {
   // @attr('datetime') receivedDate;
   // @attr('datetime') sentDate; Will be set by email-sending-service
 
-  @belongsTo('mail-folder') folder;
-  @hasMany('file') attachments;
+  @belongsTo('mail-folder', { inverse: 'emails', async: true }) folder;
+  @belongsTo('request-activity', { inverse: 'email', async: true })
+  requestActivity;
+  @belongsTo('cancellation-activity', { inverse: 'email', async: true })
+  cancellationActivity;
 
-  @belongsTo('request-activity') requestActivity;
-  @belongsTo('cancellation-activity') cancellationActivity;
+  @hasMany('file', { inverse: null, async: true }) attachments;
 }

@@ -5,11 +5,27 @@ export default class RequestActivity extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('translation-subcase') translationSubcase;
-  @belongsTo('publication-subcase') publicationSubcase;
-  @belongsTo('translation-activity') translationActivity;
-  @belongsTo('proofing-activity') proofingActivity;
-  @belongsTo('publication-activity') publicationActivity;
-  @belongsTo('email') email;
-  @hasMany('piece') usedPieces;
+  @belongsTo('translation-subcase', {
+    inverse: 'requestActivities',
+    async: true,
+  })
+  translationSubcase;
+  @belongsTo('publication-subcase', {
+    inverse: 'requestActivities',
+    async: true,
+  })
+  publicationSubcase;
+  @belongsTo('translation-activity', { inverse: 'subcase', async: true })
+  translationActivity;
+  @belongsTo('proofing-activity', { inverse: 'requestActivity', async: true })
+  proofingActivity;
+  @belongsTo('publication-activity', {
+    inverse: 'requestActivity',
+    async: true,
+  })
+  publicationActivity;
+  @belongsTo('email', { inverse: 'requestActivity', async: true }) email;
+
+  @hasMany('piece', { inverse: 'requestActivitiesUsedBy', async: true })
+  usedPieces;
 }

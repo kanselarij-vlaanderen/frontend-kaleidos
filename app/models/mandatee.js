@@ -7,14 +7,17 @@ export default class Mandatee extends Model {
   @attr('datetime') start;
   @attr('datetime') end;
 
-  @belongsTo('person') person;
-  @belongsTo('mandate') mandate;
+  @belongsTo('person', { inverse: 'mandatees', async: true }) person;
+  @belongsTo('mandate', { inverse: 'mandatee', async: true }) mandate;
 
-  @hasMany('subcase', { inverse: 'mandatees' }) subcases;
-  @hasMany('subcase', { inverse: 'requestedBy' }) requestedSubcases;
-  @hasMany('agendaitem') agendaitems;
-  @hasMany('publication-flow') publicationFlows;
-  @hasMany('sign-signing-activity') signSigningActivities;
+  @hasMany('subcase', { inverse: 'mandatees', async: true }) subcases;
+  @hasMany('subcase', { inverse: 'requestedBy', async: true })
+  requestedSubcases;
+  @hasMany('agendaitem', { inverse: 'mandatees', async: true }) agendaitems;
+  @hasMany('publication-flow', { inverse: 'mandatees', async: true })
+  publicationFlows;
+  @hasMany('sign-signing-activity', { inverse: 'mandatee', async: true })
+  signSigningActivities;
 
   get fullDisplayName() {
     const fullName = this.person.get('fullName');

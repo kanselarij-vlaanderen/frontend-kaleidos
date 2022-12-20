@@ -5,7 +5,12 @@ export default class CancellationActivity extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('subcase') subcase;
-  @belongsTo('email') email;
-  @hasMany('piece') usedPieces;
+  @belongsTo('translation-subcase', {
+    inverse: 'cancellationActivities',
+    async: true,
+  })
+  subcase;
+  @belongsTo('email', { inverse: 'cancellationActivity', async: true }) email;
+
+  @hasMany('piece', { inverse: null, async: true }) usedPieces;
 }

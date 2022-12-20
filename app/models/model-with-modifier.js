@@ -16,7 +16,7 @@ export default class ModelWithModifier extends Model {
   @service toaster;
 
   @attr('datetime') modified;
-  @belongsTo('user') modifiedBy;
+  @belongsTo('user', { inverse: null, async: true }) modifiedBy;
 
   setModified() {
     this.modified = new Date();
@@ -44,12 +44,14 @@ export default class ModelWithModifier extends Model {
       // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
       // No set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
       // We still want to change modified data to reflect that a change has happened (so other users can't save without refreshing page)
-      case '': { // only relations are dirty (f.e. themes on newsItem)
+      case '': {
+        // only relations are dirty (f.e. themes on newsItem)
         await this.preEditOrSaveCheck();
         this.setModified();
         break;
       }
-      case undefined: { // only relations are dirty? this used to work but now we seem to be getting an empty string instead
+      case undefined: {
+        // only relations are dirty? this used to work but now we seem to be getting an empty string instead
         await this.preEditOrSaveCheck();
         this.setModified();
         break;
