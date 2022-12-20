@@ -42,7 +42,7 @@ export default class Piece extends Model {
   translationActivityGeneratedBy;
   @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
   signMarkingActivity;
-  @belongsTo('signed-piece', { inverse: 'piece', async: true }) signedPiece;
+  @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
