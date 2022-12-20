@@ -43,6 +43,13 @@ const selectors = {
     },
   },
 
+  auModal: {
+    body: '.au-c-modal__body',
+    header: {
+      close: '.au-c-modal__close',
+    },
+  },
+
   accordion: {
     header: {
       button: '.auk-accordion__header .auk-accordion__button',
