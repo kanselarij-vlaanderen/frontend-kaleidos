@@ -109,7 +109,6 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
-      'manage-settings',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
