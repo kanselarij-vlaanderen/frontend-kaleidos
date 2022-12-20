@@ -9,23 +9,25 @@ export default class AgendaitemsSearchController extends Controller {
   @service router;
   @service intl;
 
-  queryParams = {
-    types: {
-      type: 'array',
+  queryParams = [
+    {
+      types: {
+        type: 'array',
+      },
+      latestOnly: {
+        type: 'boolean',
+      },
+      page: {
+        type: 'number',
+      },
+      size: {
+        type: 'number',
+      },
+      sort: {
+        type: 'string',
+      },
     },
-    latestOnly: {
-      type: 'boolean',
-    },
-    page: {
-      type: 'number',
-    },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
+  ];
 
   sizeOptions = [5, 10, 20, 50, 100, 200];
   sortOptions = [
@@ -105,12 +107,19 @@ export default class AgendaitemsSearchController extends Controller {
   @action
   navigateToAgendaitem(searchEntry) {
     if (searchEntry.meetingId) {
-      this.router.transitionTo('agenda.agendaitems.agendaitem',
-        searchEntry.meetingId, searchEntry.agendaId, searchEntry.id);
+      this.router.transitionTo(
+        'agenda.agendaitems.agendaitem',
+        searchEntry.meetingId,
+        searchEntry.agendaId,
+        searchEntry.id
+      );
     } else {
-      warn(`Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`, {
-        id: 'agendaitem.no-meeting',
-      });
+      warn(
+        `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`,
+        {
+          id: 'agendaitem.no-meeting',
+        }
+      );
     }
   }
 }

@@ -18,8 +18,9 @@ const selectors = {
 
   governmentAreaSelectorForm: {
     container: '[data-test-government-area-selector-form]',
-    domain: '[data-test-government-area-selector-form-domain]~span',
-    field: '[data-test-government-area-selector-form-field]~span',
+    // domain: '[data-test-government-area-selector-form-domain]~span',
+    domainList: '[data-test-government-area-selector-form-domain-list]',
+    // field: '[data-test-government-area-selector-form-field]~span',
   },
 
   // utils/overviews-header-decision

@@ -210,8 +210,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectGovernmentDomain(governmentDomain, ev) {
-    const checked = ev.target.checked;
+  selectGovernmentDomain(governmentDomain, checked) {
     if (checked) {
       this.selectedGovernmentDomains.addObject(governmentDomain); // addObject ensures no duplicates
     } else {
@@ -231,8 +230,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectRegulationType(regulationType, ev) {
-    const checked = ev.target.checked;
+  selectRegulationType(regulationType, checked) {
     if (checked) {
       this.selectedRegulationTypes.addObject(regulationType); // addObject ensures no duplicates
     } else {

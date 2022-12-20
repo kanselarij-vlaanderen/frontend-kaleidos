@@ -45,15 +45,15 @@
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
         <Auk::Label>{{t "blocked-on"}}</Auk::Label>
-        <Auk::Checkbox
-          @checked={{this.showBlockedMembershipsOnly}}
+        <AuControlCheckbox
           @label={{t "membership"}}
-          {{on "click" (toggle "showBlockedMembershipsOnly" this)}}
+          @checked={{this.showBlockedMembershipsOnly}}
+          @onChange={{toggle "showBlockedMembershipsOnly" this}}
         />
-        <Auk::Checkbox
-          @checked={{this.showBlockedUsersOnly}}
+        <AuControlCheckbox
           @label={{t "user"}}
-          {{on "click" (toggle "showBlockedUsersOnly" this)}}
+          @checked={{this.showBlockedUsersOnly}}
+          @onChange={{toggle "showBlockedUsersOnly" this}}
         />
       </div>
     </div>
