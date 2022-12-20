@@ -5,16 +5,7 @@ module.exports = function (environment) {
     modulePrefix: 'frontend-kaleidos',
     environment,
     rootURL: '/',
-    locationType: 'auto',
-    'ember-moment': {
-      includeLocales: ['nl-be'],
-      allowEmpty: true,
-      outputFormat:'DD-MM-YYYY',
-    },
-    featureFlags: {
-      'editor-html-paste': false,
-      'editor-browser-delete': true,
-    },
+    locationType: 'history',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
