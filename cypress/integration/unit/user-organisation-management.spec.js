@@ -144,15 +144,15 @@ context('testing user and organisation management', () => {
     });
 
     it('check filter by group', () => {
-      checkRoleFilterSingle('Admin', 10);
-      checkRoleFilterSingle('Secretarie', 11);
-      checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 11);
-      checkRoleFilterSingle('Kort bestek redactie', 11);
-      checkRoleFilterSingle('Minister', 11);
-      checkRoleFilterSingle('Kabinetdossierbeheerder', 11);
-      checkRoleFilterSingle('Kabinetmedewerker', 11);
-      checkRoleFilterSingle('Overheidsorganisatie', 11);
-      checkRoleFilterSingle('Vlaams Parlement', 11);
+      checkRoleFilterSingle('Admin', 9);
+      checkRoleFilterSingle('Secretarie', 12);
+      checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 12);
+      checkRoleFilterSingle('Kort bestek redactie', 12);
+      checkRoleFilterSingle('Minister', 12);
+      checkRoleFilterSingle('Kabinetdossierbeheerder', 12);
+      checkRoleFilterSingle('Kabinetmedewerker', 12);
+      checkRoleFilterSingle('Overheidsorganisatie', 12);
+      checkRoleFilterSingle('Vlaams Parlement', 12);
     });
 
     it('check filter by blocked', () => {
