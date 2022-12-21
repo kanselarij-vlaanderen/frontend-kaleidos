@@ -1,6 +1,6 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['mandatees', 'publicationStatusChange'];
+const SKIP_SERIALIZED = ['publicationStatusChange'];
 
 export default class PublicationFlowSerializer extends ApplicationSerializer {
   serializeBelongsTo(snapshot, json, relationship) {
