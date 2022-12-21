@@ -15,7 +15,7 @@ export default class RequestActivity extends Model {
     async: true,
   })
   publicationSubcase;
-  @belongsTo('translation-activity', { inverse: 'subcase', async: true })
+  @belongsTo('translation-activity', { inverse: 'requestActivity', async: true })
   translationActivity;
   @belongsTo('proofing-activity', { inverse: 'requestActivity', async: true })
   proofingActivity;
