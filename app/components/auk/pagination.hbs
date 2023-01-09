@@ -10,6 +10,7 @@
           @icon="chevron-left"
           @disabled={{this.isFirstPage}}
           {{on "click" @onPreviousPage}}
+          class="auk-u-text-vertical-align-middle"
         >
           {{t "previous"}}
         </AuButton>
@@ -21,6 +22,7 @@
           @iconAlignment="right"
           @disabled={{this.isLastPage}}
           {{on "click" @onNextPage}}
+          class="auk-u-text-vertical-align-middle"
         >
           {{t "next"}}
         </AuButton>
