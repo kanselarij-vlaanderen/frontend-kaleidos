@@ -21,7 +21,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @tracked isEditing = false;
   @tracked isEditingPill = false;
-  @tracked isSigned = false;
+  @tracked isSigned = true;
   @tracked isFullscreen = false;
   @tracked isAddingReport = false;
 

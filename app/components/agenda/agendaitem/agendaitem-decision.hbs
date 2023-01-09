@@ -69,12 +69,13 @@
               @iconAlignment="right"
             >
               <AuButton @skin="link-secondary" role="menuitem">
-                Versie van 18-11-2022
+                Versie van 18-11-2022 om 10:23
               </AuButton>
               <AuButton @skin="link-secondary" role="menuitem">
-                Versie van 13-11-2022
+                Versie van 13-11-2022 om 12:13
               </AuButton>
             </AuDropdown>
+            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
           </div>
           <AuButtonGroup>
             <AuButton
@@ -93,20 +94,23 @@
             </AuButton>
           </AuButtonGroup>
         {{else}}
-          <AuDropdown
-            @title="Huidige versie"
-            @alignment="left"
-            @skin="naked"
-            @icon="chevron-down"
-            @iconAlignment="right"
-          >
-            <AuButton @skin="link-secondary" role="menuitem">
-              Versie van 18-11-2022
-            </AuButton>
-            <AuButton @skin="link-secondary" role="menuitem">
-              Versie van 13-11-2022
-            </AuButton>
-          </AuDropdown>
+          <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+            <AuDropdown
+              @title="Huidige versie"
+              @alignment="left"
+              @skin="naked"
+              @icon="chevron-down"
+              @iconAlignment="right"
+            >
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 18-11-2022 om 10:23
+              </AuButton>
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 13-11-2022 om 12:13
+              </AuButton>
+            </AuDropdown>
+            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
+          </div>
           <AuButton
             @skin="naked"
             @icon="expand"

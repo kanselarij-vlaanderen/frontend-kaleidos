@@ -38,9 +38,26 @@
           <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
             <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
               {{#if this.isFullscreen}}
-                <h4 class="auk-toolbar__title">
-                  Notulen
-                </h4>
+                <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+                  <h4 class="auk-toolbar__title">
+                    Notulen
+                  </h4>
+                  <AuDropdown
+                    @title="Huidige versie"
+                    @alignment="left"
+                    @skin="naked"
+                    @icon="chevron-down"
+                    @iconAlignment="right"
+                  >
+                    <AuButton @skin="link-secondary" role="menuitem">
+                      Versie van 18-11-2022 om 10:23
+                    </AuButton>
+                    <AuButton @skin="link-secondary" role="menuitem">
+                      Versie van 13-11-2022 om 12:13
+                    </AuButton>
+                  </AuDropdown>
+                  <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
+                </div>
                 <AuButtonGroup>
                   <AuButton
                     @skin="naked"
@@ -58,7 +75,23 @@
                   </AuButton>
                 </AuButtonGroup>
               {{else}}
-                <span></span>
+                <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+                  <AuDropdown
+                    @title="Huidige versie"
+                    @alignment="left"
+                    @skin="naked"
+                    @icon="chevron-down"
+                    @iconAlignment="right"
+                  >
+                    <AuButton @skin="link-secondary" role="menuitem">
+                      Versie van 18-11-2022 om 10:23
+                    </AuButton>
+                    <AuButton @skin="link-secondary" role="menuitem">
+                      Versie van 13-11-2022 om 12:13
+                    </AuButton>
+                  </AuDropdown>
+                  <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
+                </div>
                 <AuButton
                   @skin="naked"
                   @icon="expand"
