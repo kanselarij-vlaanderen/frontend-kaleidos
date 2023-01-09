@@ -31,12 +31,14 @@ export default class NewsletterInfosSearchFutureController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked isLoadingModel;
+  @tracked ministersHidden;
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-agendaitems.meetingDate';
+    this.ministersHidden = true;
   }
 
   @action
@@ -63,5 +65,10 @@ export default class NewsletterInfosSearchFutureController extends Controller {
         latestAgendaitem['id']
       );
     }
+  }
+
+  @action
+  toggleMinistersHidden() {
+    this.ministersHidden = !this.ministersHidden;
   }
 }
