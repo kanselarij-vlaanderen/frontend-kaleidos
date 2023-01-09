@@ -36,7 +36,6 @@
           <AuHelpText @skin="secondary">
             {{slice-text @piece.name start=8 limit=2}}-{{slice-text @piece.name start=10 limit=2}}-{{slice-text @piece.name start=3 limit=4}}
             {{slice-text @piece.name start=12 limit=11}}
-            <AuPill @size="small" @skin="ongoing">BIS</AuPill>
             /
             {{t "uploaded-at"}}
             {{moment-format @piece.created}}
@@ -63,6 +62,30 @@
             @onSelect={{this.selectDocumentType}}
             @selected="Nota"
           />
+        </div>
+      </c.content>
+    </AuCard>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="version">Versie</AuLabel>
+          <select
+            name="version"
+            id="version"
+            class="auk-select auk-select--block"
+          >
+            <option value="">
+            </option>
+            <option value="BIS" selected="selected">
+              BIS
+            </option>
+            <option value="TER">
+              TER
+            </option>
+            <option value="QUATER">
+              QUATER
+            </option>
+          </select>
         </div>
       </c.content>
     </AuCard>

@@ -27,36 +27,25 @@
                 {{slice-text this.piece.name start=8 limit=2}}-{{slice-text this.piece.name start=10 limit=2}}-{{slice-text this.piece.name start=3 limit=4}}
               </span>
               <span class="auk-overline">
-                {{slice-text this.piece.name start=12 limit=11}}
+                {{#if this.piece.file}}{{uppercase this.piece.file.extension}}{{/if}}
               </span>
             </div>
             <LinkTo @route="document" @model={{this.piece.id}}
               class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny" data-test-document-card-name-value>
               {{#if (eq this.documentContainer.type.label "Nota")}}
-                {{slice-text this.piece.name start=23 limit=50 removeType=true}}
-                <AuPill @skin="ongoing" @size="small">BIS</AuPill>
+                {{slice-text this.piece.name start=12 limit=11}} <AuPill @skin="ongoing" @size="small">BIS</AuPill> -  {{slice-text this.piece.name start=23 limit=50 removeType=true}}
               {{else}}
-                {{slice-text this.piece.name start=23 limit=50 removeType=true}}
+                {{slice-text this.piece.name start=12 limit=11}} -  {{slice-text this.piece.name start=23 limit=50 removeType=true}}
               {{/if}}
-              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{uppercase this.piece.file.extension}}</AuPill>{{/if}}
             </LinkTo>
             {{else}}
             <LinkTo @route="document" @model={{this.piece.id}}
               class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny" data-test-document-card-name-value>
-                {{this.piece.name}}
-              {{#if this.piece.file}}<AuPill @skin="border" @size="small">{{uppercase this.piece.file.extension}}</AuPill>{{/if}}
+                {{this.piece.name}} - {{slice-text this.piece.name start=23 limit=50 removeType=true}}
             </LinkTo>
             {{/if}}
             <div class="vlc-document-card-content__meta au-u-margin-top-tiny">
               {{! no piece.created in legacy data }}
-              {{#if this.piece.created}}
-                <p>
-                  {{t "uploaded-at"}}
-                  {{moment-format this.piece.created}}
-                  {{t "at"}}
-                  {{moment-format this.piece.created "HH:mm"}}
-                </p>
-              {{/if}}
               {{#if this.piece.file.primarySource.created}}
                 <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
@@ -72,6 +61,15 @@
                     {{t (if (eq this.piece.file.primarySource.extension "docx") "word-document" "source-file-lowercase")}}
                   </AuLinkExternal>
                 </p>
+              {{else}}
+                {{#if this.piece.created}}
+                  <p>
+                    {{t "uploaded-at"}}
+                    {{moment-format this.piece.created}}
+                    {{t "at"}}
+                    {{moment-format this.piece.created "HH:mm"}}
+                  </p>
+                {{/if}}
               {{/if}}
             </div>
           </Group.Item>
