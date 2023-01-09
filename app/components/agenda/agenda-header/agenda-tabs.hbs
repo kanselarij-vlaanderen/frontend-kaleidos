@@ -17,11 +17,11 @@
       {{t "detail"}}
     </Auk::Tab>
   {{/if}}
-  {{#if (user-may "manage-agenda-versions")}}
+  {{!-- {{#if (user-may "manage-agenda-versions")}}
     <Auk::Tab @route="agenda.compare">
       {{t "compare"}}
     </Auk::Tab>
-  {{/if}}
+  {{/if}} --}}
   <Auk::Tab @route="agenda.documents">
     {{t "documents"}}
   </Auk::Tab>

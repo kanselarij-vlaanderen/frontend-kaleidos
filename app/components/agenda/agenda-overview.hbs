@@ -62,7 +62,6 @@
             {{/unless}}
             {{! template-lint-enable simple-unless }}
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-              {{#if (includes agendaitem @newItems)}}
               <li
                 class="vlc-agenda-items__sub-item"
                 {{sortable-item
@@ -84,23 +83,6 @@
                   @collapsed={{true}}
                 />
               </li>
-              {{else}}
-              <li
-                class="vlc-agenda-items__sub-item"
-              >
-                <Agenda::AgendaOverview::AgendaOverviewItem
-                  @agendaitem={{agendaitem}}
-                  @meeting={{@meeting}}
-                  @currentAgenda={{@currentAgenda}}
-                  @previousAgenda={{@previousAgenda}}
-                  @isNew={{includes agendaitem @newItems}}
-                  @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
-                  @isEditingFormallyOkStatus={{false}}
-                  @showDragHandle={{false}}
-                  @collapsed={{true}}
-                />
-              </li>
-              {{/if}}
             {{/each}}
           {{/each}}
         </ul>
@@ -156,7 +138,6 @@
       {{#if this.isEditingOverview}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}}>
         {{#each @announcements as |announcement|}}
-          {{#if (includes announcement @newItems)}}
           <li
             class="vlc-agenda-items__sub-item"
             {{sortable-item
@@ -175,9 +156,9 @@
               @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{false}}
               @showDragHandle={{this.canEdit}}
+              @collapsed={{true}}
             />
           </li>
-          {{/if}}
         {{/each}}
       </ul>
       {{else}}
