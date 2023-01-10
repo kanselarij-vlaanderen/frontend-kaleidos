@@ -69,23 +69,53 @@
       <c.content>
         <div class="auk-form-group">
           <AuLabel for="version">Versie</AuLabel>
-          <select
-            name="version"
-            id="version"
-            class="auk-select auk-select--block"
-          >
-            <option value="">
-            </option>
-            <option value="BIS" selected="selected">
+          <div class="auk-radio-list auk-radio-list--inline">
+            <label class="auk-radio" data-children-count="1" for="geen">
+              <input
+                type="radio"
+                class="auk-radio__toggle"
+                id="geen"
+                name="type"
+                checked={{true}}
+                value="geen"
+              />
+              Geen
+              <span class="auk-radio__box"></span>
+            </label>
+            <label class="auk-radio" data-children-count="1" for="BIS">
+              <input
+                type="radio"
+                class="auk-radio__toggle"
+                id="BIS"
+                name="type"
+                value="BIS"
+              />
               BIS
-            </option>
-            <option value="TER">
+              <span class="auk-radio__box"></span>
+            </label>
+            <label class="auk-radio" data-children-count="1" for="TER">
+              <input
+                type="radio"
+                class="auk-radio__toggle"
+                id="TER"
+                name="type"
+                value="TER"
+              />
               TER
-            </option>
-            <option value="QUATER">
+              <span class="auk-radio__box"></span>
+            </label>
+            <label class="auk-radio" data-children-count="1" for="QUATER">
+              <input
+                type="radio"
+                class="auk-radio__toggle"
+                id="QUATER"
+                name="type"
+                value="QUATER"
+              />
               QUATER
-            </option>
-          </select>
+              <span class="auk-radio__box"></span>
+            </label>
+          </div>
         </div>
       </c.content>
     </AuCard>
