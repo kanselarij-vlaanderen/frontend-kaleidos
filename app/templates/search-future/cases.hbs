@@ -829,9 +829,12 @@
                   as |card|
                 >
                   <card.header>
-                    <p class="au-u-para-small au-u-muted au-u-medium">
-                      {{moment-format row.sessionDates}}
-                    </p>
+                    <div class="au-u-flex">
+                      <p class="au-u-para-small au-u-muted au-u-medium">{{t "on-agenda-of"}} {{moment-format row.sessionDates}}</p>
+                      {{#if this.includeArchived }}
+                      <AuPill @size="small" @skin="border">Verwijderd dossier</AuPill>
+                      {{/if}}
+                    </div>
                     <AuHeading @level="3" @skin="4">
                       <AuLink
                         class="au-u-padding-none"
