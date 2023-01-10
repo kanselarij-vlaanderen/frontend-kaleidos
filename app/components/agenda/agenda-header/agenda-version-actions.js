@@ -50,12 +50,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked designAgenda = null;
   @tracked lastApprovedAgenda = null;
 
+  @tracked isClosed = false;
+
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
   }
-
 
   @task
   *loadAgendaData() {
@@ -76,6 +77,11 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.lastApprovedAgenda = agenda;
         break;
       }
+    }
+
+    const treatedAgenda = yield this.args.meeting.agenda;
+    if (treatedAgenda) {
+      this.isClosed = true;
     }
   }
 
@@ -110,7 +116,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   get canReopenPreviousAgenda() {
     return (
-      !this.args.meeting.isFinal &&
+      !this.isClosed &&
       this.isMeetingClosable &&
       this.currentSession.isAdmin &&
       this.currentAgendaIsLatest &&
@@ -140,8 +146,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-          .sortBy('number');
+      .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
+      .sortBy('number');
   }
 
   @bind
@@ -265,7 +271,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       );
     } catch (error) {
       // We use this method for 2 actions so we want to show different messages on failure
-      if (this.args.meeting.isFinal === true) {
+      if (this.isClosed === true) {
         this.toaster.error(
           this.intl.t('error-reopen-meeting', { message: error.message }),
           this.intl.t('warning-title')

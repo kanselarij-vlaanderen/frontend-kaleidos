@@ -41,10 +41,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked themisPublicationActivity;
   @tracked latestThemisPublicationActivity;
 
+  @tracked isClosed;
+
   constructor() {
     super(...arguments);
     this.loadPublicationActivities.perform();
-  }
+    this.loadAgendaData.perform();
+  }  
 
   get showPrintButton() {
     return this.router.currentRouteName === 'agenda.print';
@@ -57,7 +60,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   get canPublishDecisions() {
     return (
       this.currentSession.may('manage-decision-publications') &&
-        this.args.meeting.isFinal &&
+        this.isClosed &&
         this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
@@ -73,7 +76,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.themisPublicationActivity?.status,
     ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
 
-    return mayManagePublication && !loadingActivities && this.args.meeting.isFinal && documentsNotYetReleased;
+    return mayManagePublication && !loadingActivities && this.isClosed && documentsNotYetReleased;
   }
 
   get canPublishThemis() {
@@ -82,13 +85,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const documentsAlreadyReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
     return this.currentSession.may('manage-themis-publications') &&
-      this.args.meeting.isFinal &&
+      this.isClosed &&
       documentsAlreadyReleased;
   }
 
   get canUnpublishThemis() {
     return this.currentSession.may('manage-themis-publications') &&
-      this.args.meeting.isFinal &&
+      this.isClosed &&
       this.latestThemisPublicationActivity != null;
   }
 
@@ -129,6 +132,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
       sort: '-start-date',
     });
+  }
+
+  @task
+  *loadAgendaData() {
+    const treatedAgenda = yield this.args.meeting.agenda;
+    if(treatedAgenda) {
+      this.isClosed = true;
+    }
   }
 
   /**

@@ -14,10 +14,12 @@ export default class SubcaseTitlesPanelView extends Component {
   @service currentSession;
 
   @tracked approved; // or acknowledged
+  @tracked isClosed;
 
   constructor() {
     super(...arguments);
     this.loadApproved.perform();
+    this.loadAgendaData.perform();
   }
 
   get canShowDecisionStatus() {
@@ -34,6 +36,14 @@ export default class SubcaseTitlesPanelView extends Component {
       this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
     } else {
       this.approved = false;
+    }
+  }
+
+  @task
+  *loadAgendaData() {
+    const treatedAgenda = yield this.args.meeting.agenda;
+    if(treatedAgenda) {
+      this.isClosed = true;
     }
   }
 

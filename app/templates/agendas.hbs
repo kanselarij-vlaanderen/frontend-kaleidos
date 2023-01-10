@@ -135,7 +135,7 @@
                     </span>
                   </td>
                   <td>
-                    {{#if agenda.createdFor.isFinal}}
+                    {{#if agenda.createdFor.agenda}}
                       <AuPill @size="small">{{t "closed"}}</AuPill>
                     {{else}}
                       <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>

@@ -19,11 +19,11 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
 
   get canShowDecisionTab() {
     return this.currentSession.may('manage-decisions')
-      || (this.meeting.isFinal && this.hasDecision);
+      || (this.meeting.agenda && this.hasDecision);
   }
 
   get canShowNewsletterTab() {
     return this.currentSession.may('manage-news-items')
-      || (this.meeting.isFinal && this.hasNewsItem);
+      || (this.meeting.agenda && this.hasNewsItem);
   }
 }

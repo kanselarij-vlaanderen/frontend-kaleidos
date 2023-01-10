@@ -24,7 +24,7 @@
     </AuButton>
     <AuHr />
   {{/if}}
-  {{#if @meeting.isFinal}}
+  {{#if this.isClosed}}
     <AuButton
       @skin="link"
       data-test-agenda-version-actions-unlock-agenda
@@ -70,7 +70,7 @@
       {{t "agenda-reopen-previous-version"}}
     </AuButton>
   {{/if}}
-  {{#if (and (not this.designAgenda) (not @meeting.isFinal))}}
+  {{#if (and (not this.designAgenda) (not this.isClosed))}}
     <AuHr />
     <AuButton
       @skin="link"

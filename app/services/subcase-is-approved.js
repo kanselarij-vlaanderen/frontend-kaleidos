@@ -13,7 +13,7 @@ export default class SubcaseIsApprovedService extends Service {
       sort: '-planned-start',
     });
 
-    if (latestMeeting?.isFinal) {
+    if (latestMeeting?.agenda) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
         'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD

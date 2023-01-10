@@ -21,6 +21,8 @@ export default class SubcaseDescriptionView extends Component {
   @tracked approved = null;
   @tracked modelsOfMeetings = [];
 
+  @tracked isClosed = false;
+
   constructor() {
     super(...arguments);
     this.loadAgendaData.perform();
@@ -32,7 +34,7 @@ export default class SubcaseDescriptionView extends Component {
 
   get canShowDecisionStatus() {
     return (
-      this.latestMeeting?.isFinal &&
+      this.isClosed &&
       (this.currentSession.may('view-decisions-before-release') ||
         this.latestMeeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
@@ -70,10 +72,13 @@ export default class SubcaseDescriptionView extends Component {
 
       this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);
       // we need this multiple times in the template and navigating the nested array each time is bothersome
-      if (index === agendaActivities.length -1) {
+      if (index === agendaActivities.length - 1) {
         this.latestMeeting = meeting;
       }
 
+    }
+    if (this.latestMeeting?.agenda) {
+      this.isClosed = true;
     }
   }
 }
