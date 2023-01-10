@@ -20,12 +20,7 @@ export default class Piece extends Model {
 
   // resources with pieces linked:
 
-  // Below relationship is only defined in frontend.
-  // This definition is merely here to help ember-data with relationship bookkeeping,
-  // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
-  // The submission activity should never be sent to the backend from the piece-side
-  // as long as the relationship is not defined in the backend.
-  @belongsTo('submission-activity', { inverse: null, async: true })
+  @belongsTo('submission-activity', { inverse: 'pieces', async: true })
   submissionActivity;
   @belongsTo('decision-activity', { inverse: 'report', async: true })
   decisionActivity;
@@ -56,6 +51,7 @@ export default class Piece extends Model {
 
   @hasMany('case', { inverse: 'pieces', async: true }) cases;
   @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
+  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true }) linkedAgendaitems;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

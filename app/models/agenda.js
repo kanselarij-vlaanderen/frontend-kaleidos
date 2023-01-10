@@ -13,6 +13,7 @@ export default class Agenda extends Model.extend(LoadableModel) {
   @attr('datetime') created;
   @attr('datetime') modified;
 
+  @belongsTo('meeting', { inverse: 'agenda', async: true }) meeting;
   @belongsTo('meeting', { inverse: 'agendas', async: true }) createdFor;
   @belongsTo('agendastatus', { inverse: null }) status;
   @belongsTo('agenda', { inverse: 'previousVersion', async: true }) nextVersion; // Set in agenda-approve-service, read-only here

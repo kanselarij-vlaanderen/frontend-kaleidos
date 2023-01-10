@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class CancellationActivity extends Model {
   @attr('string') title;
@@ -11,6 +11,4 @@ export default class CancellationActivity extends Model {
   })
   subcase;
   @belongsTo('email', { inverse: 'cancellationActivity', async: true }) email;
-
-  @hasMany('piece', { inverse: null, async: true }) usedPieces;
 }

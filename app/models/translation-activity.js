@@ -15,7 +15,7 @@ export default class TranslationActivity extends Model {
     async: true,
   })
   subcase;
-  @belongsTo('request-activity', { inverse: 'traslationActivity', async: true })
+  @belongsTo('request-activity', { inverse: 'translationActivity', async: true })
   requestActivity;
   @belongsTo('language', { inverse: null, async: true }) language;
 

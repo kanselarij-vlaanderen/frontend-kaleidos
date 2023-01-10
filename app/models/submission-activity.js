@@ -11,6 +11,6 @@ export default class SubmissionActivity extends Model {
   })
   agendaActivity;
 
-  @hasMany('piece', { inverse: null, async: true }) pieces; // This relation is serialized, even though it's on the hasMany side, because the belongsTo side isn't exposed by the backend
+  @hasMany('piece', { inverse: 'submissionActivity', async: true }) pieces; // This relation is serialized, even though it's on the hasMany side, because the belongsTo side isn't exposed by the backend
   @hasMany('mandatee', { inverse: null, async: true }) submitters;
 }

@@ -27,7 +27,7 @@ export default class Agendaitem extends ModelWithModifier {
 
   @hasMany('mandatee', { inverse: 'agendaitems', async: true }) mandatees;
   @hasMany('piece', { inverse: 'agendaitems', async: true }) pieces;
-  @hasMany('piece', { inverse: null, async: true }) linkedPieces;
+  @hasMany('piece', { inverse: 'linkedAgendaitems', async: true }) linkedPieces;
 
   get modelName() {
     return this.constructor.modelName;
