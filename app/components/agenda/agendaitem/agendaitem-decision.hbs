@@ -57,10 +57,11 @@
     <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
       <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
         {{#if this.isFullscreen}}
-          <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
             <h4 class="auk-toolbar__title">
               Voorbereidende tekst voor de beslissing
             </h4>
+            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
             <AuDropdown
               @title="Huidige versie"
               @alignment="left"
@@ -75,7 +76,6 @@
                 Versie van 13-11-2022 om 12:13
               </AuButton>
             </AuDropdown>
-            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
           </div>
           <AuButtonGroup>
             <AuButton
@@ -94,7 +94,8 @@
             </AuButton>
           </AuButtonGroup>
         {{else}}
-          <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+             <AuButton @skin="link" @icon="renew" class="au-u-padding-left-none">Inhoud updaten</AuButton>
             <AuDropdown
               @title="Huidige versie"
               @alignment="left"
@@ -109,7 +110,6 @@
                 Versie van 13-11-2022 om 12:13
               </AuButton>
             </AuDropdown>
-            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
           </div>
           <AuButton
             @skin="naked"
