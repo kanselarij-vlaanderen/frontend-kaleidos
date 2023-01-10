@@ -22,15 +22,15 @@
             @width="block"
             @value={{this.name}}
           />
-          <AuButtonGroup class="au-u-flex--no-wrap">
+          {{!-- <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton
               data-test-document-edit-replace
               @skin="secondary"
               {{on "click" this.toggleUploadReplacementFile}}
             >
-              {{t "replace"}}
+              Bestand vervangen
             </AuButton>
-          </AuButtonGroup>
+          </AuButtonGroup> --}}
         </div>
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
@@ -79,7 +79,7 @@
                 checked={{true}}
                 value="geen"
               />
-              Geen
+              Eerste
               <span class="auk-radio__box"></span>
             </label>
             <label class="auk-radio" data-children-count="1" for="BIS">
@@ -119,6 +119,19 @@
         </div>
       </c.content>
     </AuCard>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="date">Datum</AuLabel>
+          <Auk::Datepicker
+            @date={{moment-format @piece.created}}
+            @onChange={{set this "dateFromBuffer"}}
+            @enableClear={{this.dateFromBuffer}}
+            @onClear={{set this "dateFromBuffer" undefined}}
+          />
+        </div>
+      </c.content>
+    </AuCard>
     {{#if @piece.file.primarySource}}
       <AuCard
         @flex={{true}}
@@ -137,13 +150,13 @@
               {{@piece.name}}
             </p>
             <AuButtonGroup class="au-u-flex--no-wrap">
-              <AuButton
+              {{!-- <AuButton
                 data-test-document-edit-source-file-replace
                 @skin="secondary"
                 {{on "click" this.toggleUploadReplacementSourceFile}}
               >
-                {{t "replace"}}
-              </AuButton>
+                Bestand vervangen
+              </AuButton> --}}
               <AuButton
                 data-test-document-edit-source-file-delete
                 @skin="secondary"

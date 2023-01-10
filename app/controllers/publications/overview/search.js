@@ -93,6 +93,7 @@ export default class PublicationsOverviewSearchController extends Controller {
   @tracked publicationStatusIds = [];
   @tracked urgentOnly;
   @tracked isLoadingModel;
+  @tracked ministersHidden;
 
   constructor() {
     super(...arguments);
@@ -100,6 +101,7 @@ export default class PublicationsOverviewSearchController extends Controller {
     this.size = this.sizeOptions[2];
     this.sort = '-opening-date';
     this.urgentOnly = false;
+    this.ministersHidden = true;
   }
 
   get selectedRegulationTypes() {
@@ -147,5 +149,10 @@ export default class PublicationsOverviewSearchController extends Controller {
   @action
   navigateToPublicationFlow(publicationFlow) {
     this.router.transitionTo('publications.publication.index', publicationFlow.id);
+  }
+
+  @action
+  toggleMinistersHidden() {
+    this.ministersHidden = !this.ministersHidden;
   }
 }
