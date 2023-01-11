@@ -18,8 +18,6 @@ export default class Email extends Model {
   @belongsTo('mail-folder', { inverse: 'emails', async: true }) folder;
   @belongsTo('request-activity', { inverse: 'email', async: true })
   requestActivity;
-  @belongsTo('cancellation-activity', { inverse: 'email', async: true })
-  cancellationActivity;
 
   @hasMany('file', { inverse: null, async: true }) attachments;
 }

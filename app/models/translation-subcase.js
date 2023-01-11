@@ -19,8 +19,6 @@ export default class TranslationSubcase extends Model {
   requestActivities;
   @hasMany('translation-activity', { inverse: 'subcase', async: true })
   translationActivities;
-  @hasMany('cancellation-activity', { inverse: 'subcase', async: true })
-  cancellationActivities;
 
   get isOverdue() {
     return moment(this.dueDate).isBefore(Date.now(), 'day');
