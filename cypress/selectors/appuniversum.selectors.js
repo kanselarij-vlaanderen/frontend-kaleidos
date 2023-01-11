@@ -6,5 +6,6 @@ const selectors = {
 
   pill: '.au-c-pill',
   input: '.au-c-input',
+  checkbox: '.au-c-control--checkbox',
 };
 export default selectors;

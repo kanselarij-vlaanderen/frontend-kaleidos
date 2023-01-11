@@ -23,7 +23,7 @@ export default class MandateesMandateesSelectorModalComponent extends Component 
   }
 
   @action
-  setOpenSearch(event) {
-    this.openSearch = event.target.checked;
+  setOpenSearch(checked) {
+    this.openSearch = checked;
   }
 }

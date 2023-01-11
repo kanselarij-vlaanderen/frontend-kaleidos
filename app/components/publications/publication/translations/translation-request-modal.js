@@ -112,8 +112,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @action
-  setTranslationRequestedStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setTranslationRequestedStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 
   @task

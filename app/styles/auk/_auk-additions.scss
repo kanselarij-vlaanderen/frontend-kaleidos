@@ -328,3 +328,54 @@ table tr.lt-expanded-row {
     margin-top: 0.5rem;
   }
 }
+
+// Checkbox list
+
+.auk-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+
+  > .auk-checkbox-list {
+    margin-left: 2.5rem;
+  }
+
+  + .auk-checkbox-list {
+    margin-top: .5rem;
+  }
+}
+
+.auk-checkbox-list--inline {
+  flex-direction: row; // reset direction
+  gap: normal; // reset gap
+
+  &:has(.auk-checkbox-list) {
+    > .auk-checkbox-list {
+      position: relative;
+
+      outline: .3rem solid $auk-red-500;
+      outline-offset: .3rem;
+
+      &:after {
+        position: absolute;
+        display: block;
+        top: 100%;
+        left: -.6rem;
+
+        min-width: 15rem;
+        width: calc(100% + 1.2rem);
+        padding: .3rem .6rem;
+        background-color: $auk-red-500;
+
+        color: $auk-white;
+        content: 'Nested checkbox lists can\'t be used when the parent checkbox list has @layout \'inline\' defined.';
+      }
+    }
+  }
+}
+
+// Alignment helpers
+
+.auk-u-text-vertical-align-middle {
+  vertical-align: middle;
+}

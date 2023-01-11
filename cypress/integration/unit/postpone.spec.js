@@ -8,6 +8,36 @@ import dependency from '../../selectors/dependency.selectors';
 // import document from '../../selectors/document.selectors';
 import utils from '../../selectors/utils.selectors';
 
+function getTranslatedMonth(month) {
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      return '';
+  }
+}
 
 context('Decision postponing tests', () => {
   beforeEach(() => {
@@ -76,7 +106,8 @@ context('Decision postponing tests', () => {
 
   it('should postpone an agendaitem', () => {
     const agendaDate = Cypress.dayjs().add(17, 'weeks');
-    const agendaDateFormatted = agendaDate.format('D MMMM YYYY').toLowerCase();
+    const monthDutch = getTranslatedMonth(agendaDate.month());
+    const agendaDateFormatted = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
     cy.approveAndCloseDesignAgenda();

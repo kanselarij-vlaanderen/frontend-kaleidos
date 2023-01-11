@@ -18,6 +18,5 @@ export default class NewsItem extends ModelWithModifier {
   @belongsTo('agenda-item-treatment', { inverse: 'newsItem', async: true })
   agendaItemTreatment;
 
-  @hasMany('piece', { inverse: 'newsItem', async: true }) attachments;
-  @hasMany('themes', { inverse: null, async: true }) themes;
+  @hasMany('themes', { inverse: null, async: true}) themes;
 }

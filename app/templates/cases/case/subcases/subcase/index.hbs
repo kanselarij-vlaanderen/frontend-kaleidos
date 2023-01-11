@@ -11,11 +11,11 @@
         {{! TODO these classes do not exist and do nothing }}
         <div class="confidentialities">
           <div class="confidential">
-            <Auk::Checkbox
-              @checked={{@model.subcase.confidential}}
-              @label={{t "limited-access"}}
-              @disabled={{true}}
+            <AuControlCheckbox
               data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
+              @label={{t "limited-access"}}
+              @checked={{@model.subcase.confidential}}
+              @disabled={{true}}
             />
           </div>
         </div>

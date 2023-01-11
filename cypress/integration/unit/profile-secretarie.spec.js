@@ -8,7 +8,6 @@ import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
-import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Testing the application as Secretarie user', () => {
@@ -17,14 +16,14 @@ context('Testing the application as Secretarie user', () => {
   });
 
   context('M-header toolbar tests', () => {
-    it('Should have meeting, Case, Newsletter, and searchSettings in toolbar', () => {
+    it('Should have meeting, Case, Newsletter, and search in toolbar', () => {
       cy.get(utils.mHeader.publications).should('not.exist');
       cy.get(utils.mHeader.agendas).should('exist');
       cy.get(utils.mHeader.cases).should('exist');
       cy.get(utils.mHeader.newsletters).should('exist');
       cy.get(utils.mHeader.search).should('exist');
       cy.get(utils.mHeader.signatures).should('exist');
-      cy.get(utils.mHeader.settings).should('exist');
+      cy.get(utils.mHeader.settings).should('not.exist');
     });
 
     it('Should switch to Agenda tab when agenda is clicked', () => {
@@ -49,13 +48,6 @@ context('Testing the application as Secretarie user', () => {
       cy.get(utils.mHeader.search).click();
       cy.get(route.search.title).should('exist');
       cy.url().should('include', '/zoeken');
-    });
-
-    it('Should switch to settings tab when settings is clicked', () => {
-      cy.get(utils.mHeader.settings).click();
-      cy.get(settings.settings.generalSettings).should('exist');
-      cy.get(settings.settings.manageMinisters).should('exist');
-      cy.url().should('include', '/instellingen');
     });
   });
 
