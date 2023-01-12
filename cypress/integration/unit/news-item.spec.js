@@ -1,7 +1,8 @@
-/* global context, beforeEach, afterEach, it, cy */
+/* global context, beforeEach, afterEach, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
@@ -712,5 +713,81 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(dependency.rdfa.editorInner).should('contain', ' ');
     cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
     cy.get(newsletter.editItem.cancel).click();
+  });
+
+  it('should test the pre mailchimp checks', () => {
+    const agendaDate = Cypress.dayjs().add(5, 'weeks')
+      .day(1);
+    const type1 = 'Mededeling';
+    const type2 = 'Nota';
+    const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
+    const theme = 'Justitie en Handhaving';
+    const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
+
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+
+    cy.createCase('Cypress test: nieuwsbrief');
+
+    // create subcase.
+    cy.addSubcase(type1, shortSubcaseTitle1);
+    cy.addSubcase(type2, shortSubcaseTitle2);
+
+    // create agendaitem
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle1);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle2);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
+    cy.intercept('POST', '/news-items').as('newsItemsPost');
+    cy.get(newsletter.newsItem.create).click()
+      .wait('@newsItemsPost');
+    cy.wait('@getAgendaitemThemes');
+    cy.get(newsletter.editItem.save).click();
+    cy.get(utils.vlModalVerify.save).click();
+
+    // test without nota in newsletter
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.showOptions).click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).click();
+    cy.get(utils.vlModalVerify.save).click()
+      .wait(1000);
+    cy.get(auk.alert.close).click()
+      .wait(1000);
+
+    // test with nota in newsletter without theme
+    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.showOptions).click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).click();
+    cy.get(utils.vlModalVerify.save).click()
+      .wait(1000);
+    cy.get(auk.alert.close).click()
+      .wait(1000);
+
+    // add theme to mededeling
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle1);
+    cy.get(newsletter.newsItem.edit).click();
+    cy.get(newsletter.editItem.themesSelector).contains(theme)
+      .click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(newsletter.editItem.save).click()
+      .wait('@patchNewsItem');
+
+    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+
+    // uncheck nota in newsletter
+    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
+      .click();
+
+    //  and check again
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.showOptions).click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).click();
+    // TODO-bug check on nota in kort-bestek @correct
+    // cy.get(utils.vlModalVerify.save).click();
+    // cy.get(auk.alert.close).click()
+    //   .wait(1000);
   });
 });
