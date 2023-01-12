@@ -80,7 +80,7 @@ const selectors = {
 
   // agenda-actions
   agendaActions: {
-    showOptions: '[data-test-agenda-actions-show-options]',
+    optionsDropdown: '[data-test-agenda-actions-options-dropdown]',
     addAgendaitems: '[data-test-agenda-actions-add-agendaitems]',
     navigateToNewsletter: '[data-test-agenda-actions-navigate-to-newsletter]',
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
