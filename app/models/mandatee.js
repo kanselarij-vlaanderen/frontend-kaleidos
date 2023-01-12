@@ -10,6 +10,8 @@ export default class Mandatee extends Model {
   @belongsTo('person', { inverse: 'mandatees', async: true }) person;
   @belongsTo('mandate', { inverse: 'mandatee', async: true }) mandate;
 
+  @hasMany('submission-activity', { inverse: 'submitters', async: true })
+  submissionActivities;
   @hasMany('subcase', { inverse: 'mandatees', async: true }) subcases;
   @hasMany('subcase', { inverse: 'requestedBy', async: true })
   requestedSubcases;
