@@ -57,18 +57,18 @@ export default class AgendasController extends Controller {
     const now = new Date();
     const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.newMeeting = this.store.createRecord('meeting', {
-      plannedStart,
+      plannedStart
     });
     const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [
       this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
-        status: this.defaultPublicationActivityStatus,
+        status: this.defaultPublicationActivityStatus
       }),
       this.store.createRecord('internal-document-publication-activity', {
         meeting: this.newMeeting,
         status: this.defaultPublicationActivityStatus,
-        plannedDate: nextBusinessDay,
+        plannedDate: nextBusinessDay
       }),
       this.store.createRecord('themis-publication-activity', {
         meeting: this.newMeeting,
@@ -77,7 +77,7 @@ export default class AgendasController extends Controller {
         scope: [
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-        ],
+        ]
       }),
     ];
 
@@ -100,7 +100,7 @@ export default class AgendasController extends Controller {
         ':lt:planned-start': this.newMeeting.plannedStart.toISOString(),
         kind: {
           ':has-no:broader': true,
-        },
+        }
       },
       sort: '-planned-start',
     });
@@ -162,7 +162,7 @@ export default class AgendasController extends Controller {
       createdFor: meeting,
       status,
       created: now,
-      modified: now,
+      modified: now
     });
     await agenda.save();
     return agenda;
@@ -181,7 +181,7 @@ export default class AgendasController extends Controller {
       'decision-activity',
       {
         startDate: startDate,
-        decisionResultCode,
+        decisionResultCode
         // no subcase. Minutes approval aren't part of a (sub)case
       }
     );
@@ -192,7 +192,7 @@ export default class AgendasController extends Controller {
       {
         created: now,
         modified: now,
-        decisionActivity,
+        decisionActivity
       }
     );
     await agendaItemTreatment.save();
@@ -208,7 +208,7 @@ export default class AgendasController extends Controller {
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
-      type: notaType,
+      type: notaType
     });
     await agendaitem.save();
     return agendaitem;
