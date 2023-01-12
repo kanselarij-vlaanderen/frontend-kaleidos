@@ -58,7 +58,6 @@ export default class AgendasController extends Controller {
     const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.newMeeting = this.store.createRecord('meeting', {
       plannedStart,
-      isFinal: false,
     });
     const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [

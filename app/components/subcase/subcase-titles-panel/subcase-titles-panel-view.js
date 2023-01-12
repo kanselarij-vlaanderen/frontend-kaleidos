@@ -18,20 +18,23 @@ export default class SubcaseTitlesPanelView extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadApproved.perform();
     this.loadAgendaData.perform();
   }
 
   get canShowDecisionStatus() {
     return (
-      this.args.meeting?.isFinal &&
+      this.isClosed &&
       (this.currentSession.may('view-decisions-before-release') ||
         this.args.meeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
   }
 
   @task
-  *loadApproved() {
+  *loadAgendaData() {
+    const treatedAgenda = yield this.args.meeting?.agenda;
+    if (treatedAgenda) {
+      this.isClosed = true;
+    }
     if (this.canShowDecisionStatus) {
       this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
     } else {
@@ -39,15 +42,7 @@ export default class SubcaseTitlesPanelView extends Component {
     }
   }
 
-  @task
-  *loadAgendaData() {
-    const treatedAgenda = yield this.args.meeting.agenda;
-    if(treatedAgenda) {
-      this.isClosed = true;
-    }
-  }
-
-  get pillSkin(){
+  get pillSkin() {
     if (this.approved) {
       return 'success';
     }

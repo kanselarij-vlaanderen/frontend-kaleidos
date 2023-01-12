@@ -24,6 +24,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked decisionActivity;
 
   @tracked isEditingAgendaItemTitles = false;
+  //TODO: add isClosed
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
