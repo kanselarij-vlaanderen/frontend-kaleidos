@@ -790,4 +790,18 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // cy.get(auk.alert.close).click()
     //   .wait(1000);
   });
+
+  // it.only('should test the pre mailchimp checks', () => {
+  //   cy.visit('/vergadering/63BFF684D02D5127D91DE575/kort-bestek/afdrukken');
+  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.showOptions).click();
+  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).click();
+
+  //   cy.fixture('example').then((examples) => {
+  //     cy.log(examples);
+  //     cy.intercept('POST', '/newsletter/mail-campaigns', examples.data).as('postMailCampaings');
+  //   });
+  //   cy.get(utils.vlModalVerify.save).click()
+  //     .wait('@postMailCampaings');
+  //   cy.wait(20000);
+  // });
 });
