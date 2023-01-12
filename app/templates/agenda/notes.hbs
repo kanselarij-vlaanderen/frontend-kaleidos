@@ -11,12 +11,15 @@
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
               <Group.Item>
-                <AuButton
+                <AuLink
+                  @route="export.notes"
                   @icon="pdf"
                   @skin="naked"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Exporteren als pdf
-                </AuButton>
+                </AuLink>
               </Group.Item>
               {{#unless this.isEditing}}
               <Group.Item>

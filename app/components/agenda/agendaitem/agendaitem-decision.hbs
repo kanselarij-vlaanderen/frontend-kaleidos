@@ -8,12 +8,15 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          <AuButton
-            @icon="pdf"
-            @skin="naked"
-          >
-            Exporteren als pdf
-          </AuButton>
+           <AuLink
+              @route="export.decision"
+              @icon="pdf"
+              @skin="naked"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Exporteren als pdf
+            </AuLink>
         </Group.Item>
         {{#unless this.isEditing}}
         <Group.Item>

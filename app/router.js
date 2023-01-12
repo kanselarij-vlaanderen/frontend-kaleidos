@@ -36,6 +36,11 @@ Router.map(function() {
     this.route('notes', { path: '/notulen', });
   });
 
+  this.route('export', { path: '/export', }, function() {
+    this.route('notes', { path: '/notulen', });
+    this.route('decision', { path: '/beslissing', });
+  })
+
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
       this.route('subcases', { path: '/deeldossiers', }, function() {
