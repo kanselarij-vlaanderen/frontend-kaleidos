@@ -1,9 +1,7 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 {{#if this.browserIsSupported}}
   <Rdfa::RdfaEditor
     @class="rdfa-editor"
-    @rdfaEditorInit={{action "handleRdfaEditorInit"}}
+    @rdfaEditorInit={{this.handleRdfaEditorInit}}
     @profile="default"
     @editorOptions={{hash
       showToggleRdfaAnnotations=null

@@ -1,17 +1,14 @@
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  classNames: ['vl-alert', 'vl-alert--warning'],
-
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    clearAction() {
-      this.clearAction();
-    },
-  },
-});
+/**
+ * @param message {string}
+ * @param buttonText {string}
+ * @param clearAction {Function}
+ */
+export default class ChangesAlert extends Component {
+  @action
+  clearAction() {
+    this.args.clearAction();
+  }
+}

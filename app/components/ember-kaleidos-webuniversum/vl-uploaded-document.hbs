@@ -1,63 +1,63 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<div class="vl-uploaded-document__title">
-  <Auk::Badge
-    @size="medium"
-    @icon="document"
-  />
-  <div class="vl-uploaded-document__title-container">
-    <div class="title">
-      <h6 class="auk-h4 auk-u-m-0"
-        data-test-vl-uploaded-document-filename>
-        {{this.name}}
-      </h6>
-      {{#if this.view}}
-        <AuButton
-          @skin="naked"
-          @icon="book"
-          @hideText={{true}}
-          {{action "view"}}
-        >
-          {{t "show-piece"}}
-        </AuButton>
-      {{/if}}
-      {{#if this.download}}
-        <AuButton
-          @skin="naked"
-          @icon="download"
-          @hideText={{true}}
-          {{action "download"}}
-        >
-          {{t "download"}}
-        </AuButton>
-      {{else if this.downloadLink}}
-        <AuLinkExternal
-          @icon="download"
-          @hideText={{true}}
-          href={{this.downloadLink}}
-          download={{if this.downloadName this.downloadName this.name}}
-        >
-          {{t "download"}}
-        </AuLinkExternal>
-      {{/if}}
-      {{#if this.delete}}
-        <AuButton
-          data-test-vl-uploaded-document-delete-piece
-          @skin="naked"
-          @alert={{true}}
-          @icon="trash"
-          @hideText={{true}}
-          {{action "delete"}}
-        >
-          {{t "delete"}}
-        </AuButton>
-      {{/if}}
-    </div>
-    <div class="auk-u-text-muted">
-      {{this.extension}}
-      -
-      {{format-bytesize this.size}}
+<div class="vl-uploaded-document">
+  <div class="vl-uploaded-document__title">
+    <Auk::Badge
+      @size="medium"
+      @icon="document"
+    />
+    <div class="vl-uploaded-document__title-container">
+      <div class="title">
+        <h6 class="auk-h4 auk-u-m-0"
+          data-test-vl-uploaded-document-filename>
+          {{@name}}
+        </h6>
+        {{#if @view}}
+          <AuButton
+            @skin="naked"
+            @icon="book"
+            @hideText={{true}}
+            {{on "click" @view}}
+          >
+            {{t "show-piece"}}
+          </AuButton>
+        {{/if}}
+        {{#if @download}}
+          <AuButton
+            @skin="naked"
+            @icon="download"
+            @hideText={{true}}
+            {{on "click" @download}}
+          >
+            {{t "download"}}
+          </AuButton>
+        {{else if @downloadLink}}
+          <AuLinkExternal
+            @icon="download"
+            @hideText={{true}}
+            href={{this.downloadLink}}
+            download={{if @downloadName @downloadName @name}}
+          >
+            {{t "download"}}
+          </AuLinkExternal>
+        {{/if}}
+        {{#if @delete}}
+          <AuButton
+            data-test-vl-uploaded-document-delete-piece
+            @skin="naked"
+            @alert={{true}}
+            @icon="trash"
+            @hideText={{true}}
+            {{on "click" @delete}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        {{/if}}
+      </div>
+      <div class="auk-u-text-muted">
+        {{@extension}}
+        -
+        {{format-bytesize @size}}
+      </div>
     </div>
   </div>
+  {{yield}}
 </div>
-{{yield}}
