@@ -2,12 +2,10 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationActivity extends Model {
-  // Attributes.
   @attr('string') title;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  // Relations.
   @belongsTo('publication-subcase', {
     inverse: 'publicationActivities',
     async: true,
