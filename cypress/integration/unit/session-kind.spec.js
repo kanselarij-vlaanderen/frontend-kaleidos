@@ -3,13 +3,16 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function checkNewsletterPage(headerText, newsletterTitle) {
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaActions.navigateToNewsletter).click();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');
@@ -103,7 +106,9 @@ context('Different session kinds should show different titles', () => {
     cy.wait('@createAgenda');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
-    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaActions.toggleEditingMeeting).click();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');

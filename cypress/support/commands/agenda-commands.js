@@ -6,6 +6,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -320,7 +321,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.intercept('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
@@ -411,7 +414,9 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.showOptions)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaActions.addAgendaitems).click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
@@ -659,7 +664,9 @@ function releaseDecisions() {
   cy.log('releaseDecisions');
   cy.intercept('PATCH', '/internal-decision-publication-activities/**').as('patchDecisionPubActivity');
 
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaActions.releaseDecisions).click({
     force: true,
   });
@@ -680,7 +687,9 @@ function releaseDocuments(now = true) {
   cy.log('releaseDocuments');
   cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchDocPubActivity');
 
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaActions.planReleaseDocuments).click();
   if (now) {
     cy.get(agenda.publicationPlanning.actions.releaseDocumentsNow).click();

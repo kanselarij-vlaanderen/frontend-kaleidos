@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -124,7 +125,9 @@ context('Agendaitem changes tests', () => {
     cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaActions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {

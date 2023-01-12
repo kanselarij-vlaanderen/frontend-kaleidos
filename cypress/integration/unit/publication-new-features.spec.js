@@ -3,6 +3,7 @@
 // / <reference types="Cypress" />
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 beforeEach(() => {
   cy.login('OVRB');
@@ -161,7 +162,9 @@ context('Publications new features tests', () => {
       .wait('@getActivities');
     //  TODO-waits there's a page reload here?
     cy.wait(2000);
-    cy.get(publication.proofReceivedPanel.dropdown).click();
+    cy.get(publication.proofReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(publication.proofReceivedPanel.publicationRequest).click();
     cy.get(publication.publicationRequest.body).find(publication.documentsList.piece)
       .should('have.length', 1)

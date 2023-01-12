@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -103,7 +104,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
 
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems);
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -226,7 +229,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -255,7 +260,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);

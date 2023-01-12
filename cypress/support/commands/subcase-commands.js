@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -231,7 +232,9 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.intercept('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get(cases.subcaseHeader.actionsDropdown).click();
+  cy.get(cases.subcaseHeader.actionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(cases.subcaseHeader.actions.deleteSubcase).click();
 
   cy.get(utils.vlModalVerify.save).click();

@@ -2,6 +2,7 @@
 
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -92,7 +93,9 @@ context('Publications translation tests', () => {
       .contains(`Aantal pagina’s: ${numberOfPages}`)
       .contains(`Aantal woorden: ${numberOfWords}`);
     // check delete
-    cy.get(publication.requestActivityPanel.dropdown).click();
+    cy.get(publication.requestActivityPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(publication.requestActivityPanel.delete).click();
     cy.intercept('DELETE', '/translation-activities/*').as('deleteTranslation');
     cy.intercept('DELETE', '/emails/*').as('deleteEmails');
@@ -152,13 +155,17 @@ context('Publications translation tests', () => {
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check edit and rollback
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationReceivedPanel.dropdown).click();
+    cy.get(publication.translationReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
-    cy.get(publication.translationReceivedPanel.dropdown).click();
+    cy.get(publication.translationReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(publication.translationReceivedPanel.edit).click();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);

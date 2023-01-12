@@ -191,7 +191,7 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitem');
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
-    // "Go to agendaitem
+    // Go to agendaitem
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
@@ -208,7 +208,8 @@ context('Subcase tests', () => {
     // Save the changes setting
     cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
     cy.intercept('PATCH', '/news-items/**').as('newsItemsPatch');
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).contains('Opslaan')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save)
+      .contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
     // We toggled hide in newsletter, await the patch

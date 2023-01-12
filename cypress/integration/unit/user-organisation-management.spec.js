@@ -215,6 +215,7 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.usersIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get(settings.usersIndex.row.action.unblockUser)
         .click({
@@ -349,6 +350,7 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.unblockOrganization)
         .click();
@@ -377,6 +379,7 @@ context('testing user and organisation management', () => {
       // check blocking
       // cy.get(settings.organizationsIndex.filterBlocked).click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.blockOrganization)
         .click();

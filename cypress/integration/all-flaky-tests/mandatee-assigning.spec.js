@@ -6,6 +6,7 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
@@ -328,7 +329,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsItem${randomInt}`);
     cy.get(newsletter.editItem.cancel).click();
 
-    cy.get(agenda.agendaActions.showOptions).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaActions.navigateToNewsletter).click();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
