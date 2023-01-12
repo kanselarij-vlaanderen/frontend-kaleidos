@@ -106,7 +106,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.agendaNameExists('B');
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -183,7 +183,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -211,7 +211,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)

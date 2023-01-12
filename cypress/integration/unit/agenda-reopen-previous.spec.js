@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Agenda reopen previous tests', () => {
   const dateToCreateAgenda = Cypress.dayjs().add(10, 'weeks')
@@ -34,9 +35,13 @@ context('Agenda reopen previous tests', () => {
     cy.agendaNameExists('A');
     // check if action does not exist on design agenda A
     // TODO: opening and re-opening doesn't seem to work in test env.
-    // cy.get(agenda.agendaVersionActions.showOptions).click();
+    // cy.get(agenda.agendaVersionActions.optionsDropdown)
+    //   .children(appuniversum.button)
+    //   .click();
     // cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
-    // cy.get(agenda.agendaVersionActions.showOptions).click();
+    // cy.get(agenda.agendaVersionActions.optionsDropdown)
+    //   .children(appuniversum.button)
+    //   .click();
     cy.approveDesignAgenda();
     // verify we have 2 agendas, A(approved) and B(design)
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
@@ -51,7 +56,9 @@ context('Agenda reopen previous tests', () => {
     cy.addDocumentsToApprovalItem('Goedkeuring van het verslag', [file]);
 
     // reopen agenda B, documents need to be removed
-    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
@@ -70,7 +77,9 @@ context('Agenda reopen previous tests', () => {
     cy.get(auk.loader).should('not.exist');
 
     // reopen agenda A, no documents
-    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
@@ -108,7 +117,9 @@ context('Agenda reopen previous tests', () => {
     cy.agendaNameExists('B', false);
     cy.agendaNameExists('A', false);
     // Check if action does not exist when there are multiple agendas but no design agenda
-    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
   });
 });

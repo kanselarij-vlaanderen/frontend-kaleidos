@@ -82,7 +82,7 @@ context('Testing the application as OVRB', () => {
       cy.agendaNameExists('B');
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -155,7 +155,7 @@ context('Testing the application as OVRB', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
@@ -180,7 +180,7 @@ context('Testing the application as OVRB', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)

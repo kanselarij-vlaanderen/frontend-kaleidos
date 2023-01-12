@@ -95,7 +95,9 @@ context('Testing the application as Secretarie user', () => {
       // Main view - Agenda actions
       // The agenda actions should be admin/kanselarij only so we only test if the button is showing.
       // Some of the options are very dependent on agenda status and are tested elsewhere.
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda);
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda);
       cy.get(agenda.agendaVersionActions.actions.lockAgenda);
@@ -221,7 +223,9 @@ context('Testing the application as Secretarie user', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
@@ -252,7 +256,9 @@ context('Testing the application as Secretarie user', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');

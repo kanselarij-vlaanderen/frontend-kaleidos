@@ -66,7 +66,7 @@ context('Testing the application as Vlaams Parlement', () => {
         .should('not.exist');
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
@@ -133,7 +133,7 @@ context('Testing the application as Vlaams Parlement', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
@@ -158,7 +158,7 @@ context('Testing the application as Vlaams Parlement', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)

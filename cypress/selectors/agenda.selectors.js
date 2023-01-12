@@ -114,7 +114,7 @@ const selectors = {
 
   // agenda-version-actions
   agendaVersionActions: {
-    showOptions: '[data-test-agenda-version-actions-show-options]',
+    optionsDropdown: '[data-test-agenda-version-actions-options-dropdown]',
     actions: {
       approveAgenda: '[data-test-agenda-version-actions-approve-agenda]',
       approveAndCloseAgenda: '[data-test-agenda-version-actions-approve-and-close-agenda]',

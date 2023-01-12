@@ -257,7 +257,9 @@ function deleteAgenda(lastAgenda) {
   // Call is made but cypress doesn't see it
   cy.intercept('DELETE', '/agendas/*').as('deleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
   cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.deleteAgenda)
     .click();
@@ -352,7 +354,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
 function approveDesignAgenda(shouldConfirm = true) {
   cy.log('approveDesignAgenda');
 
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
@@ -383,7 +387,9 @@ function approveDesignAgenda(shouldConfirm = true) {
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
 
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
@@ -414,7 +420,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
-  cy.get(agenda.agendaActions.showOptions)
+  cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaActions.addAgendaitems).click();
@@ -600,7 +606,9 @@ function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/close').as('closeAgendaCall');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
   cy.get(agenda.agendaVersionActions.confirm.lockAgenda).click();
   // as long as the modal exists, the action is not completed
@@ -622,7 +630,9 @@ function closeAgenda() {
  */
 function reopenAgenda() {
   cy.log('reopenAgenda');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.unlockAgenda).click();
   // Currently, this action has no confirmation popup but a loading overlay is showing
   cy.get(auk.modal.container, {
@@ -643,7 +653,9 @@ function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/reopen').as('reopenPreviousAgendaCall');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
   cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).click();
   // as long as the modal exists, the action is not completed
