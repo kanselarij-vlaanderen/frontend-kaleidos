@@ -116,7 +116,7 @@ export default class AgendasController extends Controller {
       );
     }
     this.isCreatingNewSession = false;
-    this.send('refreshRoute');
+    this.router.refresh();
     this.router.transitionTo('agendas');
   }
 

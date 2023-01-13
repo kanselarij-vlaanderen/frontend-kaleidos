@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action, set } from '@ember/object';
+import { set } from '@ember/object';
 
 export default class AgendaRoute extends Route {
   @service('session') simpleAuthSession;
@@ -52,10 +52,5 @@ export default class AgendaRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.isLoading = false;
-  }
-
-  @action
-  reloadAgendaModel() {
-    this.refresh();
   }
 }

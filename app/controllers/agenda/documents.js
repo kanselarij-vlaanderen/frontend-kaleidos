@@ -11,6 +11,7 @@ export default class AgendaDocumentsController extends Controller {
   @service store;
   @service toaster;
   @service fileConversionService;
+  @service router;
 
   agenda;
   meeting;
@@ -55,7 +56,7 @@ export default class AgendaDocumentsController extends Controller {
     yield all(savePromises);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.send('reloadModel');
+    this.refresh();
   }
 
   /**
@@ -93,7 +94,7 @@ export default class AgendaDocumentsController extends Controller {
         this.intl.t('warning-title'),
       );
     }
-    this.send('reloadModel');
+    this.refresh();
   }
 
   @task
@@ -132,6 +133,6 @@ export default class AgendaDocumentsController extends Controller {
 
   @action
   refresh() {
-    this.send('reloadModel');
+    this.router.refresh();
   }
 }

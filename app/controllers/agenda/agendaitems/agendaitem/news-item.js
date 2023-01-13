@@ -2,8 +2,12 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
+
+  @service router;
+
   @tracked agendaitem;
   @tracked notaModifiedTime;
   @tracked hideNotaModificationWarning = false;
@@ -37,7 +41,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   closeEdit(wasNewsItemNew) {
     this.isEditing = false;
     if (wasNewsItemNew) {
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 
@@ -46,12 +50,17 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
     yield newsItem.save();
     this.isEditing = false;
     if (wasNewsItemNew) {
-      this.send('reloadModel');
+      this.refresh();
     }
   }
 
   @action
   dismissNotaModifiedWarning() {
     this.hideNotaModificationWarning = true;
+  }
+
+  @action
+  refresh() {
+    this.router.refresh();
   }
 }
