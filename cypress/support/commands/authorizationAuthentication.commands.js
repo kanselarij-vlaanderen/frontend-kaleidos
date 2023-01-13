@@ -107,7 +107,7 @@ function logoutFlow() {
     .click();
   cy.get(utils.mHeader.userAction.logout)
     .contains('Afmelden')
-    .click();
+    .forceClick();
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }

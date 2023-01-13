@@ -332,7 +332,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)

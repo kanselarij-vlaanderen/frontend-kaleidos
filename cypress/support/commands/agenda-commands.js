@@ -260,7 +260,7 @@ function deleteAgenda(lastAgenda) {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
+  cy.get(agenda.agendaVersionActions.actions.deleteAgenda).forceClick();
   cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.deleteAgenda)
     .click();
   cy.wait('@deleteAgenda', {
@@ -327,7 +327,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .children(appuniversum.button)
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
-  cy.get(agenda.agendaActions.approveAllAgendaitems).click();
+  cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
@@ -357,7 +357,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
+  cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
@@ -390,7 +390,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).click();
+  cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
@@ -423,7 +423,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaActions.addAgendaitems).click();
+  cy.get(agenda.agendaActions.addAgendaitems).forceClick();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
@@ -609,7 +609,7 @@ function closeAgenda() {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
+  cy.get(agenda.agendaVersionActions.actions.lockAgenda).forceClick();
   cy.get(agenda.agendaVersionActions.confirm.lockAgenda).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
@@ -633,7 +633,7 @@ function reopenAgenda() {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.unlockAgenda).click();
+  cy.get(agenda.agendaVersionActions.actions.unlockAgenda).forceClick();
   // Currently, this action has no confirmation popup but a loading overlay is showing
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -656,7 +656,7 @@ function reopenPreviousAgenda() {
   cy.get(agenda.agendaVersionActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
   cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
@@ -679,9 +679,7 @@ function releaseDecisions() {
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaActions.releaseDecisions).click({
-    force: true,
-  });
+  cy.get(agenda.agendaActions.releaseDecisions).forceClick();
   cy.get(agenda.agendaActions.confirm.releaseDecisions).click();
   cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
@@ -702,7 +700,7 @@ function releaseDocuments(now = true) {
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaActions.planReleaseDocuments).click();
+  cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
   if (now) {
     cy.get(agenda.publicationPlanning.actions.releaseDocumentsNow).click();
   }

@@ -96,7 +96,7 @@ context('Publications translation tests', () => {
     cy.get(publication.requestActivityPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.requestActivityPanel.delete).click();
+    cy.get(publication.requestActivityPanel.delete).forceClick();
     cy.intercept('DELETE', '/translation-activities/*').as('deleteTranslation');
     cy.intercept('DELETE', '/emails/*').as('deleteEmails');
     cy.intercept('DELETE', '/files/*').as('deleteFiles');
@@ -158,7 +158,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.translationReceivedPanel.edit).click();
+    cy.get(publication.translationReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.get(auk.modal.footer.cancel).click();
@@ -166,7 +166,7 @@ context('Publications translation tests', () => {
     cy.get(publication.translationReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.translationReceivedPanel.edit).click();
+    cy.get(publication.translationReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedTranslationEndDate);
     cy.intercept('GET', '/translation-activities?filter**subcase**').as('reloadTranslationModel2');

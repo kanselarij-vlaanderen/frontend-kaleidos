@@ -218,9 +218,7 @@ context('testing user and organisation management', () => {
         .children(appuniversum.button)
         .click();
       cy.get(settings.usersIndex.row.action.unblockUser)
-        .click({
-          force: true,
-        });
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.usersIndex.row.name).contains('User who is Blocked Test')
         .find('au-c-pill--error')
@@ -353,7 +351,7 @@ context('testing user and organisation management', () => {
         .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.unblockOrganization)
-        .click();
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .find('.au-c-pill--error')
@@ -382,7 +380,7 @@ context('testing user and organisation management', () => {
         .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.blockOrganization)
-        .click();
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .contains('Geblokkeerd');

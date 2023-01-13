@@ -235,7 +235,7 @@ function deleteSubcase() {
   cy.get(cases.subcaseHeader.actionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(cases.subcaseHeader.actions.deleteSubcase).click();
+  cy.get(cases.subcaseHeader.actions.deleteSubcase).forceClick();
 
   cy.get(utils.vlModalVerify.save).click();
   cy.wait('@deleteSubcase');

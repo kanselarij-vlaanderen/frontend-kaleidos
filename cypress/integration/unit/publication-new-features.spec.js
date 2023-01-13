@@ -165,7 +165,7 @@ context('Publications new features tests', () => {
     cy.get(publication.proofReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.proofReceivedPanel.publicationRequest).click();
+    cy.get(publication.proofReceivedPanel.publicationRequest).forceClick();
     cy.get(publication.publicationRequest.body).find(publication.documentsList.piece)
       .should('have.length', 1)
       // TODO can't make filename unique, needs a way to ensure this is checking for the correct file to be inherited

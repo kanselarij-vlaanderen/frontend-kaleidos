@@ -128,7 +128,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.navigateToPrintableAgenda).click();
+    cy.get(agenda.agendaActions.navigateToPrintableAgenda).forceClick();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {
       timeout: 80000,

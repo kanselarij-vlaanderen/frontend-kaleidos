@@ -375,7 +375,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall1')
@@ -396,7 +396,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall2')
@@ -420,7 +420,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall3')
@@ -449,7 +449,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.addAgendaitems).click();
+    cy.get(agenda.agendaActions.addAgendaitems).forceClick();
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.input).should('not.be.disabled')
       .clear()

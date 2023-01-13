@@ -29,9 +29,7 @@ context('Testing internal and themis document release pills', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.planReleaseDocuments).click({
-      force: true,
-    });
+    cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
     cy.get(auk.datepicker.datepicker).eq(0)
       .should('have.value', nextDay.format('DD-MM-YYYY HH:mm'));
     cy.get(auk.datepicker.datepicker).eq(1)
@@ -52,9 +50,7 @@ context('Testing internal and themis document release pills', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.planReleaseDocuments).click({
-      force: true,
-    });
+    cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
     cy.get(auk.datepicker.datepicker).eq(0)
       .click();
     cy.setDateAndTimeInFlatpickr(newReleaseDate);

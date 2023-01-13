@@ -104,7 +104,7 @@ context('Create case as Admin user', () => {
       .children(appuniversum.button)
       .click();
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click();
+      .forceClick();
     cy.intercept('PATCH', '/cases/**').as('patchCases1');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
     cy.get(utils.vlModalVerify.save).click()
@@ -123,7 +123,7 @@ context('Create case as Admin user', () => {
     cy.intercept('PATCH', '/cases/**').as('patchCases2');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases2');
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click()
+      .forceClick()
       .wait('@patchCases2')
       .wait('@patchSubcases2');
 

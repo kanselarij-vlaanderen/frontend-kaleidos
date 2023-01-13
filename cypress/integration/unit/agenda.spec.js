@@ -108,7 +108,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
+    cy.get(agenda.agendaVersionActions.actions.deleteAgenda).forceClick();
     cy.get(auk.modal.body).find(auk.alert.message);
     cy.get(agenda.agendaVersionActions.confirm.deleteAgenda);
     cy.get(auk.modal.footer.cancel).click();
@@ -215,7 +215,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
         .click();
-      cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+      cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
       cy.wait('@getDecisionPubActivity');
       cy.wait('@getDocPubActivity');
       cy.wait('@getThemisPubActivity');
@@ -258,7 +258,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
+    cy.get(agenda.agendaVersionActions.actions.lockAgenda).forceClick();
     cy.get(auk.modal.body).find(auk.alert.message)
       .contains('met alle wijzigingen wil verwijderen?');
     cy.get(auk.modal.footer.cancel).click();
@@ -308,7 +308,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
@@ -331,7 +331,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');

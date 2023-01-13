@@ -59,7 +59,7 @@ context('Agenda reopen previous tests', () => {
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
+    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
     cy.get(auk.loader).should('not.exist');
@@ -80,7 +80,7 @@ context('Agenda reopen previous tests', () => {
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
+    cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
     cy.get(auk.loader).should('not.exist');

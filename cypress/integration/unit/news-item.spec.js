@@ -149,7 +149,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
@@ -282,7 +282,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     // The previous subcase had "in-newsletter" as checked, verify it was not inherited
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseShortTitle)
       .parents(newsletter.tableRow.newsletterRow)
@@ -351,7 +351,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)

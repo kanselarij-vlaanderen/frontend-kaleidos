@@ -13,7 +13,7 @@ function checkNewsletterPage(headerText, newsletterTitle) {
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
-  cy.get(agenda.agendaActions.navigateToNewsletter).click();
+  cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
@@ -109,7 +109,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');

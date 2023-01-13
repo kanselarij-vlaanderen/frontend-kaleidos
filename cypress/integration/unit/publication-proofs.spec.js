@@ -116,7 +116,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.requestActivityPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.requestActivityPanel.delete).click();
+    cy.get(publication.requestActivityPanel.delete).forceClick();
     cy.intercept('DELETE', '/proofing-activities/*').as('deleteProofing');
     cy.intercept('DELETE', '/emails/*').as('deleteEmails');
     cy.intercept('DELETE', '/files/*').as('deleteFiles');
@@ -177,7 +177,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(publication.proofReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
@@ -189,7 +189,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(publication.proofReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
@@ -297,7 +297,7 @@ context('Publications proofs tests', () => {
     cy.get(publication.translationReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();
-    cy.get(publication.translationReceivedPanel.proofRequest).click();
+    cy.get(publication.translationReceivedPanel.proofRequest).forceClick();
 
     // check data
     cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);
