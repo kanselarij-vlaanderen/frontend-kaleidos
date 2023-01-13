@@ -8,7 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-
+const DEFAULT_SORT_OPTIONS = ['-created-for.agenda.status.label', '-created-for.planned-start', 'created-for.kind.label'];
 export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
@@ -25,7 +25,8 @@ export default class AgendasController extends Controller {
   @tracked filterAgendas = null;
   @tracked pageAgendas = 0;
   @tracked sizeAgendas = 10;
-  @tracked sortAgendas = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
+  @tracked sortField;
+  @tracked sortAgendas = DEFAULT_SORT_OPTIONS.join(',');
 
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
@@ -127,7 +128,15 @@ export default class AgendasController extends Controller {
 
   @action
   sortTable(sortField) {
-    this.sortAgendas = sortField;
+    this.sortField = sortField;
+    // if only 1 field is sorted, the other sort priorities don't work anymore. So append the defaults after the sortField
+    let newSortAgendas = sortField || DEFAULT_SORT_OPTIONS.join(',');
+    for (const sortOption of DEFAULT_SORT_OPTIONS) {
+      if (newSortAgendas.replace(/-/g, '').indexOf(sortOption.replace(/-/g, '')) === -1) {
+        newSortAgendas += ',' + sortOption
+      }
+    }
+    this.sortAgendas = newSortAgendas;
   }
 
   @action
