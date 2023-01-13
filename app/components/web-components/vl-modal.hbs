@@ -1,8 +1,13 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-<div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal-container>
+<div
+  class="auk-modal-backdrop auk-modal-backdrop--visible"
+  data-test-vl-modal-container
+  {{did-insert this.focus}}
+  {{! template-lint-disable no-invalid-interactive}}
+  {{! template-lint-disable no-down-event-binding}}
+  {{on "keydown" this.keyDown}}
+>
   <ClickOutside
-    @onClickOutside={{action "clickOutside"}}
+    @onClickOutside={{this.clickOutside}}
     @exceptSelector=".flatpickr-calendar"
   >
     <div class="auk-modal {{this.sizeClass}}" role="dialog" data-test-vl-modal-dialogwindow>
@@ -12,7 +17,7 @@
           <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
-                <h2 class="auk-toolbar__title">{{this.title}}</h2>
+                <h2 class="auk-toolbar__title">{{@title}}</h2>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             <Auk::Toolbar::Group @position="right">
@@ -23,7 +28,7 @@
                     @skin="naked"
                     @icon="x"
                     @hideText={{true}}
-                    {{action "close"}}
+                    {{on "click" @closeModal}}
                   >
                     {{t "close"}}
                   </AuButton>

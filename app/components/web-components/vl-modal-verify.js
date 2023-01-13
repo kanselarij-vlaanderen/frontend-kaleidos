@@ -1,54 +1,66 @@
-// TODO: octane-refactor
-/* eslint-disable ember/no-get */
-// eslint-disable-next-line ember/no-classic-components
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  intl: inject(),
-  message: null,
-  title: null,
-  showActions: true,
-  buttonType: 'danger',
-  showVerify: true,
-  buttonText: 'delete',
+/**
+ * @param title {string}
+ * @param message {string}
+ * @param showActions {Boolean}
+ * @param showVerify {Boolean}
+ * @param buttonType {string}
+ * @param buttonText {string}
+ * @param isLoading {string}
+ * @param verify {Function}
+ * @param cancel {Function}
+ */
+export default class WebComponentsVlModalVerify extends Component {
+  @service intl;
 
-  verifyButtonText: computed('intl', 'buttonText', function() {
-    return this.intl.t(this.get('buttonText'));
-  }),
+  @tracked element;
+  // message: null,
+  // title: null,
+  // showActions: true,
+  // buttonType: 'danger',
+  // showVerify: true,
+  // buttonText: 'delete',
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-component-lifecycle-hooks
-  didInsertElement() {
-    this._super(...arguments);
-    this.get('element').querySelector('[role="dialog"]')
-      .focus();
-  },
+  get verifyButtonText() {
+    return this.intl.t(this.args.buttonText ?? 'delete');
+  }
 
-  showDestructiveIcon: computed('buttonType', function() {
+  get showDestructiveIcon() {
     return this.buttonType !== 'warning';
-  }),
+  }
 
-  isAlertButton: computed.equal('buttonType', 'danger'),
+  get buttonType() {
+    return this.args.buttonType ?? 'danger';
+  }
 
+  get isAlertButton() {
+    return this.buttonType === 'danger';
+  }
+
+  @action
+  focus(element) {
+    this.element = element;
+    this.element.querySelector('[role="dialog"]').focus();
+  }
+
+  @action
   keyDown(event) {
     if (event.key === 'Escape') {
       this.cancel();
     }
-  },
+  }
 
-  // TODO: octane-refactor
-  // eslint-disable-next-line ember/no-actions-hash
-  actions: {
-    verify() {
-      this.verify();
-    },
+  @action
+  verify() {
+    this.args.verify();
+  }
 
-    cancel() {
-      this.cancel();
-    },
-  },
-});
+  @action
+  cancel() {
+    this.args.cancel();
+  }
+}
