@@ -43,9 +43,6 @@ export default class SubcaseTitlesPanelView extends Component {
   }
 
   get pillSkin() {
-    if (this.approved) {
-      return 'success';
-    }
-    return 'default';
+    return this.approved ? 'success' : 'default';
   }
 }
