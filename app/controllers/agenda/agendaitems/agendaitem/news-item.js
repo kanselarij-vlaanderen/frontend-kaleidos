@@ -41,7 +41,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   closeEdit(wasNewsItemNew) {
     this.isEditing = false;
     if (wasNewsItemNew) {
-      this.refresh();
+      this.router.refresh();
     }
   }
 
@@ -50,17 +50,12 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
     yield newsItem.save();
     this.isEditing = false;
     if (wasNewsItemNew) {
-      this.refresh();
+      this.router.refresh();
     }
   }
 
   @action
   dismissNotaModifiedWarning() {
     this.hideNotaModificationWarning = true;
-  }
-
-  @action
-  refresh() {
-    this.router.refresh();
   }
 }

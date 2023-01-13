@@ -20,7 +20,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   *pollModel() {
     while (true) {
       yield timeout(3 * 60000);
-      this.refresh();
+      this.router.refresh();
     }
   }
 

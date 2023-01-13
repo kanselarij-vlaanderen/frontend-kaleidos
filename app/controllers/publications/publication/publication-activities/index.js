@@ -12,6 +12,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
   @service store;
   @service publicationService;
+  @service router;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
@@ -42,7 +43,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       this.publicationFlow
     );
 
-    this.refresh();
+    this.router.refresh();
     this.closeRequestModal();
   }
 

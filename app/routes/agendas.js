@@ -93,6 +93,6 @@ export default class AgendasRoute extends Route {
 
   @action
   refreshRoute() {
-    this.refresh();
+    this.router.refresh();
   }
 }

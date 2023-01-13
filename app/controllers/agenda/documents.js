@@ -56,7 +56,7 @@ export default class AgendaDocumentsController extends Controller {
     yield all(savePromises);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.refresh();
+    this.router.refresh();
   }
 
   /**
@@ -94,7 +94,7 @@ export default class AgendaDocumentsController extends Controller {
         this.intl.t('warning-title'),
       );
     }
-    this.refresh();
+    this.router.refresh();
   }
 
   @task
@@ -127,12 +127,7 @@ export default class AgendaDocumentsController extends Controller {
 
   @action
   saveBatchDetails() {
-    this.refresh();
-    this.isOpenBatchDetailsModal = false;
-  }
-
-  @action
-  refresh() {
     this.router.refresh();
+    this.isOpenBatchDetailsModal = false;
   }
 }

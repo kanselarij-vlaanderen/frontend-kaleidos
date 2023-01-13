@@ -223,7 +223,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
-      this.refresh();
+      this.router.refresh();
     }
   }
 
@@ -281,7 +281,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       const agendaitemPieces = yield this.agendaitem.hasMany('pieces').reload();
       if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
         // last added piece was found in the list from cache
-        this.refresh();
+        this.router.refresh();
         break;
       } else {
         // list from cache is stale, wait with back-off strategy
@@ -313,7 +313,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   saveBatchDetails() {
     this.isOpenBatchDetailsModal = false;
-    this.refresh();
+    this.router.refresh();
   }
 
   @action
@@ -337,10 +337,5 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async unmarkForSignature(piece) {
     await this.signatureService.unmarkDocumentForSignature(piece);
-  }
-
-  @action
-  refresh() {
-    this.router.refresh();
   }
 }

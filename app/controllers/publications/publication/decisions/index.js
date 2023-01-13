@@ -28,18 +28,13 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
     pieces.forEach((piece) => piece.publicationFlow = this.publicationFlow);
     yield Promise.all(pieces.map((piece) => piece.save()));
 
-    this.refresh();
+    this.router.refresh();
     this.closeReferenceDocumentUploadModal();
   }
 
   @dropTask
   *deletePiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.refresh();
-  }
-
-  @task
-  refresh(){
-    this.router.refresh()
+    this.router.refresh();
   }
 }
