@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
 export default class VlAlertComponent extends Component {
   get typeClass() {
@@ -19,6 +20,7 @@ export default class VlAlertComponent extends Component {
     return 'circle-info';
   }
 
+  @action
   close() {
     this.args.onClose(...arguments);
   }
