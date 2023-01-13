@@ -17,6 +17,7 @@ import {
 } from 'frontend-kaleidos/utils/agenda-approval';
 import bind from 'frontend-kaleidos/utils/bind';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent } from '@ember/utils';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -50,8 +51,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked designAgenda = null;
   @tracked lastApprovedAgenda = null;
 
-  @tracked isClosed = false;
-
   constructor() {
     super(...arguments);
 
@@ -78,11 +77,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         break;
       }
     }
+  }
 
-    const treatedAgenda = yield this.args.meeting.agenda;
-    if (treatedAgenda) {
-      this.isClosed = true;
-    }
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting.agenda.get('id'));
   }
 
   get latestAgenda() {
@@ -116,7 +114,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   get canReopenPreviousAgenda() {
     return (
-      !this.isClosed &&
+      !this.isFinalMeeting &&
       this.isMeetingClosable &&
       this.currentSession.isAdmin &&
       this.currentAgendaIsLatest &&
@@ -271,7 +269,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       );
     } catch (error) {
       // We use this method for 2 actions so we want to show different messages on failure
-      if (this.isClosed === true) {
+      if (this.isFinalMeeting === true) {
         this.toaster.error(
           this.intl.t('error-reopen-meeting', { message: error.message }),
           this.intl.t('warning-title')

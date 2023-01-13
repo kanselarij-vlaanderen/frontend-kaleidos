@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isPresent } from '@ember/utils';
 
 export default class SubcaseDescriptionView extends Component {
   /**
@@ -21,8 +22,6 @@ export default class SubcaseDescriptionView extends Component {
   @tracked approved = null;
   @tracked modelsOfMeetings = [];
 
-  @tracked isClosed = false;
-
   constructor() {
     super(...arguments);
     this.loadAgendaData.perform();
@@ -34,10 +33,14 @@ export default class SubcaseDescriptionView extends Component {
 
   get canShowDecisionStatus() {
     return (
-      this.isClosed &&
+      this.isFinalMeeting &&
       (this.currentSession.may('view-decisions-before-release') ||
         this.latestMeeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
+  }
+
+  get isFinalMeeting() {
+    return isPresent(this.latestMeeting?.agenda?.get('id'));
   }
 
   @task
@@ -75,10 +78,6 @@ export default class SubcaseDescriptionView extends Component {
       if (index === agendaActivities.length - 1) {
         this.latestMeeting = meeting;
       }
-
-    }
-    if (this.latestMeeting?.agenda) {
-      this.isClosed = true;
     }
   }
 }

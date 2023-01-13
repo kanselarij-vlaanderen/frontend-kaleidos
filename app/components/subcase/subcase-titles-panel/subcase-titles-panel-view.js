@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument subcase
@@ -14,7 +15,6 @@ export default class SubcaseTitlesPanelView extends Component {
   @service currentSession;
 
   @tracked approved; // or acknowledged
-  @tracked isClosed;
 
   constructor() {
     super(...arguments);
@@ -29,12 +29,12 @@ export default class SubcaseTitlesPanelView extends Component {
     );
   }
 
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting?.agenda.get('id'));
+  }
+
   @task
   *loadAgendaData() {
-    const treatedAgenda = yield this.args.meeting?.agenda;
-    if (treatedAgenda) {
-      this.isClosed = true;
-    }
     if (this.canShowDecisionStatus) {
       this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
     } else {

@@ -12,6 +12,7 @@ import {
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument {Meeting} meeting
@@ -41,12 +42,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked themisPublicationActivity;
   @tracked latestThemisPublicationActivity;
 
-  @tracked isClosed;
-
   constructor() {
     super(...arguments);
     this.loadPublicationActivities.perform();
-    this.loadAgendaData.perform();
   }  
 
   get showPrintButton() {
@@ -60,7 +58,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   get canPublishDecisions() {
     return (
       this.currentSession.may('manage-decision-publications') &&
-        this.isClosed &&
+        this.isFinalMeeting &&
         this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
@@ -76,7 +74,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.themisPublicationActivity?.status,
     ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
 
-    return mayManagePublication && !loadingActivities && this.isClosed && documentsNotYetReleased;
+    return mayManagePublication && !loadingActivities && this.isFinalMeeting && documentsNotYetReleased;
   }
 
   get canPublishThemis() {
@@ -85,13 +83,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const documentsAlreadyReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
     return this.currentSession.may('manage-themis-publications') &&
-      this.isClosed &&
+      this.isFinalMeeting &&
       documentsAlreadyReleased;
   }
 
   get canUnpublishThemis() {
     return this.currentSession.may('manage-themis-publications') &&
-      this.isClosed &&
+      this.isFinalMeeting &&
       this.latestThemisPublicationActivity != null;
   }
 
@@ -101,6 +99,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
       CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS
     ];
+  }
+
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting.agenda.get('id'));
   }
 
   @bind
@@ -132,14 +134,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
       sort: '-start-date',
     });
-  }
-
-  @task
-  *loadAgendaData() {
-    const treatedAgenda = yield this.args.meeting.agenda;
-    if(treatedAgenda) {
-      this.isClosed = true;
-    }
   }
 
   /**
