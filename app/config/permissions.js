@@ -2,6 +2,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   ADMIN,
+  KANSELARIJ,
   SECRETARIE,
   OVRB,
   KORT_BESTEK,
@@ -68,6 +69,30 @@ const groups = [
     ]
   },
   {
+    name: 'KANSELARIJ',
+    roles: [KANSELARIJ],
+    defaultRoute: 'agendas',
+    permissions: [
+      'manage-signatures',
+      'manage-agenda-versions',
+      'manage-agendaitems',
+      'manage-decisions',
+      'manage-cases',
+      'manage-meetings',
+      'manage-documents',
+      'manage-document-access-levels',
+      'manage-publication-flows',
+      'search-publication-flows',
+      'manage-news-items',
+      'manage-decision-publications',
+      'manage-document-publications',
+      'manage-themis-publications',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+    ]
+  },
+  {
     name: 'SECRETARIE',
     roles: [SECRETARIE],
     defaultRoute: 'agendas',
@@ -84,7 +109,6 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
-      'manage-settings',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',

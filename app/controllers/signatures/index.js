@@ -7,17 +7,19 @@ export default class SignaturesIndexController extends Controller {
   @service router;
   @service store;
 
-  queryParams = {
-    page: {
-      type: 'number',
+  queryParams = [
+    {
+      page: {
+        type: 'number',
+      },
+      size: {
+        type: 'number',
+      },
+      sort: {
+        type: 'string',
+      },
     },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
+  ];
   page = 0;
   size = 10;
 
@@ -65,7 +67,9 @@ export default class SignaturesIndexController extends Controller {
 
   @action
   async uploadPiecesToSigninghub(signingFlow) {
-    const pieces = [ await (await (await signingFlow.signSubcase).signMarkingActivity).piece ]
+    const pieces = [
+      await (await (await signingFlow.signSubcase).signMarkingActivity).piece,
+    ];
     digitalSigning.uploadPiecesToSigninghub(signingFlow, pieces);
   }
 

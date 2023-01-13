@@ -4,9 +4,9 @@
 >
   {{#if @isEditingEnabled}}
     <td class="auk-table-checkbox-col">
-      <Auk::Checkbox
+      <AuControlCheckbox
         @checked={{@isSelected}}
-        {{on "input" (fn @onSelect @row)}}
+        @onChange={{fn @onSelect @row}}
       />
     </td>
   {{/if}}

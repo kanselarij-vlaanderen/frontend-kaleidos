@@ -19,8 +19,8 @@ export default class PublicationsTableDisplayConfigModalComponent extends Compon
   }
 
   @action
-  toggleColumnVisibility(columnKey, event) {
-    if (event.target.checked) {
+  toggleColumnVisibility(columnKey, checked) {
+    if (checked) {
       this.args.tableConfig.visibleColumnKeys.add(columnKey);
     } else {
       this.args.tableConfig.visibleColumnKeys.delete(columnKey);

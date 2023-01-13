@@ -5,13 +5,11 @@
         {{#if this.markOrUnmarkForSignature.isRunning}}
           <Auk::Loader/>
         {{else}}
-          <Auk::Checkbox
+          <AuControlCheckbox
+            @label={{t "signature-needed"}}
             @checked={{this.signMarkingActivity}}
-            {{on "input" (perform this.markOrUnmarkForSignature)}}
-          >
-            {{! could use @label, but prototype shows a tooltip, so we need a block instead}}
-            <p>{{t "signature-needed"}}</p>
-          </Auk::Checkbox>
+            @onChange={{perform this.markOrUnmarkForSignature}}
+          />
         {{/if}}
       {{else}}
         <p>{{t "signature-not-possible"}}</p>
