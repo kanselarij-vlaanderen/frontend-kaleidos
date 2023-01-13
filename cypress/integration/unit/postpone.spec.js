@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 // import document from '../../selectors/document.selectors';
@@ -57,8 +58,10 @@ context('Decision postponing tests', () => {
     cy.wait(2000);
     // postpone agendaitem on agenda B
     cy.intercept('PATCH', '/decision-activities/**').as('patchActivity1');
-    cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.postpone).click();
+    cy.get(agenda.agendaitemControls.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaitemControls.action.postpone).forceClick();
     cy.wait('@patchActivity1');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
@@ -66,8 +69,10 @@ context('Decision postponing tests', () => {
 
     // advance agendaitem
     cy.intercept('PATCH', '/decision-activities/**').as('patchActivity2');
-    cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.postponeRevert).click();
+    cy.get(agenda.agendaitemControls.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaitemControls.action.postponeRevert).forceClick();
     cy.wait('@patchActivity2');
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);

@@ -167,7 +167,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.pubLink).should('not.exist');
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -193,7 +195,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
@@ -319,7 +323,9 @@ context('Testing the application as Secretarie user', () => {
       // Detail Tab - Document tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -337,7 +343,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
@@ -405,7 +413,9 @@ context('Testing the application as Secretarie user', () => {
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -422,7 +432,9 @@ context('Testing the application as Secretarie user', () => {
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
