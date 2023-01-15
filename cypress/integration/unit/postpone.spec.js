@@ -121,14 +121,17 @@ context('Decision postponing tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
 
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
-    cy.get(agenda.agendaitemPostponed.repropose).click();
+    cy.get(agenda.agendaitemPostponed.repropose)
+      .children(appuniversum.button)
+      .click();
     cy.intercept('POST', '/submission-activities').as('postSubmissionActivities');
     cy.intercept('POST', '/agenda-activities').as('postAgendaActivities');
     cy.intercept('POST', '/decision-activities').as('postDecisionActivities');
     cy.intercept('POST', '/agenda-item-treatments').as('postAgendaItemTreatments');
     cy.intercept('PATCH', '/submission-activities/**').as('patchSubmissonActivities');
-    cy.get(agenda.agendaitemPostponed.proposableMeeting).contains(agendaDateFormatted)
-      .click()
+    cy.get(agenda.agendaitemPostponed.proposableMeeting)
+      .contains(agendaDateFormatted)
+      .forceClick()
       .wait('@postSubmissionActivities')
       .wait('@postAgendaActivities')
       .wait('@postDecisionActivities')
