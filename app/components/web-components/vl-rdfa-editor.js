@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class WebComponentsVlRdfaEditor extends Component {
@@ -16,10 +15,5 @@ export default class WebComponentsVlRdfaEditor extends Component {
       || browser.isFirefox
       || browser.isChrome
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
-  }
-
-  @action
-  handleRdfaEditorInit(editorInterface) {
-    this.args.handleRdfaEditorInit(editorInterface);
   }
 }

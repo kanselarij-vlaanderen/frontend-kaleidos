@@ -1,7 +1,7 @@
 {{#if this.browserIsSupported}}
   <Rdfa::RdfaEditor
     @class="rdfa-editor"
-    @rdfaEditorInit={{this.handleRdfaEditorInit}}
+    @rdfaEditorInit={{@handleRdfaEditorInit}}
     @profile="default"
     @editorOptions={{hash
       showToggleRdfaAnnotations=null
