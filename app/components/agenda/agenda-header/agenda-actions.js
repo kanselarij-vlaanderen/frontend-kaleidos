@@ -45,7 +45,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   constructor() {
     super(...arguments);
     this.loadPublicationActivities.perform();
-  }  
+  }
 
   get showPrintButton() {
     return this.router.currentRouteName === 'agenda.print';
@@ -58,8 +58,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   get canPublishDecisions() {
     return (
       this.currentSession.may('manage-decision-publications') &&
-        this.isFinalMeeting &&
-        this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
+      this.isFinalMeeting &&
+      this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
 
@@ -109,8 +109,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-          .sortBy('number');
+      .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
+      .sortBy('number');
   }
 
   @task
