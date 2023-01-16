@@ -14,7 +14,7 @@
     </div>
   {{/if}}
   {{#if @closeable}}
-    <button data-test-vl-alert-close class="vl-alert__close" type="button" {{on "click" this.close}}>
+    <button data-test-vl-alert-close class="vl-alert__close" type="button" {{on "click" @onClose}}>
       <Auk::Icon @name="x" />
       <div class="auk-u-sr-only">
         {{t "close"}}
