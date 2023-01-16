@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -94,7 +95,9 @@ context('Testing the application as Secretarie user', () => {
       // Main view - Agenda actions
       // The agenda actions should be admin/kanselarij only so we only test if the button is showing.
       // Some of the options are very dependent on agenda status and are tested elsewhere.
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda);
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda);
       cy.get(agenda.agendaVersionActions.actions.lockAgenda);
@@ -103,7 +106,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
 
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems);
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -162,7 +167,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.pubLink).should('not.exist');
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -188,7 +195,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
@@ -218,7 +227,9 @@ context('Testing the application as Secretarie user', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
@@ -226,7 +237,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -247,7 +260,9 @@ context('Testing the application as Secretarie user', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
@@ -255,7 +270,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -306,7 +323,9 @@ context('Testing the application as Secretarie user', () => {
       // Detail Tab - Document tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -324,7 +343,9 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).click();
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
       cy.get(document.documentCard.delete);
@@ -392,7 +413,9 @@ context('Testing the application as Secretarie user', () => {
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
@@ -409,7 +432,9 @@ context('Testing the application as Secretarie user', () => {
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
-      cy.get(document.documentCard.actions).eq(0)
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
