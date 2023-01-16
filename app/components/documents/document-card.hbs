@@ -217,7 +217,7 @@
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPiece}}
+    @onClose={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
     @title={{t "new-document-piece"}}
   >

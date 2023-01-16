@@ -97,7 +97,7 @@
 
 {{#if this.isAssigningToOtherCase}}
   <WebComponents::VlModal
-    @closeModal={{this.cancel}}
+    @onClose={{this.cancel}}
     @isOverlay={{true}}
     @title={{t "move-subcase-to-other-case"}}
   >
@@ -109,7 +109,7 @@
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "propose-for-agenda"}}
-    @closeModal={{this.cancel}}
+    @onClose={{this.cancel}}
   >
     <Subcases::ProposableMeetings
       @onProposeForMeeting={{perform this.proposeForAgenda}}

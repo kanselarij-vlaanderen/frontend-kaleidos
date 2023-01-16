@@ -90,7 +90,7 @@
 
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPieces}}
+    @onClose={{perform this.cancelUploadPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}}

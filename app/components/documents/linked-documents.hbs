@@ -27,7 +27,7 @@
 
 {{#if this.isOpenLinkedPieceModal}}
   <WebComponents::VlModal
-    @closeModal={{this.cancelLinkPieces}}
+    @onClose={{this.cancelLinkPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >

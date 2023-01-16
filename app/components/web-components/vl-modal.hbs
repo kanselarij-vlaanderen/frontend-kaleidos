@@ -7,7 +7,7 @@
   {{on "keydown" this.keyDown}}
 >
   <ClickOutside
-    @onClickOutside={{this.clickOutside}}
+    @onClickOutside={{this.onClickOutside}}
     @exceptSelector=".flatpickr-calendar"
   >
     <div class="auk-modal {{this.sizeClass}}" role="dialog" data-test-vl-modal-dialogwindow>
@@ -28,7 +28,7 @@
                     @skin="naked"
                     @icon="x"
                     @hideText={{true}}
-                    {{on "click" @closeModal}}
+                    {{on "click" @onClose}}
                   >
                     {{t "close"}}
                   </AuButton>

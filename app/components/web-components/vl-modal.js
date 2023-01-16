@@ -21,15 +21,19 @@ const FOCUSABLE_ELEMENTS = [
 ];
 
 /**
- * @param clickOutside {Boolean}
+ * @param closeOnClickOutside {Boolean}
  * @param showCloseButton {Boolean}
  * @param isDocumentViewer {Boolean}
  * @param disableFocus {Boolean}
  * @param title {string}
- * @param closeModal {Function}
+ * @param onClose {Function}
  */
 export default class WebComponentsVlModal extends Component {
   @tracked element;
+
+  get closeOnClickOutside() {
+    return this.args.closeOnClickOutside ?? false;
+  }
 
   get showCloseButton() {
     return this.args.showCloseButton ?? true;
@@ -82,7 +86,7 @@ export default class WebComponentsVlModal extends Component {
   @action
   keyDown(event) {
     if (event.key === 'Escape') {
-      this.args.closeModal();
+      this.args.onClose();
     }
     if (event.key === 'Tab') {
       this.maintainFocus(event);
@@ -90,9 +94,9 @@ export default class WebComponentsVlModal extends Component {
   }
 
   @action
-  clickOutside() {
-    if (this.clickOutside) {
-      this.args.closeModal();
+  onClickOutside() {
+    if (this.closeOnClickOutside) {
+      this.args.onClose();
     }
   }
 }
