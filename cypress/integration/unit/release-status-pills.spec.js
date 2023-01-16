@@ -26,10 +26,10 @@ context('Testing internal and themis document release pills', () => {
     cy.approveAndCloseDesignAgenda();
 
     // check if planned release date is the changed value
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.planReleaseDocuments).click({
-      force: true,
-    });
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
     cy.get(auk.datepicker.datepicker).eq(0)
       .should('have.value', nextDay.format('DD-MM-YYYY HH:mm'));
     cy.get(auk.datepicker.datepicker).eq(1)
@@ -47,10 +47,10 @@ context('Testing internal and themis document release pills', () => {
     });
 
     // change release date and check if value changed
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.planReleaseDocuments).click({
-      force: true,
-    });
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
     cy.get(auk.datepicker.datepicker).eq(0)
       .click();
     cy.setDateAndTimeInFlatpickr(newReleaseDate);
