@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
@@ -146,8 +147,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@patchNewsItem');
     cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
@@ -277,8 +280,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem');
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     // The previous subcase had "in-newsletter" as checked, verify it was not inherited
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseShortTitle)
       .parents(newsletter.tableRow.newsletterRow)
@@ -344,8 +349,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)

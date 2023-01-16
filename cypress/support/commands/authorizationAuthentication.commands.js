@@ -4,6 +4,7 @@
 
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 
 /**
@@ -101,10 +102,12 @@ function logoutFlow() {
   cy.log('logoutFlow');
   cy.intercept('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('/overzicht?size=2');
-  cy.get(utils.mHeader.userActions).click();
+  cy.get(utils.mHeader.userActions)
+    .children(appuniversum.button)
+    .click();
   cy.get(utils.mHeader.userAction.logout)
     .contains('Afmelden')
-    .click();
+    .forceClick();
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }

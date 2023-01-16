@@ -17,6 +17,5 @@ export default class NewsItem extends ModelWithModifier {
 
   @belongsTo('agenda-item-treatment') agendaItemTreatment;
 
-  @hasMany('piece', { inverse: null }) attachments;
   @hasMany('themes', { inverse: null }) themes;
 }
