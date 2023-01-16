@@ -8,11 +8,16 @@ import {
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+/**
+ * @param onLink {Function} Action executed when a piece is selected
+ * @param onUnlink {Function} Action executed when a piece is deselected
+ */
 export default class AddExistingPiece extends Component {
   @service store;
   @tracked page = 0;
   @tracked filter = '';
   @tracked pieces = [];
+  @tracked selected = [];
 
   size = 5;
   sort = ['-created', 'name'];
@@ -35,10 +40,6 @@ export default class AddExistingPiece extends Component {
     this.findAll.perform();
   }
 
-  setSelectedToFalse() {
-    this.pieces.map((piece) => piece.set('selected', false));
-  }
-
   queryOptions() {
     const options = {
       sort: this.sort,
@@ -59,7 +60,7 @@ export default class AddExistingPiece extends Component {
     yield timeout(300);
     this.pieces = yield this.store.query('piece', this.queryOptions());
     yield timeout(100);
-    this.setSelectedToFalse();
+    this.selected = [];
   }
 
   @restartableTask
@@ -71,16 +72,16 @@ export default class AddExistingPiece extends Component {
   }
 
   @action
-  async select(piece, _checked, event) {
-    if (event) {
-      event.stopPropagation();
-    }
-    if (piece.selected) {
-      piece.set('selected', false);
-      this.args.delete(piece);
+  select(piece) {
+    const index = this.selected.indexOf(piece);
+    const isSelected = index > -1;
+
+    if (isSelected) {
+      this.selected = [...this.selected.slice(0, index), ...this.selected.slice(index + 1)];
+      this.args.onUnlink(piece);
     } else {
-      piece.set('selected', true);
-      this.args.add(piece);
+      this.selected = [...this.selected, piece];
+      this.args.onLink(piece);
     }
   }
 }
