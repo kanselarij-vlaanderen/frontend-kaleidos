@@ -104,7 +104,6 @@ Router.map(function() {
 
   this.route('not-supported');
   this.route('help');
-  this.route('manual', { path: '/handleiding', });
   this.route('route-not-found', { path: '/*wildcard', });
 
   this.route('styleguide', function() {
@@ -120,7 +119,7 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('checkboxes-radio-buttons');
+    this.route('radio-buttons');
     this.route('colors');
     this.route('color-badge');
     this.route('datepicker');

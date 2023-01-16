@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
 
@@ -67,7 +68,9 @@ context('Agenda tests', () => {
     cy.get(auk.modal.footer.cancel).click();
 
     // Should not be able to close a session with only a design agenda, cfr. KAS-1551
-    cy.get(agenda.agendaVersionActions.showOptions).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
     // Should not be able to reopenprevious with only a design agenda
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
@@ -102,8 +105,10 @@ context('Agenda tests', () => {
   it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
     // const agendaDate = Cypress.dayjs('2022-04-08');
     cy.visitAgendaWithLink('/vergadering/627E52AD89C002BE724F77B9/agenda/627E52AE89C002BE724F77BA/agendapunten');
-    cy.get(agenda.agendaVersionActions.showOptions).click();
-    cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaVersionActions.actions.deleteAgenda).forceClick();
     cy.get(auk.modal.body).find(auk.alert.message);
     cy.get(agenda.agendaVersionActions.confirm.deleteAgenda);
     cy.get(auk.modal.footer.cancel).click();
@@ -207,8 +212,10 @@ context('Agenda tests', () => {
     cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       // Check the values in edit session view
-      cy.get(agenda.agendaActions.showOptions).click();
-      cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
       cy.wait('@getDecisionPubActivity');
       cy.wait('@getDocPubActivity');
       cy.wait('@getThemisPubActivity');
@@ -248,8 +255,10 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShortApproved);
     cy.addAgendaitemToAgenda(subcaseTitleShortNew); // !TODO KAS-3413 could be placed in setup
 
-    cy.get(agenda.agendaVersionActions.showOptions).click();
-    cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaVersionActions.actions.lockAgenda).forceClick();
     cy.get(auk.modal.body).find(auk.alert.message)
       .contains('met alle wijzigingen wil verwijderen?');
     cy.get(auk.modal.footer.cancel).click();
@@ -296,8 +305,10 @@ context('Agenda tests', () => {
     cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
     // switch to PVV
     cy.openAgendaForDate(agendaDatePVV);
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
@@ -317,8 +328,10 @@ context('Agenda tests', () => {
 
     // switch to MR
     cy.openAgendaForDate(agendaDateMR, 1);
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');

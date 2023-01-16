@@ -4,20 +4,22 @@ import { tracked } from '@glimmer/tracking';
 import formatDate from '../utils/format-date-search-param';
 
 export default class SearchController extends Controller {
-  queryParams = {
-    searchText: {
-      type: 'string',
+  queryParams = [
+    {
+      searchText: {
+        type: 'string',
+      },
+      mandatees: {
+        type: 'string',
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
     },
-    mandatees: {
-      type: 'string',
-    },
-    dateFrom: {
-      type: 'string',
-    },
-    dateTo: {
-      type: 'string',
-    },
-  };
+  ];
 
   sizeOptions = [5, 10, 20, 50, 100, 200];
 

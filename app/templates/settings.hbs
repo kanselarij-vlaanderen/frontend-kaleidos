@@ -25,13 +25,13 @@
               >
                 {{t "manage-users"}}
               </Auk::Tab>
+              <Auk::Tab
+                @route="settings.organizations"
+                data-test-route-settings-manage-organizations
+              >
+                {{t "manage-organizations"}}
+              </Auk::Tab>
             {{/if}}
-            <Auk::Tab
-              @route="settings.organizations"
-              data-test-route-settings-manage-organizations
-            >
-              {{t "manage-organizations"}}
-            </Auk::Tab>
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>

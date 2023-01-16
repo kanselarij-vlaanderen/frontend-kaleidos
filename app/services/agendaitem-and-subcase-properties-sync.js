@@ -16,6 +16,12 @@ const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = 
 
   const keys = Object.keys(propertiesToSet);
   for (const key of keys) {
+    // Do not remove this seemingly unnecessary get!
+    // If we don't fetch the relationship we want to set here before setting it,
+    // for some unknown reason Ember will overwrite its value with the original
+    // relationship when saving the model, in particular when it does the
+    // preEditOrSaveCheck in the _saveAllowed method when fetching modifiedBy.
+    await model.get(key);
     model.set(key, propertiesToSet[key]);
   }
 

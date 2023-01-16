@@ -3,14 +3,17 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function checkNewsletterPage(headerText, newsletterTitle) {
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.navigateToNewsletter).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
@@ -44,21 +47,21 @@ context('Different session kinds should show different titles', () => {
     });
   });
 
-  it('should show the correct translations for normal session in newsletter-info print overview', () => {
+  it('should show the correct translations for normal session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad';
     const newsletterTitle = headerText;
     cy.visit(regular);
     checkNewsletterPage(headerText, newsletterTitle);
   });
 
-  it('should show the correct translations for special session in newsletter-info print overview', () => {
+  it('should show the correct translations for special session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad';
     const newsletterTitle = headerText;
     cy.visit(special);
     checkNewsletterPage(headerText, newsletterTitle);
   });
 
-  it('should show the correct translations for electronic session in newsletter-info print overview', () => {
+  it('should show the correct translations for electronic session in news-item print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Elektronische procedure';
     const newsletterTitle = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.visit(electronic);
@@ -103,8 +106,10 @@ context('Different session kinds should show different titles', () => {
     cy.wait('@createAgenda');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');

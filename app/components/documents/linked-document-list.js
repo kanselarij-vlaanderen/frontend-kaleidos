@@ -21,7 +21,6 @@ class DocumentHistory {
 
 export default class LinkedDocumentList extends Component {
   @service store;
-  @service fileService;
 
   @tracked documentHistories = A([]);
 

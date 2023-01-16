@@ -7,38 +7,40 @@ import formatDate from '../../../utils/format-date-search-param';
 export default class PublicationsOverviewSearchController extends Controller {
   @service router;
 
-  queryParams = {
-    searchText: {
-      type: 'string',
+  queryParams = [
+    {
+      searchText: {
+        type: 'string',
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
+      publicationDateTypeKey: {
+        type: 'string',
+      },
+      regulationTypeIds: {
+        type: 'array',
+      },
+      publicationStatusIds: {
+        type: 'array',
+      },
+      urgentOnly: {
+        type: 'boolean',
+      },
+      page: {
+        type: 'number',
+      },
+      size: {
+        type: 'number',
+      },
+      sort: {
+        type: 'string',
+      },
     },
-    dateFrom: {
-      type: 'string',
-    },
-    dateTo: {
-      type: 'string',
-    },
-    publicationDateTypeKey: {
-      type: 'string',
-    },
-    regulationTypeIds: {
-      type: 'array',
-    },
-    publicationStatusIds: {
-      type: 'array',
-    },
-    urgentOnly: {
-      type: 'boolean',
-    },
-    page: {
-      type: 'number',
-    },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
+  ];
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
@@ -103,11 +105,15 @@ export default class PublicationsOverviewSearchController extends Controller {
   }
 
   get selectedRegulationTypes() {
-    return this.regulationTypeIds.map((typeId) => this.regulationTypes.find(type => type.id === typeId));
+    return this.regulationTypeIds.map((typeId) =>
+      this.regulationTypes.find((type) => type.id === typeId)
+    );
   }
 
   get selectedPublicationStatuses() {
-    return this.publicationStatusIds.map((statusId) => this.publicationStatuses.find(status => status.id === statusId));
+    return this.publicationStatusIds.map((statusId) =>
+      this.publicationStatuses.find((status) => status.id === statusId)
+    );
   }
 
   @action
@@ -131,12 +137,12 @@ export default class PublicationsOverviewSearchController extends Controller {
 
   @action
   updateSelectedRegulationTypes(regulationTypes) {
-    this.regulationTypeIds = regulationTypes.map(rt => rt.id);
+    this.regulationTypeIds = regulationTypes.map((rt) => rt.id);
   }
 
   @action
   updateSelectedPublicationStatuses(publicationStatuses) {
-    this.publicationStatusIds = publicationStatuses.map(ps => ps.id);
+    this.publicationStatusIds = publicationStatuses.map((ps) => ps.id);
   }
 
   @action
@@ -146,6 +152,9 @@ export default class PublicationsOverviewSearchController extends Controller {
 
   @action
   navigateToPublicationFlow(publicationFlow) {
-    this.router.transitionTo('publications.publication.index', publicationFlow.id);
+    this.router.transitionTo(
+      'publications.publication.index',
+      publicationFlow.id
+    );
   }
 }

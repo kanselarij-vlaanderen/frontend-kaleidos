@@ -99,15 +99,15 @@
           <Auk::Label>{{t "government-domains"}}</Auk::Label>
           <Auk::CheckboxList>
             {{#each this.governmentDomains as |governmentDomain|}}
-              <Auk::Checkbox
+              <AuControlCheckbox
                 @checked={{includes
                   governmentDomain
                   this.selectedGovernmentDomains
                 }}
-                {{on "input" (fn this.selectGovernmentDomain governmentDomain)}}
+                @onChange={{fn this.selectGovernmentDomain governmentDomain}}
               >
                 {{governmentDomain.label}}
-              </Auk::Checkbox>
+              </AuControlCheckbox>
             {{/each}}
           </Auk::CheckboxList>
         </div>
@@ -117,15 +117,15 @@
           <Auk::Label>{{t "regulation-types"}}</Auk::Label>
           <Auk::CheckboxList>
             {{#each this.regulationTypes as |regulationType|}}
-              <Auk::Checkbox
+              <AuControlCheckbox
                 @checked={{includes
                   regulationType
                   this.selectedRegulationTypes
                 }}
-                {{on "input" (fn this.selectRegulationType regulationType)}}
+                @onChange={{fn this.selectRegulationType regulationType}}
               >
                 {{regulationType.label}}
-              </Auk::Checkbox>
+              </AuControlCheckbox>
             {{/each}}
           </Auk::CheckboxList>
         </div>

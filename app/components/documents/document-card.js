@@ -6,9 +6,11 @@ import { A } from '@ember/array';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { isPresent, isEmpty } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
+import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
+import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -25,7 +27,6 @@ export default class DocumentsDocumentCardComponent extends Component {
    */
   @service store;
   @service currentSession;
-  @service fileService;
   @service toaster;
   @service intl;
   @service pieceAccessLevelService;
@@ -194,7 +195,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *deleteUploadedPiece() {
     if (this.newPiece) {
       this.pieces.removeObject(this.newPiece);
-      yield this.fileService.deletePiece(this.newPiece);
+      yield deletePiece(this.newPiece);
       this.newPiece = null;
     }
   }
@@ -236,7 +237,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       },
     };
     verificationToast.options.onUndo = () => {
-      this.fileService.reverseDelete(this.documentContainer.id);
+      this.deleteDocumentContainerWithUndo.cancelAll();
       this.toaster.toasts.removeObject(verificationToast);
     };
     this.toaster.displayToast.perform(verificationToast);
@@ -246,13 +247,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *deleteDocumentContainerWithUndo() {
-    // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
-    yield this.fileService.deleteDocumentContainerWithUndo.perform(
-      this.documentContainer
-    );
-    if (this.args.didDeleteContainer) {
-      this.args.didDeleteContainer(this.documentContainer);
-    }
+    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+    yield deleteDocumentContainer(this.documentContainer);
+    this.args.didDeleteContainer?.(this.documentContainer);
   }
 
   @action

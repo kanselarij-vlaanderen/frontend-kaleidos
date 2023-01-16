@@ -25,7 +25,7 @@
             <Auk::Tab @route="cases" data-test-m-header-cases>
               {{t "cases"}}
             </Auk::Tab>
-            {{#if (user-may "manage-newsletter-infos")}}
+            {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 @route="newsletters"
                 @current-when="newsletters newsletter"
@@ -78,13 +78,13 @@
           @icon="circle-question"
           @iconAlignment="left"
         >
-          <AuLink
-            @route="manual"
+          <AuLinkExternal
+            href="/handleiding"
             role="menuitem"
             target="_blank"
           >
             {{t "look-at-documentation"}}
-          </AuLink>
+          </AuLinkExternal>
           <AuHr />
           <AuLink
             href="mailto:kaleidos.servicedesk@vlaanderen.be"

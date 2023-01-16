@@ -9,12 +9,13 @@ export default class NewsletterController extends Controller {
 
   @service intl;
   @service toaster;
+  @service router;
 
   @tracked sort = 'number';
 
   @task
-  *saveNewsletterItem(newsletterItem, wasNewsItemNew) {
-    yield newsletterItem.save();
+  *saveNewsItem(newsItem, wasNewsItemNew) {
+    yield newsItem.save();
     if (wasNewsItemNew) {
       this.send('reloadModel');
     }

@@ -7,13 +7,14 @@ import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function checkRoleFilterSingle(name, numberOfResults) {
-  cy.get(auk.checkbox.label).contains(name)
+  cy.contains(appuniversum.checkbox, name)
     .click();
   cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
   cy.get(utils.numberPagination.container).contains(`van ${numberOfResults}`);
-  cy.get(auk.checkbox.label).contains(name)
+  cy.contains(appuniversum.checkbox, name)
     .click();
 }
 
@@ -34,7 +35,7 @@ context('testing user and organisation management', () => {
       cy.wait('@getRoles');
     });
 
-    it('check filter by organization or OVO-code', () => {
+    it('check filter by organization or ID', () => {
       // filter by organization name
       cy.get(settings.organizationFilter.filter).click();
       cy.get(settings.organizationFilter.search).type('Kaleidos Test Organisatie Alternatief');
@@ -45,9 +46,9 @@ context('testing user and organisation management', () => {
 
       // remove filter
       cy.get(settings.organizationFilter.clearFilter).click();
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
-      // filter by OVO-code
+      // filter by organization ID
       cy.get(settings.organizationFilter.filter).click();
       cy.intercept('GET', '/user-organizations?filter=OVO0**').as('filterOrg');
       cy.get(settings.organizationFilter.search).type('OVO0')
@@ -55,7 +56,7 @@ context('testing user and organisation management', () => {
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
-      cy.get(utils.numberPagination.container).contains('van 9');
+      cy.get(utils.numberPagination.container).contains('van 10');
 
 
       // site can throw errors which fail our test
@@ -76,13 +77,13 @@ context('testing user and organisation management', () => {
         .click();
       cy.setDateInFlatpickr(dateEarlier);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
@@ -93,20 +94,20 @@ context('testing user and organisation management', () => {
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.clear)
         .click();
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       // filter by end date
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
       cy.setDateInFlatpickr(dateLater);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterTo).find(auk.datepicker.datepicker)
         .click();
@@ -130,7 +131,7 @@ context('testing user and organisation management', () => {
         .click();
       cy.setDateInFlatpickr(date);
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
-      cy.get(utils.numberPagination.container).contains('van 12');
+      cy.get(utils.numberPagination.container).contains('van 13');
 
       cy.get(settings.usersIndex.dateFilterFrom).find(auk.datepicker.datepicker)
         .click();
@@ -144,15 +145,15 @@ context('testing user and organisation management', () => {
     });
 
     it('check filter by group', () => {
-      checkRoleFilterSingle('Admin', 8);
-      checkRoleFilterSingle('Secretarie', 11);
-      checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 11);
-      checkRoleFilterSingle('Kort bestek redactie', 11);
-      checkRoleFilterSingle('Minister', 11);
-      checkRoleFilterSingle('Kabinetdossierbeheerder', 11);
-      checkRoleFilterSingle('Kabinetmedewerker', 11);
-      checkRoleFilterSingle('Overheidsorganisatie', 11);
-      checkRoleFilterSingle('Vlaams Parlement', 11);
+      checkRoleFilterSingle('Admin', 9);
+      checkRoleFilterSingle('Secretarie', 12);
+      checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 12);
+      checkRoleFilterSingle('Kort bestek redactie', 12);
+      checkRoleFilterSingle('Minister', 12);
+      checkRoleFilterSingle('Kabinetdossierbeheerder', 12);
+      checkRoleFilterSingle('Kabinetmedewerker', 12);
+      checkRoleFilterSingle('Overheidsorganisatie', 12);
+      checkRoleFilterSingle('Vlaams Parlement', 12);
     });
 
     it('check filter by blocked', () => {
@@ -170,16 +171,16 @@ context('testing user and organisation management', () => {
 
     it('test the datatable', () => {
       // check if no result possible
-      cy.get(auk.checkbox.label).contains('Werkrelatie')
+      cy.contains(appuniversum.checkbox, 'Werkrelatie')
         .click();
-      cy.get(auk.checkbox.label).contains('Gebruiker')
+      cy.contains(appuniversum.checkbox, 'Gebruiker')
         .click();
 
       cy.get(settings.usersIndex.table).contains('Geen resultaten gevonden');
 
-      cy.get(auk.checkbox.label).contains('Werkrelatie')
+      cy.contains(appuniversum.checkbox, 'Werkrelatie')
         .click();
-      cy.get(auk.checkbox.label).contains('Gebruiker')
+      cy.contains(appuniversum.checkbox, 'Gebruiker')
         .click();
 
       // check sort by name
@@ -214,11 +215,10 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.usersIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get(settings.usersIndex.row.action.unblockUser)
-        .click({
-          force: true,
-        });
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.usersIndex.row.name).contains('User who is Blocked Test')
         .find('au-c-pill--error')
@@ -301,7 +301,7 @@ context('testing user and organisation management', () => {
       // cy.wait('@getRoles');
     });
 
-    it('check filter by organization or OVO-code', () => {
+    it('check filter by organization or organization ID', () => {
       // filter by organization name
       cy.get(settings.organizationFilter.filter).click();
       cy.get(settings.organizationFilter.search).type('Kaleidos Test Organisatie Alternatief');
@@ -315,7 +315,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.organizationFilter.clearFilter).click();
       cy.get(settings.organizationsIndex.row.name).should('have.length', 3);
 
-      // filter by OVO-code
+      // filter by organization ID
       cy.get(settings.organizationFilter.filter).click();
       cy.intercept('GET', '/user-organizations?filter=OVO0**').as('filterOrg');
       cy.get(settings.organizationFilter.search).type('OVO0')
@@ -323,7 +323,7 @@ context('testing user and organisation management', () => {
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
-      cy.get(settings.organizationsIndex.row.ovoCode).should('have.length', 1)
+      cy.get(settings.organizationsIndex.row.organizationId).should('have.length', 1)
         .contains('OVO0BOGUS');
 
       // site can throw errors which fail our test
@@ -337,7 +337,7 @@ context('testing user and organisation management', () => {
 
     it('check filter by blocked', () => {
       cy.get(settings.organizationsIndex.filterBlocked).click();
-      cy.get(settings.organizationsIndex.row.ovoCode).should('have.length', 1)
+      cy.get(settings.organizationsIndex.row.organizationId).should('have.length', 1)
         .contains('OVO2BOGUS');
     });
 
@@ -348,9 +348,10 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.unblockOrganization)
-        .click();
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .find('.au-c-pill--error')
@@ -376,9 +377,10 @@ context('testing user and organisation management', () => {
       // check blocking
       // cy.get(settings.organizationsIndex.filterBlocked).click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.blockOrganization)
-        .click();
+        .forceClick();
       cy.get(auk.modal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .contains('Geblokkeerd');
@@ -415,15 +417,15 @@ context('testing user and organisation management', () => {
       // check sort by last seen
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.ovoCode).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
         .click();
     });
 

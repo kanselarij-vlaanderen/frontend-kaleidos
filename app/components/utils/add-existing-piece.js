@@ -71,7 +71,7 @@ export default class AddExistingPiece extends Component {
   }
 
   @action
-  async select(piece, event) {
+  async select(piece, _checked, event) {
     if (event) {
       event.stopPropagation();
     }

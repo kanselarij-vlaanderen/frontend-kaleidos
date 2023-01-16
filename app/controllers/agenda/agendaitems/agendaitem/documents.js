@@ -20,7 +20,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service store;
   @service agendaService;
   @service signatureService;
-  @service fileService;
+  @service fileConversionService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -154,7 +154,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -171,7 +171,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
-      yield this.fileService.convertSourceFile(sourceFile);
+      yield this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),

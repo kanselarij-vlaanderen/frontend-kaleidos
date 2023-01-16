@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -18,7 +19,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked reverseSortedAgendas;
   @tracked subcase;
   @tracked submitter;
-  @tracked newsletterInfo;
+  @tracked newsItem;
   @tracked mandatees;
   @tracked decisionActivity;
 
@@ -97,5 +98,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
     await this.subcase.save();
+    setNotYetFormallyOk(this.model);
+    await this.model.save();
   }
 }

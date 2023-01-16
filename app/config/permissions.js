@@ -2,6 +2,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   ADMIN,
+  KANSELARIJ,
   SECRETARIE,
   OVRB,
   KORT_BESTEK,
@@ -22,10 +23,10 @@ const {
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
 // - manage-document-access-levels: modifying document access levels
-// - manage-newsletter-infos: General viewing and editing of newsletter info
+// - manage-news-items: General viewing and editing of news items
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
-// - manage-themis-publications: Publishing newsletter-info and related documents to Themis (general public).
+// - manage-themis-publications: Publishing news-items and related documents to Themis (general public).
 // - manage-meetings: Create and update meetings
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
@@ -54,7 +55,7 @@ const groups = [
       'manage-document-access-levels',
       'manage-publication-flows',
       'search-publication-flows',
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
@@ -65,6 +66,30 @@ const groups = [
       'view-documents-before-release',
       'view-decisions-before-release',
       'impersonate-users',
+    ]
+  },
+  {
+    name: 'KANSELARIJ',
+    roles: [KANSELARIJ],
+    defaultRoute: 'agendas',
+    permissions: [
+      'manage-signatures',
+      'manage-agenda-versions',
+      'manage-agendaitems',
+      'manage-decisions',
+      'manage-cases',
+      'manage-meetings',
+      'manage-documents',
+      'manage-document-access-levels',
+      'manage-publication-flows',
+      'search-publication-flows',
+      'manage-news-items',
+      'manage-decision-publications',
+      'manage-document-publications',
+      'manage-themis-publications',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
     ]
   },
   {
@@ -80,11 +105,10 @@ const groups = [
       'manage-meetings',
       'manage-documents',
       'manage-document-access-levels',
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
-      'manage-settings',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -108,7 +132,7 @@ const groups = [
     roles: [KORT_BESTEK],
     defaultRoute: 'newsletters',
     permissions: [
-      'manage-newsletter-infos',
+      'manage-news-items',
       'manage-themis-publications',
       'view-documents-before-release',
       'view-decisions-before-release',

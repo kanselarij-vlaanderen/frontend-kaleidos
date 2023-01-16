@@ -6,7 +6,6 @@ import { dropTask, task } from 'ember-concurrency';
 
 export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service store;
-  @service fileService;
   @service publicationService;
 
   @tracked publicationFlow;

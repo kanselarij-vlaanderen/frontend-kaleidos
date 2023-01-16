@@ -39,7 +39,7 @@ context('Table Row Click tests', () => {
     cy.url().should('contain', 'deeldossiers');
   });
 
-  it('should open a newsletter-info after clicking a row', () => {
+  it('should open a news-item after clicking a row', () => {
     cy.intercept('GET', '/meetings?**').as('getMeetings');
     cy.intercept('GET', '/agendaitems**').as('getAgendaitems');
     cy.visit('/kort-bestek');

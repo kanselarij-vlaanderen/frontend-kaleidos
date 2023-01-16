@@ -60,8 +60,7 @@ export default class GovernmentAreaSelectorForm extends Component {
   }
 
   @action
-  toggleDomainSelection(domainSelection, event) {
-    const checked = event.target.checked;
+  toggleDomainSelection(domainSelection, checked) {
     const handler = checked
       ? this.args.onSelectDomains
       : this.args.onDeselectDomains;
@@ -71,8 +70,7 @@ export default class GovernmentAreaSelectorForm extends Component {
   }
 
   @action
-  toggleFieldSelection(field, event) {
-    const checked = event.target.checked;
+  toggleFieldSelection(field, checked) {
     const handler = checked
       ? this.args.onSelectFields
       : this.args.onDeselectFields;
