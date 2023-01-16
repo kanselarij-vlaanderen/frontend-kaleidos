@@ -124,6 +124,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0, shortSubcaseTitle);
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.get(cases.subcaseHeader.actions.deleteSubcase)
       .should('not.exist');
@@ -190,7 +191,7 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitem');
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
-    // "Go to agendaitem
+    // Go to agendaitem
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
@@ -207,7 +208,8 @@ context('Subcase tests', () => {
     // Save the changes setting
     cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
     cy.intercept('PATCH', '/news-items/**').as('newsItemsPatch');
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).contains('Opslaan')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save)
+      .contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
     // We toggled hide in newsletter, await the patch
@@ -370,8 +372,10 @@ context('Subcase tests', () => {
     // use case 1
     cy.openCase(caseTitle1);
     cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall1')
@@ -389,8 +393,10 @@ context('Subcase tests', () => {
     // use case 2
     cy.openCase(caseTitle1);
     cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall2')
@@ -411,8 +417,10 @@ context('Subcase tests', () => {
     cy.openCase(caseTitle1);
     cy.addSubcase(type, subcaseShortTitle3);
     cy.openSubcase(0, subcaseShortTitle3);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall3')
@@ -438,8 +446,10 @@ context('Subcase tests', () => {
     // this agenda may no longer exist if this spec is run after agenda.spec
     // subcase name (if present) in "add agendaitem to agenda" feature
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.addAgendaitems).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.addAgendaitems).forceClick();
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.input).should('not.be.disabled')
       .clear()
