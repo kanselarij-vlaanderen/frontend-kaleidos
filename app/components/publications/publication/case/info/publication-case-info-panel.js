@@ -82,8 +82,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   @action
-  changeIsUrgent(ev) {
-    const isUrgent = ev.target.checked;
+  changeIsUrgent(checked) {
+    const isUrgent = checked;
     const urgencyLevel = this.store
       .peekAll('urgency-level')
       .find((level) => level.isUrgent === isUrgent);

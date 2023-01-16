@@ -17,18 +17,20 @@ import {
 } from 'ember-concurrency';
 
 export default class AgendaAgendaitemsController extends Controller {
-  queryParams = [{
-    filter: {
-      type: 'string',
+  queryParams = [
+    {
+      filter: {
+        type: 'string',
+      },
+      showModifiedOnly: {
+        type: 'boolean',
+      },
+      anchor: {
+        type: 'string',
+      },
     },
-    showModifiedOnly: {
-      type: 'boolean',
-    },
-    anchor: {
-      type: 'string',
-    },
-  }];
-
+  ];
+  
   @service agendaService;
   @service router;
   @service store;
