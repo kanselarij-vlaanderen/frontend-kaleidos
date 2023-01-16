@@ -25,7 +25,7 @@
                   @skin="naked"
                   @icon="x"
                   @hideText={{true}}
-                  {{on "click" @cancel}}
+                  {{on "click" @onCancel}}
                 >
                   {{t "cancel"}}
                 </AuButton>
@@ -46,7 +46,7 @@
                   data-test-vl-modal-verify-cancel
                   @skin="naked"
                   @disabled={{@isLoading}}
-                  {{on "click" @cancel}}
+                  {{on "click" @onCancel}}
                 >
                   {{t "cancel"}}
                 </AuButton>
@@ -61,7 +61,7 @@
                     @alert={{this.isAlertButton}}
                     @icon={{if this.showDestructiveIcon "trash"}}
                     @loading={{@isLoading}}
-                    {{on "click" @verify}}
+                    {{on "click" @onVerify}}
                   >
                     {{this.verifyButtonText}}
                   </AuButton>

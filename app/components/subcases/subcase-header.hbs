@@ -89,8 +89,8 @@
       this.caseToDelete.shortTitle
       "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?"
     }}
-    @cancel={{this.cancelDeleteCase}}
-    @verify={{perform this.deleteCase this.caseToDelete}}
+    @onCancel={{this.cancelDeleteCase}}
+    @onVerify={{perform this.deleteCase this.caseToDelete}}
     @isLoading={{this.deleteCase.isRunning}}
   />
 {{/if}}
@@ -122,7 +122,7 @@
     @isLoading={{this.isLoading}}
     @title={{t "delete-subcase"}}
     @message={{t "delete-subcase-confirmation"}}
-    @cancel={{this.cancel}}
-    @verify={{this.deleteSubcase}}
+    @onCancel={{this.cancel}}
+    @onVerify={{this.deleteSubcase}}
   />
 {{/if}}

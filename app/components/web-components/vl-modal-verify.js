@@ -11,8 +11,8 @@ import { action } from '@ember/object';
  * @param buttonType {string}
  * @param buttonText {string}
  * @param isLoading {string}
- * @param verify {Function}
- * @param cancel {Function}
+ * @param onVerify {Function}
+ * @param onCancel {Function}
  */
 export default class WebComponentsVlModalVerify extends Component {
   @service intl;
@@ -54,15 +54,5 @@ export default class WebComponentsVlModalVerify extends Component {
     if (event.key === 'Escape') {
       this.cancel();
     }
-  }
-
-  @action
-  verify() {
-    this.args.verify();
-  }
-
-  @action
-  cancel() {
-    this.args.cancel();
   }
 }
