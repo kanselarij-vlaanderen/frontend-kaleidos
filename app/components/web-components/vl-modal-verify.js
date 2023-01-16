@@ -18,12 +18,14 @@ export default class WebComponentsVlModalVerify extends Component {
   @service intl;
 
   @tracked element;
-  // message: null,
-  // title: null,
-  // showActions: true,
-  // buttonType: 'danger',
-  // showVerify: true,
-  // buttonText: 'delete',
+
+  get showActions() {
+    return this.args.showActions ?? true;
+  }
+
+  get showVerify() {
+    return this.args.showVerify ?? true;
+  }
 
   get verifyButtonText() {
     return this.intl.t(this.args.buttonText ?? 'delete');
