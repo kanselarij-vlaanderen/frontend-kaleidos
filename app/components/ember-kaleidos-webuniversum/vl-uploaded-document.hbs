@@ -10,22 +10,22 @@
           data-test-vl-uploaded-document-filename>
           {{@name}}
         </h6>
-        {{#if @view}}
+        {{#if @onView}}
           <AuButton
             @skin="naked"
             @icon="book"
             @hideText={{true}}
-            {{on "click" @view}}
+            {{on "click" @onView}}
           >
             {{t "show-piece"}}
           </AuButton>
         {{/if}}
-        {{#if @download}}
+        {{#if @onDownload}}
           <AuButton
             @skin="naked"
             @icon="download"
             @hideText={{true}}
-            {{on "click" @download}}
+            {{on "click" @onDownload}}
           >
             {{t "download"}}
           </AuButton>
@@ -39,14 +39,14 @@
             {{t "download"}}
           </AuLinkExternal>
         {{/if}}
-        {{#if @delete}}
+        {{#if @onDelete}}
           <AuButton
             data-test-vl-uploaded-document-delete-piece
             @skin="naked"
             @alert={{true}}
             @icon="trash"
             @hideText={{true}}
-            {{on "click" @delete}}
+            {{on "click" @onDelete}}
           >
             {{t "delete"}}
           </AuButton>

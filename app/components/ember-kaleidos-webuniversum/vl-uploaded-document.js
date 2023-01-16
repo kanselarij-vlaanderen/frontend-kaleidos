@@ -1,5 +1,4 @@
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { templateOnly } from '@ember/component/template-only';
 
 /**
  * @param name {string}
@@ -7,23 +6,8 @@ import { action } from '@ember/object';
  * @param size {string}
  * @param downloadLink {string}
  * @param downloadName {string} Optional
- * @param view {Function} Optional
- * @param download {Function} Optional, overrides use of downloadLink argument
- * @param delete {Function} Optional
+ * @param onView {Function} Optional
+ * @param onDownload {Function} Optional, overrides use of downloadLink argument
+ * @param onDelete {Function} Optional
  */
-export default class EmberKaleidosWebuniversumVlUploadedDocument extends Component {
-  @action
-  view() {
-    this.args.view?.(...arguments);
-  }
-
-  @action
-  download() {
-    this.args.download?.(...arguments);
-  }
-
-  @action
-  delete() {
-    this.args.delete?.(...arguments);
-  }
-}
+export default templateOnly();
