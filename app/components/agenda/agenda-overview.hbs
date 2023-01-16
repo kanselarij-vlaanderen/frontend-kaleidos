@@ -3,7 +3,7 @@
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "end-editing-overview"}}
-      @clearAction={{@toggleIsEditingOverview}}
+      @onClear={{@toggleIsEditingOverview}}
     />
   {{/if}}
   <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">

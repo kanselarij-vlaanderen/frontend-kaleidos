@@ -1,14 +1,7 @@
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
-
+import { templateOnly } from '@ember/component/template-only';
 /**
  * @param message {string}
  * @param buttonText {string}
- * @param clearAction {Function}
+ * @param onClear {Function}
  */
-export default class ChangesAlert extends Component {
-  @action
-  clearAction() {
-    this.args.clearAction();
-  }
-}
+export default templateOnly();
