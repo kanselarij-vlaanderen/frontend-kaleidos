@@ -1,4 +1,4 @@
-import { templateOnly } from '@ember/component/template-only';
+import templateOnly from '@ember/component/template-only';
 
 /**
  * @param name {string}
