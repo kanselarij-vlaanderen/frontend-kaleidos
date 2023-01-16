@@ -18,6 +18,7 @@ function clickNewPieceForFile(file) {
     });
 }
 
+// TODO-command make new or add confirmation to existing
 function addNewPieceWithConfirm(oldFileName, file, modelToPatch, hasSubcase = true) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
@@ -68,16 +69,7 @@ function addNewPieceWithConfirm(oldFileName, file, modelToPatch, hasSubcase = tr
         cy.wait('@patchAgendaitem')
           .wait('@putAgendaitemDocuments');
       }
-      // .wait('@getSubmissionActivity', {
-      //   timeout: 12000,
-      // });
     } else if (modelToPatch === 'subcases') {
-      // NOTE: these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
-      // cy.wait('@putAgendaitemDocuments', {
-      //   timeout: 12000,
-      // }).wait('@patchAgendaitem', {
-      //   timeout: 12000,
-      // });
       // We always get the submission activities after post or patch
       cy.wait('@getSubmissionActivity');
     } else {
@@ -120,14 +112,16 @@ context('Agendaitem document warning tests', () => {
   });
 
   it('should test the warnings when adding documments on old/closed agendaversions', () => {
+    const recentVersionAvailable = 'Er is een recentere versie van deze agenda.';
+    const editDocsOnApproved = 'Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?';
     cy.openAgendaForDate(agendaDate);
 
     // check warning and cancel on A
     cy.changeSelectedAgenda('Agenda A');
     cy.openAgendaitemDocumentTab(agendaitemTitle, false, false);
     cy.get(route.agendaitemDocuments.add).click();
-    cy.get(auk.auModal.body).contains('Er is een recentere versie van deze agenda.');
-    cy.get(auk.auModal.body).contains('Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?');
+    cy.get(auk.auModal.body).contains(recentVersionAvailable);
+    cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
@@ -143,8 +137,8 @@ context('Agendaitem document warning tests', () => {
 
     // check upload new piece and cancel
     clickNewPieceForFile(file.fileName);
-    cy.get(auk.auModal.body).contains('Er is een recentere versie van deze agenda.');
-    cy.get(auk.auModal.body).contains('Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?');
+    cy.get(auk.auModal.body).contains(recentVersionAvailable);
+    cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
@@ -164,7 +158,7 @@ context('Agendaitem document warning tests', () => {
 
     // check warning and cancel on B (closed agenda)
     cy.get(route.agendaitemDocuments.add).click();
-    cy.get(auk.auModal.body).contains('Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?');
+    cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
@@ -180,7 +174,7 @@ context('Agendaitem document warning tests', () => {
 
     // check upload new piece and cancel
     clickNewPieceForFile(file.fileName);
-    cy.get(auk.auModal.body).contains('Bent U zeker dat U de documenten wilt wijzigen op deze goedgekeurde agendaversie?');
+    cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
     cy.get(utils.vlModal.dialogWindow).should('not.exist');
