@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
@@ -74,9 +75,11 @@ context('Decision tests', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/TER/);
-        cy.get(document.documentCard.actions).should('not.be.disabled')
+        cy.get(document.documentCard.actions)
+          .should('not.be.disabled')
+          .children(appuniversum.button)
           .click();
-        cy.get(document.documentCard.delete).click();
+        cy.get(document.documentCard.delete).forceClick();
       });
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
