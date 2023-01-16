@@ -10,26 +10,7 @@
           data-test-vl-uploaded-document-filename>
           {{@name}}
         </h6>
-        {{#if @onView}}
-          <AuButton
-            @skin="naked"
-            @icon="book"
-            @hideText={{true}}
-            {{on "click" @onView}}
-          >
-            {{t "show-piece"}}
-          </AuButton>
-        {{/if}}
-        {{#if @onDownload}}
-          <AuButton
-            @skin="naked"
-            @icon="download"
-            @hideText={{true}}
-            {{on "click" @onDownload}}
-          >
-            {{t "download"}}
-          </AuButton>
-        {{else if @downloadLink}}
+        {{#if @downloadLink}}
           <AuLinkExternal
             @icon="download"
             @hideText={{true}}

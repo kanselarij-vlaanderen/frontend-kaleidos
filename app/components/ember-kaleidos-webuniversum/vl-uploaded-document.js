@@ -6,8 +6,6 @@ import { templateOnly } from '@ember/component/template-only';
  * @param size {string}
  * @param downloadLink {string}
  * @param downloadName {string} Optional
- * @param onView {Function} Optional
- * @param onDownload {Function} Optional, overrides use of downloadLink argument
  * @param onDelete {Function} Optional
  */
 export default templateOnly();
