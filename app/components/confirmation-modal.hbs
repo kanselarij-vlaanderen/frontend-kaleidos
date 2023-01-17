@@ -5,12 +5,16 @@
   <:title>
     {{#if (has-block "title")}}
       {{yield to="title"}}
+    {{else if @title}}
+      {{@title}}
     {{/if}}
   </:title>
 
   <:body>
     {{#if (has-block "body")}}
       {{yield to="body"}}
+    {{else if @message}}
+      {{@message}}
     {{/if}}
   </:body>
 
@@ -39,6 +43,7 @@
               @alert={{@alert}}
               @disabled={{@disabled}}
               @loading={{@loading}}
+              @icon={{@confirmIcon}}
               {{on "click" @onConfirm}}
             >
               {{#if @confirmMessage}}
