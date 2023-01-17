@@ -149,28 +149,26 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if this.showConfirmPublishMail}}
-  <WebComponents::VlModalVerify
-    @title={{t "send-newsitem-to-mail"}}
-    @buttonType="warning"
-    @isLoading={{this.publishToMail.isRunning}}
-    @verifyButtonText={{t "send-newsitem-to-mail"}}
-    @message={{t "send-newsitem-to-mail-verification"}}
-    @onCancel={{this.cancelPublishMail}}
-    @onVerify={{perform this.publishToMail}}
-  />
-{{/if}}
-{{#if this.showConfirmPublishBelga}}
-  <WebComponents::VlModalVerify
-    @title={{t "send-newsitem-to-belga"}}
-    @buttonType="warning"
-    @isLoading={{this.publishToBelga.isRunning}}
-    @verifyButtonText={{t "send-newsitem-to-belga"}}
-    @message={{t "send-newsitem-to-belga-verification"}}
-    @onCancel={{this.cancelPublishBelga}}
-    @onVerify={{perform this.publishToBelga}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.showConfirmPublishMail}}
+  @title={{t "send-newsitem-to-mail"}}
+  @message={{t "send-newsitem-to-mail-verification"}}
+  @onConfirm={{perform this.publishToMail}}
+  @onCancel={{this.cancelPublishMail}}
+  @confirmMessage={{t "send-newsitem-to-mail"}}
+  @loading={{this.publishToMail.isRunning}}
+  @disabled={{this.publishToMail.isRunning}}
+/>
+<ConfirmationModal
+  @modalOpen={{this.showConfirmPublishBelga}}
+  @title={{t "send-newsitem-to-belga"}}
+  @message={{t "send-newsitem-to-belga-verification"}}
+  @onConfirm={{perform this.publishToBelga}}
+  @onCancel={{this.cancelPublishBelga}}
+  @confirmMessage={{t "send-newsitem-to-belga"}}
+  @loading={{this.publishToBelga.isRunning}}
+  @disabled={{this.publishToBelga.isRunning}}
+/>
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}

@@ -121,11 +121,12 @@
     @case={{this.caseToEdit}}
   />
 {{/if}}
-{{#if this.isArchivingCase}}
-  <WebComponents::VlModalVerify
-    @title={{t "archive-case"}}
-    @message={{t "archive-case-message"}}
-    @onCancel={{this.cancelArchiveCase}}
-    @onVerify={{this.archiveCase}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isArchivingCase}}
+  @title={{t "archive-case"}}
+  @message={{t "archive-case-message"}}
+  @onConfirm={{this.archiveCase}}
+  @onCancel={{this.cancelArchiveCase}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+/>
