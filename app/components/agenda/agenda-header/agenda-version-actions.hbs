@@ -1,5 +1,10 @@
-<AuDropdown data-test-agenda-version-actions-show-options={{true}} @skin="primary" @title={{t "agenda-actions" }}
-  @alignment="right" class="auk-u-hidden@print">
+<AuDropdown
+  data-test-agenda-version-actions-options-dropdown={{true}}
+  @skin="primary"
+  @title={{t "agenda-actions"}}
+  @alignment="right"
+  class="auk-u-hidden@print"
+>
   {{#if @currentAgenda.status.isDesignAgenda}}
   <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgenda}}
     role="menuitem">

@@ -104,7 +104,6 @@ Router.map(function() {
 
   this.route('not-supported');
   this.route('help');
-  this.route('manual', { path: '/handleiding', });
   this.route('route-not-found', { path: '/*wildcard', });
 
   this.route('styleguide', function() {

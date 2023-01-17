@@ -166,6 +166,14 @@ function selectFromDropdown(item) {
   cy.log('/selectFromDropdown');
 }
 
+Cypress.Commands.add('forceClick', {
+  prevSubject: 'element',
+}, (element) => {
+  cy.wrap(element).click({
+    force: true,
+  });
+});
+
 // ***********************************************
 // Commands
 
