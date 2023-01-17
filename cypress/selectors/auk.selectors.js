@@ -51,6 +51,9 @@ const selectors = {
 
   auModal: {
     body: '.au-c-modal__body',
+    header: {
+      close: '.au-c-modal__close',
+    },
   },
 
   accordion: {
