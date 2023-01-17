@@ -46,7 +46,7 @@ const selectors = {
   newsletterHeaderOverview: {
     title: '[data-test-newsletter-header-overview-title]',
     newsletterActions: {
-      showOptions: '.au-c-button--secondary',
+      optionsDropdown: '[data-test-newsletter-header-actions-dropdown]',
       publishMail: '[data-test-newsletter-header-actions-publish-mail]',
     },
   },
