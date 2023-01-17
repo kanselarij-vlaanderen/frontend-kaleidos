@@ -45,6 +45,7 @@
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
         <AuDropdown
+          data-test-newsletter-header-actions-dropdown
           @skin="secondary"
           @title={{t "actions"}}
           @alignment="right"
@@ -64,6 +65,7 @@
                 {{t "send-newsitem-to-all"}}
               </AuButton>
               <AuButton
+                data-test-newsletter-header-actions-publish-mail
                 @skin="link"
                 {{on "click" this.openConfirmPublishMail}}
                 role="menuitem"

@@ -23,6 +23,7 @@ const selectors = {
   alert: {
     message: '.auk-alert__message',
     error: '.auk-alert--error',
+    close: '.auk-alert--error > button',
   },
 
   label: {
