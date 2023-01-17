@@ -68,7 +68,6 @@
     "cypress-file-upload": "^5.0.8",
     "date-fns": "^2.29.0",
     "dayjs": "^1.10.7",
-    "ember-attacher": "git+https://github.com/erikap/ember-attacher.git#7697e098c911a5224557ec464d176f600dfe1d2f",
     "ember-auto-import": "^2.0.0",
     "ember-cli": "~3.28.5",
     "ember-cli-app-version": "^5.0.0",
