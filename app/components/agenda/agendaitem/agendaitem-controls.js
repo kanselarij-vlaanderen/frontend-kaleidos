@@ -44,7 +44,6 @@ export default class AgendaitemControls extends Component {
     );
   }
 
-  // TODO document this
   get isDeletable() {
     const agendaActivity = this.args.agendaActivity;
     if (!this.isDesignAgenda) {
