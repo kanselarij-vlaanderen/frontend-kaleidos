@@ -14,19 +14,25 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         <div class="auk-u-mb-4">
-          <fieldset>
-            <legend class="auk-label">{{t "subcase-type"}}</legend>
-            <Auk::RadioList data-test-subcase-description-edit-type @layout="inline" as |List|>
-              {{#each this.agendaItemTypes as |type|}}
-                <List.Radio
-                  @label={{type.label}}
-                  @checked={{eq type.uri this.agendaItemType.uri}}
-                  value={{type.id}}
-                  {{on "change" this.selectAgendaItemType}}
-                />
-              {{/each}}
-            </Auk::RadioList>
-          </fieldset>
+          <AuFieldset as |Fieldset|>
+            <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+            <Fieldset.content>
+              <Auk::RadioList
+                data-test-subcase-description-edit-type
+                @layout="inline"
+                as |List|
+              >
+                {{#each this.agendaItemTypes as |type|}}
+                  <List.Radio
+                    @label={{type.label}}
+                    @value={{type.id}}
+                    @onChange={{this.selectAgendaItemType}}
+                    checked={{eq type.uri this.agendaItemType.uri}}
+                  />
+                {{/each}}
+              </Auk::RadioList>
+            </Fieldset.content>
+          </AuFieldset>
         </div>
       </div>
       <div class="auk-form-group">

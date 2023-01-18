@@ -7,13 +7,11 @@
     >
       <div class="auk-o-flex auk-o-flex--justify-between">
         <div class="auk-u-mb-4">
-          <AuFieldset
-            data-test-new-subcase-type
-            as |Fieldset|
-          >
+          <AuFieldset as |Fieldset|>
             <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
             <Fieldset.content>
               <Auk::RadioList
+                data-test-new-subcase-type
                 @layout="inline"
                 as |List|
               >
