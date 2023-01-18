@@ -9,7 +9,9 @@ $au-button-height: 3.4rem;
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
+@import 'ember-appuniversum/c-alert';
 @import 'ember-appuniversum/c-badge';
+@import "ember-appuniversum/c-body-container";
 @import 'ember-appuniversum/c-button';
 @import 'ember-appuniversum/c-button-group';
 @import 'ember-appuniversum/c-card';
@@ -22,12 +24,16 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-fieldset';
 @import 'ember-appuniversum/c-icon';
 @import 'ember-appuniversum/c-input';
+@import "ember-appuniversum/c-label";
 @import 'ember-appuniversum/c-link';
 @import 'ember-appuniversum/c-list';
 @import 'ember-appuniversum/c-list-horizontal';
+@import "ember-appuniversum/c-list-navigation";
 @import 'ember-appuniversum/c-loader';
 @import 'ember-appuniversum/c-pill';
+@import "ember-appuniversum/c-main-container";
 @import 'ember-appuniversum/c-modal';
+@import "ember-appuniversum/c-sidebar";
 @import 'ember-appuniversum/c-table';
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-toggle-switch';
@@ -194,14 +200,15 @@ $au-button-height: 3.4rem;
   }
 }
 
-.au-c-button {
+.au-c-button,
+.au-c-link {
   vertical-align: middle;
 }
 
 .au-c-button--link,
 .au-c-button--tertiary,
-.au-c-button--link-secondary {
-  vertical-align: baseline;
+.au-c-link {
+  font-size: $au-button-font-size;
 }
 
 .au-c-icon {
@@ -248,6 +255,16 @@ $au-button-height: 3.4rem;
 
 .au-c-control__indicator {
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
+}
+
+// Fix icons in menu
+.auk-menu__item {
+  display: flex;
+  align-items: center;
+}
+
+.auk-menu__item--danger {
+  font-weight: 500;
 }
 
 // Modal fixes
