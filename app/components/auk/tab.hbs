@@ -3,40 +3,76 @@
       therefore disabled and in need of the deprecated @tagName.
       Inner LinkTo used for navigation --}}
   {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}
-  <LinkTo
-    @tagName="li"
-    class="auk-tabs__tab
-      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
-    @activeClass="auk-tabs__tab--active"
-    @loadingClass=""
-    @disabledClass=""
-    @disabled={{true}}
-    @route={{@route}}
-    @models={{this.models}}
-    @current-when={{@current-when}}
-    @query={{@query}}
-    ...attributes
-  >
-    {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
+  {{#if @query}}
+    {{! some temporary duplication of the code because any linkTo without
+        @query is throwing errors in newer ember version}}
     <LinkTo
-      @activeClass=""
+      @tagName="li"
+      class="auk-tabs__tab
+        {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
+      @activeClass="auk-tabs__tab--active"
       @loadingClass=""
       @disabledClass=""
+      @disabled={{true}}
       @route={{@route}}
       @models={{this.models}}
-      @disabled={{@disabled}}
       @current-when={{@current-when}}
       @query={{@query}}
+      ...attributes
     >
-      <Auk::Tab::InnerLayout
-        @layout={{@layout}}
-        @icon={{this.icon}}
-        @counter={{@counter}}
+      {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
+      <LinkTo
+        @activeClass=""
+        @loadingClass=""
+        @disabledClass=""
+        @route={{@route}}
+        @models={{this.models}}
+        @disabled={{@disabled}}
+        @current-when={{@current-when}}
       >
-        {{yield}}
-      </Auk::Tab::InnerLayout>
+        <Auk::Tab::InnerLayout
+          @layout={{@layout}}
+          @icon={{this.icon}}
+          @counter={{@counter}}
+        >
+          {{yield}}
+        </Auk::Tab::InnerLayout>
+      </LinkTo>
     </LinkTo>
-  </LinkTo>
+  {{else}}
+    <LinkTo
+      @tagName="li"
+      class="auk-tabs__tab
+        {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
+      @activeClass="auk-tabs__tab--active"
+      @loadingClass=""
+      @disabledClass=""
+      @disabled={{true}}
+      @route={{@route}}
+      @models={{this.models}}
+      @current-when={{@current-when}}
+      ...attributes
+    >
+      {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
+      <LinkTo
+        @activeClass=""
+        @loadingClass=""
+        @disabledClass=""
+        @route={{@route}}
+        @models={{this.models}}
+        @disabled={{@disabled}}
+        @current-when={{@current-when}}
+      >
+        <Auk::Tab::InnerLayout
+          @layout={{@layout}}
+          @icon={{this.icon}}
+          @counter={{@counter}}
+        >
+          {{yield}}
+        </Auk::Tab::InnerLayout>
+      </LinkTo>
+    </LinkTo>
+  {{/if}}
 {{else}}
   <li
     class="auk-tabs__tab
