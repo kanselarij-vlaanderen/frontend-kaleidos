@@ -6,10 +6,10 @@
       <div class="auk-o-grid-col-4">
         <div class="auk-u-mb">
           {{#let (includes theme @selectedThemes) as |checked|}}
-            <Auk::Checkbox
+            <AuControlCheckbox
               @checked={{checked}}
               @label={{theme.label}}
-              {{on "input" (fn this.toggleTheme theme checked)}}
+              @onChange={{fn this.toggleTheme theme}}
             />
           {{/let}}
         </div>

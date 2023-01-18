@@ -1,20 +1,20 @@
 <Auk::CheckboxList>
-  <Auk::Checkbox
-    @label={{@label}}
-    @labelSkin="bold"
+  <AuControlCheckbox
     @checked={{this.isSelectedAllItems}}
     @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
     @disabled={{@disabled}}
-    {{on "input" this.toggleTree}}
-  />
-  <div class="auk-u-ml-2">
+    @onChange={{this.toggleTree}}
+  >
+    <span class="au-u-medium">{{@label}}</span>
+  </AuControlCheckbox>
+  <Auk::CheckboxList>
     {{#each @items as |item|}}
-      <Auk::Checkbox
+      <AuControlCheckbox
         @label={{item.label}}
         @checked={{includes item this.selectedItems}}
         @disabled={{@disabled}}
-        {{on "input" (fn this.toggleItem item)}}
+        @onChange={{fn this.toggleItem item}}
       />
     {{/each}}
-  </div>
+  </Auk::CheckboxList>
 </Auk::CheckboxList>

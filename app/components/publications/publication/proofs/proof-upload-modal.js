@@ -56,8 +56,8 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   @action
-  setMustUpdatePublicationStatus(event) {
-    this.mustUpdatePublicationStatus = event.target.checked;
+  setMustUpdatePublicationStatus(checked) {
+    this.mustUpdatePublicationStatus = checked;
   }
 
   @task

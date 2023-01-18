@@ -14,6 +14,7 @@
           @icon="chevron-left"
           @disabled={{this.isFirstPage}}
           {{action "changePage" this.links.prev}}
+          class="auk-u-text-vertical-align-middle"
         >
           {{t "previous"}}
         </AuButton>
@@ -25,6 +26,7 @@
           @iconAlignment="right"
           @disabled={{this.isLastPage}}
           {{action "changePage" this.links.next}}
+          class="auk-u-text-vertical-align-middle"
         >
           {{t "next"}}
         </AuButton>

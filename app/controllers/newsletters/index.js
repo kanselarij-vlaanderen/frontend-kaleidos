@@ -9,17 +9,19 @@ import bind from 'frontend-kaleidos/utils/bind';
 export default class NewslettersIndexController extends Controller.extend(DefaultQueryParamsMixin) {
   @service router;
 
-  queryParams = {
-    page: {
-      type: 'number',
-    },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
+  queryParams = [
+    {
+      page: {
+        type: 'number',
+      },
+      size: {
+        type: 'number',
+      },
+      sort: {
+        type: 'string',
+      },
+    }
+  ];
 
   sizeOptions = [10, 25, 50, 100, 200];
 

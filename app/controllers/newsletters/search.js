@@ -11,29 +11,31 @@ export default class NewslettersSearchController extends Controller {
   @service toaster;
   @service intl;
 
-  queryParams = {
-    searchText: {
-      type: 'string',
+  queryParams = [
+    {
+      searchText: {
+        type: 'string',
+      },
+      mandatees: {
+        type: 'string',
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
+      page: {
+        type: 'number',
+      },
+      size: {
+        type: 'number',
+      },
+      sort: {
+        type: 'string',
+      },
     },
-    mandatees: {
-      type: 'string',
-    },
-    dateFrom: {
-      type: 'string',
-    },
-    dateTo: {
-      type: 'string',
-    },
-    page: {
-      type: 'number',
-    },
-    size: {
-      type: 'number',
-    },
-    sort: {
-      type: 'string',
-    },
-  };
+  ];
 
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
@@ -100,13 +102,12 @@ export default class NewslettersSearchController extends Controller {
       copyText += `${row.title}\n\n`;
     }
 
-    copyText +=
-      sanitizeHtml(
-        row.htmlContent
-          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
-          .trim() // Trim whitespaces at start & end of the string
-        , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
-      );
+    copyText += sanitizeHtml(
+      row.htmlContent
+        .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+        .trim(), // Trim whitespaces at start & end of the string
+      { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
+    );
 
     navigator.clipboard.writeText(copyText);
     this.toaster.success(this.intl.t('text-copied'));
