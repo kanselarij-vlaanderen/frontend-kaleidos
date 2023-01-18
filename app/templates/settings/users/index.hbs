@@ -77,143 +77,143 @@
         {{t "search"}}
       </AuButton>
     </form>
-    <DataTable
-      data-test-route-settings-users-table
+    <KDataTable
+      data-test-reoute-settings-users-table
+      @loading={{this.isLoadingModel}}
       @content={{this.model}}
-      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
-      @isLoading={{this.isLoadingModel}}
       @page={{this.page}}
       @size={{this.size}}
-      @sort={{this.sort}}
-      @noDataMessage={{t "no-results-found"}}
-      as |table|
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
     >
-      <table.content as |c|>
-        <c.header>
-          <ThSortable
-            data-test-route-settings-users-table-content-name
-            @currentSorting={{this.sort}}
-            @field="first-name"
-            @label={{t "name"}}
-          />
-          <th>{{t "organization"}}</th>
-          <th>{{t "group"}}</th>
-          <ThSortable
-            data-test-route-settings-users-table-content-last-seen
-            @currentSorting={{this.sort}}
-            @field="login-activity.start-date"
-            @label={{t "last-seen"}}
-          />
-          <th></th>
-        </c.header>
-        <c.body as |user|>
-          <td data-test-route-settings-users-row-name>
-            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if user.isBlocked "au-u-muted"}}">
-              {{user.fullName}}
-              {{#if user.isBlocked}}
+      <:header>
+        <Utils::ThSortable
+          data-test-route-settings-users-table-content-name
+          @currentSorting={{this.sort}}
+          @field="first-name"
+          @label={{t "name"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th>{{t "organization"}}</th>
+        <th>{{t "group"}}</th>
+        <Utils::ThSortable
+          data-test-route-settings-users-table-content-last-seen
+          @currentSorting={{this.sort}}
+          @field="login-activity.start-date"
+          @label={{t "last-seen"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th></th>
+      </:header>
+      <:body as |user|>
+        <td data-test-route-settings-users-row-name>
+          <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if user.isBlocked "au-u-muted"}}">
+            {{user.fullName}}
+            {{#if user.isBlocked}}
+              <AuPill @icon="circle-x" @skin="error" @size="small">
+                {{t "blocked-user"}}
+              </AuPill>
+            {{/if}}
+          </span>
+        </td>
+        <td class="au-o-flow au-o-flow--tiny">
+          {{#each (this.filterMemberships user.memberships) as |membership|}}
+            <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
+              <div>
+                <p class="au-u-muted au-u-h-functional">
+                  {{membership.organization.identifier}}
+                </p>
+                <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                  {{membership.organization.name}}
+                </p>
+              </div>
+              {{#if membership.isBlocked}}
                 <AuPill @icon="circle-x" @skin="error" @size="small">
-                  {{t "blocked-user"}}
+                  {{t "blocked-membership"}}
                 </AuPill>
               {{/if}}
-            </span>
-          </td>
-          <td class="au-o-flow au-o-flow--tiny">
+            </div>
+          {{/each}}
+        </td>
+        <td data-test-route-settings-users-row-group>
+          <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
             {{#each (this.filterMemberships user.memberships) as |membership|}}
-              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
-                <div>
-                  <p class="au-u-muted au-u-h-functional">
-                    {{membership.organization.identifier}}
-                  </p>
-                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                    {{membership.organization.name}}
-                  </p>
-                </div>
-                {{#if membership.isBlocked}}
-                  <AuPill @icon="circle-x" @skin="error" @size="small">
-                    {{t "blocked-membership"}}
-                  </AuPill>
-                {{/if}}
-              </div>
+              <p>{{membership.role.label}}</p>
             {{/each}}
-          </td>
-          <td data-test-route-settings-users-row-group>
-            <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
-              {{#each (this.filterMemberships user.memberships) as |membership|}}
-                <p>{{membership.role.label}}</p>
-              {{/each}}
-            </div>
-          </td>
-          <td>
-            {{#let user.loginActivity.startDate as |lastLoginDate|}}
-              {{#if lastLoginDate}}
-                {{datetime-at lastLoginDate}}
+          </div>
+        </td>
+        <td>
+          {{#let user.loginActivity.startDate as |lastLoginDate|}}
+            {{#if lastLoginDate}}
+              {{datetime-at lastLoginDate}}
+            {{/if}}
+          {{/let}}
+        </td>
+        <td data-test-route-settings-users-row-actions class="auk-u-text-align--right">
+          <div class="auk-o-flex auk-o-flex--justify-end">
+            <AuDropdown
+              data-test-route-settings-users-row-actions-dropdown
+              @skin="naked"
+              @hideText={{true}}
+              @alignment="right"
+              @icon="three-dots"
+            >
+              {{#if (not (is-empty (filter-by "isBlocked" user.memberships)))}}
+                <AuButton
+                  data-test-route-settings-users-row-action-unblock-membership
+                  @skin="naked"
+                  role="menuitem"
+                  {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
+                >
+                  {{t "unblock-membership"}}
+                </AuButton>
               {{/if}}
-            {{/let}}
-          </td>
-          <td data-test-route-settings-users-row-actions class="auk-u-text-align--right">
-            <div class="auk-o-flex auk-o-flex--justify-end">
-              <AuDropdown
-                data-test-route-settings-users-row-actions-dropdown
-                @skin="naked"
-                @hideText={{true}}
-                @alignment="right"
-                @icon="three-dots"
-              >
-                {{#if (not (is-empty (filter-by "isBlocked" user.memberships)))}}
-                  <AuButton
-                    data-test-route-settings-users-row-action-unblock-membership
-                    @skin="naked"
-                    role="menuitem"
-                    {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "unblock-membership"}}
-                  </AuButton>
-                {{/if}}
-                {{#if (not (is-empty (reject-by "isBlocked" user.memberships)))}}
-                  <AuButton
-                    data-test-route-settings-users-row-action-block-membership
-                    @skin="naked"
-                    @alert={{true}}
-                    role="menuitem"
-                    {{on "click" (queue this.toggleShowBlockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "block-membership"}}
-                  </AuButton>
-                {{/if}}
-                {{#if user.isBlocked}}
-                  <AuButton
-                    data-test-route-settings-users-row-action-unblock-user
-                    @skin="naked"
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showUnblockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "unblock-user"}}
-                  </AuButton>
-                {{else}}
-                  <AuButton
-                    data-test-route-settings-users-row-action-block-user
-                    @skin="naked"
-                    @alert={{true}}
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showBlockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
-                  >
-                    {{t "block-user"}}
-                  </AuButton>
-                {{/if}}
-              </AuDropdown>
-              <AuLink
-                data-test-button-user-detail
-                @skin="button-naked"
-                @icon="chevron-right"
-                @hideText={{true}}
-                @route="settings.users.user"
-                @model={{user.id}}
-              />
-            </div>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
+              {{#if (not (is-empty (reject-by "isBlocked" user.memberships)))}}
+                <AuButton
+                  data-test-route-settings-users-row-action-block-membership
+                  @skin="naked"
+                  @alert={{true}}
+                  role="menuitem"
+                  {{on "click" (queue this.toggleShowBlockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
+                >
+                  {{t "block-membership"}}
+                </AuButton>
+              {{/if}}
+              {{#if user.isBlocked}}
+                <AuButton
+                  data-test-route-settings-users-row-action-unblock-user
+                  @skin="naked"
+                  role="menuitem"
+                  {{on "click" (queue (toggle "showUnblockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
+                >
+                  {{t "unblock-user"}}
+                </AuButton>
+              {{else}}
+                <AuButton
+                  data-test-route-settings-users-row-action-block-user
+                  @skin="naked"
+                  @alert={{true}}
+                  role="menuitem"
+                  {{on "click" (queue (toggle "showBlockUserConfirmationModal" this) (set this "userBeingBlocked" user))}}
+                >
+                  {{t "block-user"}}
+                </AuButton>
+              {{/if}}
+            </AuDropdown>
+            <AuLink
+              data-test-button-user-detail
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              @route="settings.users.user"
+              @model={{user.id}}
+            />
+          </div>
+        </td>
+      </:body>
+    </KDataTable>
   </div>
 </div>
 

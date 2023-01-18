@@ -5,6 +5,7 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import {
   task, timeout
 } from 'ember-concurrency';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class NewsletterNotaUpdatesRoute extends Route {
@@ -89,5 +90,16 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       name: name,
       modified: modified,
     };
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }
