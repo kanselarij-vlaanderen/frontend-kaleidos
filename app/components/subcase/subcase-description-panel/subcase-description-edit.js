@@ -72,7 +72,7 @@ export default class SubcaseDescriptionEdit extends Component {
       type: this.subcaseType,
       agendaItemType: this.agendaItemType,
     };
-    const oldAgendaItemType = this.args.subcase.oldAgendaItemType;
+    const oldAgendaItemType = this.args.subcase.agendaItemType;
     await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
