@@ -337,7 +337,7 @@ table tr.lt-expanded-row {
   gap: .5rem;
 
   > .auk-checkbox-list {
-    margin-left: 2.5rem;
+    margin-left: 2rem;
   }
 
   + .auk-checkbox-list {
@@ -372,4 +372,10 @@ table tr.lt-expanded-row {
       }
     }
   }
+}
+
+// Alignment helpers
+
+.auk-u-text-vertical-align-middle {
+  vertical-align: middle;
 }
