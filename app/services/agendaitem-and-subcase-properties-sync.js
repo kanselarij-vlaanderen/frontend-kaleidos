@@ -56,7 +56,9 @@ export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
       const agenda = await item.agenda;
       const agendaStatus = await agenda.status;
       const agendaActivity = await item.agendaActivity;
-      if (agendaActivity && (agendaStatus.isDesignAgenda || agendaStatus.isFinal)) {
+      const meeting = await agenda.createdFor;
+      const finalAgenda = await meeting.agenda;
+      if (agendaActivity && (agendaStatus.isDesignAgenda || finalAgenda)) {
         const agendaitemSubcase = await agendaActivity.subcase;
         await agendaitemSubcase.preEditOrSaveCheck();
         await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);

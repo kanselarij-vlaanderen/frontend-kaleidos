@@ -26,7 +26,7 @@
   <Toolbar.Group @position="right" as |Group|>
     <Group.Item>
       {{#if (user-may "manage-agendaitems")}}
-        {{#if (not this.agenda.status.isFinal)}}
+        {{#if (not this.isFinalMeeting)}}
           <Agenda::Agendaitem::AgendaitemControls
             @agendaitem={{this.model}}
             @agendaActivity={{this.agendaActivity}}
