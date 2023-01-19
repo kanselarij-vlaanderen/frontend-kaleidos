@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 
 export default class AgendaHeader extends Component {
   /**
@@ -19,6 +21,20 @@ export default class AgendaHeader extends Component {
 
   @tracked loadingMessage = null;
   @tracked showLoadingOverlay = false;
+  @tracked isFinalAgenda = false;
+
+  constructor() {
+    super(...arguments);
+
+    this.loadAgendaIsFinal.perform();
+  }
+
+  @task
+  *loadAgendaIsFinal() {
+    const meeting = yield this.args.meeting;
+    const agenda = yield meeting.agenda;
+    this.isFinalAgenda = isPresent(agenda?.get('id'));
+  }
 
   /**
    * This method will toggle a modal component with a custom message
