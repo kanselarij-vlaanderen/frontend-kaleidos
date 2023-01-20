@@ -5,14 +5,16 @@
         @title="Radio button"
         @snippet="radio-default.hbs">
   {{!-- BEGIN-SNIPPET radio-default --}}
-  <fieldset>
-    <legend class="auk-label">Label</legend>
-    <Auk::RadioList as |List|>
-      <List.Radio @label="Label 1" checked />
-      <List.Radio @label="Label 2" />
-      <List.Radio @label="Label 3" />
-    </Auk::RadioList>
-  </fieldset>
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>Label</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::RadioList as |List|>
+        <List.Radio @label="Label 1" checked />
+        <List.Radio @label="Label 2" />
+        <List.Radio @label="Label 3" />
+      </Auk::RadioList>
+    </Fieldset.content>
+  </AuFieldset>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -20,14 +22,16 @@
         @title="Radio button inline"
         @snippet="radio-inline.hbs">
   {{!-- BEGIN-SNIPPET radio-inline --}}
-  <fieldset>
-    <legend class="auk-label">Label</legend>
-    <Auk::RadioList @layout="inline" as |List|>
-      <List.Radio @label="Label 1" checked />
-      <List.Radio @label="Label 2" />
-      <List.Radio @label="Label 3" />
-    </Auk::RadioList>
-  </fieldset>
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>Label</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::RadioList @layout="inline" as |List|>
+        <List.Radio @label="Label 1" checked />
+        <List.Radio @label="Label 2" />
+        <List.Radio @label="Label 3" />
+      </Auk::RadioList>
+    </Fieldset.content>
+  </AuFieldset>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
