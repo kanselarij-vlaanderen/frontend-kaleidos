@@ -33,7 +33,7 @@ export default class AgendaHeader extends Component {
   *loadAgendaIsFinal() {
     const meeting = yield this.args.meeting;
     const agenda = yield meeting.agenda;
-    this.isFinalAgenda = isPresent(agenda?.get('id'));
+    this.isFinalAgenda = isPresent(agenda?.id);
   }
 
   /**
