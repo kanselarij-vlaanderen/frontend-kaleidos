@@ -10,7 +10,10 @@ import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
+// TODO-command could be command
 function selectConfidentialityLevel(docName, confLevel) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
   cy.get(document.documentCard.name.value).contains(docName)
     .parents(document.documentCard.card)
     .find(document.accessLevelPill.edit)
@@ -18,10 +21,9 @@ function selectConfidentialityLevel(docName, confLevel) {
   cy.get(document.accessLevelPill.selector)
     .click();
   cy.selectFromDropdown(confLevel);
-  // TODO randomint
-  // cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
+  cy.intercept('PATCH', 'pieces/*').as(`patchPiece_${randomInt}`);
   cy.get(document.accessLevelPill.save).click();
-  // cy.wait('@patchPieces10');
+  cy.wait(`@patchPiece_${randomInt}`);
 }
 
 function checkConfidentialityLevel(docName, confLevel) {
@@ -142,7 +144,6 @@ context('Decision postponing tests', () => {
     // check confidentiality level changes
     cy.get(agenda.agendaitemNav.documentsTab).click();
     checkConfidentialityLevel(files[0].newFileName, 'Intern Regering');
-    // TODO this one don't change
     checkConfidentialityLevel(files[4].newFileName, 'Intern Regering');
     cy.get(agenda.agendaitemNav.caseTab).click();
 
@@ -154,6 +155,7 @@ context('Decision postponing tests', () => {
       .click();
     cy.get(agenda.agendaitemControls.action.postponeRevert).forceClick();
     cy.wait('@patchActivity2');
+    // TODO does this spy work?
     cy.wait(2000)
       .then(() => expect(spy).not.to.have.been.called);
     cy.get(auk.modal.container).should('not.exist');
@@ -196,11 +198,14 @@ context('Decision postponing tests', () => {
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const agendaDateFormatted = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
+    cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
+    cy.setAllItemsFormallyOk(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.releaseDecisions();
+
     // add new doc (6) on subcase
     cy.visit('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');
-    cy.get(route.subcaseDocuments.add).click();
-    cy.addNewDocumentsInUploadModal(files2, '');
-    cy.wait(5000);
+    cy.addDocumentsToSubcase(files2);
     // check all docs visible
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
@@ -209,18 +214,21 @@ context('Decision postponing tests', () => {
     cy.get(document.documentCard.name.value).contains(files[4].newFileName);
     cy.get(document.documentCard.name.value).contains(files2[0].newFileName);
 
-    cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
-    cy.approveAndCloseDesignAgenda();
-    cy.releaseDecisions();
-
     cy.createAgenda('Ministerraad', agendaDate);
 
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
 
-    // check if doc 6 not visible on 1st agenda
+    // check if doc 6 is visible on 1st agenda
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.card).should('not.exist');
+    cy.get(document.documentCard.name.value).contains(files[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[1].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[2].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[3].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[4].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName)
+      .should('not.exist');
+
     cy.get(agenda.agendaitemNav.caseTab).click();
 
     cy.get(agenda.agendaitemPostponed.repropose)
@@ -282,12 +290,9 @@ context('Decision postponing tests', () => {
     // add new doc (7)
     cy.get(cases.subcaseDetailNav.documents).click();
     cy.get(route.subcaseDocuments.add).click();
-    cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaItems');
-    cy.addNewDocumentsInUploadModal(files3, '');
+    cy.addNewDocumentsInUploadModal(files3, 'subcase');
     // check if doc 7 shows on subcase
-    cy.wait('@patchAgendaItems');
     cy.get(utils.vlModal.container).should('not.exist');
-    cy.wait(5000);
     cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
 
     // check if doc 7 shows on 2nd agenda
@@ -301,18 +306,45 @@ context('Decision postponing tests', () => {
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.name.value).should('not.exist');
+    cy.get(document.documentCard.name.value).contains(files[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[1].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[2].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[3].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[4].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName)
+      .should('not.exist');
+    cy.get(document.documentCard.name.value).contains(files3[0].newFileName)
+      .should('not.exist');
+
     // add new doc (8) on 1st agenda
     cy.get(route.agendaitemDocuments.add).click();
-    cy.get(auk.modal.footer.confirm).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.addNewDocumentsInUploadModal(files4, 'agendaitems');
+    // check files
+    cy.get(document.documentCard.name.value).contains(files[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[1].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[2].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[3].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[4].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName)
+      .should('not.exist');
+    cy.get(document.documentCard.name.value).contains(files3[0].newFileName)
+      .should('not.exist');
+    cy.get(document.documentCard.name.value).contains(files4[0].newFileName);
 
     // check that doc 8 doesn't show on subcase
     cy.get(agenda.agendaitemNav.caseTab).click();
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get(cases.subcaseDetailNav.documents).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.name.value).should('not.contain', files4[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[1].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[2].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[3].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[4].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files4[0].newFileName)
+      .should('not.exist');
 
     // check if doc 8 shows on 2nd agenda
     cy.get(cases.subcaseDetailNav.overview).click();
@@ -320,6 +352,14 @@ context('Decision postponing tests', () => {
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.name.value).should('not.contain', files4[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[1].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[2].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[3].newFileName);
+    cy.get(document.documentCard.name.value).contains(files[4].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files4[0].newFileName)
+      .should('not.exist');
   });
 });
