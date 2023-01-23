@@ -56,9 +56,9 @@ export default class DocumentController extends Controller {
     }
 
     if (previousPiece?.id) {
-      this.router.transitionTo('document', previousPiece.id);
+      this.router.replaceWith('document', previousPiece.id);
     } else {
-      this.router.transitionTo('agendas');
+      this.transitionBack();
     }
   }
 
