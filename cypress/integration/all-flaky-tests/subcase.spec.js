@@ -429,7 +429,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(auk.confirmationModal.footer.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)

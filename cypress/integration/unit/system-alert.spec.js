@@ -24,7 +24,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
     cy.intercept('GET', '/alerts?**').as('getAlerts');
     cy.intercept('POST', '/alerts').as('postAlerts');
-    cy.get(auk.confirmationModal.footer.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,

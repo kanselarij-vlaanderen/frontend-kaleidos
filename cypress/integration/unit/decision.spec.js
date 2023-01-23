@@ -41,7 +41,7 @@ context('Decision tests', () => {
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('DELETE', 'pieces/*').as('deletePiece');
     cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
-    cy.get(auk.confirmationModal.footer.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@createNewDocumentContainer');
     cy.wait('@patchDecisionActivities');
@@ -80,7 +80,7 @@ context('Decision tests', () => {
           .click();
         cy.get(document.documentCard.delete).forceClick();
       });
-    cy.get(auk.confirmationModal.footer.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
     cy.wait('@deleteFile');
     cy.wait('@deletePiece');
@@ -139,7 +139,7 @@ context('Decision tests', () => {
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('GET', 'pieces/*/previous-piece').as('getPreviousPiece');
-    cy.get(auk.confirmationModal.footer.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@patchDecisionActivities');
     cy.wait('@getPreviousPiece');
@@ -201,7 +201,7 @@ context('Decision tests', () => {
     cy.intercept('POST', '/pieces').as('postPieces');
     cy.intercept('PATCH', '/decision-activities/*').as('patchDecisionActivity');
     cy.intercept('GET', '/pieces/*/access-level').as('getAccessLevel');
-    cy.get(auk.confirmationModal.footer.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postPieces')
       .wait('@patchDecisionActivity');
     cy.get(auk.loader).should('not.exist');

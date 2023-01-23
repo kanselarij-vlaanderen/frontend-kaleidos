@@ -106,7 +106,7 @@ context('Create case as Admin user', () => {
       .forceClick();
     cy.intercept('PATCH', '/cases/**').as('patchCases1');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
-    cy.get(auk.confirmationModal.footer.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchCases1')
       .wait('@patchSubcases1');
     cy.get(auk.loader).should('not.exist');

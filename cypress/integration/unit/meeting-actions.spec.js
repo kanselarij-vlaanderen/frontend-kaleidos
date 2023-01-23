@@ -62,7 +62,7 @@ context('meeting actions tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaitemControls.action.delete).forceClick();
-    cy.get(auk.confirmationModal.footer.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
 
     cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');

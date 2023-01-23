@@ -71,7 +71,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
   cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
-  cy.get(auk.confirmationModal.footer.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
@@ -134,7 +134,7 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(auk.confirmationModal.footer.save).click({
+  cy.get(auk.confirmationModal.footer.confirm).click({
     force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
   })
     .wait(`@createNewPiece_${randomInt}`);
@@ -417,7 +417,7 @@ function addNewPieceToDecision(oldFileName, file) {
     cy.wait(1000); // Cypress is too fast
 
     // Forcing because sometimes the actions menu is still open and blocking the button, seems to happen more in headless mode
-    cy.get(auk.confirmationModal.footer.save).click({
+    cy.get(auk.confirmationModal.footer.confirm).click({
       force: true,
     })
       .wait(`@createNewPiece_${randomInt}`);
@@ -456,7 +456,7 @@ function addLinkedDocument(filenames) {
       .click();
   });
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get(auk.confirmationModal.footer.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@patchSubcase');
   cy.log('/addLinkedDocument');
 }
@@ -486,7 +486,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
         .click();
     });
 
-  cy.get(auk.confirmationModal.footer.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait(`@deletePiece${randomInt}`, {
     timeout: 40000,
   }).wait(`@putRestoreAgendaitems${randomInt}`);
