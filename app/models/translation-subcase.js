@@ -12,11 +12,13 @@ export default class TranslationSubcase extends Model {
   @attr('datetime') created;
   @attr('datetime') modified;
 
-  @belongsTo('publication-flow') publicationFlow;
+  @belongsTo('publication-flow', { inverse: 'translationSubcase', async: true })
+  publicationFlow;
 
-  @hasMany('request-activity') requestActivities;
-  @hasMany('translation-activity') translationActivities;
-  @hasMany('cancellation-activity') cancellationActivities;
+  @hasMany('request-activity', { inverse: 'translationSubcase', async: true })
+  requestActivities;
+  @hasMany('translation-activity', { inverse: 'subcase', async: true })
+  translationActivities;
 
   get isOverdue() {
     return moment(this.dueDate).isBefore(Date.now(), 'day');
