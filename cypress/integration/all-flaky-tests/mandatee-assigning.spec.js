@@ -399,7 +399,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
     checkMandateesInList(mandateeNames2020, dateRange);
   });
@@ -429,7 +429,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
     checkMandateesInList(mandateeNames2022BeforeMay, dateRange);
   });
@@ -443,7 +443,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
     });
     cy.get(dependency.emberPowerSelect.option).contains('heden');
@@ -464,7 +464,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type('Martens');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
     });
     cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
