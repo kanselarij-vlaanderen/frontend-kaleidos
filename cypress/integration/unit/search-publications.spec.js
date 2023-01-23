@@ -71,7 +71,7 @@ function checkPagination(optionsToCheck) {
 function checkPublicationSearchForStatusType(status, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.get(auk.checkbox.checkbox).parent()
+  cy.get(appuniversum.checkbox)
     .contains(status)
     .click()
     .wait(`@publicationSearchCall${randomInt}`);
@@ -98,7 +98,7 @@ function checkPublicationSearchForStatusType(status, pubNumber) {
 function checkPublicationSearchForRegulationType(regulationType, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
-  cy.get(auk.checkbox.checkbox).parent()
+  cy.get(appuniversum.checkbox)
     .contains(regulationType)
     .click()
     .wait(`@publicationSearchCall${randomInt}`);
@@ -287,10 +287,10 @@ context('Search tests', () => {
 
     // search with status and regulation type
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall4');
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains(fieldsWithDoubleDates.status)
       .click();
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains(fieldsWithDoubleDates.regulationType)
       .click()
       .wait('@publicationSearchCall4');
@@ -302,11 +302,11 @@ context('Search tests', () => {
 
     // change status
     cy.intercept('GET', '/publication-flows/search?**').as('publicationSearchCall5');
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains(fieldsWithDoubleDates.status)
       .click();
     // search with searchterm + decisionDate + regulation-type but with different status
-    cy.get(auk.checkbox.checkbox).parent()
+    cy.get(appuniversum.checkbox)
       .contains(fields2.status)
       .click()
       .wait('@publicationSearchCall5');

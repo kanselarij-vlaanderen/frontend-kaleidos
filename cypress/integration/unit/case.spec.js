@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -100,9 +101,10 @@ context('Create case as Admin user', () => {
       .parents('tr')
       .as('currentRow');
     cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click();
+      .forceClick();
     cy.intercept('PATCH', '/cases/**').as('patchCases1');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
     cy.get(utils.vlModalVerify.save).click()
@@ -116,11 +118,12 @@ context('Create case as Admin user', () => {
 
     // restore case
     cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.intercept('PATCH', '/cases/**').as('patchCases2');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases2');
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click()
+      .forceClick()
       .wait('@patchCases2')
       .wait('@patchSubcases2');
 

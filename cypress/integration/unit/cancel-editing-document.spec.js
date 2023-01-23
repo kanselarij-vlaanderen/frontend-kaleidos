@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
@@ -11,9 +12,11 @@ function uploadFileToCancel(file) {
   cy.get(document.documentCard.name.value).contains(file.fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).should('not.be.disabled')
+      cy.get(document.documentCard.actions)
+        .should('not.be.disabled')
+        .children(appuniversum.button)
         .click();
-      cy.get(document.documentCard.uploadPiece).click();
+      cy.get(document.documentCard.uploadPiece).forceClick();
     });
   cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -143,14 +146,18 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
 
     cy.get(document.documentCard.name.value).contains(fileName);
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.nameInput).type(extraName);
     cy.get(utils.vlModalFooter.cancel).click();
     // assert old value is back
     cy.get(document.documentCard.name.value).contains(fileName);
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.nameInput).type(extraName);
     cy.get(utils.vlModalFooter.save).click();
     cy.wait('@patchPieces');
@@ -249,7 +256,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // both documents and linked documents show emptyState
-    cy.get(utils.vlAlert.message).should('have.length', 2)
+    cy.get(utils.auAlert.message).should('have.length', 2)
       .eq(0)
       .contains('geen documenten');
   });
