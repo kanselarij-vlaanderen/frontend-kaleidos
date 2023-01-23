@@ -273,6 +273,32 @@ $au-button-height: 3.4rem;
   display: none;
 }
 
+// Radio
+.auk-radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: $au-unit-tiny;
+}
+
+.auk-radio-list--inline {
+  flex-direction: row;
+  gap: $au-unit;
+}
+
+// Fieldset
+
+.au-c-fieldset {
+  gap: $au-unit-small;
+}
+
+.au-c-fieldset--inline {
+  gap: $au-unit;
+}
+
+.au-c-fieldset-legend {
+  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
+  font-size: var(--au-global-font-size) !important;
+}
 
 // Additions
 
