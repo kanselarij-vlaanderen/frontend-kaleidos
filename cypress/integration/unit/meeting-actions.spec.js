@@ -5,7 +5,6 @@ import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('meeting actions tests', () => {
   afterEach(() => {
@@ -63,7 +62,7 @@ context('meeting actions tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaitemControls.action.delete).forceClick();
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.save).contains('Verwijderen')
       .click();
 
     cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');

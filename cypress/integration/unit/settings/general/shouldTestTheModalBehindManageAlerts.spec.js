@@ -3,6 +3,7 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import utils from '../../../../selectors/utils.selectors';
+import auk from '../../../../selectors.auk.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
@@ -13,15 +14,15 @@ context('Manage alerts tests', () => {
 
   it('Should open the model behind manage alerts', () => {
     cy.get(settings.overview.manageAlerts).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible')
+    cy.get(auk.auModal.container).should('be.visible')
       .should('contain', 'Systeemberichten beheer');
   });
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.get(settings.overview.manageAlerts).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible')
+    cy.get(auk.auModal.container).should('be.visible')
       .should('contain', 'Systeemberichten beheer');
-    cy.get(utils.vlModal.close).click();
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.header.close).click();
+    cy.get(auk.auModal.container).should('not.exist');
   });
 });

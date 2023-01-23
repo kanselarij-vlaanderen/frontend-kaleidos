@@ -137,7 +137,7 @@ context('Search tests', () => {
       // cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
       cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       cy.addDocumentToTreatment(fileTreatment2);
-      cy.get(utils.vlModalFooter.save).click();
+      cy.get(auk.confirmationModal.footer.save).click();
       cy.wait('@patchDecisionActivities');
     });
 

@@ -384,7 +384,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases1');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 1)
       .find(cases.subcaseItem.link)
@@ -405,7 +405,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
@@ -429,7 +429,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.save).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)
@@ -465,7 +465,7 @@ context('Subcase tests', () => {
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.row.subcaseName).contains(capital);
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
 
     // subcasename in overview and detail case tab
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/5EB2CD4FF5E1260009000016/agendapunten');
@@ -479,7 +479,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
 
     cy.get(cases.subcaseItem.link).eq(0)
       .click();
