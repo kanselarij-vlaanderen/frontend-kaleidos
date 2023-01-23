@@ -63,8 +63,10 @@ export default class DocumentController extends Controller {
   }
 
   async _didDeletePieceFromAgendaitem(agendaitem, previousPiece) {
-    const documentContainer = await previousPiece.documentContainer;
-    await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
+    if (previousPiece) {
+      const documentContainer = await previousPiece.documentContainer;
+      await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
+    }
   }
 
   async _didDeletePieceFromDecision(decisionActivity, previousPiece) {
