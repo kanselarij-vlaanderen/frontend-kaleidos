@@ -3,6 +3,7 @@
 // / <reference types="Cypress" />
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Publications proofs tests', () => {
@@ -112,8 +113,10 @@ context('Publications proofs tests', () => {
     cy.get(publication.requestActivityPanel.message)
       .contains(`VO-dossier: ${fields.number}`);
     // check delete
-    cy.get(publication.requestActivityPanel.dropdown).click();
-    cy.get(publication.requestActivityPanel.delete).click();
+    cy.get(publication.requestActivityPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(publication.requestActivityPanel.delete).forceClick();
     cy.intercept('DELETE', '/proofing-activities/*').as('deleteProofing');
     cy.intercept('DELETE', '/emails/*').as('deleteEmails');
     cy.intercept('DELETE', '/files/*').as('deleteFiles');
@@ -171,8 +174,10 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     // TODO flaky dropdown opening: Attempted to access the computed <frontend-kaleidos@component:attach-popover::ember486>._hideOn on a destroyed object, which is not allowed
     cy.wait(1000);
-    cy.get(publication.proofReceivedPanel.dropdown).click();
-    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(publication.proofReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(publication.proofReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
@@ -181,8 +186,10 @@ context('Publications proofs tests', () => {
     cy.get(publication.proofInfoPanel.view.corrector).contains('-');
     cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     // save
-    cy.get(publication.proofReceivedPanel.dropdown).click();
-    cy.get(publication.proofReceivedPanel.edit).click();
+    cy.get(publication.proofReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(publication.proofReceivedPanel.edit).forceClick();
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(editedProofEndDate);
     cy.get(publication.proofReceivedPanel.corrector).click()
@@ -287,8 +294,10 @@ context('Publications proofs tests', () => {
       .wait('@patchtranslationSubcase');
 
     // open upload modal via received translation
-    cy.get(publication.translationReceivedPanel.dropdown).click();
-    cy.get(publication.translationReceivedPanel.proofRequest).click();
+    cy.get(publication.translationReceivedPanel.dropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(publication.translationReceivedPanel.proofRequest).forceClick();
 
     // check data
     cy.get(auk.modal.header.title).contains(`Drukproef aanvragen voor publicatie ${fields.number}`);

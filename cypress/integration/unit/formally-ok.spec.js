@@ -5,6 +5,7 @@ import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Formally ok/nok tests', () => {
   beforeEach(() => {
@@ -31,8 +32,10 @@ context('Formally ok/nok tests', () => {
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Nog niet formeel OK');
-    cy.get(agenda.agendaVersionActions.showOptions).click();
-    cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
     // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(auk.alert.message).should('exist');
     cy.get(auk.modal.footer.cancel).click();

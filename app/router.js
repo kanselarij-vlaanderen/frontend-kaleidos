@@ -119,7 +119,6 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('radio-buttons');
     this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
@@ -136,10 +135,12 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
+    this.route('radio-list');
     this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
+    this.route('toggle');
     this.route('toolbar');
     this.route('navbar');
     this.route('modal');

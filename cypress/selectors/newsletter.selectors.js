@@ -45,6 +45,10 @@ const selectors = {
   // component newsletter-header-overview
   newsletterHeaderOverview: {
     title: '[data-test-newsletter-header-overview-title]',
+    newsletterActions: {
+      optionsDropdown: '[data-test-newsletter-header-actions-dropdown]',
+      publishMail: '[data-test-newsletter-header-actions-publish-mail]',
+    },
   },
 
   // component table-row

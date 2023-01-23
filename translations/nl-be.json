@@ -646,7 +646,8 @@
   "style-guide-buttons-link": "Buttons (link)",
   "style-guide-empty-state": "Empty state",
   "style-guide-file-upload": "File upload",
-  "style-guide-radio-buttons": "Radio buttons",
+  "style-guide-radio-list": "Radio list",
+  "style-guide-toggle": "Toggle",
   "style-guide-key-value": "Key Value",
   "style-guide-list": "List",
   "style-guide-loader": "Loader",
@@ -1138,4 +1139,4 @@
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
   "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
   "organization-id": "Organisatie ID"
-} 
+}
