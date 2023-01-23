@@ -16,12 +16,4 @@ export default class PublicationFlowSerializer extends ApplicationSerializer {
       super.serializeHasMany(snapshot, json, relationship);
     }
   }
-
-  shouldSerializeHasMany(snapshot, key, relationshipType) {
-    if (key === 'mandatees') {
-      return true;
-    } else {
-      return super.shouldSerializeHasMany(snapshot, key, relationshipType);
-    }
-  }
 }
