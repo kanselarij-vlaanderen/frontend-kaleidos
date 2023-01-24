@@ -1,124 +1,97 @@
-{{ page-title
-  (t "cases")
-}}
-<div class="auk-o-grid auk-u-mb-2">
-  <div class="auk-o-grid-col-2">
-    <div class="auk-box">
-      <div class="auk-u-mb-2">
-        <Auk::Label for="sort-type">
-          {{t "sort-by"}}
-        </Auk::Label>
-        <select
-          name="sort-type"
-          id="sort-type"
-          class="auk-select auk-select--block"
-          {{on "input" this.selectSort}}
-        >
-          {{#each this.sortOptions as |sortType|}}
-            <option
-              value={{sortType.value}}
-              selected={{eq sortType.value this.sort}}>
-              {{sortType.label}}
-            </option>
-          {{/each}}
-        </select>
-      </div>
-      <div class="auk-u-mb-2">
-        <Auk::Label>{{t "type"}}</Auk::Label>
-        <AuControlCheckbox
-          data-test-route-search-cases-toggle-decisions={{true}}
-          @label={{t "search-in-decisions-only"}}
-          @checked={{this.decisionsOnly}}
-          @onChange={{this.toggleDecisionsOnly}}
-        />
-      </div>
-      <div>
-        <Auk::Label>{{t "archive"}}</Auk::Label>
-        <AuControlCheckbox
-          @label={{t "search-include-archived"}}
-          @checked={{this.includeArchived}}
-          @onChange={{this.toggleIncludeArchived}}
-        />
-      </div>
-    </div>
+{{page-title (t "cases")}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "type"}}</Auk::Label>
+    <AuControlCheckbox
+      data-test-route-search-cases-toggle-decisions={{true}}
+      @label={{t "search-in-decisions-only"}}
+      @checked={{this.decisionsOnly}}
+      @onChange={{this.toggleDecisionsOnly}}
+    />
   </div>
-  <div class="auk-o-grid-col-10">
-    <div>
-      {{#if this.model.length}}
-        <DataTable
-          data-test-route-search-cases-data-table={{true}}
-          @content={{await this.model}}
-          @page={{this.page}}
-          @noDataMessage={{t "no-results-found"}}
-          @size={{this.size}}
-          @sort={{this.sort}}
-          @class="auk-table auk-table--striped"
-          @isLoading={{this.isLoadingModel}}
-          @onClickRow={{this.navigateToCase}}
-        as |table|
-        >
-          <table.content as |c|>
-            <c.header>
-              <th class="auk-table__col--8">
-                {{t "case-name"}}
-              </th>
-              <ThSortable
-                @class="auk-table__col--2"
-                @currentSorting={{this.sort}}
-                @field="created"
-                @label={{t "created-on"}}
-              />
-              <ThSortable
-                @class="auk-table__col--1"
-                @currentSorting={{this.sort}}
-                @field="sessionDates"
-                @label={{t "on-agenda-of"}}
-              />
-              <th class="auk-table__col--1"></th>
-            </c.header>
-            <c.body class="auk-table--clickable-rows" as |row|>
-              <td>
-                <p>
-                  {{#if row.shortTitle}}
-                    {{row.shortTitle}}
-                  {{else}}
-                    {{row.title}}
-                  {{/if}}
-                </p>
-              </td>
-              <td>
-                {{datetime row.created "DD-MM-YYYY HH:mm"}}
-              </td>
-              <td>
-                {{date row.sessionDates}}
-              </td>
-              <td class="auk-u-text-align--right">
-                <AuLink
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @hideText={{true}}
-                  @route="cases.case.subcases"
-                  @model={{row.id}}
-                >
-                  {{t "open"}}
-                </AuLink>
-              </td>
-            </c.body>
-          </table.content>
-        </DataTable>
-      {{else}}
-        {{#if this.emptySearch}}
-          <Auk::EmptyState
-            @bordered={{true}}
-            @message={{t "fill-in-search-term"}}
-          />
-        {{else}}
-          <Auk::EmptyState
-            @bordered={{true}}
-            @message={{t "no-results-found-modify-term"}}
-          />
-        {{/if}}
-      {{/if}}
-    </div>
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "archive"}}</Auk::Label>
+    <AuControlCheckbox
+      @label={{t "search-include-archived"}}
+      @checked={{this.includeArchived}}
+      @onChange={{this.toggleIncludeArchived}}
+    />
   </div>
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <DataTable
+      data-test-route-search-cases-data-table={{true}}
+      @content={{await this.model}}
+      @page={{this.page}}
+      @noDataMessage={{t "no-results-found"}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @class="auk-table auk-table--striped"
+      @isLoading={{this.isLoadingModel}}
+      @onClickRow={{this.navigateToCase}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <th class="auk-table__col--8">
+            {{t "case-name"}}
+          </th>
+          <ThSortable
+            @class="auk-table__col--2"
+            @currentSorting={{this.sort}}
+            @field="created"
+            @label={{t "created-on"}}
+          />
+          <ThSortable
+            @class="auk-table__col--1"
+            @currentSorting={{this.sort}}
+            @field="sessionDates"
+            @label={{t "on-agenda-of"}}
+          />
+          <th class="auk-table__col--1"></th>
+        </c.header>
+        <c.body class="auk-table--clickable-rows" as |row|>
+          <td>
+            <p>
+              {{#if row.shortTitle}}
+                {{row.shortTitle}}
+              {{else}}
+                {{row.title}}
+              {{/if}}
+            </p>
+          </td>
+          <td>
+            {{datetime row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          <td>
+            {{date row.sessionDates}}
+          </td>
+          <td class="auk-u-text-align--right">
+            <AuLink
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              @route="cases.case.subcases"
+              @model={{row.id}}
+            >
+              {{t "open"}}
+            </AuLink>
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
 </div>

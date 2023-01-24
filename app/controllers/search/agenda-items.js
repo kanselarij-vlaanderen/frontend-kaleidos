@@ -122,4 +122,8 @@ export default class AgendaitemsSearchController extends Controller {
       );
     }
   }
+
+  get customFiltersElement() {
+    return document.getElementById('search-subroute-filters-area');
+  }
 }

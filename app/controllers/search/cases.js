@@ -73,4 +73,8 @@ export default class CasesSearchController extends Controller {
   navigateToCase(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
+
+  get customFiltersElement() {
+    return document.getElementById('search-subroute-filters-area')
+  }
 }
