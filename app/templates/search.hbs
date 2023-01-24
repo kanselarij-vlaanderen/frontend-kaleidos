@@ -51,7 +51,10 @@
                 @onDateFromClear={{set this "dateFrom" undefined}}
                 @onDateToClear={{set this "dateTo" undefined}}
               />
-              <Search::MinisterFilter />
+              <Search::MinisterFilter 
+                @mandatees={{this.mandatees}}
+                @onChange={{this.setMandatees}}
+              />
             </div>
           </div>
         </div>
