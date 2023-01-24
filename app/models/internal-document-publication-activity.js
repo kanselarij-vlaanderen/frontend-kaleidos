@@ -4,6 +4,7 @@ export default class InternalDocumentPublicationActivity extends Model {
   @attr('datetime') plannedDate;
   @attr('datetime') startDate;
 
-  @belongsTo('meeting') meeting;
-  @belongsTo('concept') status;
+  @belongsTo('meeting', { inverse: 'internalDocumentPublicationActivity' })
+  meeting;
+  @belongsTo('concept', { inverse: null, async: true }) status;
 }

@@ -1,3 +1,4 @@
+import ENV from 'frontend-kaleidos/config/environment';
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -61,6 +62,10 @@ export default class NewslettersSearchController extends Controller {
 
   get isEmptySearch() {
     return isEmpty(this.searchText);
+  }
+
+  get sanitizeHtmlOptions() {
+    return ENV['sanitize-html'];
   }
 
   @action

@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-2">
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
@@ -29,7 +27,7 @@
         @size={{this.size}}
         @noDataMessage={{t "no-results-found"}}
         @isLoading={{this.findAll.isRunning}}
-        @onClickRow={{action "select"}}
+        @onClickRow={{this.select}}
       as |table|>
         <table.content as |c|>
           <c.header>
@@ -41,8 +39,7 @@
             <td class="auk-table__col--1">
               <AuControlCheckbox
                 data-test-add-existing-piece-checkbox={{true}}
-                @checked={{row.selected}}
-                @onChange={{fn this.select row}}
+                @checked={{includes row this.selected}}
               />
             </td>
             <td class="auk-table__col--8">

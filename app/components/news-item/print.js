@@ -1,3 +1,4 @@
+import ENV from 'frontend-kaleidos/config/environment';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -36,5 +37,9 @@ export default class NewsItemPrintComponent extends Component {
   async save() {
     await this.args.onSave();
     this.closeEdit();
+  }
+
+  get sanitizeHtmlOptions() {
+    return ENV['sanitize-html'];
   }
 }
