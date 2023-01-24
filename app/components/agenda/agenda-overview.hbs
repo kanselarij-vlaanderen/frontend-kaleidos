@@ -20,13 +20,6 @@
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <AuButtonGroup>
-          <AuButton
-            data-test-agenda-overview-show-changes={{true}}
-            @skin="naked"
-            {{on "click" @toggleShowModifiedOnly}}
-          >
-            {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-          </AuButton>
           {{#if this.canEdit}}
             {{#unless @isEditingOverview}}
               <AuButton
