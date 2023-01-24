@@ -39,8 +39,18 @@
         <div class="au-c-sidebar">
           <div class="au-c-sidebar__content">
             <Search::Navigation />
-            <div id="search-subroute-filters-area" class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
-              <Search::DateRangeFilter />
+            <div
+              id="search-subroute-filters-area"
+              class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
+            >
+              <Search::DateRangeFilter
+                @dateFrom={{this.dateFrom}}
+                @dateTo={{this.dateTo}}
+                @onDateFromChange={{this.setDateFrom}}
+                @onDateToChange={{this.setDateTo}}
+                @onDateFromClear={{set this "dateFrom" undefined}}
+                @onDateToClear={{set this "dateTo" undefined}}
+              />
               <Search::MinisterFilter />
             </div>
           </div>
