@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-form-group">
   <div class="auk-o-flex--align-end auk-u-mb-2">
     <div
@@ -52,7 +50,7 @@
       @displayField="label"
       @sortField="label"
       @selected={{this.alert.type}}
-      @onChange={{action "selectType"}}
+      @onChange={{this.selectType}}
     />
   </div>
 </div>

@@ -44,7 +44,12 @@
         />
       {{else}}
         <div class="auk-u-mt-2">
-          <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+          <AuAlert
+            @skin="info"
+            @icon="info-circle"
+          >
+            {{t "no-documents-yet"}}
+          </AuAlert>
         </div>
       {{/if}}
 
@@ -68,7 +73,7 @@
 
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPieces}}
+    @onClose={{perform this.cancelUploadPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}} >
