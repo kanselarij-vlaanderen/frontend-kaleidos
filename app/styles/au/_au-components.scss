@@ -200,15 +200,14 @@ $au-button-height: 3.4rem;
   }
 }
 
-.au-c-button,
-.au-c-link {
+.au-c-button {
   vertical-align: middle;
 }
 
 .au-c-button--link,
 .au-c-button--tertiary,
-.au-c-link {
-  font-size: $au-button-font-size;
+.au-c-button--link-secondary {
+  vertical-align: baseline;
 }
 
 .au-c-icon {
@@ -255,16 +254,6 @@ $au-button-height: 3.4rem;
 
 .au-c-control__indicator {
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
-}
-
-// Fix icons in menu
-.auk-menu__item {
-  display: flex;
-  align-items: center;
-}
-
-.auk-menu__item--danger {
-  font-weight: 500;
 }
 
 // Modal fixes
