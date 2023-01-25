@@ -339,7 +339,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     timeout: 60000,
   }).should('not.exist');
   cy.get(auk.loader, {
-    timeout: 20000,
+    timeout: amountOfFormallyOks * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
