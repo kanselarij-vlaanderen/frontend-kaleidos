@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class CasesSearchController extends Controller {
   @service router;
@@ -38,7 +39,7 @@ export default class CasesSearchController extends Controller {
   @tracked sort;
   @tracked includeArchived;
   @tracked decisionsOnly;
-  @tracked emptySearch;
+  @tracked searchText;
 
   constructor() {
     super(...arguments);
@@ -47,6 +48,10 @@ export default class CasesSearchController extends Controller {
     this.sort = this.sortOptions[0].value;
     this.includeArchived = true;
     this.decisionsOnly = false;
+  }
+
+  get emptySearch() {
+    return isEmpty(this.searchText);
   }
 
   @action

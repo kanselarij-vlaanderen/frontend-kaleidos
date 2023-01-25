@@ -26,6 +26,15 @@
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "agenda"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+    />
     <DataTable
       data-test-route-search-agendaitems-data-table={{true}}
       @content={{this.model}}

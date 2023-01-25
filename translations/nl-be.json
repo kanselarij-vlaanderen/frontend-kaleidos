@@ -312,6 +312,7 @@
   "requested-for-session-kind": "Aangevraagd voor {kind}:",
   "resign": "Mandaat beëindigen",
   "results": "resultaten",
+  "results-for": "resultaten voor",
   "row": "Rij",
   "save": "Opslaan",
   "save-resignation": "Mandataris wijzigen",
@@ -1138,4 +1139,4 @@
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
   "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
   "organization-id": "Organisatie ID"
-} 
+}
