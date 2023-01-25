@@ -79,6 +79,8 @@ pipeline {
         sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
         sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
 
+        sh "sleep 120"
+
         // up the system
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
         //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
@@ -91,7 +93,7 @@ pipeline {
       steps {
         // sh "npx cypress run"
         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/all-flaky-tests/subcase.spec.js'"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/all-flaky-tests/profile-minister.spec.js'"
       }
     }
   }
