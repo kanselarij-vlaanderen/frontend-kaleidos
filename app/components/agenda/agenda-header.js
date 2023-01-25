@@ -31,7 +31,7 @@ export default class AgendaHeader extends Component {
 
   @task
   *loadAgendaIsFinal() {
-    const meeting = yield this.args.meeting;
+    const meeting = this.args.meeting;
     const agenda = yield meeting.agenda;
     this.isFinalAgenda = isPresent(agenda?.id);
   }
