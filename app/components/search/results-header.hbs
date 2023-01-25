@@ -21,7 +21,7 @@
       {{#each @sortOptions as |sortType|}}
         <option
           value={{sortType.value}}
-          selected={{eq sortType.value this.sort}}
+          selected={{eq sortType.value @sort}}
         >
           {{sortType.label}}
         </option>
