@@ -182,7 +182,7 @@ context('Subcase tests', () => {
 
     // Status is hidden
     cy.get(appuniversum.pill).contains('Op de website');
-    cy.get(agenda.agendaDetailSidebarItem.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
     cy.url().should('contain', '/dossier/');
