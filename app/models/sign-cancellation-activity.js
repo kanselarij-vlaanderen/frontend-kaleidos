@@ -5,5 +5,9 @@ export default class SignCancellationActivityModel extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('sign-subcase') signSubcase;
+  @belongsTo('sign-subcase', {
+    inverse: 'signCancellationActivity',
+    async: true,
+  })
+  signSubcase;
 }

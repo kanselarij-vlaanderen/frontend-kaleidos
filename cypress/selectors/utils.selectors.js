@@ -110,6 +110,13 @@ const selectors = {
     message: '[data-test-vl-alert-message]',
   },
 
+  // au-alert
+  auAlert: {
+    close: '[data-test-alert-close]',
+    container: '[data-test-alert]',
+    message: '[data-test-alert-message]',
+  },
+
   // case-search
   caseSearch: {
     input: '[data-test-utils-case-search-input]',
