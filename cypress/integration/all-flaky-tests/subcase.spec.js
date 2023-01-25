@@ -181,10 +181,10 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.wait(1500); // TODO-flaky: link click does nothing sometimes but no calls are pending, task running?
     cy.get(appuniversum.pill).contains('Op de website');
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('not.exist');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
     cy.url().should('contain', '/dossier/');
     cy.url().should('contain', '/deeldossiers/');
 
