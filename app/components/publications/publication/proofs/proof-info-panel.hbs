@@ -41,7 +41,7 @@
             {{#if
               (and
                 (not @isFinal)
-                (is-after @publicationSubcase.dueDate precision="days")
+                (is-after-days @publicationSubcase.dueDate)
               )
             }}
               <Auk::FormHelpText
@@ -110,7 +110,7 @@
               {{#if
                 (and
                   (not @isFinal)
-                  (is-after @publicationSubcase.dueDate precision="days")
+                  (is-after-days @publicationSubcase.dueDate)
                 )
               }}
                 <Auk::FormHelpText

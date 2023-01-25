@@ -17,7 +17,7 @@
       </div>
       <div class="auk-u-mb-2">
         <AuContent>
-          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
+          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} @options={{this.sanitizeHtmlOptions}} />
         </AuContent>
       </div>
       {{#if @newsItem.remark}}

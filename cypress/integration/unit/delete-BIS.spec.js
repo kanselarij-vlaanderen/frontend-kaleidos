@@ -38,7 +38,7 @@ context('Delete BIS tests', () => {
     cy.addSubcase('Nota',
       subcaseTitle1,
       'Cypress test voor het propageren naar overheid',
-      'In voorbereiding',
+      'Principiële goedkeuring',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 

@@ -5,9 +5,9 @@ export default class UserOrganization extends Model {
   @attr('string') name;
   @attr('string') identifier;
 
-  @belongsTo('concept') status;
+  @belongsTo('concept', { inverse: null, async: true }) status;
 
-  @hasMany('membership') memberships;
+  @hasMany('membership', { inverse: 'organization', async: true }) memberships;
 
   get isBlocked() {
     return this.status.get('uri') === CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;

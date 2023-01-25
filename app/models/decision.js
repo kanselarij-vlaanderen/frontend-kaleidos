@@ -6,7 +6,8 @@ export default class DecisionModel extends Model {
   @attr('string') title;
   @attr('date') publicationDate;
 
-  @belongsTo('publication-activity') publicationActivity;
+  @belongsTo('publication-activity', { inverse: 'decisions', async: true })
+  publicationActivity;
 
   get isStaatsbladResource() {
     return this.uri && this.uri.startsWith(CONSTANTS.STAATSBLAD_ELI_DOMAIN);
