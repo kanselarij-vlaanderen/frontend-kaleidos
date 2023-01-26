@@ -1,1 +1,19 @@
-{}
+{
+  "data": {
+    "statusCode": 200,
+    "body": {
+      "data": {
+        "type": "mail-campaigns",
+          "id": 5555
+        },
+      "relationships": {
+        "meeting": {
+          "data": { "type": "meetings", "id": 5 }
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": "application/vnd.api+json"
+    }
+}
+}
