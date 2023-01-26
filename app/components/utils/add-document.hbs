@@ -1,7 +1,7 @@
 <div class="auk-u-mb-4">
   <WebComponents::VlModal
     @title={{t "document-add"}}
-    @closeModal={{this.cancel}}
+    @onClose={{this.cancel}}
     @isOverlay={{true}}
     @large={{true}}
   >
@@ -14,7 +14,7 @@
             @size={{this.pieceInCreation.file.size}}
             @downloadName={{this.pieceInCreation.file.filename}}
             @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
-            @delete={{this.deletePieceInCreation}}
+            @onDelete={{this.deletePieceInCreation}}
           />
         </div>
       {{else}}

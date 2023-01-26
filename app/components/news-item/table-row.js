@@ -1,3 +1,4 @@
+import ENV from 'frontend-kaleidos/config/environment';
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -79,5 +80,9 @@ export default class NewsItemTableRowComponent extends Component {
 
     navigator.clipboard.writeText(copyText);
     this.toaster.success(this.intl.t('text-copied'));
+  }
+
+  get sanitizeHtmlOptions() {
+    return ENV['sanitize-html'];
   }
 }

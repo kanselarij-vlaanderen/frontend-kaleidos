@@ -1,8 +1,6 @@
-import { belongsTo } from '@ember-data/model';
 import Job from './job';
+import { belongsTo } from '@ember-data/model';
 
-export default Job.extend({
-  generated: belongsTo('file', {
-    inverse: null,
-  }),
-});
+export default class FileBundlingJob extends Job {
+  @belongsTo('file', { inverse: null, async: true }) generated;
+}
