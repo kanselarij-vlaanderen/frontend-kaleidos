@@ -4,21 +4,6 @@
 import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 
-// TODO-command could be command
-// function selectConfidentialityLevel(docName, confLevel) {
-//   cy.get(document.documentCard.name.value).contains(docName)
-//     .parents(document.documentCard.card)
-//     .find(document.accessLevelPill.edit)
-//     .click();
-//   cy.get(document.accessLevelPill.selector)
-//     .click();
-//   cy.selectFromDropdown(confLevel);
-//   // TODO randomint
-//   // cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
-//   cy.get(document.accessLevelPill.save).click();
-//   // cy.wait('@patchPieces10');
-// }
-
 function checkAccess(docName, hasAccess = true) {
   cy.get(document.documentCard.name.value).contains(docName)
     .parents(document.documentCard.card)

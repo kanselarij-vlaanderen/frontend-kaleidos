@@ -4,27 +4,44 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class decisionActivity extends Model {
   @attr('date') startDate; // for publications: displayed as: Datum beslissing
 
-  @belongsTo('agenda-item-treatment') treatment;
-  @belongsTo('subcase') subcase;
-  @belongsTo('concept', { inverse: null }) decisionResultCode;
-  @belongsTo('piece') report;
+  @belongsTo('agenda-item-treatment', {
+    inverse: 'decisionActivity',
+    async: true,
+  })
+  treatment;
+  @belongsTo('subcase', { inverse: 'decisionActivities', async: true }) subcase;
+  @belongsTo('concept', { inverse: null, async: true }) decisionResultCode;
+  @belongsTo('piece', { inverse: 'decisionActivity', async: true }) report;
 
-  @hasMany('publication-flow') publicationFlows;
-  @hasMany('sign-flow') signFlows;
+  @hasMany('publication-flow', { inverse: 'decisionActivity', async: true })
+  publicationFlows;
+  @hasMany('sign-flow', { inverse: 'decisionActivity', async: true }) signFlows;
 
   get isPostponed() {
-    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD;
+    return (
+      this.decisionResultCode?.get('uri') ===
+      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+    );
   }
 
   get isRetracted() {
-    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN;
+    return (
+      this.decisionResultCode?.get('uri') ===
+      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+    );
   }
 
   get isApproved() {
-    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    return (
+      this.decisionResultCode?.get('uri') ===
+      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+    );
   }
 
   get isAcknowledged() {
-    return this.decisionResultCode?.get('uri') === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+    return (
+      this.decisionResultCode?.get('uri') ===
+      CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+    );
   }
 }

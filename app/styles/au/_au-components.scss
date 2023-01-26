@@ -274,18 +274,6 @@ $au-button-height: 3.4rem;
   display: none;
 }
 
-// Radio
-.auk-radio-list {
-  display: flex;
-  flex-direction: column;
-  gap: $au-unit-tiny;
-}
-
-.auk-radio-list--inline {
-  flex-direction: row;
-  gap: $au-unit;
-}
-
 // Fieldset
 
 .au-c-fieldset {

@@ -331,7 +331,7 @@ context('Search tests', () => {
       const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
       const type = 'Nota';
       const subcaseTitleLong = 'Cypress test met accenten in title';
-      const subcaseType = 'In voorbereiding';
+      const subcaseType = 'Principiële goedkeuring';
       const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
       cy.createAgenda(null, agendaDate, null);

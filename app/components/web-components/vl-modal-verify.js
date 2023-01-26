@@ -31,16 +31,17 @@ export default class WebComponentsVlModalVerify extends Component {
     return this.intl.t(this.args.buttonText ?? 'delete');
   }
 
-  get showDestructiveIcon() {
-    return this.buttonType !== 'warning';
-  }
-
-  get buttonType() {
+  get buttonTypeOrDanger() {
     return this.args.buttonType ?? 'danger';
   }
 
+
+  get showDestructiveIcon() {
+    return this.buttonTypeOrDanger !== 'warning';
+  }
+
   get isAlertButton() {
-    return this.buttonType === 'danger';
+    return this.buttonTypeOrDanger === 'danger';
   }
 
   @action
@@ -52,7 +53,7 @@ export default class WebComponentsVlModalVerify extends Component {
   @action
   keyDown(event) {
     if (event.key === 'Escape') {
-      this.cancel();
+      this.args.onCancel();
     }
   }
 }

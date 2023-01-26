@@ -82,7 +82,7 @@
                 {{t "title-and-content"}}
               </th>
               <Utils::ThSortable
-                @class="auk-table__col--2"
+                class="auk-table__col--2"
                 @currentSorting={{this.sort}}
                 @field="agendaitems.meetingDate"
                 @label={{t "agenda-of"}}
@@ -107,7 +107,7 @@
                   </h3>
                   <p class="auk-u-mr-2">
                     <AuContent>
-                      <SanitizeHtml @raw={{true}} @value={{row.htmlContent}} />
+                      <SanitizeHtml @raw={{true}} @value={{row.htmlContent}} @options={{this.sanitizeHtmlOptions}} />
                     </AuContent>
                   </p>
                 </td>
