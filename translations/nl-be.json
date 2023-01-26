@@ -458,7 +458,7 @@
   "present-time": "heden",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
-  "search-confidential-only": "Toon enkel vertrouwelijk",
+  "search-confidential-only": "Toon enkel dossiers met beperkte toegang",
   "search-include-archived": "Zoek ook in archief",
   "no-nota": "Geen nota beschikbaar",
   "nota-loading-text": "De nota wordt geladen..",
