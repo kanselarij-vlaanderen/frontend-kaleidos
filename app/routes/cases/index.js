@@ -16,21 +16,14 @@ export default class CasesIndexRoute extends Route.extend(DataTableRouteMixin) {
       refreshModel: true,
       as: 'sorteer',
     },
-    showArchived: {
-      refreshModel: true,
-      as: 'toon_gearchiveerd',
-    },
   };
 
   modelName = 'decisionmaking-flow';
 
-  mergeQueryOptions(params) {
+  mergeQueryOptions() {
     const opts = {
-      include: 'case'
+      include: 'case',
     };
-    if (!params.showArchived) {
-      opts['filter[case][is-archived]'] = false;
-    }
     return opts;
   }
 }

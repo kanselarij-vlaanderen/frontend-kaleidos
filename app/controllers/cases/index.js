@@ -25,18 +25,12 @@ export default class CasesIndexController extends Controller {
         type: 'string',
       },
     },
-    {
-      showArchived: {
-        type: 'boolean',
-      },
-    }
   ];
   sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
   page = 0;
   size = 20;
 
   sort = '-opened';
-  showArchived = false;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
   @tracked showEditCaseModal = false;

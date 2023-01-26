@@ -2,25 +2,6 @@
 <Cases::CasesHeader @didCreateNewCase={{this.navigateToDecisionmakingFlow}} />
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        {{#if (user-may "manage-cases")}}
-          <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
-            <Auk::Label
-              class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0"
-              for="show-cases-archived"
-            >
-              {{t "show-archived"}}
-            </Auk::Label>
-            <Auk::Toggle
-              data-test-route-cases-overview-show-archived
-              id="show-cases-archived"
-              @checked={{this.showArchived}}
-            />
-          </Auk::Toolbar::Item>
-        {{/if}}
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
     <DataTable
       data-test-route-cases-overview-data-table={{true}}
       @content={{await this.model}}
