@@ -6,6 +6,7 @@ import minimalInclude from 'frontend-kaleidos/utils/minimal-include';
 export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
   @service toaster;
+  useFetch = true; // use fetch instead of jquery
 
   // Method override from RESTAdapter base class
   // See: https://api.emberjs.com/ember-data/3.28/classes/RESTAdapter/methods/ajax?anchor=ajax
