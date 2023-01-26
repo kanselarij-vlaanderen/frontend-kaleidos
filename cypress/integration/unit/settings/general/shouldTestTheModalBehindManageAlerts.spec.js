@@ -3,7 +3,7 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import utils from '../../../../selectors/utils.selectors';
-import auk from '../../../../selectors.auk.selectors';
+import auk from '../../../../selectors/auk.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
