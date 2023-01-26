@@ -70,16 +70,6 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  toggleDecisionsOnly() {
-    this.decisionsOnly = !this.decisionsOnly;
-  }
-
-  @action
-  toggleIncludeArchived() {
-    this.includeArchived = !this.includeArchived;
-  }
-
-  @action
   navigateToCase(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }

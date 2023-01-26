@@ -95,21 +95,6 @@ export default class AgendaitemsSearchController extends Controller {
   }
 
   @action
-  toggleIncludeNotas() {
-    this.includeNotas = !this.includeNotas;
-  }
-
-  @action
-  toggleIncludeMededelingen() {
-    this.includeMededelingen = !this.includeMededelingen;
-  }
-
-  @action
-  toggleLatestOnly() {
-    this.latestOnly = !this.latestOnly;
-  }
-
-  @action
   navigateToAgendaitem(searchEntry) {
     if (searchEntry.meetingId) {
       this.router.transitionTo(

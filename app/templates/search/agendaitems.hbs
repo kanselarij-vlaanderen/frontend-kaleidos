@@ -6,12 +6,12 @@
       <AuControlCheckbox
         @label={{t "note"}}
         @checked={{this.includeNotas}}
-        @onChange={{this.toggleIncludeNotas}}
+        @onChange={{set this "includeNotas"}}
       />
       <AuControlCheckbox
         @label={{capitalize (t "announcement")}}
         @checked={{this.includeMededelingen}}
-        @onChange={{this.toggleIncludeMededelingen}}
+        @onChange={{set this "includeMededelingen"}}
       />
     </Auk::CheckboxList>
   </div>
@@ -20,7 +20,7 @@
     <AuControlCheckbox
       @label={{t "only-on-final-agenda"}}
       @checked={{this.latestOnly}}
-      @onChange={{this.toggleLatestOnly}}
+      @onChange={{set this "latestOnly"}}
     />
   </div>
 {{/in-element}}

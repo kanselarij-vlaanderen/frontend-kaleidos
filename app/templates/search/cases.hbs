@@ -6,7 +6,7 @@
       data-test-route-search-cases-toggle-decisions={{true}}
       @label={{t "search-in-decisions-only"}}
       @checked={{this.decisionsOnly}}
-      @onChange={{this.toggleDecisionsOnly}}
+      @onChange={{set this "decisionsOnly"}}
     />
   </div>
   <div class="au-c-card au-o-box au-o-box--small">
@@ -14,6 +14,7 @@
     <AuControlCheckbox
       @label={{t "search-include-archived"}}
       @checked={{this.includeArchived}}
+      @onChange={{set this "includeArchived"}}
     />
   </div>
   <div class="au-c-card au-o-box au-o-box--small">
