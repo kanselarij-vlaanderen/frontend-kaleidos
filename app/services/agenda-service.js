@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default class AgendaService extends Service {
   @service store;
@@ -170,7 +169,8 @@ export default class AgendaService extends Service {
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    updateModifiedProperty(lastAgenda);
+    lastAgenda.modified = new Date();
+    lastAgenda.save();
 
     // Create default newsItem for announcements with inNewsLetter = true
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {

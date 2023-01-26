@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import moment from 'moment';
 
 export default class SystemAlertFormComponent extends Component {
   @tracked isLoading = false;
@@ -11,13 +10,11 @@ export default class SystemAlertFormComponent extends Component {
   }
 
   get beginDate() {
-    const beginDate = this.alert.beginDate;
-    return moment.isMoment(beginDate) ? moment(beginDate).toDate() : beginDate;
+    return this.alert.beginDate;
   }
 
   get endDate() {
-    const endDate = this.alert.endDate;
-    return moment.isMoment(endDate) ? moment(endDate).toDate() : endDate;
+    return this.alert.endDate;
   }
 
   @action
@@ -27,12 +24,12 @@ export default class SystemAlertFormComponent extends Component {
 
   @action
   selectBeginDate(date) {
-    this.alert.beginDate = moment(date);
+    this.alert.beginDate = date;
   }
 
   @action
   selectEndDate(date) {
-    this.alert.endDate = moment(date);
+    this.alert.endDate = date;
   }
 
   @action
