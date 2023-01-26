@@ -16,6 +16,9 @@ export default class CasesSearchController extends Controller {
       decisionsOnly: {
         type: 'boolean',
       },
+      confidentialOnly: {
+        type: 'boolean',
+      },
       page: {
         type: 'number',
       },
@@ -39,6 +42,7 @@ export default class CasesSearchController extends Controller {
   @tracked sort;
   @tracked includeArchived;
   @tracked decisionsOnly;
+  @tracked confidentialOnly;
   @tracked searchText;
 
   constructor() {
@@ -48,6 +52,7 @@ export default class CasesSearchController extends Controller {
     this.sort = this.sortOptions[1].value;
     this.includeArchived = true;
     this.decisionsOnly = false;
+    this.confidentialOnly = false;
   }
 
   get emptySearch() {

@@ -15,6 +15,10 @@ export default class CasesSearchRoute extends Route {
       refreshModel: true,
       as: 'enkel_beslissingen',
     },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',

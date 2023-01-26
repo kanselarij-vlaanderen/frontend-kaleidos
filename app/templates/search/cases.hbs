@@ -14,7 +14,14 @@
     <AuControlCheckbox
       @label={{t "search-include-archived"}}
       @checked={{this.includeArchived}}
-      @onChange={{this.toggleIncludeArchived}}
+    />
+  </div>
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "confidential"}}</Auk::Label>
+    <AuControlCheckbox
+      @label={{t "search-confidential-only"}}
+      @checked={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
     />
   </div>
 {{/in-element}}
