@@ -13,6 +13,9 @@ export default class CasesSearchController extends Controller {
       includeArchived: {
         type: 'boolean',
       },
+      archivedOnly: {
+        type: 'boolean',
+      },
       decisionsOnly: {
         type: 'boolean',
       },
@@ -41,6 +44,7 @@ export default class CasesSearchController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked includeArchived;
+  @tracked archivedOnly;
   @tracked decisionsOnly;
   @tracked confidentialOnly;
   @tracked searchText;
@@ -51,6 +55,7 @@ export default class CasesSearchController extends Controller {
     this.size = this.sizeOptions[2];
     this.sort = this.sortOptions[1].value;
     this.includeArchived = true;
+    this.archivedOnly = false;
     this.decisionsOnly = false;
     this.confidentialOnly = false;
   }

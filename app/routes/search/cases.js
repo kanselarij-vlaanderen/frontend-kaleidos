@@ -11,6 +11,10 @@ export default class CasesSearchRoute extends Route {
       refreshModel: true,
       as: 'incl_gearchiveerd',
     },
+    archivedOnly: {
+      refreshModel: true,
+      as: 'enkel_gearchiveerd',
+    },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
@@ -110,6 +114,10 @@ export default class CasesSearchRoute extends Route {
 
     if (!params.includeArchived) {
       filter.isArchived = 'false';
+    }
+
+    if (params.archivedOnly) {
+      filter.isArchived = 'true';
     }
 
     if (params.confidentialOnly) {

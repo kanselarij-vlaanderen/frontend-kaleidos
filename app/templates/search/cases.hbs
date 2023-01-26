@@ -17,6 +17,11 @@
         @checked={{this.includeArchived}}
         @onChange={{set this "includeArchived"}}
       />
+      <AuControlCheckbox
+        @label={{t "search-archived-only"}}
+        @checked={{this.archivedOnly}}
+        @onChange={{set this "archivedOnly"}}
+      />
     </div>
   {{/if}}
   {{#if (user-may "view-confidential-cases")}}
