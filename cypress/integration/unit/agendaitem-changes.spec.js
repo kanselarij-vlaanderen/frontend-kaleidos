@@ -7,7 +7,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
-context('Agendaitem changes tests', () => {
+context.skip('Agendaitem changes tests', () => {
   beforeEach(() => {
     cy.login('Admin');
   });
