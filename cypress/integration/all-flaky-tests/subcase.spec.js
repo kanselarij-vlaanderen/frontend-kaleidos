@@ -158,7 +158,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
-    cy.url().should('not.contain', '/dossier/');
+    cy.url().should('not.contain', '/dossiers/');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {
