@@ -65,6 +65,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-confidential-cases',
       'impersonate-users',
     ]
   },
@@ -90,6 +91,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-confidential-cases',
     ]
   },
   {
@@ -112,6 +114,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-confidential-cases',
     ]
   },
   {
@@ -125,6 +128,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-confidential-cases',
     ]
   },
   {
@@ -136,6 +140,7 @@ const groups = [
       'manage-themis-publications',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-confidential-cases',
     ],
   },
   {

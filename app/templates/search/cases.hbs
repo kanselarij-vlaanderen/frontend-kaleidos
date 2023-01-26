@@ -9,22 +9,26 @@
       @onChange={{set this "decisionsOnly"}}
     />
   </div>
-  <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "archive"}}</Auk::Label>
-    <AuControlCheckbox
-      @label={{t "search-include-archived"}}
-      @checked={{this.includeArchived}}
-      @onChange={{set this "includeArchived"}}
-    />
-  </div>
-  <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "confidential"}}</Auk::Label>
-    <AuControlCheckbox
-      @label={{t "search-confidential-only"}}
-      @checked={{this.confidentialOnly}}
-      @onChange={{set this "confidentialOnly"}}
-    />
-  </div>
+  {{#if (user-may "manage-cases")}}
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>{{t "archive"}}</Auk::Label>
+      <AuControlCheckbox
+        @label={{t "search-include-archived"}}
+        @checked={{this.includeArchived}}
+        @onChange={{set this "includeArchived"}}
+      />
+    </div>
+  {{/if}}
+  {{#if (user-may "view-confidential-cases")}}
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>{{t "confidential"}}</Auk::Label>
+      <AuControlCheckbox
+        @label={{t "search-confidential-only"}}
+        @checked={{this.confidentialOnly}}
+        @onChange={{set this "confidentialOnly"}}
+      />
+    </div>
+  {{/if}}
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
