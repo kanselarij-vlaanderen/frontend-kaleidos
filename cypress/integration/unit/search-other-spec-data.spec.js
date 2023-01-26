@@ -75,7 +75,7 @@ context('Search tests', () => {
     cy.wait('@newsletterSearchCall');
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
-    cy.get(utils.vlAlert.container).should('not.exist');
+    cy.get(utils.auAlert.container).should('not.exist');
     cy.get(route.searchNewsletters.row.title).contains(searchTerm);
   });
 

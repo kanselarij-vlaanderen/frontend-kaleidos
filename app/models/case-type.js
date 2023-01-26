@@ -5,4 +5,4 @@ export default class CaseType extends Model {
   @attr('string') label;
   @attr('string') scopeNote;
   @attr('boolean') deprecated;
-};
+}

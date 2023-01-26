@@ -8,6 +8,7 @@ export default class RegulationType extends Model {
   @attr('string') altLabel; // empty in data
   @attr('number') position;
 
-  @hasMany('publication-flow') publicationFlows;
-  @hasMany('sign-flow') signFlows;
+  @hasMany('publication-flow', { inverse: 'regulationType', async: true })
+  publicationFlows;
+  @hasMany('sign-flow', { inverse: 'regulationType', async: true }) signFlows;
 }
