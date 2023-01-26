@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import Service, { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import moment from 'moment';
+import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';
 import { later } from '@ember/runloop';
 import { action } from '@ember/object';
@@ -50,8 +50,7 @@ export default class SystemAlertService extends Service {
      * Below query fetches all alerts with end date greater then start of the day.
      * This makes for only 1 unique request per day, which is good for request caching.
      */
-    const today = moment().startOf('day')
-      .format();
+    const today = startOfDay(new Date()).toISOString();
     const alerts = await this.store.query('alert', {
       filter: {
         ':gte:end-date': today,

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import moment from 'moment';
+import { differenceInMinutes } from 'date-fns';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
@@ -230,7 +230,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const threshold = 10;
     if (
       Math.abs(
-        moment(campaign.attributes.createTime).diff(moment(Date.now()), 'minutes')
+        differenceInMinutes(campaign.attributes.createTime, new Date())
       ) > threshold
     ) {
       this.toaster.error(

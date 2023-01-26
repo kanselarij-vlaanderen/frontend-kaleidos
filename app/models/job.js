@@ -4,6 +4,11 @@ import { computed } from '@ember/object';
 import Evented from '@ember/object/evented';
 import CONFIG from 'frontend-kaleidos/config/constants';
 
+// FIXME: De Evented API en het gebruik van observers is deprecated, we zullen
+// hier dus ook van moeten afstappen. We moeten de code in de volgende plaatsen
+// ook aanpassen:
+// - publications.overview.reports controller
+// - Agenda::AgendaHeader::AgendaActions component
 export default class JobModel extends Model.extend(Evented) {
   RUNNING = CONFIG.JOB_STATUSSES.RUNNING;
   SUCCESS = CONFIG.JOB_STATUSSES.SUCCESS;
@@ -17,7 +22,7 @@ export default class JobModel extends Model.extend(Evented) {
   constructor() {
     super(...arguments);
     // eslint-disable-next-line ember/no-observers, ember/classic-decorator-no-classic-methods
-    this.addObserver('hasEnded', function() {
+    this.addObserver('hasEnded', function () {
       if (this.hasEnded) {
         this.trigger('didEnd', this.status);
       }
