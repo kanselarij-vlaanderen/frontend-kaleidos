@@ -35,6 +35,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
   });
 
   it('Should close and stay closed', () => {
+    cy.get(auk.auModal.header.close).click();
+    cy.get(auk.auModal.container).should('not.exist');
     cy.intercept('GET', '/alerts?**').as('getAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
