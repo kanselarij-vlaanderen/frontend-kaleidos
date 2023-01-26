@@ -1,16 +1,17 @@
-import Model, {
-  attr,
-  hasMany,
-  belongsTo
-} from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class SubmissionActivity extends Model {
   @attr('datetime') startDate;
 
-  @belongsTo('subcase') subcase;
-  @belongsTo('agenda-activity') agendaActivity;
-  @hasMany('piece', {
-    serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)
-  }) pieces;
-  @hasMany('mandatee') submitters;
+  @belongsTo('subcase', { inverse: 'submissionActivities', async: true })
+  subcase;
+  @belongsTo('agenda-activity', {
+    inverse: 'submissionActivities',
+    async: true,
+  })
+  agendaActivity;
+
+  @hasMany('piece', { inverse: 'submissionActivity', async: true }) pieces; // This relation is serialized, even though it's on the hasMany side, because the belongsTo side isn't exposed by the backend
+  @hasMany('mandatee', { inverse: 'submissionActivities', async: true })
+  submitters;
 }
