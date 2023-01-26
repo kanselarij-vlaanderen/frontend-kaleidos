@@ -186,7 +186,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
-    cy.url().should('contain', '/dossier/');
+    cy.url().should('contain', '/dossiers/');
     cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
