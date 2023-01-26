@@ -44,11 +44,10 @@ export default class PublicationsOverviewReportsController extends Controller {
     );
     const job = this.createExportJob(reportTypeEntry, userParams);
     await job.save();
-    this.jobMonitor.register(job);
     const thisRouteName = this.router.currentRouteName;
-    job.on('didEnd', this, async (status) => {
+    this.jobMonitor.register(job, async (job) => {
       this.toaster.clear(generatingToast);
-      if (status === job.SUCCESS) {
+      if (job.status === job.SUCCESS) {
         const file = await job.generated;
         const downloadFileToast = {
           title: this.intl.t('publication-reports--toast-ready--title'),
