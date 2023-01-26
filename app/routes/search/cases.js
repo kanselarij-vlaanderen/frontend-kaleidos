@@ -112,6 +112,10 @@ export default class CasesSearchRoute extends Route {
       filter.isArchived = 'false';
     }
 
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
+    }
+
     this.lastParams.commit();
 
     if (isEmpty(params.searchText)) {
