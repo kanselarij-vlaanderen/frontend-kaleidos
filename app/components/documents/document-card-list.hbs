@@ -16,7 +16,12 @@
     </div>
   {{else}}
     <div class="auk-u-mt-2">
-      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+      <AuAlert
+        @skin="info"
+        @icon="info-circle"
+      >
+        {{t "no-documents-yet"}}
+      </AuAlert>
     </div>
   {{/each}}
 </Documents::DocumentList>

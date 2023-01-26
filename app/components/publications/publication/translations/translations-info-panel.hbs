@@ -41,7 +41,7 @@
             {{#if
               (and
                 (not @isFinal)
-                (is-after @translationSubcase.dueDate precision="days")
+                (is-after-days @translationSubcase.dueDate)
               )
             }}
               <Auk::FormHelpText
@@ -100,7 +100,7 @@
             {{#if
               (and
                 (not @isFinal)
-                (is-after @translationSubcase.dueDate precision="days")
+                (is-after-days @translationSubcase.dueDate)
               )
             }}
               <Auk::FormHelpText

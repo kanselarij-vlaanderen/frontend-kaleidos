@@ -177,8 +177,8 @@
   <WebComponents::VlModalVerify
     @title={{t "no-themes-selected"}}
     @message={{t "no-themes-selected-message"}}
-    @cancel={{this.cancelSave}}
-    @verify={{perform this.confirmSave}}
+    @onCancel={{this.cancelSave}}
+    @onVerify={{perform this.confirmSave}}
     @buttonText="save"
     @buttonType="warning"
     @showIcon={{false}}
