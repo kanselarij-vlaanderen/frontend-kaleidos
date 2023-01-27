@@ -138,6 +138,7 @@ const selectors = {
   // document-badge
   documentBadge: {
     link: '[data-test-document-badge-link]',
+    isNew: '[data-test-document-badge-isNew]',
   },
 
 };
