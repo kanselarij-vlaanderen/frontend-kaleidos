@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import sanitizeHtml from 'ember-cli-sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 export default class NewsItemTableRowComponent extends Component {
   @service currentSession;
