@@ -164,7 +164,6 @@
   "end-date": "Einddatum",
   "environment": "omgeving",
   "error": "Er is iets misgelopen..",
-  "example-subcase": "In voorbereiding",
   "document-name": "Naam document",
   "file-type": "Bestandstype",
   "files-of": "bestanden van de",
@@ -646,7 +645,8 @@
   "style-guide-buttons-link": "Buttons (link)",
   "style-guide-empty-state": "Empty state",
   "style-guide-file-upload": "File upload",
-  "style-guide-radio-buttons": "Radio buttons",
+  "style-guide-radio-list": "Radio list",
+  "style-guide-toggle": "Toggle",
   "style-guide-key-value": "Key Value",
   "style-guide-list": "List",
   "style-guide-loader": "Loader",
@@ -1137,5 +1137,6 @@
   "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden.",
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
   "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
-  "organization-id": "Organisatie ID"
+  "organization-id": "Organisatie ID",
+  "open": "Open"
 } 

@@ -6,9 +6,11 @@ export default class SignFlowModel extends Model {
   @attr('date') openingDate;
   @attr('date') closingDate;
 
-  @belongsTo('sign-subcase') signSubcase;
-  @belongsTo('regulation-type') regulationType;
-  @belongsTo('case') case;
-  @belongsTo('decision-activity') decisionActivity;
-  @belongsTo('user') creator;
+  @belongsTo('sign-subcase', { inverse: 'signFlow', async: true }) signSubcase;
+  @belongsTo('regulation-type', { inverse: 'signFlows', async: true })
+  regulationType;
+  @belongsTo('case', { inverse: 'signFlows', async: true }) case;
+  @belongsTo('decision-activity', { inverse: 'signFlows', async: true })
+  decisionActivity;
+  @belongsTo('user', { inverse: null, async: true }) creator;
 }

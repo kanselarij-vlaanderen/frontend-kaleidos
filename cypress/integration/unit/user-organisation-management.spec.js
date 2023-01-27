@@ -219,7 +219,7 @@ context('testing user and organisation management', () => {
         .click();
       cy.get(settings.usersIndex.row.action.unblockUser)
         .forceClick();
-      cy.get(auk.modal.footer.confirm).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.usersIndex.row.name).contains('User who is Blocked Test')
         .find('au-c-pill--error')
         .should('not.exist');
@@ -352,7 +352,7 @@ context('testing user and organisation management', () => {
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.unblockOrganization)
         .forceClick();
-      cy.get(auk.modal.footer.confirm).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .find('.au-c-pill--error')
         .should('not.exist');
@@ -381,7 +381,7 @@ context('testing user and organisation management', () => {
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.blockOrganization)
         .forceClick();
-      cy.get(auk.modal.footer.confirm).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .contains('Geblokkeerd');
 

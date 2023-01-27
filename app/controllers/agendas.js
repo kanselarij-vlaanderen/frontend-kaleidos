@@ -2,12 +2,10 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import moment from 'moment';
 import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import addBusinessDays from 'date-fns/addBusinessDays';
-import setHours from 'date-fns/setHours';
-import setMinutes from 'date-fns/setMinutes';
+import { addBusinessDays, setHours, setMinutes } from 'date-fns';
+import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 const DEFAULT_SORT_OPTIONS = ['-created-for.agenda.status.label', '-created-for.planned-start', 'created-for.kind.label'];
 export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
@@ -165,9 +163,7 @@ export default class AgendasController extends Controller {
     );
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
-      title: `Agenda A voor zitting ${moment(meeting.plannedStart).format(
-        'D-M-YYYY'
-      )}`,
+      title: `Agenda A voor zitting ${dateFormat(meeting.plannedStart, 'd-M-yyyy')}`,
       createdFor: meeting,
       status,
       created: now,
@@ -211,9 +207,7 @@ export default class AgendasController extends Controller {
       created: now,
       agenda,
       number: 1,
-      shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
-        closestMeeting.plannedstart
-      ).format('dddd DD-MM-YYYY')}`,
+      shortTitle: `Goedkeuring van het verslag van de vergadering van ${dateFormat(closestMeeting.plannedStart, 'EEEE dd-MM-yyyy')}`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
