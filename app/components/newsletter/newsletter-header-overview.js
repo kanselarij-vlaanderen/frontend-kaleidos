@@ -206,7 +206,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       'filter[in-newsletter]': true,
     })) > 0;
 
-    // return hasDocumentPublicationPlanned && hasThemes && hasNotas;
     return hasDocumentPublicationPlanned && hasNotasWithThemes;
   }
 
