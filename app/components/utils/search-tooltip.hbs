@@ -5,13 +5,12 @@
     class="auk-u-cursor-pointer"
     {{on "click" this.openModal}}
   >
-    <AttachPopover
-      @class="auk-popover"
+    <EmberPopover
+      @tooltipClass="auk-popover"
       @showOn="click"
-      @placement="right"
+      @side="right-start"
       @hideOn="clickout"
       @isShown={{this.isOpenModal}}
-      @renderInPlace={{false}}
     >
       <div class="auk-popover__header">
         <Auk::Toolbar as |Toolbar|>
@@ -60,6 +59,6 @@
           </thead>
         </table>
       </div>
-    </AttachPopover>
+    </EmberPopover>
   </Auk::Icon>
 </span>

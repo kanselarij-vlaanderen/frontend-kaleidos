@@ -6,9 +6,8 @@ export default class PublicationsOverviewPublicationsTable extends Component {
   @tracked isColumnsDisplayConfigPanelShown = false;
 
   @action
-  toggleColumnsDisplayConfigPanel() {
-    this.isColumnsDisplayConfigPanelShown =
-      !this.isColumnsDisplayConfigPanelShown;
+  closeColumnsDisplayConfigPanel() {
+    this.isColumnsDisplayConfigPanelShown = false;
   }
 
   get tableColumnVisibilityMap() {

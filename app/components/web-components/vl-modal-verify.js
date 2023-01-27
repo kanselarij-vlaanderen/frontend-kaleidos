@@ -9,7 +9,7 @@ import { action } from '@ember/object';
  * @param showActions {Boolean}
  * @param showVerify {Boolean}
  * @param buttonType {string}
- * @param buttonText {string}
+ * @param verifyButtonText {string}
  * @param isLoading {string}
  * @param onVerify {Function}
  * @param onCancel {Function}
@@ -28,7 +28,7 @@ export default class WebComponentsVlModalVerify extends Component {
   }
 
   get verifyButtonText() {
-    return this.intl.t(this.args.buttonText ?? 'delete');
+    return this.args.verifyButtonText ?? this.intl.t('delete');
   }
 
   get buttonTypeOrDanger() {
