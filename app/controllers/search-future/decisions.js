@@ -39,7 +39,6 @@ export default class DecisionsSearchFutureController extends Controller {
   @tracked types;
   @tracked latestOnly; // Only show the most recent version of an agenda-item
   @tracked emptySearch;
-  @tracked ministersHidden;
 
   constructor() {
     super(...arguments);
@@ -48,7 +47,6 @@ export default class DecisionsSearchFutureController extends Controller {
     this.sort = this.sortOptions[0].value;
     this.types = A(['nota', 'mededeling']);
     this.latestOnly = true;
-    this.ministersHidden = true;
   }
 
   get includeNotas() {
@@ -114,10 +112,5 @@ export default class DecisionsSearchFutureController extends Controller {
         id: 'agendaitem.no-meeting',
       });
     }
-  }
-
-  @action
-  toggleMinistersHidden() {
-    this.ministersHidden = !this.ministersHidden;
   }
 }

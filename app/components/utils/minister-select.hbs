@@ -1,0 +1,402 @@
+<div class="auk-form-group au-o-flow">
+  <Auk::CheckboxList>
+    <Auk::Label for="ministerName">Huidige Ministers</Auk::Label>
+    <AuLink>Alles deselecteren</AuLink>
+    <div>
+      <Auk::Checkbox
+        @label="Jan Jambon"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Hilde Crevits"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Bart Somers"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Ben Weyts"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Zuhal Demir"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Matthias Diependaele"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Lydia Peeters"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Benjamin Dalle"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+      <Auk::Checkbox
+        @label="Jo Brouns"
+        @checked={{true}}
+        @disabled={{@disabled}}
+      />
+    </div>
+  </Auk::CheckboxList>
+  <Auk::CheckboxList>
+  <Auk::Label for="ministerName">Vorige Ministers</Auk::Label>
+  <AuLink>Alles selecteren</AuLink>
+  {{#if this.ministersHidden}}
+  <AuButton {{on "click" this.toggleMinistersHidden}} @skin="link-secondary" class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny" @icon="add">Toon vorige ministers</AuButton>
+  {{ else }}
+    <Auk::Checkbox
+      @label="Paul Akkermans"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Bert Anciaux"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Eddy Baldewijns"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Wouter Beke"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Edward Beysen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Gilbert Bossuyt"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Geert Bourgeois"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Paul Breyne"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jacky Buchmann"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Adelheid Byttebier"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Patricia Ceysens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Daniël Coens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Norbert De Batselier"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Roger De Wulf"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Wivina Demeester-De Meyer"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Paul Deprez"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Leona Detiège"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Patrick Dewael"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Vera Dua"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jos Dupré"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jaak Gabriëls"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Mark Galle"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Sven Gatz"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Gaston Geens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Brigitte Grouwels"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Veerle Heeren"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Liesbeth Homans"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Theo Kelchtermans"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Marino Keulen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Renaat Landuyt"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jan Lenssens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Yves Leterme"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Ingrid Lieten"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Luc Martens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Fientje Moerman"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Philippe Muyters"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jean Pede"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Leo Peeters"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Kris Peeters"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Karel Poma"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Ludo Sannen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Johan Sauwens"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Joke Schauvliege"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Hugo Schiltz"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Pascal Smet"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Steve Stevaert"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Rika Steyaert"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jef Tavernier"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Bart Tommelein"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Annemie Turtelboom"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Anne Van Asbroeck"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Kathleen Van Brempt"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Freya Van den Bossche"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Luc Van den Bossche"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Luc Van den Brande"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Koen Van den Heuvel"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Paul Van Grembergen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Dirk Van Mechelen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Eric Van Rompuy"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Steven Vanackere"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Frank Vandenbroucke"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Marleen Vanderpoorten"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Jo Vandeurzen"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Guy Vanhengel"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Inge Vervotte"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Mieke Vogels"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Louis Waltniel"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+    <Auk::Checkbox
+      @label="Hugo Weckx"
+      @checked={{false}}
+      @disabled={{@disabled}}
+    />
+  <AuButton {{on "click" this.toggleMinistersHidden}} @skin="link-secondary" class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny" @icon="remove">Verberg vorige ministers</AuButton>
+  {{/if}}
+  </Auk::CheckboxList>
+</div>

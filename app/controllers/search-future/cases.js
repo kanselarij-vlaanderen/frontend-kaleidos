@@ -37,7 +37,6 @@ export default class CasesSearchFutureController extends Controller {
   @tracked includeArchived;
   @tracked decisionsOnly;
   @tracked emptySearch;
-  @tracked ministersHidden;
 
   constructor() {
     super(...arguments);
@@ -46,7 +45,6 @@ export default class CasesSearchFutureController extends Controller {
     this.sort = this.sortOptions[0].value;
     this.includeArchived = false;
     this.decisionsOnly = false;
-    this.ministersHidden = true;
   }
 
   @action
@@ -72,10 +70,5 @@ export default class CasesSearchFutureController extends Controller {
   @action
   navigateToCase(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
-  }
-
-  @action
-  toggleMinistersHidden() {
-    this.ministersHidden = !this.ministersHidden;
   }
 }
