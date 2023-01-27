@@ -71,7 +71,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
 
     yield Promise.all([...pieceSaves]);
 
-    this.router.refresh();
+    this.router.refresh('publications.publication.translations.index');
     this.showTranslationUploadModal = false;
   }
 
@@ -100,7 +100,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     saves.push(translationActivity.save());
 
     yield Promise.all(saves);
-    this.router.refresh();
+    this.router.refresh('publications.publication.translations.index');
   }
 
   @task
@@ -173,7 +173,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       );
     }
 
-    this.router.refresh();
+    this.router.refresh('publications.publication.translations.index');
     this.showTranslationRequestModal = false;
   }
 
@@ -191,7 +191,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
       yield this.publicationService.deletePiece(piece);
     }
     yield requestActivity.destroyRecord();
-    this.router.refresh();
+    this.router.refresh('publications.publication.translations.index');
   }
 
   @task

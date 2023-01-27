@@ -21,6 +21,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
   @service fileConversionService;
+  @service router;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -337,5 +338,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async unmarkForSignature(piece) {
     await this.signatureService.unmarkDocumentForSignature(piece);
+  }
+
+  @action
+  refresh() {
+    this.router.refresh();
   }
 }

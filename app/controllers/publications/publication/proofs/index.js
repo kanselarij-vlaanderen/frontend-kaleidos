@@ -77,7 +77,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       publicationSubcaseSave,
     ]);
 
-    this.router.refresh();
+    this.router.refresh('publications.publication.proofs.index');
     this.showProofUploadModal = false;
   }
 
@@ -88,7 +88,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       this.publicationFlow
     );
 
-    this.router.refresh();
+    this.router.refresh('publications.publication.proofs.index');
     this.showProofRequestModal = false;
   }
 

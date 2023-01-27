@@ -18,7 +18,7 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   saveTableConfig() {
     this.tableConfig.saveToLocalStorage();
-    this.reload();
+    this.router.refresh('publications.overview._base');
   }
 
   @action
@@ -42,10 +42,5 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   sortTable(sortField) {
     this.sort = sortField;
-  }
-
-  @action
-  reload() {
-    this.router.refresh();
   }
 }

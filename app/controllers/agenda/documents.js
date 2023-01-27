@@ -130,4 +130,9 @@ export default class AgendaDocumentsController extends Controller {
     this.router.refresh();
     this.isOpenBatchDetailsModal = false;
   }
+
+  @action
+  refresh() {
+    this.router.refresh();
+  }
 }
