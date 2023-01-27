@@ -26,9 +26,11 @@ import utils from '../../selectors/utils.selectors';
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
   cy.get(auk.auModal.container).as('fileUploadDialog');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
+      cy.intercept('GET', '/concepts**559774e3-061c-4f4b-a758-57228d4b68cd**').as(`loadConceptsDocType_${randomInt}`);
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       // ensure the new uploadedDocument component is visible before trying to continue
       cy.get(document.uploadedDocument.nameInput).should('have.length.at.least', index + 1);
@@ -41,8 +43,12 @@ function addNewDocumentsInUploadModal(files, model) {
     });
 
     if (file.fileType) {
-      cy.get('@fileUploadDialog').find(document.uploadedDocument.documentTypes)
+      cy.wait(`@loadConceptsDocType_${randomInt}`, {
+        timeout: 30000,
+      });
+      cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
         .eq(index)
+        .find(document.uploadedDocument.documentTypes)
         .as('radioOptions');
       cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
       cy.get('@radioOptions').within(($t) => {
@@ -65,11 +71,10 @@ function addNewDocumentsInUploadModal(files, model) {
     }
   });
   // Click save
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', 'pieces').as('createNewPiece');
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
-  cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
+  cy.intercept('GET', '/submission-activities?filter**&include**').as(`getSubmissionActivity_${randomInt}`);
   cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
   cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@createNewDocumentContainer', {
@@ -83,7 +88,7 @@ function addNewDocumentsInUploadModal(files, model) {
     cy.wait('@createNewSubmissionActivity', {
       timeout: 24000 + (6000 * files.length),
     }).wait(`@getSubmissionActivity_${randomInt}`, {
-      timeout: 24000,
+      timeout: 60000,
     });
   } else {
     cy.wait(`@loadPieces${model}`, {
