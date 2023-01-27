@@ -85,6 +85,7 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agendaitems', { path: '/agendapunten', });
+    this.route('news-items', { path: '/kort-bestek', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
