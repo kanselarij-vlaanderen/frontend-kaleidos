@@ -48,7 +48,7 @@
     {{#if @notaGroups.length}}
       <div class="auk-u-mb-8">
         {{#if this.isEditingOverview}}
-        <ul {{sortable-group onChange=@onReorderAgendaitems}}>
+        <ul>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{! template-lint-disable simple-unless }}
             {{#unless
@@ -64,12 +64,6 @@
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
               <li
                 class="vlc-agenda-items__sub-item"
-                {{sortable-item
-                  model=agendaitem
-                  distance="30"
-                  handle=this.dragHandleClass
-                  disabled=(not this.canEdit)
-                }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
                   @agendaitem={{agendaitem}}
@@ -136,16 +130,10 @@
   <div class="auk-u-mb-4">
     {{#if @announcements.length}}
       {{#if this.isEditingOverview}}
-      <ul {{sortable-group onChange=@onReorderAgendaitems}}>
+      <ul>
         {{#each @announcements as |announcement|}}
           <li
             class="vlc-agenda-items__sub-item"
-            {{sortable-item
-              model=announcement
-              distance="30"
-              handle=this.dragHandleClass
-              disabled=(not this.canEdit)
-            }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}

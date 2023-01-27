@@ -74,17 +74,17 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @task
   *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
-    const draggedAgendaItemType = yield draggedAgendaItem.type;
-    // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
-    const reorderedAgendaitemsOfCategory =  [];
-    for (const agendaitem of reorderedAgendaitems.toArray()) {
-      const agendaItemType = yield agendaitem.type;
-      if (agendaItemType === draggedAgendaItemType) {
-        reorderedAgendaitemsOfCategory.push(agendaitem);
-      }
-    }
-    yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
-    this.send('reloadModel');
+    // const draggedAgendaItemType = yield draggedAgendaItem.type;
+    // // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
+    // const reorderedAgendaitemsOfCategory =  [];
+    // for (const agendaitem of reorderedAgendaitems.toArray()) {
+    //   const agendaItemType = yield agendaitem.type;
+    //   if (agendaItemType === draggedAgendaItemType) {
+    //     reorderedAgendaitemsOfCategory.push(agendaitem);
+    //   }
+    // }
+    // yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
+    // this.send('reloadModel');
   }
 
   @task
