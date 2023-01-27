@@ -158,7 +158,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
-    cy.url().should('not.contain', '/dossier/');
+    cy.url().should('not.contain', '/dossiers/');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {
@@ -181,8 +181,13 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
+    cy.wait(1500); // TODO-flakey, linkToSubcase does nothing sometimes
     cy.get(appuniversum.pill).contains('Op de website');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
+    cy.url().should('contain', '/dossiers/');
+    cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
