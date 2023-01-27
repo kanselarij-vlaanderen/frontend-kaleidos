@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
-import sanitizeHtml from 'ember-cli-sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 export default class NewslettersSearchController extends Controller {
   @service router;

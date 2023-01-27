@@ -1,0 +1,13 @@
+<div class="sanitized-value">
+  {{#if (has-block)}}
+    {{yield this.sanitizedValue}}
+  {{else}}
+    {{#if @raw}}
+      {{! template-lint-disable no-triple-curlies }}
+      {{{this.sanitizedValue}}}
+      {{! template-lint-enable no-triple-curlies }}
+    {{else}}
+      {{this.sanitizedValue}}
+    {{/if}}
+  {{/if}}
+</div>
