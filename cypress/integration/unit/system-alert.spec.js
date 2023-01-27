@@ -42,7 +42,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
 
-    cy.get(utils.auAlert.close).each((button) => {
+    cy.get(utils.vlAlert.close).each((button) => {
       cy.get(button).click();
     });
     cy.get(settings.systemAlert).should('not.exist');
