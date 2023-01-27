@@ -5,9 +5,23 @@ export default class SignSigningActivityModel extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('sign-subcase') signSubcase;
-  @belongsTo('sign-preparation-activity') signPreparationActivity;
-  @belongsTo('sign-refusal-activity') signRefusalActivity;
-  @belongsTo('sign-completion-activity') signCompletionActivity;
-  @belongsTo('mandatee') mandatee;
+  @belongsTo('sign-subcase', { inverse: 'signSigningActivities', async: true })
+  signSubcase;
+  @belongsTo('sign-preparation-activity', {
+    inverse: 'signSigningActivities',
+    async: true,
+  })
+  signPreparationActivity;
+  @belongsTo('sign-refusal-activity', {
+    inverse: 'signSigningActivity',
+    async: true,
+  })
+  signRefusalActivity;
+  @belongsTo('sign-completion-activity', {
+    inverse: 'signSigningActivities',
+    async: true,
+  })
+  signCompletionActivity;
+  @belongsTo('mandatee', { inverse: 'signSigningActivities', async: true })
+  mandatee;
 }

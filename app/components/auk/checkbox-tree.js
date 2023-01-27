@@ -42,9 +42,7 @@ export default class CheckboxTree extends Component {
   }
 
   @action
-  toggleItem(item, event) {
-    const checked = event.target.checked;
-
+  toggleItem(item, checked) {
     if (checked) {
       this.selectedItems.push(item);
     } else {

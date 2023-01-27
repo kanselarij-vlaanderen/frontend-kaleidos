@@ -45,6 +45,7 @@
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
         <AuDropdown
+          data-test-newsletter-header-actions-dropdown
           @skin="secondary"
           @title={{t "actions"}}
           @alignment="right"
@@ -64,6 +65,7 @@
                 {{t "send-newsitem-to-all"}}
               </AuButton>
               <AuButton
+                data-test-newsletter-header-actions-publish-mail
                 @skin="link"
                 {{on "click" this.openConfirmPublishMail}}
                 role="menuitem"
@@ -156,8 +158,8 @@
     @isLoading={{this.publishToMail.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-mail"}}
     @message={{t "send-newsitem-to-mail-verification"}}
-    @cancel={{this.cancelPublishMail}}
-    @verify={{perform this.publishToMail}}
+    @onCancel={{this.cancelPublishMail}}
+    @onVerify={{perform this.publishToMail}}
   />
 {{/if}}
 {{#if this.showConfirmPublishBelga}}
@@ -167,8 +169,8 @@
     @isLoading={{this.publishToBelga.isRunning}}
     @verifyButtonText={{t "send-newsitem-to-belga"}}
     @message={{t "send-newsitem-to-belga-verification"}}
-    @cancel={{this.cancelPublishBelga}}
-    @verify={{perform this.publishToBelga}}
+    @onCancel={{this.cancelPublishBelga}}
+    @onVerify={{perform this.publishToBelga}}
   />
 {{/if}}
 {{#if this.showConfirmPublishThemis}}

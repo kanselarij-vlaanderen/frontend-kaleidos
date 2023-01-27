@@ -1,0 +1,36 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Radio list" />
+
+<StyleguideSample
+        @title="Radio button"
+        @snippet="radio-default.hbs">
+  {{!-- BEGIN-SNIPPET radio-default --}}
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>Label</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::RadioList as |List|>
+        <List.Radio @label="Label 1" checked />
+        <List.Radio @label="Label 2" />
+        <List.Radio @label="Label 3" />
+      </Auk::RadioList>
+    </Fieldset.content>
+  </AuFieldset>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Radio button inline"
+        @snippet="radio-inline.hbs">
+  {{!-- BEGIN-SNIPPET radio-inline --}}
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>Label</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::RadioList @layout="inline" as |List|>
+        <List.Radio @label="Label 1" checked />
+        <List.Radio @label="Label 2" />
+        <List.Radio @label="Label 3" />
+      </Auk::RadioList>
+    </Fieldset.content>
+  </AuFieldset>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
