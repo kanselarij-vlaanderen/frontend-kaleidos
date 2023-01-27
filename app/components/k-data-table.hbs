@@ -45,7 +45,11 @@
   </tbody>
 </table>
 {{#if this.enablePagination}}
-  <AuToolbar class="auk-table__actions--bottom" as |Group|>
+  <AuToolbar
+    class="auk-table__actions--bottom"
+    data-test-number-pagination-container
+    as |Group|
+  >
     <Group>
       <Auk::Pagination
         @page={{@page}}
@@ -64,6 +68,7 @@
         <WebComponents::AuPageSize
           @selectedSize={{@size}}
           @onChange={{@onChangeSize}}
+          data-test-number-pagination-size
         />
       </Auk::Toolbar::Item>
     </Group>
