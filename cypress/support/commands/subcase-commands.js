@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -128,13 +129,16 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.wait(`@getGovernmentBodies${randomInt}`);
-  cy.wait(`@getMandatees${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
   if (mandateeSearchText) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
   }
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
   // we can search or select by number
   // when searching we select the first option we get or the first option with a specific title
   if (mandateeSearchText) {
@@ -179,6 +183,9 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
   }).wait('@patchAgenda', {
     timeout: 40000,
   });
+  // the mandatee groups have to be recalculated.
+  cy.wait(2000);
+
   cy.log('/addAgendaitemMandatee');
 }
 
@@ -231,8 +238,10 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.intercept('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get(cases.subcaseHeader.actionsDropdown).click();
-  cy.get(cases.subcaseHeader.actions.deleteSubcase).click();
+  cy.get(cases.subcaseHeader.actionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(cases.subcaseHeader.actions.deleteSubcase).forceClick();
 
   cy.get(utils.vlModalVerify.save).click();
   cy.wait('@deleteSubcase');

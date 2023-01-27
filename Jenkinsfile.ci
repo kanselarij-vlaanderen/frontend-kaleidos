@@ -72,7 +72,7 @@ pipeline {
 
         // Reset the contents of DB an search
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  search"
-        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion cache resource yggdrasil migrations"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion cache resource cache-warmup yggdrasil migrations"
         sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata && rm -rf testdata-elasticsearch"
         sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project && unzip -o testdata-elasticsearch.zip -d ${WORKSPACE}/kaleidos-project && mv ${WORKSPACE}/kaleidos-project/testdata-elasticsearch/* ${WORKSPACE}/kaleidos-project/testdata"
         sh "cd ${WORKSPACE}/kaleidos-project && chmod 1777 -R data"
@@ -84,7 +84,7 @@ pipeline {
         //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
         // Wait for indexation.
-        sh "sleep 60"
+        sh "sleep 120"
       }
     }
     stage('Automated tests: Cypress') {
@@ -92,6 +92,8 @@ pipeline {
         // sh "npx cypress run"
         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+        // run specific specs example
+        // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/all-flaky-tests/*.spec.js'"
       }
     }
   }

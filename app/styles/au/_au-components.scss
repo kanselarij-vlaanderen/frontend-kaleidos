@@ -9,6 +9,7 @@ $au-button-height: 3.4rem;
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
+@import 'ember-appuniversum/c-alert';
 @import 'ember-appuniversum/c-badge';
 @import 'ember-appuniversum/c-button';
 @import 'ember-appuniversum/c-button-group';
@@ -194,15 +195,14 @@ $au-button-height: 3.4rem;
   }
 }
 
-.au-c-button,
-.au-c-link {
+.au-c-button {
   vertical-align: middle;
 }
 
 .au-c-button--link,
 .au-c-button--tertiary,
-.au-c-link {
-  font-size: $au-button-font-size;
+.au-c-button--link-secondary {
+  vertical-align: baseline;
 }
 
 .au-c-icon {
@@ -274,6 +274,20 @@ $au-button-height: 3.4rem;
   display: none;
 }
 
+// Fieldset
+
+.au-c-fieldset {
+  gap: $au-unit-small;
+}
+
+.au-c-fieldset--inline {
+  gap: $au-unit;
+}
+
+.au-c-fieldset-legend {
+  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
+  font-size: var(--au-global-font-size) !important;
+}
 
 // Additions
 

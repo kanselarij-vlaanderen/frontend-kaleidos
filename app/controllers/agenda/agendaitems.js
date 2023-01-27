@@ -82,7 +82,7 @@ export default class AgendaAgendaitemsController extends Controller {
     const reorderedAgendaitemsOfCategory =  [];
     for (const agendaitem of reorderedAgendaitems.toArray()) {
       const agendaItemType = yield agendaitem.type;
-      if (agendaItemType === draggedAgendaItemType) {
+      if (agendaItemType.uri === draggedAgendaItemType.uri) {
         reorderedAgendaitemsOfCategory.push(agendaitem);
       }
     }

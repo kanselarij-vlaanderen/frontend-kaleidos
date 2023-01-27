@@ -215,12 +215,11 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.usersIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get(settings.usersIndex.row.action.unblockUser)
-        .click({
-          force: true,
-        });
-      cy.get(auk.modal.footer.confirm).click();
+        .forceClick();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.usersIndex.row.name).contains('User who is Blocked Test')
         .find('au-c-pill--error')
         .should('not.exist');
@@ -349,10 +348,11 @@ context('testing user and organisation management', () => {
         .parents('tr')
         .as('currentRow');
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.unblockOrganization)
-        .click();
-      cy.get(auk.modal.footer.confirm).click();
+        .forceClick();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .find('.au-c-pill--error')
         .should('not.exist');
@@ -377,10 +377,11 @@ context('testing user and organisation management', () => {
       // check blocking
       // cy.get(settings.organizationsIndex.filterBlocked).click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.actionsDropdown)
+        .children(appuniversum.button)
         .click();
       cy.get('@currentRow').find(settings.organizationsIndex.row.action.blockOrganization)
-        .click();
-      cy.get(auk.modal.footer.confirm).click();
+        .forceClick();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie Geblokkeerd')
         .contains('Geblokkeerd');
 

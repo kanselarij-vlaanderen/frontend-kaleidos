@@ -3,14 +3,17 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function checkNewsletterPage(headerText, newsletterTitle) {
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.navigateToNewsletter).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
   cy.get(newsletter.newsletterHeaderOverview.title).contains(headerText);
   cy.clickReverseTab('Klad');
   cy.get(newsletter.newsletterMeeting.title).contains(newsletterTitle);
@@ -103,8 +106,10 @@ context('Different session kinds should show different titles', () => {
     cy.wait('@createAgenda');
     // check if edit shows correct data
     cy.openAgendaForDate(agendaDate, 1);
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.toggleEditingMeeting).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.wait('@getDecisionPubActivity');
     cy.wait('@getDocPubActivity');
     cy.wait('@getThemisPubActivity');
@@ -177,19 +182,19 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda('Ministerraad - Plan Vlaamse Veerkracht', agendaDate, null, null, null, null, relatedMainMeeting).then((result) => {
       cy.log(result);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.vlAlert.message).eq(0)
+      cy.get(utils.auAlert.message).eq(0)
         .contains(alertMessage);
     });
 
     cy.createAgenda('Bijzondere ministerraad', agendaDate).then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.vlAlert.message).eq(0)
+      cy.get(utils.auAlert.message).eq(0)
         .contains(alertMessage);
     });
 
     cy.createAgenda('Elektronische procedure', agendaDate).then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.vlAlert.message).eq(0)
+      cy.get(utils.auAlert.message).eq(0)
         .contains(alertMessage);
     });
   });

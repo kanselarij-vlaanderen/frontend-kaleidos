@@ -6,6 +6,7 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
@@ -40,7 +41,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -78,7 +79,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister na agendering vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -116,7 +117,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: assign mandatee - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het toewijzen van een minister vanuit agendaitem op ontwerpagenda';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -328,8 +329,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@postNewsItem${randomInt}`);
     cy.get(newsletter.editItem.cancel).click();
 
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     // Toggle all newsletters to show
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -396,7 +399,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
     checkMandateesInList(mandateeNames2020, dateRange);
   });
@@ -426,7 +429,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
     checkMandateesInList(mandateeNames2022BeforeMay, dateRange);
   });
@@ -440,7 +443,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
     });
     cy.get(dependency.emberPowerSelect.option).contains('heden');
@@ -461,7 +464,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type('Martens');
-    cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Type to search', {
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
     });
     cy.get(dependency.emberPowerSelect.option).should('have.length', 4);

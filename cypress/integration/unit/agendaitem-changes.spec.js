@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -73,7 +74,7 @@ context('Agendaitem changes tests', () => {
   it('should add an agendaitem of type remark and highlight it as added', () => {
     const caseLink = 'dossiers/E14FB4CE-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers';
     cy.visit(caseLink);
-    cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'Principiële goedkeuring', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show
@@ -124,8 +125,10 @@ context('Agendaitem changes tests', () => {
     cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToPrintableAgenda).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToPrintableAgenda).forceClick();
     cy.wait(1000);
     cy.get(agenda.printableAgenda.headerTitle, {
       timeout: 80000,

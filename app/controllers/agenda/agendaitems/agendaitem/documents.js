@@ -5,7 +5,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask, task } from 'ember-concurrency';
 import { all, timeout } from 'ember-concurrency';
-import moment from 'moment';
 import {
   addPieceToAgendaitem,
   restorePiecesFromPreviousAgendaitem,
@@ -114,7 +113,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   uploadPiece(file) {
-    const now = moment().utc().toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });

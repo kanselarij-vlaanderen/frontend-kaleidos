@@ -83,21 +83,20 @@
 {{#if this.promptDeleteCase}}
   <WebComponents::VlModalVerify
     @title="Leeg dossier verwijderen?"
-    @verifyButtonText="Verwijderen"
     @message={{concat
       "Dossier '"
       this.caseToDelete.shortTitle
       "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?"
     }}
-    @cancel={{this.cancelDeleteCase}}
-    @verify={{perform this.deleteCase this.caseToDelete}}
+    @onCancel={{this.cancelDeleteCase}}
+    @onVerify={{perform this.deleteCase this.caseToDelete}}
     @isLoading={{this.deleteCase.isRunning}}
   />
 {{/if}}
 
 {{#if this.isAssigningToOtherCase}}
   <WebComponents::VlModal
-    @closeModal={{this.cancel}}
+    @onClose={{this.cancel}}
     @isOverlay={{true}}
     @title={{t "move-subcase-to-other-case"}}
   >
@@ -109,7 +108,7 @@
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "propose-for-agenda"}}
-    @closeModal={{this.cancel}}
+    @onClose={{this.cancel}}
   >
     <Subcases::ProposableMeetings
       @onProposeForMeeting={{perform this.proposeForAgenda}}
@@ -122,7 +121,7 @@
     @isLoading={{this.isLoading}}
     @title={{t "delete-subcase"}}
     @message={{t "delete-subcase-confirmation"}}
-    @cancel={{this.cancel}}
-    @verify={{this.deleteSubcase}}
+    @onCancel={{this.cancel}}
+    @onVerify={{this.deleteSubcase}}
   />
 {{/if}}

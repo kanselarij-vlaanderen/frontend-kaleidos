@@ -1,15 +1,12 @@
-/* eslint-disable object-curly-newline */
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-const Router = EmberRouter.extend({
-  location: config.locationType,
-  rootURL: config.rootURL,
-});
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
 
 Router.map(function() {
   this.route('mock-login');
@@ -104,7 +101,6 @@ Router.map(function() {
 
   this.route('not-supported');
   this.route('help');
-  this.route('manual', { path: '/handleiding', });
   this.route('route-not-found', { path: '/*wildcard', });
 
   this.route('styleguide', function() {
@@ -120,7 +116,6 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('radio-buttons');
     this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
@@ -137,10 +132,12 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
+    this.route('radio-list');
     this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
+    this.route('toggle');
     this.route('toolbar');
     this.route('navbar');
     this.route('modal');
@@ -148,5 +145,3 @@ Router.map(function() {
     this.route('upload');
   });
 });
-
-export default Router;

@@ -45,8 +45,6 @@
                   {{datetime-at this.piece.created}}
                   {{#if this.piece.file.derived}}
                     {{t "as"}}
-                    {{!-- TODO: AuLinkExternal has a font-size of 16px (because it uses the same size as buttons), but that's larger than normal text (which uses 14px).
-                    Currently this link looks a little larger than the surrounding text. --}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
                       href={{this.piece.file.namedDownloadLink}}
@@ -219,7 +217,7 @@
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPiece}}
+    @onClose={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
     @title={{t "new-document-piece"}}
   >
@@ -249,7 +247,7 @@
   <WebComponents::VlModalVerify
     @title={{t "document-container-delete"}}
     @message={{t "delete-document-container-message"}}
-    @cancel={{this.cancelDeleteDocumentContainer}}
-    @verify={{this.verifyDeleteDocumentContainer}}
+    @onCancel={{this.cancelDeleteDocumentContainer}}
+    @onVerify={{this.verifyDeleteDocumentContainer}}
   />
 {{/if}}
