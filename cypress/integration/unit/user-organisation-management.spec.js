@@ -187,7 +187,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.usersIndex.row.name).eq(0)
         .contains('Admin Test');
       cy.intercept('GET', '/users?filter**').as('filterUsers1');
-      cy.get(settings.usersIndex.tableContent.name).children('a')
+      cy.get(settings.usersIndex.tableContent.name).children('button')
         .click()
         .wait('@filterUsers1');
       cy.get(settings.usersIndex.row.name).eq(0)
@@ -195,13 +195,13 @@ context('testing user and organisation management', () => {
 
       // check sort by last seen
       cy.intercept('GET', '/users?filter**').as('filterUsers2');
-      cy.get(settings.usersIndex.tableContent.lastSeen).children('a')
+      cy.get(settings.usersIndex.tableContent.lastSeen).children('button')
         .click()
         .wait('@filterUsers2');
       cy.get(settings.usersIndex.row.name).eq(0)
         .should('not.contain', 'Admin Test');
       cy.intercept('GET', '/users?filter**').as('filterUsers3');
-      cy.get(settings.usersIndex.tableContent.lastSeen).children('a')
+      cy.get(settings.usersIndex.tableContent.lastSeen).children('button')
         .click()
         .wait('@filterUsers3');
       cy.get(settings.usersIndex.row.name).eq(0)
@@ -403,29 +403,29 @@ context('testing user and organisation management', () => {
       // check sort by organization
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie');
-      cy.get(settings.organizationsIndex.tableContent.organization).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organization).children('button')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie');
-      cy.get(settings.organizationsIndex.tableContent.organization).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organization).children('button')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.organization).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organization).children('button')
         .click();
 
       // check sort by last seen
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('button')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie');
-      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('button')
         .click();
       cy.get(settings.organizationsIndex.row.name).eq(0)
         .contains('Kaleidos Test Organisatie Geblokkeerd');
-      cy.get(settings.organizationsIndex.tableContent.organizationId).children('a')
+      cy.get(settings.organizationsIndex.tableContent.organizationId).children('button')
         .click();
     });
 

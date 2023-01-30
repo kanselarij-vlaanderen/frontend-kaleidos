@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Search tests', () => {
-  const options = [5, 10, 25, 50, 100];
+  const options = [10, 25, 50, 100, 200];
 
   beforeEach(() => {
     cy.login('Admin');
@@ -124,7 +124,7 @@ context('Search tests', () => {
       // cy.addDocumentsToAgendaitem(subcase1TitleShortNoIcon, [fileAgendaitem1]);
       // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       // cy.addDocumentToTreatment(fileTreatment1);
-      // cy.get(utils.vlModalFooter.save).click();
+      // cy.get(auk.auModal.container).should('not.exist');
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
@@ -137,7 +137,7 @@ context('Search tests', () => {
       // cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
       cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       cy.addDocumentToTreatment(fileTreatment2);
-      cy.get(utils.vlModalFooter.save).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
       cy.wait('@patchDecisionActivities');
     });
 

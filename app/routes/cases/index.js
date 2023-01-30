@@ -1,8 +1,7 @@
 import Route from '@ember/routing/route';
-// eslint-disable-next-line ember/no-mixins
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
+import { action } from "@ember/object";
 
-export default class CasesIndexRoute extends Route.extend(DataTableRouteMixin) {
+export default class CasesIndexRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
@@ -22,15 +21,31 @@ export default class CasesIndexRoute extends Route.extend(DataTableRouteMixin) {
     },
   };
 
-  modelName = 'decisionmaking-flow';
-
-  mergeQueryOptions(params) {
-    const opts = {
-      include: 'case'
+  model(params) {
+    const options = {
+      include: 'case',
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
     };
+
     if (!params.showArchived) {
-      opts['filter[case][is-archived]'] = false;
+      options['filter[case][is-archived]'] = false;
     }
-    return opts;
+
+    return this.store.query('decisionmaking-flow', options);
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }
