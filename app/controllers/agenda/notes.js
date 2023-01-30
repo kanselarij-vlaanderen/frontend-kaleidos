@@ -8,6 +8,18 @@ export default class AgendaNotesController extends Controller {
   @tracked isFullscreen = false;
   @tracked isEditing = false;
   @tracked isSigned = true;
+  @tracked document = false;
+  @tracked signatureRequested = false;
+
+  @action
+  showDocument() {
+    this.document = true;
+  }
+
+  @action
+  requestSignature() {
+    this.signatureRequested = true;
+  }
 
   @action
   toggleSigned() {

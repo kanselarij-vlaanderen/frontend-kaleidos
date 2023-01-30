@@ -8,15 +8,22 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-           <AuLink
-              @route="export.decision"
-              @icon="pdf"
-              @skin="naked"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Exporteren als pdf
-            </AuLink>
+          {{!-- <AuLink
+            @route="export.decision"
+            @icon="pdf"
+            @skin="naked"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Exporteren als pdf
+          </AuLink> --}}
+          <AuButton
+            @icon="pdf"
+            @skin="naked"
+            {{on "click" this.showDocument}}
+          >
+            Exporteren als pdf
+          </AuButton>
         </Group.Item>
         {{#unless this.isEditing}}
         <Group.Item>
@@ -33,6 +40,94 @@
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
+  {{#if this.document}}
+  <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
+    <div
+      class="vlc-document-card"
+    >
+      <div class="vlc-document-card__summary">
+        <div class="vlc-document-card__content">
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left" as |Group|>
+              <Group.Item>
+                <Auk::Badge @skin="success" @icon="document-added" @size="large" />
+              </Group.Item>
+              <Group.Item class="auk-u-maximize-width">
+                <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+                  <span data-test-document-card-type class="auk-overline">
+                    Beslissing
+                  </span>
+                  <span class="auk-overline">
+                    01-02-2023
+                  </span>
+                  <span class="auk-overline">
+                    PDF
+                  </span>
+                </div>
+                <LinkTo 
+                  @route="export.decision"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                  DOC.02032 — Voorbereidende tekst voor de beslissing
+                </LinkTo>
+              </Group.Item>
+            </Toolbar.Group>
+            <Toolbar.Group @position="right" as |Group|>
+              <Group.Item>
+                {{#if (or this.signatureRequested @signatureMockupAlt)}}
+                <SignaturePill
+                  @isEditable={{true}}
+                  @signatureMockupAlt={{@signatureMockupAlt}}
+                />
+                {{else if (or this.signatureRequested @signatureMockup)}}
+                <SignaturePill
+                  @isEditable={{true}}
+                  @signatureMockup={{@signatureMockup}}
+                />
+                {{else}}
+                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
+                  <Auk::Toggle
+                    id="signatureToggle"
+                    @checked={{if this.signMarkingActivity true false}}
+                    {{on "click" this.requestSignature}}
+                  />
+                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
+                    {{#if this.markOrUnmarkForSignature.isRunning}}
+                      <Auk::Loader />
+                    {{else}}
+                      {{t "to-sign"}}
+                    {{/if}}
+                  </label>
+                </div>
+                {{/if}}
+              </Group.Item>
+              <Group.Item>
+                <AuDropdown
+                  data-test-document-card-actions={{true}}
+                  @icon="three-dots"
+                  @title={{t "more"}}
+                  @hideText={{true}}
+                  @disabled={{this.loadPieceRelatedData.isRunning}}
+                  @alignment="right"
+                >
+                  <AuButton
+                    data-test-document-card-delete
+                    @skin="link"
+                    @alert={{true}}
+                    role="menuitem"
+                  >
+                    {{t "document-delete"}}
+                  </AuButton>
+                </AuDropdown>
+              </Group.Item>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </div>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+  {{/if}}
   <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -129,7 +224,7 @@
         @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
       />
     </div>
-    <div>
+    {{!-- <div>
       <AuToggleSwitch
         @label="Ondertekend"
         @identifier="signature"
@@ -137,7 +232,7 @@
         @checked={{if (eq this.isSigned true) "true" ""}}
         {{on "click" this.toggleSigned}}
       />
-    </div>
+    </div> --}}
     {{else}}
     {{!-- <AuAlert
       @title="Nog geen tekst toegevoegd"
@@ -153,13 +248,13 @@
       <p>De Vlaamse Regering beslist:</p>
       <ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk besluit;</li><li>de minister-president van de Vlaamse Regering te gelasten de federale minister van Noordzee van deze beslissing in kennis te stellen.</li></ol>
     </AuContent>
-    <p>
+    {{!-- <p>
       {{#if this.isSigned}}
       <AuPill @icon="sign" @size="small" @skin="success">Getekend</AuPill>
       {{else}}
       <AuPill @icon="no-sign" @size="small">Niet getekend</AuPill>
       {{/if}}
-    </p>
+    </p> --}}
     {{/if}}
   </Auk::Panel::Body>
   {{#if this.isEditing}}

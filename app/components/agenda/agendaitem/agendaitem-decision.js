@@ -24,13 +24,25 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isSigned = true;
   @tracked isFullscreen = false;
   @tracked isAddingReport = false;
+  @tracked document = false;
+  @tracked signatureRequested = false;
 
   @tracked decisionDocType;
+
+  @action
+  showDocument() {
+    this.document = true;
+  }
 
   @action
   toggleAll() {
     this.isFullscreen = false;
     this.isEditing = false;
+  }
+
+  @action
+  requestSignature() {
+    this.signatureRequested = true;
   }
 
   @action
