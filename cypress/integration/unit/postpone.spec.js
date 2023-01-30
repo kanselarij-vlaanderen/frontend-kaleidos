@@ -291,7 +291,7 @@ context('Decision postponing tests', () => {
     cy.get(route.subcaseDocuments.add).click();
     cy.addNewDocumentsInUploadModal(files3, 'subcase');
     // check if doc 7 shows on subcase
-    cy.get(auk.auModal).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
 
     // check if doc 7 shows on 2nd agenda

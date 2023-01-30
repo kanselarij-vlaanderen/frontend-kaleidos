@@ -124,7 +124,7 @@ context('Search tests', () => {
       // cy.addDocumentsToAgendaitem(subcase1TitleShortNoIcon, [fileAgendaitem1]);
       // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       // cy.addDocumentToTreatment(fileTreatment1);
-      // cy.get(auk.auModal).should('not.exist');
+      // cy.get(auk.auModal.container).should('not.exist');
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
