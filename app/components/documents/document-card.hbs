@@ -120,6 +120,17 @@
               )
             }}
               <Group.Item>
+                {{#if (or this.signatureRequested @signatureMockupAlt)}}
+                <SignaturePill
+                  @isEditable={{true}}
+                  @signatureMockupAlt={{@signatureMockupAlt}}
+                />
+                {{else if (or this.signatureRequested @signatureMockup)}}
+                <SignaturePill
+                  @isEditable={{true}}
+                  @signatureMockup={{@signatureMockup}}
+                />
+                {{else}}
                 <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
                   <Auk::Toggle
                     id="signatureToggle"
@@ -134,6 +145,13 @@
                     {{/if}}
                   </label>
                 </div>
+                {{/if}}
+              </Group.Item>
+            {{else}}
+              <Group.Item>
+                <SignaturePill
+                  @isEditable={{false}}
+                />
               </Group.Item>
             {{/if}}
           {{/if}}

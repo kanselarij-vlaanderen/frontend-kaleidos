@@ -1,0 +1,70 @@
+{{#if this.isLoading}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else}}
+  {{#if @signatureMockupAlt}}
+    <AuPill
+      @icon="sign"
+      @skin="success"
+    >
+      Getekend
+    </AuPill>
+  {{else if @signatureMockup}}  
+    <AuPill
+      @icon="sign"
+      @skin="warning"
+    >
+      Verstuurd
+    </AuPill>
+  {{else}}
+    {{#if (not this.isEditing)}}
+      <AuPill
+        @icon="sign"
+        @skin="ongoing"
+        @onClickAction={{this.openEditMode}}
+        @actionIcon="pencil"  
+      >
+        Te handtekenen
+      </AuPill>
+    {{else}}
+      <div class="auk-o-flex auk-o-flex--vertical-center">
+        <div class="auk-u-maximize-width">
+          <select
+            name="signature"
+            id="signature"
+            class="auk-select auk-select--block"
+          >
+            <option
+              value="no"
+            >
+              Geen handtekening
+            </option>
+            <option
+              value="yes"
+              selected="selected"
+            >
+              Te handtekenen
+            </option>
+          </select>
+        </div>
+        <AuButton
+          @skin="naked"
+          @icon="check"
+          @hideText={{true}}
+          {{on "click" (perform this.confirmChangeSignatureLevel)}}
+          class="auk-o-flex__item--fix auk-u-ml"
+        >
+          {{t "save"}}
+        </AuButton>
+        <AuButton
+          @skin="naked"
+          @icon="x"
+          @hideText={{true}}
+          {{on "click" (perform this.cancelChangeSignatureLevel)}}
+          class="auk-o-flex__item--fix"
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </div>
+    {{/if}}
+  {{/if}}
+{{/if}}

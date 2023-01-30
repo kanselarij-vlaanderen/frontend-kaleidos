@@ -38,6 +38,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked documentContainer;
   @tracked isDraftAccessLevel;
   @tracked signMarkingActivity;
+  @tracked signatureRequested;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -49,6 +50,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    this.signatureRequested = false;
   }
 
   get bordered() {
@@ -113,6 +115,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   *loadSignatureRelatedData() {
     if (this.args.hasMarkForSignature) {
       this.signMarkingActivity = yield this.piece.signMarkingActivity;
+      this.signatureRequested = true;
     }
   }
 
@@ -198,8 +201,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   *markOrUnmarkForSignature() {
     if (!this.signMarkingActivity) {
       yield this.args.markForSignature(this.args.piece);
+      this.signatureRequested = true;
     } else {
       yield this.args.unmarkForSignature(this.args.piece);
+      this.signatureRequested = false;
     }
     yield this.loadSignatureRelatedData.perform();
   }
@@ -246,6 +251,11 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
+  }
+
+  @action
+  changeSignatureLevel(accessLevel) {
     this.piece.accessLevel = accessLevel;
   }
 

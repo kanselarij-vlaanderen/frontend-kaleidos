@@ -1,6 +1,35 @@
 <Documents::DocumentList @pieces={{@pieces}} as |documents|>
-  {{#each documents as |doc|}}
+  {{#each documents as |doc index|}}
     <div class="auk-u-mb-2">
+      {{#if (eq index 0)}}
+      <Documents::DocumentCard
+        @piece={{doc}}
+        @agendaContext={{@agendaContext}}
+        @isHighlighted={{includes doc @highlightedPieces}}
+        @hideNewerVersions={{false}}
+        @didDeleteContainer={{@didDeleteContainer}}
+        @onOpenUploadModal={{@onOpenUploadModal}}
+        @markForSignature={{@markForSignature}}
+        @unmarkForSignature={{@unmarkForSignature}}
+        @onAddPiece={{@onAddPiece}}
+        @nameMockup={{@nameMockup}}
+        @signatureMockup={{true}}
+      />
+      {{else if (eq index 1)}}
+      <Documents::DocumentCard
+          @piece={{doc}}
+          @agendaContext={{@agendaContext}}
+          @isHighlighted={{includes doc @highlightedPieces}}
+          @hideNewerVersions={{false}}
+          @didDeleteContainer={{@didDeleteContainer}}
+          @onOpenUploadModal={{@onOpenUploadModal}}
+          @markForSignature={{@markForSignature}}
+          @unmarkForSignature={{@unmarkForSignature}}
+          @onAddPiece={{@onAddPiece}}
+          @nameMockup={{@nameMockup}}
+          @signatureMockupAlt={{true}}
+      />
+      {{else}}
       <Documents::DocumentCard
         @piece={{doc}}
         @agendaContext={{@agendaContext}}
@@ -13,6 +42,7 @@
         @onAddPiece={{@onAddPiece}}
         @nameMockup={{@nameMockup}}
       />
+      {{/if}}
     </div>
   {{else}}
     <div class="auk-u-mt-2">

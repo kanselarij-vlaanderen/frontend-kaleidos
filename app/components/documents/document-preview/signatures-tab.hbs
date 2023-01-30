@@ -1,21 +1,32 @@
 <div class="auk-u-m-4">
-  <Auk::KeyValue @key={{t "validation-signature"}}>
-    {{#if (not this.loadSignatureRelatedData.isRunning)}}
-      {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem ergo a treatment}}
-        {{#if this.markOrUnmarkForSignature.isRunning}}
-          <Auk::Loader/>
-        {{else}}
-          <Auk::Checkbox
-            @checked={{this.signMarkingActivity}}
-            {{on "input" (perform this.markOrUnmarkForSignature)}}
-          >
-            {{! could use @label, but prototype shows a tooltip, so we need a block instead}}
-            <p>{{t "signature-needed"}}</p>
-          </Auk::Checkbox>
-        {{/if}}
+  {{#if (not this.loadSignatureRelatedData.isRunning)}}
+    {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem ergo a treatment}}
+      {{#if this.markOrUnmarkForSignature.isRunning}}
+        <Auk::Loader/>
       {{else}}
-        <p>{{t "signature-not-possible"}}</p>
+        {{#if this.signatureRequested}}
+        <SignaturePill
+          @isEditable={{true}}
+        />
+        {{else}}
+        <div class="auk-o-flex auk-o-flex--spaced au-u-flex--vertical-center">
+          <Auk::Toggle
+            id="signatureToggle"
+            @checked={{if this.signMarkingActivity true false}}
+            {{on "click" (perform this.markOrUnmarkForSignature)}}
+          />
+          <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
+            {{#if this.markOrUnmarkForSignature.isRunning}}
+              <Auk::Loader />
+            {{else}}
+              {{t "to-sign"}}
+            {{/if}}
+          </label>
+        </div>
+        {{/if}}
       {{/if}}
+    {{else}}
+      <p>{{t "signature-not-possible"}}</p>
     {{/if}}
-  </Auk::KeyValue>
+  {{/if}}
 </div>

@@ -25,6 +25,11 @@
             </Group.Item>
           </Toolbar.Group>
           <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
+              <SignaturePill
+                @signatureMockupAlt={{true}}
+              />
+            </Group.Item>
             <Group.Item class="auk-o-flex">
               {{#if (and @isEnabledDelete @piece.file)}}
                 <AuDropdown
