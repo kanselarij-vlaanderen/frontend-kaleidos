@@ -3,6 +3,7 @@
 
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 import settings from '../../selectors/settings.selectors';
 
 const ALERT_POLL_INTERVAL = 70000;
@@ -23,7 +24,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
     cy.intercept('GET', '/alerts?**').as('getAlerts');
     cy.intercept('POST', '/alerts').as('postAlerts');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
@@ -34,6 +35,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
   });
 
   it('Should close and stay closed', () => {
+    cy.get(auk.auModal.header.close).click();
+    cy.get(auk.auModal.container).should('not.exist');
     cy.intercept('GET', '/alerts?**').as('getAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,

@@ -243,7 +243,7 @@ function deleteSubcase() {
     .click();
   cy.get(cases.subcaseHeader.actions.deleteSubcase).forceClick();
 
-  cy.get(utils.vlModalVerify.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@deleteSubcase');
   cy.log('/deleteSubcase');
 }
