@@ -25,7 +25,7 @@ import utils from '../../selectors/utils.selectors';
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
-  cy.get(auk.modal.container).as('fileUploadDialog');
+  cy.get(auk.auModal.container).as('fileUploadDialog');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   files.forEach((file, index) => {
@@ -76,7 +76,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
   cy.intercept('GET', '/submission-activities?filter**&include**').as(`getSubmissionActivity_${randomInt}`);
   cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
-  cy.get(utils.vlModalFooter.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
@@ -133,13 +133,13 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
       cy.get(document.documentCard.uploadPiece).forceClick();
     });
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(utils.vlModalFooter.save).click({
+  cy.get(auk.confirmationModal.footer.confirm).click({
     force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
   })
     .wait(`@createNewPiece_${randomInt}`);
@@ -220,7 +220,7 @@ function addDocumentToTreatment(file) {
   // 1 default item treatment exists
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });
 }
@@ -416,20 +416,20 @@ function addNewPieceToDecision(oldFileName, file) {
       cy.get(document.documentCard.uploadPiece).forceClick();
     });
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
     cy.wait(1000); // Cypress is too fast
 
     // Forcing because sometimes the actions menu is still open and blocking the button, seems to happen more in headless mode
-    cy.get(utils.vlModalFooter.save).click({
+    cy.get(auk.confirmationModal.footer.confirm).click({
       force: true,
     })
       .wait(`@createNewPiece_${randomInt}`);
   });
   cy.wait(`@patchDecisionActivity_${randomInt}`);
   cy.wait(`@getPreviousPiece_${randomInt}`);
-  cy.get(auk.modal.container).should('not.exist');
+  cy.get(auk.auModal.container).should('not.exist');
   cy.get(auk.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
@@ -461,7 +461,7 @@ function addLinkedDocument(filenames) {
       .click();
   });
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get(utils.vlModalFooter.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@patchSubcase');
   cy.log('/addLinkedDocument');
 }
@@ -491,7 +491,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
         .click();
     });
 
-  cy.get(utils.vlModalVerify.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait(`@deletePiece${randomInt}`, {
     timeout: 40000,
   }).wait(`@putRestoreAgendaitems${randomInt}`);

@@ -7,11 +7,12 @@
       <thead class="lt-head">
         <tr class="lt-scaffolding-row"></tr>
         <tr>
-          <ThSortable
-            @class="lt-column align-left"
+          <Utils::ThSortable
+            class="lt-column align-left"
             @currentSorting={{this.sort}}
             @field="number"
             @label="#"
+            @onChange={{fn (mut this.sort)}}
           />
           <th class="lt-column align-left auk-table__col--7">
             {{t "title-and-content"}}
@@ -19,17 +20,19 @@
           <th class="lt-column align-left">{{t "minister"}}</th>
           {{! Note: We are sorting on two keys below. In-newsletter property changes order,
                       while we want number to stay ordered ascending }}
-          <ThSortable
-            @class="lt-column align-left"
+          <Utils::ThSortable
+            class="lt-column align-left"
             @currentSorting={{this.sort}}
             @field="treatment.newsItem.inNewsletter,number"
             @label={{t "show-in-newsletter"}}
+            @onChange={{fn (mut this.sort)}}
           />
-          <ThSortable
-            @class="lt-column align-left"
+          <Utils::ThSortable
+            class="lt-column align-left"
             @currentSorting={{this.sort}}
             @field="treatment.newsItem.modified"
             @label={{t "latest-modified"}}
+            @onChange={{fn (mut this.sort)}}
           />
           <th class="c-table__header c-table__header--actions"></th>
         </tr>

@@ -389,7 +389,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases1');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 1)
       .find(cases.subcaseItem.link)
@@ -410,7 +410,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(auk.auModal.header.close).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
@@ -434,7 +434,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)

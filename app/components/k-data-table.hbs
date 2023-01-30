@@ -1,0 +1,76 @@
+<table
+  class="auk-table
+  {{if @hoverable "auk-table--hoverable"}}
+  {{if @striped "auk-table--striped"}}
+  {{if @stickyHeader "auk-table--sticky-header"}}
+  {{if @stickyActionColumn "auk-table--sticky-action-column"}}"
+  ...attributes
+>
+  <thead>
+    <tr>
+      {{yield to="header"}}
+    </tr>
+  </thead>
+  <tbody class="{{if (or @clickable @onClickRow) "auk-table--clickable-rows"}}">
+    {{#if @loading}}
+      <tr>
+        <td colspan="100%">
+          {{#if (has-block "loading")}}
+            {{yield to="loading"}}
+          {{else}}
+            {{this.loadingMessage}}
+          {{/if}}
+        </td>
+      </tr>
+    {{else if @content}}
+      {{#each @content as |row|}}
+        <tr
+          role="button"
+          {{on "click" (fn (optional @onClickRow) row)}}
+        >
+          {{yield row to="body"}}
+        </tr>
+      {{/each}}
+    {{else}}
+      <tr>
+        <td colspan="100%">
+          {{#if (has-block "no-data")}}
+            {{yield to="no-data"}}
+          {{else}}
+            {{this.noDataMessage}}
+          {{/if}}
+        </td>
+      </tr>
+    {{/if}}
+  </tbody>
+</table>
+{{#if this.enablePagination}}
+  <AuToolbar
+    class="auk-table__actions--bottom"
+    data-test-number-pagination-container
+    as |Group|
+  >
+    <Group>
+      <Auk::Pagination
+        @page={{@page}}
+        @size={{@size}}
+        @nbOfItems={{@numberOfItems}}
+        @total={{@totalNumberOfItems}}
+        @onNextPage={{this.onNextPage}}
+        @onPreviousPage={{this.onPreviousPage}}
+      />
+    </Group>
+    <Group>
+      <Auk::Toolbar::Item>
+        {{t "amount-per-page"}}
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::AuPageSize
+          @selectedSize={{@size}}
+          @onChange={{@onChangeSize}}
+          data-test-number-pagination-size
+        />
+      </Auk::Toolbar::Item>
+    </Group>
+  </AuToolbar>
+{{/if}}

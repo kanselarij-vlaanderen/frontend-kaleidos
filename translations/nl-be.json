@@ -1138,5 +1138,7 @@
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
   "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
   "organization-id": "Organisatie ID",
+  "delete-empty-case": "Leeg dossier verwijderen?",
+  "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
   "open": "Open"
-} 
+}
