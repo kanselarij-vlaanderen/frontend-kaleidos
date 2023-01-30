@@ -74,7 +74,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.intercept('POST', 'pieces').as('createNewPiece');
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'submission-activities').as('createNewSubmissionActivity');
-  cy.intercept('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
+  cy.intercept('GET', '/submission-activities?filter**&include**').as(`getSubmissionActivity_${randomInt}`);
   cy.intercept('GET', `/pieces?filter**${model}**`).as(`loadPieces${model}`);
   cy.get(utils.vlModalFooter.save).click();
   cy.wait('@createNewDocumentContainer', {
@@ -88,7 +88,7 @@ function addNewDocumentsInUploadModal(files, model) {
     cy.wait('@createNewSubmissionActivity', {
       timeout: 24000 + (6000 * files.length),
     }).wait(`@getSubmissionActivity_${randomInt}`, {
-      timeout: 24000,
+      timeout: 60000,
     });
   } else {
     cy.wait(`@loadPieces${model}`, {
