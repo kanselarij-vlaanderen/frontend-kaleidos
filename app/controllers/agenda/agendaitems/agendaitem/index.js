@@ -26,7 +26,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked isEditingAgendaItemTitles = false;
 
-  get isFinalMeeting() {
+  get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));
   }
 
