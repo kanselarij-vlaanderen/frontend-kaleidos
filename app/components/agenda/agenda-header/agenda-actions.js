@@ -12,6 +12,7 @@ import {
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument {Meeting} meeting
@@ -57,8 +58,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   get canPublishDecisions() {
     return (
       this.currentSession.may('manage-decision-publications') &&
-        this.args.meeting.isFinal &&
-        this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
+      this.isFinalMeeting &&
+      this.decisionPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.PLANNED
     );
   }
 
@@ -73,7 +74,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.themisPublicationActivity?.status,
     ].some((status) => status?.get('uri') != CONSTANTS.RELEASE_STATUSES.RELEASED);
 
-    return mayManagePublication && !loadingActivities && this.args.meeting.isFinal && documentsNotYetReleased;
+    return mayManagePublication && !loadingActivities && this.isFinalMeeting && documentsNotYetReleased;
   }
 
   get canPublishThemis() {
@@ -82,13 +83,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const documentsAlreadyReleased = this.documentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.RELEASED;
 
     return this.currentSession.may('manage-themis-publications') &&
-      this.args.meeting.isFinal &&
+      this.isFinalMeeting &&
       documentsAlreadyReleased;
   }
 
   get canUnpublishThemis() {
     return this.currentSession.may('manage-themis-publications') &&
-      this.args.meeting.isFinal &&
+      this.isFinalMeeting &&
       this.latestThemisPublicationActivity != null;
   }
 
@@ -100,12 +101,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     ];
   }
 
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting.agenda.get('id'));
+  }
+
   @bind
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-          .sortBy('number');
+      .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
+      .sortBy('number');
   }
 
   @task

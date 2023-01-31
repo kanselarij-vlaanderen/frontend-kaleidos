@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class NewslettersIndexRoute extends Route {
@@ -25,5 +26,16 @@ export default class NewslettersIndexRoute extends Route {
       sort: params.sort,
     };
     return await this.store.query('meeting', queryParams);
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    return true;
   }
 }
