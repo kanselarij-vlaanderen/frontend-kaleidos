@@ -8,7 +8,6 @@ import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 // TODO-command could be command
 function selectConfidentialityLevel(docName, confLevel) {
@@ -292,7 +291,7 @@ context('Decision postponing tests', () => {
     cy.get(route.subcaseDocuments.add).click();
     cy.addNewDocumentsInUploadModal(files3, 'subcase');
     // check if doc 7 shows on subcase
-    cy.get(utils.vlModal.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
 
     // check if doc 7 shows on 2nd agenda

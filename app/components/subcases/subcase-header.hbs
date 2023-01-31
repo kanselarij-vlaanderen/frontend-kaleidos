@@ -80,49 +80,44 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if this.promptDeleteCase}}
-  <WebComponents::VlModalVerify
-    @title="Leeg dossier verwijderen?"
-    @verifyButtonText="Verwijderen"
-    @message={{concat
-      "Dossier '"
-      this.caseToDelete.shortTitle
-      "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?"
-    }}
-    @onCancel={{this.cancelDeleteCase}}
-    @onVerify={{perform this.deleteCase this.caseToDelete}}
-    @isLoading={{this.deleteCase.isRunning}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.promptDeleteCase}}
+  @title={{t "delete-empty-case"}}
+  @message={{t "delete-empty-case-confirmation" case=this.caseToDelete.shortTitle}}
+  @onConfirm={{perform this.deleteCase this.caseToDelete}}
+  @onCancel={{this.cancelDeleteCase}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+  @loading={{this.deleteCase.isRunning}}
+/>
 
-{{#if this.isAssigningToOtherCase}}
-  <WebComponents::VlModal
-    @onClose={{this.cancel}}
-    @isOverlay={{true}}
-    @title={{t "move-subcase-to-other-case"}}
-  >
+<AuModal
+  @modalOpen={{this.isAssigningToOtherCase}}
+  @closeModal={{this.cancel}}
+  @padding="none"
+>
+  <:title>
+    {{t "move-subcase-to-other-case"}}
+  </:title>
+  <:body>
     <Utils::CaseSearch @onSelect={{this.moveSubcase}} />
-  </WebComponents::VlModal>
-{{/if}}
+  </:body>
+</AuModal>
 
 {{#if this.isAssigningToOtherAgenda}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @title={{t "propose-for-agenda"}}
-    @onClose={{this.cancel}}
-  >
-    <Subcases::ProposableMeetings
-      @onProposeForMeeting={{perform this.proposeForAgenda}}
-      @onCancel={{this.cancel}}
-    />
-  </WebComponents::VlModal>
-{{/if}}
-{{#if this.isDeletingSubcase}}
-  <WebComponents::VlModalVerify
-    @isLoading={{this.isLoading}}
-    @title={{t "delete-subcase"}}
-    @message={{t "delete-subcase-confirmation"}}
+  <Subcases::ProposableMeetings
+    @onProposeForMeeting={{perform this.proposeForAgenda}}
     @onCancel={{this.cancel}}
-    @onVerify={{this.deleteSubcase}}
   />
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isDeletingSubcase}}
+  @title={{t "delete-subcase"}}
+  @message={{t "delete-subcase-confirmation"}}
+  @onConfirm={{this.deleteSubcase}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+  @loading={{this.isLoading}}
+/>

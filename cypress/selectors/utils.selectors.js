@@ -83,19 +83,6 @@ const selectors = {
 
   /** Section VL-components **/
 
-  // vl-modal-footer
-  vlModalFooter: {
-    save: '[data-test-vl-modal-footer-save]',
-    cancel: '[data-test-vl-modal-footer-cancel]',
-  },
-
-  // vl-modal
-  vlModal: {
-    container: '[data-test-vl-modal-container]',
-    dialogWindow: '[data-test-vl-modal-dialogwindow]',
-    close: '[data-test-vl-modal-close]',
-  },
-
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',

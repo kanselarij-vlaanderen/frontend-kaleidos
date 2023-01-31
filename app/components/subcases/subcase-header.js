@@ -47,7 +47,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       filter: {
         ':gte:planned-start': dateOfToday,
         ':lte:planned-start': futureDate,
-        'is-final': false,
+        ':has-no:agenda': true
       },
       sort: 'planned-start',
     });
