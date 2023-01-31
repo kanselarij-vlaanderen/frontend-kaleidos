@@ -17,12 +17,42 @@
             <strong>{{t "all-document-types"}}</strong>
           </AuControlCheckbox>
           {{#each this.documentTypes as |documentType|}}
-            <AuControlCheckbox
-              @checked={{includes documentType this.selected}}
-              @label={{documentType.label}}
-              @onChange={{fn this.toggleDocumentType documentType}}
-            />
+            {{#if (includes documentType.uri this.defaultVisibleTypes)}}
+              <AuControlCheckbox
+                @checked={{includes documentType this.selected}}
+                @label={{documentType.label}}
+                @onChange={{fn this.toggleDocumentType documentType}}
+              />
+            {{/if}}
           {{/each}}
+          {{#if (not this.showAllTypes)}}
+            <AuButton
+              {{on "click" (toggle "showAllTypes" this)}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="add"
+            >
+              {{t "show-all-document-types"}}
+            </AuButton>
+          {{else}}
+            {{#each this.documentTypes as |documentType|}}
+              {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
+                <AuControlCheckbox
+                  @checked={{includes documentType this.selected}}
+                  @label={{documentType.label}}
+                  @onChange={{fn this.toggleDocumentType documentType}}
+                />
+              {{/if}}
+            {{/each}}
+            <AuButton
+              {{on "click" (toggle "showAllTypes" this)}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="remove"
+            >
+              {{t "hide-document-types"}}
+            </AuButton>
+          {{/if}}
         </div>
       {{/if}}
     </Auk::CheckboxList>

@@ -9,6 +9,9 @@ export default class DocumentTypeFilter extends Component {
   @service conceptStore;
 
   @tracked _selected = null;
+  @tracked showAllTypes = false;
+
+  defaultVisibleTypes = [...Object.values(CONSTANTS.DOCUMENT_TYPES)];
 
   constructor() {
     super(...arguments);
