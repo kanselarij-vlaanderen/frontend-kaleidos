@@ -6,7 +6,7 @@ export default class NewslettersDraftController extends Controller {
   editorInstance;
 
   @tracked isFullscreen = false;
-  @tracked isEditing = false;
+  @tracked isEditing = true;
   @tracked isSigned = true;
   @tracked document = false;
   @tracked signatureRequested = false;

@@ -1,7 +1,7 @@
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-4">
     <Auk::Panel>
-      <Auk::Panel::Header class="{{if this.isEditing 'au-u-background-gray-100'}}">
+      <Auk::Panel::Header class="au-u-background-gray-100">
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>
             <h4 class="auk-toolbar__title">
@@ -10,31 +10,18 @@
           </Toolbar.Group>
           <Toolbar.Group @position="right" as |Group|>
             <Group.Item>
-              <AuLink
-                @route="newsletters.drafts"
-                @icon="arrow-left"
-                @skin="naked"
-              >
-                Terug naar overzicht
-              </AuLink>
-            </Group.Item>
-            {{#unless this.isEditing}}
-            <Group.Item>
               <AuButton
-                @skin="naked"
-                @icon="pencil"
-                @iconAlignment="left"
-                {{on "click" this.toggleEdit}}
+                @skin="secondary"
+                @icon="bin"
+                @alert="true"
               >
-                Wijzigen
+                Verwijder draft
               </AuButton>
             </Group.Item>
-            {{/unless}}
           </Toolbar.Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
-      <Auk::Panel::Body class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}">
-        {{#if this.isEditing}}
+      <Auk::Panel::Body class="au-o-flow au-u-background-gray-100">
         <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
           <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
             {{#if this.isFullscreen}}
@@ -66,12 +53,12 @@
                 >
                   {{t "close-fullscreen"}}
                 </AuButton>
-                <AuButton
-                  @skin="primary"
-                  {{on "click" this.toggleAll}}
+                <AuLink
+                  @route="newsletters.drafts"
+                  @skin="button"
                 >
                   {{t "save"}}
-                </AuButton>
+                </AuLink>
               </AuButtonGroup>
             {{else}}
               <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
@@ -104,39 +91,38 @@
             data-test-newsletter-edit-item-rdfa-editor
             @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
           />
+          <AuFormRow @alignment="default" class="au-u-margin-top">
+            <AuLabel for="input">
+              Opmerkingen
+            </AuLabel>
+            <AuTextarea id="textarea" @width="block" />
+          </AuFormRow>
         </div>
-        {{else}}
-        <div class="au-c-content au-c-content--small">
-          <p>Draft tekst</p>
-        </div>
-        {{/if}}
       </Auk::Panel::Body>
-      {{#if this.isEditing}}
-        <Auk::Panel::Footer class="au-u-background-gray-100">
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <AuButton
-                  @skin="naked"
-                  {{on "click" this.toggleEdit}}
-                >
-                  {{t "cancel"}}
-                </AuButton>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-            <Auk::Toolbar::Group @position="right">
-              <Auk::Toolbar::Item>
-                <AuButton
-                  @skin="primary"
-                  {{on "click" this.toggleEdit}}
-                >
-                  {{t "save"}}
-                </AuButton>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </Auk::Panel::Footer>
-      {{/if}}
+      <Auk::Panel::Footer class="au-u-background-gray-100">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuLink
+                @route="newsletters.drafts"
+                @skin="naked"
+              >
+                {{t "cancel"}}
+              </AuLink>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuLink
+                @route="newsletters.drafts"
+                @skin="button"
+              >
+                Opslaan
+              </AuLink>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
     </Auk::Panel>
   </div>
 </div>

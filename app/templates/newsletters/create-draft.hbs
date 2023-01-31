@@ -8,29 +8,6 @@
               Draft titel
             </h4>
           </Toolbar.Group>
-          <Toolbar.Group @position="right" as |Group|>
-            <Group.Item>
-              <AuLink
-                @route="newsletters.drafts"
-                @icon="arrow-left"
-                @skin="naked"
-              >
-                Terug naar overzicht
-              </AuLink>
-            </Group.Item>
-            {{#unless this.isEditing}}
-            <Group.Item>
-              <AuButton
-                @skin="naked"
-                @icon="pencil"
-                @iconAlignment="left"
-                {{on "click" this.toggleEdit}}
-              >
-                Wijzigen
-              </AuButton>
-            </Group.Item>
-            {{/unless}}
-          </Toolbar.Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body class="au-o-flow au-u-background-gray-100">
@@ -103,6 +80,12 @@
             data-test-newsletter-edit-item-rdfa-editor
             @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
           />
+          <AuFormRow @alignment="default" class="au-u-margin-top">
+            <AuLabel for="input">
+              Opmerkingen
+            </AuLabel>
+            <AuTextarea id="textarea" @width="block" />
+          </AuFormRow>
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Footer class="au-u-background-gray-100">
