@@ -69,28 +69,28 @@
             <tr>
               <Utils::ThSortable
                 class="auk-table__col--3 auk-table__header-title"
-                @currentSorting={{this.sortAgendas}}
+                @currentSorting={{this.sortField}}
                 @field="created-for.planned-start"
                 @onChange={{this.sortTable}}
                 @label={{t "agenda"}}
               />
               <Utils::ThSortable
                 class="auk-table__header-title"
-                @currentSorting={{this.sortAgendas}}
-                @field="created-for.is-final"
+                @currentSorting={{this.sortField}}
+                @field="created-for.agenda.status.label"
                 @onChange={{this.sortTable}}
                 @label={{t "status"}}
               />
               <Utils::ThSortable
                 class="auk-table__header-title"
-                @currentSorting={{this.sortAgendas}}
+                @currentSorting={{this.sortField}}
                 @field="created-for.kind.label"
                 @onChange={{this.sortTable}}
                 @label={{t "kind"}}
               />
               <Utils::ThSortable
                 class="auk-table__header-title"
-                @currentSorting={{this.sortAgendas}}
+                @currentSorting={{this.sortField}}
                 @field="modified"
                 @onChange={{this.sortTable}}
                 @label={{t "latest-modified"}}
@@ -135,7 +135,7 @@
                     </span>
                   </td>
                   <td>
-                    {{#if agenda.createdFor.isFinal}}
+                    {{#if agenda.createdFor.agenda}}
                       <AuPill @size="small">{{t "closed"}}</AuPill>
                     {{else}}
                       <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>

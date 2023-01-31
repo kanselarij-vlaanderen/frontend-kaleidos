@@ -22,112 +22,112 @@
     </div>
   </div>
   <div class="auk-o-grid-col-10">
-    <DataTable
+    <KDataTable
       data-test-route-settings-organizations-table
+      @loading={{this.isLoadingModel}}
       @content={{@model}}
-      @class="auk-table auk-table--styled auk-table--bordered auk-table--noactions"
       @page={{this.page}}
       @size={{this.size}}
-      @sort={{this.sort}}
-      @noDataMessage={{t "no-results-found"}}
-      @isLoading={{this.isLoadingModel}}
-      as |table|
+      @numberOfItems={{@model.length}}
+      @totalNumberOfItems={{@model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
     >
-      <table.content as |c|>
-        <c.header>
-          <ThSortable
-            data-test-route-settings-organizations-tablecontent-organization
-            @currentSorting={{this.sort}}
-            @field="name"
-            @label={{t "organization"}}
-          />
-          <ThSortable
-            data-test-route-settings-organizations-tablecontent-organization-id
-            @currentSorting={{this.sort}}
-            @field="identifier"
-            @label={{t "organization-id"}}
-          />
-          <th>{{t "users-seen"}}</th>
-          <th></th>
-        </c.header>
-        <c.body as |organization|>
-          <td data-test-route-settings-organizations-row-name class={{if organization.isBlocked "au-u-muted"}}>
-            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-              {{organization.name}}
-              {{#if organization.isBlocked}}
-                <AuPill
-                  @icon="circle-x"
-                  @skin="error"
-                  @size="small"
-                >
-                  {{t "blocked"}}
-                </AuPill>
-              {{/if}}
-            </span>
-          </td>
-          <td data-test-route-settings-organizations-row-organization-id class={{if organization.isBlocked "au-u-muted"}}>
-            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-              {{organization.identifier}}
-            </span>
-          </td>
-          <td class={{if organization.isBlocked "au-u-muted"}}>
-            <div>
-              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                <LinkTo
-                  @route="settings.users"
-                  @query={{hash
-                    organizations=(array organization.id)
-                    filter=null
-                    page=0
-                    dateFrom=null
-                    dateTo=null
-                    roles=(array)
-                    showBlockedUsers=false
-                    showBlockedMembership=false
-                  }}
-                >
-                  <OrganizationMembershipsCount
-                    @organization={{organization}}
-                  />
-                </LinkTo>
-              </span>
-            </div>
-          </td>
-          <td data-test-route-settings-organizations-row-actions class="auk-u-text-align--right">
-            <div class="auk-o-flex auk-o-flex--justify-end">
-              <AuDropdown
-                data-test-route-settings-organizations-row-actions-dropdown
-                @skin="naked"
-                @hideText={{true}}
-                @alignment="right"
-                @icon="three-dots"
+      <:header>
+        <Utils::ThSortable
+          data-test-route-settings-organizations-tablecontent-organization
+          @currentSorting={{this.sort}}
+          @field="name"
+          @label={{t "organization"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <Utils::ThSortable
+          data-test-route-settings-organizations-tablecontent-organization-id
+          @currentSorting={{this.sort}}
+          @field="identifier"
+          @label={{t "organization-id"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th>{{t "users-seen"}}</th>
+        <th></th>
+      </:header>
+      <:body as |organization|>
+        <td data-test-route-settings-organizations-row-name class={{if organization.isBlocked "au-u-muted"}}>
+          <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+            {{organization.name}}
+            {{#if organization.isBlocked}}
+              <AuPill
+                @icon="circle-x"
+                @skin="error"
+                @size="small"
               >
-                {{#if organization.isBlocked}}
-                  <AuButton
-                    data-test-route-settings-organizations-unblock-organization
-                    @skin="naked"
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
-                  >
-                    {{t "unblock-organization"}}
-                  </AuButton>
-                {{else}}
-                  <AuButton
-                    data-test-route-settings-organizations-block-organization
-                    @skin="naked"
-                    @alert={{true}}
-                    role="menuitem"
-                    {{on "click" (queue (toggle "showBlockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
-                  >
-                    {{t "block-organization"}}
-                  </AuButton>
-                {{/if}}
-              </AuDropdown>
-            </div>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
+                {{t "blocked"}}
+              </AuPill>
+            {{/if}}
+          </span>
+        </td>
+        <td data-test-route-settings-organizations-row-organization-id class={{if organization.isBlocked "au-u-muted"}}>
+          <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+            {{organization.identifier}}
+          </span>
+        </td>
+        <td class={{if organization.isBlocked "au-u-muted"}}>
+          <div>
+            <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              <LinkTo
+                @route="settings.users"
+                @query={{hash
+                  organizations=(array organization.id)
+                  filter=null
+                  page=0
+                  dateFrom=null
+                  dateTo=null
+                  roles=(array)
+                  showBlockedUsers=false
+                  showBlockedMembership=false
+                }}
+              >
+                <OrganizationMembershipsCount
+                  @organization={{organization}}
+                />
+              </LinkTo>
+            </span>
+          </div>
+        </td>
+        <td data-test-route-settings-organizations-row-actions class="auk-u-text-align--right">
+          <div class="auk-o-flex auk-o-flex--justify-end">
+            <AuDropdown
+              data-test-route-settings-organizations-row-actions-dropdown
+              @skin="naked"
+              @hideText={{true}}
+              @alignment="right"
+              @icon="three-dots"
+            >
+              {{#if organization.isBlocked}}
+                <AuButton
+                  data-test-route-settings-organizations-unblock-organization
+                  @skin="naked"
+                  role="menuitem"
+                  {{on "click" (queue (toggle "showUnblockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
+                >
+                  {{t "unblock-organization"}}
+                </AuButton>
+              {{else}}
+                <AuButton
+                  data-test-route-settings-organizations-block-organization
+                  @skin="naked"
+                  @alert={{true}}
+                  role="menuitem"
+                  {{on "click" (queue (toggle "showBlockOrganizationConfirmationModal" this) (set this "organizationBeingBlocked" organization))}}
+                >
+                  {{t "block-organization"}}
+                </AuButton>
+              {{/if}}
+            </AuDropdown>
+          </div>
+        </td>
+      </:body>
+    </KDataTable>
   </div>
 </div>
 
