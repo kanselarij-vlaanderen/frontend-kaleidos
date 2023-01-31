@@ -1,0 +1,81 @@
+{{page-title (t "decisions")}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "decisions"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <DataTable
+      @content={{this.model}}
+      @page={{this.page}}
+      @noDataMessage={{t "no-results-found"}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @class="auk-table auk-table--striped"
+      @isLoading={{this.isLoadingModel}}
+      @onClickRow={{this.navigateToDecision}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <th class="auk-table__col--7">
+            {{t "title"}}
+          </th>
+          <th class="auk-table__col--1">
+            {{t "date"}}
+          </th>
+          <th class="auk-table__col--2">
+            {{t "result-decision"}}
+          </th>
+          <th class="auk-table__col--1"></th>
+        </c.header>
+        <c.body class="auk-table--clickable-rows" as |row|>
+          <td>
+            <p>
+              {{row.subcaseTitle}}
+            </p>
+          </td>
+          <td>
+            {{date row.decisionStartDate}}
+          </td>
+          <td>
+            <Decision::DecisionResultPill
+              @decisionResultCode={{row.decisionResult}}
+            />
+          </td>
+          <td class="auk-u-text-align--right">
+            <AuLink
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              @route="agenda.agendaitems.agendaitem.decisions"
+              @models={{array row.meetingId row.agendaId row.id}}
+            >
+              {{t "open"}}
+            </AuLink>
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>
