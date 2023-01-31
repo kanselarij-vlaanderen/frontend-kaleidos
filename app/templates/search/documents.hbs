@@ -1,0 +1,89 @@
+{{#in-element this.customFiltersElement insertBefore=null}}
+  <Search::ConfidentialOnly
+    @objectVerb={{t "documents"}}
+    @confidentialOnly={{this.confidentialOnly}}
+    @onChange={{set this "confidentialOnly"}}
+  />
+  <Search::DocumentTypeFilter />
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "cases"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <DataTable
+      data-test-route-search-cases-data-table={{true}}
+      @content={{await this.model}}
+      @page={{this.page}}
+      @noDataMessage={{t "no-results-found"}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @class="auk-table auk-table--striped"
+      @isLoading={{this.isLoadingModel}}
+      @onClickRow={{this.navigateToCase}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <th class="auk-table__col--8">
+            {{t "case-name"}}
+          </th>
+          <ThSortable
+            @class="auk-table__col--2"
+            @currentSorting={{this.sort}}
+            @field="created"
+            @label={{t "created-on"}}
+          />
+          <ThSortable
+            @class="auk-table__col--2"
+            @currentSorting={{this.sort}}
+            @field="confidentialityLevel"
+            @label={{t "confidentialityLevel"}}
+          />
+          <th class="auk-table__col--1"></th>
+        </c.header>
+        <c.body class="auk-table--clickable-rows" as |row|>
+          <td>
+            <p>
+              {{row.title}}
+            </p>
+          </td>
+          <td>
+            {{datetime row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          <td>{{row.confidentialityLevel}}</td>
+          <td class="auk-u-text-align--right">
+            <AuLink
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              @route="cases.case.subcases"
+              @model={{row.id}}
+            >
+              {{t "open"}}
+            </AuLink>
+          </td>
+        </c.body>
+      </table.content>
+    </DataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>
