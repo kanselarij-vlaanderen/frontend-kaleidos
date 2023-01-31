@@ -90,7 +90,7 @@ function setDateAndTimeInFlatpickr(date) {
 function openSettingsModal(selector) {
   cy.log('openSettingsModal');
   cy.get(selector).click();
-  cy.get(utils.vlModal.dialogWindow).should('be.visible');
+  cy.get(auk.auModal.container).should('be.visible');
   cy.log('/openSettingsModal');
 }
 
@@ -102,8 +102,8 @@ function openSettingsModal(selector) {
  */
 function closeSettingsModal() {
   cy.log('closeSettingsModal');
-  cy.get(utils.vlModal.close).click();
-  cy.get(utils.vlModal.dialogWindow).should('not.exist');
+  cy.get(auk.auModal.header.close).click();
+  cy.get(auk.auModal.container).should('not.exist');
   cy.log('/closeSettingsModal');
 }
 
@@ -165,6 +165,14 @@ function selectFromDropdown(item) {
   }).should('not.exist');
   cy.log('/selectFromDropdown');
 }
+
+Cypress.Commands.add('forceClick', {
+  prevSubject: 'element',
+}, (element) => {
+  cy.wrap(element).click({
+    force: true,
+  });
+});
 
 // ***********************************************
 // Commands

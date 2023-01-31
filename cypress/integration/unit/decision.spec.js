@@ -3,10 +3,10 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('Decision tests', () => {
   beforeEach(() => {
@@ -32,7 +32,7 @@ context('Decision tests', () => {
 
     cy.get(document.vlUploadedDocument.filename).should('not.exist');
 
-    cy.get(utils.vlModal.dialogWindow).within(() => {
+    cy.get(auk.auModal.container).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
@@ -41,7 +41,7 @@ context('Decision tests', () => {
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('DELETE', 'pieces/*').as('deletePiece');
     cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@createNewDocumentContainer');
     cy.wait('@patchDecisionActivities');
@@ -74,11 +74,13 @@ context('Decision tests', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.name.value).contains(/TER/);
-        cy.get(document.documentCard.actions).should('not.be.disabled')
+        cy.get(document.documentCard.actions)
+          .should('not.be.disabled')
+          .children(appuniversum.button)
           .click();
-        cy.get(document.documentCard.delete).click();
+        cy.get(document.documentCard.delete).forceClick();
       });
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
     cy.wait('@deleteFile');
     cy.wait('@deletePiece');
@@ -137,7 +139,7 @@ context('Decision tests', () => {
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('GET', 'pieces/*/previous-piece').as('getPreviousPiece');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@patchDecisionActivities');
     cy.wait('@getPreviousPiece');
@@ -199,7 +201,7 @@ context('Decision tests', () => {
     cy.intercept('POST', '/pieces').as('postPieces');
     cy.intercept('PATCH', '/decision-activities/*').as('patchDecisionActivity');
     cy.intercept('GET', '/pieces/*/access-level').as('getAccessLevel');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postPieces')
       .wait('@patchDecisionActivity');
     cy.get(auk.loader).should('not.exist');

@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 // import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -81,10 +82,12 @@ context('Testing the application as OVRB', () => {
       cy.agendaNameExists('B');
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -100,7 +103,6 @@ context('Testing the application as OVRB', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 
@@ -152,9 +154,11 @@ context('Testing the application as OVRB', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -175,10 +179,12 @@ context('Testing the application as OVRB', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.showOptions).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
 
       // Main view - Actions
-      cy.get(agenda.agendaActions.showOptions).click();
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
@@ -194,7 +200,6 @@ context('Testing the application as OVRB', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 

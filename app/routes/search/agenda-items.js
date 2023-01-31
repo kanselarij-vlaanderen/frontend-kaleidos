@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import moment from 'moment';
+import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -29,7 +29,21 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'shortTitle^3', 'data.content'];
+  textSearchFields = [
+    'title^4',
+    'shortTitle^4',
+    'mandateRoles^2',
+    'mandateeFirstNames^3',
+    'mandateeFamilyNames^3',
+    'pieceNames^2',
+    'pieceFileNames^2',
+    'pieces.content',
+    'decisionName^2',
+    'decisionFileName^2',
+    'decision.content',
+    'newsItemTitle^2',
+    'newsItem',
+  ];
 
   constructor() {
     super(...arguments);
@@ -63,7 +77,7 @@ export default class AgendaitemSearchRoute extends Route {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -71,15 +85,15 @@ export default class AgendaitemSearchRoute extends Route {
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
     } else if (!isEmpty(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:sessionDates'] = date.utc().toISOString();
+      const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      filter[':gte:sessionDates'] = date.toISOString();
     } else if (!isEmpty(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:sessionDates'] = date.utc().toISOString();
+      const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte:sessionDates'] = date.toISOString();
     }
 
     if (params.types.length) {

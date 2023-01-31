@@ -3,8 +3,8 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('meeting actions tests', () => {
   afterEach(() => {
@@ -39,7 +39,9 @@ context('meeting actions tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // verify this profile does not have the option to delete approved agendaitems
     cy.wait(2000); // controls buttons is not clickable yet (no calls are running, element detached from DOM)
-    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.actions)
+      .children(appuniversum.button)
+      .click();
     cy.get(agenda.agendaitemControls.action.delete).should('not.exist');
   });
 
@@ -56,9 +58,11 @@ context('meeting actions tests', () => {
 
     cy.wait(1000); // controls buttons is not clickable yet (no calls are running)
     // delete the agendaitem from approved agenda
-    cy.get(agenda.agendaitemControls.actions).click();
-    cy.get(agenda.agendaitemControls.action.delete).click();
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+    cy.get(agenda.agendaitemControls.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaitemControls.action.delete).forceClick();
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
 
     cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');

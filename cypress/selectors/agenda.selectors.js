@@ -68,7 +68,6 @@ const selectors = {
   // agenda-overview
   agendaOverview: {
     notesSectionTitle: '[data-test-agenda-overview-section-title-notes]',
-    showChanges: '[data-test-agenda-overview-show-changes]',
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
@@ -80,7 +79,7 @@ const selectors = {
 
   // agenda-actions
   agendaActions: {
-    showOptions: '[data-test-agenda-actions-show-options]',
+    optionsDropdown: '[data-test-agenda-actions-options-dropdown]',
     addAgendaitems: '[data-test-agenda-actions-add-agendaitems]',
     navigateToNewsletter: '[data-test-agenda-actions-navigate-to-newsletter]',
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
@@ -114,7 +113,7 @@ const selectors = {
 
   // agenda-version-actions
   agendaVersionActions: {
-    showOptions: '[data-test-agenda-version-actions-show-options]',
+    optionsDropdown: '[data-test-agenda-version-actions-options-dropdown]',
     actions: {
       approveAgenda: '[data-test-agenda-version-actions-approve-agenda]',
       approveAndCloseAgenda: '[data-test-agenda-version-actions-approve-and-close-agenda]',

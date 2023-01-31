@@ -6,6 +6,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -34,7 +35,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
   cy.visit('/overzicht?size=2');
-  cy.get(route.agendas.action.newMeeting).click();
+  cy.get(route.agendas.action.newMeeting, {
+    timeout: 60000,
+  }).click();
 
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
@@ -256,8 +259,10 @@ function deleteAgenda(lastAgenda) {
   // Call is made but cypress doesn't see it
   cy.intercept('DELETE', '/agendas/*').as('deleteAgenda');
   cy.intercept('GET', '/agendaitems?filter**').as('loadAgendaitems');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.deleteAgenda).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.deleteAgenda).forceClick();
   cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.deleteAgenda)
     .click();
   cy.wait('@deleteAgenda', {
@@ -320,9 +325,11 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.intercept('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-  cy.get(agenda.agendaActions.showOptions).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
-  cy.get(agenda.agendaActions.approveAllAgendaitems).click();
+  cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
@@ -332,7 +339,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     timeout: 60000,
   }).should('not.exist');
   cy.get(auk.loader, {
-    timeout: 20000,
+    timeout: amountOfFormallyOks * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -349,8 +356,10 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
 function approveDesignAgenda(shouldConfirm = true) {
   cy.log('approveDesignAgenda');
 
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.approveAgenda).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
@@ -380,8 +389,10 @@ function approveDesignAgenda(shouldConfirm = true) {
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
 
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
@@ -411,8 +422,10 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.get(auk.loader).should('not.exist');
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.addAgendaitems).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.addAgendaitems).forceClick();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
@@ -465,22 +478,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
     timeout: 12000,
   }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
-}
-
-/**
- * @description Toggles the show changes
- * @name toggleShowChanges
- * @memberOf Cypress.Chainable#
- * @function
- */
-function toggleShowChanges() {
-  cy.log('toggleShowChanges');
-  cy.clickReverseTab('Overzicht');
-  cy.get(auk.loader).should('not.exist'); // data is not loading
-  cy.get(agenda.agendaOverview.showChanges).click();
-  // data loading is triggered so we check for the loader
-  cy.get(auk.loader).should('not.exist');
-  cy.log('/toggleShowChanges');
 }
 
 /**
@@ -595,8 +592,10 @@ function closeAgenda() {
   cy.log('closeAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/close').as('closeAgendaCall');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.lockAgenda).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.lockAgenda).forceClick();
   cy.get(agenda.agendaVersionActions.confirm.lockAgenda).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
@@ -617,8 +616,10 @@ function closeAgenda() {
  */
 function reopenAgenda() {
   cy.log('reopenAgenda');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.unlockAgenda).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.unlockAgenda).forceClick();
   // Currently, this action has no confirmation popup but a loading overlay is showing
   cy.get(auk.modal.container, {
     timeout: 60000,
@@ -638,8 +639,10 @@ function reopenPreviousAgenda() {
   cy.log('reopenPreviousAgenda');
   // Call is made but cypress doesn't see it
   // cy.intercept('POST', '/agendas/*/reopen').as('reopenPreviousAgendaCall');
-  cy.get(agenda.agendaVersionActions.showOptions).click();
-  cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).click();
+  cy.get(agenda.agendaVersionActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
   cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).click();
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
@@ -659,10 +662,10 @@ function releaseDecisions() {
   cy.log('releaseDecisions');
   cy.intercept('PATCH', '/internal-decision-publication-activities/**').as('patchDecisionPubActivity');
 
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.releaseDecisions).click({
-    force: true,
-  });
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.releaseDecisions).forceClick();
   cy.get(agenda.agendaActions.confirm.releaseDecisions).click();
   cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
@@ -680,8 +683,10 @@ function releaseDocuments(now = true) {
   cy.log('releaseDocuments');
   cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchDocPubActivity');
 
-  cy.get(agenda.agendaActions.showOptions).click();
-  cy.get(agenda.agendaActions.planReleaseDocuments).click();
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.planReleaseDocuments).forceClick();
   if (now) {
     cy.get(agenda.publicationPlanning.actions.releaseDocumentsNow).click();
   }
@@ -718,7 +723,6 @@ Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
-Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);

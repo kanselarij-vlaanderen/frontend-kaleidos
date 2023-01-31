@@ -1,8 +1,8 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
-
-import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
+import auk from '../../selectors/auk.selectors';
 
 context('check the functions of the new document widget', () => {
   beforeEach(() => {
@@ -38,28 +38,32 @@ context('check the functions of the new document widget', () => {
     cy.addNewPieceToApprovalItem('Goedkeuring van het verslag', file.newFileName, newVersionfile);
 
     // replace pdf
-    cy.get(document.documentCard.actions).should('not.be.disabled')
+    cy.get(document.documentCard.actions)
+      .should('not.be.disabled')
+      .children(appuniversum.button)
       .click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.sourceFileReplace).click();
     cy.get(document.documentEdit.sourceFileReplacer).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@deleteFile1')
       .wait('@patchPieces1');
 
     // upload word file as derived file
-    cy.get(document.documentCard.actions).should('not.be.disabled')
+    cy.get(document.documentCard.actions)
+      .should('not.be.disabled')
+      .children(appuniversum.button)
       .click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.derivedFileUploader).within(() => {
       cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces2');
     // Derived file should link to uploaded word file
     cy.get(document.documentCard.name.value)
@@ -69,15 +73,17 @@ context('check the functions of the new document widget', () => {
       .should('contain', `${file.fileName}.${pdfExtension}`);
 
     // upload word file as source file and ensure derived pdf file is generated
-    cy.get(document.documentCard.actions).should('not.be.disabled')
+    cy.get(document.documentCard.actions)
+      .should('not.be.disabled')
+      .children(appuniversum.button)
       .click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.sourceFileReplace).click();
     cy.get(document.documentEdit.sourceFileReplacer).within(() => {
       cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces3');
     // Derived file should be converted pdf file
     cy.get(document.documentCard.name.value)
@@ -87,15 +93,17 @@ context('check the functions of the new document widget', () => {
       .should('contain', `${file.fileName}.${wordExtension}`);
 
     // replace derived file
-    cy.get(document.documentCard.actions).should('not.be.disabled')
+    cy.get(document.documentCard.actions)
+      .should('not.be.disabled')
+      .children(appuniversum.button)
       .click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.derivedFileReplace).click();
     cy.get(document.documentEdit.derivedFileReplacer).within(() => {
       cy.uploadFile(file.folder, replaceFilename, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces4');
     // Derived file should now be uploaded word file
     cy.get(document.documentCard.name.value)
@@ -105,12 +113,14 @@ context('check the functions of the new document widget', () => {
       .should('contain', `${file.fileName}.${wordExtension}`);
 
     // delete derived file
-    cy.get(document.documentCard.actions).should('not.be.disabled')
+    cy.get(document.documentCard.actions)
+      .should('not.be.disabled')
+      .children(appuniversum.button)
       .click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.derivedFileDelete).click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces5');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces4');
     cy.get(document.documentCard.primarySourceCreated).should('not.exist');
   });

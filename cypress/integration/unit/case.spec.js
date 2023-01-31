@@ -2,9 +2,9 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -46,7 +46,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(utils.vlModal.close).click();
+    cy.get(auk.auModal.header.close).click();
     // check if data is cleared after close
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
@@ -100,12 +100,13 @@ context('Create case as Admin user', () => {
       .parents('tr')
       .as('currentRow');
     cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click();
+      .forceClick();
     cy.intercept('PATCH', '/cases/**').as('patchCases1');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
-    cy.get(utils.vlModalVerify.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchCases1')
       .wait('@patchSubcases1');
     cy.get(auk.loader).should('not.exist');
@@ -116,11 +117,12 @@ context('Create case as Admin user', () => {
 
     // restore case
     cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.intercept('PATCH', '/cases/**').as('patchCases2');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases2');
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
-      .click()
+      .forceClick()
       .wait('@patchCases2')
       .wait('@patchSubcases2');
 

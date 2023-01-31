@@ -1,5 +1,3 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-u-mb-2">
   <Auk::Toolbar @auto={{true}}>
     <Auk::Toolbar::Group @position="left">
@@ -22,42 +20,43 @@
         <Auk::Loader @message={{t "loading"}} />
       </div>
     {{else}}
-      <DataTable
+      <KDataTable
+        @hoverable={{true}}
+        @loading={{this.findAll.isRunning}}
         @content={{this.pieces}}
-        @sort={{this.sort}}
         @page={{this.pageParam}}
         @size={{this.size}}
-        @noDataMessage={{t "no-results-found"}}
-        @isLoading={{this.findAll.isRunning}}
-        @onClickRow={{action "select"}}
-      as |table|>
-        <table.content as |c|>
-          <c.header>
-            <th></th>
-            <th><span class="">{{t "title-document"}}</span></th>
-            <th><span class="">{{t "created-on"}}</span></th>
-          </c.header>
-          <c.body as |row|>
-            <td class="auk-table__col--1">
-              <AuControlCheckbox
-                data-test-add-existing-piece-checkbox={{true}}
-                @checked={{row.selected}}
-                @onChange={{fn this.select row}}
-              />
-            </td>
-            <td class="auk-table__col--8">
-              {{row.name}}
-            </td>
-            <td class="auk-table__col--3">
-              {{#if row.created}}
-                {{date-format row.created "EEEEEE dd-MM-yyyy HH:mm"}}
-              {{else}}
-                {{t "dash"}}
-              {{/if}}
-            </td>
-          </c.body>
-        </table.content>
-      </DataTable>
+        @numberOfItems={{this.pieces.length}}
+        @totalNumberOfItems={{this.pieces.meta.count}}
+        @onChangeSize={{fn (mut this.size)}}
+        @onChangePage={{fn (mut this.page)}}
+        @onClickRow={{this.select}}
+      >
+        <:header>
+          <th></th>
+          <th><span class="">{{t "title-document"}}</span></th>
+          <th><span class="">{{t "created-on"}}</span></th>
+        </:header>
+        <:body as |row|>
+          <td class="auk-table__col--1">
+            <AuControlCheckbox
+              data-test-add-existing-piece-checkbox={{true}}
+              @checked={{includes row this.selected}}
+              @onChange={{fn this.select row}}
+            />
+          </td>
+          <td class="auk-table__col--8">
+            {{row.name}}
+          </td>
+          <td class="auk-table__col--3">
+            {{#if row.created}}
+              {{date-format row.created "EEEEEE dd-MM-yyyy HH:mm"}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
+          </td>
+        </:body>
+      </KDataTable>
     {{/if}}
   </div>
 </div>

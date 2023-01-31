@@ -1,10 +1,11 @@
+import ENV from 'frontend-kaleidos/config/environment';
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
-import sanitizeHtml from 'ember-cli-sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 export default class NewslettersSearchController extends Controller {
   @service router;
@@ -61,6 +62,10 @@ export default class NewslettersSearchController extends Controller {
 
   get isEmptySearch() {
     return isEmpty(this.searchText);
+  }
+
+  get sanitizeHtmlOptions() {
+    return ENV['sanitize-html'];
   }
 
   @action

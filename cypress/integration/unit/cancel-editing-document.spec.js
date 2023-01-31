@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
@@ -11,11 +12,13 @@ function uploadFileToCancel(file) {
   cy.get(document.documentCard.name.value).contains(file.fileName)
     .parents(document.documentCard.card)
     .within(() => {
-      cy.get(document.documentCard.actions).should('not.be.disabled')
+      cy.get(document.documentCard.actions)
+        .should('not.be.disabled')
+        .children(appuniversum.button)
         .click();
-      cy.get(document.documentCard.uploadPiece).click();
+      cy.get(document.documentCard.uploadPiece).forceClick();
     });
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
     cy.wait(1000);
@@ -143,16 +146,20 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
 
     cy.get(document.documentCard.name.value).contains(fileName);
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.nameInput).type(extraName);
-    cy.get(utils.vlModalFooter.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
     // assert old value is back
     cy.get(document.documentCard.name.value).contains(fileName);
-    cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.editPiece).click();
+    cy.get(document.documentCard.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.nameInput).type(extraName);
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchPieces');
     // assert new value is set
     cy.get(document.documentCard.name.value)
@@ -249,7 +256,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // both documents and linked documents show emptyState
-    cy.get(utils.vlAlert.message).should('have.length', 2)
+    cy.get(utils.auAlert.message).should('have.length', 2)
       .eq(0)
       .contains('geen documenten');
   });
@@ -273,11 +280,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.log('uploadFileToCancel 1');
     uploadFileToCancel(file);
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
-    cy.get(utils.vlModalFooter.cancel).click()
+    cy.get(auk.confirmationModal.footer.cancel).click()
       .wait('@deleteFile1');
 
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}BIS`);
@@ -285,10 +292,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.log('uploadFileToCancel 2');
     uploadFileToCancel(file);
     cy.intercept('DELETE', '/files/**').as('deleteFile2');
-    cy.get(utils.vlModal.close).click()
+    cy.get(auk.auModal.header.close).click()
       .wait('@deleteFile2');
     cy.addNewPieceToAgendaitem(subcaseTitleShort, file.newFileName, file);
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}TER`);
@@ -301,8 +308,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile3');
 
     cy.log('uploadFileToCancel 4');
-    cy.get(utils.vlModal.dialogWindow).within(() => {
-      cy.get(utils.vlModalFooter.save).should('be.disabled');
+    cy.get(auk.auModal.container).within(() => {
+      cy.get(auk.confirmationModal.footer.confirm).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
       cy.intercept('POST', '/pieces').as('createNewPiece');
@@ -310,7 +317,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.intercept('PATCH', '/submission-activities').as('patchAgendaitem');
       cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
       cy.intercept('GET', '/pieces?filter**agendaitems**').as('loadPiecesAgendaitemQuater');
-      cy.get(utils.vlModalFooter.save).should('not.be.disabled')
+      cy.get(auk.confirmationModal.footer.confirm).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,
@@ -326,7 +333,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.wait('@loadPiecesAgendaitemQuater');
     });
 
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName}QUATER`);

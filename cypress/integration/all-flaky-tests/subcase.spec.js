@@ -64,7 +64,7 @@ context('Subcase tests', () => {
   it('should open an existing case and add a subcase', () => {
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -104,7 +104,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -117,13 +117,14 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0, shortSubcaseTitle);
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
       .click();
     cy.get(cases.subcaseHeader.actions.deleteSubcase)
       .should('not.exist');
@@ -133,7 +134,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -157,14 +158,14 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
-    cy.url().should('not.contain', '/dossier/');
+    cy.url().should('not.contain', '/dossiers/');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const shortSubcaseTitle = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     // Aanmaken Dossier
@@ -180,8 +181,13 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
+    cy.wait(1500); // TODO-flakey, linkToSubcase does nothing sometimes
     cy.get(appuniversum.pill).contains('Op de website');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
+    cy.url().should('contain', '/dossiers/');
+    cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
@@ -190,7 +196,7 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitem');
 
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
-    // "Go to agendaitem
+    // Go to agendaitem
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
@@ -207,7 +213,8 @@ context('Subcase tests', () => {
     // Save the changes setting
     cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
     cy.intercept('PATCH', '/news-items/**').as('newsItemsPatch');
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).contains('Opslaan')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save)
+      .contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
     // We toggled hide in newsletter, await the patch
@@ -370,8 +377,10 @@ context('Subcase tests', () => {
     // use case 1
     cy.openCase(caseTitle1);
     cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall1')
@@ -380,7 +389,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases1');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 1)
       .find(cases.subcaseItem.link)
@@ -389,8 +398,10 @@ context('Subcase tests', () => {
     // use case 2
     cy.openCase(caseTitle1);
     cy.openSubcase(0);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall2')
@@ -399,7 +410,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(auk.auModal.header.close).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
@@ -411,8 +422,10 @@ context('Subcase tests', () => {
     cy.openCase(caseTitle1);
     cy.addSubcase(type, subcaseShortTitle3);
     cy.openSubcase(0, subcaseShortTitle3);
-    cy.get(cases.subcaseHeader.actionsDropdown).click();
-    cy.get(cases.subcaseHeader.actions.moveSubcase).click();
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
     cy.get(utils.caseSearch.input).type(caseTitle2)
       .wait('@searchCall3')
@@ -421,7 +434,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)
@@ -438,8 +451,10 @@ context('Subcase tests', () => {
     // this agenda may no longer exist if this spec is run after agenda.spec
     // subcase name (if present) in "add agendaitem to agenda" feature
     cy.visitAgendaWithLink('vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.addAgendaitems).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.addAgendaitems).forceClick();
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     cy.get(agenda.createAgendaitem.input).should('not.be.disabled')
       .clear()

@@ -1,7 +1,9 @@
-/* global context, beforeEach, afterEach, it, cy */
+/* global context, beforeEach, afterEach, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
@@ -104,7 +106,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItems');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
@@ -145,8 +147,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@patchNewsItem');
     cy.wait(1000);// flakyness, zebra view does not have this newsitem yet sometimes
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
@@ -276,8 +280,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem');
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     // The previous subcase had "in-newsletter" as checked, verify it was not inherited
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseShortTitle)
       .parents(newsletter.tableRow.newsletterRow)
@@ -343,8 +349,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains(theme);
     // check KB views for in-newsletter toggle
-    cy.get(agenda.agendaActions.showOptions).click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).click();
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent).contains(previousSubcaseTitleShort)
       .parents(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -446,7 +454,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).click();
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     // TODO-bug reload should not be needed
     // reload needed to update openNota
@@ -484,7 +492,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContent);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.wait(2000); // TODO-BUG rare flaky where parent is not longer connected to dom, data reload happening?
@@ -576,7 +584,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .type(remarkTextNota);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
@@ -713,4 +721,115 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
     cy.get(newsletter.editItem.cancel).click();
   });
+
+  it('should test the pre mailchimp checks', () => {
+    const agendaDate = Cypress.dayjs().add(5, 'weeks')
+      .day(1);
+    const type1 = 'Mededeling';
+    const type2 = 'Nota';
+    const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
+    const theme = 'Justitie en Handhaving';
+    const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
+    const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
+
+    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
+
+    cy.createCase('Cypress test: nieuwsbrief');
+
+    // create subcase.
+    cy.addSubcase(type1, shortSubcaseTitle1);
+    cy.addSubcase(type2, shortSubcaseTitle2);
+
+    // create agendaitem
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle1);
+    cy.addAgendaitemToAgenda(shortSubcaseTitle2);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
+    cy.intercept('POST', '/news-items').as('newsItemsPost');
+    cy.get(newsletter.newsItem.create).click()
+      .wait('@newsItemsPost');
+    cy.wait('@getAgendaitemThemes');
+    cy.get(newsletter.editItem.save).click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@patchNewsItem');
+
+    // test without nota in newsletter
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+    cy.get(newsletter.tableRow.titleContent); // await page load
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.get(auk.auModal.container).should('not.exist');
+    cy.get(auk.alert.message).contains(alertMessage);
+    cy.get(auk.alert.close).click();
+    // test with nota in newsletter without theme
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
+      .click()
+      .wait('@patchNewsItem');
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.get(auk.auModal.container).should('not.exist');
+    cy.get(auk.alert.message).contains(alertMessage);
+    cy.get(auk.alert.close).click();
+
+    // add theme to mededeling
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle1);
+    cy.get(newsletter.newsItem.edit).click();
+    cy.get(newsletter.editItem.themesSelector).contains(theme)
+      .click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(newsletter.editItem.save).click()
+      .wait('@patchNewsItem');
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+    cy.get(newsletter.tableRow.titleContent); // await page load
+
+    // uncheck nota in newsletter
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
+      .click()
+      .wait('@patchNewsItem');
+
+    // TODO-bug check on nota in kort-bestek allows mailcampaign with nota without themes
+    //  and check again
+    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+    //   .children(appuniversum.button)
+    //   .click();
+    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    // cy.get(utils.vlModalVerify.save).click();
+    // cy.get(utils.vlModalVerify.container).should('not.exist');
+    // cy.get(auk.alert.message).contains(alertMessage);
+    // cy.get(auk.alert.close).click();
+  });
+
+  // it.only('should test the pre mailchimp checks', () => {
+  //   cy.visit('/vergadering/63BFF684D02D5127D91DE575/kort-bestek/afdrukken');
+  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+  //       .children(appuniversum.button)
+  //       .click();
+  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+
+  //   cy.fixture('example').then((examples) => {
+  //     cy.log(examples);
+  //     cy.intercept('POST', '/newsletter/mail-campaigns', examples.data).as('postMailCampaings');
+  //   });
+  //   cy.get(utils.vlModalVerify.save).click()
+  //     .wait('@postMailCampaings');
+  //   cy.wait(20000);
+  // });
 });
