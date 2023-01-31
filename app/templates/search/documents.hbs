@@ -4,7 +4,10 @@
     @confidentialOnly={{this.confidentialOnly}}
     @onChange={{set this "confidentialOnly"}}
   />
-  <Search::DocumentTypeFilter />
+  <Search::DocumentTypeFilter
+    @selected={{this.documentTypes}} 
+    @onChange={{this.setDocumentTypes}} 
+  />
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}

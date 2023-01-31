@@ -23,6 +23,10 @@ export default class CasesSearchRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    documentTypeIds: {
+      refreshModel: true,
+      as: 'document_types',
+    },
   };
 
   postProcessDates(_case) {
@@ -94,6 +98,10 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:confidentialityLevel'] = 2;
     }
 
+    if (params.documentTypeIds) {
+      filter[':terms:documentType'] = params.documentTypeIds;
+    }
+
     this.lastParams.commit();
 
     if (isEmpty(params.searchText)) {
@@ -128,11 +136,14 @@ export default class CasesSearchRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
 
+    const params = this.paramsFor('search');
+
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
 
-    controller.searchText = this.paramsFor('search').searchText;
+    controller.searchText = params.searchText;
+    controller.loadDocumentTypes.perform();
   }
 
   @action

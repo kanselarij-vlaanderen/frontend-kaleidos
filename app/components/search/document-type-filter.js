@@ -22,7 +22,7 @@ export default class DocumentTypeFilter extends Component {
 
   set selected(selected) {
     this._selected = selected;
-    this.onChange?.(this.selected);
+    this.args.onChange?.(this.selected);
   }
 
   get someDocumentTypesSelected() {
@@ -45,11 +45,11 @@ export default class DocumentTypeFilter extends Component {
   _toggleDocumentType = (documentType) => {
     const index = this.selected.indexOf(documentType);
     if (index >= 0) {
-        this.selected.splice(index, 1);
+      this.selected.splice(index, 1);
     } else {
-        this.selected.push(documentType);
+      this.selected.push(documentType);
     }
-  }
+  };
 
   @action
   toggleDocumentType(documentType) {
@@ -68,10 +68,10 @@ export default class DocumentTypeFilter extends Component {
   }
 
   loadDocumentTypes = task(async () => {
-    this.documentTypes = (await this.conceptStore.queryAllByConceptScheme(
-      CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
-    )).content;
-
-    this.selected = this.args.selected ?? [...this.documentTypes];
+    this.documentTypes = (
+      await this.conceptStore.queryAllByConceptScheme(
+        CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
+      )
+    ).content;
   });
 }
