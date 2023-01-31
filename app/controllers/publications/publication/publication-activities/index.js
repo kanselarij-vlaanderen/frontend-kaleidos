@@ -43,7 +43,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       this.publicationFlow
     );
 
-    this.router.refresh();
+    this.router.refresh('publications.publication.publication-activities');
     this.closeRequestModal();
   }
 
@@ -85,7 +85,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     yield Promise.all(saves);
-    this.router.refresh();
+    this.router.refresh('publications.publication.publication-activities');
     this.closeRegistrationModal();
   }
 
@@ -105,7 +105,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     yield this.performDeleteRequest(requestActivityArgs);
     // separate from this.performDeleteRequest(...):
     //    refresh is OK to be aborted
-    this.router.refresh();
+    this.router.refresh('publications.publication.publication-activities');
   }
 
   // separate method to prevent ember-concurrency from saving only partially

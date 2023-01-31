@@ -69,7 +69,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.router.refresh();
+    this.router.refresh('cases.case.subcases.subcase.documents');
   }
 
   /**
@@ -108,7 +108,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       );
     }
     yield this.handleSubmittedPieces.perform([piece]);
-    this.router.refresh();
+    this.router.refresh('cases.case.subcases.subcase.documents');
   }
 
   @task
@@ -183,7 +183,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           }
         }
       }
-      this.router.refresh();
+      this.router.refresh('cases.case.subcases.subcase.documents');
     }
   }
 
@@ -279,7 +279,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         }
       }
     }
-    this.router.refresh();
+    this.router.refresh('cases.case.subcases.subcase.documents');
   }
 
 
@@ -296,7 +296,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @action
   saveBatchDetails() {
-    this.router.refresh();
+    this.router.refresh('cases.case.subcases.subcase.documents');
     this.isOpenBatchDetailsModal = false;
   }
 }

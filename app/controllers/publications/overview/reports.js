@@ -62,7 +62,7 @@ export default class PublicationsOverviewReportsController extends Controller {
         };
         this.toaster.displayToast.perform(downloadFileToast);
         if (this.router.isActive(thisRouteName)) {
-          this.router.refresh();
+          this.router.refresh(thisRouteName);
         }
       } else {
         this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
