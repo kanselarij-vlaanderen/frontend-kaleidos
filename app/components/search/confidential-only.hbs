@@ -1,0 +1,10 @@
+{{#if (user-may "view-confidential-cases")}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "confidential"}}</Auk::Label>
+    <AuControlCheckbox
+      @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+      @checked={{@confidentialOnly}}
+      @onChange={{@onChange}}
+    />
+  </div>
+{{/if}}
