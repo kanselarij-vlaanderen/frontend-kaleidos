@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import moment from 'moment';
+import { differenceInMinutes } from 'date-fns';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
@@ -199,17 +199,14 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
 
     const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
-    const hasNotas = (await this.store.count('agendaitem', {
-      'filter[agenda][:id:]': agenda.id,
-      'filter[type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
-    })) > 0;
-
-    const hasThemes = (await this.store.count('news-item', {
+    const hasNotasWithThemes = (await this.store.count('news-item', {
       'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
       'filter[:has:themes]': true,
+      'filter[in-newsletter]': true,
     })) > 0;
 
-    return hasDocumentPublicationPlanned && hasThemes && hasNotas;
+    return hasDocumentPublicationPlanned && hasNotasWithThemes;
   }
 
   async validateMailCampaign() {
@@ -230,7 +227,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const threshold = 10;
     if (
       Math.abs(
-        moment(campaign.attributes.createTime).diff(moment(Date.now()), 'minutes')
+        differenceInMinutes(campaign.attributes.createTime, new Date())
       ) > threshold
     ) {
       this.toaster.error(

@@ -26,7 +26,7 @@ export default class ProposableMeetings extends Component {
   *loadMeetings() {
     const queryParams = {
       filter: {
-        'is-final': false,
+        ':has-no:agenda': true
       },
       // high page size is mainly for testing, results will be < 5 in normal situations
       page: {
@@ -38,7 +38,7 @@ export default class ProposableMeetings extends Component {
     this.meetings = yield this.store.query('meeting', queryParams);
     this.datesToEnable = this.meetings.map((meeting) => meeting.plannedStart);
   }
-  
+
   @action
   selectPlannedStart(selectedDate) {
     this.meetingsForSelectedDate = this.meetings.filter((meeting) => meeting.plannedStart.toDateString() === selectedDate.toDateString());

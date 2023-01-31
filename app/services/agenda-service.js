@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default class AgendaService extends Service {
   @service store;
@@ -34,22 +33,6 @@ export default class AgendaService extends Service {
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
-    const response = await fetch(url);
-    const payload = await response.json();
-    const itemsFromStore = [];
-    for (const item of payload.data) {
-      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
-      if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
-      }
-      itemsFromStore.push(itemFromStore);
-    }
-    return itemsFromStore;
-  }
-
-  async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
-    // scopefields specify which fields to base upon for determining if an item was modified
-    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(',')}`;
     const response = await fetch(url);
     const payload = await response.json();
     const itemsFromStore = [];
@@ -170,7 +153,8 @@ export default class AgendaService extends Service {
     await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    updateModifiedProperty(lastAgenda);
+    lastAgenda.modified = new Date();
+    lastAgenda.save();
 
     // Create default newsItem for announcements with inNewsLetter = true
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {

@@ -7,15 +7,15 @@ reset-cache-resource-only:
 	- sleep 5
 
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
 
 reset-elastic-and-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion cache resource migrations cache-warmup
-	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion cache resource migrations cache-warmup
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion cache resource migrations cache-warmup publication-report
+	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion cache resource migrations cache-warmup publication-report
 	- rm -rf ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
@@ -23,7 +23,7 @@ reset-elastic-and-cache:
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- docker-compose ${COMPOSE_FILE} up -d
-	- sleep 60
+	- sleep 120
 
 run-cypress-tests:
 	-	make reset-elastic-and-cache

@@ -215,39 +215,35 @@
   />
 {{/if}}
 
-{{#if this.isOpenUploadModal}}
-  <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPiece}}
-    @isOverlay={{true}}
-    @title={{t "new-document-piece"}}
-  >
-    <Auk::Modal::Body>
-      {{#if this.newPiece}}
-        <Auk::Label>{{t "name"}}</Auk::Label>
-        <AuInput @width="block" @value={{this.newPiece.name}} />
-        <Documents::UploadedDocument
-          @piece={{this.newPiece}}
-          @onDelete={{perform this.deleteUploadedPiece}}
-        />
-      {{else}}
-        <Auk::FileUploader @onUpload={{perform this.uploadPiece}} />
-      {{/if}}
-    </Auk::Modal::Body>
-    <WebComponents::VlModalFooter
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "add"}}
-      @isLoading={{this.addPiece.isRunning}}
-      @cancelAction={{perform this.cancelUploadPiece}}
-      @saveAction={{perform this.addPiece}}
-      @disableSave={{not this.newPiece}}
-    />
-  </WebComponents::VlModal>
-{{/if}}
-{{#if this.isOpenVerifyDeleteModal}}
-  <WebComponents::VlModalVerify
-    @title={{t "document-container-delete"}}
-    @message={{t "delete-document-container-message"}}
-    @cancel={{this.cancelDeleteDocumentContainer}}
-    @verify={{this.verifyDeleteDocumentContainer}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenUploadModal}}
+  @title={{t "new-document-piece"}}
+  @onConfirm={{perform this.addPiece}}
+  @onCancel={{perform this.cancelUploadPiece}}
+  @confirmMessage={{t "add"}}
+  @loading={{this.addPiece.isRunning}}
+  @disabled={{not this.newPiece}}
+>
+  <:body>
+    {{#if this.newPiece}}
+      <Auk::Label>{{t "name"}}</Auk::Label>
+      <AuInput @width="block" @value={{this.newPiece.name}} />
+      <Documents::UploadedDocument
+        @piece={{this.newPiece}}
+        @onDelete={{perform this.deleteUploadedPiece}}
+      />
+    {{else}}
+      <Auk::FileUploader @onUpload={{perform this.uploadPiece}} />
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyDeleteModal}}
+  @title={{t "document-container-delete"}}
+  @message={{t "delete-document-container-message"}}
+  @onConfirm={{this.verifyDeleteDocumentContainer}}
+  @onCancel={{this.cancelDeleteDocumentContainer}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+/>

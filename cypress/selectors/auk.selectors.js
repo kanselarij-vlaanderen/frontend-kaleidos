@@ -51,6 +51,7 @@ const selectors = {
   },
 
   auModal: {
+    container: '.au-c-modal',
     body: '.au-c-modal__body',
     header: {
       close: '.au-c-modal__close',
@@ -89,10 +90,6 @@ const selectors = {
 
   /** Section single selector AUK components **/
 
-  checkbox: {
-    checkbox: '.auk-checkbox__toggle',
-    label: '.auk-checkbox__label ',
-  },
   loader: '.auk-loader',
 
   datepicker: {

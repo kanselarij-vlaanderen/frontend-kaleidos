@@ -83,19 +83,6 @@ const selectors = {
 
   /** Section VL-components **/
 
-  // vl-modal-footer
-  vlModalFooter: {
-    save: '[data-test-vl-modal-footer-save]',
-    cancel: '[data-test-vl-modal-footer-cancel]',
-  },
-
-  // vl-modal
-  vlModal: {
-    container: '[data-test-vl-modal-container]',
-    dialogWindow: '[data-test-vl-modal-dialogwindow]',
-    close: '[data-test-vl-modal-close]',
-  },
-
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
@@ -108,6 +95,13 @@ const selectors = {
     close: '[data-test-vl-alert-close]',
     container: '[data-test-vl-alert]',
     message: '[data-test-vl-alert-message]',
+  },
+
+  // au-alert
+  auAlert: {
+    close: '[data-test-alert-close]',
+    container: '[data-test-alert]',
+    message: '[data-test-alert-message]',
   },
 
   // case-search

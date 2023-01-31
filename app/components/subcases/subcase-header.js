@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import moment from 'moment';
+import { addWeeks, subWeeks } from 'date-fns';
 
 /*
  * @argument subcase
@@ -40,18 +40,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.canPropose = !(activities?.length || this.isAssigningToOtherAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToOtherAgenda);
 
-    const dateOfToday = moment().utc()
-      .subtract(1, 'weeks')
-      .format();
-    const futureDate = moment().utc()
-      .add(20, 'weeks')
-      .format();
+    const dateOfToday = subWeeks(new Date, 1).toISOString();
+    const futureDate = addWeeks(new Date, 20).toISOString();
 
     this.meetings = yield this.store.query('meeting', {
       filter: {
         ':gte:planned-start': dateOfToday,
         ':lte:planned-start': futureDate,
-        'is-final': false,
+        ':has-no:agenda': true
       },
       sort: 'planned-start',
     });
