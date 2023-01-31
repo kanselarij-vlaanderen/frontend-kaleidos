@@ -13,7 +13,6 @@ export default class Meeting extends Model {
   @attr location;
   @attr('number') number;
   @attr numberRepresentation;
-  @attr('boolean') isFinal;
   @attr extraInfo;
 
   @belongsTo('concept', { inverse: null, async: true }) kind;

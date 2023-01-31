@@ -61,14 +61,16 @@
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{/if}}
 {{/if}}
-{{#if this.isVerifying}}
-  <WebComponents::VlModalVerify
-    @title={{t "delete-agendaitem"}}
-    @message={{this.deleteWarningText}}
-    @onCancel={{this.toggleIsVerifying}}
-    @onVerify={{fn this.verifyDelete @agendaitem}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isVerifying}}
+  @title={{t "delete-agendaitem"}}
+  @message={{this.deleteWarningText}}
+  @onConfirm={{fn this.verifyDelete @agendaitem}}
+  @onCancel={{this.toggleIsVerifying}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+/>
 {{#if this.setDecisionResultCode.isRunning}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />

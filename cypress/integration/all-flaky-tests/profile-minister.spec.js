@@ -104,7 +104,6 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 
@@ -205,7 +204,6 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 
