@@ -41,6 +41,6 @@ export default class NewslettersDraftsController extends Controller.extend(Defau
 
   @action
   async navigateToNewsletter(meeting) {
-    this.router.transitionTo('newsletter', meeting.id);
+    this.router.transitionTo('newsletters.draft');
   }
 }

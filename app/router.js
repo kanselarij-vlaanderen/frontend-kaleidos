@@ -59,6 +59,8 @@ Router.map(function() {
   this.route('newsletters', { path: '/kort-bestek', }, function() {
     this.route('search', { path: '/zoeken', });
     this.route('drafts', { path: '/drafts', });
+    this.route('draft', { path: '/draft', });
+    this.route('create-draft', { path: '/nieuwe-draft', });
   });
 
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {

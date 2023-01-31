@@ -1,0 +1,23 @@
+.auk-table--fill {
+  .data-table__actions {
+    padding: 0;
+  }
+
+  .data-table__actions:has(*) {
+    padding: 1rem;
+  }
+
+  .data-table-content {
+    overflow: auto;
+    margin-left: 1rem;
+  }
+
+  .data-table__actions {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  margin: 0;
+  height: calc(100% - 51px);
+  position: relative;
+}

@@ -21,6 +21,19 @@
         </Auk::Tabs>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{#if (eq this.activeRoute "newsletters.drafts")}}
+    <Auk::Toolbar::Group @position="right">
+      <AuLink
+        @route="newsletters.create-draft"
+        @skin="button"
+        @icon="add"
+      >
+        Draft toevoegen
+      </AuLink>
+    </Auk::Toolbar::Group>
+    {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
-{{outlet}}
+<div class="auk-scroll-wrapper__body">
+  {{outlet}}
+</div>
