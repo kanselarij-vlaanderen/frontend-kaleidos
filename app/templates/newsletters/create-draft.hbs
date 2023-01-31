@@ -5,12 +5,18 @@
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>
             <h4 class="auk-toolbar__title">
-              Draft titel
+              Draft toevoegen
             </h4>
           </Toolbar.Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body class="au-o-flow au-u-background-gray-100">
+        <AuFormRow @alignment="default">
+          <AuLabel for="title">
+            Titel
+          </AuLabel>
+          <AuInput id="title" @width="block" />
+        </AuFormRow>
         <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
           <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
             {{#if this.isFullscreen}}
@@ -80,13 +86,13 @@
             data-test-newsletter-edit-item-rdfa-editor
             @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
           />
-          <AuFormRow @alignment="default" class="au-u-margin-top">
-            <AuLabel for="input">
-              Opmerkingen
-            </AuLabel>
-            <AuTextarea id="textarea" @width="block" />
-          </AuFormRow>
         </div>
+        <AuFormRow @alignment="default" class="au-u-margin-top">
+          <AuLabel for="remarks">
+            Opmerkingen
+          </AuLabel>
+          <AuTextarea id="remarks" @width="block" />
+        </AuFormRow>
       </Auk::Panel::Body>
       <Auk::Panel::Footer class="au-u-background-gray-100">
         <Auk::Toolbar>
