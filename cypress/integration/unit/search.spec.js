@@ -348,20 +348,21 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.wait('@searchCall');
 
+      // sorted default by relevance and not dates
       cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
-        .contains('Hawaï');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
         .contains('accenten');
+      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+        .contains('Hawaï');
 
       cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
-      cy.get(route.searchAgendaitems.sidebar.sortOptions).select('Relevantie');
+      cy.get(utils.resultsHeader.type).select('Datum vergadering');
       cy.wait('@searchCall2');
       cy.url().should('contain', 'sorteer=&');
 
       cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
-        .contains('accenten');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
         .contains('Hawaï');
+      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+        .contains('accenten');
     });
   });
 });

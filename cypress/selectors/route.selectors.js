@@ -98,9 +98,6 @@ const selectors = {
 
   // search/agendaitems
   searchAgendaitems: {
-    sidebar: {
-      sortOptions: '[data-test-route-search-agendaitems-sidebar-sort-options]',
-    },
     dataTable: '[data-test-route-search-agendaitems-data-table]',
     row: {
       shortTitle: '[data-test-route-search-agendaitems-row-shorttitle]',

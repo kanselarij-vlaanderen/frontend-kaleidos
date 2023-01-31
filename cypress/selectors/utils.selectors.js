@@ -113,5 +113,10 @@ const selectors = {
   kindSelector: {
     kind: '[data-test-utils-kind-selector]',
   },
+
+  // results-header
+  resultsHeader: {
+    type: '[data-test-results-header-type]',
+  },
 };
 export default selectors;
