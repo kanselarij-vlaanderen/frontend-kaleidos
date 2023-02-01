@@ -1,15 +1,15 @@
-<Auk::CheckboxList>
-  {{#if this.loadCurrentMinisters.isRunning}}
-    <Auk::Loader />
-  {{else}}
-    <AuControlCheckbox
-      @checked={{this.allCurrentMinistersSelected}}
-      @indeterminate={{and (not this.allCurrentMinistersSelected) this.someCurrentMinistersSelected}}
-      @onChange={{this.toggleAllCurrentMinisters}}
-    >
-      <strong>{{t "current-ministers"}}</strong>
-    </AuControlCheckbox>
-    <div class="auk-u-ml-2">
+{{#if this.loadCurrentMinisters.isRunning}}
+  <Auk::Loader />
+{{else}}
+  <AuControlCheckbox
+    @checked={{this.allCurrentMinistersSelected}}
+    @indeterminate={{and (not this.allCurrentMinistersSelected) this.someCurrentMinistersSelected}}
+    @onChange={{this.toggleAllCurrentMinisters}}
+  >
+    <strong>{{t "current-ministers"}}</strong>
+  </AuControlCheckbox>
+  <div class="auk-u-ml-2">
+    <Auk::CheckboxList>
       {{#each this.currentMinisters as |minister|}}
         <AuControlCheckbox
           @checked={{includes minister this.selected}}
@@ -17,27 +17,29 @@
           @onChange={{fn this.toggleMinister minister}}
         />
       {{/each}}
-    </div>
-    {{#if this.pastMinistersHidden}}
-      <AuButton
-        {{on "click" (toggle "pastMinistersHidden" this)}}
-        @skin="link"
-        class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-        @icon="add"
-      >
-        {{t "show-past-ministers"}}
-      </AuButton>
-    {{else if this.loadPastMinisters.isRunning}}
-      <Auk::Loader />
-    {{else}}
-      <AuControlCheckbox
-        @checked={{this.allPastMinistersSelected}}
-        @indeterminate={{and (not this.allPastMinistersSelected) this.somePastMinistersSelected}}
-        @onChange={{this.toggleAllPastMinisters}}
-      >
-        <strong>{{t "past-ministers"}}</strong>
-      </AuControlCheckbox>
-      <div class="auk-u-ml-2">
+    </Auk::CheckboxList>
+  </div>
+  {{#if this.pastMinistersHidden}}
+    <AuButton
+      {{on "click" (toggle "pastMinistersHidden" this)}}
+      @skin="link"
+      class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+      @icon="add"
+    >
+      {{t "show-past-ministers"}}
+    </AuButton>
+  {{else if this.loadPastMinisters.isRunning}}
+    <Auk::Loader />
+  {{else}}
+    <AuControlCheckbox
+      @checked={{this.allPastMinistersSelected}}
+      @indeterminate={{and (not this.allPastMinistersSelected) this.somePastMinistersSelected}}
+      @onChange={{this.toggleAllPastMinisters}}
+    >
+      <strong>{{t "past-ministers"}}</strong>
+    </AuControlCheckbox>
+    <div class="auk-u-ml-2">
+      <Auk::CheckboxList>
         {{#each this.pastMinisters as |minister|}}
           <AuControlCheckbox
             @checked={{includes minister this.selected}}
@@ -45,15 +47,15 @@
             @onChange={{fn this.toggleMinister minister}}
           />
         {{/each}}
-      </div>
-      <AuButton
-        {{on "click" (toggle "pastMinistersHidden" this)}}
-        @skin="link"
-        class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-        @icon="remove"
-      >
-        {{t "hide-past-ministers"}}
-      </AuButton>
-    {{/if}}
+      </Auk::CheckboxList>
+    </div>
+    <AuButton
+      {{on "click" (toggle "pastMinistersHidden" this)}}
+      @skin="link"
+      class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+      @icon="remove"
+    >
+      {{t "hide-past-ministers"}}
+    </AuButton>
   {{/if}}
-</Auk::CheckboxList>
+{{/if}}
