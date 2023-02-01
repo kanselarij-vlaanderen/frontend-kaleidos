@@ -357,7 +357,7 @@ context('Search tests', () => {
       cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
       cy.get(utils.resultsHeader.type).select('Datum vergadering');
       cy.wait('@searchCall2');
-      cy.url().should('contain', 'sorteer=&');
+      cy.url().should('contain', 'sorteer=-session-dates');
 
       cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
         .contains('Hawaï');

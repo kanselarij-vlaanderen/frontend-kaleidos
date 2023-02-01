@@ -88,7 +88,6 @@ const selectors = {
 
   // search/template
   search: {
-    title: '[data-test-route-search-title]',
     input: '[data-test-route-search-input]',
     from: '[data-test-route-search-date-from]',
     to: '[data-test-route-search-date-to]',

@@ -118,5 +118,14 @@ const selectors = {
   resultsHeader: {
     type: '[data-test-results-header-type]',
   },
+
+  // date-range-filter
+  dateRangeFilter: {
+    // more ideal selectors, but would break current tests
+    // from: '[data-test-date-range-filter-from]',
+    // to: '[data-test-date-range-filter-to]',
+    from: '[data-test-route-search-date-from]',
+    to: '[data-test-route-search-date-to]',
+  },
 };
 export default selectors;
