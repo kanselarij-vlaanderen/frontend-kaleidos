@@ -98,6 +98,17 @@ pipeline {
 
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+
+            // Stack service logs
+            sh "mkdir -p ${WORKSPACE}/service-logs"
+            sh '''
+            cd $WORKSPACE/kaleidos-project &&
+            for container_name in $(docker-compose -p $projectName ps | awk '{print $1}' | tail -n +3)
+            do
+            docker logs -t $container_name > $WORKSPACE/service-logs/$container_name.log 2>&1
+            done
+            '''
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
         }
         cleanup {
           sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
