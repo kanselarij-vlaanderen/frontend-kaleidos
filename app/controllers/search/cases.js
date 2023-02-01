@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class CasesSearchController extends Controller {
   @service router;
@@ -38,15 +39,19 @@ export default class CasesSearchController extends Controller {
   @tracked sort;
   @tracked includeArchived;
   @tracked decisionsOnly;
-  @tracked emptySearch;
+  @tracked searchText;
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = this.sortOptions[0].value;
+    this.sort = this.sortOptions[1].value;
     this.includeArchived = true;
     this.decisionsOnly = false;
+  }
+
+  get emptySearch() {
+    return isEmpty(this.searchText);
   }
 
   @action
@@ -72,5 +77,9 @@ export default class CasesSearchController extends Controller {
   @action
   navigateToCase(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+  }
+
+  get customFiltersElement() {
+    return document.getElementById('search-subroute-filters-area')
   }
 }
