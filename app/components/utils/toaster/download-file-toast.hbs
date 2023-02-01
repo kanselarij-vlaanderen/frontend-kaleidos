@@ -8,8 +8,9 @@
     @onClose={{@options.onClose}}
   >
     <div class="vl-alert__message auk-u-text-capitalize">
-      <p>{{@message}}</p>
+      <p data-test-download-file-toast-message>{{@message}}</p>
       <AuLinkExternal
+        data-test-download-file-toast-link
         @skin="button-secondary"
         href={{@options.downloadLink}}
         {{on "click" @options.onClose}}

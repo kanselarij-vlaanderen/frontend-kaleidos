@@ -54,6 +54,8 @@ services:
       ENABLE_RECENT_AGENDAS_CACHE: "false"
       ENABLE_LARGE_AGENDAS_CACHE: "false"
       ENABLE_CONCEPTS_CACHE: "true"
+  publication-report:
+    user: ${HOST_UID_GID}
   staatsblad-uuid-generation:
     image: lblod/sink-service:1.0.0
     restart: "no"

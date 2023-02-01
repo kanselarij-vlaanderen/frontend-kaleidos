@@ -278,10 +278,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
           timeOut: 3 * 60 * 1000,
         }
       );
-      this.jobMonitor.register(job);
-      job.on('didEnd', this, async function (status) {
+      this.jobMonitor.register(job, async (job) => {
         this.toaster.clear(inCreationToast);
-        if (status === job.SUCCESS) {
+        if (job.status === job.SUCCESS) {
           const url = await fileDownloadUrlFromJob(job, name);
           debug(`Archive ready. Prompting for download now (${url})`);
           fileDownloadToast.options.downloadLink = url;
