@@ -59,6 +59,11 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
+  navigateToDocument(document) {
+    this.router.transitionTo('document', document.id);
+  }
+
+  @action
   selectSize(size) {
     this.size = size;
   }

@@ -5,8 +5,8 @@
     @onChange={{set this "confidentialOnly"}}
   />
   <Search::DocumentTypeFilter
-    @selected={{this.documentTypes}} 
-    @onChange={{this.setDocumentTypes}} 
+    @selected={{this.documentTypes}}
+    @onChange={{this.setDocumentTypes}}
   />
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
@@ -30,7 +30,7 @@
       @sort={{this.sort}}
       @class="auk-table auk-table--striped"
       @isLoading={{this.isLoadingModel}}
-      @onClickRow={{this.navigateToCase}}
+      @onClickRow={{this.navigateToDocument}}
       as |table|
     >
       <table.content as |c|>
@@ -67,7 +67,7 @@
               @skin="button-naked"
               @icon="chevron-right"
               @hideText={{true}}
-              @route="cases.case.subcases"
+              @route="document"
               @model={{row.id}}
             >
               {{t "open"}}
