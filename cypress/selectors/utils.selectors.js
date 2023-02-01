@@ -113,5 +113,10 @@ const selectors = {
   kindSelector: {
     kind: '[data-test-utils-kind-selector]',
   },
+
+  downloadFileToast: {
+    message: '[data-test-download-file-toast-message]',
+    link: '[data-test-download-file-toast-link]',
+  },
 };
 export default selectors;

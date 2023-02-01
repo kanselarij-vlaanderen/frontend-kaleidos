@@ -80,6 +80,7 @@
             {{t "ministers"}}
           </Auk::Label>
           <PowerSelectMultiple
+            data-test-generate-report-select-mandatee
             @options={{this.mandateePersons}}
             @selected={{this.selectedMandateePersons}}
             @onChange={{fn (mut this.selectedMandateePersons)}}
@@ -134,6 +135,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>
     <AuButton
+      data-test-generate-report-confirm
       @skin="primary"
       @disabled={{not this.isValid}}
       {{on "click" this.triggerGenerateReport}}
