@@ -18,7 +18,6 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   saveTableConfig() {
     this.tableConfig.saveToLocalStorage();
-    this.router.refresh('publications.overview._base');
   }
 
   @action
