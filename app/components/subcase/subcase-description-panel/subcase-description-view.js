@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isPresent } from '@ember/utils';
 
 export default class SubcaseDescriptionView extends Component {
   /**
@@ -32,10 +33,14 @@ export default class SubcaseDescriptionView extends Component {
 
   get canShowDecisionStatus() {
     return (
-      this.latestMeeting?.isFinal &&
+      this.isFinalMeeting &&
       (this.currentSession.may('view-decisions-before-release') ||
         this.latestMeeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
+  }
+
+  get isFinalMeeting() {
+    return isPresent(this.latestMeeting?.agenda?.get('id'));
   }
 
   @task
@@ -70,10 +75,9 @@ export default class SubcaseDescriptionView extends Component {
 
       this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);
       // we need this multiple times in the template and navigating the nested array each time is bothersome
-      if (index === agendaActivities.length -1) {
+      if (index === agendaActivities.length - 1) {
         this.latestMeeting = meeting;
       }
-
     }
   }
 }

@@ -6,7 +6,7 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addBusinessDays, setHours, setMinutes } from 'date-fns';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-
+const DEFAULT_SORT_OPTIONS = ['-created-for.agenda.status.label', '-created-for.planned-start', 'created-for.kind.label'];
 export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
@@ -23,7 +23,8 @@ export default class AgendasController extends Controller {
   @tracked filterAgendas = null;
   @tracked pageAgendas = 0;
   @tracked sizeAgendas = 10;
-  @tracked sortAgendas = 'created-for.is-final,-created-for.planned-start,created-for.kind.label';
+  @tracked sortField;
+  @tracked sortAgendas = DEFAULT_SORT_OPTIONS.join(',');
 
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
@@ -55,19 +56,18 @@ export default class AgendasController extends Controller {
     const now = new Date();
     const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.newMeeting = this.store.createRecord('meeting', {
-      plannedStart,
-      isFinal: false,
+      plannedStart
     });
     const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [
       this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
-        status: this.defaultPublicationActivityStatus,
+        status: this.defaultPublicationActivityStatus
       }),
       this.store.createRecord('internal-document-publication-activity', {
         meeting: this.newMeeting,
         status: this.defaultPublicationActivityStatus,
-        plannedDate: nextBusinessDay,
+        plannedDate: nextBusinessDay
       }),
       this.store.createRecord('themis-publication-activity', {
         meeting: this.newMeeting,
@@ -76,7 +76,7 @@ export default class AgendasController extends Controller {
         scope: [
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-        ],
+        ]
       }),
     ];
 
@@ -99,7 +99,7 @@ export default class AgendasController extends Controller {
         ':lt:planned-start': this.newMeeting.plannedStart.toISOString(),
         kind: {
           ':has-no:broader': true,
-        },
+        }
       },
       sort: '-planned-start',
     });
@@ -126,7 +126,15 @@ export default class AgendasController extends Controller {
 
   @action
   sortTable(sortField) {
-    this.sortAgendas = sortField;
+    this.sortField = sortField;
+    // if only 1 field is sorted, the other sort priorities don't work anymore. So append the defaults after the sortField
+    let newSortAgendas = sortField || DEFAULT_SORT_OPTIONS.join(',');
+    for (const sortOption of DEFAULT_SORT_OPTIONS) {
+      if (newSortAgendas.replace(/-/g, '').indexOf(sortOption.replace(/-/g, '')) === -1) {
+        newSortAgendas += ',' + sortOption
+      }
+    }
+    this.sortAgendas = newSortAgendas;
   }
 
   @action
@@ -159,7 +167,7 @@ export default class AgendasController extends Controller {
       createdFor: meeting,
       status,
       created: now,
-      modified: now,
+      modified: now
     });
     await agenda.save();
     return agenda;
@@ -178,7 +186,7 @@ export default class AgendasController extends Controller {
       'decision-activity',
       {
         startDate: startDate,
-        decisionResultCode,
+        decisionResultCode
         // no subcase. Minutes approval aren't part of a (sub)case
       }
     );
@@ -189,7 +197,7 @@ export default class AgendasController extends Controller {
       {
         created: now,
         modified: now,
-        decisionActivity,
+        decisionActivity
       }
     );
     await agendaItemTreatment.save();
@@ -203,7 +211,7 @@ export default class AgendasController extends Controller {
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
-      type: notaType,
+      type: notaType
     });
     await agendaitem.save();
     return agendaitem;
