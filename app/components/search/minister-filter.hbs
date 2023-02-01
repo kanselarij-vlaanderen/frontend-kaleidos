@@ -1,0 +1,14 @@
+<div class="au-c-card au-o-box au-o-box--small">
+  <div class="auk-form-group">
+    <Auk::Label for="ministerName">
+      {{t "minister"}}
+    </Auk::Label>
+    <AuInput
+      data-test-route-search-mandatee-input
+      @width="block"
+      @value={{@mandatees}}
+      {{on "input" @onChange}}
+      id="ministerName"
+    />
+  </div>
+</div>

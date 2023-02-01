@@ -28,16 +28,25 @@ export default class SearchController extends Controller {
   @tracked dateFrom;
   @tracked dateTo;
   @tracked searchTextBuffer = '';
-  @tracked mandateesBuffer;
-  @tracked dateFromBuffer;
-  @tracked dateToBuffer;
 
   @action
   search(e) {
     e.preventDefault();
     this.searchText = this.searchTextBuffer;
-    this.mandatees = this.mandateesBuffer;
-    this.dateFrom = formatDate(this.dateFromBuffer);
-    this.dateTo = formatDate(this.dateToBuffer);
+  }
+
+  @action
+  setDateFrom(date) {
+    this.dateFrom = formatDate(date);
+  }
+
+  @action
+  setDateTo(date) {
+    this.dateTo = formatDate(date);
+  }
+
+  @action
+  setMandatees(mandatees) {
+    this.mandatees = mandatees;
   }
 }

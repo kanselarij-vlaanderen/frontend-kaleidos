@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class AgendaitemsSearchController extends Controller {
   @service router;
@@ -40,15 +41,19 @@ export default class AgendaitemsSearchController extends Controller {
   @tracked sort;
   @tracked types;
   @tracked latestOnly; // Only show the most recent version of an agenda-item
-  @tracked emptySearch;
+  @tracked searchText;
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = this.sortOptions[0].value;
+    this.sort = this.sortOptions[1].value;
     this.types = A(['nota', 'mededeling']);
     this.latestOnly = true;
+  }
+
+  get emptySearch() {
+    return isEmpty(this.searchText);
   }
 
   get includeNotas() {
@@ -121,5 +126,9 @@ export default class AgendaitemsSearchController extends Controller {
         }
       );
     }
+  }
+
+  get customFiltersElement() {
+    return document.getElementById('search-subroute-filters-area');
   }
 }
