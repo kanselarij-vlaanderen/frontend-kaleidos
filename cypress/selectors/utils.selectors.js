@@ -114,6 +114,11 @@ const selectors = {
     kind: '[data-test-utils-kind-selector]',
   },
 
+  downloadFileToast: {
+    message: '[data-test-download-file-toast-message]',
+    link: '[data-test-download-file-toast-link]',
+  },
+
   // results-header
   resultsHeader: {
     type: '[data-test-results-header-type]',
