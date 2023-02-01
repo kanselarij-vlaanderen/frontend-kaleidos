@@ -29,7 +29,21 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'shortTitle^3', 'data.content'];
+  textSearchFields = [
+    'title^4',
+    'shortTitle^4',
+    'mandateRoles^2',
+    'mandateeFirstNames^3',
+    'mandateeFamilyNames^3',
+    'pieceNames^2',
+    'pieceFileNames^2',
+    'pieces.content',
+    'decisionName^2',
+    'decisionFileName^2',
+    'decision.content',
+    'newsItemTitle^2',
+    'newsItem',
+  ];
 
   constructor() {
     super(...arguments);
@@ -63,7 +77,7 @@ export default class AgendaitemSearchRoute extends Route {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
     if (!isEmpty(params.mandatees)) {
-      // filter['mandateeName,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      // filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
       filter[':terms:mandateeIds'] = params.mandatees;
     }
 
