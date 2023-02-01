@@ -71,6 +71,7 @@
   "delete-subcase": "Procedurestap verwijderen",
   "delete-subcase-confirmation": "Ben je zeker dat je de procedurestap wilt verwijderen?",
   "at": "om",
+  "in": "in",
   "attachments": "Bijlagen",
   "attendees": "Aanwezigen",
   "back": "Terug",
@@ -1140,5 +1141,12 @@
   "sum-of-attachments-exceeds-maximum-threshold": "De som van alle bestanden is groter dan 30 MB. Deze mail kan niet verstuurd worden.",
   "error-create-newsitem": "Er is al een kort bestek aangemaakt door {user}.",
   "error-multiple-newsitem": "Dit agendapunt heeft meerdere kort bestek berichten. Contacteer de administrator om dit recht te zetten.",
-  "organization-id": "Organisatie ID"
+  "organization-id": "Organisatie ID",
+  "current-ministers": "Huidige ministers",
+  "past-ministers": "Vorige ministers",
+  "show-past-ministers": "Toon vorige ministers",
+  "hide-past-ministers": "Verberg vorige ministers",
+  "delete-empty-case": "Leeg dossier verwijderen?",
+  "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
+  "open": "Open"
 }

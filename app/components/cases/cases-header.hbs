@@ -23,14 +23,16 @@
       </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-{{#if this.isOpenNewCaseModal}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @onClose={{this.toggleIsOpenNewCaseModal}}
-    @title={{t "new-case"}} >
+<AuModal
+  @modalOpen={{this.isOpenNewCaseModal}}
+  @closeModal={{this.toggleIsOpenNewCaseModal}}
+  @title={{t "new-case"}}
+  @padding="none"
+>
+  <:body>
     <Cases::NewCase
       @didSave={{this.saveNewCase}}
       @onCancel={{this.toggleIsOpenNewCaseModal}}
     />
-  </WebComponents::VlModal>
-{{/if}}
+  </:body>
+</AuModal>

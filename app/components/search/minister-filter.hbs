@@ -1,14 +1,61 @@
-<div class="au-c-card au-o-box au-o-box--small">
-  <div class="auk-form-group">
-    <Auk::Label for="ministerName">
-      {{t "minister"}}
-    </Auk::Label>
-    <AuInput
-      data-test-route-search-mandatee-input
-      @width="block"
-      @value={{@mandatees}}
-      {{on "input" @onChange}}
-      id="ministerName"
-    />
+{{#if this.loadCurrentMinisters.isRunning}}
+  <Auk::Loader />
+{{else}}
+  <AuControlCheckbox
+    @checked={{this.allCurrentMinistersSelected}}
+    @indeterminate={{and (not this.allCurrentMinistersSelected) this.someCurrentMinistersSelected}}
+    @onChange={{this.toggleAllCurrentMinisters}}
+  >
+    <strong>{{t "current-ministers"}}</strong>
+  </AuControlCheckbox>
+  <div class="auk-u-ml-2">
+    <Auk::CheckboxList>
+      {{#each this.currentMinisters as |minister|}}
+        <AuControlCheckbox
+          @checked={{includes minister this.selected}}
+          @label={{minister.fullName}}
+          @onChange={{fn this.toggleMinister minister}}
+        />
+      {{/each}}
+    </Auk::CheckboxList>
   </div>
-</div>
+  {{#if this.pastMinistersHidden}}
+    <AuButton
+      {{on "click" (toggle "pastMinistersHidden" this)}}
+      @skin="link"
+      class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+      @icon="add"
+    >
+      {{t "show-past-ministers"}}
+    </AuButton>
+  {{else if this.loadPastMinisters.isRunning}}
+    <Auk::Loader />
+  {{else}}
+    <AuControlCheckbox
+      @checked={{this.allPastMinistersSelected}}
+      @indeterminate={{and (not this.allPastMinistersSelected) this.somePastMinistersSelected}}
+      @onChange={{this.toggleAllPastMinisters}}
+    >
+      <strong>{{t "past-ministers"}}</strong>
+    </AuControlCheckbox>
+    <div class="auk-u-ml-2">
+      <Auk::CheckboxList>
+        {{#each this.pastMinisters as |minister|}}
+          <AuControlCheckbox
+            @checked={{includes minister this.selected}}
+            @label={{minister.fullName}}
+            @onChange={{fn this.toggleMinister minister}}
+          />
+        {{/each}}
+      </Auk::CheckboxList>
+    </div>
+    <AuButton
+      {{on "click" (toggle "pastMinistersHidden" this)}}
+      @skin="link"
+      class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+      @icon="remove"
+    >
+      {{t "hide-past-ministers"}}
+    </AuButton>
+  {{/if}}
+{{/if}}

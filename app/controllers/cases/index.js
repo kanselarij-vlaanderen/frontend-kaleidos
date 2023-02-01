@@ -31,6 +31,7 @@ export default class CasesIndexController extends Controller {
   size = 20;
 
   sort = '-opened';
+  @tracked isLoadingModel;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
   @tracked showEditCaseModal = false;
