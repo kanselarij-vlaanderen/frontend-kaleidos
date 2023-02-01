@@ -51,10 +51,16 @@
                 @onDateFromClear={{set this "dateFrom" undefined}}
                 @onDateToClear={{set this "dateTo" undefined}}
               />
-              <Search::MinisterFilter 
-                @mandatees={{this.mandatees}}
-                @onChange={{this.setMandatees}}
-              />
+              <div class="au-c-card au-o-box au-o-box--small">
+                {{#if this.loadMinisters.isRunning}}
+                  <Auk::Loader />
+                {{else}}
+                  <Search::MinisterFilter
+                    @selected={{this.mandateesBuffer}}
+                    @onChange={{this.setMandatees}}
+                  />
+                {{/if}}
+              </div>
             </div>
           </div>
         </div>
