@@ -5,19 +5,37 @@
       {{#if this.loadDocumentTypes.isRunning}}
         <Auk::Loader />
       {{else}}
-        <div class="auk-u-ml-2">
-          <AuControlCheckbox
-            @checked={{this.allDocumentTypesSelected}}
-            @indeterminate={{and
-              (not this.allDocumentTypesSelected)
-              this.someDocumentTypesSelected
-            }}
-            @onChange={{this.toggleAllDocumentTypes}}
+        <AuControlCheckbox
+          @checked={{this.allDocumentTypesSelected}}
+          @indeterminate={{and
+            (not this.allDocumentTypesSelected)
+            this.someDocumentTypesSelected
+          }}
+          @onChange={{this.toggleAllDocumentTypes}}
+        >
+          <strong>{{t "all-document-types"}}</strong>
+        </AuControlCheckbox>
+        {{#each this.documentTypes as |documentType|}}
+          {{#if (includes documentType.uri this.defaultVisibleTypes)}}
+            <AuControlCheckbox
+              @checked={{includes documentType this.selected}}
+              @label={{documentType.label}}
+              @onChange={{fn this.toggleDocumentType documentType}}
+            />
+          {{/if}}
+        {{/each}}
+        {{#if (not this.showAllTypes)}}
+          <AuButton
+            {{on "click" (toggle "showAllTypes" this)}}
+            @skin="link"
+            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+            @icon="add"
           >
-            <strong>{{t "all-document-types"}}</strong>
-          </AuControlCheckbox>
+            {{t "show-all-document-types"}}
+          </AuButton>
+        {{else}}
           {{#each this.documentTypes as |documentType|}}
-            {{#if (includes documentType.uri this.defaultVisibleTypes)}}
+            {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
               <AuControlCheckbox
                 @checked={{includes documentType this.selected}}
                 @label={{documentType.label}}
@@ -25,35 +43,15 @@
               />
             {{/if}}
           {{/each}}
-          {{#if (not this.showAllTypes)}}
-            <AuButton
-              {{on "click" (toggle "showAllTypes" this)}}
-              @skin="link"
-              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-              @icon="add"
-            >
-              {{t "show-all-document-types"}}
-            </AuButton>
-          {{else}}
-            {{#each this.documentTypes as |documentType|}}
-              {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
-                <AuControlCheckbox
-                  @checked={{includes documentType this.selected}}
-                  @label={{documentType.label}}
-                  @onChange={{fn this.toggleDocumentType documentType}}
-                />
-              {{/if}}
-            {{/each}}
-            <AuButton
-              {{on "click" (toggle "showAllTypes" this)}}
-              @skin="link"
-              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-              @icon="remove"
-            >
-              {{t "hide-document-types"}}
-            </AuButton>
-          {{/if}}
-        </div>
+          <AuButton
+            {{on "click" (toggle "showAllTypes" this)}}
+            @skin="link"
+            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+            @icon="remove"
+          >
+            {{t "hide-document-types"}}
+          </AuButton>
+        {{/if}}
       {{/if}}
     </Auk::CheckboxList>
   </div>
