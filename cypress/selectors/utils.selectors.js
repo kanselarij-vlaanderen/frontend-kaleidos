@@ -83,19 +83,6 @@ const selectors = {
 
   /** Section VL-components **/
 
-  // vl-modal-footer
-  vlModalFooter: {
-    save: '[data-test-vl-modal-footer-save]',
-    cancel: '[data-test-vl-modal-footer-cancel]',
-  },
-
-  // vl-modal
-  vlModal: {
-    container: '[data-test-vl-modal-container]',
-    dialogWindow: '[data-test-vl-modal-dialogwindow]',
-    close: '[data-test-vl-modal-close]',
-  },
-
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
@@ -125,6 +112,20 @@ const selectors = {
 
   kindSelector: {
     kind: '[data-test-utils-kind-selector]',
+  },
+
+  // results-header
+  resultsHeader: {
+    type: '[data-test-results-header-type]',
+  },
+
+  // date-range-filter
+  dateRangeFilter: {
+    // more ideal selectors, but would break current tests
+    // from: '[data-test-date-range-filter-from]',
+    // to: '[data-test-date-range-filter-to]',
+    from: '[data-test-route-search-date-from]',
+    to: '[data-test-route-search-date-to]',
   },
 };
 export default selectors;

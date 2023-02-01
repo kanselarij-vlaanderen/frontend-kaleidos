@@ -4,7 +4,6 @@
 import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 function clickNewPieceForFile(file) {
   cy.get(document.documentCard.name.value).contains(file)
@@ -44,13 +43,13 @@ function addNewPieceWithConfirm(oldFileName, file, modelToPatch, hasSubcase = tr
   // warning
   cy.get(auk.confirmationModal.footer.confirm).click();
 
-  cy.get(utils.vlModal.dialogWindow).within(() => {
+  cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
-  cy.get(utils.vlModalFooter.save).click({
+  cy.get(auk.confirmationModal.footer.confirm).click({
     force: true, // covered by the pop-up in headless tests where ut stays open while it shouldn't
   })
     .wait(`@createNewPiece_${randomInt}`);
@@ -122,7 +121,7 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
 
     // check flow after confirm
     cy.get(route.agendaitemDocuments.add).click();
@@ -139,7 +138,7 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
 
     // check upload new piece and confirm
     addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);
@@ -159,7 +158,7 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
 
     // check flow after confirm
     cy.get(route.agendaitemDocuments.add).click();
@@ -175,7 +174,7 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
-    cy.get(utils.vlModal.dialogWindow).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
 
     // check upload new piece and confirm
     addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);

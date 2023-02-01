@@ -71,40 +71,35 @@
   </div>
 </div>
 
-{{#if this.isOpenPieceUploadModal}}
-  <WebComponents::VlModal
-    @onClose={{perform this.cancelUploadPieces}}
-    @isOverlay={{true}}
-    @large={{true}}
-    @title={{t "document-add"}} >
-    <Auk::Modal::Body>
-      {{#if this.savePieces.isRunning}}
-        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-      {{else}}
-        <Auk::FileUploader
-          @multiple={{true}}
-          @reusable={{true}}
-          @onUpload={{this.uploadPiece}}
-        />
-        <div class="upload-container">
-          {{#each this.newPieces as |piece|}}
-            <Documents::UploadedDocument
-              @piece={{piece}}
-              @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deletePiece piece}} />
-          {{/each}}
-        </div>
-      {{/if}}
-    </Auk::Modal::Body>
-    <WebComponents::VlModalFooter
-      @isLoading={{this.savePieces.isRunning}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "documents-add"}}
-      @cancelAction={{perform this.cancelUploadPieces}}
-      @saveAction={{perform this.savePieces}}
-      @disableSave={{eq this.newPieces.length 0}} />
-  </WebComponents::VlModal>
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}} />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
 
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal

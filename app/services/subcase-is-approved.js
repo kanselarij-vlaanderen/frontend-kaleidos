@@ -12,8 +12,9 @@ export default class SubcaseIsApprovedService extends Service {
       'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity?.id,
       sort: '-planned-start',
     });
-
-    if (latestMeeting?.isFinal) {
+    const agenda = await latestMeeting.agenda;
+    
+    if (agenda) {
       const approvedDecisionResultCode = await this.store.findRecordByUri(
         'concept',
         CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
