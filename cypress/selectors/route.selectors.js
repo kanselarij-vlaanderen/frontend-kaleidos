@@ -60,7 +60,6 @@ const selectors = {
 
   // cases/overview/template
   casesOverview: {
-    showArchived: '[data-test-route-cases-overview-show-archived]',
     dataTable: '[data-test-route-cases-overview-data-table]',
     row: {
       caseTitle: '[data-test-route-cases-overview-row-case-title]',
