@@ -61,7 +61,7 @@ $say-editor-padding: 1rem;
 
 // Full screen
 .auk-rdfa-holder {
-
+  //
 }
 
 .auk-rdfa-holder__header {
@@ -84,11 +84,6 @@ $say-editor-padding: 1rem;
   z-index: 1;
   background-color: #fff;
   box-shadow: 0 0 6rem rgba(0,0,0,.8);
-
-  > .ember-view {
-    height: 100%;
-    position: relative;
-  }
 
   .say-container {
     height: calc(100vh - 6.5rem);
