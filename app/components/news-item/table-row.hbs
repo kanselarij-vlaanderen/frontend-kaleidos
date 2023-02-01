@@ -47,6 +47,7 @@
       @disabled={{or
         (not @newsItem)
         this.saveNewsItem.isRunning
+        (not (user-may "manage-news-items"))
       }}
       @onChange={{this.toggleInNewsletterFlag}}
     />
