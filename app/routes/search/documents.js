@@ -60,7 +60,7 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
-    const textSearchFields = ['title^3', 'fileName^2'];
+    const textSearchFields = ['title^3', 'fileName^2', 'data.content'];
 
     const searchModifier = ':sqs:';
     const textSearchKey = textSearchFields.join(',');
