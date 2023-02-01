@@ -77,9 +77,4 @@ export default class PublicationsOverviewBaseRoute extends Route {
     super.setupController(...arguments);
     controller.tableConfig = this.tableConfig;
   }
-
-  @action
-  reloadModel() {
-    this.refresh();
-  }
 }

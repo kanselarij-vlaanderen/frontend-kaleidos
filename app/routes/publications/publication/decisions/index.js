@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
@@ -36,10 +35,5 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
     super.setupController(...arguments);
     ctrl.publicationFlow = this.publicationFlow;
     ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
-  }
-
-  @action
-  refresh() {
-    super.refresh();
   }
 }

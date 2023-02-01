@@ -96,6 +96,6 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
   @action
   refresh() {
     // We want to refresh our own route + parent route which has the info panel
-    this.router.refresh('publications.publication.publication-activities')
+    this.router.refresh('publications.publication.publication-activities');
   }
 }
