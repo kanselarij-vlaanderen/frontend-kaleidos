@@ -1,9 +1,10 @@
 <div ...attributes>
   {{#if this.browserIsSupported}}
     <Rdfa::RdfaEditor
-      @class="rdfa-editor"
+      @schema={{this.schema}}
+      @widgets={{this.widgets}}
+      @plugins={{this.plugins}}
       @rdfaEditorInit={{@handleRdfaEditorInit}}
-      @profile="default"
       @editorOptions={{hash
         showToggleRdfaAnnotations=null
         showInsertButton=null
