@@ -544,6 +544,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     await this.args.meeting.reload();
     await this.args.meeting.belongsTo('agenda').reload();
     await this.args.meeting.hasMany('agendas').reload();
+    await this.args.meeting.belongsTo('agenda').reload();
   }
 
   @action
