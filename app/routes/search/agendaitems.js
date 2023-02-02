@@ -77,7 +77,6 @@ export default class AgendaitemSearchRoute extends Route {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
     }
     if (!isEmpty(params.mandatees)) {
-      // filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
       filter[':terms:mandateeIds'] = params.mandatees;
     }
 
