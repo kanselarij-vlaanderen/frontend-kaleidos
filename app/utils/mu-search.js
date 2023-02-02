@@ -28,6 +28,7 @@ async function muSearch(
   sort,
   filter,
   dataMapping,
+  highlightFields
 ) {
   const endpoint = new URL(`/${index}/search`, window.location.origin);
   const params = new URLSearchParams(
@@ -47,6 +48,10 @@ async function muSearch(
     params.append(`sort[${snakeToCamel(stripSort(sort))}]`, sortOrder(sort));
   }
 
+  if (highlightFields) {
+    params.append(`highlight[:fields:]`, highlightFields.join(','));
+  }
+
   endpoint.search = params.toString();
 
   const { count, data } = await (await fetch(endpoint)).json();
@@ -55,6 +60,7 @@ async function muSearch(
 
   return ArrayProxy.create({
     content: entries,
+    highlight: data.map((entry) => entry.highlight),
     meta: {
       count,
       pagination,
