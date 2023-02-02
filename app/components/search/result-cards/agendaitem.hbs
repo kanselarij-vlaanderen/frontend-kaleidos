@@ -1,0 +1,48 @@
+<AuCard @shadow={{true}} @size="small" as |c|>
+  <c.header>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      <AuPill @size="small">
+        {{#if (is-announcement @agendaItemType)}}
+          {{capitalize (t "announcement")}}
+        {{else}}
+          {{t "note"}}
+        {{/if}}
+      </AuPill>
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{date @date}}
+      </p>
+    </div>
+    <AuHeading @level="3" @skin="4">
+      <AuLink
+        class="au-u-padding-none"
+        @route="agenda.agendaitems.agendaitem"
+        @models={{array @meetingId @agendaId @agendaItemId}}
+      >
+        {{#if @shortTitle}}
+          {{@shortTitle}}
+        {{else}}
+          {{@title}}
+        {{/if}}
+      </AuLink>
+    </AuHeading>
+  </c.header>
+  <c.content>
+    <p class="au-u-para">{{@title}}</p>
+    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+      {{t "out"}}
+      <AuLink @skin="secondary">
+        {{t "agenda-version"}}
+        {{@agendaSerialNumber}}
+      </AuLink>
+    </p>
+    {{!-- <p class="au-u-para-small au-u-margin-top-none au-u-muted">
+      Ook gevonden in
+      <AuLink @skin="secondary">
+        Versie B
+      </AuLink>,
+      <AuLink @skin="secondary">
+        Versie A
+      </AuLink>
+    </p> --}}
+  </c.content>
+</AuCard>
