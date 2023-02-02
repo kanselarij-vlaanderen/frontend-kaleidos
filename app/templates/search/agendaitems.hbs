@@ -1,20 +1,26 @@
-{{page-title (t "cases")}}
+{{page-title (t "agendaitems")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   <div class="au-c-card au-o-box au-o-box--small">
     <Auk::Label>{{t "type"}}</Auk::Label>
-    <AuControlCheckbox
-      data-test-route-search-cases-toggle-decisions={{true}}
-      @label={{t "search-in-decisions-only"}}
-      @checked={{this.decisionsOnly}}
-      @onChange={{this.toggleDecisionsOnly}}
-    />
+    <Auk::CheckboxList>
+      <AuControlCheckbox
+        @label={{t "note"}}
+        @checked={{this.includeNotas}}
+        @onChange={{this.toggleIncludeNotas}}
+      />
+      <AuControlCheckbox
+        @label={{capitalize (t "announcement")}}
+        @checked={{this.includeMededelingen}}
+        @onChange={{this.toggleIncludeMededelingen}}
+      />
+    </Auk::CheckboxList>
   </div>
   <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "archive"}}</Auk::Label>
+    <Auk::Label>{{t "version"}}</Auk::Label>
     <AuControlCheckbox
-      @label={{t "search-include-archived"}}
-      @checked={{this.includeArchived}}
-      @onChange={{this.toggleIncludeArchived}}
+      @label={{t "only-on-final-agenda"}}
+      @checked={{this.latestOnly}}
+      @onChange={{this.toggleLatestOnly}}
     />
   </div>
 {{/in-element}}
@@ -25,13 +31,13 @@
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
       @searchText={{this.searchText}}
-      @searchType={{t "cases"}}
+      @searchType={{t "agenda"}}
       @onSortChange={{this.selectSort}}
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
     <KDataTable
-      data-test-route-search-cases-data-table
+      data-test-route-search-agendaitems-data-table
       @hoverable={{true}}
       @striped={{true}}
       @loading={{this.isLoadingModel}}
@@ -40,23 +46,22 @@
       @size={{this.size}}
       @numberOfItems={{this.model.length}}
       @totalNumberOfItems={{this.model.meta.count}}
-      @onChangeSize={{this.selectSize}}
+      @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToCase}}
+      @onClickRow={{this.navigateToAgendaitem}}
     >
       <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
+        <th class="auk-table__col--7">
+          {{t "agendaitem-table-header"}}
+        </th>
+        <th class="auk-table__col--1">
+          {{t "agendaitem-type"}}
+        </th>
+        <th class="auk-table__col--1">
+          {{t "agenda-version"}}
         </th>
         <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--1"
+          @class="auk-table__col--1"
           @currentSorting={{this.sort}}
           @field="sessionDates"
           @label={{t "on-agenda-of"}}
@@ -66,7 +71,7 @@
       </:header>
       <:body as |row|>
         <td>
-          <p>
+          <p data-test-route-search-agendaitems-row-shorttitle>
             {{#if row.shortTitle}}
               {{row.shortTitle}}
             {{else}}
@@ -75,7 +80,18 @@
           </p>
         </td>
         <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
+          {{#if (is-announcement row.type)}}
+            {{capitalize (t "announcement")}}
+          {{else}}
+            {{t "note"}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if (eq row.agendaSerialNumber.length 1)}}
+            {{t "agenda"}} {{row.agendaSerialNumber}}
+          {{else}}
+            {{t "agenda"}}
+          {{/if}}
         </td>
         <td>
           {{date row.sessionDates}}
@@ -85,8 +101,8 @@
             @skin="button-naked"
             @icon="chevron-right"
             @hideText={{true}}
-            @route="cases.case.subcases"
-            @model={{row.id}}
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array row.meetingId row.agendaId row.id}}
           >
             {{t "open"}}
           </AuLink>

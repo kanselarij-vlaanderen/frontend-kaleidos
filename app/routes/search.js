@@ -13,7 +13,7 @@ export default class SearchRoute extends Route {
     },
     mandatees: {
       refreshModel: true,
-      as: 'minister',
+      as: 'ministers',
     },
     dateFrom: {
       refreshModel: true,
@@ -40,7 +40,7 @@ export default class SearchRoute extends Route {
     super.setupController(controller, model);
     const params = this.paramsFor('search');
     controller.searchTextBuffer = params.searchText;
-    controller.mandateesBuffer = params.mandatees;
+    controller.loadMinisters.perform();
     controller.page = params.page;
     controller.dateFromBuffer = parseDate(params.dateFrom);
     controller.dateToBuffer = parseDate(params.dateTo);

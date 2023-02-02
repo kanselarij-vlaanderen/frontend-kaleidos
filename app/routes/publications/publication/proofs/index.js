@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { warn } from '@ember/debug';
@@ -112,10 +111,5 @@ export default class PublicationsPublicationProofsRoute extends Route {
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
     controller.publicationActivitiesCount = this.publicationActivitiesCount;
-  }
-
-  @action
-  refresh() {
-    super.refresh();
   }
 }
