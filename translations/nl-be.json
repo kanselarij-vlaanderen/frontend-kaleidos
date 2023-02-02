@@ -1005,7 +1005,7 @@
   "search-error": "Er ging iets mis bij het zoeken",
   "signatures": "Handtekeningen",
   "open-version": "Open versie",
-  "signature-folder": "Handtekenmap",
+  "signature-folder": "Handtekeningen",
   "different": "Verschillend",
   "x-documents-selected": "{count, plural, =1 {# document} other {# documenten}} geselecteerd",
   "validation-signature": "Validatie handtekening",
