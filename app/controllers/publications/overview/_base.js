@@ -1,8 +1,12 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class PublicationsOverviewBaseController extends Controller {
+
+  @service router;
+
   @tracked page = 0;
   @tracked size = 25;
   @tracked sort = '-identification.structured-identifier.local-identifier';
@@ -14,7 +18,6 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   saveTableConfig() {
     this.tableConfig.saveToLocalStorage();
-    this.reload();
   }
 
   @action
@@ -38,10 +41,5 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   sortTable(sortField) {
     this.sort = sortField;
-  }
-
-  @action
-  reload() {
-    this.send('reloadModel');
   }
 }

@@ -338,6 +338,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
+  cy.get(auk.loader); // loader should be shown briefly
   cy.get(auk.loader, {
     timeout: amountOfFormallyOks * 20000,
   }).should('not.exist');

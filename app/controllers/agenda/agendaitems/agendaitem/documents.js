@@ -20,6 +20,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service signatureService;
   @service fileConversionService;
+  @service router;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -222,7 +223,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
-      this.refresh();
+      this.router.refresh('agenda.agendaitems.agendaitem.documents');
     }
   }
 
@@ -280,7 +281,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       const agendaitemPieces = yield this.agendaitem.hasMany('pieces').reload();
       if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
         // last added piece was found in the list from cache
-        this.send('reloadModel');
+        this.router.refresh('agenda.agendaitems.agendaitem.documents');
         break;
       } else {
         // list from cache is stale, wait with back-off strategy
@@ -312,7 +313,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   saveBatchDetails() {
     this.isOpenBatchDetailsModal = false;
-    this.refresh();
+    this.router.refresh('agenda.agendaitems.agendaitem.documents');
   }
 
   @action
@@ -340,6 +341,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   refresh() {
-    this.send('reloadModel');
+    this.router.refresh('agenda.agendaitems.agendaitem.documents');
   }
 }
