@@ -38,7 +38,8 @@ export default class SearchNewsItemsRoute extends Route {
 
     if (!isEmpty(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    } if (!isEmpty(params.mandatees)) {filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
+    } if (!isEmpty(params.mandatees)) {
+      filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
