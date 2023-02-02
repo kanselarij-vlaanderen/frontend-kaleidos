@@ -4,7 +4,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
-import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
 context.skip('Agendaitem changes tests', () => {
