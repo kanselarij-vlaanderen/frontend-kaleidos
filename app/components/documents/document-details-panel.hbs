@@ -178,10 +178,17 @@
   </Auk::Panel>
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}
+  {{!-- TODO: vl-refactor --}}
+  {{!-- We can't use AuModal here because said modals get rendered inside a
+        "wormhole" div. The current component is also part of a modal which gets
+        rendered in the same "wormhole", so opening another AuModal here will
+        overwrite the existing page content, and break the route. If AuModals
+        ever support rendering multiple modals over each other, we can use one
+        here, otherwise we might want to make the doc view not be a modal. --}}
   <WebComponents::VlModalVerify
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
-    @cancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
-    @verify={{this.verifyDeleteDocument}}
+    @onCancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
+    @onVerify={{this.verifyDeleteDocument}}
   />
 {{/if}}

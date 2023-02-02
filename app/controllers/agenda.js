@@ -30,7 +30,7 @@ export default class AgendaController extends Controller {
 
   @action
   refresh() {
-    this.send('reloadAgendaModel');
+    this.router.refresh('agenda');
   }
 
   @action

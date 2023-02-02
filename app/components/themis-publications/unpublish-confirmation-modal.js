@@ -29,8 +29,7 @@ export default class ThemisPublicationsUnpublishConfirmationModalComponent exten
   }
 
   @action
-  selectOption(event) {
-    const value = event.target.value;
+  selectOption(value) {
     this.selectedOption = this.options.find((option) => option.value == value);
   }
 

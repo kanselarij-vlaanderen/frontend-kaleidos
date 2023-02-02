@@ -17,7 +17,7 @@
       </div>
       <div class="auk-u-mb-2">
         <AuContent>
-          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
+          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} @options={{this.sanitizeHtmlOptions}} />
         </AuContent>
       </div>
       {{#if @newsItem.remark}}
@@ -47,6 +47,7 @@
       @disabled={{or
         (not @newsItem)
         this.saveNewsItem.isRunning
+        (not (user-may "manage-news-items"))
       }}
       @onChange={{this.toggleInNewsletterFlag}}
     />

@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import moment from 'moment';
 import { dropTask } from 'ember-concurrency';
+import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 export default class SubcaseTimeline extends Component {
   @service store;
@@ -13,6 +13,16 @@ export default class SubcaseTimeline extends Component {
   constructor() {
     super(...arguments);
     this.loadSubcasePhases.perform();
+  }
+
+  subcaseTimelineItemText = (timelineItem) => {
+    const label = timelineItem.label || '';
+    const date = timelineItem.date;
+    let textToShow = `${label}`;
+    if (date) {
+      textToShow += ` ${dateFormat(date, 'dd MMMM yyyy')}`;
+    }
+    return textToShow;
   }
 
   @dropTask
@@ -28,7 +38,7 @@ export default class SubcaseTimeline extends Component {
       if (activity.startDate) {
         phases.push({
           label: this.intl.t('activity-phase-proposed-for-agenda'),
-          date: moment.utc(activity.startDate).toDate(),
+          date: activity.startDate,
         });
       }
       // phase 2: Is the subcase on an approved agenda
@@ -43,7 +53,7 @@ export default class SubcaseTimeline extends Component {
         const meeting = yield agenda.createdFor;
         phases.push({
           label: this.intl.t('activity-phase-approved-on-agenda'),
-          date: moment.utc(meeting.plannedStart).toDate(),
+          date: meeting.plannedStart,
         });
         // phase 3: if on approved, what is the decision
         const treatment = yield firstAgendaitemOfActivity.treatment;
@@ -57,7 +67,7 @@ export default class SubcaseTimeline extends Component {
               label: `${decisionResultCode.label} ${this.intl.t(
                 'decision-activity-result'
               )}`,
-              date: moment.utc(meeting.plannedStart).toDate(),
+              date: meeting.plannedStart,
             });
           }
         }

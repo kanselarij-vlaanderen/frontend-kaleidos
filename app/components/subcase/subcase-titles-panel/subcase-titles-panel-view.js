@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument subcase
@@ -17,19 +18,23 @@ export default class SubcaseTitlesPanelView extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadApproved.perform();
+    this.loadAgendaData.perform();
   }
 
   get canShowDecisionStatus() {
     return (
-      this.args.meeting?.isFinal &&
+      this.isFinalMeeting &&
       (this.currentSession.may('view-decisions-before-release') ||
         this.args.meeting?.internalDecisionPublicationActivity?.get('startDate'))
     );
   }
 
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting?.agenda.get('id'));
+  }
+
   @task
-  *loadApproved() {
+  *loadAgendaData() {
     if (this.canShowDecisionStatus) {
       this.approved = yield this.subcaseIsApproved.isApproved(this.args.subcase);
     } else {
@@ -37,10 +42,7 @@ export default class SubcaseTitlesPanelView extends Component {
     }
   }
 
-  get pillSkin(){
-    if (this.approved) {
-      return 'success';
-    }
-    return 'default';
+  get pillSkin() {
+    return this.approved ? 'success' : 'default';
   }
 }

@@ -34,7 +34,7 @@ export default class AgendaitemPostponed extends Component {
         this.args.agendaActivity.startDate.toISOString(),
       sort: 'start-date',
     });
-    
+
     if (latestAagendaActivity) {
       // we have to generate a link to the latest meeting
       // The subcase could be postponed on multipe meetings, but we show only the latest one
@@ -61,7 +61,7 @@ export default class AgendaitemPostponed extends Component {
     const meetings = yield this.store.query('meeting', {
       filter: {
         ':gt:planned-start': aWeekAgo.toISOString(),
-        'is-final': false,
+        ':has-no:agenda': true
       },
       sort: '-planned-start',
     });

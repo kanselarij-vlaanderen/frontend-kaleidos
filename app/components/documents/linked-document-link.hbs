@@ -108,11 +108,13 @@
   {{/if}}
 </div>
 
-{{#if this.isOpenVerifyDeleteModal}}
-  <WebComponents::VlModalVerify
-    @title={{t "document-unlink"}}
-    @message={{t "unlink-document-message"}}
-    @cancel={{this.cancelDeletePieceLink}}
-    @verify={{this.verifyDeletePieceLink}}
-    @verifyButtonText={{t "unlink"}} />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyDeleteModal}}
+  @title={{t "document-unlink"}}
+  @message={{t "unlink-document-message"}}
+  @onConfirm={{this.verifyDeletePieceLink}}
+  @onCancel={{this.cancelDeletePieceLink}}
+  @confirmMessage={{t "unlink"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+/>

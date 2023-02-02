@@ -71,6 +71,7 @@
   "delete-subcase": "Procedurestap verwijderen",
   "delete-subcase-confirmation": "Ben je zeker dat je de procedurestap wilt verwijderen?",
   "at": "om",
+  "in": "in",
   "attachments": "Bijlagen",
   "attendees": "Aanwezigen",
   "back": "Terug",
@@ -164,7 +165,6 @@
   "end-date": "Einddatum",
   "environment": "omgeving",
   "error": "Er is iets misgelopen..",
-  "example-subcase": "In voorbereiding",
   "document-name": "Naam document",
   "file-type": "Bestandstype",
   "files-of": "bestanden van de",
@@ -647,7 +647,8 @@
   "style-guide-buttons-link": "Buttons (link)",
   "style-guide-empty-state": "Empty state",
   "style-guide-file-upload": "File upload",
-  "style-guide-radio-buttons": "Radio buttons",
+  "style-guide-radio-list": "Radio list",
+  "style-guide-toggle": "Toggle",
   "style-guide-key-value": "Key Value",
   "style-guide-list": "List",
   "style-guide-loader": "Loader",
@@ -1142,5 +1143,8 @@
   "current-ministers": "Huidige ministers",
   "past-ministers": "Vorige ministers",
   "show-past-ministers": "Toon vorige ministers",
-  "hide-past-ministers": "Verberg vorige ministers"
+  "hide-past-ministers": "Verberg vorige ministers",
+  "delete-empty-case": "Leeg dossier verwijderen?",
+  "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
+  "open": "Open"
 }

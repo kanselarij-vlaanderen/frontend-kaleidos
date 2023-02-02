@@ -1,9 +1,9 @@
-<WebComponents::VlAlert
+<AuAlert
   class="vl-alert-relative vl-alert-relative--center-mid"
   aria-live="assertive"
-  @type="warning"
-  @title="Document verwijderen"
-  @closeable={{false}}
+  @skin="warning"
+  @icon="alert-triangle"
+  @title={{t "document-delete"}}
 >
   <div class="vl-alert__message auk-u-text-capitalize">
     <p>
@@ -18,4 +18,4 @@
       {{t "undo"}}
     </AuButton>
   </div>
-</WebComponents::VlAlert>
+</AuAlert>
