@@ -60,7 +60,7 @@ async function muSearch(
 
   return ArrayProxy.create({
     content: entries,
-    highlight: data.map((entry) => entry.highlight),
+    highlight: highlightFields ? data.map((entry) => entry.highlight) : null,
     meta: {
       count,
       pagination,
