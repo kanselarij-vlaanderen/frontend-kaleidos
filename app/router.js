@@ -91,11 +91,15 @@ Router.map(function() {
   });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekenmap', }, function() {
+    this.route('signatures', { path: '/handtekeningen', }, function() {
       this.route('index', { path: '/overzicht', });
-      this.route('signing-flow', { path: '/:signingflow_id' }, function() {
-        this.route('documents', { path: '/documenten' });
-      });
+      this.route('busy', { path: '/overzicht-bezig', });
+      this.route('success', { path: '/overzicht-notificatie', });
+      this.route('sign', { path: '/tekenen', });
+      this.route('multiple', { path: '/meerdere-tekenen', });
+      this.route('signature', { path: '/handtekenen', });
+      this.route('signed', { path: '/overzicht-gehandtekend', });
+      this.route('email', { path: '/email', });
     });
   }
 

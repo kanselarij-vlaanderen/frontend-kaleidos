@@ -1,0 +1,35 @@
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header @title="Notificatie toevoegen" @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <div class="auk-form-group">
+      <Auk::Label>E-mail adres</Auk::Label>
+      <Auk::Input
+        @block={{true}}
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::ButtonLink
+            data-test-publications-filter-cancel
+            {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </Auk::ButtonLink>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            {{on "click" @onCancel}}
+          >
+            Toevoegen
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

@@ -1,0 +1,173 @@
+// Fix toggle text label alignment
+.auk-c-toggle-label {
+  line-height: 1;
+  padding-bottom: .2rem;
+  display: flex;
+  align-items: center;
+  min-width: 100px;
+}
+
+// Sidebar
+$scroll-sidebar-width: 50rem;
+
+.auk-scroll-wrapper--sidebar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  .auk-scroll-wrapper__body {
+    width: calc(100% - #{$scroll-sidebar-width});
+  }
+
+  .auk-scroll-wrapper__sidebar {
+    position: relative;
+    height: 100%;
+    width: #{$scroll-sidebar-width};
+    background-color: $auk-gray-100;
+    border-left: .1rem solid $auk-gray-300;
+  }
+}
+
+.auk-sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.auk-sidebar__header {
+  border-bottom: .2rem solid $auk-gray-300;
+  padding: .7rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auk-sidebar__body {
+  flex-grow: 1;
+  overflow: auto;
+  padding: .9rem 1.2rem;
+}
+
+.auk-sidebar__footer {
+  border-top: .1rem solid $auk-gray-300;
+  min-height: 5rem;
+  padding: .9rem 1.2rem;
+}
+
+// Clickable table rows
+.auk-table--signatures {
+  padding-left: 2rem;
+
+  thead th {
+    z-index: 1;
+  }
+
+  thead th:last-child,
+  tbody td:last-child {
+    background-color: white;
+    width: 57px;
+    min-width: 57px;
+    max-width: 57px;
+    right: 0;
+    border-left: .1rem solid $auk-gray-100;
+  }
+}
+
+.auk-table--action {
+  padding-left: 2rem;
+
+  thead th {
+    z-index: 1;
+  }
+
+  thead th:last-child,
+  tbody td:last-child {
+    text-align: right;
+  }
+}
+
+.auk-table__row__clickable {
+  position: relative;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-within {
+    background-color: $auk-gray-100;
+
+    td:last-child {
+      background-color: $auk-gray-100;
+    }
+  }
+}
+
+// Fix fake button
+.auk-button--primary {
+  color: #fff;
+
+  &:hover,
+  &:active {
+    color: #fff;
+  }
+}
+
+// Mockup
+.auk-mockup {
+  display: block;
+  width: 100%;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+// Document sidebar
+.auk-u-sidebar-min-width[data-collapsed="false"] {
+  min-width: 60rem;
+}
+
+.auk-u-px-1 {
+  padding: 0 .8rem !important ;
+}
+
+.auk-u-p-1 {
+  padding: .8rem !important ;
+}
+
+// Modal fix
+.auk-modal--full-screen .auk-modal__body,
+.auk-modal--full-screen .auk-modal__content {
+  flex: 0 1 auto;
+  overflow: auto;
+  height: auto;
+}
+
+.auk-modal--full-screen > .auk-modal__content > .auk-modal__body,
+.auk-modal--full-screen > .auk-modal__content {
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.auk-modal--full-screen .auk-modal__push {
+  display: block;
+}
+
+.auk-modal--full-screen > .auk-modal__push {
+  display: none;
+}
+
+
+// E-mail
+.auk-c-email-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #F4F5F6;
+
+  table table {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

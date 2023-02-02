@@ -3,9 +3,8 @@ import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default class SignaturesIndexController extends Controller {
+export default class SignaturesBusyController extends Controller {
   @service router;
-  @service currentSession;
 
   queryParams = {
     page: {
@@ -67,7 +66,6 @@ export default class SignaturesIndexController extends Controller {
   @tracked isShowSidebar = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
-  @tracked isShowSignButton = false;
   @tracked isShowAddCC = false;
 
   @action
@@ -83,11 +81,6 @@ export default class SignaturesIndexController extends Controller {
   @action
   showFilterModal() {
     this.isShowFilterModal = true;
-  }
-
-  @action
-  showSignButton(sort) {
-    this.isShowSignButton = true;
   }
 
   @action
