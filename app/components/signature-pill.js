@@ -19,6 +19,11 @@ export default class SignaturePillComponent extends Component {
     this.isEditing = true;
   }
 
+  @action
+  closeEditMode() {
+    this.isEditing = false;
+  }
+
   @task
   *confirmChangeSignatureLevel() {
     this.isEditing = false;

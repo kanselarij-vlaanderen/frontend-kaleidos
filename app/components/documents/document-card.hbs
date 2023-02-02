@@ -131,20 +131,13 @@
                   @signatureMockup={{@signatureMockup}}
                 />
                 {{else}}
-                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                  <Auk::Toggle
-                    id="signatureToggle"
-                    @checked={{if this.signMarkingActivity true false}}
-                    {{on "click" (perform this.markOrUnmarkForSignature)}}
-                  />
-                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
-                    {{#if this.markOrUnmarkForSignature.isRunning}}
-                      <Auk::Loader />
-                    {{else}}
-                      {{t "to-sign"}}
-                    {{/if}}
-                  </label>
-                </div>
+                <AuPill
+                  @actionIcon="add"
+                  @skin="border"
+                  @onClickAction={{perform this.markOrUnmarkForSignature}}
+                >
+                  Zet in handtekenmap
+                </AuPill>
                 {{/if}}
               </Group.Item>
             {{else}}
