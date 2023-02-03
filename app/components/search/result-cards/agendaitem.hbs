@@ -21,6 +21,7 @@
         {{#if @shortTitle}}
           {{@shortTitle}}
         {{else}}
+          {{!-- FUTURE: highlighting should be applied here --}}
           {{@title}}
         {{/if}}
       </AuLink>
@@ -30,12 +31,12 @@
     <p class="au-u-para">{{@title}}</p>
     <p class="au-u-para-small au-u-margin-top-small au-u-muted">
       {{t "out"}}
-      <AuLink @skin="secondary">
+      <span class="au-u-medium">
         {{t "agenda-version"}}
         {{@agendaSerialNumber}}
-      </AuLink>
+      </span>
     </p>
-    {{!-- <p class="au-u-para-small au-u-margin-top-none au-u-muted">
+    {{! <p class="au-u-para-small au-u-margin-top-none au-u-muted">
       Ook gevonden in
       <AuLink @skin="secondary">
         Versie B
@@ -43,6 +44,6 @@
       <AuLink @skin="secondary">
         Versie A
       </AuLink>
-    </p> --}}
+    </p> }}
   </c.content>
 </AuCard>
