@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
+    historySupportMiddleware: true,
     featureFlags: {
       'editor-html-paste': false,
       'editor-browser-delete': true,
@@ -75,6 +76,11 @@ module.exports = function (environment) {
       allowedSchemesByTag: {},
       allowedSchemesAppliedToAttributes: [ 'href', 'src', 'cite' ],
       allowProtocolRelative: true
+    },
+    routerScroll: {
+      scrollWhenIdle: true,
+      scrollWhenAfterRender: true,
+      scrollElement: '#content'
     }
   };
 
