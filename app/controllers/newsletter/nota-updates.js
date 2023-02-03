@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 export default class NewsletterNotaUpdatesController extends Controller {
   queryParams = ['sort'];
 
+  @tracked isLoadingModel;
   @tracked sort = '-modified';
 
   get size() {

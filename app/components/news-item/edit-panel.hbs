@@ -173,16 +173,13 @@
   </Utils::LoadableContent>
 </Auk::Panel>
 
-{{#if this.isOpenMissingThemesModal}}
-  <WebComponents::VlModalVerify
-    @title={{t "no-themes-selected"}}
-    @message={{t "no-themes-selected-message"}}
-    @onCancel={{this.cancelSave}}
-    @onVerify={{perform this.confirmSave}}
-    @buttonText="save"
-    @buttonType="warning"
-    @showIcon={{false}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenMissingThemesModal}}
+  @title={{t "no-themes-selected"}}
+  @message={{t "no-themes-selected-message"}}
+  @onConfirm={{perform this.confirmSave}}
+  @onCancel={{this.cancelSave}}
+  @confirmMessage={{t "save"}}
+/>
 
 {{yield}}

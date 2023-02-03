@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
@@ -78,10 +77,5 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.meeting = this.meeting;
     controller.loadNewPieces.perform();
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }

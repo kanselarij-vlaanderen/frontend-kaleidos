@@ -41,4 +41,12 @@ export default class Tab extends Component {
     }
     return null;
   }
+
+  get query() {
+    if (isPresent(this.args.query)) {
+      return this.args.query;
+    }
+    // return empty object
+    return [];
+  }
 }

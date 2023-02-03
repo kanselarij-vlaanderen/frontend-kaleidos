@@ -1,0 +1,125 @@
+{{page-title (t "agendaitems")}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "type"}}</Auk::Label>
+    <Auk::CheckboxList>
+      <AuControlCheckbox
+        @label={{t "note"}}
+        @checked={{this.includeNotas}}
+        @onChange={{this.toggleIncludeNotas}}
+      />
+      <AuControlCheckbox
+        @label={{capitalize (t "announcement")}}
+        @checked={{this.includeMededelingen}}
+        @onChange={{this.toggleIncludeMededelingen}}
+      />
+    </Auk::CheckboxList>
+  </div>
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Auk::Label>{{t "version"}}</Auk::Label>
+    <AuControlCheckbox
+      @label={{t "only-on-final-agenda"}}
+      @checked={{this.latestOnly}}
+      @onChange={{this.toggleLatestOnly}}
+    />
+  </div>
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "agenda"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      data-test-route-search-agendaitems-data-table
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToAgendaitem}}
+    >
+      <:header>
+        <th class="auk-table__col--7">
+          {{t "agendaitem-table-header"}}
+        </th>
+        <th class="auk-table__col--1">
+          {{t "agendaitem-type"}}
+        </th>
+        <th class="auk-table__col--1">
+          {{t "agenda-version"}}
+        </th>
+        <Utils::ThSortable
+          @class="auk-table__col--1"
+          @currentSorting={{this.sort}}
+          @field="sessionDates"
+          @label={{t "on-agenda-of"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p data-test-route-search-agendaitems-row-shorttitle>
+            {{#if row.shortTitle}}
+              {{row.shortTitle}}
+            {{else}}
+              {{row.title}}
+            {{/if}}
+          </p>
+        </td>
+        <td>
+          {{#if (is-announcement row.type)}}
+            {{capitalize (t "announcement")}}
+          {{else}}
+            {{t "note"}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if (eq row.agendaSerialNumber.length 1)}}
+            {{t "agenda"}} {{row.agendaSerialNumber}}
+          {{else}}
+            {{t "agenda"}}
+          {{/if}}
+        </td>
+        <td>
+          {{date row.sessionDates}}
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array row.meetingId row.agendaId row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

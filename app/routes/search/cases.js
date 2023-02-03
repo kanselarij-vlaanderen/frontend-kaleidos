@@ -75,7 +75,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -126,11 +126,13 @@ export default class CasesSearchRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+    const searchText = this.paramsFor('search').searchText;
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+
+    controller.searchText = searchText;
   }
 
   @action

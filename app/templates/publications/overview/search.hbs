@@ -100,102 +100,106 @@
         <div class="auk-o-grid-col-10">
           <div>
             {{#if this.model.length}}
-              <DataTable
+              <KDataTable
                 data-test-route-search-publication-data-table
-                @content={{await this.model}}
+                @hoverable={{true}}
+                @striped={{true}}
+                @loading={{this.isLoadingModel}}
+                @content={{this.model}}
                 @page={{this.page}}
-                @noDataMessage={{t "no-results-found"}}
                 @size={{this.size}}
-                @sort={{this.sort}}
-                @class="auk-table auk-table--striped auk-table--vertical-align-top auk-table--noactions"
-                @isLoading={{this.isLoadingModel}}
+                @numberOfItems={{this.model.length}}
+                @totalNumberOfItems={{this.model.meta.count}}
+                @onChangeSize={{fn (mut this.size)}}
+                @onChangePage={{fn (mut this.page)}}
                 @onClickRow={{this.navigateToPublicationFlow}}
-                as |table|
               >
-                <table.content as |c|>
-                  <c.header>
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="urgencyLevelId"
-                      @label={{t "publication-urgent"}}
-                    />
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="identificationKeyword"
-                      @label={{t "publication-number-small"}}
-                    />
-                    <th class="auk-table__col--7">{{t "short-title"}}</th>
-                    <th class="auk-table__col--1">
-                      {{t "publication-flow-numac-number"}}
-                    </th>
-                    <ThSortable
-                      @class="auk-table__col--1"
-                      @currentSorting={{this.sort}}
-                      @field="openingDate"
-                      @label={{t "date-received"}}
-                    />
-                    <ThSortable
-                      @class="auk-table__col--2"
-                      @currentSorting={{this.sort}}
-                      @field="statusId"
-                      @label={{t "status"}}
-                    />
-                    <th class="auk-table__col--1"></th>
-                  </c.header>
-                  <c.body class="auk-table--clickable-rows" as |row|>
-                    <td>
-                      {{#if row.urgent}}
-                        <Auk::Icon @skin="warning" @name="alert-triangle" />
+                <:header>
+                  <Utils::ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="urgencyLevelId"
+                    @label={{t "publication-urgent"}}
+                    @onChange={{fn (mut this.sort)}}
+                  />
+                  <Utils::ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="identificationKeyword"
+                    @label={{t "publication-number-small"}}
+                    @onChange={{fn (mut this.sort)}}
+                  />
+                  <th class="auk-table__col--7">{{t "short-title"}}</th>
+                  <th class="auk-table__col--1">
+                    {{t "publication-flow-numac-number"}}
+                  </th>
+                  <Utils::ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="openingDate"
+                    @label={{t "date-received"}}
+                    @onChange={{fn (mut this.sort)}}
+                  />
+                  <Utils::ThSortable
+                    @class="auk-table__col--2"
+                    @currentSorting={{this.sort}}
+                    @field="statusId"
+                    @label={{t "status"}}
+                    @onChange={{fn (mut this.sort)}}
+                  />
+                  <th class="auk-table__col--1"></th>
+                </:header>
+                <:body as |row|>
+                  <td>
+                    {{#if row.urgent}}
+                      <Auk::Icon @skin="warning" @name="alert-triangle" />
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  <td data-test-route-search-publication-row-number>
+                    {{row.identification}}
+                  </td>
+                  <td>
+                    <p>
+                      {{#if row.shortTitle}}
+                        {{row.shortTitle}}
                       {{else}}
-                        {{t "dash"}}
+                        {{row.title}}
                       {{/if}}
-                    </td>
-                    <td data-test-route-search-publication-row-number>
-                      {{row.identification}}
-                    </td>
-                    <td>
-                      <p>
-                        {{#if row.shortTitle}}
-                          {{row.shortTitle}}
-                        {{else}}
-                          {{row.title}}
-                        {{/if}}
-                      </p>
-                    </td>
-                    <td>
-                      {{#if row.numacNumbers.length}}
-                        {{join ", " (sort row.numacNumbers)}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                    <td>
-                      {{date row.openingDate}}
-                    </td>
-                    <td>
-                      <Auk::StatusPill
-                        @step={{row.statusPillStep}}
-                        @status={{row.statusPillKey}}
-                      >
-                        {{row.status.label}}
-                      </Auk::StatusPill>
-                    </td>
-                    <td class="auk-u-text-align--right">
-                      <AuLink
-                        @skin="button-naked"
-                        @icon="chevron-right"
-                        @hideText={{true}}
-                        @route="publications.publication.index"
-                        @model={{row.id}}
-                      >
-                        {{t "open"}}
-                      </AuLink>
-                    </td>
-                  </c.body>
-                </table.content>
-              </DataTable>
+                    </p>
+                  </td>
+                  <td>
+                    {{#if row.numacNumbers.length}}
+                      {{join ", " (sort row.numacNumbers)}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{date row.openingDate}}
+                  </td>
+                  <td>
+                    <Auk::StatusPill
+                      @step={{row.statusPillStep}}
+                      @status={{row.statusPillKey}}
+                    >
+                      {{row.status.label}}
+                    </Auk::StatusPill>
+                  </td>
+                  <td class="auk-u-text-align--right">
+                    <AuLink
+                      @skin="button-naked"
+                      @icon="chevron-right"
+                      @hideText={{true}}
+                      @route="publications.publication.index"
+                      @model={{row.id}}
+                    >
+                      {{t "open"}}
+                    </AuLink>
+                  </td>
+                </:body>
+              </KDataTable>
             {{else}}
               <Auk::EmptyState
                 @bordered={{true}}

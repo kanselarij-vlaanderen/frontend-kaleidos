@@ -1,6 +1,7 @@
 /* global context, it, cy, Cypress */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
@@ -8,7 +9,6 @@ import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -52,7 +52,7 @@ context('Propagation to other graphs', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
 
     // Change the rights of the treatment report
     cy.get(document.documentCard.card).within(() => {

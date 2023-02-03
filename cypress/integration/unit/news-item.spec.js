@@ -99,7 +99,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItems');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
@@ -447,7 +447,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.toggleFinished).click();
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     // TODO-bug reload should not be needed
     // reload needed to update openNota
@@ -485,7 +485,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContent);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.wait(2000); // TODO-BUG rare flaky where parent is not longer connected to dom, data reload happening?
@@ -577,7 +577,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .type(remarkTextNota);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
@@ -656,7 +656,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@getAgendaitemThemes');
     cy.get(newsletter.editItem.save).click();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(utils.vlModalVerify.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchNewsItem');
 
     // test without nota in newsletter
@@ -669,8 +669,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .children(appuniversum.button)
       .click();
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.get(utils.vlModalVerify.save).click();
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(auk.alert.message).contains(alertMessage);
     cy.get(auk.alert.close).click();
     // test with nota in newsletter without theme
@@ -682,8 +682,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .children(appuniversum.button)
       .click();
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.get(utils.vlModalVerify.save).click();
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.get(auk.auModal.container).should('not.exist');
     cy.get(auk.alert.message).contains(alertMessage);
     cy.get(auk.alert.close).click();
 
