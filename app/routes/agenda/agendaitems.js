@@ -110,6 +110,13 @@ export default class AgendaAgendaitemsRoute extends Route {
     controller.scrollToAnchor();
   }
 
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      // isExiting would be false if only the route's model was changing
+      controller.set('filter', null);
+    }
+  }
+
   @action
   loading(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
