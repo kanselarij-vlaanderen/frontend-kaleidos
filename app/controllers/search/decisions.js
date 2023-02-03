@@ -56,21 +56,6 @@ export default class SearchDecisionsController extends Controller {
   }
 
   @action
-  toggleIncludeNotas() {
-    this.includeNotas = !this.includeNotas;
-  }
-
-  @action
-  toggleIncludeMededelingen() {
-    this.includeMededelingen = !this.includeMededelingen;
-  }
-
-  @action
-  toggleLatestOnly() {
-    this.latestOnly = !this.latestOnly;
-  }
-
-  @action
   navigateToDecision(searchEntry) {
     if (searchEntry.meetingId) {
       this.router.transitionTo(

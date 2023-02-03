@@ -13,58 +13,62 @@
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
-    <DataTable
+    <KDataTable
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
-      @noDataMessage={{t "no-results-found"}}
       @size={{this.size}}
-      @sort={{this.sort}}
-      @class="auk-table auk-table--striped"
-      @isLoading={{this.isLoadingModel}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{this.selectSize}}
+      @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToDecision}}
-      as |table|
     >
-      <table.content as |c|>
-        <c.header>
-          <th class="auk-table__col--7">
-            {{t "title"}}
-          </th>
-          <th class="auk-table__col--1">
-            {{t "date"}}
-          </th>
-          <th class="auk-table__col--2">
-            {{t "result-decision"}}
-          </th>
-          <th class="auk-table__col--1"></th>
-        </c.header>
-        <c.body class="auk-table--clickable-rows" as |row|>
-          <td>
-            <p>
-              {{row.subcaseTitle}}
-            </p>
-          </td>
-          <td>
-            {{date row.decisionStartDate}}
-          </td>
-          <td>
-            <Decision::DecisionResultPill
-              @decisionResultCode={{row.decisionResult}}
-            />
-          </td>
-          <td class="auk-u-text-align--right">
-            <AuLink
-              @skin="button-naked"
-              @icon="chevron-right"
-              @hideText={{true}}
-              @route="agenda.agendaitems.agendaitem.decisions"
-              @models={{array row.meetingId row.agendaId row.id}}
-            >
-              {{t "open"}}
-            </AuLink>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
+      <:header>
+        <th class="auk-table__col--7">
+          {{t "title"}}
+        </th>
+        <Utils::ThSortable
+          class="auk-table__col--1"
+          @currentSorting={{this.sort}}
+          @field="session-dates"
+          @label={{t "date"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th class="auk-table__col--2">
+          {{t "result-decision"}}
+        </th>
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p>
+            {{row.subcaseTitle}}
+          </p>
+        </td>
+        <td>
+          {{date row.decisionStartDate}}
+        </td>
+        <td>
+          <Decision::DecisionResultPill
+            @decisionResultCode={{row.decisionResult}}
+          />
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="agenda.agendaitems.agendaitem.decisions"
+            @models={{array row.meetingId row.agendaId row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState
