@@ -18,10 +18,17 @@ export default class SearchNewsItemsControllers extends Controller {
       size: {
         type: 'number',
       },
+      sort: {
+        type: 'string',
+      },
     },
   ];
 
   sizeOptions = [5, 10, 20, 50, 100, 200];
+  sortOptions = [
+    { value: '-agendaitems.meetingDate', label: this.intl.t('meeting-date') },
+    { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
+  ];
 
   @tracked page;
   @tracked size;
@@ -33,7 +40,7 @@ export default class SearchNewsItemsControllers extends Controller {
     super(...arguments);
     this.page = 0;
     this.size = this.sizeOptions[2];
-    this.sort = '-agendaitems.meetingDate';
+    this.sort = this.sortOptions[1].value;
   }
 
   get isEmptySearch() {
@@ -43,6 +50,11 @@ export default class SearchNewsItemsControllers extends Controller {
   @action
   selectSize(size) {
     this.size = size;
+  }
+
+  @action
+  selectSort(event) {
+    this.sort = event.target.value;
   }
 
   @action

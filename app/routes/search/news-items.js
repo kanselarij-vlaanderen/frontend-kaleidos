@@ -14,6 +14,10 @@ export default class SearchNewsItemsRoute extends Route {
       refreshModel: true,
       as: 'aantal',
     },
+    sort: {
+      refreshModel: true,
+      as: 'sorteer',
+    },
   };
 
   textSearchFields = ['title^3', 'htmlContent'];
