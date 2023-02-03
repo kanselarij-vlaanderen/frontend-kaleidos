@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import sanitizeHtml from 'ember-cli-sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 export default class SearchNewsItemsControllers extends Controller {
   @service router;
