@@ -150,8 +150,8 @@ context('testing user and organisation management', () => {
       checkRoleFilterSingle('Ondersteuning Vlaamse Regering en Betekeningen', 12);
       checkRoleFilterSingle('Kort bestek redactie', 12);
       checkRoleFilterSingle('Minister', 12);
-      checkRoleFilterSingle('Kabinetdossierbeheerder', 12);
-      checkRoleFilterSingle('Kabinetmedewerker', 12);
+      checkRoleFilterSingle('Kabinetsdossierbeheerder', 12);
+      checkRoleFilterSingle('Kabinetsmedewerker', 12);
       checkRoleFilterSingle('Overheidsorganisatie', 12);
       checkRoleFilterSingle('Vlaams Parlement', 12);
     });
