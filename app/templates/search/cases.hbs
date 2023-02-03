@@ -44,52 +44,15 @@
       @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToCase}}
     >
-      <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--1"
-          @currentSorting={{this.sort}}
-          @field="sessionDates"
-          @label={{t "on-agenda-of"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{#if row.shortTitle}}
-              {{row.shortTitle}}
-            {{else}}
-              {{row.title}}
-            {{/if}}
-          </p>
-        </td>
-        <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td>
-          {{date row.sessionDates}}
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="cases.case.subcases"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Case
+            @sessionDate={{row.sessionDates}}
+            @shortTitle={{row.shortTitle}}
+            @title={{row.title}}
+            @caseId={{row.id}}
+            @isArchived={{row.isArchived}}
+          />
         </td>
       </:body>
     </KDataTable>
