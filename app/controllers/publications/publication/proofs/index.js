@@ -77,7 +77,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       publicationSubcaseSave,
     ]);
 
-    this.send('refresh');
+    this.router.refresh('publications.publication.proofs.index');
     this.showProofUploadModal = false;
   }
 
@@ -88,7 +88,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       this.publicationFlow
     );
 
-    this.send('refresh');
+    this.router.refresh('publications.publication.proofs.index');
     this.showProofRequestModal = false;
   }
 
@@ -134,7 +134,7 @@ export default class PublicationsPublicationProofsController extends Controller 
       }
     }
     yield requestActivity.destroyRecord();
-    this.send('refresh');
+    this.router.refresh('publications.publication.proofs.index');
   }
 
   @task
@@ -149,7 +149,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     saves.push(this.publicationSubcase.save());
 
     yield Promise.all(saves);
-    this.send('refresh');
+    this.router.refresh('publications.publication.proofs.index');
   }
 
   @task

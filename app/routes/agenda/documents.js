@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { inject as service } from '@ember/service';
 
@@ -30,10 +29,5 @@ export default class AgendaDocumentsRoute extends Route {
     const agenda = this.modelFor('agenda').agenda;
     controller.agenda = agenda;
     controller.defaultAccessLevel = this.defaultAccessLevel;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }

@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { isPresent } from '@ember/utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -24,6 +25,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked decisionActivity;
 
   @tracked isEditingAgendaItemTitles = false;
+
+  get isClosedMeeting() {
+    return isPresent(this.meeting.agenda.get('id'));
+  }
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
@@ -64,7 +69,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.navigateToNeighbouringItem(this.model);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
     // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
-    return this.agendaController.send('reloadAgendaModel');
+    return this.router.refresh('agenda');
   }
 
   @action
