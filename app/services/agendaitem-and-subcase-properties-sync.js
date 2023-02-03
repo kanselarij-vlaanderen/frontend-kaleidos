@@ -58,6 +58,10 @@ export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
       const agendaActivity = await item.agendaActivity;
       const meeting = await agenda.createdFor;
       const finalAgenda = await meeting.agenda;
+      // Only push certain changes to subcase if we are on design agenda
+      // or if we are on the final agenda on a closed meeting
+      // This prevents changes on older agenda versions (fe. agenda B and subcase have info that agenda C has not)
+      // For legacy edits, this means you could edit the agendaitem without reopening and changes will reflect on subcase
       if (agendaActivity && (agendaStatus.isDesignAgenda || finalAgenda === agenda)) {
         const agendaitemSubcase = await agendaActivity.subcase;
         await agendaitemSubcase.preEditOrSaveCheck();
