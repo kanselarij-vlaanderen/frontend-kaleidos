@@ -9,6 +9,6 @@ export default class PublicationController extends Controller {
 
   @action
   refreshRoute() {
-    this.router.refresh();
+    this.router.refresh('publications.publication');
   }
 }

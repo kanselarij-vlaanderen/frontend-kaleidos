@@ -128,9 +128,4 @@ export default class AgendaAgendaitemsRoute extends Route {
     }
     return true;
   }
-
-  @action
-  reloadModel() {
-    this.refresh();
-  }
 }
