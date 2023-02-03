@@ -74,7 +74,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     //   .click();
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(route.agendaitemDocuments.batchEdit).click();
+    openAgendaitemDocumentBatchEdit();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.type)
@@ -108,7 +108,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     //   .find(auk.accordion.header.button)
     //   .click();
 
-    cy.get(route.agendaitemDocuments.batchEdit).click();
+    openAgendaitemDocumentBatchEdit();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.type)
@@ -218,7 +218,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.intercept('DELETE', '/pieces/**').as('deletePieceBis');
     // put call to restore pieces (won't do anything in this test, but should always be called)
     cy.intercept('PUT', '/agendaitems/**/pieces/restore').as('restoreAgendaitemPieceBis');
-    cy.get(route.agendaitemDocuments.batchEdit).click();
+    openAgendaitemDocumentBatchEdit();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.delete)
@@ -243,7 +243,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.intercept('DELETE', '/files/**').as('deleteLastFile');
     cy.intercept('DELETE', '/pieces/**').as('deleteLastPiece');
     cy.intercept('DELETE', '/document-containers/**').as('deleteContainer');
-    cy.get(route.agendaitemDocuments.batchEdit).click();
+    openAgendaitemDocumentBatchEdit();
     cy.get(document.documentDetailsRow.row).as('documentRows');
     cy.get('@documentRows').eq(0)
       .find(document.documentDetailsRow.delete)

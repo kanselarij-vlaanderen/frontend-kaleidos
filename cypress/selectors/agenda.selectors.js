@@ -58,6 +58,7 @@ const selectors = {
   agendaOverviewItem: {
     container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
+    isNew: '[data-test-agenda-overview-item-is-new]',
     title: '[data-test-agenda-overview-item-title]',
     subcaseName: '[data-test-agenda-overview-item-subcase-name]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
