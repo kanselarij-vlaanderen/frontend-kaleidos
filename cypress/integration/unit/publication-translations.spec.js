@@ -74,13 +74,13 @@ context('Publications translation tests', () => {
       .click();
     // after updating pages and words, the text of the message updates, but cypress is faster then the update
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('PATCH', 'pieces/*').as('patchUploadedPiece');
     cy.intercept('POST', 'request-activities').as('createRequestActivity');
     cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
     cy.intercept('POST', 'emails').as('createEmail');
     cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece')
+    cy.wait('@patchUploadedPiece')
       .wait('@createRequestActivity')
       .wait('@patchTranslationSubcase')
       .wait('@createEmail')
@@ -122,14 +122,14 @@ context('Publications translation tests', () => {
     cy.get(publication.translationRequest.numberOfWords).should('be.empty')
       .type(numberOfWords);
     cy.get(publication.translationRequest.updateStatus).should('be.checked'); // default checked
-    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('PATCH', 'pieces/*').as('patchUploadedPiece');
     cy.intercept('POST', 'request-activities').as('createRequestActivity');
     cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
     cy.intercept('POST', 'emails').as('createEmail');
     cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece')
+    cy.wait('@patchUploadedPiece')
       .wait('@createRequestActivity')
       .wait('@patchTranslationSubcase')
       .wait('@createEmail')
@@ -234,13 +234,13 @@ context('Publications translation tests', () => {
     cy.get(auk.datepicker.datepicker).click();
     cy.setDateInFlatpickr(translationEndDate);
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.intercept('POST', 'pieces').as('createNewPiece');
+    cy.intercept('PATCH', 'pieces/*').as('patchUploadedPiece');
     cy.intercept('POST', 'request-activities').as('createRequestActivity');
     cy.intercept('PATCH', 'translation-subcases/**').as('patchTranslationSubcase');
     cy.intercept('POST', 'emails').as('createEmail');
     cy.intercept('GET', 'request-activities/**/translation-activity').as('getTranslationsActivity');
     cy.get(publication.translationRequest.save).click();
-    cy.wait('@createNewPiece')
+    cy.wait('@patchUploadedPiece')
       .wait('@createRequestActivity')
       .wait('@patchTranslationSubcase')
       .wait('@createEmail')

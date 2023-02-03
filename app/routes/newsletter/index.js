@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -48,10 +47,5 @@ export default class IndexNewsletterRoute extends Route {
         };
       })
     );
-  }
-
-  @action
-  reloadModel() {
-    super.refresh();
   }
 }

@@ -83,7 +83,7 @@ export default class AgendaAgendaitemsController extends Controller {
       }
     }
     yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
-    this.send('reloadModel');
+    this.router.refresh('agenda.agendaitems');
   }
 
   @task

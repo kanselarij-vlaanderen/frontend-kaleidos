@@ -12,6 +12,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PublicationsPublicationPublicationActivitiesIndexController extends Controller {
   @service store;
   @service publicationService;
+  @service router;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
@@ -42,7 +43,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       this.publicationFlow
     );
 
-    this.send('refresh');
+    this.router.refresh('publications.publication.publication-activities');
     this.closeRequestModal();
   }
 
@@ -84,7 +85,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     }
 
     yield Promise.all(saves);
-    this.send('refresh');
+    this.router.refresh('publications.publication.publication-activities');
     this.closeRegistrationModal();
   }
 
@@ -104,7 +105,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     yield this.performDeleteRequest(requestActivityArgs);
     // separate from this.performDeleteRequest(...):
     //    refresh is OK to be aborted
-    this.send('refresh');
+    this.router.refresh('publications.publication.publication-activities');
   }
 
   // separate method to prevent ember-concurrency from saving only partially

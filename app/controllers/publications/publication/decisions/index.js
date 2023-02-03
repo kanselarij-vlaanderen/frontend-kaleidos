@@ -7,6 +7,7 @@ import { dropTask, task } from 'ember-concurrency';
 export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service store;
   @service publicationService;
+  @service router;
 
   @tracked publicationFlow;
   @tracked isViaCouncilOfMinisters;
@@ -27,13 +28,13 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
     pieces.forEach((piece) => piece.publicationFlow = this.publicationFlow);
     yield Promise.all(pieces.map((piece) => piece.save()));
 
-    this.send('refresh');
+    this.router.refresh('publications.publication.decisions.index');
     this.closeReferenceDocumentUploadModal();
   }
 
   @dropTask
   *deletePiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.send('refresh');
+    this.router.refresh('publications.publication.decisions.index');
   }
 }

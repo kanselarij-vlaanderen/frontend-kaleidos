@@ -69,7 +69,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.navigateToNeighbouringItem(this.model);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
     // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
-    return this.agendaController.send('reloadAgendaModel');
+    return this.router.refresh('agenda');
   }
 
   @action
