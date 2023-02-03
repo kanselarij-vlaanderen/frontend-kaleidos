@@ -37,6 +37,27 @@
       </Auk::Tab::InnerLayout>
     </LinkTo>
   </LinkTo>
+{{else if @isHierarchicalBack}}
+  <li
+    class="auk-tabs__tab
+      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
+      {{if @active "auk-tabs__tab--active"}}"
+  >
+    {{!-- template-lint-disable link-href-attributes no-invalid-interactive --}}
+    <a
+      type="button"
+      disabled={{not this.hasHistory}}
+      {{on "click" this.transitionBack}}
+      ...attributes
+    >
+      <Auk::Tab::InnerLayout
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
+      />
+    </a>
+    {{!-- template-lint-enable link-href-attributes no-invalid-interactive --}}
+  </li>
 {{else}}
   <li
     class="auk-tabs__tab
