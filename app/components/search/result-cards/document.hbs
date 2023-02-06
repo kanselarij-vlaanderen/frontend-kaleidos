@@ -1,0 +1,27 @@
+<AuCard @shadow={{true}} @size="small" as |c|>
+  <c.header>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{t "created"}}
+        {{date @created}}
+      </p>
+    </div>
+    <AuHeading @level="3" @skin="4">
+      <AuLink
+        class="au-u-padding-none"
+        @route="agenda.agendaitems.agendaitem"
+        @model={{@documentId}}
+      >
+        {{@title}}
+      </AuLink>
+    </AuHeading>
+  </c.header>
+  <c.content>
+    {{!-- <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p> --}}
+    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+      <AuLink @skin="secondary" @icon="document" @iconAlignment="left">
+        {{@fileName}}{{@fileExtension}}
+      </AuLink>
+    </p>
+  </c.content>
+</AuCard>

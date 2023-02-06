@@ -4,6 +4,7 @@ const selectors = {
     trigger: '.ember-power-select-trigger',
     option: '.ember-power-select-option',
     optionLoadingMessage: '.ember-power-select-option--loading-message',
+    optionTypeToSearchMessage: '.ember-power-select-option--search-message',
     searchInput: '.ember-power-select-search-input',
   },
 

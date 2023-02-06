@@ -20,6 +20,11 @@
                 data-test-agenda-header-kind
                 class="auk-u-text-muted auk-body-1"
               >
+                {{#if this.isFinalAgenda}}
+                  <AuPill @size="small">{{t "closed"}}</AuPill>
+                {{else}}
+                  <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
+                {{/if}}
                 -
                 {{@meeting.kind.label}}
               </span>

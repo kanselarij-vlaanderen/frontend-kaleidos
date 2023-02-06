@@ -1,0 +1,61 @@
+<AuCard @shadow={{true}} @size="small" as |card|>
+  <card.header>
+    <div class="au-u-flex">
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{#if @sessionDate}}
+          {{t "on-agenda-of"}}
+          {{date @sessionDate}}
+        {{else}}
+          {{t "not-yet-on-agenda"}}
+        {{/if}}
+      </p>
+      {{#if (eq @isArchived "true")}}
+        <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
+      {{/if}}
+    </div>
+    <AuHeading @level="3" @skin="4">
+      <AuLink
+        class="au-u-padding-none"
+        @route="cases.case.subcases"
+        @model={{@caseId}}
+      >
+        {{#if @shortTitle}}
+          {{@shortTitle}}
+        {{else}}
+          {{@title}}
+        {{/if}}
+      </AuLink>
+    </AuHeading>
+  </card.header>
+  <card.content>
+    {{#if @agendaItems}}
+      <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+        {{t "found-inside"}}
+        <ul>
+          {{#each @agendaItems as |agendaItem|}}
+            <li>
+              <AuLink
+                @skin="secondary"
+                @route="agenda.agendaitems.agendaitem"
+                @models={{array
+                  agendaItem.meetingId
+                  agendaItem.agendaId
+                  agendaItem.uuid
+                }}
+              >
+                {{agendaItem.shortTitle}}
+              </AuLink>
+            </li>
+          {{/each}}
+        </ul>
+      </p>
+    {{/if}}
+    {{! <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+      Gevonden in
+      <AuLink @skin="secondary">
+        Agendapunt ...
+      </AuLink>
+      en nog 4 andere plaatsen
+    </p> }}
+  </card.content>
+</AuCard>

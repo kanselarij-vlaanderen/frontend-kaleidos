@@ -17,6 +17,7 @@ import {
 } from 'frontend-kaleidos/utils/agenda-approval';
 import bind from 'frontend-kaleidos/utils/bind';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent } from '@ember/utils';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -56,7 +57,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.loadAgendaData.perform();
   }
 
-
   @task
   *loadAgendaData() {
     const status = yield this.args.currentAgenda.status;
@@ -77,6 +77,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         break;
       }
     }
+  }
+
+  get isFinalMeeting() {
+    return isPresent(this.args.meeting.agenda.get('id'));
   }
 
   get latestAgenda() {
@@ -110,7 +114,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   get canReopenPreviousAgenda() {
     return (
-      !this.args.meeting.isFinal &&
+      !this.isFinalMeeting &&
       this.isMeetingClosable &&
       this.currentSession.isAdmin &&
       this.currentAgendaIsLatest &&
@@ -140,8 +144,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async allAgendaitemsNotOk() {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
-          .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-          .sortBy('number');
+      .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
+      .sortBy('number');
   }
 
   @bind
@@ -265,7 +269,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       );
     } catch (error) {
       // We use this method for 2 actions so we want to show different messages on failure
-      if (this.args.meeting.isFinal === true) {
+      if (this.isFinalMeeting === true) {
         this.toaster.error(
           this.intl.t('error-reopen-meeting', { message: error.message }),
           this.intl.t('warning-title')
@@ -538,7 +542,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async reloadMeeting() {
     // This is a workaround for route not reloading attributes and agendas on refresh model
     await this.args.meeting.reload();
+    await this.args.meeting.belongsTo('agenda').reload();
     await this.args.meeting.hasMany('agendas').reload();
+    await this.args.meeting.belongsTo('agenda').reload();
   }
 
   @action
