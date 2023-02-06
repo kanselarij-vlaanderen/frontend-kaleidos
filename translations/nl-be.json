@@ -460,7 +460,7 @@
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
   "search-confidential-only": "Toon enkel dossiers met beperkte toegang",
-  "search-include-archived": "Toon ook verwijderde dossiers",
+  "search-hide-archived": "Verberg verwijderde dossiers",
   "search-archived-only": "Toon enkel verwijderde dossiers",
   "no-nota": "Geen nota beschikbaar",
   "nota-loading-text": "De nota wordt geladen..",
@@ -1148,5 +1148,6 @@
   "hide-past-ministers": "Verberg vorige ministers",
   "delete-empty-case": "Leeg dossier verwijderen?",
   "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
-  "open": "Open"
+  "open": "Open",
+  "removed-cases": "Verwijderde dossiers"
 }

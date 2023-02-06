@@ -11,17 +11,17 @@
   </div>
   {{#if (user-may "manage-cases")}}
     <div class="au-c-card au-o-box au-o-box--small">
-      <Auk::Label>{{t "archive"}}</Auk::Label>
-      <AuControlCheckbox
-        @label={{t "search-include-archived"}}
-        @checked={{this.includeArchived}}
-        @onChange={{set this "includeArchived"}}
-      />
-      <AuControlCheckbox
-        @label={{t "search-archived-only"}}
-        @checked={{this.archivedOnly}}
-        @onChange={{set this "archivedOnly"}}
-      />
+      <Auk::Label>{{t "removed-cases"}}</Auk::Label>
+      <Auk::RadioList as |list|>
+        {{#each this.archivedOptions as |option|}}
+          <list.Radio
+            @label={{option.label}}
+            @value={{option.value}}
+            @onChange={{this.setArchived}}
+            checked={{eq this.archived.value option.value}}
+          />
+        {{/each}}
+      </Auk::RadioList>
     </div>
   {{/if}}
   {{#if (user-may "view-confidential-cases")}}

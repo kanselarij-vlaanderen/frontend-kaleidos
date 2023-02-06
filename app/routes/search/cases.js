@@ -7,13 +7,9 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
-    },
-    archivedOnly: {
-      refreshModel: true,
-      as: 'enkel_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
@@ -112,11 +108,9 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
-    }
-
-    if (params.archivedOnly) {
+    } else if (params.archived === 'only') {
       filter.isArchived = 'true';
     }
 
