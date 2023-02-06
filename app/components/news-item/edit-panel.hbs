@@ -132,10 +132,10 @@
         </div>
         <div class="auk-form-group">
           <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
-          <Auk::Toggle
+          <AuToggleSwitch
             data-test-news-item-edit-item-toggle-finished
-            id="item-finished"
             @checked={{this.isFinished}}
+            id="item-finished"
           />
         </div>
         <div class="auk-form-group" data-test-news-item-edit-item-themes-selector>
