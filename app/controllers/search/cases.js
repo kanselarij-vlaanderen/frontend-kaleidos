@@ -86,8 +86,7 @@ export default class CasesSearchController extends Controller {
 
   @action
   setArchived(option) {
-    console.log(option);
-    this.archived= option;
+    this.archived = option;
   }
 
   @action
