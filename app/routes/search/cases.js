@@ -139,12 +139,14 @@ export default class CasesSearchRoute extends Route {
       sort,
       filter,
       (searchData) => {
-        const entry = searchData.attributes;
-        entry.id = searchData.id;
         this.postProcessDates(searchData);
         this.postProcessAgendaItems(searchData);
+        const entry = { ...searchData.attributes, ...searchData.highlight };
+        entry.id = searchData.id;
+        entry.shortTitle = entry.shortTitle.join('');
         return entry;
-      }
+      },
+      ['shortTitle']
     );
   }
 
