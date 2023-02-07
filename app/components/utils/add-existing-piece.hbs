@@ -24,12 +24,12 @@
         @hoverable={{true}}
         @loading={{this.findAll.isRunning}}
         @content={{this.pieces}}
-        @page={{this.pageParam}}
+        @page={{this.page}}
         @size={{this.size}}
         @numberOfItems={{this.pieces.length}}
         @totalNumberOfItems={{this.pieces.meta.count}}
-        @onChangeSize={{fn (mut this.size)}}
-        @onChangePage={{fn (mut this.page)}}
+        @onChangeSize={{this.setSize}}
+        @onChangePage={{this.setPage}}
         @onClickRow={{this.select}}
       >
         <:header>
