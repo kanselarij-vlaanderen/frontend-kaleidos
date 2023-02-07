@@ -18,12 +18,11 @@
         @route="agenda.agendaitems.agendaitem"
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        {{#if @shortTitle}}
-          {{@shortTitle}}
-        {{else}}
-          {{!-- FUTURE: highlighting should be applied here --}}
-          {{@title}}
-        {{/if}}
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{if @shortTitle @shortTitle @title}}
+          @options={{this.sanitizeHtmlOptions}}
+        />
       </AuLink>
     </AuHeading>
   </c.header>

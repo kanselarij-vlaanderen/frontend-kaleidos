@@ -143,7 +143,9 @@ export default class CasesSearchRoute extends Route {
         this.postProcessAgendaItems(searchData);
         const entry = { ...searchData.attributes, ...searchData.highlight };
         entry.id = searchData.id;
-        entry.shortTitle = entry.shortTitle.join('');
+        if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
+          entry.shortTitle = entry.shortTitle.join('');
+        }
         return entry;
       },
       ['shortTitle']

@@ -133,10 +133,19 @@ export default class AgendaitemSearchRoute extends Route {
       params.sort,
       filter,
       (agendaitem) => {
-        const entry = agendaitem.attributes;
+        const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
         entry.id = agendaitem.id;
+        console.log(entry.shortTitle);
+
+        if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
+          entry.shortTitle = entry.shortTitle.join('');
+        }
+        if (entry.title && Array.isArray(entry.title)) {
+          entry.title = entry.title.join('');
+        }
         return entry;
-      }
+      },
+      ['shortTitle, title']
     );
   }
 
