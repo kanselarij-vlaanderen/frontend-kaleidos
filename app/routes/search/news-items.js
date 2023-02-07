@@ -20,7 +20,7 @@ export default class SearchNewsItemsRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'htmlContent'];
+  textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
