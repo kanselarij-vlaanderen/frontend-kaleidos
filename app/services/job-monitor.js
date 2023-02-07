@@ -1,21 +1,19 @@
 import Service from '@ember/service';
-import { A } from '@ember/array';
 import { task, timeout } from 'ember-concurrency';
 
 export default class JobMonitorService extends Service {
-  jobs = A([]);
 
-  register(job) {
-    this.jobs.pushObject(job);
-    this.monitorJobProgress.perform(job);
+  register(job, callbackFn) {
+    this.monitorJobProgress.perform(job, callbackFn);
   }
 
   @task
-  *monitorJobProgress(job) {
+  *monitorJobProgress(job, callbackFn) {
     while (!job.hasEnded) {
       yield timeout(1000);
       yield job.reload();
     }
+    yield callbackFn(job);
     return job;
   }
 }

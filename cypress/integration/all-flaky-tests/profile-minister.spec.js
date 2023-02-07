@@ -42,7 +42,7 @@ context('Testing the application as Minister user', () => {
 
     it('Should switch to search tab when search is clicked as minister', () => {
       cy.get(utils.mHeader.search).click();
-      cy.get(route.search.title).should('exist');
+      cy.get(route.search.trigger).should('exist');
       cy.url().should('include', '/zoeken');
     });
   });

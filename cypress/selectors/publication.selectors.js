@@ -392,5 +392,19 @@ const selectors = {
     message: '[data-test-publication-request-message]',
     save: '[data-test-publication-request-save]',
   },
+
+  // reports-panel-entry
+  reportsPanelEntry: {
+    title: '[data-test-reports-panel-entry-title]',
+    lastRequest: '[data-test-reports-panel-entry-last-request]',
+    downloadLink: '[data-test-reports-panel-entry-download-link]',
+    create: '[data-test-reports-panel-entry-create]',
+  },
+
+  // generate-report-modal
+  generateReport: {
+    selectMandatee: '[data-test-generate-report-select-mandatee]',
+    confirm: '[data-test-generate-report-confirm]',
+  },
 };
 export default selectors;

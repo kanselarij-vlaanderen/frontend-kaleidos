@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
@@ -20,10 +19,5 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.meeting = meeting;
     const agenda = this.modelFor('agenda').agenda;
     controller.agenda = agenda;
-  }
-
-  @action
-  reloadModel() {
-    this.refresh();
   }
 }
