@@ -13,7 +13,7 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{#if this.currentSession.isMinister}}
+    {{#if (eq this.currentSession.role.label "Minister")}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         {{#if this.isShowSignButton}}
@@ -64,7 +64,7 @@
 
 <div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb {{if this.isShowSidebar "auk-scroll-wrapper--sidebar" ""}}">
   <div class="auk-scroll-wrapper__body">
-    {{#if this.currentSession.isMinister}}
+    {{#if (eq this.currentSession.role.label "Minister")}}
        <table class="auk-table auk-table--sticky-header auk-table--action">
         <thead>
           <tr>
@@ -256,7 +256,7 @@
   {{#if this.isShowSidebar}}
   <div class="auk-scroll-wrapper__sidebar">
     <div class="auk-sidebar">
-      {{#if this.currentSession.isMinister}}
+      {{#if (eq this.currentSession.role.label "Minister")}}
         <div class="auk-sidebar__header">
           <h4 class="auk-toolbar-complex__title">
             {{t "signaturesSection.sidebar-title"}}
@@ -558,7 +558,7 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        {{#if this.currentSession.isMinister}}
+        {{#if (eq this.currentSession.role.label "Minister")}}
         <Auk::Pagination
           @page="0"
           @size="1"

@@ -8,12 +8,12 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4 class="auk-toolbar-complex__title">
-            {{t "signature-folder"}}
+            {{t "signature-folder"}} 
           </h4>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{#if this.currentSession.isMinister}}
+    {{#if (eq this.currentSession.role.label "Minister")}}
     {{else}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
@@ -210,7 +210,7 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            {{t "util.preview"}}
+            {{t "util.preview"}} 
           </Auk::ButtonLink>
           <Auk::ButtonLink
             @skin="borderless"

@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { action } from '@ember/object';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
   @service currentSession;
@@ -10,6 +11,18 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @tracked signMarkingActivity;
   @tracked agendaitem;
   @tracked signatureRequested;
+
+  @tracked isShowAddCC = false;
+
+  @action
+  showAddCC() {
+    this.isShowAddCC = true;
+  }
+
+  @action
+  closeAddCC() {
+    this.isShowAddCC = false;
+  }
 
   constructor() {
     super(...arguments);
@@ -45,5 +58,34 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       this.signatureRequested = false;
     }
     yield this.loadSignatureRelatedData.perform();
+  }
+
+  @tracked isShowAddMinister = false;
+  @tracked isShowCancelSignatures = false;
+  @tracked isInEditMode = false;
+
+  @action
+  showAddMinister() {
+    this.isShowAddMinister = true;
+  }
+
+  @action
+  closeAddMinister() {
+    this.isShowAddMinister = false;
+  }
+
+  @action
+  showCancelSignatures() {
+    this.isShowCancelSignatures = true;
+  }
+
+  @action
+  closeCancelSignatures() {
+    this.isShowCancelSignatures = false;
+  }
+
+  @action
+  putInEditMode() {
+    this.isInEditMode = !this.isInEditMode;
   }
 }
