@@ -52,7 +52,7 @@ export default class AgendaitemSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -64,7 +64,11 @@ export default class AgendaitemSearchRoute extends Route {
     }
     this.lastParams.stageLive(params);
 
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
       params.page = 0;
     }
 
@@ -87,7 +91,10 @@ export default class AgendaitemSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -97,9 +104,15 @@ export default class AgendaitemSearchRoute extends Route {
     }
 
     if (params.types.length) {
-      if (params.types.includes('nota') && !params.types.includes('mededeling')) {
+      if (
+        params.types.includes('nota') &&
+        !params.types.includes('mededeling')
+      ) {
         filter.type = CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
-      } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
+      } else if (
+        params.types.includes('mededeling') &&
+        !params.types.includes('nota')
+      ) {
         filter.type = CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       }
     }
@@ -113,11 +126,18 @@ export default class AgendaitemSearchRoute extends Route {
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('agendaitems', params.page, params.size, params.sort, filter, (agendaitem) => {
-      const entry = agendaitem.attributes;
-      entry.id = agendaitem.id;
-      return entry;
-    });
+    return search(
+      'agendaitems',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      (agendaitem) => {
+        const entry = agendaitem.attributes;
+        entry.id = agendaitem.id;
+        return entry;
+      }
+    );
   }
 
   setupController(controller) {
