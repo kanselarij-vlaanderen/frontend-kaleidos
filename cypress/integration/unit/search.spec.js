@@ -42,15 +42,16 @@ context('Search tests', () => {
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });
 
-  it('Searchfield should be empty after revisiting search page', () => {
+  it('Searchfield should contain same filter after revisiting search page', () => {
+    const searchValue = 'TestSearchSet';
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
-    cy.get(route.search.input).type('TestSearchSet');
+    cy.get(route.search.input).type(searchValue);
     cy.get(route.search.trigger).click();
     cy.wait(500);
     cy.get(utils.mHeader.settings).click();
     cy.get(utils.mHeader.search).click();
-    cy.get(route.search.input).should('have.value', '');
+    cy.get(route.search.input).should('have.value', searchValue);
   });
 
   it('Search for htmlContent in kort-bestek and open the detail view by clicking row', () => {
@@ -212,7 +213,7 @@ context('Search tests', () => {
 
       cy.get(utils.mHeader.settings).click();
       cy.get(utils.mHeader.search).click();
-      cy.get(route.search.input).should('have.value', '');
+      cy.get(route.search.input).should('have.value', wordsToCheck1[wordsToCheck1.length - 1]);
     });
 
     it('Search for funky searchterms on dossiers ONLY beslissingsfiche', () => {
