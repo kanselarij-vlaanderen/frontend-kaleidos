@@ -61,6 +61,8 @@ export default class CasesSearchRoute extends Route {
     const textSearchFields = [
       'title^4',
       'shortTitle^4',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
       'mandateRoles^2',
       'mandateeFirstNames^3',
       'mandateeFamilyNames^3',
