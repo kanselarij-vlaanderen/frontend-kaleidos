@@ -19,11 +19,11 @@
         @route="cases.case.subcases"
         @model={{@caseId}}
       >
-        {{#if @shortTitle}}
-          {{@shortTitle}}
-        {{else}}
-          {{@title}}
-        {{/if}}
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{if @shortTitle @shortTitle @title}}
+          @options={{this.sanitizeHtmlOptions}}
+        />
       </AuLink>
     </AuHeading>
   </card.header>
