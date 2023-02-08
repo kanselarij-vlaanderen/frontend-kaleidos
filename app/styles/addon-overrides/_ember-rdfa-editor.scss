@@ -4,15 +4,19 @@
 
 // Variables
 
-$say-paper: false;
-$say-paper-sidebar: false;
-$say-editor-background: white;
-$say-toolbar-background: white;
+$say-editor-background: var(--au-white);
+$say-toolbar-background: var(--au-white);
 $say-editor-padding: 1rem;
-// $say-font: $auk-font-sans-family; // Currently the default editor fonts (https://github.com/lblod/ember-rdfa-editor/blob/039156d2f4d4933551fbc31939bd8893a7d01211/app/styles/ember-rdfa-editor/_s-settings.scss#L26)
 
 
-// @import 'ember-rdfa-editor/custom-components'; // This used to be the only import regarding the rdfa-editor styling but because we only use the basic functionality for the moment & we don't really need the deprecated styling from that package, we'll be only importing the necessary SCSS files (see below)
+// Custom variables
+
+$say-editor-border-color: $au-input-border-color;
+$say-editor-border-radius: $au-input-border-radius;
+
+
+// @import 'ember-rdfa-editor/custom-components';
+// This used to be the only import regarding the rdfa-editor styling but because we only use the basic functionality for the moment & we don't really need the deprecated styling from that package, we'll be only importing the necessary SCSS files (see below)
 
 @import 'ember-rdfa-editor/c-container';
 @import 'ember-rdfa-editor/c-dropdown';
@@ -26,40 +30,61 @@ $say-editor-padding: 1rem;
 
 // Overrides
 
-// Custom typography
+.say-container {
+  height: 40rem;
+
+  border: .1rem solid $say-editor-border-color;
+  border-radius: $say-editor-border-radius;
+}
+
+.auk-rdfa-fullscreen .say-container {
+  border-radius: 0;
+}
+
+.say-toolbar {
+  border-bottom-color: $say-editor-border-color;
+}
+
+.say-toolbar__group {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.say-toolbar__button,
+.say-dropdown__button {
+  &:focus {
+    outline-offset: -0.3rem;
+  }
+}
+
+.say-toolbar__button + .say-toolbar__button {
+  border-left-color: $say-editor-border-color;
+}
+
+.say-editor__inner {
+  overflow-wrap: anywhere;
+}
+
 .say-content {
+  --au-font: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
   &,
   p,
   ul,
   ol,
   div {
     @include au-font-size(1.8rem);
-    font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  ul,
+  ol {
+    margin-left: 2.8rem;
   }
 }
 
-// Reduce height of inner
-.say-container {
-  height: 40rem;
-  border: .1rem solid $auk-gray-300;
-}
-
-// This was not an option in the skinning, so hardcoded
-.say-toolbar {
-  border-bottom: .1rem solid $auk-gray-300;
-}
-
-// Fix spacing for lists
-.say-editor {
-  padding-left: 2rem;
-}
-
-// Disable display of toast hints (https://github.com/lblod/ember-rdfa-editor/issues/26)
-.say-container__aside {
-  display: none;
-}
 
 // Full screen
+
 .auk-rdfa-holder {
   //
 }
@@ -70,7 +95,6 @@ $say-editor-padding: 1rem;
     flex-grow: 0;
   }
 }
-
 
 .auk-rdfa-fullscreen {
   position: fixed;
@@ -99,8 +123,4 @@ $say-editor-padding: 1rem;
   .say-editor {
     padding-top: 3rem;
   }
-}
-
-.say-editor__inner {
-  overflow-wrap: anywhere;
 }
