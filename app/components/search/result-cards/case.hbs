@@ -28,28 +28,6 @@
     </AuHeading>
   </card.header>
   <card.content>
-    {{#if @agendaItems}}
-      <p class="au-u-para-small au-u-margin-top-small au-u-muted">
-        {{t "found-inside"}}
-        <ul>
-          {{#each @agendaItems as |agendaItem|}}
-            <li>
-              <AuLink
-                @skin="secondary"
-                @route="agenda.agendaitems.agendaitem"
-                @models={{array
-                  agendaItem.meetingId
-                  agendaItem.agendaId
-                  agendaItem.uuid
-                }}
-              >
-                {{agendaItem.shortTitle}}
-              </AuLink>
-            </li>
-          {{/each}}
-        </ul>
-      </p>
-    {{/if}}
     {{! <p class="au-u-para-small au-u-margin-top-small au-u-muted">
       Gevonden in
       <AuLink @skin="secondary">
