@@ -1148,5 +1148,6 @@
   "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
   "deleted-case": "Verwijderd dossier",
   "open": "Open",
-  "out": "Uit"
+  "out": "Uit",
+  "found-inside": "Gevonden in"
 }
