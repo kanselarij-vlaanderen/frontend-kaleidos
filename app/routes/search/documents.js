@@ -1,11 +1,16 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
+import { warn } from '@ember/debug';
 import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSearchRoute extends Route {
+  @service store;
+
   queryParams = {
     confidentialOnly: {
       refreshModel: true,
@@ -28,18 +33,6 @@ export default class CasesSearchRoute extends Route {
       as: 'document_types',
     },
   };
-
-  postProcessDates(_case) {
-    const { sessionDates } = _case.attributes;
-    if (sessionDates) {
-      if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
-        _case.attributes.sessionDates = sorted[sorted.length - 1];
-      } else {
-        _case.attributes.sessionDates = sessionDates;
-      }
-    }
-  }
 
   constructor() {
     super(...arguments);
@@ -95,7 +88,10 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (params.confidentialOnly) {
-      filter[':lte:confidentialityLevel'] = 2;
+      filter[':terms:accessLevel'] = [
+        CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+      ];
     }
 
     if (params.documentTypeIds) {
@@ -117,17 +113,16 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    const { postProcessDates } = this;
     return search(
       'pieces',
       params.page,
       params.size,
       sort,
       filter,
-      (searchData) => {
+      async (searchData) => {
         const entry = searchData.attributes;
         entry.id = searchData.id;
-        postProcessDates(searchData);
+        await this.postProcessAccessLevel(entry);
         return entry;
       }
     );
@@ -155,5 +150,18 @@ export default class CasesSearchRoute extends Route {
       controller.isLoadingModel = false;
     });
     return true;
+  }
+
+  async postProcessAccessLevel(entry) {
+    if (entry.accessLevel) {
+      if (Array.isArray(entry.accessLevel)) {
+        warn(
+          `Piece ${entry.id} has multiple access levels. We will display the first one`,
+          { id: 'piece.multiple-access-levels' }
+        );
+        entry.accessLevel = entry.accessLevel[0];
+      }
+      entry.accessLevel = await this.store.findRecordByUri('concept', entry.accessLevel);
+    }
   }
 }

@@ -23,61 +23,65 @@
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
-    <DataTable
+    <KDataTable
       data-test-route-search-cases-data-table={{true}}
-      @content={{await this.model}}
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
       @page={{this.page}}
-      @noDataMessage={{t "no-results-found"}}
       @size={{this.size}}
-      @sort={{this.sort}}
-      @class="auk-table auk-table--striped"
-      @isLoading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToDocument}}
-      as |table|
     >
-      <table.content as |c|>
-        <c.header>
-          <th class="auk-table__col--8">
-            {{t "case-name"}}
-          </th>
-          <ThSortable
-            @class="auk-table__col--2"
-            @currentSorting={{this.sort}}
-            @field="created"
-            @label={{t "created-on"}}
-          />
-          <ThSortable
-            @class="auk-table__col--2"
-            @currentSorting={{this.sort}}
-            @field="confidentialityLevel"
-            @label={{t "confidentialityLevel"}}
-          />
-          <th class="auk-table__col--1"></th>
-        </c.header>
-        <c.body class="auk-table--clickable-rows" as |row|>
-          <td>
-            <p>
-              {{row.title}}
-            </p>
-          </td>
-          <td>
-            {{datetime row.created "DD-MM-YYYY HH:mm"}}
-          </td>
-          <td>{{row.confidentialityLevel}}</td>
-          <td class="auk-u-text-align--right">
-            <AuLink
-              @skin="button-naked"
-              @icon="chevron-right"
-              @hideText={{true}}
-              @route="document"
-              @model={{row.id}}
-            >
-              {{t "open"}}
-            </AuLink>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
+      <:header>
+        <th class="auk-table__col--8">
+          {{t "case-name"}}
+        </th>
+        <Utils::ThSortable
+          class="auk-table__col--2"
+          @currentSorting={{this.sort}}
+          @field="created"
+          @label={{t "created-on"}}
+          @onChange={{this.selectSort}}
+        />
+        <Utils::ThSortable
+          class="auk-table__col--2"
+          @currentSorting={{this.sort}}
+          @field="confidentialityLevel"
+          @label={{t "confidentialityLevel"}}
+          @onChange={{this.selectSort}}
+        />
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p>
+            {{row.title}}
+          </p>
+        </td>
+        <td>
+          {{datetime row.created "DD-MM-YYYY HH:mm"}}
+        </td>
+        <td>
+          <AccessLevelPill @accessLevel={{row.accessLevel}} />
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="document"
+            @model={{row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState
