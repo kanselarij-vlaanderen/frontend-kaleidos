@@ -15,6 +15,10 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    showArchivedOnly: {
+      refreshModel: true,
+      as: 'toon_enkel_gearchiveerd',
+    },
   };
 
   model(params) {
@@ -26,6 +30,11 @@ export default class CasesIndexRoute extends Route {
         size: params.size,
       },
     };
+    if (params.showArchivedOnly) {
+      options['filter[case][is-archived]'] = true;
+    } else {
+      options['filter[case][is-archived]'] = false;
+    }
 
     return this.store.query('decisionmaking-flow', options);
   }

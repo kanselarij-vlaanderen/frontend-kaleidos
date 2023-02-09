@@ -112,6 +112,9 @@ context('Create case as Admin user', () => {
     cy.get(auk.loader).should('not.exist');
     cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
 
+    cy.get(route.casesOverview.showArchived).click();
+    cy.get(auk.loader).should('exist'); // page load
+    cy.url().should('contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
 
     // restore case
@@ -125,6 +128,9 @@ context('Create case as Admin user', () => {
       .wait('@patchCases2')
       .wait('@patchSubcases2');
 
+    cy.get(route.casesOverview.showArchived).click();
+    cy.get(auk.loader).should('exist'); // page load
+    cy.url().should('not.contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
   });
 });
