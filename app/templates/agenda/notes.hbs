@@ -81,20 +81,6 @@
                         @signatureMockup={{@signatureMockup}}
                       />
                       {{else}}
-                      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                        <Auk::Toggle
-                          id="signatureToggle"
-                          @checked={{if this.signMarkingActivity true false}}
-                          {{on "click" this.requestSignature}}
-                        />
-                        <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
-                          {{#if this.markOrUnmarkForSignature.isRunning}}
-                            <Auk::Loader />
-                          {{else}}
-                            {{t "to-sign"}}
-                          {{/if}}
-                        </label>
-                      </div>
                       {{/if}}
                     </Group.Item>
                     <Group.Item>
@@ -106,6 +92,17 @@
                         @disabled={{this.loadPieceRelatedData.isRunning}}
                         @alignment="right"
                       >
+                        <AuButton
+                          @skin="link"
+                          role="menuitem"
+                          {{on "click" this.requestSignature}}
+                        >
+                          {{#if (eq this.signatureRequested true)}}
+                            Verwijderen van handtekenen
+                          {{else}}
+                            Aanbieden voor handtekenen 
+                          {{/if}}
+                        </AuButton>
                         <AuButton
                           data-test-document-card-delete
                           @skin="link"
