@@ -22,9 +22,6 @@ export default class AgendaAgendaitemsController extends Controller {
       filter: {
         type: 'string',
       },
-      showModifiedOnly: {
-        type: 'boolean',
-      },
       anchor: {
         type: 'string',
       },
@@ -48,7 +45,6 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked isEditingOverview = false;
 
   // @tracked filter; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  // @tracked showModifiedOnly;
   // @tracked anchor;
 
   get id() {
@@ -87,7 +83,7 @@ export default class AgendaAgendaitemsController extends Controller {
       }
     }
     yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
-    this.send('reloadModel');
+    this.router.refresh('agenda.agendaitems');
   }
 
   @task
@@ -117,11 +113,6 @@ export default class AgendaAgendaitemsController extends Controller {
       await this.throttledLoadingService.loadPieces.perform(agendaitem);
       this.documentLoadCount++;
     }));
-  }
-
-  @action
-  toggleShowModifiedOnly() {
-    set(this,'showModifiedOnly', !this.showModifiedOnly);
   }
 
   scrollToAnchor() {

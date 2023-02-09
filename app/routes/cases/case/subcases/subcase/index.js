@@ -49,7 +49,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
         sort: '-planned-start',
       });
-      this.agenda = await this.meeting?.agenda;
+      this.agenda = await this.meeting?.belongsTo('agenda').reload();
     }
     await model.subcase.governmentAreas;
   }

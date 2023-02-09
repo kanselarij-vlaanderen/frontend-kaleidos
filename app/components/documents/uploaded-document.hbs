@@ -6,7 +6,7 @@
   @downloadLink={{@piece.file.namedDownloadLink}}
   @onDelete={{@onDelete}}>
   {{#if @allowDocumentContainerEdit}}
-    <div class="metadata-container">
+    <div data-test-uploaded-document-container class="metadata-container">
       <div class="auk-form-group">
         <Auk::Label>{{t "document-name"}}</Auk::Label>
         <AuInput

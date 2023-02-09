@@ -11,24 +11,26 @@
   </div>
   {{#if (user-may "manage-cases")}}
     <div class="au-c-card au-o-box au-o-box--small">
-      <Auk::Label>{{t "archive"}}</Auk::Label>
-      <AuControlCheckbox
-        @label={{t "search-include-archived"}}
-        @checked={{this.includeArchived}}
-        @onChange={{set this "includeArchived"}}
-      />
-      <AuControlCheckbox
-        @label={{t "search-archived-only"}}
-        @checked={{this.archivedOnly}}
-        @onChange={{set this "archivedOnly"}}
-      />
+      <Auk::Label>{{t "removed-cases"}}</Auk::Label>
+      <Auk::RadioList as |list|>
+        {{#each this.archivedOptions as |option|}}
+          <list.Radio
+            @label={{option.label}}
+            @value={{option.value}}
+            @onChange={{this.setArchived}}
+            checked={{eq this.archived.value option.value}}
+          />
+        {{/each}}
+      </Auk::RadioList>
     </div>
   {{/if}}
-  <Search::ConfidentialOnly 
-    @confidentialOnly={{this.confidentialOnly}}
-    @onChange={{set this "confidentialOnly"}}
-    @objectVerb={{t "cases"}}
-  />
+  {{#if (user-may "search-confidential-cases")}}
+    <Search::ConfidentialOnly
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+      @objectVerb={{t "cases"}}
+    />
+  {{/if}}
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
@@ -42,67 +44,69 @@
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
-    <DataTable
-      data-test-route-search-cases-data-table={{true}}
-      @content={{await this.model}}
+    <KDataTable
+      data-test-route-search-cases-data-table
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
       @page={{this.page}}
-      @noDataMessage={{t "no-results-found"}}
       @size={{this.size}}
-      @sort={{this.sort}}
-      @class="auk-table auk-table--striped"
-      @isLoading={{this.isLoadingModel}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{this.selectSize}}
+      @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToCase}}
-      as |table|
     >
-      <table.content as |c|>
-        <c.header>
-          <th class="auk-table__col--8">
-            {{t "case-name"}}
-          </th>
-          <ThSortable
-            @class="auk-table__col--2"
-            @currentSorting={{this.sort}}
-            @field="created"
-            @label={{t "created-on"}}
-          />
-          <ThSortable
-            @class="auk-table__col--1"
-            @currentSorting={{this.sort}}
-            @field="sessionDates"
-            @label={{t "on-agenda-of"}}
-          />
-          <th class="auk-table__col--1"></th>
-        </c.header>
-        <c.body class="auk-table--clickable-rows" as |row|>
-          <td>
-            <p>
-              {{#if row.shortTitle}}
-                {{row.shortTitle}}
-              {{else}}
-                {{row.title}}
-              {{/if}}
-            </p>
-          </td>
-          <td>
-            {{datetime row.created "DD-MM-YYYY HH:mm"}}
-          </td>
-          <td>
-            {{date row.sessionDates}}
-          </td>
-          <td class="auk-u-text-align--right">
-            <AuLink
-              @skin="button-naked"
-              @icon="chevron-right"
-              @hideText={{true}}
-              @route="cases.case.subcases"
-              @model={{row.id}}
-            >
-              {{t "open"}}
-            </AuLink>
-          </td>
-        </c.body>
-      </table.content>
-    </DataTable>
+      <:header>
+        <th class="auk-table__col--8">
+          {{t "case-name"}}
+        </th>
+        <Utils::ThSortable
+          class="auk-table__col--2"
+          @currentSorting={{this.sort}}
+          @field="created"
+          @label={{t "created-on"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <Utils::ThSortable
+          class="auk-table__col--1"
+          @currentSorting={{this.sort}}
+          @field="sessionDates"
+          @label={{t "on-agenda-of"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p>
+            {{#if row.shortTitle}}
+              {{row.shortTitle}}
+            {{else}}
+              {{row.title}}
+            {{/if}}
+          </p>
+        </td>
+        <td>
+          {{datetime row.created "DD-MM-YYYY HH:mm"}}
+        </td>
+        <td>
+          {{date row.sessionDates}}
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="cases.case.subcases"
+            @model={{row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState

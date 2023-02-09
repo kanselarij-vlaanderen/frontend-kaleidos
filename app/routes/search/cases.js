@@ -7,13 +7,9 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
-    },
-    archivedOnly: {
-      refreshModel: true,
-      as: 'enkel_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
@@ -73,11 +69,16 @@ export default class CasesSearchRoute extends Route {
       'shortTitle^4',
       'subcaseTitle^2',
       'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
     ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -90,7 +91,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -112,11 +113,9 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
-    }
-
-    if (params.archivedOnly) {
+    } else if (params.archived === 'only') {
       filter.isArchived = 'true';
     }
 

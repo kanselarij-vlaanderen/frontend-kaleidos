@@ -1,9 +1,11 @@
 {{#in-element this.customFiltersElement insertBefore=null}}
-  <Search::ConfidentialOnly
-    @objectVerb={{t "documents"}}
-    @confidentialOnly={{this.confidentialOnly}}
-    @onChange={{set this "confidentialOnly"}}
-  />
+  {{#if (user-may "search-confidential-documents")}}
+    <Search::ConfidentialOnly
+      @objectVerb={{t "documents"}}
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+    />
+  {{/if}}
   <Search::DocumentTypeFilter
     @selected={{this.documentTypes}}
     @onChange={{this.setDocumentTypes}}

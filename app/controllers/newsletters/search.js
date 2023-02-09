@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
-import sanitizeHtml from 'ember-cli-sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 export default class NewslettersSearchController extends Controller {
   @service router;
@@ -107,12 +107,14 @@ export default class NewslettersSearchController extends Controller {
       copyText += `${row.title}\n\n`;
     }
 
-    copyText += sanitizeHtml(
-      row.htmlContent
-        .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
-        .trim(), // Trim whitespaces at start & end of the string
-      { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
-    );
+    if (row.htmlContent) {
+      copyText += sanitizeHtml(
+        row.htmlContent
+          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+          .trim(), // Trim whitespaces at start & end of the string
+        { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
+      );
+    }
 
     navigator.clipboard.writeText(copyText);
     this.toaster.success(this.intl.t('text-copied'));
