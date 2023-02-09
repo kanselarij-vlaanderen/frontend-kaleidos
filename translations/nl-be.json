@@ -341,6 +341,7 @@
   "short-title-case": "Korte titel dossier",
   "long-title": "Lange titel",
   "show-archived": "Toon verwijderde dossiers",
+  "show-archived-only": "Toon enkel verwijderde dossiers",
   "show-as-remark": "Dit is een mededeling",
   "show-piece": "Viewer",
   "show-pieces": "Toon versies",
@@ -459,7 +460,9 @@
   "present-time": "heden",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
-  "search-include-archived": "Zoek ook in archief",
+  "search-confidential-only": "Toon enkel dossiers met beperkte toegang",
+  "search-hide-archived": "Verberg verwijderde dossiers",
+  "search-archived-only": "Toon enkel verwijderde dossiers",
   "no-nota": "Geen nota beschikbaar",
   "nota-loading-text": "De nota wordt geladen..",
   "general-settings": "Algemene instellingen",
@@ -1144,7 +1147,9 @@
   "past-ministers": "Vorige ministers",
   "show-past-ministers": "Toon vorige ministers",
   "hide-past-ministers": "Verberg vorige ministers",
+  "decisions": "Beslissingen",
   "delete-empty-case": "Leeg dossier verwijderen?",
   "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
-  "open": "Open"
+  "open": "Open",
+  "removed-cases": "Verwijderde dossiers"
 }
