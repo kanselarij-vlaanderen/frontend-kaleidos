@@ -51,12 +51,12 @@
           <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "type"}}</Auk::Label>
             <Auk::Checkbox
-              @checked={{this.includeNotas}}
+              @checked={{(not this.includeNotas)}}
               @label={{t "note"}}
               {{on "input" this.toggleIncludeNotas}}
             />
             <Auk::Checkbox
-              @checked={{this.includeMededelingen}}
+              @checked={{(not this.includeMededelingen)}}
               @label={{capitalize (t "announcement")}}
               {{on "input" this.toggleIncludeMededelingen}}
             />
