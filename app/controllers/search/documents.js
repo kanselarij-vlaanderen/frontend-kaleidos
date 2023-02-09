@@ -25,7 +25,7 @@ export default class CasesSearchController extends Controller {
       sort: {
         type: 'string',
       },
-      documentTypeIds: {
+      documentTypes: {
         type: 'array',
       },
     },
@@ -42,8 +42,8 @@ export default class CasesSearchController extends Controller {
   @tracked sort;
   @tracked confidentialOnly;
   @tracked searchText;
-  @tracked documentTypes = null;
-  @tracked documentTypeIds = null;
+  @tracked documentTypes = [];
+  @tracked documentTypesBuffer = [];
 
   constructor() {
     super(...arguments);
@@ -51,7 +51,6 @@ export default class CasesSearchController extends Controller {
     this.size = this.sizeOptions[2];
     this.sort = this.sortOptions[1].value;
     this.confidentialOnly = false;
-    this.loadDocumentTypes.perform();
   }
 
   get emptySearch() {
@@ -75,8 +74,8 @@ export default class CasesSearchController extends Controller {
 
   @action
   setDocumentTypes(documentTypes) {
-    this.documentTypeIds = documentTypes.map((x) => x.id);
-    this.documentTypes = documentTypes;
+    this.documentTypes = documentTypes.map((x) => x.id);
+    this.documentTypesBuffer = documentTypes;
   }
 
   get customFiltersElement() {
@@ -84,20 +83,14 @@ export default class CasesSearchController extends Controller {
   }
 
   loadDocumentTypes = task(async () => {
-    const documentTypes = (
-      await this.conceptStore.queryAllByConceptScheme(
-        CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
-      )
-    ).content;
-
-    if (this.documentTypeIds) {
-      this.setDocumentTypes(
-        documentTypes.filter((documentType) =>
-          this.documentTypeIds.includes(documentType.id)
+    if (this.documentTypes) {
+      this.documentTypesBuffer = (
+        await Promise.all(
+          this.documentTypes?.map((id) => this.store.findRecord('concept', id))
         )
-      );
+      ).toArray();
     } else {
-      this.setDocumentTypes(documentTypes);
+      this.documentTypesBuffer = [];
     }
   });
 }

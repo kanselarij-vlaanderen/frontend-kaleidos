@@ -28,7 +28,7 @@ export default class CasesSearchRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-    documentTypeIds: {
+    documentTypes: {
       refreshModel: true,
       as: 'document_types',
     },
@@ -94,8 +94,8 @@ export default class CasesSearchRoute extends Route {
       ];
     }
 
-    if (params.documentTypeIds) {
-      filter[':terms:documentType'] = params.documentTypeIds;
+    if (params.documentTypes.length) {
+      filter[':terms:documentType'] = params.documentTypes;
     }
 
     this.lastParams.commit();
