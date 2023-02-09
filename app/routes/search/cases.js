@@ -69,11 +69,16 @@ export default class CasesSearchRoute extends Route {
       'shortTitle^4',
       'subcaseTitle^2',
       'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
     ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -86,7 +91,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
