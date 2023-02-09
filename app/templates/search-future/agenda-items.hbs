@@ -76,20 +76,35 @@
           <div class="au-c-card au-o-box au-o-box--small">
             <Utils::MinisterSelect />
           </div>
-           <div class="au-c-card au-o-box au-o-box--small">
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>Type</Auk::Label>
+            <Auk::Checkbox
+              @checked={{false}}
+              @label="Nota's"
+            />
+            <Auk::Checkbox
+              @checked={{false}}
+              @label="Mededelingen"
+            />
+            <Auk::Checkbox
+              @checked={{false}}
+              @label="Decreten"
+            />
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>Toon</Auk::Label>
             <Auk::Checkbox
               @checked={{this.latestOnly}}
-              @label={{t "only-on-final-agenda"}}
+              @label="Laatste agenda"
               {{on "input" this.toggleLatestOnly}}
             />
             <Auk::Checkbox
               @checked={{false}}
-              @label="Enkel mededelingen"
+              @label="Beperkte toegang"
             />
             <Auk::Checkbox
               @checked={{false}}
-              @label="Enkel beperkte toegang"
+              @label="Niet-geagendeerde stappen"
             />
           </div>
         </div>

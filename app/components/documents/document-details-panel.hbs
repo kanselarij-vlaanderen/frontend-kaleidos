@@ -182,6 +182,30 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
+      <Auk::KeyValue
+        data-test-document-details-panel-source-file
+        @key="Getekend document"
+      >
+        {{#if @piece.file.primarySource}}
+          <AuLinkExternal
+            href={{@piece.file.primarySource.namedDownloadLink}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLinkExternal>
+        {{else if @piece.file}}
+          <AuLinkExternal
+            href={{@piece.file.namedDownloadLink}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >{{@piece.name}}-getekend</AuLinkExternal>
+          {{else}}
+          {{@piece.name}}
+        {{/if}}
+      </Auk::KeyValue>
     </Auk::Panel::Body>
   </Auk::Panel>
 {{/if}}

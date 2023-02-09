@@ -46,19 +46,19 @@
             {{/if}}
             <div class="vlc-document-card-content__meta au-u-margin-top-tiny">
               {{! no piece.created in legacy data }}
-              {{#if this.piece.file.primarySource.created}}
+              {{#if (or (eq this.piece.file.extension "docx") (eq this.piece.file.extension "doc"))}}
                 <p data-test-document-card-primary-source-created>
                   {{t "uploaded-at"}}
-                  {{moment-format this.piece.file.primarySource.created}}
+                  {{moment-format this.piece.created}}
                   {{t "at"}}
-                  {{moment-format this.piece.file.primarySource.created "HH:mm"}}
+                  {{moment-format this.piece.created "HH:mm"}}
                   {{t "as"}}
                   <AuLinkExternal
                     data-test-document-card-primary-source-link
                     href={{this.piece.file.primarySource.namedDownloadLink}}
                     download
                   >
-                    {{t (if (eq this.piece.file.primarySource.extension "docx") "word-document" "source-file-lowercase")}}
+                    {{t (if (or (eq this.piece.file.extension "docx") (eq this.piece.file.extension "doc")) "word-document" "source-file-lowercase")}}
                   </AuLinkExternal>
                 </p>
               {{else}}
@@ -70,6 +70,9 @@
                     {{moment-format this.piece.created "HH:mm"}}
                   </p>
                 {{/if}}
+              {{/if}}
+              {{#if (eq @signatureMockupAlt true)}}
+              <p><AuLinkExternal>Getekend document</AuLinkExternal> op {{moment-format this.piece.created}} {{t "at"}} {{moment-format this.piece.created "HH:mm"}}</p>
               {{/if}}
             </div>
           </Group.Item>
@@ -120,32 +123,27 @@
               )
             }}
               <Group.Item>
-                {{#if (or this.signatureRequested @signatureMockupAlt)}}
+                {{#if (or (eq this.signatureRequested true) @signatureMockupAlt)}}
                 <SignaturePill
                   @isEditable={{true}}
                   @signatureMockupAlt={{@signatureMockupAlt}}
                 />
-                {{else if (or this.signatureRequested @signatureMockup)}}
+                {{else if (or (eq this.signatureRequested true) @signatureMockup)}}
                 <SignaturePill
                   @isEditable={{true}}
                   @signatureMockup={{@signatureMockup}}
                 />
                 {{else}}
-                <AuPill
-                  @actionIcon="add"
-                  @skin="border"
-                  @onClickAction={{perform this.markOrUnmarkForSignature}}
-                >
-                  Zet in handtekenmap
-                </AuPill>
                 {{/if}}
               </Group.Item>
             {{else}}
+              {{#if (eq this.signatureRequested true)}}
               <Group.Item>
                 <SignaturePill
                   @isEditable={{false}}
                 />
               </Group.Item>
+              {{/if}}
             {{/if}}
           {{/if}}
           {{#if (user-may "manage-documents")}}
@@ -174,6 +172,21 @@
                 >
                   {{t "edit"}}
                 </AuButton>
+                {{#if (or @signatureMockup @signatureMockupAlt)}}
+                {{else}}
+                <AuHr />
+                <AuButton
+                  @skin="link"
+                  {{on "click" (perform this.markOrUnmarkForSignature)}}
+                  role="menuitem"
+                >
+                  {{#if (eq this.signatureRequested true)}}
+                    Verwijderen van handtekenen
+                  {{else}}
+                    Aanbieden voor handtekenen 
+                  {{/if}}
+                </AuButton>
+                {{/if}}
                 <AuHr />
                 <AuButton
                   data-test-document-card-delete

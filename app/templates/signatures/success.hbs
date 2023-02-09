@@ -12,6 +12,19 @@
           </h4>
         </div>
       </Auk::Toolbar::Item>
+      {{#if (eq this.currentSession.role.label "Minister")}}
+      {{else}}
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="signatures.success">
+            Gemarkeerd voor handtekenen
+          </Auk::Tab>
+          <Auk::Tab @route="signatures.start">
+            Op te starten
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
+      {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
@@ -198,7 +211,7 @@
           }}
         </p>
         <h5 class="auk-h4 auk-u-m-0">{{signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
-        <p class="auk-u-small au-u-muted"><strong>Dossier:</strong> Omkadering leerlingondersteuning <AuPill @skin="warning" @icon="lock-closed" @layout="icon-only">Vertrouwelijk</AuPill></p>
+        <p class="auk-u-small au-u-muted  au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><strong>Dossier:</strong> Omkadering leerlingondersteuning <AuPill @skin="warning" @icon="lock-closed" @hideText={{true}}>Vertrouwelijk</AuPill></p>
         <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-2">
           <Auk::ButtonLink
             @skin="borderless"
@@ -231,11 +244,11 @@
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                <Auk::Toolbar::Item>
+                {{!-- <Auk::Toolbar::Item>
                   <Auk::Button @skin="tertiary" @icon="pencil" {{on "click" this.showAddMinister}}>
                     {{t "util.edit-list"}}
                   </Auk::Button>
-                </Auk::Toolbar::Item>
+                </Auk::Toolbar::Item> --}}
               </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>
@@ -246,13 +259,14 @@
               </Auk::List::Item>
               <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                 <span>Lydia Peeters</span>
-                <Auk::Button
+                <AuPill @icon="sign" @skin="success">Getekend</AuPill>
+                {{!-- <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
                   @icon="trash"
                 >
                   {{t "util.delete"}}
-                </Auk::Button>
+                </Auk::Button> --}}
               </Auk::List::Item>
             </Auk::List>
           </Auk::Panel::Body>
@@ -268,11 +282,11 @@
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                <Auk::Toolbar::Item>
+                {{!-- <Auk::Toolbar::Item>
                   <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showAddCC}}>
                     Toevoegen
                   </Auk::Button>
-                </Auk::Toolbar::Item>
+                </Auk::Toolbar::Item> --}}
               </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>
@@ -280,13 +294,13 @@
             <Auk::List @bordered={{true}}>
               <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                 <span>medewerker@vlaanderen.be</span>
-                <Auk::Button
+                {{!-- <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
                   @icon="trash"
                 >
                   {{t "util.delete"}}
-                </Auk::Button>
+                </Auk::Button> --}}
               </Auk::List::Item>
             </Auk::List>
           </Auk::Panel::Body>
@@ -323,7 +337,7 @@
           </Auk::Panel::Body>
         </Auk::Panel>
       </div>
-      <div class="auk-sidebar__footer">
+      {{!-- <div class="auk-sidebar__footer">
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
@@ -346,7 +360,7 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
-      </div>
+      </div> --}}
       {{/if}}
       {{/each}}
     </div>

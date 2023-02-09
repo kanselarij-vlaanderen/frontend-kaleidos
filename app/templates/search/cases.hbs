@@ -58,10 +58,10 @@
             />
           </div>
           <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>Verwijderde dossiers</Auk::Label>
+            <Auk::Label>Toon</Auk::Label>
             <Auk::Checkbox
               @checked={{this.includeArchived}}
-              @label="Toon enkel verwijderde dossiers"
+              @label="Niet-geagendeerde stappen"
               {{on "input" this.toggleIncludeArchived}}
             />
           </div>

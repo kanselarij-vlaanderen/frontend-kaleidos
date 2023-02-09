@@ -27,6 +27,16 @@
     />
   </td>
   <td>
+    <div class="auk-o-flex auk-o-flex--spaced auk-u-mt-2">
+      <Auk::Toggle
+        @checked={{true}}
+      />
+      <label class="auk-c-toggle-label au-u-muted">
+        Te handtekenen
+      </label>
+    </div>
+  </td>
+  <td>
     <WebComponents::AuButtonToolbar>
       {{#if this.isToBeDeleted}}
         <AuButton

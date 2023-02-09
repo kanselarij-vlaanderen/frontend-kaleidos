@@ -65,16 +65,16 @@
             <Auk::Label>Toon</Auk::Label>
             <Auk::Checkbox
               @checked={{this.latestOnly}}
-              @label={{t "only-on-final-agenda"}}
+              @label="Laatste agenda"
               {{on "input" this.toggleLatestOnly}}
             />
             <Auk::Checkbox
               @checked={{false}}
-              @label="Enkel mededelingen"
+              @label="Beperkte toegang"
             />
             <Auk::Checkbox
               @checked={{false}}
-              @label="Enkel beperkte toegang"
+              @label="Niet-geagendeerde stappen"
             />
           </div>
         </div>

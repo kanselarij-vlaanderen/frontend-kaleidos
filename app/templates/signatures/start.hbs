@@ -182,12 +182,6 @@
         <table class="auk-table auk-table--sticky-header auk-table--signatures">
           <thead>
             <tr>
-              <Utils::ThSortable
-                @label="Dringend"
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
               <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
               <Utils::ThSortable
                 @label={{t "util.date-approved"}}
@@ -201,27 +195,12 @@
                 @currentSorting={{this.sort}}
                 @onChange={{this.changeSorting}}
               />
-              <Utils::ThSortable
-                @label={{t "signaturesSection.signed-status"}}
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
               <th>{{! Actions}}</th>
             </tr>
           </thead>
           <tbody>
             {{#each this.model as |signFlow|}}
               <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
-                <td
-                  class="auk-u-text-align--center"
-                >
-                  {{#if (eq signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label "Nota")}}
-                    <Auk::Icon @skin="warning" @name="alert-triangle" />
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </td>
                 <td>
                   <p class="au-u-muted">Decreet - {{moment-format
                     signFlow.decisionActivity.startDate
@@ -237,9 +216,6 @@
                 </td>
                 <td>
                   15-04-2022
-                </td>
-                <td>
-                  <AuPill @skin="border" @icon="sign">Gemarkeerd voor handtekenen</AuPill>
                 </td>
                 <td>
                   <Auk::Button
@@ -331,7 +307,7 @@
               </Auk::Toolbar>
             </Auk::Panel::Header>
             <Auk::Panel::Body class="auk-u-p-0">
-              <Auk::List @bordered={{true}}>
+              {{!-- <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>Jan Jambon</span>
                   <AuPill  @skin="white" @icon="clock">
@@ -344,7 +320,7 @@
                     Ondertekend
                   </AuPill>
                 </Auk::List::Item>
-              </Auk::List>
+              </Auk::List> --}}
             </Auk::Panel::Body>
           </Auk::Panel>
           <Auk::Panel class="auk-u-mt-4">
@@ -399,7 +375,6 @@
           />
         </div>
         <div class="auk-sidebar__body">
-          <AuPill @skin="border" @icon="sign">Gemarkeerd voor handtekenen</AuPill>
           <p class="au-u-muted auk-u-mt-2">
             Decreet -
             {{moment-format
@@ -449,7 +424,7 @@
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
             </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-0">
+            {{!-- <Auk::Panel::Body class="auk-u-p-0">
               <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>Jan Jambon</span>
@@ -472,7 +447,7 @@
                   </Auk::Button>
                 </Auk::List::Item>
               </Auk::List>
-            </Auk::Panel::Body>
+            </Auk::Panel::Body> --}}
           </Auk::Panel>
           <Auk::Panel class="auk-u-mt-4">
             <Auk::Panel::Header class="auk-u-px-1">
@@ -493,7 +468,7 @@
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
             </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-0">
+            {{!-- <Auk::Panel::Body class="auk-u-p-0">
               <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>medewerker@vlaanderen.be</span>
@@ -506,7 +481,7 @@
                   </Auk::Button>
                 </Auk::List::Item>
               </Auk::List>
-            </Auk::Panel::Body>
+            </Auk::Panel::Body> --}}
           </Auk::Panel>
           <Auk::Panel class="auk-u-mt-4">
             <Auk::Panel::Header class="auk-u-px-1">

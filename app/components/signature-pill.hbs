@@ -4,14 +4,16 @@
   {{#if @signatureMockupAlt}}
     <AuPill
       @icon="sign"
-      @skin="success"
+      @skin="link"
+      @route="signatures.index"
     >
       Getekend
     </AuPill>
   {{else if @signatureMockup}}  
     <AuPill
       @icon="sign"
-      @skin="warning"
+      @skin="link"
+      @route="signatures.index"
     >
       Verstuurd
     </AuPill>
@@ -19,20 +21,13 @@
     {{#if (not this.isEditing)}}
       <AuPill
         @icon="sign"
-        @skin="ongoing"
-        @onClickAction={{this.openEditMode}}
-        @actionIcon="remove"  
+        @skin="link"
+        @route="signatures.index"
       >
         Te handtekenen
       </AuPill>
     {{else}}
-      <AuPill
-        @actionIcon="add"
-        @skin="border"
-        @onClickAction={{this.closeEditMode}}
-      >
-        Zet in handtekenmap
-      </AuPill>
+
     {{/if}}
   {{/if}}
 {{/if}}
