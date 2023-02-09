@@ -542,7 +542,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   async reloadMeeting() {
     // This is a workaround for route not reloading attributes and agendas on refresh model
     await this.args.meeting.reload();
-    await this.args.meeting.belongsTo('agenda').reload();
     await this.args.meeting.hasMany('agendas').reload();
     await this.args.meeting.belongsTo('agenda').reload();
   }
