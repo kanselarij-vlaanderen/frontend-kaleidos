@@ -39,9 +39,10 @@
   </LinkTo>
 {{else if @isHierarchicalBack}}
   <li
-    class="auk-tabs__tab
-      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
-      {{if @active "auk-tabs__tab--active"}}"
+    class="auk-tabs__tab auk-tabs__hierarchical-back auk-tabs__tab--active"
+    {{!-- Here the tab always has the active class because that's how it would
+          behave if passed in a @route to the parent route, because the parent
+          route is always active --}}
   >
     {{!-- template-lint-disable link-href-attributes no-invalid-interactive --}}
     <a
