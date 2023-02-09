@@ -6,11 +6,12 @@ import { task, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class UsersSettingsController extends Controller {
   @service store;
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
+  sizeOptions = PAGINATION_SIZES;
   @tracked size = 10;
   @tracked page = 0;
   @tracked sort = 'first-name';

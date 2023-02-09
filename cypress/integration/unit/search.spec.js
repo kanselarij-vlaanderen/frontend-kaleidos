@@ -7,7 +7,7 @@ import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Search tests', () => {
-  const options = [10, 25, 50, 100, 200];
+  const options = [5, 10, 20, 50, 100, 200];
 
   beforeEach(() => {
     cy.login('Admin');

@@ -14,6 +14,8 @@ export const PAGE_SIZE = {
 
 export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
 
+export const PAGINATION_SIZES = [5, 10, 20, 50, 100, 200];
+
 export const PUBLICATION_REPORT_START_YEAR = 1981;
 
 export const PUBLICATION_EMAIL = {
