@@ -4,13 +4,15 @@
 
 // Variables
 
-$say-editor-background: var(--au-white);
 $say-toolbar-background: var(--au-white);
+$say-editor-background: var(--au-white);
 $say-editor-padding: 1rem;
+$say-paper-min-height: 80rem;
 
 
 // Custom variables
 
+$say-container-height: 40rem;
 $say-editor-border-color: $au-input-border-color;
 $say-editor-border-radius: $au-input-border-radius;
 
@@ -31,7 +33,7 @@ $say-editor-border-radius: $au-input-border-radius;
 // Overrides
 
 .say-container {
-  height: 40rem;
+  height: $say-container-height;
 
   border: .1rem solid $say-editor-border-color;
   border-radius: $say-editor-border-radius;
@@ -63,6 +65,10 @@ $say-editor-border-radius: $au-input-border-radius;
 
 .say-editor__inner {
   overflow-wrap: anywhere;
+
+  p {
+    white-space: break-spaces;
+  }
 }
 
 .say-content {
@@ -80,6 +86,14 @@ $say-editor-border-radius: $au-input-border-radius;
   ol {
     margin-left: 2.8rem;
   }
+}
+
+.say-container__aside {
+  pointer-events: none;
+}
+
+.say-editor-hints {
+  pointer-events: auto;
 }
 
 
