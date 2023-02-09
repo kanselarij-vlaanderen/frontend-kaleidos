@@ -98,6 +98,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
     });
     const agenda = yield latestAgendaitem?.agenda;
     this.latestMeeting = yield agenda?.createdFor;
+    yield this.latestMeeting?.belongsTo('agenda').reload();
   }
 
   @task
