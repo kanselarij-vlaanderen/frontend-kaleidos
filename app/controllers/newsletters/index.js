@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import bind from 'frontend-kaleidos/utils/bind';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class NewslettersIndexController extends Controller {
   @service router;
@@ -21,7 +22,7 @@ export default class NewslettersIndexController extends Controller {
     }
   ];
 
-  sizeOptions = [10, 25, 50, 100, 200];
+  sizeOptions = PAGINATION_SIZES;
 
   @tracked isLoadingModel;
   @tracked page;
@@ -31,7 +32,7 @@ export default class NewslettersIndexController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[0];
+    this.size = this.sizeOptions[1];
   }
 
   @bind

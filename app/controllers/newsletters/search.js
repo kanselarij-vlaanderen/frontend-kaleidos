@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
 import sanitizeHtml from 'sanitize-html';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class NewslettersSearchController extends Controller {
   @service router;
@@ -38,7 +39,7 @@ export default class NewslettersSearchController extends Controller {
     },
   ];
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  sizeOptions = PAGINATION_SIZES;
 
   @tracked searchText = '';
   @tracked mandatees;
