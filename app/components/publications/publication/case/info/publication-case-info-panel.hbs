@@ -367,7 +367,7 @@
                 data-test-publication-case-info-panel-cancel
                 @skin="naked"
                 @loading={{this.closeEditingPanel.isRunning}}
-                @disable={{this.save.isRunning}}
+                @disabled={{this.save.isRunning}}
                 {{on "click" (perform this.closeEditingPanel)}}
               >
                 {{t "cancel"}}

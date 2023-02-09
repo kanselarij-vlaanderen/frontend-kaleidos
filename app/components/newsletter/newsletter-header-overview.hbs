@@ -127,6 +127,7 @@
                 @alert={{true}}
                 {{on "click" (perform this.deleteCampaign)}}
                 role="menuitem"
+                @disabled={{this.deleteCampaign.isRunning}}
               >
                 {{t "delete-campaign"}}
               </AuButton>
