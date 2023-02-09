@@ -27,7 +27,6 @@ Router.map(function() {
         this.route('news-item', { path: '/kort-bestek', });
       });
     });
-    this.route('compare', { path: '/vergelijken', });
     this.route('documents', { path: '/documenten', });
   });
 
