@@ -161,6 +161,7 @@
               <AuButton
                 data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
+                @disabled={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
               >
                 {{t "save"}}
@@ -180,6 +181,7 @@
   @onConfirm={{perform this.confirmSave}}
   @onCancel={{this.cancelSave}}
   @confirmMessage={{t "save"}}
+  @loading={{this.confirmSave.isRunning}}
 />
 
 {{yield}}
