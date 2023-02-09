@@ -7,13 +7,17 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
+    },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
     },
     page: {
       refreshModel: true,
@@ -30,9 +34,7 @@ export default class CasesSearchRoute extends Route {
   };
 
   postProcessDates(_case) {
-    const {
-      sessionDates,
-    } = _case.attributes;
+    const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();
@@ -50,19 +52,33 @@ export default class CasesSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
 
     this.lastParams.stageLive(params);
 
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
       params.page = 0;
     }
 
-    const textSearchFields = ['title^4', 'shortTitle^4', 'subcaseTitle^2', 'subcaseSubTitle^2'];
+    const textSearchFields = [
+      'title^4',
+      'shortTitle^4',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
+    ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -75,7 +91,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -85,7 +101,10 @@ export default class CasesSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -94,8 +113,14 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
+    } else if (params.archived === 'only') {
+      filter.isArchived = 'true';
+    }
+
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
     }
 
     this.lastParams.commit();
@@ -113,15 +138,20 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    const {
-      postProcessDates,
-    } = this;
-    return search('decisionmaking-flows', params.page, params.size, sort, filter, (searchData) => {
-      const entry = searchData.attributes;
-      entry.id = searchData.id;
-      postProcessDates(searchData);
-      return entry;
-    });
+    const { postProcessDates } = this;
+    return search(
+      'decisionmaking-flows',
+      params.page,
+      params.size,
+      sort,
+      filter,
+      (searchData) => {
+        const entry = searchData.attributes;
+        entry.id = searchData.id;
+        postProcessDates(searchData);
+        return entry;
+      }
+    );
   }
 
   setupController(controller) {

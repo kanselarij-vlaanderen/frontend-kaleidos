@@ -6,17 +6,34 @@
       data-test-route-search-cases-toggle-decisions={{true}}
       @label={{t "search-in-decisions-only"}}
       @checked={{this.decisionsOnly}}
-      @onChange={{this.toggleDecisionsOnly}}
+      @onChange={{set this "decisionsOnly"}}
     />
   </div>
-  <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "archive"}}</Auk::Label>
-    <AuControlCheckbox
-      @label={{t "search-include-archived"}}
-      @checked={{this.includeArchived}}
-      @onChange={{this.toggleIncludeArchived}}
-    />
-  </div>
+  {{#if (user-may "manage-cases")}}
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>{{t "removed-cases"}}</Auk::Label>
+      <Auk::RadioList as |list|>
+        {{#each this.archivedOptions as |option|}}
+          <list.Radio
+            @label={{option.label}}
+            @value={{option.value}}
+            @onChange={{this.setArchived}}
+            checked={{eq this.archived.value option.value}}
+          />
+        {{/each}}
+      </Auk::RadioList>
+    </div>
+  {{/if}}
+  {{#if (user-may "search-confidential-cases")}}
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>{{t "confidential"}}</Auk::Label>
+      <AuControlCheckbox
+        @label={{t "search-confidential-only"}}
+        @checked={{this.confidentialOnly}}
+        @onChange={{set this "confidentialOnly"}}
+      />
+    </div>
+  {{/if}}
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
