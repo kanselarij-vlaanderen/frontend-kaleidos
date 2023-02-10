@@ -2,13 +2,13 @@
 // / <reference types="Cypress" />
 
 // import agenda from '../../selectors/agenda.selectors';
-// import auk from '../../selectors/auk.selectors';
+import auk from '../../selectors/auk.selectors';
 // import appuniversum from '../../selectors/appuniversum.selectors';
 // import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
+// import utils from '../../selectors/utils.selectors';
 
 // TODO-command
 function pressRdfaButton(buttonName) {
@@ -117,7 +117,7 @@ context('rdfa editor tests', () => {
     cy.get('strong').contains('Bold');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.editItem.save).click();
-    cy.get(utils.vlModalVerify.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchNewsItems1');
 
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems2');

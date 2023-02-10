@@ -35,12 +35,11 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <AuContent>
+    <AuContent data-test-agendaitem-news-item-content>
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
       <SanitizeHtml
-        data-test-agendaitem-news-item-content
         class="auk-u-overflow-wrap-anywhere"
         @raw={{true}}
         @value={{@newsItem.htmlContent}}
