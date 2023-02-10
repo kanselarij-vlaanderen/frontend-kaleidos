@@ -141,7 +141,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.rdfaEditor).type(text);
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
-    cy.get(newsletter.editItem.toggleFinished).click();
+    cy.get(newsletter.editItem.toggleFinished)
+      .parent()
+      .click();
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem');
@@ -451,7 +453,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItem');
     cy.wait('@getThemes');
-    cy.get(newsletter.editItem.toggleFinished).click();
+    cy.get(newsletter.editItem.toggleFinished)
+      .parent()
+      .click();
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click();
@@ -513,7 +517,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     cy.get(newsletter.editItem.remark).clear()
       .type(remarkText);
-    cy.get(newsletter.editItem.toggleFinished).click();
+    cy.get(newsletter.editItem.toggleFinished)
+      .parent()
+      .click();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
     cy.get(newsletter.editItem.save).click();
     cy.wait('@patchNewsItem2');
@@ -600,7 +606,9 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check if mededeling is not visible when deselected in dossier
     cy.visitAgendaWithLink(agendaLinkMed);
     cy.get(agenda.agendaitemTitlesView.edit).click();
-    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
+    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
+      .parent
+      .click();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
       .wait('@patchNewsItem2');
