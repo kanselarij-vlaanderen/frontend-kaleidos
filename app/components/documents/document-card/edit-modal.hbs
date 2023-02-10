@@ -4,6 +4,7 @@
   @onConfirm={{perform this.saveEdit}}
   @onCancel={{this.cancelEdit}}
   @confirmMessage={{t "save"}}
+  @loading={{this.saveEdit.isRunning}}
 >
   <:body>
     <AuCard
