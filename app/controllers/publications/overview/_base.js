@@ -8,7 +8,7 @@ export default class PublicationsOverviewBaseController extends Controller {
   @service router;
 
   @tracked page = 0;
-  @tracked size = 20;
+  @tracked size = 25;
   @tracked sort = '-identification.structured-identifier.local-identifier';
 
   @tracked tableConfig;

@@ -5,7 +5,6 @@ import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class AgendaitemsSearchController extends Controller {
   @service router;
@@ -31,7 +30,7 @@ export default class AgendaitemsSearchController extends Controller {
     },
   ];
 
-  sizeOptions = PAGINATION_SIZES;
+  sizeOptions = [5, 10, 20, 50, 100, 200];
   sortOptions = [
     { value: '-session-dates', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element

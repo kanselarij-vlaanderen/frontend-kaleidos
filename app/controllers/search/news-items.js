@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import sanitizeHtml from 'sanitize-html';
-import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SearchNewsItemsControllers extends Controller {
   @service router;
@@ -25,7 +24,7 @@ export default class SearchNewsItemsControllers extends Controller {
     },
   ];
 
-  sizeOptions = PAGINATION_SIZES;
+  sizeOptions = [5, 10, 20, 50, 100, 200];
   sortOptions = [
     { value: '-agendaitems.meetingDate', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
