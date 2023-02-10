@@ -8,14 +8,14 @@
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
             <Auk::Label
               class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0"
-              for="show-cases-archived"
+              for="show-cases-archived-only"
             >
-              {{t "show-archived"}}
+              {{t "show-archived-only"}}
             </Auk::Label>
             <AuToggleSwitch
               data-test-route-cases-overview-show-archived
-              @checked={{this.showArchived}}
-              id="show-cases-archived"
+              @checked={{this.showArchivedOnly}}
+              id="show-cases-archived-only"
             />
           </Auk::Toolbar::Item>
         {{/if}}

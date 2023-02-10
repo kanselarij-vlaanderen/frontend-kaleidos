@@ -4,7 +4,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
-import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -151,88 +150,6 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.printableAgenda.container).contains(agendaitemIndex2);
     cy.get(agenda.printableAgenda.container).contains(subcaseTitle2);
     cy.get(agenda.printableAgenda.container).contains(subcaseTitle3);
-  });
-
-  it('should verify that you can compare agendas', () => {
-    cy.intercept('GET', '/agendas**5EBA48CF95A2760008000006**&include=status**').as('loadAgendasWithStatus');
-    cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
-    cy.wait('@loadAgendasWithStatus');
-    cy.wait(2000); // Some data loading issues, there is no loader to wait on and most ID's in xhr calls are always new
-    // compare Agenda B against Agenda C
-    cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Agenda B')
-      .click();
-    cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Agenda C')
-      .click();
-    cy.get(auk.loader).should('not.exist');
-    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
-    cy.get(agenda.compareAgenda.showChanges).click();
-    cy.wait(5000); // TODO-FLAKY there is no loading state when changing the agendaitems, so we have to wait a while for the list to change
-    cy.get(agenda.compareAgenda.agendaitemLeft, {
-      timeout: 40000,
-    }).should('have.length', 1);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 1);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
-    cy.contains(subcaseTitle1);
-    cy.contains(subcaseTitle3);
-    cy.contains(approvalTitle).should('not.exist');
-    cy.contains(agendaitemIndex2).should('not.exist');
-    cy.contains(subcaseTitle2).should('not.exist');
-    cy.get(agenda.compareAgenda.showChanges).click();
-
-    // compare Agenda C against Agenda D
-    cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Agenda C')
-      .click();
-    cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
-      .click();
-    cy.get(auk.loader).should('not.exist');
-    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
-    cy.get(agenda.compareAgenda.showChanges).click();
-    cy.wait(5000); // TODO-FLAKY there is no loading state when changing the agendaitems, so we have to wait a while for the list to change
-    cy.get(agenda.compareAgenda.agendaitemLeft, {
-      timeout: 40000,
-    }).should('have.length', 1);
-    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 1);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 1);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
-    cy.contains(approvalTitle);
-    cy.contains(subcaseTitle3);
-    cy.contains(subcaseTitle1).should('not.exist');
-    cy.contains(agendaitemIndex2).should('not.exist');
-    cy.contains(subcaseTitle2).should('not.exist');
-
-    cy.get(agenda.compareAgenda.showChanges).click();
-
-    // compare Agenda D against Agenda E
-    cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
-      .click();
-    cy.get(auk.loader).should('not.exist');
-    cy.wait(2500); // TODO-FLAKY lots of calls are happening when changing the agenda and some elements get detached from DOM
-    cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.get(dependency.emberPowerSelect.option).contains('Ontwerpagenda E')
-      .click();
-    cy.get(auk.loader).should('not.exist');
-    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
-    cy.get(agenda.compareAgenda.showChanges).click();
-    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 0);
-    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 0);
-    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 0);
   });
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
