@@ -144,8 +144,8 @@ context('Decision tests', () => {
     cy.wait('@patchDecisionActivities');
     cy.wait('@getPreviousPiece');
     cy.get(auk.loader).should('not.exist');
-    // correct default access rights on non-confidential subcase should be "Intern Regering"
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    // correct default access rights on non-confidential subcase should be "Intern Overheid"
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
     decisionTypes.forEach((type) => {
       cy.get(agenda.decisionResultPill.edit)
         .click();
