@@ -37,6 +37,7 @@
                   @skin="secondary"
                   @icon="copy-paste"
                   {{on "click" (perform this.copyFullSubcase)}}
+                  @disabled={{this.copyFullSubcase.isRunning}}
                 >
                   {{t "clone-previous-subcase"}}
                 </AuButton>
