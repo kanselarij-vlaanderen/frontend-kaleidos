@@ -607,7 +607,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink(agendaLinkMed);
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .parent
+      .parent()
       .click();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
     cy.get(agenda.agendaitemTitlesEdit.actions.save).click()
