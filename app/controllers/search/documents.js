@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSearchController extends Controller {
   @service router;
