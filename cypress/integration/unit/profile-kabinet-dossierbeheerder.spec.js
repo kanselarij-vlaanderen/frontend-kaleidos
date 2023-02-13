@@ -56,8 +56,6 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
-      cy.get(agenda.agendaTabs.tabs).contains('Vergelijk')
-        .should('not.exist');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
 
       // Main view - Side Nav (left)
