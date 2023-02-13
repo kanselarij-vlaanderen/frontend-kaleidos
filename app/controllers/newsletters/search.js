@@ -1,3 +1,4 @@
+import ENV from 'frontend-kaleidos/config/environment';
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -63,6 +64,10 @@ export default class NewslettersSearchController extends Controller {
     return isEmpty(this.searchText);
   }
 
+  get sanitizeHtmlOptions() {
+    return ENV['sanitize-html'];
+  }
+
   @action
   search(e) {
     e.preventDefault();
@@ -102,12 +107,14 @@ export default class NewslettersSearchController extends Controller {
       copyText += `${row.title}\n\n`;
     }
 
-    copyText += sanitizeHtml(
-      row.htmlContent
-        .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
-        .trim(), // Trim whitespaces at start & end of the string
-      { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
-    );
+    if (row.htmlContent) {
+      copyText += sanitizeHtml(
+        row.htmlContent
+          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+          .trim(), // Trim whitespaces at start & end of the string
+        { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
+      );
+    }
 
     navigator.clipboard.writeText(copyText);
     this.toaster.success(this.intl.t('text-copied'));

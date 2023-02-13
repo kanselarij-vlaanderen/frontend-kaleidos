@@ -5,8 +5,10 @@ export default class ThemisPublicationActivity extends Model {
   @attr('datetime') startDate;
   @attr('string-set', {
     defaultValue: () => [],
-  }) scope;
+  })
+  scope;
 
-  @belongsTo('meeting') meeting;
-  @belongsTo('concept') status;
+  @belongsTo('meeting', { inverse: 'themisPublicationActivities', async: true })
+  meeting;
+  @belongsTo('concept', { inverse: null, async: true }) status;
 }

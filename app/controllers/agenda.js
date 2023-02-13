@@ -10,10 +10,6 @@ export default class AgendaController extends Controller {
   @tracked isLoading = false;
   @tracked isOpenSideNav = true;
 
-  get shouldHideNav() {
-    return this.router.currentRouteName === 'agenda.compare';
-  }
-
   get meetingKindPrefix() {
     return this.model.meeting.kind.get('uri') == CONSTANTS.MEETING_KINDS.PVV ? 'MR VV' : 'MR';
   }
@@ -30,7 +26,7 @@ export default class AgendaController extends Controller {
 
   @action
   refresh() {
-    this.send('reloadAgendaModel');
+    this.router.refresh('agenda');
   }
 
   @action

@@ -1,15 +1,12 @@
-/* eslint-disable object-curly-newline */
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes
-const Router = EmberRouter.extend({
-  location: config.locationType,
-  rootURL: config.rootURL,
-});
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
 
 Router.map(function() {
   this.route('mock-login');
@@ -30,7 +27,6 @@ Router.map(function() {
         this.route('news-item', { path: '/kort-bestek', });
       });
     });
-    this.route('compare', { path: '/vergelijken', });
     this.route('documents', { path: '/documenten', });
   });
 
@@ -84,7 +80,9 @@ Router.map(function() {
 
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
-    this.route('agenda-items', { path: '/agendapunten', });
+    this.route('agendaitems', { path: '/agendapunten', });
+    this.route('decisions', { path: '/beslissingen' });
+    this.route('news-items', { path: '/kort-bestek', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
@@ -119,7 +117,6 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('radio-buttons');
     this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
@@ -136,10 +133,12 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
+    this.route('radio-list');
     this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
+    this.route('toggle');
     this.route('toolbar');
     this.route('navbar');
     this.route('modal');
@@ -147,5 +146,3 @@ Router.map(function() {
     this.route('upload');
   });
 });
-
-export default Router;

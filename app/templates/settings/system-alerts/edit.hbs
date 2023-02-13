@@ -1,19 +1,15 @@
-<WebComponents::VlModal
-  @isOverlay={{true}}
+<ConfirmationModal
+  @modalOpen={{true}}
   @title={{t "manage-alerts"}}
-  @closeModal={{this.cancel}}
+  @onConfirm={{perform this.save this.model}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "save"}}
+  @loading={{this.save.isRunning}}
 >
-  <Auk::Modal::Body>
+  <:body>
     <Utils::SystemAlertForm
       @alert={{@model}}
       @onCancel={{this.cancel}}
     />
-  </Auk::Modal::Body>
-  <WebComponents::VlModalFooter
-    @isLoading={{this.save.isRunning}}
-    @cancelButtonText={{t "cancel"}}
-    @saveButtonText={{t "save"}}
-    @cancelAction={{this.cancel}}
-    @saveAction={{perform this.save this.model}}
-  />
-</WebComponents::VlModal>
+  </:body>
+</ConfirmationModal>

@@ -21,7 +21,10 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   }
 
   get isSaveDisabled() {
-    return isEmpty(this.newReceivedDate);
+    return (
+      isEmpty(this.newReceivedDate) ||
+      this.save.isRunning
+    );
   }
 
   @task

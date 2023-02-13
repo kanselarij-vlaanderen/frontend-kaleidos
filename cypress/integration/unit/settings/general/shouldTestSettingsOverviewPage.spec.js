@@ -3,6 +3,7 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import utils from '../../../../selectors/utils.selectors';
+import auk from '../../../../selectors/auk.selectors';
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
@@ -24,7 +25,7 @@ context('Settings overview page tests', () => {
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.openSettingsModal(settings.overview.manageAlerts);
-    cy.get(utils.vlModal.container).should('contain', 'Systeemberichten beheer');
+    cy.get(auk.auModal.container).should('contain', 'Systeemberichten beheer');
     cy.closeSettingsModal();
   });
 

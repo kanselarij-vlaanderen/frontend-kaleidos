@@ -97,6 +97,7 @@
                   <AuButton
                     data-test-news-item-edit-item-save
                     @loading={{this.confirmSave.isRunning}}
+                    @disabled={{this.confirmSave.isRunning}}
                     {{on "click" this.save}}
                   >
                     {{t "save"}}
@@ -123,7 +124,7 @@
       </Auk::Panel::Body>
       <Auk::Panel::Body class="au-u-background-gray-100">
         <div class="auk-form-group auk-u-text-capitalize">
-          <Auk::Label>Opmerking</Auk::Label>
+          <Auk::Label>{{t "comment-title"}}</Auk::Label>
           <AuInput
             data-test-news-item-edit-item-remark
             @width="block"
@@ -161,6 +162,7 @@
               <AuButton
                 data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
+                @disabled={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
               >
                 {{t "save"}}
@@ -173,16 +175,14 @@
   </Utils::LoadableContent>
 </Auk::Panel>
 
-{{#if this.isOpenMissingThemesModal}}
-  <WebComponents::VlModalVerify
-    @title={{t "no-themes-selected"}}
-    @message={{t "no-themes-selected-message"}}
-    @cancel={{this.cancelSave}}
-    @verify={{perform this.confirmSave}}
-    @buttonText="save"
-    @buttonType="warning"
-    @showIcon={{false}}
-  />
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenMissingThemesModal}}
+  @title={{t "no-themes-selected"}}
+  @message={{t "no-themes-selected-message"}}
+  @onConfirm={{perform this.confirmSave}}
+  @onCancel={{this.cancelSave}}
+  @confirmMessage={{t "save"}}
+  @loading={{this.confirmSave.isRunning}}
+/>
 
 {{yield}}

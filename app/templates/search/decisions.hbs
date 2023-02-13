@@ -1,0 +1,85 @@
+{{page-title (t "decisions")}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "decisions"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{this.selectSize}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToDecision}}
+    >
+      <:header>
+        <th class="auk-table__col--7">
+          {{t "title"}}
+        </th>
+        <Utils::ThSortable
+          class="auk-table__col--1"
+          @currentSorting={{this.sort}}
+          @field="session-dates"
+          @label={{t "date"}}
+          @onChange={{fn (mut this.sort)}}
+        />
+        <th class="auk-table__col--2">
+          {{t "result-decision"}}
+        </th>
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p>
+            {{row.subcaseTitle}}
+          </p>
+        </td>
+        <td>
+          {{date row.decisionStartDate}}
+        </td>
+        <td>
+          <Decision::DecisionResultPill
+            @decisionResultCode={{row.decisionResult}}
+          />
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="agenda.agendaitems.agendaitem.decisions"
+            @models={{array row.meetingId row.agendaId row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

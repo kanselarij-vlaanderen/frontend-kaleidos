@@ -8,13 +8,20 @@ import {
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+/**
+ * @param onLink {Function} Action executed when a piece is selected
+ * @param onUnlink {Function} Action executed when a piece is deselected
+ */
 export default class AddExistingPiece extends Component {
   @service store;
-  @tracked page = 0;
-  @tracked filter = '';
-  @tracked pieces = [];
 
-  size = 5;
+  @tracked page = 0;
+  @tracked size = 10;
+  @tracked filter = '';
+
+  @tracked pieces = [];
+  @tracked selected = [];
+
   sort = ['-created', 'name'];
 
   constructor() {
@@ -22,24 +29,7 @@ export default class AddExistingPiece extends Component {
     this.findAll.perform();
   }
 
-  get pageParam() {
-    return this.page;
-  }
-
-  set pageParam(page) {
-    if (page === undefined) {
-      this.page = 0;
-    } else {
-      this.page = page;
-    }
-    this.findAll.perform();
-  }
-
-  setSelectedToFalse() {
-    this.pieces.map((piece) => piece.set('selected', false));
-  }
-
-  queryOptions() {
+  get queryOptions() {
     const options = {
       sort: this.sort,
       page: {
@@ -57,30 +47,42 @@ export default class AddExistingPiece extends Component {
   @task
   *findAll() {
     yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions);
     yield timeout(100);
-    this.setSelectedToFalse();
+    this.selected = [];
   }
 
   @restartableTask
   *searchTask() {
     yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions);
     this.page = 0;
     yield timeout(100);
   }
 
   @action
-  async select(piece, _checked, event) {
-    if (event) {
-      event.stopPropagation();
-    }
-    if (piece.selected) {
-      piece.set('selected', false);
-      this.args.delete(piece);
+  select(piece) {
+    const index = this.selected.indexOf(piece);
+    const isSelected = index > -1;
+
+    if (isSelected) {
+      this.selected = [...this.selected.slice(0, index), ...this.selected.slice(index + 1)];
+      this.args.onUnlink(piece);
     } else {
-      piece.set('selected', true);
-      this.args.add(piece);
+      this.selected = [...this.selected, piece];
+      this.args.onLink(piece);
     }
+  }
+
+  @action
+  setPage(page) {
+    this.page = page;
+    this.findAll.perform();
+  }
+
+  @action
+  setSize(size) {
+    this.size = size;
+    this.findAll.perform();
   }
 }

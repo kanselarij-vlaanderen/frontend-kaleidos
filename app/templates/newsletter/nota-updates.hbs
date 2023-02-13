@@ -2,86 +2,84 @@
   <div class="auk-u-mb-8">
     <div>
       {{!-- Indien er geen resultaten gevonden worden, komt dit doordat er geen documenten als type 'nota' bij agendapunten staan --}}
-        <DataTable
-          data-test-route-newsletter-nota-updates-data-table={{true}}
+        <KDataTable
+          data-test-route-newsletter-nota-updates-data-table
+          @striped={{true}}
+          @loading={{this.isLoadingModel}}
           @content={{this.model}}
-          @sizeOptions={{null}}
-          @noDataMessage={{t "no-results-found"}}
-          @sort={{this.sort}}
-          @class="auk-table auk-table--striped auk-table--no-scroll"
-          @isLoading={{this.isLoadingModel}}
-          as |table|
+          @page={{this.page}}
+          @size={{this.size}}
+          @enablePagination={{false}}
         >
-          <table.content as |c|>
-            <c.header>
-              <th class="auk-table__col--1">
-                {{t "newsletter-update-notas-number"}}
-              </th>
-              <th class="auk-table__col--2">
-                {{t "newsletter-update-notas-agendaitem-short-title"}}
-              </th>
-              <th class="auk-table__col--2">
-                {{t "newsletter-update-notas-documentname"}}
-              </th>
-              <ThSortable
-                  @class="auk-table__col--2"
-                  @currentSorting={{this.sort}}
-                  @field="modified"
-                  @label={{t "newsletter-update-notas-edited-on"}}
-              />
-              <th class="auk-table__col--1"></th>
-            </c.header>
-            <c.body class="auk-table--clickable-rows" as |row|>
-              <td>
-                <p>
-                  {{row.agendaitemNumber}}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {{row.agendaitemShortTitle}}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {{row.name}}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {{t
-                    "newsletter-update-notas-edited-text"
-                    date=(date row.modified)
-                    time=(time row.modified)
-                  }}
-                </p>
-              </td>
-              <td class="auk-u-text-align--right">
-                <AuButton
-                  @skin="naked"
-                  @icon="book"
-                  @hideText={{true}}
-                  {{on "click" (fn this.showPieceViewer row.documentId)}}
-                >
-                  {{t "open-note"}}
-                </AuButton>
-                <AuLink
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @hideText={{true}}
-                  @route="agenda.agendaitems.agendaitem.documents"
-                  @models={{array
-                    (await row.meetingId)
-                    (await row.agendaId)
-                    (await row.agendaitemId)
-                  }}
-                >
-                  {{t "open"}}
-                </AuLink>
-              </td>
-            </c.body>
-          </table.content>
-        </DataTable>
+          <:header>
+            <th class="auk-table__col--1">
+              {{t "newsletter-update-notas-number"}}
+            </th>
+            <th class="auk-table__col--2">
+              {{t "newsletter-update-notas-agendaitem-short-title"}}
+            </th>
+            <th class="auk-table__col--2">
+              {{t "newsletter-update-notas-documentname"}}
+            </th>
+            <Utils::ThSortable
+                class="auk-table__col--2"
+                @currentSorting={{this.sort}}
+                @field="modified"
+                @label={{t "newsletter-update-notas-edited-on"}}
+                @onChange={{fn (mut this.sort)}}
+            />
+            <th class="auk-table__col--1"></th>
+          </:header>
+          <:body as |row|>
+            <td>
+              <p>
+                {{row.agendaitemNumber}}
+              </p>
+            </td>
+            <td>
+              <p>
+                {{row.agendaitemShortTitle}}
+              </p>
+            </td>
+            <td>
+              <p>
+                {{row.name}}
+              </p>
+            </td>
+            <td>
+              <p>
+                {{t
+                  "newsletter-update-notas-edited-text"
+                  date=(date row.modified)
+                  time=(time row.modified)
+                }}
+              </p>
+            </td>
+            <td class="auk-u-text-align--right">
+              <AuButton
+                @skin="naked"
+                @icon="book"
+                @hideText={{true}}
+                {{on "click" (fn this.showPieceViewer row.documentId)}}
+              >
+                {{t "open-note"}}
+              </AuButton>
+              <AuLink
+                @skin="button-naked"
+                @icon="chevron-right"
+                @hideText={{true}}
+                @route="agenda.agendaitems.agendaitem.documents"
+                @models={{array
+                  (await row.meetingId)
+                  (await row.agendaId)
+                  (await row.agendaitemId)
+                }}
+              >
+                {{t "open"}}
+              </AuLink>
+            </td>
+          </:body>
+        </KDataTable>
     </div>
   </div>
 </div>

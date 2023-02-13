@@ -8,8 +8,8 @@ export default class File extends Model {
   @attr('string') extension;
   @attr('datetime') created;
 
-  @belongsTo('file', { inverse: 'derived' }) source;
-  @belongsTo('file', { inverse: 'source' }) derived;
+  @belongsTo('file', { inverse: 'derived', async: true }) source;
+  @belongsTo('file', { inverse: 'source', async: true }) derived;
 
   // *NOTE Don't use this getter, use filename instead
   // Possible unused getter since it had an error throwing 'deprecate' method for 2 months but no support issues were ever logged

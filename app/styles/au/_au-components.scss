@@ -9,7 +9,9 @@ $au-button-height: 3.4rem;
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
+@import 'ember-appuniversum/c-alert';
 @import 'ember-appuniversum/c-badge';
+@import "ember-appuniversum/c-body-container";
 @import 'ember-appuniversum/c-button';
 @import 'ember-appuniversum/c-button-group';
 @import 'ember-appuniversum/c-card';
@@ -22,12 +24,16 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-fieldset';
 @import 'ember-appuniversum/c-icon';
 @import 'ember-appuniversum/c-input';
+@import "ember-appuniversum/c-label";
 @import 'ember-appuniversum/c-link';
 @import 'ember-appuniversum/c-list';
 @import 'ember-appuniversum/c-list-horizontal';
+@import "ember-appuniversum/c-list-navigation";
 @import 'ember-appuniversum/c-loader';
 @import 'ember-appuniversum/c-pill';
+@import "ember-appuniversum/c-main-container";
 @import 'ember-appuniversum/c-modal';
+@import "ember-appuniversum/c-sidebar";
 @import 'ember-appuniversum/c-table';
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-toggle-switch';
@@ -273,6 +279,20 @@ $au-button-height: 3.4rem;
   display: none;
 }
 
+// Fieldset
+
+.au-c-fieldset {
+  gap: $au-unit-small;
+}
+
+.au-c-fieldset--inline {
+  gap: $au-unit;
+}
+
+.au-c-fieldset-legend {
+  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
+  font-size: var(--au-global-font-size) !important;
+}
 
 // Additions
 

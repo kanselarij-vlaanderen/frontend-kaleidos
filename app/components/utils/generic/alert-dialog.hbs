@@ -18,7 +18,7 @@
       @skin="primary"
       @alert={{this.isAlertConfirm}}
       @icon={{this.confirmIcon}}
-      @disabled={{this.isLoading}}
+      @disabled={{or this.isLoading this.confirm.isRunning}}
       @loading={{this.confirm.isRunning}}
       {{on "click" (perform this.confirm)}}
     >

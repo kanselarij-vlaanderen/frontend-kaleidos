@@ -26,6 +26,10 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const agendaActivities = await this.subcase.agendaActivities;
     const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
     if (latestActivity) {
+      this.latestMeeting = await this.store.queryOne('meeting', {
+        'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
+        sort: '-planned-start',
+      });
       const submissionActivitiesFromLatestMeeting = await this.store.query('submission-activity', {
         'filter[subcase][:id:]': this.subcase.id,
         'filter[agenda-activity][:id:]': latestActivity.id,

@@ -6,11 +6,8 @@ export default class DecisionmakingFlow extends Model {
   @attr('datetime') opened;
   @attr('datetime') closed;
 
-  @belongsTo('case') case;
+  @belongsTo('case', { inverse: 'decisionmakingFlow', async: true }) case;
 
-  @hasMany('concept') governmentAreas;
-  // This relation is saved on subcase and should be read-only here
-  @hasMany('subcase', {
-    serialize: false,
-  }) subcases;
+  @hasMany('concept', { inverse: null, async: true }) governmentAreas;
+  @hasMany('subcase', { inverse: 'decisionmakingFlow', async: true }) subcases; // This relation is saved on subcase and should be read-only here
 }

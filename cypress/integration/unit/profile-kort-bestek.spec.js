@@ -58,7 +58,7 @@ context('Testing the application as Kort bestek user', () => {
 
     it('Should switch to search tab when search is clicked', () => {
       cy.get(utils.mHeader.search).click();
-      cy.get(route.search.title).should('exist');
+      cy.get(route.search.trigger).should('exist');
       cy.url().should('include', '/zoeken');
     });
 
@@ -97,8 +97,6 @@ context('Testing the application as Kort bestek user', () => {
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
-      cy.get(agenda.agendaTabs.tabs).contains('Vergelijk')
-        .should('not.exist');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
 
       // Main view - Side Nav (left)
@@ -127,7 +125,6 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 
@@ -233,7 +230,6 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 

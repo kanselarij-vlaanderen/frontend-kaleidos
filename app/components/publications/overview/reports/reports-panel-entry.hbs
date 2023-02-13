@@ -1,9 +1,9 @@
 <Auk::Panel::Body class="auk-o-flex auk-o-flex--justify-between">
   <div>
-    <h4 class="auk-h4 auk-u-m-0">{{@title}}</h4>
+    <h4 data-test-reports-panel-entry-title class="auk-h4 auk-u-m-0">{{@title}}</h4>
     {{#if @lastJob}}
       <div>
-        <div class="auk-u-text-muted">
+        <div data-test-reports-panel-entry-last-request class="auk-u-text-muted">
           {{t
             "publication-reports-last-request"
             date=(date @lastJob.created)
@@ -12,6 +12,7 @@
           }}
         </div>
           <AuLinkExternal
+            data-test-reports-panel-entry-download-link
             @icon="download"
             href={{@lastJob.generated.namedDownloadLink}}
             download
@@ -23,6 +24,7 @@
   </div>
   <div>
     <AuButton
+      data-test-reports-panel-entry-create
       @skin="primary"
       {{on "click" this.openGenerateReportModal}}
     >

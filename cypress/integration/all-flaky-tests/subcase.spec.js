@@ -64,7 +64,7 @@ context('Subcase tests', () => {
   it('should open an existing case and add a subcase', () => {
     const type = 'Nota';
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
@@ -104,7 +104,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -117,7 +117,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: delete subcase not possible - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -134,7 +134,7 @@ context('Subcase tests', () => {
     const type = 'Nota';
     const shortSubcaseTitle = `Cypress test: Link to agenda item ok - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
@@ -158,14 +158,14 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
-    cy.url().should('not.contain', '/dossier/');
+    cy.url().should('not.contain', '/dossiers/');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {
     const type = 'Mededeling';
     const shortSubcaseTitle = `Cypress test: Mededeling - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test doorstromen changes agendaitem to subcase';
-    const subcaseType = 'In voorbereiding';
+    const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     // Aanmaken Dossier
@@ -181,8 +181,13 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
+    cy.wait(1500); // TODO-flakey, linkToSubcase does nothing sometimes
     cy.get(appuniversum.pill).contains('Op de website');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
+    cy.url().should('contain', '/dossiers/');
+    cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
@@ -384,7 +389,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases1');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 1)
       .find(cases.subcaseItem.link)
@@ -405,7 +410,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(auk.auModal.header.close).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
@@ -429,7 +434,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)

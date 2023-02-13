@@ -60,7 +60,6 @@
 
 
 // EXTERNAL ADDON OVERRIDES
-@import 'addon-overrides/ember-data-table';
 @import 'addon-overrides/ember-flatpickr';
 @import 'addon-overrides/ember-power-select';
 @import 'addon-overrides/ember-rdfa-editor';
@@ -69,7 +68,6 @@
 
 
 // LAYOUT STYLING
-@import 'layout/compare-agenda-list';
 @import 'layout/logo-header';
 @import 'layout/printable-agenda';
 @import 'layout/printable-newsletter';
@@ -77,3 +75,7 @@
 
 // PRINT STYLING
 @import 'print/general';
+
+
+// PROTOTYPE
+@import 'prototype/_search';

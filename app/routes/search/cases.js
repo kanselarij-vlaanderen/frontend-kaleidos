@@ -1,19 +1,23 @@
 import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
-import moment from 'moment';
+import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
+    },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
     },
     page: {
       refreshModel: true,
@@ -30,15 +34,13 @@ export default class CasesSearchRoute extends Route {
   };
 
   postProcessDates(_case) {
-    const {
-      sessionDates,
-    } = _case.attributes;
+    const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();
         _case.attributes.sessionDates = sorted[sorted.length - 1];
       } else {
-        _case.attributes.sessionDates = moment(sessionDates);
+        _case.attributes.sessionDates = sessionDates;
       }
     }
   }
@@ -50,19 +52,33 @@ export default class CasesSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
 
     this.lastParams.stageLive(params);
 
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
       params.page = 0;
     }
 
-    const textSearchFields = ['title^4', 'shortTitle^4', 'subcaseTitle^2', 'subcaseSubTitle^2'];
+    const textSearchFields = [
+      'title^4',
+      'shortTitle^4',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
+    ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -75,7 +91,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -83,19 +99,28 @@ export default class CasesSearchRoute extends Route {
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
      */
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      const to = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.utc().toISOString(), from.utc().toISOString()].join(',');
+      const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
-      const date = moment(params.dateFrom, 'DD-MM-YYYY').startOf('day');
-      filter[':gte:sessionDates'] = date.utc().toISOString();
+      const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      filter[':gte:sessionDates'] = date.toISOString();
     } else if (!isEmpty(params.dateTo)) {
-      const date = moment(params.dateTo, 'DD-MM-YYYY').endOf('day'); // "To" interpreted as inclusive
-      filter[':lte:sessionDates'] = date.utc().toISOString();
+      const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
+    } else if (params.archived === 'only') {
+      filter.isArchived = 'true';
+    }
+
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
     }
 
     this.lastParams.commit();
@@ -113,24 +138,31 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    const {
-      postProcessDates,
-    } = this;
-    return search('decisionmaking-flows', params.page, params.size, sort, filter, (searchData) => {
-      const entry = searchData.attributes;
-      entry.id = searchData.id;
-      postProcessDates(searchData);
-      return entry;
-    });
+    const { postProcessDates } = this;
+    return search(
+      'decisionmaking-flows',
+      params.page,
+      params.size,
+      sort,
+      filter,
+      (searchData) => {
+        const entry = searchData.attributes;
+        entry.id = searchData.id;
+        postProcessDates(searchData);
+        return entry;
+      }
+    );
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.emptySearch = isEmpty(this.paramsFor('search').searchText);
+    const searchText = this.paramsFor('search').searchText;
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
+
+    controller.searchText = searchText;
   }
 
   @action

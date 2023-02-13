@@ -26,7 +26,7 @@ export default class CasesIndexController extends Controller {
       },
     },
     {
-      showArchived: {
+      showArchivedOnly: {
         type: 'boolean',
       },
     }
@@ -36,7 +36,8 @@ export default class CasesIndexController extends Controller {
   size = 20;
 
   sort = '-opened';
-  showArchived = false;
+  showArchivedOnly = false;
+  @tracked isLoadingModel;
   @tracked selectedCase = null;
   @tracked caseToEdit = null;
   @tracked showEditCaseModal = false;

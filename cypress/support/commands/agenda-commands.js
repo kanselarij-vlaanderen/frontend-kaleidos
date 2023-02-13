@@ -35,7 +35,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
   cy.visit('/overzicht?size=2');
-  cy.get(route.agendas.action.newMeeting).click();
+  cy.get(route.agendas.action.newMeeting, {
+    timeout: 60000,
+  }).click();
 
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
@@ -336,8 +338,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
+  cy.get(auk.loader); // loader should be shown briefly
   cy.get(auk.loader, {
-    timeout: 20000,
+    timeout: amountOfFormallyOks * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -476,22 +479,6 @@ function addAgendaitemToAgenda(subcaseTitle) {
     timeout: 12000,
   }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
-}
-
-/**
- * @description Toggles the show changes
- * @name toggleShowChanges
- * @memberOf Cypress.Chainable#
- * @function
- */
-function toggleShowChanges() {
-  cy.log('toggleShowChanges');
-  cy.clickReverseTab('Overzicht');
-  cy.get(auk.loader).should('not.exist'); // data is not loading
-  cy.get(agenda.agendaOverview.showChanges).click();
-  // data loading is triggered so we check for the loader
-  cy.get(auk.loader).should('not.exist');
-  cy.log('/toggleShowChanges');
 }
 
 /**
@@ -737,7 +724,6 @@ Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
-Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
 Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);

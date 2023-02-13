@@ -19,7 +19,10 @@ export default class PublicationStatusModal extends Component {
   }
 
   get isDisabledSave() {
-    return this.publicationStatus == this.args.publicationStatus; // no new status selected
+    return (
+      this.publicationStatus == this.args.publicationStatus || // no new status selected
+      this.savePublicationStatus.isRunning
+    );
   }
 
   @action

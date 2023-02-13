@@ -41,7 +41,7 @@
             {{#if
               (and
                 (not @isFinal)
-                (is-after @translationSubcase.dueDate precision="days")
+                (is-after-days @translationSubcase.dueDate)
               )
             }}
               <Auk::FormHelpText
@@ -73,6 +73,7 @@
               data-test-publication-translations-info-panel-save
               @skin="primary"
               @loading={{this.save.isRunning}}
+              @disabled={{this.save.isRunning}}
               {{on "click" (perform this.save)}}
             >
               {{t "save"}}
@@ -100,7 +101,7 @@
             {{#if
               (and
                 (not @isFinal)
-                (is-after @translationSubcase.dueDate precision="days")
+                (is-after-days @translationSubcase.dueDate)
               )
             }}
               <Auk::FormHelpText

@@ -17,7 +17,7 @@ export default class NewsletterController extends Controller {
   *saveNewsItem(newsItem, wasNewsItemNew) {
     yield newsItem.save();
     if (wasNewsItemNew) {
-      this.send('reloadModel');
+      this.router.refresh('newsletter.index');
     }
     this.toaster.success(this.intl.t('successfully-saved'));
   }
@@ -25,7 +25,7 @@ export default class NewsletterController extends Controller {
   @action
   cancelEdit(wasNewsItemNew) {
     if (wasNewsItemNew) {
-      this.send('reloadModel');
+      this.router.refresh('newsletter.index');
     }
   }
 }

@@ -1,9 +1,12 @@
-<WebComponents::VlModal
-  @closeModal={{this.cancelEdit}}
-  @isOverlay={{true}}
+<ConfirmationModal
+  @modalOpen={{true}}
   @title={{t "modify-document"}}
+  @onConfirm={{perform this.saveEdit}}
+  @onCancel={{this.cancelEdit}}
+  @confirmMessage={{t "save"}}
+  @loading={{this.saveEdit.isRunning}}
 >
-  <Auk::Modal::Body>
+  <:body>
     <AuCard
       @flex={{true}}
       @size="small"
@@ -118,11 +121,5 @@
         </c.content>
       </AuCard>
     {{/if}}
-  </Auk::Modal::Body>
-  <WebComponents::VlModalFooter
-    @cancelButtonText={{t "cancel"}}
-    @saveButtonText={{t "save"}}
-    @cancelAction={{this.cancelEdit}}
-    @saveAction={{perform this.saveEdit}}
-  />
-</WebComponents::VlModal>
+  </:body>
+</ConfirmationModal>

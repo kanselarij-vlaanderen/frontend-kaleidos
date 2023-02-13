@@ -56,8 +56,6 @@ context('Testing the application as Kabinetmedewerker', () => {
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
-      cy.get(agenda.agendaTabs.tabs).contains('Vergelijk')
-        .should('not.exist');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
 
       // Main view - Side Nav (left)
@@ -86,7 +84,6 @@ context('Testing the application as Kabinetmedewerker', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 
@@ -187,7 +184,6 @@ context('Testing the application as Kabinetmedewerker', () => {
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
-      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
 

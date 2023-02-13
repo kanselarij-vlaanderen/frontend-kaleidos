@@ -65,6 +65,7 @@ const selectors = {
   },
 
   uploadedDocument: {
+    container: '[data-test-uploaded-document-container]',
     nameInput: '[data-test-uploaded-document-name-input]',
     documentTypes: '[data-test-uploaded-document-types]',
   },
@@ -138,6 +139,7 @@ const selectors = {
   // document-badge
   documentBadge: {
     link: '[data-test-document-badge-link]',
+    isNew: '[data-test-document-badge-isNew]',
   },
 
 };

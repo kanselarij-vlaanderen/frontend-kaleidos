@@ -7,23 +7,25 @@
     >
       <div class="auk-o-flex auk-o-flex--justify-between">
         <div class="auk-u-mb-4">
-          <fieldset>
-            <legend class="auk-label">{{t "subcase-type"}}</legend>
-            <Auk::RadioList
-              @layout="inline"
-              data-test-new-subcase-type
-              as |List|
-            >
-              {{#each this.agendaItemTypes as |type|}}
-                <List.Radio
-                  @label={{type.label}}
-                  @checked={{eq this.agendaItemType.id type.id}}
-                  value={{type.id}}
-                  {{on "change" this.selectAgendaItemType}}
-                />
-              {{/each}}
-            </Auk::RadioList>
-          </fieldset>
+          <AuFieldset as |Fieldset|>
+            <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+            <Fieldset.content>
+              <Auk::RadioList
+                data-test-new-subcase-type
+                @layout="inline"
+                as |List|
+              >
+                {{#each this.agendaItemTypes as |type|}}
+                  <List.Radio
+                    @label={{type.label}}
+                    @value={{type.id}}
+                    @onChange={{this.selectAgendaItemType}}
+                    checked={{eq this.agendaItemType.id type.id}}
+                  />
+                {{/each}}
+              </Auk::RadioList>
+            </Fieldset.content>
+          </AuFieldset>
         </div>
 
         <div class="auk-o-flex auk-o-flex--vertical-center">
@@ -35,6 +37,7 @@
                   @skin="secondary"
                   @icon="copy-paste"
                   {{on "click" (perform this.copyFullSubcase)}}
+                  @disabled={{this.copyFullSubcase.isRunning}}
                 >
                   {{t "clone-previous-subcase"}}
                 </AuButton>
