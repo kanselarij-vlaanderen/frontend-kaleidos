@@ -209,7 +209,7 @@ context('Subcase tests', () => {
 
     // Check the toggle switch
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .parent
+      .parent()
       .click();
 
     // Save the changes setting
