@@ -232,6 +232,7 @@
                 @disabled={{or
                   (not this.isValid)
                   this.closeEditingPanel.isRunning
+                  this.save.isRunning
                 }}
                 {{on "click" (perform this.save)}}
               >
