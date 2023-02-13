@@ -14,6 +14,7 @@
     @icon="check"
     @hideText={{true}}
     @loading={{this.saveDecisionActivity.isRunning}}
+    @disabled={{this.saveDecisionActivity.isRunning}}
     {{on "click" (perform this.saveDecisionActivity)}}
     class="auk-u-ml"
   >
@@ -25,6 +26,7 @@
     @icon="x"
     @hideText={{true}}
     @loading={{this.saveDecisionActivity.isRunning}}
+    @disabled={{this.saveDecisionActivity.isRunning}}
     {{on "click" this.cancelEdit}}
   >
     {{t "cancel"}}
