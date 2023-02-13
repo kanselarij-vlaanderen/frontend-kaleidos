@@ -14,7 +14,10 @@ export default class NewCase extends Component {
   @tracked shortTitle;
 
   get isCreateDisabled() {
-    return isBlank(this.shortTitle);
+    return (
+      isBlank(this.shortTitle) ||
+      this.createCase.isRunning
+    );
   }
 
   get isLoading() {

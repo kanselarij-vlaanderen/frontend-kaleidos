@@ -23,7 +23,8 @@ export default class SettingsEmailController extends Controller {
     return (
       isBlank(this.model.translationRequestToEmail) ||
       isBlank(this.model.proofRequestToEmail) ||
-      isBlank(this.model.publicationRequestToEmail)
+      isBlank(this.model.publicationRequestToEmail) ||
+      this.save.isRunning
     );
   }
 }
