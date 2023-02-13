@@ -17,7 +17,10 @@ export default class EditCase extends Component {
   }
 
   get isSaveDisabled() {
-    return isBlank(this.shortTitle);
+    return (
+      isBlank(this.shortTitle) ||
+      this.save.isRunning
+    );
   }
 
   @task
