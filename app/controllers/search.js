@@ -3,8 +3,11 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import formatDate from '../utils/format-date-search-param';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class SearchController extends Controller {
+  @service store;
+
   queryParams = [
     {
       searchText: {
