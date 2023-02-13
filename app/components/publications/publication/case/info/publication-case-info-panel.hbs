@@ -37,17 +37,19 @@
             <div class="auk-o-grid">
               {{! Dringend }}
               <div class="auk-o-grid-col-3">
-                <Auk::Label>
-                  {{t "publication-urgent"}}
-                </Auk::Label>
-                <div class="auk-form-group">
-                  <AuControlCheckbox
-                    data-test-urgency-level-checkbox
-                    @label={{t "priority-procedure"}}
-                    @checked={{@publicationFlow.urgencyLevel.isUrgent}}
-                    @onChange={{this.changeIsUrgent}}
-                  />
-                </div>
+                <AuFieldset as |Fieldset|>
+                  <Fieldset.legend>{{t "publication-urgent"}}</Fieldset.legend>
+                  <Fieldset.content>
+                    <Auk::CheckboxList>
+                      <AuControlCheckbox
+                        data-test-urgency-level-checkbox
+                        @label={{t "priority-procedure"}}
+                        @checked={{@publicationFlow.urgencyLevel.isUrgent}}
+                        @onChange={{this.changeIsUrgent}}
+                      />
+                    </Auk::CheckboxList>
+                  </Fieldset.content>
+                </AuFieldset>
               </div>
 
               {{! Publicatienummer }}
