@@ -1,0 +1,19 @@
+<div class="au-u-flex au-u-flex--column au-u-flex--spaced">
+  {{#if @loading}}
+    {{#if (has-block "loading")}}
+      {{yield to="loading"}}
+    {{else}}
+      {{this.loadingMessage}}
+    {{/if}}
+  {{else if @content}}
+    {{#each @content as |row|}}
+      {{yield row to="body"}}
+    {{/each}}
+  {{else}}
+    {{#if (has-block "no-data")}}
+      {{yield to="no-data"}}
+    {{else}}
+      {{this.noDataMessage}}
+    {{/if}}
+  {{/if}}
+</div>

@@ -1,0 +1,54 @@
+{{#if (has-block "body")}}
+  {{#if @loading}}
+    {{#if (has-block "loading")}}
+      {{yield to="loading"}}
+    {{else}}
+      {{this.loadingMessage}}
+    {{/if}}
+  {{else if @content}}
+    {{#each @content as |row|}}
+      {{yield row to="body"}}
+    {{/each}}
+  {{else}}
+    {{#if (has-block "no-data")}}
+      {{yield to="no-data"}}
+    {{else}}
+      {{this.noDataMessage}}
+    {{/if}}
+  {{/if}}
+{{else}}
+  {{yield (hash
+      Table=(component "k-data/table" content=@content)
+      Cards=(component "k-data/cards" content=@content)
+  )}}
+{{/if}}
+{{#if this.enablePagination}}
+  <AuToolbar
+    class="auk-table__actions--bottom"
+    data-test-number-pagination-container
+    as |Group|
+  >
+    <Group>
+      <Auk::Pagination
+        @page={{@page}}
+        @size={{@size}}
+        @nbOfItems={{@numberOfItems}}
+        @total={{@totalNumberOfItems}}
+        @onNextPage={{this.onNextPage}}
+        @onPreviousPage={{this.onPreviousPage}}
+      />
+    </Group>
+    <Group>
+      <Auk::Toolbar::Item>
+        {{t "amount-per-page"}}
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::AuPageSize
+          @selectedSize={{@size}}
+          @onChange={{@onChangeSize}}
+          data-test-number-pagination-size
+        />
+      </Auk::Toolbar::Item>
+    </Group>
+  </AuToolbar>
+{{/if}}
