@@ -1,4 +1,9 @@
-<AuCard @shadow={{true}} @size="small" as |c|>
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |c|
+>
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       <p class="au-u-para-small au-u-muted au-u-medium">
@@ -6,7 +11,7 @@
         {{date @created}}
       </p>
     </div>
-    <AuHeading @level="3" @skin="4">
+    <AuHeading @level="3" @skin="6">
       <AuLink
         class="au-u-padding-none"
         @route="agenda.agendaitems.agendaitem"

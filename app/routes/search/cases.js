@@ -163,7 +163,7 @@ export default class CasesSearchRoute extends Route {
         }
         return entry;
       },
-      ['shortTitle']
+      ['shortTitle,title']
     );
   }
 

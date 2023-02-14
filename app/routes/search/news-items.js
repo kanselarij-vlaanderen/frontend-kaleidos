@@ -69,14 +69,22 @@ export default class SearchNewsItemsRoute extends Route {
       return [];
     }
 
-    return search('news-items', params.page, params.size, params.sort, filter, (newsItem) => {
-      const entry = newsItem.attributes;
-      entry.id = newsItem.id;
-      this.postProcessAgendaitems(newsItem);
-      this.postProcessDecisions(newsItem);
-      this.postProcessMandatees(newsItem);
-      return entry;
-    });
+    return search(
+      'news-items',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      (newsItem) => {
+        this.postProcessHighlights(newsItem);
+        const entry = { ...newsItem.attributes, ...newsItem.highlight };
+        entry.id = newsItem.id;
+        this.postProcessAgendaitems(newsItem);
+        this.postProcessMandatees(newsItem);
+        return entry;
+      },
+      ['title,subTitle,htmlContent']
+    );
   }
 
   setupController(controller) {
@@ -110,16 +118,6 @@ export default class SearchNewsItemsRoute extends Route {
     }
   }
 
-  postProcessDecisions(newsletter) {
-    const decisions = newsletter.attributes.decisions;
-    if (Array.isArray(decisions)) {
-      // TODO for now, if there are multiple decisions, we just grab the first one
-      newsletter.attributes.decision = decisions.firstObject;
-    } else {
-      newsletter.attributes.decision = decisions;
-    }
-  }
-
   postProcessMandatees(newsletter) {
     const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
@@ -127,6 +125,20 @@ export default class SearchNewsItemsRoute extends Route {
       newsletter.attributes.mandatees = sortedMandatees;
     } else {
       newsletter.attributes.mandatees = [mandatees];
+    }
+  }
+
+  postProcessHighlights(entry) {
+    if (Array.isArray(entry.highlight?.title)) {
+      entry.highlight.title = entry.highlight.title[0];
+    }
+
+    if (Array.isArray(entry.highlight?.subTitle)) {
+      entry.highlight.subTitle = entry.highlight.subTitle[0];
+    }
+
+    if (Array.isArray(entry.highlight?.htmlContent)) {
+      entry.highlight.htmlContent = entry.highlight.htmlContent[0];
     }
   }
 }

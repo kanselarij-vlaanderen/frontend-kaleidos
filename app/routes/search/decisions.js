@@ -25,6 +25,7 @@ export default class SearchDecisionsRoute extends Route {
 
   textSearchFields = [
     'subcaseTitle^2',
+    'subcaseShortTitle^2',
     'decisionName^2',
     'decisionFileName^2',
     'decision.content'
@@ -78,12 +79,21 @@ export default class SearchDecisionsRoute extends Route {
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route
-    return search('agendaitems', params.page, params.size, params.sort, filter, async (agendaitem) => {
-      const entry = agendaitem.attributes;
-      entry.id = agendaitem.id;
-      await this.postProcessDecisions(entry);
-      return entry;
-    });
+    return search(
+      'agendaitems',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      async (agendaitem) => {
+        this.postProcessHighlights(agendaitem);
+        const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
+        entry.id = agendaitem.id;
+        await this.postProcessDecisions(entry);
+        return entry;
+      },
+      ['subcaseShortTitle,subcaseTitle']
+    );
   }
 
   setupController(controller) {
@@ -110,6 +120,16 @@ export default class SearchDecisionsRoute extends Route {
         'concept',
         entry.decisionResult
       );
+    }
+  }
+
+  postProcessHighlights(entry) {
+    if (Array.isArray(entry.highlight?.subcaseTitle)) {
+      entry.highlight.subcaseTitle = entry.highlight.subcaseTitle[0];
+    }
+
+    if (Array.isArray(entry.highlight?.subcaseShortTitle)) {
+      entry.highlight.subcaseShortTitle = entry.highlight.subcaseShortTitle[0];
     }
   }
 }

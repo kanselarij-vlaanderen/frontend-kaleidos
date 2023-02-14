@@ -339,3 +339,10 @@ table tr.lt-expanded-row {
 .auk-u-text-vertical-align-middle {
   vertical-align: middle;
 }
+
+// Result cards
+// Workaround until we adapt mu-search to send more specific tags for highlights
+.result-card em {
+  background: rgba($auk-yellow-500, .3);
+  font-style: inherit;
+}
