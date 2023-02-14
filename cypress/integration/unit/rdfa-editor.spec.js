@@ -47,7 +47,8 @@ context('rdfa editor tests', () => {
     cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
     // check single delete
     cy.get(dependency.rdfa.editorInner).type('Bold')
-      .type('{selectall}{del}');
+      .type('{selectAll}')
+      .type('{del}');
     cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bold');
     // check separate backspaces
     cy.get(dependency.rdfa.editorInner).type('Bold')
@@ -69,9 +70,10 @@ context('rdfa editor tests', () => {
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
     cy.get(dependency.rdfa.editorInner).find('br')
-      .should('not.exist');
+      .should('have.length', 1); // 1 br exists by default
     cy.get(dependency.rdfa.editorInner).type('{enter}');
-    cy.get(dependency.rdfa.editorInner).find('br');
+    cy.get(dependency.rdfa.editorInner).find('br')
+      .should('have.length', 2);
     // check space
     cy.get(dependency.rdfa.editorInner).clear()
       .type(' ');
