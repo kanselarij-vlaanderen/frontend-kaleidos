@@ -111,6 +111,7 @@ export default class SearchMinisterFilterComponent extends Component {
       sort: 'last-name'
     });
     this.pastMinisters = allMinisters
-      .filter((minister) => !this.currentMinisters.includes(minister));
+      .filter((minister) => !this.currentMinisters.includes(minister))
+      .filter((minister) => minister.uri.startsWith('http://themis.vlaanderen.be'));
   }
 }
