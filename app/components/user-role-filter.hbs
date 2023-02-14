@@ -1,12 +1,18 @@
 {{#if this.loadRoles.isRunning}}
   <Auk::Loader />
 {{else}}
-  <Auk::Label>{{t "filter-on-rights"}}</Auk::Label>
-  {{#each this.roles as |role|}}
-    <AuControlCheckbox
-      @label={{role.label}}
-      @checked={{includes role this.selected}}
-      @onChange={{fn this.toggleRole role}}
-    />
-  {{/each}}
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>{{t "filter-on-rights"}}</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::CheckboxList>
+        {{#each this.roles as |role|}}
+          <AuControlCheckbox
+            @label={{role.label}}
+            @checked={{includes role this.selected}}
+            @onChange={{fn this.toggleRole role}}
+          />
+        {{/each}}
+      </Auk::CheckboxList>
+    </Fieldset.content>
+  </AuFieldset>
 {{/if}}

@@ -7,13 +7,17 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
+    },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
     },
     page: {
       refreshModel: true,
@@ -74,11 +78,16 @@ export default class CasesSearchRoute extends Route {
       'shortTitle^4',
       'subcaseTitle^2',
       'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
     ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -113,8 +122,14 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
+    } else if (params.archived === 'only') {
+      filter.isArchived = 'true';
+    }
+
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
     }
 
     this.lastParams.commit();

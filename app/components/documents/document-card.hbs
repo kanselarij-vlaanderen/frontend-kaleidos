@@ -106,10 +106,10 @@
             }}
               <Group.Item>
                 <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                  <Auk::Toggle
-                    id="signatureToggle"
+                  <AuToggleSwitch
                     @checked={{if this.signMarkingActivity true false}}
-                    {{on "click" (perform this.markOrUnmarkForSignature)}}
+                    @onChange={{perform this.markOrUnmarkForSignature}}
+                    id="signatureToggle"
                   />
                   <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
                     {{#if this.markOrUnmarkForSignature.isRunning}}

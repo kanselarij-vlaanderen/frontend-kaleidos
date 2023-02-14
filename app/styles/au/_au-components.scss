@@ -294,6 +294,14 @@ $au-button-height: 3.4rem;
   font-size: var(--au-global-font-size) !important;
 }
 
+// Toggle switch
+
+.au-c-toggle-switch__label {
+  &:empty {
+    margin-left: 0;
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {

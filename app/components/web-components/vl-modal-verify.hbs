@@ -59,6 +59,7 @@
                     @alert={{this.isAlertButton}}
                     @icon={{if this.showDestructiveIcon "trash"}}
                     @loading={{@isLoading}}
+                    @disabled={{@isLoading}}
                     {{on "click" @onVerify}}
                   >
                     {{this.verifyButtonText}}

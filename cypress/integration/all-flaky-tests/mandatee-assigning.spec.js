@@ -363,9 +363,15 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
-    cy.wait('@getMandatees1');
-    cy.wait('@getMandatees2');
-    cy.wait('@getMandatees3');
+    cy.wait('@getMandatees1', {
+      timeout: 60000,
+    });
+    cy.wait('@getMandatees2', {
+      timeout: 60000,
+    });
+    cy.wait('@getMandatees3', {
+      timeout: 60000,
+    });
     cy.wait(2000);
     cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)

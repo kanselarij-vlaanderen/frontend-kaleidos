@@ -10,6 +10,6 @@ import templateOnly from '@ember/component/template-only';
  * @param confirmIcon {string} Icon to display inside the confirm button
  * @param alert {boolean} Whether the confirm button is in an alert state (i.e. red or blue)
  * @param disabled {boolean} Whether the confirm button is in a disabled state
- * @param loading {boolean} Whether the confirm button is in a loading state
+ * @param loading {boolean} Whether the confirm button is in a loading state (and also disabled)
  */
 export default templateOnly();
