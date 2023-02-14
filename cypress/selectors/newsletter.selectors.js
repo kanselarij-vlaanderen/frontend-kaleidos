@@ -15,6 +15,7 @@ const selectors = {
   // component agendaitem-news-item
   agendaitemNewsItem: {
     title: '[data-test-agendaitem-news-item-title]',
+    content: '[data-test-agendaitem-news-item-content]',
     themes: '[data-test-agendaitem-news-item-themes]',
   },
 
