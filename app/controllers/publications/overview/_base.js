@@ -18,6 +18,8 @@ export default class PublicationsOverviewBaseController extends Controller {
   @action
   saveTableConfig() {
     this.tableConfig.saveToLocalStorage();
+    // refreshes the active route, which could mean any of the tabs that extend _base route
+    this.router.refresh(this.router.currentRouteName);
   }
 
   @action

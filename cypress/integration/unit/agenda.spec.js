@@ -146,7 +146,9 @@ context('Agenda tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     // detail view
     cy.get(agenda.agendaitemTitlesView.edit).click();
-    cy.get(agenda.agendaitemTitlesEdit.confidential).click();
+    cy.get(agenda.agendaitemTitlesEdit.confidential)
+      .parent()
+      .click();
     // When typing, the name in de sidebar item also changes, showing the whitespaces before saving
 
     // short title
@@ -194,7 +196,9 @@ context('Agenda tests', () => {
 
     // rollback confidentiality should work
     cy.get(agenda.agendaitemTitlesView.edit).click();
-    cy.get(agenda.agendaitemTitlesEdit.confidential).click();
+    cy.get(agenda.agendaitemTitlesEdit.confidential)
+      .parent()
+      .click();
     cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
     cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
     cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
