@@ -1,13 +1,19 @@
 {{page-title (t "cases")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "type"}}</Auk::Label>
-    <AuControlCheckbox
-      data-test-route-search-cases-toggle-decisions={{true}}
-      @label={{t "search-in-decisions-only"}}
-      @checked={{this.decisionsOnly}}
-      @onChange={{set this "decisionsOnly"}}
-    />
+    <AuFieldset as |Fieldset|>
+      <Fieldset.legend>{{t "type"}}</Fieldset.legend>
+      <Fieldset.content>
+        <Auk::CheckboxList>
+          <AuControlCheckbox
+            data-test-route-search-cases-toggle-decisions={{true}}
+            @label={{t "search-in-decisions-only"}}
+            @checked={{this.decisionsOnly}}
+            @onChange={{set this "decisionsOnly"}}
+          />
+        </Auk::CheckboxList>
+      </Fieldset.content>
+    </AuFieldset>
   </div>
   {{#if (user-may "manage-cases")}}
     <div class="au-c-card au-o-box au-o-box--small">

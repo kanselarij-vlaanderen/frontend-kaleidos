@@ -1,8 +1,14 @@
 <div class="au-c-card au-o-box au-o-box--small">
-  <Auk::Label>{{t "confidential"}}</Auk::Label>
-  <AuControlCheckbox
-    @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
-    @checked={{@confidentialOnly}}
-    @onChange={{@onChange}}
-  />
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>{{t "confidential"}}</Fieldset.legend>
+    <Fieldset.content>
+      <Auk::CheckboxList>
+        <AuControlCheckbox
+          @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+          @checked={{@confidentialOnly}}
+          @onChange={{@onChange}}
+        />
+      </Auk::CheckboxList>
+    </Fieldset.content>
+  </AuFieldset>
 </div>

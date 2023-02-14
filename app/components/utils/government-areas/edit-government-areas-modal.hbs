@@ -11,16 +11,20 @@
       {{!-- Extra loading state test needed here despite the "LoadableContent", since "LoadableContent"
       with @reserveSpace={{true}} already renders while loading anyway (in order to prevent unnecessary modal resizes) --}}
       {{#unless this.loadGovernmentAreas.isRunning}}
-        <Auk::Label>{{t "government-domains-government-fields"}}</Auk::Label>
-        <Utils::GovernmentAreas::AreaSelector::GovernmentAreaSelectorForm
-          @availableFields={{this.governmentFields}}
-          @selectedFields={{this.selectedGovernmentFields}}
-          @onSelectFields={{this.selectField}}
-          @onDeselectFields={{this.deselectField}}
-          @selectedDomains={{this.selectedGovernmentDomains}}
-          @onSelectDomains={{this.selectDomain}}
-          @onDeselectDomains={{this.deselectDomain}}
-        />
+        <AuFieldset as |Fieldset|>
+          <Fieldset.legend>{{t "government-domains-government-fields"}}</Fieldset.legend>
+          <Fieldset.content>
+            <Utils::GovernmentAreas::AreaSelector::GovernmentAreaSelectorForm
+              @availableFields={{this.governmentFields}}
+              @selectedFields={{this.selectedGovernmentFields}}
+              @onSelectFields={{this.selectField}}
+              @onDeselectFields={{this.deselectField}}
+              @selectedDomains={{this.selectedGovernmentDomains}}
+              @onSelectDomains={{this.selectDomain}}
+              @onDeselectDomains={{this.deselectDomain}}
+            />
+          </Fieldset.content>
+        </AuFieldset>
       {{/unless}}
     </Utils::LoadableContent>
   </Auk::Modal::Body>
@@ -33,6 +37,7 @@
       data-test-edit-government-fields-modal-save
       @skin="primary"
       @loading={{this.save.isRunning}}
+      @disabled={{this.save.isRunning}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}
