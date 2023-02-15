@@ -1,24 +1,16 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
-export default class CasesSearchController extends Controller {
-  @service router;
+export default class SearchDecisionsController extends Controller {
   @service intl;
+  @service router;
 
   queryParams = [
     {
-      archived: {
-        type: 'string',
-      },
-      decisionsOnly: {
-        type: 'boolean',
-      },
-      confidentialOnly: {
-        type: 'boolean',
-      },
       page: {
         type: 'number',
       },
@@ -37,27 +29,9 @@ export default class CasesSearchController extends Controller {
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
   ];
 
-  archivedOptions = [
-    {
-      label: this.intl.t('search-hide-archived'),
-      value: 'hide',
-    },
-    {
-      label: this.intl.t('show-archived'),
-      value: 'show',
-    },
-    {
-      label: this.intl.t('search-archived-only'),
-      value: 'only',
-    },
-  ];
-
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked archived;
-  @tracked decisionsOnly;
-  @tracked confidentialOnly;
   @tracked searchText;
 
   constructor() {
@@ -65,9 +39,6 @@ export default class CasesSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = this.sortOptions[1].value;
-    this.archived = this.archivedOptions[0];
-    this.decisionsOnly = false;
-    this.confidentialOnly = false;
   }
 
   get emptySearch() {
@@ -85,13 +56,22 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  setArchived(option) {
-    this.archived = option;
-  }
-
-  @action
-  navigateToCase(decisionmakingFlow) {
-    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+  navigateToDecision(searchEntry) {
+    if (searchEntry.meetingId) {
+      this.router.transitionTo(
+        'agenda.agendaitems.agendaitem.decisions',
+        searchEntry.meetingId,
+        searchEntry.agendaId,
+        searchEntry.id
+      );
+    } else {
+      warn(
+        `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to decisions`,
+        {
+          id: 'agendaitem.no-meeting',
+        }
+      );
+    }
   }
 
   get customFiltersElement() {

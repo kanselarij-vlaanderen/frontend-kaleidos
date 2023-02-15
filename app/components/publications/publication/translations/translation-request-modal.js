@@ -50,7 +50,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       this.uploadedPieces.length === 0 ||
       this.sumOfUploadedPiecesIsTooLarge ||
       !this.validators.areValid ||
-      this.cancel.isRunning
+      this.cancel.isRunning ||
+      this.save.isRunning
     );
   }
 
