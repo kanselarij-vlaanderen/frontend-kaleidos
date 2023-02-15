@@ -60,7 +60,10 @@
                 data-test-inscription-edit-save
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                @disabled={{not this.isShortTitleValid}}
+                @disabled={{or
+                  (not this.isShortTitleValid)
+                  this.save.isRunning
+                }}
                 {{on "click" (perform this.save)}}
               >
                 {{t "save"}}
