@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 
-export default class CasesSearchController extends Controller {
+export default class SearchDocumentsController extends Controller {
   @service router;
   @service intl;
   @service conceptStore;

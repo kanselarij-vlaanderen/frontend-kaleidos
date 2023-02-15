@@ -8,7 +8,7 @@ import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class CasesSearchRoute extends Route {
+export default class SearchDocumentsRoute extends Route {
   @service store;
 
   queryParams = {
