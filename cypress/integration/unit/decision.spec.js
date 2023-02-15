@@ -162,7 +162,7 @@ context('Decision tests', () => {
 
   it('should test if changing subcase to confidential sets correct access rights', () => {
     cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
     cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseTitlesView.edit).click();
     cy.get(cases.subcaseTitlesEdit.confidential)
