@@ -1146,5 +1146,6 @@
   "delete-empty-case": "Leeg dossier verwijderen?",
   "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
   "open": "Open",
-  "removed-cases": "Verwijderde dossiers"
+  "removed-cases": "Verwijderde dossiers",
+  "clear-filters": "Filters verwijderen"
 }
