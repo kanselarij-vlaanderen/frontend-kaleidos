@@ -70,6 +70,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{this.selectSize}}
       @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToCase}}
     >
       <:body as |row|>
         <td>

@@ -79,8 +79,8 @@ export default class SearchNewsItemsRoute extends Route {
         this.postProcessHighlights(newsItem);
         const entry = { ...newsItem.attributes, ...newsItem.highlight };
         entry.id = newsItem.id;
-        this.postProcessAgendaitems(newsItem);
-        this.postProcessMandatees(newsItem);
+        this.postProcessAgendaitems(entry);
+        this.postProcessMandatees(entry);
         return entry;
       },
       ['title,subTitle,htmlContent']
@@ -108,23 +108,23 @@ export default class SearchNewsItemsRoute extends Route {
   }
 
   postProcessAgendaitems(newsletter) {
-    const agendaitems = newsletter.attributes.agendaitems;
+    const agendaitems = newsletter.agendaitems;
     if (Array.isArray(agendaitems)) {
-      newsletter.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
+      newsletter.latestAgendaitem = agendaitems.find((agendaitem) => {
         return agendaitem['nextVersionId'] == null;
       });
     } else {
-      newsletter.attributes.latestAgendaitem = agendaitems;
+      newsletter.latestAgendaitem = agendaitems;
     }
   }
 
   postProcessMandatees(newsletter) {
-    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
+    const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
       const sortedMandatees = mandatees.sortBy('priority');
-      newsletter.attributes.mandatees = sortedMandatees;
+      newsletter.mandatees = sortedMandatees;
     } else {
-      newsletter.attributes.mandatees = [mandatees];
+      newsletter.mandatees = [mandatees];
     }
   }
 
