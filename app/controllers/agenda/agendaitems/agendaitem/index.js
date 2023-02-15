@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { isPresent } from '@ember/utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -24,6 +25,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked decisionActivity;
 
   @tracked isEditingAgendaItemTitles = false;
+
+  get isClosedMeeting() {
+    return isPresent(this.meeting.agenda.get('id'));
+  }
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item, called on the delete of an agendaitem

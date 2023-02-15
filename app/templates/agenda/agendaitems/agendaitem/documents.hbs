@@ -14,6 +14,7 @@
             data-test-route-agenda---agendaitem-documents-batch-edit
             @icon="pencil"
             @loading={{this.ensureFreshData.isRunning}}
+            @disabled={{this.ensureFreshData.isRunning}}
             {{on "click" this.openBatchDetails}}
           >
             {{t "batch-edit"}}

@@ -44,17 +44,23 @@
         {{/if}}
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
-        <Auk::Label>{{t "blocked-on"}}</Auk::Label>
-        <AuControlCheckbox
-          @label={{t "membership"}}
-          @checked={{this.showBlockedMembershipsOnly}}
-          @onChange={{toggle "showBlockedMembershipsOnly" this}}
-        />
-        <AuControlCheckbox
-          @label={{t "user"}}
-          @checked={{this.showBlockedUsersOnly}}
-          @onChange={{toggle "showBlockedUsersOnly" this}}
-        />
+        <AuFieldset as |Fieldset|>
+          <Fieldset.legend>{{t "blocked-on"}}</Fieldset.legend>
+          <Fieldset.content>
+            <Auk::CheckboxList>
+              <AuControlCheckbox
+                @label={{t "membership"}}
+                @checked={{this.showBlockedMembershipsOnly}}
+                @onChange={{toggle "showBlockedMembershipsOnly" this}}
+              />
+              <AuControlCheckbox
+                @label={{t "user"}}
+                @checked={{this.showBlockedUsersOnly}}
+                @onChange={{toggle "showBlockedUsersOnly" this}}
+              />
+            </Auk::CheckboxList>
+          </Fieldset.content>
+        </AuFieldset>
       </div>
     </div>
   </div>

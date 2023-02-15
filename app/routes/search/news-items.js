@@ -3,18 +3,9 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
-import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class AgendaitemSearchRoute extends Route {
+export default class SearchNewsItemsRoute extends Route {
   queryParams = {
-    types: {
-      refreshModel: true,
-    },
-    latestOnly: {
-      refreshModel: true,
-      as: 'uitsluitend-laatste-versie',
-    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -29,30 +20,11 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = [
-    'title^4',
-    'shortTitle^4',
-    'mandateRoles^2',
-    'mandateeFirstNames^3',
-    'mandateeFamilyNames^3',
-    'pieceNames^2',
-    'pieceFileNames^2',
-    'pieces.content',
-    'decisionName^2',
-    'decisionFileName^2',
-    'decision.content',
-    'newsItemTitle^2',
-    'newsItem',
-  ];
-
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
+  textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -62,11 +34,6 @@ export default class AgendaitemSearchRoute extends Route {
     if (!params.mandatees) {
       params.mandatees = null;
     }
-    this.lastParams.stageLive(params);
-
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
-      params.page = 0;
-    }
 
     const searchModifier = ':sqs:';
     const textSearchKey = this.textSearchFields.join(',');
@@ -75,9 +42,8 @@ export default class AgendaitemSearchRoute extends Route {
 
     if (!isEmpty(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    }
-    if (!isEmpty(params.mandatees)) {
-      filter[':terms:mandateeIds'] = params.mandatees;
+    } if (!isEmpty(params.mandatees)) {
+      filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -87,35 +53,28 @@ export default class AgendaitemSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:agendaitems.meetingDate'] = [to.toISOString(), from.toISOString()].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
-      filter[':gte:sessionDates'] = date.toISOString();
+      filter[':gte:agendaitems.meetingDate'] = date.toISOString();
     } else if (!isEmpty(params.dateTo)) {
       const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte:sessionDates'] = date.toISOString();
+      filter[':lte:agendaitems.meetingDate'] = date.toISOString();
     }
 
-    if (params.types.length) {
-      if (params.types.includes('nota') && !params.types.includes('mededeling')) {
-        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
-      } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
-        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-      }
-    }
-
-    if (params.latestOnly) {
-      filter[':has-no:nextVersionId'] = 't';
-    }
-
-    this.lastParams.commit();
+    // Filter out news-items that are not linked to a meeting via treatment(s)/agendaitem(s)
+    filter[':has:agendaitems'] = 't';
 
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('agendaitems', params.page, params.size, params.sort, filter, (agendaitem) => {
-      const entry = agendaitem.attributes;
-      entry.id = agendaitem.id;
+
+    return search('news-items', params.page, params.size, params.sort, filter, (newsItem) => {
+      const entry = newsItem.attributes;
+      entry.id = newsItem.id;
+      this.postProcessAgendaitems(newsItem);
+      this.postProcessDecisions(newsItem);
+      this.postProcessMandatees(newsItem);
       return entry;
     });
   }
@@ -123,10 +82,6 @@ export default class AgendaitemSearchRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const searchText = this.paramsFor('search').searchText;
-
-    if (controller.page !== this.lastParams.committed.page) {
-      controller.page = this.lastParams.committed.page;
-    }
 
     controller.searchText = searchText;
   }
@@ -139,6 +94,39 @@ export default class AgendaitemSearchRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
-    return true;
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
+  }
+
+  postProcessAgendaitems(newsletter) {
+    const agendaitems = newsletter.attributes.agendaitems;
+    if (Array.isArray(agendaitems)) {
+      newsletter.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
+        return agendaitem['nextVersionId'] == null;
+      });
+    } else {
+      newsletter.attributes.latestAgendaitem = agendaitems;
+    }
+  }
+
+  postProcessDecisions(newsletter) {
+    const decisions = newsletter.attributes.decisions;
+    if (Array.isArray(decisions)) {
+      // TODO for now, if there are multiple decisions, we just grab the first one
+      newsletter.attributes.decision = decisions.firstObject;
+    } else {
+      newsletter.attributes.decision = decisions;
+    }
+  }
+
+  postProcessMandatees(newsletter) {
+    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
+    if (Array.isArray(mandatees)) {
+      const sortedMandatees = mandatees.sortBy('priority');
+      newsletter.attributes.mandatees = sortedMandatees;
+    } else {
+      newsletter.attributes.mandatees = [mandatees];
+    }
   }
 }

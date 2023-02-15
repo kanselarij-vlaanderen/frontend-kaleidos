@@ -14,7 +14,7 @@
   <tbody class="{{if (or @clickable @onClickRow) "auk-table--clickable-rows"}}">
     {{#if @loading}}
       <tr>
-        <td colspan="100%">
+        <td colspan="100%" class="is-loading-data">
           {{#if (has-block "loading")}}
             {{yield to="loading"}}
           {{else}}

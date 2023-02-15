@@ -1,20 +1,14 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
-import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { parse, startOfDay, endOfDay } from 'date-fns';
+import { inject as service } from '@ember/service';
 
-export default class AgendaitemSearchRoute extends Route {
+export default class SearchDecisionsRoute extends Route {
+  @service store;
+
   queryParams = {
-    types: {
-      refreshModel: true,
-    },
-    latestOnly: {
-      refreshModel: true,
-      as: 'uitsluitend-laatste-versie',
-    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -30,29 +24,16 @@ export default class AgendaitemSearchRoute extends Route {
   };
 
   textSearchFields = [
-    'title^4',
-    'shortTitle^4',
-    'mandateRoles^2',
-    'mandateeFirstNames^3',
-    'mandateeFamilyNames^3',
-    'pieceNames^2',
-    'pieceFileNames^2',
-    'pieces.content',
+    'subcaseTitle^2',
     'decisionName^2',
     'decisionFileName^2',
-    'decision.content',
-    'newsItemTitle^2',
-    'newsItem',
+    'decision.content'
   ];
-
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams};
+
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -61,11 +42,6 @@ export default class AgendaitemSearchRoute extends Route {
     }
     if (!params.mandatees) {
       params.mandatees = null;
-    }
-    this.lastParams.stageLive(params);
-
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
-      params.page = 0;
     }
 
     const searchModifier = ':sqs:';
@@ -96,26 +72,16 @@ export default class AgendaitemSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (params.types.length) {
-      if (params.types.includes('nota') && !params.types.includes('mededeling')) {
-        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
-      } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
-        filter.type = CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-      }
-    }
-
-    if (params.latestOnly) {
-      filter[':has-no:nextVersionId'] = 't';
-    }
-
-    this.lastParams.commit();
-
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search('agendaitems', params.page, params.size, params.sort, filter, (agendaitem) => {
+    // Since we want to show the decisions in their agendaitem, we query for
+    // agendaitems here while only filtering on decision data, so that we can
+    // easily link to the agendaitem route
+    return search('agendaitems', params.page, params.size, params.sort, filter, async (agendaitem) => {
       const entry = agendaitem.attributes;
       entry.id = agendaitem.id;
+      await this.postProcessDecisions(entry);
       return entry;
     });
   }
@@ -123,10 +89,6 @@ export default class AgendaitemSearchRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const searchText = this.paramsFor('search').searchText;
-
-    if (controller.page !== this.lastParams.committed.page) {
-      controller.page = this.lastParams.committed.page;
-    }
 
     controller.searchText = searchText;
   }
@@ -140,5 +102,14 @@ export default class AgendaitemSearchRoute extends Route {
       controller.isLoadingModel = false;
     });
     return true;
+  }
+
+  async postProcessDecisions(entry) {
+    if (entry.decisionResult) {
+      entry.decisionResult = await this.store.findRecordByUri(
+        'concept',
+        entry.decisionResult
+      );
+    }
   }
 }

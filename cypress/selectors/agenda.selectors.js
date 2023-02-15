@@ -58,6 +58,7 @@ const selectors = {
   agendaOverviewItem: {
     container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
+    isNew: '[data-test-agenda-overview-item-is-new]',
     title: '[data-test-agenda-overview-item-title]',
     subcaseName: '[data-test-agenda-overview-item-subcase-name]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
@@ -156,17 +157,6 @@ const selectors = {
   agendaSideNav: {
     agenda: '[data-test-agenda-side-nav-agenda]',
     agendaName: '[data-test-agenda-side-nav-agenda-name]',
-  },
-
-  // compare-agenda-list
-  compareAgenda: {
-    showChanges: '[data-test-compare-show-changes]',
-    agendaLeft: '[data-test-compare-agenda-left]',
-    agendaRight: '[data-test-compare-agenda-right]',
-    agendaitemLeft: '[data-test-compare-agendaitem-left]',
-    agendaitemRight: '[data-test-compare-agendaitem-right]',
-    announcementLeft: '[data-test-compare-announcement-left]',
-    announcementRight: '[data-test-compare-announcement-right]',
   },
 
   // agendaitem-titles-view

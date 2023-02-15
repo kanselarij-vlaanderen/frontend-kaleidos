@@ -114,7 +114,6 @@ context('Testing the application as Admin user', () => {
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
-      cy.get(agenda.agendaTabs.tabs).contains('Vergelijk');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
 
       // Main view - Side Nav (left)
@@ -418,24 +417,6 @@ context('Testing the application as Admin user', () => {
       // TODO-bug
       // !This fails because you can go to the address and not get rerouted.
       // cy.get(agenda.agendaitemNav.activeTab).contains('Dossier');
-    });
-
-    it('check agenda compare', () => {
-      // There should be no difference with released except that non-editors wont see designagendas
-      // Open agenda
-      // Compare Tab
-      cy.visitAgendaWithLink(agendaOpenLink);
-      cy.clickReverseTab('Vergelijk');
-      cy.get(agenda.compareAgenda.agendaLeft).click();
-      cy.selectFromDropdown('Agenda A');
-      cy.get(auk.loader).should('not.exist');
-
-      cy.get(agenda.compareAgenda.agendaRight).click();
-      cy.selectFromDropdown('Ontwerpagenda B');
-      cy.get(auk.loader).should('not.exist');
-
-      cy.get(agenda.compareAgenda.agendaitemLeft);
-      cy.get(agenda.compareAgenda.agendaitemRight);
     });
 
     it('check agenda documents', () => {
