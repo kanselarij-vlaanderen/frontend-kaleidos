@@ -24,6 +24,7 @@
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
         <SanitizeHtml
+          data-test-route-search-agendaitems-row-shorttitle
           @raw={{true}}
           @value={{if @shortTitle @shortTitle @title}}
         />
