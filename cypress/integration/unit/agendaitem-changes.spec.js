@@ -44,8 +44,8 @@ context('Agendaitem changes tests', () => {
     cy.visitAgendaWithLink(agendaURL);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
     cy.setFormalOkOnItemWithIndex(1);
-    // TODO, toggle show changes is gone, check new doc icon
-    // cy.agendaitemExists(subcaseTitle1);
+    cy.toggleShowChanges();
+    cy.agendaitemExists(subcaseTitle1);
   });
 
   it('should add an agendaitem and highlight it as changed', () => {
@@ -53,9 +53,9 @@ context('Agendaitem changes tests', () => {
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2);
     cy.setFormalOkOnItemWithIndex(2); // punt 3
-    // TODO, toggle show changes is gone, check new agendaitem icon
-    // cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 3);
-    // cy.agendaitemExists(subcaseTitle2);
+    cy.toggleShowChanges();
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 3);
+    cy.agendaitemExists(subcaseTitle2);
     cy.setFormalOkOnItemWithIndex(2); // punt 4
     cy.approveDesignAgenda();
   });
@@ -67,8 +67,8 @@ context('Agendaitem changes tests', () => {
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.setFormalOkOnItemWithIndex(1);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
-    // TODO, toggle show changes is gone, check new doc icon
-    // cy.agendaitemExists(subcaseTitle1);
+    cy.toggleShowChanges();
+    cy.agendaitemExists(subcaseTitle1);
   });
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
@@ -80,9 +80,9 @@ context('Agendaitem changes tests', () => {
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle3);
     cy.setFormalOkOnItemWithIndex(4);
-    // TODO, toggle show changes is gone, check new agendaitem icon for remark
-    // cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
-    // cy.agendaitemExists(subcaseTitle3);
+    cy.toggleShowChanges();
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+    cy.agendaitemExists(subcaseTitle3);
     cy.approveDesignAgenda();
   });
 
@@ -93,8 +93,8 @@ context('Agendaitem changes tests', () => {
     cy.addDocumentsToAgendaitem(subcaseTitle3, files);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.setFormalOkOnItemWithIndex(4);
-    // TODO, toggle show changes is gone, check new doc icon
-    // cy.agendaitemExists(subcaseTitle3);
+    cy.toggleShowChanges();
+    cy.agendaitemExists(subcaseTitle3);
   });
 
   it('should add a document to the approval (verslag) and highlight it as changed', () => {
@@ -108,8 +108,8 @@ context('Agendaitem changes tests', () => {
     cy.addNewDocumentsInUploadModal(files, 'agendaitems');
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.setFormalOkOnItemWithIndex(0);
-    // TODO, toggle show changes is gone, check new doc icon for approval item
-    // cy.agendaitemExists(approvalTitle);
+    cy.toggleShowChanges();
+    cy.agendaitemExists(approvalTitle);
   });
 
   it('should verify that only changes are shown by approving with no changes', () => {
@@ -117,8 +117,8 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.approveDesignAgenda();
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 5);
-    // TODO, toggle show changes is gone, check no new docs or agendaitems
-    // cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 0);
+    cy.toggleShowChanges();
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 0);
   });
 
   it('should check the printable version of the agenda', () => {
