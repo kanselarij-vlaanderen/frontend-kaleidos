@@ -1,5 +1,5 @@
-import { parse } from 'date-fns';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import moment from 'moment';
 
 /**
  * This code is 99% the same as vr-document-name.js and is used to cover some issues sorting legacy documents
@@ -53,10 +53,8 @@ export default class VRLegacyDocumentName {
     if (versionSuffix) {
       versionNumber = CONFIG.numbersBylatinAdverbialNumberals[versionSuffix.toLowerCase()];
     }
-    const date = parse(match.groups.date, 'yyyy ddMM', new Date());
-    // TODO throw error when date is invalid (using isNaN(date) check)
     const meta = {
-      date,
+      date: moment(match.groups.date, 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       casePrefix: match.groups.casePrefix,
       docType: match.groups.docType,
       caseNr: parseInt(match.groups.caseNr, 10),

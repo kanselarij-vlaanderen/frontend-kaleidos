@@ -13,18 +13,25 @@ export default class Agenda extends Model.extend(LoadableModel) {
   @attr('datetime') created;
   @attr('datetime') modified;
 
-  @belongsTo('meeting', { inverse: 'agenda', async: true }) meeting;
-  @belongsTo('meeting', { inverse: 'agendas', async: true }) createdFor;
+  @belongsTo('meeting') createdFor;
   @belongsTo('agendastatus', { inverse: null }) status;
-  @belongsTo('agenda', { inverse: 'previousVersion', async: true }) nextVersion; // Set in agenda-approve-service, read-only here
-  @belongsTo('agenda', { inverse: 'nextVersion', async: true }) previousVersion; // Set in agenda-approve-service, read-only here
+  // the next and previous version of agenda is set in agenda-approve-service, read-only in frontend
+  @belongsTo('agenda', {
+    inverse: 'nextVersion',
+    serialize: false,
+  }) previousVersion;
+  @belongsTo('agenda', {
+    inverse: 'previousVersion',
+    serialize: false,
+  }) nextVersion;
 
-  @hasMany('agendaitem', { inverse: 'agenda', async: true }) agendaitems;
+  @hasMany('agendaitem', {
+    inverse: null,
+    serialize: false,
+  }) agendaitems;
 
   get agendaName() {
-    let prefix = this.status.get('isDesignAgenda')
-      ? this.intl.t('design-agenda')
-      : this.intl.t('agenda');
+    let prefix = this.status.get('isDesignAgenda') ? this.intl.t('design-agenda') : this.intl.t('agenda');
     let name = this.serialnumber || '';
     return `${prefix} ${name}`.trim();
   }

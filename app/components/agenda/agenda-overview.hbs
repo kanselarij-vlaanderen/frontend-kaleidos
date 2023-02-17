@@ -3,7 +3,7 @@
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "end-editing-overview"}}
-      @onClear={{@toggleIsEditingOverview}}
+      @clearAction={{@toggleIsEditingOverview}}
     />
   {{/if}}
   <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">
@@ -78,12 +78,7 @@
       </div>
     {{else}}
       <div class="auk-u-mt-2">
-        <AuAlert
-          @skin="info"
-          @icon="info-circle"
-        >
-          {{t "no-agendaitems-yet"}}
-        </AuAlert>
+        <WebComponents::VlAlert @message={{t "no-agendaitems-yet"}} />
       </div>
     {{/if}}
   {{else}}
@@ -120,12 +115,7 @@
         {{/each}}
       </ul>
     {{else}}
-      <AuAlert
-        @skin="info"
-        @icon="info-circle"
-      >
-        {{t "no-announcements-yet"}}
-      </AuAlert>
+      <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}
   </div>
 </div>

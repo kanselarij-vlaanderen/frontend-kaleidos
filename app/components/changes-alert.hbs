@@ -1,17 +1,16 @@
-<div
-  class="auk-o-flex auk-o-flex--justify-between auk-u-maximize-width vl-alert vl-alert--warning"
-  data-test-changes-alert
->
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<div data-test-changes-alert class="auk-o-flex auk-o-flex--justify-between auk-u-maximize-width">
   <p class="vl-alert__content">
-    {{@message}}
+    {{this.message}}
   </p>
   <div class="button-container">
     <AuButton
       data-test-changes-alert-close
       @skin="secondary"
-      {{on "click" @onClear}}
+      {{action "clearAction"}}
     >
-      {{@buttonText}}
+      {{this.buttonText}}
     </AuButton>
   </div>
 </div>

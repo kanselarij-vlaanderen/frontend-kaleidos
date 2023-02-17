@@ -6,11 +6,11 @@ export default class User extends Model {
   @attr('string') lastName;
   @attr('string') identifier;
 
-  @belongsTo('account', { inverse: 'user', async: true }) account;
-  @belongsTo('concept', { inverse: null, async: true }) status;
-  @belongsTo('login-activity', { inverse: 'user', async: true }) loginActivity;
+  @belongsTo('account') account;
+  @belongsTo('concept') status;
+  @belongsTo('login-activity') loginActivity;
 
-  @hasMany('membership', { inverse: 'user', async: true }) memberships;
+  @hasMany('membership') memberships;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;

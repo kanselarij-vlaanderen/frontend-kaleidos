@@ -1,6 +1,6 @@
 import Model, { belongsTo, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { formatDistanceToNow } from 'date-fns';
+import moment from 'moment';
 import fetch from 'fetch';
 import ModifiedOldDataError from 'frontend-kaleidos/errors/modified-old-data-error';
 
@@ -16,7 +16,7 @@ export default class ModelWithModifier extends Model {
   @service toaster;
 
   @attr('datetime') modified;
-  @belongsTo('user', { inverse: null, async: true }) modifiedBy;
+  @belongsTo('user') modifiedBy;
 
   setModified() {
     this.modified = new Date();
@@ -44,14 +44,12 @@ export default class ModelWithModifier extends Model {
       // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
       // No set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
       // We still want to change modified data to reflect that a change has happened (so other users can't save without refreshing page)
-      case '': {
-        // only relations are dirty (f.e. themes on newsItem)
+      case '': { // only relations are dirty (f.e. themes on newsItem)
         await this.preEditOrSaveCheck();
         this.setModified();
         break;
       }
-      case undefined: {
-        // only relations are dirty? this used to work but now we seem to be getting an empty string instead
+      case undefined: { // only relations are dirty? this used to work but now we seem to be getting an empty string instead
         await this.preEditOrSaveCheck();
         this.setModified();
         break;
@@ -74,7 +72,8 @@ export default class ModelWithModifier extends Model {
    */
   async preEditOrSaveCheck() {
     if (!(await this._saveAllowed())) {
-      const { oldModelData, oldModelModified } = await this._getOldModelData();
+      const { oldModelData, oldModelModifiedMoment } =
+        await this._getOldModelData();
       this.mustRefresh = true;
       const userId =
         oldModelData.data[0].relationships['modified-by'].links.self;
@@ -85,7 +84,7 @@ export default class ModelWithModifier extends Model {
         modelName: this.intl.t(this.constructor.modelName),
         firstname: vals['first-name'],
         lastname: vals['last-name'],
-        time: formatDistanceToNow(oldModelModified),
+        time: oldModelModifiedMoment.locale('nl').fromNow(),
       });
       this.toaster.error(
         errorMessage,
@@ -109,23 +108,27 @@ export default class ModelWithModifier extends Model {
    * @returns {Promise<Boolean>}
    */
   async _saveAllowed() {
+    const modified = this.modified;
     const modifiedBy = await this.modifiedBy;
+    const currentModifiedModel = moment.utc(this.modified);
     if (this.mustRefresh) {
       return false;
     }
 
-    const { oldModelData, oldModelModified } = await this._getOldModelData();
+    const { oldModelData, oldModelModifiedMoment } =
+      await this._getOldModelData();
     // If the record has no modified and modifiedBy data it's a brand new record
     // that has no backend data and we can always save it.
     // If the record's modified and modifiedBy data matches the backend data, we
     // can save the record since we wouldn't be overwriting any other changes.
     // Otherwise, disallow saving the record.
     return (
-      typeof this.modified === 'undefined' ||
-        modifiedBy === null ||
-        (typeof this.modified !== 'undefined' &&
-         this.modified.getTime() === oldModelModified.getTime() &&
-         typeof oldModelData.data[0].relationships['modified-by'] !== 'undefined')
+      typeof modified === 'undefined' ||
+      modifiedBy === null ||
+      (typeof modified !== 'undefined' &&
+        currentModifiedModel.isSame(oldModelModifiedMoment) &&
+        typeof oldModelData.data[0].relationships['modified-by'] !==
+          'undefined')
     );
   }
 
@@ -148,10 +151,12 @@ export default class ModelWithModifier extends Model {
           id: this.id,
         },
       });
-    const oldModelModified = new Date(oldModelData.data[0].attributes.modified);
+    const oldModelModifiedMoment = moment.utc(
+      oldModelData.data[0].attributes.modified
+    );
     return {
       oldModelData,
-      oldModelModified,
+      oldModelModifiedMoment,
     };
   }
 }

@@ -22,6 +22,10 @@ module.exports = function (defaults) {
     flatpickr: {
       locales: ['nl'],
     },
+    moment: {
+      outputFormat: 'L',
+      allowEmpty: true,
+    },
     outputPaths: {
       app: {
         css: {

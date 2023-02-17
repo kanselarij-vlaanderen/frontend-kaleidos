@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { startOfDay } from 'date-fns';
+import moment from 'moment';
 
 export default class SettingsMinistersRoute extends Route {
   /*
@@ -13,7 +13,7 @@ export default class SettingsMinistersRoute extends Route {
   @service mandatees;
 
   async model() {
-    const today = startOfDay(new Date()); // Round date for higher caching efficieny
+    const today = moment().startOf('day').toDate(); // Round date for higher caching efficiency
     const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(today);
     return currentMandatees;
   }

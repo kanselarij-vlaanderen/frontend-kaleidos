@@ -9,12 +9,7 @@
         @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}} />
     {{else}}
       <div class="auk-u-mt-2">
-        <AuAlert
-          @skin="info"
-          @icon="info-circle"
-        >
-          {{t "no-documents-yet"}}
-        </AuAlert>
+        <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
       </div>
     {{/each}}
   {{/if}}

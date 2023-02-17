@@ -1,4 +1,6 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, {
+  attr, belongsTo
+} from '@ember-data/model';
 
 export default class Identification extends Model {
   @attr('string') idName;
@@ -6,17 +8,9 @@ export default class Identification extends Model {
 
   @belongsTo('publication-flow', {
     inverse: 'identification',
-    async: true,
-  })
-  publicationFlow;
+  }) publicationFlow;
   @belongsTo('publication-flow', {
     inverse: 'numacNumbers',
-    async: true,
-  })
-  publicationFlowForNumac;
-  @belongsTo('structured-identifier', {
-    inverse: 'identification',
-    async: true,
-  })
-  structuredIdentifier;
+  }) publicationFlowForNumac;
+  @belongsTo('structured-identifier') structuredIdentifier;
 }

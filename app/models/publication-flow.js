@@ -1,4 +1,6 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, {
+  attr, belongsTo, hasMany
+} from '@ember-data/model';
 
 export default class PublicationFlow extends Model {
   @attr('string') shortTitle;
@@ -11,38 +13,30 @@ export default class PublicationFlow extends Model {
   @attr('number') numberOfPages;
   @attr('number') numberOfExtracts; // = aantal uittreksels
 
-  @belongsTo('case', { inverse: 'publicationFlows', async: true }) case;
-  @belongsTo('identification', { inverse: 'publicationFlow', async: true })
-  identification;
-  @belongsTo('publication-status', { inverse: 'publications', async: true })
-  status;
-  @belongsTo('publication-mode', { inverse: 'publicationFlow', async: true })
-  mode;
-  @belongsTo('regulation-type', { inverse: 'publicationFlows', async: true })
-  regulationType;
-  @belongsTo('urgency-level', { inverse: 'publications', async: true })
-  urgencyLevel;
+  @belongsTo('case') case;
+  @belongsTo('identification', {
+    inverse: 'publicationFlow',
+  }) identification;
+  @belongsTo('publication-status') status;
+  @belongsTo('publication-mode') mode;
+  @belongsTo('regulation-type') regulationType;
+  @belongsTo('urgency-level') urgencyLevel;
+  // This relation is read-only for concurrency reasons, the linked model is deleted/replaced often
+  // Allowing this relation to serialize with a deleted model results in errors
   @belongsTo('publication-status-change', {
-    inverse: 'publication',
-    async: true,
-  })
-  publicationStatusChange; // This relation is read-only for concurrency reasons, the linked model is deleted/replaced often. Allowing this relation to serialize with a deleted model results in errors
-  @belongsTo('publication-subcase', { inverse: 'publicationFlow', async: true })
-  publicationSubcase;
-  @belongsTo('translation-subcase', { inverse: 'publicationFlow', async: true })
-  translationSubcase;
-  @belongsTo('decision-activity', { inverse: 'publicationFlows', async: true })
-  decisionActivity;
+    serialize: false,
+  }) publicationStatusChange;
+  @belongsTo('publication-subcase') publicationSubcase;
+  @belongsTo('translation-subcase') translationSubcase;
+  @belongsTo('decision-activity') decisionActivity;
 
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',
-    async: true,
-  })
-  numacNumbers;
-  @hasMany('contact-person', { inverse: 'publicationFlow', async: true })
-  contactPersons;
-  @hasMany('mandatee', { inverse: 'publicationFlows', async: true }) mandatees;
-  @hasMany('piece', { inverse: 'publicationFlow', async: true })
-  referenceDocuments;
-  @hasMany('concept', { inverse: null, async: true }) governmentAreas;
+  }) numacNumbers;
+  @hasMany('contact-person') contactPersons;
+  @hasMany('mandatee', {
+    serialize: true,
+  }) mandatees;
+  @hasMany('piece') referenceDocuments;
+  @hasMany('concept') governmentAreas;
 }

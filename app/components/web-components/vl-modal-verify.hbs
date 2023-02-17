@@ -1,11 +1,6 @@
-<div
-  class="auk-modal-backdrop auk-modal-backdrop--visible"
-  data-test-vl-modal-verify-container
-  {{did-insert this.focus}}
-  {{! template-lint-disable no-invalid-interactive}}
-  {{! template-lint-disable no-down-event-binding}}
-  {{on "keydown" this.keyDown}}
->
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
+<div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal-verify-container>
   <div class="auk-modal auk-modal--small" role="dialog">
     <div class="auk-modal__push"></div>
     <div class="auk-modal__content">
@@ -13,7 +8,7 @@
         <Auk::Toolbar @size="large">
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <h2 class="auk-toolbar__title">{{@title}}</h2>
+              <h2 class="auk-toolbar__title">{{this.title}}</h2>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           {{#if this.showCloseButton}}
@@ -23,7 +18,7 @@
                   @skin="naked"
                   @icon="x"
                   @hideText={{true}}
-                  {{on "click" @onCancel}}
+                  {{action "cancel"}}
                 >
                   {{t "cancel"}}
                 </AuButton>
@@ -33,7 +28,7 @@
         </Auk::Toolbar>
       </div>
       <Auk::Modal::Body>
-        <p>{{@message}}</p>
+        <p>{{this.message}}</p>
       </Auk::Modal::Body>
       {{#if this.showActions}}
         <Auk::Modal::Footer @custom={{true}}>
@@ -43,8 +38,8 @@
                 <AuButton
                   data-test-vl-modal-verify-cancel
                   @skin="naked"
-                  @disabled={{@isLoading}}
-                  {{on "click" @onCancel}}
+                  @disabled={{this.isLoading}}
+                  {{action "cancel"}}
                 >
                   {{t "cancel"}}
                 </AuButton>
@@ -58,8 +53,8 @@
                     @skin="primary"
                     @alert={{this.isAlertButton}}
                     @icon={{if this.showDestructiveIcon "trash"}}
-                    @loading={{@isLoading}}
-                    {{on "click" @onVerify}}
+                    @loading={{this.isLoading}}
+                    {{action "verify"}}
                   >
                     {{this.verifyButtonText}}
                   </AuButton>

@@ -1,3 +1,5 @@
+{{!-- TODO: octane-refactor --}}
+{{!-- template-lint-disable no-action --}}
 <div
   data-test-vl-alert
   class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}"
@@ -14,7 +16,7 @@
     </div>
   {{/if}}
   {{#if @closeable}}
-    <button data-test-vl-alert-close class="vl-alert__close" type="button" {{on "click" @onClose}}>
+    <button data-test-vl-alert-close class="vl-alert__close" type="button" {{action "close"}}>
       <Auk::Icon @name="x" />
       <div class="auk-u-sr-only">
         {{t "close"}}

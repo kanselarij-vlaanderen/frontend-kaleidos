@@ -73,13 +73,13 @@ export default class MHeader extends Component {
         this.intl.t('warning-title'),
       );
     }
-    window.location.reload();
+    await this.router.refresh();
   }
 
   @action
   async stopImpersonation() {
     await this.impersonation.stopImpersonation();
-    window.location.reload();
+    await this.router.refresh();
   }
 
   @task

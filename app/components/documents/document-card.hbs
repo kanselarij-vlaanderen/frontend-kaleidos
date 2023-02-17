@@ -217,7 +217,7 @@
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal
-    @onClose={{perform this.cancelUploadPiece}}
+    @closeModal={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
     @title={{t "new-document-piece"}}
   >
@@ -247,7 +247,7 @@
   <WebComponents::VlModalVerify
     @title={{t "document-container-delete"}}
     @message={{t "delete-document-container-message"}}
-    @onCancel={{this.cancelDeleteDocumentContainer}}
-    @onVerify={{this.verifyDeleteDocumentContainer}}
+    @cancel={{this.cancelDeleteDocumentContainer}}
+    @verify={{this.verifyDeleteDocumentContainer}}
   />
 {{/if}}

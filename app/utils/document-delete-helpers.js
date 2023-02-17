@@ -39,11 +39,9 @@ export async function deletePiece(pieceOrPromise) {
     await deleteFile(file);
     await piece.destroyRecord();
   }
-  if (documentContainer) {
-    const allPieces = await documentContainer.pieces;
-    if (allPieces.length === 0) {
-      return documentContainer.destroyRecord();
-    }
+  const allPieces = await documentContainer.pieces;
+  if (allPieces.length === 0) {
+    return documentContainer.destroyRecord();
   }
 }
 

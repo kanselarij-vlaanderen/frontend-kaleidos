@@ -4,7 +4,6 @@
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
-import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Publications overview tests', () => {
   beforeEach(() => {
@@ -98,17 +97,17 @@ context('Publications overview tests', () => {
         .then((checked) => {
           if (checked) {
             cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
-            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(appuniversum.checkbox)
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
               .click();
             cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`).should('not.exist');
-            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(appuniversum.checkbox)
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
               .click();
           } else {
             cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`).should('not.exist');
-            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(appuniversum.checkbox)
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
               .click();
             cy.get(`[${publication.publicationsIndex.columnHeader}${columnKeyName}]`);
-            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(appuniversum.checkbox)
+            cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(auk.checkbox)
               .click();
           }
         });

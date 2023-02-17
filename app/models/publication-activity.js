@@ -1,28 +1,24 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, {
+  attr, belongsTo, hasMany
+} from '@ember-data/model';
 import { isEmpty } from '@ember/utils';
 
 export default class PublicationActivity extends Model {
+  // Attributes.
   @attr('string') title;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('publication-subcase', {
-    inverse: 'publicationActivities',
-    async: true,
-  })
-  subcase;
-  @belongsTo('request-activity', {
-    inverse: 'publicationActivity',
-    async: true,
-  })
-  requestActivity;
+  // Relations.
+  @belongsTo('publication-subcase') subcase;
+  @belongsTo('request-activity') requestActivity;
 
-  @hasMany('piece', { inverse: 'publicationActivitiesUsedBy', async: true })
-  usedPieces;
-  @hasMany('decision', { inverse: 'publicationActivity', async: true })
-  decisions;
+  @hasMany('piece', {
+    inverse: 'publicationActivitiesUsedBy',
+  }) usedPieces;
+  @hasMany('decision') decisions;
 
-  get isFinished() {
+  get isFinished(){
     return !isEmpty(this.endDate);
   }
 }

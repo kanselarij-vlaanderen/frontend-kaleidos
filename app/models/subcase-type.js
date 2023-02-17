@@ -6,5 +6,5 @@ export default class SubcaseType extends Model {
   @attr scopeNote;
   @attr uri;
 
-  @hasMany('subcase', { inverse: 'type', async: true }) subcases;
+  @hasMany('subcase', { inverse: null }) subcases;
 }

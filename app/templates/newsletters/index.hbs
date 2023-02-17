@@ -98,11 +98,6 @@
   </div>
 {{else}}
   <div class="auk-u-m-8">
-    <AuAlert
-      @skin="info"
-      @icon="info-circle"
-    >
-      {{t "no-meetings"}}
-    </AuAlert>
+    <WebComponents::VlAlert @message={{t "no-meetings"}} />
   </div>
 {{/if}}

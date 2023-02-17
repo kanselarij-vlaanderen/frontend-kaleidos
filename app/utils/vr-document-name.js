@@ -1,5 +1,5 @@
 import CONFIG from 'frontend-kaleidos/utils/config';
-import { parse } from 'date-fns';
+import moment from 'moment';
 
 export default class VRDocumentName {
   static get regexGroups() {
@@ -50,10 +50,8 @@ export default class VRDocumentName {
     if (versionSuffix) {
       versionNumber = CONFIG.numbersBylatinAdverbialNumberals[versionSuffix.toLowerCase()];
     }
-    const date = parse(match.groups.date, 'yyyy ddMM', new Date());
-    // TODO throw error when date is invalid (using isNaN(date) check)
     const meta = {
-      date,
+      date: moment(match.groups.date, 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       casePrefix: match.groups.casePrefix,
       docType: match.groups.docType,
       caseNr: parseInt(match.groups.caseNr, 10),
@@ -72,7 +70,7 @@ export default class VRDocumentName {
   //   const caseNr = meta.caseNr.padStart(4, '0');
   //   const index = meta.index.toString();
   //   const pieceNr = meta.pieceNr || 1;
-  //   const formattedDate = parse(date, 'yyyy ddMM', new Date());
+  //   const formattedDate = moment(date).format('YYYY DDMM');
   //
   //   return VRDocumentName(`VR ${formattedDate} ${docType}.${caseNr}/${index}${this.pieceSuffixes[pieceNr]}`);
   // }

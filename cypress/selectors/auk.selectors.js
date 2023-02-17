@@ -89,6 +89,10 @@ const selectors = {
 
   /** Section single selector AUK components **/
 
+  checkbox: {
+    checkbox: '.auk-checkbox__toggle',
+    label: '.auk-checkbox__label ',
+  },
   loader: '.auk-loader',
 
   datepicker: {

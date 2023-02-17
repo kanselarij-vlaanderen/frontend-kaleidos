@@ -45,37 +45,38 @@ context('Publications new features tests', () => {
     cy.get(publication.publicationRequest.subject).should('have.value', 'DRINGEND: Publicatieaanvraag BS-werknr:  VO-dossier: 2007');
     cy.get(auk.modal.footer.cancel).click();
 
-    // remove urgency
-    cy.get(publication.publicationNav.case).click();
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.urgencyLevelCheckbox).parent()
-      .click();
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow2');
-    cy.get(publication.publicationCaseInfo.editView.save).click()
-      .wait('@patchPublicationFlow2');
+    // remove urgency // TODO-setup needed in new search test
+    // cy.get(publication.publicationNav.case).click();
+    // cy.get(publication.publicationCaseInfo.edit).click();
+    // cy.get(publication.urgencyLevelCheckbox).parent()
+    //   .click();
+    // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow2');
+    // cy.get(publication.publicationCaseInfo.editView.save).click()
+    //   .wait('@patchPublicationFlow2');
   });
 
   it('should check urgent tab', () => {
     const emptyStateMessage = 'Geen resultaten gevonden';
 
-    cy.visit('publicaties/overzicht/dringend');
-    // there should be no urgent records now in default data set
+    // there should be one record in urgent tab from previous test
+    cy.get(publication.publicationsIndex.tabs.urgent).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(auk.emptyState.message).contains(emptyStateMessage);
+    cy.get(publication.publicationTableRow.rows).should('have.length', 1);
 
-    // check urgency
+    // uncheck
     cy.visit('/publicaties/626FBC3BCB00108193DC4361/dossier');
     cy.get(publication.publicationCaseInfo.edit).click();
     cy.get(publication.urgencyLevelCheckbox).parent()
-      .click(); // urgent ON => needed in search-publications.spec.js
+      .click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.publicationCaseInfo.editView.save).click()
       .wait('@patchPublicationFlow');
 
-    // there should be one record in urgent tab
-    cy.visit('publicaties/overzicht/dringend');
+    // there should be no records now
+    cy.get(publication.publicationNav.goBack).click();
+    cy.get(publication.publicationsIndex.tabs.urgent).click();
     cy.get(auk.loader).should('not.exist');
-    cy.get(publication.publicationTableRow.rows).should('have.length', 1);
+    cy.get(auk.emptyState.message).contains(emptyStateMessage);
   });
 
   it('should check number of extracts default, docs removable, uploaded docs inherited when making new publication and registration updates correctly', () => {

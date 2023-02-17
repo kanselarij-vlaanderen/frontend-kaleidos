@@ -16,30 +16,30 @@ export default class Meeting extends Model {
   @attr('boolean') isFinal;
   @attr extraInfo;
 
-  @belongsTo('concept', { inverse: null, async: true }) kind;
+  @hasMany('agenda', {
+    inverse: null, serialize: false,
+  }) agendas;
+  @hasMany('piece') pieces;
+  @hasMany('themis-publication-activity') themisPublicationActivities;
+
+  @belongsTo('concept') kind;
   @belongsTo('meeting', {
     inverse: null,
-    async: true,
-  })
-  mainMeeting;
-  @belongsTo('mail-campaign', { inverse: 'meeting', async: true }) mailCampaign; // mail-campaign is read-only to prevent concurrency issues
-  @belongsTo('agenda', { inverse: 'meeting', async: true }) agenda; // The final agenda for this meeting, not saved on agenda side
+  }) mainMeeting;
+  // mailcampaign is read-only to prevent concurrency issues
+  @belongsTo('mail-campaign', {
+    serialize: false,
+  }) mailCampaign;
+  @belongsTo('agenda', {
+    inverse: null,
+  }) agenda;
 
-  @belongsTo('internal-decision-publication-activity', {
-    inverse: 'meeting',
-    async: true,
-  })
-  internalDecisionPublicationActivity;
-  @belongsTo('internal-document-publication-activity', {
-    inverse: 'meeting',
-    async: true,
-  })
-  internalDocumentPublicationActivity;
+  @belongsTo('internal-decision-publication-activity') internalDecisionPublicationActivity;
+  @belongsTo('internal-document-publication-activity') internalDocumentPublicationActivity;
+  @hasMany('themis-publication-activity',  {
+    serialize: false,
+  }) themisPublicationActivities;
 
-  @hasMany('themis-publication-activity', { inverse: 'meeting', async: true })
-  themisPublicationActivities;
-  @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
-  @hasMany('piece', { inverse: 'meeting', async: true }) pieces;
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;

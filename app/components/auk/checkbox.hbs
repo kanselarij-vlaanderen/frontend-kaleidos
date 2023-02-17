@@ -1,0 +1,20 @@
+<label class="auk-checkbox {{if (and (not (has-block)) (not @label)) "auk-checkbox--unattached"}}">
+  <input
+    class="auk-checkbox__toggle"
+    ...attributes
+    type="checkbox"
+    checked={{@checked}}
+    indeterminate={{@indeterminate}}
+    disabled={{@disabled}}
+  />
+  {{#if (or (has-block) @label)}}
+    <span class="auk-checkbox__label {{this.labelSkinClass}}">
+      {{#if (has-block)}}
+        {{yield}}
+      {{else}}
+        {{@label}}
+      {{/if}}
+    </span>
+  {{/if}}
+  <span class="auk-checkbox__box"></span>
+</label>

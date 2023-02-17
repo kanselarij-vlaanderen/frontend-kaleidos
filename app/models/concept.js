@@ -9,13 +9,11 @@ export default class Concept extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
+  @hasMany('concept', { inverse: 'broader'}) narrower;
   // The idea behind also using broader is because ember was automatically connecting the broader parent under the narrower relation
   // Resulting in all concepts with 1 inverse narrower to break length == 0 checks on narrower
-  @belongsTo('concept', { inverse: 'narrower', async: true }) broader;
+  @belongsTo('concept', { inverse: 'narrower'}) broader;
 
-  @hasMany('concept', { inverse: 'broader', async: true }) narrower;
-  @hasMany('concept-scheme', { inverse: 'concepts', async: true })
-  conceptSchemes;
-  @hasMany('concept-scheme', { inverse: 'topConcepts', async: true })
-  topConceptSchemes;
+  @hasMany("concept-scheme", { inverse: 'concepts' }) conceptSchemes;
+  @hasMany("concept-scheme", { inverse: 'topConcepts' }) topConceptSchemes;
 }

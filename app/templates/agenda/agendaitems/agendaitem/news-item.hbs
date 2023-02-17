@@ -54,7 +54,7 @@
       time=(time this.notaModifiedTime)
     }}
     @buttonText={{t "close"}}
-    @onClear={{this.dismissNotaModifiedWarning}} />
+    @clearAction={{this.dismissNotaModifiedWarning}} />
 {{/if}}
 {{#if this.isEditing}}
   <NewsItem::EditPanel

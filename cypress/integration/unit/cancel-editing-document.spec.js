@@ -256,7 +256,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // both documents and linked documents show emptyState
-    cy.get(utils.auAlert.message).should('have.length', 2)
+    cy.get(utils.vlAlert.message).should('have.length', 2)
       .eq(0)
       .contains('geen documenten');
   });

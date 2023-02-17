@@ -486,11 +486,6 @@ context('Publications tests', () => {
   });
 
   it('publications:caseInfo: check urgency, mode and decisiondate fields', () => {
-    const fields1 = {
-      number: 1224,
-      shortTitle: 'test',
-    };
-
     const defaultValue = '-';
     const publicationMode1 = 'Extenso';
     const publicationMode2 = 'Bij uittreksel';
@@ -498,7 +493,7 @@ context('Publications tests', () => {
       .day(3);
     const formattedDecisionDate = decisionDate.format('DD-MM-YYYY');
 
-    cy.createPublication(fields1);
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/dossier');
 
     // check fields default value
     cy.get(publication.publicationCaseInfo.urgencyLevel).contains(defaultValue);

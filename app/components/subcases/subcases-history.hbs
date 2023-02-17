@@ -50,11 +50,6 @@
   {{/if}}
 {{else}}
   <div class="auk-u-mt-2">
-    <AuAlert
-      @skin="info"
-      @icon="info-circle"
-    >
-      {{t "no-subcases-yet"}}
-    </AuAlert>
+    <WebComponents::VlAlert @message={{t "no-subcases-yet"}} />
   </div>
 {{/if}}

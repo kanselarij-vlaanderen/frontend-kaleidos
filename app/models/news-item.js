@@ -15,8 +15,7 @@ export default class NewsItem extends ModelWithModifier {
     return this.constructor.modelName;
   }
 
-  @belongsTo('agenda-item-treatment', { inverse: 'newsItem', async: true })
-  agendaItemTreatment;
+  @belongsTo('agenda-item-treatment') agendaItemTreatment;
 
-  @hasMany('themes', { inverse: null, async: true}) themes;
+  @hasMany('themes', { inverse: null }) themes;
 }

@@ -5,8 +5,7 @@ export default class PublicationStatus extends Model {
   @attr('string') uri;
   @attr('string') label;
   @attr('number') position;
-
-  @hasMany('publication-flow', { inverse: 'status', async: true }) publications;
+  @hasMany('publication-flow') publications;
 
   get isStarted() {
     return this.uri === CONSTANTS.PUBLICATION_STATUSES.STARTED;

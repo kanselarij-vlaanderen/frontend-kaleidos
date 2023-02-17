@@ -56,17 +56,15 @@ export default class DocumentController extends Controller {
     }
 
     if (previousPiece?.id) {
-      this.router.replaceWith('document', previousPiece.id);
+      this.router.transitionTo('document', previousPiece.id);
     } else {
-      this.transitionBack();
+      this.router.transitionTo('agendas');
     }
   }
 
   async _didDeletePieceFromAgendaitem(agendaitem, previousPiece) {
-    if (previousPiece) {
-      const documentContainer = await previousPiece.documentContainer;
-      await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
-    }
+    const documentContainer = await previousPiece.documentContainer;
+    await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
   }
 
   async _didDeletePieceFromDecision(decisionActivity, previousPiece) {

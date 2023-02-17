@@ -12,15 +12,10 @@ export default class PublicationSubcase extends Model {
   @attr('datetime') modified;
   @attr proofPrintCorrector;
 
-  @belongsTo('publication-flow', { inverse: 'publicationSubcase', async: true })
-  publicationFlow;
-
-  @hasMany('request-activity', { inverse: 'publicationSubcase', async: true })
-  requestActivities;
-  @hasMany('proofing-activity', { inverse: 'subcase', async: true })
-  proofingActivities;
-  @hasMany('publication-activity', { inverse: 'subcase', async: true })
-  publicationActivities;
+  @belongsTo('publication-flow') publicationFlow;
+  @hasMany('request-activity') requestActivities;
+  @hasMany('proofing-activity') proofingActivities;
+  @hasMany('publication-activity') publicationActivities;
 
   get isOverdue() {
     return this.targetEndDate < Date.now();

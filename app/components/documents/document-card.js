@@ -173,7 +173,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     });
     this.newPiece.name = new VRDocumentName(
       previousPiece.name
-    ).withOtherVersionSuffix(this.sortedPieces.length);
+    ).withOtherVersionSuffix(this.sortedPieces.length + 1);
   }
 
   @task

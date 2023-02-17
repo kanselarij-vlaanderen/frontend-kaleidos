@@ -1,9 +1,10 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, {
+  attr, belongsTo
+} from '@ember-data/model';
 
 export default class StructuredIdentifier extends Model {
   @attr('number') localIdentifier;
   @attr('string') versionIdentifier;
 
-  @belongsTo('identification', { inverse: 'structuredIdentifier', async: true })
-  identification;
+  @belongsTo('identification') identification;
 }

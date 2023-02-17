@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { isPresent } from '@ember/utils';
-import { isBefore, startOfDay } from 'date-fns';
+import moment from 'moment';
 
 export default class TranslationSubcase extends Model {
   @attr shortTitle;
@@ -12,16 +12,14 @@ export default class TranslationSubcase extends Model {
   @attr('datetime') created;
   @attr('datetime') modified;
 
-  @belongsTo('publication-flow', { inverse: 'translationSubcase', async: true })
-  publicationFlow;
+  @belongsTo('publication-flow') publicationFlow;
 
-  @hasMany('request-activity', { inverse: 'translationSubcase', async: true })
-  requestActivities;
-  @hasMany('translation-activity', { inverse: 'subcase', async: true })
-  translationActivities;
+  @hasMany('request-activity') requestActivities;
+  @hasMany('translation-activity') translationActivities;
+  @hasMany('cancellation-activity') cancellationActivities;
 
   get isOverdue() {
-    return isBefore(startOfDay(this.dueDate), startOfDay(new Date()));
+    return moment(this.dueDate).isBefore(Date.now(), 'day');
   }
 
   get isFinished() {

@@ -276,8 +276,8 @@ context('Search tests', () => {
       cy.wait(500);
 
       // Should find nothing.
-      cy.get(utils.auAlert.message).contains(alertMessageNota);
-      cy.get(utils.auAlert.message).contains(alertMessageRemark);
+      cy.get(utils.vlAlert.message).contains(alertMessageNota);
+      cy.get(utils.vlAlert.message).contains(alertMessageRemark);
 
       const wordsToCheck1 = [
         'peerd',
@@ -331,7 +331,7 @@ context('Search tests', () => {
       const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
       const type = 'Nota';
       const subcaseTitleLong = 'Cypress test met accenten in title';
-      const subcaseType = 'Principiële goedkeuring';
+      const subcaseType = 'In voorbereiding';
       const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
       cy.createAgenda(null, agendaDate, null);

@@ -8,11 +8,9 @@ export default class CaseModel extends Model {
   @attr('string') number;
   @attr('boolean') isArchived;
 
-  @belongsTo('decisionmaking-flow', { inverse: 'case', async: true })
-  decisionmakingFlow;
+  @belongsTo('decisionmaking-flow') decisionmakingFlow;
 
-  @hasMany('piece', { inverse: 'cases', async: true }) pieces;
-  @hasMany('publication-flow', { inverse: 'case', async: true })
-  publicationFlows;
-  @hasMany('sign-flow', { inverse: 'case', async: true }) signFlows;
+  @hasMany('piece') pieces;
+  @hasMany('publication-flow') publicationFlows;
+  @hasMany('sign-flow') signFlows;
 }

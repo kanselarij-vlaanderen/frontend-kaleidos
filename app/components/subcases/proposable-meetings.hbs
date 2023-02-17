@@ -27,7 +27,7 @@
                 {{meeting.kind.label}}
               </td>
               <td class="auk-table__col--6">
-                {{date-format meeting.plannedStart "dd MMMM yyyy"}}
+                {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                 {{#if meeting.numberRepresentation}}
                   {{concat " - " meeting.numberRepresentation}}
                 {{/if}}

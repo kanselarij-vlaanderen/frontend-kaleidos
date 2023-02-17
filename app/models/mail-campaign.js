@@ -6,7 +6,7 @@ export default class MailCampaign extends Model {
   @attr('string') archiveUrl;
   @attr('datetime') sentAt;
 
-  @belongsTo('meeting', { inverse: 'mailCampaign', async: true }) meeting;
+  @belongsTo('meeting') meeting;
 
   get isSent() {
     return !!this.sentAt;

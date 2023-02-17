@@ -65,8 +65,8 @@
   <WebComponents::VlModalVerify
     @title={{t "delete-agendaitem"}}
     @message={{this.deleteWarningText}}
-    @onCancel={{this.toggleIsVerifying}}
-    @onVerify={{fn this.verifyDelete @agendaitem}}
+    @cancel={{this.toggleIsVerifying}}
+    @verify={{fn this.verifyDelete @agendaitem}}
   />
 {{/if}}
 {{#if this.setDecisionResultCode.isRunning}}

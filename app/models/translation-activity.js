@@ -1,32 +1,27 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, {
+  attr, belongsTo, hasMany
+} from '@ember-data/model';
 import { isPresent } from '@ember/utils';
 
 export default class TranslationActivity extends Model {
+  // Attributes.
   @attr('string') title;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
   @attr('datetime') dueDate;
   @attr('datetime') targetEndDate;
 
-  @belongsTo('translation-subcase', {
-    inverse: 'translationActivity',
-    async: true,
-  })
-  subcase;
-  @belongsTo('request-activity', { inverse: 'translationActivity', async: true })
-  requestActivity;
-  @belongsTo('language', { inverse: null, async: true }) language;
+  // Relations.
+  @belongsTo('translation-subcase') subcase;
+  @belongsTo('request-activity') requestActivity;
+  @belongsTo('language') language;
 
   @hasMany('piece', {
     inverse: 'translationActivitiesUsedBy',
-    async: true,
-  })
-  usedPieces;
+  }) usedPieces;
   @hasMany('piece', {
     inverse: 'translationActivityGeneratedBy',
-    async: true,
-  })
-  generatedPieces;
+  }) generatedPieces;
 
   get isFinished() {
     return isPresent(this.endDate);

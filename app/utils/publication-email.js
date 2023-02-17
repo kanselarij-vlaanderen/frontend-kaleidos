@@ -1,4 +1,4 @@
-import { dateFormat } from 'frontend-kaleidos/utils/date-format';
+import moment from 'moment';
 
 // * NOTES *
 // 1. single new line: '\t\n' (multiple just n x '\n')
@@ -34,7 +34,7 @@ async function buildContactInformation(contactPersons) {
   return message;
 }
 async function translationRequestEmail(params) {
-  const dueDate = params.dueDate ? dateFormat(params.dueDate, 'dd-MM-yyyy') : '-';
+  const dueDate = params.dueDate ? moment(params.dueDate).format('DD-MM-YYYY') : '-';
   const subject = `${params.identifier} - Vertaalaanvraag - ${params.shortTitle}`;
   let message= '';
 
@@ -91,7 +91,7 @@ function proofRequestEmail(params) {
 }
 
 function publicationRequestEmail(params) {
-  const targetEndDate = params.targetEndDate ? dateFormat(params.targetEndDate, 'dd-MM-yyyy') : '-';
+  const targetEndDate = params.targetEndDate ? moment(params.targetEndDate).format('DD-MM-YYYY') : '-';
   const numacNumbers = params.numacNumbers
         ? params.numacNumbers.mapBy('idName').join(', ')
         : '-';

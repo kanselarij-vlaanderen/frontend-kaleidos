@@ -1,16 +1,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { addDays } from 'date-fns';
+import moment from 'moment';
 
 export default class NewSystemAlertsRoute extends Route {
   @service router;
   @service store;
 
   beforeModel() {
-    const now = new Date();
     const alert = this.store.createRecord('alert', {
-      beginDate: now,
-      endDate: addDays(now, 1),
+      beginDate: moment(),
+      endDate: moment().add(1, 'days'),
     });
     this.router.transitionTo('settings.system-alerts.edit', alert);
   }

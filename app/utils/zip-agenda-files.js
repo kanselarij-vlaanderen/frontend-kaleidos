@@ -1,5 +1,5 @@
 import fetch from 'fetch';
-import { dateFormat } from 'frontend-kaleidos/utils/date-format';
+import moment from 'moment';
 
 function registerJobToStore(job, store) {
   store.pushPayload(job);
@@ -16,7 +16,7 @@ async function prettifyAgendaName(agenda) {
 
 async function constructArchiveName(agenda) {
   const meeting = await agenda.createdFor;
-  const formattedDate = dateFormat(meeting.plannedStart, 'dd_MM_yyyy');
+  const formattedDate = moment(meeting.plannedStart).format('DD_MM_YYYY');
   const agendaName = await prettifyAgendaName(agenda);
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }

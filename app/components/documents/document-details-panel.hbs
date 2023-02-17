@@ -181,7 +181,7 @@
   <WebComponents::VlModalVerify
     @title={{t "document-delete"}}
     @message={{t "delete-document-message"}}
-    @onCancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
-    @onVerify={{this.verifyDeleteDocument}}
+    @cancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
+    @verify={{this.verifyDeleteDocument}}
   />
 {{/if}}

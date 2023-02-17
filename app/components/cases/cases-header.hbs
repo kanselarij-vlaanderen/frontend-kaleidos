@@ -26,7 +26,7 @@
 {{#if this.isOpenNewCaseModal}}
   <WebComponents::VlModal
     @isOverlay={{true}}
-    @onClose={{this.toggleIsOpenNewCaseModal}}
+    @closeModal={{this.toggleIsOpenNewCaseModal}}
     @title={{t "new-case"}} >
     <Cases::NewCase
       @didSave={{this.saveNewCase}}

@@ -27,14 +27,14 @@
 
 {{#if this.isOpenLinkedPieceModal}}
   <WebComponents::VlModal
-    @onClose={{this.cancelLinkPieces}}
+    @closeModal={{this.cancelLinkPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
     <Auk::Modal::Body>
       <Utils::AddExistingPiece
-        @onLink={{this.linkPiece}}
-        @onUnlink={{this.unlinkPiece}}
+        @add={{this.linkPiece}}
+        @delete={{this.unlinkPiece}}
       />
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter

@@ -5,6 +5,6 @@ export default class Role extends Model {
   @attr label;
   @attr('number') position;
 
-  @hasMany('mandate', { inverse: 'role', async: true }) mandates;
-  @hasMany('membership', { inverse: 'role', async: true }) memberships;
+  @hasMany('mandate') mandates;
+  @hasMany('membership') memberships;
 }

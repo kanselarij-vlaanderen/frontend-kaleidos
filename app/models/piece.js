@@ -10,47 +10,71 @@ export default class Piece extends Model {
   @attr('datetime') modified;
   @attr('datetime') accessLevelLastModified;
 
-  @belongsTo('concept', { inverse: null, async: true }) accessLevel;
-  @belongsTo('language', { inverse: null, async: true }) language;
-  @belongsTo('file', { inverse: null, async: true }) file;
-  @belongsTo('document-container', { inverse: 'pieces', async: true })
-  documentContainer;
-  @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
-  @belongsTo('piece', { inverse: 'nextPiece', async: true }) previousPiece;
+  @belongsTo('concept') accessLevel;
+  @belongsTo('language') language;
+  @belongsTo('file') file;
+  @belongsTo('document-container', {
+    inverse: null
+  }) documentContainer;
+  @belongsTo('piece', {
+    inverse: 'previousPiece'
+  }) nextPiece;
+  @belongsTo('piece', {
+    inverse: 'nextPiece'
+  }) previousPiece;
 
   // resources with pieces linked:
 
-  @belongsTo('submission-activity', { inverse: 'pieces', async: true })
-  submissionActivity;
-  @belongsTo('decision-activity', { inverse: 'report', async: true })
-  decisionActivity;
-  @belongsTo('meeting', { inverse: 'pieces', async: true }) meeting;
-  @belongsTo('publication-flow', { inverse: 'referenceDocuments', async: true })
-  publicationFlow;
-  @belongsTo('proofing-activity', { inverse: 'generatedPieces', async: true })
-  proofingActivityGeneratedBy;
+  // Below relationship is only defined in frontend.
+  // This definition is merely here to help ember-data with relationship bookkeeping,
+  // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
+  // The submission activity should never be sent to the backend from the piece-side
+  // as long as the relationship is not defined in the backend.
+  @belongsTo('submission-activity', {
+    serialize: false
+  }) submissionActivity;
+  @belongsTo('decision-activity', {
+    inverse: null
+  }) decisionActivity;
+  @belongsTo('meeting', {
+    inverse: null
+  }) meeting;
+
+  @belongsTo('publication-flow') publicationFlow;
+  @hasMany('request-activity', {
+    inverse: 'usedPieces'
+  }) requestActivitiesUsedBy;
+  @hasMany('translation-activity', {
+    inverse: 'usedPieces'
+  }) translationActivitiesUsedBy;
   @belongsTo('translation-activity', {
-    inverse: 'generatedPieces',
-    async: true,
-  })
-  translationActivityGeneratedBy;
-  @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
-  signMarkingActivity;
-  @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
-  // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
+    inverse: 'generatedPieces'
+  }) translationActivityGeneratedBy;
+  @hasMany('proofing-activity', {
+    inverse: 'usedPieces'
+  }) proofingActivitiesUsedBy;
+  @belongsTo('proofing-activity', {
+    inverse: 'generatedPieces'
+  }) proofingActivityGeneratedBy;
+  @hasMany('publication-activity', {
+    inverse: 'usedPieces'
+  }) publicationActivitiesUsedBy;
 
-  @hasMany('request-activity', { inverse: 'usedPieces', async: true })
-  requestActivitiesUsedBy;
-  @hasMany('translation-activity', { inverse: 'usedPieces', async: true })
-  translationActivitiesUsedBy;
-  @hasMany('proofing-activity', { inverse: 'usedPieces', async: true })
-  proofingActivitiesUsedBy;
-  @hasMany('publication-activity', { inverse: 'usedPieces', async: true })
-  publicationActivitiesUsedBy;
+  // TODO: figure out if and why this is required. Delete otherwise
+  @hasMany('case', {
+    inverse: null
+  }) cases;
+  // serialize: false ensures the relation (which may contain stale data due to
+  // custom service) is not send in patch calls
+  @hasMany('agendaitem', {
+    serialize: false,
+    inverse: null,
+  }) agendaitems;
 
-  @hasMany('case', { inverse: 'pieces', async: true }) cases;
-  @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
-  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true }) linkedAgendaitems;
+  // SIGN FLOW
+  @belongsTo('sign-marking-activity') signMarkingActivity;
+  @belongsTo('signed-piece') signedPiece;
+
 
   get viewDocumentURL() {
     return `/document/${this.id}`;
@@ -63,9 +87,7 @@ export default class Piece extends Model {
         const downloadFilename = sanitize(filename, {
           replacement: '_',
         });
-        return `${file.downloadLink}?name=${encodeURIComponent(
-          downloadFilename
-        )}`;
+        return `${file.downloadLink}?name=${encodeURIComponent(downloadFilename)}`;
       } else {
         return undefined;
       }
