@@ -7,7 +7,6 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('Decision tests', () => {
   beforeEach(() => {
@@ -33,7 +32,7 @@ context('Decision tests', () => {
 
     cy.get(document.vlUploadedDocument.filename).should('not.exist');
 
-    cy.get(utils.vlModal.dialogWindow).within(() => {
+    cy.get(auk.auModal.container).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
@@ -42,7 +41,7 @@ context('Decision tests', () => {
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('DELETE', 'pieces/*').as('deletePiece');
     cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@createNewDocumentContainer');
     cy.wait('@patchDecisionActivities');
@@ -81,7 +80,7 @@ context('Decision tests', () => {
           .click();
         cy.get(document.documentCard.delete).forceClick();
       });
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
     cy.wait('@deleteFile');
     cy.wait('@deletePiece');
@@ -140,13 +139,13 @@ context('Decision tests', () => {
     cy.intercept('POST', 'pieces').as('createNewPiece');
     cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
     cy.intercept('GET', 'pieces/*/previous-piece').as('getPreviousPiece');
-    cy.get(utils.vlModalFooter.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@createNewPiece');
     cy.wait('@patchDecisionActivities');
     cy.wait('@getPreviousPiece');
     cy.get(auk.loader).should('not.exist');
-    // correct default access rights on non-confidential subcase should be "Intern Regering"
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    // correct default access rights on non-confidential subcase should be "Intern Overheid"
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
     decisionTypes.forEach((type) => {
       cy.get(agenda.decisionResultPill.edit)
         .click();
@@ -163,10 +162,12 @@ context('Decision tests', () => {
 
   it('should test if changing subcase to confidential sets correct access rights', () => {
     cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
-    cy.get(document.accessLevelPill.pill).contains('Intern Regering');
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
     cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential).click();
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .parent()
+      .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
@@ -187,7 +188,9 @@ context('Decision tests', () => {
 
     cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277');
     cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential).click();
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .parent()
+      .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
@@ -202,7 +205,7 @@ context('Decision tests', () => {
     cy.intercept('POST', '/pieces').as('postPieces');
     cy.intercept('PATCH', '/decision-activities/*').as('patchDecisionActivity');
     cy.intercept('GET', '/pieces/*/access-level').as('getAccessLevel');
-    cy.get(utils.vlModalFooter.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postPieces')
       .wait('@patchDecisionActivity');
     cy.get(auk.loader).should('not.exist');

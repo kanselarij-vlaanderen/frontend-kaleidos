@@ -3,7 +3,7 @@
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 function formatmeetingDocumentsUrl(meetingId, agendaId) {
   return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
@@ -144,7 +144,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.intercept('DELETE', 'pieces/*').as('deletePiece');
     cy.intercept('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
       .click();
     // there is a 15 second delay to allow a user to reconsider the delete
 

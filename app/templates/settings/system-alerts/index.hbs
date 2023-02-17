@@ -1,9 +1,11 @@
-<WebComponents::VlModal
-  @isOverlay={{true}}
-  @title={{t "manage-alerts"}}
+<AuModal
+  @modalOpen={{true}}
   @closeModal={{this.cancel}}
 >
-  <Auk::Modal::Body>
+  <:title>
+    {{t "manage-alerts"}}
+  </:title>
+  <:body>
     <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
       <PowerSelect
         @options={{@model}}
@@ -14,8 +16,8 @@
         {{alert.title}}
       </PowerSelect>
     </div>
-  </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
+  </:body>
+  <:footer>
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
@@ -60,5 +62,5 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
-  </Auk::Modal::Footer>
-</WebComponents::VlModal>
+  </:footer>
+</AuModal>

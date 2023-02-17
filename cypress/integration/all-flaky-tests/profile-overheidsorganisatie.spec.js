@@ -42,7 +42,7 @@ context('Testing the application as Overheid user', () => {
 
     it('Should switch to search tab when search is clicked as overheid', () => {
       cy.get(utils.mHeader.search).click();
-      cy.get(route.search.title).should('exist');
+      cy.get(route.search.trigger).should('exist');
       cy.url().should('include', '/zoeken');
     });
   });
@@ -74,8 +74,6 @@ context('Testing the application as Overheid user', () => {
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
-      cy.get(agenda.agendaTabs.tabs).contains('Vergelijk')
-        .should('not.exist');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
 
       // Main view - Side Nav (left)

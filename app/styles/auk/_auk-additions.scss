@@ -72,6 +72,11 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-table__actions--bottom {
+  border-top: 2px solid #cbd2da;
+  padding: 0 1rem 0 1rem;
+}
+
 // When using auk-modal, the ember power select wormhole is behind the modal
 // auk-modal has z-index of 1600;
 

@@ -14,7 +14,7 @@
     @route={{@route}}
     @models={{this.models}}
     @current-when={{@current-when}}
-    @query={{@query}}
+    @query={{this.query}}
     ...attributes
   >
     {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
@@ -26,7 +26,7 @@
       @models={{this.models}}
       @disabled={{@disabled}}
       @current-when={{@current-when}}
-      @query={{@query}}
+      @query={{this.query}}
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}

@@ -25,24 +25,19 @@
   {{/if}}
 </div>
 
-{{#if this.isOpenLinkedPieceModal}}
-  <WebComponents::VlModal
-    @closeModal={{this.cancelLinkPieces}}
-    @isOverlay={{true}}
-    @large={{true}}
-    @title={{t "document-link-old"}} >
-    <Auk::Modal::Body>
-      <Utils::AddExistingPiece
-        @add={{this.linkPiece}}
-        @delete={{this.unlinkPiece}}
-      />
-    </Auk::Modal::Body>
-    <WebComponents::VlModalFooter
-      @isLoading={{this.saveLinkedPieces.isRunning}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "document-link-old"}}
-      @cancelAction={{this.cancelLinkPieces}}
-      @saveAction={{perform this.saveLinkedPieces}}
-      @disableSave={{eq this.newLinkedPieces.length 0}} />
-  </WebComponents::VlModal>
-{{/if}}
+<ConfirmationModal
+  @modalOpen={{this.isOpenLinkedPieceModal}}
+  @title={{t "document-link-old"}}
+  @onConfirm={{perform this.saveLinkedPieces}}
+  @onCancel={{this.cancelLinkPieces}}
+  @confirmMessage={{t "document-link-old"}}
+  @disabled={{eq this.newLinkedPieces.length 0}}
+  @loading={{this.saveLinkedPieces.isRunning}}
+>
+  <:body>
+    <Utils::AddExistingPiece
+      @onLink={{this.linkPiece}}
+      @onUnlink={{this.unlinkPiece}}
+    />
+  </:body>
+</ConfirmationModal>

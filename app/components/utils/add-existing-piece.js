@@ -10,11 +10,13 @@ import { tracked } from '@glimmer/tracking';
 
 export default class AddExistingPiece extends Component {
   @service store;
+
   @tracked page = 0;
+  @tracked size = 10;
   @tracked filter = '';
+
   @tracked pieces = [];
 
-  size = 5;
   sort = ['-created', 'name'];
 
   constructor() {
@@ -22,24 +24,7 @@ export default class AddExistingPiece extends Component {
     this.findAll.perform();
   }
 
-  get pageParam() {
-    return this.page;
-  }
-
-  set pageParam(page) {
-    if (page === undefined) {
-      this.page = 0;
-    } else {
-      this.page = page;
-    }
-    this.findAll.perform();
-  }
-
-  setSelectedToFalse() {
-    this.pieces.map((piece) => piece.set('selected', false));
-  }
-
-  queryOptions() {
+  get queryOptions() {
     const options = {
       sort: this.sort,
       page: {
@@ -57,7 +42,7 @@ export default class AddExistingPiece extends Component {
   @task
   *findAll() {
     yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions);
     yield timeout(100);
     this.setSelectedToFalse();
   }
@@ -65,7 +50,7 @@ export default class AddExistingPiece extends Component {
   @restartableTask
   *searchTask() {
     yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions);
     this.page = 0;
     yield timeout(100);
   }
@@ -82,5 +67,17 @@ export default class AddExistingPiece extends Component {
       piece.set('selected', true);
       this.args.add(piece);
     }
+  }
+
+  @action
+  setPage(page) {
+    this.page = page;
+    this.findAll.perform();
+  }
+
+  @action
+  setSize(size) {
+    this.size = size;
+    this.findAll.perform();
   }
 }

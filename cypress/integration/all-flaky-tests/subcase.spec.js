@@ -158,7 +158,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
-    cy.url().should('not.contain', '/dossier/');
+    cy.url().should('not.contain', '/dossiers/');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {
@@ -181,8 +181,13 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
+    cy.wait(1500); // TODO-flakey, linkToSubcase does nothing sometimes
     cy.get(appuniversum.pill).contains('Op de website');
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.confidential).should('not.exist');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
+    cy.url().should('contain', '/dossiers/');
+    cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
@@ -202,8 +207,10 @@ context('Subcase tests', () => {
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();
 
-    // Check the checkbox
-    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter).click();
+    // Check the toggle switch
+    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
+      .parent()
+      .click();
 
     // Save the changes setting
     cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
@@ -384,7 +391,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases1');
-    cy.get(utils.vlModalVerify.container).should('not.exist');
+    cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 1)
       .find(cases.subcaseItem.link)
@@ -405,7 +412,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(auk.auModal.header.close).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
@@ -429,7 +436,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases3');
-    cy.get(utils.vlModalVerify.save).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseItem.container).should('have.length', 3)

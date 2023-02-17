@@ -1,0 +1,58 @@
+<div class="au-c-card au-o-box au-o-box--small">
+  <div class="auk-form-group">
+    <Auk::Label>{{t "document-type"}}</Auk::Label>
+    <Auk::CheckboxList>
+      {{#if this.loadDocumentTypes.isRunning}}
+        <Auk::Loader />
+      {{else}}
+        <AuControlCheckbox
+          @checked={{this.allDocumentTypesSelected}}
+          @indeterminate={{and
+            (not this.allDocumentTypesSelected)
+            this.someDocumentTypesSelected
+          }}
+          @onChange={{this.toggleAllDocumentTypes}}
+        >
+          <strong>{{t "all-document-types"}}</strong>
+        </AuControlCheckbox>
+        {{#each this.documentTypes as |documentType|}}
+          {{#if (includes documentType.uri this.defaultVisibleTypes)}}
+            <AuControlCheckbox
+              @checked={{includes documentType this.selected}}
+              @label={{documentType.label}}
+              @onChange={{fn this.toggleDocumentType documentType}}
+            />
+          {{/if}}
+        {{/each}}
+        {{#if (not this.showAllTypes)}}
+          <AuButton
+            {{on "click" (toggle "showAllTypes" this)}}
+            @skin="link"
+            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+            @icon="add"
+          >
+            {{t "show-all-document-types"}}
+          </AuButton>
+        {{else}}
+          {{#each this.documentTypes as |documentType|}}
+            {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
+              <AuControlCheckbox
+                @checked={{includes documentType this.selected}}
+                @label={{documentType.label}}
+                @onChange={{fn this.toggleDocumentType documentType}}
+              />
+            {{/if}}
+          {{/each}}
+          <AuButton
+            {{on "click" (toggle "showAllTypes" this)}}
+            @skin="link"
+            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+            @icon="remove"
+          >
+            {{t "hide-document-types"}}
+          </AuButton>
+        {{/if}}
+      {{/if}}
+    </Auk::CheckboxList>
+  </div>
+</div>

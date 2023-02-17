@@ -1,11 +1,15 @@
 <div class="auk-u-mb-4">
-  <WebComponents::VlModal
+  <ConfirmationModal
+    @modalOpen={{true}}
     @title={{t "document-add"}}
-    @closeModal={{this.cancel}}
-    @isOverlay={{true}}
-    @large={{true}}
+    @onConfirm={{perform this.save}}
+    @onCancel={{this.cancel}}
+    @confirmMessage={{t "document-add"}}
+    @disabled={{not this.pieceInCreation}}
+    @loading={{this.save.isRunning}}
+    @size="large"
   >
-    <Auk::Modal::Body>
+    <:body>
       {{#if this.pieceInCreation}}
         <div class="upload-container">
           <EmberKaleidosWebuniversum::VlUploadedDocument
@@ -22,14 +26,6 @@
           @onUpload={{this.createNewPiece}}
         />
       {{/if}}
-    </Auk::Modal::Body>
-    <WebComponents::VlModalFooter
-      @isLoading={{this.save.isRunning}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "document-add"}}
-      @cancelAction={{this.cancel}}
-      @saveAction={{perform this.save}}
-      @disableSave={{not this.pieceInCreation}}
-    />
-  </WebComponents::VlModal>
+    </:body>
+  </ConfirmationModal>
 </div>

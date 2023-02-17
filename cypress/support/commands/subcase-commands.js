@@ -90,7 +90,9 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
   cy.get(cases.subcaseTitlesView.edit).click();
 
   if (confidentialityChange) {
-    cy.get(cases.subcaseTitlesEdit.confidential).click();
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .parent()
+      .click();
   }
   if (newShortTitle) {
     cy.get(cases.subcaseTitlesEdit.shorttitle).click()
@@ -129,13 +131,16 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.wait(`@getGovernmentBodies${randomInt}`);
-  cy.wait(`@getMandatees${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
   if (mandateeSearchText) {
     cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
   }
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
   // we can search or select by number
   // when searching we select the first option we get or the first option with a specific title
   if (mandateeSearchText) {
@@ -180,6 +185,9 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
   }).wait('@patchAgenda', {
     timeout: 40000,
   });
+  // the mandatee groups have to be recalculated.
+  cy.wait(2000);
+
   cy.log('/addAgendaitemMandatee');
 }
 
@@ -237,7 +245,7 @@ function deleteSubcase() {
     .click();
   cy.get(cases.subcaseHeader.actions.deleteSubcase).forceClick();
 
-  cy.get(utils.vlModalVerify.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
   cy.wait('@deleteSubcase');
   cy.log('/deleteSubcase');
 }

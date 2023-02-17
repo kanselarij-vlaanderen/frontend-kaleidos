@@ -23,7 +23,7 @@ reset-elastic-and-cache:
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- docker-compose ${COMPOSE_FILE} up -d
-	- sleep 60
+	- sleep 120
 
 run-cypress-tests:
 	-	make reset-elastic-and-cache

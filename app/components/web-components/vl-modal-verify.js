@@ -5,16 +5,19 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
-// TODO: octane-refactor
-// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend({
-  intl: inject(),
-  message: null,
-  title: null,
-  showActions: true,
-  buttonType: 'danger',
-  showVerify: true,
-  buttonText: 'delete',
+/**
+ * @param title {string}
+ * @param message {string}
+ * @param showActions {Boolean}
+ * @param showVerify {Boolean}
+ * @param buttonType {string}
+ * @param verifyButtonText {string}
+ * @param isLoading {string}
+ * @param onVerify {Function}
+ * @param onCancel {Function}
+ */
+export default class WebComponentsVlModalVerify extends Component {
+  @service intl;
 
   verifyButtonText: computed('intl', 'buttonText', function() {
     return this.intl.t(this.get('buttonText'));
@@ -32,7 +35,9 @@ export default Component.extend({
     return this.buttonType !== 'warning';
   }),
 
-  isAlertButton: computed.equal('buttonType', 'danger'),
+  get verifyButtonText() {
+    return this.args.verifyButtonText ?? this.intl.t('delete');
+  }
 
   keyDown(event) {
     if (event.key === 'Escape') {

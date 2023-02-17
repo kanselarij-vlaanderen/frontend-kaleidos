@@ -1,0 +1,97 @@
+{{#in-element this.customFiltersElement insertBefore=null}}
+  {{#if (user-may "search-confidential-documents")}}
+    <Search::ConfidentialOnly
+      @objectVerb={{t "documents"}}
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+    />
+  {{/if}}
+  <Search::DocumentTypeFilter
+    @selected={{this.documentTypesBuffer}}
+    @onChange={{this.setDocumentTypes}}
+  />
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "cases"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @content={{this.model}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToDocument}}
+    >
+      <:header>
+        <th class="auk-table__col--8">
+          {{t "case-name"}}
+        </th>
+        <Utils::ThSortable
+          class="auk-table__col--2"
+          @currentSorting={{this.sort}}
+          @field="created"
+          @label={{t "created-on"}}
+          @onChange={{this.selectSort}}
+        />
+        <Utils::ThSortable
+          class="auk-table__col--2"
+          @currentSorting={{this.sort}}
+          @field="confidentialityLevel"
+          @label={{t "confidentiality-level"}}
+          @onChange={{this.selectSort}}
+        />
+        <th class="auk-table__col--1"></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <p>
+            {{row.title}}
+          </p>
+        </td>
+        <td>
+          {{datetime row.created "DD-MM-YYYY HH:mm"}}
+        </td>
+        <td>
+          <AccessLevelPill @accessLevel={{row.accessLevel}} />
+        </td>
+        <td class="auk-u-text-align--right">
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="document"
+            @model={{row.id}}
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

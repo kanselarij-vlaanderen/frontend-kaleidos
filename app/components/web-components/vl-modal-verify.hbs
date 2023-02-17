@@ -53,8 +53,9 @@
                     @skin="primary"
                     @alert={{this.isAlertButton}}
                     @icon={{if this.showDestructiveIcon "trash"}}
-                    @loading={{this.isLoading}}
-                    {{action "verify"}}
+                    @loading={{@isLoading}}
+                    @disabled={{@isLoading}}
+                    {{on "click" @onVerify}}
                   >
                     {{this.verifyButtonText}}
                   </AuButton>

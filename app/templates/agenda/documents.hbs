@@ -51,6 +51,7 @@
   </div>
 </div>
 
+<<<<<<< HEAD
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
     @closeModal={{perform this.cancelUploadPieces}}
@@ -81,6 +82,33 @@
       @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
+=======
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "documents-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    <Auk::FileUploader
+      @multiple={{true}}
+      @reusable={{true}}
+      @onUpload={{this.uploadPiece}}
+    />
+    <div class="upload-container">
+      {{#each this.newPieces as |piece|}}
+        <Documents::UploadedDocument
+          @piece={{piece}}
+          @allowDocumentContainerEdit={{true}}
+          @onDelete={{perform this.deletePiece piece}} />
+      {{/each}}
+    </div>
+  </:body>
+</ConfirmationModal>
+>>>>>>> development
 
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal

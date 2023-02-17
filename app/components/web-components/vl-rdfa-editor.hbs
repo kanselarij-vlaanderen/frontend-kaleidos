@@ -1,27 +1,28 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
-{{#if this.browserIsSupported}}
-  <Rdfa::RdfaEditor
-    @class="rdfa-editor"
-    @rdfaEditorInit={{action "handleRdfaEditorInit"}}
-    @profile="default"
-    @editorOptions={{hash
-      showToggleRdfaAnnotations=null
-      showInsertButton=null
-      showRdfa=null
-      showRdfaHighlight=null
-      showRdfaHover=null
-    }}
-    @toolbarOptions={{hash
-      showTextStyleButtons="true"
-      showListButtons="true"
-      showIndentButtons=null
-    }}
-  />
-{{else}}
-  <Auk::Alert
-    @skin="warning"
-    @title={{t "browser-unsupported-short"}}
-    @message={{t "browser-unsupported-editor" browserName=this.browserName}}
-  />
-{{/if}}
+<div ...attributes>
+  {{#if this.browserIsSupported}}
+    <Rdfa::RdfaEditor
+      @schema={{this.schema}}
+      @widgets={{this.widgets}}
+      @plugins={{this.plugins}}
+      @rdfaEditorInit={{@handleRdfaEditorInit}}
+      @editorOptions={{hash
+        showToggleRdfaAnnotations=null
+        showInsertButton=null
+        showRdfa=null
+        showRdfaHighlight=null
+        showRdfaHover=null
+      }}
+      @toolbarOptions={{hash
+        showTextStyleButtons="true"
+        showListButtons="true"
+        showIndentButtons="true"
+      }}
+    />
+  {{else}}
+    <Auk::Alert
+      @skin="warning"
+      @title={{t "browser-unsupported-short"}}
+      @message={{t "browser-unsupported-editor" browserName=this.browserName}}
+    />
+  {{/if}}
+</div>

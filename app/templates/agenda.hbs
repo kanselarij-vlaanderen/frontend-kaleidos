@@ -18,7 +18,6 @@
   {{! The reason for this is that we want to prevent any clicking on sideNav or content in sibling routes during actions}}
 {{else}}
   <div class="auk-panel-layout">
-    {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
         <Agenda::SideNav
           @meeting={{this.model.meeting}}
@@ -29,7 +28,6 @@
           @onOpen={{this.openSideNav}}
         />
       </div>
-    {{/unless}}
     {{outlet}}
   </div>
 {{/if}}

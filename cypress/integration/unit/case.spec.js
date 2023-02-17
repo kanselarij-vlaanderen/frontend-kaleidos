@@ -5,7 +5,6 @@ import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -47,7 +46,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(utils.vlModal.close).click();
+    cy.get(auk.auModal.header.close).click();
     // check if data is cleared after close
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
@@ -107,13 +106,17 @@ context('Create case as Admin user', () => {
       .forceClick();
     cy.intercept('PATCH', '/cases/**').as('patchCases1');
     cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
-    cy.get(utils.vlModalVerify.save).click()
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchCases1')
       .wait('@patchSubcases1');
     cy.get(auk.loader).should('not.exist');
     cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
 
-    cy.get(route.casesOverview.showArchived).click();
+    cy.get(route.casesOverview.showArchived)
+      .parent()
+      .click();
+    cy.get(auk.loader).should('exist'); // page load
+    cy.url().should('contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
 
     // restore case
@@ -127,7 +130,11 @@ context('Create case as Admin user', () => {
       .wait('@patchCases2')
       .wait('@patchSubcases2');
 
-    cy.get(route.casesOverview.showArchived).click();
+    cy.get(route.casesOverview.showArchived)
+      .parent()
+      .click();
+    cy.get(auk.loader).should('exist'); // page load
+    cy.url().should('not.contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
   });
 });

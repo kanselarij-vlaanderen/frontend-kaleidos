@@ -30,7 +30,6 @@ Router.map(function() {
         this.route('news-item', { path: '/kort-bestek', });
       });
     });
-    this.route('compare', { path: '/vergelijken', });
     this.route('documents', { path: '/documenten', });
   });
 
@@ -84,7 +83,10 @@ Router.map(function() {
 
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
-    this.route('agenda-items', { path: '/agendapunten', });
+    this.route('agendaitems', { path: '/agendapunten', });
+    this.route('documents', { path: '/documenten'});
+    this.route('decisions', { path: '/beslissingen' });
+    this.route('news-items', { path: '/kort-bestek', });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
@@ -118,6 +120,7 @@ Router.map(function() {
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
+    this.route('checkbox-list');
     this.route('checkbox-tree');
     this.route('radio-buttons');
     this.route('colors');

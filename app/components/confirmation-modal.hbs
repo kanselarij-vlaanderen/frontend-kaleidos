@@ -5,12 +5,16 @@
   <:title>
     {{#if (has-block "title")}}
       {{yield to="title"}}
+    {{else if @title}}
+      {{@title}}
     {{/if}}
   </:title>
 
   <:body>
     {{#if (has-block "body")}}
       {{yield to="body"}}
+    {{else if @message}}
+      {{@message}}
     {{/if}}
   </:body>
 
@@ -38,8 +42,9 @@
             <AuButton
               data-test-confirmation-modal-confirm
               @alert={{@alert}}
-              @disabled={{@disabled}}
+              @disabled={{or @disabled @loading}}
               @loading={{@loading}}
+              @icon={{@confirmIcon}}
               {{on "click" @onConfirm}}
             >
               {{#if @confirmMessage}}
