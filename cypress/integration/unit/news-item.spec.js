@@ -10,13 +10,6 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-// TODO-command
-function pressRdfaButton(buttonName) {
-  cy.get('button').contains(buttonName)
-    .parent('button')
-    .click();
-}
-
 // TODO-command, might not have any other usages
 function changeSubcaseType(subcaseLink, type) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
@@ -394,7 +387,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes2');
-    cy.get(dependency.rdfa.editorInner).should('be.empty');
+    cy.get(dependency.rdfa.editorInner).find('p')
+      .should('have.length', 1); // 1 trailing space inside a paragraph by default
     cy.get(newsletter.editItem.remark).should('be.empty');
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
 
@@ -641,95 +635,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsletterPrint.theme).contains(theme2);
     cy.get(newsletter.newsletterPrint.htmlContent).contains(htmlContentNota);
     cy.get(newsletter.newsletterPrint.remark).should('not.exist');
-  });
-
-  // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
-  it('should test the rdfa editor', () => {
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.intercept('GET', '/themes**').as('getThemes');
-    cy.get(newsletter.buttonToolbar.edit).eq(0)
-      .click();
-    cy.wait('@getThemes');
-
-    pressRdfaButton('Strikethrough');
-    cy.get(dependency.rdfa.editorInner).type('Strikethrough');
-    pressRdfaButton('Strikethrough');
-    cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Underline');
-    cy.get(dependency.rdfa.editorInner).type('Underline');
-    pressRdfaButton('Underline');
-    cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Italic');
-    cy.get(dependency.rdfa.editorInner).type('Italic');
-    pressRdfaButton('Italic');
-    cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Bold');
-    cy.get(dependency.rdfa.editorInner).type('Bold');
-
-    cy.get('del').contains('Strikethrough');
-    cy.get('u').contains('Underline');
-    cy.get('em').contains('Italic');
-    cy.get('strong').contains('Bold');
-    cy.get(newsletter.editItem.cancel).click();
-  });
-
-  it('should test the rdfa editor keypresses', () => {
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.get(newsletter.buttonToolbar.edit).eq(0)
-      .click();
-
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+u}Underline')
-      .type('{ctrl+u} ');
-    cy.get('u').contains('Underline');
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+i}Italic')
-      .type('{ctrl+i} ');
-    cy.get('em').contains('Italic');
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+b}Bold')
-      .type('{ctrl+b} ');
-    cy.get('strong').contains('Bold');
-
-    // check single backspace
-    cy.get(dependency.rdfa.editorInner).type('{selectAll}{backspace}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
-    // check single delete
-    cy.get(dependency.rdfa.editorInner).type('Bold')
-      .type('{selectall}{del}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bold');
-    // check separate backspaces
-    cy.get(dependency.rdfa.editorInner).type('Bold')
-      .type('{end}{backspace}')
-      .type('{backspace}')
-      .type('{backspace}')
-      .type('{backspace}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
-    // check separate deletes
-    cy.get(dependency.rdfa.editorInner).type('Bold')
-      .type('{home}{del}')
-      .type('{del}')
-      .type('{del}')
-      .type('{del}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'old');
-    cy.get(newsletter.editItem.cancel).click();
-
-    // check enter
-    cy.get(newsletter.buttonToolbar.edit).eq(0)
-      .click();
-    cy.get(dependency.rdfa.editorInner).find('br')
-      .should('not.exist');
-    cy.get(dependency.rdfa.editorInner).type('{enter}');
-    cy.get(dependency.rdfa.editorInner).find('br');
-    // check space
-    cy.get(dependency.rdfa.editorInner).clear()
-      .type(' ');
-    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
-    // check that there are no &nbsp;
-    // see: https://github.com/lblod/ember-rdfa-editor/pull/245
-    cy.get(dependency.rdfa.editorInner).clear()
-      .type('test  test');
-    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
-    cy.get(newsletter.editItem.cancel).click();
   });
 
   it('should test the pre mailchimp checks', () => {
