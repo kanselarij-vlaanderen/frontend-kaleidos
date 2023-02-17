@@ -1153,5 +1153,6 @@
   "removed-cases": "Verwijderde dossiers",
   "open": "Open",
   "out": "Uit",
-  "found-inside": "Gevonden in"
+  "found-inside": "Gevonden in",
+  "found-in-thing": "Gevonden in {thing}"
 }

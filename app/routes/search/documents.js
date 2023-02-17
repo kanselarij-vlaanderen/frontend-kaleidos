@@ -123,6 +123,7 @@ export default class SearchDocumentsRoute extends Route {
         const entry = searchData.attributes;
         entry.id = searchData.id;
         await this.postProcessAccessLevel(entry);
+        this.postProcessAgendaitems(entry);
         return entry;
       }
     );
@@ -162,6 +163,17 @@ export default class SearchDocumentsRoute extends Route {
         entry.accessLevel = entry.accessLevel[0];
       }
       entry.accessLevel = await this.store.findRecordByUri('concept', entry.accessLevel);
+    }
+  }
+
+  postProcessAgendaitems(entry) {
+    const agendaitems = entry.agendaitems;
+    if (Array.isArray(agendaitems)) {
+      entry.latestAgendaitem = agendaitems.find((agendaitem) => {
+        return agendaitem['nextVersionId'] == null;
+      });
+    } else {
+      entry.latestAgendaitem = agendaitems;
     }
   }
 }

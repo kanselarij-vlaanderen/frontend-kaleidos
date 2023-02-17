@@ -24,8 +24,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @page={{this.page}}
       @size={{this.size}}
@@ -36,48 +35,18 @@
       @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToDocument}}
     >
-      <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{this.selectSort}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="confidentialityLevel"
-          @label={{t "confidentiality-level"}}
-          @onChange={{this.selectSort}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{row.title}}
-          </p>
-        </td>
-        <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td>
-          <AccessLevelPill @accessLevel={{row.accessLevel}} />
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="document"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Document
+            @created={{row.created}}
+            @documentId={{row.id}}
+            @title={{row.title}}
+            @fileName={{row.fileName}}
+            @agendaitemShortTitle={{row.latestAgendaitem.shortTitle}}
+            @meetingId={{row.latestAgendaitem.meetingId}}
+            @agendaId={{row.latestAgendaitem.agendaId}}
+            @agendaitemId={{row.latestAgendaitem.id}}
+          />
         </td>
       </:body>
     </KDataTable>

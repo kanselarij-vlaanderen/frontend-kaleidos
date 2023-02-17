@@ -7,14 +7,13 @@
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       <p class="au-u-para-small au-u-muted au-u-medium">
-        {{t "created"}}
         {{date @created}}
       </p>
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
         class="au-u-padding-none"
-        @route="agenda.agendaitems.agendaitem"
+        @route="document"
         @model={{@documentId}}
       >
         {{@title}}
@@ -23,10 +22,16 @@
   </c.header>
   <c.content>
     {{!-- <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p> --}}
-    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
-      <AuLink @skin="secondary" @icon="document" @iconAlignment="left">
-        {{@fileName}}{{@fileExtension}}
-      </AuLink>
-    </p>
+    {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
+      <p class="au-u-para-small au-u-muted">
+        {{t "found-in-thing" thing=(t "agendaitem")}}
+        <AuLink
+          @route="agenda.agendaitems.agendaitem"
+          @models={{array @meetingId @agendaId @agendaitemId}}
+        >
+          {{@agendaitemShortTitle}}
+        </AuLink>
+      </p>
+    {{/if}}
   </c.content>
 </AuCard>
