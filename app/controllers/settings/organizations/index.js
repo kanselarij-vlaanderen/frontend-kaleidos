@@ -4,12 +4,13 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SettingsOrganizationsIndexController extends Controller {
   @service store;
   @service currentSession;
 
-  @tracked size = 10;
+  @tracked size = PAGINATION_SIZES[1];
   @tracked page = 0;
   @tracked sort = 'identifier';
   @tracked filter;

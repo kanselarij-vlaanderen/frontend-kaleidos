@@ -24,7 +24,6 @@ export default class SearchDecisionsController extends Controller {
     },
   ];
 
-  sizeOptions = PAGINATION_SIZES;
   sortOptions = [
     { value: '-session-dates', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
@@ -38,7 +37,7 @@ export default class SearchDecisionsController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
   }
 

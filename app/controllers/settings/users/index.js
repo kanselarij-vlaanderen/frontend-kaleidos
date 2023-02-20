@@ -11,8 +11,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class UsersSettingsController extends Controller {
   @service store;
 
-  sizeOptions = PAGINATION_SIZES;
-  @tracked size = 10;
+  @tracked size = PAGINATION_SIZES[1];
   @tracked page = 0;
   @tracked sort = 'first-name';
   @tracked filter;

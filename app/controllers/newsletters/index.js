@@ -22,8 +22,6 @@ export default class NewslettersIndexController extends Controller {
     }
   ];
 
-  sizeOptions = PAGINATION_SIZES;
-
   @tracked isLoadingModel;
   @tracked page;
   @tracked size;
@@ -32,7 +30,7 @@ export default class NewslettersIndexController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[1];
+    this.size = PAGINATION_SIZES[1];
   }
 
   @bind

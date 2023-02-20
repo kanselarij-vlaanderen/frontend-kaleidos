@@ -4,9 +4,10 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { debounce } from '@ember/runloop';
 import search from 'frontend-kaleidos/utils/mu-search';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CaseSearch extends Component {
-  size = 5;
+  size = PAGINATION_SIZES[0];
   textSearchFields = null;
 
   @tracked results = null;

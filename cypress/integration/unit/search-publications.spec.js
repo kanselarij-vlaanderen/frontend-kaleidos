@@ -194,8 +194,8 @@ context('Search tests', () => {
 
   it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
-    const options = [5, 10, 20, 50, 100, 200];
-    const defaultSize = 20;
+    const options = [5, 10, 20, 25, 50, 100, 200];
+    const defaultSize = options[2];
     checkPagination(options, defaultSize);
   });
 

@@ -43,8 +43,6 @@ export default class PublicationsOverviewSearchController extends Controller {
     },
   ];
 
-  sizeOptions = PAGINATION_SIZES;
-
   publicationDateTypes = [
     {
       key: 'decisionDate',
@@ -100,7 +98,7 @@ export default class PublicationsOverviewSearchController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = '-opening-date';
     this.urgentOnly = false;
   }

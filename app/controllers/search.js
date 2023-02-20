@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import formatDate from '../utils/format-date-search-param';
 import { task } from 'ember-concurrency';
-import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SearchController extends Controller {
   queryParams = [
@@ -22,8 +21,6 @@ export default class SearchController extends Controller {
       },
     },
   ];
-
-  sizeOptions = PAGINATION_SIZES;
 
   @tracked searchText = '';
   @tracked mandatees = [];

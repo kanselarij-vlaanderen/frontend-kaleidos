@@ -39,8 +39,6 @@ export default class NewslettersSearchController extends Controller {
     },
   ];
 
-  sizeOptions = PAGINATION_SIZES;
-
   @tracked searchText = '';
   @tracked mandatees;
   @tracked dateFrom;
@@ -57,7 +55,7 @@ export default class NewslettersSearchController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = '-agendaitems.meetingDate';
   }
 

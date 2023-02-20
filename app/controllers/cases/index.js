@@ -32,9 +32,8 @@ export default class CasesIndexController extends Controller {
       },
     }
   ];
-  sizeOptions = PAGINATION_SIZES;
   page = 0;
-  size = 20;
+  size = PAGINATION_SIZES[2];
 
   sort = '-opened';
   showArchivedOnly = false;
