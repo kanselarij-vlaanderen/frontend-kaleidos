@@ -67,6 +67,17 @@ export default class SignaturesBusyController extends Controller {
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
   @tracked isShowAddCC = false;
+  @tracked isShowApproval = false;
+
+  @action
+  showApproval() {
+    this.isShowApproval = true;
+  }
+
+  @action
+  closeApproval() {
+    this.isShowApproval = false;
+  }
 
   @action
   showAddCC() {

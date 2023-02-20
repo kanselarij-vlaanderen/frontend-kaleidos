@@ -69,6 +69,17 @@ export default class SignaturesIndexController extends Controller {
   @tracked isShowCancelSignatures = false;
   @tracked isShowSignButton = false;
   @tracked isShowAddCC = false;
+  @tracked isShowApproval = false;
+
+  @action
+  showApproval() {
+    this.isShowApproval = true;
+  }
+
+  @action
+  closeApproval() {
+    this.isShowApproval = false;
+  }
 
   @action
   showAddCC() {

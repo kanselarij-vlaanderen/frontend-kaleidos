@@ -35,7 +35,7 @@
           @icon="sign"
           @route="signatures.multiple"
         >
-          Geselecteerde documenten handtekenen
+          Proces starten
         </Auk::Button>
         {{else}}
         <Auk::Button
@@ -43,7 +43,7 @@
           @icon="sign"
           @disabled={{true}}
         >
-          Geselecteerde documenten handtekenen
+          Proces starten
         </Auk::Button>
         {{/if}}
       </Auk::Toolbar::Item>
@@ -66,9 +66,24 @@
           {{t "signaturesSection.filter-ministers"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
-
       <Auk::Toolbar::Item>
-        {{! bundle signature here}}
+        {{#if this.isShowSignButton}}
+        <Auk::Button
+          @skin="primary"
+          @icon="sign"
+           {{on "click" this.showSidebar}}
+        >
+          Proces starten
+        </Auk::Button>
+        {{else}}
+        <Auk::Button
+          @skin="primary"
+          @icon="sign"
+          @disabled={{true}}
+        >
+          Proces starten
+        </Auk::Button>
+        {{/if}}
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{/if}}
@@ -82,21 +97,9 @@
         <thead>
           <tr>
             <th>{{! Select}}</th>
-            <Utils::ThSortable
-              @label="Dringend"
-              @field="decision-activity.start-date"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}}
-            />
             <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
             <Utils::ThSortable
               @label={{t "util.date-approved"}}
-              @field="decision-activity.start-date"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}}
-            />
-            <Utils::ThSortable
-              @label="Deadline"
               @field="decision-activity.start-date"
               @currentSorting={{this.sort}}
               @onChange={{this.changeSorting}}
@@ -114,20 +117,12 @@
                 {{on "input" (action "showSignButton")}}
               />
             </td>
-            <td
-              class="auk-u-text-align--center"
-            >
-              <Auk::Icon @skin="warning" @name="alert-triangle" />
-            </td>
             <td>
               <p class="au-u-muted">Decreet - 01-09-2021</p>
               <p>VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</p>
             </td>
             <td>
               01-09-2021
-            </td>
-            <td>
-              15-04-2022
             </td>
             <td>
               <Auk::Button
@@ -142,17 +137,12 @@
           </tr>
           <tr class="auk-table__row">
             <td
-              class="auk-u-text-align--center"
+              class="auk-u-text-align--center au-u-column-select"
             >
               <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
               <Auk::Checkbox
                 {{on "input" (action "showSignButton")}}
               />
-            </td>
-            <td
-              class="auk-u-text-align--center"
-            >
-              -
             </td>
             <td>
               <p class="au-u-muted">Decreet - 07-07-2021</p>
@@ -179,18 +169,13 @@
       </table>
     {{else}}
       {{#if this.model.length}}
-        <table class="auk-table auk-table--sticky-header auk-table--signatures">
+        <table class="auk-table auk-table--sticky-header auk-table--action">
           <thead>
             <tr>
+              <th>{{! Select}}</th>
               <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
               <Utils::ThSortable
                 @label={{t "util.date-approved"}}
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
-              <Utils::ThSortable
-                @label="Deadline"
                 @field="decision-activity.start-date"
                 @currentSorting={{this.sort}}
                 @onChange={{this.changeSorting}}
@@ -200,22 +185,27 @@
           </thead>
           <tbody>
             {{#each this.model as |signFlow|}}
-              <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
-                <td>
+              <tr class="auk-table__row auk-table__row__clickable">
+                <td
+                  class="auk-u-text-align--center au-u-column-select"
+                >
+                  <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
+                  <Auk::Checkbox
+                    {{on "input" (action "showSignButton")}}
+                  />
+                </td>
+                <td {{on "click" this.showSidebar}}>
                   <p class="au-u-muted">Decreet - {{moment-format
                     signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
                   }}</p>
                   <p>{{signFlow.signSubcase.signMarkingActivity.piece.name}}</p>
                 </td>
-                <td>
+                <td {{on "click" this.showSidebar}}>
                   {{moment-format
                     signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
                   }}
-                </td>
-                <td>
-                  15-04-2022
                 </td>
                 <td>
                   <Auk::Button
@@ -321,27 +311,6 @@
                   </AuPill>
                 </Auk::List::Item>
               </Auk::List> --}}
-            </Auk::Panel::Body>
-          </Auk::Panel>
-          <Auk::Panel class="auk-u-mt-4">
-            <Auk::Panel::Header class="auk-u-px-1">
-              <Auk::Toolbar>
-                <Auk::Toolbar::Group @position="left">
-                  <Auk::Toolbar::Item>
-                    <h4 class="auk-h4 auk-u-m-0">
-                      Deadline
-                    </h4>
-                  </Auk::Toolbar::Item>
-                </Auk::Toolbar::Group>
-              </Auk::Toolbar>
-            </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-1">
-              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-                <AuPill @icon="alert-triangle" @skin="warning">Dringend</AuPill>
-                <p class="auk-u-m-0">
-                 15-04-2022
-                </p>
-              </div>
             </Auk::Panel::Body>
           </Auk::Panel>
         </div>
@@ -455,6 +424,40 @@
                 <Auk::Toolbar::Group @position="left">
                   <Auk::Toolbar::Item>
                     <h4 class="auk-h4 auk-u-m-0">
+                      Goed te keuren door
+                    </h4>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+                <Auk::Toolbar::Group @position="right">
+                  <Auk::Toolbar::Item>
+                    <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showApproval}}>
+                      Toevoegen
+                    </Auk::Button>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+            <Auk::Panel::Body class="auk-u-p-0">
+              <Auk::List @bordered={{true}}>
+                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <span>medewerker@vlaanderen.be</span>
+                  <Auk::Button
+                    @skin="danger-borderless"
+                    @layout="icon-only"
+                    @icon="trash"
+                  >
+                    {{t "util.delete"}}
+                  </Auk::Button>
+                </Auk::List::Item>
+              </Auk::List>
+            </Auk::Panel::Body>
+          </Auk::Panel>
+          <Auk::Panel class="auk-u-mt-4">
+            <Auk::Panel::Header class="auk-u-px-1">
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="left">
+                  <Auk::Toolbar::Item>
+                    <h4 class="auk-h4 auk-u-m-0">
                       Notificaties
                     </h4>
                   </Auk::Toolbar::Item>
@@ -483,37 +486,6 @@
               </Auk::List>
             </Auk::Panel::Body> --}}
           </Auk::Panel>
-          <Auk::Panel class="auk-u-mt-4">
-            <Auk::Panel::Header class="auk-u-px-1">
-              <Auk::Toolbar>
-                <Auk::Toolbar::Group @position="left">
-                  <Auk::Toolbar::Item>
-                    <h4 class="auk-h4 auk-u-m-0">
-                      Deadline
-                    </h4>
-                  </Auk::Toolbar::Item>
-                </Auk::Toolbar::Group>
-              </Auk::Toolbar>
-            </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-1">
-              <div>
-                <Auk::Label>Datum</Auk::Label>
-                <WebComponents::VlDatepicker
-                  @selectedDate="15-04-2022"
-                  @dateChanged=""
-                />
-              </div>
-              <div class="auk-o-flex auk-o-flex--spaced auk-u-mt-2">
-                <Auk::Toggle
-                  id="signatureToggle"
-                  @checked={{if (eq signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label "Nota") true false}}
-                />
-                <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
-                  Dringend
-                </label>
-              </div>
-            </Auk::Panel::Body>
-          </Auk::Panel>
         </div>
         <div class="auk-sidebar__footer">
           <Auk::Toolbar>
@@ -521,7 +493,7 @@
               <Auk::Toolbar::Item>
                 <LinkTo
                   class="auk-button auk-button--primary"
-                  @route="signatures.sign"
+                  @route="signatures.busy"
                 >
                   {{t "signaturesSection.prepare-signatures"}}
                 </LinkTo>
@@ -613,5 +585,12 @@
   <Signatures::SignaturesCancelSignatures
     @onCancel={{this.closeCancelSignatures}}
     @onSave={{this.closeCancelSignatures}}
+  />
+{{/if}}
+
+{{#if this.isShowApproval}}
+  <Signatures::SignaturesApproval
+    @onCancel={{this.closeApproval}}
+    @onSave={{this.closeApproval}}
   />
 {{/if}}

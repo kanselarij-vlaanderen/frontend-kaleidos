@@ -82,21 +82,9 @@
         <thead>
           <tr>
             <th>{{! Select}}</th>
-            <Utils::ThSortable
-              @label="Dringend"
-              @field="decision-activity.start-date"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}}
-            />
             <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
             <Utils::ThSortable
               @label={{t "util.date-approved"}}
-              @field="decision-activity.start-date"
-              @currentSorting={{this.sort}}
-              @onChange={{this.changeSorting}}
-            />
-            <Utils::ThSortable
-              @label="Deadline"
               @field="decision-activity.start-date"
               @currentSorting={{this.sort}}
               @onChange={{this.changeSorting}}
@@ -114,20 +102,12 @@
                 {{on "input" (action "showSignButton")}}
               />
             </td>
-            <td
-              class="auk-u-text-align--center"
-            >
-              <Auk::Icon @skin="warning" @name="alert-triangle" />
-            </td>
             <td>
               <p class="au-u-muted">Decreet - 01-09-2021</p>
               <p>VR 2020 1812 DOC.1322-2 Eindtermen tweede en derde graad SO - decreetTER</p>
             </td>
             <td>
               01-09-2021
-            </td>
-            <td>
-              15-04-2022
             </td>
             <td>
               <Auk::Button
@@ -149,20 +129,12 @@
                 {{on "input" (action "showSignButton")}}
               />
             </td>
-            <td
-              class="auk-u-text-align--center"
-            >
-              -
-            </td>
             <td>
               <p class="au-u-muted">Decreet - 07-07-2021</p>
               <p>VR 2020 1707 DOC.0846-1 Leerlingondersteuning - notaBIS2</p>
             </td>
             <td>
               07-07-2021
-            </td>
-            <td>
-              15-04-2022
             </td>
             <td>
               <Auk::Button
@@ -182,21 +154,9 @@
         <table class="auk-table auk-table--sticky-header auk-table--signatures">
           <thead>
             <tr>
-              <Utils::ThSortable
-                @label="Dringend"
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
               <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
               <Utils::ThSortable
                 @label={{t "util.date-approved"}}
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
-              <Utils::ThSortable
-                @label="Deadline"
                 @field="decision-activity.start-date"
                 @currentSorting={{this.sort}}
                 @onChange={{this.changeSorting}}
@@ -213,15 +173,6 @@
           <tbody>
             {{#each this.model as |signFlow|}}
               <tr class="auk-table__row auk-table__row__clickable" {{on "click" this.showSidebar}}>
-                <td
-                  class="auk-u-text-align--center"
-                >
-                  {{#if (eq signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label "Nota")}}
-                    <Auk::Icon @skin="warning" @name="alert-triangle" />
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </td>
                 <td>
                   <p class="au-u-muted">Decreet - {{moment-format
                     signFlow.decisionActivity.startDate
@@ -234,9 +185,6 @@
                     signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
                   }}
-                </td>
-                <td>
-                  15-04-2022
                 </td>
                 <td>
                   <AuPill @skin="border" @icon="sign">Gemarkeerd voor handtekenen</AuPill>
@@ -347,33 +295,12 @@
               </Auk::List>
             </Auk::Panel::Body>
           </Auk::Panel>
-          <Auk::Panel class="auk-u-mt-4">
-            <Auk::Panel::Header class="auk-u-px-1">
-              <Auk::Toolbar>
-                <Auk::Toolbar::Group @position="left">
-                  <Auk::Toolbar::Item>
-                    <h4 class="auk-h4 auk-u-m-0">
-                      Deadline
-                    </h4>
-                  </Auk::Toolbar::Item>
-                </Auk::Toolbar::Group>
-              </Auk::Toolbar>
-            </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-1">
-              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-                <AuPill @icon="alert-triangle" @skin="warning">Dringend</AuPill>
-                <p class="auk-u-m-0">
-                 15-04-2022
-                </p>
-              </div>
-            </Auk::Panel::Body>
-          </Auk::Panel>
         </div>
         <div class="auk-sidebar__footer">
           <Auk::Toolbar>
             <LinkTo
               class="auk-button auk-button--primary auk-button--block"
-              @route="signatures.signature"
+              @route="signatures.signed"
             >
               <span class="auk-button__content">
                 <Auk::Icon @name="pencil" />
@@ -480,6 +407,40 @@
                 <Auk::Toolbar::Group @position="left">
                   <Auk::Toolbar::Item>
                     <h4 class="auk-h4 auk-u-m-0">
+                      Goed te keuren door
+                    </h4>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+                <Auk::Toolbar::Group @position="right">
+                  <Auk::Toolbar::Item>
+                    <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showApproval}}>
+                      Toevoegen
+                    </Auk::Button>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
+            </Auk::Panel::Header>
+            <Auk::Panel::Body class="auk-u-p-0">
+              <Auk::List @bordered={{true}}>
+                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <span>medewerker@vlaanderen.be</span>
+                  <Auk::Button
+                    @skin="danger-borderless"
+                    @layout="icon-only"
+                    @icon="trash"
+                  >
+                    {{t "util.delete"}}
+                  </Auk::Button>
+                </Auk::List::Item>
+              </Auk::List>
+            </Auk::Panel::Body>
+          </Auk::Panel>
+          <Auk::Panel class="auk-u-mt-4">
+            <Auk::Panel::Header class="auk-u-px-1">
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="left">
+                  <Auk::Toolbar::Item>
+                    <h4 class="auk-h4 auk-u-m-0">
                       Notificaties
                     </h4>
                   </Auk::Toolbar::Item>
@@ -508,37 +469,6 @@
               </Auk::List>
             </Auk::Panel::Body>
           </Auk::Panel>
-          <Auk::Panel class="auk-u-mt-4">
-            <Auk::Panel::Header class="auk-u-px-1">
-              <Auk::Toolbar>
-                <Auk::Toolbar::Group @position="left">
-                  <Auk::Toolbar::Item>
-                    <h4 class="auk-h4 auk-u-m-0">
-                      Deadline
-                    </h4>
-                  </Auk::Toolbar::Item>
-                </Auk::Toolbar::Group>
-              </Auk::Toolbar>
-            </Auk::Panel::Header>
-            <Auk::Panel::Body class="auk-u-p-1">
-              <div>
-                <Auk::Label>Datum</Auk::Label>
-                <WebComponents::VlDatepicker
-                  @selectedDate="15-04-2022"
-                  @dateChanged=""
-                />
-              </div>
-              <div class="auk-o-flex auk-o-flex--spaced auk-u-mt-2">
-                <Auk::Toggle
-                  id="signatureToggle"
-                  @checked={{if (eq signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label "Nota") true false}}
-                />
-                <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
-                  Dringend
-                </label>
-              </div>
-            </Auk::Panel::Body>
-          </Auk::Panel>
         </div>
         <div class="auk-sidebar__footer">
           <Auk::Toolbar>
@@ -546,7 +476,7 @@
               <Auk::Toolbar::Item>
                 <LinkTo
                   class="auk-button auk-button--primary"
-                  @route="signatures.sign"
+                  @route="signatures.busy"
                 >
                   {{t "signaturesSection.prepare-signatures"}}
                 </LinkTo>
@@ -631,6 +561,13 @@
   <Signatures::SignaturesAddCc
     @onCancel={{this.closeAddCC}}
     @onSave={{this.closeAddCC}}
+  />
+{{/if}}
+
+{{#if this.isShowApproval}}
+  <Signatures::SignaturesApproval
+    @onCancel={{this.closeApproval}}
+    @onSave={{this.closeApproval}}
   />
 {{/if}}
 
