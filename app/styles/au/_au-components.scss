@@ -176,38 +176,6 @@ $au-button-height: 3.4rem;
   > * + h6 {
     margin-top: 1.5rem;
   }
-
-  .sanitized-value { // because rdfa editor output adds an extra parent element (<div id="ember490" class="sanitized-value ember-view">), we need te declare the overrides above again
-    > * + * {
-      margin-top: 1.5rem;
-    }
-
-    > * + h1,
-    > * + h2,
-    > * + h3 {
-      margin-top: 3rem;
-    }
-
-    > * + h4,
-    > * + h5,
-    > * + h6 {
-      margin-top: 1.5rem;
-    }
-  }
-
-  em { // default text color in Kaleidos
-    color: $auk-color-text;
-  }
-
-  sub {
-    vertical-align: sub;
-    font-size: smaller;
-  }
-
-  sup {
-    vertical-align: super;
-    font-size: smaller;
-  }
 }
 
 .au-c-button {
