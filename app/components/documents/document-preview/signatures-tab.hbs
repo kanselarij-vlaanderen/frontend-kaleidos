@@ -136,7 +136,40 @@
           </Auk::List>
         </Auk::Panel::Body>
       </Auk::Panel>
-
+      <Auk::Panel class="auk-u-mt-4">
+        <Auk::Panel::Header class="auk-u-px-1">
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-h4 auk-u-m-0">
+                  Goed te keuren door
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              <Auk::Toolbar::Item>
+                <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showApproval}}>
+                  Toevoegen
+                </Auk::Button>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-p-0">
+          <Auk::List @bordered={{true}}>
+            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+              <span>medewerker@vlaanderen.be</span>
+              <Auk::Button
+                @skin="danger-borderless"
+                @layout="icon-only"
+                @icon="trash"
+              >
+                {{t "util.delete"}}
+              </Auk::Button>
+            </Auk::List::Item>
+          </Auk::List>
+        </Auk::Panel::Body>
+      </Auk::Panel>
       <Auk::Panel class="auk-u-mt-4">
         <Auk::Panel::Header class="auk-u-px-1">
           <Auk::Toolbar>
@@ -169,37 +202,6 @@
               </Auk::Button>
             </Auk::List::Item>
           </Auk::List>
-        </Auk::Panel::Body>
-      </Auk::Panel>
-      <Auk::Panel class="auk-u-mt-4">
-        <Auk::Panel::Header class="auk-u-px-1">
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <h4 class="auk-h4 auk-u-m-0">
-                  Deadline
-                </h4>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </Auk::Panel::Header>
-        <Auk::Panel::Body class="auk-u-p-1">
-          <div>
-            <Auk::Label>Datum</Auk::Label>
-            <WebComponents::VlDatepicker
-              @selectedDate="15-04-2022"
-              @dateChanged=""
-            />
-          </div>
-          <div class="auk-o-flex auk-o-flex--spaced auk-u-mt-2">
-            <Auk::Toggle
-              id="signatureToggle"
-              @checked={{true}}
-            />
-            <label for="signatureToggle" class="auk-c-toggle-label au-u-muted">
-              Dringend
-            </label>
-          </div>
         </Auk::Panel::Body>
       </Auk::Panel>
     {{/if}}
@@ -249,5 +251,12 @@
   <Signatures::SignaturesAddCc
     @onCancel={{this.closeAddCC}}
     @onSave={{this.closeAddCC}}
+  />
+{{/if}}
+
+{{#if this.isShowApproval}}
+  <Signatures::SignaturesApproval
+    @onCancel={{this.closeApproval}}
+    @onSave={{this.closeApproval}}
   />
 {{/if}}

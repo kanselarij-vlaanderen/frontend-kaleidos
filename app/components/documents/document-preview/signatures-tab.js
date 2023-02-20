@@ -13,6 +13,17 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @tracked signatureRequested;
 
   @tracked isShowAddCC = false;
+  @tracked isShowApproval = false;
+
+  @action
+  showApproval() {
+    this.isShowApproval = true;
+  }
+
+  @action
+  closeApproval() {
+    this.isShowApproval = false;
+  }
 
   @action
   showAddCC() {
