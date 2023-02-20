@@ -47,11 +47,12 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::Case
-            @sessionDate={{row.sessionDates}}
-            @shortTitle={{row.shortTitle}}
-            @title={{row.title}}
+            @created={{row.attributes.created}}
+            @shortTitle={{row.highlight.shortTitle}}
+            @title={{row.highlight.title}}
             @caseId={{row.id}}
-            @isArchived={{row.isArchived}}
+            @isArchived={{row.attributes.isArchived}}
+            @subcaseHighlights={{row.subcaseHighlights}}
           />
         </td>
       </:body>

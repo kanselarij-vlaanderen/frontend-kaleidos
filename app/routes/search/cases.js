@@ -41,6 +41,26 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
+  postProcessHighlight(_case) {
+    const { highlight } = _case;
+    if (highlight) {
+      if (highlight.title) {
+        highlight.title = highlight.title[0];
+      }
+      if (highlight.shortTitle) {
+        highlight.shortTitle = highlight.shortTitle[0];
+      }
+    }
+  }
+
+  setSubcaseHighlights(_case) {
+    if (_case.highlight.subcaseTitle) {
+      _case.subcaseHighlights = _case.highlight.subcaseTitle;
+    } else if (_case.highlight.subcaseSubTitle) {
+      _case.subcaseHighlights = _case.highlight.subcaseSubTitle;
+    }
+  }
+
   constructor() {
     super(...arguments);
     this.lastParams = new Snapshot();
@@ -68,6 +88,8 @@ export default class CasesSearchRoute extends Route {
       'mandateeFamilyNames^3',
       'newsItemTitle^2',
       'newsItem',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
     ];
     if (params.decisionsOnly) {
       textSearchFields.push(
@@ -130,7 +152,6 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    const { postProcessDates } = this;
     return search(
       'decisionmaking-flows',
       params.page,
@@ -138,11 +159,18 @@ export default class CasesSearchRoute extends Route {
       sort,
       filter,
       (searchData) => {
-        const entry = searchData.attributes;
-        entry.id = searchData.id;
-        postProcessDates(searchData);
-        return entry;
-      }
+        this.postProcessHighlight(searchData);
+        this.postProcessDates(searchData);
+        this.setSubcaseHighlights(searchData);
+
+        searchData.highlight = {
+          ...searchData.attributes,
+          ...searchData.highlight,
+        };
+
+        return searchData;
+      },
+      ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle']
     );
   }
 
