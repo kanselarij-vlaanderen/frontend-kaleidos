@@ -74,6 +74,16 @@
         <div class="auk-o-grid-col-2">
           <div class="auk-box">
             <div class="auk-u-mb-2">
+                {{#if this.loadMinisters.isRunning}}
+                  <Auk::Loader />
+                {{else}}
+                  <Search::MinisterFilter
+                    @selected={{this.mandateesBuffer}}
+                    @onChange={{this.setMandatees}}
+                  />
+                {{/if}}
+            </div>
+            <div class="auk-u-mb-2">
               <Auk::CheckboxTree
                 @label={{t "regulation-type"}}
                 @items={{this.regulationTypes}}
