@@ -41,9 +41,9 @@
                 {{mandatee.person.fullName}}
               </td>
               <td data-test-mandatee-panel-edit-row-submitter>
-                <Auk::Toggle
+                <AuToggleSwitch
                   @checked={{eq mandatee this.submitterBuffer}}
-                  {{on "input" (fn this.toggleIsSubmitter mandatee)}}
+                  @onChange={{fn this.toggleIsSubmitter mandatee}}
                 />
               </td>
               <td class="auk-u-text-align--right auk-o-flex--vertical-center">

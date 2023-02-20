@@ -57,7 +57,7 @@
       {{#if @newsItem.htmlContent}}
         <p data-test-news-item-print-htmlContent class="auk-u-mb-2">
           <AuContent>
-            <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} @options={{this.sanitizeHtmlOptions}} />
+            <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}}/>
           </AuContent>
         </p>
       {{else}}

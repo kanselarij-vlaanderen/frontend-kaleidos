@@ -81,6 +81,7 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agendaitems', { path: '/agendapunten', });
+    this.route('documents', { path: '/documenten'});
     this.route('decisions', { path: '/beslissingen' });
     this.route('news-items', { path: '/kort-bestek', });
   });
@@ -116,6 +117,7 @@ Router.map(function() {
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
+    this.route('checkbox-list');
     this.route('checkbox-tree');
     this.route('colors');
     this.route('color-badge');

@@ -8,17 +8,12 @@
         </div>
       </div>
       {{#if (user-may "manage-cases")}}
-        {{! TODO these classes do not exist and do nothing }}
-        <div class="confidentialities">
-          <div class="confidential">
-            <AuControlCheckbox
-              data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
-              @label={{t "limited-access"}}
-              @checked={{@model.subcase.confidential}}
-              @disabled={{true}}
-            />
-          </div>
-        </div>
+        <AuControlCheckbox
+          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
+          @label={{t "limited-access"}}
+          @checked={{@model.subcase.confidential}}
+          @disabled={{true}}
+        />
       {{/if}}
       <Subcase::SubcaseTitlesPanel
         @subcase={{@model.subcase}}

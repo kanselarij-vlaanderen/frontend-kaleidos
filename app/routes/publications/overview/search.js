@@ -37,6 +37,10 @@ export default class PublicationsOverviewSearchRoute extends Route {
       refreshModel: true,
       as: 'datum_type',
     },
+    mandatees: {
+      refreshModel: true,
+      as: 'ministers',
+    },
     regulationTypeIds: {
       refreshModel: true,
       as: 'types_regelgeving',
@@ -96,7 +100,6 @@ export default class PublicationsOverviewSearchRoute extends Route {
     if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
       params.page = 0;
     }
-
     const textSearchFields = ['title', 'shortTitle', 'identification', 'numacNumbers'];
 
     const searchModifier = ':sqs:';
@@ -107,9 +110,6 @@ export default class PublicationsOverviewSearchRoute extends Route {
     const searchText = isEmpty(params.searchText) ? '*' : params.searchText;
     filter[searchModifier + textSearchKey] = searchText;
 
-    if (isPresent(params.mandatees)) {
-      filter['mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
-    }
 
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
@@ -134,6 +134,10 @@ export default class PublicationsOverviewSearchRoute extends Route {
 
     if (isPresent(params.publicationStatusIds)) {
       filter[':terms:statusId'] = params.publicationStatusIds;
+    }
+
+    if (!isEmpty(params.mandatees)) {
+      filter[':terms:mandateeIds'] = params.mandatees;
     }
 
     if (params.urgentOnly) {
@@ -166,6 +170,8 @@ export default class PublicationsOverviewSearchRoute extends Route {
     controller.dateToBuffer = parseDate(params.dateTo);
     controller.publicationStatuses = this.publicationStatuses.toArray();
     controller.regulationTypes = this.regulationTypes.toArray();
+    controller.mandatees = params.mandatees;
+    controller.loadMinisters.perform();
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
