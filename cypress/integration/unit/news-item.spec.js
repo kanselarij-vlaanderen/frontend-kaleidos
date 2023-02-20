@@ -36,6 +36,48 @@ function changeSubcaseType(subcaseLink, type) {
   }
 }
 
+function addOrRemoveThemeFromMededeling(shortSubcaseTitle, theme, confirm) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.openAgendaitemKortBestekTab(shortSubcaseTitle);
+  cy.get(newsletter.newsItem.edit).click();
+  cy.get(newsletter.editItem.themesSelector).contains(theme)
+    .click();
+  cy.intercept('PATCH', '/news-items/**').as(`patchNewsItem${randomInt}`);
+  cy.get(newsletter.editItem.save).click();
+  if (confirm) {
+    cy.get(auk.confirmationModal.footer.confirm).click();
+  }
+  cy.wait(`@patchNewsItem${randomInt}`);
+}
+
+function goToNewsletter() {
+  cy.get(agenda.agendaActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+  cy.get(newsletter.tableRow.titleContent); // await page load
+}
+
+function checkPublishMail(alertMessage) {
+  cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+    .children(appuniversum.button)
+    .click();
+  cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+  cy.get(auk.confirmationModal.footer.confirm).click();
+  cy.get(auk.auModal.container).should('not.exist');
+  cy.get(auk.alert.message).contains(alertMessage);
+  cy.get(auk.alert.close).click();
+}
+
+function checkUncheckInNewsletter(index) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('PATCH', '/news-items/**').as(`patchNewsItem${randomInt}`);
+  cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(index)
+    .parent()
+    .click()
+    .wait(`@patchNewsItem${randomInt}`);
+}
+
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   const theme = 'Justitie en Handhaving';
   const theme2 = 'Landbouw en Visserij';
@@ -637,6 +679,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
   it('should test the pre mailchimp checks', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
       .day(1);
     const type1 = 'Mededeling';
@@ -644,6 +688,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
     const theme = 'Justitie en Handhaving';
     const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
+    const shortSubcaseTitle3 = 'Cypress test: tweede nieuwsbrief nota';
     const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
 
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
@@ -653,41 +698,21 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // create subcase.
     cy.addSubcase(type1, shortSubcaseTitle1);
     cy.addSubcase(type2, shortSubcaseTitle2);
+    cy.addSubcase(type2, shortSubcaseTitle3);
+    cy.wait(5000);
 
     // create agendaitem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(shortSubcaseTitle1);
     cy.addAgendaitemToAgenda(shortSubcaseTitle2);
-    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
-    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
-    cy.intercept('POST', '/news-items').as('newsItemsPost');
-    cy.get(newsletter.newsItem.create).click()
-      .wait('@newsItemsPost');
-    cy.wait('@getAgendaitemThemes');
-    cy.get(newsletter.editItem.save).click();
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(auk.confirmationModal.footer.confirm).click()
-      .wait('@patchNewsItem');
+    cy.addAgendaitemToAgenda(shortSubcaseTitle3);
 
-    // test without nota in newsletter
+    // test without kort bestek and no theme in mededeling
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent); // await page load
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.get(auk.confirmationModal.footer.confirm).click();
-    cy.get(auk.auModal.container).should('not.exist');
-    cy.get(auk.alert.message).contains(alertMessage);
-    cy.get(auk.alert.close).click();
-    // test with nota in newsletter without theme
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
-      .click()
-      .wait('@patchNewsItem');
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -699,36 +724,141 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     // add theme to mededeling
     cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemKortBestekTab(shortSubcaseTitle1);
+    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme);
+
+    // test without kort bestek and with theme in mededeling
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+    cy.get(newsletter.tableRow.titleContent); // await page load
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.get(auk.auModal.container).should('not.exist');
+    cy.get(auk.alert.message).contains(alertMessage);
+    cy.get(auk.alert.close).click();
+
+    // remove theme from mededeling
+    cy.openAgendaForDate(agendaDate);
+    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme, true);
+
+    // add kort bestek
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes1');
+    cy.intercept('POST', '/news-items').as('newsItemsPost');
+    cy.get(newsletter.newsItem.create).click()
+      .wait('@newsItemsPost');
+    cy.wait('@getAgendaitemThemes1');
+    cy.get(newsletter.editItem.save).click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@patchNewsItem');
+
+    // test with kort bestek, without nota in newsletter, with mededeling and without theme
+    goToNewsletter();
+    checkPublishMail(alertMessage);
+
+    // add theme to nota
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
     cy.get(newsletter.newsItem.edit).click();
     cy.get(newsletter.editItem.themesSelector).contains(theme)
       .click();
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click()
       .wait('@patchNewsItem');
+    // test with kort bestek, without nota in newsletter, with mededeling and with theme
+    goToNewsletter();
+    checkPublishMail(alertMessage);
 
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-    cy.get(newsletter.tableRow.titleContent); // await page load
-
-    // uncheck nota in newsletter
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
-      .click()
-      .wait('@patchNewsItem');
-
-    // TODO-bug check on nota in kort-bestek allows mailcampaign with nota without themes
-    //  and check again
-    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+    // // remove mededeling
+    // cy.openAgendaForDate(agendaDate);
+    // cy.openAgendaitemDossierTab(shortSubcaseTitle1);
+    // cy.get(agenda.agendaitemControls.actions)
     //   .children(appuniversum.button)
     //   .click();
-    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    // cy.get(utils.vlModalVerify.save).click();
-    // cy.get(utils.vlModalVerify.container).should('not.exist');
-    // cy.get(auk.alert.message).contains(alertMessage);
-    // cy.get(auk.alert.close).click();
+    // cy.get(agenda.agendaitemControls.action.delete).click();
+    // cy.get(auk.confirmationModal.footer.confirm).click();
+    // cy.wait(2000);
+
+    // // test with kort bestek, without nota in newsletter, without mededeling and with theme
+    // goToNewsletter();
+    // checkPublishMail(alertMessage);
+
+    // remove theme from nota
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
+    cy.get(newsletter.newsItem.edit).click();
+    cy.get(newsletter.editItem.themesSelector).contains(theme)
+      .click();
+    cy.get(newsletter.editItem.save).click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@patchNewsItem');
+    // test with kort bestek, without nota in newsletter and without theme
+    goToNewsletter();
+    checkPublishMail(alertMessage);
+
+    // test with nota in newsletter without theme
+    checkUncheckInNewsletter(0);
+    cy.log('test with nota in newsletter without theme');
+    checkPublishMail(alertMessage);
+
+    // add theme to nota
+    cy.openAgendaForDate(agendaDate);
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
+    cy.get(newsletter.newsItem.edit).click();
+    cy.get(newsletter.editItem.themesSelector).contains(theme)
+      .click();
+    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+    cy.get(newsletter.editItem.save).click()
+      .wait('@patchNewsItem');
+    // // re-add mededeling
+    // cy.addAgendaitemToAgenda(shortSubcaseTitle1);
+    // // add theme to mededeling
+    // addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme);
+    // add kort bestek to second nota
+    cy.openAgendaitemKortBestekTab(shortSubcaseTitle3);
+    cy.intercept('GET', '/themes**').as('getAgendaitemThemes2');
+    cy.intercept('POST', '/news-items').as('newsItemsPost');
+    cy.get(newsletter.newsItem.create).click()
+      .wait('@newsItemsPost');
+    cy.wait('@getAgendaitemThemes2');
+    cy.get(newsletter.editItem.themesSelector).contains(theme)
+      .click();
+    cy.get(newsletter.editItem.save).click();
+    cy.intercept('PATCH', '/news-items/**').as(`patchNewsItem${randomInt}`);
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait(`@patchNewsItem${randomInt}`);
+
+    goToNewsletter();
+    // uncheck nota with themes, check nota without themes
+    checkUncheckInNewsletter(0);
+    checkUncheckInNewsletter(1);
+
+    // TODO-bug check on nota in kort-bestek allows mailcampaign with nota without themes
+    //  and test again
+    checkPublishMail(alertMessage);
+
+    // switch the checks
+    checkUncheckInNewsletter(0);
+    checkUncheckInNewsletter(1);
+    // there should be no alert message
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.intercept('POST', '/newsletter/mail-campaigns').as('postMailCampaigns');
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@postMailCampaigns')
+      .then((responseBody) => {
+        if (responseBody.error || responseBody.response?.statusCode === 500) {
+          cy.get(auk.alert.message).should('not.exist');
+        }
+      });
   });
 
   // it.only('should test the pre mailchimp checks', () => {

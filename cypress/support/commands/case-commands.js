@@ -20,7 +20,9 @@ import route from '../../selectors/route.selectors';
 function createCase(shortTitle) {
   cy.log('createCase');
   cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
-  cy.visit('/dossiers');
+  cy.visit('/dossiers?aantal=10');
+  cy.get(auk.loader);
+  cy.get(auk.loader).should('not.exist');
 
   cy.get(cases.casesHeader.addCase).click();
   cy.get(cases.newCase.shorttitle).type(shortTitle);
@@ -53,9 +55,11 @@ function createCase(shortTitle) {
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcase(type, newShortTitle, longTitle, step, stepName) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
   cy.log('addSubcase');
-  cy.intercept('POST', '/subcases').as('addSubcase-createNewSubcase');
-  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as('addSubcase-reloadDecisionmakingFlow');
+  cy.intercept('POST', '/subcases').as(`addSubcase-createNewSubcase${randomInt}`);
+  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as(`addSubcase-reloadDecisionmakingFlow${randomInt}`);
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
@@ -106,12 +110,12 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   let subcaseId;
   cy.log('/addSubcase');
-  cy.wait('@addSubcase-createNewSubcase')
+  cy.wait(`@addSubcase-createNewSubcase${randomInt}`)
     .its('response.body')
     .then((responseBody) => {
       subcaseId = responseBody.data.id;
     });
-  cy.wait('@addSubcase-reloadDecisionmakingFlow')
+  cy.wait(`@addSubcase-reloadDecisionmakingFlow${randomInt}`)
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         subcaseId,
