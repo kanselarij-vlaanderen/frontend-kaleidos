@@ -7,13 +7,17 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
+    },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
     },
     page: {
       refreshModel: true,
@@ -83,6 +87,8 @@ export default class CasesSearchRoute extends Route {
     const textSearchFields = [
       'title^4',
       'shortTitle^4',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
       'mandateRoles^2',
       'mandateeFirstNames^3',
       'mandateeFamilyNames^3',
@@ -133,8 +139,14 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
+    } else if (params.archived === 'only') {
+      filter.isArchived = 'true';
+    }
+
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
     }
 
     this.lastParams.commit();
