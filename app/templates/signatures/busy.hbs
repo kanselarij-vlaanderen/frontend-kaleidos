@@ -268,7 +268,7 @@
           <Auk::Panel::Body class="auk-u-p-0">
             <Auk::List @bordered={{true}}>
               <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>medewerker@vlaanderen.be</span>
+                <span>kc@vlaanderen.be</span>
                 <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
@@ -302,7 +302,7 @@
           <Auk::Panel::Body class="auk-u-p-0">
             <Auk::List @bordered={{true}}>
               <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>medewerker@vlaanderen.be</span>
+                <span>kc@vlaanderen.be</span>
                 <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
@@ -319,22 +319,13 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <LinkTo
-                class="auk-button auk-button--primary"
-                @route="signatures.success"
-              >
-                Klaar met voorbereiden
-              </LinkTo>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
+              <AuLink
                 @icon="sign"
                 @skin="naked"
+                @route="signatures.success"
               >
                 Bekijk op SigningHub
-              </AuButton>
+              </AuLink>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
