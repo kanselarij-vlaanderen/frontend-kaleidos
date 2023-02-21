@@ -8,7 +8,8 @@ import auk from '../../selectors/auk.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
-    cy.get(route.search.input).type('test');
+    cy.get(route.search.input).clear()
+      .type('test');
     cy.get(route.search.trigger).click();
     cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
       .click();
