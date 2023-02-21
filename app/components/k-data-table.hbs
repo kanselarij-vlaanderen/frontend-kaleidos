@@ -3,7 +3,8 @@
   {{if @hoverable "auk-table--hoverable"}}
   {{if @striped "auk-table--striped"}}
   {{if @stickyHeader "auk-table--sticky-header"}}
-  {{if @stickyActionColumn "auk-table--sticky-action-column"}}"
+  {{if @stickyActionColumn "auk-table--sticky-action-column"}}
+  {{if @cards "auk-card-table"}}"
   ...attributes
 >
   <thead>
@@ -14,7 +15,7 @@
   <tbody class="{{if (or @clickable @onClickRow) "auk-table--clickable-rows"}}">
     {{#if @loading}}
       <tr>
-        <td colspan="100%">
+        <td colspan="100%" class="is-loading-data">
           {{#if (has-block "loading")}}
             {{yield to="loading"}}
           {{else}}

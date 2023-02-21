@@ -1,22 +1,42 @@
 {{page-title (t "cases")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "type"}}</Auk::Label>
-    <AuControlCheckbox
-      data-test-route-search-cases-toggle-decisions={{true}}
-      @label={{t "search-in-decisions-only"}}
-      @checked={{this.decisionsOnly}}
-      @onChange={{this.toggleDecisionsOnly}}
-    />
+    <AuFieldset as |Fieldset|>
+      <Fieldset.legend>{{t "type"}}</Fieldset.legend>
+      <Fieldset.content>
+        <Auk::CheckboxList>
+          <AuControlCheckbox
+            data-test-route-search-cases-toggle-decisions={{true}}
+            @label={{t "search-in-decisions-only"}}
+            @checked={{this.decisionsOnly}}
+            @onChange={{set this "decisionsOnly"}}
+          />
+        </Auk::CheckboxList>
+      </Fieldset.content>
+    </AuFieldset>
   </div>
-  <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "archive"}}</Auk::Label>
-    <AuControlCheckbox
-      @label={{t "search-include-archived"}}
-      @checked={{this.includeArchived}}
-      @onChange={{this.toggleIncludeArchived}}
+  {{#if (user-may "manage-cases")}}
+    <div class="au-c-card au-o-box au-o-box--small">
+      <Auk::Label>{{t "removed-cases"}}</Auk::Label>
+      <Auk::RadioList as |list|>
+        {{#each this.archivedOptions as |option|}}
+          <list.Radio
+            @label={{option.label}}
+            @value={{option.value}}
+            @onChange={{this.setArchived}}
+            checked={{eq this.archived option.value}}
+          />
+        {{/each}}
+      </Auk::RadioList>
+    </div>
+  {{/if}}
+  {{#if (user-may "search-confidential-cases")}}
+    <Search::ConfidentialOnly
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+      @objectVerb={{t "cases"}}
     />
-  </div>
+  {{/if}}
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
@@ -32,8 +52,7 @@
     />
     <KDataTable
       data-test-route-search-cases-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}

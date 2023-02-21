@@ -1,0 +1,54 @@
+{{page-title (t "newsletter")}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "agenda"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      data-test-route-search-news-items-data-table={{true}}
+      @cards={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToNewsletter}}
+    >
+      <:body as |row|>
+        <td>
+          <Search::ResultCards::NewsItem
+            @date={{row.modified}}
+            @title={{or row.subTitle row.title}}
+            @text={{row.htmlContent}}
+            @mandatees={{row.mandatees}}
+            @meetingId={{row.latestAgendaitem.meetingId}}
+            @agendaId={{row.latestAgendaitem.agendaId}}
+            @agendaItemId={{row.latestAgendaitem.id}}
+          />
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.isEmptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

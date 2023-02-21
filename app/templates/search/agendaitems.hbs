@@ -1,27 +1,37 @@
 {{page-title (t "agendaitems")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "type"}}</Auk::Label>
-    <Auk::CheckboxList>
-      <AuControlCheckbox
-        @label={{t "note"}}
-        @checked={{this.includeNotas}}
-        @onChange={{this.toggleIncludeNotas}}
-      />
-      <AuControlCheckbox
-        @label={{capitalize (t "announcement")}}
-        @checked={{this.includeMededelingen}}
-        @onChange={{this.toggleIncludeMededelingen}}
-      />
-    </Auk::CheckboxList>
+    <AuFieldset as |Fieldset|>
+      <Fieldset.legend>{{t "type"}}</Fieldset.legend>
+      <Fieldset.content>
+        <Auk::CheckboxList>
+          <AuControlCheckbox
+            @label={{t "note"}}
+            @checked={{this.includeNotas}}
+            @onChange={{set this "includeNotas"}}
+          />
+          <AuControlCheckbox
+            @label={{capitalize (t "announcement")}}
+            @checked={{this.includeMededelingen}}
+            @onChange={{set this "includeMededelingen"}}
+          />
+        </Auk::CheckboxList>
+      </Fieldset.content>
+    </AuFieldset>
   </div>
   <div class="au-c-card au-o-box au-o-box--small">
-    <Auk::Label>{{t "version"}}</Auk::Label>
-    <AuControlCheckbox
-      @label={{t "only-on-final-agenda"}}
-      @checked={{this.latestOnly}}
-      @onChange={{this.toggleLatestOnly}}
-    />
+    <AuFieldset as |Fieldset|>
+      <Fieldset.legend>{{t "version"}}</Fieldset.legend>
+      <Fieldset.content>
+        <Auk::CheckboxList>
+          <AuControlCheckbox
+            @label={{t "only-on-final-agenda"}}
+            @checked={{this.latestOnly}}
+            @onChange={{set this "latestOnly"}}
+          />
+        </Auk::CheckboxList>
+      </Fieldset.content>
+    </AuFieldset>
   </div>
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
@@ -38,8 +48,7 @@
     />
     <KDataTable
       data-test-route-search-agendaitems-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}

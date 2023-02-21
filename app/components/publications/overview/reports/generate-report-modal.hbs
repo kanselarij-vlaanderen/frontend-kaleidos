@@ -97,38 +97,46 @@
       {{/if}}
       {{#if @userInputFields.governmentDomains}}
         <div class="auk-form-group">
-          <Auk::Label>{{t "government-domains"}}</Auk::Label>
-          <Auk::CheckboxList>
-            {{#each this.governmentDomains as |governmentDomain|}}
-              <AuControlCheckbox
-                @checked={{includes
-                  governmentDomain
-                  this.selectedGovernmentDomains
-                }}
-                @onChange={{fn this.selectGovernmentDomain governmentDomain}}
-              >
-                {{governmentDomain.label}}
-              </AuControlCheckbox>
-            {{/each}}
-          </Auk::CheckboxList>
+          <AuFieldset as |Fieldset|>
+            <Fieldset.legend>{{t "government-domains"}}</Fieldset.legend>
+            <Fieldset.content>
+              <Auk::CheckboxList>
+                {{#each this.governmentDomains as |governmentDomain|}}
+                  <AuControlCheckbox
+                    @checked={{includes
+                      governmentDomain
+                      this.selectedGovernmentDomains
+                    }}
+                    @onChange={{fn this.selectGovernmentDomain governmentDomain}}
+                  >
+                    {{governmentDomain.label}}
+                  </AuControlCheckbox>
+                {{/each}}
+              </Auk::CheckboxList>
+            </Fieldset.content>
+          </AuFieldset>
         </div>
       {{/if}}
       {{#if @userInputFields.regulationTypes}}
         <div class="auk-form-group">
-          <Auk::Label>{{t "regulation-types"}}</Auk::Label>
-          <Auk::CheckboxList>
-            {{#each this.regulationTypes as |regulationType|}}
-              <AuControlCheckbox
-                @checked={{includes
-                  regulationType
-                  this.selectedRegulationTypes
-                }}
-                @onChange={{fn this.selectRegulationType regulationType}}
-              >
-                {{regulationType.label}}
-              </AuControlCheckbox>
-            {{/each}}
-          </Auk::CheckboxList>
+          <AuFieldset as |Fieldset|>
+            <Fieldset.legend>{{t "regulation-types"}}</Fieldset.legend>
+            <Fieldset.content>
+              <Auk::CheckboxList>
+                {{#each this.regulationTypes as |regulationType|}}
+                  <AuControlCheckbox
+                    @checked={{includes
+                      regulationType
+                      this.selectedRegulationTypes
+                    }}
+                    @onChange={{fn this.selectRegulationType regulationType}}
+                  >
+                    {{regulationType.label}}
+                  </AuControlCheckbox>
+                {{/each}}
+              </Auk::CheckboxList>
+            </Fieldset.content>
+          </AuFieldset>
         </div>
       {{/if}}
     </Utils::LoadableContent>

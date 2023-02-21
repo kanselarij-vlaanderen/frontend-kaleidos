@@ -10,10 +10,13 @@ export default class CasesSearchController extends Controller {
 
   queryParams = [
     {
-      includeArchived: {
-        type: 'boolean',
+      archived: {
+        type: 'string',
       },
       decisionsOnly: {
+        type: 'boolean',
+      },
+      confidentialOnly: {
         type: 'boolean',
       },
       page: {
@@ -34,11 +37,27 @@ export default class CasesSearchController extends Controller {
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
   ];
 
+  archivedOptions = [
+    {
+      label: this.intl.t('search-hide-archived'),
+      value: 'hide',
+    },
+    {
+      label: this.intl.t('show-archived'),
+      value: 'show',
+    },
+    {
+      label: this.intl.t('search-archived-only'),
+      value: 'only',
+    },
+  ];
+
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked includeArchived;
+  @tracked archived;
   @tracked decisionsOnly;
+  @tracked confidentialOnly;
   @tracked searchText;
 
   constructor() {
@@ -46,8 +65,9 @@ export default class CasesSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = this.sortOptions[1].value;
-    this.includeArchived = true;
+    this.archived = this.archivedOptions[0].value;
     this.decisionsOnly = false;
+    this.confidentialOnly = false;
   }
 
   get emptySearch() {
@@ -65,13 +85,8 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  toggleDecisionsOnly() {
-    this.decisionsOnly = !this.decisionsOnly;
-  }
-
-  @action
-  toggleIncludeArchived() {
-    this.includeArchived = !this.includeArchived;
+  setArchived(option) {
+    this.archived = option;
   }
 
   @action
@@ -80,6 +95,6 @@ export default class CasesSearchController extends Controller {
   }
 
   get customFiltersElement() {
-    return document.getElementById('search-subroute-filters-area')
+    return document.getElementById('search-subroute-filters-area');
   }
 }

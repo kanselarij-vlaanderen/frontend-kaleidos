@@ -1,4 +1,9 @@
-<AuCard @shadow={{true}} @size="small" as |card|>
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |card|
+>
   <card.header>
     <div class="au-u-flex">
       <p class="au-u-para-small au-u-muted au-u-medium">
@@ -13,7 +18,7 @@
         <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
       {{/if}}
     </div>
-    <AuHeading @level="3" @skin="4">
+    <AuHeading @level="3" @skin="6">
       <AuLink
         class="au-u-padding-none"
         @route="cases.case.subcases"
@@ -22,7 +27,6 @@
         <SanitizeHtml
           @raw={{true}}
           @value={{if @shortTitle @shortTitle @title}}
-          @options={{this.sanitizeHtmlOptions}}
         />
       </AuLink>
     </AuHeading>

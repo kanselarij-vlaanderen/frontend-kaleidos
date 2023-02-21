@@ -1,0 +1,66 @@
+{{#in-element this.customFiltersElement insertBefore=null}}
+  {{#if (user-may "search-confidential-documents")}}
+    <Search::ConfidentialOnly
+      @objectVerb={{t "documents"}}
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+    />
+  {{/if}}
+  <Search::DocumentTypeFilter
+    @selected={{this.documentTypesBuffer}}
+    @onChange={{this.setDocumentTypes}}
+  />
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @searchText={{this.searchText}}
+      @searchType={{t "cases"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      @cards={{true}}
+      @loading={{this.isLoadingModel}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @content={{this.model}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToDocument}}
+    >
+      <:body as |row|>
+        <td>
+          <Search::ResultCards::Document
+            @created={{row.created}}
+            @documentId={{row.id}}
+            @title={{row.title}}
+            @fileName={{row.fileName}}
+            @agendaitemShortTitle={{row.latestAgendaitem.shortTitle}}
+            @meetingId={{row.latestAgendaitem.meetingId}}
+            @agendaId={{row.latestAgendaitem.agendaId}}
+            @agendaitemId={{row.latestAgendaitem.id}}
+          />
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

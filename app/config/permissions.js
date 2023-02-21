@@ -37,6 +37,8 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - search-confidential-cases: allow searching of cases that have at least 1 confidential subcase
+// - search-confidential-documents: allow searching of documents that have vertrouwelijk access level
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 
 const groups = [
@@ -65,6 +67,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
       'impersonate-users',
     ]
   },
@@ -90,6 +94,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
     ]
   },
   {
@@ -112,6 +118,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'search-confidential-cases',
+      'search-confidentnial-documents',
     ]
   },
   {
@@ -125,6 +133,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
     ]
   },
   {
@@ -136,6 +146,8 @@ const groups = [
       'manage-themis-publications',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
     ],
   },
   {

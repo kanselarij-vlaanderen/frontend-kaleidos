@@ -7,13 +7,17 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
-    includeArchived: {
+    archived: {
       refreshModel: true,
-      as: 'incl_gearchiveerd',
+      as: 'gearchiveerd',
     },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
+    },
+    confidentialOnly: {
+      refreshModel: true,
+      as: 'enkel_vertrouwelijk',
     },
     page: {
       refreshModel: true,
@@ -58,11 +62,21 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
-    const textSearchFields = ['title^4', 'shortTitle^4', 'subcaseTitle^2', 'subcaseSubTitle^2'];
+    const textSearchFields = [
+      'title^4',
+      'shortTitle^4',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
+      'mandateRoles^2',
+      'mandateeFirstNames^3',
+      'mandateeFamilyNames^3',
+      'newsItemTitle^2',
+      'newsItem',
+    ];
     if (params.decisionsOnly) {
-      textSearchFields.push('decisions.content');
+      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
     } else {
-      textSearchFields.push('documents.content');
+      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
     }
 
     const searchModifier = ':sqs:';
@@ -94,8 +108,14 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
-    if (!params.includeArchived) {
+    if (params.archived === 'hide') {
       filter.isArchived = 'false';
+    } else if (params.archived === 'only') {
+      filter.isArchived = 'true';
+    }
+
+    if (params.confidentialOnly) {
+      filter.subcaseConfidential = 'true';
     }
 
     this.lastParams.commit();
@@ -113,15 +133,24 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    const {
-      postProcessDates,
-    } = this;
-    return search('decisionmaking-flows', params.page, params.size, sort, filter, (searchData) => {
-      const entry = searchData.attributes;
-      entry.id = searchData.id;
-      postProcessDates(searchData);
-      return entry;
-    });
+    return search(
+      'decisionmaking-flows',
+      params.page,
+      params.size,
+      sort,
+      filter,
+      (searchData) => {
+        this.postProcessDates(searchData);
+        this.postProcessAgendaItems(searchData);
+        const entry = { ...searchData.attributes, ...searchData.highlight };
+        entry.id = searchData.id;
+        if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
+          entry.shortTitle = entry.shortTitle.join('');
+        }
+        return entry;
+      },
+      ['shortTitle,title']
+    );
   }
 
   setupController(controller) {
