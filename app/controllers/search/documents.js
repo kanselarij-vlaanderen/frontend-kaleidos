@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SearchDocumentsController extends Controller {
   @service router;
@@ -30,7 +31,6 @@ export default class SearchDocumentsController extends Controller {
     },
   ];
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
   sortOptions = [
     { value: '-session-dates', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
@@ -47,7 +47,7 @@ export default class SearchDocumentsController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
     this.confidentialOnly = false;
   }
