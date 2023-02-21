@@ -489,7 +489,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
  */
 function toggleShowChanges() {
   cy.log('toggleShowChanges');
-  cy.clickReverseTab('Overzicht');
+  // cy.clickReverseTab('Overzicht');
   cy.get(auk.loader).should('not.exist'); // data is not loading
   cy.get(agenda.agendaOverview.showChanges).click();
   // data loading is triggered so we check for the loader
