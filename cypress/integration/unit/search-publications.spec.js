@@ -54,7 +54,7 @@ function searchFakePublication() {
   cy.get(route.search.input).clear();
 }
 
-function checkPagination(optionsToCheck) {
+function checkPagination(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
     cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
@@ -64,7 +64,9 @@ function checkPagination(optionsToCheck) {
       .click();
     cy.wait(`@publicationSearchCall${randomInt}`);
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
-    cy.url().should('include', `aantal=${option}`);
+    if (option !== defaultOption) {
+      cy.url().should('include', `aantal=${option}`);
+    }
   });
 }
 
@@ -192,8 +194,9 @@ context('Search tests', () => {
 
   it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
-    const options = [10, 25, 50, 100, 200];
-    checkPagination(options);
+    const options = [5, 10, 20, 25, 50, 100, 200];
+    const defaultSize = options[2];
+    checkPagination(options, defaultSize);
   });
 
   it('search for all different unique searchterms in publicaties', () => {

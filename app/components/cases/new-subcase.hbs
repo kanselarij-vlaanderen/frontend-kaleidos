@@ -48,10 +48,10 @@
       </div>
       <div class="auk-form-group">
         <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
-        <Auk::Toggle
+        <AuToggleSwitch
           data-test-new-subcase-confidential
-          id="new-subcase-confidential"
           @checked={{this.confidential}}
+          id="new-subcase-confidential"
         />
       </div>
       <div class="auk-form-group">

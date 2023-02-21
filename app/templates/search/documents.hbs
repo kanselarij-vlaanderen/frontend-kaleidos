@@ -1,42 +1,15 @@
-{{page-title (t "cases")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
-  <div class="au-c-card au-o-box au-o-box--small">
-    <AuFieldset as |Fieldset|>
-      <Fieldset.legend>{{t "type"}}</Fieldset.legend>
-      <Fieldset.content>
-        <Auk::CheckboxList>
-          <AuControlCheckbox
-            data-test-route-search-cases-toggle-decisions={{true}}
-            @label={{t "search-in-decisions-only"}}
-            @checked={{this.decisionsOnly}}
-            @onChange={{set this "decisionsOnly"}}
-          />
-        </Auk::CheckboxList>
-      </Fieldset.content>
-    </AuFieldset>
-  </div>
-  {{#if (user-may "manage-cases")}}
-    <div class="au-c-card au-o-box au-o-box--small">
-      <Auk::Label>{{t "removed-cases"}}</Auk::Label>
-      <Auk::RadioList as |list|>
-        {{#each this.archivedOptions as |option|}}
-          <list.Radio
-            @label={{option.label}}
-            @value={{option.value}}
-            @onChange={{this.setArchived}}
-            checked={{eq this.archived.value option.value}}
-          />
-        {{/each}}
-      </Auk::RadioList>
-    </div>
-  {{/if}}
-  {{#if (user-may "search-confidential-cases")}}
+  {{#if (user-may "search-confidential-documents")}}
     <Search::ConfidentialOnly
+      @objectVerb={{t "documents"}}
       @confidentialOnly={{this.confidentialOnly}}
       @onChange={{set this "confidentialOnly"}}
-      @objectVerb={{t "cases"}}
     />
   {{/if}}
+  <Search::DocumentTypeFilter
+    @selected={{this.documentTypesBuffer}}
+    @onChange={{this.setDocumentTypes}}
+  />
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
@@ -51,18 +24,17 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      data-test-route-search-cases-data-table
       @hoverable={{true}}
       @striped={{true}}
       @loading={{this.isLoadingModel}}
-      @content={{this.model}}
       @page={{this.page}}
       @size={{this.size}}
+      @content={{this.model}}
       @numberOfItems={{this.model.length}}
       @totalNumberOfItems={{this.model.meta.count}}
-      @onChangeSize={{this.selectSize}}
+      @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToCase}}
+      @onClickRow={{this.navigateToDocument}}
     >
       <:header>
         <th class="auk-table__col--8">
@@ -73,39 +45,35 @@
           @currentSorting={{this.sort}}
           @field="created"
           @label={{t "created-on"}}
-          @onChange={{fn (mut this.sort)}}
+          @onChange={{this.selectSort}}
         />
         <Utils::ThSortable
-          class="auk-table__col--1"
+          class="auk-table__col--2"
           @currentSorting={{this.sort}}
-          @field="sessionDates"
-          @label={{t "on-agenda-of"}}
-          @onChange={{fn (mut this.sort)}}
+          @field="confidentialityLevel"
+          @label={{t "confidentiality-level"}}
+          @onChange={{this.selectSort}}
         />
         <th class="auk-table__col--1"></th>
       </:header>
       <:body as |row|>
         <td>
           <p>
-            {{#if row.shortTitle}}
-              {{row.shortTitle}}
-            {{else}}
-              {{row.title}}
-            {{/if}}
+            {{row.title}}
           </p>
         </td>
         <td>
           {{datetime row.created "DD-MM-YYYY HH:mm"}}
         </td>
         <td>
-          {{date row.sessionDates}}
+          <AccessLevelPill @accessLevel={{row.accessLevel}} />
         </td>
         <td class="auk-u-text-align--right">
           <AuLink
             @skin="button-naked"
             @icon="chevron-right"
             @hideText={{true}}
-            @route="cases.case.subcases"
+            @route="document"
             @model={{row.id}}
           >
             {{t "open"}}

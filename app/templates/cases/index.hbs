@@ -12,10 +12,10 @@
             >
               {{t "show-archived-only"}}
             </Auk::Label>
-            <Auk::Toggle
+            <AuToggleSwitch
               data-test-route-cases-overview-show-archived
-              id="show-cases-archived-only"
               @checked={{this.showArchivedOnly}}
+              id="show-cases-archived-only"
             />
           </Auk::Toolbar::Item>
         {{/if}}

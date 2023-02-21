@@ -85,7 +85,7 @@ pipeline {
         //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
         // Wait for indexation.
-        sh "sleep 120"
+        sh "sleep 600"
       }
     }
     stage('Automated tests: Cypress') {

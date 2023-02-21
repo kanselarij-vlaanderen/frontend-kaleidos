@@ -50,31 +50,6 @@ module.exports = function (environment) {
     plausible: {
       domain: '{{ANALYTICS_APP_DOMAIN}}',
       apiHost: '{{ANALYTICS_API_HOST}}',
-    },
-    'sanitize-html': {
-      // Because ember-cli-sanitize-html uses an outdated version of sanitize-html,
-      // the option defaults (from version 2.8.1) are manually copied here to support all modern tags and attributes
-      //
-      // !! 'del' was manually added to the allowedTags list
-      allowedTags: [
-        'address', 'article', 'aside', 'footer', 'header', 'h1', 'h2', 'h3', 'h4',
-        'h5', 'h6', 'hgroup', 'main', 'nav', 'section', 'blockquote', 'dd', 'div',
-        'dl', 'dt', 'figcaption', 'figure', 'hr', 'li', 'main', 'ol', 'p', 'pre',
-        'ul', 'a', 'abbr', 'b', 'bdi', 'bdo', 'br', 'cite', 'code', 'data', 'dfn',
-        'em', 'i', 'kbd', 'mark', 'q', 'rb', 'rp', 'rt', 'rtc', 'ruby', 's', 'samp',
-        'small', 'span', 'strong', 'sub', 'sup', 'time', 'u', 'var', 'wbr', 'caption',
-        'col', 'colgroup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'del'
-      ],
-      disallowedTagsMode: 'discard',
-      allowedAttributes: {
-        a: [ 'href', 'name', 'target' ],
-        img: [ 'src', 'srcset', 'alt', 'title', 'width', 'height', 'loading' ]
-      },
-      selfClosing: [ 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta' ],
-      allowedSchemes: [ 'http', 'https', 'ftp', 'mailto', 'tel' ],
-      allowedSchemesByTag: {},
-      allowedSchemesAppliedToAttributes: [ 'href', 'src', 'cite' ],
-      allowProtocolRelative: true
     }
   };
 
