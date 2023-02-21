@@ -9,7 +9,7 @@ export default class PublicationsOverviewBaseController extends Controller {
   @service router;
 
   @tracked page = 0;
-  @tracked size = PAGINATION_SIZES[2];
+  @tracked size = PAGINATION_SIZES[3];
   @tracked sort = '-identification.structured-identifier.local-identifier';
 
   @tracked tableConfig;
