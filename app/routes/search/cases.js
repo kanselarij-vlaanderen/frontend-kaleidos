@@ -34,9 +34,7 @@ export default class CasesSearchRoute extends Route {
   };
 
   postProcessDates(_case) {
-    const {
-      sessionDates,
-    } = _case.attributes;
+    const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
         const sorted = sessionDates.sort();
@@ -47,6 +45,26 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
+  postProcessHighlight(_case) {
+    const { highlight } = _case;
+    if (highlight) {
+      if (highlight.title) {
+        highlight.title = highlight.title[0];
+      }
+      if (highlight.shortTitle) {
+        highlight.shortTitle = highlight.shortTitle[0];
+      }
+    }
+  }
+
+  setSubcaseHighlights(_case) {
+    if (_case.highlight.subcaseTitle) {
+      _case.subcaseHighlights = _case.highlight.subcaseTitle;
+    } else if (_case.highlight.subcaseSubTitle) {
+      _case.subcaseHighlights = _case.highlight.subcaseSubTitle;
+    }
+  }
+
   constructor() {
     super(...arguments);
     this.lastParams = new Snapshot();
@@ -54,11 +72,15 @@ export default class CasesSearchRoute extends Route {
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
 
     this.lastParams.stageLive(params);
 
-    if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
       params.page = 0;
     }
 
@@ -72,11 +94,17 @@ export default class CasesSearchRoute extends Route {
       'mandateeFamilyNames^3',
       'newsItemTitle^2',
       'newsItem',
+      'subcaseTitle^2',
+      'subcaseSubTitle^2',
     ];
     if (params.decisionsOnly) {
-      textSearchFields.push(...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']);
+      textSearchFields.push(
+        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
+      );
     } else {
-      textSearchFields.push(...['documentNames^2', 'documentFileNames^2', 'documents.content']);
+      textSearchFields.push(
+        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
+      );
     }
 
     const searchModifier = ':sqs:';
@@ -99,7 +127,10 @@ export default class CasesSearchRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -140,16 +171,18 @@ export default class CasesSearchRoute extends Route {
       sort,
       filter,
       (searchData) => {
+        this.postProcessHighlight(searchData);
         this.postProcessDates(searchData);
-        this.postProcessAgendaItems(searchData);
-        const entry = { ...searchData.attributes, ...searchData.highlight };
-        entry.id = searchData.id;
-        if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
-          entry.shortTitle = entry.shortTitle.join('');
-        }
-        return entry;
+        this.setSubcaseHighlights(searchData);
+
+        searchData.highlight = {
+          ...searchData.attributes,
+          ...searchData.highlight,
+        };
+
+        return searchData;
       },
-      ['shortTitle,title']
+      ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle']
     );
   }
 

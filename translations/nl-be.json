@@ -1154,5 +1154,7 @@
   "open": "Open",
   "out": "Uit",
   "found-inside": "Gevonden in",
-  "found-in-thing": "Gevonden in {thing}"
+  "found-in-thing": "Gevonden in {thing}",
+  "and-one-other-subcase": "en nog 1 andere procedurestap",
+  "and-n-other-subcases": "en nog {n} andere procedurestappen"
 }
