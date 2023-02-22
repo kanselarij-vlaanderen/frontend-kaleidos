@@ -118,7 +118,7 @@
     "ember-router-service-refresh-polyfill": "^1.1.0",
     "ember-set-helper": "^2.0.1",
     "ember-sortable": "^4.0.3",
-    "ember-source": "~4.4.0",
+    "ember-source": "~4.4.4",
     "ember-svg-jar": "^2.4.2",
     "ember-tag-input": "git+https://github.com/kanselarij-vlaanderen/ember-tag-input.git#6f7d67f23274e2ebe23f8e9619353d35de94b516",
     "ember-template-lint": "^4.10.0",
