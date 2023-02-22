@@ -24,6 +24,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument isEditingFormallyOkStatus
    * @argument showDragHandle: boolean to show the drag-handle for changing item order
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
+   * @argument onMove: the function used to change item order by button click
+   * @argument isFirst: boolean indicating whether it's the first nota or announcement
+   * @argument isLast: boolean indicating whether it's the last nota or announcement
    */
 
   @service store;

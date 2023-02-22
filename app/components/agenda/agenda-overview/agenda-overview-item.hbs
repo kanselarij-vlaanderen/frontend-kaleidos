@@ -15,14 +15,28 @@
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
-          <AuIcon
-            data-test-agenda-overview-item-dragging
-            class="auk-u-cursor-grab auk-u-text-muted"
-            @icon="drag-handle-2"
-            @size="large"
-            {{sortable-handle}}
-          />
-        </div>
+            <div class="vlc-agenda-items__icons">
+              <AuIcon
+                data-test-agenda-overview-item-dragging
+                class="auk-u-cursor-grab auk-u-text-muted"
+                @icon="drag-handle-2"
+                @size="large"
+                {{sortable-handle}}
+              />
+              <AuButton
+                  @skin="link"
+                  @icon="chevron-up"
+                  @disabled={{@isFirst}}
+                  {{on "click" (fn @onMove @agendaitem -1)}}
+                />
+              <AuButton
+                  @skin="link"
+                  @icon="chevron-down"
+                  @disabled={{@isLast}}
+                  {{on "click" (fn @onMove @agendaitem 1)}}
+                />
+          </div>
+        </div> 
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
         {{! For legacy data agenda-item number can be unexistent }}
