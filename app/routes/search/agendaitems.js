@@ -135,7 +135,7 @@ export default class AgendaitemSearchRoute extends Route {
       (agendaitem) => {
         const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
         entry.id = agendaitem.id;
-        console.log(entry.shortTitle);
+        this.postProcessPastAgendaVersions(entry);
 
         if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
           entry.shortTitle = entry.shortTitle.join('');
@@ -169,5 +169,15 @@ export default class AgendaitemSearchRoute extends Route {
       controller.isLoadingModel = false;
     });
     return true;
+  }
+
+  postProcessPastAgendaVersions(entry) {
+    const pastAgendaitems = entry.agendaitemTreatment.agendaitems;
+    if (Array.isArray(pastAgendaitems)) {
+      entry.pastAgendaVersions = pastAgendaitems
+        .map((agendaitem) => agendaitem.agendaSerialNumber)
+        .filter((agendaSerialNumber) => agendaSerialNumber != entry.agendaSerialNumber)
+        .sort();
+    }
   }
 }

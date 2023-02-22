@@ -45,14 +45,15 @@
         {{@agendaSerialNumber}}
       </span>
     </p>
-    {{! <p class="au-u-para-small au-u-margin-top-none au-u-muted">
-      Ook gevonden in
-      <AuLink @skin="secondary">
-        Versie B
-      </AuLink>,
-      <AuLink @skin="secondary">
-        Versie A
-      </AuLink>
-    </p> }}
+    {{#if @pastAgendaVersions}}
+      <p class="au-u-para-small au-u-margin-top-none au-u-muted">
+        {{t "also-found-in"}}
+        {{#each @pastAgendaVersions as |pastAgendaVersion|}}
+          <AuLink @skin="secondary">
+            {{t "version"}} {{pastAgendaVersion}}{{#if (has-next pastAgendaVersion @pastAgendaVersions)}},{{/if}}
+          </AuLink>
+        {{/each}}
+      </p>
+    {{/if}}
   </c.content>
 </AuCard>
