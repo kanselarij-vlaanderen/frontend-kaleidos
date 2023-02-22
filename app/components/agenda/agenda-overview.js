@@ -30,7 +30,7 @@ export default class AgendaOverview extends Component {
   @task
   *move(agendaitem, offset) {
     const changedAgendaItemType = yield agendaitem.type;
-    let agendaitemIndex = -1
+    let agendaitemIndex = -1;
     let itemArray = [];
     if (changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
       for (const notaGroup of this.args.notaGroups) {
