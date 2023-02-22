@@ -17,7 +17,7 @@
       </div>
       <div class="auk-u-mb-2">
         <AuContent>
-          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} @options={{this.sanitizeHtmlOptions}} />
+          <SanitizeHtml @raw={{true}} @value={{@newsItem.htmlContent}} />
         </AuContent>
       </div>
       {{#if @newsItem.remark}}
@@ -124,7 +124,7 @@
 
 {{#if this.isOpenEditView}}
   <tr class="lt-row lt-expanded-row">
-    <td colspan="5">
+    <td colspan="6">
       <div class="auk-container auk-container--center">
         <NewsItem::EditPanel
           @newsItem={{@newsItem}}

@@ -24,8 +24,6 @@ export default class SearchController extends Controller {
     },
   ];
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
-
   @tracked searchText = '';
   @tracked mandatees = [];
   @tracked dateFrom;
