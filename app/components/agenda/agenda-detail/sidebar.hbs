@@ -7,6 +7,17 @@
         </h4>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        {{!-- TODO: this button needs to be displayed in a smaller size --}}
+        <AuButton
+          @skin="link"
+          {{on "click" @toggleShowModifiedOnly}}
+        >
+          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+        </AuButton>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 <div>

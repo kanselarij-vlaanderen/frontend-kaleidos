@@ -18,6 +18,8 @@
             @announcements={{this.model.announcements}}
             @newItems={{this.model.newItems}}
             @currentAgenda={{this.agenda}}
+            @showModifiedOnly={{this.showModifiedOnly}}
+            @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
             @activeItem={{this.selectedAgendaitem}}
           />
         </div>
@@ -50,6 +52,8 @@
             @currentAgenda={{this.agenda}}
             @previousAgenda={{this.previousAgenda}}
             @onReorderAgendaitems={{perform this.assignNewPriorities}}
+            @showModifiedOnly={{this.showModifiedOnly}}
+            @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
             @isEditingOverview={{this.isEditingOverview}}
             @toggleIsEditingOverview={{toggle "isEditingOverview" this}}
           />
