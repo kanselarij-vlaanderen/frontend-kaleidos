@@ -58,10 +58,12 @@ export default class CasesSearchRoute extends Route {
   }
 
   setSubcaseHighlights(_case) {
-    if (_case.highlight.subcaseTitle) {
-      _case.subcaseHighlights = _case.highlight.subcaseTitle;
-    } else if (_case.highlight.subcaseSubTitle) {
-      _case.subcaseHighlights = _case.highlight.subcaseSubTitle;
+    if (_case.highlight) {
+      if (_case.highlight.subcaseTitle) {
+        _case.subcaseHighlights = _case.highlight.subcaseTitle;
+      } else if (_case.highlight.subcaseSubTitle) {
+        _case.subcaseHighlights = _case.highlight.subcaseSubTitle;
+      }
     }
   }
 
@@ -182,7 +184,9 @@ export default class CasesSearchRoute extends Route {
 
         return searchData;
       },
-      ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle']
+      {
+        fields: ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'],
+      }
     );
   }
 
