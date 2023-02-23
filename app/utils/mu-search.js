@@ -28,7 +28,7 @@ async function muSearch(
   sort,
   filter,
   dataMapping,
-  highlightFields
+  highlightConfig
 ) {
   const endpoint = new URL(`/${index}/search`, window.location.origin);
   const params = new URLSearchParams(
@@ -48,8 +48,14 @@ async function muSearch(
     params.append(`sort[${snakeToCamel(stripSort(sort))}]`, sortOrder(sort));
   }
 
-  if (highlightFields) {
-    params.append(`highlight[:fields:]`, highlightFields.join(','));
+  if (highlightConfig) {
+    if (highlightConfig.fields) {
+      params.append(`highlight[:fields:]`, highlightConfig.fields.join(','));
+    }
+
+    if (highlightConfig.tag) {
+      params.append('highlight[:tag:]', highlightConfig.tag);
+    }
   }
 
   endpoint.search = params.toString();

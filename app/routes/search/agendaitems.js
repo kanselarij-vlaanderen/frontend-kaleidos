@@ -144,7 +144,9 @@ export default class AgendaitemSearchRoute extends Route {
         }
         return entry;
       },
-      ['shortTitle,title']
+      {
+        fields: ['shortTitle,title'],
+      }
     );
   }
 
