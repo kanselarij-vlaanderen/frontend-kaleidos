@@ -172,12 +172,14 @@ export default class AgendaitemSearchRoute extends Route {
   }
 
   postProcessPastAgendaVersions(entry) {
-    const pastAgendaitems = entry.agendaitemTreatment.agendaitems;
-    if (Array.isArray(pastAgendaitems)) {
-      entry.pastAgendaVersions = pastAgendaitems
-        .map((agendaitem) => agendaitem.agendaSerialNumber)
-        .filter((agendaSerialNumber) => agendaSerialNumber != entry.agendaSerialNumber)
-        .sort();
+    if (entry.agendaitemTreatment) {
+      const pastAgendaitems = entry.agendaitemTreatment.agendaitems;
+      if (Array.isArray(pastAgendaitems)) {
+        entry.pastAgendaVersions = pastAgendaitems
+          .map((agendaitem) => agendaitem.agendaSerialNumber)
+          .filter((agendaSerialNumber) => agendaSerialNumber != entry.agendaSerialNumber)
+          .sort();
+      }
     }
   }
 }
