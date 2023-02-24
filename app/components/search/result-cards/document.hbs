@@ -20,7 +20,7 @@
   <c.content>
     {{#if @contentHighlight}}
       <p class="au-u-para">
-        <SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />
+        …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
       </p>
     {{/if}}
     {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
