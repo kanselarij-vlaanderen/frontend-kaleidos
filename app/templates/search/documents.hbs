@@ -50,7 +50,10 @@
             @meetingId={{row.attributes.latestAgendaitem.meetingId}}
             @agendaId={{row.attributes.latestAgendaitem.agendaId}}
             @agendaitemId={{row.attributes.latestAgendaitem.id}}
-            @contentHighlight={{this.getStringProp row.highlight "data.content"}}
+            @contentHighlight={{this.getStringProp
+              row.highlight
+              "data.content"
+            }}
           />
         </td>
       </:body>
