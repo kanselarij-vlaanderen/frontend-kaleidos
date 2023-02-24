@@ -77,7 +77,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept', subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
     );
 
     await documentContainer.save();

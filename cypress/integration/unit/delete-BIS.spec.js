@@ -57,7 +57,8 @@ context('Delete BIS tests', () => {
     // cy.openAgendaForDate(agendaDate);
     // cy.openAgendaitemDocumentTab(subcaseTitle1, false);
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+    cy.get(document.documentCard.versionHistory).should('have.length', 2)
+      .find(auk.accordion.header.button)
       .should('not.be.disabled');
 
     cy.get(document.documentCard.name.value).contains('VR 2022 0425 DOC.0001-1')

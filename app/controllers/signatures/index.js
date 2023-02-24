@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import * as digitalSigning from 'frontend-kaleidos/utils/digital-signing';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
@@ -21,7 +22,7 @@ export default class SignaturesIndexController extends Controller {
     },
   ];
   page = 0;
-  size = 10;
+  size = PAGINATION_SIZES[1];
 
   @action
   prevPage() {

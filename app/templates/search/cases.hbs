@@ -31,20 +31,11 @@
     </div>
   {{/if}}
   {{#if (user-may "search-confidential-cases")}}
-    <div class="au-c-card au-o-box au-o-box--small">
-      <AuFieldset as |Fieldset|>
-        <Fieldset.legend>{{t "confidential"}}</Fieldset.legend>
-        <Fieldset.content>
-          <Auk::CheckboxList>
-            <AuControlCheckbox
-              @label={{t "search-confidential-only"}}
-              @checked={{this.confidentialOnly}}
-              @onChange={{set this "confidentialOnly"}}
-            />
-          </Auk::CheckboxList>
-        </Fieldset.content>
-      </AuFieldset>
-    </div>
+    <Search::ConfidentialOnly
+      @confidentialOnly={{this.confidentialOnly}}
+      @onChange={{set this "confidentialOnly"}}
+      @objectVerb={{t "cases"}}
+    />
   {{/if}}
 {{/in-element}}
 <div class="au-o-box au-o-box--small">

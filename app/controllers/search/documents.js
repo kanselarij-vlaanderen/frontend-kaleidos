@@ -1,17 +1,21 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import { task } from 'ember-concurrency';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
-export default class SearchDecisionsController extends Controller {
-  @service intl;
+export default class SearchDocumentsController extends Controller {
   @service router;
+  @service intl;
+  @service conceptStore;
 
   queryParams = [
     {
+      confidentialOnly: {
+        type: 'boolean',
+      },
       page: {
         type: 'number',
       },
@@ -20,6 +24,9 @@ export default class SearchDecisionsController extends Controller {
       },
       sort: {
         type: 'string',
+      },
+      documentTypes: {
+        type: 'array',
       },
     },
   ];
@@ -32,17 +39,26 @@ export default class SearchDecisionsController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
+  @tracked confidentialOnly;
   @tracked searchText;
+  @tracked documentTypes = [];
+  @tracked documentTypesBuffer = [];
 
   constructor() {
     super(...arguments);
     this.page = 0;
     this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
+    this.confidentialOnly = false;
   }
 
   get emptySearch() {
     return isEmpty(this.searchText);
+  }
+
+  @action
+  navigateToDocument(document) {
+    this.router.transitionTo('document', document.id);
   }
 
   @action
@@ -56,25 +72,24 @@ export default class SearchDecisionsController extends Controller {
   }
 
   @action
-  navigateToDecision(searchEntry) {
-    if (searchEntry.meetingId) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem.decisions',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.id
-      );
-    } else {
-      warn(
-        `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to decisions`,
-        {
-          id: 'agendaitem.no-meeting',
-        }
-      );
-    }
+  setDocumentTypes(documentTypes) {
+    this.documentTypes = documentTypes.map((x) => x.id);
+    this.documentTypesBuffer = documentTypes;
   }
 
   get customFiltersElement() {
     return document.getElementById('search-subroute-filters-area');
   }
+
+  loadDocumentTypes = task(async () => {
+    if (this.documentTypes) {
+      this.documentTypesBuffer = (
+        await Promise.all(
+          this.documentTypes?.map((id) => this.store.findRecord('concept', id))
+        )
+      ).toArray();
+    } else {
+      this.documentTypesBuffer = [];
+    }
+  });
 }
