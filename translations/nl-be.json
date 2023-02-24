@@ -1156,5 +1156,6 @@
   "found-inside": "Gevonden in",
   "found-in-thing": "Gevonden in {thing}",
   "and-one-other-subcase": "en nog 1 andere procedurestap",
-  "and-n-other-subcases": "en nog {n} andere procedurestappen"
+  "and-n-other-subcases": "en nog {n} andere procedurestappen",
+  "uploaded-in-thing": "Geupload in {thing}"
 }
