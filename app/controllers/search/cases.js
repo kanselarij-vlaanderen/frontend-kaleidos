@@ -65,7 +65,7 @@ export default class CasesSearchController extends Controller {
     this.page = 0;
     this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
-    this.archived = this.archivedOptions[0];
+    this.archived = this.archivedOptions[0].value;
     this.decisionsOnly = false;
     this.confidentialOnly = false;
   }

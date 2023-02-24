@@ -24,7 +24,7 @@
             @label={{option.label}}
             @value={{option.value}}
             @onChange={{this.setArchived}}
-            checked={{eq this.archived.value option.value}}
+            checked={{eq this.archived option.value}}
           />
         {{/each}}
       </Auk::RadioList>
@@ -52,8 +52,7 @@
     />
     <KDataTable
       data-test-route-search-cases-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -67,11 +66,12 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::Case
-            @sessionDate={{row.sessionDates}}
-            @shortTitle={{row.shortTitle}}
-            @title={{row.title}}
+            @created={{row.attributes.created}}
+            @shortTitle={{row.highlight.shortTitle}}
+            @title={{row.highlight.title}}
             @caseId={{row.id}}
-            @isArchived={{row.isArchived}}
+            @isArchived={{row.attributes.isArchived}}
+            @subcaseHighlights={{row.subcaseHighlights}}
           />
         </td>
       </:body>

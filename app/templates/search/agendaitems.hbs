@@ -48,8 +48,7 @@
     />
     <KDataTable
       data-test-route-search-agendaitems-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -71,6 +70,7 @@
             @agendaItemId={{row.id}}
             @shortTitle={{row.shortTitle}}
             @title={{row.title}}
+            @pastAgendaVersions={{row.pastAgendaVersions}}
           />
         </td>
       </:body>

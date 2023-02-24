@@ -1,39 +1,50 @@
-<AuCard @shadow={{true}} @size="small" as |card|>
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |card|
+>
   <card.header>
     <div class="au-u-flex">
       <p class="au-u-para-small au-u-muted au-u-medium">
-        {{#if @sessionDate}}
-          {{t "on-agenda-of"}}
-          {{date @sessionDate}}
-        {{else}}
-          {{t "not-yet-on-agenda"}}
-        {{/if}}
+        {{t "case-created"}}
+        {{date @created}}
       </p>
       {{#if (eq @isArchived "true")}}
         <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
       {{/if}}
     </div>
-    <AuHeading @level="3" @skin="4">
+    <AuHeading @level="3" @skin="6">
       <AuLink
         class="au-u-padding-none"
         @route="cases.case.subcases"
         @model={{@caseId}}
       >
-        {{#if @shortTitle}}
-          {{@shortTitle}}
-        {{else}}
-          {{@title}}
-        {{/if}}
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{if @shortTitle @shortTitle @title}}
+        />
       </AuLink>
     </AuHeading>
   </card.header>
   <card.content>
-    {{! <p class="au-u-para-small au-u-margin-top-small au-u-muted">
-      Gevonden in
-      <AuLink @skin="secondary">
-        Agendapunt ...
-      </AuLink>
-      en nog 4 andere plaatsen
-    </p> }}
+    {{#if @subcaseHighlights}}
+      <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+        {{t "found-inside"}}
+        <span class="au-u-muted au-u-medium">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{object-at 0 @subcaseHighlights}}
+            @options={{this.sanitizeHtmlOptions}}
+          />
+        </span>
+        {{#if (eq @subcaseHighlights.length 2)}}
+          {{t "and-one-other-subcase"}}
+        {{/if}}
+        {{#if (gt @subcaseHighlights.length 2)}}
+          {{t "and-n-other-subcases" n=(sub @subcaseHighlights.length 1)}}
+        {{/if}}
+      </p>
+    {{/if}}
   </card.content>
 </AuCard>
