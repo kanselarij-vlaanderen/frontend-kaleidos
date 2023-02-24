@@ -24,8 +24,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @page={{this.page}}
       @size={{this.size}}
@@ -36,48 +35,26 @@
       @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToDocument}}
     >
-      <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{this.selectSort}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="confidentialityLevel"
-          @label={{t "confidentiality-level"}}
-          @onChange={{this.selectSort}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{row.title}}
-          </p>
-        </td>
-        <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td>
-          <AccessLevelPill @accessLevel={{row.accessLevel}} />
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="document"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Document
+            @created={{row.attributes.created}}
+            @documentId={{row.id}}
+            @title={{row.attributes.title}}
+            @fileName={{if
+              row.highlight.fileName
+              row.highlight.fileName
+              row.attributes.fileName
+            }}
+            @agendaitemShortTitle={{row.attributes.latestAgendaitem.shortTitle}}
+            @meetingId={{row.attributes.latestAgendaitem.meetingId}}
+            @agendaId={{row.attributes.latestAgendaitem.agendaId}}
+            @agendaitemId={{row.attributes.latestAgendaitem.id}}
+            @contentHighlight={{this.getStringProp
+              row.highlight
+              "data.content"
+            }}
+          />
         </td>
       </:body>
     </KDataTable>
