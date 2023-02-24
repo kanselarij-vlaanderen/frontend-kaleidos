@@ -56,8 +56,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @action
   async delete(contactPerson) {
     const person = await contactPerson.person;
-    const destroyContactPerson = contactPerson.destroyRecord();
-    const destroyPerson = person.destroyRecord();
-    await Promise.all([destroyContactPerson, destroyPerson]);
+    await contactPerson.destroyRecord();
+    await person.destroyRecord();
   }
 }
