@@ -343,5 +343,6 @@ table tr.lt-expanded-row {
 // Result cards
 // Workaround until we adapt mu-search to send more specific tags for highlights
 .result-card em {
+  font-weight: bold;
   font-style: inherit;
 }
