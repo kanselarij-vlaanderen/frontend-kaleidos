@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import {
   task, timeout, restartableTask
 } from 'ember-concurrency';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument meeting
@@ -22,7 +23,7 @@ export default class CreateAgendaitem extends Component {
   @tracked loader = false;
 
   @tracked page = 0;
-  @tracked size = 10;
+  @tracked size = PAGINATION_SIZES[1];
   @tracked filter = '';
   @tracked sort = 'short-title';
 
