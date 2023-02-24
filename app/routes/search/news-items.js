@@ -42,7 +42,8 @@ export default class SearchNewsItemsRoute extends Route {
 
     if (!isEmpty(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    } if (!isEmpty(params.mandatees)) {
+    }
+    if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
     }
 
@@ -53,7 +54,10 @@ export default class SearchNewsItemsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:agendaitems.meetingDate'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:agendaitems.meetingDate'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:agendaitems.meetingDate'] = date.toISOString();
@@ -83,7 +87,9 @@ export default class SearchNewsItemsRoute extends Route {
         this.postProcessMandatees(entry);
         return entry;
       },
-      ['title,subTitle,htmlContent']
+      {
+        fields: ['title,subTitle,htmlContent'],
+      }
     );
   }
 

@@ -28,12 +28,12 @@ export default class SearchDecisionsRoute extends Route {
     'subcaseShortTitle^2',
     'decisionName^2',
     'decisionFileName^2',
-    'decision.content'
+    'decision.content',
   ];
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
 
     if (!params.dateFrom) {
       params.dateFrom = null;
@@ -64,7 +64,10 @@ export default class SearchDecisionsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -92,7 +95,9 @@ export default class SearchDecisionsRoute extends Route {
         await this.postProcessDecisions(entry);
         return entry;
       },
-      ['subcaseShortTitle,subcaseTitle']
+      {
+        fields: ['subcaseShortTitle,subcaseTitle'],
+      }
     );
   }
 
