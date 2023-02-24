@@ -92,4 +92,9 @@ export default class SearchDocumentsController extends Controller {
       this.documentTypesBuffer = [];
     }
   });
+
+  getStringProp = (object, propName) => {
+    return object[propName];
+  }
+
 }

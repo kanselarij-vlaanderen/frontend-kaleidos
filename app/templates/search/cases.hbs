@@ -24,7 +24,7 @@
             @label={{option.label}}
             @value={{option.value}}
             @onChange={{this.setArchived}}
-            checked={{eq this.archived.value option.value}}
+            checked={{eq this.archived option.value}}
           />
         {{/each}}
       </Auk::RadioList>
@@ -52,8 +52,7 @@
     />
     <KDataTable
       data-test-route-search-cases-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -64,52 +63,16 @@
       @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToCase}}
     >
-      <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--1"
-          @currentSorting={{this.sort}}
-          @field="sessionDates"
-          @label={{t "on-agenda-of"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{#if row.shortTitle}}
-              {{row.shortTitle}}
-            {{else}}
-              {{row.title}}
-            {{/if}}
-          </p>
-        </td>
-        <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td>
-          {{date row.sessionDates}}
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="cases.case.subcases"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Case
+            @created={{row.attributes.created}}
+            @shortTitle={{row.highlight.shortTitle}}
+            @title={{row.highlight.title}}
+            @caseId={{row.id}}
+            @isArchived={{row.attributes.isArchived}}
+            @subcaseHighlights={{row.subcaseHighlights}}
+          />
         </td>
       </:body>
     </KDataTable>
