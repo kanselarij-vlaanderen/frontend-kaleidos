@@ -24,6 +24,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
+      data-test-route-search-documents-datatable
       @hoverable={{true}}
       @striped={{true}}
       @loading={{this.isLoadingModel}}
@@ -58,7 +59,7 @@
       </:header>
       <:body as |row|>
         <td>
-          <p>
+          <p data-test-route-search-documents-row-title>
             {{row.title}}
           </p>
         </td>

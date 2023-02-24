@@ -9,7 +9,7 @@
     <strong>{{t "current-ministers"}}</strong>
   </AuControlCheckbox>
   <div class="auk-u-ml-2">
-    <Auk::CheckboxList>
+    <Auk::CheckboxList data-test-route-search-minister-filter-list>
       {{#each this.currentMinisters as |minister|}}
         <AuControlCheckbox
           @checked={{includes minister this.selected}}

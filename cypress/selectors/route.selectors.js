@@ -97,6 +97,10 @@ const selectors = {
 
   // search/agendaitems
   searchAgendaitems: {
+    filter: {
+      type: '[data-test-route-search-agendaitems-type-filter]',
+      finalAgenda: '[data-test-route-search-agendaitems-final-agenda-filter]',
+    },
     dataTable: '[data-test-route-search-agendaitems-data-table]',
     row: {
       shortTitle: '[data-test-route-search-agendaitems-row-shorttitle]',
@@ -106,7 +110,11 @@ const selectors = {
   // search/cases
   searchCases: {
     toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
+    removedCasesList: '[data-test-route-search-removed-cases-list]',
     dataTable: '[data-test-route-search-cases-data-table]',
+    row: {
+      shortTitle: '[data-test-route-search-cases-shortTitle]',
+    },
   },
 
   // search/newsletters
@@ -127,6 +135,38 @@ const selectors = {
     row: {
       number: '[data-test-route-search-publication-row-number]',
     },
+  },
+
+  // search/documents
+  searchDocuments: {
+    row: {
+      title: '[data-test-route-search-documents-row-title]',
+    },
+  },
+
+  // search/decisions
+  searchDecisions: {
+    dataTable: '[data-test-route-search-decisions-data-table]',
+    row: {
+      title: '[data-test-route-search-decisions-title]',
+    },
+  },
+
+  // components (?)
+
+  // search/minister-filter
+  searchMinisterFilter: {
+    list: '[data-test-route-search-minister-filter-list]',
+  },
+
+  // search/confidential-only
+  searchConfidentialOnly: {
+    checkbox: '[data-test-route-search-confidential-only-checkbox]',
+  },
+
+  // search/document-type-filter
+  searchDocumentTypeFilter: {
+    list: '[data-test-route-search-document-type-filter-list]',
   },
 
   /**

@@ -16,7 +16,7 @@
     </AuFieldset>
   </div>
   {{#if (user-may "manage-cases")}}
-    <div class="au-c-card au-o-box au-o-box--small">
+    <div data-test-route-search-removed-cases-list class="au-c-card au-o-box au-o-box--small">
       <Auk::Label>{{t "removed-cases"}}</Auk::Label>
       <Auk::RadioList as |list|>
         {{#each this.archivedOptions as |option|}}
@@ -86,7 +86,7 @@
       </:header>
       <:body as |row|>
         <td>
-          <p>
+          <p data-test-route-search-cases-shortTitle>
             {{#if row.shortTitle}}
               {{row.shortTitle}}
             {{else}}
