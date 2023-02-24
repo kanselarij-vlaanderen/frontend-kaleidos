@@ -10,23 +10,17 @@
         class="au-u-padding-none"
         @route="document"
         @model={{@documentId}}
+        @icon="document"
+        @iconAlignment="left"
       >
-        {{@title}}
+        {{@fileName}}
       </AuLink>
     </AuHeading>
   </c.header>
   <c.content>
     {{#if @contentHighlight}}
-      <p>
-        <span class="au-u-para-small au-u-muted">
-          {{t "found-in-thing" thing=(lowercase (t "content"))}}:
-        </span>
-        <div class="au-u-para">
-          <SanitizeHtml
-            @raw={{true}}
-            @value={{object-at 0 @contentHighlight}}
-          />
-        </div>
+      <p class="au-u-para">
+        <SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />
       </p>
     {{/if}}
     {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
