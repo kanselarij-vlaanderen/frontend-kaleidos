@@ -2,13 +2,14 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsOverviewBaseController extends Controller {
 
   @service router;
 
   @tracked page = 0;
-  @tracked size = 25;
+  @tracked size = PAGINATION_SIZES[3];
   @tracked sort = '-identification.structured-identifier.local-identifier';
 
   @tracked tableConfig;

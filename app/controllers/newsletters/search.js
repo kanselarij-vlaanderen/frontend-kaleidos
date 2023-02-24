@@ -1,4 +1,3 @@
-import ENV from 'frontend-kaleidos/config/environment';
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -6,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
 import sanitizeHtml from 'sanitize-html';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class NewslettersSearchController extends Controller {
   @service router;
@@ -38,8 +38,6 @@ export default class NewslettersSearchController extends Controller {
     },
   ];
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
-
   @tracked searchText = '';
   @tracked mandatees;
   @tracked dateFrom;
@@ -56,16 +54,12 @@ export default class NewslettersSearchController extends Controller {
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = '-agendaitems.meetingDate';
   }
 
   get isEmptySearch() {
     return isEmpty(this.searchText);
-  }
-
-  get sanitizeHtmlOptions() {
-    return ENV['sanitize-html'];
   }
 
   @action

@@ -1,9 +1,4 @@
-<AuCard
-  @shadow={{true}}
-  @size="small"
-  class="result-card"
-  as |c|
->
+<AuCard @shadow={{true}} @size="small" class="result-card" as |c|>
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       <p class="au-u-para-small au-u-muted au-u-medium">
@@ -15,16 +10,22 @@
         class="au-u-padding-none"
         @route="document"
         @model={{@documentId}}
+        @icon="document"
+        @iconAlignment="left"
       >
-        {{@title}}
+        {{@fileName}}
       </AuLink>
     </AuHeading>
   </c.header>
   <c.content>
-    {{!-- <p class="au-u-para">Tekst ...... <strong>test</strong> ....... tekst</p> --}}
+    {{#if @contentHighlight}}
+      <p class="au-u-para">
+        …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
+      </p>
+    {{/if}}
     {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
       <p class="au-u-para-small au-u-muted">
-        {{t "found-in-thing" thing=(t "agendaitem")}}
+        {{t "uploaded-in-thing" thing=(t "agendaitem")}}
         <AuLink
           @route="agenda.agendaitems.agendaitem"
           @models={{array @meetingId @agendaId @agendaitemId}}

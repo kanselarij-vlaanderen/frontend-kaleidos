@@ -475,6 +475,8 @@
   "normal-meeting": "Niet-elektronisch",
   "flemish-government": "Vlaamse Regering",
   "added-agendaitem-text": "Nieuw agendapunt",
+  "show-changes": "Toon aangepaste punten",
+  "show-all": "Toon alle punten",
   "national-number": "VO-ID",
   "last-name": "Achternaam",
   "group": "Groep",
@@ -1157,5 +1159,6 @@
   "found-in-thing": "Gevonden in {thing}",
   "and-one-other-subcase": "en nog 1 andere procedurestap",
   "and-n-other-subcases": "en nog {n} andere procedurestappen",
-  "also-found-in": "Ook gevonden in"
+  "also-found-in": "Ook gevonden in",
+  "uploaded-in-thing": "Geupload in {thing}"
 }

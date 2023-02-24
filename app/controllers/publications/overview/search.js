@@ -3,9 +3,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import formatDate from '../../../utils/format-date-search-param';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { task } from 'ember-concurrency';
 
 export default class PublicationsOverviewSearchController extends Controller {
   @service router;
+  @service store;
 
   queryParams = [
     {
@@ -20,6 +23,9 @@ export default class PublicationsOverviewSearchController extends Controller {
       },
       publicationDateTypeKey: {
         type: 'string',
+      },
+      mandatees: {
+        type: 'array',
       },
       regulationTypeIds: {
         type: 'array',
@@ -41,8 +47,6 @@ export default class PublicationsOverviewSearchController extends Controller {
       },
     },
   ];
-
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
 
   publicationDateTypes = [
     {
@@ -95,11 +99,13 @@ export default class PublicationsOverviewSearchController extends Controller {
   @tracked publicationStatusIds = [];
   @tracked urgentOnly;
   @tracked isLoadingModel;
+  @tracked mandatees = [];
+  @tracked mandateesBuffer = [];
 
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = '-opening-date';
     this.urgentOnly = false;
   }
@@ -156,5 +162,22 @@ export default class PublicationsOverviewSearchController extends Controller {
       'publications.publication.index',
       publicationFlow.id
     );
+  }
+
+  @action
+  setMandatees(mandatees) {
+    this.mandatees = mandatees.map((minister) => minister.id);
+    this.mandateesBuffer = mandatees;
+  }
+  
+  @task
+  *loadMinisters() {
+    if (this.mandatees) {
+      this.mandateesBuffer = (yield Promise.all(
+        this.mandatees?.map((id) => this.store.findRecord('person', id))
+      )).toArray();
+    } else {
+      this.mandateesBuffer = [];
+    }
   }
 }

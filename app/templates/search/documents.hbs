@@ -38,14 +38,22 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::Document
-            @created={{row.created}}
+            @created={{row.attributes.created}}
             @documentId={{row.id}}
-            @title={{row.title}}
-            @fileName={{row.fileName}}
-            @agendaitemShortTitle={{row.latestAgendaitem.shortTitle}}
-            @meetingId={{row.latestAgendaitem.meetingId}}
-            @agendaId={{row.latestAgendaitem.agendaId}}
-            @agendaitemId={{row.latestAgendaitem.id}}
+            @title={{row.attributes.title}}
+            @fileName={{if
+              row.highlight.fileName
+              row.highlight.fileName
+              row.attributes.fileName
+            }}
+            @agendaitemShortTitle={{row.attributes.latestAgendaitem.shortTitle}}
+            @meetingId={{row.attributes.latestAgendaitem.meetingId}}
+            @agendaId={{row.attributes.latestAgendaitem.agendaId}}
+            @agendaitemId={{row.attributes.latestAgendaitem.id}}
+            @contentHighlight={{this.getStringProp
+              row.highlight
+              "data.content"
+            }}
           />
         </td>
       </:body>
