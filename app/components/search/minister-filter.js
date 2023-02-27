@@ -20,19 +20,19 @@ export default class SearchMinisterFilterComponent extends Component {
   }
 
   get allCurrentMinistersSelected() {
-    return this.currentMinisters.every((minister) => this.args.selected.includes(minister.id));
+    return this.currentMinisters.every((minister) => this.args.selected?.includes(minister.id));
   }
 
   get someCurrentMinistersSelected() {
-    return this.currentMinisters.some((minister) => this.args.selected.includes(minister.id));
+    return this.currentMinisters.some((minister) => this.args.selected?.includes(minister.id));
   }
 
   get allPastMinistersSelected() {
-    return this.pastMinisters.every((minister) => this.args.selected.includes(minister.id));
+    return this.pastMinisters.every((minister) => this.args.selected?.includes(minister.id));
   }
 
   get somePastMinistersSelected() {
-    return this.pastMinisters.some((minister) => this.args.selected.includes(minister.id));
+    return this.pastMinisters.some((minister) => this.args.selected?.includes(minister.id));
   }
 
   _toggleMinister = (list, minister) => {
