@@ -6,7 +6,6 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
-    historySupportMiddleware: true,
     featureFlags: {
       'editor-html-paste': false,
       'editor-browser-delete': true,
@@ -51,11 +50,6 @@ module.exports = function (environment) {
     plausible: {
       domain: '{{ANALYTICS_APP_DOMAIN}}',
       apiHost: '{{ANALYTICS_API_HOST}}',
-    },
-    routerScroll: {
-      scrollWhenIdle: true,
-      scrollWhenAfterRender: true,
-      scrollElement: '#content'
     }
   };
 
