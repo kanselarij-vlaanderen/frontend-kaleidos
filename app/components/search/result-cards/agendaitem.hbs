@@ -19,12 +19,13 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
+        data-test-route-search-agendaitems-row-shorttitle
         class="au-u-padding-none"
         @route="agenda.agendaitems.agendaitem"
+
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
         <SanitizeHtml
-          data-test-route-search-agendaitems-row-shorttitle
           @raw={{true}}
           @value={{if @shortTitle @shortTitle @title}}
         />
