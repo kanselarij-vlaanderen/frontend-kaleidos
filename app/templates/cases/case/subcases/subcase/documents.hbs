@@ -1,73 +1,71 @@
-<div class="auk-panel-layout__main-content">
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-8">
-      <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
+<div class="auk-scroll-wrapper__body">
+  <div class="auk-u-m-8">
+    <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-toolbar__title">
+            {{t "documents"}}
+          </h4>
+        </Group.Item>
+        <AuPill
+          @size="small"
+          @skin="border"
+          @icon="comment"
+        >
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "filtered-subcase-documents"}}
+          </EmberTooltip>
+        </AuPill>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        {{#if this.model.pieces.length}}
           <Group.Item>
-            <h4 class="auk-toolbar__title">
-              {{t "documents"}}
-            </h4>
+            {{#if (user-may "manage-documents")}}
+              <AuButton
+                data-test-route-cases---subcase-documents-batch-edit
+                @icon="pencil"
+                {{on "click" this.openBatchDetails}}
+              >
+                {{t "batch-edit"}}
+              </AuButton>
+            {{/if}}
           </Group.Item>
-          <AuPill
-            @size="small"
-            @skin="border"
-            @icon="comment"
-          >
-            <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-              {{t "filtered-subcase-documents"}}
-            </EmberTooltip>
-          </AuPill>
-        </Toolbar.Group>
-        <Toolbar.Group @position="right" as |Group|>
-          {{#if this.model.pieces.length}}
-            <Group.Item>
-              {{#if (user-may "manage-documents")}}
-                <AuButton
-                  data-test-route-cases---subcase-documents-batch-edit
-                  @icon="pencil"
-                  {{on "click" this.openBatchDetails}}
-                >
-                  {{t "batch-edit"}}
-                </AuButton>
-              {{/if}}
-            </Group.Item>
-          {{/if}}
-        </Toolbar.Group>
-      </Auk::Toolbar>
+        {{/if}}
+      </Toolbar.Group>
+    </Auk::Toolbar>
 
-      {{#if this.documentsAreVisible}}
-        <Documents::DocumentCardList
-          @pieces={{this.model.pieces}}
-          @onAddPiece={{perform this.addPiece}}
-          @didDeleteContainer={{this.refresh}}
-          @isEditable={{true}}
-        />
-      {{else}}
-        <div class="auk-u-mt-2">
-          <AuAlert
-            @skin="info"
-            @icon="info-circle"
-          >
-            {{t "no-documents-yet"}}
-          </AuAlert>
-        </div>
-      {{/if}}
+    {{#if this.documentsAreVisible}}
+      <Documents::DocumentCardList
+        @pieces={{this.model.pieces}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeleteContainer={{this.refresh}}
+        @isEditable={{true}}
+      />
+    {{else}}
+      <div class="auk-u-mt-2">
+        <AuAlert
+          @skin="info"
+          @icon="info-circle"
+        >
+          {{t "no-documents-yet"}}
+        </AuAlert>
+      </div>
+    {{/if}}
 
-      {{#if (user-may "manage-documents")}}
-        <div class="auk-u-mb-4">
-          <AuButton
-            data-test-route-cases---subcase-documents-add
-            @skin="naked"
-            @icon="plus"
-            {{on "click" this.openPieceUploadModal}}
-          >
-            {{t "documents-add"}}
-          </AuButton>
-        </div>
-      {{/if}}
+    {{#if (user-may "manage-documents")}}
+      <div class="auk-u-mb-4">
+        <AuButton
+          data-test-route-cases---subcase-documents-add
+          @skin="naked"
+          @icon="plus"
+          {{on "click" this.openPieceUploadModal}}
+        >
+          {{t "documents-add"}}
+        </AuButton>
+      </div>
+    {{/if}}
 
-      <Documents::LinkedDocuments @agendaitemOrSubcase={{this.subcase}}/>
-    </div>
+    <Documents::LinkedDocuments @agendaitemOrSubcase={{this.subcase}}/>
   </div>
 </div>
 
