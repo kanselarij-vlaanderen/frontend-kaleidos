@@ -39,21 +39,6 @@
         <div class="au-c-sidebar">
           <div class="au-c-sidebar__content">
             <Search::Navigation />
-            <AuNavigationLink
-              @route={{this.currentRoute}}
-              @query={{hash
-                         mandatees=(array)
-                         dateFrom=null
-                         dateTo=null
-                         types=(array "nota" "mededeling")
-                         latestOnly=true
-                         archived="hide"
-                         decisionsOnly=false
-                         confidentialOnly=false
-                     }}
-            >
-              {{t "clear-filters"}}
-            </AuNavigationLink>
             <div
               id="search-subroute-filters-area"
               class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
