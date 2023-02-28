@@ -66,7 +66,7 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::Case
-            @created={{row.attributes.created}}
+            @sessionDate={{row.attributes.sessionDates}}
             @shortTitle={{row.highlight.shortTitle}}
             @title={{row.highlight.title}}
             @caseId={{row.id}}
