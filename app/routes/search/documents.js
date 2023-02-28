@@ -34,30 +34,19 @@ export default class SearchDocumentsRoute extends Route {
     },
   };
 
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
+  static textSearchFields = ['title^3', 'fileName^2', 'data.content'];
+  static highlightFields = ['title', 'fileName', 'data.content'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+  static postProcessData = async (searchData, store) => {
+    await SearchDocumentsRoute.postProcessAccessLevel(
+      searchData.attributes,
+      store
+    );
+    SearchDocumentsRoute.postProcessAgendaitems(searchData.attributes);
+    return searchData;
+  };
 
-    this.lastParams.stageLive(params);
-
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
-    const textSearchFields = ['title^3', 'fileName^2', 'data.content'];
-
-    const searchModifier = ':sqs:';
-    const textSearchKey = textSearchFields.join(',');
-
+  static createFilter(searchModifier, textSearchKey, params) {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -93,9 +82,40 @@ export default class SearchDocumentsRoute extends Route {
       ];
     }
 
-    if (params.documentTypes.length) {
+    if (params.documentTypes && params.documentTypes.length) {
       filter[':terms:documentType'] = params.documentTypes;
     }
+
+    return filter;
+  }
+
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
+
+    const searchModifier = ':sqs:';
+    const textSearchKey = SearchDocumentsRoute.textSearchFields.join(',');
+
+    const filter = SearchDocumentsRoute.createFilter(
+      searchModifier,
+      textSearchKey,
+      params
+    );
 
     this.lastParams.commit();
 
@@ -118,13 +138,9 @@ export default class SearchDocumentsRoute extends Route {
       params.size,
       sort,
       filter,
-      async (searchData) => {
-        await this.postProcessAccessLevel(searchData.attributes);
-        this.postProcessAgendaitems(searchData.attributes);
-        return searchData;
-      },
+      (document) => SearchDocumentsRoute.postProcessData(document, this.store),
       {
-        fields: ['title', 'fileName', 'data.content'],
+        fields: SearchDocumentsRoute.highlightFields,
       }
     );
   }
@@ -153,7 +169,7 @@ export default class SearchDocumentsRoute extends Route {
     return true;
   }
 
-  async postProcessAccessLevel(entry) {
+  static async postProcessAccessLevel(entry, store) {
     if (entry.accessLevel) {
       if (Array.isArray(entry.accessLevel)) {
         warn(
@@ -162,14 +178,14 @@ export default class SearchDocumentsRoute extends Route {
         );
         entry.accessLevel = entry.accessLevel[0];
       }
-      entry.accessLevel = await this.store.findRecordByUri(
+      entry.accessLevel = await store.findRecordByUri(
         'concept',
         entry.accessLevel
       );
     }
   }
 
-  postProcessAgendaitems(entry) {
+  static postProcessAgendaitems(entry) {
     const agendaitems = entry.agendaitems;
     if (Array.isArray(agendaitems)) {
       entry.latestAgendaitem = agendaitems.find((agendaitem) => {

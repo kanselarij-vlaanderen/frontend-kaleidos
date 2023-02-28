@@ -20,24 +20,19 @@ export default class SearchNewsItemsRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
+  static textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
+  static highlightFields = ['title,subTitle,htmlContent'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
-    if (!params.dateFrom) {
-      params.dateFrom = null;
-    }
-    if (!params.dateTo) {
-      params.dateTo = null;
-    }
-    if (!params.mandatees) {
-      params.mandatees = null;
-    }
+  static postProcessData = (newsItem) => {
+    SearchNewsItemsRoute.postProcessHighlights(newsItem);
+    const entry = { ...newsItem.attributes, ...newsItem.highlight };
+    entry.id = newsItem.id;
+    SearchNewsItemsRoute.postProcessAgendaitems(entry);
+    SearchNewsItemsRoute.postProcessMandatees(entry);
+    return entry;
+  };
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
-
+  static createFilter(searchModifier, textSearchKey, params) {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -68,6 +63,31 @@ export default class SearchNewsItemsRoute extends Route {
 
     // Filter out news-items that are not linked to a meeting via treatment(s)/agendaitem(s)
     filter[':has:agendaitems'] = 't';
+    
+    return filter;
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+    if (!params.dateFrom) {
+      params.dateFrom = null;
+    }
+    if (!params.dateTo) {
+      params.dateTo = null;
+    }
+    if (!params.mandatees) {
+      params.mandatees = null;
+    }
+
+    const searchModifier = ':sqs:';
+    const textSearchKey = SearchNewsItemsRoute.textSearchFields.join(',');
+
+    const filter = SearchNewsItemsRoute.createFilter(
+      searchModifier,
+      textSearchKey,
+      params
+    );
 
     if (isEmpty(params.searchText)) {
       return [];
@@ -79,16 +99,9 @@ export default class SearchNewsItemsRoute extends Route {
       params.size,
       params.sort,
       filter,
-      (newsItem) => {
-        this.postProcessHighlights(newsItem);
-        const entry = { ...newsItem.attributes, ...newsItem.highlight };
-        entry.id = newsItem.id;
-        this.postProcessAgendaitems(entry);
-        this.postProcessMandatees(entry);
-        return entry;
-      },
+      SearchNewsItemsRoute.postProcessData,
       {
-        fields: ['title,subTitle,htmlContent'],
+        fields: SearchNewsItemsRoute.highlightFields,
       }
     );
   }
@@ -113,7 +126,7 @@ export default class SearchNewsItemsRoute extends Route {
     return false;
   }
 
-  postProcessAgendaitems(newsletter) {
+  static postProcessAgendaitems(newsletter) {
     const agendaitems = newsletter.agendaitems;
     if (Array.isArray(agendaitems)) {
       newsletter.latestAgendaitem = agendaitems.find((agendaitem) => {
@@ -124,7 +137,7 @@ export default class SearchNewsItemsRoute extends Route {
     }
   }
 
-  postProcessMandatees(newsletter) {
+  static postProcessMandatees(newsletter) {
     const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
       const sortedMandatees = mandatees.sortBy('priority');
@@ -134,7 +147,7 @@ export default class SearchNewsItemsRoute extends Route {
     }
   }
 
-  postProcessHighlights(entry) {
+  static postProcessHighlights(entry) {
     if (Array.isArray(entry.highlight?.title)) {
       entry.highlight.title = entry.highlight.title[0];
     }
