@@ -76,6 +76,9 @@ export default class SearchDecisionsRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
+    // Since all agendaitem versions point to the same treatment, only use latest agendaitems
+    filter[':has-no:nextVersionId'] = 't';
+
     if (isEmpty(params.searchText)) {
       return [];
     }

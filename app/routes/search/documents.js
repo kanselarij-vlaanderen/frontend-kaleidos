@@ -103,13 +103,13 @@ export default class SearchDocumentsRoute extends Route {
       return [];
     }
 
-    // session-dates can contain multiple values.
+    // created can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
-    if (params.sort === 'session-dates') {
-      sort = ':min:session-dates';
-    } else if (params.sort === '-session-dates') {
-      sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
+    if (params.sort === 'created') {
+      sort = ':min:created';
+    } else if (params.sort === '-created') {
+      sort = '-:max:created'; // correctly converted to mu-search syntax by the mu-search util
     }
 
     return search(

@@ -17,7 +17,7 @@ export default class SearchRoute extends Route {
     },
     dateFrom: {
       refreshModel: true,
-      as: 'vanaf',
+      as: 'van',
     },
     dateTo: {
       refreshModel: true,
