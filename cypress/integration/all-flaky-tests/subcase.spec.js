@@ -223,7 +223,8 @@ context('Subcase tests', () => {
     cy.wait('@newsItemsPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(appuniversum.pill).contains('Niet op de website');
+    cy.get(agenda.agendaitemTitlesView.newsItem).find(appuniversum.pill)
+      .contains('Niet op de website');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
@@ -412,7 +413,7 @@ context('Subcase tests', () => {
     cy.get(utils.caseSearch.row).contains(caseTitle2)
       .click()
       .wait('@patchSubcases2');
-    cy.get(auk.auModal.header.close).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);

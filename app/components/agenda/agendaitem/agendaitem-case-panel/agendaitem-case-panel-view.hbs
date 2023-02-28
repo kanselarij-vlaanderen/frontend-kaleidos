@@ -100,7 +100,7 @@
           </div>
         {{/if}}
         {{#if (is-announcement @agendaitem.type)}}
-          <div class="auk-u-mt-2">
+          <div class="auk-u-mt-2" data-test-agendaitem-titles-news-item>
             {{#if @newsItem}}
               {{#if @newsItem.inNewsletter}}
                 <AuPill @size="small" @skin="border" @icon="website">
