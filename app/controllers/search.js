@@ -31,10 +31,6 @@ export default class SearchController extends Controller {
 
   @tracked searchTextBuffer = '';
 
-  get currentRoute() {
-    return this.router.currentRouteName;
-  }
-
   @action
   search(e) {
     e.preventDefault();
