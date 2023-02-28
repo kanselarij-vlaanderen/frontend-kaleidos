@@ -50,9 +50,9 @@
       <p class="au-u-para-small au-u-margin-top-none au-u-muted">
         {{t "also-found-in"}}
         {{#each @pastAgendaVersions as |pastAgendaVersion|}}
-          <AuLink @skin="secondary">
+          <span class="au-u-medium">
             {{t "version"}} {{pastAgendaVersion}}{{#if (has-next pastAgendaVersion @pastAgendaVersions)}},{{/if}}
-          </AuLink>
+          </span>
         {{/each}}
       </p>
     {{/if}}
