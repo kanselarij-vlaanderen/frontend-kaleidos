@@ -171,7 +171,6 @@ export default class PublicationsOverviewSearchRoute extends Route {
     controller.publicationStatuses = this.publicationStatuses.toArray();
     controller.regulationTypes = this.regulationTypes.toArray();
     controller.mandatees = params.mandatees;
-    controller.loadMinisters.perform();
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;

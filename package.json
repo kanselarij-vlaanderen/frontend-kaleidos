@@ -153,6 +153,5 @@
   },
   "engines": {
     "node": "12 || 14 || >= 16"
-  },
-  "dependencies": {}
+  }
 }
