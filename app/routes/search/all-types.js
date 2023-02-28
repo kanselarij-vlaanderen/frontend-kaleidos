@@ -22,7 +22,8 @@ export default class AllTypes extends Route {
 
   CONTENT_TYPES = [
     {
-      name: 'decisionmaking-flows',
+      name: 'cases',
+      searchType: 'decisionmaking-flows',
       searchFields: CasesSearchRoute.textSearchFields,
       highlightFields: CasesSearchRoute.highlightFields,
       dataMapping: CasesSearchRoute.postProcessData,
@@ -30,6 +31,7 @@ export default class AllTypes extends Route {
     },
     {
       name: 'agendaitems',
+      searchType: 'agendaitems',
       searchFields: AgendaItemsSearchRoute.textSearchFields,
       highlightFields: AgendaItemsSearchRoute.highlightFields,
       dataMapping: AgendaItemsSearchRoute.postProcessData,
@@ -37,13 +39,15 @@ export default class AllTypes extends Route {
     },
     {
       name: 'pieces',
+      searchType: 'pieces',
       searchFields: SearchDocumentsRoute.textSearchFields,
       highlightFields: SearchDocumentsRoute.highlightFields,
       dataMapping: SearchDocumentsRoute.postProcessData,
       createFilter: SearchDocumentsRoute.createFilter,
     },
     {
-      name: 'agendaitems',
+      name: 'decisions',
+      searchType: 'agendaitems',
       searchFields: SearchDecisionsRoute.textSearchFields,
       highlightFields: SearchDecisionsRoute.highlightFields,
       dataMapping: SearchDecisionsRoute.postProcessData,
@@ -51,6 +55,7 @@ export default class AllTypes extends Route {
     },
     {
       name: 'news-items',
+      searchType: 'news-items',
       searchFields: SearchNewsItemsRoute.textSearchFields,
       highlightFields: SearchNewsItemsRoute.highlightFields,
       dataMapping: SearchNewsItemsRoute.postProcessData,
@@ -91,45 +96,37 @@ export default class AllTypes extends Route {
           sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
         }
 
-        return search(
-          type.name,
-          0,
-          10,
-          sort,
-          filter,
-          (searchData) => type.dataMapping(searchData, this.store),
-          {
-            fields: type.highlightFields,
-          }
-        );
+        return (async () => {
+          const results = await search(
+            type.searchType,
+            0,
+            10,
+            sort,
+            filter,
+            (searchData) => type.dataMapping(searchData, this.store),
+            {
+              fields: type.highlightFields,
+            }
+          );
 
-        //   return {
-        //     type: type.name,
-        //     data: results,
-        //   };
-
-        // return async () => {
-        //   const results = await search(
-        //     type.name,
-        //     0,
-        //     10,
-        //     sort,
-        //     filter,
-        //     (searchData) => type.dataMapping(searchData, this.store),
-        //     {
-        //       fields: type.highlightFields,
-        //     }
-        //   );
-
-        //   return {
-        //     type: type.name,
-        //     data: results,
-        //   };
-        // };
+          return {
+            name: type.name,
+            data: results,
+          };
+        })();
       })
     );
 
-    return results;
+    let flatResults = [];
+    for (const searchType of results) {
+      flatResults = flatResults.concat(
+        searchType.data.map((data) => {
+          return { name: searchType.name, data: data};
+        })
+      );
+    }
+
+    return flatResults;
   }
 
   setupController(controller) {
