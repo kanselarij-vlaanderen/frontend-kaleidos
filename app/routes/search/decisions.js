@@ -40,7 +40,10 @@ export default class SearchDecisionsRoute extends Route {
     return entry;
   };
 
-  static createFilter(searchModifier, textSearchKey, params) {
+  static createFilter(params) {
+    const searchModifier = ':sqs:';
+    const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
+
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -88,14 +91,7 @@ export default class SearchDecisionsRoute extends Route {
       params.mandatees = null;
     }
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
-
-    const filter = SearchDecisionsRoute.createFilter(
-      searchModifier,
-      textSearchKey,
-      params
-    );
+    const filter = SearchDecisionsRoute.createFilter(params);
 
     if (isEmpty(params.searchText)) {
       return [];

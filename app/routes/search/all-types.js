@@ -76,10 +76,7 @@ export default class AllTypes extends Route {
 
     const results = await Promise.all(
       this.CONTENT_TYPES.map((type) => {
-        const searchModifier = ':sqs:';
-        const textSearchKey = type.searchFields.join(',');
-
-        const filter = type.createFilter(searchModifier, textSearchKey, params);
+        const filter = type.createFilter(params);
 
         this.lastParams.commit();
 
@@ -121,7 +118,7 @@ export default class AllTypes extends Route {
     for (const searchType of results) {
       flatResults = flatResults.concat(
         searchType.data.map((data) => {
-          return { name: searchType.name, data: data};
+          return { name: searchType.name, data: data };
         })
       );
     }

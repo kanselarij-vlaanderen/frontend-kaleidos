@@ -100,7 +100,22 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
-  static createFilter(searchModifier, textSearchKey, params) {
+  static createFilter(params) {
+    const textSearchFields = [...CasesSearchRoute.textSearchFields];
+
+    if (params.decisionsOnly) {
+      textSearchFields.push(
+        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
+      );
+    } else {
+      textSearchFields.push(
+        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
+      );
+    }
+
+    const searchModifier = ':sqs:';
+    const textSearchKey = textSearchFields.join(',');
+
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -152,8 +167,6 @@ export default class CasesSearchRoute extends Route {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
 
-    const textSearchFields = [...CasesSearchRoute.textSearchFields];
-
     this.lastParams.stageLive(params);
 
     if (
@@ -164,24 +177,7 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
-    if (params.decisionsOnly) {
-      textSearchFields.push(
-        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
-      );
-    } else {
-      textSearchFields.push(
-        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
-      );
-    }
-
-    const searchModifier = ':sqs:';
-    const textSearchKey = textSearchFields.join(',');
-
-    const filter = CasesSearchRoute.createFilter(
-      searchModifier,
-      textSearchKey,
-      params
-    );
+    const filter = CasesSearchRoute.createFilter(params);
 
     this.lastParams.commit();
 

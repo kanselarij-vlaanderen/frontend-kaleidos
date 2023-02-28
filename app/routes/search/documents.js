@@ -46,7 +46,10 @@ export default class SearchDocumentsRoute extends Route {
     return searchData;
   };
 
-  static createFilter(searchModifier, textSearchKey, params) {
+  static createFilter(params) {
+    const searchModifier = ':sqs:';
+    const textSearchKey = SearchDocumentsRoute.textSearchFields.join(',');
+
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -108,14 +111,7 @@ export default class SearchDocumentsRoute extends Route {
       params.page = 0;
     }
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = SearchDocumentsRoute.textSearchFields.join(',');
-
-    const filter = SearchDocumentsRoute.createFilter(
-      searchModifier,
-      textSearchKey,
-      params
-    );
+    const filter = SearchDocumentsRoute.createFilter(params);
 
     this.lastParams.commit();
 

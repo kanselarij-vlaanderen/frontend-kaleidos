@@ -50,4 +50,10 @@ export default class AllTypesController extends Controller {
   get customFiltersElement() {
     return document.getElementById('search-subroute-filters-area');
   }
+
+  getStringProp = (object, propName) => {
+    if (object) {
+      return object[propName];
+    }
+  }
 }

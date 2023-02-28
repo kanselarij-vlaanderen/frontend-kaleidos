@@ -32,7 +32,10 @@ export default class SearchNewsItemsRoute extends Route {
     return entry;
   };
 
-  static createFilter(searchModifier, textSearchKey, params) {
+  static createFilter(params) {
+    const searchModifier = ':sqs:';
+    const textSearchKey = SearchNewsItemsRoute.textSearchFields.join(',');
+
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -63,7 +66,7 @@ export default class SearchNewsItemsRoute extends Route {
 
     // Filter out news-items that are not linked to a meeting via treatment(s)/agendaitem(s)
     filter[':has:agendaitems'] = 't';
-    
+
     return filter;
   }
 
@@ -80,14 +83,7 @@ export default class SearchNewsItemsRoute extends Route {
       params.mandatees = null;
     }
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = SearchNewsItemsRoute.textSearchFields.join(',');
-
-    const filter = SearchNewsItemsRoute.createFilter(
-      searchModifier,
-      textSearchKey,
-      params
-    );
+    const filter = SearchNewsItemsRoute.createFilter(params);
 
     if (isEmpty(params.searchText)) {
       return [];

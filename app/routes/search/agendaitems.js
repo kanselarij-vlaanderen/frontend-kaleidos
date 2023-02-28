@@ -60,7 +60,10 @@ export default class AgendaitemSearchRoute extends Route {
     return entry;
   };
 
-  static createFilter(searchModifier, textSearchKey, params) {
+  static createFilter(params) {
+    const searchModifier = ':sqs:';
+    const textSearchKey = AgendaitemSearchRoute.textSearchFields.join(',');
+
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
@@ -119,14 +122,7 @@ export default class AgendaitemSearchRoute extends Route {
       params.page = 0;
     }
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = AgendaitemSearchRoute.textSearchFields.join(',');
-
-    const filter = AgendaitemSearchRoute.createFilter(
-      searchModifier,
-      textSearchKey,
-      params
-    );
+    const filter = AgendaitemSearchRoute.createFilter(params);
 
     if (params.types.length) {
       if (
