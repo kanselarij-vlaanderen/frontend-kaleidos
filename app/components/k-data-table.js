@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
  * @param striped {Boolean} Whether the table rows will alternate colour, like a zebra's stripes
  * @param stickyHeader {Boolean} Whether the table header will stick to the page view when vertically scrolling
  * @param stickyActionColumn {Boolean} Whether the rightmost action column will stick to the page view when horizontally scrolling
+ * @param cards {Boolean} Whether the table should be styled for displaying cards
  * @param clickable {Boolean} Whether the rows are clickable. Overrides an undefined onClickRow parameter to still make the row look clickable, but binds no action to clicking the row
  * @param loading {Boolean}
  * @param content {Array<Model>} Array of rows that will be displayed in the table

@@ -12,7 +12,7 @@
     <Auk::CheckboxList>
       {{#each this.currentMinisters as |minister|}}
         <AuControlCheckbox
-          @checked={{includes minister this.selected}}
+          @checked={{includes minister.id @selected}}
           @label={{minister.fullName}}
           @onChange={{fn this.toggleMinister minister}}
         />
@@ -42,7 +42,7 @@
       <Auk::CheckboxList>
         {{#each this.pastMinisters as |minister|}}
           <AuControlCheckbox
-            @checked={{includes minister this.selected}}
+            @checked={{includes minister.id @selected}}
             @label={{minister.fullName}}
             @onChange={{fn this.toggleMinister minister}}
           />

@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 import { isPresent } from '@ember/utils';
+import { action } from '@ember/object';
 
 /**
  * A (nav) tab. Takes most arguments that LinkTo takes.
@@ -48,5 +49,12 @@ export default class Tab extends Component {
     }
     // return empty object
     return [];
+  }
+
+  @action
+  transitionBack() {
+    if (history.length > 1) {
+      history.back();
+    }
   }
 }

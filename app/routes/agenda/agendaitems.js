@@ -12,6 +12,10 @@ export default class AgendaAgendaitemsRoute extends Route {
     filter: {
       refreshModel: true,
     },
+    showModifiedOnly: {
+      refreshModel: true,
+      as: 'toon_enkel_gewijzigd',
+    },
     anchor: {
       refreshModel: false,
     },
@@ -50,6 +54,14 @@ export default class AgendaAgendaitemsRoute extends Route {
       newItems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
     } else {
       newItems = agendaitems;
+    }
+
+    if (params.showModifiedOnly) {
+      // "modified" here is interpreted as "new item or existing item with changes in its related documents"
+      if (previousAgenda) {
+        const modItems = await this.agendaService.modifiedAgendaItems(agenda.id, previousAgenda.id, ['documents']);
+        agendaitems = agendaitems.filter((item) => [...new Set(newItems.concat(modItems))].includes(item));
+      }
     }
 
     if (params.filter) {
@@ -108,6 +120,13 @@ export default class AgendaAgendaitemsRoute extends Route {
 
     await animationFrame(); // make sure rendering has happened before trying to scroll
     controller.scrollToAnchor();
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      // isExiting would be false if only the route's model was changing
+      controller.set('filter', null);
+    }
   }
 
   @action
