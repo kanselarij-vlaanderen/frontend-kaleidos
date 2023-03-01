@@ -119,9 +119,15 @@ export default class AllTypes extends Route {
       const d2 = new Date(this.CONTENT_TYPES[r2.name].retrieveDate(r2.data));
       return d1 < d2;
     };
+
     flatResults.sort(sortFunc);
 
-    return flatResults;
+    const counts = {};
+    for (const result of results) {
+      counts[result.name] = result.data.meta.count;
+    }
+
+    return { results: flatResults, counts };
   }
 
   setupController(controller) {

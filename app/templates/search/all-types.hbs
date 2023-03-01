@@ -1,23 +1,12 @@
 {{page-title (t "all-content")}}
 <div class="au-o-box au-o-box--small">
-  {{#if this.model.length}}
-    <Search::ResultsHeader
-      @pageSize={{this.model.length}}
-      @pageIdx={{0}}
-      @nbOfItems={{this.model.length}}
-      @searchText={{this.searchText}}
-      @onSortChange={{this.selectSort}}
-      @sortOptions={{this.sortOptions}}
-      @sort={{this.sort}}
-    />
+  {{#if this.model}}
     <KDataTable
       @cards={{true}}
       @loading={{this.isLoadingModel}}
-      @content={{this.model}}
+      @content={{this.model.results}}
       @size={{this.size}}
-      @numberOfItems={{this.model.length}}
-      @totalNumberOfItems={{this.model.meta.count}}
-      @onChangeSize={{fn (mut this.size)}}
+      @numberOfItems={{this.model.results.length}}
       @enablePagination={{false}}
       @onClickRow={{this.navigateToResult}}
     >
@@ -91,6 +80,36 @@
         </td>
       </:body>
     </KDataTable>
+    {{#if this.model.counts.cases}}
+      {{t "n-results-found-in" n=this.model.counts.cases}}
+      <AuLink @route="search.cases">
+        {{t "cases"}}
+      </AuLink>
+    {{/if}}
+    {{#if this.model.counts.agendaitems}}
+      {{t "n-results-found-in" n=this.model.counts.agendaitems}}
+      <AuLink @route="search.agendaitems">
+        {{t "agendas"}}
+      </AuLink>
+    {{/if}}
+    {{#if this.model.counts.pieces}}
+      {{t "n-results-found-in" n=this.model.counts.pieces}}
+      <AuLink @route="search.documents">
+        {{t "documents"}}
+      </AuLink>
+    {{/if}}
+    {{#if this.model.counts.decisions}}
+      {{t "n-results-found-in" n=this.model.counts.decisions}}
+      <AuLink @route="search.decisions">
+        {{t "decisions"}}
+      </AuLink>
+    {{/if}}
+    {{#if (get this.model.counts "news-items")}}
+      {{t "n-results-found-in" n=(get this.model.counts "news-items")}}
+      <AuLink @route="search.news-items">
+        {{t "newsletter"}}
+      </AuLink>
+    {{/if}}
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState
