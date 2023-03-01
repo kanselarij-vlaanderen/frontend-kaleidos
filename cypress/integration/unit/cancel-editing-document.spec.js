@@ -21,7 +21,6 @@ function uploadFileToCancel(file) {
   cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
-    cy.wait(1000);
   });
 }
 

@@ -19,10 +19,12 @@ export default class UploadedDocument extends Component {
 
   @task
   *loadData() {
-    this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+    if (this.args.allowDocumentContainerEdit) {
+      this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
 
-    this.documentContainer = yield this.args.piece.documentContainer;
-    this.selectedDocumentType = yield this.documentContainer.type;
+      this.documentContainer = yield this.args.piece.documentContainer;
+      this.selectedDocumentType = yield this.documentContainer.type;
+    }
   }
 
   get sortedDocumentTypes() {
