@@ -183,7 +183,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           }
         }
       }
-      this.router.refresh('cases.case.subcases.subcase.documents');
     }
   }
 
