@@ -24,7 +24,7 @@ export default class IndexSearchRoute extends Route {
       dateTo: null,
       page: 0,
     }
-    this.router.transitionTo('search.agendaitems', {
+    this.router.transitionTo('search.all-types', {
       queryParams: queryParams,
     });
   }
