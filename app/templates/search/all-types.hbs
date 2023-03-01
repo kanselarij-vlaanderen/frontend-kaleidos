@@ -79,7 +79,7 @@
           {{/if}}
           {{#if (eq row.name "news-items")}}
             <Search::ResultCards::NewsItem
-              @date={{row.data.modified}}
+              @date={{row.data.latestAgendaitem.meetingDate}}
               @title={{or row.data.subTitle row.data.title}}
               @text={{row.data.htmlContent}}
               @mandatees={{row.data.mandatees}}

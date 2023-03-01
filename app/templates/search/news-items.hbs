@@ -27,7 +27,7 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::NewsItem
-            @date={{row.modified}}
+            @date={{row.latestAgendaitem.meetingDate}}
             @title={{or row.subTitle row.title}}
             @text={{row.htmlContent}}
             @mandatees={{row.mandatees}}
