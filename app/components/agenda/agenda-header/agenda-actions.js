@@ -36,6 +36,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showPlanDocumentPublicationModal = false;
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
+  @tracked showDownloadDocuments = false;
+  @tracked showDownloadDocuments = false;
+  @tracked selectedMandatees = [];
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -241,7 +244,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  async downloadAllDocuments() {
+  async downloadDocuments() {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const fileDownloadToast = {
       title: this.intl.t('file-ready'),
@@ -256,6 +259,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     debug('Checking if archive exists ...');
     const jobPromise = fetchArchivingJobForAgenda(
       this.args.currentAgenda,
+      this.selectedMandatees,
       this.store
     );
     const [name, job] = await all([namePromise, jobPromise]);
@@ -362,6 +366,24 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   toggleEditingMeeting() {
     this.isEditingMeeting = !this.isEditingMeeting;
+  }
+
+  @action
+  openDownloadDocuments() {
+    this.showDownloadDocuments = true;
+    this.selectedMandatees = [];
+  }
+
+  @action
+  closeDownloadDocuments() {
+    this.showDownloadDocuments = false;
+    this.selectedMandatees = [];
+  }
+
+  @action
+  async confirmDownloadDocuments() {
+    await this.downloadDocuments();
+    this.closeDownloadDocuments();
   }
 
   @action

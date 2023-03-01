@@ -49,7 +49,7 @@
   <AuButton
     data-test-agenda-actions-download-documents
     @skin="link"
-    {{on "click" this.downloadAllDocuments}}
+    {{on "click" this.openDownloadDocuments}}
     role="menuitem"
   >
     {{t "download-documents"}}
@@ -214,3 +214,19 @@
     @onConfirm={{perform this.unpublishThemis}}
   />
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.showDownloadDocuments}}
+  @onCancel={{this.closeDownloadDocuments}}
+  @title={{t "download-documents"}}
+  @confirmMessage={{t "download-documents"}}
+  @onConfirm={{this.confirmDownloadDocuments}}
+>
+  <:body>
+    <Mandatees::CheckboxSelect
+      @selected={{this.selectedMandatees}}
+      @referenceAgenda={{@currentAgenda}}
+      @onChange={{set this "selectedMandatees"}}
+    />
+  </:body>
+</ConfirmationModal>
