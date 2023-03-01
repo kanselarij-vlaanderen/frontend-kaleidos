@@ -1,6 +1,44 @@
 {{page-title (t "all-content")}}
 <div class="au-o-box au-o-box--small">
-  {{#if this.model}}
+  {{#if this.model.results}}
+    <ul>
+      {{#each-in this.model.counts as |name count|}}
+        {{#if count}}
+          <li>
+            {{#if (eq count 1)}}
+              {{t "one-result-found-in"}}
+            {{else}}
+              {{t "n-results-found-in" n=count}}
+            {{/if}}
+            {{#if (eq name "cases")}}
+              <AuLink @route="search.cases">
+                {{t "cases"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "agendaitems")}}
+              <AuLink @route="search.agendaitems">
+                {{t "agendas"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "pieces")}}
+              <AuLink @route="search.documents">
+                {{t "documents"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "decisions")}}
+              <AuLink @route="search.decisions">
+                {{t "decisions"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "news-items")}}
+              <AuLink @route="search.news-items">
+                {{t "news-items"}}
+              </AuLink>
+            {{/if}}
+          </li>
+        {{/if}}
+      {{/each-in}}
+    </ul>
     <KDataTable
       @cards={{true}}
       @loading={{this.isLoadingModel}}
@@ -80,36 +118,6 @@
         </td>
       </:body>
     </KDataTable>
-    {{#if this.model.counts.cases}}
-      {{t "n-results-found-in" n=this.model.counts.cases}}
-      <AuLink @route="search.cases">
-        {{t "cases"}}
-      </AuLink>
-    {{/if}}
-    {{#if this.model.counts.agendaitems}}
-      {{t "n-results-found-in" n=this.model.counts.agendaitems}}
-      <AuLink @route="search.agendaitems">
-        {{t "agendas"}}
-      </AuLink>
-    {{/if}}
-    {{#if this.model.counts.pieces}}
-      {{t "n-results-found-in" n=this.model.counts.pieces}}
-      <AuLink @route="search.documents">
-        {{t "documents"}}
-      </AuLink>
-    {{/if}}
-    {{#if this.model.counts.decisions}}
-      {{t "n-results-found-in" n=this.model.counts.decisions}}
-      <AuLink @route="search.decisions">
-        {{t "decisions"}}
-      </AuLink>
-    {{/if}}
-    {{#if (get this.model.counts "news-items")}}
-      {{t "n-results-found-in" n=(get this.model.counts "news-items")}}
-      <AuLink @route="search.news-items">
-        {{t "news-items"}}
-      </AuLink>
-    {{/if}}
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState
