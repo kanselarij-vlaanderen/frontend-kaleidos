@@ -24,6 +24,10 @@
     outline-offset: var(--au-outline-offset);
   }
 
+  > li {
+    display: inline-flex;
+  }
+
   @extend .auk-filter-pill-list;
 }
 

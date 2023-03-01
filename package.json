@@ -120,7 +120,7 @@
     "ember-sortable": "^4.0.3",
     "ember-source": "~4.8.0",
     "ember-svg-jar": "^2.4.2",
-    "ember-tag-input": "git+https://github.com/kanselarij-vlaanderen/ember-tag-input.git#6f7d67f23274e2ebe23f8e9619353d35de94b516",
+    "ember-tag-input": "3.1.0",
     "ember-template-lint": "^4.16.1",
     "ember-template-lint-plugin-prettier": "^2.0.1",
     "ember-test-selectors": "^6.0.0",
