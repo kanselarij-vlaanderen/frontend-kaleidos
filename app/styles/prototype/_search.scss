@@ -51,10 +51,19 @@
 .au-c-search-container__content {
   position: relative;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+
+  @include mq(medium) {
+    overflow: hidden;
+  }
 
   .au-c-main-container {
     height: 100%;
+    display: block;
+
+    @include mq(medium) {
+      display: flex;
+    }
   }
 }
 
