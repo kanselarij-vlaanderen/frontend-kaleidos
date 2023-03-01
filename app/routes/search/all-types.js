@@ -20,48 +20,48 @@ export default class AllTypes extends Route {
     },
   };
 
-  CONTENT_TYPES = [
-    {
-      name: 'cases',
+  CONTENT_TYPES = {
+    'cases': {
       searchType: 'decisionmaking-flows',
       searchFields: CasesSearchRoute.textSearchFields,
       highlightFields: CasesSearchRoute.highlightFields,
       dataMapping: CasesSearchRoute.postProcessData,
       createFilter: CasesSearchRoute.createFilter,
+      retrieveDate: (case_) => case_.attributes.created,
     },
-    {
-      name: 'agendaitems',
+    'agendaitems': {
       searchType: 'agendaitems',
       searchFields: AgendaItemsSearchRoute.textSearchFields,
       highlightFields: AgendaItemsSearchRoute.highlightFields,
       dataMapping: AgendaItemsSearchRoute.postProcessData,
       createFilter: AgendaItemsSearchRoute.createFilter,
+      retrieveDate: (agendaitem) => agendaitem.sessionDates
     },
-    {
-      name: 'pieces',
+    'pieces': {
       searchType: 'pieces',
       searchFields: SearchDocumentsRoute.textSearchFields,
       highlightFields: SearchDocumentsRoute.highlightFields,
       dataMapping: SearchDocumentsRoute.postProcessData,
       createFilter: SearchDocumentsRoute.createFilter,
+      retrieveDate: (piece) => piece.attributes.created,
     },
-    {
-      name: 'decisions',
+    'decisions': {
       searchType: 'agendaitems',
       searchFields: SearchDecisionsRoute.textSearchFields,
       highlightFields: SearchDecisionsRoute.highlightFields,
       dataMapping: SearchDecisionsRoute.postProcessData,
       createFilter: SearchDecisionsRoute.createFilter,
+      retrieveDate: (decision) => decision.sessionDates
     },
-    {
-      name: 'news-items',
+    'news-items': {
       searchType: 'news-items',
       searchFields: SearchNewsItemsRoute.textSearchFields,
       highlightFields: SearchNewsItemsRoute.highlightFields,
       dataMapping: SearchNewsItemsRoute.postProcessData,
       createFilter: SearchNewsItemsRoute.createFilter,
+      retrieveDate: (newsItem) => newsItem.latestAgendaitem.meetingDate
     },
-  ];
+  };
 
   constructor() {
     super(...arguments);
@@ -73,32 +73,23 @@ export default class AllTypes extends Route {
     const params = { ...searchParams, ...filterParams };
 
     this.lastParams.stageLive(params);
+    this.lastParams.commit();
+
+    if (isEmpty(params.searchText)) {
+      return [];
+    }
 
     const results = await Promise.all(
-      this.CONTENT_TYPES.map((type) => {
+      Object.entries(this.CONTENT_TYPES).map((entry) => {
+        const [name, type] = entry;
         const filter = type.createFilter(params);
-
-        this.lastParams.commit();
-
-        if (isEmpty(params.searchText)) {
-          return [];
-        }
-
-        // session-dates can contain multiple values.
-        // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
-        let sort = params.sort;
-        if (params.sort === 'session-dates') {
-          sort = ':min:session-dates';
-        } else if (params.sort === '-session-dates') {
-          sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
-        }
 
         return (async () => {
           const results = await search(
             type.searchType,
             0,
             10,
-            sort,
+            null,
             filter,
             (searchData) => type.dataMapping(searchData, this.store),
             {
@@ -107,7 +98,7 @@ export default class AllTypes extends Route {
           );
 
           return {
-            name: type.name,
+            name,
             data: results,
           };
         })();
@@ -122,6 +113,13 @@ export default class AllTypes extends Route {
         })
       );
     }
+
+    const sortFunc = (r1, r2) => {
+      const d1 = new Date(this.CONTENT_TYPES[r1.name].retrieveDate(r1.data));
+      const d2 = new Date(this.CONTENT_TYPES[r2.name].retrieveDate(r2.data));
+      return d1 < d2;
+    }
+    flatResults.sort(sortFunc);
 
     return flatResults;
   }

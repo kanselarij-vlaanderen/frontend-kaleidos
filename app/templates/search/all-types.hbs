@@ -10,9 +10,19 @@
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
-    <ul>
-      <li>
-        {{#each this.model as |row|}}
+    <KDataTable
+      @cards={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @enablePagination={{false}}
+      @onClickRow={{this.navigateToResult}}
+    >
+      <:body as |row|>
+        <td>
           {{#if (eq row.name "cases")}}
             <Search::ResultCards::Case
               @created={{row.data.attributes.created}}
@@ -78,9 +88,9 @@
               @agendaItemId={{row.data.latestAgendaitem.id}}
             />
           {{/if}}
-        {{/each}}
-      </li>
-    </ul>
+        </td>
+      </:body>
+    </KDataTable>
   {{else}}
     {{#if this.emptySearch}}
       <Auk::EmptyState
