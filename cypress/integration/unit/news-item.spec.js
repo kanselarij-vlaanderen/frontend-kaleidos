@@ -62,9 +62,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get('@checkboxValue').should('not.be.checked');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
+    // checkbox gets disabled during saving
     // checkbox is checked, toggle it back
     cy.get('@checkboxValue').should('be.checked');
-    cy.get('@checkboxContainer').click();
+    cy.get('@checkboxContainer').should('not.be.disabled')
+      .click();
     cy.wait('@patchNewsItems');
     // checkbox is unchecked
     cy.get('@checkboxValue').should('not.be.checked');
@@ -529,7 +531,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const agendaLinkMed = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289BFE536C464112FFE91';
     const agendaLinkNota = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289D3E536C464112FFE96';
     const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
-    // *note the next htmlContent is used in search.spec, keep them identical
+    // *note the next htmlContent is used in search-other-spec-data.spec, keep them identical
     const htmlContentNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
     const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';
@@ -543,7 +545,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
     // actual time is 14:00, but server time is being used as "local time" in the test it seems
-    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
+    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 14:00');
     cy.get(newsletter.newsletterPrint.container).should('have.length', 1);
     cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');
