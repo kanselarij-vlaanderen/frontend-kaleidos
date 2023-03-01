@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -164,9 +165,12 @@ context('Agendaitem document warning tests', () => {
     cy.get(route.agendaitemDocuments.add).click();
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems2');
+    cy.intercept('GET', '/pieces?filter**').as('loadNewPiece');
     cy.addNewDocumentsInUploadModal([newFile], 'agendaitems');
     cy.wait('@patchAgendaitems2');
-    cy.get(auk.loader).should('not.exist');
+    cy.wait('@loadNewPiece');
+    cy.get(auk.auModal.container).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.name.value).contains(newFile.fileName);
 
     // check upload new piece and cancel

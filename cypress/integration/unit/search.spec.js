@@ -46,9 +46,10 @@ context('Search tests', () => {
   });
 
   it('Searchfield should be empty after revisiting search page', () => {
+    const searchValue = 'TestSearchSet';
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
-    cy.get(route.search.input).type('TestSearchSet');
+    cy.get(route.search.input).type(searchValue);
     cy.get(route.search.trigger).click();
     cy.wait(500);
     cy.get(utils.mHeader.settings).click();

@@ -7,8 +7,7 @@
   <card.header>
     <div class="au-u-flex">
       <p class="au-u-para-small au-u-muted au-u-medium">
-        {{t "case-created"}}
-        {{date @created}}
+        {{date @sessionDate}}
       </p>
       {{#if (eq @isArchived "true")}}
         <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
