@@ -21,7 +21,7 @@ export default class AllTypes extends Route {
   };
 
   CONTENT_TYPES = {
-    'cases': {
+    cases: {
       searchType: 'decisionmaking-flows',
       searchFields: CasesSearchRoute.textSearchFields,
       highlightFields: CasesSearchRoute.highlightFields,
@@ -29,15 +29,15 @@ export default class AllTypes extends Route {
       createFilter: CasesSearchRoute.createFilter,
       retrieveDate: (case_) => case_.attributes.created,
     },
-    'agendaitems': {
+    agendaitems: {
       searchType: 'agendaitems',
       searchFields: AgendaItemsSearchRoute.textSearchFields,
       highlightFields: AgendaItemsSearchRoute.highlightFields,
       dataMapping: AgendaItemsSearchRoute.postProcessData,
       createFilter: AgendaItemsSearchRoute.createFilter,
-      retrieveDate: (agendaitem) => agendaitem.sessionDates
+      retrieveDate: (agendaitem) => agendaitem.sessionDates,
     },
-    'pieces': {
+    pieces: {
       searchType: 'pieces',
       searchFields: SearchDocumentsRoute.textSearchFields,
       highlightFields: SearchDocumentsRoute.highlightFields,
@@ -45,13 +45,13 @@ export default class AllTypes extends Route {
       createFilter: SearchDocumentsRoute.createFilter,
       retrieveDate: (piece) => piece.attributes.created,
     },
-    'decisions': {
+    decisions: {
       searchType: 'agendaitems',
       searchFields: SearchDecisionsRoute.textSearchFields,
       highlightFields: SearchDecisionsRoute.highlightFields,
       dataMapping: SearchDecisionsRoute.postProcessData,
       createFilter: SearchDecisionsRoute.createFilter,
-      retrieveDate: (decision) => decision.sessionDates
+      retrieveDate: (decision) => decision.sessionDates,
     },
     'news-items': {
       searchType: 'news-items',
@@ -59,7 +59,7 @@ export default class AllTypes extends Route {
       highlightFields: SearchNewsItemsRoute.highlightFields,
       dataMapping: SearchNewsItemsRoute.postProcessData,
       createFilter: SearchNewsItemsRoute.createFilter,
-      retrieveDate: (newsItem) => newsItem.latestAgendaitem.meetingDate
+      retrieveDate: (newsItem) => newsItem.latestAgendaitem.meetingDate,
     },
   };
 
@@ -118,7 +118,7 @@ export default class AllTypes extends Route {
       const d1 = new Date(this.CONTENT_TYPES[r1.name].retrieveDate(r1.data));
       const d2 = new Date(this.CONTENT_TYPES[r2.name].retrieveDate(r2.data));
       return d1 < d2;
-    }
+    };
     flatResults.sort(sortFunc);
 
     return flatResults;
