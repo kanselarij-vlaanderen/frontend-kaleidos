@@ -1162,5 +1162,6 @@
   "also-found-in": "Ook gevonden in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
-  "news-items": "Kort bestek berichten"
+  "news-items": "Kort bestek berichten",
+  "download-agenda-documents-info": "Vink de ministers aan wier documenten je wilt downloaden. Documenten zonder minister worden altijd toegevoegd aan het bestand."
 }

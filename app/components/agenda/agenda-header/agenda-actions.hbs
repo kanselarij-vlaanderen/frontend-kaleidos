@@ -223,6 +223,12 @@
   @onConfirm={{this.confirmDownloadDocuments}}
 >
   <:body>
+    <AuAlert
+      @skin="info"
+      @size="small"
+    >
+      <p>{{t "download-agenda-documents-info"}}</p>
+    </AuAlert>
     <Mandatees::CheckboxSelect
       @selected={{this.selectedMandatees}}
       @referenceAgenda={{@currentAgenda}}
