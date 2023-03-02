@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, Cypress, beforeEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
+// import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -301,5 +302,20 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
         .find(document.accessLevelPill.edit)
         .should('not.exist');
     });
+  });
+
+  context('Profile rights checks for kort-bestek routes', () => {
+    it.only('check that link to kort bestek zebra view doesnt work', () => {
+      const agendaDate = Cypress.dayjs('2022-04-05');
+
+      cy.openAgendaForDate(agendaDate);
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+      cy.url().should('not.include', 'vergadering/6374F696D9A98BD0A2288559/kort-bestek');
+    });
+
+    // no other tests here because there is no acces to kort bestek
   });
 });

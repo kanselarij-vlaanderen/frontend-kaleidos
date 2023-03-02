@@ -321,4 +321,29 @@ context('Testing the application as OVRB', () => {
         .should('not.exist');
     });
   });
+
+  context('Profile rights checks for kort-bestek routes', () => {
+    const kortBestekLink = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
+
+    it.only('check kort bestek zebra view', () => {
+      cy.visit(kortBestekLink);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+    });
+  });
 });
