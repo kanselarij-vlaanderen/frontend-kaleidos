@@ -1,10 +1,12 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import formatDate from '../utils/format-date-search-param';
-import { task } from 'ember-concurrency';
 
 export default class SearchController extends Controller {
+  @service router;
+
   queryParams = [
     {
       searchText: {
@@ -22,14 +24,12 @@ export default class SearchController extends Controller {
     },
   ];
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
-
   @tracked searchText = '';
   @tracked mandatees = [];
   @tracked dateFrom;
   @tracked dateTo;
+
   @tracked searchTextBuffer = '';
-  @tracked mandateesBuffer = [];
 
   @action
   search(e) {
@@ -49,18 +49,6 @@ export default class SearchController extends Controller {
 
   @action
   setMandatees(mandatees) {
-    this.mandatees = mandatees.map((minister) => minister.id);
-    this.mandateesBuffer = mandatees;
-  }
-
-  @task
-  *loadMinisters() {
-    if (this.mandatees) {
-      this.mandateesBuffer = (yield Promise.all(
-        this.mandatees?.map((id) => this.store.findRecord('person', id))
-      )).toArray();
-    } else {
-      this.mandateesBuffer = [];
-    }
+    this.mandatees = mandatees;
   }
 }

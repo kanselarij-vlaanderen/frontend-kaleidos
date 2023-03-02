@@ -48,8 +48,7 @@
     />
     <KDataTable
       data-test-route-search-agendaitems-data-table
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -60,62 +59,19 @@
       @onChangePage={{fn (mut this.page)}}
       @onClickRow={{this.navigateToAgendaitem}}
     >
-      <:header>
-        <th class="auk-table__col--7">
-          {{t "agendaitem-table-header"}}
-        </th>
-        <th class="auk-table__col--1">
-          {{t "agendaitem-type"}}
-        </th>
-        <th class="auk-table__col--1">
-          {{t "agenda-version"}}
-        </th>
-        <Utils::ThSortable
-          @class="auk-table__col--1"
-          @currentSorting={{this.sort}}
-          @field="sessionDates"
-          @label={{t "on-agenda-of"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p data-test-route-search-agendaitems-row-shorttitle>
-            {{#if row.shortTitle}}
-              {{row.shortTitle}}
-            {{else}}
-              {{row.title}}
-            {{/if}}
-          </p>
-        </td>
-        <td>
-          {{#if (is-announcement row.type)}}
-            {{capitalize (t "announcement")}}
-          {{else}}
-            {{t "note"}}
-          {{/if}}
-        </td>
-        <td>
-          {{#if (eq row.agendaSerialNumber.length 1)}}
-            {{t "agenda"}} {{row.agendaSerialNumber}}
-          {{else}}
-            {{t "agenda"}}
-          {{/if}}
-        </td>
-        <td>
-          {{date row.sessionDates}}
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="agenda.agendaitems.agendaitem"
-            @models={{array row.meetingId row.agendaId row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Agendaitem
+            @date={{row.sessionDates}}
+            @agendaItemType={{row.type}}
+            @agendaSerialNumber={{row.agendaSerialNumber}}
+            @meetingId={{row.meetingId}}
+            @agendaId={{row.agendaId}}
+            @agendaItemId={{row.id}}
+            @shortTitle={{row.shortTitle}}
+            @title={{row.title}}
+            @pastAgendaVersions={{row.pastAgendaVersions}}
+          />
         </td>
       </:body>
     </KDataTable>

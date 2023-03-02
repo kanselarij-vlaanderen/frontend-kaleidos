@@ -7,6 +7,7 @@ import {
 } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 /**
  * @param onLink {Function} Action executed when a piece is selected
@@ -16,7 +17,7 @@ export default class AddExistingPiece extends Component {
   @service store;
 
   @tracked page = 0;
-  @tracked size = 10;
+  @tracked size = PAGINATION_SIZES[1];
   @tracked filter = '';
 
   @tracked pieces = [];

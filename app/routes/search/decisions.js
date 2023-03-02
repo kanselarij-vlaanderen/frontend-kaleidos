@@ -25,14 +25,15 @@ export default class SearchDecisionsRoute extends Route {
 
   textSearchFields = [
     'subcaseTitle^2',
+    'subcaseShortTitle^2',
     'decisionName^2',
     'decisionFileName^2',
-    'decision.content'
+    'decision.content',
   ];
 
   model(filterParams) {
     const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+    const params = { ...searchParams, ...filterParams };
 
     if (!params.dateFrom) {
       params.dateFrom = null;
@@ -63,7 +64,10 @@ export default class SearchDecisionsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -72,18 +76,32 @@ export default class SearchDecisionsRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
+    // Since all agendaitem versions point to the same treatment, only use latest agendaitems
+    filter[':has-no:nextVersionId'] = 't';
+
     if (isEmpty(params.searchText)) {
       return [];
     }
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route
-    return search('agendaitems', params.page, params.size, params.sort, filter, async (agendaitem) => {
-      const entry = agendaitem.attributes;
-      entry.id = agendaitem.id;
-      await this.postProcessDecisions(entry);
-      return entry;
-    });
+    return search(
+      'agendaitems',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      async (agendaitem) => {
+        this.postProcessHighlights(agendaitem);
+        const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
+        entry.id = agendaitem.id;
+        await this.postProcessDecisions(entry);
+        return entry;
+      },
+      {
+        fields: ['subcaseShortTitle,subcaseTitle'],
+      }
+    );
   }
 
   setupController(controller) {
@@ -110,6 +128,16 @@ export default class SearchDecisionsRoute extends Route {
         'concept',
         entry.decisionResult
       );
+    }
+  }
+
+  postProcessHighlights(entry) {
+    if (Array.isArray(entry.highlight?.subcaseTitle)) {
+      entry.highlight.subcaseTitle = entry.highlight.subcaseTitle[0];
+    }
+
+    if (Array.isArray(entry.highlight?.subcaseShortTitle)) {
+      entry.highlight.subcaseShortTitle = entry.highlight.subcaseShortTitle[0];
     }
   }
 }

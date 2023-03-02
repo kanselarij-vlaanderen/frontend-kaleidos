@@ -75,10 +75,9 @@ export default class SearchDocumentsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:created'] = [
-        to.toISOString(),
-        from.toISOString(),
-      ].join(',');
+      filter[':lte,gte:created'] = [to.toISOString(), from.toISOString()].join(
+        ','
+      );
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:created'] = date.toISOString();
@@ -90,7 +89,7 @@ export default class SearchDocumentsRoute extends Route {
     if (params.confidentialOnly) {
       filter[':terms:accessLevel'] = [
         CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
-        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
       ];
     }
 
@@ -104,13 +103,13 @@ export default class SearchDocumentsRoute extends Route {
       return [];
     }
 
-    // session-dates can contain multiple values.
+    // created can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
-    if (params.sort === 'session-dates') {
-      sort = ':min:session-dates';
-    } else if (params.sort === '-session-dates') {
-      sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
+    if (params.sort === 'created') {
+      sort = ':min:created';
+    } else if (params.sort === '-created') {
+      sort = '-:max:created'; // correctly converted to mu-search syntax by the mu-search util
     }
 
     return search(
@@ -120,10 +119,12 @@ export default class SearchDocumentsRoute extends Route {
       sort,
       filter,
       async (searchData) => {
-        const entry = searchData.attributes;
-        entry.id = searchData.id;
-        await this.postProcessAccessLevel(entry);
-        return entry;
+        await this.postProcessAccessLevel(searchData.attributes);
+        this.postProcessAgendaitems(searchData.attributes);
+        return searchData;
+      },
+      {
+        fields: ['title', 'fileName', 'data.content'],
       }
     );
   }
@@ -161,7 +162,21 @@ export default class SearchDocumentsRoute extends Route {
         );
         entry.accessLevel = entry.accessLevel[0];
       }
-      entry.accessLevel = await this.store.findRecordByUri('concept', entry.accessLevel);
+      entry.accessLevel = await this.store.findRecordByUri(
+        'concept',
+        entry.accessLevel
+      );
+    }
+  }
+
+  postProcessAgendaitems(entry) {
+    const agendaitems = entry.agendaitems;
+    if (Array.isArray(agendaitems)) {
+      entry.latestAgendaitem = agendaitems.find((agendaitem) => {
+        return agendaitem['nextVersionId'] == null;
+      });
+    } else {
+      entry.latestAgendaitem = agendaitems;
     }
   }
 }

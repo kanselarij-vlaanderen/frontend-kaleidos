@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "5.45.6",
+  "version": "5.46.4",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -153,6 +153,5 @@
   },
   "engines": {
     "node": "12 || 14 || >= 16"
-  },
-  "dependencies": {}
+  }
 }

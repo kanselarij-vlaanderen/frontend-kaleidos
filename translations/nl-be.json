@@ -475,6 +475,8 @@
   "normal-meeting": "Niet-elektronisch",
   "flemish-government": "Vlaamse Regering",
   "added-agendaitem-text": "Nieuw agendapunt",
+  "show-changes": "Toon aangepaste punten",
+  "show-all": "Toon alle punten",
   "national-number": "VO-ID",
   "last-name": "Achternaam",
   "group": "Groep",
@@ -1149,6 +1151,16 @@
   "decisions": "Beslissingen",
   "delete-empty-case": "Leeg dossier verwijderen?",
   "delete-empty-case-confirmation": "Dossier ''{case}'' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?",
+  "deleted-case": "Verwijderd dossier",
+  "removed-cases": "Verwijderde dossiers",
   "open": "Open",
-  "removed-cases": "Verwijderde dossiers"
+  "out": "Uit",
+  "found-inside": "Gevonden in",
+  "found-in-thing": "Gevonden in {thing}",
+  "and-one-other-subcase": "en nog 1 andere procedurestap",
+  "and-n-other-subcases": "en nog {n} andere procedurestappen",
+  "also-found-in": "Ook gevonden in",
+  "uploaded-in-thing": "Geüpload in {thing}",
+  "creation-date": "Aanmaakdatum",
+  "news-items": "Kort bestek berichten"
 }

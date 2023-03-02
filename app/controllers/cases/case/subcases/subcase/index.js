@@ -4,13 +4,14 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
   @service currentSession;
 
   @tracked page = 0;
-  @tracked size = 25;
+  @tracked size = PAGINATION_SIZES[3];
 
   @tracked decisionmakingFlow;
   @tracked mandatees;

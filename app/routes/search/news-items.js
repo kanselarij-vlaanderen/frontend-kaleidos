@@ -42,7 +42,8 @@ export default class SearchNewsItemsRoute extends Route {
 
     if (!isEmpty(params.searchText)) {
       filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    } if (!isEmpty(params.mandatees)) {
+    }
+    if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
     }
 
@@ -53,7 +54,10 @@ export default class SearchNewsItemsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:agendaitems.meetingDate'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:agendaitems.meetingDate'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:agendaitems.meetingDate'] = date.toISOString();
@@ -69,14 +73,24 @@ export default class SearchNewsItemsRoute extends Route {
       return [];
     }
 
-    return search('news-items', params.page, params.size, params.sort, filter, (newsItem) => {
-      const entry = newsItem.attributes;
-      entry.id = newsItem.id;
-      this.postProcessAgendaitems(newsItem);
-      this.postProcessDecisions(newsItem);
-      this.postProcessMandatees(newsItem);
-      return entry;
-    });
+    return search(
+      'news-items',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      (newsItem) => {
+        this.postProcessHighlights(newsItem);
+        const entry = { ...newsItem.attributes, ...newsItem.highlight };
+        entry.id = newsItem.id;
+        this.postProcessAgendaitems(entry);
+        this.postProcessMandatees(entry);
+        return entry;
+      },
+      {
+        fields: ['title,subTitle,htmlContent'],
+      }
+    );
   }
 
   setupController(controller) {
@@ -100,33 +114,37 @@ export default class SearchNewsItemsRoute extends Route {
   }
 
   postProcessAgendaitems(newsletter) {
-    const agendaitems = newsletter.attributes.agendaitems;
+    const agendaitems = newsletter.agendaitems;
     if (Array.isArray(agendaitems)) {
-      newsletter.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
+      newsletter.latestAgendaitem = agendaitems.find((agendaitem) => {
         return agendaitem['nextVersionId'] == null;
       });
     } else {
-      newsletter.attributes.latestAgendaitem = agendaitems;
-    }
-  }
-
-  postProcessDecisions(newsletter) {
-    const decisions = newsletter.attributes.decisions;
-    if (Array.isArray(decisions)) {
-      // TODO for now, if there are multiple decisions, we just grab the first one
-      newsletter.attributes.decision = decisions.firstObject;
-    } else {
-      newsletter.attributes.decision = decisions;
+      newsletter.latestAgendaitem = agendaitems;
     }
   }
 
   postProcessMandatees(newsletter) {
-    const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
+    const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
       const sortedMandatees = mandatees.sortBy('priority');
-      newsletter.attributes.mandatees = sortedMandatees;
+      newsletter.mandatees = sortedMandatees;
     } else {
-      newsletter.attributes.mandatees = [mandatees];
+      newsletter.mandatees = [mandatees];
+    }
+  }
+
+  postProcessHighlights(entry) {
+    if (Array.isArray(entry.highlight?.title)) {
+      entry.highlight.title = entry.highlight.title[0];
+    }
+
+    if (Array.isArray(entry.highlight?.subTitle)) {
+      entry.highlight.subTitle = entry.highlight.subTitle[0];
+    }
+
+    if (Array.isArray(entry.highlight?.htmlContent)) {
+      entry.highlight.htmlContent = entry.highlight.htmlContent[0];
     }
   }
 }
