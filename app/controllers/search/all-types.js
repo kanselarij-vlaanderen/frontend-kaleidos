@@ -20,6 +20,7 @@ export default class AllTypesController extends Controller {
   sortOptions = [{ value: '-session-dates', label: this.intl.t('date') }];
 
   @tracked sort;
+  @tracked searchText;
 
   constructor() {
     super(...arguments);
