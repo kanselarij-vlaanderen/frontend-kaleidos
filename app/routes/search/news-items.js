@@ -81,6 +81,18 @@ export default class SearchNewsItemsRoute extends Route {
       filter,
       (newsItem) => {
         this.postProcessHighlights(newsItem);
+        // Currently highlights return a snippet. When no highlighting is
+        // found, we display the whole text, which is jarring when both
+        // are intertwined. So we will have htmlContent contain a
+        // snippet as well for consistency. Once we expose the necessary
+        // highlighting options via mu-search we can remove this.
+        // Note: we don't need to care about unclosed tags. Browsers
+        // should deal with that anyway.
+        let htmlContent = newsItem.attributes.htmlContent;
+        if (htmlContent) {
+          htmlContent = htmlContent.split(' ').slice(0, 14).join(' ');
+          newsItem.attributes.htmlContent = htmlContent;
+        }
         const entry = { ...newsItem.attributes, ...newsItem.highlight };
         entry.id = newsItem.id;
         this.postProcessAgendaitems(entry);
