@@ -208,6 +208,7 @@ context('new document viewer tests', () => {
     // replace word file with new word file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.wait(1000);
     cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // delete document and check
