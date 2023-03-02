@@ -82,6 +82,8 @@ export default class AgendaitemControls extends Component {
   async deleteItem(agendaitem) {
     this.isVerifying = false;
     this.showLoader = true;
+    const agendaItemType = await agendaitem.type;
+    const previousNumber = agendaitem.number;
     if (await this.isDeletable) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -89,7 +91,7 @@ export default class AgendaitemControls extends Component {
     }
 
     if (this.args.onDeleteAgendaitem) {
-      await this.args.onDeleteAgendaitem();
+      await this.args.onDeleteAgendaitem(agendaItemType, previousNumber);
     }
     this.showLoader = false;
   }
