@@ -140,7 +140,6 @@ Router.map(function() {
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
-    this.route('toggle');
     this.route('toolbar');
     this.route('navbar');
     this.route('modal');
