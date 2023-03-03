@@ -144,6 +144,7 @@ const groups = [
     permissions: [
       'manage-news-items',
       'manage-themis-publications',
+      'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
       'search-confidential-cases',
