@@ -38,6 +38,7 @@
       <:body as |row|>
         <td>
           <Search::ResultCards::Document
+            @date={{row.attributes.meetingDate}}
             @created={{row.attributes.created}}
             @documentId={{row.id}}
             @title={{if
