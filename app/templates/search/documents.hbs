@@ -40,11 +40,10 @@
           <Search::ResultCards::Document
             @created={{row.attributes.created}}
             @documentId={{row.id}}
-            @title={{row.attributes.title}}
-            @fileName={{if
-              row.highlight.fileName
-              row.highlight.fileName
-              row.attributes.fileName
+            @title={{if
+              row.highlight.title
+              row.highlight.title
+              row.attributes.title
             }}
             @agendaitemShortTitle={{row.attributes.latestAgendaitem.shortTitle}}
             @meetingId={{row.attributes.latestAgendaitem.meetingId}}
