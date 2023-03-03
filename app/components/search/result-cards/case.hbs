@@ -19,10 +19,12 @@
         @route="cases.case.subcases"
         @model={{@caseId}}
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{if @shortTitle @shortTitle @title}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </card.header>
@@ -34,7 +36,6 @@
           <SanitizeHtml
             @raw={{true}}
             @value={{object-at 0 @subcaseHighlights}}
-            @options={{this.sanitizeHtmlOptions}}
           />
         </span>
         {{#if (eq @subcaseHighlights.length 2)}}

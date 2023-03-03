@@ -13,10 +13,12 @@
         @icon="document"
         @iconAlignment="left"
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@fileName}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@fileName}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </c.header>
@@ -33,10 +35,12 @@
           @route="agenda.agendaitems.agendaitem"
           @models={{array @meetingId @agendaId @agendaitemId}}
         >
-          <SanitizeHtml
-            @raw={{true}}
-            @value={{@agendaitemShortTitle}}
-          />
+          <span>
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{@agendaitemShortTitle}}
+            />
+          </span>
         </AuLink>
       </p>
     {{/if}}
