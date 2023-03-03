@@ -32,7 +32,7 @@ export default class SearchDocumentsController extends Controller {
   ];
 
   sortOptions = [
-    { value: '-created', label: this.intl.t('creation-date') },
+    { value: '-agendaitems.meetingDate', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
   ];
 
