@@ -3,6 +3,17 @@
 
 // SCSS variables (to override)
 
+$mq-breakpoints: (
+  xsmall: 300px,
+  small: 500px,
+  medium: 767px,
+  large: 1023px,
+);
+
+$au-layout-width: 767px;
+$au-layout-width-small: 500px;
+$au-layout-width-large: 1023px;
+
 $au-button-height: 3.4rem;
 
 

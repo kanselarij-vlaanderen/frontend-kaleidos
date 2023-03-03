@@ -2,7 +2,13 @@
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       <p class="au-u-para-small au-u-muted au-u-medium">
-        {{date @created}}
+        {{#if @date}}
+          {{date @date}}
+        {{else}}
+          {{#if @created}}
+            {{t "creation-date"}}: {{date @created}}
+          {{/if}}
+        {{/if}}
       </p>
     </div>
     <AuHeading @level="3" @skin="6">
@@ -16,7 +22,7 @@
         <span>
           <SanitizeHtml
             @raw={{true}}
-            @value={{@fileName}}
+            @value={{@title}}
           />
         </span>
       </AuLink>
@@ -42,6 +48,10 @@
             />
           </span>
         </AuLink>
+      </p>
+    {{else}}
+      <p class="au-u-para-small au-u-muted">
+        {{t "document-not-on-agendaitem"}}
       </p>
     {{/if}}
   </c.content>

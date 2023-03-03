@@ -1162,5 +1162,6 @@
   "also-found-in": "Ook gevonden in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
-  "news-items": "Kort bestek berichten"
+  "news-items": "Kort bestek berichten",
+  "document-not-on-agendaitem": "Niet geüpload op een agendapunt"
 }
