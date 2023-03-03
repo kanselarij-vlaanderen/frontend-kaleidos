@@ -11,10 +11,6 @@ export default class CasesSearchRoute extends Route {
       refreshModel: true,
       as: 'gearchiveerd',
     },
-    decisionsOnly: {
-      refreshModel: true,
-      as: 'enkel_beslissingen',
-    },
     confidentialOnly: {
       refreshModel: true,
       as: 'enkel_vertrouwelijk',
@@ -98,16 +94,13 @@ export default class CasesSearchRoute extends Route {
       'newsItem',
       'subcaseTitle^2',
       'subcaseSubTitle^2',
+      'documentNames^2',
+      'documentFileNames^2',
+      'documents.content',
+      'decisionNames^2',
+      'decisionFileNames^2',
+      'decisions.content',
     ];
-    if (params.decisionsOnly) {
-      textSearchFields.push(
-        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
-      );
-    } else {
-      textSearchFields.push(
-        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
-      );
-    }
 
     const searchModifier = ':sqs:';
     const textSearchKey = textSearchFields.join(',');
