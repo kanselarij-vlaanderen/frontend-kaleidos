@@ -52,7 +52,7 @@
         <td>
           {{#if (eq row.name "cases")}}
             <Search::ResultCards::Case
-              @created={{row.data.attributes.created}}
+              @date={{row.data.attributes.sessionDates}}
               @shortTitle={{row.data.highlight.shortTitle}}
               @title={{row.data.highlight.title}}
               @caseId={{row.data.id}}
@@ -75,13 +75,13 @@
           {{/if}}
           {{#if (eq row.name "pieces")}}
             <Search::ResultCards::Document
+              @date={{row.data.attributes.meetingDate}}
               @created={{row.data.attributes.created}}
               @documentId={{row.data.id}}
-              @title={{row.data.attributes.title}}
-              @fileName={{if
-                row.data.highlight.fileName
-                row.data.highlight.fileName
-                row.data.attributes.fileName
+              @title={{if
+                row.data.highlight.title
+                row.data.highlight.title
+                row.data.attributes.title
               }}
               @agendaitemShortTitle={{row.data.attributes.latestAgendaitem.shortTitle}}
               @meetingId={{row.data.attributes.latestAgendaitem.meetingId}}
