@@ -6,20 +6,26 @@
 >
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-      <AuPill @size="small">
+      <AuPill
+        data-test-route-search-result-cards-agendaitem-type
+        @size="small"
+      >
         {{#if (is-announcement @agendaItemType)}}
           {{capitalize (t "announcement")}}
         {{else}}
           {{t "note"}}
         {{/if}}
       </AuPill>
-      <p class="au-u-para-small au-u-muted au-u-medium">
+      <p
+        data-test-route-search-result-cards-agendaitem-date
+        class="au-u-para-small au-u-muted au-u-medium"
+      >
         {{date @date}}
       </p>
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
-        data-test-route-search-agendaitems-row-shorttitle
+        data-test-route-search-result-cards-agendaitem-shorttitle
         class="au-u-padding-none"
         @route="agenda.agendaitems.agendaitem"
 
@@ -33,13 +39,19 @@
     </AuHeading>
   </c.header>
   <c.content>
-    <p class="au-u-para">
+    <p
+      data-test-route-search-result-cards-agendaitem-title
+      class="au-u-para"
+    >
       <SanitizeHtml
         @raw={{true}}
         @value={{@title}}
       />
     </p>
-    <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+    <p
+      data-test-route-search-result-cards-agendaitem-agenda-serial-number
+      class="au-u-para-small au-u-margin-top-small au-u-muted"
+    >
       {{t "out"}}
       <span class="au-u-medium">
         {{t "agenda-version"}}
@@ -47,7 +59,10 @@
       </span>
     </p>
     {{#if @pastAgendaVersions}}
-      <p class="au-u-para-small au-u-margin-top-none au-u-muted">
+      <p
+        data-test-route-search-result-cards-agendaitem-past-agenda-version
+        class="au-u-para-small au-u-margin-top-none au-u-muted"
+      >
         {{t "also-found-in"}}
         {{#each @pastAgendaVersions as |pastAgendaVersion|}}
           <span class="au-u-medium">

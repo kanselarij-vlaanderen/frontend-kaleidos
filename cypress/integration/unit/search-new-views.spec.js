@@ -53,7 +53,7 @@ context('New search views tests', () => {
       cy.get(route.searchConfidentialOnly.checkbox);
     });
 
-    it('Search for non-existing and existing searchterm in dossiers', () => {
+    it('Search for non-existing and existing searchterm in dossiers and check resultcard', () => {
       const searchTerm = 'assign mandatee';
 
       // search for non-existing searchterm
@@ -80,7 +80,11 @@ context('New search views tests', () => {
       cy.get(route.searchCases.dataTable).find('tbody')
         .children('tr')
         .should('have.length', 1);
-      cy.get(route.searchCases.row.shortTitle).contains('mandatee');
+      cy.get(route.caseResultCard.shortTitleLink).contains('mandatee');
+
+      // check resultcard
+      cy.get(route.caseResultCard.sessionDate);
+      cy.get(route.caseResultCard.foundSubcases);
     });
   });
 
@@ -93,9 +97,10 @@ context('New search views tests', () => {
       searchFunction(options);
     });
 
-    it.only('Should check all filters', () => {
+    it('Should check all filters', () => {
       cy.get(route.search.to);
       cy.get(route.search.from);
+      cy.get(auk.loader).should('not.exist');
 
       cy.get(route.searchMinisterFilter.list);
 
@@ -129,7 +134,15 @@ context('New search views tests', () => {
       cy.get(route.searchAgendaitems.dataTable).find('tbody')
         .children('tr')
         .should('have.length', 3);
-      cy.get(route.searchAgendaitems.row.shortTitle).contains(searchTerm);
+      cy.get(route.agendaitemResultCard.shortTitleLink).contains(searchTerm);
+
+      // check resultcard
+      cy.get(route.agendaitemResultCard.type).contains('Nota');
+      cy.get(route.agendaitemResultCard.date);
+      cy.get(route.agendaitemResultCard.title).contains('Cypress test voor het toewijzen van een minister voor agendering vanuit procedurestap');
+      cy.get(route.agendaitemResultCard.agendaSerialNumber).contains('Uit Agenda versie A');
+      // TODO check result with past agendaversion?
+      cy.get(route.agendaitemResultCard.pastAgendaVersion).should('not.exist');
     });
   });
 
@@ -170,13 +183,19 @@ context('New search views tests', () => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
 
-      cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
+      cy.intercept('GET', '/pieces/search?**').as('searchCall2');
       cy.get(route.search.trigger).click()
         .wait('@searchCall2');
 
-      cy.get(route.searchDocuments.dataTable).find('tbody')
-        .children('tr');
-      cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+      // cy.get(route.searchDocuments.dataTable).find('tbody')
+      //   .children('tr');
+      cy.get(route.documentResultCard.filename).contains('test.pdf');
+      // TODO check if changing document title shows in result?
+
+      // check resultcard
+      cy.get(route.documentResultCard.dateCreated);
+      // TODO check shorttitle?
+      cy.get(route.documentResultCard.agendaItem).contains('Geüpload in agendapunt');
     });
   });
 
@@ -217,9 +236,14 @@ context('New search views tests', () => {
       cy.get(route.search.trigger).click()
         .wait('@searchCall2');
 
-      cy.get(route.searchDecisions.dataTable).find('tbody')
-        .children('tr');
-      cy.get(route.searchDecisions.row.title).contains(searchTerm);
+      // cy.get(route.searchDecisions.dataTable).find('tbody')
+      //   .children('tr');
+      cy.get(route.decisionResultCard.shortTitleLink).contains(searchTerm);
+
+      // check resultcard
+      cy.get(route.decisionResultCard.date);
+      cy.get(route.decisionResultCard.result);
+      // TODO check different pills?
     });
   });
 
@@ -257,14 +281,19 @@ context('New search views tests', () => {
       cy.get(route.search.input).clear();
       cy.get(route.search.input).type(searchTerm);
 
-      cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
+      cy.intercept('GET', '/news-items/search?**').as('searchCall2');
       cy.get(route.search.trigger).click()
         .wait('@searchCall2');
 
-      cy.get(route.searchNewsletters.dataTable).find('tbody')
-        .children('tr')
-        .should('have.length', 3);
-      cy.get(route.searchNewsletters.row.title).contains(searchTerm);
+      // cy.get(route.searchNewsletters.dataTable).find('tbody')
+      //   .children('tr')
+      //   .should('have.length', 3);
+      cy.get(route.newsItemResultCard.titleLink).contains(searchTerm);
+
+      // check resultcard
+      cy.get(route.newsItemResultCard.date);
+      cy.get(route.newsItemResultCard.text);
+      cy.get(route.newsItemResultCard.mandatees);
     });
   });
 });

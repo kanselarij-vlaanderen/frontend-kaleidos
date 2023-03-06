@@ -102,9 +102,6 @@ const selectors = {
       finalAgenda: '[data-test-route-search-agendaitems-final-agenda-filter]',
     },
     dataTable: '[data-test-route-search-agendaitems-data-table]',
-    row: {
-      shortTitle: '[data-test-route-search-agendaitems-row-shorttitle]',
-    },
   },
 
   // search/cases
@@ -112,9 +109,6 @@ const selectors = {
     toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
     removedCasesList: '[data-test-route-search-removed-cases-list]',
     dataTable: '[data-test-route-search-cases-data-table]',
-    row: {
-      shortTitle: '[data-test-route-search-cases-shortTitle]',
-    },
   },
 
   // search/newsletters
@@ -169,6 +163,44 @@ const selectors = {
     list: '[data-test-route-search-document-type-filter-list]',
   },
 
+  // search/result-cards/case
+  caseResultCard: {
+    sessionDate: '[data-test-route-search-result-cards-case-sessiondate]',
+    shortTitleLink: '[data-test-route-search-result-cards-case-shorttitle]',
+    foundSubcases: '[data-test-route-search-result-cards-case-found-subcases]',
+  },
+
+  // search/result-cards/agendaitem
+  agendaitemResultCard: {
+    type: '[data-test-route-search-result-cards-agendaitem-type]',
+    date: '[data-test-route-search-result-cards-agendaitem-date]',
+    shortTitleLink: '[data-test-route-search-result-cards-agendaitem-shorttitle]',
+    title: '[data-test-route-search-result-cards-agendaitem-title]',
+    agendaSerialNumber: '[data-test-route-search-result-cards-agendaitem-agenda-serial-number]',
+    pastAgendaVersion: '[data-test-route-search-result-cards-agendaitem-past-agenda-version]',
+  },
+
+  // search/result-cards/document
+  documentResultCard: {
+    dateCreated: '[data-test-route-search-result-cards-document-date-created]',
+    filename: '[data-test-route-search-result-cards-document-filename]',
+    agendaItem: '[data-test-route-search-result-cards-document-agendaitem]',
+  },
+
+  // search/result-cards/document
+  decisionResultCard: {
+    date: '[data-test-route-search-result-cards-decision-date]',
+    shortTitleLink: '[data-test-route-search-result-cards-decision-shorttitle]',
+    result: '[data-test-route-search-result-cards-decision-result]',
+  },
+
+  // search/result-cards/document
+  newsItemResultCard: {
+    date: '[data-test-route-search-result-cards-news-item-date]',
+    titleLink: '[data-test-route-search-result-cards-news-item-title]',
+    text: '[data-test-route-search-result-cards-news-item-text]',
+    mandatees: '[data-test-route-search-result-cards-news-item-mandatees]',
+  },
   /**
     ROUTE NEWSLETTER
   */
