@@ -4,6 +4,7 @@ import { isEmpty } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import { inject as service } from '@ember/service';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
@@ -47,7 +48,7 @@ export default class SearchDecisionsRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;

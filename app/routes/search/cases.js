@@ -4,16 +4,13 @@ import { action } from '@ember/object';
 import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
     archived: {
       refreshModel: true,
       as: 'gearchiveerd',
-    },
-    decisionsOnly: {
-      refreshModel: true,
-      as: 'enkel_beslissingen',
     },
     confidentialOnly: {
       refreshModel: true,
@@ -45,6 +42,12 @@ export default class CasesSearchRoute extends Route {
     'newsItem',
     'subcaseTitle^2',
     'subcaseSubTitle^2',
+    'documentNames^2',
+    'documentFileNames^2',
+    'documents.content',
+    'decisionNames^2',
+    'decisionFileNames^2',
+    'decisions.content',
   ];
   static highlightFields = [
     'title',
@@ -102,24 +105,13 @@ export default class CasesSearchRoute extends Route {
 
   static createFilter(params) {
     const textSearchFields = [...CasesSearchRoute.textSearchFields];
-
-    if (params.decisionsOnly) {
-      textSearchFields.push(
-        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
-      );
-    } else {
-      textSearchFields.push(
-        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
-      );
-    }
-
     const searchModifier = ':sqs:';
     const textSearchKey = textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {

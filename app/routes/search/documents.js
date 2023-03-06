@@ -7,6 +7,7 @@ import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDocumentsRoute extends Route {
   @service store;
@@ -39,10 +40,10 @@ export default class SearchDocumentsRoute extends Route {
 
   static postProcessData = async (searchData, store) => {
     await SearchDocumentsRoute.postProcessAccessLevel(
-      searchData.attributes,
+      searchData,
       store
     );
-    SearchDocumentsRoute.postProcessAgendaitems(searchData.attributes);
+    SearchDocumentsRoute.postProcessAgendaitems(searchData);
     return searchData;
   };
 
@@ -53,7 +54,7 @@ export default class SearchDocumentsRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {
@@ -67,15 +68,16 @@ export default class SearchDocumentsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:created'] = [to.toISOString(), from.toISOString()].join(
-        ','
-      );
+      filter[':lte,gte:agendaitems.meetingDate'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
-      filter[':gte:created'] = date.toISOString();
+      filter[':gte:agendaitems.meetingDate'] = date.toISOString();
     } else if (!isEmpty(params.dateTo)) {
       const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte:created'] = date.toISOString();
+      filter[':lte:agendaitems.meetingDate'] = date.toISOString();
     }
 
     if (params.confidentialOnly) {
@@ -119,14 +121,22 @@ export default class SearchDocumentsRoute extends Route {
       return [];
     }
 
-    // created can contain multiple values.
+    // agendaitems.meetingDate can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
-    if (params.sort === 'created') {
-      sort = ':min:created';
-    } else if (params.sort === '-created') {
-      sort = '-:max:created'; // correctly converted to mu-search syntax by the mu-search util
+    if (params.sort === 'agendaitems.meetingDate') {
+      sort = ':min:agendaitems.meetingDate';
+    } else if (params.sort === '-agendaitems.meetingDate') {
+      sort = '-:max:agendaitems.meetingDate'; // correctly converted to mu-search syntax by the mu-search util
     }
+
+    // in case we only want to show latest piece?
+    // if (params.latestOnly) {
+    filter[':has-no:nextPieceId'] = 't';
+    // }
+
+    // in case we only want to show pieces with connected agendaitems
+    // filter[':has:agendaitems'] = 't';
 
     return search(
       'pieces',
@@ -166,29 +176,38 @@ export default class SearchDocumentsRoute extends Route {
   }
 
   static async postProcessAccessLevel(entry, store) {
-    if (entry.accessLevel) {
-      if (Array.isArray(entry.accessLevel)) {
+    if (entry.attributes.accessLevel) {
+      if (Array.isArray(entry.attributes.accessLevel)) {
         warn(
-          `Piece ${entry.id} has multiple access levels. We will display the first one`,
+          `Piece ${entry.attributes.id} has multiple access levels. We will display the first one`,
           { id: 'piece.multiple-access-levels' }
         );
-        entry.accessLevel = entry.accessLevel[0];
+        entry.attributes.accessLevel = entry.attributes.accessLevel[0];
       }
-      entry.accessLevel = await store.findRecordByUri(
+      entry.attributes.accessLevel = await store.findRecordByUri(
         'concept',
-        entry.accessLevel
+        entry.attributes.accessLevel
       );
     }
   }
 
   static postProcessAgendaitems(entry) {
-    const agendaitems = entry.agendaitems;
+    const agendaitems = entry.attributes.agendaitems;
     if (Array.isArray(agendaitems)) {
-      entry.latestAgendaitem = agendaitems.find((agendaitem) => {
+      entry.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
         return agendaitem['nextVersionId'] == null;
       });
     } else {
-      entry.latestAgendaitem = agendaitems;
+      entry.attributes.latestAgendaitem = agendaitems;
+    }
+    const meetingDate = entry.attributes.latestAgendaitem?.meetingDate;
+    if (meetingDate) {
+      if (Array.isArray(meetingDate)) {
+        const sorted = meetingDate.sort();
+        entry.attributes.meetingDate = sorted[sorted.length - 1];
+      } else {
+        entry.attributes.meetingDate = meetingDate;
+      }
     }
   }
 }
