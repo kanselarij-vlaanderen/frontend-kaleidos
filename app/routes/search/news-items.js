@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchNewsItemsRoute extends Route {
   queryParams = {
@@ -41,7 +42,7 @@ export default class SearchNewsItemsRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;

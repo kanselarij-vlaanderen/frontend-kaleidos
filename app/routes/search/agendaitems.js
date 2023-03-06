@@ -5,6 +5,7 @@ import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class AgendaitemSearchRoute extends Route {
   queryParams = {
@@ -78,7 +79,7 @@ export default class AgendaitemSearchRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;

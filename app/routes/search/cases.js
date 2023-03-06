@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
@@ -115,7 +116,7 @@ export default class CasesSearchRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {

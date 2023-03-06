@@ -7,6 +7,7 @@ import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDocumentsRoute extends Route {
   @service store;
@@ -61,7 +62,7 @@ export default class SearchDocumentsRoute extends Route {
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {
