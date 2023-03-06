@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchNewsItemsRoute extends Route {
   queryParams = {
@@ -20,28 +21,38 @@ export default class SearchNewsItemsRoute extends Route {
     },
   };
 
-  textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
+  static textSearchFields = ['title^3', 'subtitle^3', 'htmlContent'];
+  static highlightFields = ['title,subTitle,htmlContent'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
-    if (!params.dateFrom) {
-      params.dateFrom = null;
+  static postProcessData = (newsItem) => {
+    SearchNewsItemsRoute.postProcessHighlights(newsItem);
+    // Currently highlights return a snippet. When no highlighting is
+    // found, we display the whole text, which is jarring when both
+    // are intertwined. So we will have htmlContent contain a
+    // snippet as well for consistency. Once we expose the necessary
+    // highlighting options via mu-search we can remove this.
+    // Note: we don't need to care about unclosed tags. Browsers
+    // should deal with that anyway.
+    let htmlContent = newsItem.attributes.htmlContent;
+    if (htmlContent) {
+      htmlContent = htmlContent.split(' ').slice(0, 14).join(' ');
+      newsItem.attributes.htmlContent = htmlContent;
     }
-    if (!params.dateTo) {
-      params.dateTo = null;
-    }
-    if (!params.mandatees) {
-      params.mandatees = null;
-    }
+    const entry = { ...newsItem.attributes, ...newsItem.highlight };
+    entry.id = newsItem.id;
+    SearchNewsItemsRoute.postProcessAgendaitems(entry);
+    SearchNewsItemsRoute.postProcessMandatees(entry);
+    return entry;
+  };
 
+  static createFilter(params) {
     const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
+    const textSearchKey = SearchNewsItemsRoute.textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
@@ -69,6 +80,24 @@ export default class SearchNewsItemsRoute extends Route {
     // Filter out news-items that are not linked to a meeting via treatment(s)/agendaitem(s)
     filter[':has:agendaitems'] = 't';
 
+    return filter;
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+    if (!params.dateFrom) {
+      params.dateFrom = null;
+    }
+    if (!params.dateTo) {
+      params.dateTo = null;
+    }
+    if (!params.mandatees) {
+      params.mandatees = null;
+    }
+
+    const filter = SearchNewsItemsRoute.createFilter(params);
+
     if (isEmpty(params.searchText)) {
       return [];
     }
@@ -79,16 +108,9 @@ export default class SearchNewsItemsRoute extends Route {
       params.size,
       params.sort,
       filter,
-      (newsItem) => {
-        this.postProcessHighlights(newsItem);
-        const entry = { ...newsItem.attributes, ...newsItem.highlight };
-        entry.id = newsItem.id;
-        this.postProcessAgendaitems(entry);
-        this.postProcessMandatees(entry);
-        return entry;
-      },
+      SearchNewsItemsRoute.postProcessData,
       {
-        fields: ['title,subTitle,htmlContent'],
+        fields: SearchNewsItemsRoute.highlightFields,
       }
     );
   }
@@ -113,7 +135,7 @@ export default class SearchNewsItemsRoute extends Route {
     return false;
   }
 
-  postProcessAgendaitems(newsletter) {
+  static postProcessAgendaitems(newsletter) {
     const agendaitems = newsletter.agendaitems;
     if (Array.isArray(agendaitems)) {
       newsletter.latestAgendaitem = agendaitems.find((agendaitem) => {
@@ -124,7 +146,7 @@ export default class SearchNewsItemsRoute extends Route {
     }
   }
 
-  postProcessMandatees(newsletter) {
+  static postProcessMandatees(newsletter) {
     const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
       const sortedMandatees = mandatees.sortBy('priority');
@@ -134,7 +156,7 @@ export default class SearchNewsItemsRoute extends Route {
     }
   }
 
-  postProcessHighlights(entry) {
+  static postProcessHighlights(entry) {
     if (Array.isArray(entry.highlight?.title)) {
       entry.highlight.title = entry.highlight.title[0];
     }

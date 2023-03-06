@@ -454,8 +454,6 @@
   "until": "tot",
   "until-inclusive": "Tot en met",
   "present-time": "heden",
-  "search-in-decisions-only": "Zoek enkel in beslissingen",
-  "search-in-announcements-only": "Zoek enkel in mededelingen",
   "search-confidential-only": "Toon enkel {objectVerb} met beperkte toegang",
   "search-hide-archived": "Verberg verwijderde dossiers",
   "search-archived-only": "Toon enkel verwijderde dossiers",
@@ -649,7 +647,6 @@
   "style-guide-file-upload": "File upload",
   "style-guide-checkbox-list": "Checkbox list",
   "style-guide-radio-list": "Radio list",
-  "style-guide-toggle": "Toggle",
   "style-guide-key-value": "Key Value",
   "style-guide-list": "List",
   "style-guide-loader": "Loader",
@@ -1162,5 +1159,9 @@
   "also-found-in": "Ook gevonden in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
-  "news-items": "Kort bestek berichten"
+  "all-content": "Alle inhoud",
+  "n-results-found-in": "{n} resultaten gevonden in",
+  "one-result-found-in": "1 resultaat gevonden in",
+  "news-items": "Kort bestek berichten",
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
 }

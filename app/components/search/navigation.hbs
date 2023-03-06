@@ -1,28 +1,37 @@
-<div>
+<nav>
   <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
     {{t "content"}}
   </AuHeading>
   <ul class="au-c-list-navigation">
     <li class="au-c-list-navigation__item">
+      <AuNavigationLink @route="search.all-types">
+        {{t "all-content"}}
+      </AuNavigationLink>
+    </li>
+    <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="search.cases">
-        {{t "agendaitem-case"}}
+        {{t "cases"}}
       </AuNavigationLink>
     </li>
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="search.agendaitems">
-        {{t "agenda"}}
+        {{t "agendas"}}
       </AuNavigationLink>
     </li>
     <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="search.documents">
-        {{t "document"}}
+        {{t "documents"}}
       </AuNavigationLink>
+    </li>
+    <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="search.decisions">
         {{t "decisions"}}
       </AuNavigationLink>
+    </li>
+    <li class="au-c-list-navigation__item">
       <AuNavigationLink @route="search.news-items">
         {{t "newsletter"}}
       </AuNavigationLink>
     </li>
   </ul>
-</div>
+</nav>

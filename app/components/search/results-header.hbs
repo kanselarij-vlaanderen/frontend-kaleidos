@@ -2,11 +2,15 @@
   class="au-u-flex au-u-flex--no-wrap au-u-flex--spaced au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small"
 >
   <p class="au-u-muted">
-    <strong class="au-u-medium">{{this.fromResultIndex}}-{{this.toResultIndex}}</strong>
+    <strong
+      class="au-u-medium"
+    >{{this.fromResultIndex}}-{{this.toResultIndex}}</strong>
     {{t "results-for"}}
     <strong class="au-u-medium">"{{@searchText}}"</strong>
-    {{t "in"}}
-    <strong>{{@searchType}}</strong>
+    {{#if @searchType}}
+      {{t "in"}}
+      <strong>{{@searchType}}</strong>
+    {{/if}}
   </p>
   <div>
     <AuLabel for="sort-type" class="au-u-hidden-visually">
@@ -20,10 +24,7 @@
       {{on "input" @onSortChange}}
     >
       {{#each @sortOptions as |sortType|}}
-        <option
-          value={{sortType.value}}
-          selected={{eq sortType.value @sort}}
-        >
+        <option value={{sortType.value}} selected={{eq sortType.value @sort}}>
           {{sortType.label}}
         </option>
       {{/each}}
