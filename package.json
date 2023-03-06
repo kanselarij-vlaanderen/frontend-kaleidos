@@ -153,5 +153,10 @@
   },
   "engines": {
     "node": "12 || 14 || >= 16"
+  },
+  "overrides": {
+    "@appuniversum/ember-appuniversum": {
+      "@zestia/ember-auto-focus": "4.4.0"
+    }
   }
 }
