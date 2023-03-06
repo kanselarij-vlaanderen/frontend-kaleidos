@@ -78,6 +78,6 @@ export default class DocumentTypeFilter extends Component {
         },
         'document-type'
       )
-    ).content;
+    ).content.sort((a, b) => { return (a.altLabel < b.altLabel) ? -1 : ((a.altLabel > b.altLabel) ? 1 : 0) });
   });
 }
