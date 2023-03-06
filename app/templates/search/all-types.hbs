@@ -1,0 +1,133 @@
+{{page-title (t "all-content")}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.results}}
+    <ul class="au-u-padding-bottom-small">
+      {{#each-in this.model.counts as |name count|}}
+        {{#if count}}
+          <li>
+            {{#if (eq count 1)}}
+              {{t "one-result-found-in"}}
+            {{else}}
+              {{t "n-results-found-in" n=count}}
+            {{/if}}
+            {{#if (eq name "cases")}}
+              <AuLink @route="search.cases">
+                {{t "cases"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "agendaitems")}}
+              <AuLink @route="search.agendaitems">
+                {{t "agendas"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "pieces")}}
+              <AuLink @route="search.documents">
+                {{t "documents"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "decisions")}}
+              <AuLink @route="search.decisions">
+                {{t "decisions"}}
+              </AuLink>
+            {{/if}}
+            {{#if (eq name "news-items")}}
+              <AuLink @route="search.news-items">
+                {{t "news-items"}}
+              </AuLink>
+            {{/if}}
+          </li>
+        {{/if}}
+      {{/each-in}}
+    </ul>
+    <KDataTable
+      @cards={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model.results}}
+      @numberOfItems={{this.model.results.length}}
+      @enablePagination={{false}}
+      @onClickRow={{this.navigateToResult}}
+    >
+      <:body as |row|>
+        <td>
+          {{#if (eq row.name "cases")}}
+            <Search::ResultCards::Case
+              @date={{row.data.attributes.sessionDates}}
+              @shortTitle={{row.data.highlight.shortTitle}}
+              @title={{row.data.highlight.title}}
+              @caseId={{row.data.id}}
+              @isArchived={{row.data.attributes.isArchived}}
+              @subcaseHighlights={{row.data.subcaseHighlights}}
+            />
+          {{/if}}
+          {{#if (eq row.name "agendaitems")}}
+            <Search::ResultCards::Agendaitem
+              @date={{row.data.sessionDates}}
+              @agendaItemType={{row.data.type}}
+              @agendaSerialNumber={{row.data.agendaSerialNumber}}
+              @meetingId={{row.data.meetingId}}
+              @agendaId={{row.data.agendaId}}
+              @agendaItemId={{row.data.id}}
+              @shortTitle={{row.data.shortTitle}}
+              @title={{row.data.title}}
+              @pastAgendaVersions={{row.data.pastAgendaVersions}}
+            />
+          {{/if}}
+          {{#if (eq row.name "pieces")}}
+            <Search::ResultCards::Document
+              @date={{row.data.attributes.meetingDate}}
+              @created={{row.data.attributes.created}}
+              @documentId={{row.data.id}}
+              @title={{if
+                row.data.highlight.title
+                row.data.highlight.title
+                row.data.attributes.title
+              }}
+              @agendaitemShortTitle={{row.data.attributes.latestAgendaitem.shortTitle}}
+              @meetingId={{row.data.attributes.latestAgendaitem.meetingId}}
+              @agendaId={{row.data.attributes.latestAgendaitem.agendaId}}
+              @agendaitemId={{row.data.attributes.latestAgendaitem.id}}
+              @contentHighlight={{this.getStringProp
+                row.data.highlight
+                "data.content"
+              }}
+            />
+          {{/if}}
+          {{#if (eq row.name "decisions")}}
+            <Search::ResultCards::Decision
+              @date={{row.data.decisionStartDate}}
+              @title={{row.data.subcaseTitle}}
+              @shortTitle={{row.data.subcaseShortTitle}}
+              @decisionResultCode={{row.data.decisionResult}}
+              @meetingId={{row.data.meetingId}}
+              @agendaId={{row.data.agendaId}}
+              @agendaItemId={{row.data.id}}
+            />
+          {{/if}}
+          {{#if (eq row.name "news-items")}}
+            <Search::ResultCards::NewsItem
+              @date={{row.data.latestAgendaitem.meetingDate}}
+              @title={{or row.data.subTitle row.data.title}}
+              @text={{row.data.htmlContent}}
+              @mandatees={{row.data.mandatees}}
+              @meetingId={{row.data.latestAgendaitem.meetingId}}
+              @agendaId={{row.data.latestAgendaitem.agendaId}}
+              @agendaItemId={{row.data.latestAgendaitem.id}}
+            />
+          {{/if}}
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

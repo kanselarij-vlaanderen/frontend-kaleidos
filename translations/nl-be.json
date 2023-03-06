@@ -454,8 +454,6 @@
   "until": "tot",
   "until-inclusive": "Tot en met",
   "present-time": "heden",
-  "search-in-decisions-only": "Zoek enkel in beslissingen",
-  "search-in-announcements-only": "Zoek enkel in mededelingen",
   "search-confidential-only": "Toon enkel {objectVerb} met beperkte toegang",
   "search-hide-archived": "Verberg verwijderde dossiers",
   "search-archived-only": "Toon enkel verwijderde dossiers",
@@ -1161,6 +1159,9 @@
   "also-found-in": "Ook gevonden in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
+  "all-content": "Alle inhoud",
+  "n-results-found-in": "{n} resultaten gevonden in",
+  "one-result-found-in": "1 resultaat gevonden in",
   "news-items": "Kort bestek berichten",
-  "document-not-on-agendaitem": "Niet geüpload op een agendapunt"
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
 }

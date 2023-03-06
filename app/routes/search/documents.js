@@ -7,6 +7,7 @@ import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDocumentsRoute extends Route {
   @service store;
@@ -34,34 +35,26 @@ export default class SearchDocumentsRoute extends Route {
     },
   };
 
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
+  static textSearchFields = ['title^3', 'fileName^2', 'data.content'];
+  static highlightFields = ['title', 'fileName', 'data.content'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+  static postProcessData = async (searchData, store) => {
+    await SearchDocumentsRoute.postProcessAccessLevel(
+      searchData,
+      store
+    );
+    SearchDocumentsRoute.postProcessAgendaitems(searchData);
+    return searchData;
+  };
 
-    this.lastParams.stageLive(params);
-
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
-    const textSearchFields = ['title^3', 'fileName^2', 'data.content'];
-
+  static createFilter(params) {
     const searchModifier = ':sqs:';
-    const textSearchKey = textSearchFields.join(',');
+    const textSearchKey = SearchDocumentsRoute.textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {
@@ -94,9 +87,33 @@ export default class SearchDocumentsRoute extends Route {
       ];
     }
 
-    if (params.documentTypes.length) {
+    if (params.documentTypes && params.documentTypes.length) {
       filter[':terms:documentType'] = params.documentTypes;
     }
+
+    return filter;
+  }
+
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
+
+    const filter = SearchDocumentsRoute.createFilter(params);
 
     this.lastParams.commit();
 
@@ -127,13 +144,9 @@ export default class SearchDocumentsRoute extends Route {
       params.size,
       sort,
       filter,
-      async (searchData) => {
-        await this.postProcessAccessLevel(searchData);
-        this.postProcessAgendaitems(searchData);
-        return searchData;
-      },
+      (document) => SearchDocumentsRoute.postProcessData(document, this.store),
       {
-        fields: ['title', 'fileName', 'data.content'],
+        fields: SearchDocumentsRoute.highlightFields,
       }
     );
   }
@@ -162,7 +175,7 @@ export default class SearchDocumentsRoute extends Route {
     return true;
   }
 
-  async postProcessAccessLevel(entry) {
+  static async postProcessAccessLevel(entry, store) {
     if (entry.attributes.accessLevel) {
       if (Array.isArray(entry.attributes.accessLevel)) {
         warn(
@@ -171,14 +184,14 @@ export default class SearchDocumentsRoute extends Route {
         );
         entry.attributes.accessLevel = entry.attributes.accessLevel[0];
       }
-      entry.attributes.accessLevel = await this.store.findRecordByUri(
+      entry.attributes.accessLevel = await store.findRecordByUri(
         'concept',
         entry.attributes.accessLevel
       );
     }
   }
 
-  postProcessAgendaitems(entry) {
+  static postProcessAgendaitems(entry) {
     const agendaitems = entry.attributes.agendaitems;
     if (Array.isArray(agendaitems)) {
       entry.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {

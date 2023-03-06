@@ -5,6 +5,7 @@ import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class AgendaitemSearchRoute extends Route {
   queryParams = {
@@ -29,7 +30,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = [
+  static textSearchFields = [
     'title^4',
     'shortTitle^4',
     'mandateRoles^2',
@@ -44,6 +45,56 @@ export default class AgendaitemSearchRoute extends Route {
     'newsItemTitle^2',
     'newsItem',
   ];
+  static highlightFields = ['shortTitle,title'];
+
+  static postProcessData = (agendaitem) => {
+    const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
+    entry.id = agendaitem.id;
+    AgendaitemSearchRoute.postProcessPastAgendaVersions(entry);
+
+    if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
+      entry.shortTitle = entry.shortTitle.join('');
+    }
+    if (entry.title && Array.isArray(entry.title)) {
+      entry.title = entry.title.join('');
+    }
+    return entry;
+  };
+
+  static createFilter(params) {
+    const searchModifier = ':sqs:';
+    const textSearchKey = AgendaitemSearchRoute.textSearchFields.join(',');
+
+    const filter = {};
+
+    if (!isEmpty(params.searchText)) {
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
+    }
+    if (!isEmpty(params.mandatees)) {
+      filter[':terms:mandateeIds'] = params.mandatees;
+    }
+
+    /* A closed range is treated as something different than 2 open ranges because
+     * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
+     * returns an off-by-one result (1 to many) in case of two open ranges combined.
+     */
+    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
+      const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
+    } else if (!isEmpty(params.dateFrom)) {
+      const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
+      filter[':gte:sessionDates'] = date.toISOString();
+    } else if (!isEmpty(params.dateTo)) {
+      const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
+      filter[':lte:sessionDates'] = date.toISOString();
+    }
+
+    return filter;
+  }
 
   constructor() {
     super(...arguments);
@@ -72,36 +123,7 @@ export default class AgendaitemSearchRoute extends Route {
       params.page = 0;
     }
 
-    const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
-
-    const filter = {};
-
-    if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    }
-    if (!isEmpty(params.mandatees)) {
-      filter[':terms:mandateeIds'] = params.mandatees;
-    }
-
-    /* A closed range is treated as something different than 2 open ranges because
-     * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
-     * returns an off-by-one result (1 to many) in case of two open ranges combined.
-     */
-    if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
-      const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
-      const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [
-        to.toISOString(),
-        from.toISOString(),
-      ].join(',');
-    } else if (!isEmpty(params.dateFrom)) {
-      const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
-      filter[':gte:sessionDates'] = date.toISOString();
-    } else if (!isEmpty(params.dateTo)) {
-      const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte:sessionDates'] = date.toISOString();
-    }
+    const filter = AgendaitemSearchRoute.createFilter(params);
 
     if (params.types.length) {
       if (
@@ -132,21 +154,9 @@ export default class AgendaitemSearchRoute extends Route {
       params.size,
       params.sort,
       filter,
-      (agendaitem) => {
-        const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
-        entry.id = agendaitem.id;
-        this.postProcessPastAgendaVersions(entry);
-
-        if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
-          entry.shortTitle = entry.shortTitle.join('');
-        }
-        if (entry.title && Array.isArray(entry.title)) {
-          entry.title = entry.title.join('');
-        }
-        return entry;
-      },
+      AgendaitemSearchRoute.postProcessData,
       {
-        fields: ['shortTitle,title'],
+        fields: AgendaitemSearchRoute.highlightFields,
       }
     );
   }
@@ -173,13 +183,16 @@ export default class AgendaitemSearchRoute extends Route {
     return true;
   }
 
-  postProcessPastAgendaVersions(entry) {
+  static postProcessPastAgendaVersions(entry) {
     if (entry.agendaitemTreatment) {
       const pastAgendaitems = entry.agendaitemTreatment.agendaitems;
       if (Array.isArray(pastAgendaitems)) {
         entry.pastAgendaVersions = pastAgendaitems
           .map((agendaitem) => agendaitem.agendaSerialNumber)
-          .filter((agendaSerialNumber) => agendaSerialNumber != entry.agendaSerialNumber)
+          .filter(
+            (agendaSerialNumber) =>
+              agendaSerialNumber != entry.agendaSerialNumber
+          )
           .sort();
       }
     }
