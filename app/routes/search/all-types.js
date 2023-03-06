@@ -13,13 +13,6 @@ import SearchDecisionsRoute from './decisions';
 export default class AllTypes extends Route {
   @service store;
 
-  queryParams = {
-    sort: {
-      refreshModel: true,
-      as: 'sorteer',
-    },
-  };
-
   CONTENT_TYPES = {
     cases: {
       searchType: 'decisionmaking-flows',

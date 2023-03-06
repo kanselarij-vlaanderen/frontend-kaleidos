@@ -9,36 +9,10 @@ export default class AllTypesController extends Controller {
   @service router;
   @service intl;
 
-  queryParams = [
-    {
-      sort: {
-        type: 'string',
-      },
-    },
-  ];
-
-  sortOptions = [{ value: '-session-dates', label: this.intl.t('date') }];
-
-  @tracked sort;
   @tracked searchText;
-
-  constructor() {
-    super(...arguments);
-    this.sort = this.sortOptions[0].value;
-  }
 
   get emptySearch() {
     return isEmpty(this.searchText);
-  }
-
-  @action
-  selectSize(size) {
-    this.size = size;
-  }
-
-  @action
-  selectSort(event) {
-    this.sort = event.target.value;
   }
 
   @action
