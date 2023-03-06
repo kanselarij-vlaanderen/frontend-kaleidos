@@ -105,7 +105,6 @@ const selectors = {
 
   // search/cases
   searchCases: {
-    toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
     dataTable: '[data-test-route-search-cases-data-table]',
   },
 
