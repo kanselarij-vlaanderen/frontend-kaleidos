@@ -429,7 +429,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes2');
-    cy.get(dependency.rdfa.editorInner).should('be.empty');
+    cy.get(dependency.rdfa.editorInner).find('p')
+      .should('have.length', 1); // 1 trailing space inside a paragraph by default
     cy.get(newsletter.editItem.remark).should('be.empty');
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
 

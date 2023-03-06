@@ -23,14 +23,14 @@
           <Utils::ThSortable
             class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsItem.inNewsletter,number"
+            @field="treatment.news-item.in-newsletter,number"
             @label={{t "show-in-newsletter"}}
             @onChange={{fn (mut this.sort)}}
           />
           <Utils::ThSortable
             class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsItem.modified"
+            @field="treatment.news-item.modified"
             @label={{t "latest-modified"}}
             @onChange={{fn (mut this.sort)}}
           />

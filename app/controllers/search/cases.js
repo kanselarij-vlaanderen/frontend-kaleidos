@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesSearchController extends Controller {
   @service router;
@@ -12,9 +13,6 @@ export default class CasesSearchController extends Controller {
     {
       archived: {
         type: 'string',
-      },
-      decisionsOnly: {
-        type: 'boolean',
       },
       confidentialOnly: {
         type: 'boolean',
@@ -31,7 +29,6 @@ export default class CasesSearchController extends Controller {
     },
   ];
 
-  sizeOptions = [5, 10, 20, 50, 100, 200];
   sortOptions = [
     { value: '-session-dates', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
@@ -56,17 +53,15 @@ export default class CasesSearchController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked archived;
-  @tracked decisionsOnly;
   @tracked confidentialOnly;
   @tracked searchText;
 
   constructor() {
     super(...arguments);
     this.page = 0;
-    this.size = this.sizeOptions[2];
+    this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
-    this.archived = this.archivedOptions[0];
-    this.decisionsOnly = false;
+    this.archived = this.archivedOptions[0].value;
     this.confidentialOnly = false;
   }
 

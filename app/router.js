@@ -81,8 +81,10 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agendaitems', { path: '/agendapunten', });
+    this.route('documents', { path: '/documenten'});
     this.route('decisions', { path: '/beslissingen' });
     this.route('news-items', { path: '/kort-bestek', });
+    this.route('all-types', { path: '/alle-types' });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
@@ -139,7 +141,6 @@ Router.map(function() {
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
-    this.route('toggle');
     this.route('toolbar');
     this.route('navbar');
     this.route('modal');

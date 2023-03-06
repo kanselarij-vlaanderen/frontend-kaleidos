@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesIndexController extends Controller {
   // Services
@@ -31,9 +32,8 @@ export default class CasesIndexController extends Controller {
       },
     }
   ];
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
   page = 0;
-  size = 20;
+  size = PAGINATION_SIZES[2];
 
   sort = '-opened';
   showArchivedOnly = false;

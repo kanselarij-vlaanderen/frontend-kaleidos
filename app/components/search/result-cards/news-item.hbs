@@ -1,0 +1,42 @@
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |c|
+>
+  <c.header>
+    <p class="au-u-para-small au-u-muted au-u-medium">
+      {{date @date}}
+    </p>
+    <AuHeading @level="3" @skin="6">
+      <AuLink
+        class="au-u-padding-none"
+        @route="agenda.agendaitems.agendaitem.news-item"
+        @models={{array @meetingId @agendaId @agendaItemId}}
+      >
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@title}}
+          />
+        </span>
+      </AuLink>
+    </AuHeading>
+  </c.header>
+  <c.content>
+    <p class="au-u-para">
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{@text}}
+      />
+    </p>
+
+    <p class="au-u-para-small au-u-margin-top-tiny au-u-muted">
+      {{#each @mandatees as |mandatee|}}
+        {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
+          {{fullName}}{{if (has-next mandatee @mandatees) ", "}}
+        {{/let}}
+      {{/each}}
+    </p>
+  </c.content>
+</AuCard>

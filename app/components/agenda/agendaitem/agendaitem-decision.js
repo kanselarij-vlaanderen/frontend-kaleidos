@@ -77,7 +77,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept', subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
     );
 
     await documentContainer.save();
@@ -115,6 +115,10 @@ export default class AgendaitemDecisionComponent extends Component {
     }
     this.args.decisionActivity.report = piece;
     await this.args.decisionActivity.save();
+
+    // This should happen in document-card but isn't reached.
+    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+
     // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
     // when deleting the full container right after adding a new report version without the version history open.
     const documentContainer = await piece.documentContainer;

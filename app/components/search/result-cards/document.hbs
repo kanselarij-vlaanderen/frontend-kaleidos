@@ -1,0 +1,58 @@
+<AuCard @shadow={{true}} @size="small" class="result-card" as |c|>
+  <c.header>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{#if @date}}
+          {{date @date}}
+        {{else}}
+          {{#if @created}}
+            {{t "creation-date"}}: {{date @created}}
+          {{/if}}
+        {{/if}}
+      </p>
+    </div>
+    <AuHeading @level="3" @skin="6">
+      <AuLink
+        class="au-u-padding-none"
+        @route="document"
+        @model={{@documentId}}
+        @icon="document"
+        @iconAlignment="left"
+      >
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@title}}
+          />
+        </span>
+      </AuLink>
+    </AuHeading>
+  </c.header>
+  <c.content>
+    {{#if @contentHighlight}}
+      <p class="au-u-para">
+        …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
+      </p>
+    {{/if}}
+    {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
+      <p class="au-u-para-small au-u-muted">
+        {{t "uploaded-in-thing" thing=(t "agendaitem")}}
+        <AuLink
+          @route="agenda.agendaitems.agendaitem"
+          @models={{array @meetingId @agendaId @agendaitemId}}
+        >
+          <span>
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{@agendaitemShortTitle}}
+            />
+          </span>
+        </AuLink>
+      </p>
+    {{else}}
+      <p class="au-u-para-small au-u-muted">
+        {{t "document-not-on-agendaitem"}}
+      </p>
+    {{/if}}
+  </c.content>
+</AuCard>

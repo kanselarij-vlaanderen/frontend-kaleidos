@@ -6,8 +6,24 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 
+function searchFunction(optionsToCheck, defaultOption) {
+  optionsToCheck.forEach((option) => {
+    cy.get(route.search.input).clear()
+      .type('test');
+    cy.get(route.search.trigger).click();
+    cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(option)
+      .click();
+    if (option !== defaultOption) {
+      cy.url().should('include', `aantal=${option}`);
+    }
+    cy.get(route.search.input).clear();
+  });
+}
+
 context('Search tests', () => {
-  const options = [10, 25, 50, 100, 200];
+  const options = [5, 10, 20, 25, 50, 100, 200];
 
   beforeEach(() => {
     cy.login('Admin');
@@ -16,19 +32,6 @@ context('Search tests', () => {
   afterEach(() => {
     cy.logout();
   });
-
-  const searchFunction = (elementsToCheck) => {
-    elementsToCheck.forEach((option) => {
-      cy.get(route.search.input).type('test');
-      cy.get(route.search.trigger).click();
-      cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
-        .click();
-      cy.get(dependency.emberPowerSelect.option).contains(option)
-        .click();
-      cy.url().should('include', `aantal=${option}`);
-      cy.get(route.search.input).clear();
-    });
-  };
 
   it('Search for non existing searchterm in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
@@ -43,9 +46,10 @@ context('Search tests', () => {
   });
 
   it('Searchfield should be empty after revisiting search page', () => {
+    const searchValue = 'TestSearchSet';
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
-    cy.get(route.search.input).type('TestSearchSet');
+    cy.get(route.search.input).type(searchValue);
     cy.get(route.search.trigger).click();
     cy.wait(500);
     cy.get(utils.mHeader.settings).click();
@@ -144,17 +148,17 @@ context('Search tests', () => {
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
     it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
       cy.visit('zoeken/agendapunten');
-      searchFunction(options);
+      searchFunction(options, options[2]);
     });
 
     it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
       cy.visit('zoeken/dossiers');
-      searchFunction(options);
+      searchFunction(options, options[2]);
     });
 
     it('Should change the amount of elements to every value in selectbox in kort-bestek search view', () => {
       cy.visit('kort-bestek/zoeken');
-      searchFunction(options);
+      searchFunction(options, options[2]);
     });
 
     it('Search for funky searchterms in dossiers', () => {
@@ -238,18 +242,12 @@ context('Search tests', () => {
       //     .contains(case1TitleShort);
       // });
 
-      // Toggling decisions forces an empty datatable to ensure our searchTerm result is new, not the previous result
-      cy.get(route.searchCases.toggleDecisions).parent()
-        .click();
+      // TODO does this still work reliably after recent changes
       wordsFromTreatmentPdf.forEach((searchTerm) => {
-        cy.get(route.searchCases.toggleDecisions).parent()
-          .click();
         cy.get(route.search.input).clear();
         cy.get(route.search.input).type(searchTerm);
         cy.get(route.search.trigger).click(); // no results found in documents
         cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
-        cy.get(route.searchCases.toggleDecisions).parent()
-          .click(); // 1 result found in treatments
         cy.wait('@decisionsSearchCall');
 
         cy.get(route.searchCases.dataTable).find('tbody')

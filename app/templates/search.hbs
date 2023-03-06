@@ -33,7 +33,7 @@
       </div>
     </form>
   </Auk::Navbar>
-  <div class="au-c-search-container__content au-u-background-gray-100">
+  <div class="au-u-background-gray-100 au-c-search-container__content">
     <AuMainContainer as |m|>
       <m.sidebar>
         <div class="au-c-sidebar">
@@ -52,14 +52,10 @@
                 @onDateToClear={{set this "dateTo" undefined}}
               />
               <div class="au-c-card au-o-box au-o-box--small">
-                {{#if this.loadMinisters.isRunning}}
-                  <Auk::Loader />
-                {{else}}
-                  <Search::MinisterFilter
-                    @selected={{this.mandateesBuffer}}
-                    @onChange={{this.setMandatees}}
-                  />
-                {{/if}}
+                <Search::MinisterFilter
+                  @selected={{this.mandatees}}
+                  @onChange={{this.setMandatees}}
+                />
               </div>
             </div>
           </div>

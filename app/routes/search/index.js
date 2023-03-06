@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class IndexSearchRoute extends Route {
-  @service currentSession;
   @service router
 
   beforeModel() {
@@ -25,7 +24,7 @@ export default class IndexSearchRoute extends Route {
       dateTo: null,
       page: 0,
     }
-    this.router.transitionTo('search.agendaitems', {
+    this.router.transitionTo('search.all-types', {
       queryParams: queryParams,
     });
   }
