@@ -46,8 +46,6 @@ context('New search views tests', () => {
 
       cy.get(route.searchMinisterFilter.list);
 
-      cy.get(route.searchCases.toggleDecisions);
-
       cy.get(route.searchCases.removedCasesList);
 
       cy.get(route.searchConfidentialOnly.checkbox);
