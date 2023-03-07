@@ -5,7 +5,13 @@
         data-test-route-search-result-cards-document-date
         class="au-u-para-small au-u-muted au-u-medium"
       >
-        {{date @created}}
+        {{#if @date}}
+          {{date @date}}
+        {{else}}
+          {{#if @created}}
+            {{t "creation-date"}}: {{date @created}}
+          {{/if}}
+        {{/if}}
       </p>
     </div>
     <AuHeading @level="3" @skin="6">
@@ -17,10 +23,12 @@
         @icon="document"
         @iconAlignment="left"
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@fileName}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@title}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </c.header>
@@ -40,11 +48,17 @@
           @route="agenda.agendaitems.agendaitem"
           @models={{array @meetingId @agendaId @agendaitemId}}
         >
-          <SanitizeHtml
-            @raw={{true}}
-            @value={{@agendaitemShortTitle}}
-          />
+          <span>
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{@agendaitemShortTitle}}
+            />
+          </span>
         </AuLink>
+      </p>
+    {{else}}
+      <p class="au-u-para-small au-u-muted">
+        {{t "document-not-on-agendaitem"}}
       </p>
     {{/if}}
   </c.content>

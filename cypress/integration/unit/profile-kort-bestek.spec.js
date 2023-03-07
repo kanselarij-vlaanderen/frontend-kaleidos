@@ -162,7 +162,16 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.pubLink).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.documentCard.versionHistory).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Document tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
 
       // Detail Tab - Newsletter tab (with newsletter)
       cy.openAgendaitemKortBestekTab(subcaseTitleShort2);

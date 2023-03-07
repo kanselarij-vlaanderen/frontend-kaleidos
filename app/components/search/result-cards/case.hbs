@@ -10,7 +10,7 @@
         data-test-route-search-result-cards-case-date
         class="au-u-para-small au-u-muted au-u-medium"
       >
-        {{date @sessionDate}}
+        {{date @date}}
       </p>
       {{#if (eq @isArchived "true")}}
         <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
@@ -23,10 +23,12 @@
         @route="cases.case.subcases"
         @model={{@caseId}}
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{if @shortTitle @shortTitle @title}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </card.header>
@@ -41,7 +43,6 @@
           <SanitizeHtml
             @raw={{true}}
             @value={{object-at 0 @subcaseHighlights}}
-            @options={{this.sanitizeHtmlOptions}}
           />
         </span>
         {{#if (eq @subcaseHighlights.length 2)}}

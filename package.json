@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "5.46.4",
+  "version": "5.46.7",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -53,7 +53,7 @@
     "@ember/test-helpers": "^2.9.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "3.3.0",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "3.4.0",
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",

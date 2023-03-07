@@ -4,16 +4,13 @@ import { action } from '@ember/object';
 import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class CasesSearchRoute extends Route {
   queryParams = {
     archived: {
       refreshModel: true,
       as: 'gearchiveerd',
-    },
-    decisionsOnly: {
-      refreshModel: true,
-      as: 'enkel_beslissingen',
     },
     confidentialOnly: {
       refreshModel: true,
@@ -33,7 +30,46 @@ export default class CasesSearchRoute extends Route {
     },
   };
 
-  postProcessDates(_case) {
+  static textSearchFields = [
+    'title^4',
+    'shortTitle^4',
+    'subcaseTitle^2',
+    'subcaseSubTitle^2',
+    'mandateRoles^2',
+    'mandateeFirstNames^3',
+    'mandateeFamilyNames^3',
+    'newsItemTitle^2',
+    'newsItem',
+    'subcaseTitle^2',
+    'subcaseSubTitle^2',
+    'documentNames^2',
+    'documentFileNames^2',
+    'documents.content',
+    'decisionNames^2',
+    'decisionFileNames^2',
+    'decisions.content',
+  ];
+  static highlightFields = [
+    'title',
+    'shortTitle',
+    'subcaseTitle',
+    'subcaseSubTitle',
+  ];
+
+  static postProcessData = (searchData) => {
+    CasesSearchRoute.postProcessHighlight(searchData);
+    CasesSearchRoute.postProcessDates(searchData);
+    CasesSearchRoute.setSubcaseHighlights(searchData);
+
+    searchData.highlight = {
+      ...searchData.attributes,
+      ...searchData.highlight,
+    };
+
+    return searchData;
+  };
+
+  static postProcessDates(_case) {
     const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
@@ -45,7 +81,7 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
-  postProcessHighlight(_case) {
+  static postProcessHighlight(_case) {
     const { highlight } = _case;
     if (highlight) {
       if (highlight.title) {
@@ -57,7 +93,7 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
-  setSubcaseHighlights(_case) {
+  static setSubcaseHighlights(_case) {
     if (_case.highlight) {
       if (_case.highlight.subcaseTitle) {
         _case.subcaseHighlights = _case.highlight.subcaseTitle;
@@ -67,55 +103,15 @@ export default class CasesSearchRoute extends Route {
     }
   }
 
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
-
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
-
-    this.lastParams.stageLive(params);
-
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
-    const textSearchFields = [
-      'title^4',
-      'shortTitle^4',
-      'subcaseTitle^2',
-      'subcaseSubTitle^2',
-      'mandateRoles^2',
-      'mandateeFirstNames^3',
-      'mandateeFamilyNames^3',
-      'newsItemTitle^2',
-      'newsItem',
-      'subcaseTitle^2',
-      'subcaseSubTitle^2',
-    ];
-    if (params.decisionsOnly) {
-      textSearchFields.push(
-        ...['decisionNames^2', 'decisionFileNames^2', 'decisions.content']
-      );
-    } else {
-      textSearchFields.push(
-        ...['documentNames^2', 'documentFileNames^2', 'documents.content']
-      );
-    }
-
+  static createFilter(params) {
+    const textSearchFields = [...CasesSearchRoute.textSearchFields];
     const searchModifier = ':sqs:';
     const textSearchKey = textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {
@@ -151,6 +147,30 @@ export default class CasesSearchRoute extends Route {
       filter.subcaseConfidential = 'true';
     }
 
+    return filter;
+  }
+
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
+
+    const filter = CasesSearchRoute.createFilter(params);
+
     this.lastParams.commit();
 
     if (isEmpty(params.searchText)) {
@@ -172,20 +192,9 @@ export default class CasesSearchRoute extends Route {
       params.size,
       sort,
       filter,
-      (searchData) => {
-        this.postProcessHighlight(searchData);
-        this.postProcessDates(searchData);
-        this.setSubcaseHighlights(searchData);
-
-        searchData.highlight = {
-          ...searchData.attributes,
-          ...searchData.highlight,
-        };
-
-        return searchData;
-      },
+      CasesSearchRoute.postProcessData,
       {
-        fields: ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'],
+        fields: CasesSearchRoute.highlightFields,
       }
     );
   }
