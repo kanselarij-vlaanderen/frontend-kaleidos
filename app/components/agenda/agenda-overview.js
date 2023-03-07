@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { action } from '@ember/object';
 export default class AgendaOverview extends Component {
   /**
    * @argument notaGroups: Array of AgendaitemGroup-objects
@@ -28,7 +28,7 @@ export default class AgendaOverview extends Component {
     return this.canEdit && this.args.isEditingOverview;
   }
 
-  @task
+  @action
   *move(agendaitem, offset) {
     const changedAgendaItemType = yield agendaitem.type;
     let agendaitemIndex = -1;
@@ -41,7 +41,7 @@ export default class AgendaOverview extends Component {
           }
         }
       }
-    } else if ( changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+    } else if (changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       itemArray = [...this.args.announcements];
     }
     for (let i = 0; i < itemArray.length; i++) {
@@ -50,7 +50,7 @@ export default class AgendaOverview extends Component {
         break;
       }
     }
-    if(agendaitemIndex > -1 && 
+    if (agendaitemIndex > -1 && 
       agendaitemIndex + offset > -1 &&
       agendaitemIndex + offset < itemArray.length) {
         itemArray[agendaitemIndex] = itemArray.splice(agendaitemIndex + offset, 1, itemArray[agendaitemIndex])[0];

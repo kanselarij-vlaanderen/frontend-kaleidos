@@ -77,9 +77,9 @@
                   @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{@isEditingOverview}}
                   @showDragHandle={{this.canDragAgendaitems}}
-                  @onMove={{perform this.move}}
+                  @onMove={{this.move}}
                   @isFirst={{and (eq index 0) (eq indexItems 0)}}
-                  @isLast={{and (not (has-next agendaitemGroup @notaGroups)) (not (has-next agendaitem agendaitemGroup.agendaitems ))}}
+                  @isLast={{and (not (has-next agendaitemGroup @notaGroups)) (not (has-next agendaitem agendaitemGroup.agendaitems))}}
                 />
               </li>
             {{/each}}
@@ -125,7 +125,7 @@
               @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{@isEditingOverview}}
               @showDragHandle={{this.canDragAgendaitems}}
-              @onMove={{perform this.move}}
+              @onMove={{this.move}}
               @isFirst={{eq indexitems 0}}
               @isLast={{not (has-next announcement @announcements)}}
             />
