@@ -20,6 +20,7 @@ export default class Agenda extends Model.extend(LoadableModel) {
   @belongsTo('agenda', { inverse: 'nextVersion', async: true }) previousVersion; // Set in agenda-approve-service, read-only here
 
   @hasMany('agendaitem', { inverse: 'agenda', async: true }) agendaitems;
+  @hasMany('agendastatusactivity', { inverse: 'agenda', async: true}) agendastatusactivities;
 
   get agendaName() {
     let prefix = this.status.get('isDesignAgenda')
