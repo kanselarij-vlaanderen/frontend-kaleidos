@@ -165,7 +165,7 @@ const selectors = {
 
   // search/result-cards/case
   caseResultCard: {
-    sessionDate: '[data-test-route-search-result-cards-case-sessiondate]',
+    date: '[data-test-route-search-result-cards-case-date]',
     shortTitleLink: '[data-test-route-search-result-cards-case-shorttitle]',
     foundSubcases: '[data-test-route-search-result-cards-case-found-subcases]',
   },
@@ -182,7 +182,7 @@ const selectors = {
 
   // search/result-cards/document
   documentResultCard: {
-    dateCreated: '[data-test-route-search-result-cards-document-date-created]',
+    date: '[data-test-route-search-result-cards-document-date]',
     filename: '[data-test-route-search-result-cards-document-filename]',
     agendaItem: '[data-test-route-search-result-cards-document-agendaitem]',
   },
