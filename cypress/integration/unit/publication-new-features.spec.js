@@ -177,6 +177,7 @@ context('Publications new features tests', () => {
 
     cy.visit('publicaties/overzicht/dringend');
     // there should be no urgent records now in default data set
+    cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.emptyState.message).contains(emptyStateMessage);
 
