@@ -1163,5 +1163,6 @@
   "n-results-found-in": "{n} resultaten gevonden in",
   "one-result-found-in": "1 resultaat gevonden in",
   "news-items": "Kort bestek berichten",
-  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt",
+  "download-agenda-documents-info": "Vink de ministers aan wier documenten je wilt downloaden. Documenten zonder minister worden altijd toegevoegd aan het bestand."
 }
