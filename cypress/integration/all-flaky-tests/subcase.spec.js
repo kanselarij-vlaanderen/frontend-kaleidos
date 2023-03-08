@@ -1,4 +1,4 @@
-/* global context, before, cy,beforeEach, it, Cypress */
+/* global context, before, cy, beforeEach, afterEach, it, Cypress */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
@@ -59,6 +59,10 @@ context('Subcase tests', () => {
 
   beforeEach(() => {
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should open an existing case and add a subcase', () => {
