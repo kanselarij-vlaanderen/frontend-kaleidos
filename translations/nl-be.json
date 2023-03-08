@@ -146,6 +146,8 @@
   "download": "Download",
   "download-2": "Downloaden",
   "download-documents": "Download alle documenten",
+  "download-decisions": "Download beslissingsfiches",
+  "download-all-decisions": "Download alle beslisingen",
   "download-all-documents": "Download alle documenten",
   "drop-text": "Laat los om het bestand op te laden.",
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
@@ -1164,5 +1166,6 @@
   "one-result-found-in": "1 resultaat gevonden in",
   "news-items": "Kort bestek berichten",
   "document-not-on-agendaitem": "Niet geüpload in agendapunt",
-  "download-agenda-documents-info": "Vink de ministers aan wier documenten je wilt downloaden. Documenten zonder minister worden altijd toegevoegd aan het bestand."
+  "download-agenda-documents-info": "Vink de ministers aan wier documenten je wilt downloaden. Documenten zonder minister worden altijd toegevoegd aan het bestand.",
+  "download-agenda-decisions-info": "Vink de ministers aan wier beslissingsfiches je wilt downloaden. Beslissingsfiches zonder minister worden altijd toegevoegd aan het bestand."
 }
