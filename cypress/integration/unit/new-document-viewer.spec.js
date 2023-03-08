@@ -41,6 +41,7 @@ context('new document viewer tests', () => {
     cy.wait(`@deleteOldFile_${randomInt}`);
     cy.wait(`@patchPieces_${randomInt}`);
     cy.wait(`@patchDocumentContainers_${randomInt}`);
+    cy.wait(1000); // TODO flaky, name not loaded? I think because of the silent await in line 1 of document-preview-modal.hbs
   }
 
   const fileName = 'test pdf';

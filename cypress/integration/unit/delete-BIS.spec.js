@@ -89,6 +89,7 @@ context('Delete BIS tests', () => {
     cy.get('@documentCard1').should('not.contain', /BIS/);
 
     cy.reload();
+    cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
     cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       .should('not.be.disabled');

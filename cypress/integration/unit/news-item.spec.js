@@ -590,6 +590,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
+    cy.wait(1000); // tableRow is not connected to DOM.
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)

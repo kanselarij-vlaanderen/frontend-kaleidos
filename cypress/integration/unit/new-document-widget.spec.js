@@ -65,6 +65,7 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces2');
+    cy.wait(500); // cypress might be too fast
     // Derived file should link to uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
@@ -85,6 +86,7 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces3');
+    cy.wait(500); // cypress might be too fast
     // Derived file should be converted pdf file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${pdfExtension}`);
@@ -105,6 +107,7 @@ context('check the functions of the new document widget', () => {
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces4');
+    cy.wait(500); // cypress might be too fast
     // Derived file should now be uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
