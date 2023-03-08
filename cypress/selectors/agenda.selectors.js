@@ -76,6 +76,8 @@ const selectors = {
   // agenda-header
   agendaHeader: {
     kind: '[data-test-agenda-header-kind]',
+    isFinalPillClosed: '[data-test-agenda-header-is-final-pill-closed]',
+    isFinalPillOpened: '[data-test-agenda-header-is-final-pill-opened]',
     title: '[data-test-agenda-header-title]',
   },
 
