@@ -10,6 +10,8 @@ const PROOFREAD_STATUSES_URIS = [
 export default class PublicationsOverviewProofreadRoute extends PublicationsOverviewBaseRoute {
   @service store;
 
+  templateName = 'publications.overview.all';
+
   defaultColumns = [
     'isUrgent',
     'publicationNumber',
@@ -32,11 +34,5 @@ export default class PublicationsOverviewProofreadRoute extends PublicationsOver
         ':id:': proofreadStatuses.mapBy('id').join(','),
       },
     };
-  }
-
-  renderTemplate(controller) {
-    this.render('publications.overview.all', {
-      controller: controller
-    });
   }
 }
