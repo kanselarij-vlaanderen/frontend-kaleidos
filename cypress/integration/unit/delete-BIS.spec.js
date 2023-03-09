@@ -77,13 +77,16 @@ context('Delete BIS tests', () => {
     cy.intercept('DELETE', 'pieces/**').as('deletePiece');
     cy.intercept('GET', 'pieces?filter**').as('piecesFilter');
     cy.get(utils.vlModalVerify.save).click()
-      .wait('@restoreFile')
       .wait('@deleteFile')
       .wait('@deletePiece')
+      .wait('@restoreFile')
       .wait('@piecesFilter');
     // TODO-BUG clicking close to fast uses old context
     // cy.get(auk.auModal.header.close).click();
+    cy.get(auk.loader);
+    cy.get(auk.loader).should('not.exist');
     cy.go('back');
+    cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
     cy.get('@documentCard1').contains(files[0].newFileName);
     cy.get('@documentCard1').should('not.contain', /BIS/);

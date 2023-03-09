@@ -49,6 +49,7 @@ context('check the functions of the new document widget', () => {
     });
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
+    cy.wait(1000);
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@deleteFile1')
       .wait('@patchPieces1');
@@ -63,9 +64,9 @@ context('check the functions of the new document widget', () => {
       cy.uploadFile(file.folder, file.fileName, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
+    cy.wait(1000);
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces2');
-    cy.wait(500); // cypress might be too fast
     // Derived file should link to uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
@@ -105,9 +106,9 @@ context('check the functions of the new document widget', () => {
       cy.uploadFile(file.folder, replaceFilename, wordExtension);
     });
     cy.intercept('PATCH', '/pieces/**').as('patchPieces4');
+    cy.wait(1000);
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces4');
-    cy.wait(500); // cypress might be too fast
     // Derived file should now be uploaded word file
     cy.get(document.documentCard.name.value)
       .should('contain', `.${wordExtension}`);
@@ -123,6 +124,7 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.derivedFileDelete).click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces5');
+    cy.wait(1000);
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchPieces4');
     cy.get(document.documentCard.primarySourceCreated).should('not.exist');
