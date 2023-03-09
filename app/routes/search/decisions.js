@@ -8,6 +8,7 @@ import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
+  @service plausible;
 
   queryParams = {
     page: {
@@ -78,7 +79,7 @@ export default class SearchDecisionsRoute extends Route {
     return filter;
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
 
@@ -100,7 +101,7 @@ export default class SearchDecisionsRoute extends Route {
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route
-    return search(
+    const results = search(
       'agendaitems',
       params.page,
       params.size,
@@ -111,6 +112,33 @@ export default class SearchDecisionsRoute extends Route {
         fields: SearchDecisionsRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Aantal resultaten': resultCount,
+    }, true);
   }
 
   setupController(controller) {
