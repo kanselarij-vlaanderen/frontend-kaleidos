@@ -19,7 +19,7 @@
           {{#if (includes documentType.uri this.defaultVisibleTypes)}}
             <AuControlCheckbox
               @checked={{includes documentType this.selected}}
-              @label={{documentType.label}}
+              @label={{documentType.altLabel}}
               @onChange={{fn this.toggleDocumentType documentType}}
             />
           {{/if}}
@@ -38,7 +38,7 @@
             {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
               <AuControlCheckbox
                 @checked={{includes documentType this.selected}}
-                @label={{documentType.label}}
+                @label={{documentType.altLabel}}
                 @onChange={{fn this.toggleDocumentType documentType}}
               />
             {{/if}}
