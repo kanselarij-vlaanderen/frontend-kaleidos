@@ -20,6 +20,14 @@ export default class RadioDropdownComboSelectComponent extends Component {
     return this.args.labelKey || 'label';
   }
 
+  get radioLabelKey() {
+    return this.args.radioLabelKey || this.args.labelKey || 'label';
+  }
+
+  get dropdownLabelKey() {
+    return this.args.dropdownLabelKey || this.args.labelKey || 'label';
+  }
+
   get radioName() {
     return `${guidFor(this)}-radio`;
   }
