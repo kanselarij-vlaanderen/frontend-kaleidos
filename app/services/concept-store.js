@@ -13,7 +13,7 @@ export default class ConceptStoreService extends Service {
    * by the cache-warmup-service. If you make changes to this call, make sure
    * to also update the cache-warmup-service.
    */
-  queryAllByConceptScheme(conceptSchemeUri, query) {
+  queryAllByConceptScheme(conceptSchemeUri, query, subClass) {
     query = query || {}; // eslint-disable-line no-param-reassign
 
     // Remove any keys that filter on [concept-scheme][:uri:]
@@ -24,7 +24,7 @@ export default class ConceptStoreService extends Service {
       delete conceptSchemesFilter[':uri:'];
     }
 
-    return this.store.queryAll('concept', {
+    return this.store.queryAll(subClass ? subClass : 'concept', {
       ...query,
       'filter[concept-schemes][:uri:]': conceptSchemeUri,
       filter: {
@@ -38,7 +38,7 @@ export default class ConceptStoreService extends Service {
    *
    * The results are sorted on start-date and label to ensure unique sorting.
    * Sorting on position (if needed) should be done after.
-   * 
+   *
    * Note that this call is pre-loaded by the cache-warmup-service.
    * If you make changes to this call, make sure to also update the cache-warmup-service.
    */
