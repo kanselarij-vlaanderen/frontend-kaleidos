@@ -775,20 +775,6 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     goToNewsletter();
     checkPublishMail(alertMessage);
 
-    // // remove mededeling
-    // cy.openAgendaForDate(agendaDate);
-    // cy.openAgendaitemDossierTab(shortSubcaseTitle1);
-    // cy.get(agenda.agendaitemControls.actions)
-    //   .children(appuniversum.button)
-    //   .click();
-    // cy.get(agenda.agendaitemControls.action.delete).click();
-    // cy.get(auk.confirmationModal.footer.confirm).click();
-    // cy.wait(2000);
-
-    // // test with kort bestek, without nota in newsletter, without mededeling and with theme
-    // goToNewsletter();
-    // checkPublishMail(alertMessage);
-
     // remove theme from nota
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
@@ -817,10 +803,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click()
       .wait('@patchNewsItem');
-    // // re-add mededeling
-    // cy.addAgendaitemToAgenda(shortSubcaseTitle1);
-    // // add theme to mededeling
-    // addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme);
+
     // add kort bestek to second nota
     cy.openAgendaitemKortBestekTab(shortSubcaseTitle3);
     cy.intercept('GET', '/themes**').as('getAgendaitemThemes2');
