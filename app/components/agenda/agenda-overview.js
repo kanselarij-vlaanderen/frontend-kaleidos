@@ -29,8 +29,8 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  *move(agendaitem, offset) {
-    const changedAgendaItemType = yield agendaitem.type;
+  async move(agendaitem, offset) {
+    const changedAgendaItemType = await agendaitem.type;
     let agendaitemIndex = -1;
     let itemArray = [];
     if (changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
