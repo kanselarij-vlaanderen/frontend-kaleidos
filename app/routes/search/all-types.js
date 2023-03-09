@@ -73,9 +73,9 @@ export default class AllTypes extends Route {
     }
 
     const results = await Promise.all(
-      Object.entries(this.CONTENT_TYPES).map((entry) => {
+      Object.entries(this.CONTENT_TYPES).map(async (entry) => {
         const [name, type] = entry;
-        const filter = type.createFilter(params);
+        const filter = await type.createFilter(params, this.store);
 
         return (async () => {
           const results = await search(
