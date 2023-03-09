@@ -104,7 +104,8 @@ export default class NewslettersSearchController extends Controller {
     if (row.htmlContent) {
       copyText += sanitizeHtml(
         row.htmlContent
-          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+          .replace(/<p>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
+          .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
           .trim(), // Trim whitespaces at start & end of the string
         { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
       );

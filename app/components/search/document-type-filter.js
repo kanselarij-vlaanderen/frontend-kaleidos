@@ -73,8 +73,11 @@ export default class DocumentTypeFilter extends Component {
   loadDocumentTypes = task(async () => {
     this.documentTypes = (
       await this.conceptStore.queryAllByConceptScheme(
-        CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
+        CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES, {
+          'filter[:has:document-containers]': true
+        },
+        'document-type'
       )
-    ).content;
+    ).content.sort((a, b) => { return (a.altLabel < b.altLabel) ? -1 : ((a.altLabel > b.altLabel) ? 1 : 0) });
   });
 }
