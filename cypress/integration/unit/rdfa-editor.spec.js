@@ -17,6 +17,25 @@ function pressRdfaButton(buttonName) {
     .click();
 }
 
+function checkCSS(row) {
+  cy.get(row).find('strong')
+    .should('have.css', 'font-weight', '500');
+  cy.get(row).find('em')
+    .should('have.css', 'font-style', 'italic');
+  cy.get(row).find('u')
+    .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
+  cy.get(row).find('del')
+    .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+  cy.get(row).find('sub')
+    .should('have.css', 'vertical-align', 'sub');
+  cy.get(row).find('sup')
+    .should('have.css', 'vertical-align', 'super');
+  cy.get(row).find('ul')
+    .should('have.css', 'list-style', 'outside none disc');
+  cy.get(row).find('li')
+    .should('have.css', 'display', 'list-item');
+}
+
 context('rdfa editor tests', () => {
   beforeEach(() => {
     cy.login('Admin');
@@ -41,6 +60,7 @@ context('rdfa editor tests', () => {
     cy.get(dependency.rdfa.editorInner).type('{ctrl+b}Bold')
       .type('{ctrl+b} ');
     cy.get('strong').contains('Bold');
+    // it's not possible to type super or subscript in a similar way here so it's only in the next test, same with lists
 
     // check single backspace
     cy.get(dependency.rdfa.editorInner).type('{selectAll}{backspace}');
@@ -95,28 +115,59 @@ context('rdfa editor tests', () => {
       .click();
     cy.wait('@getThemes');
 
-    pressRdfaButton('Strikethrough');
+    pressRdfaButton('Doorstreept');
     cy.get(dependency.rdfa.editorInner).type('Strikethrough');
     cy.wait(200);
-    pressRdfaButton('Strikethrough');
+    pressRdfaButton('Doorstreept');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Underline');
+    pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfa.editorInner).type('Underline');
     cy.wait(200);
-    pressRdfaButton('Underline');
+    pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Italic');
+    pressRdfaButton('Schuingedrukt');
     cy.get(dependency.rdfa.editorInner).type('Italic');
     cy.wait(200);
-    pressRdfaButton('Italic');
+    pressRdfaButton('Schuingedrukt');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Bold');
+    pressRdfaButton('Vetgedrukt');
     cy.get(dependency.rdfa.editorInner).type('Bold');
+    cy.wait(200);
+    pressRdfaButton('Vetgedrukt');
+
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Subscript');
+    cy.get(dependency.rdfa.editorInner).type('Subscript');
+    cy.wait(200);
+    pressRdfaButton('Subscript');
+    cy.get(dependency.rdfa.editorInner).type(' ');
+    pressRdfaButton('Superscript');
+    cy.get(dependency.rdfa.editorInner).type('Superscript');
+    cy.wait(200);
+
+    cy.get(dependency.rdfa.editorInner).type('{enter}');
+    pressRdfaButton('Ongeordende lijst');
+    cy.get(dependency.rdfa.editorInner).type('Ongeordende lijst');
+    cy.wait(200);
+    cy.get(dependency.rdfa.editorInner).type('{enter}');
+    pressRdfaButton('Lijstniveau lager');
+    cy.get(dependency.rdfa.editorInner).type('Lijstniveau lager');
+    cy.wait(200);
+
+    cy.get('button').contains('Lijstniveau lager')
+      .should('not.exist');
+    cy.get(dependency.rdfa.editorInner).type('{enter}');
+    pressRdfaButton('Lijstniveau hoger');
+    cy.get('button').contains('Lijstniveau lager');
 
     cy.get('del').contains('Strikethrough');
     cy.get('u').contains('Underline');
     cy.get('em').contains('Italic');
     cy.get('strong').contains('Bold');
+    cy.get('sub').contains('Subscript');
+    cy.get('sup').contains('Superscript');
+    cy.get('ul').contains('Ongeordende lijst');
+    cy.get('li').contains('Lijstniveau lager');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click()
@@ -134,65 +185,27 @@ context('rdfa editor tests', () => {
     cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .as('firstRowZebra');
-
-    cy.get('@firstRowZebra').find('strong')
-      .should('have.css', 'font-weight', '500');
-    cy.get('@firstRowZebra').find('em')
-      .should('have.css', 'font-style', 'italic');
-    cy.get('@firstRowZebra').find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get('@firstRowZebra').find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    checkCSS('@firstRowZebra');
 
     cy.clickReverseTab('Klad');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowKlad');
-
-    cy.get('@firstRowKlad').find('strong')
-      .should('have.css', 'font-weight', '500');
-    cy.get('@firstRowKlad').find('em')
-      .should('have.css', 'font-style', 'italic');
-    cy.get('@firstRowKlad').find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get('@firstRowKlad').find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    checkCSS('@firstRowKlad');
 
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowDefinitief');
-
-    cy.get('@firstRowDefinitief').find('strong')
-      .should('have.css', 'font-weight', '500');
-    cy.get('@firstRowDefinitief').find('em')
-      .should('have.css', 'font-style', 'italic');
-    cy.get('@firstRowDefinitief').find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get('@firstRowDefinitief').find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    checkCSS('@firstRowDefinitief');
 
     cy.visit('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/kort-bestek');
     cy.get(newsletter.agendaitemNewsItem.content).as('agendaitemNewsItemContent');
-    cy.get('@agendaitemNewsItemContent').find('strong')
-      .should('have.css', 'font-weight', '500');
-    cy.get('@agendaitemNewsItemContent').find('em')
-      .should('have.css', 'font-style', 'italic');
-    cy.get('@agendaitemNewsItemContent').find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get('@agendaitemNewsItemContent').find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    checkCSS('@agendaitemNewsItemContent');
 
     cy.visit('/kort-bestek/zoeken');
     cy.get(route.search.input).type('Cypress test: 20+ documents agendaitem with subcase - 1589286110');
     cy.get(route.search.trigger).click();
     cy.get(route.searchNewsletters.row.title).eq(0)
       .as('searchResultContent');
-    cy.get('@searchResultContent').find('strong')
-      .should('have.css', 'font-weight', '500');
-    cy.get('@searchResultContent').find('em')
-      .should('have.css', 'font-style', 'italic');
-    cy.get('@searchResultContent').find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get('@searchResultContent').find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    checkCSS('@searchResultContent');
   });
 });
