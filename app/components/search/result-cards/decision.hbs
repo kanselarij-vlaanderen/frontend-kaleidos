@@ -16,10 +16,12 @@
         @route="agenda.agendaitems.agendaitem.decisions"
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@shortTitle}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@shortTitle}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </c.header>

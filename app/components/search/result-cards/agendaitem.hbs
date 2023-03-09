@@ -25,10 +25,12 @@
 
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{if @shortTitle @shortTitle @title}}
-        />
+        <span>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
       </AuLink>
     </AuHeading>
   </c.header>

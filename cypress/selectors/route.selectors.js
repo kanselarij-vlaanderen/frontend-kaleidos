@@ -105,7 +105,6 @@ const selectors = {
 
   // search/cases
   searchCases: {
-    toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
     dataTable: '[data-test-route-search-cases-data-table]',
   },
 
@@ -136,6 +135,11 @@ const selectors = {
   // newsletter/template
   newsletter: {
     dataTable: '[data-test-route-newsletter-data-table]',
+    header: {
+      number: '[data-test-route-newsletter-header-number]',
+      inNewsletter: '[data-test-route-newsletter-header-show-in-newsletter]',
+      latestModified: '[data-test-route-newsletter-header-latest-modified]',
+    },
   },
 
   // newsletter/nota-updates/template

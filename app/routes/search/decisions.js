@@ -4,6 +4,7 @@ import { isEmpty } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import { inject as service } from '@ember/service';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
@@ -23,35 +24,31 @@ export default class SearchDecisionsRoute extends Route {
     },
   };
 
-  textSearchFields = [
+  static textSearchFields = [
     'subcaseTitle^2',
     'subcaseShortTitle^2',
     'decisionName^2',
     'decisionFileName^2',
     'decision.content',
   ];
+  static highlightFields = ['subcaseShortTitle,subcaseTitle'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+  static postProcessData = async (agendaitem, store) => {
+    SearchDecisionsRoute.postProcessHighlights(agendaitem);
+    const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
+    entry.id = agendaitem.id;
+    await SearchDecisionsRoute.postProcessDecisions(entry, store);
+    return entry;
+  };
 
-    if (!params.dateFrom) {
-      params.dateFrom = null;
-    }
-    if (!params.dateTo) {
-      params.dateTo = null;
-    }
-    if (!params.mandatees) {
-      params.mandatees = null;
-    }
-
+  static createFilter(params) {
     const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
+    const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
@@ -78,6 +75,24 @@ export default class SearchDecisionsRoute extends Route {
 
     // Since all agendaitem versions point to the same treatment, only use latest agendaitems
     filter[':has-no:nextVersionId'] = 't';
+    return filter;
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    if (!params.dateFrom) {
+      params.dateFrom = null;
+    }
+    if (!params.dateTo) {
+      params.dateTo = null;
+    }
+    if (!params.mandatees) {
+      params.mandatees = null;
+    }
+
+    const filter = SearchDecisionsRoute.createFilter(params);
 
     if (isEmpty(params.searchText)) {
       return [];
@@ -91,15 +106,9 @@ export default class SearchDecisionsRoute extends Route {
       params.size,
       params.sort,
       filter,
-      async (agendaitem) => {
-        this.postProcessHighlights(agendaitem);
-        const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
-        entry.id = agendaitem.id;
-        await this.postProcessDecisions(entry);
-        return entry;
-      },
+      (decision) => SearchDecisionsRoute.postProcessData(decision, this.store),
       {
-        fields: ['subcaseShortTitle,subcaseTitle'],
+        fields: SearchDecisionsRoute.highlightFields,
       }
     );
   }
@@ -122,16 +131,16 @@ export default class SearchDecisionsRoute extends Route {
     return true;
   }
 
-  async postProcessDecisions(entry) {
+  static async postProcessDecisions(entry, store) {
     if (entry.decisionResult) {
-      entry.decisionResult = await this.store.findRecordByUri(
+      entry.decisionResult = await store.findRecordByUri(
         'concept',
         entry.decisionResult
       );
     }
   }
 
-  postProcessHighlights(entry) {
+  static postProcessHighlights(entry) {
     if (Array.isArray(entry.highlight?.subcaseTitle)) {
       entry.highlight.subcaseTitle = entry.highlight.subcaseTitle[0];
     }

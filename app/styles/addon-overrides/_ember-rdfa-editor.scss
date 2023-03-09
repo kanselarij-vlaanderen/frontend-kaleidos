@@ -82,6 +82,15 @@ $say-editor-border-radius: $au-input-border-radius;
     @include au-font-size(1.8rem);
   }
 
+  > * + * {
+    margin-top: 1.5rem;
+  }
+
+  > p + ul,
+  > p + ol {
+    margin-top: 0;
+  }
+
   ul,
   ol {
     margin-left: 2.8rem;
