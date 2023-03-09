@@ -3,6 +3,17 @@
 
 // SCSS variables (to override)
 
+$mq-breakpoints: (
+  xsmall: 300px,
+  small: 500px,
+  medium: 767px,
+  large: 1023px,
+);
+
+$au-layout-width: 767px;
+$au-layout-width-small: 500px;
+$au-layout-width-large: 1023px;
+
 $au-button-height: 3.4rem;
 
 
@@ -153,7 +164,7 @@ $au-button-height: 3.4rem;
   }
 
   ul:not(.au-c-list-horizontal) li + li { // override list item spacing to match the one in Kaleidos a bit more
-    margin-top: 0.3rem;
+    margin-top: 0.1rem;
   }
 
   ul.au-c-list  li + li { // this styling needs to be reset again unfortunately
@@ -163,6 +174,11 @@ $au-button-height: 3.4rem;
   // override child (and heading) spacing to match the one in Kaleidos a bit more
   > * + * {
     margin-top: 1.5rem;
+  }
+
+  > p + ul,
+  > p + ol {
+    margin-top: 0.2rem;
   }
 
   > * + h1,
@@ -175,6 +191,20 @@ $au-button-height: 3.4rem;
   > * + h5,
   > * + h6 {
     margin-top: 1.5rem;
+  }
+
+  em { // default text color in Kaleidos
+    color: $auk-color-text;
+  }
+
+  sub {
+    vertical-align: sub;
+    font-size: smaller;
+  }
+
+  sup {
+    vertical-align: super;
+    font-size: smaller;
   }
 }
 

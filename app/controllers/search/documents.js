@@ -32,7 +32,7 @@ export default class SearchDocumentsController extends Controller {
   ];
 
   sortOptions = [
-    { value: '-session-dates', label: this.intl.t('meeting-date') },
+    { value: '-agendaitems.meetingDate', label: this.intl.t('meeting-date') },
     { value: '', label: this.intl.t('relevance-score') }, // empty string as value because null is not handled correctly by select-element
   ];
 
@@ -92,4 +92,11 @@ export default class SearchDocumentsController extends Controller {
       this.documentTypesBuffer = [];
     }
   });
+
+  getStringProp = (object, propName) => {
+    if (object) {
+      return object[propName];
+    }
+  }
+
 }

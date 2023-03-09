@@ -46,9 +46,10 @@ context('Search tests', () => {
   });
 
   it('Searchfield should be empty after revisiting search page', () => {
+    const searchValue = 'TestSearchSet';
     cy.visit('/zoeken/agendapunten');
     cy.get(route.search.input).clear();
-    cy.get(route.search.input).type('TestSearchSet');
+    cy.get(route.search.input).type(searchValue);
     cy.get(route.search.trigger).click();
     cy.wait(500);
     cy.get(utils.mHeader.settings).click();
@@ -241,18 +242,12 @@ context('Search tests', () => {
       //     .contains(case1TitleShort);
       // });
 
-      // Toggling decisions forces an empty datatable to ensure our searchTerm result is new, not the previous result
-      cy.get(route.searchCases.toggleDecisions).parent()
-        .click();
+      // TODO does this still work reliably after recent changes
       wordsFromTreatmentPdf.forEach((searchTerm) => {
-        cy.get(route.searchCases.toggleDecisions).parent()
-          .click();
+        cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
         cy.get(route.search.input).clear();
         cy.get(route.search.input).type(searchTerm);
         cy.get(route.search.trigger).click(); // no results found in documents
-        cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
-        cy.get(route.searchCases.toggleDecisions).parent()
-          .click(); // 1 result found in treatments
         cy.wait('@decisionsSearchCall');
 
         cy.get(route.searchCases.dataTable).find('tbody')

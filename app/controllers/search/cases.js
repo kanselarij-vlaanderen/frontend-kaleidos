@@ -14,9 +14,6 @@ export default class CasesSearchController extends Controller {
       archived: {
         type: 'string',
       },
-      decisionsOnly: {
-        type: 'boolean',
-      },
       confidentialOnly: {
         type: 'boolean',
       },
@@ -56,7 +53,6 @@ export default class CasesSearchController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked archived;
-  @tracked decisionsOnly;
   @tracked confidentialOnly;
   @tracked searchText;
 
@@ -65,8 +61,7 @@ export default class CasesSearchController extends Controller {
     this.page = 0;
     this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
-    this.archived = this.archivedOptions[0];
-    this.decisionsOnly = false;
+    this.archived = this.archivedOptions[0].value;
     this.confidentialOnly = false;
   }
 

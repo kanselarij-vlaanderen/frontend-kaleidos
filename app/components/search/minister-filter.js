@@ -11,7 +11,6 @@ export default class SearchMinisterFilterComponent extends Component {
 
   @tracked currentMinisters = [];
   @tracked pastMinisters = [];
-  @tracked _selected = null;
   @tracked pastMinistersHidden = true;
 
   constructor() {
@@ -20,76 +19,68 @@ export default class SearchMinisterFilterComponent extends Component {
     this.loadCurrentMinisters.perform();
   }
 
-  get selected() {
-    return this._selected ?? this.args.selected ?? [];
-  }
-
-  set selected(selected) {
-    this._selected = selected;
-  }
-
   get allCurrentMinistersSelected() {
-    return this.currentMinisters.every((minister) => this.selected.includes(minister));
+    return this.currentMinisters.every((minister) => this.args.selected?.includes(minister.id));
   }
 
   get someCurrentMinistersSelected() {
-    return this.currentMinisters.some((minister) => this.selected.includes(minister));
+    return this.currentMinisters.some((minister) => this.args.selected?.includes(minister.id));
   }
 
   get allPastMinistersSelected() {
-    return this.pastMinisters.every((minister) => this.selected.includes(minister));
+    return this.pastMinisters.every((minister) => this.args.selected?.includes(minister.id));
   }
 
   get somePastMinistersSelected() {
-    return this.pastMinisters.some((minister) => this.selected.includes(minister));
+    return this.pastMinisters.some((minister) => this.args.selected?.includes(minister.id));
   }
 
-  _toggleMinister = (minister) => {
-    const index = this.selected.indexOf(minister);
+  _toggleMinister = (list, minister) => {
+    const index = list.indexOf(minister.id);
     if (index >= 0) {
-      this.selected.splice(index, 1);
+      list.splice(index, 1);
     } else {
-      this.selected.push(minister);
+      list.push(minister.id);
     }
+    return list;
   }
 
   @action
   toggleMinister(minister) {
-    this._toggleMinister(minister);
-    this.selected = [...this.selected];
-    this.args.onChange?.(this.selected);
+    const selected = [...this.args.selected];
+    this.args.onChange?.(this._toggleMinister(selected, minister));
   }
 
   @action
   toggleAllCurrentMinisters() {
+    const selected = [...this.args.selected];
     if (!this.allCurrentMinistersSelected && this.someCurrentMinistersSelected) {
       // Enable remaninig ministers
       this.currentMinisters.forEach((minister) => {
-        if (!this.selected.includes(minister)) {
-          this.selected.push(minister);
+        if (!selected.includes(minister.id)) {
+          selected.push(minister.id);
         }
       });
     } else {
       // Toggle all
-      this.currentMinisters.forEach(this._toggleMinister);
+      this.currentMinisters.forEach((minister) => this._toggleMinister(selected, minister));
     }
-    this.selected = [...this.selected];
-    this.args.onChange?.(this.selected);
+    this.args.onChange?.(selected);
   }
 
   @action
   toggleAllPastMinisters() {
+    const selected = [...this.args.selected];
     if (!this.allPastMinistersSelected && this.somePastMinistersSelected) {
       this.pastMinisters.forEach((minister) => {
-        if (!this.selected.includes(minister)) {
-          this.selected.push(minister);
+        if (!selected.includes(minister.id)) {
+          selected.push(minister.id);
         }
       });
     } else {
-      this.pastMinisters.forEach(this._toggleMinister);
+      this.pastMinisters.forEach((minister) => this._toggleMinister(selected, minister));
     }
-    this.selected = [...this.selected];
-    this.args.onChange?.(this.selected);
+    this.args.onChange?.(selected);
   }
 
   @task

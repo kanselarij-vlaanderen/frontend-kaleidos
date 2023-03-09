@@ -13,7 +13,7 @@ export default class SanitizeHtmlComponent extends Component {
   get sanitizedValue() {
     const options = this.args.options || {};
     options.allowedTags = isPresent(options.allowedTags) ? options.allowedTags : sanitizeHtml.defaults.allowedTags.concat(additionalAllowedTags); // add more tags to the default allowed tags
-    const value = this.args.value || '';
+    const value = Array.isArray(this.args.value) ? this.args.value.join(' - ') : this.args.value || '';
     return sanitizeHtml(value, options) || '';
   }
 }

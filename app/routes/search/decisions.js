@@ -4,6 +4,7 @@ import { isEmpty } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import { inject as service } from '@ember/service';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
@@ -23,34 +24,31 @@ export default class SearchDecisionsRoute extends Route {
     },
   };
 
-  textSearchFields = [
+  static textSearchFields = [
     'subcaseTitle^2',
+    'subcaseShortTitle^2',
     'decisionName^2',
     'decisionFileName^2',
-    'decision.content'
+    'decision.content',
   ];
+  static highlightFields = ['subcaseShortTitle,subcaseTitle'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = {...searchParams, ...filterParams};
+  static postProcessData = async (agendaitem, store) => {
+    SearchDecisionsRoute.postProcessHighlights(agendaitem);
+    const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
+    entry.id = agendaitem.id;
+    await SearchDecisionsRoute.postProcessDecisions(entry, store);
+    return entry;
+  };
 
-    if (!params.dateFrom) {
-      params.dateFrom = null;
-    }
-    if (!params.dateTo) {
-      params.dateTo = null;
-    }
-    if (!params.mandatees) {
-      params.mandatees = null;
-    }
-
+  static createFilter(params) {
     const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
+    const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
     }
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
@@ -63,7 +61,10 @@ export default class SearchDecisionsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:sessionDates'] = [to.toISOString(), from.toISOString()].join(',');
+      filter[':lte,gte:sessionDates'] = [
+        to.toISOString(),
+        from.toISOString(),
+      ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       filter[':gte:sessionDates'] = date.toISOString();
@@ -72,18 +73,44 @@ export default class SearchDecisionsRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
+    // Since all agendaitem versions point to the same treatment, only use latest agendaitems
+    filter[':has-no:nextVersionId'] = 't';
+    return filter;
+  }
+
+  model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    if (!params.dateFrom) {
+      params.dateFrom = null;
+    }
+    if (!params.dateTo) {
+      params.dateTo = null;
+    }
+    if (!params.mandatees) {
+      params.mandatees = null;
+    }
+
+    const filter = SearchDecisionsRoute.createFilter(params);
+
     if (isEmpty(params.searchText)) {
       return [];
     }
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route
-    return search('agendaitems', params.page, params.size, params.sort, filter, async (agendaitem) => {
-      const entry = agendaitem.attributes;
-      entry.id = agendaitem.id;
-      await this.postProcessDecisions(entry);
-      return entry;
-    });
+    return search(
+      'agendaitems',
+      params.page,
+      params.size,
+      params.sort,
+      filter,
+      (decision) => SearchDecisionsRoute.postProcessData(decision, this.store),
+      {
+        fields: SearchDecisionsRoute.highlightFields,
+      }
+    );
   }
 
   setupController(controller) {
@@ -104,12 +131,22 @@ export default class SearchDecisionsRoute extends Route {
     return true;
   }
 
-  async postProcessDecisions(entry) {
+  static async postProcessDecisions(entry, store) {
     if (entry.decisionResult) {
-      entry.decisionResult = await this.store.findRecordByUri(
+      entry.decisionResult = await store.findRecordByUri(
         'concept',
         entry.decisionResult
       );
+    }
+  }
+
+  static postProcessHighlights(entry) {
+    if (Array.isArray(entry.highlight?.subcaseTitle)) {
+      entry.highlight.subcaseTitle = entry.highlight.subcaseTitle[0];
+    }
+
+    if (Array.isArray(entry.highlight?.subcaseShortTitle)) {
+      entry.highlight.subcaseShortTitle = entry.highlight.subcaseShortTitle[0];
     }
   }
 }
