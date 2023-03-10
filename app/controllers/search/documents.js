@@ -10,6 +10,7 @@ export default class SearchDocumentsController extends Controller {
   @service router;
   @service intl;
   @service conceptStore;
+  @service plausible;
 
   queryParams = [
     {
@@ -58,6 +59,7 @@ export default class SearchDocumentsController extends Controller {
 
   @action
   navigateToDocument(document) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
     this.router.transitionTo('document', document.id);
   }
 

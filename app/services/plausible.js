@@ -33,4 +33,13 @@ export default class ExtendedPlausibleService extends PlausibleService {
       this.firstEvent = false;
     }
   }
+
+  trackEventWithRole(eventName, _props = {}, aggregate = false) {
+    const role = this.currentSession.role.label;
+    let props = { ..._props, Rol: role };
+    if (aggregate) {
+      props = { ...props, 'Aggregate': JSON.stringify(props) }
+    }
+    this.trackEvent(eventName, props);
+  }
 }
