@@ -452,63 +452,126 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.cancel).click();
     // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
   });
+  context('zebra view tests', () => {
+    it('should test the zebra view', () => {
+      // const agendaDate = Cypress.dayjs('2022-04-02');
+      const agendaLink = '/vergadering/62726CA1D600B7FF7F95BBEB/agenda/62726CA2D600B7FF7F95BBEC/agendapunten';
+      const newsletterLink = '/vergadering/62726CA1D600B7FF7F95BBEB/kort-bestek';
+      // const subcaseTitleMededeling = 'Cypress test: KB zebra view - mededeling - 1651673379';
+      const subcaseTitleNota = 'Cypress test: KB zebra view - nota - 1651673379';
+      const file = {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+      };
+      const files = [file];
 
-  it('should test the zebra view', () => {
-    // const agendaDate = Cypress.dayjs('2022-04-02');
-    const agendaLink = '/vergadering/62726CA1D600B7FF7F95BBEB/agenda/62726CA2D600B7FF7F95BBEC/agendapunten';
-    const newsletterLink = '/vergadering/62726CA1D600B7FF7F95BBEB/kort-bestek';
-    // const subcaseTitleMededeling = 'Cypress test: KB zebra view - mededeling - 1651673379';
-    const subcaseTitleNota = 'Cypress test: KB zebra view - nota - 1651673379';
-    const file = {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
-    };
-    const files = [file];
+      // check that there are no items in list with only 'verslag' and 'mededeling
+      cy.visit(newsletterLink);
+      cy.get(route.newsletter.dataTable).within(() => {
+        cy.get(newsletter.tableRow.newsletterRow).should('not.exist');
+      });
 
-    // check that there are no items in list with only 'verslag' and 'mededeling
-    cy.visit(newsletterLink);
-    cy.get(route.newsletter.dataTable).within(() => {
-      cy.get(newsletter.tableRow.newsletterRow).should('not.exist');
+      // add nota to agenda and check if list contains correct item
+      cy.visitAgendaWithLink(agendaLink);
+      cy.addAgendaitemToAgenda(subcaseTitleNota);
+      cy.visit(newsletterLink);
+      cy.get(newsletter.tableRow.newsletterRow).within(() => {
+        cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
+        cy.get(newsletter.tableRow.titleContent).contains('Nog geen kort bestek voor dit agendapunt.');
+        cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
+      });
+
+      // add nota to agendaitem
+      cy.visitAgendaWithLink(agendaLink);
+      cy.openAgendaitemKortBestekTab(subcaseTitleNota);
+      cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
+      cy.visit(newsletterLink);
+      // check newsitem save
+      cy.intercept('GET', '/themes**').as('getThemes');
+      cy.intercept('POST', '/news-items').as('postNewsItem');
+      cy.get(newsletter.buttonToolbar.edit).click();
+      cy.wait('@postNewsItem');
+      cy.wait('@getThemes');
+      cy.get(newsletter.editItem.toggleFinished)
+        .parent()
+        .click();
+      cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
+      cy.get(newsletter.editItem.save).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
+      cy.wait('@patchNewsItem');
+      // TODO-bug reload should not be needed
+      // reload needed to update openNota
+      // cy.reload(); // disable reload since we can't test the opening of the nota
+      // check if nota can be opened
+      // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
+      // cy.get(newsletter.tableRow.newsletterRow).within(() => {
+      //   cy.get(newsletter.buttonToolbar.openNota).children('i')
+      //     .invoke('removeAttr', 'target')
+      //     .click();
+      // });
+      // cy.url().should('contain', '/document/');
     });
 
-    // add nota to agenda and check if list contains correct item
-    cy.visitAgendaWithLink(agendaLink);
-    cy.addAgendaitemToAgenda(subcaseTitleNota);
-    cy.visit(newsletterLink);
-    cy.get(newsletter.tableRow.newsletterRow).within(() => {
-      cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
-      cy.get(newsletter.tableRow.titleContent).contains('Nog geen kort bestek voor dit agendapunt.');
-      cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
-    });
+    it('should test the sorting', () => {
+      const newsletterLink = '/vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+      const subcaseTitleShort = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
-    // add nota to agendaitem
-    cy.visitAgendaWithLink(agendaLink);
-    cy.openAgendaitemKortBestekTab(subcaseTitleNota);
-    cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
-    cy.visit(newsletterLink);
-    // check newsitem save
-    cy.intercept('GET', '/themes**').as('getThemes');
-    cy.intercept('POST', '/news-items').as('postNewsItem');
-    cy.get(newsletter.buttonToolbar.edit).click();
-    cy.wait('@postNewsItem');
-    cy.wait('@getThemes');
-    cy.get(newsletter.editItem.toggleFinished)
-      .parent()
-      .click();
-    cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
-    cy.get(newsletter.editItem.save).click();
-    cy.get(auk.confirmationModal.footer.confirm).click();
-    cy.wait('@patchNewsItem');
-    // TODO-bug reload should not be needed
-    // reload needed to update openNota
-    // cy.reload(); // disable reload since we can't test the opening of the nota
-    // check if nota can be opened
-    // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
-    // cy.get(newsletter.tableRow.newsletterRow).within(() => {
-    //   cy.get(newsletter.buttonToolbar.openNota).children('i')
-    //     .invoke('removeAttr', 'target')
-    //     .click();
-    // });
-    // cy.url().should('contain', '/document/');
+      cy.visit(newsletterLink);
+
+      cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
+      cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
+        .parents(newsletter.tableRow.newsletterRow)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .parent()
+        .click()
+        .wait('@patchNewsItem1');
+
+      // test sort inNewsletter
+      cy.get(route.newsletter.header.inNewsletter).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.inNewsletter).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      // test sort number
+      cy.get(route.newsletter.header.number).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.number).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      // test sort latestModified
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
+      cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
+        .parents(newsletter.tableRow.newsletterRow)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .parent()
+        .click()
+        .wait('@patchNewsItem2');
+    });
   });
 
   it('should test the klad view', () => {
