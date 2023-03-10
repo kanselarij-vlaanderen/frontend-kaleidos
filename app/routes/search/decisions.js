@@ -105,14 +105,6 @@ export default class SearchDecisionsRoute extends Route {
 
     this.lastParams.stageLive(params);
 
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -121,6 +113,14 @@ export default class SearchDecisionsRoute extends Route {
     }
     if (!params.mandatees) {
       params.mandatees = null;
+    }
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
     }
 
     const filter = await SearchDecisionsRoute.createFilter(params, this.store);
@@ -149,6 +149,7 @@ export default class SearchDecisionsRoute extends Route {
       params.searchText,
       results.length,
       params.mandatees,
+      params.decisionResults,
       params.dateFrom,
       params.dateTo,
       params.sort,
@@ -157,11 +158,16 @@ export default class SearchDecisionsRoute extends Route {
     return results;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort) {
+  async trackSearch(searchTerm, resultCount, mandatees, decisionResults, from, to, sort) {
     const ministerNames = (
       await Promise.all(
         mandatees.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
+
+    const decisionResultNames = (
+      await Promise.all(
+        decisionResults.map((id) => this.store.findRecord('concept', id)))
+    ).map((decisionResultCode) => decisionResultCode.label);
 
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
@@ -170,6 +176,7 @@ export default class SearchDecisionsRoute extends Route {
       'Tot en met': to,
       'Sorteringsoptie': sort,
       'Aantal resultaten': resultCount,
+      'Resultaat beslissing': decisionResultNames.join(', '),
     }, true);
   }
 
