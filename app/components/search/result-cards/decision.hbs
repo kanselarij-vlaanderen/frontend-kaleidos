@@ -32,10 +32,13 @@
         @value={{@title}}
       />
     </p>
-    <p class="au-u-margin-top-small">
-      <Decision::DecisionResultPill
-        @decisionResultCode={{@decisionResultCode}}
-      />
-    </p>
+    {{#if @decisionResultCode}}
+      <p class="au-u-margin-top-small">
+        <Decision::DecisionResultPill
+          @decisionResultCode={{@decisionResultCode}}
+          @showUndecided={{false}}
+        />
+      </p>
+    {{/if}}
   </c.content>
 </AuCard>
