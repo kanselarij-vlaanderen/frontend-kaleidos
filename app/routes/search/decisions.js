@@ -10,6 +10,10 @@ export default class SearchDecisionsRoute extends Route {
   @service store;
 
   queryParams = {
+    decisionResults: {
+      refreshModel: true,
+      as: 'resultaat_beslissing',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -41,7 +45,7 @@ export default class SearchDecisionsRoute extends Route {
     return entry;
   };
 
-  static createFilter(params) {
+  static async createFilter(params, store) {
     const searchModifier = ':sqs:';
     const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
 
@@ -75,10 +79,20 @@ export default class SearchDecisionsRoute extends Route {
 
     // Since all agendaitem versions point to the same treatment, only use latest agendaitems
     filter[':has-no:nextVersionId'] = 't';
+
+    if (params.decisionResults?.length) {
+      const decisionResults = (
+        await Promise.all(
+          params.decisionResults
+                .map((id) => store.findRecord('concept', id)))
+      ).map((record) => record.uri);
+      filter[':terms:decisionResult'] = decisionResults;
+    }
+
     return filter;
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
 
@@ -92,7 +106,7 @@ export default class SearchDecisionsRoute extends Route {
       params.mandatees = null;
     }
 
-    const filter = SearchDecisionsRoute.createFilter(params);
+    const filter = await SearchDecisionsRoute.createFilter(params, this.store);
 
     if (isEmpty(params.searchText)) {
       return [];
