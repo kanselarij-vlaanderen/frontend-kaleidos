@@ -9,6 +9,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class SearchDecisionsController extends Controller {
   @service intl;
   @service router;
+  @service plausible;
 
   queryParams = [
     {
@@ -67,6 +68,8 @@ export default class SearchDecisionsController extends Controller {
   @action
   navigateToDecision(searchEntry) {
     if (searchEntry.meetingId) {
+      this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+
       this.router.transitionTo(
         'agenda.agendaitems.agendaitem.decisions',
         searchEntry.meetingId,
