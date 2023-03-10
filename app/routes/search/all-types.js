@@ -12,6 +12,7 @@ import SearchDecisionsRoute from './decisions';
 
 export default class AllTypes extends Route {
   @service store;
+  @service intl;
 
   CONTENT_TYPES = {
     cases: {
@@ -115,9 +116,37 @@ export default class AllTypes extends Route {
 
     flatResults.sort(sortFunc);
 
-    const counts = {};
+    const counts = [];
     for (const result of results) {
       counts[result.name] = result.data.meta.count;
+      const count = result.data.meta.count;
+      let name;
+      let route;
+      switch (result.name) {
+        case 'cases':
+          name = this.intl.t('cases');
+          route = 'search.cases';
+          break;
+        case 'agendaitems':
+          name = this.intl.t('agendas');
+          route = 'search.agendaitems';
+          break;
+        case 'pieces':
+          name = this.intl.t('documents');
+          route = 'search.documents';
+          break;
+        case 'decisions':
+          name = this.intl.t('decisions');
+          route = 'search.decisions';
+          break;
+        case 'news-items':
+          name = this.intl.t('news-items');
+          route = 'search.news-items';
+          break;
+        default:
+          break;
+      }
+      counts.push({ name, count, route });
     }
 
     return { results: flatResults, counts };
