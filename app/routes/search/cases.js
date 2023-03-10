@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import { startOfDay, endOfDay, parse } from 'date-fns';
@@ -7,6 +8,9 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class CasesSearchRoute extends Route {
+  @service store;
+  @service plausible;
+
   queryParams = {
     archived: {
       refreshModel: true,
@@ -155,7 +159,7 @@ export default class CasesSearchRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
 
@@ -186,7 +190,7 @@ export default class CasesSearchRoute extends Route {
       sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    return search(
+    const results = await search(
       'decisionmaking-flows',
       params.page,
       params.size,
@@ -197,6 +201,38 @@ export default class CasesSearchRoute extends Route {
         fields: CasesSearchRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      params.mandatees,
+      results.length,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+      params.archived,
+      params.confidentialOnly
+    );
+
+    return results;
+  }
+
+
+  async trackSearch(searchTerm, mandatees, resultCount, from, to, sort, archived, confidentialOnly) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Aantal resultaten': resultCount,
+      'Vanaf': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Verwijderde dossiers': archived,
+      'Toon enkel dossiers met beperkte toegang': confidentialOnly,
+    }, true);
   }
 
   setupController(controller) {

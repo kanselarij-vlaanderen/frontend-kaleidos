@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
@@ -8,6 +9,9 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class AgendaitemSearchRoute extends Route {
+  @service store;
+  @service plausible;
+
   queryParams = {
     types: {
       refreshModel: true,
@@ -101,7 +105,7 @@ export default class AgendaitemSearchRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
@@ -148,7 +152,8 @@ export default class AgendaitemSearchRoute extends Route {
     if (isEmpty(params.searchText)) {
       return [];
     }
-    return search(
+
+    const results = await search(
       'agendaitems',
       params.page,
       params.size,
@@ -159,6 +164,37 @@ export default class AgendaitemSearchRoute extends Route {
         fields: AgendaitemSearchRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+      params.types,
+      params.latestOnly,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, latestOnly) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Aantal resultaten': resultCount,
+      'Agendapunt types': types.join(', '),
+      'Enkel definitieve agenda': latestOnly,
+    }, true);
   }
 
   setupController(controller) {
