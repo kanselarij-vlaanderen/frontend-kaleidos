@@ -10,11 +10,11 @@
           id={{radioId}}
           name={{this.radioName}}
           checked={{eq opt this.selectedOption}}
-          value={{get opt this.labelKey}}
+          value={{get opt this.radioLabelKey}}
           {{on "input" (fn this.select opt)}}
         />
         <span class="au-c-control__indicator"></span>
-        {{get opt this.labelKey}}
+        {{get opt this.radioLabelKey}}
       </label>
     {{/let}}
   {{/each}}
@@ -39,9 +39,10 @@
     @options={{this.otherOptions}}
     @selected={{this.selectedOption}}
     @searchEnabled={{true}}
-    @searchField={{this.labelKey}}
+    @searchField={{this.dropdownLabelKey}}
     @onChange={{this.select}}
+    @renderInPlace="true"
   as |opt|>
-    {{get opt this.labelKey}}
+    {{get opt this.dropdownLabelKey}}
   </PowerSelect>
 {{/if}}

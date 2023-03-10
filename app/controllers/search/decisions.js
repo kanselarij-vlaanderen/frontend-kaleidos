@@ -12,6 +12,9 @@ export default class SearchDecisionsController extends Controller {
 
   queryParams = [
     {
+      decisionResults: {
+        type: 'array',
+      },
       page: {
         type: 'number',
       },
@@ -33,6 +36,7 @@ export default class SearchDecisionsController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked searchText;
+  @tracked decisionResults = [];
 
   constructor() {
     super(...arguments);
@@ -53,6 +57,11 @@ export default class SearchDecisionsController extends Controller {
   @action
   selectSort(event) {
     this.sort = event.target.value;
+  }
+
+  @action
+  setDecisionResults(decisionResults) {
+    this.decisionResults = decisionResults;
   }
 
   @action
