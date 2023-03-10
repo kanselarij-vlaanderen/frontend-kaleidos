@@ -20,7 +20,7 @@ export default class AllTypes extends Route {
       highlightFields: CasesSearchRoute.highlightFields,
       dataMapping: CasesSearchRoute.postProcessData,
       createFilter: CasesSearchRoute.createFilter,
-      retrieveDate: (case_) => case_.attributes.created,
+      retrieveDate: (case_) => case_.attributes.sessionDates,
     },
     agendaitems: {
       searchType: 'agendaitems',
@@ -36,7 +36,7 @@ export default class AllTypes extends Route {
       highlightFields: SearchDocumentsRoute.highlightFields,
       dataMapping: SearchDocumentsRoute.postProcessData,
       createFilter: SearchDocumentsRoute.createFilter,
-      retrieveDate: (piece) => piece.attributes.created,
+      retrieveDate: (piece) => piece.attributes.meetingDate,
     },
     decisions: {
       searchType: 'agendaitems',
@@ -73,9 +73,9 @@ export default class AllTypes extends Route {
     }
 
     const results = await Promise.all(
-      Object.entries(this.CONTENT_TYPES).map((entry) => {
+      Object.entries(this.CONTENT_TYPES).map(async (entry) => {
         const [name, type] = entry;
-        const filter = type.createFilter(params);
+        const filter = await type.createFilter(params, this.store);
 
         return (async () => {
           const results = await search(
@@ -110,7 +110,7 @@ export default class AllTypes extends Route {
     const sortFunc = (r1, r2) => {
       const d1 = new Date(this.CONTENT_TYPES[r1.name].retrieveDate(r1.data));
       const d2 = new Date(this.CONTENT_TYPES[r2.name].retrieveDate(r2.data));
-      return d1 < d2;
+      return d2 - d1;
     };
 
     flatResults.sort(sortFunc);

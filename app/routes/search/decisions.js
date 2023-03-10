@@ -5,11 +5,16 @@ import search from 'frontend-kaleidos/utils/mu-search';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import { inject as service } from '@ember/service';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
+import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
 
   queryParams = {
+    decisionResults: {
+      refreshModel: true,
+      as: 'resultaat_beslissing',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -41,7 +46,7 @@ export default class SearchDecisionsRoute extends Route {
     return entry;
   };
 
-  static createFilter(params) {
+  static async createFilter(params, store) {
     const searchModifier = ':sqs:';
     const textSearchKey = SearchDecisionsRoute.textSearchFields.join(',');
 
@@ -75,12 +80,37 @@ export default class SearchDecisionsRoute extends Route {
 
     // Since all agendaitem versions point to the same treatment, only use latest agendaitems
     filter[':has-no:nextVersionId'] = 't';
+
+    if (params.decisionResults?.length) {
+      const decisionResults = (
+        await Promise.all(
+          params.decisionResults
+                .map((id) => store.findRecord('concept', id)))
+      ).map((record) => record.uri);
+      filter[':terms:decisionResult'] = decisionResults;
+    }
+
     return filter;
   }
 
-  model(filterParams) {
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
+
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
 
     if (!params.dateFrom) {
       params.dateFrom = null;
@@ -92,7 +122,9 @@ export default class SearchDecisionsRoute extends Route {
       params.mandatees = null;
     }
 
-    const filter = SearchDecisionsRoute.createFilter(params);
+    const filter = await SearchDecisionsRoute.createFilter(params, this.store);
+
+    this.lastParams.commit();
 
     if (isEmpty(params.searchText)) {
       return [];
@@ -116,6 +148,10 @@ export default class SearchDecisionsRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     const searchText = this.paramsFor('search').searchText;
+
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
 
     controller.searchText = searchText;
   }
