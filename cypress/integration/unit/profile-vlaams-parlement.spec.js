@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, beforeEach */
+/* global context, it, cy, beforeEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -7,7 +7,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 // import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
-// import newsletter from '../../selectors/newsletter.selectors';
+import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -278,17 +278,49 @@ context('Testing the application as Vlaams Parlement', () => {
   });
 
   context('Profile rights checks for kort-bestek routes', () => {
-    it.only('check that link to kort bestek zebra view doesnt work', () => {
-      const agendaDate = Cypress.dayjs('2022-04-05');
+    const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
+    const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
 
-      cy.openAgendaForDate(agendaDate);
-      cy.get(agenda.agendaActions.optionsDropdown)
-        .children(appuniversum.button)
-        .click();
-      cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-      cy.url().should('not.include', 'vergadering/6374F696D9A98BD0A2288559/kort-bestek');
+    it('check kort bestek zebra view for open agenda', () => {
+      cy.visit(kortBestekLinkOpenAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
     });
 
-    // no other tests here because there is no acces to kort bestek
+    it('check kort bestek zebra view for released agenda', () => {
+      cy.visit(kortBestekLinkReleasedAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+    });
   });
 });
