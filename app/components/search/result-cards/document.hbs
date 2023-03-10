@@ -34,20 +34,30 @@
         …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
       </p>
     {{/if}}
-    {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
+    {{#if (and @meetingId @agendaId @agendaitemId)}}
       <p class="au-u-para-small au-u-muted">
-        {{t "uploaded-in-thing" thing=(t "agendaitem")}}
-        <AuLink
-          @route="agenda.agendaitems.agendaitem"
-          @models={{array @meetingId @agendaId @agendaitemId}}
-        >
-          <span>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{@agendaitemShortTitle}}
-            />
-          </span>
-        </AuLink>
+        {{#if @agendaitemShortTitle}}
+          {{t "uploaded-in-thing" thing=(t "agendaitem")}}
+          <AuLink
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array @meetingId @agendaId @agendaitemId}}
+          >
+            <span>
+              <SanitizeHtml
+                @raw={{true}}
+                @value={{@agendaitemShortTitle}}
+              />
+            </span>
+          </AuLink>
+        {{else}}
+          {{t "uploaded-in"}}
+          <AuLink
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array @meetingId @agendaId @agendaitemId}}
+          >
+            {{t "agendaitem"}}
+          </AuLink>
+        {{/if}}
       </p>
     {{else}}
       <p class="au-u-para-small au-u-muted">
