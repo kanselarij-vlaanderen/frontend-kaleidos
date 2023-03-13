@@ -12,6 +12,7 @@ import SearchDecisionsRoute from './decisions';
 
 export default class AllTypes extends Route {
   @service store;
+  @service plausible;
 
   CONTENT_TYPES = {
     cases: {
@@ -120,6 +121,14 @@ export default class AllTypes extends Route {
       counts[result.name] = result.data.meta.count;
     }
 
+    this.trackSearch(
+      params.searchText,
+      flatResults.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+    );
+
     return { results: flatResults, counts };
   }
 
@@ -132,6 +141,21 @@ export default class AllTypes extends Route {
     }
 
     controller.searchText = searchText;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Aantal resultaten': resultCount,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+    }, true);
   }
 
   @action

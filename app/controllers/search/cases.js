@@ -8,6 +8,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class CasesSearchController extends Controller {
   @service router;
   @service intl;
+  @service plausible;
 
   queryParams = [
     {
@@ -86,6 +87,7 @@ export default class CasesSearchController extends Controller {
 
   @action
   navigateToCase(decisionmakingFlow) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
 

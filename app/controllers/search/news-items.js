@@ -10,6 +10,7 @@ export default class SearchNewsItemsControllers extends Controller {
   @service router;
   @service toaster;
   @service intl;
+  @service plausible;
 
   queryParams = [
     {
@@ -61,6 +62,7 @@ export default class SearchNewsItemsControllers extends Controller {
   navigateToNewsletter(searchEntry) {
     const latestAgendaitem = searchEntry.latestAgendaitem;
     if (latestAgendaitem) {
+      this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1});
       this.router.transitionTo(
         'agenda.agendaitems.agendaitem.news-item',
         latestAgendaitem['meetingId'],
