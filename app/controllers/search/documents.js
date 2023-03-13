@@ -11,6 +11,7 @@ export default class SearchDocumentsController extends Controller {
   @service intl;
   @service conceptStore;
   @service plausible;
+  @service store;
 
   queryParams = [
     {
@@ -87,7 +88,7 @@ export default class SearchDocumentsController extends Controller {
     if (this.documentTypes) {
       this.documentTypesBuffer = (
         await Promise.all(
-          this.documentTypes?.map((id) => this.store.findRecord('concept', id))
+          this.documentTypes?.map((id) => this.store.findRecord('document-type', id))
         )
       ).toArray();
     } else {
