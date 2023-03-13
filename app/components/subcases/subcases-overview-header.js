@@ -54,4 +54,11 @@ export default class SubCasesOverviewHeader extends Component {
     await this.args.onCreateSubcase();
     this.closeAddSubcaseModal();
   }
+
+  @action
+  transitionBack() {
+    if (history.length > 1) {
+      history.back();
+    }
+  }
 }

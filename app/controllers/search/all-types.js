@@ -8,6 +8,7 @@ import { warn } from '@ember/debug';
 export default class AllTypesController extends Controller {
   @service router;
   @service intl;
+  @service plausible;
 
   @tracked searchText;
 
@@ -25,6 +26,7 @@ export default class AllTypesController extends Controller {
       'news-items': this.navigateToNewsletter,
     };
 
+    this.plausible.trackEventWithRole('Zoekresultaat klik');
     mapping[result.name](result.data);
   }
 
