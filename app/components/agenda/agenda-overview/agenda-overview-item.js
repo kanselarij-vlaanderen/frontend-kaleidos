@@ -26,11 +26,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
-  @service store;
   @service intl;
   @service toaster;
   @service agendaService;
-  @service router;
   @service currentSession;
   @service throttledLoadingService;
 

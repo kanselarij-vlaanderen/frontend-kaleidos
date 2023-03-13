@@ -8,7 +8,6 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
-  @service currentSession;
   @service store;
 
   @tracked page = 0;

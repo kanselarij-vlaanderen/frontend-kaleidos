@@ -5,7 +5,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendasRoute extends Route {
   @service store;
-  @service router;
   @service('session') simpleAuthSession;
 
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;

@@ -7,7 +7,6 @@ import { warn } from '@ember/debug';
 
 export default class AllTypesController extends Controller {
   @service router;
-  @service intl;
   @service plausible;
 
   @tracked searchText;

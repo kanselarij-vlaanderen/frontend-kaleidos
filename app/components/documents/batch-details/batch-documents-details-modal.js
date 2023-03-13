@@ -11,7 +11,6 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
 export default class BatchDocumentsDetailsModal extends Component {
-  @service store;
   @service pieceAccessLevelService;
 
   @tracked rows;

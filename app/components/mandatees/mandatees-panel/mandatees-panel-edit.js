@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -12,7 +11,6 @@ export default class MandateesMandateesPanelEditComponent extends Component {
    * @argument onSave
    * @argument {Date} referenceDate: Date to get active Mandatees for
    */
-  @service store;
 
   @tracked mandateesBuffer;
   @tracked submitterBuffer;

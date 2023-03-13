@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import sanitizeHtml from 'sanitize-html';
 
 export default class NewsItemTableRowComponent extends Component {
-  @service currentSession;
   @service toaster;
   @service intl;
   @service agendaitemNota;

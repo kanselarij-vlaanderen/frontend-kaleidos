@@ -1,12 +1,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
 import formatDate from '../utils/format-date-search-param';
 
 export default class SearchController extends Controller {
-  @service router;
-
   queryParams = [
     {
       searchText: {
