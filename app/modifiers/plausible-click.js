@@ -4,23 +4,24 @@ import { inject as service } from '@ember/service';
 export default class PlausibleClickModifier extends Modifier {
   @service plausible;
 
+  positional;
+  named;
+
   get eventName() {
-    return this.args.positional[0];
+    return this.positional[0];
   }
 
   get props() {
-    return this.args.named;
+    return this.named;
   }
 
   onClick = () => {
     this.plausible.trackEvent(this.eventName, this.props);
   }
 
-  didInstall() {
-    this.element.addEventListener('click', this.onClick);
-  }
-
-  willRemove() {
-    this.element.removeEventListener('click', this.onClick);
+  modify(element, positional, named) {
+    this.positional = positional;
+    this.named = named;
+    element.addEventListener('click', this.onClick);
   }
 }

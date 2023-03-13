@@ -5,12 +5,15 @@ export default class PlausibleClickWithRoleModifier extends Modifier {
   @service plausible;
   @service currentSession;
 
+  positional;
+  named;
+
   get eventName() {
-    return this.args.positional[0];
+    return this.positional[0];
   }
 
   get props() {
-    return this.args.named;
+    return this.named;
   }
 
   onClick = () => {
@@ -18,11 +21,9 @@ export default class PlausibleClickWithRoleModifier extends Modifier {
     this.plausible.trackEvent(this.eventName, props);
   }
 
-  didInstall() {
-    this.element.addEventListener('click', this.onClick);
-  }
-
-  willRemove() {
-    this.element.removeEventListener('click', this.onClick);
+  modify(element, positional, named) {
+    this.positional = positional;
+    this.named = named;
+    element.addEventListener('click', this.onClick);
   }
 }
