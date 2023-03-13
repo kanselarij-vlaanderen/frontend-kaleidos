@@ -11,27 +11,27 @@
               {{t "n-results-found-in" n=count}}
             {{/if}}
             {{#if (eq name "cases")}}
-              <AuLink @route="search.cases">
+              <AuLink @route="search.cases" {{plausible-click-with-role "Alle inhoud resultaten link" tab="Dossiers"}}>
                 {{t "cases"}}
               </AuLink>
             {{/if}}
             {{#if (eq name "agendaitems")}}
-              <AuLink @route="search.agendaitems">
+              <AuLink @route="search.agendaitems" {{plausible-click-with-role "Alle inhoud resultaten link" tab="Agenda"}}>
                 {{t "agendas"}}
               </AuLink>
             {{/if}}
             {{#if (eq name "pieces")}}
-              <AuLink @route="search.documents">
+              <AuLink @route="search.documents" {{plausible-click-with-role "Alle inhoud resultaten link" tab="Documenten"}}>
                 {{t "documents"}}
               </AuLink>
             {{/if}}
             {{#if (eq name "decisions")}}
-              <AuLink @route="search.decisions">
+              <AuLink @route="search.decisions" {{plausible-click-with-role "Alle inhoud resultaten link" tab="Beslissingen"}}>
                 {{t "decisions"}}
               </AuLink>
             {{/if}}
             {{#if (eq name "news-items")}}
-              <AuLink @route="search.news-items">
+              <AuLink @route="search.news-items" {{plausible-click-with-role "Alle inhoud resultaten link" tab="Kort bestek"}}>
                 {{t "news-items"}}
               </AuLink>
             {{/if}}
