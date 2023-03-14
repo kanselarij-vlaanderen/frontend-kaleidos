@@ -87,8 +87,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           if (yield this.validateMailCampaign()) {
             try {
               yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-              this.mailCampaign.sentAt = new Date();
-              yield this.mailCampaign.save();
+              this.mailCampaign.reload();
               this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
             } catch(e) {
               console.log("error sending newsletter", e);
@@ -252,7 +251,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
       this.toaster.success(this.intl.t('success-delete-newsletter'));
     }
-    this.mailCampaign.destroyRecord();
     yield this.args.meeting.belongsTo('mailCampaign').reload();
     yield this.loadMailCampaign.perform();
   }
