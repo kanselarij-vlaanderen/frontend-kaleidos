@@ -56,3 +56,6 @@ drc-up-d:
 
 drc-kill:
 	- docker-compose ${COMPOSE_FILE} kill && docker-compose ${COMPOSE_FILE} rm -f
+
+drc-up-d-service:
+	- docker-compose ${COMPOSE_FILE} up -d ${SERV}

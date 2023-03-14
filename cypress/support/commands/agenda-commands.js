@@ -34,7 +34,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
-  cy.visit('/overzicht?size=2');
+  cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendas.action.newMeeting, {
     timeout: 60000,
   }).click();
@@ -211,12 +211,12 @@ function openAgendaForDate(agendaDate, index = 0) {
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
 
-  cy.visit('/overzicht?size=2');
+  cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendasOverview.filter.container).within(() => {
     cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
   });
   cy.get(route.agendasOverview.loader, {
-    timeout: 5000,
+    timeout: 10000,
   }).should('not.exist');
   cy.wait('@getFilteredAgendas', {
     timeout: 20000,
