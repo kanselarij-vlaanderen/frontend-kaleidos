@@ -37,6 +37,7 @@ context('new document viewer tests', () => {
     cy.intercept('DELETE', '/files/*').as(`deleteOldFile_${randomInt}`);
     cy.intercept('PATCH', '/pieces/*').as(`patchPieces_${randomInt}`);
     cy.intercept('PATCH', '/document-containers/*').as(`patchDocumentContainers_${randomInt}`);
+    cy.wait(1000); // TODO KAS-3977 button is not disabled when upload is still in progress
     cy.get(document.previewDetailsTab.save).click();
     cy.wait(`@deleteOldFile_${randomInt}`);
     cy.wait(`@patchPieces_${randomInt}`);
