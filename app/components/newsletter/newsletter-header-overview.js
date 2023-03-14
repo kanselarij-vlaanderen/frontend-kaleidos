@@ -226,7 +226,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const threshold = 10;
     if (
       Math.abs(
-        differenceInMinutes(campaign.attributes.createTime, new Date())
+        differenceInMinutes(campaign.attributes['create-time'], new Date())
       ) > threshold
     ) {
       this.toaster.error(
