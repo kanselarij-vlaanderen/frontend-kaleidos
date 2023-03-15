@@ -1161,8 +1161,6 @@
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
   "all-content": "Alle inhoud",
-  "n-results-found-in": "{n} resultaten gevonden in",
-  "one-result-found-in": "1 resultaat gevonden in",
   "news-items": "Kort bestek berichten",
   "document-not-on-agendaitem": "Niet geüpload in agendapunt"
 }

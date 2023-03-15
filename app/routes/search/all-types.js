@@ -13,6 +13,7 @@ import SearchDecisionsRoute from './decisions';
 export default class AllTypes extends Route {
   @service store;
   @service plausible;
+  @service intl;
 
   CONTENT_TYPES = {
     cases: {
@@ -116,9 +117,43 @@ export default class AllTypes extends Route {
 
     flatResults.sort(sortFunc);
 
-    const counts = {};
+    const counts = [];
     for (const result of results) {
       counts[result.name] = result.data.meta.count;
+      const count = result.data.meta.count;
+      let name;
+      let route;
+      let tab; // for plausible
+      switch (result.name) {
+        case 'cases':
+          name = this.intl.t('cases');
+          route = 'search.cases';
+          tab = 'Dossiers';
+          break;
+        case 'agendaitems':
+          name = this.intl.t('agendas');
+          route = 'search.agendaitems';
+          tab = 'Agenda';
+          break;
+        case 'pieces':
+          name = this.intl.t('documents');
+          route = 'search.documents';
+          tab = 'Documenten';
+          break;
+        case 'decisions':
+          name = this.intl.t('decisions');
+          route = 'search.decisions';
+          tab = 'Beslissingen';
+          break;
+        case 'news-items':
+          name = this.intl.t('news-items');
+          route = 'search.news-items';
+          tab = 'Kort bestek';
+          break;
+        default:
+          break;
+      }
+      counts.push({ name, count, route, tab });
     }
 
     this.trackSearch(
