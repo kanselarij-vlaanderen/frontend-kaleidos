@@ -81,6 +81,8 @@ export default class SearchDecisionsRoute extends Route {
 
     // Since all agendaitem versions point to the same treatment, only use latest agendaitems
     filter[':has-no:nextVersionId'] = 't';
+    // only show results with a decision present
+    filter[':has:decisionName'] = 't';
 
     if (params.decisionResults?.length) {
       const decisionResults = (
