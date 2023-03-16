@@ -97,6 +97,11 @@ export default class AgendaitemSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
+    // all-types also needs this filtering (default = true, toggleable in current route)
+    if (params.latestOnly) {
+      filter[':has-no:nextVersionId'] = 't';
+    }
+
     return filter;
   }
 
@@ -143,10 +148,6 @@ export default class AgendaitemSearchRoute extends Route {
       }
     }
 
-    if (params.latestOnly) {
-      filter[':has-no:nextVersionId'] = 't';
-    }
-
     this.lastParams.commit();
 
     if (isEmpty(params.searchText)) {
@@ -182,7 +183,7 @@ export default class AgendaitemSearchRoute extends Route {
   async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, latestOnly) {
     const ministerNames = (
       await Promise.all(
-        mandatees.map((id) => this.store.findRecord('person', id)))
+        mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
     this.plausible.trackEventWithRole('Zoekopdracht', {

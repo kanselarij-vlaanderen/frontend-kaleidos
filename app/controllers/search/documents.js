@@ -59,9 +59,20 @@ export default class SearchDocumentsController extends Controller {
   }
 
   @action
-  navigateToDocument(document) {
+  resultClicked(searchEntry, clickEvent) {
     this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
-    this.router.transitionTo('document', document.id);
+    this.navigateToDocument(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToDocument(document, clickEvent) {
+    // Check if we clicked an emphasis or svg inside a linkTo or a linkTo
+    if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+      // do nothing, this was a clicked link in the card and the router will transition later
+      return;
+    } else {
+      this.router.transitionTo('document', document.id);
+    }
   }
 
   @action
