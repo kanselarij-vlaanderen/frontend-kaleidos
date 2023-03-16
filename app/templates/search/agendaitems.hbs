@@ -58,7 +58,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToAgendaitem}}
+      @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
         <td>
