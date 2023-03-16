@@ -10,17 +10,13 @@ export default class DocumentController extends Controller {
   @service router;
   @service store;
   @service signatureService;
+  @service transitionHistory;
 
   @tracked decisionActivity;
 
   @action
   transitionBack() {
-    // If no route where you returned from go to the home page
-    if (history.length > 1) {
-      history.back();
-    } else {
-      this.router.transitionTo('agendas');
-    }
+    this.transitionHistory.goBack();
   }
 
   @action

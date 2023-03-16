@@ -10,6 +10,7 @@ export default class ApplicationRoute extends Route {
   @service currentSession;
   @service router;
   @service userAgent;
+  @service transitionHistory;
 
   async beforeModel() {
     if (!this.isSupportedBrowser) {
@@ -49,5 +50,6 @@ export default class ApplicationRoute extends Route {
     if (this.session.isAuthenticated && !this.currentSession.hasAccessToApplication) {
       this.router.transitionTo('accountless-users');
     }
+    this.transitionHistory.registerTransition();
   }
 }

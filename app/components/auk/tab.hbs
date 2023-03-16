@@ -47,7 +47,7 @@
     {{!-- template-lint-disable link-href-attributes no-invalid-interactive --}}
     <a
       type="button"
-      disabled={{not this.hasHistory}}
+      {{!-- disabled={{not this.hasHistory}} --}}
       {{on "click" this.transitionBack}}
       ...attributes
     >

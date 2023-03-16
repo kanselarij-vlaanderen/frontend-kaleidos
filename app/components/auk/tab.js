@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 import { isPresent } from '@ember/utils';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 /**
  * A (nav) tab. Takes most arguments that LinkTo takes.
@@ -11,9 +12,11 @@ import { action } from '@ember/object';
  * @argument {Number} counter: Count number to display next to tab label
  * @argument {String} layout: can be (default, "icon-left") or "icon-right"
  * @argument {Boolean} isHierarchicalBack: Flag to apply custom styling for "hierarchical back button"-tab
+ * @argument {String} fallBackRoute: Route to fall back on
  * @argument {Boolean} active: Helps achieve active state without route
  */
 export default class Tab extends Component {
+  @service transitionHistory;
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
   // https://github.com/emberjs/ember.js/issues/18265
   @computed('args.{model,models}')
@@ -53,8 +56,6 @@ export default class Tab extends Component {
 
   @action
   transitionBack() {
-    if (history.length > 1) {
-      history.back();
-    }
+    this.transitionHistory.goBack(this.args.fallBackRoute);
   }
 }

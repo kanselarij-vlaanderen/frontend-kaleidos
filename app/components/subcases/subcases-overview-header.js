@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
+  @service transitionHistory;
 
   @tracked case;
   @tracked showAddSubcaseModal = false;
@@ -57,8 +58,6 @@ export default class SubCasesOverviewHeader extends Component {
 
   @action
   transitionBack() {
-    if (history.length > 1) {
-      history.back();
-    }
+    this.transitionHistory.goBack('/dossiers');
   }
 }
