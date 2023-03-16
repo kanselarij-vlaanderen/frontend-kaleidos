@@ -76,6 +76,7 @@ export default class AllTypes extends Route {
 
     const results = await Promise.all(
       Object.entries(this.CONTENT_TYPES).map(async (entry) => {
+        params.latestOnly = true; // for agendaitems filter
         const [name, type] = entry;
         const filter = await type.createFilter(params, this.store);
 

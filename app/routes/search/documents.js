@@ -92,6 +92,9 @@ export default class SearchDocumentsRoute extends Route {
       filter[':terms:documentType'] = params.documentTypes;
     }
 
+    // we only want to show latest piece
+    filter[':has-no:nextPieceId'] = 't';
+
     return filter;
   }
 
@@ -130,11 +133,6 @@ export default class SearchDocumentsRoute extends Route {
     } else if (params.sort === '-agendaitems.meetingDate') {
       sort = '-:max:agendaitems.meetingDate'; // correctly converted to mu-search syntax by the mu-search util
     }
-
-    // in case we only want to show latest piece?
-    // if (params.latestOnly) {
-    filter[':has-no:nextPieceId'] = 't';
-    // }
 
     // in case we only want to show pieces with connected agendaitems
     // filter[':has:agendaitems'] = 't';

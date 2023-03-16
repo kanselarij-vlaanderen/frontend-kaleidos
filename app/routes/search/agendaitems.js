@@ -97,6 +97,11 @@ export default class AgendaitemSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.toISOString();
     }
 
+    // all-types also needs this filtering (default = true, toggleable in current route)
+    if (params.latestOnly) {
+      filter[':has-no:nextVersionId'] = 't';
+    }
+
     return filter;
   }
 
@@ -141,10 +146,6 @@ export default class AgendaitemSearchRoute extends Route {
       ) {
         filter.type = CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       }
-    }
-
-    if (params.latestOnly) {
-      filter[':has-no:nextVersionId'] = 't';
     }
 
     this.lastParams.commit();
