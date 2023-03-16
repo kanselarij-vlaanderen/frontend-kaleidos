@@ -218,6 +218,7 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenUploadModal}}
   @title={{t "new-document-piece"}}
+  @overflow={{true}}
   @onConfirm={{perform this.addPiece}}
   @onCancel={{perform this.cancelUploadPiece}}
   @confirmMessage={{t "add"}}
