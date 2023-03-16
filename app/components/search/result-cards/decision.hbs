@@ -19,7 +19,7 @@
         <span>
           <SanitizeHtml
             @raw={{true}}
-            @value={{@shortTitle}}
+            @value={{if @shortTitle @shortTitle @title}}
           />
         </span>
       </AuLink>
