@@ -220,7 +220,7 @@ export default class CasesSearchRoute extends Route {
   async trackSearch(searchTerm, mandatees, resultCount, from, to, sort, archived, confidentialOnly) {
     const ministerNames = (
       await Promise.all(
-        mandatees.map((id) => this.store.findRecord('person', id)))
+        mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
     this.plausible.trackEventWithRole('Zoekopdracht', {

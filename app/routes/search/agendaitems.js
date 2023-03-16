@@ -182,7 +182,7 @@ export default class AgendaitemSearchRoute extends Route {
   async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, latestOnly) {
     const ministerNames = (
       await Promise.all(
-        mandatees.map((id) => this.store.findRecord('person', id)))
+        mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
     this.plausible.trackEventWithRole('Zoekopdracht', {
