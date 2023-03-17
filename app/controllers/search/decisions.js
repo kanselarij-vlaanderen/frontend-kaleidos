@@ -9,6 +9,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class SearchDecisionsController extends Controller {
   @service intl;
   @service router;
+  @service plausible;
 
   queryParams = [
     {
@@ -65,14 +66,26 @@ export default class SearchDecisionsController extends Controller {
   }
 
   @action
-  navigateToDecision(searchEntry) {
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToDecision(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToDecision(searchEntry, clickEvent) {
     if (searchEntry.meetingId) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem.decisions',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.id
-      );
+      // Check if we clicked an emphasis inside a linkTo or a linkTo
+      if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+        // do nothing, this was a clicked link in the card and the router will transition later
+        return;
+      } else {
+        this.router.transitionTo(
+          'agenda.agendaitems.agendaitem.decisions',
+          searchEntry.meetingId,
+          searchEntry.agendaId,
+          searchEntry.id
+        );
+      }
     } else {
       warn(
         `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to decisions`,

@@ -9,6 +9,7 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SearchDecisionsRoute extends Route {
   @service store;
+  @service plausible;
 
   queryParams = {
     decisionResults: {
@@ -80,6 +81,8 @@ export default class SearchDecisionsRoute extends Route {
 
     // Since all agendaitem versions point to the same treatment, only use latest agendaitems
     filter[':has-no:nextVersionId'] = 't';
+    // only show results with a decision present
+    filter[':has:decisionName'] = 't';
 
     if (params.decisionResults?.length) {
       const decisionResults = (
@@ -104,14 +107,6 @@ export default class SearchDecisionsRoute extends Route {
 
     this.lastParams.stageLive(params);
 
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
@@ -120,6 +115,14 @@ export default class SearchDecisionsRoute extends Route {
     }
     if (!params.mandatees) {
       params.mandatees = null;
+    }
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
     }
 
     const filter = await SearchDecisionsRoute.createFilter(params, this.store);
@@ -132,7 +135,7 @@ export default class SearchDecisionsRoute extends Route {
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route
-    return search(
+    const results = search(
       'agendaitems',
       params.page,
       params.size,
@@ -143,6 +146,40 @@ export default class SearchDecisionsRoute extends Route {
         fields: SearchDecisionsRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.decisionResults,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, decisionResults, from, to, sort) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees?.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    const decisionResultNames = (
+      await Promise.all(
+        decisionResults?.map((id) => this.store.findRecord('concept', id)))
+    ).map((decisionResultCode) => decisionResultCode.label);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Aantal resultaten': resultCount,
+      'Resultaat beslissing': decisionResultNames.join(', '),
+    }, true);
   }
 
   setupController(controller) {

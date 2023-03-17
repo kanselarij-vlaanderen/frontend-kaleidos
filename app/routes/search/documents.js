@@ -11,6 +11,7 @@ import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDocumentsRoute extends Route {
   @service store;
+  @service plausible;
 
   queryParams = {
     confidentialOnly: {
@@ -91,6 +92,9 @@ export default class SearchDocumentsRoute extends Route {
       filter[':terms:documentType'] = params.documentTypes;
     }
 
+    // we only want to show latest piece
+    filter[':has-no:nextPieceId'] = 't';
+
     return filter;
   }
 
@@ -99,7 +103,7 @@ export default class SearchDocumentsRoute extends Route {
     this.lastParams = new Snapshot();
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
 
@@ -130,15 +134,10 @@ export default class SearchDocumentsRoute extends Route {
       sort = '-:max:agendaitems.meetingDate'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    // in case we only want to show latest piece?
-    // if (params.latestOnly) {
-    filter[':has-no:nextPieceId'] = 't';
-    // }
-
     // in case we only want to show pieces with connected agendaitems
     // filter[':has:agendaitems'] = 't';
 
-    return search(
+    const results = search(
       'pieces',
       params.page,
       params.size,
@@ -149,6 +148,42 @@ export default class SearchDocumentsRoute extends Route {
         fields: SearchDocumentsRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+      params.documentTypes,
+      params.confidentialOnly,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, confidentialOnly) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees?.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    const typeNames = (
+      await Promise.all(
+        types?.map((id) => this.store.findRecord('concept', id)))
+    ).map((document) => document.label);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Aantal resultaten': resultCount,
+      'Documenttypes': typeNames.join(', '),
+      'Enkel vertrouwelijke documenten': confidentialOnly,
+    }, true);
   }
 
   setupController(controller) {

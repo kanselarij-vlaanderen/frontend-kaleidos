@@ -13,13 +13,13 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="document"
         @model={{@documentId}}
         @icon="document"
         @iconAlignment="left"
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
             @value={{@title}}
@@ -39,10 +39,11 @@
         {{#if @agendaitemShortTitle}}
           {{t "uploaded-in-thing" thing=(t "agendaitem")}}
           <AuLink
+            class="card-link"
             @route="agenda.agendaitems.agendaitem"
             @models={{array @meetingId @agendaId @agendaitemId}}
           >
-            <span>
+            <span class="card-link">
               <SanitizeHtml
                 @raw={{true}}
                 @value={{@agendaitemShortTitle}}
@@ -52,6 +53,7 @@
         {{else}}
           {{t "uploaded-in"}}
           <AuLink
+            class="card-link"
             @route="agenda.agendaitems.agendaitem"
             @models={{array @meetingId @agendaId @agendaitemId}}
           >
