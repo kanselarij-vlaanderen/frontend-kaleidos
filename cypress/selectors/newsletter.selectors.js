@@ -2,6 +2,8 @@ const selectors = {
   // component newsletter-header
   newsletterHeader: {
     title: '[data-test-newsletter-header-title]',
+    overview: '[data-test-newsletter-header-overview]',
+    search: '[data-test-newsletter-header-search]',
   },
 
   // route agenda/agendaitems/agendaitem/news-item
@@ -46,9 +48,19 @@ const selectors = {
   // component newsletter-header-overview
   newsletterHeaderOverview: {
     title: '[data-test-newsletter-header-overview-title]',
+    index: '[data-test-newsletter-header-overview-index]',
+    printDraft: '[data-test-newsletter-header-overview-print-draft]',
+    print: '[data-test-newsletter-header-overview-print]',
+    notaUpdates: '[data-test-newsletter-header-overview-nota-updates]',
     newsletterActions: {
       optionsDropdown: '[data-test-newsletter-header-actions-dropdown]',
+      publishAll: '[data-test-newsletter-header-actions-publish-all]',
+      publishBelga: '[data-test-newsletter-header-actions-publish-belga]',
       publishMail: '[data-test-newsletter-header-actions-publish-mail]',
+      publishThemis: '[data-test-newsletter-header-actions-publish-themis]',
+      print: '[data-test-newsletter-header-actions-print]',
+      deleteCampaign: '[data-test-newsletter-header-actions-delete-campaign]',
+      unpublishThemis: '[data-test-newsletter-header-actions-unpublish-themis]',
     },
   },
 

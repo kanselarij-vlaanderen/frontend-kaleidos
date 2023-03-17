@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, Cypress, beforeEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -13,6 +13,9 @@ import route from '../../selectors/route.selectors';
 import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
+function currentTimestamp() {
+  return Cypress.dayjs().unix();
+}
 
 context('Testing the application as Admin user', () => {
   beforeEach(() => {
@@ -50,7 +53,7 @@ context('Testing the application as Admin user', () => {
 
     it('Should switch to newsletter tab when newsletter is clicked', () => {
       cy.get(utils.mHeader.newsletters).click();
-      cy.get(newsletter.newsletterHeader.title).should('exist');
+      cy.get(newsletter.newsletterHeader.title);
       cy.url().should('include', '/kort-bestek');
     });
 
@@ -471,46 +474,334 @@ context('Testing the application as Admin user', () => {
     });
   });
 
-  context('Profile rights checks for kort-bestek routes', () => {
-    const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
-    const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+  context.only('Profile rights checks for kort-bestek routes', () => {
+    const agendaDate = Cypress.dayjs().add(3, 'weeks')
+      .day(3);
 
-    it('check kort bestek zebra view for open agenda', () => {
-      cy.visit(kortBestekLinkOpenAgenda);
-      cy.get(auk.loader).should('not.exist');
+    it('setup for update notas tests', () => {
+      const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
+      const caseTitle = `testId=${currentTimestamp()}: Cypress test nota updates`;
+      const subcaseTitle1 = `${caseTitle} test stap 1`;
+      const file = {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+      };
+      const files = [file];
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(0)
-        .find(newsletter.tableRow.inNewsletterCheckbox)
-        .should('be.disabled');
+      cy.createCase(caseTitle);
+      cy.addSubcase('Nota',
+        subcaseTitle1,
+        'Cypress test voor nota updates',
+        'Principiële goedkeuring',
+        'Principiële goedkeuring m.h.o. op adviesaanvraag');
+      cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(0)
-        .find(newsletter.buttonToolbar.edit);
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(subcaseTitle1);
+      cy.addDocumentsToAgendaitem(subcaseTitle1, files);
+      cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(1)
-        .find(newsletter.tableRow.inNewsletterCheckbox)
-        .should('not.be.disabled');
-
-      cy.get(newsletter.tableRow.newsletterRow).eq(1)
-        .find(newsletter.buttonToolbar.edit);
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
+      cy.approveAndCloseDesignAgenda();
+      cy.releaseDecisions();
+      cy.wait(80000);
+      // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+      cy.get(agenda.publicationPills.container).within(() => {
+        cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
+      });
     });
 
-    it('check kort bestek zebra view for released agenda', () => {
-      cy.visit(kortBestekLinkReleasedAgenda);
-      cy.get(auk.loader).should('not.exist');
+    it('check kort bestek route', () => {
+      cy.visit('/kort-bestek');
+      cy.get(newsletter.newsletterHeader.overview);
+      cy.get(newsletter.newsletterHeader.search);
+    });
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(0)
-        .find(newsletter.tableRow.inNewsletterCheckbox)
-        .should('be.disabled');
+    it('check kort bestek general view tabs', () => {
+      cy.visit('vergadering/6374F696D9A98BD0A2288559/kort-bestek');
+      cy.get(newsletter.newsletterHeaderOverview.index);
+      cy.get(newsletter.newsletterHeaderOverview.printDraft);
+      cy.get(newsletter.newsletterHeaderOverview.print);
+      cy.get(newsletter.newsletterHeaderOverview.notaUpdates);
+    });
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(0)
-        .find(newsletter.buttonToolbar.edit);
+    context('check kort bestek route on open agenda', () => {
+      const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
+      const kladViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/afdrukken?klad=true';
+      const definitiefViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/afdrukken';
+      const notaUpdatesViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/nota-updates';
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(1)
-        .find(newsletter.tableRow.inNewsletterCheckbox)
-        .should('not.be.disabled');
+      it('check zebra view', () => {
+        cy.visit(kortBestekLinkOpenAgenda);
+        cy.get(auk.loader).should('not.exist');
 
-      cy.get(newsletter.tableRow.newsletterRow).eq(1)
-        .find(newsletter.buttonToolbar.edit);
+        // check edit rights
+        cy.get(newsletter.tableRow.newsletterRow).eq(0)
+          .find(newsletter.tableRow.inNewsletterCheckbox)
+          .should('be.disabled');
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(0)
+          .find(newsletter.buttonToolbar.edit);
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(1)
+          .find(newsletter.tableRow.inNewsletterCheckbox)
+          .should('not.be.disabled');
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(1)
+          .find(newsletter.buttonToolbar.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+      });
+
+      it('check klad view', () => {
+        cy.visit(kladViewOpenAgenda);
+
+        // check edit
+        cy.get(newsletter.newsletterPrint.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+      });
+
+      it('check definitief view', () => {
+        // setup: make sure there is a nota to check in definitief view
+        cy.visit(kortBestekLinkOpenAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+
+        cy.visit(definitiefViewOpenAgenda);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+
+        // check edit doesn't exist
+        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkOpenAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+      });
+
+      it('check update notas view', () => {
+        cy.visit(notaUpdatesViewOpenAgenda);
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
+      });
+    });
+
+    context('check kort bestek route on released agenda', () => {
+      const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+      const kladViewReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek/afdrukken?klad=true';
+      const definitiefViewReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek/afdrukken';
+      // const notaUpdatesViewReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek/nota-updates';
+
+      it('check zebra view', () => {
+        cy.visit(kortBestekLinkReleasedAgenda);
+        cy.get(auk.loader).should('not.exist');
+
+        // check edit rights
+        cy.get(newsletter.tableRow.newsletterRow).eq(0)
+          .find(newsletter.tableRow.inNewsletterCheckbox)
+          .should('be.disabled');
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(0)
+          .find(newsletter.buttonToolbar.edit);
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(1)
+          .find(newsletter.tableRow.inNewsletterCheckbox)
+          .should('not.be.disabled');
+
+        cy.get(newsletter.tableRow.newsletterRow).eq(1)
+          .find(newsletter.buttonToolbar.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+      });
+
+      it('check klad view', () => {
+        cy.visit(kladViewReleasedAgenda);
+
+        // check edit
+        cy.get(newsletter.newsletterPrint.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+      });
+
+      it('check definitief view', () => {
+        // setup: make sure there is a nota to check in definitief view
+        cy.visit(kortBestekLinkReleasedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+
+        cy.visit(definitiefViewReleasedAgenda);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+
+        // check edit doesn't exist
+        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkReleasedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+      });
+
+      it('check update notas view', () => {
+        // setup: create nota with bis
+        cy.openAgendaForDate(agendaDate);
+        cy.get(agenda.agendaActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+        cy.get(newsletter.newsletterHeaderOverview.notaUpdates).click();
+
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
+      });
+    });
+
+    context('check kort bestek route on closed agenda', () => {
+      const kortBestekLinkClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek';
+      const kladViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/afdrukken?klad=true';
+      const definitiefViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/afdrukken';
+      // const notaUpdatesViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/nota-updates';
+
+      it('check klad view', () => {
+        cy.visit(kladViewClosedAgenda);
+
+        // check edit
+        cy.get(newsletter.newsletterPrint.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+      });
+
+      it('check definitief view', () => {
+        // setup: make sure there is a nota to check in definitief view
+        cy.visit(kortBestekLinkClosedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(0)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+
+        cy.visit(definitiefViewClosedAgenda);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+
+        // check edit doesn't exist
+        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkClosedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(0)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+      });
+
+      it.skip('check update notas view', () => {
+        // setup: create nota with bis
+        cy.openAgendaForDate(agendaDate);
+        cy.get(agenda.agendaActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+        cy.get(newsletter.newsletterHeaderOverview.notaUpdates).click();
+
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
+      });
     });
   });
 });

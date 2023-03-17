@@ -41,6 +41,8 @@ context('Testing the application as Overheid user', () => {
       cy.url().should('include', '/dossiers');
     });
 
+    // there is no newsletter tab here so no tests
+
     it('Should switch to search tab when search is clicked as overheid', () => {
       cy.get(utils.mHeader.search).click();
       cy.get(route.search.trigger).should('exist');
@@ -303,6 +305,7 @@ context('Testing the application as Overheid user', () => {
       cy.visit(kortBestekLinkOpenAgenda);
       cy.get(auk.loader).should('not.exist');
 
+      // check edit rights
       cy.get(newsletter.tableRow.newsletterRow).eq(0)
         .find(newsletter.tableRow.inNewsletterCheckbox)
         .should('be.disabled');
@@ -318,6 +321,8 @@ context('Testing the application as Overheid user', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
 
     it('check kort bestek zebra view for released agenda', () => {
@@ -339,6 +344,8 @@ context('Testing the application as Overheid user', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
   });
 });

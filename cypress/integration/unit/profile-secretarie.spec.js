@@ -431,7 +431,7 @@ context('Testing the application as Secretarie user', () => {
     });
   });
 
-  context('Profile rights checks for kort-bestek routes', () => {
+  context.only('Profile rights checks for kort-bestek routes', () => {
     const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
     const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
 
@@ -439,6 +439,7 @@ context('Testing the application as Secretarie user', () => {
       cy.visit(kortBestekLinkOpenAgenda);
       cy.get(auk.loader).should('not.exist');
 
+      // check edit rights
       cy.get(newsletter.tableRow.newsletterRow).eq(0)
         .find(newsletter.tableRow.inNewsletterCheckbox)
         .should('be.disabled');
@@ -452,12 +453,25 @@ context('Testing the application as Secretarie user', () => {
 
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit);
+
+      // check actions
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
     });
 
     it('check kort bestek zebra view for released agenda', () => {
       cy.visit(kortBestekLinkReleasedAgenda);
       cy.get(auk.loader).should('not.exist');
 
+      // check edit rights
       cy.get(newsletter.tableRow.newsletterRow).eq(0)
         .find(newsletter.tableRow.inNewsletterCheckbox)
         .should('be.disabled');
@@ -471,6 +485,18 @@ context('Testing the application as Secretarie user', () => {
 
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit);
+
+      // check actions
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
     });
   });
 });

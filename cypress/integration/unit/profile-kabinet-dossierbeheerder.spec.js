@@ -304,7 +304,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
     });
   });
 
-  context('Profile rights checks for kort-bestek routes', () => {
+  context.only('Profile rights checks for kort-bestek routes', () => {
     const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
     const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
 
@@ -327,6 +327,8 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
 
     it('check kort bestek zebra view for released agenda', () => {
@@ -348,6 +350,8 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
   });
 });

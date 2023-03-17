@@ -300,6 +300,8 @@ context('Testing the application as Vlaams Parlement', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
 
     it('check kort bestek zebra view for released agenda', () => {
@@ -321,6 +323,8 @@ context('Testing the application as Vlaams Parlement', () => {
       cy.get(newsletter.tableRow.newsletterRow).eq(1)
         .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
+
+      // no checks on actions because it doesn't have any
     });
   });
 });
