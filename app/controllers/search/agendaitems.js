@@ -10,6 +10,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class AgendaitemsSearchController extends Controller {
   @service router;
   @service intl;
+  @service plausible;
 
   queryParams = [
     {
@@ -95,14 +96,26 @@ export default class AgendaitemsSearchController extends Controller {
   }
 
   @action
-  navigateToAgendaitem(searchEntry) {
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToAgendaitem(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToAgendaitem(searchEntry, clickEvent) {
     if (searchEntry.meetingId) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.id
-      );
+      // Check if we clicked an emphasis inside a linkTo or a linkTo
+      if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+        // do nothing, this was a clicked link in the card and the router will transition later
+        return;
+      } else {
+        this.router.transitionTo(
+          'agenda.agendaitems.agendaitem',
+          searchEntry.meetingId,
+          searchEntry.agendaId,
+          searchEntry.id
+        );
+      }
     } else {
       warn(
         `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`,

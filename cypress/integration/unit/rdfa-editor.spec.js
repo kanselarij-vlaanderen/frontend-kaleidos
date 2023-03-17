@@ -95,22 +95,22 @@ context('rdfa editor tests', () => {
       .click();
     cy.wait('@getThemes');
 
-    pressRdfaButton('Strikethrough');
+    pressRdfaButton('Doorstreept');
     cy.get(dependency.rdfa.editorInner).type('Strikethrough');
     cy.wait(200);
-    pressRdfaButton('Strikethrough');
+    pressRdfaButton('Doorstreept');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Underline');
+    pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfa.editorInner).type('Underline');
     cy.wait(200);
-    pressRdfaButton('Underline');
+    pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Italic');
+    pressRdfaButton('Schuingedrukt');
     cy.get(dependency.rdfa.editorInner).type('Italic');
     cy.wait(200);
-    pressRdfaButton('Italic');
+    pressRdfaButton('Schuingedrukt');
     cy.get(dependency.rdfa.editorInner).type(' ');
-    pressRdfaButton('Bold');
+    pressRdfaButton('Vetgedrukt');
     cy.get(dependency.rdfa.editorInner).type('Bold');
 
     cy.get('del').contains('Strikethrough');

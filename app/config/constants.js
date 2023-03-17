@@ -125,5 +125,15 @@ export default {
     MINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
     VOORZITTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
     GEMEENSCHAPSMINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
-  }
+  },
+  // TODO replace harcoded strings with constants for plausible
+  PLAUSIBLE_EVENTS: {
+    SEARCH_RESULT_KLIK: 'Zoekresultaat klik',
+    SEARCH_TRIGGER: 'Zoekopdracht',
+    SEARCH_ALL_TYPES_RESULTS_LINK: 'Alle inhoud resultaten link',
+    USER_SESSION: 'Gebruikerssessie (per rol)',
+    USER_LOGIN: 'Aanmelding (per rol)',
+    USER_PAGEVIEW: 'Pageview (per rol)',
+    FIRST_ACTION: 'Eerste actie',
+  },
 };

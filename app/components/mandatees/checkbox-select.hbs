@@ -1,6 +1,6 @@
 {{#if this.loadMinisters.isRunning}}
   <Auk::Loader />
-{{else}}
+{{else if this.ministers}}
 <div class="auk-form-group">
   <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
     <Auk::Label for="ministerName">
@@ -29,4 +29,6 @@
     {{/each}}
   </Auk::CheckboxList>
   </div>
+{{else}}
+  <p>{{t "no-ministers-submitted-on-this-agenda"}}</p>
 {{/if}}
