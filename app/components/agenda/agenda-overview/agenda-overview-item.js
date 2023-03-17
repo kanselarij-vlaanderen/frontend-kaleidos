@@ -22,7 +22,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument previousAgenda: the previous version of the currently open agenda
    * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isEditingFormallyOkStatus
-   * @argument showDragHandle: boolean to show the drag-handle for changing item order
+   * @argument allowReorderItems: boolean to enable changing item order with drag-handle or move buttons
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    * @argument onMove: the function used to change item order by button click
    * @argument isFirst: boolean indicating whether it's the first nota or announcement

@@ -24,8 +24,8 @@ export default class AgendaOverview extends Component {
     return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
   }
 
-  get canDragAgendaitems() {
-    return this.canEdit && this.args.isEditingOverview;
+  get canMoveAgendaitems() {
+    return this.canEdit && this.args.isEditingOverview && !this.args.showModifiedOnly;
   }
 
   @action

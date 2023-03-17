@@ -65,7 +65,7 @@
                 {{sortable-item
                   model=agendaitem
                   distance="30"
-                  disabled=(not this.canDragAgendaitems)
+                  disabled=(not this.canMoveAgendaitems)
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
@@ -76,7 +76,7 @@
                   @isNew={{includes agendaitem @newItems}}
                   @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
                   @isEditingFormallyOkStatus={{@isEditingOverview}}
-                  @showDragHandle={{this.canDragAgendaitems}}
+                  @allowReorderItems={{this.canMoveAgendaitems}}
                   @onMove={{this.move}}
                   @isFirst={{and (eq index 0) (eq indexItems 0)}}
                   @isLast={{and (not (has-next agendaitemGroup @notaGroups)) (not (has-next agendaitem agendaitemGroup.agendaitems))}}
@@ -113,7 +113,7 @@
             {{sortable-item
               model=announcement
               distance="30"
-              disabled=(not this.canDragAgendaitems)
+              disabled=(not this.canMoveAgendaitems)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -124,7 +124,7 @@
               @isNew={{includes announcement @newItems}}
               @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
               @isEditingFormallyOkStatus={{@isEditingOverview}}
-              @showDragHandle={{this.canDragAgendaitems}}
+              @allowReorderItems={{this.canMoveAgendaitems}}
               @onMove={{this.move}}
               @isFirst={{eq indexitems 0}}
               @isLast={{not (has-next announcement @announcements)}}
