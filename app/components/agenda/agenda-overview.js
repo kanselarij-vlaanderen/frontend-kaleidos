@@ -11,7 +11,7 @@ export default class AgendaOverview extends Component {
    * @argument meeting: the meeting that is currently open
    * @argument currentAgenda: the agenda that is currently open
    * @argument previousAgenda: the previous version of the currently open agenda
-   * @argument onReorderAgendaitems: trigger the parent's action when we reorder agendaitems (by dragging)
+   * @argument onReorderAgendaitems: trigger the parent's action when we reorder agendaitems
    * @argument showModifiedOnly: if we should filter only on modified agendaitems
    * @argument toggleShowModifiedOnly: toggle the parent to set the modified filter on or off
    * @argument isEditingOverview {Boolean} If the overview is in edit mode
