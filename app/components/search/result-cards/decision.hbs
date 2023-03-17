@@ -16,14 +16,14 @@
     <AuHeading @level="3" @skin="6">
       <AuLink
         data-test-route-search-result-cards-decision-shorttitle
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="agenda.agendaitems.agendaitem.decisions"
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
-            @value={{@shortTitle}}
+            @value={{if @shortTitle @shortTitle @title}}
           />
         </span>
       </AuLink>
@@ -36,13 +36,16 @@
         @value={{@title}}
       />
     </p>
-    <p
-      data-test-route-search-result-cards-decision-result
-      class="au-u-margin-top-small"
-    >
-      <Decision::DecisionResultPill
-        @decisionResultCode={{@decisionResultCode}}
-      />
-    </p>
+    {{#if @decisionResultCode}}
+      <p 
+        data-test-route-search-result-cards-decision-result
+        class="au-u-margin-top-small"
+      >
+        <Decision::DecisionResultPill
+          @decisionResultCode={{@decisionResultCode}}
+          @showUndecided={{false}}
+        />
+      </p>
+    {{/if}}
   </c.content>
 </AuCard>

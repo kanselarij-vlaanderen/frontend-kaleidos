@@ -17,13 +17,13 @@
     <AuHeading @level="3" @skin="6">
       <AuLink
         data-test-route-search-result-cards-document-filename
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="document"
         @model={{@documentId}}
         @icon="document"
         @iconAlignment="left"
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
             @value={{@title}}
@@ -38,23 +38,35 @@
         …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
       </p>
     {{/if}}
-    {{#if (and @agendaitemShortTitle @meetingId @agendaId @agendaitemId)}}
-      <p
+    {{#if (and @meetingId @agendaId @agendaitemId)}}
+      <p 
         data-test-route-search-result-cards-document-agendaitem
         class="au-u-para-small au-u-muted"
       >
-        {{t "uploaded-in-thing" thing=(t "agendaitem")}}
-        <AuLink
-          @route="agenda.agendaitems.agendaitem"
-          @models={{array @meetingId @agendaId @agendaitemId}}
-        >
-          <span>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{@agendaitemShortTitle}}
-            />
-          </span>
-        </AuLink>
+        {{#if @agendaitemShortTitle}}
+          {{t "uploaded-in-thing" thing=(t "agendaitem")}}
+          <AuLink
+            class="card-link"
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array @meetingId @agendaId @agendaitemId}}
+          >
+            <span class="card-link">
+              <SanitizeHtml
+                @raw={{true}}
+                @value={{@agendaitemShortTitle}}
+              />
+            </span>
+          </AuLink>
+        {{else}}
+          {{t "uploaded-in"}}
+          <AuLink
+            class="card-link"
+            @route="agenda.agendaitems.agendaitem"
+            @models={{array @meetingId @agendaId @agendaitemId}}
+          >
+            {{t "agendaitem"}}
+          </AuLink>
+        {{/if}}
       </p>
     {{else}}
       <p class="au-u-para-small au-u-muted">

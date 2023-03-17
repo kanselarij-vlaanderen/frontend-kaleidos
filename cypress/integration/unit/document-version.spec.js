@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 
 context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
@@ -41,7 +40,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     cy.get(document.documentCard.card).should('have.length', amountOfDocs);
 
     // all documents of current subcase are "linked documents" of newly created subcase
-    cy.get(auk.tab.hierarchicalBack).click();
+    cy.visit('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     const subcaseShortTitle = 'cypress test: 20+ documents linked subcase - 1589286110 part 2';
     cy.addSubcase(null, subcaseShortTitle);
     cy.openSubcase(0, subcaseShortTitle);

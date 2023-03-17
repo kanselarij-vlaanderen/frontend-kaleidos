@@ -8,7 +8,7 @@ export default class NewsItemEditPanelComponent extends Component {
   @service newsletterService;
   @service agendaitemNota;
 
-  editorInstance;
+  editorController;
   @tracked newsItem;
   @tracked isFullscreen = false;
   @tracked proposalText;
@@ -73,7 +73,7 @@ export default class NewsItemEditPanelComponent extends Component {
 
   @task
   *confirmSave() {
-    if (!this.editorInstance) {
+    if (!this.editorController) {
       throw new Error("Can't get rich text since editor-instance isn't available!");
     }
 
@@ -95,7 +95,7 @@ export default class NewsItemEditPanelComponent extends Component {
       // we send it off via Mailchimp, because it also has impact on the layout
       // in mail readers. For that reason, we now strip ALL &nbsp; regardless of
       // whether they hug html tags or not.
-      const htmlContent = this.editorInstance.htmlContent;
+      const htmlContent = this.editorController.htmlContent;
       const cleanedHtml = htmlContent.replaceAll(/&nbsp;/gm, ' ');
       this.newsItem.htmlContent = cleanedHtml;
     } catch {
@@ -123,8 +123,8 @@ export default class NewsItemEditPanelComponent extends Component {
   }
 
   @action
-  handleRdfaEditorInit(editorInterface) {
-    this.editorInstance = editorInterface;
-    editorInterface.setHtmlContent(this.htmlContent);
+  handleRdfaEditorInit(editorController) {
+    this.editorController = editorController;
+    editorController.setHtmlContent(this.htmlContent);
   }
 }

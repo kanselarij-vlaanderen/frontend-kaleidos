@@ -26,12 +26,12 @@
     <AuHeading @level="3" @skin="6">
       <AuLink
         data-test-route-search-result-cards-agendaitem-shorttitle
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="agenda.agendaitems.agendaitem"
 
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
             @value={{if @shortTitle @shortTitle @title}}
