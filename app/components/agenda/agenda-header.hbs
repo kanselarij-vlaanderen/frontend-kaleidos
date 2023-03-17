@@ -21,9 +21,9 @@
                 class="auk-u-text-muted auk-body-1"
               >
                 {{#if this.isFinalAgenda}}
-                  <AuPill @size="small">{{t "closed"}}</AuPill>
+                  <AuPill data-test-agenda-header-is-final-pill-closed @size="small">{{t "closed"}}</AuPill>
                 {{else}}
-                  <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
+                  <AuPill data-test-agenda-header-is-final-pill-opened @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
                 {{/if}}
                 -
                 {{@meeting.kind.label}}

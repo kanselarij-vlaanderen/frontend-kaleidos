@@ -339,3 +339,29 @@ table tr.lt-expanded-row {
 .auk-u-text-vertical-align-middle {
   vertical-align: middle;
 }
+
+// Result cards
+// Workaround until we adapt mu-search to send more specific tags for highlights
+.result-card em {
+  font-style: inherit;
+  background: #E4EBF5;
+}
+
+// Bigger font
+// workaround for search legend sign example
+.auk-u-text-size--xlarge {
+  font-size: 2.5rem !important;
+}
+
+// Bigger container
+// workaround for search legend popover having a max-width of 45rem 
+.auk-u-max-width-xxlarge {
+  max-width: 65rem;
+}
+
+// Workaround for popover exiting view window on small display for search legend
+@media screen and (max-width: 780px) {
+  .auk-u-max-width-xxlarge.ember-popover {
+    transform: translate3d(10px, 64px, 0px) !important;
+  }
+}

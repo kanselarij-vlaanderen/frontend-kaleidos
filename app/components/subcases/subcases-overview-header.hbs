@@ -4,9 +4,9 @@
       <Auk::Toolbar::Item>
         <AuLink
           @skin="button-naked"
-          @icon="chevron-left"
+          @icon="hierarchical-back"
           @hideText={{true}}
-          @route="cases"
+          {{on "click" this.transitionBack}}
         >
           {{t "back"}}
         </AuLink>

@@ -39,10 +39,12 @@ context('Agenda-Header actions tests', () => {
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B');
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillOpened);
       cy.approveAndCloseDesignAgenda();
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B', false);
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillClosed);
       cy.deleteAgenda();
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
       cy.agendaNameExists('A', false);
@@ -50,6 +52,7 @@ context('Agenda-Header actions tests', () => {
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B');
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillOpened);
     }
   });
 
@@ -61,13 +64,16 @@ context('Agenda-Header actions tests', () => {
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B');
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillOpened);
       cy.closeAgenda();
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillClosed);
       cy.reopenAgenda();
       cy.get(agenda.agendaSideNav.agenda).should('have.length', 2);
       cy.agendaNameExists('B');
       cy.agendaNameExists('A', false);
+      cy.get(agenda.agendaHeader.isFinalPillOpened);
     }
   });
 

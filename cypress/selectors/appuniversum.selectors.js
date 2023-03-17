@@ -8,5 +8,6 @@ const selectors = {
   input: '.au-c-input',
   checkbox: '.au-c-control--checkbox',
   button: '.au-c-button',
+  loader: '.au-c-loader',
 };
 export default selectors;

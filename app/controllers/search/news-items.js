@@ -10,6 +10,7 @@ export default class SearchNewsItemsControllers extends Controller {
   @service router;
   @service toaster;
   @service intl;
+  @service plausible;
 
   queryParams = [
     {
@@ -58,15 +59,27 @@ export default class SearchNewsItemsControllers extends Controller {
   }
 
   @action
-  navigateToNewsletter(searchEntry) {
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToNewsletter(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToNewsletter(searchEntry, clickEvent) {
     const latestAgendaitem = searchEntry.latestAgendaitem;
     if (latestAgendaitem) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem.news-item',
-        latestAgendaitem['meetingId'],
-        latestAgendaitem['agendaId'],
-        latestAgendaitem['id']
-      );
+      // Check if we clicked an emphasis inside a linkTo or a linkTo
+      if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+        // do nothing, this was a clicked link in the card and the router will transition later
+        return;
+      } else {
+        this.router.transitionTo(
+          'agenda.agendaitems.agendaitem.news-item',
+          latestAgendaitem['meetingId'],
+          latestAgendaitem['agendaId'],
+          latestAgendaitem['id']
+        );
+      }
     }
   }
 
@@ -85,7 +98,8 @@ export default class SearchNewsItemsControllers extends Controller {
     if (row.htmlContent) {
       copyText += sanitizeHtml(
         row.htmlContent
-          .replace(/<p>(.*?)<\/p>/g, '$1\n\n') // Replace p-tags with \n line breaks
+          .replace(/<p>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
+          .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
           .trim(), // Trim whitespaces at start & end of the string
         { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
       );

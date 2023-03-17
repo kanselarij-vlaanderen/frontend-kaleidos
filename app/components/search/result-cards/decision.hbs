@@ -1,0 +1,44 @@
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |c|
+>
+  <c.header>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{date @date}}
+      </p>
+    </div>
+    <AuHeading @level="3" @skin="6">
+      <AuLink
+        class="au-u-padding-none card-link"
+        @route="agenda.agendaitems.agendaitem.decisions"
+        @models={{array @meetingId @agendaId @agendaItemId}}
+      >
+        <span class="card-link">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
+      </AuLink>
+    </AuHeading>
+  </c.header>
+  <c.content>
+    <p class="au-u-para">
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{@title}}
+      />
+    </p>
+    {{#if @decisionResultCode}}
+      <p class="au-u-margin-top-small">
+        <Decision::DecisionResultPill
+          @decisionResultCode={{@decisionResultCode}}
+          @showUndecided={{false}}
+        />
+      </p>
+    {{/if}}
+  </c.content>
+</AuCard>

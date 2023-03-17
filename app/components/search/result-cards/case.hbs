@@ -1,0 +1,50 @@
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |card|
+>
+  <card.header>
+    <div class="au-u-flex">
+      <p class="au-u-para-small au-u-muted au-u-medium">
+        {{date @date}}
+      </p>
+      {{#if (eq @isArchived "true")}}
+        <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
+      {{/if}}
+    </div>
+    <AuHeading @level="3" @skin="6">
+      <AuLink
+        class="au-u-padding-none card-link"
+        @route="cases.case.subcases"
+        @model={{@caseId}}
+      >
+        <span class="card-link">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
+      </AuLink>
+    </AuHeading>
+  </card.header>
+  <card.content>
+    {{#if @subcaseHighlights}}
+      <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+        {{t "found-inside"}}
+        <span class="au-u-muted au-u-medium">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{object-at 0 @subcaseHighlights}}
+          />
+        </span>
+        {{#if (eq @subcaseHighlights.length 2)}}
+          {{t "and-one-other-subcase"}}
+        {{/if}}
+        {{#if (gt @subcaseHighlights.length 2)}}
+          {{t "and-n-other-subcases" n=(sub @subcaseHighlights.length 1)}}
+        {{/if}}
+      </p>
+    {{/if}}
+  </card.content>
+</AuCard>

@@ -17,15 +17,15 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
-      @searchType={{t "cases"}}
+      @searchType={{t "documents"}}
       @onSortChange={{this.selectSort}}
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
     <KDataTable
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @page={{this.page}}
       @size={{this.size}}
@@ -34,50 +34,28 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToDocument}}
+      @onClickRow={{this.resultClicked}}
     >
-      <:header>
-        <th class="auk-table__col--8">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="created"
-          @label={{t "created-on"}}
-          @onChange={{this.selectSort}}
-        />
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="confidentialityLevel"
-          @label={{t "confidentiality-level"}}
-          @onChange={{this.selectSort}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{row.title}}
-          </p>
-        </td>
-        <td>
-          {{datetime row.created "DD-MM-YYYY HH:mm"}}
-        </td>
-        <td>
-          <AccessLevelPill @accessLevel={{row.accessLevel}} />
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="document"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
+          <Search::ResultCards::Document
+            @date={{row.attributes.meetingDate}}
+            @created={{row.attributes.created}}
+            @documentId={{row.id}}
+            @title={{if
+              row.highlight.title
+              row.highlight.title
+              row.attributes.title
+            }}
+            @agendaitemShortTitle={{row.attributes.latestAgendaitem.shortTitle}}
+            @meetingId={{row.attributes.latestAgendaitem.meetingId}}
+            @agendaId={{row.attributes.latestAgendaitem.agendaId}}
+            @agendaitemId={{row.attributes.latestAgendaitem.id}}
+            @contentHighlight={{this.getStringProp
+              row.highlight
+              "data.content"
+            }}
+          />
         </td>
       </:body>
     </KDataTable>

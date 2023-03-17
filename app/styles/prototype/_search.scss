@@ -1,23 +1,19 @@
 .auk-card-table {
-  .data-table tbody tr {
+  tbody tr td {
     border: 0 !important;
   }
 
-  .data-table tbody tr td {
+  tbody tr td {
     padding: 0 !important;
     padding-bottom: $au-unit-small !important;
   }
 
-  table.data-table tbody tr:hover {
+  tbody tr:hover {
     background-color: var(--au-gray-100);
   }
 
   .container-flex--scroll {
     overflow: visible !important;
-  }
-
-  .data-table__actions--top {
-    display: none;
   }
 }
 
@@ -55,10 +51,19 @@
 .au-c-search-container__content {
   position: relative;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+
+  @include mq(medium) {
+    overflow: hidden;
+  }
 
   .au-c-main-container {
     height: 100%;
+    display: block;
+
+    @include mq(medium) {
+      display: flex;
+    }
   }
 }
 

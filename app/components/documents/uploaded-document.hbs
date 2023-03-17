@@ -21,6 +21,8 @@
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
             @onSelect={{this.selectDocumentType}}
+            @dropdownLabelKey="altLabel"
+            @radioOptionsSize="6"
             @selected={{this.selectedDocumentType}}
           />
         </div>

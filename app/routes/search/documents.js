@@ -7,9 +7,11 @@ import { startOfDay, endOfDay, parse } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchDocumentsRoute extends Route {
   @service store;
+  @service plausible;
 
   queryParams = {
     confidentialOnly: {
@@ -34,34 +36,26 @@ export default class SearchDocumentsRoute extends Route {
     },
   };
 
-  constructor() {
-    super(...arguments);
-    this.lastParams = new Snapshot();
-  }
+  static textSearchFields = ['title^3', 'fileName^2', 'data.content'];
+  static highlightFields = ['title', 'fileName', 'data.content'];
 
-  model(filterParams) {
-    const searchParams = this.paramsFor('search');
-    const params = { ...searchParams, ...filterParams };
+  static postProcessData = async (searchData, store) => {
+    await SearchDocumentsRoute.postProcessAccessLevel(
+      searchData,
+      store
+    );
+    SearchDocumentsRoute.postProcessAgendaitems(searchData);
+    return searchData;
+  };
 
-    this.lastParams.stageLive(params);
-
-    if (
-      this.lastParams.anyFieldChanged(
-        Object.keys(params).filter((key) => key !== 'page')
-      )
-    ) {
-      params.page = 0;
-    }
-
-    const textSearchFields = ['title^3', 'fileName^2', 'data.content'];
-
+  static createFilter(params) {
     const searchModifier = ':sqs:';
-    const textSearchKey = textSearchFields.join(',');
+    const textSearchKey = SearchDocumentsRoute.textSearchFields.join(',');
 
     const filter = {};
 
     if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = params.searchText;
+      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
     }
 
     if (!isEmpty(params.mandatees)) {
@@ -75,28 +69,55 @@ export default class SearchDocumentsRoute extends Route {
     if (!isEmpty(params.dateFrom) && !isEmpty(params.dateTo)) {
       const from = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
       const to = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte,gte:created'] = [
+      filter[':lte,gte:agendaitems.meetingDate'] = [
         to.toISOString(),
         from.toISOString(),
       ].join(',');
     } else if (!isEmpty(params.dateFrom)) {
       const date = startOfDay(parse(params.dateFrom, 'dd-MM-yyyy', new Date()));
-      filter[':gte:created'] = date.toISOString();
+      filter[':gte:agendaitems.meetingDate'] = date.toISOString();
     } else if (!isEmpty(params.dateTo)) {
       const date = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date())); // "To" interpreted as inclusive
-      filter[':lte:created'] = date.toISOString();
+      filter[':lte:agendaitems.meetingDate'] = date.toISOString();
     }
 
     if (params.confidentialOnly) {
       filter[':terms:accessLevel'] = [
         CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
-        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
       ];
     }
 
-    if (params.documentTypes.length) {
+    if (params.documentTypes && params.documentTypes.length) {
       filter[':terms:documentType'] = params.documentTypes;
     }
+
+    // we only want to show latest piece
+    filter[':has-no:nextPieceId'] = 't';
+
+    return filter;
+  }
+
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
+
+  async model(filterParams) {
+    const searchParams = this.paramsFor('search');
+    const params = { ...searchParams, ...filterParams };
+
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
+
+    const filter = SearchDocumentsRoute.createFilter(params);
 
     this.lastParams.commit();
 
@@ -104,40 +125,76 @@ export default class SearchDocumentsRoute extends Route {
       return [];
     }
 
-    // session-dates can contain multiple values.
+    // agendaitems.meetingDate can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
-    if (params.sort === 'session-dates') {
-      sort = ':min:session-dates';
-    } else if (params.sort === '-session-dates') {
-      sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
+    if (params.sort === 'agendaitems.meetingDate') {
+      sort = ':min:agendaitems.meetingDate';
+    } else if (params.sort === '-agendaitems.meetingDate') {
+      sort = '-:max:agendaitems.meetingDate'; // correctly converted to mu-search syntax by the mu-search util
     }
 
-    return search(
+    // in case we only want to show pieces with connected agendaitems
+    // filter[':has:agendaitems'] = 't';
+
+    const results = search(
       'pieces',
       params.page,
       params.size,
       sort,
       filter,
-      async (searchData) => {
-        const entry = searchData.attributes;
-        entry.id = searchData.id;
-        await this.postProcessAccessLevel(entry);
-        return entry;
+      (document) => SearchDocumentsRoute.postProcessData(document, this.store),
+      {
+        fields: SearchDocumentsRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+      params.documentTypes,
+      params.confidentialOnly,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, confidentialOnly) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees?.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    const typeNames = (
+      await Promise.all(
+        types?.map((id) => this.store.findRecord('concept', id)))
+    ).map((document) => document.label);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+      'Aantal resultaten': resultCount,
+      'Documenttypes': typeNames.join(', '),
+      'Enkel vertrouwelijke documenten': confidentialOnly,
+    }, true);
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-
-    const params = this.paramsFor('search');
+    const searchText = this.paramsFor('search').searchText;
 
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
 
-    controller.searchText = params.searchText;
+    controller.searchText = searchText;
     controller.loadDocumentTypes.perform();
   }
 
@@ -152,16 +209,39 @@ export default class SearchDocumentsRoute extends Route {
     return true;
   }
 
-  async postProcessAccessLevel(entry) {
-    if (entry.accessLevel) {
-      if (Array.isArray(entry.accessLevel)) {
+  static async postProcessAccessLevel(entry, store) {
+    if (entry.attributes.accessLevel) {
+      if (Array.isArray(entry.attributes.accessLevel)) {
         warn(
-          `Piece ${entry.id} has multiple access levels. We will display the first one`,
+          `Piece ${entry.attributes.id} has multiple access levels. We will display the first one`,
           { id: 'piece.multiple-access-levels' }
         );
-        entry.accessLevel = entry.accessLevel[0];
+        entry.attributes.accessLevel = entry.attributes.accessLevel[0];
       }
-      entry.accessLevel = await this.store.findRecordByUri('concept', entry.accessLevel);
+      entry.attributes.accessLevel = await store.findRecordByUri(
+        'concept',
+        entry.attributes.accessLevel
+      );
+    }
+  }
+
+  static postProcessAgendaitems(entry) {
+    const agendaitems = entry.attributes.agendaitems;
+    if (Array.isArray(agendaitems)) {
+      entry.attributes.latestAgendaitem = agendaitems.find((agendaitem) => {
+        return agendaitem['nextVersionId'] == null;
+      });
+    } else {
+      entry.attributes.latestAgendaitem = agendaitems;
+    }
+    const meetingDate = entry.attributes.latestAgendaitem?.meetingDate;
+    if (meetingDate) {
+      if (Array.isArray(meetingDate)) {
+        const sorted = meetingDate.sort();
+        entry.attributes.meetingDate = sorted[sorted.length - 1];
+      } else {
+        entry.attributes.meetingDate = meetingDate;
+      }
     }
   }
 }

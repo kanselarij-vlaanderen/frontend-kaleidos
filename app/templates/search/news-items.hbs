@@ -5,16 +5,16 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
-      @searchType={{t "agenda"}}
+      @searchType={{t "news-items"}}
       @onSortChange={{this.selectSort}}
       @sortOptions={{this.sortOptions}}
       @sort={{this.sort}}
     />
     <KDataTable
       data-test-route-search-news-items-data-table={{true}}
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -23,86 +23,20 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToNewsletter}}
+      @onClickRow={{this.resultClicked}}
     >
-      <:header>
-        <th class="auk-table__col--6">
-          {{t "title-and-content"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--2"
-          @currentSorting={{this.sort}}
-          @field="agendaitems.meetingDate"
-          @label={{t "agenda-of"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--2">
-          {{t "minister"}}
-        </th>
-        {{! sorting on this field won't work as-is, since you can have multiple decisions}}
-        <th class="auk-table__col--1">
-          {{t "agendaitem-decision"}}
-        </th>
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
-        {{! each row has been processed to have 1 decision (object) as well as 1 latestAgendaitem (object)}}
-        {{! see postProcess methods in route}}
-        {{#let row.latestAgendaitem as |latestAgendaitem|}}
-          <td data-test-route-search-news-items-row-title>
-            <h3 class="auk-h4 auk-u-mb">
-              {{row.title}}
-            </h3>
-            <p class="auk-u-mr-2">
-              <AuContent>
-                <SanitizeHtml @raw={{true}} @value={{row.htmlContent}} />
-              </AuContent>
-            </p>
-          </td>
-          <td>
-            {{date latestAgendaitem.meetingDate}}
-          </td>
-          <td data-test-route-search-news-items-row-mandatees>
-            {{#each row.mandatees as |mandatee|}}
-              {{#let (concat mandatee.firstName " " mandatee.familyName) as |fullName|}}
-                {{fullName}}{{if (has-next mandatee row.mandatees) ", "}}
-              {{/let}}
-            {{/each}}
-          </td>
-          <td data-test-route-search-news-items-row-decision-result>
-            {{row.decision.decisionResultCodeLabel}}
-          </td>
-          <td
-            data-test-route-search-news-items-row-go-to-agendaitem
-            class="auk-u-text-align--right"
-          >
-            <AuButtonGroup class="auk-o-flex--no-wrap">
-              <AuButton
-                @skin="naked"
-                @icon="copy"
-                @hideText={{true}}
-                {{on "click" (fn this.copyText row)}}
-              >
-                {{t "copy"}}
-              </AuButton>
-              {{#if latestAgendaitem}}
-                <AuLink
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @hideText={{true}}
-                  @route="agenda.agendaitems.agendaitem.news-item"
-                  @models={{array
-                    latestAgendaitem.meetingId
-                    latestAgendaitem.agendaId
-                    latestAgendaitem.id
-                  }}
-                >
-                  {{t "open"}}
-                </AuLink>
-              {{/if}}
-            </AuButtonGroup>
-          </td>
-        {{/let}}
+        <td>
+          <Search::ResultCards::NewsItem
+            @date={{row.latestAgendaitem.meetingDate}}
+            @title={{or row.subTitle row.title}}
+            @text={{row.htmlContent}}
+            @mandatees={{row.mandatees}}
+            @meetingId={{row.latestAgendaitem.meetingId}}
+            @agendaId={{row.latestAgendaitem.agendaId}}
+            @agendaItemId={{row.latestAgendaitem.id}}
+          />
+        </td>
       </:body>
     </KDataTable>
   {{else}}

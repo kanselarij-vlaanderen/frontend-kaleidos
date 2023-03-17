@@ -8,6 +8,7 @@
         <tr class="lt-scaffolding-row"></tr>
         <tr>
           <Utils::ThSortable
+            data-test-route-newsletter-header-number
             class="lt-column align-left"
             @currentSorting={{this.sort}}
             @field="number"
@@ -21,16 +22,18 @@
           {{! Note: We are sorting on two keys below. In-newsletter property changes order,
                       while we want number to stay ordered ascending }}
           <Utils::ThSortable
+            data-test-route-newsletter-header-show-in-newsletter
             class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsItem.inNewsletter,number"
+            @field="treatment.news-item.in-newsletter,number"
             @label={{t "show-in-newsletter"}}
             @onChange={{fn (mut this.sort)}}
           />
           <Utils::ThSortable
+            data-test-route-newsletter-header-latest-modified
             class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatment.newsItem.modified"
+            @field="treatment.news-item.modified"
             @label={{t "latest-modified"}}
             @onChange={{fn (mut this.sort)}}
           />

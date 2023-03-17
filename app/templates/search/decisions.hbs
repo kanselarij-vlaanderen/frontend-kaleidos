@@ -1,5 +1,11 @@
 {{page-title (t "decisions")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Search::DecisionResultFilter
+      @selected={{this.decisionResults}}
+      @onChange={{this.setDecisionResults}}
+    />
+  </div>
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
@@ -7,6 +13,7 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
       @searchType={{t "decisions"}}
       @onSortChange={{this.selectSort}}
@@ -14,8 +21,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      @hoverable={{true}}
-      @striped={{true}}
+      @cards={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -24,48 +30,19 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{this.selectSize}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToDecision}}
+      @onClickRow={{this.resultClicked}}
     >
-      <:header>
-        <th class="auk-table__col--7">
-          {{t "title"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--1"
-          @currentSorting={{this.sort}}
-          @field="session-dates"
-          @label={{t "date"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--2">
-          {{t "result-decision"}}
-        </th>
-        <th class="auk-table__col--1"></th>
-      </:header>
       <:body as |row|>
         <td>
-          <p>
-            {{row.subcaseTitle}}
-          </p>
-        </td>
-        <td>
-          {{date row.decisionStartDate}}
-        </td>
-        <td>
-          <Decision::DecisionResultPill
+          <Search::ResultCards::Decision
+            @date={{row.decisionStartDate}}
+            @title={{row.subcaseTitle}}
+            @shortTitle={{row.subcaseShortTitle}}
             @decisionResultCode={{row.decisionResult}}
+            @meetingId={{row.meetingId}}
+            @agendaId={{row.agendaId}}
+            @agendaItemId={{row.id}}
           />
-        </td>
-        <td class="auk-u-text-align--right">
-          <AuLink
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="agenda.agendaitems.agendaitem.decisions"
-            @models={{array row.meetingId row.agendaId row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
         </td>
       </:body>
     </KDataTable>
