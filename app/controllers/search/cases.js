@@ -8,6 +8,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 export default class CasesSearchController extends Controller {
   @service router;
   @service intl;
+  @service plausible;
 
   queryParams = [
     {
@@ -85,8 +86,21 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  navigateToCase(decisionmakingFlow) {
-    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToCase(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToCase(decisionmakingFlow, clickEvent) {
+    // Check if we clicked an emphasis inside a linkTo or a linkTo
+    if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+      // do nothing, this was a clicked link in the card and the router will transition later
+      return;
+    } else {
+      this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+    }
+
   }
 
   get customFiltersElement() {
