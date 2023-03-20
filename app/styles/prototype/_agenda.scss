@@ -1,0 +1,8 @@
+.au-c-checkboxlist-column {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  > * {width: calc(33% - 2rem);}
+}

@@ -1170,6 +1170,8 @@
   "uploaded-in": "Geüpload in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
+  "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
+  "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
   "all-content": "Alle inhoud",
   "news-items": "Kort bestek berichten",
   "document-not-on-agendaitem": "Niet geüpload in agendapunt"
