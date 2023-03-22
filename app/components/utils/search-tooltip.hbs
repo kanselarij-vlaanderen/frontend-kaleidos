@@ -6,7 +6,7 @@
     {{on "click" this.openModal}}
   >
     <EmberPopover
-      @tooltipClass="auk-popover"
+      @tooltipClass="auk-u-max-width-xxlarge auk-popover"
       @showOn="click"
       @side="right-start"
       @hideOn="clickout"
@@ -37,24 +37,46 @@
         <table class="auk-table">
           <thead>
             <tr>
-              <th>{{t "search-legend-header-example"}}</th>
+              <th>{{t "search-legend-header-sign"}}</th>
               <th>{{t "search-legend-header-explanation"}}</th>
+              <th>{{t "search-legend-header-example"}}</th>
             </tr>
-            <tr>
-              <td class="auk-table__col--4">{{t "search-legend-and-example"}}</td>
-              <td class="auk-table__col--8">{{t "search-legend-and-explanation"}}</td>
+            <tr> {{! and}}
+              <td class="auk-table__col--1 auk-u-text-align--center auk-u-text-size--xlarge">{{t "search-legend-and-sign"}}</td>
+              <td class="auk-table__col--6">
+                <p class="au-u-margin-bottom-small">{{t "search-legend-and-explanation-meaning"}}</p>
+                <p>{{t "search-legend-and-explanation"}}</p>
+              </td>
+              <td class="auk-table__col--5">{{t "search-legend-and-example"}}</td>
             </tr>
-            <tr>
-              <td class="auk-table__col--4">{{t "search-legend-not-example"}}</td>
-              <td class="auk-table__col--8">{{t "search-legend-not-explanation"}}</td>
+            <tr> {{! literal}}
+              <td class="auk-table__col--1 auk-u-text-align--center auk-u-text-size--xlarge">{{t "search-legend-literal-sign"}}</td>
+              <td class="auk-table__col--6">
+                <p>{{t "search-legend-literal-explanation"}}</p>
+              </td>
+              <td class="auk-table__col--5 auk-u-text-prewrap">{{t "search-legend-literal-example"}}</td>
             </tr>
-            <tr>
-              <td class="auk-table__col--4">{{t "search-legend-order-example"}}</td>
-              <td class="auk-table__col--8">{{t "search-legend-order-explanation"}}</td>
+            <tr> {{! or}}
+              <td class="auk-table__col--1 auk-u-text-align--center auk-u-text-size--xlarge">{{t "search-legend-or-sign"}}</td>
+              <td class="auk-table__col--6">
+                <p class="au-u-margin-bottom-small">{{t "search-legend-or-explanation-meaning"}}</p>
+                <p>{{t "search-legend-or-explanation"}}</p>
+              </td>
+              <td class="auk-table__col--5">{{t "search-legend-or-example"}}</td>
             </tr>
-            <tr>
-              <td class="auk-table__col--4">{{t "search-legend-wildcard-example"}}</td>
-              <td class="auk-table__col--8">{{t "search-legend-wildcard-explanation"}}</td>
+            <tr> {{! not}}
+              <td class="auk-table__col--1 auk-u-text-align--center auk-u-text-size--xlarge">{{t "search-legend-not-sign"}}</td>
+              <td class="auk-table__col--6">
+                <p class="au-u-margin-bottom-small">{{t "search-legend-not-explanation-meaning"}}</p>
+                <p class="au-u-margin-bottom-small">{{t "search-legend-not-explanation"}}</p>
+                <p class="auk-u-text-bold">{{t "search-legend-not-explanation-addendum"}}</p>
+              </td>
+              <td class="auk-table__col--5 auk-u-text-prewrap">{{t "search-legend-not-example"}}</td>
+            </tr>
+            <tr> {{! wildcard}}
+              <td class="auk-table__col--1 auk-u-text-align--center auk-u-text-size--xlarge">{{t "search-legend-wildcard-sign"}}</td>
+              <td class="auk-table__col--6">{{t "search-legend-wildcard-explanation"}}</td>
+              <td class="auk-table__col--5">{{t "search-legend-wildcard-example"}}</td>
             </tr>
           </thead>
         </table>

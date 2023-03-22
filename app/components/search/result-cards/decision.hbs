@@ -12,14 +12,14 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="agenda.agendaitems.agendaitem.decisions"
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
-            @value={{@shortTitle}}
+            @value={{if @shortTitle @shortTitle @title}}
           />
         </span>
       </AuLink>

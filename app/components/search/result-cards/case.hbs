@@ -15,11 +15,11 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
-        class="au-u-padding-none"
+        class="au-u-padding-none card-link"
         @route="cases.case.subcases"
         @model={{@caseId}}
       >
-        <span>
+        <span class="card-link">
           <SanitizeHtml
             @raw={{true}}
             @value={{if @shortTitle @shortTitle @title}}
