@@ -146,6 +146,8 @@
   "download": "Download",
   "download-2": "Downloaden",
   "download-documents": "Download alle documenten",
+  "download-decisions": "Download beslissingsfiches",
+  "download-all-decisions": "Download alle beslisingen",
   "download-all-documents": "Download alle documenten",
   "drop-text": "Laat los om het bestand op te laden.",
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
@@ -1170,9 +1172,10 @@
   "uploaded-in": "Geüpload in",
   "uploaded-in-thing": "Geüpload in {thing}",
   "creation-date": "Aanmaakdatum",
-  "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
-  "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
   "all-content": "Alle inhoud",
   "news-items": "Kort bestek berichten",
-  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt",
+  "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
+  "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
+  "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan."
 }
