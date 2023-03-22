@@ -37,8 +37,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
   @tracked showDownloadDocuments = false;
-  @tracked showDownloadDocuments = false;
   @tracked selectedMandatees = [];
+  @tracked showDownloadDecisions = false;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -244,7 +244,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  async downloadDocuments() {
+  async downloadDocuments(decisions = false) {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const fileDownloadToast = {
       title: this.intl.t('file-ready'),
@@ -260,6 +260,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const jobPromise = fetchArchivingJobForAgenda(
       this.args.currentAgenda,
       this.selectedMandatees,
+      decisions,
       this.store
     );
     const [name, job] = await all([namePromise, jobPromise]);
@@ -384,6 +385,24 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   async confirmDownloadDocuments() {
     await this.downloadDocuments();
     this.closeDownloadDocuments();
+  }
+
+  @action
+  openDownloadDecisions() {
+    this.showDownloadDecisions = true;
+    this.selectedMandatees = [];
+  }
+
+  @action
+  closeDownloadDecisions() {
+    this.showDownloadDecisions = false;
+    this.selectedMandatees = [];
+  }
+
+  @action
+  async confirmDownloadDecisions() {
+    await this.downloadDocuments(true);
+    this.closeDownloadDecisions();
   }
 
   @action

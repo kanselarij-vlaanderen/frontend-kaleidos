@@ -49,12 +49,29 @@ context('Decision tests', () => {
     cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 1);
 
+    // correct default access rights on non-confidential subcase should be "Intern Overheid"
+    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+
     // TODO-command addNewPieceToTreatment
     cy.addNewPieceToDecision('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get(document.documentCard.name.value).eq(0)
       .contains(/BIS/);
+
+    // check version history acceslevel
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
+    cy.get(document.vlDocument.piece).as('pieces');
+    cy.get('@pieces').eq(0)
+      .find(document.accessLevelPill.pill)
+      .contains('Intern Regering');
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
 
     // Delete the TER piece, the BIS should then become the report
     cy.addNewPieceToDecision('test', {
@@ -66,9 +83,23 @@ context('Decision tests', () => {
         cy.get(document.documentCard.name.value).contains(/TER/);
         cy.get(document.documentCard.versionHistory)
           .find(auk.accordion.header.button)
+          .should('not.be.disabled')
           .click();
         cy.get(document.vlDocument.piece).should('have.length', 2);
       });
+
+    // check version history acceslevel
+    cy.get(document.vlDocument.piece).as('pieces');
+    cy.get('@pieces').eq(0)
+      .find(document.accessLevelPill.pill)
+      .contains('Intern Regering');
+    cy.get('@pieces').eq(1)
+      .find(document.accessLevelPill.pill)
+      .contains('Intern Regering');
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
 
     // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
@@ -144,8 +175,7 @@ context('Decision tests', () => {
     cy.wait('@patchDecisionActivities');
     cy.wait('@getPreviousPiece');
     cy.get(auk.loader).should('not.exist');
-    // correct default access rights on non-confidential subcase should be "Intern Overheid"
-    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+
     decisionTypes.forEach((type) => {
       cy.get(agenda.decisionResultPill.edit)
         .click();
@@ -161,24 +191,112 @@ context('Decision tests', () => {
   });
 
   it('should test if changing subcase to confidential sets correct access rights', () => {
+    const accesLevel = 'Intern Overheid';
+    const defaultAccesLevel = 'Intern Regering';
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    };
+
     cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+
+    // set subcase to confidential
     cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseTitlesView.edit).click();
     cy.get(cases.subcaseTitlesEdit.confidential)
       .parent()
       .click();
-    cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
-    cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
-    cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
-    cy.intercept('PATCH', '/pieces/*').as('patchPieces');
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases1');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems1');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgenda1');
+    cy.intercept('PATCH', '/pieces/*').as('patchPieces1');
     cy.get(cases.subcaseTitlesEdit.actions.save).click()
-      .wait('@patchSubcases')
-      .wait('@patchagendaitems')
-      .wait('@patchAgenda')
-      .wait('@patchPieces');
+      .wait('@patchSubcases1')
+      .wait('@patchagendaitems1')
+      .wait('@patchAgenda1')
+      .wait('@patchPieces1');
+
+    // check document confidentiality
     cy.get(cases.subcaseDetailNav.decisions).click();
     cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+
+    // revert subcase confidentiality
+    cy.get(cases.subcaseDetailNav.overview).click();
+    cy.get(cases.subcaseTitlesView.edit).click();
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .parent()
+      .click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases2');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems2');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgenda2');
+    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+      .wait('@patchSubcases2')
+      .wait('@patchagendaitems2')
+      .wait('@patchAgenda2');
+
+    // decision should stay confidential
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+
+    // switch decision to intern overheid
+    cy.get(document.documentCard.card).within(() => {
+      cy.get(document.accessLevelPill.edit).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
+    cy.get(dependency.emberPowerSelect.option).contains(accesLevel)
+      .click();
+    cy.get(document.accessLevelPill.save).click();
+
+    // add BIS
+    cy.addNewPiece(file.fileName, file, false, false);
+
+    cy.get(document.accessLevelPill.pill).contains(accesLevel);
+
+    // check previous version has default acces level (Intern Regering)
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
+    cy.get(document.vlDocument.name).contains(file.fileName)
+      .parents(document.vlDocument.piece)
+      .find(document.accessLevelPill.pill)
+      .contains(defaultAccesLevel);
+
+    // set subcase to confidential again
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
+    cy.get(cases.subcaseDetailNav.overview).click();
+    cy.get(cases.subcaseTitlesView.edit).click();
+    cy.get(cases.subcaseTitlesEdit.confidential)
+      .parent()
+      .click();
+    cy.intercept('PATCH', '/subcases/*').as('patchSubcases3');
+    cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems3');
+    cy.intercept('PATCH', '/agendas/*').as('patchAgenda3');
+    cy.intercept('PATCH', '/pieces/*').as('patchPieces3');
+    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+      .wait('@patchSubcases3')
+      .wait('@patchagendaitems3')
+      .wait('@patchAgenda3')
+      .wait('@patchPieces3');
+
+    // check decision acceslevel
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+
+    // check previous version has updated level (Vertrouwelijk)
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
+    cy.get(document.vlDocument.name).contains(file.fileName)
+      .parents(document.vlDocument.piece)
+      .find(document.accessLevelPill.pill);
+    // TODO wrong acceslevel?
+    // .contains('Vertrouwelijk');
   });
 
   it('should test if adding decision to confidential subcase sets correct default access rights', () => {
@@ -211,5 +329,20 @@ context('Decision tests', () => {
     cy.get(auk.loader).should('not.exist');
     cy.wait('@getAccessLevel');
     cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+
+    // add BIS
+    cy.addNewPiece(file.fileName, file, false, false);
+
+    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+
+    // check previous version has correct acces level (Vertrouwelijk)
+    cy.get(document.documentCard.versionHistory)
+      .find(auk.accordion.header.button)
+      .should('not.be.disabled')
+      .click();
+    cy.get(document.vlDocument.name).contains(file.fileName)
+      .parents(document.vlDocument.piece)
+      .find(document.accessLevelPill.pill)
+      .contains('Vertrouwelijk');
   });
 });

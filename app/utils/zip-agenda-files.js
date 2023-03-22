@@ -21,10 +21,10 @@ async function constructArchiveName(agenda) {
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }
 
-async function fetchArchivingJob(agenda, mandateeIds) {
-  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive`;
+async function fetchArchivingJob(agenda, mandateeIds, decisions= false) {
+  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive?decisions=${decisions}`;
   if (mandateeIds.length) {
-    url += '?' + (new URLSearchParams({ mandateeIds }).toString());
+    url += '&' + (new URLSearchParams({ mandateeIds }).toString());
   }
   const fetchedJob = await fetch(url, {
     method: 'post',
@@ -38,8 +38,8 @@ async function fetchArchivingJob(agenda, mandateeIds) {
   return fetchedJob.json();
 }
 
-async function fetchArchivingJobForAgenda(agenda, mandateeIds, store) {
-  const job = await fetchArchivingJob(agenda, mandateeIds);
+async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store) {
+  const job = await fetchArchivingJob(agenda, mandateeIds, decisions);
   if (job) {
     return registerJobToStore(job, store);
   }

@@ -16,6 +16,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
+  @tracked isReplacingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
   @tracked replacementSourceFile;
   @tracked documentType;
@@ -28,7 +29,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   get isProcessing() {
-    return this.saveDetails.isRunning || this.cancelEditDetails.isRunning;
+    return (
+      this.saveDetails.isRunning
+        || this.cancelEditDetails.isRunning
+        || this.isUploadingReplacementSourceFile
+    );
   }
 
   @task
@@ -38,12 +43,17 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
   }
 
+  @action
+  handleReplacementFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingReplacementSourceFile = uploadIsRunning && !uploadIsCompleted;
+  }
+
   @task
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
     yield this.loadDetailsData.perform();
     yield this.replacementSourceFile?.destroyRecord();
-    this.isUploadingReplacementSourceFile = false;
+    this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
     this.isEditingDetails = false;
   }
@@ -80,7 +90,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     yield this.args.documentContainer.save();
     this.isEditingDetails = false;
     this.replacementSourceFile = null;
-    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
+    this.isReplacingSourceFile = !this.isReplacingSourceFile;
   }
 
   @action

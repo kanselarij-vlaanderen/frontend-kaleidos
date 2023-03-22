@@ -64,6 +64,9 @@ const selectors = {
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     status: '[data-test-agenda-overview-item-status]',
     dragging: '[data-test-agenda-overview-item-dragging]',
+    moveUp: '[data-test-agenda-overview-item-move-up]',
+    moveDown: '[data-test-agenda-overview-item-move-down]',
+    numbering: '[data-test-agenda-overview-item-numbering]',
   },
 
   // agenda-overview
