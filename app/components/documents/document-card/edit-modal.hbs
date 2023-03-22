@@ -5,6 +5,7 @@
   @onCancel={{this.cancelEdit}}
   @confirmMessage={{t "save"}}
   @loading={{this.saveEdit.isRunning}}
+  @disabled={{this.isDisabled}}
 >
   <:body>
     <AuCard
@@ -41,10 +42,11 @@
           </AuHelpText>
         {{/if}}
       </c.header>
-      {{#if this.isUploadingReplacementSourceFile}}
+      {{#if this.isReplacingSourceFile}}
         <c.content data-test-document-edit-source-file-replacer>
           <Auk::FileUploader
             @onUpload={{set this "replacementSourceFile"}}
+            @onQueueUpdate={{this.handleReplacementSourceFileUploadQueue}}
           />
         </c.content>
       {{/if}}
@@ -92,10 +94,11 @@
             </AuHelpText>
           {{/if}}
         </c.header>
-        {{#if this.isUploadingReplacementDerivedFile}}
+        {{#if this.isReplacingDerivedFile}}
           <c.content data-test-document-edit-derived-file-replacer>
             <Auk::FileUploader
               @onUpload={{set this "replacementDerivedFile"}}
+              @onQueueUpdate={{this.handleReplacementDerivedFileUploadQueue}}
             />
           </c.content>
         {{/if}}
@@ -117,6 +120,7 @@
         <c.content data-test-document-edit-derived-file-uploader>
           <Auk::FileUploader
             @onUpload={{set this "uploadedDerivedFile"}}
+            @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
           />
         </c.content>
       </AuCard>
