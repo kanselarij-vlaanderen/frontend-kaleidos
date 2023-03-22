@@ -23,6 +23,8 @@ services:
     user: ${HOST_UID_GID}
   cache:
     user: ${HOST_UID_GID}
+  forever-cache:
+    user: ${HOST_UID_GID}
   resource:
     user: ${HOST_UID_GID}
   database-healthcheck:

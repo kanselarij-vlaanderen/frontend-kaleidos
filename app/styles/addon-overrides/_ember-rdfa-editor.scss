@@ -45,6 +45,8 @@ $say-editor-border-radius: $au-input-border-radius;
 
 .say-toolbar {
   border-bottom-color: $say-editor-border-color;
+  border-top-left-radius: $say-editor-border-radius;
+  border-top-right-radius: $say-editor-border-radius;
 }
 
 .say-toolbar__group {
@@ -61,6 +63,15 @@ $say-editor-border-radius: $au-input-border-radius;
 
 .say-toolbar__button + .say-toolbar__button {
   border-left-color: $say-editor-border-color;
+}
+
+.say-dropdown + .say-toolbar__button {
+  border-left: 0.1rem solid $say-editor-border-color;
+}
+
+.say-container__main {
+  border-bottom-right-radius: $say-editor-border-radius;
+  border-bottom-left-radius: $say-editor-border-radius;
 }
 
 .say-editor__inner {
