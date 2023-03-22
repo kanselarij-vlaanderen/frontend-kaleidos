@@ -24,12 +24,14 @@
                 {{sortable-handle}}
               />
               <AuButton
+                  data-test-agenda-overview-item-move-up
                   @skin="link"
                   @icon="chevron-up"
                   @disabled={{@isFirst}}
                   {{on "click" (fn @onMove @agendaitem -1)}}
                 />
               <AuButton
+                  data-test-agenda-overview-item-move-down
                   @skin="link"
                   @icon="chevron-down"
                   @disabled={{@isLast}}
@@ -38,7 +40,7 @@
           </div>
         </div> 
       {{/if}}
-      <span class="vlc-agenda-items-sub-item__numbering">
+      <span data-test-agenda-overview-item-numbering class="vlc-agenda-items-sub-item__numbering">
         {{! For legacy data agenda-item number can be unexistent }}
         {{#if @agendaitem.number}}
           {{@agendaitem.number}}.
