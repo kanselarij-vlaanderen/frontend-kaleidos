@@ -9,7 +9,7 @@ context('Authentication tests', () => {
     cy.login('Admin');
     cy.url().should('include', 'overzicht');
     cy.logout();
-    cy.visit('/overzicht?size=2');
+    cy.visit('/overzicht?sizeAgendas=2');
     cy.get(route.login.acmidmButton).contains(acmidmButtonText);
   });
 
@@ -17,7 +17,7 @@ context('Authentication tests', () => {
     cy.loginFlow('Admin');
     cy.url().should('include', 'overzicht');
     cy.logoutFlow();
-    cy.visit('/overzicht?size=2');
+    cy.visit('/overzicht?sizeAgendas=2');
     // TODO flaky, sometimes we end up on authentication-ti.vlaanderen
     // cy.get(route.login.acmidmButton).contains(acmidmButtonText);
   });
