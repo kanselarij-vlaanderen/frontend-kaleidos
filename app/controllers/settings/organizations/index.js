@@ -26,6 +26,9 @@ export default class SettingsOrganizationsIndexController extends Controller {
   @tracked selectedOrganizations = [];
   @tracked showBlockedOrganizationsOnly = false;
 
+  @tracked organizationBeingLinked = null;
+  @tracked showMandateeSelectorModal = false;
+
   @action
   setOrganizations(organizations) {
     this.organizations = organizations.map((organization) => organization.id);

@@ -130,6 +130,45 @@
           </Auk::Panel::Body>
         </Auk::Panel>
       </div>
+      <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+        <Auk::Panel>
+            <Auk::Panel::Header>
+              <AuToolbar class="auk-u-maximize-width" as |Group|>
+              <Group>
+                <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
+                {{t "mandatee"}}
+                </h4>
+              </Group>
+              <Group>
+                {{#if this.selectedPerson.id}}
+                  {{#if (eq this.selectedPerson.id this.model.person.id)}}
+                  <AuButton
+                      @alert={{true}}
+                      {{on "click" this.unlinkPerson}}
+                      >
+                      {{t "unlink"}}
+                  </AuButton>
+                  {{/if}}
+                  {{else}}
+                  <AuButton
+                      @alert={{true}}
+                      {{on "click" this.linkPerson}}
+                      >
+                      {{t "connect"}}
+                    </AuButton>
+                {{/if}}
+              </Group>
+              </AuToolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="au-u-padding-none">
+            <Mandatees::MandateePersonSelector
+              @onChange={{fn (mut this.selectedPerson)}}
+              @multiple={{false}}
+              @selectedPerson={{this.model.person}}
+            />
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      </div>
     </div>
   </div>
 </div>

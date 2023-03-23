@@ -6,7 +6,7 @@ export default class SettingsUsersUserRoute extends Route {
 
   model(params) {
     return this.store.findRecord('user', params.id, {
-      include: 'memberships.organization,memberships.role'
+      include: 'memberships.organization,memberships.role,person'
     });
   }
 }

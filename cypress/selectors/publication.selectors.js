@@ -403,7 +403,7 @@ const selectors = {
 
   // generate-report-modal
   generateReport: {
-    selectMandatee: '[data-test-generate-report-select-mandatee]',
+    selectMandatee: '[data-test-mandatee-person-selector]',
     confirm: '[data-test-generate-report-confirm]',
   },
 };

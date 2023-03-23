@@ -5,4 +5,5 @@ export default class Organization extends Model {
   @attr('string') identifier;
 
   @hasMany('person', { inverse: 'organization', async: true }) persons;
+  @hasMany('mandatee', {async: true}) mandatees;
 }

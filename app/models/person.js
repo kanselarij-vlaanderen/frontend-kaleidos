@@ -8,6 +8,7 @@ export default class Person extends Model {
   @belongsTo('contact-person', { inverse: 'person', async: true })
   contactPerson;
   @belongsTo('organization', { inverse: 'persons', async: true }) organization;
+  @belongsTo('user', {inverse: 'person', async: true}) user;
 
   @hasMany('mandatee', { inverse: 'person', async: true }) mandatees;
 

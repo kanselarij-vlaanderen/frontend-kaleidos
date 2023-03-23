@@ -12,6 +12,7 @@ export default class SettingsUsersUserController extends Controller {
   @tracked showUnblockUser = false;
   @tracked showBlockMembership = false;
   @tracked showUnblockMembership = false;
+  @tracked selectedPerson = null;
 
   @action
   async blockUser() {
@@ -39,5 +40,18 @@ export default class SettingsUsersUserController extends Controller {
     const allowed = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.ALLOWED);
     this.membershipBeingBlocked.status = allowed;
     await this.membershipBeingBlocked.save();
+  }
+
+  @action
+  async linkPerson() {
+    this.model.person = this.selectedPerson;
+    await this.model.save();
+  }
+
+  @action
+  async unlinkPerson() {
+    this.model.person = null;
+    this.selectedPerson = null;
+    await this.model.save();
   }
 }
