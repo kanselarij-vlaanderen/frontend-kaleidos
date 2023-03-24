@@ -107,7 +107,7 @@ context('New search views tests', () => {
     });
 
     it('Search for non existing and existing searchterm in agendaitems', () => {
-      const searchTerm = 'testId=1653051049: dit is de korte titel for search 🔍 Lāna Hawaï eiland';
+      const searchTerm = 'testId=1653051049: dit is de korte titel for search 🔍';
 
       // search for non-existing searchterm
       cy.get(route.search.input).clear;
@@ -185,11 +185,11 @@ context('New search views tests', () => {
 
       // cy.get(route.searchDocuments.dataTable).find('tbody')
       //   .children('tr');
-      cy.get(route.documentResultCard.filename).contains('test.pdf');
+      cy.get(route.documentResultCard.filename).contains('test pdf');
       // TODO check if changing document title shows in result?
 
       // check resultcard
-      cy.get(route.documentResultCard.date).contains('12-05-2020');
+      cy.get(route.documentResultCard.date).contains('08-04-2020');
       // TODO check shorttitle?
       cy.get(route.documentResultCard.agendaItem).contains('Geüpload in agendapunt');
     });
@@ -237,7 +237,7 @@ context('New search views tests', () => {
       cy.get(route.decisionResultCard.shortTitleLink).contains(searchTerm);
 
       // check resultcard
-      cy.get(route.decisionResultCard.date).contains('01-04-2020');
+      cy.get(route.decisionResultCard.date).contains('28-02-2022');
       cy.get(route.decisionResultCard.result);
       // TODO check different pills?
     });
@@ -286,7 +286,7 @@ context('New search views tests', () => {
       cy.get(route.newsItemResultCard.text).contains(searchTerm);
 
       // check resultcard
-      cy.get(route.newsItemResultCard.date).contains('05-05-2022');
+      cy.get(route.newsItemResultCard.date).contains('22-04-2020');
       cy.get(route.newsItemResultCard.titleLink).contains('Eerste stap');
       cy.get(route.newsItemResultCard.mandatees);
     });

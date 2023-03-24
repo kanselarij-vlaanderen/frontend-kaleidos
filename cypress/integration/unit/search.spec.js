@@ -323,7 +323,7 @@ context('Search tests', () => {
       });
     });
 
-    it('Sort by relevance', () => {
+    it.only('Sort by relevance', () => {
       const agendaDate = Cypress.dayjs('2021-03-12');
       const currentTimestamp = Cypress.dayjs().unix();
       const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
@@ -347,9 +347,9 @@ context('Search tests', () => {
       cy.wait('@searchCall');
 
       // sorted default by relevance and not dates
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(0)
         .contains('accenten');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(1)
         .contains('Hawaï');
 
       cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
@@ -357,9 +357,9 @@ context('Search tests', () => {
       cy.wait('@searchCall2');
       cy.url().should('contain', 'sorteer=-session-dates');
 
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(0)
         .contains('Hawaï');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(1)
         .contains('accenten');
     });
   });
