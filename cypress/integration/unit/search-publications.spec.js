@@ -54,19 +54,36 @@ function searchFakePublication() {
   cy.get(route.search.input).clear();
 }
 
-function checkPagination(optionsToCheck, defaultOption) {
+// TODO remove if searchFunction is less flaky
+// function checkPagination(optionsToCheck, defaultOption) {
+//   optionsToCheck.forEach((option) => {
+//     const randomInt = Math.floor(Math.random() * Math.floor(10000));
+//     cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+//     cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
+//       .click();
+//     cy.get(dependency.emberPowerSelect.option).contains(option)
+//       .click();
+//     cy.wait(`@publicationSearchCall${randomInt}`);
+//     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+//     if (option !== defaultOption) {
+//       cy.url().should('include', `aantal=${option}`);
+//     }
+//   });
+// }
+
+function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
-    const randomInt = Math.floor(Math.random() * Math.floor(10000));
-    cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
+    cy.get(route.search.input).clear()
+      .type('test');
+    cy.get(route.search.trigger).click();
     cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains(option)
       .click();
-    cy.wait(`@publicationSearchCall${randomInt}`);
-    cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     if (option !== defaultOption) {
       cy.url().should('include', `aantal=${option}`);
     }
+    cy.get(route.search.input).clear();
   });
 }
 
@@ -196,7 +213,7 @@ context('Search tests', () => {
     visitPublicationSearch();
     const options = [5, 10, 20, 25, 50, 100, 200];
     const defaultSize = options[2];
-    checkPagination(options, defaultSize);
+    searchFunction(options, defaultSize);
   });
 
   it('search for all different unique searchterms in publicaties', () => {

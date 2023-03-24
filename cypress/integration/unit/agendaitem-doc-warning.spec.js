@@ -27,7 +27,7 @@ function addNewPieceWithConfirm(oldFileName, file, modelToPatch, hasSubcase = tr
       cy.intercept('GET', '/submission-activities?filter**').as('getSubmissionActivity');
       cy.intercept('POST', '/submission-activities').as('createNewSubmissionActivity');
       cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitem');
-      cy.intercept('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
+      cy.intercept('PUT', '/agendaitems/**/pieces').as(`putAgendaitemDocuments_${randomInt}`);
     } else {
       cy.intercept('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
@@ -62,10 +62,10 @@ function addNewPieceWithConfirm(oldFileName, file, modelToPatch, hasSubcase = tr
         // we always POST submission activity here
         cy.wait('@createNewSubmissionActivity')
           .wait('@patchAgendaitem')
-          .wait('@putAgendaitemDocuments');
+          .wait(`@putAgendaitemDocuments_${randomInt}`);
       } else {
         cy.wait('@patchAgendaitem')
-          .wait('@putAgendaitemDocuments');
+          .wait(`@putAgendaitemDocuments_${randomInt}`);
       }
     } else if (modelToPatch === 'subcases') {
       // We always get the submission activities after post or patch
@@ -171,6 +171,7 @@ context('Agendaitem document warning tests', () => {
     cy.wait('@loadNewPiece');
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(appuniversum.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('have.length', 2);
     cy.get(document.documentCard.name.value).contains(newFile.fileName);
 
     // check upload new piece and cancel

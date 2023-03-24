@@ -54,6 +54,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.organizationFilter.search).type('OVO0')
         .wait('@filterOrg');
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
       cy.get(utils.numberPagination.container).contains('van 10');
@@ -321,6 +322,7 @@ context('testing user and organisation management', () => {
       cy.get(settings.organizationFilter.search).type('OVO0')
         .wait('@filterOrg');
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).eq(0)
         .click();
       cy.get(settings.organizationsIndex.row.organizationId).should('have.length', 1)

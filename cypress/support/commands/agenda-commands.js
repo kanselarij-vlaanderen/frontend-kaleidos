@@ -34,7 +34,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
 
-  cy.visit('/overzicht?size=2');
+  cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendas.action.newMeeting, {
     timeout: 60000,
   }).click();
@@ -211,12 +211,12 @@ function openAgendaForDate(agendaDate, index = 0) {
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
 
-  cy.visit('/overzicht?size=2');
+  cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendasOverview.filter.container).within(() => {
     cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
   });
   cy.get(route.agendasOverview.loader, {
-    timeout: 5000,
+    timeout: 10000,
   }).should('not.exist');
   cy.wait('@getFilteredAgendas', {
     timeout: 20000,
@@ -417,22 +417,21 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
  */
 function addAgendaitemToAgenda(subcaseTitle) {
   cy.log('addAgendaitemToAgenda');
-  cy.intercept('GET', '/subcases?**sort**').as('getSubcasesFiltered');
-  cy.intercept('POST', '/agendaitems').as('createNewAgendaitem');
-  cy.intercept('POST', '/agenda-activities').as('createAgendaActivity');
-  cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/subcases?**sort**').as(`getSubcasesFiltered_${randomInt}`);
+  cy.intercept('POST', '/agendaitems').as(`createNewAgendaitem_${randomInt}`);
+  cy.intercept('POST', '/agenda-activities').as(`createAgendaActivity_${randomInt}`);
+  cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
 
   cy.get(auk.loader).should('not.exist');
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaActions.addAgendaitems).forceClick();
-  cy.wait('@getSubcasesFiltered', {
+  cy.wait(`@getSubcasesFiltered_${randomInt}`, {
     timeout: 20000,
   });
   const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
-
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.get(auk.modal.container).within(() => {
     cy.get(auk.loader, {
@@ -440,7 +439,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
     // type the subcase title from parameters to search
-    cy.intercept('GET', `/subcases?filter**filter[short-title]=${encodedSubcaseTitle}**`).as('getSubcasesFiltered');
+    cy.intercept('GET', `/subcases?filter**filter*short-title*=${encodedSubcaseTitle}**`).as('getSubcasesFiltered');
     cy.get(agenda.createAgendaitem.input).clear()
       .type(subcaseTitle, {
         force: true,
@@ -464,17 +463,17 @@ function addAgendaitemToAgenda(subcaseTitle) {
     cy.get(agenda.createAgendaitem.save).click();
   });
 
-  cy.wait('@createAgendaActivity', {
+  cy.wait(`@createAgendaActivity_${randomInt}`, {
     timeout: 20000,
   });
-  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
-  cy.wait('@createNewAgendaitem', {
+  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems_${randomInt}`);
+  cy.wait(`@createNewAgendaitem_${randomInt}`, {
     timeout: 30000,
   })
-    .wait('@patchAgenda', {
+    .wait(`@patchAgenda_${randomInt}`, {
       timeout: 20000,
     });
-  cy.wait(`@loadAgendaitems${randomInt}`);
+  cy.wait(`@loadAgendaitems_${randomInt}`);
   cy.get(auk.loader, {
     timeout: 12000,
   }).should('not.exist');

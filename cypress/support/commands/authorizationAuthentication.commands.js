@@ -40,7 +40,7 @@ function login(name, retries = 0) {
   });
   cy.intercept('GET', '/memberships/*').as('getMembership');
   cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
-  cy.visit('/overzicht?size=2').wait('@getCurrentSession')
+  cy.visit('/overzicht?sizeAgendas=2').wait('@getCurrentSession')
     .then((responseBody) => {
       if (responseBody.error || responseBody.response?.statusCode === 400) {
         if (retries < 5) {
@@ -68,7 +68,7 @@ function logout() {
     method: 'DELETE',
     url: '/mock/sessions/current',
   }).then(() => {
-    cy.visit('/overzicht?size=2');
+    cy.visit('/overzicht?sizeAgendas=2');
   });
   cy.wait(1000);
   cy.log('/logout');
@@ -101,7 +101,7 @@ function loginFlow(name) {
 function logoutFlow() {
   cy.log('logoutFlow');
   cy.intercept('DELETE', '/mock/sessions/current').as('mockLogout');
-  cy.visit('/overzicht?size=2');
+  cy.visit('/overzicht?sizeAgendas=2');
   cy.get(utils.mHeader.userActions)
     .children(appuniversum.button)
     .click();

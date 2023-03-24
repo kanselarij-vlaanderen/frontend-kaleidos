@@ -13,7 +13,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument onCancel
  */
 export default class AgendaitemCasePanelEdit extends Component {
-  @service store;
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 

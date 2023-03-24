@@ -10,6 +10,8 @@ const PROOF_STATUSES_URIS = [
 export default class PublicationsOverviewProofRoute extends PublicationsOverviewBaseRoute {
   @service store;
 
+  templateName = 'publications.overview.all';
+
   defaultColumns = [
     'isUrgent',
     'publicationNumber',
@@ -31,11 +33,5 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
         ':id:': proofStatuses.mapBy('id').join(','),
       },
     };
-  }
-
-  renderTemplate(controller) {
-    this.render('publications.overview.all', {
-      controller: controller
-    });
   }
 }
