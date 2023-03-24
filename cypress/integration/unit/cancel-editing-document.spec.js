@@ -21,7 +21,6 @@ function uploadFileToCancel(file) {
   cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
-    cy.wait(1000);
   });
 }
 
@@ -340,6 +339,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
+      .should('not.be.disabled')
       .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
@@ -353,12 +353,14 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains(file.newFileName);
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
+      .should('not.be.disabled')
       .click();
 
     // verify history in subcase view
     cy.visit('/dossiers/E14FB4D9-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628208FF7D8287D7ED094CF2/documenten');
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
+      .should('not.be.disabled')
       .click();
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
@@ -372,6 +374,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .contains(file.newFileName);
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
+      .should('not.be.disabled')
       .click();
   });
 

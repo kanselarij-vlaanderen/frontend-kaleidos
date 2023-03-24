@@ -28,7 +28,7 @@ context('rdfa editor tests', () => {
 
   // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor keypresses', () => {
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
 
@@ -88,8 +88,8 @@ context('rdfa editor tests', () => {
     cy.get(newsletter.editItem.cancel).click();
   });
 
-  it('should test the rdfa editor', () => {
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+  it('should test the rdfa editor buttonpresses', () => {
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
     cy.intercept('GET', '/themes**').as('getThemes');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
@@ -131,7 +131,7 @@ context('rdfa editor tests', () => {
   });
 
   it('should test the kort bestek and agendaitem views visually', () => {
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .as('firstRowZebra');
 
@@ -170,7 +170,7 @@ context('rdfa editor tests', () => {
     cy.get('@firstRowDefinitief').find('del')
       .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
 
-    cy.visit('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/kort-bestek');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/kort-bestek');
     cy.get(newsletter.agendaitemNewsItem.content).as('agendaitemNewsItemContent');
     cy.get('@agendaitemNewsItemContent').find('strong')
       .should('have.css', 'font-weight', '500');

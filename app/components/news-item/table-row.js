@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import sanitizeHtml from 'sanitize-html';
 
 export default class NewsItemTableRowComponent extends Component {
-  @service currentSession;
   @service toaster;
   @service intl;
   @service agendaitemNota;
@@ -32,10 +31,10 @@ export default class NewsItemTableRowComponent extends Component {
     );
   }
 
-  @action
-  async toggleInNewsletterFlag(checked) {
+  @task
+  *toggleInNewsletterFlag(checked) {
     this.args.newsItem.inNewsletter = checked;
-    await this.saveNewsItem.perform(this.args.newsItem);
+    yield this.saveNewsItem.perform(this.args.newsItem);
   }
 
   @action

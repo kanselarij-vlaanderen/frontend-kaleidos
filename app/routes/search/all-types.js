@@ -13,6 +13,7 @@ import SearchDecisionsRoute from './decisions';
 export default class AllTypes extends Route {
   @service store;
   @service plausible;
+  @service intl;
 
   CONTENT_TYPES = {
     cases: {
@@ -75,6 +76,7 @@ export default class AllTypes extends Route {
 
     const results = await Promise.all(
       Object.entries(this.CONTENT_TYPES).map(async (entry) => {
+        params.latestOnly = true; // for agendaitems filter
         const [name, type] = entry;
         const filter = await type.createFilter(params, this.store);
 
@@ -116,9 +118,43 @@ export default class AllTypes extends Route {
 
     flatResults.sort(sortFunc);
 
-    const counts = {};
+    const counts = [];
     for (const result of results) {
       counts[result.name] = result.data.meta.count;
+      const count = result.data.meta.count;
+      let name;
+      let route;
+      let tab; // for plausible
+      switch (result.name) {
+        case 'cases':
+          name = this.intl.t('cases');
+          route = 'search.cases';
+          tab = 'Dossiers';
+          break;
+        case 'agendaitems':
+          name = this.intl.t('agendas');
+          route = 'search.agendaitems';
+          tab = 'Agenda';
+          break;
+        case 'pieces':
+          name = this.intl.t('documents');
+          route = 'search.documents';
+          tab = 'Documenten';
+          break;
+        case 'decisions':
+          name = this.intl.t('decisions');
+          route = 'search.decisions';
+          tab = 'Beslissingen';
+          break;
+        case 'news-items':
+          name = this.intl.t('news-items');
+          route = 'search.news-items';
+          tab = 'Kort bestek';
+          break;
+        default:
+          break;
+      }
+      counts.push({ name, count, route, tab });
     }
 
     this.trackSearch(
@@ -146,7 +182,7 @@ export default class AllTypes extends Route {
   async trackSearch(searchTerm, resultCount, mandatees, from, to) {
     const ministerNames = (
       await Promise.all(
-        mandatees.map((id) => this.store.findRecord('person', id)))
+        mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
     this.plausible.trackEventWithRole('Zoekopdracht', {

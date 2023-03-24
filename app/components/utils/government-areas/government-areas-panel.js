@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 class Row {
@@ -25,7 +24,6 @@ export default class GovernmentAreasPanel extends Component {
    * @argument allowEditing
    * @argument onSave
    */
-  @service store;
 
   @tracked isOpenEditModal;
   @tracked rows = [];

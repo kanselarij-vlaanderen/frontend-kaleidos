@@ -30,11 +30,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     return isPresent(this.meeting.agenda.get('id'));
   }
 
-  async navigateToNeighbouringItem(agendaitem) {
+  async navigateToNeighbouringItem(agendaItemType, previousNumber) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
-    const previousNumber = agendaitem.number;
-    const agendaItemType = await agendaitem.type;
     const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[type][:id:]': agendaItemType.id,
@@ -64,9 +62,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   @action
-  async reassignNumbersAndNavigateToNeighbouringAgendaitem() {
+  async reassignNumbersAndNavigateToNeighbouringAgendaitem(agendaItemType, previousNumber) {
     await this.reassignNumbersForAgendaitems();
-    await this.navigateToNeighbouringItem(this.model);
+    await this.navigateToNeighbouringItem(agendaItemType, previousNumber);
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
     // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
     return this.router.refresh('agenda');

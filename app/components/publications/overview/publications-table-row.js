@@ -8,7 +8,6 @@ import maxDate from 'date-fns/max';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
-  @service store;
   @service publicationService;
 
   @tracked isViaCouncilOfMinisters;

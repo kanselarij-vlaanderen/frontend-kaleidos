@@ -22,7 +22,7 @@ export default class DcoumentsDocumentBadgeComponent extends Component {
   @keepLatestTask
   *loadData() {
     const accessLevel = yield this.args.doc.accessLevel;
-    const context = Object.assign(this.args.agendaContext || {}, { piece: this.args.doc });
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+    const context = this.args.agendaContext || {};
+    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.doc);
   }
 }

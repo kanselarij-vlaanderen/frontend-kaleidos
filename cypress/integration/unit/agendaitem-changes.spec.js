@@ -258,4 +258,58 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaOverviewItem.subitem).contains(approvalTitle)
       .should('be.visible');
   });
+
+  it('check agendaitem move up and move down buttons', () => {
+    // uses the profile spec agenda
+    const agendaitemTitle = 'Cypress test: profile rights - subcase 1 no decision docs';
+
+    cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten');
+
+    cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaOverviewItem.subitem).contains(agendaitemTitle)
+      .parents(agenda.agendaOverviewItem.container)
+      .as('agendaItem');
+
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
+      .contains(2);
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
+      .click()
+      .wait('@patchAgendaitems');
+    cy.get(auk.loader).should('not.exist');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
+      .should('be.disabled');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
+      .contains(1);
+
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems2');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
+      .click()
+      .wait('@patchAgendaitems2');
+    cy.get(auk.loader).should('not.exist');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
+      .should('not.be.disabled');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
+      .contains(2);
+
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems3');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
+      .click()
+      .wait('@patchAgendaitems3');
+    cy.get(auk.loader).should('not.exist');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
+      .should('be.disabled');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
+      .contains(3);
+
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems4');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
+      .click()
+      .wait('@patchAgendaitems4');
+    cy.get(auk.loader).should('not.exist');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
+      .should('not.be.disabled');
+    cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
+      .contains(2);
+  });
 });

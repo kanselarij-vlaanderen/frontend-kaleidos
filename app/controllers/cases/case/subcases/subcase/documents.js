@@ -16,11 +16,11 @@ import {
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
-  @service currentSession;
   @service intl;
   @service store;
   @service router;
   @service fileConversionService;
+  @service toaster;
 
   case;
   subcase;
@@ -183,7 +183,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
           }
         }
       }
-      this.router.refresh('cases.case.subcases.subcase.documents');
     }
   }
 
