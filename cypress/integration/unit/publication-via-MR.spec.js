@@ -128,6 +128,7 @@ context('Publications via MR tests', () => {
     cy.wait('@getMandatees');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains('Hilde Crevits')
       .scrollIntoView()
       .click();
@@ -233,6 +234,7 @@ context('Publications via MR tests', () => {
       .wait('@getFilteredIdCase')
       .wait('@getFilteredIdDecisionActivity');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(publicationNumber2)
       .scrollIntoView()
       .trigger('mouseover')

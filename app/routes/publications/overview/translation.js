@@ -2,6 +2,8 @@ import PublicationsOverviewBaseRoute from './_base';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsOverviewTranslationRoute extends PublicationsOverviewBaseRoute {
+  templateName = 'publications.overview.all';
+
   defaultColumns = [
     'isUrgent',
     'publicationNumber',
@@ -20,11 +22,5 @@ export default class PublicationsOverviewTranslationRoute extends PublicationsOv
         ':uri:': CONSTANTS.PUBLICATION_STATUSES.TRANSLATION_REQUESTED,
       },
     };
-  }
-
-  renderTemplate(controller) {
-    this.render('publications.overview.all', {
-      controller: controller
-    });
   }
 }

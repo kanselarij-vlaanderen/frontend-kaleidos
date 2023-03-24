@@ -1,12 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class SubCasesOverviewHeader extends Component {
-  @service currentSession;
-
   @tracked case;
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;

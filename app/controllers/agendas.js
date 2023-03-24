@@ -11,7 +11,6 @@ export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
   @service store;
-  @service currentSession;
   @service router;
 
   defaultPublicationActivityStatus;

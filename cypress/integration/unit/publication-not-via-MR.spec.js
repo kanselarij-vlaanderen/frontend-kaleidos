@@ -74,18 +74,21 @@ context('link publication not via MR to MR', () => {
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type(fields1.number);
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains('Geen resultaten gevonden');
 
     // check if publication linked to same case can be found
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type(fields2.number);
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(fields2.number);
 
     // check if existing publication not via MR can be found and linked
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type(fields3.number);
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.intercept('DELETE', '/cases/*').as('deleteCases');
     cy.intercept('DELETE', '/decision-activities/*').as('deleteDecisionActivity');
     cy.intercept('PATCH', '/publication-flows/*').as('patchPublicationFlows');

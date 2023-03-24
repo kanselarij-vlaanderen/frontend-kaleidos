@@ -3,7 +3,7 @@ export default class DocumentContainerModel extends Model {
   @attr uri;
   @attr('datetime') created;
 
-  @belongsTo('concept', { inverse: null, async: true }) type;
+  @belongsTo('concept', { inverse: null, async: true, polymorphic: true }) type;
 
   @hasMany('piece', { inverse: 'documentContainer', async: true }) pieces;
 }

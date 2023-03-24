@@ -10,7 +10,6 @@ import { task } from 'ember-concurrency';
  * @argument onSave
  */
 export default class SubcaseTitlesPanelEdit extends Component {
-  @service store;
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 

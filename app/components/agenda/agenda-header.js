@@ -16,7 +16,6 @@ export default class AgendaHeader extends Component {
    * @argument onStartLoading
    * @argument onStopLoading
    */
-  @service currentSession;
   @service intl;
 
   @tracked loadingMessage = null;
