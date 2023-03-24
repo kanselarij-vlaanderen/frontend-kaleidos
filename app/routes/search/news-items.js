@@ -1,11 +1,15 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
+import { inject as service } from '@ember/service';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchNewsItemsRoute extends Route {
+  @service store;
+  @service plausible;
+
   queryParams = {
     page: {
       refreshModel: true,
@@ -83,7 +87,7 @@ export default class SearchNewsItemsRoute extends Route {
     return filter;
   }
 
-  model(filterParams) {
+  async model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = { ...searchParams, ...filterParams };
     if (!params.dateFrom) {
@@ -102,7 +106,7 @@ export default class SearchNewsItemsRoute extends Route {
       return [];
     }
 
-    return search(
+    const results = await search(
       'news-items',
       params.page,
       params.size,
@@ -113,6 +117,33 @@ export default class SearchNewsItemsRoute extends Route {
         fields: SearchNewsItemsRoute.highlightFields,
       }
     );
+
+    this.trackSearch(
+      params.searchText,
+      results.length,
+      params.mandatees,
+      params.dateFrom,
+      params.dateTo,
+      params.sort,
+    );
+
+    return results;
+  }
+
+  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort) {
+    const ministerNames = (
+      await Promise.all(
+        mandatees?.map((id) => this.store.findRecord('person', id)))
+    ).map((person) => person.fullName);
+
+    this.plausible.trackEventWithRole('Zoekopdracht', {
+      'Zoekterm': searchTerm,
+      'Aantal resultaten': resultCount,
+      'Ministers': ministerNames.join(', '),
+      'Van': from,
+      'Tot en met': to,
+      'Sorteringsoptie': sort,
+    }, true);
   }
 
   setupController(controller) {

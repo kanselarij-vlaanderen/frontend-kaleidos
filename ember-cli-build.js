@@ -38,6 +38,13 @@ module.exports = function (defaults) {
     'ember-test-selectors': {
       strip: false
     },
+    '@embroider/macros': {
+      setConfig: {
+        '@ember-data/store': {
+          polyfillUUID: true,
+        },
+      },
+    },
   });
 
   app.import('node_modules/sanitize-filename/index.js', {

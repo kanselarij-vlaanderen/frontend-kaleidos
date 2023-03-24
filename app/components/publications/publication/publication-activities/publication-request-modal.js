@@ -9,7 +9,6 @@ import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-ema
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
-  @service store;
   @service publicationService;
 
   @tracked subject;

@@ -9,7 +9,6 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
    */
   @service router;
   @service store;
-  @service currentSession;
 
   @lastValue('loadFirstAgendaitem') firstAgendaitem;
 

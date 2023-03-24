@@ -105,8 +105,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadAccessLevelRelatedData() {
     const accessLevel = yield this.piece.accessLevel;
-    const context = Object.assign({}, this.args.agendaContext || {}, { piece: this.piece });
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+    const context = this.args.agendaContext || {};
+    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.piece);
   }
 
   @task

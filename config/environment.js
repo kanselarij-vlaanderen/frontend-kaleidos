@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = function (environment) {
-  let ENV = {
+  const ENV = {
     modulePrefix: 'frontend-kaleidos',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
     featureFlags: {
       'editor-html-paste': false,
       'editor-browser-delete': true,
@@ -14,10 +14,6 @@ module.exports = function (environment) {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
-      },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false,
       },
     },
     APP: {

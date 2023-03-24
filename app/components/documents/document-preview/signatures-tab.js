@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
-  @service currentSession;
   @service store;
 
   @tracked signMarkingActivity;
