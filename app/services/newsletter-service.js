@@ -7,7 +7,6 @@ export default class NewsletterService extends Service {
   @service store;
   @service toaster;
   @service intl;
-  @service currentSession;
 
   async createCampaign(meeting, silent = false) {
     const endpoint = `/newsletter/mail-campaigns`;

@@ -49,7 +49,7 @@
         this.saveNewsItem.isRunning
         (not (user-may "manage-news-items"))
       }}
-      @onChange={{this.toggleInNewsletterFlag}}
+      @onChange={{perform this.toggleInNewsletterFlag}}
     />
   </td>
   <td class="lt-cell align-left">
