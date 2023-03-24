@@ -6,7 +6,7 @@ You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://ember-cli.com/)
+* [Ember CLI](https://cli.emberjs.com/release/)
 * [Google Chrome](https://google.com/chrome/)
 
 ## Installation
@@ -60,3 +60,8 @@ These commands are used in the above commands. you only need them if you want to
 2. Make sure your frontend is running on port 4200 also. Issueing the command `npm start` in the frontend should do the trick.
 3. Also in the frontend: issue the  `make run-cypress-tests-headless` command. Your tests are now running.
 
+* [ember.js](https://emberjs.com/)
+* [ember-cli](https://cli.emberjs.com/release/)
+* Development Browser Extensions
+  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
+  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)

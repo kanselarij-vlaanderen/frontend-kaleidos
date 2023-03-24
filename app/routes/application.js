@@ -5,7 +5,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class ApplicationRoute extends Route {
   @service conceptStore;
-  @service intl;
   @service session;
   @service currentSession;
   @service router;

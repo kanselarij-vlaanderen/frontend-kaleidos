@@ -23,6 +23,7 @@
 # ember-try
 /.node_modules.ember-try/
 /bower.json.ember-try
+/npm-shrinkwrap.json.ember-try
 /package.json.ember-try
 
 .idea/
@@ -36,3 +37,6 @@
 *~
 .nvmrc
 .dir-locals.el
+
+# broccoli-debug
+/DEBUG/

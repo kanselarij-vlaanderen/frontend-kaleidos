@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 export default class PublicationsOverviewUrgentRoute extends PublicationsOverviewBaseRoute {
   @service store;
 
+  templateName = 'publications.overview.all';
+
   defaultColumns = [
     'publicationNumber',
     'numacNumber',
@@ -25,11 +27,5 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
         ':id:': allStatusesExceptPublished.mapBy('id').join(','),
       },
     };
-  }
-
-  renderTemplate(controller) {
-    this.render('publications.overview.all', {
-      controller: controller,
-    });
   }
 }

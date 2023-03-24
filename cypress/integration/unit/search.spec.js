@@ -244,10 +244,10 @@ context('Search tests', () => {
 
       // TODO does this still work reliably after recent changes
       wordsFromTreatmentPdf.forEach((searchTerm) => {
+        cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
         cy.get(route.search.input).clear();
         cy.get(route.search.input).type(searchTerm);
-        cy.get(route.search.trigger).click(); // no results found in documents
-        cy.intercept('GET', `/decisionmaking-flows/search?**${encodeURIComponent(searchTerm)}**`).as('decisionsSearchCall');
+        cy.get(route.search.trigger).click();
         cy.wait('@decisionsSearchCall');
 
         cy.get(route.searchCases.dataTable).find('tbody')

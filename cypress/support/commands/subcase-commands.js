@@ -127,7 +127,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
   cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
 
-  cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
+  cy.intercept('PATCH', '/subcases/*').as(`patchSubcase${randomInt}`);
   cy.get(mandatee.mandateePanelView.actions.edit).click();
   cy.get(mandatee.mandateePanelEdit.actions.add).click();
   cy.wait(`@getGovernmentBodies${randomInt}`);
@@ -157,7 +157,7 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   }
   cy.get(utils.mandateesSelector.add).click();
   cy.get(mandatee.mandateePanelEdit.actions.save).click();
-  cy.wait('@patchSubcase', {
+  cy.wait(`@patchSubcase${randomInt}`, {
     timeout: 40000,
   });
   cy.log('/addSubcaseMandatee');
@@ -175,14 +175,15 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
  */
 function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   cy.log('addAgendaitemMandatee');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('PATCH', '/agendaitems/*').as(`patchAgendaitem${randomInt}`);
+  cy.intercept('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
 
-  cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
-  cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
 
   cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
-  cy.wait('@patchAgendaitem', {
+  cy.wait(`@patchAgendaitem${randomInt}`, {
     timeout: 40000,
-  }).wait('@patchAgenda', {
+  }).wait(`@patchAgenda${randomInt}`, {
     timeout: 40000,
   });
   // the mandatee groups have to be recalculated.

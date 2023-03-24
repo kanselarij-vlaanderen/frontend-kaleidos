@@ -196,6 +196,7 @@ context('Publications tests', () => {
     cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)
       .click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

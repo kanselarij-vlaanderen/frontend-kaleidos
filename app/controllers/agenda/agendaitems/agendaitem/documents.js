@@ -214,16 +214,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  async setPreviousPiecesFromAgendaitem(deletedPiece) {
-    // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
-    const documentContainer = await deletedPiece.documentContainer;
+  async setPreviousPiecesFromAgendaitem(previousPiece) {
+    const documentContainer = await previousPiece?.documentContainer;
     if (documentContainer) {
       const pieces = documentContainer.pieces;
       if (this.agendaitem && pieces.length > 0) {
         await restorePiecesFromPreviousAgendaitem(this.agendaitem, documentContainer);
         // TODO: make sure we're not loading stale cache
       }
-      this.router.refresh('agenda.agendaitems.agendaitem.documents');
     }
   }
 

@@ -75,15 +75,15 @@ export default class SettingsUsersIndexRoute extends Route {
     }
 
     if (params.dateFrom) {
-      filter['login-activity'] = {
-        ':gte:start-date': startOfDay(parseDate(params.dateFrom)).toISOString(),
-      };
+      filter['login-activity'] ??= {};
+      filter['login-activity'][':gte:start-date'] =
+        startOfDay(parseDate(params.dateFrom)).toISOString();
     }
 
     if (params.dateTo) {
-      filter['login-activity'] = {
-        ':lte:start-date': endOfDay(parseDate(params.dateTo)).toISOString(),
-      };
+      filter['login-activity'] ??= {};
+      filter['login-activity'][':lte:start-date'] =
+        endOfDay(parseDate(params.dateTo)).toISOString();
     }
 
     if (params.roles.length) {

@@ -105,6 +105,8 @@ context('Testing the application as Overheid user', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort1);
@@ -198,6 +200,8 @@ context('Testing the application as Overheid user', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort3);

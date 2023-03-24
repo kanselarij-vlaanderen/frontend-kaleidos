@@ -10,11 +10,11 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * @argument decisionActivity
  */
 export default class AgendaitemDecisionComponent extends Component {
-  @service currentSession;
   @service store;
   @service pieceAccessLevelService;
   @service toaster;
   @service fileConversionService;
+  @service intl;
 
   @tracked report;
   @tracked previousReport;

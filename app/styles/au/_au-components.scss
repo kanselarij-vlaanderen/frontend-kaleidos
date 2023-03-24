@@ -206,6 +206,76 @@ $au-button-height: 3.4rem;
     vertical-align: super;
     font-size: smaller;
   }
+
+  .auk-table & { // override the styling inherited from parent auk-table elements/components to its default
+    table {
+      td {
+        padding: 0;
+        border: none;
+        vertical-align: baseline;
+      }
+
+      tr:last-child {
+        td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  .auk-table--striped & { // override the styling inherited from parent striped auk-table elements/components to its default
+    table {
+      tbody {
+        tr {
+          td {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  :is(.auk-table, *) & { // explicit selector to increase specificity (TODO: remove when either au-kaleidos-css table selectors are adjusted or only tables from ember-appuniverum are used)
+    table {
+      position: relative;
+      display: table;
+      min-width: 50rem;
+      width: 100%;
+      border: 0.1rem solid var(--au-gray-300);
+      border-radius: var(--au-radius);
+      border-collapse: collapse;
+      font-size: inherit;
+
+      td {
+        max-width: 55ch;
+        position: relative;
+      }
+
+      td + td {
+        &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 0.1rem;
+          left: -0.1rem;
+          top: 0;
+          height: 100%;
+          border-left: 0.1rem dotted var(--au-gray-300);
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 0.1rem solid var(--au-gray-300);
+          background-color: var(--au-white);
+        }
+
+        td {
+          padding: $au-unit-tiny;
+        }
+      }
+    }
+  }
 }
 
 .au-c-button {

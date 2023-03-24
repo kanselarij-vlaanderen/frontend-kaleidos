@@ -7,7 +7,6 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsOverviewSearchController extends Controller {
   @service router;
-  @service store;
 
   queryParams = [
     {

@@ -7,11 +7,11 @@ import { task } from 'ember-concurrency';
 import { all } from 'ember-concurrency';
 
 export default class AgendaDocumentsController extends Controller {
-  @service currentSession;
   @service store;
   @service toaster;
   @service fileConversionService;
   @service router;
+  @service intl;
 
   agenda;
   meeting;

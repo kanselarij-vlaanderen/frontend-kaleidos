@@ -54,14 +54,17 @@
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"
-            {{on "click" (toggle "isUploadingReplacementSourceFile" this)}}
+            {{on "click" (toggle "isReplacingSourceFile" this)}}
           >
             {{t (if @piece.file "replace" "upload")}}
           </AuButton>
         </div>
       </Auk::KeyValue>
-      {{#if this.isUploadingReplacementSourceFile}}
-        <Auk::FileUploader @onUpload={{set this "replacementSourceFile"}} />
+      {{#if this.isReplacingSourceFile}}
+        <Auk::FileUploader
+          @onUpload={{set this "replacementSourceFile"}}
+          @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
+        />
       {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
