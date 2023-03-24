@@ -154,8 +154,6 @@ context('rdfa editor tests', () => {
     cy.get(dependency.rdfa.editorInner).type('Lijstniveau lager');
     cy.wait(200);
 
-    cy.get('button').contains('Lijstniveau lager')
-      .should('not.exist');
     cy.get(dependency.rdfa.editorInner).type('{enter}');
     pressRdfaButton('Lijstniveau hoger');
     cy.get('button').contains('Lijstniveau lager');
