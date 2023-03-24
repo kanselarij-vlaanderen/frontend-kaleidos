@@ -24,7 +24,7 @@ export default class NewslettersIndexRoute extends Route {
         size: params.size,
       },
       sort: params.sort,
-      include: "mail-campaign",
+      include: 'mail-campaign',
     };
     return await this.store.query('meeting', queryParams);
   }
