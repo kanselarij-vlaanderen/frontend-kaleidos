@@ -58,12 +58,16 @@
     @title={{t "signed-decision-add"}}
     @onSave={{this.attachReport}}
     @onCancel={{this.toggleIsAddingReport}}
+    @documentType="report"
   />
 {{/if}}
 
 {{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
   <Auk::Modal @size="medium">
-    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
+    <Auk::Modal::Header
+      @title={{t "saving-decision-result-title"}}
+      @closeable={{false}}
+    />
     <Auk::Modal::Body>
       <Auk::Loader @message={{t "saving-decision-result-message"}} />
     </Auk::Modal::Body>

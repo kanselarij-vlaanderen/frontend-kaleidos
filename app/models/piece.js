@@ -16,7 +16,8 @@ export default class Piece extends Model {
   @belongsTo('document-container', { inverse: 'pieces', async: true })
   documentContainer;
   @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
-  @belongsTo('piece', { inverse: 'nextPiece', async: true }) previousPiece;
+  @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true })
+  previousPiece;
 
   // resources with pieces linked:
 
@@ -36,7 +37,8 @@ export default class Piece extends Model {
   translationActivityGeneratedBy;
   @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
   signMarkingActivity;
-  @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
+  @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true })
+  signedPiece;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
@@ -50,7 +52,8 @@ export default class Piece extends Model {
 
   @hasMany('case', { inverse: 'pieces', async: true }) cases;
   @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
-  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true }) linkedAgendaitems;
+  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
+  linkedAgendaitems;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

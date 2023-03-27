@@ -38,12 +38,15 @@ export default class UtilsAddDocument extends Component {
   @action
   createNewPiece(uploadedFile) {
     const now = new Date();
-    this.pieceInCreation = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: uploadedFile,
-      name: uploadedFile.filenameWithoutExtension,
-    });
+    this.pieceInCreation = this.store.createRecord(
+      this.args.documentType ?? 'piece',
+      {
+        created: now,
+        modified: now,
+        file: uploadedFile,
+        name: uploadedFile.filenameWithoutExtension,
+      }
+    );
   }
 
   @task
