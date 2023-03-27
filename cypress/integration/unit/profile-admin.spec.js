@@ -480,11 +480,11 @@ context('Testing the application as Admin user', () => {
     });
   });
 
-  context.only('Profile rights checks for kort-bestek routes', () => {
+  context('Profile rights checks for kort-bestek routes', () => {
     const agendaDate = Cypress.dayjs().add(3, 'weeks')
       .day(3);
 
-    it('setup for update notas tests', () => {
+    it.skip('setup for update notas tests', () => {
       const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
       const caseTitle = `testId=${currentTimestamp()}: Cypress test nota updates`;
       const subcaseTitle1 = `${caseTitle} test stap 1`;
@@ -722,7 +722,8 @@ context('Testing the application as Admin user', () => {
           .wait('@patchNewsItem');
       });
 
-      it('check update notas view', () => {
+      // TODO We need setup for this test, needs to be added to ZIP
+      it.skip('check update notas view', () => {
         // setup: create nota with bis
         cy.openAgendaForDate(agendaDate);
         cy.get(agenda.agendaActions.optionsDropdown)

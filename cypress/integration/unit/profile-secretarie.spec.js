@@ -435,7 +435,7 @@ context('Testing the application as Secretarie user', () => {
     });
   });
 
-  context.only('Profile rights checks for kort-bestek routes', () => {
+  context('Profile rights checks for kort-bestek routes', () => {
     const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
     const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
 
