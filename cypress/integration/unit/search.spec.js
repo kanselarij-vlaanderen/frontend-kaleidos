@@ -146,12 +146,13 @@ context('Search tests', () => {
     });
 
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
+    // duplicated tests, see search-new-views.spec.js
+    it.skip('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
       cy.visit('zoeken/agendapunten');
       searchFunction(options, options[2]);
     });
 
-    it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
+    it.skip('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
       cy.visit('zoeken/dossiers');
       searchFunction(options, options[2]);
     });

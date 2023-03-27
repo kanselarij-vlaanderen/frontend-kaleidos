@@ -6,9 +6,26 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 
+function searchFunction(optionsToCheck, defaultOption) {
+  optionsToCheck.forEach((option) => {
+    cy.get(route.search.input).clear()
+      .type('test');
+    cy.get(route.search.trigger).click();
+    cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(option)
+      .click();
+    if (option !== defaultOption) {
+      cy.url().should('include', `aantal=${option}`);
+    }
+    cy.get(route.search.input).clear();
+  });
+}
+
 context('New search views tests', () => {
-  const options = [10, 25, 50, 100, 200];
+  const options = [5, 10, 20, 25, 50, 100, 200];
   const emptyStateMessage = 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.';
+  const defaultSize = options[2];
 
   beforeEach(() => {
     cy.login('Admin');
@@ -18,26 +35,13 @@ context('New search views tests', () => {
     cy.logout();
   });
 
-  const searchFunction = (elementsToCheck) => {
-    elementsToCheck.forEach((option) => {
-      cy.get(route.search.input).type('test');
-      cy.get(route.search.trigger).click();
-      cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
-        .click();
-      cy.get(dependency.emberPowerSelect.option).contains(option)
-        .click();
-      cy.url().should('include', `aantal=${option}`);
-      cy.get(route.search.input).clear();
-    });
-  };
-
   context('Test zoeken/dossiers', () => {
     beforeEach(() => {
       cy.visit('/zoeken/dossiers');
     });
 
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-      searchFunction(options);
+    it('Should change the amount of elements to every value in selectbox in cases search view', () => {
+      searchFunction(options, defaultSize);
     });
 
     it('Should check all filters', () => {
@@ -51,7 +55,7 @@ context('New search views tests', () => {
       cy.get(route.searchConfidentialOnly.checkbox);
     });
 
-    it('Search for non-existing and existing searchterm in dossiers and check resultcard', () => {
+    it('Search for non-existing and existing searchterm in cases and check resultcard', () => {
       const searchTerm = 'search dossier 1';
 
       // search for non-existing searchterm
@@ -90,8 +94,8 @@ context('New search views tests', () => {
       cy.visit('/zoeken/agendapunten');
     });
 
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-      searchFunction(options);
+    it('Should change the amount of elements to every value in selectbox in agendaitems search view', () => {
+      searchFunction(options, defaultSize);
     });
 
     it('Should check all filters', () => {
@@ -147,8 +151,8 @@ context('New search views tests', () => {
       cy.visit('/zoeken/documenten');
     });
 
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-      searchFunction(options);
+    it('Should change the amount of elements to every value in selectbox in pieces search view', () => {
+      searchFunction(options, defaultSize);
     });
 
     it('Should check all filters', () => {
@@ -200,8 +204,8 @@ context('New search views tests', () => {
       cy.visit('/zoeken/beslissingen');
     });
 
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-      searchFunction(options);
+    it('Should change the amount of elements to every value in selectbox in decisions search view', () => {
+      searchFunction(options, defaultSize);
     });
 
     it('Should check all filters', () => {
@@ -237,7 +241,7 @@ context('New search views tests', () => {
       cy.get(route.decisionResultCard.shortTitleLink).contains(searchTerm);
 
       // check resultcard
-      cy.get(route.decisionResultCard.date).contains('28-02-2022');
+      cy.get(route.decisionResultCard.date).contains('22-04-2022');
       cy.get(route.decisionResultCard.result);
       // TODO check different pills?
     });
@@ -248,8 +252,8 @@ context('New search views tests', () => {
       cy.visit('/zoeken/kort-bestek');
     });
 
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
-      searchFunction(options);
+    it('Should change the amount of elements to every value in selectbox in news-items search view', () => {
+      searchFunction(options, defaultSize);
     });
 
     it('Should check all filters', () => {
