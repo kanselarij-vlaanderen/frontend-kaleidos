@@ -37,14 +37,7 @@ export default class NewsletterService extends Service {
       }
       throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
     }
-    const mailCampaign = this.store.createRecord('mail-campaign', {
-      campaignId: result.data.id,
-      campaignWebId: result.data.attributes.webId,
-      archiveUrl: result.data.attributes.archiveUrl,
-      meeting: meeting,
-    });
-
-    await mailCampaign.save();
+    const mailCampaign = this.store.findRecord('mail-campaign', result.data.id);
     return mailCampaign;
   }
 
