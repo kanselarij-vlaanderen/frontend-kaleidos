@@ -55,21 +55,24 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
-      .as('checkboxValue');
-    cy.get('@checkboxValue').parent()
+      .as('checkboxInput');
+    cy.get('@checkboxInput').parent()
       .as('checkboxContainer');
     // checkbox is unchecked, toggle it
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
     // checkbox gets disabled during saving
     // checkbox is checked, toggle it back
-    cy.get('@checkboxValue').should('be.checked');
-    cy.get('@checkboxContainer').should('not.be.disabled')
-      .click();
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+    cy.get('@checkboxInput').should('be.checked')
+      .should('not.be.disabled');
+    cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
     // checkbox is unchecked
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
   });
 
   // test in agenda detail
