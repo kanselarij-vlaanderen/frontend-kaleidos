@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
   @service store;
 
+  templateName = 'publications.overview.all';
+
   defaultColumns= [
     'publicationNumber',
     'numacNumber',
@@ -30,12 +32,6 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
         ':lt:target-end-date': getStartOfToday().toISOString(),
       },
     };
-  }
-
-  renderTemplate(controller) {
-    this.render('publications.overview.all', {
-      controller: controller
-    });
   }
 }
 

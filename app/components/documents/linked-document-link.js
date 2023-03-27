@@ -6,8 +6,6 @@ import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 
 export default class LinkedDocumentLink extends Component {
-  @service store;
-  @service currentSession;
   @service pieceAccessLevelService;
 
   @tracked isOpenVerifyDeleteModal = false;

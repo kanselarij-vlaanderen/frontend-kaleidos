@@ -16,7 +16,6 @@ const environmentNames = {
 export default class MHeader extends Component {
   @service currentSession;
   @service impersonation;
-  @service router;
   @service session;
   @service store;
   @service toaster;

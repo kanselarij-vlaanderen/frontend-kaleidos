@@ -6,7 +6,6 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesIndexController extends Controller {
   // Services
-  @service currentSession;
   @service router;
   @service store;
 

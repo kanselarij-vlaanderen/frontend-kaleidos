@@ -146,6 +146,8 @@
   "download": "Download",
   "download-2": "Downloaden",
   "download-documents": "Download alle documenten",
+  "download-decisions": "Download beslissingsfiches",
+  "download-all-decisions": "Download alle beslisingen",
   "download-all-documents": "Download alle documenten",
   "drop-text": "Laat los om het bestand op te laden.",
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
@@ -561,7 +563,7 @@
   "clone-previous-subcase": "Kopieer voorgaande stap",
   "action-not-allowed": "Deze actie is niet toegestaan, Contacteer de administrator of probeer het opnieuw.",
   "filtered-agendas": "Deze data is gefilterd.",
-  "editing-agenda-overview": "U bent nu aan het bewerken. U kan de volgorde en de status van de mededelingen en nota's aanpassen. Wijzigingen worden onmiddellijk opgeslagen.",
+  "editing-agenda-overview": "U bent nu aan het bewerken. U kan de status van de mededelingen en nota's aanpassen. Volgorde aanpassen kan enkel indien alle punten getoond worden. Wijzigingen worden onmiddellijk opgeslagen.",
   "end-editing-overview": "Bewerken afsluiten",
   "clear-filter": "Reset filter",
   "clear-filter-plural": "Reset filters",
@@ -1172,5 +1174,8 @@
   "creation-date": "Aanmaakdatum",
   "all-content": "Alle inhoud",
   "news-items": "Kort bestek berichten",
-  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt",
+  "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
+  "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
+  "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan."
 }
