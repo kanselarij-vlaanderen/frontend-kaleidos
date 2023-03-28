@@ -183,6 +183,28 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-table--list {
+  thead {
+    display: none;
+  }
+
+  td {
+    border-bottom: 0;
+  }
+
+  td,
+  tr td:first-child,
+  tr td:last-child {
+    padding: 0 0 $au-unit-small 0;
+  }
+
+  .auk-table--clickable-rows {
+    tr:focus-within td {
+      background-color: transparent;
+    }
+  }
+}
+
 // Button toolbar
 
 .auk-button-toolbar {
