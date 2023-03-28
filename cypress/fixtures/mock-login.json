@@ -12,6 +12,19 @@
       "type": "sessions"
     }
   },
+  "Kanselarij": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "837b7934-261e-4782-a51d-9b058810cf90",
+            "type": "accounts"
+          }
+        }
+      },
+      "type": "sessions"
+    }
+  },
   "Secretarie": {
     "data": {
       "relationships": {
