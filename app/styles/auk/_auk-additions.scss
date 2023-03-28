@@ -387,3 +387,8 @@ table tr.lt-expanded-row {
     transform: translate3d(10px, 64px, 0px) !important;
   }
 }
+
+// Checkbox list spacing override
+.auk-checkbox-list + .auk-checkbox-list {
+  margin-top: 1rem;
+}
