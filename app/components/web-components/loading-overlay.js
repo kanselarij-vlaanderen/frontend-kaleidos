@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 
 export default class LoadingOverlay extends Component {
-  @service() intl;
+  @service intl;
 
   get getSize() {
     if (this.args.size) {

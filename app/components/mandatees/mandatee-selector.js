@@ -13,7 +13,6 @@ import { inject as service } from '@ember/service';
  * @argument {Date} referenceDate: Date to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
-  @service store;
   @service mandatees;
 
   @tracked mandateeOptions = [];

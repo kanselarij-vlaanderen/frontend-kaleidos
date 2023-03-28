@@ -8,7 +8,11 @@ export default class SignSubcaseModel extends Model {
   @belongsTo('sign-flow', { inverse: 'signSubcase', async: true }) signFlow;
   @belongsTo('sign-marking-activity', { inverse: 'signSubcase', async: true })
   signMarkingActivity;
-  @belongsTo('sign-preparation-activity') signPreparationActivity;
+  @belongsTo('sign-preparation-activity', {
+    inverse: 'signSubcase',
+    async: true,
+  })
+  signPreparationActivity;
   @belongsTo('sign-cancellation-activity', {
     inverse: 'signSubcase',
     async: true,

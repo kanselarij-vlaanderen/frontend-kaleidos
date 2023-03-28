@@ -175,6 +175,7 @@ const selectors = {
     confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
+    newsItem: '[data-test-agendaitem-titles-news-item]',
   },
 
   // agendaitem-titles-edit

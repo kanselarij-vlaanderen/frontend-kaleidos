@@ -49,7 +49,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @task
   *loadMailCampaign() {
-    this.mailCampaign = yield this.args.meeting.mailCampaign;
+    this.mailCampaign = yield this.store.queryOne('mail-campaign', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+    });
   }
 
   @task
@@ -87,8 +89,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
           if (yield this.validateMailCampaign()) {
             try {
               yield this.newsletterService.sendMailCampaign(this.mailCampaign.campaignId);
-              this.mailCampaign.sentAt = new Date();
-              yield this.mailCampaign.save();
+              yield this.loadMailCampaign.perform();
               this.toaster.success(this.intl.t('success-publish-newsletter-to-mail'));
             } catch(e) {
               console.log("error sending newsletter", e);
@@ -224,12 +225,12 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       return false;
     }
 
+    // Don't send the campaign if it's over 10 minutes old
+    const now =  new Date();
+    const campaignCreatedDatetime = new Date(campaign.attributes['create-time']);
+    const difference = differenceInMinutes(now, campaignCreatedDatetime);
     const threshold = 10;
-    if (
-      Math.abs(
-        differenceInMinutes(campaign.attributes.createTime, new Date())
-      ) > threshold
-    ) {
+    if (difference > threshold) {
       this.toaster.error(
         this.intl.t('error-old-newsletter'),
         this.intl.t('warning-title')
@@ -252,8 +253,6 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       yield this.newsletterService.deleteCampaign(this.mailCampaign.campaignId);
       this.toaster.success(this.intl.t('success-delete-newsletter'));
     }
-    this.mailCampaign.destroyRecord();
-    yield this.args.meeting.belongsTo('mailCampaign').reload();
     yield this.loadMailCampaign.perform();
   }
 
