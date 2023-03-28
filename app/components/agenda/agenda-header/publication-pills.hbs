@@ -1,23 +1,23 @@
 <div data-test-publication-pills-container>
   {{#unless this.loadInitialData.isRunning}}
     {{#if (user-may "manage-decision-publications")}}
-      {{#if @meeting.internalDecisionPublicationActivity.startDate}}
+      {{#if this.internalDecisionPublicationActivity.startDate}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "decisions-were-released-at"
-            date=(date @meeting.internalDecisionPublicationActivity.startDate)
-            time=(time @meeting.internalDecisionPublicationActivity.startDate)
+            date=(date this.internalDecisionPublicationActivity.startDate)
+            time=(time this.internalDecisionPublicationActivity.startDate)
           }}
         </AuPill>
       {{/if}}
     {{/if}}
     {{#if (user-may "manage-document-publications")}}
-      {{#if @meeting.internalDocumentPublicationActivity.startDate}}
+      {{#if this.internalDocumentPublicationActivity.startDate}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-were-released-at"
-            date=(date @meeting.internalDocumentPublicationActivity.plannedDate)
-            time=(time @meeting.internalDocumentPublicationActivity.plannedDate)
+            date=(date this.internalDocumentPublicationActivity.plannedDate)
+            time=(time this.internalDocumentPublicationActivity.plannedDate)
           }}
         </AuPill>
       {{else}}
@@ -25,8 +25,8 @@
           <AuPill @skin="default" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
             {{t
               "documents-are-planned-to-release-at"
-               date=(date @meeting.internalDocumentPublicationActivity.plannedDate)
-               time=(time @meeting.internalDocumentPublicationActivity.plannedDate)
+               date=(date this.internalDocumentPublicationActivity.plannedDate)
+               time=(time this.internalDocumentPublicationActivity.plannedDate)
             }}
           </AuPill>
         {{/if}}

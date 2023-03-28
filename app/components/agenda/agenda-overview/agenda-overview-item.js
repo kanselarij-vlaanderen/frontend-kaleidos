@@ -29,11 +29,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument isLast: boolean indicating whether it's the last nota or announcement
    */
 
-  @service store;
   @service intl;
   @service toaster;
   @service agendaService;
-  @service router;
   @service currentSession;
   @service throttledLoadingService;
 

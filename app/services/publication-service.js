@@ -5,7 +5,6 @@ import { isEmpty } from '@ember/utils';
 
 export default class PublicationService extends Service {
   @service store;
-  @service toaster;
   @service intl;
 
   async createNewPublicationFromMinisterialCouncil(

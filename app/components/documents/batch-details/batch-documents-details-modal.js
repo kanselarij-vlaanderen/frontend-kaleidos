@@ -4,14 +4,13 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { task } from 'ember-concurrency';
-import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { task, all } from 'ember-concurrency';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
 export default class BatchDocumentsDetailsModal extends Component {
-  @service store;
   @service pieceAccessLevelService;
 
   @tracked rows;
@@ -91,16 +90,16 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
-    const saves = this.rows.map(async (row) => {
+    yield all(this.rows.map(async (row) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
+        const previousPiece = await piece.previousPiece;
         await deletePiece(piece);
-        await this.args.didDeletePiece?.(piece);
-        const piecesInContainer = await row.documentContainer.pieces;
-        if (piecesInContainer.length === 0) {
-          await deleteDocumentContainer(row.documentContainer);
+        if (this.args.didDeletePiece && previousPiece) {
+          await this.args.didDeletePiece(previousPiece);
         }
+        // container is cleaned up in deletePiece if no more pieces exist
       } else {
         piece.name = row.name;
         // does not check for relationship changes
@@ -123,8 +122,7 @@ export default class BatchDocumentsDetailsModal extends Component {
           }
         }
       }
-    });
-    yield Promise.all(saves);
+    }));
     this.args.onSave();
   }
 }

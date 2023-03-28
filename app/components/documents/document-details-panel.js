@@ -9,7 +9,6 @@ import { task } from 'ember-concurrency';
  * @param {Piece} piece
  */
 export default class DocumentsDocumentDetailsPanel extends Component {
-  @service currentSession;
   @service pieceAccessLevelService;
   @service fileConversionService;
   @service intl;
@@ -81,6 +80,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
           this.intl.t('warning-title'),
         );
       }
+      this.args.onChangeFile();
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();

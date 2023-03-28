@@ -11,6 +11,8 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   @service store;
 
   @tracked latestThemisPublicationActivity;
+  @tracked internalDecisionPublicationActivity;
+  @tracked internalDocumentPublicationActivity;
 
   constructor() {
     super(...arguments);
@@ -23,7 +25,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   }
 
   get isConfirmedDocumentPublicationPlanning() {
-    return this.args.meeting.internalDocumentPublicationActivity.get('status.uri') == CONSTANTS.RELEASE_STATUSES.CONFIRMED;
+    return this.internalDocumentPublicationActivity?.status.get('uri') == CONSTANTS.RELEASE_STATUSES.CONFIRMED;
   }
 
   get isReleasedThemisPublicationActivity() {
@@ -51,10 +53,15 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
   @task
   *loadPublicationActivities() {
-    const decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    yield decisionPublicationActivity?.belongsTo('status').reload();
-    const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    yield documentPublicationActivity?.belongsTo('status').reload();
+    this.internalDocumentPublicationActivity = yield this.store.queryOne('internal-document-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      include: 'status',
+    });
+
+    this.internalDecisionPublicationActivity = yield this.store.queryOne('internal-decision-publication-activity', {
+      'filter[meeting][:uri:]': this.args.meeting.uri,
+      include: 'status',
+    });
 
     this.latestThemisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
