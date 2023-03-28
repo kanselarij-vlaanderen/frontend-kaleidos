@@ -29,6 +29,17 @@ context('New search views tests', () => {
 
   beforeEach(() => {
     cy.login('Admin');
+    // minister filter may need loading
+    cy.intercept('GET', '/roles?**').as('getRoles');
+    cy.intercept('GET', '/government-bodies?**').as('getGovBodies');
+    cy.intercept('GET', '/mandatees?**').as('getMandatees');
+    cy.visit('/zoeken/alle-types');
+    cy.wait('@getRoles');
+    cy.wait('@getGovBodies');
+    cy.wait('@getMandatees', {
+      timeout: 100000,
+    });
+    cy.get(auk.loader).should('not.exist');
   });
 
   afterEach(() => {
@@ -38,6 +49,8 @@ context('New search views tests', () => {
   context('Test zoeken/dossiers', () => {
     beforeEach(() => {
       cy.visit('/zoeken/dossiers');
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in cases search view', () => {
@@ -92,6 +105,8 @@ context('New search views tests', () => {
   context('Test zoeken/agendapunten', () => {
     beforeEach(() => {
       cy.visit('/zoeken/agendapunten');
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in agendaitems search view', () => {
@@ -149,6 +164,8 @@ context('New search views tests', () => {
   context('Test zoeken/documenten', () => {
     beforeEach(() => {
       cy.visit('/zoeken/documenten');
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in pieces search view', () => {
@@ -202,6 +219,8 @@ context('New search views tests', () => {
   context('Test zoeken/beslissingen', () => {
     beforeEach(() => {
       cy.visit('/zoeken/beslissingen');
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in decisions search view', () => {
@@ -250,6 +269,8 @@ context('New search views tests', () => {
   context('Test zoeken/kort-bestek', () => {
     beforeEach(() => {
       cy.visit('/zoeken/kort-bestek');
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in news-items search view', () => {
