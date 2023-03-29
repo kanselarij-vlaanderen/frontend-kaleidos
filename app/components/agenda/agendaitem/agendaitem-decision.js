@@ -20,6 +20,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
 
   @tracked isEditing = false;
+  @tracked isEditingPill = false;
   @tracked isAddingReport = false;
 
   @tracked decisionDocType;
@@ -32,7 +33,10 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.decisionDocType = yield this.store.findRecordByUri('concept', CONSTANTS.DOCUMENT_TYPES.DECISION);
+    this.decisionDocType = yield this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.DECISION
+    );
   }
 
   @action
@@ -40,9 +44,18 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isEditing = !this.isEditing;
   }
 
+  @action toggleEditPill() {
+    this.isEditingPill = !this.isEditingPill;
+  }
+
   @action
   toggleIsAddingReport() {
     this.isAddingReport = !this.isAddingReport;
+  }
+
+  @action
+  showDocument() {
+    console.log('Implement me!');
   }
 
   @task
@@ -53,19 +66,33 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @task
   *updateAgendaitemPiecesAccessLevels() {
-    const decisionResultCode = yield this.args.decisionActivity.decisionResultCode;
-    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCode.uri)) {
+    const decisionResultCode = yield this.args.decisionActivity
+      .decisionResultCode;
+    if (
+      [
+        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+      ].includes(decisionResultCode.uri)
+    ) {
       const pieces = this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+          piece
+        );
       }
     }
-    this.toggleEdit();
+    this.toggleEditPill();
   }
 
   @action
-  async attachReport(piece) {
+  async attachReport() {
     const now = new Date();
+    const piece = this.store.createRecord('report', {
+      created: now,
+      modified: now,
+      name: 'TODO WHAT TO PUT HERE????'
+    });
+
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
       type: this.decisionDocType,
@@ -75,7 +102,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const subcaseIsConfidential = subcase?.confidential;
 
     const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept', subcaseIsConfidential
+      'concept',
+      subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
     );
@@ -86,43 +114,61 @@ export default class AgendaitemDecisionComponent extends Component {
       documentContainer,
     });
     await piece.save();
-    try {
-      const sourceFile = await piece.file;
-      await this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title'),
-      );
-    }
+
     this.args.decisionActivity.report = piece;
     await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
   }
 
+  // @action
+  // async attachNewReportVersion(piece) {
+  //   await piece.save();
+  //   this.args.decisionActivity.report = piece;
+  //   await this.args.decisionActivity.save();
+
+  //   // This should happen in document-card but isn't reached.
+  //   await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+
+  //   // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
+  //   // when deleting the full container right after adding a new report version without the version history open.
+  //   const documentContainer = await piece.documentContainer;
+  //   await documentContainer.hasMany('pieces').reload();
+  //   await this.loadReport.perform();
+  // }
+
   @action
-  async attachNewReportVersion(piece) {
-    await piece.save();
-    try {
-      const sourceFile = await piece.file;
-      await this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title'),
-      );
+  handleRdfaEditorInitBetreft(editorInterface) {
+    this.editorInstanceBetreft = editorInterface;
+    editorInterface.setHtmlContent(
+      '<p>Toegang havens<br/>Voorontwerp van koninklijk besluit betreffende het verbieden van toegang tot de Belgische havens door gesanctioneerde schepen<br/>Betrokkenheid van de Vlaamse Regering<br/>Standpuntbepaling<br/>(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>'
+    );
+  }
+
+  @action
+  handleRdfaEditorInitBeslissing(editorInterface) {
+    this.editorInstanceBeslissing = editorInterface;
+    editorInterface.setHtmlContent(
+      '<ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk besluit;</li><li>de minister-president van de Vlaamse Regering te gelasten de federale minister van Noordzee van deze beslissing in kennis te stellen.</li></ol>'
+    );
+  }
+
+  @action
+  async savePieceParts() {
+    if (!this.report) {
+      await this.attachReport();
     }
-    this.args.decisionActivity.report = piece;
-    await this.args.decisionActivity.save();
 
-    // This should happen in document-card but isn't reached.
-    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+    await this.store.createRecord('piece-part', {
+      title: 'Betreft',
+      value: this.editorInstanceBetreft.htmlContent,
+      report: this.report,
+    }).save();
 
-    // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
-    // when deleting the full container right after adding a new report version without the version history open.
-    const documentContainer = await piece.documentContainer;
-    await documentContainer.hasMany('pieces').reload();
-    await this.loadReport.perform();
+    await this.store.createRecord('piece-part', {
+      title: 'Beslissing',
+      value: this.editorInstanceBeslissing.htmlContent,
+      report: this.report,
+    }).save();
   }
 }

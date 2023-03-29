@@ -1,31 +1,72 @@
 <Auk::Panel>
-  <Auk::Panel::Header @size="auto">
+  <Auk::Panel::Header
+    @size="auto"
+    class="{{if this.isEditing 'au-u-background-gray-100'}}"
+  >
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left">
+        <h4 class="auk-toolbar__title">
+          {{t "decision-title"}}
+        </h4>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        {{#if (user-may "manage-decisions")}}
+          <Group.Item>
+            <AuButton
+              @icon="pdf"
+              @skin="naked"
+              {{on "click" this.showDocument}}
+            >
+              Exporteren als pdf
+            </AuButton>
+          </Group.Item>
+          {{#unless this.isEditing}}
+            <Group.Item>
+              <AuButton
+                @skin="naked"
+                @icon="pencil"
+                @iconAlignment="left"
+                {{on "click" this.toggleEdit}}
+              >
+                Wijzigen
+              </AuButton>
+            </Group.Item>
+          {{/unless}}
+        {{/if}}
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+
+  <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
           <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
-          {{#if (not this.isEditing)}}
+          {{#if (not this.isEditingPill)}}
             <div class="auk-u-my-2">
               <Decision::DecisionResultPill
                 @decisionResultCode={{@decisionActivity.decisionResultCode}}
                 @isEditable={{user-may "manage-decisions"}}
-                @onEdit={{this.toggleEdit}}
+                @onEdit={{this.toggleEditPill}}
               />
             </div>
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
               @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
-              @onCancel={{this.toggleEdit}}
+              @onCancel={{this.toggleEditPill}}
             />
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
-  </Auk::Panel::Header>
-  <Auk::Panel::Body @noPadding={{true}}>
+  </Auk::Panel::Body>
+
+  <Auk::Panel::Body
+    class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+  >
     {{#if this.loadReport.isIdle}}
-      {{#if this.report}}
+      {{#if (and this.report this.report.file)}}
         <Documents::DocumentCard
           @piece={{this.report}}
           @isEditable={{true}}
@@ -36,7 +77,97 @@
           @didDeleteContainer={{perform this.loadReport}}
           @bordered={{false}}
         />
-      {{else if (user-may "manage-decisions")}}
+      {{else}}
+        {{#if this.isEditing}}
+        <h4 class="auk-u-my-2">Betreft:</h4>
+          <div class="auk-rdfa-holder">
+            <div
+              class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
+            >
+              <div
+                class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
+              >
+                <AuButton
+                  @skin="link"
+                  @icon="renew"
+                  class="au-u-padding-left-none"
+                >Inhoud updaten</AuButton>
+                <AuDropdown
+                  @title="Huidige versie"
+                  @alignment="left"
+                  @skin="naked"
+                  @icon="chevron-down"
+                  @iconAlignment="right"
+                >
+                  <AuButton @skin="link-secondary" role="menuitem">
+                    Versie van 18-11-2022 om 10:23
+                  </AuButton>
+                  <AuButton @skin="link-secondary" role="menuitem">
+                    Versie van 13-11-2022 om 12:13
+                  </AuButton>
+                </AuDropdown>
+              </div>
+            </div>
+            <WebComponents::VlRdfaEditor
+              data-test-newsletter-edit-item-rdfa-editor
+              @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+            />
+          </div>
+          <h4>Beslissing:</h4>
+          <div class="auk-rdfa-holder">
+            <div
+              class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
+            >
+              <div
+                class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
+              >
+                <AuButton
+                  @skin="link"
+                  @icon="renew"
+                  class="au-u-padding-left-none"
+                >Inhoud updaten</AuButton>
+                <AuDropdown
+                  @title="Huidige versie"
+                  @alignment="left"
+                  @skin="naked"
+                  @icon="chevron-down"
+                  @iconAlignment="right"
+                >
+                  <AuButton @skin="link-secondary" role="menuitem">
+                    Versie van 18-11-2022 om 10:23
+                  </AuButton>
+                  <AuButton @skin="link-secondary" role="menuitem">
+                    Versie van 13-11-2022 om 12:13
+                  </AuButton>
+                </AuDropdown>
+              </div>
+            </div>
+            <WebComponents::VlRdfaEditor
+              data-test-newsletter-edit-item-rdfa-editor
+              @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+            />
+          </div>
+        {{else if this.report.pieceParts}}
+          <AuContent @size="small">
+            <h4>Betreft :</h4>
+
+            <p>Toegang havens<br />Voorontwerp van koninklijk besluit
+              betreffende het verbieden van toegang tot de Belgische havens door
+              gesanctioneerde schepen<br />Betrokkenheid van de Vlaamse Regering<br
+              />Standpuntbepaling<br />(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>
+
+            <h4>Beslissing :</h4>
+
+            <p>De Vlaamse Regering beslist:</p>
+            <ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk
+                besluit;</li><li>de minister-president van de Vlaamse Regering
+                te gelasten de federale minister van Noordzee van deze
+                beslissing in kennis te stellen.</li></ol>
+
+          </AuContent>
+        {{/if}}
+
+        {{! TODO REMOVE BLOCK }}
         <div class="auk-u-p-2">
           <AuButton
             data-test-agendaitem-decision-upload-file
@@ -48,11 +179,33 @@
           </AuButton>
         </div>
       {{/if}}
+
     {{else}}
       <Auk::Loader />
     {{/if}}
   </Auk::Panel::Body>
+  {{#if this.isEditing}}
+    <Auk::Panel::Footer class="au-u-background-gray-100">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton @skin="naked" {{on "click" this.toggleEdit}}>
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton @skin="primary" {{on "click" this.savePieceParts}}>
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  {{/if}}
 </Auk::Panel>
+
 {{#if this.isAddingReport}}
   <Utils::AddDocument
     @title={{t "signed-decision-add"}}
