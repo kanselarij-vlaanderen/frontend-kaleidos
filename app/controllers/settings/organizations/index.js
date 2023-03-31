@@ -26,9 +26,6 @@ export default class SettingsOrganizationsIndexController extends Controller {
   @tracked selectedOrganizations = [];
   @tracked showBlockedOrganizationsOnly = false;
 
-  @tracked organizationBeingLinked = null;
-  @tracked showMandateeSelectorModal = false;
-
   @action
   setOrganizations(organizations) {
     this.organizations = organizations.map((organization) => organization.id);
@@ -87,5 +84,5 @@ export default class SettingsOrganizationsIndexController extends Controller {
   *updateMembershipStatus(membership, status) {
     membership.status = status;
     yield membership.save();
-  }
+  }  
 }

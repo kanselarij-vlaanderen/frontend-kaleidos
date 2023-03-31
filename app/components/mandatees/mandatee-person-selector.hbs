@@ -3,7 +3,7 @@
     {{t "ministers"}}
   </Auk::Label>
   {{#if this.mandateePersons}}
-    {{#if this.multiple}}
+    {{#if @multiple}}
     <PowerSelectMultiple
       data-test-mandatee-person-selector
       @options={{this.mandateePersons}}

@@ -8,6 +8,7 @@ export default class UserOrganization extends Model {
   @belongsTo('concept', { inverse: null, async: true }) status;
 
   @hasMany('membership', { inverse: 'organization', async: true }) memberships;
+  @hasMany('mandatee', {inverse: 'organizations', async: true}) mandatees;
 
   get isBlocked() {
     return this.status.get('uri') === CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;

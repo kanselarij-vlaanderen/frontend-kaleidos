@@ -131,33 +131,20 @@
                 {{t "connect to mandatee"}}
               </AuButton>
             </AuDropdown>
+            <AuLink
+              data-test-button-organization-detail
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              @route="settings.organizations.organization"
+              @model={{organization.id}}
+            />
           </div>
         </td>
       </:body>
     </KDataTable>
   </div>
 </div>
-
-<ConfirmationModal
-  @modalOpen={{this.showMandateeSelectorModal}}
-  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganizationConfirmationModal" this)}}
-  @onCancel={{toggle "showMandateeSelectorModal" this}}
-  @confirmMessage={{t "connect to mandatee"}}
-  @alert={{true}}>
-  <:title>
-    {{t "connect to mandatee"}}
-  </:title>
-  <:body>
-  <div class="au-o-flow au-o-flow--small">
-    <Mandatees::MandateeSelector
-        @referenceDate={{@referenceDate}}
-        @openSearch={{this.openSearch}}
-        @onSelectMandatee={{fn (mut this.selectedMandatee)}}
-        @selectedMandatees={{this.selectedMandatee}}
-      />
-  </div>
-  </:body>
-</ConfirmationModal>
 
 <ConfirmationModal
   @modalOpen={{this.showBlockOrganizationConfirmationModal}}

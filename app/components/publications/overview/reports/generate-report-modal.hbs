@@ -63,7 +63,6 @@
             @type="number"
             @value={{this.publicationYearAsString}}
             @error={{not this.isPublicationYearValid}}
-            {{on "focusout" this.loadMandateePersons}}
             {{on "focusout" (perform this.loadGovernmentDomains)}}
             {{on "change" (perform this.loadGovernmentDomains)}}
             id="publicationReportsPublicationYear"

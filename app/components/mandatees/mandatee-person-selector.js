@@ -17,6 +17,13 @@ export default class MandateePersonSelector extends Component {
   @service store;
   @service mandatees;
 
+  // LIMITATION:
+  //  1. a person will not show up in the select
+  //    if: a mandatee resigned in the year before the publication
+  //  2. a person can be selected person that was not a mandatee in that year
+  //    if a person is selected
+  //      and then the publication year is changed
+
   @tracked mandateePersons;
   @tracked selectedMandateePerson;
   @tracked selectedMandateePersons = [];
