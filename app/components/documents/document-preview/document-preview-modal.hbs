@@ -1,43 +1,46 @@
-{{#let (or this.selectedVersion.file.derived this.selectedVersion.file) as |file|}}
-  <AuModal
-    @modalOpen={{true}}
-    @closeModal={{@onClose}}
-    @size="fullscreen"
-    @padding="none"
-  >
-    <:title>
-      <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-        {{this.selectedVersion.name}}
-        {{#if file}}
-          <AuLinkExternal
-            {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
-            @icon="download"
-            @iconAlignment="left"
-            href={{file.namedDownloadLink}}
-            download
-          >{{t "download-2"}}</AuLinkExternal>
+<AuModal
+  @modalOpen={{true}}
+  @closeModal={{@onClose}}
+  @size="fullscreen"
+  @padding="none"
+>
+  <:title>
+    <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+      {{this.selectedVersion.name}}
+      {{#if this.file}}
+        <AuLinkExternal
+          {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
+          @icon="download"
+          @iconAlignment="left"
+          href={{this.file.namedDownloadLink}}
+          download
+        >{{t "download-2"}}</AuLinkExternal>
+      {{/if}}
+    </span>
+  </:title>
+  <:body>
+    <div class="auk-panel-layout">
+      <div class="auk-panel-layout__main-content">
+        {{#if this.loadFile.isRunning}}
+          <WebComponents::LoadingPage />
+        {{else}}
+          <Documents::DocumentView @file={{this.file}} />
         {{/if}}
-      </span>
-    </:title>
-    <:body>
-      <div class="auk-panel-layout">
-        <div class="auk-panel-layout__main-content">
-          <Documents::DocumentView @file={{file}} />
-        </div>
-        <div class="auk-panel-layout__sidebar">
-          <Documents::DocumentPreview::DocumentPreviewSidebar
-            @isOpen={{this.sidebarIsOpen}}
-            @onCollapse={{this.toggleSidebar}}
-            @onOpen={{this.toggleSidebar}}
-            @piece={{this.selectedVersion}}
-            @onSelectVersion={{this.setSelectedVersion}}
-            @transitionBack={{@onClose}}
-            @markForSignature={{@markForSignature}}
-            @unmarkForSignature={{@unmarkForSignature}}
-            @didDeletePiece={{@didDeletePiece}}
-          />
-        </div>
       </div>
-    </:body>
-  </AuModal>
-{{/let}}
+      <div class="auk-panel-layout__sidebar">
+        <Documents::DocumentPreview::DocumentPreviewSidebar
+          @isOpen={{this.sidebarIsOpen}}
+          @onCollapse={{this.toggleSidebar}}
+          @onOpen={{this.toggleSidebar}}
+          @piece={{this.selectedVersion}}
+          @onSelectVersion={{this.setSelectedVersion}}
+          @transitionBack={{@onClose}}
+          @markForSignature={{@markForSignature}}
+          @unmarkForSignature={{@unmarkForSignature}}
+          @didDeletePiece={{@didDeletePiece}}
+          @onChangeFile={{perform this.loadFile}}
+        />
+      </div>
+    </div>
+  </:body>
+</AuModal>
