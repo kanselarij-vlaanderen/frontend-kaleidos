@@ -324,7 +324,7 @@ context('Search tests', () => {
       });
     });
 
-    it.only('Sort by relevance', () => {
+    it('Sort by relevance', () => {
       const agendaDate = Cypress.dayjs('2021-03-12');
       const currentTimestamp = Cypress.dayjs().unix();
       const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
