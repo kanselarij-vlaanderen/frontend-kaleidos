@@ -79,7 +79,7 @@
         />
       {{else}}
         {{#if this.isEditing}}
-        <h4 class="auk-u-my-2">Betreft:</h4>
+          <h4 class="auk-u-my-2">Betreft:</h4>
           <div class="auk-rdfa-holder">
             <div
               class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
@@ -150,20 +150,15 @@
         {{else if this.report.pieceParts}}
           <AuContent @size="small">
             <h4>Betreft :</h4>
-
-            <p>Toegang havens<br />Voorontwerp van koninklijk besluit
-              betreffende het verbieden van toegang tot de Belgische havens door
-              gesanctioneerde schepen<br />Betrokkenheid van de Vlaamse Regering<br
-              />Standpuntbepaling<br />(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>
-
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{this.betreftPiecePart.value}}
+            />
             <h4>Beslissing :</h4>
-
-            <p>De Vlaamse Regering beslist:</p>
-            <ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk
-                besluit;</li><li>de minister-president van de Vlaamse Regering
-                te gelasten de federale minister van Noordzee van deze
-                beslissing in kennis te stellen.</li></ol>
-
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{this.beslissingPiecePart.value}}
+            />
           </AuContent>
         {{/if}}
 
@@ -196,7 +191,11 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <AuButton @skin="primary" {{on "click" this.savePieceParts}}>
+            <AuButton
+              @disabled={{this.disableSaveButton}}
+              @skin="primary"
+              {{on "click" this.savePieceParts}}
+            >
               {{t "save"}}
             </AuButton>
           </Auk::Toolbar::Item>

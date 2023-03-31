@@ -23,6 +23,9 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
 
+  @tracked editorInstanceBeslissing = null;
+  @tracked editorInstanceBetreft = null;
+
   @tracked decisionDocType;
 
   constructor() {
@@ -90,7 +93,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const piece = this.store.createRecord('report', {
       created: now,
       modified: now,
-      name: 'TODO WHAT TO PUT HERE????'
+      name: 'TODO WHAT TO PUT HERE????',
     });
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -140,17 +143,13 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     this.editorInstanceBetreft = editorInterface;
-    editorInterface.setHtmlContent(
-      '<p>Toegang havens<br/>Voorontwerp van koninklijk besluit betreffende het verbieden van toegang tot de Belgische havens door gesanctioneerde schepen<br/>Betrokkenheid van de Vlaamse Regering<br/>Standpuntbepaling<br/>(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>'
-    );
+    editorInterface.setHtmlContent(this.betreftPiecePart.value);
   }
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     this.editorInstanceBeslissing = editorInterface;
-    editorInterface.setHtmlContent(
-      '<ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk besluit;</li><li>de minister-president van de Vlaamse Regering te gelasten de federale minister van Noordzee van deze beslissing in kennis te stellen.</li></ol>'
-    );
+    editorInterface.setHtmlContent(this.beslissingPiecePart.value);
   }
 
   @action
@@ -159,16 +158,41 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.attachReport();
     }
 
-    await this.store.createRecord('piece-part', {
-      title: 'Betreft',
-      value: this.editorInstanceBetreft.htmlContent,
-      report: this.report,
-    }).save();
+    await this.store
+      .createRecord('piece-part', {
+        title: 'Betreft',
+        value: this.editorInstanceBetreft.htmlContent,
+        report: this.report,
+        previousPiecePart: this.betreftPiecePart,
+      })
+      .save();
 
-    await this.store.createRecord('piece-part', {
-      title: 'Beslissing',
-      value: this.editorInstanceBeslissing.htmlContent,
-      report: this.report,
-    }).save();
+    await this.store
+      .createRecord('piece-part', {
+        title: 'Beslissing',
+        value: this.editorInstanceBeslissing.htmlContent,
+        report: this.report,
+        previousPiecePart: this.beslissingPiecePart,
+      })
+      .save();
+  }
+
+  get betreftPiecePart() {
+    return this.report.pieceParts.find((x) => x.title == 'Betreft');
+  }
+
+  get beslissingPiecePart() {
+    return this.report.pieceParts.find((x) => x.title == 'Beslissing');
+  }
+
+  get disableSaveButton() {
+    return (
+      !this.report.pieceParts ||
+      !this.editorInstanceBeslissing ||
+      !this.editorInstanceBetreft ||
+      (this.betreftPiecePart.value == this.editorInstanceBetreft.htmlContent &&
+        this.beslissingPiecePart.value ==
+          this.editorInstanceBeslissing.htmlContent)
+    );
   }
 }
