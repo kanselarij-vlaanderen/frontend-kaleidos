@@ -80,6 +80,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
           this.intl.t('warning-title'),
         );
       }
+      this.args.onChangeFile();
     }
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();

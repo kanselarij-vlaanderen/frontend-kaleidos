@@ -277,10 +277,8 @@ context('Subcase tests', () => {
     cy.get(newsletter.agendaitemNewsItem.themes).contains('Innovatie');
 
     // Go via kort-bestek view
-    cy.intercept('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
     cy.intercept('GET', '/meetings?**').as('getMeetingsfilter');
     cy.get(utils.mHeader.newsletters).click();
-    cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');
 
     cy.intercept('GET', '/meetings/**').as('getMeetingsDetail');
