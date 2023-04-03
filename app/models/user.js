@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class User extends Model {
   @attr('string') firstName;
   @attr('string') lastName;
+  @attr('email') email;
   @attr('string') identifier;
 
   @belongsTo('account', { inverse: 'user', async: true }) account;

@@ -65,6 +65,14 @@
               </div>
             </dl>
             <dl>
+              <div class="auk-key-value-item auk-key-value-item--horizontal">
+                <div class="auk-key-value-item__label">{{t "manage-users-email"}}</div>
+                <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                  {{this.model.email}}
+                </div>
+              </div>
+            </dl>
+            <dl>
               <Auk::KeyValue
                 @key={{t "last-seen"}}
                 @value={{if
