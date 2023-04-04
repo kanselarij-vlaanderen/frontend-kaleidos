@@ -4,6 +4,11 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEmpty } from '@ember/utils';
+
+function editorContentChanged(piecePartRecord, piecePartEditor) {
+  return piecePartRecord.value !== piecePartEditor.htmlContent;
+}
 
 /**
  * @argument agendaitem
@@ -17,7 +22,6 @@ export default class AgendaitemDecisionComponent extends Component {
   @service fileConversionService;
 
   @tracked report;
-  @tracked previousReport;
 
   @tracked isEditing = false;
   @tracked isEditingPill = false;
@@ -34,42 +38,24 @@ export default class AgendaitemDecisionComponent extends Component {
     this.loadCodelists.perform();
   }
 
-  @task
-  *loadCodelists() {
-    this.decisionDocType = yield this.store.findRecordByUri(
+  loadCodelists = task(async () => {
+    this.decisionDocType = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.DOCUMENT_TYPES.DECISION
     );
-  }
+  });
 
   @action
-  toggleEdit() {
-    this.isEditing = !this.isEditing;
-  }
-
-  @action toggleEditPill() {
+  toggleEditPill() {
     this.isEditingPill = !this.isEditingPill;
   }
 
-  @action
-  toggleIsAddingReport() {
-    this.isAddingReport = !this.isAddingReport;
-  }
+  loadReport = task(async () => {
+    this.report = await this.args.decisionActivity.report;
+  });
 
-  @action
-  showDocument() {
-    console.log('Implement me!');
-  }
-
-  @task
-  *loadReport() {
-    this.report = yield this.args.decisionActivity.report;
-    this.previousReport = yield this.report?.previousPiece;
-  }
-
-  @task
-  *updateAgendaitemPiecesAccessLevels() {
-    const decisionResultCode = yield this.args.decisionActivity
+  updateAgendaitemPiecesAccessLevels = task(async () => {
+    const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
     if (
       [
@@ -79,13 +65,13 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       const pieces = this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );
       }
     }
     this.toggleEditPill();
-  }
+  });
 
   @action
   async attachReport() {
@@ -120,8 +106,13 @@ export default class AgendaitemDecisionComponent extends Component {
 
     this.args.decisionActivity.report = piece;
     await this.args.decisionActivity.save();
-    this.isAddingReport = false;
+
     await this.loadReport.perform();
+  }
+
+  @action
+  showDocument() {
+    console.log('Implement me!');
   }
 
   // @action
@@ -143,27 +134,36 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     this.editorInstanceBetreft = editorInterface;
-    editorInterface.setHtmlContent(this.betreftPiecePart.value);
+    editorInterface.setHtmlContent(this.betreftPiecePart?.value ?? '');
   }
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     this.editorInstanceBeslissing = editorInterface;
-    editorInterface.setHtmlContent(this.beslissingPiecePart.value);
+    editorInterface.setHtmlContent(this.beslissingPiecePart?.value ?? '');
   }
 
-  @action
-  async savePieceParts() {
+  saveReport = task(async () => {
     if (!this.report) {
       await this.attachReport();
     }
 
+    if (isEmpty(await this.report.pieceParts)) {
+      await this.attachPieceParts();
+    } else {
+      await this.updatePieceParts();
+    }
+
+    this.isEditing = false;
+  });
+
+  @action
+  async attachPieceParts() {
     await this.store
       .createRecord('piece-part', {
         title: 'Betreft',
         value: this.editorInstanceBetreft.htmlContent,
         report: this.report,
-        previousPiecePart: this.betreftPiecePart,
       })
       .save();
 
@@ -172,27 +172,82 @@ export default class AgendaitemDecisionComponent extends Component {
         title: 'Beslissing',
         value: this.editorInstanceBeslissing.htmlContent,
         report: this.report,
-        previousPiecePart: this.beslissingPiecePart,
       })
       .save();
   }
 
-  get betreftPiecePart() {
-    return this.report.pieceParts.find((x) => x.title == 'Betreft');
-  }
+  @action
+  async updatePieceParts() {
+    const betreftPiecePart = this.betreftPiecePart;
+    const beslissingPiecePart = this.beslissingPiecePart;
 
-  get beslissingPiecePart() {
-    return this.report.pieceParts.find((x) => x.title == 'Beslissing');
+    // Check again because only one of the editors might have changed
+    if (editorContentChanged(betreftPiecePart, this.editorInstanceBetreft)) {
+      betreftPiecePart.report = null;
+      await this.store
+        .createRecord('piece-part', {
+          title: 'Betreft',
+          value: this.editorInstanceBetreft.htmlContent,
+          report: this.report,
+          previousPiecePart: betreftPiecePart,
+        })
+        .save();
+      await betreftPiecePart.save();
+    }
+
+    if (
+      editorContentChanged(beslissingPiecePart, this.editorInstanceBeslissing)
+    ) {
+      beslissingPiecePart.report = null;
+      await this.store
+        .createRecord('piece-part', {
+          title: 'Beslissing',
+          value: this.editorInstanceBeslissing.htmlContent,
+          report: this.report,
+          previousPiecePart: beslissingPiecePart,
+        })
+        .save();
+      await beslissingPiecePart.save();
+    }
+
+    await this.report.save();
   }
 
   get disableSaveButton() {
-    return (
-      !this.report.pieceParts ||
-      !this.editorInstanceBeslissing ||
-      !this.editorInstanceBetreft ||
-      (this.betreftPiecePart.value == this.editorInstanceBetreft.htmlContent &&
-        this.beslissingPiecePart.value ==
-          this.editorInstanceBeslissing.htmlContent)
-    );
+    if (this.loadReport.isRunning) {
+      return true;
+    }
+
+    if (!this.editorInstanceBetreft || !this.editorInstanceBeslissing) {
+      return true;
+    }
+
+    // If any editor is empty, disable
+    if (
+      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length ===
+        0 ||
+      this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0
+    ) {
+      return true;
+    }
+
+    // If there is no change to any of the parts, disable
+    if (
+      this.beslissingPiecePart?.value ===
+        this.editorInstanceBeslissing.htmlContent &&
+      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  get betreftPiecePart() {
+    return this.report?.pieceParts?.find((x) => x.title === 'Betreft');
+  }
+
+  get beslissingPiecePart() {
+    return this.report?.pieceParts?.find((x) => x.title === 'Beslissing');
   }
 }

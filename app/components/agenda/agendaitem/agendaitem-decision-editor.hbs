@@ -1,0 +1,30 @@
+<div class="auk-rdfa-holder">
+  <div
+    class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
+  >
+    <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+      <AuButton @skin="link" @icon="renew" class="au-u-padding-left-none">{{t
+          "update-thing"
+          thing=(t "content")
+        }}</AuButton>
+      <AuDropdown
+        @title={{t "current-version"}}
+        @alignment="left"
+        @skin="naked"
+        @icon="chevron-down"
+        @iconAlignment="right"
+      >
+        <AuButton @skin="link-secondary" role="menuitem">
+          Versie van 18-11-2022 om 10:23
+        </AuButton>
+        <AuButton @skin="link-secondary" role="menuitem">
+          Versie van 13-11-2022 om 12:13
+        </AuButton>
+      </AuDropdown>
+    </div>
+  </div>
+  <WebComponents::VlRdfaEditor
+    data-test-newsletter-edit-item-rdfa-editor
+    @handleRdfaEditorInit={{@handleRdfaEditorInit}}
+  />
+</div>

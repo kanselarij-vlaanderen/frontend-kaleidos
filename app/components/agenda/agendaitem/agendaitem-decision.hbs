@@ -17,7 +17,7 @@
               @skin="naked"
               {{on "click" this.showDocument}}
             >
-              Exporteren als pdf
+              {{t "export-as-pdf"}}
             </AuButton>
           </Group.Item>
           {{#unless this.isEditing}}
@@ -26,9 +26,9 @@
                 @skin="naked"
                 @icon="pencil"
                 @iconAlignment="left"
-                {{on "click" this.toggleEdit}}
+                {{on "click" (set this "isEditing")}}
               >
-                Wijzigen
+                {{t "edit"}}
               </AuButton>
             </Group.Item>
           {{/unless}}
@@ -79,74 +79,14 @@
         />
       {{else}}
         {{#if this.isEditing}}
-          <h4 class="auk-u-my-2">Betreft:</h4>
-          <div class="auk-rdfa-holder">
-            <div
-              class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
-            >
-              <div
-                class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
-              >
-                <AuButton
-                  @skin="link"
-                  @icon="renew"
-                  class="au-u-padding-left-none"
-                >Inhoud updaten</AuButton>
-                <AuDropdown
-                  @title="Huidige versie"
-                  @alignment="left"
-                  @skin="naked"
-                  @icon="chevron-down"
-                  @iconAlignment="right"
-                >
-                  <AuButton @skin="link-secondary" role="menuitem">
-                    Versie van 18-11-2022 om 10:23
-                  </AuButton>
-                  <AuButton @skin="link-secondary" role="menuitem">
-                    Versie van 13-11-2022 om 12:13
-                  </AuButton>
-                </AuDropdown>
-              </div>
-            </div>
-            <WebComponents::VlRdfaEditor
-              data-test-newsletter-edit-item-rdfa-editor
-              @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
-            />
-          </div>
-          <h4>Beslissing:</h4>
-          <div class="auk-rdfa-holder">
-            <div
-              class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
-            >
-              <div
-                class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
-              >
-                <AuButton
-                  @skin="link"
-                  @icon="renew"
-                  class="au-u-padding-left-none"
-                >Inhoud updaten</AuButton>
-                <AuDropdown
-                  @title="Huidige versie"
-                  @alignment="left"
-                  @skin="naked"
-                  @icon="chevron-down"
-                  @iconAlignment="right"
-                >
-                  <AuButton @skin="link-secondary" role="menuitem">
-                    Versie van 18-11-2022 om 10:23
-                  </AuButton>
-                  <AuButton @skin="link-secondary" role="menuitem">
-                    Versie van 13-11-2022 om 12:13
-                  </AuButton>
-                </AuDropdown>
-              </div>
-            </div>
-            <WebComponents::VlRdfaEditor
-              data-test-newsletter-edit-item-rdfa-editor
-              @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
-            />
-          </div>
+          <h4 class="auk-u-my-2">{{t "concerns"}}:</h4>
+          <Agenda::Agendaitem::AgendaitemDecisionEditor
+            @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+          />
+          <h4>{{capitalize (t "decision")}}:</h4>
+          <Agenda::Agendaitem::AgendaitemDecisionEditor
+            @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+          />
         {{else if this.report.pieceParts}}
           <AuContent @size="small">
             <h4>Betreft :</h4>
@@ -161,18 +101,6 @@
             />
           </AuContent>
         {{/if}}
-
-        {{! TODO REMOVE BLOCK }}
-        <div class="auk-u-p-2">
-          <AuButton
-            data-test-agendaitem-decision-upload-file
-            @skin="naked"
-            @icon="upload"
-            {{on "click" this.toggleIsAddingReport}}
-          >
-            {{t "signed-decision-add"}}
-          </AuButton>
-        </div>
       {{/if}}
 
     {{else}}
@@ -184,7 +112,7 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <AuButton @skin="naked" {{on "click" this.toggleEdit}}>
+            <AuButton @skin="naked" {{on "click" (set this "isEditing" false)}}>
               {{t "cancel"}}
             </AuButton>
           </Auk::Toolbar::Item>
@@ -194,7 +122,8 @@
             <AuButton
               @disabled={{this.disableSaveButton}}
               @skin="primary"
-              {{on "click" this.savePieceParts}}
+              @loading={{this.saveReport.isRunning}}
+              {{on "click" (perform this.saveReport)}}
             >
               {{t "save"}}
             </AuButton>
@@ -204,15 +133,6 @@
     </Auk::Panel::Footer>
   {{/if}}
 </Auk::Panel>
-
-{{#if this.isAddingReport}}
-  <Utils::AddDocument
-    @title={{t "signed-decision-add"}}
-    @onSave={{this.attachReport}}
-    @onCancel={{this.toggleIsAddingReport}}
-    @documentType="report"
-  />
-{{/if}}
 
 {{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
   <Auk::Modal @size="medium">

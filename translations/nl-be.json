@@ -1174,5 +1174,9 @@
   "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
   "all-content": "Alle inhoud",
   "news-items": "Kort bestek berichten",
-  "document-not-on-agendaitem": "Niet geüpload in agendapunt"
+  "document-not-on-agendaitem": "Niet geüpload in agendapunt",
+  "export-as-pdf": "Exporteren als PDF",
+  "concerns": "Betreft",
+  "update-thing": "{thing} updaten",
+  "current-version": "Huidige versie"
 }
