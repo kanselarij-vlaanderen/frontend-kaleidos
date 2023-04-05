@@ -88,18 +88,12 @@
             @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
           />
         {{else if this.report.pieceParts}}
-          <AuContent @size="small">
-            <h4>Betreft :</h4>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{this.betreftPiecePart.value}}
-            />
-            <h4>Beslissing :</h4>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{this.beslissingPiecePart.value}}
-            />
-          </AuContent>
+          <Agenda::Agendaitem::DecisionViewer
+            @meeting={{@agendaContext.meeting}}
+            @agendaitem={{@agendaContext.agendaitem}}
+            @concernsHtmlString={{this.betreftPiecePart.value}}
+            @decisionHtmlString={{this.beslissingPiecePart.value}}
+          />
         {{/if}}
       {{/if}}
 
