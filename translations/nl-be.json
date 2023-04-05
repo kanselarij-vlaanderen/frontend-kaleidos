@@ -1178,5 +1178,12 @@
   "export-as-pdf": "Exporteren als PDF",
   "concerns": "Betreft",
   "update-thing": "{thing} updaten",
-  "current-version": "Huidige versie"
+  "current-version": "Huidige versie",
+  "monday": "maandag",
+  "tuesday": "dinsdag",
+  "wednesday": "woensdag",
+  "thursday": "donderdag",
+  "friday": "vrijdag",
+  "saturday": "zaterdag",
+  "sunday": "zondag"
 }
