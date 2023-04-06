@@ -4,10 +4,16 @@ import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { TrackedArray } from 'tracked-built-ins';
 
+const DEFAULT_ITEM_STRUCTURE = {
+  id: 'id',
+  label: 'label',
+};
+
 /**
  *
  * @argument label {String} Label for "parent" selector checkbox
  * @argument items {Array} array of objects representing tree "leaf" options
+ * @argument itemStructure {Object} Object with keys representing the actual keys in @items
  * @argument selectedItems {Array} Subset of @items representing the selected options
  * @argument didUpdate {Function} Action called whenever the selection is updated. Returns the checked item objects.
  * @argument disabled {Boolean}
@@ -18,6 +24,10 @@ export default class CheckboxTree extends Component {
   constructor() {
     super(...arguments);
     this.selectedItems = new TrackedArray(this.args.selectedItems || []);
+  }
+
+  get itemStructure() {
+    return {...DEFAULT_ITEM_STRUCTURE, ...this.args.itemStructure};
   }
 
   get isSelectedAllItems() {
