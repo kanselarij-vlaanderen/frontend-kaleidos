@@ -36,6 +36,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   get isLoading() {
     return (
       this.loadProofPieces.isRunning ||
+      this.setEmailFields.isRunning ||
       this.cancel.isRunning ||
       this.save.isRunning
     );
@@ -44,6 +45,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   get isCancelDisabled() {
     return (
       this.loadProofPieces.isRunning ||
+      this.setEmailFields.isRunning ||
       this.cancel.isRunning ||
       this.save.isRunning
     );
