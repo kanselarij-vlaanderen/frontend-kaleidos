@@ -1,32 +1,31 @@
-<AuContent
-  style="overflow-y: scroll; background-color: lightgrey"
-  class="au-u-flex au-u-flex--column"
-  @size="small"
->
+<div class="l-decision-viewer">
   <div
-    style="background-color: white"
-    class="au-u-flex-self-center au-u-padding-left-huge au-u-padding-right-huge au-u-padding-bottom-huge au-u-flex au-u-flex--column"
+    class="au-u-padding-left-huge au-u-padding-right-huge au-u-padding-bottom-huge l-decision-viewer__page"
   >
-    <div class="au-u-padding-small au-c-brand au-u-flex-self-center">
-      <FlemishGovernmentBrand />
-      <p class="au-c-brand__logotype">
-        <span class="au-c-brand__main">Vlaamse<br />Regering</span>
-      </p>
+    <div class="au-u-margin-bottom-large au-u-flex au-u-flex--column">
+      <Utils::LogoHeader />
+      <p class="au-u-text-center au-u-flex-self-center">{{t "session-of"}}
+        {{date-weekday @meeting.plannedStart}}
+        {{date-phrase @meeting.plannedStart}}</p>
+      <hr
+        class="au-u-margin-top au-u-flex-self-center l-decision-viewer__header-underline"
+      />
     </div>
-    <p class="au-u-flex-self-center">{{t "session-of"}} {{date-weekday @meeting.plannedStart}} {{date-phrase @meeting.plannedStart}}</p>
-    <hr
-      class="au-u-margin-top au-u-flex-self-center"
-      style="width: 23rem; border-color:black; height: 0.1rem"
-    />
-    <div class="au-u-padding"></div>
-    <h5 style="text-decoration: underline">{{@meeting.numberRepresentation}} - punt {{add-leading-zeros @agendaitem.number 4}}</h5>
-    <h5 style="text-decoration:underline" class="au-u-padding-top">{{t
-        "concerns"
-      }}:</h5>
-    <SanitizeHtml @raw={{true}} @value={{@concernsHtmlString}} />
-    <h5 style="text-decoration: underline" class="au-u-padding-top">{{capitalize
-        (t "decision")
-      }}:</h5>
-    <SanitizeHtml @raw={{true}} @value={{@decisionHtmlString}} />
+    <AuContent @size="small">
+      <h5
+        class="auk-u-text-decoration-underline"
+      >{{@meeting.numberRepresentation}}
+        -
+        {{t "point"}}
+        {{add-leading-zeros @agendaitem.number 4}}</h5>
+      <h5 class="auk-u-text-decoration-underline au-u-padding-top">{{t
+          "concerns"
+        }}:</h5>
+      <SanitizeHtml @raw={{true}} @value={{@concernsHtmlString}} />
+      <h5 class="auk-u-text-decoration-underline au-u-padding-top">{{capitalize
+          (t "decision")
+        }}:</h5>
+      <SanitizeHtml @raw={{true}} @value={{@decisionHtmlString}} />
+    </AuContent>
   </div>
-</AuContent>
+</div>
