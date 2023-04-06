@@ -62,10 +62,10 @@
                   {{t "latest-modified-on"}}
                   <br />
                   {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else if agenda.modified}}
+                {{else if this.mostRecentStatusActivityIsApproved}}
                   {{t "approved-on"}}
                   <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
+                  {{date-format this.mostRecentStatusActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
                 {{else}}
                   {{t "approved"}}
                 {{/if}}

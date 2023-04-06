@@ -1,8 +1,9 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class AgendaStatusActivity extends Model {
-  @attr('datetime') approved;
+  @attr('datetime') startDate;
 
-  @belongsTo('agenda', { inverse: 'agendastatusactivities', async: true}) agenda;
+  @belongsTo('agendastatus') statusSet;
+  @belongsTo('agenda', { inverse: 'agendaStatusActivities', async: true}) agenda;
 
 }
