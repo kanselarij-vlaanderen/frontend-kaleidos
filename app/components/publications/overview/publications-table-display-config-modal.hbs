@@ -27,7 +27,7 @@
   {{#each this.optionColumns as |column|}}
     <Auk::CheckboxList>
       {{#each column as |option|}}
-        <AuControlCheckbox
+        <AuCheckbox
           data-test-overview-table-display-config-option-checkbox={{option.keyName}}
           @checked={{includes option @tableConfig.visibleColumns}}
           @onChange={{fn this.toggleColumnVisibility option.keyName}}
@@ -44,7 +44,7 @@
               </span>
             {{/if}}
           </span>
-        </AuControlCheckbox>
+        </AuCheckbox>
       {{/each}}
     </Auk::CheckboxList>
   {{/each}}

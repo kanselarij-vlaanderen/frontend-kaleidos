@@ -41,12 +41,13 @@
                   <Fieldset.legend>{{t "publication-urgent"}}</Fieldset.legend>
                   <Fieldset.content>
                     <Auk::CheckboxList>
-                      <AuControlCheckbox
+                      <AuCheckbox
                         data-test-urgency-level-checkbox
-                        @label={{t "priority-procedure"}}
                         @checked={{@publicationFlow.urgencyLevel.isUrgent}}
                         @onChange={{this.changeIsUrgent}}
-                      />
+                      >
+                        {{t "priority-procedure"}}
+                      </AuCheckbox>
                     </Auk::CheckboxList>
                   </Fieldset.content>
                 </AuFieldset>

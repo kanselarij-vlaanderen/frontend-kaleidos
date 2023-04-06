@@ -15,7 +15,7 @@
           <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
           <div data-test-route-settings-user-date-from class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
             <Auk::Label>{{t "from"}}</Auk::Label>
-            <Auk::Datepicker 
+            <Auk::Datepicker
               @date={{this.dateFromBuffer}}
               @onChange={{set this "dateFromBuffer"}}
               @enableClear={{this.dateFromBuffer}}
@@ -48,16 +48,18 @@
           <Fieldset.legend>{{t "blocked-on"}}</Fieldset.legend>
           <Fieldset.content>
             <Auk::CheckboxList>
-              <AuControlCheckbox
-                @label={{t "membership"}}
+              <AuCheckbox
                 @checked={{this.showBlockedMembershipsOnly}}
                 @onChange={{toggle "showBlockedMembershipsOnly" this}}
-              />
-              <AuControlCheckbox
-                @label={{t "user"}}
+              >
+                {{t "membership"}}
+              </AuCheckbox>
+              <AuCheckbox
                 @checked={{this.showBlockedUsersOnly}}
                 @onChange={{toggle "showBlockedUsersOnly" this}}
-              />
+              >
+                {{t "user"}}
+              </AuCheckbox>
             </Auk::CheckboxList>
           </Fieldset.content>
         </AuFieldset>
@@ -242,11 +244,12 @@
         <f.content>
           {{#each (reject-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
             {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
-              <AuControlCheckbox
-                @label={{membershipLabel}}
+              <AuCheckbox
                 @identifier={{membershipLabel}}
                 @onChange={{fn this.toggleMembershipBeingBlocked membership}}
-              />
+              >
+                {{membershipLabel}}
+              </AuCheckbox>
             {{/let}}
           {{/each}}
         </f.content>
@@ -273,11 +276,12 @@
         <f.content>
           {{#each (filter-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
             {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
-              <AuControlCheckbox
-                @label={{membershipLabel}}
+              <AuCheckbox
                 @identifier={{membershipLabel}}
                 @onChange={{fn this.toggleMembershipBeingBlocked membership}}
-              />
+              >
+                {{membershipLabel}}
+              </AuCheckbox>
             {{/let}}
           {{/each}}
         </f.content>

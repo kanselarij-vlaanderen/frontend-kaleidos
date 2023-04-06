@@ -6,11 +6,12 @@
       <div class="auk-o-grid-col-4">
         <div class="auk-u-mb">
           {{#let (includes theme @selectedThemes) as |checked|}}
-            <AuControlCheckbox
+            <AuCheckbox
               @checked={{checked}}
-              @label={{theme.label}}
               @onChange={{fn this.toggleTheme theme}}
-            />
+            >
+              {{theme.label}}
+            </AuCheckbox>
           {{/let}}
         </div>
       </div>

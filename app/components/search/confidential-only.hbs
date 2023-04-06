@@ -3,11 +3,12 @@
     <Fieldset.legend>{{t "confidential"}}</Fieldset.legend>
     <Fieldset.content>
       <Auk::CheckboxList>
-        <AuControlCheckbox
-          @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+        <AuCheckbox
           @checked={{@confidentialOnly}}
           @onChange={{@onChange}}
-        />
+        >
+          {{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+        </AuCheckbox>
       </Auk::CheckboxList>
     </Fieldset.content>
   </AuFieldset>

@@ -5,16 +5,18 @@
       <Fieldset.legend>{{t "type"}}</Fieldset.legend>
       <Fieldset.content>
         <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "note"}}
+          <AuCheckbox
             @checked={{this.includeNotas}}
             @onChange={{set this "includeNotas"}}
-          />
-          <AuControlCheckbox
-            @label={{capitalize (t "announcement")}}
+          >
+            {{t "note"}}
+          </AuCheckbox>
+          <AuCheckbox
             @checked={{this.includeMededelingen}}
             @onChange={{set this "includeMededelingen"}}
-          />
+          >
+            {{capitalize (t "announcement")}}
+          </AuCheckbox>
         </Auk::CheckboxList>
       </Fieldset.content>
     </AuFieldset>
@@ -24,11 +26,12 @@
       <Fieldset.legend>{{t "version"}}</Fieldset.legend>
       <Fieldset.content>
         <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "only-on-final-agenda"}}
+          <AuCheckbox
             @checked={{this.latestOnly}}
             @onChange={{set this "latestOnly"}}
-          />
+          >
+            {{t "only-on-final-agenda"}}
+          </AuCheckbox>
         </Auk::CheckboxList>
       </Fieldset.content>
     </AuFieldset>

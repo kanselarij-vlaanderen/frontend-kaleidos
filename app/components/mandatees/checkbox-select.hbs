@@ -21,11 +21,12 @@
   </div>
   <Auk::CheckboxList class="au-c-checkboxlist-column">
     {{#each this.ministers as |minister|}}
-      <AuControlCheckbox
+      <AuCheckbox
         @checked={{this.isChecked minister}}
-        @label={{minister.fullName}}
         @onChange={{fn this.toggle minister}}
-      />
+      >
+        {{minister.fullName}}
+      </AuCheckbox>
     {{/each}}
   </Auk::CheckboxList>
   </div>

@@ -8,19 +8,20 @@
       <hr class="auk-u-my-2"/>
     {{/unless}}
     {{! template-lint-enable simple-unless }}
-    <AuControlCheckbox
+    <AuCheckbox
       @checked={{domainSelection.isSelected}}
       @onChange={{fn this.toggleDomainSelection domainSelection}}
     >
       {{domainSelection.domain.label}}
-    </AuControlCheckbox>
+    </AuCheckbox>
     <Auk::CheckboxList data-test-government-area-selector-form-domain-list>
       {{#each domainSelection.availableFields as |field|}}
-        <AuControlCheckbox
-          @label={{field.label}}
+        <AuCheckbox
           @checked={{includes field domainSelection.selectedFields}}
           @onChange={{fn this.toggleFieldSelection field}}
-        />
+        >
+          {{field.label}}
+        </AuCheckbox>
       {{/each}}
     </Auk::CheckboxList>
   {{/each}}

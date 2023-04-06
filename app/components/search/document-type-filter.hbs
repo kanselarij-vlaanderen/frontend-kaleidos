@@ -5,7 +5,7 @@
       {{#if this.loadDocumentTypes.isRunning}}
         <Auk::Loader />
       {{else}}
-        <AuControlCheckbox
+        <AuCheckbox
           @checked={{this.allDocumentTypesSelected}}
           @indeterminate={{and
             (not this.allDocumentTypesSelected)
@@ -14,14 +14,15 @@
           @onChange={{this.toggleAllDocumentTypes}}
         >
           <strong>{{t "all-document-types"}}</strong>
-        </AuControlCheckbox>
+        </AuCheckbox>
         {{#each this.documentTypes as |documentType|}}
           {{#if (includes documentType.uri this.defaultVisibleTypes)}}
-            <AuControlCheckbox
+            <AuCheckbox
               @checked={{includes documentType this.selected}}
-              @label={{documentType.altLabel}}
               @onChange={{fn this.toggleDocumentType documentType}}
-            />
+            >
+              {{documentType.altLabel}}
+            </AuCheckbox>
           {{/if}}
         {{/each}}
         {{#if (not this.showAllTypes)}}
@@ -36,11 +37,12 @@
         {{else}}
           {{#each this.documentTypes as |documentType|}}
             {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
-              <AuControlCheckbox
+              <AuCheckbox
                 @checked={{includes documentType this.selected}}
-                @label={{documentType.altLabel}}
                 @onChange={{fn this.toggleDocumentType documentType}}
-              />
+              >
+                {{documentType.altLabel}}
+              </AuCheckbox>
             {{/if}}
           {{/each}}
           <AuButton

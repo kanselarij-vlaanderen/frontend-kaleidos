@@ -102,7 +102,7 @@
             <Fieldset.content>
               <Auk::CheckboxList>
                 {{#each this.governmentDomains as |governmentDomain|}}
-                  <AuControlCheckbox
+                  <AuCheckbox
                     @checked={{includes
                       governmentDomain
                       this.selectedGovernmentDomains
@@ -110,7 +110,7 @@
                     @onChange={{fn this.selectGovernmentDomain governmentDomain}}
                   >
                     {{governmentDomain.label}}
-                  </AuControlCheckbox>
+                  </AuCheckbox>
                 {{/each}}
               </Auk::CheckboxList>
             </Fieldset.content>
@@ -124,7 +124,7 @@
             <Fieldset.content>
               <Auk::CheckboxList>
                 {{#each this.regulationTypes as |regulationType|}}
-                  <AuControlCheckbox
+                  <AuCheckbox
                     @checked={{includes
                       regulationType
                       this.selectedRegulationTypes
@@ -132,7 +132,7 @@
                     @onChange={{fn this.selectRegulationType regulationType}}
                   >
                     {{regulationType.label}}
-                  </AuControlCheckbox>
+                  </AuCheckbox>
                 {{/each}}
               </Auk::CheckboxList>
             </Fieldset.content>

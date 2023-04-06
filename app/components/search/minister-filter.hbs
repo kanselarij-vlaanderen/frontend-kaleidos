@@ -1,21 +1,22 @@
 {{#if this.loadCurrentMinisters.isRunning}}
   <Auk::Loader />
 {{else}}
-  <AuControlCheckbox
+  <AuCheckbox
     @checked={{this.allCurrentMinistersSelected}}
     @indeterminate={{and (not this.allCurrentMinistersSelected) this.someCurrentMinistersSelected}}
     @onChange={{this.toggleAllCurrentMinisters}}
   >
     <strong>{{t "current-ministers"}}</strong>
-  </AuControlCheckbox>
+  </AuCheckbox>
   <div class="auk-u-ml-2">
     <Auk::CheckboxList>
       {{#each this.currentMinisters as |minister|}}
-        <AuControlCheckbox
+        <AuCheckbox
           @checked={{includes minister.id @selected}}
-          @label={{minister.fullName}}
           @onChange={{fn this.toggleMinister minister}}
-        />
+        >
+          {{minister.fullName}}
+        </AuCheckbox>
       {{/each}}
     </Auk::CheckboxList>
   </div>
@@ -31,21 +32,22 @@
   {{else if this.loadPastMinisters.isRunning}}
     <Auk::Loader />
   {{else}}
-    <AuControlCheckbox
+    <AuCheckbox
       @checked={{this.allPastMinistersSelected}}
       @indeterminate={{and (not this.allPastMinistersSelected) this.somePastMinistersSelected}}
       @onChange={{this.toggleAllPastMinisters}}
     >
       <strong>{{t "past-ministers"}}</strong>
-    </AuControlCheckbox>
+    </AuCheckbox>
     <div class="auk-u-ml-2">
       <Auk::CheckboxList>
         {{#each this.pastMinisters as |minister|}}
-          <AuControlCheckbox
+          <AuCheckbox
             @checked={{includes minister.id @selected}}
-            @label={{minister.fullName}}
             @onChange={{fn this.toggleMinister minister}}
-          />
+          >
+            {{minister.fullName}}
+          </AuCheckbox>
         {{/each}}
       </Auk::CheckboxList>
     </div>

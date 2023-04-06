@@ -14,11 +14,12 @@
   </AuLink>
   <Auk::CheckboxList>
     {{#each this.decisionResultCodes as |decisionResultCode|}}
-      <AuControlCheckbox
+      <AuCheckbox
         @checked={{includes decisionResultCode.id @selected}}
-        @label={{decisionResultCode.label}}
         @onChange={{fn this.toggle decisionResultCode}}
-      />
+      >
+        {{decisionResultCode.label}}
+      </AuCheckbox>
     {{/each}}
   </Auk::CheckboxList>
 {{/if}}
