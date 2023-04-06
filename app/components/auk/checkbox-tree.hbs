@@ -1,4 +1,4 @@
-<Auk::CheckboxList>
+<AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
   <AuCheckbox
     @checked={{this.isSelectedAllItems}}
     @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
@@ -7,15 +7,18 @@
   >
     <span class="au-u-medium">{{@label}}</span>
   </AuCheckbox>
-  <Auk::CheckboxList>
+  <AuCheckboxGroup
+    @selected={{this.selectedItems}}
+    @onChange={{this.toggleItem}}
+    as |Group|
+  >
     {{#each @items as |item|}}
-      <AuCheckbox
-        @checked={{includes item this.selectedItems}}
+      <Group.Checkbox
+        @value={{item}}
         @disabled={{@disabled}}
-        @onChange={{fn this.toggleItem item}}
       >
         {{item.label}}
-      </AuCheckbox>
+      </Group.Checkbox>
     {{/each}}
-  </Auk::CheckboxList>
-</Auk::CheckboxList>
+  </AuCheckboxGroup>
+</AuCheckboxGroup>

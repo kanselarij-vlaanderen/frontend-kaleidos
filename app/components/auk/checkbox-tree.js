@@ -42,12 +42,8 @@ export default class CheckboxTree extends Component {
   }
 
   @action
-  toggleItem(item, checked) {
-    if (checked) {
-      this.selectedItems.push(item);
-    } else {
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
-    }
+  toggleItem(selectedItems) {
+    this.selectedItems = selectedItems;
 
     if (isPresent(this.args.didUpdate)) {
       this.args.didUpdate(this.selectedItems);
