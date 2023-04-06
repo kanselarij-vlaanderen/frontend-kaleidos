@@ -381,6 +381,30 @@ $au-button-height: 3.4rem;
   }
 }
 
+// Control group
+
+.au-c-control-group {
+  gap: .6rem;
+
+  > .au-c-control-group {
+    margin-left: 2rem;
+  }
+
+  + .au-c-control-group {
+    margin-top: .6rem;
+  }
+}
+
+.au-c-control-group--inline {
+  gap: 2rem;
+
+  &:has(.au-c-control-group) {
+    > .au-c-control-group {
+      @include style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
+    }
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {
