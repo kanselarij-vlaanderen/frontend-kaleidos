@@ -10,6 +10,7 @@
   <AuCheckboxGroup
     @selected={{this.selectedItems}}
     @onChange={{this.toggleItem}}
+    class={{this.layoutClass}}
     as |Group|
   >
     {{#each @items as |item|}}

@@ -424,3 +424,13 @@ $au-button-height: 3.4rem;
     -webkit-print-color-adjust: exact;
   }
 }
+
+.au-c-control-group--grid {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+
+  > * {
+    width: calc(33% - 2rem);
+  }
+}
