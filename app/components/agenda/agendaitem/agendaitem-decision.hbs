@@ -89,6 +89,7 @@
           />
         {{else if this.report.pieceParts}}
           <Agenda::Agendaitem::DecisionViewer
+            {{did-insert this.setDecisionViewerElement}}
             @meeting={{@agendaContext.meeting}}
             @agendaitem={{@agendaContext.agendaitem}}
             @concernsHtmlString={{this.betreftPiecePart.value}}

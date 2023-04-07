@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEmpty } from '@ember/utils';
+import html2pdf from 'html-to-pdf-js';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -29,6 +30,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
+  @tracked decisionViewerElement = null;
 
   @tracked decisionDocType;
 
@@ -111,8 +113,16 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  setDecisionViewerElement(element) {
+    this.decisionViewerElement = element;
+  }
+
+  @action
   showDocument() {
-    console.log('Implement me!');
+    const options = {
+      filename: 'myFile.pdf', // TODO set correct name
+    };
+    html2pdf(this.decisionViewerElement, options);
   }
 
   // @action
