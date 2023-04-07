@@ -24,30 +24,31 @@
   </Auk::Toolbar>
 </div>
 <div class="auk-popover__body">
-  {{#each this.optionColumns as |column|}}
-    <Auk::CheckboxList>
-      {{#each column as |option|}}
-        <AuCheckbox
-          data-test-overview-table-display-config-option-checkbox={{option.keyName}}
-          @checked={{includes option @tableConfig.visibleColumns}}
-          @onChange={{fn this.toggleColumnVisibility option.keyName}}
-        >
-          <span>
-            {{t option.translationKey}}
-            {{#if
-              (not-eq
-                (t option.translationKey) (t option.translationKeySmall)
-              )
-            }}
-              <span class="auk-u-text-size--small auk-u-text-muted">
-                ({{t option.translationKeySmall}})
-              </span>
-            {{/if}}
-          </span>
-        </AuCheckbox>
-      {{/each}}
-    </Auk::CheckboxList>
-  {{/each}}
+  <AuCheckboxGroup
+    @selected={{this.selectedOptions}}
+    @onChange={{this.onChangeOptions}}
+    as |Group|
+  >
+    {{#each this.options as |option|}}
+      <Group.Checkbox
+        data-test-overview-table-display-config-option-checkbox={{option.keyName}}
+        @value={{option}}
+      >
+        <span>
+          {{t option.translationKey}}
+          {{#if
+            (not-eq
+              (t option.translationKey) (t option.translationKeySmall)
+            )
+          }}
+            <span class="auk-u-text-size--small auk-u-text-muted">
+              ({{t option.translationKeySmall}})
+            </span>
+          {{/if}}
+        </span>
+      </Group.Checkbox>
+    {{/each}}
+  </AuCheckboxGroup>
   <AuButton
     class="auk-u-mt-2"
     @skin="link-secondary"
