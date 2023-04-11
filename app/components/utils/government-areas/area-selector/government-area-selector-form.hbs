@@ -1,7 +1,7 @@
-<Auk::CheckboxList
-  {{did-update (perform this.calculateDomainSelections) @selectedFields}}
+<AuCheckboxGroup
   data-test-government-area-selector-form
->
+  {{did-update (perform this.calculateDomainSelections) @selectedFields}}
+> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
   {{#each this.domainSelections as |domainSelection index|}}
     {{! template-lint-disable simple-unless }}
     {{#unless (eq index 0)}}
@@ -14,15 +14,19 @@
     >
       {{domainSelection.domain.label}}
     </AuCheckbox>
-    <Auk::CheckboxList data-test-government-area-selector-form-domain-list>
+    <AuCheckboxGroup
+      data-test-government-area-selector-form-domain-list
+      @selected={{domainSelection.selectedFields}}
+      as |Group|
+    >
       {{#each domainSelection.availableFields as |field|}}
-        <AuCheckbox
-          @checked={{includes field domainSelection.selectedFields}}
+        <Group.Checkbox
+          @value={{field}}
           @onChange={{fn this.toggleFieldSelection field}}
         >
           {{field.label}}
-        </AuCheckbox>
+        </Group.Checkbox>
       {{/each}}
-    </Auk::CheckboxList>
+    </AuCheckboxGroup>
   {{/each}}
-</Auk::CheckboxList>
+</AuCheckboxGroup>

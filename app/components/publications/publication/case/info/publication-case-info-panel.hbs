@@ -40,7 +40,7 @@
                 <AuFieldset as |Fieldset|>
                   <Fieldset.legend>{{t "publication-urgent"}}</Fieldset.legend>
                   <Fieldset.content>
-                    <Auk::CheckboxList>
+                    <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
                       <AuCheckbox
                         data-test-urgency-level-checkbox
                         @checked={{@publicationFlow.urgencyLevel.isUrgent}}
@@ -48,7 +48,7 @@
                       >
                         {{t "priority-procedure"}}
                       </AuCheckbox>
-                    </Auk::CheckboxList>
+                    </AuCheckboxGroup>
                   </Fieldset.content>
                 </AuFieldset>
               </div>

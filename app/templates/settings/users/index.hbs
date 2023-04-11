@@ -47,7 +47,7 @@
         <AuFieldset as |Fieldset|>
           <Fieldset.legend>{{t "blocked-on"}}</Fieldset.legend>
           <Fieldset.content>
-            <Auk::CheckboxList>
+            <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
               <AuCheckbox
                 @checked={{this.showBlockedMembershipsOnly}}
                 @onChange={{toggle "showBlockedMembershipsOnly" this}}
@@ -60,7 +60,7 @@
               >
                 {{t "user"}}
               </AuCheckbox>
-            </Auk::CheckboxList>
+            </AuCheckboxGroup>
           </Fieldset.content>
         </AuFieldset>
       </div>

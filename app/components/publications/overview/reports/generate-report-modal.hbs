@@ -100,19 +100,19 @@
           <AuFieldset as |Fieldset|>
             <Fieldset.legend>{{t "government-domains"}}</Fieldset.legend>
             <Fieldset.content>
-              <Auk::CheckboxList>
+              <AuCheckboxGroup
+                @selected={{this.selectedGovernmentDomains}}
+                @onChange={{this.onChangeGovernmentDomains}}
+                as |Group|
+              >
                 {{#each this.governmentDomains as |governmentDomain|}}
-                  <AuCheckbox
-                    @checked={{includes
-                      governmentDomain
-                      this.selectedGovernmentDomains
-                    }}
-                    @onChange={{fn this.selectGovernmentDomain governmentDomain}}
+                  <Group.Checkbox
+                    @value={{governmentDomain}}
                   >
                     {{governmentDomain.label}}
-                  </AuCheckbox>
+                  </Group.Checkbox>
                 {{/each}}
-              </Auk::CheckboxList>
+              </AuCheckboxGroup>
             </Fieldset.content>
           </AuFieldset>
         </div>
@@ -122,19 +122,19 @@
           <AuFieldset as |Fieldset|>
             <Fieldset.legend>{{t "regulation-types"}}</Fieldset.legend>
             <Fieldset.content>
-              <Auk::CheckboxList>
+              <AuCheckboxGroup
+                @selected={{this.selectedRegulationTypes}}
+                @onChange={{this.onChangeRegulationTypes}}
+                as |Group|
+              >
                 {{#each this.regulationTypes as |regulationType|}}
-                  <AuCheckbox
-                    @checked={{includes
-                      regulationType
-                      this.selectedRegulationTypes
-                    }}
-                    @onChange={{fn this.selectRegulationType regulationType}}
+                  <Group.Checkbox
+                    @value={{regulationType}}
                   >
                     {{regulationType.label}}
-                  </AuCheckbox>
+                  </Group.Checkbox>
                 {{/each}}
-              </Auk::CheckboxList>
+              </AuCheckboxGroup>
             </Fieldset.content>
           </AuFieldset>
         </div>
