@@ -27,7 +27,6 @@ export default class PublicationsOverviewShortlistController extends Controller 
         break;
       }
     }
-    console.timeEnd(`getAgendaitem ${piece.id}`);
     return agendaitem;
   }
 
