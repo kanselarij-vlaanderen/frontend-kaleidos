@@ -16,12 +16,6 @@ export default class PublicationsOverviewShortlistController extends Controller 
   caseForPublication;
   mandateesForPublication;
 
-  getAgendaitem = async (piece) => {
-    const [agendaitem] = await piece.agendaitems;
-
-    return agendaitem;
-  }
-
   getDecisionDate = async (piece) => {
     const agendaitems = await piece.agendaitems;
     const treatments = await Promise.all(
