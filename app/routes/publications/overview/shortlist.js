@@ -14,20 +14,20 @@ export default class PublicationsOverviewShortlistRoute extends Route {
     });
     const result = await response.json();
 
-    const pieces = await this.store.query('piece', {
-      include: [
-        'agendaitems.agenda.next-version',
-        'agendaitems.mandatees.person',
-        'agendaitems.treatment.decision-activity',
-        'document-container.type',
-      ].join(','),
-      sort: '-created',
-      'page[size]': result.data.length,
-      'filter[:id:]': result.data.map((record) => record.id).join(','),
-    });
-
-    return {
-      pieces,
+    if (result.data.length) {
+      return this.store.query('piece', {
+        include: [
+          'agendaitems.agenda.next-version',
+          'agendaitems.mandatees.person',
+          'agendaitems.treatment.decision-activity',
+          'document-container.type',
+        ].join(','),
+        sort: '-created',
+        'page[size]': result.data.length,
+        'filter[:id:]': result.data.map((record) => record.id).join(','),
+      });
     }
+
+    return [];
   }
 }
