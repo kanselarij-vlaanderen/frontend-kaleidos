@@ -11,6 +11,16 @@
           </h4>
         </div>
       </Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="signatures">
+            {{t "marked-for-signing"}}
+          </Auk::Tab>
+          <Auk::Tab @route="signatures.shortlist">
+            {{t "shortlist"}}
+          </Auk::Tab>
+        </Auk::Tabs>
+      <Auk::Toolbar::Item>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>

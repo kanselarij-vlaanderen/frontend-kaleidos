@@ -1,0 +1,29 @@
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <KDataTable @content={{@model.pieces}} @enablePagination={{false}}>
+      <:header>
+        <th>{{t "document-name"}}</th>
+        <th>{{t "decision-date"}}</th>
+        <th></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <AuLink @route="document" @model={{row.id}}>
+            {{row.name}}
+          </AuLink>
+        </td>
+        <td>{{date (await (this.getDecisionDate row))}}</td>
+        <td>
+          <AuLink
+            @skin="button-naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+            @route="signatures.shortlist"
+          >
+            {{t "open"}}
+          </AuLink>
+        </td>
+      </:body>
+    </KDataTable>
+  </div>
+</div>
