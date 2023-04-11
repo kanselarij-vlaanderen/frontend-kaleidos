@@ -185,26 +185,34 @@
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key="Getekend document"
-      >
-        {{#if @piece.file.primarySource}}
-          <AuLinkExternal
-            href={{@piece.file.primarySource.namedDownloadLink}}
-            @skin="primary"
-            @icon="download"
-            @iconAlignment="left"
-            download
-          >{{@piece.name}}.{{@piece.file.primarySource.extension}}</AuLinkExternal>
-        {{else if @piece.file}}
-          <AuLinkExternal
-            href={{@piece.file.namedDownloadLink}}
-            @skin="primary"
-            @icon="download"
-            @iconAlignment="left"
-            download
-          >{{@piece.name}}-getekend</AuLinkExternal>
-          {{else}}
-          {{@piece.name}}
-        {{/if}}
+      > 
+        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+          {{#if @piece.file.primarySource}}
+            <AuLinkExternal
+              href={{@piece.file.primarySource.namedDownloadLink}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >{{@piece.name}}-getekend.{{@piece.file.primarySource.extension}}</AuLinkExternal>
+          {{else if @piece.file}}
+            <AuLinkExternal
+              href={{@piece.file.namedDownloadLink}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >{{@piece.name}}-getekend</AuLinkExternal>
+            {{else}}
+            {{@piece.name}}
+          {{/if}}
+          <AuPill
+            @skin="warning"
+            @icon="circle"
+          >
+            Intern regering
+          </AuPill>
+        </div>
       </Auk::KeyValue>
     </Auk::Panel::Body>
   </Auk::Panel>

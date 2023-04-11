@@ -93,13 +93,12 @@ Router.map(function() {
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekeningen', }, function() {
       this.route('index', { path: '/overzicht', });
-      this.route('start', { path: '/start', });
       this.route('busy', { path: '/overzicht-bezig', });
+      this.route('open', { path: '/overzicht-open', });
       this.route('success', { path: '/overzicht-notificatie', });
-      this.route('sign', { path: '/tekenen', });
+      this.route('signinghub', { path: '/tekenen', });
       this.route('multiple', { path: '/meerdere-tekenen', });
       this.route('signature', { path: '/handtekenen', });
-      this.route('signed', { path: '/overzicht-gehandtekend', });
       this.route('email', { path: '/email', });
     });
   }

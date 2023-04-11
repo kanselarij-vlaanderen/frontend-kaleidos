@@ -64,10 +64,25 @@ export default class SignaturesBusyController extends Controller {
 
   @tracked isShowFilterModal = false;
   @tracked isShowSidebar = false;
+  @tracked isShowSidebarMultiple = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
   @tracked isShowAddCC = false;
   @tracked isShowApproval = false;
+  @tracked isSelectAll = false;
+  @tracked isShowSignButton = false;
+  @tracked isShowToast = true;
+
+  @action
+  showSignButton(sort) {
+    this.isShowSignButton = true;
+  }
+
+  @action
+  selectAll() {
+    this.isShowSignButton = true;
+    this.isSelectAll = true;
+  }
 
   @action
   showApproval() {
@@ -110,6 +125,16 @@ export default class SignaturesBusyController extends Controller {
   }
 
   @action
+  showSidebarMultiple() {
+    this.isShowSidebarMultiple = true;
+  }
+
+  @action
+  closeSidebarMultiple() {
+    this.isShowSidebarMultiple = false;
+  }
+
+  @action
   showAddMinister() {
     this.isShowAddMinister = true;
   }
@@ -127,5 +152,10 @@ export default class SignaturesBusyController extends Controller {
   @action
   closeCancelSignatures() {
     this.isShowCancelSignatures = false;
+  }
+
+  @action
+  closeToast() {
+    this.isShowToast = false;
   }
 }

@@ -65,9 +65,11 @@ export default class SignaturesIndexController extends Controller {
 
   @tracked isShowFilterModal = false;
   @tracked isShowSidebar = false;
+  @tracked isShowSidebarMultiple = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
   @tracked isShowSignButton = false;
+  @tracked isSelectAll = false;
   @tracked isShowAddCC = false;
   @tracked isShowApproval = false;
 
@@ -97,8 +99,14 @@ export default class SignaturesIndexController extends Controller {
   }
 
   @action
-  showSignButton(sort) {
+  showSignButton() {
     this.isShowSignButton = true;
+  }
+
+  @action
+  selectAll() {
+    this.isShowSignButton = true;
+    this.isSelectAll = true;
   }
 
   @action
@@ -109,11 +117,23 @@ export default class SignaturesIndexController extends Controller {
   @action
   showSidebar() {
     this.isShowSidebar = true;
+    this.isShowSidebarMultiple = false;
   }
 
   @action
   closeSidebar() {
     this.isShowSidebar = false;
+  }
+
+  @action
+  showSidebarMultiple() {
+    this.isShowSidebarMultiple = true;
+    this.isShowSidebar = false;
+  }
+
+  @action
+  closeSidebarMultiple() {
+    this.isShowSidebarMultiple = false;
   }
 
   @action
@@ -135,4 +155,5 @@ export default class SignaturesIndexController extends Controller {
   closeCancelSignatures() {
     this.isShowCancelSignatures = false;
   }
+
 }

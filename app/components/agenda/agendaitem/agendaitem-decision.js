@@ -25,6 +25,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isFullscreen = false;
   @tracked isAddingReport = false;
   @tracked document = false;
+  @tracked version = false;
   @tracked signatureRequested = false;
 
   @tracked decisionDocType;
@@ -32,6 +33,11 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   showDocument() {
     this.document = true;
+  }
+
+  @action
+  showVersion() {
+    this.version = true;
   }
 
   @action
@@ -145,7 +151,14 @@ export default class AgendaitemDecisionComponent extends Component {
     this.editorInstance = editorInterface;
     editorInterface.setHtmlContent(
       '<h4>Betreft :</h4>' +
-      '<p>Toegang havens<br/>Voorontwerp van koninklijk besluit betreffende het verbieden van toegang tot de Belgische havens door gesanctioneerde schepen<br/>Betrokkenheid van de Vlaamse Regering<br/>Standpuntbepaling<br/>(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>' + 
+      '<p>Toegang havens<br/>Voorontwerp van koninklijk besluit betreffende het verbieden van toegang tot de Belgische havens door gesanctioneerde schepen<br/>Betrokkenheid van de Vlaamse Regering<br/>Standpuntbepaling<br/>(VR 2022 3009 DOC.1056/1 en DOC.1056/2)</p>'
+    )
+  }
+
+  @action
+  handleRdfaEditorInitBody(editorInterface) {
+    this.editorInstance = editorInterface;
+    editorInterface.setHtmlContent(
       '<h4>Beslissing :</h4>' +
       '<p>De Vlaamse Regering beslist:</p>' +
       '<ol><li>in te stemmen met bovengenoemd voorontwerp van koninklijk besluit;</li><li>de minister-president van de Vlaamse Regering te gelasten de federale minister van Noordzee van deze beslissing in kennis te stellen.</li></ol>'

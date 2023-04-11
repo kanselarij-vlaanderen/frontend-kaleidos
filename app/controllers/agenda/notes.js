@@ -9,11 +9,17 @@ export default class AgendaNotesController extends Controller {
   @tracked isEditing = false;
   @tracked isSigned = true;
   @tracked document = false;
+  @tracked version = false;
   @tracked signatureRequested = false;
 
   @action
   showDocument() {
     this.document = true;
+  }
+
+  @action
+  showVersion() {
+    this.version = true;
   }
 
   @action

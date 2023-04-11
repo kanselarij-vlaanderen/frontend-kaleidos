@@ -5,7 +5,9 @@
     <AuPill
       @icon="sign"
       @skin="link"
-      @route="signatures.index"
+      @route="signatures.signinghub"
+      target="_blank"
+      rel="noreferrer noopener"
     >
       Getekend
     </AuPill>
@@ -13,7 +15,9 @@
     <AuPill
       @icon="sign"
       @skin="link"
-      @route="signatures.index"
+      @route="signatures.signinghub"
+      target="_blank"
+      rel="noreferrer noopener"
     >
       Verstuurd
     </AuPill>
@@ -22,12 +26,11 @@
       <AuPill
         @icon="sign"
         @skin="link"
-        @route="signatures.index"
+        @route="signatures.open"
       >
         Te handtekenen
       </AuPill>
     {{else}}
-
     {{/if}}
   {{/if}}
 {{/if}}

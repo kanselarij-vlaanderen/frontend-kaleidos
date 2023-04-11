@@ -3,7 +3,7 @@ import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default class SignaturesSuccessController extends Controller {
+export default class SignaturesIndexController extends Controller {
   @service router;
   @service currentSession;
 
@@ -64,10 +64,12 @@ export default class SignaturesSuccessController extends Controller {
   }
 
   @tracked isShowFilterModal = false;
-  @tracked isShowSidebar = false;
+  @tracked isShowSidebar = true;
+  @tracked isShowSidebarMultiple = false;
   @tracked isShowAddMinister = false;
   @tracked isShowCancelSignatures = false;
-  @tracked isShowToast = true;
+  @tracked isShowSignButton = false;
+  @tracked isSelectAll = false;
   @tracked isShowAddCC = false;
   @tracked isShowApproval = false;
 
@@ -97,6 +99,17 @@ export default class SignaturesSuccessController extends Controller {
   }
 
   @action
+  showSignButton() {
+    this.isShowSignButton = true;
+  }
+
+  @action
+  selectAll() {
+    this.isShowSignButton = true;
+    this.isSelectAll = true;
+  }
+
+  @action
   closeFilterModal() {
     this.isShowFilterModal = false;
   }
@@ -104,11 +117,23 @@ export default class SignaturesSuccessController extends Controller {
   @action
   showSidebar() {
     this.isShowSidebar = true;
+    this.isShowSidebarMultiple = false;
   }
 
   @action
   closeSidebar() {
     this.isShowSidebar = false;
+  }
+
+  @action
+  showSidebarMultiple() {
+    this.isShowSidebarMultiple = true;
+    this.isShowSidebar = false;
+  }
+
+  @action
+  closeSidebarMultiple() {
+    this.isShowSidebarMultiple = false;
   }
 
   @action
@@ -131,8 +156,4 @@ export default class SignaturesSuccessController extends Controller {
     this.isShowCancelSignatures = false;
   }
 
-  @action
-  closeToast() {
-    this.isShowToast = false;
-  }
 }

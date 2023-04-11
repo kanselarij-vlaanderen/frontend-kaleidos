@@ -12,19 +12,6 @@
           </h4>
         </div>
       </Auk::Toolbar::Item>
-      {{#if (eq this.currentSession.role.label "Minister")}}
-      {{else}}
-      <Auk::Toolbar::Item>
-        <Auk::Tabs>
-          <Auk::Tab @route="signatures.success">
-            Gemarkeerd voor handtekenen
-          </Auk::Tab>
-          <Auk::Tab @route="signatures.start">
-            Op te starten
-          </Auk::Tab>
-        </Auk::Tabs>
-      </Auk::Toolbar::Item>
-      {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>

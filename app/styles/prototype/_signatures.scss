@@ -175,3 +175,10 @@ $scroll-sidebar-width: 50rem;
 .au-u-column-select {
   width: 30px;
 }
+
+.au-c-repeater {
+  & + & {
+    border-top: .1rem solid var(--au-gray-300);
+    margin-top: $au-unit-small;
+  }
+}

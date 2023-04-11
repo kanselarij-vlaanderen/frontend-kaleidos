@@ -17,6 +17,15 @@
           >
             Exporteren als pdf
           </AuLink> --}}
+          {{#if this.document}}
+          <AuButton
+            @icon="pdf"
+            @skin="naked"
+            {{on "click" this.showVersion}}
+          >
+            Exporteren als pdf
+          </AuButton>
+          {{else}}
           <AuButton
             @icon="pdf"
             @skin="naked"
@@ -24,6 +33,7 @@
           >
             Exporteren als pdf
           </AuButton>
+          {{/if}}
         </Group.Item>
         {{#unless this.isEditing}}
         <Group.Item>
@@ -122,6 +132,58 @@
           </Auk::Toolbar>
         </div>
       </div>
+      {{#if this.version}}
+      <div class="vlc-document-card-versions">
+        <Auk::Accordion>
+          <Auk::Accordion::Item
+            @title={{t "previous-versions"}}
+            @disabled={{this.loadPieceRelatedData.isRunning}}
+            @expandTask={{this.loadVersionHistory}}
+            data-test-document-card-version-history
+          >
+            {{#if this.loadVersionHistory.isRunning}}
+              <div class="auk-u-p-3">
+                <Auk::Loader />
+              </div>
+            {{else}}
+              <div
+                class="vlc-document-holder"
+              >
+                <div class="vlc-document-card-item">
+                  <div class="vlc-document-card-item__title">
+                    <LinkTo @route="document" @model={{piece.id}}
+                      class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link">
+                      DOC.02032 — Voorbereidende tekst voor de beslissing
+                    </LinkTo>
+                    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+                      <AuPill @icon="sign">Getekend</AuPill>
+                      <AuPill
+                        @skin="warning"
+                        @icon="circle"
+                      >
+                        Intern regering
+                      </AuPill>
+                    </div>
+                  </div>
+                  <div class="vlc-document-card-item__meta au-u-muted">
+                    {{!-- no piece.created in legacy data --}}
+                    {{#if piece.created}}
+                      {{t "uploaded-at"}}
+                      {{moment-format piece.created}}
+                      {{t "at"}}
+                      {{moment-format piece.created "HH:mm"}}
+                    {{/if}}
+                  </div>
+                  <div class="vlc-document-card-item__icon">
+                    <Auk::Icon @name="clock-rewind" @size="small" />
+                  </div>
+                </div>
+              </div>
+            {{/if}}
+          </Auk::Accordion::Item>
+        </Auk::Accordion>
+      </div>
+      {{/if}}
     </div>
   </Auk::Panel::Body>
   {{/if}}
@@ -154,7 +216,7 @@
         {{#if this.isFullscreen}}
           <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
             <h4 class="auk-toolbar__title">
-              Voorbereidende tekst voor de beslissing
+              Voorbereidende tekst voor de beslissing: betreft
             </h4>
             <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
             <AuDropdown
@@ -219,6 +281,78 @@
       <WebComponents::VlRdfaEditor
         data-test-newsletter-edit-item-rdfa-editor
         @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+      />
+    </div>
+    <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen au-u-margin-top-none"}}">
+      <div class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center">
+        {{#if this.isFullscreen}}
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+            <h4 class="auk-toolbar__title">
+              Voorbereidende tekst voor de beslissing: beslissing
+            </h4>
+            <AuButton @skin="link" @icon="renew">Inhoud updaten</AuButton>
+            <AuDropdown
+              @title="Huidige versie"
+              @alignment="left"
+              @skin="naked"
+              @icon="chevron-down"
+              @iconAlignment="right"
+            >
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 18-11-2022 om 10:23
+              </AuButton>
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 13-11-2022 om 12:13
+              </AuButton>
+            </AuDropdown>
+          </div>
+          <AuButtonGroup>
+            <AuButton
+              @skin="naked"
+              @icon="minimize"
+              @iconAlignment="left"
+              {{on "click" this.toggleFullscreen}}
+            >
+              {{t "close-fullscreen"}}
+            </AuButton>
+            <AuButton
+              @skin="primary"
+              {{on "click" this.toggleAll}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </AuButtonGroup>
+        {{else}}
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+             <AuButton @skin="link" @icon="renew" class="au-u-padding-left-none">Inhoud updaten</AuButton>
+            <AuDropdown
+              @title="Huidige versie"
+              @alignment="left"
+              @skin="naked"
+              @icon="chevron-down"
+              @iconAlignment="right"
+            >
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 18-11-2022 om 10:23
+              </AuButton>
+              <AuButton @skin="link-secondary" role="menuitem">
+                Versie van 13-11-2022 om 12:13
+              </AuButton>
+            </AuDropdown>
+          </div>
+          <AuButton
+            @skin="naked"
+            @icon="expand"
+            @iconAlignment="left"
+            {{on "click" this.toggleFullscreen}}
+          >
+            {{t "fullscreen"}}
+          </AuButton>
+        {{/if}}
+      </div>
+      <WebComponents::VlRdfaEditor
+        data-test-newsletter-edit-item-rdfa-editor
+        @handleRdfaEditorInit={{this.handleRdfaEditorInitBody}}
       />
     </div>
     {{!-- <div>

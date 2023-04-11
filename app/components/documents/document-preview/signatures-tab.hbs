@@ -89,11 +89,7 @@
                 </p>
               </Auk::KeyValue>
             </div>
-            <div class="auk-o-grid-col-6 auk-content">
-              <Auk::KeyValue @key={{t "signaturesSection.signed-status"}}  class="auk-u-m-0">
-                <AuPill @skin="default" @icon="sign">Gemarkeerd voor handtekenen</AuPill>
-              </Auk::KeyValue>
-            </div>
+            
           </div>
         </Auk::Panel::Body>
       </Auk::Panel>
@@ -214,7 +210,7 @@
       <Auk::Toolbar::Item>
         <LinkTo
           class="auk-button auk-button--primary"
-          @route="signatures.sign"
+          @route="signatures.signinghub"
         >
           {{t "signaturesSection.prepare-signatures"}}
         </LinkTo>

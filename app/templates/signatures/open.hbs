@@ -12,19 +12,6 @@
           </h4>
         </div>
       </Auk::Toolbar::Item>
-      {{#if (eq this.currentSession.role.label "Minister")}}
-      {{else}}
-      <Auk::Toolbar::Item>
-        <Auk::Tabs>
-          <Auk::Tab @route="signatures.index">
-            Gemarkeerd voor handtekenen
-          </Auk::Tab>
-          <Auk::Tab @route="signatures.start">
-            Op te starten
-          </Auk::Tab>
-        </Auk::Tabs>
-      </Auk::Toolbar::Item>
-      {{/if}}
     </Auk::Toolbar::Group>
     {{#if (eq this.currentSession.role.label "Minister")}}
     <Auk::Toolbar::Group @position="right">
@@ -35,7 +22,7 @@
           @icon="sign"
           @route="signatures.multiple"
         >
-          Proces starten
+          Geselecteerde documenten handtekenen
         </Auk::Button>
         {{else}}
         <Auk::Button
@@ -43,7 +30,7 @@
           @icon="sign"
           @disabled={{true}}
         >
-          Proces starten
+          Geselecteerde documenten handtekenen
         </Auk::Button>
         {{/if}}
       </Auk::Toolbar::Item>
@@ -66,31 +53,23 @@
           {{t "signaturesSection.filter-ministers"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
+      {{#if this.isShowSignButton}}
       <Auk::Toolbar::Item>
-        {{#if this.isShowSignButton}}
         <Auk::Button
           @skin="primary"
           @icon="sign"
-           {{on "click" this.showSidebar}}
+          {{on "click" this.showSidebarMultiple}}
         >
-          Proces starten
+          Proces starten voor 3 geselecteerde documenten
         </Auk::Button>
-        {{else}}
-        <Auk::Button
-          @skin="primary"
-          @icon="sign"
-          @disabled={{true}}
-        >
-          Proces starten
-        </Auk::Button>
-        {{/if}}
       </Auk::Toolbar::Item>
+      {{/if}}
     </Auk::Toolbar::Group>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb {{if this.isShowSidebar "auk-scroll-wrapper--sidebar" ""}}">
+<div class="auk-scroll-wrapper auk-scroll-wrapper--ovrb {{if this.isShowSidebar "auk-scroll-wrapper--sidebar" ""}}{{if this.isShowSidebarMultiple "auk-scroll-wrapper--sidebar" ""}}">
   <div class="auk-scroll-wrapper__body">
     {{#if (eq this.currentSession.role.label "Minister")}}
        <table class="auk-table auk-table--sticky-header auk-table--action">
@@ -137,7 +116,7 @@
           </tr>
           <tr class="auk-table__row">
             <td
-              class="auk-u-text-align--center au-u-column-select"
+              class="auk-u-text-align--center"
             >
               <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
               <Auk::Checkbox
@@ -150,9 +129,6 @@
             </td>
             <td>
               07-07-2021
-            </td>
-            <td>
-              15-04-2022
             </td>
             <td>
               <Auk::Button
@@ -172,10 +148,32 @@
         <table class="auk-table auk-table--sticky-header auk-table--action">
           <thead>
             <tr>
-              <th>{{! Select}}</th>
-              <th class="auk-u-text-nowrap">{{t "keyword"}}</th>
+              <th>
+                <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
+                <Auk::Checkbox
+                  {{on "input" (action "selectAll")}}
+                  />
+              </th>
               <Utils::ThSortable
-                @label={{t "util.date-approved"}}
+                @label="Documentnaam"
+                @field="decision-activity.start-date"
+                @currentSorting={{this.sort}}
+                @onChange={{this.changeSorting}}
+              />
+              <Utils::ThSortable
+                @label="Type document"
+                @field="decision-activity.start-date"
+                @currentSorting={{this.sort}}
+                @onChange={{this.changeSorting}}
+              />
+              <Utils::ThSortable
+                @label="Minister"
+                @field="decision-activity.start-date"
+                @currentSorting={{this.sort}}
+                @onChange={{this.changeSorting}}
+              />
+              <Utils::ThSortable
+                @label="Datum beslissing"
                 @field="decision-activity.start-date"
                 @currentSorting={{this.sort}}
                 @onChange={{this.changeSorting}}
@@ -185,23 +183,39 @@
           </thead>
           <tbody>
             {{#each this.model as |signFlow|}}
-              <tr class="auk-table__row auk-table__row__clickable">
+              {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
+              <tr class="auk-table__row">
                 <td
-                  class="auk-u-text-align--center au-u-column-select"
+                  class="auk-u-text-align--center"
                 >
                   <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
                   <Auk::Checkbox
+                    @checked={{this.isSelectAll}}
                     {{on "input" (action "showSignButton")}}
                   />
                 </td>
-                <td {{on "click" this.showSidebar}}>
-                  <p class="au-u-muted">Decreet - {{moment-format
-                    signFlow.decisionActivity.startDate
-                    "DD-MM-YYYY"
-                  }}</p>
-                  <p>{{signFlow.signSubcase.signMarkingActivity.piece.name}}</p>
+                <td>
+                  {{# if signFlow.signSubcase.signMarkingActivity.piece.name }}
+                  <AuLink @route="document" @model={{signFlow.signSubcase.signMarkingActivity.piece.id}}>
+                    {{signFlow.signSubcase.signMarkingActivity.piece.name}}
+                  </AuLink>
+                  {{else}}
+                  <AuLink @route="document" @model={{signFlow.signSubcase.signMarkingActivity.id}}>
+                    VR 2020 3004 DOC.0398 {{signFlow.signSubcase.signFlow.shortTitle}}
+                  </AuLink>
+                  {{/if}}
                 </td>
-                <td {{on "click" this.showSidebar}}>
+                <td>
+                  {{# if signFlow.signSubcase.signMarkingActivity.piece.name }}
+                    <AuPill @size="small">Nota</AuPill>
+                  {{else}}
+                    <AuPill @size="small">Decreet</AuPill>
+                  {{/if}}
+                </td>
+                <td>
+                  –
+                </td>
+                <td>
                   {{moment-format
                     signFlow.decisionActivity.startDate
                     "DD-MM-YYYY"
@@ -210,15 +224,15 @@
                 <td>
                   <Auk::Button
                     @skin="borderless"
-                    @layout="icon-only"
-                    @icon="chevron-right"
+                    @icon="sign"
                     class="auk-table__link"
                     {{on "click" this.showSidebar}}
                   >
-                    {{t "read"}}
+                    Proces starten
                   </Auk::Button>
                 </td>
               </tr>
+              {{/if}}
             {{/each}}
           </tbody>
         </table>
@@ -297,7 +311,7 @@
               </Auk::Toolbar>
             </Auk::Panel::Header>
             <Auk::Panel::Body class="auk-u-p-0">
-              {{!-- <Auk::List @bordered={{true}}>
+              <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>Jan Jambon</span>
                   <AuPill  @skin="white" @icon="clock">
@@ -310,7 +324,7 @@
                     Ondertekend
                   </AuPill>
                 </Auk::List::Item>
-              </Auk::List> --}}
+              </Auk::List>
             </Auk::Panel::Body>
           </Auk::Panel>
         </div>
@@ -318,7 +332,7 @@
           <Auk::Toolbar>
             <LinkTo
               class="auk-button auk-button--primary auk-button--block"
-              @route="signatures.signature"
+              @route="signatures.signed"
             >
               <span class="auk-button__content">
                 <Auk::Icon @name="pencil" />
@@ -331,10 +345,10 @@
         </div>
       {{else}}
         {{#each this.model as |signFlow index|}}
-        {{#if (eq index 0)}}
+        {{#if (eq index 1)}}
         <div class="auk-sidebar__header">
           <h4 class="auk-toolbar-complex__title">
-            {{t "signaturesSection.sidebar-title"}}
+            Proces starten
           </h4>
           <Auk::Button
             @icon="x"
@@ -345,24 +359,22 @@
         </div>
         <div class="auk-sidebar__body">
           <p class="au-u-muted auk-u-mt-2">
-            Decreet -
+            Nota -
             {{moment-format
               signFlow.decisionActivity.startDate
               "DD-MM-YYYY"
             }}
           </p>
           <h5 class="auk-h4 auk-u-m-0">{{signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
-          <p class="auk-u-small au-u-muted au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><strong>Dossier:</strong> Omkadering leerlingondersteuning <AuPill @skin="warning" @icon="lock-closed" @hideText={{true}}>Vertrouwelijk</AuPill></p>
+          <p class="auk-u-small au-u-muted au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><strong>Dossier:</strong> Aanmoedigingspremies <AuPill @skin="warning" @icon="lock-closed" @hideText={{true}}>Vertrouwelijk</AuPill></p>
           <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-2">
-            <Auk::ButtonLink
-              @skin="borderless"
+            <AuLink
               @icon="book"
-              @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
-              target="_blank"
-              rel="noopener noreferrer"
+              @route="document" 
+              @model={{signFlow.signSubcase.signMarkingActivity.piece.id}}
             >
               {{t "util.preview"}}
-            </Auk::ButtonLink>
+            </AuLink>
             <Auk::ButtonLink
               @skin="borderless"
               @icon="document"
@@ -393,7 +405,7 @@
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
             </Auk::Panel::Header>
-            {{!-- <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::Panel::Body class="auk-u-p-0">
               <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>Jan Jambon</span>
@@ -416,7 +428,7 @@
                   </Auk::Button>
                 </Auk::List::Item>
               </Auk::List>
-            </Auk::Panel::Body> --}}
+            </Auk::Panel::Body>
           </Auk::Panel>
           <Auk::Panel class="auk-u-mt-4">
             <Auk::Panel::Header class="auk-u-px-1">
@@ -471,7 +483,7 @@
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
             </Auk::Panel::Header>
-            {{!-- <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::Panel::Body class="auk-u-p-0">
               <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>kc@vlaanderen.be</span>
@@ -484,7 +496,7 @@
                   </Auk::Button>
                 </Auk::List::Item>
               </Auk::List>
-            </Auk::Panel::Body> --}}
+            </Auk::Panel::Body>
           </Auk::Panel>
         </div>
         <div class="auk-sidebar__footer">
@@ -514,6 +526,213 @@
         {{/if}}
         {{/each}}
       {{/if}}
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if this.isShowSidebarMultiple}}
+  <div class="auk-scroll-wrapper__sidebar">
+    <div class="auk-sidebar">
+      {{#each this.model as |signFlow index|}}
+      {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
+      {{#if (eq index 1)}}
+      <div class="auk-sidebar__header">
+        <h4 class="auk-toolbar-complex__title">
+          Proces starten voor 3 documenten
+        </h4>
+        <Auk::Button
+          @icon="x"
+          @skin="borderless"
+          @layout="icon-only"
+          {{on "click" this.closeSidebarMultiple}}
+        />
+      </div>
+      {{/if}}
+      {{/if}}
+      {{/each}}
+
+      <div class="auk-sidebar__body">
+        {{#each this.model as |signFlow index|}}
+        {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
+        <div class="au-c-repeater">
+          <p class="au-u-muted auk-u-mt-2">
+            Decreet -
+            {{moment-format
+              signFlow.decisionActivity.startDate
+              "DD-MM-YYYY"
+            }}
+          </p>
+          <h5 class="auk-h4 auk-u-m-0">{{signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
+          <p class="auk-u-small au-u-muted au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><strong>Dossier:</strong> Omkadering leerlingondersteuning <AuPill @skin="warning" @icon="lock-closed" @hideText={{true}}>Vertrouwelijk</AuPill></p>
+          <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-2">
+            <Auk::ButtonLink
+              @skin="borderless"
+              @icon="book"
+              @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{t "util.preview"}}
+            </Auk::ButtonLink>
+            <Auk::ButtonLink
+              @skin="borderless"
+              @icon="document"
+              {{on
+                "click"
+                (fn this.navigateToDecision signFlow.decisionActivity)
+              }}
+            >
+              {{t "consult-agendaitem-decision"}}
+            </Auk::ButtonLink>
+          </div>
+        </div>
+        {{/if}}
+        {{/each}}
+        {{#each this.model as |signFlow index|}}
+        {{#if (eq index 1)}}
+        <Auk::Panel class="auk-u-mt-4">
+          <Auk::Panel::Header class="auk-u-px-1">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <h4 class="auk-h4 auk-u-m-0">
+                    {{t "signaturesSection.signature-needed-by"}}
+                  </h4>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <Auk::Button @skin="tertiary" @icon="pencil" {{on "click" this.showAddMinister}}>
+                    {{t "util.edit-list"}}
+                  </Auk::Button>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::List @bordered={{true}}>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>Jan Jambon</span>
+                <Auk::Button
+                  @skin="danger-borderless"
+                  @layout="icon-only"
+                  @icon="trash"
+                >
+                  {{t "util.delete"}}
+                </Auk::Button>
+              </Auk::List::Item>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>Lydia Peeters</span>
+                <Auk::Button
+                  @skin="danger-borderless"
+                  @layout="icon-only"
+                  @icon="trash"
+                >
+                  {{t "util.delete"}}
+                </Auk::Button>
+              </Auk::List::Item>
+            </Auk::List>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+        <Auk::Panel class="auk-u-mt-4">
+          <Auk::Panel::Header class="auk-u-px-1">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <h4 class="auk-h4 auk-u-m-0">
+                    Goed te keuren door
+                  </h4>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showApproval}}>
+                    Toevoegen
+                  </Auk::Button>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::List @bordered={{true}}>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>kc@vlaanderen.be</span>
+                <Auk::Button
+                  @skin="danger-borderless"
+                  @layout="icon-only"
+                  @icon="trash"
+                >
+                  {{t "util.delete"}}
+                </Auk::Button>
+              </Auk::List::Item>
+            </Auk::List>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+        <Auk::Panel class="auk-u-mt-4">
+          <Auk::Panel::Header class="auk-u-px-1">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <h4 class="auk-h4 auk-u-m-0">
+                    Notificaties
+                  </h4>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <Auk::Button @skin="tertiary" @icon="plus" {{on "click" this.showAddCC}}>
+                    Toevoegen
+                  </Auk::Button>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="auk-u-p-0">
+            <Auk::List @bordered={{true}}>
+              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <span>kc@vlaanderen.be</span>
+                <Auk::Button
+                  @skin="danger-borderless"
+                  @layout="icon-only"
+                  @icon="trash"
+                >
+                  {{t "util.delete"}}
+                </Auk::Button>
+              </Auk::List::Item>
+            </Auk::List>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+        {{/if}}
+        {{/each}}
+      </div>
+      {{#each this.model as |signFlow index|}}
+      {{#if (eq index 1)}}
+      <div class="auk-sidebar__footer">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <LinkTo
+                class="auk-button auk-button--primary"
+                @route="signatures.busy"
+              >
+                {{t "signaturesSection.prepare-signatures"}}
+              </LinkTo>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="danger-borderless"
+                {{on "click" this.showCancelSignatures}}
+              >
+                {{t "signaturesSection.cancel-signatures"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+      {{/if}}
+      {{/each}}
     </div>
   </div>
   {{/if}}
@@ -581,16 +800,16 @@
   />
 {{/if}}
 
-{{#if this.isShowCancelSignatures}}
-  <Signatures::SignaturesCancelSignatures
-    @onCancel={{this.closeCancelSignatures}}
-    @onSave={{this.closeCancelSignatures}}
-  />
-{{/if}}
-
 {{#if this.isShowApproval}}
   <Signatures::SignaturesApproval
     @onCancel={{this.closeApproval}}
     @onSave={{this.closeApproval}}
+  />
+{{/if}}
+
+{{#if this.isShowCancelSignatures}}
+  <Signatures::SignaturesCancelSignatures
+    @onCancel={{this.closeCancelSignatures}}
+    @onSave={{this.closeCancelSignatures}}
   />
 {{/if}}
