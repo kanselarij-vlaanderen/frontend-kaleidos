@@ -14,10 +14,17 @@ export default class PublicationsOverviewShortlistRoute extends Route {
     });
     const result = await response.json();
 
-    this.store.pushPayload('piece', result);
-    const pieces = result.data.map(
-      (record) => this.store.peekRecord('piece', record.id)
-    );
+    const pieces = await this.store.query('piece', {
+      include: [
+        'agendaitems.agenda.next-version',
+        'agendaitems.mandatees.person',
+        'agendaitems.treatment.decision-activity',
+        'document-container.type',
+      ].join(','),
+      sort: '-created',
+      'page[size]': result.data.length,
+      'filter[:id:]': result.data.map((record) => record.id).join(','),
+    });
 
     return {
       pieces,

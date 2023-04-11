@@ -16,31 +16,32 @@ export default class PublicationsOverviewShortlistController extends Controller 
   caseForPublication;
   mandateesForPublication;
 
-  getDecisionDate = async (piece) => {
+  getAgendaitem = async (piece) => {
     const agendaitems = await piece.agendaitems;
-    const treatments = await Promise.all(
-      agendaitems.map((agendaitem) => agendaitem.treatment)
-    );
-    const decisionActivities = await Promise.all(
-      treatments.map((treatment) => treatment.decisionActivity)
-    );
-    const decisionDates =
-          decisionActivities.map((activity) => activity.startDate);
-    if (decisionDates.length) {
-      return decisionDates[0];
+    let agendaitem;
+    for (let maybeAgendaitem of agendaitems) {
+      const agenda = await maybeAgendaitem.agenda;
+      const nextVersion = await agenda.nextVersion;
+      if (!nextVersion) {
+        agendaitem = maybeAgendaitem;
+        break;
+      }
     }
+    console.timeEnd(`getAgendaitem ${piece.id}`);
+    return agendaitem;
+  }
+
+  getDecisionDate = async (piece) => {
+    const agendaitem = this.getAgendaitem(piece);
+    const treatment = await agendaitem.treatment;
+    const decisionActivity = await treatment.decisionActivity;
+    const decisionDate = await decisionActivity.startDate;
+    return decisionDate;
   }
 
   getMandateeNames = async (piece) => {
-    const agendaitems = await piece.agendaitems;
-    const mandatees = (
-      await agendaitems
-        .reduce(async (accumulator, agendaitem) => {
-          const mandatees = await agendaitem.mandatees;
-          accumulator = [...accumulator, ...mandatees.toArray()];
-          return accumulator;
-        }, [])
-    ).sortBy('priority');
+    const agendaitem = await this.getAgendaitem(piece);
+    const mandatees = await agendaitem.mandatees;
     const persons = await Promise.all(
       mandatees.map((mandatee) => mandatee.person)
     );
@@ -50,13 +51,11 @@ export default class PublicationsOverviewShortlistController extends Controller 
   @action
   async openNewPublicationModal(piece) {
     this.pieceForPublication = piece;
-    [this.agendaitemForPublication] = await this.pieceForPublication.agendaitems;
+    this.agendaitemForPublication = await this.getAgendaitem(piece);
     this.mandateesForPublication = await this.agendaitemForPublication.mandatees;
 
     const treatment = await this.agendaitemForPublication.treatment;
     this.decisionActivityForPublication = await treatment.decisionActivity;
-
-    console.debug(this.decisionActivityForPublication);
 
     const subcase = await this.decisionActivityForPublication.subcase;
     const decisionmakingFlow = await subcase.decisionmakingFlow;
