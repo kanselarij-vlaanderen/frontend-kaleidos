@@ -3,16 +3,19 @@
   {{#if (user-may "manage-cases")}}
     <div class="au-c-card au-o-box au-o-box--small">
       <Auk::Label>{{t "removed-cases"}}</Auk::Label>
-      <Auk::RadioList as |list|>
+      <AuRadioGroup
+        @selected={{this.selectedArchivedOption}}
+        @onChange={{this.onChangeArchivedOption}}
+        as |Group|
+      >
         {{#each this.archivedOptions as |option|}}
-          <list.Radio
-            @label={{option.label}}
+          <Group.Radio
             @value={{option.value}}
-            @onChange={{this.setArchived}}
-            checked={{eq this.archived option.value}}
-          />
+          >
+            {{option.label}}
+          </Group.Radio>
         {{/each}}
-      </Auk::RadioList>
+      </AuRadioGroup>
     </div>
   {{/if}}
   {{#if (user-may "search-confidential-cases")}}

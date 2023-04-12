@@ -50,24 +50,22 @@ export default class CasesSearchController extends Controller {
     },
   ];
 
-  @tracked page;
-  @tracked size;
-  @tracked sort;
-  @tracked archived;
-  @tracked confidentialOnly;
+  @tracked page = 0;
+  @tracked size = PAGINATION_SIZES[2];
+  @tracked sort = this.sortOptions[1].value;
+  @tracked archived = this.archivedOptions[0].value;
+  @tracked confidentialOnly = false;
   @tracked searchText;
 
   constructor() {
     super(...arguments);
-    this.page = 0;
-    this.size = PAGINATION_SIZES[2];
-    this.sort = this.sortOptions[1].value;
-    this.archived = this.archivedOptions[0].value;
-    this.confidentialOnly = false;
   }
 
   get emptySearch() {
     return isEmpty(this.searchText);
+  }
+  get selectedArchivedOption() {
+    return this.archived;
   }
 
   @action
@@ -81,8 +79,8 @@ export default class CasesSearchController extends Controller {
   }
 
   @action
-  setArchived(option) {
-    this.archived = option;
+  onChangeArchivedOption(selectedArchivedOption) {
+    this.archived = selectedArchivedOption;
   }
 
   @action
@@ -100,7 +98,6 @@ export default class CasesSearchController extends Controller {
     } else {
       this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
     }
-
   }
 
   get customFiltersElement() {
