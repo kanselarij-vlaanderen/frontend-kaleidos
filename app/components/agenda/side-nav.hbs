@@ -58,17 +58,19 @@
                 </AuPill>
               </div>
               <div class="auk-sidebar__sublabel">
-                {{#if agenda.status.isDesignAgenda}}
-                  {{t "latest-modified-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else if this.mostRecentStatusActivityIsApproved}}
-                  {{t "approved-on"}}
-                  <br />
-                  {{date-format this.mostRecentStatusActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else}}
-                  {{t "approved"}}
-                {{/if}}
+                {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |activity|}}
+                  {{#if agenda.status.isDesignAgenda}}
+                    {{t "latest-modified-on"}}
+                    <br />
+                    {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
+                  {{else if activity.statusSet.isApproved}}
+                    {{t "approved-on"}}
+                    <br />
+                    {{date-format activity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
+                  {{else}}
+                    {{t "approved"}}
+                  {{/if}}
+                {{/let}}
               </div>
             {{else}}
               <div class="auk-sidebar__label">
@@ -115,17 +117,19 @@
                 </AuPill>
               </div>
               <div class="auk-sidebar__sublabel">
-                {{#if agenda.status.isDesignAgenda}}
-                  {{t "latest-modified-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else if agenda.modified}}
-                  {{t "approved-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else}}
-                  {{t "approved"}}
-                {{/if}}
+                {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |activity|}}
+                  {{#if agenda.status.isDesignAgenda}}
+                    {{t "latest-modified-on"}}
+                    <br />
+                    {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
+                  {{else if activity.statusSet.isApproved}}
+                    {{t "approved-on"}}
+                    <br />
+                    {{date-format activity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
+                  {{else}}
+                    {{t "approved"}}
+                  {{/if}}
+                {{/let}}
               </div>
             {{else}}
               <div class="auk-sidebar__label">
