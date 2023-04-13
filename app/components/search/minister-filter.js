@@ -13,78 +13,56 @@ export default class SearchMinisterFilterComponent extends Component {
   @tracked pastMinisters = [];
   @tracked pastMinistersHidden = true;
 
+  @tracked selectedCurrentMinisterIds = [];
+  @tracked selectedPastMinisterIds = [];
+
   constructor() {
     super(...arguments);
 
-    this.loadCurrentMinisters.perform();
+    this.prepareMinisters.perform();
   }
 
-  get allCurrentMinistersSelected() {
-    return this.currentMinisters.every((minister) => this.args.selected?.includes(minister.id));
+  get selectedMinisterIds() {
+    return this.args.selected === null ? [] : this.args.selected;
   }
 
-  get someCurrentMinistersSelected() {
-    return this.currentMinisters.some((minister) => this.args.selected?.includes(minister.id));
+  get selectedCurrentMinisters() {
+    return this.selectedCurrentMinisterIds.map((ministerId) =>
+      this.currentMinisters.find((minister) => minister.id === ministerId)
+    );
   }
 
-  get allPastMinistersSelected() {
-    return this.pastMinisters.every((minister) => this.args.selected?.includes(minister.id));
-  }
-
-  get somePastMinistersSelected() {
-    return this.pastMinisters.some((minister) => this.args.selected?.includes(minister.id));
-  }
-
-  _toggleMinister = (list, minister) => {
-    const index = list.indexOf(minister.id);
-    if (index >= 0) {
-      list.splice(index, 1);
-    } else {
-      list.push(minister.id);
-    }
-    return list;
+  get selectedPastMinisters() {
+    return this.selectedPastMinisterIds.map((ministerId) =>
+      this.pastMinisters.find((minister) => minister.id === ministerId)
+    );
   }
 
   @action
-  toggleMinister(minister) {
-    const selected = [...this.args.selected];
-    this.args.onChange?.(this._toggleMinister(selected, minister));
+  onChangeCurrentMinisters(selected) {
+    this.selectedCurrentMinisterIds = selected.map((m) => m.id)
+    this.onChangeMinisters();
   }
 
   @action
-  toggleAllCurrentMinisters() {
-    const selected = [...this.args.selected];
-    if (!this.allCurrentMinistersSelected && this.someCurrentMinistersSelected) {
-      // Enable remaninig ministers
-      this.currentMinisters.forEach((minister) => {
-        if (!selected.includes(minister.id)) {
-          selected.push(minister.id);
-        }
-      });
-    } else {
-      // Toggle all
-      this.currentMinisters.forEach((minister) => this._toggleMinister(selected, minister));
-    }
-    this.args.onChange?.(selected);
+  onChangePastMinisters(selected) {
+    this.selectedPastMinisterIds = selected.map((m) => m.id)
+    this.onChangeMinisters();
   }
 
   @action
-  toggleAllPastMinisters() {
-    const selected = [...this.args.selected];
-    if (!this.allPastMinistersSelected && this.somePastMinistersSelected) {
-      this.pastMinisters.forEach((minister) => {
-        if (!selected.includes(minister.id)) {
-          selected.push(minister.id);
-        }
-      });
-    } else {
-      this.pastMinisters.forEach((minister) => this._toggleMinister(selected, minister));
-    }
-    this.args.onChange?.(selected);
+  onChangeMinisters() {
+    this.args.onChange?.([...this.selectedCurrentMinisterIds, ...this.selectedPastMinisterIds]);
   }
 
   @task
-  *loadCurrentMinisters() {
+  *prepareMinisters() {
+    yield this.prepareCurrentMinisters.perform();
+    yield this.preparePastMinisters.perform();
+  }
+
+  @task
+  *prepareCurrentMinisters() {
     const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
     const sortedMandatees = currentMandatees
           .sort((m1, m2) => m1.priority - m2.priority)
@@ -92,11 +70,11 @@ export default class SearchMinisterFilterComponent extends Component {
       sortedMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
-    this.loadPastMinisters.perform();
+    this.selectedCurrentMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.currentMinisters.find((minister) => minister.id === ministerId));
   }
 
   @task
-  *loadPastMinisters() {
+  *preparePastMinisters() {
     const allMinisters = yield this.store.queryAll('person', {
       'filter[:has:mandatees]': true,
       sort: 'last-name'
@@ -104,5 +82,6 @@ export default class SearchMinisterFilterComponent extends Component {
     this.pastMinisters = allMinisters
       .filter((minister) => !this.currentMinisters.includes(minister))
       .filter((minister) => minister.uri.startsWith('http://themis.vlaanderen.be'));
+    this.selectedPastMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.pastMinisters.find((minister) => minister.id === ministerId));
   }
 }
