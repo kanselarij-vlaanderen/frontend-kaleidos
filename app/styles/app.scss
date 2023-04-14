@@ -71,6 +71,7 @@
 @import 'layout/logo-header';
 @import 'layout/printable-agenda';
 @import 'layout/printable-newsletter';
+@import 'layout/search';
 
 
 // PRINT STYLING
@@ -79,5 +80,4 @@
 
 // PROTOTYPE
 @import 'prototype/_agenda';
-@import 'prototype/_search';
 @import 'prototype/_signatures';
