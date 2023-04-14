@@ -137,8 +137,10 @@
   "unlink": "Ontkoppelen",
   "document-number": "Nummer Document",
   "document-title-edit": "Bestandsnaam wijzigen",
+  "document-name": "Documentnaam",
   "document-type": "Type document",
   "document-type-pdf": "PDF",
+  "no-document-type": "Geen document type",
   "documents": "Documenten",
   "linked-documents": "Reeds bezorgde documenten",
   "documents-attached-to": "Bijbehorende documenten",
@@ -1177,5 +1179,6 @@
   "document-not-on-agendaitem": "Niet geüpload in agendapunt",
   "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
   "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
-  "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan."
+  "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
+  "start-process": "Proces starten"
 }
