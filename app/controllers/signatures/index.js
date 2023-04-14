@@ -52,7 +52,7 @@ export default class SignaturesIndexController extends Controller {
     if (agendaitem) {
       const agenda = await agendaitem.agenda;
       const meeting = await agenda.meeting;
-      return [meeting.id, agenda.id, latestAgendaitem.id];
+      return [meeting, agenda, agendaitem];
     }
     return [];
   }

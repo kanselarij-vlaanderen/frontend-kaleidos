@@ -115,7 +115,7 @@
             class="auk-table__link"
             {{on "click" (fn this.openSidebar signFlow)}}
           >
-            Proces starten
+            {{t "start-process"}}
           </Auk::Button>
         </td>
       {{/if}}
@@ -144,7 +144,7 @@
             @skin="button-naked"
             @icon="document"
             @route="agenda.agendaitems.agendaitem"
-            @models={{array this.meeting this.agenda this.agendaitem}}
+            @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
           >
             {{t "consult-agendaitem-decision"}}
           </AuLink>
