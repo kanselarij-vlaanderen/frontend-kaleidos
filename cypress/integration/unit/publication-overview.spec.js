@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach, afterEach */
+/* global context, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
 import dependency from '../../selectors/dependency.selectors';
@@ -202,6 +202,77 @@ context('Publications overview tests', () => {
       cy.get('@row')
         .find(publication.publicationTableRow.row.status)
         .contains(status);
+      cy.get('@row')
+        .find(publication.publicationTableRow.row.goToPublication)
+        .click();
+    });
+  });
+
+  it('should test if changing to all statussen keeps correct information on all routes', () => {
+    const emptyStateMessage = 'Geen resultaten gevonden';
+    const defaultStatus = 'Opgestart';
+    const statusList = [
+      'Opgestart',
+      'Naar vertaaldienst',
+      'Vertaling in',
+      'Drukproef aangevraagd',
+      'Proef in',
+      'Rappel proef',
+      'Proef verbeterd',
+      'Publicatie gevraagd',
+      'Gepubliceerd',
+      'Geannuleerd',
+      'Gepauzeerd'
+    ];
+    const fields1 = {
+      number: 1420,
+      shortTitle: 'test route information on status change',
+      targetEndDate: Cypress.dayjs().add(-1, 'days'),
+    };
+    cy.createPublication(fields1);
+    // set targetEndDate
+    cy.get(publication.publicationNav.publications).click();
+    cy.get(publication.publicationsInfoPanel.edit).click();
+    cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker.datepicker)
+      .click();
+    cy.setDateInFlatpickr(fields1.targetEndDate);
+    cy.get(publication.publicationsInfoPanel.editView.save).click();
+
+    statusList.forEach((status) => {
+      if (status !== defaultStatus) {
+        cy.changePublicationStatus(status);
+      }
+      cy.get(publication.statusPill.contentLabel).contains(status);
+      cy.get(publication.publicationNav.goBack).click();
+      cy.get(publication.publicationsIndex.tabs.translations).click();
+      if (status === 'Naar vertaaldienst') {
+        cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number);
+      } else {
+        cy.get(publication.publicationTableRow.row.publicationNumber).should('not.contain', fields1.number);
+      }
+      cy.get(publication.publicationsIndex.tabs.proof).click();
+      if (status === 'Drukproef aangevraagd' || status === 'Rappel proef') {
+        cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number);
+      } else {
+        cy.get(publication.publicationTableRow.row.publicationNumber).should('not.contain', fields1.number);
+      }
+      cy.get(publication.publicationsIndex.tabs.proofread).click();
+      if (status === 'Proef in') {
+        cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number);
+      } else {
+        cy.get(auk.emptyState.message).contains(emptyStateMessage);
+      }
+      cy.get(publication.publicationsIndex.tabs.late).click();
+      if (status === 'Gepubliceerd' || status ===  'Geannuleerd') {
+        cy.get(auk.emptyState.message).contains(emptyStateMessage);
+      } else {
+        cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number);
+      }
+
+      cy.get(publication.publicationsIndex.tabs.all).click();
+      cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields1.number)
+        .parent()
+        .as('row');
       cy.get('@row')
         .find(publication.publicationTableRow.row.goToPublication)
         .click();
