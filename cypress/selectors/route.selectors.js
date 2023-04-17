@@ -147,6 +147,7 @@ const selectors = {
 
   // components (?)
 
+  // TODO This selector is removed but unused in this branch. Find a fix in KAS-4004 or KAS-4016
   // search/minister-filter
   searchMinisterFilter: {
     list: '[data-test-route-search-minister-filter-list]',

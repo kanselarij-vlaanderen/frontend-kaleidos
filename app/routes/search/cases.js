@@ -44,8 +44,6 @@ export default class CasesSearchRoute extends Route {
     'mandateeFamilyNames^3',
     'newsItemTitle^2',
     'newsItem',
-    'subcaseTitle^2',
-    'subcaseSubTitle^2',
     'documentNames^2',
     'documentFileNames^2',
     'documents.content',
