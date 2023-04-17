@@ -10,7 +10,7 @@
   <Auk::CheckboxList>
     {{#each @items as |item|}}
       <AuControlCheckbox
-        @label={{item.label}}
+        @label={{get item this.itemStructure.label}}
         @checked={{includes item this.selectedItems}}
         @disabled={{@disabled}}
         @onChange={{fn this.toggleItem item}}

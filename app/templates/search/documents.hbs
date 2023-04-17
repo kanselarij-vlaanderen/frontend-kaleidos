@@ -17,6 +17,7 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
       @searchType={{t "documents"}}
       @onSortChange={{this.selectSort}}
@@ -24,7 +25,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      @cards={{true}}
+      @list={{true}}
       @loading={{this.isLoadingModel}}
       @page={{this.page}}
       @size={{this.size}}
@@ -33,7 +34,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToDocument}}
+      @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
         <td>

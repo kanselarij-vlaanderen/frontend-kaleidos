@@ -13,7 +13,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
   @service router;
-  @service currentSession;
 
   @tracked isAssigningToOtherAgenda = false;
   @tracked isAssigningToOtherCase = false;

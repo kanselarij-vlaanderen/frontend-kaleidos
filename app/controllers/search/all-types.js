@@ -1,13 +1,17 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import { warn } from '@ember/debug';
 
 export default class AllTypesController extends Controller {
   @service router;
-  @service intl;
+  @service plausible;
+  @controller('search.cases') searchCaseController;
+  @controller('search.agendaitems') searchAgendaitemsController;
+  @controller('search.documents') searchDocumentsController;
+  @controller('search.decisions') searchDecisionsController;
+  @controller('search.news-items') searchNewsItemsController;
 
   @tracked searchText;
 
@@ -16,77 +20,17 @@ export default class AllTypesController extends Controller {
   }
 
   @action
-  navigateToResult(result) {
+  navigateToResult(result, clickEvent) {
     const mapping = {
-      cases: this.navigateToCase,
-      agendaitems: this.navigateToAgendaitem,
-      pieces: this.navigateToDocument,
-      decisions: this.navigateToDecision,
-      'news-items': this.navigateToNewsletter,
+      cases: this.searchCaseController.navigateToCase,
+      agendaitems: this.searchAgendaitemsController.navigateToAgendaitem,
+      pieces: this.searchDocumentsController.navigateToDocument,
+      decisions: this.searchDecisionsController.navigateToDecision,
+      'news-items': this.searchNewsItemsController.navigateToNewsletter,
     };
 
-    mapping[result.name](result.data);
-  }
-
-  @action
-  navigateToDecision(searchEntry) {
-    if (searchEntry.meetingId) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem.decisions',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.id
-      );
-    } else {
-      warn(
-        `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to decisions`,
-        {
-          id: 'agendaitem.no-meeting',
-        }
-      );
-    }
-  }
-
-  @action
-  navigateToCase(decisionmakingFlow) {
-    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
-  }
-
-  @action
-  navigateToNewsletter(searchEntry) {
-    const latestAgendaitem = searchEntry.latestAgendaitem;
-    if (latestAgendaitem) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem.news-item',
-        latestAgendaitem['meetingId'],
-        latestAgendaitem['agendaId'],
-        latestAgendaitem['id']
-      );
-    }
-  }
-
-  @action
-  navigateToDocument(document) {
-    this.router.transitionTo('document', document.id);
-  }
-
-  @action
-  navigateToAgendaitem(searchEntry) {
-    if (searchEntry.meetingId) {
-      this.router.transitionTo(
-        'agenda.agendaitems.agendaitem',
-        searchEntry.meetingId,
-        searchEntry.agendaId,
-        searchEntry.id
-      );
-    } else {
-      warn(
-        `Agendaitem ${searchEntry.id} is not related to a meeting. Cannot navigate to detail`,
-        {
-          id: 'agendaitem.no-meeting',
-        }
-      );
-    }
+    this.plausible.trackEventWithRole('Zoekresultaat klik');
+    mapping[result.name](result.data, clickEvent);
   }
 
   get customFiltersElement() {

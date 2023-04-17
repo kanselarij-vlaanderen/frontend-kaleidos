@@ -131,8 +131,12 @@ context('Testing the application as Secretarie user', () => {
 
       // Overview Tab - General action - Dragging
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
       cy.get(agenda.agendaOverview.formallyOkEdit).click();
       cy.get(agenda.agendaOverviewItem.dragging);
+      cy.get(agenda.agendaOverviewItem.moveUp);
+      cy.get(agenda.agendaOverviewItem.moveDown);
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort1);
@@ -428,6 +432,49 @@ context('Testing the application as Secretarie user', () => {
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.edit);
+    });
+  });
+
+  context('Profile rights checks for kort-bestek routes', () => {
+    const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
+    const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+
+    it('check kort bestek zebra view for open agenda', () => {
+      cy.visit(kortBestekLinkOpenAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit);
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('not.be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit);
+    });
+
+    it('check kort bestek zebra view for released agenda', () => {
+      cy.visit(kortBestekLinkReleasedAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit);
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('not.be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit);
     });
   });
 });

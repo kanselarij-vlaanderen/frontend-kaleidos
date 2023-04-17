@@ -5,6 +5,7 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
       @searchType={{t "news-items"}}
       @onSortChange={{this.selectSort}}
@@ -13,7 +14,7 @@
     />
     <KDataTable
       data-test-route-search-news-items-data-table={{true}}
-      @cards={{true}}
+      @list={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -22,7 +23,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToNewsletter}}
+      @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
         <td>

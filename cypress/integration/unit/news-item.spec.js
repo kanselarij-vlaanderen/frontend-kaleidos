@@ -1,4 +1,4 @@
-/* global context, beforeEach, afterEach, it, cy, Cypress */
+/* global context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -55,19 +55,24 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
-      .as('checkboxValue');
-    cy.get('@checkboxValue').parent()
+      .as('checkboxInput');
+    cy.get('@checkboxInput').parent()
       .as('checkboxContainer');
     // checkbox is unchecked, toggle it
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
+    // checkbox gets disabled during saving
     // checkbox is checked, toggle it back
-    cy.get('@checkboxValue').should('be.checked');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+    cy.get('@checkboxInput').should('be.checked')
+      .should('not.be.disabled');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
     // checkbox is unchecked
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
   });
 
   // test in agenda detail
@@ -410,63 +415,126 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.cancel).click();
     // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
   });
+  context('zebra view tests', () => {
+    it('should test the zebra view', () => {
+      // const agendaDate = Cypress.dayjs('2022-04-02');
+      const agendaLink = '/vergadering/62726CA1D600B7FF7F95BBEB/agenda/62726CA2D600B7FF7F95BBEC/agendapunten';
+      const newsletterLink = '/vergadering/62726CA1D600B7FF7F95BBEB/kort-bestek';
+      // const subcaseTitleMededeling = 'Cypress test: KB zebra view - mededeling - 1651673379';
+      const subcaseTitleNota = 'Cypress test: KB zebra view - nota - 1651673379';
+      const file = {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+      };
+      const files = [file];
 
-  it('should test the zebra view', () => {
-    // const agendaDate = Cypress.dayjs('2022-04-02');
-    const agendaLink = '/vergadering/62726CA1D600B7FF7F95BBEB/agenda/62726CA2D600B7FF7F95BBEC/agendapunten';
-    const newsletterLink = '/vergadering/62726CA1D600B7FF7F95BBEB/kort-bestek';
-    // const subcaseTitleMededeling = 'Cypress test: KB zebra view - mededeling - 1651673379';
-    const subcaseTitleNota = 'Cypress test: KB zebra view - nota - 1651673379';
-    const file = {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
-    };
-    const files = [file];
+      // check that there are no items in list with only 'verslag' and 'mededeling
+      cy.visit(newsletterLink);
+      cy.get(route.newsletter.dataTable).within(() => {
+        cy.get(newsletter.tableRow.newsletterRow).should('not.exist');
+      });
 
-    // check that there are no items in list with only 'verslag' and 'mededeling
-    cy.visit(newsletterLink);
-    cy.get(route.newsletter.dataTable).within(() => {
-      cy.get(newsletter.tableRow.newsletterRow).should('not.exist');
+      // add nota to agenda and check if list contains correct item
+      cy.visitAgendaWithLink(agendaLink);
+      cy.addAgendaitemToAgenda(subcaseTitleNota);
+      cy.visit(newsletterLink);
+      cy.get(newsletter.tableRow.newsletterRow).within(() => {
+        cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
+        cy.get(newsletter.tableRow.titleContent).contains('Nog geen kort bestek voor dit agendapunt.');
+        cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
+      });
+
+      // add nota to agendaitem
+      cy.visitAgendaWithLink(agendaLink);
+      cy.openAgendaitemKortBestekTab(subcaseTitleNota);
+      cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
+      cy.visit(newsletterLink);
+      // check newsitem save
+      cy.intercept('GET', '/themes**').as('getThemes');
+      cy.intercept('POST', '/news-items').as('postNewsItem');
+      cy.get(newsletter.buttonToolbar.edit).click();
+      cy.wait('@postNewsItem');
+      cy.wait('@getThemes');
+      cy.get(newsletter.editItem.toggleFinished)
+        .parent()
+        .click();
+      cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
+      cy.get(newsletter.editItem.save).click();
+      cy.get(auk.confirmationModal.footer.confirm).click();
+      cy.wait('@patchNewsItem');
+      // TODO-bug reload should not be needed
+      // reload needed to update openNota
+      // cy.reload(); // disable reload since we can't test the opening of the nota
+      // check if nota can be opened
+      // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
+      // cy.get(newsletter.tableRow.newsletterRow).within(() => {
+      //   cy.get(newsletter.buttonToolbar.openNota).children('i')
+      //     .invoke('removeAttr', 'target')
+      //     .click();
+      // });
+      // cy.url().should('contain', '/document/');
     });
 
-    // add nota to agenda and check if list contains correct item
-    cy.visitAgendaWithLink(agendaLink);
-    cy.addAgendaitemToAgenda(subcaseTitleNota);
-    cy.visit(newsletterLink);
-    cy.get(newsletter.tableRow.newsletterRow).within(() => {
-      cy.get(newsletter.tableRow.agendaitemNumber).contains(2);
-      cy.get(newsletter.tableRow.titleContent).contains('Nog geen kort bestek voor dit agendapunt.');
-      cy.get(newsletter.buttonToolbar.openNota).should('be.disabled');
-    });
+    it('should test the sorting', () => {
+      const newsletterLink = '/vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+      const subcaseTitleShort = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
-    // add nota to agendaitem
-    cy.visitAgendaWithLink(agendaLink);
-    cy.openAgendaitemKortBestekTab(subcaseTitleNota);
-    cy.addDocumentsToAgendaitem(subcaseTitleNota, files);
-    cy.visit(newsletterLink);
-    // check newsitem save
-    cy.intercept('GET', '/themes**').as('getThemes');
-    cy.intercept('POST', '/news-items').as('postNewsItem');
-    cy.get(newsletter.buttonToolbar.edit).click();
-    cy.wait('@postNewsItem');
-    cy.wait('@getThemes');
-    cy.get(newsletter.editItem.toggleFinished)
-      .parent()
-      .click();
-    cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
-    cy.get(newsletter.editItem.save).click();
-    cy.get(auk.confirmationModal.footer.confirm).click();
-    cy.wait('@patchNewsItem');
-    // TODO-bug reload should not be needed
-    // reload needed to update openNota
-    // cy.reload(); // disable reload since we can't test the opening of the nota
-    // check if nota can be opened
-    // TODO-refactor opening nota is an action that opens a second browser tab, not testable in cypress
-    // cy.get(newsletter.tableRow.newsletterRow).within(() => {
-    //   cy.get(newsletter.buttonToolbar.openNota).children('i')
-    //     .invoke('removeAttr', 'target')
-    //     .click();
-    // });
-    // cy.url().should('contain', '/document/');
+      cy.visit(newsletterLink);
+
+      cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
+      cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
+        .parents(newsletter.tableRow.newsletterRow)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .parent()
+        .click()
+        .wait('@patchNewsItem1');
+
+      // test sort inNewsletter
+      cy.get(route.newsletter.header.inNewsletter).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.inNewsletter).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      // test sort number
+      cy.get(route.newsletter.header.number).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.number).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      // test sort latestModified
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(auk.loader);
+      cy.get(auk.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      cy.intercept('PATCH', '/news-items/**').as('patchNewsItem2');
+      cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
+        .parents(newsletter.tableRow.newsletterRow)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .parent()
+        .click()
+        .wait('@patchNewsItem2');
+    });
   });
 
   it('should test the klad view', () => {
@@ -529,7 +597,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const agendaLinkMed = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289BFE536C464112FFE91';
     const agendaLinkNota = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289D3E536C464112FFE96';
     const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
-    // *note the next htmlContent is used in search.spec, keep them identical
+    // *note the next htmlContent is used in search-other-spec-data.spec, keep them identical
     const htmlContentNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
     const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';
@@ -588,6 +656,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
+    cy.wait(1000); // tableRow is not connected to DOM.
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)
@@ -636,115 +705,4 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.newsletterPrint.htmlContent).contains(htmlContentNota);
     cy.get(newsletter.newsletterPrint.remark).should('not.exist');
   });
-
-  it('should test the pre mailchimp checks', () => {
-    const agendaDate = Cypress.dayjs().add(5, 'weeks')
-      .day(1);
-    const type1 = 'Mededeling';
-    const type2 = 'Nota';
-    const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
-    const theme = 'Justitie en Handhaving';
-    const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
-    const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
-
-    cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
-
-    cy.createCase('Cypress test: nieuwsbrief');
-
-    // create subcase.
-    cy.addSubcase(type1, shortSubcaseTitle1);
-    cy.addSubcase(type2, shortSubcaseTitle2);
-
-    // create agendaitem
-    cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(shortSubcaseTitle1);
-    cy.addAgendaitemToAgenda(shortSubcaseTitle2);
-    cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
-    cy.intercept('GET', '/themes**').as('getAgendaitemThemes');
-    cy.intercept('POST', '/news-items').as('newsItemsPost');
-    cy.get(newsletter.newsItem.create).click()
-      .wait('@newsItemsPost');
-    cy.wait('@getAgendaitemThemes');
-    cy.get(newsletter.editItem.save).click();
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(auk.confirmationModal.footer.confirm).click()
-      .wait('@patchNewsItem');
-
-    // test without nota in newsletter
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-    cy.get(newsletter.tableRow.titleContent); // await page load
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.get(auk.confirmationModal.footer.confirm).click();
-    cy.get(auk.auModal.container).should('not.exist');
-    cy.get(auk.alert.message).contains(alertMessage);
-    cy.get(auk.alert.close).click();
-    // test with nota in newsletter without theme
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
-      .click()
-      .wait('@patchNewsItem');
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.get(auk.confirmationModal.footer.confirm).click();
-    cy.get(auk.auModal.container).should('not.exist');
-    cy.get(auk.alert.message).contains(alertMessage);
-    cy.get(auk.alert.close).click();
-
-    // add theme to mededeling
-    cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemKortBestekTab(shortSubcaseTitle1);
-    cy.get(newsletter.newsItem.edit).click();
-    cy.get(newsletter.editItem.themesSelector).contains(theme)
-      .click();
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(newsletter.editItem.save).click()
-      .wait('@patchNewsItem');
-
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-    cy.get(newsletter.tableRow.titleContent); // await page load
-
-    // uncheck nota in newsletter
-    cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
-    cy.get(newsletter.tableRow.inNewsletterCheckbox).parent()
-      .click()
-      .wait('@patchNewsItem');
-
-    // TODO-bug check on nota in kort-bestek allows mailcampaign with nota without themes
-    //  and check again
-    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-    //   .children(appuniversum.button)
-    //   .click();
-    // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    // cy.get(utils.vlModalVerify.save).click();
-    // cy.get(utils.vlModalVerify.container).should('not.exist');
-    // cy.get(auk.alert.message).contains(alertMessage);
-    // cy.get(auk.alert.close).click();
-  });
-
-  // it.only('should test the pre mailchimp checks', () => {
-  //   cy.visit('/vergadering/63BFF684D02D5127D91DE575/kort-bestek/afdrukken');
-  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-  //       .children(appuniversum.button)
-  //       .click();
-  //   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-
-  //   cy.fixture('example').then((examples) => {
-  //     cy.log(examples);
-  //     cy.intercept('POST', '/newsletter/mail-campaigns', examples.data).as('postMailCampaings');
-  //   });
-  //   cy.get(utils.vlModalVerify.save).click()
-  //     .wait('@postMailCampaings');
-  //   cy.wait(20000);
-  // });
 });

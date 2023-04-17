@@ -183,6 +183,28 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-table--list {
+  thead {
+    display: none;
+  }
+
+  td {
+    border-bottom: 0;
+  }
+
+  td,
+  tr td:first-child,
+  tr td:last-child {
+    padding: 0 0 $au-unit-small 0;
+  }
+
+  .auk-table--clickable-rows {
+    tr:focus-within td {
+      background-color: transparent;
+    }
+  }
+}
+
 // Button toolbar
 
 .auk-button-toolbar {
@@ -345,4 +367,28 @@ table tr.lt-expanded-row {
 .result-card em {
   font-style: inherit;
   background: #E4EBF5;
+}
+
+// Bigger font
+// workaround for search legend sign example
+.auk-u-text-size--xlarge {
+  font-size: 2.5rem !important;
+}
+
+// Bigger container
+// workaround for search legend popover having a max-width of 45rem
+.auk-u-max-width-xxlarge {
+  max-width: 65rem;
+}
+
+// Workaround for popover exiting view window on small display for search legend
+@media screen and (max-width: 780px) {
+  .auk-u-max-width-xxlarge.ember-popover {
+    transform: translate3d(10px, 64px, 0px) !important;
+  }
+}
+
+// Checkbox list spacing override
+.auk-checkbox-list + .auk-checkbox-list {
+  margin-top: 1rem;
 }

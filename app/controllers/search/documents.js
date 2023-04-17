@@ -10,6 +10,8 @@ export default class SearchDocumentsController extends Controller {
   @service router;
   @service intl;
   @service conceptStore;
+  @service plausible;
+  @service store;
 
   queryParams = [
     {
@@ -57,8 +59,20 @@ export default class SearchDocumentsController extends Controller {
   }
 
   @action
-  navigateToDocument(document) {
-    this.router.transitionTo('document', document.id);
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToDocument(searchEntry, clickEvent);
+  }
+
+  @action
+  navigateToDocument(document, clickEvent) {
+    // Check if we clicked an emphasis or svg inside a linkTo or a linkTo
+    if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+      // do nothing, this was a clicked link in the card and the router will transition later
+      return;
+    } else {
+      this.router.transitionTo('document', document.id);
+    }
   }
 
   @action
@@ -85,7 +99,7 @@ export default class SearchDocumentsController extends Controller {
     if (this.documentTypes) {
       this.documentTypesBuffer = (
         await Promise.all(
-          this.documentTypes?.map((id) => this.store.findRecord('concept', id))
+          this.documentTypes?.map((id) => this.store.findRecord('document-type', id))
         )
       ).toArray();
     } else {

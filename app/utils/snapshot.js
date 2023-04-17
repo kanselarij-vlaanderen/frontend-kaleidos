@@ -1,7 +1,7 @@
 /* eslint-disable */
 /* "stolen" from https://github.com/lblod/frontend-toezicht-abb/blob/04297657e7960b72741f1eaf43c649f84f93c0b9/app/utils/snapshot.js */
 import { compare } from '@ember/utils';
-import { copy } from '@ember/object/internals';
+import { copy } from 'ember-copy';
 
 export default class Snapshot {
   base = null;

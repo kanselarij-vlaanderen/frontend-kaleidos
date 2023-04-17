@@ -7,7 +7,6 @@ import { A } from '@ember/array';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DocumentsLinkedDocumentsComponent extends Component {
-  @service currentSession;
   @service store;
 
   @tracked isOpenLinkedPieceModal = false;

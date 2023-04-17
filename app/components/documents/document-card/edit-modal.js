@@ -14,9 +14,13 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @service toaster;
   @service fileConversionService;
 
+  @tracked isReplacingSourceFile = false;
+  @tracked isReplacingDerivedFile = false;
+  @tracked isUploadingDerivedFile = false;
+  @tracked isDeletingDerivedFile = false;
+
   @tracked isUploadingReplacementSourceFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
-  @tracked isDeletingDerivedFile = false;
 
   @tracked name;
   @tracked uploadedDerivedFile;
@@ -29,18 +33,42 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.name = this.args.piece.name;
   }
 
+  get isDisabled() {
+    return (
+      this.saveEdit.isRunning
+        || this.isUploadingDerivedFile
+        || this.isUploadingReplacementDerivedFile
+        || this.isUploadingReplacementSourceFile
+    );
+  }
+
+  @action
+  handleDerivedFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingDerivedFile = uploadIsRunning && !uploadIsCompleted;
+  }
+
+  @action
+  handleReplacementSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingReplacementSourceFile = uploadIsRunning && !uploadIsCompleted;
+  }
+
+  @action
+  handleReplacementDerivedFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingReplacementDerivedFile = uploadIsRunning && !uploadIsCompleted;
+  }
+
   @action
   async toggleUploadReplacementSourceFile() {
     await this.replacementSourceFile?.destroyRecord();
     this.replacementSourceFile = null;
-    this.isUploadingReplacementSourceFile = !this.isUploadingReplacementSourceFile;
+    this.isReplacingSourceFile = !this.isReplacingSourceFile;
   }
 
   @action
   async toggleUploadReplacementDerivedFile() {
     await this.replacementDerivedFile?.destroyRecord();
     this.replacementDerivedFile = null;
-    this.isUploadingReplacementDerivedFile = !this.isUploadingReplacementDerivedFile;
+    this.isReplacingDerivedFile = !this.isReplacingDerivedFile;
   }
 
   @action
@@ -48,11 +76,11 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.name = null;
 
     await this.replacementSourceFile?.destroyRecord();
-    this.isUploadingReplacementSourceFile = false;
+    this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
 
     await this.replacementDerivedFile?.destroyRecord();
-    this.isUploadingReplacementDerivedFile = false;
+    this.isReplacingDerivedFile = false;
     this.replacementDerivedFile = null;
 
     await this.uploadedDerivedFile?.destroyRecord();
@@ -110,10 +138,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
 
     this.name = null;
 
-    this.isUploadingReplacementSourceFile = false;
+    this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
 
-    this.isUploadingReplacementDerivedFile = false;
+    this.isReplacingDerivedFile = false;
     this.replacementDerivedFile = false;
 
     this.uploadedDerivedFile = null;

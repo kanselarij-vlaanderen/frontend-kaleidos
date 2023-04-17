@@ -1,5 +1,11 @@
 {{page-title (t "decisions")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Search::DecisionResultFilter
+      @selected={{this.decisionResults}}
+      @onChange={{this.setDecisionResults}}
+    />
+  </div>
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
@@ -7,6 +13,7 @@
       @pageSize={{this.size}}
       @pageIdx={{this.page}}
       @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
       @searchText={{this.searchText}}
       @searchType={{t "decisions"}}
       @onSortChange={{this.selectSort}}
@@ -14,7 +21,7 @@
       @sort={{this.sort}}
     />
     <KDataTable
-      @cards={{true}}
+      @list={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}
@@ -23,7 +30,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{this.selectSize}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToDecision}}
+      @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
         <td>

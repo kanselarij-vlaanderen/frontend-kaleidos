@@ -14,6 +14,7 @@ import { enqueueTask } from 'ember-concurrency';
  * @argument {Function} onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
  * @argument {Function} validateFile: function run to validate files before sending them to the backend.
  *  Takes in a File and should return a boolean (whether the file is valid or not). See: https://developer.mozilla.org/en-US/docs/Web/API/File
+ * @argument {Function} onQueueUpdate: function that is called whenever the file queue's state changes, can be used to determine if an upload is ongoing
  */
 export default class FileUploader extends Component {
   @service store;
@@ -48,18 +49,28 @@ export default class FileUploader extends Component {
       || this.uploadFileTask.isRunning;
   }
 
+  get queueInfo() {
+    return {
+      uploadIsRunning: this.uploadIsRunning,
+      uploadIsCompleted: this.uploadIsCompleted,
+    };
+  }
+
   @enqueueTask({
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
     try {
+      this.args.onQueueUpdate?.(this.queueInfo);
       const response = yield file.upload('/files');
       const fileFromStore = yield this.store.findRecord('file', response.body.data.id);
       if (this.args.onUpload) {
         this.args.onUpload(fileFromStore);
       }
       this.uploadedFileLength += 1;
+      this.args.onQueueUpdate?.(this.queueInfo);
     } catch (exception) {
       console.warn('An exception occurred', exception);
+      this.args.onQueueUpdate?.(this.queueInfo);
     }
   }
 

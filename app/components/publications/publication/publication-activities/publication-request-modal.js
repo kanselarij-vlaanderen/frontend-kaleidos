@@ -9,7 +9,6 @@ import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-ema
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
-  @service store;
   @service publicationService;
 
   @tracked subject;
@@ -37,6 +36,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   get isLoading() {
     return (
       this.loadProofPieces.isRunning ||
+      this.setEmailFields.isRunning ||
       this.cancel.isRunning ||
       this.save.isRunning
     );
@@ -45,6 +45,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   get isCancelDisabled() {
     return (
       this.loadProofPieces.isRunning ||
+      this.setEmailFields.isRunning ||
       this.cancel.isRunning ||
       this.save.isRunning
     );
