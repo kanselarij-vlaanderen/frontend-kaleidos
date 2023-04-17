@@ -21,6 +21,7 @@
   </div>
   {{#if this.pastMinistersHidden}}
     <AuButton
+      data-test-search-minister-filter-past-ministers
       {{on "click" (toggle "pastMinistersHidden" this)}}
       @skin="link"
       class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
