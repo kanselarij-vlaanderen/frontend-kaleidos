@@ -95,32 +95,19 @@
               />
             {{/unless}}
           </Group.Item>
-          {{#if this.signaturesEnabled}} {{! feature flag }}
-            {{#if
-              (and
-                @isEditable
-                (user-may "manage-signatures")
-                (not this.loadSignatureRelatedData.isRunning)
-                (not this.loadPieceRelatedData.isRunning)
-              )
-            }}
-              <Group.Item>
-                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                  <AuToggleSwitch
-                    @checked={{if this.signMarkingActivity true false}}
-                    @onChange={{perform this.markOrUnmarkForSignature}}
-                    id="signatureToggle"
-                  />
-                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
-                    {{#if this.markOrUnmarkForSignature.isRunning}}
-                      <Auk::Loader />
-                    {{else}}
-                      {{t "to-sign"}}
-                    {{/if}}
-                  </label>
-                </div>
-              </Group.Item>
-            {{/if}}
+          {{#if this.signaturesEnabled}}
+              {{#if (or
+                 this.loadSignatureRelatedData.isRunning
+                 this.markForSignature.isRunning
+                 ) }}
+                <Group.Item>
+                  <div class="auk-loader au-u-margin-left-small" role="alert" aria-busy="true"></div>
+                </Group.Item>
+              {{else if this.signMarkingActivity}}
+                <Group.Item>
+                  <SignaturePill @signMarkingActivity={{this.signMarkingActivity}}/>
+                </Group.Item>
+              {{/if}}
           {{/if}}
           {{#if
               (and
@@ -154,6 +141,16 @@
                   {{t "edit"}}
                 </AuButton>
                 <AuHr />
+                {{#if this.mayCreateSignMarkingActivity}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" (perform this.markForSignature)}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                  <AuHr />
+                {{/if}}
                 <AuButton
                   data-test-document-card-delete
                   @skin="link"

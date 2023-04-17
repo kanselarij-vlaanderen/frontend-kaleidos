@@ -1,0 +1,15 @@
+{{#if this.loadData.isRunning}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else if this.isSigned}}
+  <AuPill @icon="sign" @skin="link" target="_blank" rel="noreferrer noopener">
+    {{t "signed"}}
+  </AuPill>
+{{else if this.isPreprated}}
+  <AuPill @icon="sign" @skin="link" target="_blank" rel="noreferrer noopener">
+    {{t "sent"}}
+  </AuPill>
+{{else if this.isMarked}}
+  <AuPill @icon="sign" @skin="link">
+    {{t "to-sign"}}
+  </AuPill>
+{{/if}}
