@@ -28,7 +28,7 @@ export default class DocumentRoute extends Route {
             },
           },
         });
-        if (this.submissionActivity) {
+        if (submissionActivity) {
           this.mayAccessKabinetDocument = false;
           const subcase = await submissionActivity.subcase;
           const mandatees = await subcase.mandatees;
@@ -41,6 +41,8 @@ export default class DocumentRoute extends Route {
             }
           }
         }
+      } else {
+        this.mayAccessKabinetDocument = true;
       }
     }
     return model;
