@@ -12,6 +12,7 @@ export default class DocumentController extends Controller {
   @service signatureService;
 
   @tracked decisionActivity;
+  @tracked mayAccessKabinetDocument;
 
   @action
   transitionBack() {

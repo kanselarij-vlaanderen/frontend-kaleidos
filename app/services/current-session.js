@@ -3,6 +3,7 @@ import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CurrentSessionService extends Service {
   @service session;
@@ -43,7 +44,7 @@ export default class CurrentSessionService extends Service {
     this.impersonation.stopImpersonation();
   }
 
-  may(permission, checkImpersonator=false) {
+  may(permission, checkImpersonator = false) {
     return checkImpersonator
       ? this.impersonatorUserGroup?.permissions.includes(permission)
       : this.userGroup?.permissions.includes(permission);
@@ -69,5 +70,9 @@ export default class CurrentSessionService extends Service {
 
   get isImpersonator() {
     return isPresent(this.impersonation.role);
+  }
+
+  get isKabinetDossierBeheerder() {
+    return this.role.uri === CONSTANTS.USER_ROLES.KABINET_DOSSIERBEHEERDER;
   }
 }

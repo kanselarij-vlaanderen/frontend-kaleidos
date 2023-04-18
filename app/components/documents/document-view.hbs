@@ -1,4 +1,4 @@
-{{#if @file}}
+{{#if (and @file @mayAccessKabinetDocument)}}
   {{#if this.isPdfDocument}}
     <object
       type="application/pdf"

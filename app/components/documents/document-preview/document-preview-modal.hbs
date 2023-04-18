@@ -8,7 +8,7 @@
     <:title>
       <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
         {{this.selectedVersion.name}}
-        {{#if file}}
+        {{#if (and file @mayAccessKabinetDocument)}}
           <AuLinkExternal
             {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
@@ -22,7 +22,7 @@
     <:body>
       <div class="auk-panel-layout">
         <div class="auk-panel-layout__main-content">
-          <Documents::DocumentView @file={{file}} />
+          <Documents::DocumentView @file={{file}} @mayAccessKabinetDocument={{@mayAccessKabinetDocument}}/>
         </div>
         <div class="auk-panel-layout__sidebar">
           <Documents::DocumentPreview::DocumentPreviewSidebar
@@ -35,6 +35,7 @@
             @markForSignature={{@markForSignature}}
             @unmarkForSignature={{@unmarkForSignature}}
             @didDeletePiece={{@didDeletePiece}}
+            @mayAccessKabinetDocument={{@mayAccessKabinetDocument}}
           />
         </div>
       </div>
