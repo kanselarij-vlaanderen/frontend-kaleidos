@@ -138,6 +138,7 @@
   "document-number": "Nummer Document",
   "document-title-edit": "Bestandsnaam wijzigen",
   "document-type": "Type document",
+  "no-document-type": "Geen document type",
   "document-type-pdf": "PDF",
   "documents": "Documenten",
   "linked-documents": "Reeds bezorgde documenten",
@@ -1180,5 +1181,6 @@
   "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
   "start-process": "Proces starten",
   "signed": "Getekend",
-  "sent": "Verstuurd"
+  "sent": "Verstuurd",
+  "case": "Dossier"
 }

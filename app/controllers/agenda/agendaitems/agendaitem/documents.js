@@ -28,14 +28,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenPublicationModal = false;
+  @tracked isOpenSignFlowModal = false;
   @tracked isOpenWarnDocEditOnApproved = false;
   @tracked hasConfirmedDocEditOnApproved = false;
+
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
   @tracked agendaActivity;
+  @tracked subcase;
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
@@ -325,16 +328,22 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
+  openSignatureFlowModal(piece) {
+    this.isOpenSignFlowModal = true;
+    this.piece = piece;
+  }
+
+  @action
+  closeSignatureFlowModal() {
+    this.isOpenSignFlowModal = false;
+  }
+
+  @action
   async markForSignature(piece) {
     // Placed the getting of these variables here to lessen loading time in router
     const agendaItemTreatment = await this.agendaitem.treatment;
     const decisionActivity = await agendaItemTreatment.decisionActivity;
     await this.signatureService.markDocumentForSignature(piece, decisionActivity);
-  }
-
-  @action
-  async unmarkForSignature(piece) {
-    await this.signatureService.unmarkDocumentForSignature(piece);
   }
 
   @action
