@@ -12,6 +12,10 @@ export default class DocumentController extends Controller {
 
   @tracked decisionActivity;
 
+  queryParams = ['isSigning'];
+  @tracked isSigning = false;
+  @tracked activeTab = 'details';
+
   @action
   transitionBack() {
     // If no route where you returned from go to the home page
