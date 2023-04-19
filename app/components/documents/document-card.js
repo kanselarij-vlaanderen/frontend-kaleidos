@@ -209,12 +209,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = false;
   }
 
-  @task
-  *markForSignature() {
-    yield this.args.markForSignature?.(this.args.piece);
-    yield this.loadSignatureRelatedData.perform();
-  }
-
   @action
   deleteDocumentContainer() {
     this.isOpenVerifyDeleteModal = true;

@@ -96,10 +96,7 @@
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}}
-              {{#if (or
-                 this.loadSignatureRelatedData.isRunning
-                 this.markForSignature.isRunning
-                 ) }}
+              {{#if this.loadSignatureRelatedData.isRunning}}
                 <Group.Item>
                   <div class="auk-loader au-u-margin-left-small" role="alert" aria-busy="true"></div>
                 </Group.Item>
@@ -142,13 +139,15 @@
                 </AuButton>
                 <AuHr />
                 {{#if this.mayCreateSignMarkingActivity}}
-                  <AuButton
+                  <AuLink
                     @skin="link"
-                    {{on "click" (perform this.markForSignature)}}
+                    @route="document"
+                    @model={{this.piece.id}}
+                    @query={{hash isSigning=true}}
                     role="menuitem"
                   >
                     {{t "present-for-signing"}}
-                  </AuButton>
+                  </AuLink>
                   <AuHr />
                 {{/if}}
                 <AuButton

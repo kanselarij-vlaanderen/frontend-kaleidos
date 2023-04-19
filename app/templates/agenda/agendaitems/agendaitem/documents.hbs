@@ -44,7 +44,6 @@
       @onOpenUploadModal={{this.openUploadModalForNewPiece}}
       @onAddPiece={{perform this.addPiece}}
       @didDeleteContainer={{this.refresh}}
-      @markForSignature={{this.openSignatureFlowModal}}
       @isEditable={{true}}
     />
   {{else}}
@@ -130,29 +129,6 @@
         <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
       {{/if}}
       <p>{{t "documents-on-approved-agenda-message"}}</p>
-  </:body>
-</ConfirmationModal>
-
-<ConfirmationModal
-  @modalOpen={{this.isOpenSignFlowModal}}
-  @title={{t "start-process"}}
-  @confirmMessage={{t "start-process"}}
-  @onConfirm={{this.closeSignatureFlowModal}}
-  @onCancel={{this.closeSignatureFlowModal}}
->
-  <:body>
-    <p class="au-u-muted auk-u-mt-2">
-      {{or this.piece.documentContainer.type.label (t "no-document-type")}}
-      -
-      {{date this.agendaitem.treatment.decisionActivity.startDate}}
-    </p>
-    <h5 class="auk-h4">{{this.piece.name}}</h5>
-    <p class="auk-u-small au-u-muted au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-      <strong>{{t "case"}}:</strong> {{this.subcase.shortTitle}}
-      {{#if this.subcase.confidential}}
-        <AuPill @size="small" @skin="warning" @icon="lock-closed" />
-      {{/if}}
-    </p>
   </:body>
 </ConfirmationModal>
 

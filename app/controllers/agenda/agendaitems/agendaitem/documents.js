@@ -18,7 +18,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service toaster;
   @service store;
   @service agendaService;
-  @service signatureService;
   @service fileConversionService;
   @service router;
 
@@ -325,25 +324,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   closePublicationModal() {
     this.isOpenPublicationModal = false;
-  }
-
-  @action
-  openSignatureFlowModal(piece) {
-    this.isOpenSignFlowModal = true;
-    this.piece = piece;
-  }
-
-  @action
-  closeSignatureFlowModal() {
-    this.isOpenSignFlowModal = false;
-  }
-
-  @action
-  async markForSignature(piece) {
-    // Placed the getting of these variables here to lessen loading time in router
-    const agendaItemTreatment = await this.agendaitem.treatment;
-    const decisionActivity = await agendaItemTreatment.decisionActivity;
-    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
   }
 
   @action
