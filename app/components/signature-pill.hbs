@@ -1,11 +1,23 @@
 {{#if this.loadData.isRunning}}
   <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else if this.isCancelled}}
+  <AuPill @icon="sign" @skin="link">
+    {{t "cancelled"}}
+  </AuPill>
 {{else if this.isSigned}}
-  <AuPill @icon="sign" @skin="link" target="_blank" rel="noreferrer noopener">
+  <AuPill @icon="sign" @skin="link">
     {{t "signed"}}
   </AuPill>
-{{else if this.isPreprated}}
-  <AuPill @icon="sign" @skin="link" target="_blank" rel="noreferrer noopener">
+{{else if this.hasToBeSigned}}
+  <AuPill @icon="sign" @skin="link">
+    {{t "to-sign"}}
+  </AuPill>
+{{else if this.hasToBeApproved}}
+  <AuPill @icon="sign" @skin="link">
+    {{t "to-approve"}}
+  </AuPill>
+{{else if this.isPrepared}}
+  <AuPill @icon="sign" @skin="link">
     {{t "sent"}}
   </AuPill>
 {{else if this.isMarked}}
