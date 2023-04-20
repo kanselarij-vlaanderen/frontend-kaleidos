@@ -60,6 +60,7 @@ Router.map(function() {
       this.route('late', { path: '/te-laat-in-bs' });
       this.route('reports', { path: '/rapporten' });
       this.route('search', { path: '/zoeken' });
+      this.route('shortlist');
     });
     this.route('publication', { path: ':publication_id', }, function() {
       this.route('case', { path: '/dossier', });
