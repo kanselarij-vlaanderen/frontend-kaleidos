@@ -8,6 +8,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
 
   @tracked signMarkingActivity;
   @tracked agendaitem;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
@@ -25,19 +26,8 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       'filter[pieces][:id:]': this.args.piece.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
-    })
-
-  }
-
-  @task
-  *markOrUnmarkForSignature() {
-    if (!this.signMarkingActivity) {
-      const agendaItemTreatment = yield this.agendaitem.treatment;
-      const decisionActivity = yield agendaItemTreatment.decisionActivity;
-      yield this.args.markForSignature(this.args.piece, decisionActivity);
-    } else {
-      yield this.args.unmarkForSignature(this.args.piece);
-    }
-    yield this.loadSignatureRelatedData.perform();
+    });
+    const treatment = yield this.agendaitem.treatment;
+    this.decisionActivity = yield treatment.decisionActivity;
   }
 }
