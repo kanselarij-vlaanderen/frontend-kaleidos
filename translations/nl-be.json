@@ -1191,7 +1191,7 @@
   "to-sign-by": "Te handtekenen door",
   "to-approve-by": "Goed te keuren door",
   "to-approve": "Goed te keuren",
-  "cancelled": "Geweigerd",
+  "refused": "Geweigerd",
   "no-signers-selected": "Geen ondertekenaars gekozen",
   "no-approvers-selected": "Geen goedkeurders gekozen",
   "no-notification-addresses-selected": "Geen notificatieadressen gekozen",

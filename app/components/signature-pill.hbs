@@ -1,8 +1,8 @@
 {{#if this.loadData.isRunning}}
   <div class="auk-loader" role="alert" aria-busy="true"></div>
-{{else if this.isCancelled}}
-  <AuPill @icon="sign" @skin="link">
-    {{t "cancelled"}}
+{{else if this.isRefused}}
+  <AuPill @icon="sign" @skin="error">
+    {{t "refused"}}
   </AuPill>
 {{else if this.isSigned}}
   <AuPill @icon="sign" @skin="link">
