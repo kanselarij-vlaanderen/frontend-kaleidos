@@ -10,32 +10,64 @@
         </h4>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        {{#if (user-may "manage-decisions")}}
-          <Group.Item>
-            <AuButton
-              @icon="pdf"
-              @skin="naked"
-              {{on "click" this.exportPDF}}
-            >
-              {{t "export-as-pdf"}}
-            </AuButton>
-          </Group.Item>
-          {{#unless this.isEditing}}
-            <Group.Item>
-              <AuButton
-                @skin="naked"
-                @icon="pencil"
-                @iconAlignment="left"
-                {{on "click" (set this "isEditing")}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Group.Item>
-          {{/unless}}
+        {{#if this.loadReport.isIdle}}
+          {{#if (user-may "manage-decisions")}}
+            {{#unless this.isEditing}}
+              {{#if this.report.pieceParts}}
+                <Group.Item>
+                  <AuButton
+                    @icon="pdf"
+                    @skin="naked"
+                    {{on "click" this.exportPDF}}
+                  >
+                    {{t "export-as-pdf"}}
+                  </AuButton>
+                </Group.Item>
+                <Group.Item>
+                  <AuButton
+                    @skin="naked"
+                    @icon="pencil"
+                    @iconAlignment="left"
+                    {{on "click" (set this "isEditing")}}
+                  >
+                    {{t "edit"}}
+                  </AuButton>
+                </Group.Item>
+              {{/if}}
+              {{#if (and (not this.report.pieceParts) (not this.report.file))}}
+                <Group.Item>
+                  <AuButton
+                    @skin="naked"
+                    @icon="pencil"
+                    @iconAlignment="left"
+                    {{on "click" (set this "isEditing")}}
+                  >
+                    {{t "create"}}
+                  </AuButton>
+                </Group.Item>
+              {{/if}}
+            {{/unless}}
+          {{/if}}
         {{/if}}
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
+
+  {{#if (and this.report.file this.report.pieceParts)}}
+    <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
+      {{!-- <Agenda::Agendaitem::VersionedDocumentCard @file={{this.report.file}} /> --}}
+      <Documents::DocumentCard
+        @piece={{this.report}}
+        @isEditable={{true}}
+        @agendaContext={{@agendaContext}}
+        @hideNewerVersions={{true}}
+        @onOpenUploadModal={{@onOpenUploadModal}}
+        @onAddPiece={{this.attachNewReportVersion}}
+        @didDeleteContainer={{perform this.loadReport}}
+        @bordered={{false}}
+      />
+    </Auk::Panel::Body>
+  {{/if}}
 
   <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
@@ -62,32 +94,39 @@
     </Auk::Toolbar>
   </Auk::Panel::Body>
 
-  <Auk::Panel::Body
-    class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
-  >
-    {{#if this.loadReport.isIdle}}
-      {{#if (and this.report this.report.file)}}
-        <Documents::DocumentCard
-          @piece={{this.report}}
-          @isEditable={{true}}
-          @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
-          @onOpenUploadModal={{@onOpenUploadModal}}
-          @onAddPiece={{this.attachNewReportVersion}}
-          @didDeleteContainer={{perform this.loadReport}}
-          @bordered={{false}}
+  {{#if this.loadReport.isIdle}}
+    {{#if this.isEditing}}
+      <Auk::Panel::Body
+        class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+      >
+        <Agenda::Agendaitem::AgendaitemDecisionEditor
+          @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
         />
-      {{else}}
-        {{#if this.isEditing}}
-          <h4 class="auk-u-my-2">{{t "concerns"}}:</h4>
-          <Agenda::Agendaitem::AgendaitemDecisionEditor
-            @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+        <Agenda::Agendaitem::AgendaitemDecisionEditor
+          @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+        />
+      </Auk::Panel::Body>
+    {{else}}
+      {{#if (and this.report.file (not this.report.pieceParts))}}
+        <Auk::Panel::Body
+          class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+        >
+          <Documents::DocumentCard
+            @piece={{this.report}}
+            @isEditable={{true}}
+            @agendaContext={{@agendaContext}}
+            @hideNewerVersions={{true}}
+            @onOpenUploadModal={{@onOpenUploadModal}}
+            @onAddPiece={{this.attachNewReportVersion}}
+            @didDeleteContainer={{perform this.loadReport}}
+            @bordered={{false}}
           />
-          <h4>{{capitalize (t "decision")}}:</h4>
-          <Agenda::Agendaitem::AgendaitemDecisionEditor
-            @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
-          />
-        {{else if this.report.pieceParts}}
+        </Auk::Panel::Body>
+      {{/if}}
+      {{#if this.report.pieceParts}}
+        <Auk::Panel::Body
+          class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+        >
           <Agenda::Agendaitem::DecisionViewer
             {{did-insert this.setDecisionViewerElement}}
             @meeting={{@agendaContext.meeting}}
@@ -95,13 +134,17 @@
             @concernsHtmlString={{this.betreftPiecePart.value}}
             @decisionHtmlString={{this.beslissingPiecePart.value}}
           />
-        {{/if}}
+        </Auk::Panel::Body>
       {{/if}}
-
-    {{else}}
-      <Auk::Loader />
     {{/if}}
-  </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body
+      class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+    >
+      <Auk::Loader />
+    </Auk::Panel::Body>
+  {{/if}}
+
   {{#if this.isEditing}}
     <Auk::Panel::Footer class="au-u-background-gray-100">
       <Auk::Toolbar>
