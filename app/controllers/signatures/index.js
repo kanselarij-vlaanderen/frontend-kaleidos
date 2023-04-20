@@ -11,22 +11,25 @@ export default class SignaturesIndexController extends Controller {
   @tracked agendaitem = null;
   @tracked agenda = null;
   @tracked meeting = null;
+
   @tracked showSidebar = false;
+  @tracked showFilterModal = false;
+  @tracked selectedMinisters = [];
+  @tracked filteredMinisters = [];
+
+  localStorageKey = 'signatures.shortlist.minister-filter';
 
   getDecisionDate = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const treatment = await agendaitem.treatment;
-    const decisionActivity = await treatment.decisionActivity;
+    const decisionActivity = await this.getDecisionActivity(piece);
     return decisionActivity.startDate;
   }
 
-  getMandateeNames = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const mandatees = await agendaitem.mandatees;
-    const persons = await Promise.all(
-      mandatees.map((mandatee) => mandatee.person)
-    );
-    return persons.map((person) => person.fullName);
+  getMandateeName = async (piece) => {
+    const decisionActivity = await this.getDecisionActivity(piece);
+    const subcase = await decisionActivity.subcase;
+    const mandatee = await subcase.requestedBy;
+    const person = await mandatee.person;
+    return person.fullName
   }
 
   async getAgendaitem(piece) {
@@ -41,6 +44,12 @@ export default class SignaturesIndexController extends Controller {
       }
     }
     return agendaitem;
+  }
+
+  async getDecisionActivity(piece) {
+    const agendaitem = await this.getAgendaitem(piece);
+    const treatment = await agendaitem.treatment;
+    return treatment.decisionActivity;
   }
 
   async getAgendaitemRouteModels(piece) {
@@ -72,4 +81,41 @@ export default class SignaturesIndexController extends Controller {
     this.meeting = null;
     this.showSidebar = false;
   }
+
+  @action
+  openFilterModal() {
+    this.selectedMinisters = this.filteredMinisters;
+    this.showFilterModal = true;
+  }
+
+  @action
+  closeFilterModal() {
+    this.showFilterModal = false;
+    this.selectedMinisters = this.filteredMinisters;
+  }
+
+  @action
+  clearFilter() {
+    this.showFilterModal = false;
+    this.selectedMinisters = [];
+    this.filteredMinisters = [];
+    this.saveSelectedToLocalStorage();
+    this.router.refresh(this.router.routeName);
+  }
+
+  @action
+  applyFilter() {
+    this.filteredMinisters = this.selectedMinisters;
+    this.saveSelectedToLocalStorage();
+    this.router.refresh(this.router.routeName);
+    this.showFilterModal = false;
+  }
+
+  saveSelectedToLocalStorage() {
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify(this.filteredMinisters)
+    );
+  }
+
 }

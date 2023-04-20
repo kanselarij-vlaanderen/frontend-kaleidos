@@ -1196,5 +1196,7 @@
   "no-approvers-selected": "Geen goedkeurders gekozen",
   "no-notification-addresses-selected": "Geen notificatieadressen gekozen",
   "marked-for-signing": "Gemarkeerd voor handtekenen",
-  "preview": "Voorvertoning"
+  "preview": "Voorvertoning",
+  "filter-on-signer": "Filter op ondertekenaar",
+  "filter-content": "Filter inhoud"
 }

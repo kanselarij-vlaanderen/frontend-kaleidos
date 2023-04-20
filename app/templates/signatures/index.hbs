@@ -17,7 +17,18 @@
         {{! search here}}
       </Group.Item>
       <Group.Item>
-        {{! filter here}}
+        {{#if this.filteredMinisters}}
+          <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuButton
+          @skin="secondary"
+          @icon="filter"
+          {{on "click" this.openFilterModal}}
+        >
+          {{t "filter-on-signer"}}
+        </AuButton>
       </Group.Item>
       <Group.Item>
         {{! bundle signature here}}
@@ -73,11 +84,13 @@
       </AuPill>
     </td>
     <td>
-      {{#each (await (this.getMandateeNames piece)) as |name|}}
-        {{name}}
-      {{else}}
-        -
-      {{/each}}
+      {{#let (await (this.getMandateeName piece)) as |name|}}
+        {{#if name}}
+          {{name}}
+        {{else}}
+          -
+        {{/if}}
+      {{/let}}
     </td>
     <td>{{date (await (this.getDecisionDate piece))}}</td>
     <td>
@@ -230,3 +243,37 @@
     </div>
   </:aside>
 </KDataTable>
+
+<ConfirmationModal
+  @modalOpen={{this.showFilterModal}}
+  @title={{t "filter-content"}}
+  @onCancel={{this.closeFilterModal}}
+>
+  <:body>
+    <Mandatees::CheckboxList
+      @selected={{this.selectedMinisters}}
+      @onChange={{fn (mut this.selectedMinisters)}}
+    />
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton @skin="naked" {{on "click" this.closeFilterModal}}>
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        {{#if this.filteredMinisters}}
+          <AuButton @skin="secondary" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuButton @icon="filter" {{on "click" this.applyFilter}}>
+          {{t "filter-content"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</ConfirmationModal>
