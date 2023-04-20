@@ -81,7 +81,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const piece = this.store.createRecord('report', {
       created: now,
       modified: now,
-      name: 'TODO WHAT TO PUT HERE????',
+      name: 'example report (TODO)',
     });
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -118,11 +118,8 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  showDocument() {
-    const options = {
-      filename: 'myFile.pdf', // TODO set correct name
-    };
-    html2pdf(this.decisionViewerElement, options);
+  async exportPDF() {
+    await fetch(`/generate-decision-report/${this.report.id}`);
   }
 
   // @action
