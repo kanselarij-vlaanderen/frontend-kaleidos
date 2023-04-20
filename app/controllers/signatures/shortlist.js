@@ -29,4 +29,13 @@ export default class PublicationsOverviewShortlistController extends Controller 
       return decisionDates[0];
     }
   }
+
+  getMandateeNames = async (piece) => {
+    const agendaitem = await this.getAgendaitem(piece);
+    const mandatees = await agendaitem.mandatees;
+    const persons = await Promise.all(
+      mandatees.map((mandatee) => mandatee.person)
+    );
+    return persons.map((person) => person.fullName);
+  }
 }

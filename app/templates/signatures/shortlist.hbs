@@ -3,25 +3,36 @@
     <KDataTable @content={{@model}} @enablePagination={{false}}>
       <:header>
         <th>{{t "document-name"}}</th>
+        <th>{{t "document-type"}}</th>
+        <th>{{t "minister"}}</th>
         <th>{{t "decision-date"}}</th>
         <th></th>
       </:header>
-      <:body as |row|>
+      <:body as |piece|>
         <td>
-          <AuLink @route="document" @model={{row.id}}>
-            {{row.name}}
+          <AuLink @route="document" @model={{piece.id}}>
+            {{piece.name}}
           </AuLink>
         </td>
-        <td>{{date (await (this.getDecisionDate row))}}</td>
         <td>
-          <AuLink
+          {{or piece.documentContainer.type.label (t "no-document-type")}}
+        </td>
+        <td>
+          {{#each (await (this.getMandateeNames)) as |name|}}
+            {{name}}
+          {{else}}
+            -
+          {{/each}}
+        </td>
+        <td>{{date (await (this.getDecisionDate piece))}}</td>
+        <td>
+          <AuButton
             @skin="button-naked"
-            @icon="chevron-right"
+            @icon="sign"
             @hideText={{true}}
-            @route="signatures.shortlist"
           >
             {{t "open"}}
-          </AuLink>
+          </AuButton>
         </td>
       </:body>
     </KDataTable>

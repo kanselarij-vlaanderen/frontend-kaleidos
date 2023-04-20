@@ -4,34 +4,29 @@ import { inject as service } from '@ember/service';
 export default class SignaturesIndexRoute extends Route {
   @service store;
 
-  queryParams = {
-    page: {
-      refreshModel: true,
-      as: 'pagina',
-    },
-    size: {
-      refreshModel: true,
-      as: 'aantal',
-    },
-    sort: {
-      refreshModel: true,
-      as: 'sorteer',
-    },
-  };
-
-  model(params) {
-    return this.store.query('sign-flow', {
-      sort: params.sort,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      include: [
-        'creator',
-        'sign-subcase.sign-marking-activity.piece',
-        'sign-subcase.sign-marking-activity.piece.document-container.type',
-        'decision-activity',
-      ].join(','),
+  async model() {
+    const endpoint = '/sign-flows/shortlist';
+    const response = await fetch(endpoint, {
+      Headers: {
+        'Accept': 'application/vnd.api+json',
+      }
     });
+    const result = await response.json();
+
+    if (result.data.length) {
+      return this.store.query('piece', {
+        include: [
+          'agendaitems.agenda.next-version',
+          'agendaitems.mandatees.person',
+          'agendaitems.treatment.decision-activity',
+          'document-container.type',
+        ].join(','),
+        sort: '-created',
+        'page[size]': result.data.length,
+        'filter[:id:]': result.data.map((record) => record.id).join(','),
+      });
+    }
+
+    return [];
   }
 }
