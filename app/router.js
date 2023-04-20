@@ -76,7 +76,6 @@ Router.map(function() {
       this.route('signing-flow', { path: '/:signingflow_id' }, function() {
         this.route('documents', { path: '/documenten' });
       });
-      this.route('shortlist', { path: '/starten' });
     });
   }
 
