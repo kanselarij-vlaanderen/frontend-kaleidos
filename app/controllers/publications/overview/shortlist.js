@@ -31,7 +31,7 @@ export default class PublicationsOverviewShortlistController extends Controller 
   }
 
   getDecisionDate = async (piece) => {
-    const agendaitem = this.getAgendaitem(piece);
+    const agendaitem = await this.getAgendaitem(piece);
     const treatment = await agendaitem.treatment;
     const decisionActivity = await treatment.decisionActivity;
     const decisionDate = await decisionActivity.startDate;
