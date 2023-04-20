@@ -6,6 +6,7 @@
     {{else}}
       <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
         <AuCheckbox
+          data-test-route-search-document-type-filter
           @checked={{this.allDocumentTypesSelected}}
           @indeterminate={{and
             (not this.allDocumentTypesSelected)

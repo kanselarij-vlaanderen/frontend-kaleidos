@@ -1,7 +1,10 @@
 <AuCard @shadow={{true}} @size="small" class="result-card" as |c|>
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-      <p class="au-u-para-small au-u-muted au-u-medium">
+      <p
+        data-test-route-search-result-cards-document-date
+        class="au-u-para-small au-u-muted au-u-medium"
+      >
         {{#if @date}}
           {{date @date}}
         {{else}}
@@ -13,6 +16,7 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
+        data-test-route-search-result-cards-document-filename
         class="au-u-padding-none card-link"
         @route="document"
         @model={{@documentId}}
@@ -35,7 +39,10 @@
       </p>
     {{/if}}
     {{#if (and @meetingId @agendaId @agendaitemId)}}
-      <p class="au-u-para-small au-u-muted">
+      <p 
+        data-test-route-search-result-cards-document-agendaitem
+        class="au-u-para-small au-u-muted"
+      >
         {{#if @agendaitemShortTitle}}
           {{t "uploaded-in-thing" thing=(t "agendaitem")}}
           <AuLink

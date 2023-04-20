@@ -4,6 +4,7 @@
     <Fieldset.content>
       <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
         <AuCheckbox
+          data-test-route-search-confidential-only-checkbox
           @checked={{@confidentialOnly}}
           @onChange={{@onChange}}
         >
