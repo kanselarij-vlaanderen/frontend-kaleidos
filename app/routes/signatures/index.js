@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import fetch from 'fetch';
 import { inject as service } from '@ember/service';
 
 export default class SignaturesIndexRoute extends Route {
@@ -13,7 +14,7 @@ export default class SignaturesIndexRoute extends Route {
     });
     const result = await response.json();
 
-    if (result.data.length) {
+    if (result.data?.length) {
       return this.store.query('piece', {
         include: [
           'agendaitems.agenda.next-version',
