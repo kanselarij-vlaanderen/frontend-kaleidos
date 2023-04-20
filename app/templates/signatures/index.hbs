@@ -2,28 +2,27 @@
   @skin="gray-100"
   @auto={{true}}
 >
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4 class="auk-toolbar-complex__title">
             {{t "signatures"}}
           </h4>
         </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      <Group.Item>
         {{! search here}}
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
+      </Group.Item>
+      <Group.Item>
         {{! filter here}}
-      </Auk::Toolbar::Item>
-
-      <Auk::Toolbar::Item>
+      </Group.Item>
+      <Group.Item>
         {{! bundle signature here}}
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      </Group.Item>
+    </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 
@@ -31,15 +30,9 @@
   @scrollable={{true}}
   @stickyHeader={{true}}
   @clickable={{false}}
-  @content={{@model}}
-  @page={{this.page}}
-  @size={{this.size}}
-  @clickable={{false}}
   @asideVisible={{this.showSidebar}}
-  @numberOfItems={{@model.length}}
-  @totalNumberOfItems={{@model.meta.count}}
-  @onChangeSize={{fn (mut this.size)}}
-  @onChangePage={{fn (mut this.page)}}
+  @content={{@model}}
+  @enablePagination={{false}}
 >
   <:header>
     <th>
@@ -49,77 +42,53 @@
         </span>
       </AuControlCheckbox>
     </th>
-    <Utils::ThSortable
-      @label={{t "document-name"}}
-      @field="sign-subcase.sign-marking-activity.piece.name"
-      @currentSorting={{this.sort}}
-      @onChange={{this.changeSorting}}
-    />
-    <Utils::ThSortable
-      @label={{t "document-type"}}
-      @field="sign-subcase.sign-marking-activity.document-container.type.label"
-      @currentSorting={{this.sort}}
-      @onChange={{this.changeSorting}}
-    />
+    <th>{{t "document-name"}}</th>
+    <th>{{t "document-type"}}</th>
     <th>{{t "minister"}}</th>
-    <Utils::ThSortable
-      @label={{t "decision-date"}}
-      @field="decision-activity.start-date"
-      @currentSorting={{this.sort}}
-      @onChange={{this.changeSorting}}
-    />
-    <th>{{! Actions}}</th>
+    <th>{{t "decision-date"}}</th>
+    <th></th>
   </:header>
-  <:body as |signFlow|>
-    {{#let signFlow.signSubcase.signMarkingActivity.piece as |piece|}}
-      {{#if piece}}
-        <td>
-          <AuControlCheckbox>
-            <span class="auk-u-sr-only">{{t "select"}}</span>
-          </AuControlCheckbox>
-        </td>
-        <td>
-          <AuLink @route="document" @model={{piece.id}}>
-            {{piece.name}}
-          </AuLink>
-        </td>
-        <td>
-          <AuPill @size="small">
-            {{#let piece.documentContainer.type as |type|}}
-              {{#if type}}
-                {{type.label}}
-              {{else}}
-                {{t "no-document-type"}}
-              {{/if}}
-            {{/let}}
-          </AuPill>
-        </td>
-        <td>
-          {{#let (await (this.getMandateeNames signFlow)) as |mandateeNames|}}
-            {{#if mandateeNames}}
-              {{#each mandateeNames as |name|}}
-                {{name}}
-              {{/each}}
-            {{else}}
-              -
-            {{/if}}
-          {{/let}}
-        </td>
-        <td>
-          {{date signFlow.decisionActivity.startDate}}
-        </td>
-        <td>
-          <Auk::Button
-            @skin="borderless"
-            @icon="sign"
-            class="auk-table__link"
-            {{on "click" (fn this.openSidebar signFlow)}}
-          >
-            {{t "start-process"}}
-          </Auk::Button>
-        </td>
-      {{/if}}
-    {{/let}}
+  <:body as |piece|>
+    <td>
+      <AuControlCheckbox>
+        <span class="auk-u-sr-only">
+          {{t "select"}}
+        </span>
+      </AuControlCheckbox>
+    </td>
+    <td>
+      <AuLink @route="document" @model={{piece.id}}>
+        {{piece.name}}
+      </AuLink>
+    </td>
+    <td>
+      <AuPill @size="small">
+        {{#let piece.documentContainer.type as |type|}}
+          {{#if type}}
+            {{type.label}}
+          {{else}}
+            {{t "no-document-type"}}
+          {{/if}}
+        {{/let}}
+      </AuPill>
+    </td>
+    <td>
+      {{#each (await (this.getMandateeNames piece)) as |name|}}
+        {{name}}
+      {{else}}
+        -
+      {{/each}}
+    </td>
+    <td>{{date (await (this.getDecisionDate piece))}}</td>
+    <td>
+      <AuButton
+        @skin="naked"
+        @icon="sign"
+        {{on "click" (fn this.openSidebar piece)}}
+      >
+        {{t "start-process"}}
+      </AuButton>
+    </td>
   </:body>
   <:aside>
     <div class="auk-sidebar">
@@ -136,9 +105,11 @@
       </div>
       <div class="auk-sidebar__body">
         <p class="au-u-muted auk-u-mt-2">
-          {{or this.signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label (t "no-document-type")}} - {{date this.signFlow.decisionActivity.startDate}}
+          {{or this.piece.documentContainer.type.label (t "no-document-type")}}
+          -
+          {{date (await (this.getDecisionDate this.piece))}}
         </p>
-        <h5 class="auk-h4">{{this.signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
+        <h5 class="auk-h4">{{this.piece.name}}</h5>
         <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
           <AuLink
             @skin="button-naked"

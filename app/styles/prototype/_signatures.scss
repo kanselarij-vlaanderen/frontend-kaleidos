@@ -44,3 +44,8 @@ $scroll-sidebar-width: 50rem;
   min-height: 5rem;
   padding: .9rem 1.2rem;
 }
+
+// Document sidebar
+.auk-u-sidebar-min-width[data-collapsed="false"] {
+  min-width: 60rem;
+}

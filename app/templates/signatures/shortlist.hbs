@@ -1,0 +1,40 @@
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <KDataTable @content={{@model}} @enablePagination={{false}}>
+      <:header>
+        <th>{{t "document-name"}}</th>
+        <th>{{t "document-type"}}</th>
+        <th>{{t "minister"}}</th>
+        <th>{{t "decision-date"}}</th>
+        <th></th>
+      </:header>
+      <:body as |piece|>
+        <td>
+          <AuLink @route="document" @model={{piece.id}}>
+            {{piece.name}}
+          </AuLink>
+        </td>
+        <td>
+          {{or piece.documentContainer.type.label (t "no-document-type")}}
+        </td>
+        <td>
+          {{#each (await (this.getMandateeNames)) as |name|}}
+            {{name}}
+          {{else}}
+            -
+          {{/each}}
+        </td>
+        <td>{{date (await (this.getDecisionDate piece))}}</td>
+        <td>
+          <AuButton
+            @skin="button-naked"
+            @icon="sign"
+            @hideText={{true}}
+          >
+            {{t "open"}}
+          </AuButton>
+        </td>
+      </:body>
+    </KDataTable>
+  </div>
+</div>

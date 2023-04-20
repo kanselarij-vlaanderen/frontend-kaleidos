@@ -60,7 +60,7 @@ Router.map(function() {
       this.route('late', { path: '/te-laat-in-bs' });
       this.route('reports', { path: '/rapporten' });
       this.route('search', { path: '/zoeken' });
-      this.route('shortlist');
+      this.route('shortlist', { path: '/starten' });
     });
     this.route('publication', { path: ':publication_id', }, function() {
       this.route('case', { path: '/dossier', });
@@ -76,6 +76,7 @@ Router.map(function() {
       this.route('signing-flow', { path: '/:signingflow_id' }, function() {
         this.route('documents', { path: '/documenten' });
       });
+      this.route('shortlist', { path: '/starten' });
     });
   }
 

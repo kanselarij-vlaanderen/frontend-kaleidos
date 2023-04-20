@@ -1192,5 +1192,6 @@
   "to-approve-by": "Goed te keuren door",
   "no-signers-selected": "Geen ondertekenaars gekozen",
   "no-approvers-selected": "Geen goedkeurders gekozen",
-  "no-notification-addresses-selected": "Geen notificatieadressen gekozen"
+  "no-notification-addresses-selected": "Geen notificatieadressen gekozen",
+  "marked-for-signing": "Gemarkeerd voor handtekenen"
 }
