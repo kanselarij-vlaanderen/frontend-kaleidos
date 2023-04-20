@@ -14,7 +14,7 @@ export default class SignPreparationActivityModel extends Model {
   signMarkingActivity;
 
   @hasMany('sign-signing-activity', {
-    inverse: 'signPreprationActivity',
+    inverse: 'signPreparationActivity',
     async: true,
   })
   signSigningActivities;
