@@ -273,4 +273,146 @@ export default class DocumentsDocumentCardComponent extends Component {
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
   }
+
+  // Debug stufff, can deleted as soon as digital-signing-service is up and running
+  @service signatureService
+
+  get isDebugMode() {
+    return ENV.APP.ENABLE_DEBUG;
+  }
+
+  @action
+  async getOrCreateSignSubcase() {
+    const getSignSubcase = async () => {
+      const signMarkingActivity = await this.piece.signMarkingActivity;
+      return await signMarkingActivity?.signSubcase;
+    }
+
+    const signSubcase = await getSignSubcase();
+    if (signSubcase) {
+      return signSubcase;
+    } else {
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[pieces][:id:]': this.piece.id,
+        'filter[:has-no:next-version]': true,
+        sort: '-created',
+      });
+      const treatment = await agendaitem.treatment;
+      const decisionActivity = await treatment.decisionActivity;
+      await this.signatureService.markDocumentForSignature(this.piece, decisionActivity);
+      await this.piece.belongsTo('signMarkingActivity').reload();
+      return await getSignSubcase();
+    }
+  }
+
+  @action
+  async clearSignRecords() {
+    const signSubcase = await this.getOrCreateSignSubcase();
+    const signPreparationActivity = await signSubcase.signPreparationActivity;
+    const signSigningActivities = await signSubcase.signSigningActivities;
+    const signCompletionActivity = await signSubcase.signCompletionActivity;
+    const signRefusalActivities = await signSubcase.signRefusalActivities;
+
+    await signPreparationActivity?.destroyRecord();
+    await signCompletionActivity?.destroyRecord();
+    await Promise.all(
+      signRefusalActivities?.map(
+        (signRefusalActivity) => signRefusalActivity?.destroyRecord()
+      )
+    );
+    await Promise.all(
+      signSigningActivities?.map(
+        (signSigningActivity) => signSigningActivity?.destroyRecord()
+      )
+    );
+  }
+
+  @action
+  async removeSignFlow() {
+    await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    await this.signatureService.unmarkDocumentForSignature(this.piece);
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
+
+  @action
+  async signFlowMarked() {
+    await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
+
+  @action
+  async signFlowPrepared() {
+    const now = new Date();
+    const signSubcase = await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    const signPreparationActivity = this.store.createRecord(
+      'sign-preparation-activity',
+      {
+        startDate: now,
+        endDate: now,
+        signSubcase,
+      }
+    );
+    await signPreparationActivity.save();
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
+
+  @action
+  async signFlowToBeSigned() {
+    const now = new Date();
+    const signSubcase = await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    const signSigningActivity = this.store.createRecord(
+      'sign-signing-activity',
+      {
+        startDate: now,
+        endDate: now,
+        signSubcase,
+      }
+    );
+    await signSigningActivity.save();
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
+
+  @action
+  async signFlowSigned() {
+    const now = new Date();
+    const signSubcase = await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    const signCompletionActivity = this.store.createRecord(
+      'sign-completion-activity',
+      {
+        startDate: now,
+        endDate: now,
+        signSubcase,
+      }
+    );
+    await signCompletionActivity.save();
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
+
+  @action
+  async signFlowRefused() {
+    const now = new Date();
+    const signSubcase = await this.getOrCreateSignSubcase();
+    await this.clearSignRecords();
+    const signRefusalActivity = this.store.createRecord(
+      'sign-refusal-activity',
+      {
+        startDate: now,
+        endDate: now,
+        signSubcase,
+      }
+    );
+    await signRefusalActivity.save();
+    this.piece.belongsTo('signMarkingActivity').reload();
+    this.loadSignatureRelatedData.perform();
+  }
 }
