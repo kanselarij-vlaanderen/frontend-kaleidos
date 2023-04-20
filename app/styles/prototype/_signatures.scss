@@ -16,13 +16,13 @@ $scroll-sidebar-width: 50rem;
     background-color: $auk-gray-100;
     border-left: .1rem solid $auk-gray-300;
   }
-}
 
-.auk-sidebar {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  .auk-sidebar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 .auk-sidebar__header {
@@ -43,9 +43,4 @@ $scroll-sidebar-width: 50rem;
   border-top: .1rem solid $auk-gray-300;
   min-height: 5rem;
   padding: .9rem 1.2rem;
-}
-
-// Document sidebar
-.auk-u-sidebar-min-width[data-collapsed="false"] {
-  min-width: 60rem;
 }
