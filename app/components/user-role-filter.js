@@ -23,7 +23,6 @@ export default class UserRoleFilterComponent extends Component {
     this._selected = selected;
   }
 
-
   constructor() {
     super(...arguments);
 
@@ -31,12 +30,8 @@ export default class UserRoleFilterComponent extends Component {
   }
 
   @action
-  toggleRole(role) {
-    if (this.selected.includes(role)) {
-      this.selected.splice(this.selected.indexOf(role), 1);
-    } else {
-      this.selected.push(role);
-    }
+  toggleRole(selectedRoles) {
+    this.selected = selectedRoles;
     this.args.onChange?.(this.selected);
   }
 

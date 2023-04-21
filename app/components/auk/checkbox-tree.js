@@ -4,10 +4,17 @@ import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { TrackedArray } from 'tracked-built-ins';
 
+const DEFAULT_ITEM_STRUCTURE = {
+  id: 'id',
+  label: 'label',
+};
+
 /**
  *
  * @argument label {String} Label for "parent" selector checkbox
+ * @argument layout {String} Layout type for the inner control group
  * @argument items {Array} array of objects representing tree "leaf" options
+ * @argument itemStructure {Object} Object with keys representing the actual keys in @items
  * @argument selectedItems {Array} Subset of @items representing the selected options
  * @argument didUpdate {Function} Action called whenever the selection is updated. Returns the checked item objects.
  * @argument disabled {Boolean}
@@ -18,6 +25,15 @@ export default class CheckboxTree extends Component {
   constructor() {
     super(...arguments);
     this.selectedItems = new TrackedArray(this.args.selectedItems || []);
+  }
+
+  get layoutClass() {
+    if (this.args.layout == 'grid') return 'au-c-control-group--grid';
+    else return '';
+  }
+
+  get itemStructure() {
+    return {...DEFAULT_ITEM_STRUCTURE, ...this.args.itemStructure};
   }
 
   get isSelectedAllItems() {
@@ -42,12 +58,8 @@ export default class CheckboxTree extends Component {
   }
 
   @action
-  toggleItem(item, checked) {
-    if (checked) {
-      this.selectedItems.push(item);
-    } else {
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
-    }
+  toggleItem(selectedItems) {
+    this.selectedItems = new TrackedArray(selectedItems);
 
     if (isPresent(this.args.didUpdate)) {
       this.args.didUpdate(this.selectedItems);

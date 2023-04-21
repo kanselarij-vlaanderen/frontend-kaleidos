@@ -6,7 +6,7 @@ export default class SettingsOrganizationsOrganizationRoute extends Route {
 
   model(params) {
     return this.store.findRecord('user-organization', params.id, {
-      include: 'memberships,mandatees'
+      include: 'memberships,mandatees',
     });
   }
 
@@ -16,6 +16,6 @@ export default class SettingsOrganizationsOrganizationRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.linkedMandatees = this.linkedMandatees
+    controller.linkedMandatees = this.linkedMandatees;
   }
 }

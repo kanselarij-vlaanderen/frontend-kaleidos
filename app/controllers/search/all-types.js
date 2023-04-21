@@ -6,7 +6,6 @@ import { isEmpty } from '@ember/utils';
 
 export default class AllTypesController extends Controller {
   @service router;
-  @service intl;
   @service plausible;
   @controller('search.cases') searchCaseController;
   @controller('search.agendaitems') searchAgendaitemsController;

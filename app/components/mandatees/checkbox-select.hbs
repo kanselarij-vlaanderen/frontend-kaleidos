@@ -2,33 +2,15 @@
   <Auk::Loader />
 {{else if this.ministers}}
 <div class="auk-form-group">
-  <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-bottom-small">
-    <Auk::Label for="ministerName">
-      {{t "ministers"}}
-    </Auk::Label>
-    <p>
-      <AuButton
-        {{on "click" this.toggleAll}}
-        @skin="link"
-      >
-        {{#if this.allSelected}}
-          {{capitalize (t "deselect-all")}}
-        {{else}}
-          {{capitalize (t "select-all")}}
-        {{/if}}
-      </AuButton>
-    </p>
-  </div>
-  <Auk::CheckboxList class="au-c-checkboxlist-column">
-    {{#each this.ministers as |minister|}}
-      <AuControlCheckbox
-        @checked={{this.isChecked minister}}
-        @label={{minister.fullName}}
-        @onChange={{fn this.toggle minister}}
-      />
-    {{/each}}
-  </Auk::CheckboxList>
-  </div>
+  <Auk::CheckboxTree
+    @label={{t "ministers"}}
+    @layout="grid"
+    @items={{this.ministers}}
+    @itemStructure={{hash label="fullName"}}
+    @selectedItems={{this.selectedMinisters}}
+    @didUpdate={{this.onChangeMinisters}}
+  />
+ </div>
 {{else}}
   <p>{{t "no-ministers-submitted-on-this-agenda"}}</p>
 {{/if}}

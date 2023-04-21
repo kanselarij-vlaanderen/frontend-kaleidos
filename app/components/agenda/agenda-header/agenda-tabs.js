@@ -9,7 +9,6 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
    */
   @service router;
   @service store;
-  @service currentSession;
 
   @lastValue('loadFirstAgendaitem') firstAgendaitem;
 
@@ -24,7 +23,7 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
       // sorting on type prevents defaulting to an announcement when there are notas
       return yield this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': this.args.currentAgenda.id,
-        sort: 'type,number',
+        sort: 'type.position,number',
       });
     }
     return null;

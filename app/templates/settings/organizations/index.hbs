@@ -123,16 +123,8 @@
                   {{t "block-organization"}}
                 </AuButton>
               {{/if}}
-              <AuButton
-              @skin="naked"
-              role="menuitem"
-              {{on "click" (queue (toggle "showMandateeSelectorModal" this) (set this "organizationBeingLinked" organization))}}
-              >
-                {{t "connect to mandatee"}}
-              </AuButton>
             </AuDropdown>
             <AuLink
-              data-test-button-organization-detail
               @skin="button-naked"
               @icon="chevron-right"
               @hideText={{true}}

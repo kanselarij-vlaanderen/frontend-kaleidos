@@ -167,12 +167,8 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectGovernmentDomain(governmentDomain, checked) {
-    if (checked) {
-      this.selectedGovernmentDomains.addObject(governmentDomain); // addObject ensures no duplicates
-    } else {
-      this.selectedGovernmentDomains.removeObject(governmentDomain);
-    }
+  onChangeGovernmentDomains(selectedGovernmentDomains) {
+    this.selectedGovernmentDomains = selectedGovernmentDomains;
   }
 
   @task // @task: for consistency with other loadData tasks
@@ -187,12 +183,8 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectRegulationType(regulationType, checked) {
-    if (checked) {
-      this.selectedRegulationTypes.addObject(regulationType); // addObject ensures no duplicates
-    } else {
-      this.selectedRegulationTypes.removeObject(regulationType);
-    }
+  onChangeRegulationTypes(selectedRegulationTypes) {
+    this.selectedRegulationTypes = selectedRegulationTypes;
   }
 
   get isValid() {

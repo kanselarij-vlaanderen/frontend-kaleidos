@@ -37,10 +37,12 @@ context('new document viewer tests', () => {
     cy.intercept('DELETE', '/files/*').as(`deleteOldFile_${randomInt}`);
     cy.intercept('PATCH', '/pieces/*').as(`patchPieces_${randomInt}`);
     cy.intercept('PATCH', '/document-containers/*').as(`patchDocumentContainers_${randomInt}`);
+    cy.wait(1000); // TODO KAS-3977 button is not disabled when upload is still in progress
     cy.get(document.previewDetailsTab.save).click();
     cy.wait(`@deleteOldFile_${randomInt}`);
     cy.wait(`@patchPieces_${randomInt}`);
     cy.wait(`@patchDocumentContainers_${randomInt}`);
+    cy.wait(1000); // TODO flaky, name not loaded? I think because of the silent await in line 1 of document-preview-modal.hbs
   }
 
   const fileName = 'test pdf';
@@ -208,6 +210,7 @@ context('new document viewer tests', () => {
     // replace word file with new word file and check again
     openEditAndAddDocument(newWordFile.folder, newWordFile.fileName, newWordFile.fileExtension);
     cy.get(document.previewDetailsTab.sourceFile).contains('new name test.docx');
+    cy.wait(1000);
     cy.get(document.previewDetailsTab.name).contains('new name test.pdf');
 
     // delete document and check

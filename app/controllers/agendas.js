@@ -11,7 +11,6 @@ export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
   @service store;
-  @service currentSession;
   @service router;
 
   defaultPublicationActivityStatus;
@@ -170,6 +169,17 @@ export default class AgendasController extends Controller {
       modified: now
     });
     await agenda.save();
+
+    const agendaStatusActivity = this.store.createRecord(
+      'agenda-status-activity',
+      {
+        startDate: now,
+        statusSet: status,
+        agenda,
+      }
+    );
+    await agendaStatusActivity.save();
+
     return agenda;
   }
 

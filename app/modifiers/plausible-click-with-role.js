@@ -1,28 +1,22 @@
 import Modifier from 'ember-modifier';
+import { registerDestructor } from '@ember/destroyable';
 import { inject as service } from '@ember/service';
 
 export default class PlausibleClickWithRoleModifier extends Modifier {
   @service plausible;
   @service currentSession;
 
-  get eventName() {
-    return this.args.positional[0];
-  }
 
-  get props() {
-    return this.args.named;
-  }
+  modify(element, [eventName], props) {
+    const onClick = () => {
+      const _props = { ...props, rol: this.currentSession.role.label };
+      this.plausible.trackEvent(eventName, _props);
+    }
 
-  onClick = () => {
-    const props = { ...this.props, rol: this.currentSession.role.label };
-    this.plausible.trackEvent(this.eventName, props);
-  }
+    element.addEventListener('click', onClick);
 
-  didInstall() {
-    this.element.addEventListener('click', this.onClick);
-  }
-
-  willRemove() {
-    this.element.removeEventListener('click', this.onClick);
+    registerDestructor(this, () => {
+      element.removeEventListener('click', onClick);
+    });
   }
 }

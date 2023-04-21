@@ -136,7 +136,7 @@ export default class PieceAccessLevelService extends Service {
    * E.g. a public document is publicly available only after the documents of a meeting
    * have been published on Themis, even though it is already marked as public in Kaleidos before.
   */
-  async isDraftAccessLevel(accessLevel, { meeting, agenda, agendaitem, piece }) {
+  async isDraftAccessLevel(accessLevel, { meeting, agenda, agendaitem }, piece) {
     if ([accessLevel, meeting, agenda, piece].includes(undefined)) {
       // Propagation status is based on agenda-related rules.
       // If any of the arguments is undefined, this access level is not related

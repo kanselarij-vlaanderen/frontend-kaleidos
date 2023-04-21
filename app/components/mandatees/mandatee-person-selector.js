@@ -11,7 +11,8 @@ import * as CONFIG from 'frontend-kaleidos/config/config';
  * @argument multiple
  * @argument selectedPersons
  * @argument selectedPerson
-*/
+ * @argument showLabel
+ */
 
 export default class MandateePersonSelector extends Component {
   @service store;
@@ -28,12 +29,11 @@ export default class MandateePersonSelector extends Component {
   @tracked selectedMandateePerson;
   @tracked selectedMandateePersons = [];
 
-
   constructor() {
     super(...arguments);
     this.loadMandateePersons();
 
-    if(this.args.multiple){
+    if (this.args.multiple) {
       this.selectedMandateePersons = this.args.selectedPersons || [];
     } else {
       this.selectedMandateePerson = this.args.selectedPerson;
@@ -53,7 +53,7 @@ export default class MandateePersonSelector extends Component {
     } else {
       this.selectedMandateePerson = newValue;
     }
-    if (typeof this.args.onChange === "function"){
+    if (typeof this.args.onChange === 'function') {
       this.args.onChange(newValue);
     }
   }
@@ -69,8 +69,15 @@ export default class MandateePersonSelector extends Component {
 
   @task
   *fetchMandateePersons(searchText) {
-    const [dateRangeStart, dateRangeEnd] = this.args.dateRange || [undefined, undefined];
-    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(dateRangeStart, dateRangeEnd, searchText);
+    const [dateRangeStart, dateRangeEnd] = this.args.dateRange || [
+      undefined,
+      undefined,
+    ];
+    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(
+      dateRangeStart,
+      dateRangeEnd,
+      searchText
+    );
     const persons = [];
     for (const mandatee of mandatees) {
       const person = yield mandatee.person;
