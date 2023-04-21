@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
@@ -20,6 +21,20 @@ function searchFunction(optionsToCheck, defaultOption) {
     }
     cy.get(route.search.input).clear();
   });
+}
+
+function triggerSearch() {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/decisionmaking-flows/search?**').as(`caseSearchCall${randomInt}`);
+  cy.get(route.search.trigger).click();
+  cy.wait(`@caseSearchCall${randomInt}`);
+}
+
+function searchDossier(searchTerm, Result) {
+  cy.get(route.search.input).clear()
+    .type(searchTerm);
+  triggerSearch();
+  cy.get(route.searchCases.row).contains(Result);
 }
 
 context('Search tests', () => {
@@ -361,6 +376,114 @@ context('Search tests', () => {
         .contains('Hawaï');
       cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
         .contains('accenten');
+    });
+
+    context('Search all fields', () => {
+      const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+      const agendaDate = Cypress.dayjs('2023-06-06');
+      const caseTitle = `Cypress test - ${randomInt}: uniek precair interstellair, maar niet verstoken van enige flair`;
+      const subcaseTitle1 = `Cypress test - ${randomInt}: uniek terracotta scherven die wij van ons moeder erven`;
+      const subcaseTitle2 = `Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;
+      const longTitle1 = `Cypress test - ${randomInt}: uniek dramatiek op de dansvloer zonder muziek`;
+      const longTitle2 = `Cypress test - ${randomInt}: uniek ik eet mijn vla toch liever zonder sla`;
+      const newsItemContent = `Cypress test - ${randomInt}: uniek voor wie het ondermaanse wat ondermaats vindt`;
+      const fileNameDocs = 'search-agendaitem-piece_1';
+      const fileNameTreatment = 'search-agendaitem-treatment_2';
+      const fileNameSubcase = 'search-agendaitem-piece_2';
+      const newFileNameDocs = `Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
+      const newFileNameTreatment = `Cypress test - ${randomInt}: uniek een beetje blazé over het Oosterweeltracé`;
+      const fileDocs = {
+        folder: 'files', fileName: fileNameDocs, fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+      };
+      const files = [fileDocs];
+      const fileTreatment = {
+        folder: 'files', fileName: fileNameTreatment, fileExtension: 'pdf', newFileName: newFileNameTreatment,
+      };
+
+      it('Search all fields setup', () => {
+        cy.visit('/dossiers');
+        cy.createCase(caseTitle);
+        cy.addSubcase('Nota',
+          subcaseTitle1,
+          longTitle1,
+          'Principiële goedkeuring',
+          'Principiële goedkeuring m.h.o. op adviesaanvraag');
+        cy.openSubcase(0, subcaseTitle1);
+        cy.addSubcaseMandatee(4);
+        cy.addDocumentsToSubcase([
+          {
+            folder: 'files', fileName: fileNameSubcase, fileExtension: 'pdf', newFileName: newFileNameDocs, fileType: 'Nota',
+          }
+        ]);
+        cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
+
+        cy.openAgendaForDate(agendaDate);
+        cy.addAgendaitemToAgenda(subcaseTitle1);
+        cy.addDocumentsToAgendaitem(subcaseTitle1, files);
+        cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+        cy.addDocumentToTreatment(fileTreatment);
+        cy.get(auk.confirmationModal.footer.confirm).click();
+        cy.wait('@patchDecisionActivities');
+
+        cy.openAgendaitemKortBestekTab(subcaseTitle1);
+        // create new KB
+        cy.intercept('GET', '/themes**').as('getThemes');
+        cy.intercept('POST', '/news-items').as('postNewsItem');
+        cy.get(newsletter.newsItem.create).click();
+        cy.wait('@postNewsItem');
+        cy.wait('@getThemes');
+        cy.get(newsletter.editItem.shortTitle).clear()
+          .type(longTitle2);
+        cy.get(newsletter.editItem.rdfaEditor).type(newsItemContent);
+        cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
+        cy.get(newsletter.editItem.save).click();
+        cy.get(auk.confirmationModal.footer.confirm).click();
+        cy.wait('@patchNewsItem');
+
+        cy.setFormalOkOnItemWithIndex(0);
+        cy.setFormalOkOnItemWithIndex(1);
+        cy.approveDesignAgenda();
+
+        cy.openAgendaitemKortBestekTab(subcaseTitle1);
+        cy.get(newsletter.newsItem.edit).click();
+        cy.get(newsletter.editItem.shortTitle).clear()
+          .type(subcaseTitle2);
+        cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+        cy.get(newsletter.editItem.save).click();
+        cy.get(auk.confirmationModal.footer.confirm).click();
+        cy.wait('@patchNewsItems');
+
+        // wait for indexing
+        cy.wait(60000);
+      });
+
+      it('Search all fields on case', () => {
+        cy.visit('/zoeken/dossiers');
+
+        // titles
+        searchDossier(caseTitle, caseTitle);
+        searchDossier(subcaseTitle1, caseTitle);
+        searchDossier(subcaseTitle2, caseTitle);
+        searchDossier(longTitle1, caseTitle);
+        // mandatees
+        searchDossier('Ben', caseTitle);
+        searchDossier('Weyts', caseTitle);
+        searchDossier('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', caseTitle);
+        // news-item
+        searchDossier(longTitle2, caseTitle);
+        searchDossier(newsItemContent, caseTitle);
+        // documents
+        searchDossier(fileNameDocs, caseTitle);
+        searchDossier(fileNameSubcase, caseTitle);
+        searchDossier(newFileNameDocs, caseTitle);
+        searchDossier('fax', caseTitle);
+        searchDossier('Telefoon', caseTitle);
+        // decision
+        searchDossier(fileNameTreatment, caseTitle);
+        searchDossier(newFileNameTreatment, caseTitle);
+        searchDossier('krokkettenmaker', caseTitle);
+      });
     });
   });
 });

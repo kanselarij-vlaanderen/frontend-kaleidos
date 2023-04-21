@@ -106,6 +106,7 @@ const selectors = {
   // search/cases
   searchCases: {
     dataTable: '[data-test-route-search-cases-data-table]',
+    row: '[data-test-route-search-cases-data-table-row]',
   },
 
   // search/newsletters

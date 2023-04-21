@@ -50,7 +50,7 @@
       @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-cases-data-table-row>
           <Search::ResultCards::Case
             @date={{row.attributes.sessionDates}}
             @shortTitle={{row.highlight.shortTitle}}
