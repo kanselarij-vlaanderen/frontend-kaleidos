@@ -28,6 +28,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-card';
 @import 'ember-appuniversum/c-content';
 @import 'ember-appuniversum/c-control';
+@import 'ember-appuniversum/c-control-group';
 @import 'ember-appuniversum/c-dropdown';
 @import 'ember-appuniversum/c-heading';
 @import 'ember-appuniversum/c-help-text';
@@ -385,6 +386,30 @@ $au-button-height: 3.4rem;
   }
 }
 
+// Control group
+
+.au-c-control-group {
+  gap: .6rem;
+
+  > .au-c-control-group {
+    margin-left: 2rem;
+  }
+
+  + .au-c-control-group {
+    margin-top: .6rem;
+  }
+}
+
+.au-c-control-group--inline {
+  gap: 2rem;
+
+  &:has(.au-c-control-group) {
+    > .au-c-control-group {
+      @include style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
+    }
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {
@@ -397,5 +422,15 @@ $au-button-height: 3.4rem;
   .au-c-pill {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+}
+
+.au-c-control-group--grid {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+
+  > * {
+    width: calc(33% - 2rem);
   }
 }

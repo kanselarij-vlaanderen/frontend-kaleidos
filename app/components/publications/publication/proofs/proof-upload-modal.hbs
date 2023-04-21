@@ -15,12 +15,13 @@
       @onDeletePiece={{perform this.deleteUploadedPiece}}
     />
     <div class="auk-form-group auk-u-mt-4">
-      <AuControlCheckbox
+      <AuCheckbox
         data-test-proof-upload-update-status
-        @label={{t "update-publication-status-proof-received"}}
         @checked={{this.mustUpdatePublicationStatus}}
         @onChange={{this.setMustUpdatePublicationStatus}}
-      />
+      >
+        {{t "update-publication-status-proof-received"}}
+      </AuCheckbox>
     </div>
     <div class="auk-form-group">
       <Auk::Label for="proofUploadReceivedDate" @required={{true}}>

@@ -5,11 +5,12 @@
         {{#if this.markOrUnmarkForSignature.isRunning}}
           <Auk::Loader/>
         {{else}}
-          <AuControlCheckbox
-            @label={{t "signature-needed"}}
+          <AuCheckbox
             @checked={{this.signMarkingActivity}}
             @onChange={{perform this.markOrUnmarkForSignature}}
-          />
+          >
+            {{t "signature-needed"}}
+          </AuCheckbox>
         {{/if}}
       {{else}}
         <p>{{t "signature-not-possible"}}</p>

@@ -4,18 +4,20 @@
     <AuFieldset as |Fieldset|>
       <Fieldset.legend>{{t "type"}}</Fieldset.legend>
       <Fieldset.content>
-        <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "note"}}
+        <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+          <AuCheckbox
             @checked={{this.includeNotas}}
             @onChange={{set this "includeNotas"}}
-          />
-          <AuControlCheckbox
-            @label={{capitalize (t "announcement")}}
+          >
+            {{t "note"}}
+          </AuCheckbox>
+          <AuCheckbox
             @checked={{this.includeMededelingen}}
             @onChange={{set this "includeMededelingen"}}
-          />
-        </Auk::CheckboxList>
+          >
+            {{capitalize (t "announcement")}}
+          </AuCheckbox>
+        </AuCheckboxGroup>
       </Fieldset.content>
     </AuFieldset>
   </div>
@@ -23,13 +25,14 @@
     <AuFieldset as |Fieldset|>
       <Fieldset.legend>{{t "version"}}</Fieldset.legend>
       <Fieldset.content>
-        <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "only-on-final-agenda"}}
+        <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+          <AuCheckbox
             @checked={{this.latestOnly}}
             @onChange={{set this "latestOnly"}}
-          />
-        </Auk::CheckboxList>
+          >
+            {{t "only-on-final-agenda"}}
+          </AuCheckbox>
+        </AuCheckboxGroup>
       </Fieldset.content>
     </AuFieldset>
   </div>
