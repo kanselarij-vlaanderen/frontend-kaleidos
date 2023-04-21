@@ -11,6 +11,7 @@ import * as CONFIG from 'frontend-kaleidos/config/config';
  * @argument multiple
  * @argument selectedPersons
  * @argument selectedPerson
+ * @argument showLabel
  */
 
 export default class MandateePersonSelector extends Component {

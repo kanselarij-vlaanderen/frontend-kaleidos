@@ -1,7 +1,9 @@
 <div class="auk-form-group">
-  <Auk::Label>
-    {{t "ministers"}}
-  </Auk::Label>
+  {{#if @showLabel}}
+    <Auk::Label>
+      {{t "ministers"}}
+    </Auk::Label>
+  {{/if}}
   {{#if this.mandateePersons}}
     {{#if @multiple}}
       <PowerSelectMultiple
