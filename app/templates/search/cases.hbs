@@ -1,7 +1,7 @@
 {{page-title (t "cases")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   {{#if (user-may "manage-cases")}}
-    <div class="au-c-card au-o-box au-o-box--small">
+    <div data-test-route-search-removed-cases-list class="au-c-card au-o-box au-o-box--small">
       <Auk::Label>{{t "removed-cases"}}</Auk::Label>
       <Auk::RadioList as |list|>
         {{#each this.archivedOptions as |option|}}
