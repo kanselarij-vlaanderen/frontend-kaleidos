@@ -178,8 +178,8 @@
             <AuButton
               @disabled={{this.disableSaveButton}}
               @skin="primary"
-              @loading={{this.saveReport.isRunning}}
-              {{on "click" (perform this.saveReport)}}
+              @loading={{this.onSaveReport.isRunning}}
+              {{on "click" (perform this.onSaveReport)}}
             >
               {{t "save"}}
             </AuButton>
