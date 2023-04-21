@@ -1,5 +1,4 @@
+import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import { helper } from '@ember/component/helper';
 
-export default helper(function addLeadingZeros([number, length]) {
-  return String(number).padStart(length, '0');
-});
+export default helper((args) => addLeadingZeros(...args));
