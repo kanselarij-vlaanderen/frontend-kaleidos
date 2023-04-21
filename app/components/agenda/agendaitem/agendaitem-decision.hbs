@@ -18,7 +18,9 @@
                   <AuButton
                     @icon="pdf"
                     @skin="naked"
-                    {{on "click" this.exportPDF}}
+                    @disabled={{this.exportPdf.isRunning}}
+                    @loading={{this.exportPdf.isRunning}}
+                    {{on "click" (perform this.exportPdf)}}
                   >
                     {{t "export-as-pdf"}}
                   </AuButton>
@@ -28,6 +30,7 @@
                     @skin="naked"
                     @icon="pencil"
                     @iconAlignment="left"
+                    @disabled={{this.exportPdf.isRunning}}
                     {{on "click" (set this "isEditing")}}
                   >
                     {{t "edit"}}
@@ -45,6 +48,7 @@
                     {{t "create"}}
                   </AuButton>
                 </Group.Item>
+
               {{/if}}
             {{/unless}}
           {{/if}}
@@ -55,7 +59,7 @@
 
   {{#if (and this.report.file this.report.pieceParts)}}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
-      {{!-- <Agenda::Agendaitem::VersionedDocumentCard @file={{this.report.file}} /> --}}
+      {{!-- <Agenda::Agendaitem::VersionedDocumentCard @report={{this.report}} /> --}}
       <Documents::DocumentCard
         @piece={{this.report}}
         @isEditable={{true}}

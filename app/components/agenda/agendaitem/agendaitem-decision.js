@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEmpty } from '@ember/utils';
-import html2pdf from 'html-to-pdf-js';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -117,10 +116,11 @@ export default class AgendaitemDecisionComponent extends Component {
     this.decisionViewerElement = element;
   }
 
-  @action
-  async exportPDF() {
+  exportPdf = task(async () => {
     await fetch(`/generate-decision-report/${this.report.id}`);
-  }
+    await this.report.reload();
+    await this.report.file.reload();
+  });
 
   // @action
   // async attachNewReportVersion(piece) {
@@ -150,7 +150,7 @@ export default class AgendaitemDecisionComponent extends Component {
     editorInterface.setHtmlContent(this.beslissingPiecePart?.value ?? '');
   }
 
-  saveReport = task(async () => {
+  onSaveReport = task(async () => {
     if (!this.report) {
       await this.attachReport();
     }

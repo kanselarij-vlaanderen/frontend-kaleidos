@@ -14,19 +14,18 @@
                 {{t "decision"}}
               </span>
               <span class="auk-overline">
-                {{date @file.created}}
+                {{date @report.file.created}}
               </span>
               <span class="auk-overline">
                 {{t "pdf"}}
               </span>
             </div>
             <LinkTo
-              @route="search"
-              target="_blank"
-              rel="noopener noreferrer"
+              @route="document"
+              @model={{@report.id}}
               class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
             >
-              {{@file.filename}}
+              {{@report.file.filenameWithoutExtension}}
             </LinkTo>
           </Group.Item>
         </Toolbar.Group>
@@ -79,56 +78,56 @@
       </Auk::Toolbar>
     </div>
   </div>
-  {{!-- {{#if this.version}}
-          <div class="vlc-document-card-versions">
-            <Auk::Accordion>
-              <Auk::Accordion::Item
-                @title={{t "previous-versions"}}
-                @disabled={{this.loadPieceRelatedData.isRunning}}
-                @expandTask={{this.loadVersionHistory}}
-                data-test-document-card-version-history
-              >
-                {{#if this.loadVersionHistory.isRunning}}
-                  <div class="auk-u-p-3">
-                    <Auk::Loader />
+  {{#if this.version}}
+    <div class="vlc-document-card-versions">
+      <Auk::Accordion>
+        <Auk::Accordion::Item
+          @title={{t "previous-versions"}}
+          @disabled={{this.loadPieceRelatedData.isRunning}}
+          @expandTask={{this.loadVersionHistory}}
+          data-test-document-card-version-history
+        >
+          {{#if this.loadVersionHistory.isRunning}}
+            <div class="auk-u-p-3">
+              <Auk::Loader />
+            </div>
+          {{else}}
+            <div class="vlc-document-holder">
+              <div class="vlc-document-card-item">
+                <div class="vlc-document-card-item__title">
+                  <LinkTo
+                    @route="document"
+                    @model={{piece.id}}
+                    class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                  >
+                    DOC.02032 — Voorbereidende tekst voor de beslissing
+                  </LinkTo>
+                  <div
+                    class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
+                  >
+                    <AuPill @icon="sign">Getekend</AuPill>
+                    <AuPill @skin="warning" @icon="circle">
+                      Intern regering
+                    </AuPill>
                   </div>
-                {{else}}
-                  <div class="vlc-document-holder">
-                    <div class="vlc-document-card-item">
-                      <div class="vlc-document-card-item__title">
-                        <LinkTo
-                          @route="document"
-                          @model={{piece.id}}
-                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                        >
-                          DOC.02032 — Voorbereidende tekst voor de beslissing
-                        </LinkTo>
-                        <div
-                          class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
-                        >
-                          <AuPill @icon="sign">Getekend</AuPill>
-                          <AuPill @skin="warning" @icon="circle">
-                            Intern regering
-                          </AuPill>
-                        </div>
-                      </div>
-                      <div class="vlc-document-card-item__meta au-u-muted">
-                        {{! no piece.created in legacy data }}
-                        {{#if piece.created}}
-                          {{t "uploaded-at"}}
-                          {{moment-format piece.created}}
-                          {{t "at"}}
-                          {{moment-format piece.created "HH:mm"}}
-                        {{/if}}
-                      </div>
-                      <div class="vlc-document-card-item__icon">
-                        <Auk::Icon @name="clock-rewind" @size="small" />
-                      </div>
-                    </div>
-                  </div>
-                {{/if}}
-              </Auk::Accordion::Item>
-            </Auk::Accordion>
-          </div>
-        {{/if}} --}}
+                </div>
+                <div class="vlc-document-card-item__meta au-u-muted">
+                  {{! no piece.created in legacy data }}
+                  {{#if piece.created}}
+                    {{t "uploaded-at"}}
+                    {{moment-format piece.created}}
+                    {{t "at"}}
+                    {{moment-format piece.created "HH:mm"}}
+                  {{/if}}
+                </div>
+                <div class="vlc-document-card-item__icon">
+                  <Auk::Icon @name="clock-rewind" @size="small" />
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        </Auk::Accordion::Item>
+      </Auk::Accordion>
+    </div>
+  {{/if}}
 </div>
