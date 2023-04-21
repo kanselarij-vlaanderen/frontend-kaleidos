@@ -7,7 +7,7 @@
           <tr>
             {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
-                <AuControlCheckbox
+                <AuCheckbox
                   data-test-batch-documents-details-select-all
                   @checked={{this.areAllSelected}}
                   @onChange={{this.toggleAllSelection}}

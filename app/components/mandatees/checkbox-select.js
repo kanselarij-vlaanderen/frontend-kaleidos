@@ -23,8 +23,9 @@ export default class MandateesCheckboxSelect extends Component {
   @service store;
 
   @tracked ministers;
+  @tracked selectedMandateesIds = this.args.selected || [];
+  @tracked selectedMinisters = [];
 
-  mandatees;
   ministerToMandateeMap = new Map();
 
   constructor() {
@@ -33,33 +34,15 @@ export default class MandateesCheckboxSelect extends Component {
     this.loadMinisters.perform();
   }
 
-  get allSelected() {
-    return (
-      this.args.selected?.length === this.mandatees.length &&
-      this.mandatees
-        .map((m) => m.id)
-        .every((m) => this.args.selected?.includes(m))
-    );
-  }
-
-  isChecked = (minister) => {
-    if (this.args.selected?.length) {
-      return this.ministerToMandateeMap
-        .get(minister)
-        ?.every((m) => this.args.selected.includes(m.id));
-    }
-    return false;
-  };
-
   loadMinisters = task(async () => {
     if (this.args.referenceAgenda) {
-      this.mandatees = await this.store.query('mandatee', {
+      const mandatees = await this.store.query('mandatee', {
         'filter[agendaitems][agenda][:id:]': this.args.referenceAgenda.id,
         include: 'person',
         sort: 'priority',
       });
       const sortedMinisters = await Promise.all(
-        this.mandatees.map(async (m) => {
+        mandatees.map(async (m) => {
           const person = await m.person;
           if (this.ministerToMandateeMap.has(person)) {
             this.ministerToMandateeMap.get(person).push(m);
@@ -70,36 +53,19 @@ export default class MandateesCheckboxSelect extends Component {
         })
       );
       this.ministers = [...new Set(sortedMinisters)];
+      if (this.selectedMandateesIds.length) {
+        this.ministerToMandateeMap.forEach((mandatees, minister) => {
+          if (mandatees.every((mandatee) => this.selectedMandateesIds.includes(mandatee.id))) {
+            this.selectedMinisters.push(minister);
+          }
+        });
+      }
     }
   });
 
   @action
-  toggle(minister) {
-    const mandatees = this.ministerToMandateeMap.get(minister);
-    if (mandatees?.length) {
-      const selected = [...this.args.selected];
-      for (const mandatee of mandatees) {
-        const index = selected.indexOf(mandatee.id);
-        if (index >= 0) {
-          selected.splice(index, 1);
-        } else {
-          selected.push(mandatee.id);
-        }
-      }
-
-      this.args.onChange?.(selected);
-    }
-  }
-
-  @action
-  toggleAll() {
-    let selected = [];
-    if (this.allSelected) {
-      // Deselect all, leave selected empty
-    } else {
-      // Select all
-      selected = this.mandatees.map((m) => m.id);
-    }
-    this.args.onChange?.(selected);
+  onChangeMinisters(ministers) {
+    this.selectedMandateesIds = ministers.map((minister) => this.ministerToMandateeMap.get(minister).map((mandatee) => mandatee.id)).flat();
+    this.args.onChange?.(this.selectedMandateesIds);
   }
 }
