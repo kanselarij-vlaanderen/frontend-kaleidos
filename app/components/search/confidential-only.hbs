@@ -4,6 +4,7 @@
     <Fieldset.content>
       <Auk::CheckboxList>
         <AuControlCheckbox
+          data-test-route-search-confidential-only-checkbox
           @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
           @checked={{@confidentialOnly}}
           @onChange={{@onChange}}
