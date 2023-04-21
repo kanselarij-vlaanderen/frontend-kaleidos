@@ -6,7 +6,10 @@
 >
   <card.header>
     <div class="au-u-flex">
-      <p class="au-u-para-small au-u-muted au-u-medium">
+      <p
+        data-test-route-search-result-cards-case-date
+        class="au-u-para-small au-u-muted au-u-medium"
+      >
         {{date @date}}
       </p>
       {{#if (eq @isArchived "true")}}
@@ -15,6 +18,7 @@
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
+        data-test-route-search-result-cards-case-shorttitle
         class="au-u-padding-none card-link"
         @route="cases.case.subcases"
         @model={{@caseId}}
@@ -30,7 +34,10 @@
   </card.header>
   <card.content>
     {{#if @subcaseHighlights}}
-      <p class="au-u-para-small au-u-margin-top-small au-u-muted">
+      <p
+        data-test-route-search-result-cards-case-found-subcases
+        class="au-u-para-small au-u-margin-top-small au-u-muted"
+      >
         {{t "found-inside"}}
         <span class="au-u-muted au-u-medium">
           <SanitizeHtml
