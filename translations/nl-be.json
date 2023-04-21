@@ -1128,11 +1128,11 @@
   "copy": "Kopiëren",
   "text-copied": "Tekst gekopieerd naar klembord.",
   "signaturesSection": {
-    "filter-ministers": "Filter op ondertekenaar",
+    "filter-ministers": "Filter op indiener",
     "signed-status": "Tekenstatus",
     "sidebar-title": "Handteken document",
     "signature-needed-by": "Te handtekenen door",
-    "prepare-signatures": "Proces starten",
+    "prepare-signatures": "Tekenen opstarten",
     "yes-cancel-signatures": "Ja, handtekenen annuleren",
     "cancel-signatures": "Proces annuleren",
     "confirm-cancel-signatures": "Door het annuleren van handtekenen zal dit document uit de handtekenmap verwijderd worden.",

@@ -119,16 +119,6 @@
             <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
               <span>Jan Jambon</span>
             </Auk::List::Item>
-            <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-              <span>Lydia Peeters</span>
-              <Auk::Button
-                @skin="danger-borderless"
-                @layout="icon-only"
-                @icon="trash"
-              >
-                {{t "util.delete"}}
-              </Auk::Button>
-            </Auk::List::Item>
           </Auk::List>
         </Auk::Panel::Body>
       </Auk::Panel>
@@ -214,16 +204,6 @@
         >
           {{t "signaturesSection.prepare-signatures"}}
         </LinkTo>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="danger-borderless"
-          {{on "click" this.showCancelSignatures}}
-        >
-          {{t "signaturesSection.cancel-signatures"}}
-        </Auk::Button>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

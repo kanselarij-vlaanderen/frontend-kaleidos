@@ -27,7 +27,7 @@
                 {{slice-text this.piece.name start=8 limit=2}}-{{slice-text this.piece.name start=10 limit=2}}-{{slice-text this.piece.name start=3 limit=4}}
               </span>
               <span class="auk-overline">
-                {{#if this.piece.file}}{{uppercase this.piece.file.extension}}{{/if}}
+                {{#if this.piece.file}}PDF{{/if}}
               </span>
             </div>
             <LinkTo @route="document" @model={{this.piece.id}}
@@ -188,17 +188,24 @@
                 {{#if (or @signatureMockup @signatureMockupAlt)}}
                 {{else}}
                 <AuHr />
+                {{#if (eq this.signatureRequested true)}}
                 <AuButton
                   @skin="link"
                   {{on "click" (perform this.markOrUnmarkForSignature)}}
                   role="menuitem"
                 >
-                  {{#if (eq this.signatureRequested true)}}
                     Verwijderen van handtekenen
-                  {{else}}
-                    Aanbieden voor handtekenen 
-                  {{/if}}
                 </AuButton>
+                {{else}}
+                <AuLink
+                  @route="document" 
+                  @model={{this.piece.id}}
+                  @skin="link"
+                  role="menuitem"
+                >
+                  Aanbieden voor handtekenen
+                </AuLink>
+                {{/if}}
                 {{/if}}
                 <AuHr />
                 <AuButton
@@ -237,50 +244,6 @@
                   class="vlc-document-holder"
                   {{did-update (perform this.loadPieceRelatedData) piece}}
                 >
-                  {{#if (eq @signatureMockupAlt true)}}
-                  <div class="vlc-document-card-item">
-                    <div class="vlc-document-card-item__title">
-                      {{#if piece.file}}
-                        <LinkTo @route="document" @model={{piece.id}}
-                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                          data-test-vl-document-name>
-                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
-                        </LinkTo>
-                      {{else}}
-                        <h6
-                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                          data-test-vl-document-name
-                        >
-                          <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-                            {{t "document-not-consultable"}}
-                          </EmberTooltip>
-                          {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
-                        </h6>
-                      {{/if}}
-                      <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
-                        <AuPill @icon="sign">Getekend</AuPill>
-                        <AuPill
-                          @skin="warning"
-                          @icon="circle"
-                        >
-                          Intern regering
-                        </AuPill>
-                      </div>
-                    </div>
-                    <div class="vlc-document-card-item__meta au-u-muted">
-                      {{!-- no piece.created in legacy data --}}
-                      {{#if piece.created}}
-                        {{t "uploaded-at"}}
-                        {{moment-format piece.created}}
-                        {{t "at"}}
-                        {{moment-format piece.created "HH:mm"}}
-                      {{/if}}
-                    </div>
-                    <div class="vlc-document-card-item__icon">
-                      <Auk::Icon @name="clock-rewind" @size="small" />
-                    </div>
-                  </div>
-                  {{/if}}
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
                     @agendaContext={{@agendaContext}}

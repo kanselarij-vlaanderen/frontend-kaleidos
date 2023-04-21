@@ -38,7 +38,7 @@
           @icon="sign"
           {{on "click" this.showSidebarMultiple}}
         >
-          Proces starten voor 2 geselecteerde documenten
+          Tekenen opstarten voor 2 geselecteerde documenten
         </Auk::Button>
       </Auk::Toolbar::Item>
       {{/if}}
@@ -135,7 +135,7 @@
                     class="auk-table__link"
                     {{on "click" this.showSidebar}}
                   >
-                    Proces starten
+                    Tekenen opstarten
                   </Auk::Button>
                 </td>
             </tr>
@@ -226,12 +226,6 @@
                     Nog niet ondertekend
                   </AuPill>
                 </Auk::List::Item>
-                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                  <span>Lydia Peeters</span>
-                  <AuPill @skin="success" @icon="check">
-                    Ondertekend
-                  </AuPill>
-                </Auk::List::Item>
               </Auk::List>
             </Auk::Panel::Body>
           </Auk::Panel>
@@ -256,7 +250,7 @@
         {{#if (eq index 1)}}
         <div class="auk-sidebar__header">
           <h4 class="auk-toolbar-complex__title">
-            Proces starten
+            Tekenen opstarten
           </h4>
           <Auk::Button
             @icon="x"
@@ -317,16 +311,6 @@
               <Auk::List @bordered={{true}}>
                 <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                   <span>Jan Jambon</span>
-                  <Auk::Button
-                    @skin="danger-borderless"
-                    @layout="icon-only"
-                    @icon="trash"
-                  >
-                    {{t "util.delete"}}
-                  </Auk::Button>
-                </Auk::List::Item>
-                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                  <span>Lydia Peeters</span>
                   <Auk::Button
                     @skin="danger-borderless"
                     @layout="icon-only"
@@ -419,16 +403,6 @@
                 </LinkTo>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
-            <Auk::Toolbar::Group @position="right">
-              <Auk::Toolbar::Item>
-                <Auk::Button
-                  @skin="danger-borderless"
-                  {{on "click" this.showCancelSignatures}}
-                >
-                  {{t "signaturesSection.cancel-signatures"}}
-                </Auk::Button>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </div>
         {{/if}}
@@ -446,7 +420,7 @@
       {{#if (eq index 3)}}
       <div class="auk-sidebar__header">
         <h4 class="auk-toolbar-complex__title">
-          Proces starten voor 2 documenten
+          Tekenen opstarten voor 2 documenten
         </h4>
         <Auk::Button
           @icon="x"
@@ -460,44 +434,6 @@
       {{/each}}
 
       <div class="auk-sidebar__body">
-        {{#each this.model as |signFlow index|}}
-        {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
-        {{#if (not-eq index 1)}}
-        <div class="au-c-repeater">
-          <p class="au-u-muted auk-u-mt-2">
-            Decreet -
-            {{moment-format
-              signFlow.decisionActivity.startDate
-              "DD-MM-YYYY"
-            }}
-          </p>
-          <h5 class="auk-h4 auk-u-m-0">{{signFlow.signSubcase.signMarkingActivity.piece.name}}</h5>
-          <p class="auk-u-small au-u-muted au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><strong>Dossier:</strong> Omkadering leerlingondersteuning <AuPill @skin="warning" @icon="lock-closed" @hideText={{true}}>Vertrouwelijk</AuPill></p>
-          <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-2">
-            <Auk::ButtonLink
-              @skin="borderless"
-              @icon="book"
-              @href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{t "util.preview"}}
-            </Auk::ButtonLink>
-            <Auk::ButtonLink
-              @skin="borderless"
-              @icon="document"
-              {{on
-                "click"
-                (fn this.navigateToDecision signFlow.decisionActivity)
-              }}
-            >
-              {{t "consult-agendaitem-decision"}}
-            </Auk::ButtonLink>
-          </div>
-        </div>
-        {{/if}}
-        {{/if}}
-        {{/each}}
         {{#each this.model as |signFlow index|}}
         {{#if (eq index 3)}}
         <Auk::Panel class="auk-u-mt-4">
@@ -523,16 +459,6 @@
             <Auk::List @bordered={{true}}>
               <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                 <span>Jan Jambon</span>
-                <Auk::Button
-                  @skin="danger-borderless"
-                  @layout="icon-only"
-                  @icon="trash"
-                >
-                  {{t "util.delete"}}
-                </Auk::Button>
-              </Auk::List::Item>
-              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>Lydia Peeters</span>
                 <Auk::Button
                   @skin="danger-borderless"
                   @layout="icon-only"
@@ -627,16 +553,6 @@
               >
                 {{t "signaturesSection.prepare-signatures"}}
               </LinkTo>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <Auk::Button
-                @skin="danger-borderless"
-                {{on "click" this.showCancelSignatures}}
-              >
-                {{t "signaturesSection.cancel-signatures"}}
-              </Auk::Button>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>

@@ -110,7 +110,6 @@
                   <AuButton
                     @skin="link"
                     role="menuitem"
-                    {{on "click" this.requestSignature}}
                   >
                     {{#if (eq this.signatureRequested true)}}
                       Verwijderen van handtekenen
@@ -157,12 +156,6 @@
                     </LinkTo>
                     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
                       <AuPill @icon="sign">Getekend</AuPill>
-                      <AuPill
-                        @skin="warning"
-                        @icon="circle"
-                      >
-                        Intern regering
-                      </AuPill>
                     </div>
                   </div>
                   <div class="vlc-document-card-item__meta au-u-muted">
