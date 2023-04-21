@@ -16,28 +16,40 @@ export default class SettingsUsersUserController extends Controller {
 
   @action
   async blockUser() {
-    const blocked = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.BLOCKED);
+    const blocked = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
+    );
     this.model.status = blocked;
     await this.model.save();
   }
 
   @action
   async unblockUser() {
-    const allowed = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.ALLOWED);
+    const allowed = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
+    );
     this.model.status = allowed;
     await this.model.save();
   }
 
   @action
   async blockMembership() {
-    const blocked = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.BLOCKED);
+    const blocked = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
+    );
     this.membershipBeingBlocked.status = blocked;
     await this.membershipBeingBlocked.save();
   }
 
   @action
   async unblockMembership() {
-    const allowed = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.ALLOWED);
+    const allowed = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
+    );
     this.membershipBeingBlocked.status = allowed;
     await this.membershipBeingBlocked.save();
   }

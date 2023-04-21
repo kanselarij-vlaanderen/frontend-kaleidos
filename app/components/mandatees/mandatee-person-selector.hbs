@@ -4,21 +4,20 @@
   </Auk::Label>
   {{#if this.mandateePersons}}
     {{#if @multiple}}
-    <PowerSelectMultiple
-      data-test-mandatee-person-selector
-      @options={{this.mandateePersons}}
-      @selected={{this.selectedMandateePersons}}
-      @onChange={{this.onChange}}
-      @searchEnabled={{true}}
-      @search={{perform this.searchMandateePersons}}
-      @noMatchesMessage={{t "no-ministers-found"}}
-      @searchMessage={{t "no-ministers-found"}}
-      @loadingMessage={{t "search-loading-text"}}
-      as |person|
+      <PowerSelectMultiple
+        data-test-mandatee-person-selector
+        @options={{this.mandateePersons}}
+        @selected={{this.selectedMandateePersons}}
+        @onChange={{this.onChange}}
+        @searchEnabled={{true}}
+        @search={{perform this.searchMandateePersons}}
+        @noMatchesMessage={{t "no-ministers-found"}}
+        @searchMessage={{t "no-ministers-found"}}
+        @loadingMessage={{t "search-loading-text"}} as |person|
       >
         {{person.fullName}}
       </PowerSelectMultiple>
-      {{else}}
+    {{else}}
       <PowerSelect
         data-test-mandatee-person-selector
         @options={{this.mandateePersons}}
@@ -28,11 +27,10 @@
         @search={{perform this.searchMandateePersons}}
         @noMatchesMessage={{t "no-ministers-found"}}
         @searchMessage={{t "no-ministers-found"}}
-        @loadingMessage={{t "search-loading-text"}}
-        as |person|
+        @loadingMessage={{t "search-loading-text"}} as |person|
       >
         {{person.fullName}}
       </PowerSelect>
-      {{/if}}
     {{/if}}
+  {{/if}}
 </div>

@@ -84,5 +84,5 @@ export default class SettingsOrganizationsIndexController extends Controller {
   *updateMembershipStatus(membership, status) {
     membership.status = status;
     yield membership.save();
-  }  
+  }
 }

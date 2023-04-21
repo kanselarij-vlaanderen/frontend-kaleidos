@@ -74,12 +74,11 @@
         </div>
       {{/if}}
       {{#if @userInputFields.mandateePersons}}
-          <Mandatees::MandateePersonSelector
-            @onChange={{fn (mut this.selectedMandateePersons)}}
-            @dateRange={{this.dateRange}}
-            @multiple={{true}}
-          >
-          </Mandatees::MandateePersonSelector>
+        <Mandatees::MandateePersonSelector
+          @onChange={{fn (mut this.selectedMandateePersons)}}
+          @dateRange={{this.dateRange}}
+          @multiple={{true}}
+        />
       {{/if}}
       {{#if @userInputFields.governmentDomains}}
         <div class="auk-form-group">
