@@ -106,6 +106,7 @@
         />
         <th>{{t "organization"}}</th>
         <th>{{t "group"}}</th>
+        <th>{{t "minister"}}</th>
         <Utils::ThSortable
           data-test-route-settings-users-table-content-last-seen
           @currentSorting={{this.sort}}
@@ -151,6 +152,11 @@
               <p>{{membership.role.label}}</p>
             {{/each}}
           </div>
+        </td>
+        <td>
+          {{#if user.person}}
+            {{user.person.fullName}}
+          {{/if}}
         </td>
         <td>
           {{#let user.loginActivity.startDate as |lastLoginDate|}}

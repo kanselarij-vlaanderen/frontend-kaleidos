@@ -63,7 +63,6 @@
             @type="number"
             @value={{this.publicationYearAsString}}
             @error={{not this.isPublicationYearValid}}
-            {{on "focusout" this.loadMandateePersons}}
             {{on "focusout" (perform this.loadGovernmentDomains)}}
             {{on "change" (perform this.loadGovernmentDomains)}}
             id="publicationReportsPublicationYear"
@@ -75,25 +74,12 @@
         </div>
       {{/if}}
       {{#if @userInputFields.mandateePersons}}
-        <div class="auk-form-group">
-          <Auk::Label>
-            {{t "ministers"}}
-          </Auk::Label>
-          <PowerSelectMultiple
-            data-test-generate-report-select-mandatee
-            @options={{this.mandateePersons}}
-            @selected={{this.selectedMandateePersons}}
-            @onChange={{fn (mut this.selectedMandateePersons)}}
-            @searchEnabled={{true}}
-            @search={{perform this.searchMandateePersons}}
-            @noMatchesMessage={{t "no-ministers-found"}}
-            @searchMessage={{t "no-ministers-found"}}
-            @loadingMessage={{t "search-loading-text"}}
-            as |person|
-          >
-            {{person.fullName}}
-          </PowerSelectMultiple>
-        </div>
+        <Mandatees::MandateePersonSelector
+          @onChange={{fn (mut this.selectedMandateePersons)}}
+          @dateRange={{this.dateRange}}
+          @multiple={{true}}
+          @showLabel={{true}}
+        />
       {{/if}}
       {{#if @userInputFields.governmentDomains}}
         <div class="auk-form-group">

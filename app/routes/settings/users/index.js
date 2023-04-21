@@ -121,6 +121,7 @@ export default class SettingsUsersIndexRoute extends Route {
         'memberships.role',
         'memberships.status',
         'status',
+        'person',
       ].join(',')
     };
 
