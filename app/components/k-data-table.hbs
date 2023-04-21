@@ -7,7 +7,6 @@
    list=@list
    loading=@loading
    content=@content
-   loadingMessage=@loadingMessage
    onClickRow=@onClickRow) as |Table|}}
   {{#let (and @asideVisible (has-block "aside"))
      as |showAside|}}
@@ -19,9 +18,23 @@
         <div class="auk-scroll-wrapper__body">
           <Table ...attributes>
             <:header>{{yield to="header"}}</:header>
-            <:loading>{{yield to="loading"}}</:loading>
-            <:body as |row|>{{yield row to="body"}}</:body>
-            <:no-data>{{yield to="no-data"}}</:no-data>
+            <:loading>
+              {{#if (has-block "loading")}}
+                {{yield to="loading"}}
+              {{else}}
+                {{this.loadingMessage}}
+              {{/if}}
+            </:loading>
+            <:body as |row|>
+              {{yield row to="body"}}
+            </:body>
+            <:no-data>
+              {{#if (has-block "no-data")}}
+                {{yield to="no-data"}}
+              {{else}}
+                {{this.noDataMessage}}
+              {{/if}}
+            </:no-data>
           </Table>
         </div>
         {{#if showAside}}
@@ -33,9 +46,23 @@
     {{else}}
       <Table ...attributes>
         <:header>{{yield to="header"}}</:header>
-        <:loading>{{yield to="loading"}}</:loading>
-        <:body as |row|>{{yield row to="body"}}</:body>
-        <:no-data>{{yield to="no-data"}}</:no-data>
+        <:loading>
+          {{#if (has-block "loading")}}
+            {{yield to="loading"}}
+          {{else}}
+            {{this.loadingMessage}}
+          {{/if}}
+        </:loading>
+        <:body as |row|>
+          {{yield row to="body"}}
+        </:body>
+        <:no-data>
+          {{#if (has-block "no-data")}}
+            {{yield to="no-data"}}
+          {{else}}
+            {{this.noDataMessage}}
+          {{/if}}
+        </:no-data>
       </Table>
       {{#if showAside}}
         {{yield to="aside"}}

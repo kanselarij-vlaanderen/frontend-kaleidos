@@ -16,11 +16,7 @@
     {{#if @loading}}
       <tr>
         <td colspan="100%" class="is-loading-data">
-          {{#if (has-block "loading")}}
-            {{yield to="loading"}}
-          {{else}}
-            {{this.loadingMessage}}
-          {{/if}}
+          {{yield to="loading"}}
         </td>
       </tr>
     {{else if @content}}
@@ -35,11 +31,7 @@
     {{else}}
       <tr>
         <td colspan="100%">
-          {{#if (has-block "no-data")}}
-            {{yield to="no-data"}}
-          {{else}}
-            {{this.noDataMessage}}
-          {{/if}}
+          {{yield to="no-data"}}
         </td>
       </tr>
     {{/if}}
