@@ -169,6 +169,17 @@ export default class AgendasController extends Controller {
       modified: now
     });
     await agenda.save();
+
+    const agendaStatusActivity = this.store.createRecord(
+      'agenda-status-activity',
+      {
+        startDate: now,
+        statusSet: status,
+        agenda,
+      }
+    );
+    await agendaStatusActivity.save();
+
     return agenda;
   }
 

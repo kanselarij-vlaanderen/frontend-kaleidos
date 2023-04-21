@@ -62,12 +62,16 @@
                   {{t "latest-modified-on"}}
                   <br />
                   {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else if agenda.modified}}
-                  {{t "approved-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
                 {{else}}
-                  {{t "approved"}}
+                  {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |lastActivity|}}
+                    {{#if lastActivity.startDate}}
+                      {{t "approved-on"}}
+                      <br />
+                      {{date-format lastActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
+                    {{else}}
+                      {{t "approved"}}
+                    {{/if}}
+                  {{/let}}
                 {{/if}}
               </div>
             {{else}}
@@ -119,12 +123,16 @@
                   {{t "latest-modified-on"}}
                   <br />
                   {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else if agenda.modified}}
-                  {{t "approved-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
                 {{else}}
-                  {{t "approved"}}
+                  {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |lastActivity|}}
+                    {{#if lastActivity.startDate}}
+                      {{t "approved-on"}}
+                      <br />
+                      {{date-format lastActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
+                    {{else}}
+                      {{t "approved"}}
+                    {{/if}}
+                  {{/let}}
                 {{/if}}
               </div>
             {{else}}
