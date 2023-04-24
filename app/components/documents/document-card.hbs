@@ -123,10 +123,7 @@
             {{/if}}
           {{/if}}
           {{#if
-              (and
-                @isEditable
-                (user-may "manage-documents")
-              )
+            (and @isEditable (user-may "manage-documents") (not @hideActions))
           }}
             <Group.Item>
               <AuDropdown
