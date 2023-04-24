@@ -56,6 +56,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.report;
+    this.previousReport = await this.report?.previousPiece;
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -146,21 +147,33 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
   }
 
-  // @action
-  // async attachNewReportVersion(piece) {
-  //   await piece.save();
-  //   this.args.decisionActivity.report = piece;
-  //   await this.args.decisionActivity.save();
+  /**
+   * Deprecated but needed for backwards compat
+   */
+  @action
+  async attachNewReportVersion(piece) {
+    await piece.save();
+    try {
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title')
+      );
+    }
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
 
-  //   // This should happen in document-card but isn't reached.
-  //   await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+    // This should happen in document-card but isn't reached.
+    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
 
-  //   // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
-  //   // when deleting the full container right after adding a new report version without the version history open.
-  //   const documentContainer = await piece.documentContainer;
-  //   await documentContainer.hasMany('pieces').reload();
-  //   await this.loadReport.perform();
-  // }
+    // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
+    // when deleting the full container right after adding a new report version without the version history open.
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.hasMany('pieces').reload();
+    await this.loadReport.perform();
+  }
 
   @action
   setDecisionViewerElement(element) {

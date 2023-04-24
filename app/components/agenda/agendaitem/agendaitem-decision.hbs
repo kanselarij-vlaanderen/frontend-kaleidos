@@ -60,7 +60,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
-  {{#if this.report.pieceParts}}
+  {{#if (and (not this.isEditing) this.report.pieceParts)}}
     {{! We need to guarantee the report has a file attached to it.
     We can have reports with only piece parts, then we need to display
     the previous version (which is guaranteed to have a file) }}
