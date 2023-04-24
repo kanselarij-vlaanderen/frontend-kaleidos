@@ -18,7 +18,10 @@
                   <AuButton
                     @icon="pdf"
                     @skin="naked"
-                    @disabled={{this.exportPdf.isRunning}}
+                    @disabled={{or
+                      this.exportPdf.isRunning
+                      (if this.report.file true false)
+                    }}
                     @loading={{this.exportPdf.isRunning}}
                     {{on "click" (perform this.exportPdf)}}
                   >
@@ -57,20 +60,28 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
-  {{#if (and this.report.file this.report.pieceParts)}}
-    <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
-      {{!-- <Agenda::Agendaitem::VersionedDocumentCard @report={{this.report}} /> --}}
-      <Documents::DocumentCard
-        @piece={{this.report}}
-        @isEditable={{true}}
-        @agendaContext={{@agendaContext}}
-        @hideNewerVersions={{true}}
-        @onOpenUploadModal={{@onOpenUploadModal}}
-        @onAddPiece={{this.attachNewReportVersion}}
-        @didDeleteContainer={{perform this.loadReport}}
-        @bordered={{false}}
-      />
-    </Auk::Panel::Body>
+  {{#if this.report.pieceParts}}
+    {{! We need to guarantee the report has a file attached to it.
+    We can have reports with only piece parts, then we need to display
+    the previous version (which is guaranteed to have a file) }}
+    {{#if (or this.report.file this.report.previousPiece)}}
+      <Auk::Panel::Body
+        class="{{if this.isEditing 'au-u-background-gray-100'}}"
+      >
+        <Documents::DocumentCard
+          @piece={{if
+            this.report.file
+            this.report
+            (await this.report.previousPiece)
+          }}
+          @isEditable={{true}}
+          @agendaContext={{@agendaContext}}
+          @hideNewerVersions={{true}}
+          @hideActions={{true}}
+          @bordered={{true}}
+        />
+      </Auk::Panel::Body>
+    {{/if}}
   {{/if}}
 
   <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">

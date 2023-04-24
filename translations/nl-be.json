@@ -1187,5 +1187,6 @@
   "saturday": "zaterdag",
   "sunday": "zondag",
   "point": "punt",
-  "pdf": "PDF"
+  "pdf": "PDF",
+  "error-while-exporting-pdf": "Er ging iets mis tijdens het exporteren naar PDF"
 }

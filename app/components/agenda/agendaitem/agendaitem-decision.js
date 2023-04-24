@@ -5,6 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEmpty } from '@ember/utils';
+import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -16,10 +18,11 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
  */
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
-  @service store;
-  @service pieceAccessLevelService;
-  @service toaster;
   @service fileConversionService;
+  @service pieceAccessLevelService;
+  @service store;
+  @service toaster;
+  @service intl;
 
   @tracked report;
 
@@ -77,10 +80,15 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async attachReport() {
     const now = new Date();
-    const piece = this.store.createRecord('report', {
+    const report = this.store.createRecord('report', {
       created: now,
       modified: now,
-      name: 'example report (TODO)',
+      name: `${
+        this.args.agendaContext.meeting.numberRepresentation
+      } - punt ${addLeadingZeros(
+        this.args.agendaContext.agendaitem.number,
+        4
+      )}`,
     });
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -99,28 +107,44 @@ export default class AgendaitemDecisionComponent extends Component {
     );
 
     await documentContainer.save();
-    piece.setProperties({
+    report.setProperties({
       accessLevel: defaultAccessLevel,
       documentContainer,
     });
-    await piece.save();
+    await report.save();
 
-    this.args.decisionActivity.report = piece;
+    this.args.decisionActivity.report = report;
+
     await this.args.decisionActivity.save();
-
     await this.loadReport.perform();
   }
 
   @action
-  setDecisionViewerElement(element) {
-    this.decisionViewerElement = element;
+  async updateReport() {
+    const previousReport = this.report;
+    const now = new Date();
+    let newName;
+    try {
+      newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
+        (await (await previousReport.documentContainer).pieces).length + 1
+      );
+    } catch (e) {
+      newName = previousReport.name;
+    }
+    this.report = await this.store
+      .createRecord('report', {
+        name: newName,
+        created: now,
+        modified: now,
+        previousPiece: previousReport,
+        accessLevel: previousReport.accessLevel,
+        documentContainer: previousReport.documentContainer,
+      })
+      .save();
+    await previousReport.save();
+    this.args.decisionActivity.report = this.report;
+    await this.args.decisionActivity.save();
   }
-
-  exportPdf = task(async () => {
-    await fetch(`/generate-decision-report/${this.report.id}`);
-    await this.report.reload();
-    await this.report.file.reload();
-  });
 
   // @action
   // async attachNewReportVersion(piece) {
@@ -139,6 +163,23 @@ export default class AgendaitemDecisionComponent extends Component {
   // }
 
   @action
+  setDecisionViewerElement(element) {
+    this.decisionViewerElement = element;
+  }
+
+  exportPdf = task(async () => {
+    const resp = await fetch(`/generate-decision-report/${this.report.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    const fileMeta = await resp.json();
+    this.report.file = await this.store.findRecord('file', fileMeta.id);
+    this.report.modified = new Date();
+    await this.report.save();
+  });
+
+  @action
   handleRdfaEditorInitBetreft(editorInterface) {
     this.editorInstanceBetreft = editorInterface;
     editorInterface.setHtmlContent(this.betreftPiecePart?.value ?? '');
@@ -153,6 +194,12 @@ export default class AgendaitemDecisionComponent extends Component {
   onSaveReport = task(async () => {
     if (!this.report) {
       await this.attachReport();
+    }
+
+    // To make sure the content of the PDF matches the piece parts,
+    // we need to create a new report version here
+    if (await this.report.file) {
+      await this.updateReport();
     }
 
     if (isEmpty(await this.report.pieceParts)) {
