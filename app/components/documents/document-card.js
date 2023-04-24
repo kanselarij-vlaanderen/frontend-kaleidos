@@ -280,4 +280,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
   }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
+  }
 }

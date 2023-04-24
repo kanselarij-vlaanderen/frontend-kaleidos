@@ -7,7 +7,7 @@
   <:title>
     <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       {{this.selectedVersion.name}}
-      {{#if (and this.file @mayAccessKabinetDocument)}}
+      {{#if (and this.file (await (this.canViewConfidentialPiece)))}}
         <AuLinkExternal
           {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
           @icon="download"
@@ -24,7 +24,7 @@
         {{#if this.loadFile.isRunning}}
           <WebComponents::LoadingPage />
         {{else}}
-          <Documents::DocumentView @file={{this.file}} @mayAccessKabinetDocument={{@mayAccessKabinetDocument}} />
+          <Documents::DocumentView @file={{this.file}} @piece={{@piece}} />
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">
@@ -39,7 +39,6 @@
           @unmarkForSignature={{@unmarkForSignature}}
           @didDeletePiece={{@didDeletePiece}}
           @onChangeFile={{perform this.loadFile}}
-          @mayAccessKabinetDocument={{@mayAccessKabinetDocument}}
         />
       </div>
     </div>

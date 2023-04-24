@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PieceAccessLevelService extends Service {
   @service agendaService;
   @service store;
+  @service currentSession;
 
 /*
  * This method is used to update the access levels of the previous version of a piece.
@@ -192,5 +193,33 @@ export default class PieceAccessLevelService extends Service {
         return false;
       }
     }
+  }
+
+  async canViewConfidentialPiece(piece) {
+    const accessLevel = await piece?.accessLevel;
+    if (this.currentSession.may('view-only-specific-confidential-documents') && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        filter: {
+          pieces: {
+            ':id:': piece?.id,
+          },
+        },
+      });
+      if (submissionActivity) {
+        const subcase = await submissionActivity.subcase;
+        const mandatees = await subcase.mandatees;
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+        for (let i = 0; i < currentUserOrganizationMandatees.length; i++) {
+          if (mandatees.includes(currentUserOrganizationMandatees[i]) != -1) {
+            return true;
+          }
+        }
+      }
+    } else {
+      // default to standard behaviour (if confidential doc is in your graph it can be accessed normally)
+      return true;
+    }
+    return false;
   }
 }
