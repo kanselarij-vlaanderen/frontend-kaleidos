@@ -39,7 +39,7 @@
         </:header>
         <:body as |row|>
           <td class="auk-table__col--1">
-            <AuControlCheckbox
+            <AuCheckbox
               data-test-add-existing-piece-checkbox={{true}}
               @checked={{includes row this.selected}}
               @onChange={{fn this.select row}}
