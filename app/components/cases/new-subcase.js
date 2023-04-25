@@ -192,8 +192,8 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  selectAgendaItemType(id) {
-    this.agendaItemType = this.store.peekRecord('concept', id);
+  onChangeAgendaItemType(selectedType) {
+    this.agendaItemType = selectedType;
   }
 
   @action

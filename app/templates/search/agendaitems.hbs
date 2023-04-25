@@ -1,35 +1,38 @@
 {{page-title (t "agendaitems")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
-  <div class="au-c-card au-o-box au-o-box--small">
+  <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-agendaitems-type-filter>
     <AuFieldset as |Fieldset|>
       <Fieldset.legend>{{t "type"}}</Fieldset.legend>
       <Fieldset.content>
-        <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "note"}}
+        <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+          <AuCheckbox
             @checked={{this.includeNotas}}
             @onChange={{set this "includeNotas"}}
-          />
-          <AuControlCheckbox
-            @label={{capitalize (t "announcement")}}
+          >
+            {{t "note"}}
+          </AuCheckbox>
+          <AuCheckbox
             @checked={{this.includeMededelingen}}
             @onChange={{set this "includeMededelingen"}}
-          />
-        </Auk::CheckboxList>
+          >
+            {{capitalize (t "announcement")}}
+          </AuCheckbox>
+        </AuCheckboxGroup>
       </Fieldset.content>
     </AuFieldset>
   </div>
-  <div class="au-c-card au-o-box au-o-box--small">
+  <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-agendaitems-final-agenda-filter>
     <AuFieldset as |Fieldset|>
       <Fieldset.legend>{{t "version"}}</Fieldset.legend>
       <Fieldset.content>
-        <Auk::CheckboxList>
-          <AuControlCheckbox
-            @label={{t "only-on-final-agenda"}}
+        <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+          <AuCheckbox
             @checked={{this.latestOnly}}
             @onChange={{set this "latestOnly"}}
-          />
-        </Auk::CheckboxList>
+          >
+            {{t "only-on-final-agenda"}}
+          </AuCheckbox>
+        </AuCheckboxGroup>
       </Fieldset.content>
     </AuFieldset>
   </div>
@@ -49,7 +52,7 @@
     />
     <KDataTable
       data-test-route-search-agendaitems-data-table
-      @cards={{true}}
+      @list={{true}}
       @loading={{this.isLoadingModel}}
       @content={{this.model}}
       @page={{this.page}}

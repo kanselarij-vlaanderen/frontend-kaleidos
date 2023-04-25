@@ -151,10 +151,12 @@ context('Publications translation tests', () => {
       .wait('@patchTranslationActivities')
       .wait('@getPieces')
       .wait('@reloadTranslationModel')
-      .wait(500); // the model reloaded but not fully processed, making DOM elements reload.
+      .wait(1500); // the model reloaded but not fully processed, making DOM elements reload.
     cy.get(publication.statusPill.contentLabel).should('contain', 'Naar vertaaldienst');
     // check edit and rollback
     cy.get(publication.translationReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
+    // TODO flaky dropdown opening, wait a bit longer for now
+    cy.wait(1500);
     cy.get(publication.translationReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();

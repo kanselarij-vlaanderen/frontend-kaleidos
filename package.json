@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "5.46.13",
+  "version": "5.47.0",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "2.2.0",
+    "@appuniversum/ember-appuniversum": "2.5.0",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",

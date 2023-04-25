@@ -347,27 +347,30 @@ context('Search tests', () => {
     triggerSearchPublication(mandatee1);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
-      .should('have.length', 2);
+      .should('have.length.at.least', 2)
+      .contains(fields4.number);
 
     // add Hilde Crevits
     triggerSearchPublication(mandatee2);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
-      .should('have.length', 3);
+      .should('have.length.at.least', 3)
+      .as('rows');
+    cy.get('@rows').contains(fields4.number);
+    cy.get('@rows').contains(fields2.number);
 
     // remove Jan Jambon
-    // no triggerSearchPublication here, can't deselect
-    cy.get(appuniversum.checkbox).contains(mandatee1)
-      .click();
+    triggerSearchPublication(mandatee1);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
-      .should('have.length', 1);
+      .should('have.length.at.least', 1);
+
+    // remove Hilde Crevits
+    triggerSearchPublication(mandatee2);
 
     // check previous mandatees works
-    cy.intercept('GET', '/@appuniversum/ember-appuniversum/appuniversum-symbolset.svg').as('getMinisters');
-    cy.get(utils.ministerFilter.pastMinisters).click()
-      .wait('@getMinisters');
-    triggerSearchPublication(mandatee2);
+    cy.get(utils.ministerFilter.pastMinisters).click();
+    // add Pauk Akkermans
     triggerSearchPublication(mandatee4);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   });

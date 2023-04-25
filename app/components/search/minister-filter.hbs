@@ -1,24 +1,13 @@
-{{#if this.loadCurrentMinisters.isRunning}}
+{{#if this.prepareCurrentMinisters.isRunning}}
   <Auk::Loader />
 {{else}}
-  <AuControlCheckbox
-    @checked={{this.allCurrentMinistersSelected}}
-    @indeterminate={{and (not this.allCurrentMinistersSelected) this.someCurrentMinistersSelected}}
-    @onChange={{this.toggleAllCurrentMinisters}}
-  >
-    <strong>{{t "current-ministers"}}</strong>
-  </AuControlCheckbox>
-  <div class="auk-u-ml-2">
-    <Auk::CheckboxList>
-      {{#each this.currentMinisters as |minister|}}
-        <AuControlCheckbox
-          @checked={{includes minister.id @selected}}
-          @label={{minister.fullName}}
-          @onChange={{fn this.toggleMinister minister}}
-        />
-      {{/each}}
-    </Auk::CheckboxList>
-  </div>
+  <Auk::CheckboxTree
+    @label={{t "current-ministers"}}
+    @items={{this.currentMinisters}}
+    @itemStructure={{hash label="fullName"}}
+    @selectedItems={{this.selectedCurrentMinisters}}
+    @didUpdate={{this.onChangeCurrentMinisters}}
+  />
   {{#if this.pastMinistersHidden}}
     <AuButton
       data-test-search-minister-filter-past-ministers
@@ -29,27 +18,16 @@
     >
       {{t "show-past-ministers"}}
     </AuButton>
-  {{else if this.loadPastMinisters.isRunning}}
+  {{else if this.preparePastMinisters.isRunning}}
     <Auk::Loader />
   {{else}}
-    <AuControlCheckbox
-      @checked={{this.allPastMinistersSelected}}
-      @indeterminate={{and (not this.allPastMinistersSelected) this.somePastMinistersSelected}}
-      @onChange={{this.toggleAllPastMinisters}}
-    >
-      <strong>{{t "past-ministers"}}</strong>
-    </AuControlCheckbox>
-    <div class="auk-u-ml-2">
-      <Auk::CheckboxList>
-        {{#each this.pastMinisters as |minister|}}
-          <AuControlCheckbox
-            @checked={{includes minister.id @selected}}
-            @label={{minister.fullName}}
-            @onChange={{fn this.toggleMinister minister}}
-          />
-        {{/each}}
-      </Auk::CheckboxList>
-    </div>
+    <Auk::CheckboxTree
+      @label={{t "past-ministers"}}
+      @items={{this.pastMinisters}}
+      @itemStructure={{hash label="fullName"}}
+      @selectedItems={{this.selectedPastMinisters}}
+      @didUpdate={{this.onChangePastMinisters}}
+    />
     <AuButton
       {{on "click" (toggle "pastMinistersHidden" this)}}
       @skin="link"

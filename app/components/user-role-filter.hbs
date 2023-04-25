@@ -4,15 +4,17 @@
   <AuFieldset as |Fieldset|>
     <Fieldset.legend>{{t "filter-on-rights"}}</Fieldset.legend>
     <Fieldset.content>
-      <Auk::CheckboxList>
+      <AuCheckboxGroup
+        @selected={{this.selected}}
+        @onChange={{this.toggleRole}}
+        as |Group|
+      >
         {{#each this.roles as |role|}}
-          <AuControlCheckbox
-            @label={{role.label}}
-            @checked={{includes role this.selected}}
-            @onChange={{fn this.toggleRole role}}
-          />
+          <Group.Checkbox @value={{role}}>
+            {{role.label}}
+          </Group.Checkbox>
         {{/each}}
-      </Auk::CheckboxList>
+      </AuCheckboxGroup>
     </Fieldset.content>
   </AuFieldset>
 {{/if}}
