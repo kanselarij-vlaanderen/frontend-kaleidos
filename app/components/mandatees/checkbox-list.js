@@ -8,6 +8,7 @@ import { startOfDay } from 'date-fns';
 /**
  * @param {[Mandatee]} selected
  * @param {Function} onChange
+ * @param {Boolean} allowPartialMatch set the checkbox to checked even if only some mandatees are selected (only has impact on MP)
  */
 export default class MandateesCheckboxListComponent extends Component {
   @service mandatees;
@@ -24,20 +25,17 @@ export default class MandateesCheckboxListComponent extends Component {
     this.loadMinisters.perform();
   }
 
-  get allSelected() {
-    return (
-      this.args.selected?.length === this.currentMandatees.length &&
-      this.currentMandatees
-        .map((m) => m.id)
-        .every((m) => this.args.selected?.includes(m))
-    );
-  }
-
   isChecked = (minister) => {
     if (this.args.selected?.length) {
-      return this.ministerToMandateeMap
-        .get(minister)
-        ?.every((m) => this.args.selected.includes(m.id));
+      if (this.args.allowPartialMatch) {
+        return this.ministerToMandateeMap
+          .get(minister)
+          ?.some((m) => this.args.selected.includes(m.id));
+      } else {
+        return this.ministerToMandateeMap
+          .get(minister)
+          ?.every((m) => this.args.selected.includes(m.id));
+      }
     }
     return false;
   };
@@ -59,18 +57,19 @@ export default class MandateesCheckboxListComponent extends Component {
   };
 
   loadMinisters = task(async () => {
-    const currentMandatees = await this.mandatees
-                                       .getMandateesActiveOn
-                                       .perform(startOfDay(new Date()));
-    const sortedMandatees = currentMandatees
-          .sort((m1, m2) => m1.priority - m2.priority)
+    const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
+      startOfDay(new Date())
+    );
+    const sortedMandatees = currentMandatees.sort(
+      (m1, m2) => m1.priority - m2.priority
+    );
     const sortedMinisters = await Promise.all(
       sortedMandatees.map(async (m) => {
         const person = await m.person;
         if (this.ministerToMandateeMap.has(person)) {
-        this.ministerToMandateeMap.get(person).push(m);
+          this.ministerToMandateeMap.get(person).push(m);
         } else {
-        this.ministerToMandateeMap.set(person, [m]);
+          this.ministerToMandateeMap.set(person, [m]);
         }
         return person;
       })
@@ -94,17 +93,5 @@ export default class MandateesCheckboxListComponent extends Component {
 
       this.args.onChange?.(selected);
     }
-  }
-
-  @action
-  toggleAll() {
-    let selected = [];
-    if (this.allSelected) {
-      // Deselect all, leave selected empty
-    } else {
-      // Select all
-      selected = this.currentMandatees.map((m) => m.id);
-    }
-    this.args.onChange?.(selected);
   }
 }
