@@ -380,6 +380,7 @@
   "uploaded-files": "{numFiles, plural, =1 {Bestand} other {Bestanden}} opgeladen",
   "uploaded-at": "Geüpload op",
   "sent-at": "verstuurd op",
+  "added-at": "Toegevoegd op",
   "uploading": "opgeladen",
   "loading": "Aan het laden",
   "user": "Gebruiker",
@@ -1188,5 +1189,6 @@
   "sunday": "zondag",
   "point": "punt",
   "pdf": "PDF",
-  "error-while-exporting-pdf": "Er ging iets mis tijdens het exporteren naar PDF"
+  "error-while-exporting-pdf": "Er ging iets mis tijdens het exporteren naar PDF",
+  "version-of-date-at-time": "Versie van {date} om {time}"
 }

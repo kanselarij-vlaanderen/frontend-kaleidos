@@ -41,7 +41,7 @@
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
                 <p data-test-document-card-primary-source-created={{if this.piece.file.derived ""}}>
-                  {{t "uploaded-at"}}
+                  {{t "added-at"}}
                   {{datetime-at this.piece.created}}
                   {{#if this.piece.file.derived}}
                     {{t "as"}}
