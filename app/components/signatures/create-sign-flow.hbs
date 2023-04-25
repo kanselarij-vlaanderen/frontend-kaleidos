@@ -31,15 +31,17 @@
             class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
           >
             {{signer.person.fullName}}
-            <AuButton
-              @skin="naked"
-              @alert={{true}}
-              @hideText={{true}}
-              @icon="trash"
-              {{on "click" (fn this.removeSigner signer)}}
-            >
-              {{t "delete"}}
-            </AuButton>
+            {{#unless (eq signer this.primeMinister)}}
+              <AuButton
+                @skin="naked"
+                @alert={{true}}
+                @hideText={{true}}
+                @icon="trash"
+                {{on "click" (fn this.removeSigner signer)}}
+              >
+                {{t "delete"}}
+              </AuButton>
+            {{/unless}}
           </Auk::List::Item>
         {{else}}
           <Auk::List::Item>
@@ -120,6 +122,7 @@
     <Signatures::SelectMinistersModal
       @loading={{this.saveSigners.isRunning}}
       @selected={{map-by "id" this.signers}}
+      @disabledOptions={{array this.primeMinister.person.id}}
       @onConfirm={{this.saveSigners.perform}}
       @onCancel={{toggle "showMinisterModal" this}}
     />

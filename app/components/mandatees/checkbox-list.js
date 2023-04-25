@@ -6,8 +6,9 @@ import { task } from 'ember-concurrency';
 import { startOfDay } from 'date-fns';
 
 /**
- * @param {[Mandatee]} selected
+ * @param {[string]} selected
  * @param {Function} onChange
+ * @param {[string]} disabledOptions options which are disabled and not toggleable by users
  * @param {Boolean} allowPartialMatch set the checkbox to checked even if only some mandatees are selected (only has impact on MP)
  */
 export default class MandateesCheckboxListComponent extends Component {
