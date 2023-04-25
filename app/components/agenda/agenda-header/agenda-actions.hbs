@@ -54,6 +54,15 @@
   >
     {{t "download-documents"}}
   </AuButton>
+    <AuButton
+    data-test-agenda-actions-download-decisions
+    @skin="link"
+    {{on "click" this.openDownloadDecisions}}
+    role="menuitem"
+  >
+    {{t "download-decisions"}}
+  </AuButton>
+
   {{#if (user-may "manage-meetings")}}
     <AuHr />
     <AuButton
@@ -228,6 +237,28 @@
       @size="small"
     >
       <p>{{t "download-agenda-documents-info"}}</p>
+    </AuAlert>
+    <Mandatees::CheckboxSelect
+      @selected={{this.selectedMandatees}}
+      @referenceAgenda={{@currentAgenda}}
+      @onChange={{set this "selectedMandatees"}}
+    />
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.showDownloadDecisions}}
+  @onCancel={{this.closeDownloadDecisions}}
+  @title={{t "download-all-decisions"}}
+  @confirmMessage={{t "download-all-decisions"}}
+  @onConfirm={{this.confirmDownloadDecisions}}
+>
+  <:body>
+    <AuAlert
+      @skin="info"
+      @size="small"
+    >
+      <p>{{t "download-agenda-decisions-info"}}</p>
     </AuAlert>
     <Mandatees::CheckboxSelect
       @selected={{this.selectedMandatees}}

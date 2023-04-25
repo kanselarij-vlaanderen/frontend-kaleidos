@@ -55,19 +55,24 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit('/vergadering/5EBA9588751CF70008000012/kort-bestek');
     // define alias
     cy.get(newsletter.tableRow.newsletterRow).find(newsletter.tableRow.inNewsletterCheckbox)
-      .as('checkboxValue');
-    cy.get('@checkboxValue').parent()
+      .as('checkboxInput');
+    cy.get('@checkboxInput').parent()
       .as('checkboxContainer');
     // checkbox is unchecked, toggle it
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
+    // checkbox gets disabled during saving
     // checkbox is checked, toggle it back
-    cy.get('@checkboxValue').should('be.checked');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+    cy.get('@checkboxInput').should('be.checked')
+      .should('not.be.disabled');
     cy.get('@checkboxContainer').click();
     cy.wait('@patchNewsItems');
     // checkbox is unchecked
-    cy.get('@checkboxValue').should('not.be.checked');
+    cy.get('@checkboxInput').should('not.be.checked')
+      .should('not.be.disabled');
   });
 
   // test in agenda detail
@@ -592,7 +597,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const agendaLinkMed = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289BFE536C464112FFE91';
     const agendaLinkNota = '/vergadering/62726CD0D600B7FF7F95BBF5/agenda/62726CD1D600B7FF7F95BBF6/agendapunten/627289D3E536C464112FFE96';
     const newsletterLink = '/vergadering/62726CD0D600B7FF7F95BBF5/kort-bestek';
-    // *note the next htmlContent is used in search.spec, keep them identical
+    // *note the next htmlContent is used in search-other-spec-data.spec, keep them identical
     const htmlContentNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
     const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';
@@ -651,6 +656,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.wait('@patchNewsItem');
+    cy.wait(1000); // tableRow is not connected to DOM.
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem1');
     cy.get(newsletter.tableRow.newsletterRow)
       .find(newsletter.tableRow.inNewsletterCheckbox)

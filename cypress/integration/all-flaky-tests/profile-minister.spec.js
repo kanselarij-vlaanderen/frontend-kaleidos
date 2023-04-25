@@ -7,6 +7,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
+import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -105,6 +106,8 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort1);
@@ -206,6 +209,8 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort3);
@@ -317,6 +322,53 @@ context('Testing the application as Minister user', () => {
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.edit)
+        .should('not.exist');
+    });
+  });
+
+  context('Profile rights checks for kort-bestek routes', () => {
+    const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
+    const kortBestekLinkReleasedAgenda = 'vergadering/6374FA85D9A98BD0A2288576/kort-bestek';
+
+    it('check kort bestek zebra view for open agenda', () => {
+      cy.visit(kortBestekLinkOpenAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+    });
+
+    it('check kort bestek zebra view for released agenda', () => {
+      cy.visit(kortBestekLinkReleasedAgenda);
+      cy.get(auk.loader).should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(0)
+        .find(newsletter.buttonToolbar.edit)
+        .should('not.exist');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.tableRow.inNewsletterCheckbox)
+        .should('be.disabled');
+
+      cy.get(newsletter.tableRow.newsletterRow).eq(1)
+        .find(newsletter.buttonToolbar.edit)
         .should('not.exist');
     });
   });

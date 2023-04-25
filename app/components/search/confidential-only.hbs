@@ -2,13 +2,15 @@
   <AuFieldset as |Fieldset|>
     <Fieldset.legend>{{t "confidential"}}</Fieldset.legend>
     <Fieldset.content>
-      <Auk::CheckboxList>
-        <AuControlCheckbox
-          @label={{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+      <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+        <AuCheckbox
+          data-test-route-search-confidential-only-checkbox
           @checked={{@confidentialOnly}}
           @onChange={{@onChange}}
-        />
-      </Auk::CheckboxList>
+        >
+          {{t "search-confidential-only" objectVerb=(lowercase @objectVerb)}}
+        </AuCheckbox>
+      </AuCheckboxGroup>
     </Fieldset.content>
   </AuFieldset>
 </div>

@@ -17,7 +17,6 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
  * @argument decisionActivity
  */
 export default class AgendaitemDecisionComponent extends Component {
-  @service currentSession;
   @service fileConversionService;
   @service pieceAccessLevelService;
   @service store;

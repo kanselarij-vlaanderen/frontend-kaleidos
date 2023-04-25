@@ -111,3 +111,12 @@
     </Auk::Panel::Footer>
   </Auk::Panel>
 </div>
+
+{{#if this.saveChanges.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-change-message"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

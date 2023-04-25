@@ -17,7 +17,7 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('subcase-type', { inverse: 'subcases', async: true }) type;
   @belongsTo('decisionmaking-flow', { inverse: 'subcases', async: true })
   decisionmakingFlow;
-  @belongsTo('mandatee', { inverse: 'requestedSubcases' }) requestedBy;
+  @belongsTo('mandatee', { inverse: 'requestedSubcases', async: true }) requestedBy;
   @belongsTo('concept', { inverse: null, async: true }) agendaItemType;
 
   @hasMany('agenda-activity', { inverse: 'subcase', async: true })

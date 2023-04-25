@@ -18,8 +18,8 @@ export default class DocumentsDocumentVersionHistoryItemComponent extends Compon
   @keepLatestTask
   *loadData() {
     const accessLevel = yield this.args.piece.accessLevel;
-    const context = Object.assign({}, this.args.agendaContext || {}, { piece: this.args.piece });
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context);
+    const context = this.args.agendaContext || {};
+    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.piece);
   }
 
   @keepLatestTask

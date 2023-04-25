@@ -8,7 +8,14 @@ const selectors = {
   publicationsIndex: {
     title: '[data-test-route-publications-index-title]',
     tabs: {
+      all: '[data-test-route-publications-index-tabs-all]',
       urgent: '[data-test-route-publications-index-tabs-urgent]',
+      translations: '[data-test-route-publications-index-tabs-translation]',
+      proof: '[data-test-route-publications-index-tabs-proof]',
+      proofread: '[data-test-route-publications-index-tabs-proofread]',
+      late: '[data-test-route-publications-index-tabs-late]',
+      reports: '[data-test-route-publications-index-tabs-reports]',
+      search: '[data-test-route-publications-index-tabs-search]',
     },
     newPublication: '[data-test-route-publications-index-new-publication]',
     dataTable: '[data-test-route-publications-index-data-table]',
@@ -403,7 +410,7 @@ const selectors = {
 
   // generate-report-modal
   generateReport: {
-    selectMandatee: '[data-test-generate-report-select-mandatee]',
+    selectMandatee: '[data-test-mandatee-person-selector]',
     confirm: '[data-test-generate-report-confirm]',
   },
 };

@@ -168,12 +168,12 @@ context('Publications proofs tests', () => {
       .wait('@patchProofingActivities')
       .wait('@getPieces')
       .wait('@reloadProofingModel')
-      .wait(500);
+      .wait(1500); // some reloads happen (if dropdown or modal is opened to fast it just closes again)
     cy.get(publication.statusPill.contentLabel).should('contain', 'Drukproef aangevraagd');
     // check edit and rollback
     cy.get(publication.proofReceivedPanel.endDate).contains(translationEndDate.format('DD-MM-YYYY'));
     // TODO flaky dropdown opening: Attempted to access the computed <frontend-kaleidos@component:attach-popover::ember486>._hideOn on a destroyed object, which is not allowed
-    cy.wait(1000);
+    cy.wait(1500);
     cy.get(publication.proofReceivedPanel.dropdown)
       .children(appuniversum.button)
       .click();

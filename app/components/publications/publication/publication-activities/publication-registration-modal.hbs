@@ -21,11 +21,12 @@
       </div>
 
       <div class="auk-form-group">
-        <AuControlCheckbox
-          @label={{t "update-publication-status-published"}}
+        <AuCheckbox
           @checked={{this.mustUpdatePublicationStatus}}
           @onChange={{this.setMustUpdatePublicationStatus}}
-        />
+        >
+          {{t "update-publication-status-published"}}
+        </AuCheckbox>
       </div>
     </div>
   </Auk::Modal::Body>

@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 
 export default class Meeting extends Model {
-  @service store;
   @service intl;
 
   @attr uri;

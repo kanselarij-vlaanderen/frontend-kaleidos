@@ -1,11 +1,12 @@
 <div class="au-c-card au-o-box au-o-box--small">
   <div class="auk-form-group">
     <Auk::Label>{{t "document-type"}}</Auk::Label>
-    <Auk::CheckboxList>
-      {{#if this.loadDocumentTypes.isRunning}}
-        <Auk::Loader />
-      {{else}}
-        <AuControlCheckbox
+    {{#if this.loadDocumentTypes.isRunning}}
+      <Auk::Loader />
+    {{else}}
+      <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+        <AuCheckbox
+          data-test-route-search-document-type-filter
           @checked={{this.allDocumentTypesSelected}}
           @indeterminate={{and
             (not this.allDocumentTypesSelected)
@@ -13,46 +14,48 @@
           }}
           @onChange={{this.toggleAllDocumentTypes}}
         >
-          <strong>{{t "all-document-types"}}</strong>
-        </AuControlCheckbox>
-        {{#each this.documentTypes as |documentType|}}
-          {{#if (includes documentType.uri this.defaultVisibleTypes)}}
-            <AuControlCheckbox
-              @checked={{includes documentType this.selected}}
-              @label={{documentType.altLabel}}
-              @onChange={{fn this.toggleDocumentType documentType}}
-            />
-          {{/if}}
-        {{/each}}
-        {{#if (not this.showAllTypes)}}
-          <AuButton
-            {{on "click" (toggle "showAllTypes" this)}}
-            @skin="link"
-            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-            @icon="add"
-          >
-            {{t "show-all-document-types"}}
-          </AuButton>
-        {{else}}
+          <span class="au-u-medium">{{t "all-document-types"}}</span>
+        </AuCheckbox>
+        <AuCheckboxGroup
+          @selected={{this.selected}}
+          as |Group|
+        >
           {{#each this.documentTypes as |documentType|}}
-            {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
-              <AuControlCheckbox
-                @checked={{includes documentType this.selected}}
-                @label={{documentType.altLabel}}
+            {{#if (includes documentType.uri this.defaultVisibleTypes)}}
+              <Group.Checkbox
+                @value={{documentType}}
                 @onChange={{fn this.toggleDocumentType documentType}}
-              />
+              >
+                {{documentType.altLabel}}
+              </Group.Checkbox>
             {{/if}}
           {{/each}}
-          <AuButton
-            {{on "click" (toggle "showAllTypes" this)}}
-            @skin="link"
-            class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
-            @icon="remove"
-          >
-            {{t "hide-document-types"}}
-          </AuButton>
-        {{/if}}
-      {{/if}}
-    </Auk::CheckboxList>
+
+          {{#if this.showAllTypes}}
+            {{#each this.documentTypes as |documentType|}}
+              {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
+                <Group.Checkbox
+                  @value={{documentType}}
+                  @onChange={{fn this.toggleDocumentType documentType}}
+                >
+                  {{documentType.altLabel}}
+                </Group.Checkbox>
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        </AuCheckboxGroup>
+      </AuCheckboxGroup>
+
+      <div class="au-u-margin-top-tiny">
+        <AuButton
+          {{on "click" (toggle "showAllTypes" this)}}
+          @skin="link"
+          class="au-u-h-functional au-u-padding-left-none"
+          @icon={{if this.showAllTypes "remove" "add"}}
+        >
+          {{if this.showAllTypes (t "hide-document-types") (t "show-all-document-types")}}
+        </AuButton>
+      </div>
+    {{/if}}
   </div>
 </div>

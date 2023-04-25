@@ -13,7 +13,6 @@ export default class UtilsAddDocument extends Component {
    * @argument onSave: receives pieceInCreation as an argument
    */
   @service store;
-  @service currentSession;
 
   @tracked pieceInCreation = null;
 
