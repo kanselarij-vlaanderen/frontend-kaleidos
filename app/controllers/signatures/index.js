@@ -70,6 +70,7 @@ export default class SignaturesIndexController extends Controller {
       this.agenda,
       this.agendaitem
     ] = await this.getAgendaitemRouteModels(piece);
+    this.decisionActivity = await this.getDecisionActivity(piece);
     this.showSidebar = true;
   }
 
@@ -79,6 +80,7 @@ export default class SignaturesIndexController extends Controller {
     this.agendaitem = null;
     this.agenda = null;
     this.meeting = null;
+    this.decisionActivity = null;
     this.showSidebar = false;
   }
 
