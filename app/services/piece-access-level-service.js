@@ -210,8 +210,10 @@ export default class PieceAccessLevelService extends Service {
         const mandatees = await subcase.mandatees;
         const currentUserOrganization = await this.currentSession.organization;
         const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
-        for (let i = 0; i < currentUserOrganizationMandatees.length; i++) {
-          if (mandatees.includes(currentUserOrganizationMandatees[i]) != -1) {
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandatees.length && mandateeUris.includes(orgMandateeUri)) {
             return true;
           }
         }

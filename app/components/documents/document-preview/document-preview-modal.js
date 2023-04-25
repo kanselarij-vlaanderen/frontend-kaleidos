@@ -43,6 +43,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   }
 
   canViewConfidentialPiece = async () => {
-    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.selectedVersion);
   }
 }
