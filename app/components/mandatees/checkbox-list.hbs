@@ -3,11 +3,12 @@
 {{else}}
   <Auk::CheckboxList>
     {{#each this.ministers as |minister|}}
-      <AuControlCheckbox
+      <AuCheckbox
         @checked={{this.isChecked minister}}
-        @label={{await (this.getMinisterNameAndTitle minister)}}
         @onChange={{fn this.toggle minister}}
-      />
+      >
+        {{await (this.getMinisterNameAndTitle minister)}}
+      </AuCheckbox>
     {{/each}}
   </Auk::CheckboxList>
 {{/if}}
