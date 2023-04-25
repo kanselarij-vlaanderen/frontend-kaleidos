@@ -7,16 +7,19 @@
     <AuFieldset as |Fieldset|>
       <Fieldset.legend>{{t "unpublish-publication-scope-selection"}}</Fieldset.legend>
       <Fieldset.content>
-        <Auk::RadioList as |List|>
+        <AuRadioGroup
+          @selected={{this.selectedOption}}
+          @onChange={{this.onChangeOption}}
+          as |Group|
+        >
           {{#each this.options as |option|}}
-            <List.Radio
-              @label={{option.label}}
-              @value={{option.value}}
-              @onChange={{this.selectOption}}
-              checked={{eq this.selectedOption.value option.value}}
-            />
+            <Group.Radio
+              @value={{option}}
+            >
+              {{option.label}}
+            </Group.Radio>
           {{/each}}
-        </Auk::RadioList>
+        </AuRadioGroup>
       </Fieldset.content>
     </AuFieldset>
   </Auk::Modal::Body>

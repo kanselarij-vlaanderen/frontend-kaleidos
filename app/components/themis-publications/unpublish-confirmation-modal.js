@@ -29,8 +29,8 @@ export default class ThemisPublicationsUnpublishConfirmationModalComponent exten
   }
 
   @action
-  selectOption(value) {
-    this.selectedOption = this.options.find((option) => option.value == value);
+  onChangeOption(selectedOption) {
+    this.selectedOption = selectedOption;
   }
 
   @task

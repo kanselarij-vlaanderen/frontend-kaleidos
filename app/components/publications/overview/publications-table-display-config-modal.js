@@ -9,28 +9,23 @@ export default class PublicationsTableDisplayConfigModalComponent extends Compon
    * @argument onClose: action, fired when the 'X' is clicked
    */
 
-  get optionColumns() {
-    const columnSize = 10; // amount of options per column
-    const columns = [];
-    for (let i = 0; i < tableColumns.length; i += columnSize) {
-      columns.push(tableColumns.slice(i, i + columnSize));
-    }
-    return columns;
+  get options() {
+    return tableColumns;
+  }
+
+  get selectedOptions() {
+    return this.args.tableConfig.visibleColumns;
   }
 
   @action
-  toggleColumnVisibility(columnKey, checked) {
-    if (checked) {
-      this.args.tableConfig.visibleColumnKeys.add(columnKey);
-    } else {
-      this.args.tableConfig.visibleColumnKeys.delete(columnKey);
-    }
-    this.args.didChange(this.args.tableConfig);
+  onChangeOptions(selectedOptions) {
+    this.args.tableConfig.visibleColumnKeys = new Set(selectedOptions.map((option) => option.keyName));
+    this.args.didChange?.(this.args.tableConfig);
   }
 
   @action
   reset() {
     this.args.tableConfig.loadDefault();
-    this.args.didChange(this.args.tableConfig);
+    this.args.didChange?.(this.args.tableConfig);
   }
 }

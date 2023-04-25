@@ -78,12 +78,13 @@
         />
       </div>
       <div class="auk-form-group auk-u-mt-4">
-        <AuControlCheckbox
+        <AuCheckbox
           data-test-publication-translation-request-update-status
-          @label={{t "update-publication-status-translation-requested"}}
           @checked={{this.mustUpdatePublicationStatus}}
           @onChange={{this.setTranslationRequestedStatus}}
-        />
+        >
+          {{t "update-publication-status-translation-requested"}}
+        </AuCheckbox>
       </div>
       <div class="auk-form-group">
         <Auk::Label for="translationRequestSubject" @required={{true}}>
