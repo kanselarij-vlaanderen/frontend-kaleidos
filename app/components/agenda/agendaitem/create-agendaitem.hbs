@@ -48,7 +48,7 @@
               {{#each this.subcases as |subcase|}}
                 <tr data-test-create-agendaitem-row>
                   <td class="auk-table__col--1">
-                    <AuControlCheckbox
+                    <AuCheckbox
                       data-test-create-agendaitem-row-subcase-checkbox={{true}}
                       @checked={{includes subcase this.selectedSubcases}}
                       @onChange={{fn this.selectSubcase subcase}}

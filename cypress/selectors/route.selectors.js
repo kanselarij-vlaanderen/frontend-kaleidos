@@ -160,7 +160,7 @@ const selectors = {
 
   // search/document-type-filter
   searchDocumentTypeFilter: {
-    list: '[data-test-route-search-document-type-filter-list]',
+    list: '[data-test-route-search-document-type-filter]',
   },
 
   // search/result-cards/case
