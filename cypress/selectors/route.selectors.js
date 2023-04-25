@@ -129,6 +129,16 @@ const selectors = {
     },
   },
 
+  // search/documents
+  searchDocuments: {
+    row: '[data-test-route-search-documents-row]',
+  },
+
+  // search/decisions
+  searchDecisions: {
+    row: '[data-test-route-search-decisions-data-table-row]',
+  },
+
   /**
     ROUTE NEWSLETTER
   */

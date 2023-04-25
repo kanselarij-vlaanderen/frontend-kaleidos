@@ -1,7 +1,9 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach, it */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -23,18 +25,21 @@ function searchFunction(optionsToCheck, defaultOption) {
   });
 }
 
-function triggerSearch() {
+function triggerSearch(searchFlow) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('GET', '/decisionmaking-flows/search?**').as(`caseSearchCall${randomInt}`);
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}`);
   cy.get(route.search.trigger).click();
-  cy.wait(`@caseSearchCall${randomInt}`);
+  cy.wait(`@searchCall${randomInt}`);
 }
 
-function searchDossier(searchTerm, Result) {
+function searchOnRoute(searchTerm, searchFlow, resultRow, Result) {
+  cy.get(route.search.input).clear()
+    .type('s');
+  triggerSearch(searchFlow);
   cy.get(route.search.input).clear()
     .type(searchTerm);
-  triggerSearch();
-  cy.get(route.searchCases.row).contains(Result);
+  triggerSearch(searchFlow);
+  cy.get(resultRow).contains(Result);
 }
 
 context('Search tests', () => {
@@ -382,51 +387,61 @@ context('Search tests', () => {
       const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
       const agendaDate = Cypress.dayjs('2023-06-06');
-      const caseTitle = `Cypress test - ${randomInt}: uniek precair interstellair, maar niet verstoken van enige flair`;
-      const subcaseTitle1 = `Cypress test - ${randomInt}: uniek terracotta scherven die wij van ons moeder erven`;
-      const subcaseTitle2 = `Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;
-      const longTitle1 = `Cypress test - ${randomInt}: uniek dramatiek op de dansvloer zonder muziek`;
-      const longTitle2 = `Cypress test - ${randomInt}: uniek ik eet mijn vla toch liever zonder sla`;
+      const caseShortTitle = `Cypress test - ${randomInt}: uniek precair interstellair, maar niet verstoken van enige flair`;
+      const subcaseShortTitle = `Cypress test - ${randomInt}: uniek terracotta scherven die wij van ons moeder erven`;
+      const subcaseLongTitle = `Cypress test - ${randomInt}: uniek dramatiek op de dansvloer zonder muziek`;
+      const newsItemShortTitle = `Cypress test - ${randomInt}: uniek ik eet mijn vla toch liever zonder sla`;
+      const newsItemLongTitle = subcaseLongTitle;
       const newsItemContent = `Cypress test - ${randomInt}: uniek voor wie het ondermaanse wat ondermaats vindt`;
-      const fileNameDocs = 'search-agendaitem-piece_1';
-      const fileNameTreatment = 'search-agendaitem-treatment_2';
-      const fileNameSubcase = 'search-agendaitem-piece_2';
-      const newFileNameDocs = `Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
+      const fileNameAgendaitem = 'search-agendaitem-piece_1'; // unieke woorden: computer, telefoon
+      const fileNameTreatment = 'search-agendaitem-treatment_2'; // unieke woorden: codez krokkettenmaker
+      const fileNameSubcase = 'search-agendaitem-piece_2'; // unieke woorden: walkman, stereo
+      const newFileNameNota = `Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
+      const newFileNameBvr = `Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;
       const newFileNameTreatment = `Cypress test - ${randomInt}: uniek een beetje blazé over het Oosterweeltracé`;
-      const fileDocs = {
-        folder: 'files', fileName: fileNameDocs, fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
-      };
-      const files = [fileDocs];
+      const filesSubcase = [
+        {
+          folder: 'files', fileName: fileNameSubcase, fileExtension: 'pdf', newFileName: newFileNameNota, fileType: 'Nota',
+        }
+      ];
+      const files = [
+        {
+          folder: 'files', fileName: fileNameAgendaitem, fileExtension: 'pdf', newFileName: newFileNameBvr, fileType: 'BVR',
+        }
+      ];
       const fileTreatment = {
-        folder: 'files', fileName: fileNameTreatment, fileExtension: 'pdf', newFileName: newFileNameTreatment,
+        folder: 'files', fileName: fileNameTreatment, fileExtension: 'pdf',
       };
 
       it('Search all fields setup', () => {
         cy.visit('/dossiers');
-        cy.createCase(caseTitle);
+        cy.createCase(caseShortTitle);
         cy.addSubcase('Nota',
-          subcaseTitle1,
-          longTitle1,
+          subcaseShortTitle,
+          subcaseLongTitle,
           'Principiële goedkeuring',
           'Principiële goedkeuring m.h.o. op adviesaanvraag');
-        cy.openSubcase(0, subcaseTitle1);
+        cy.openSubcase(0, subcaseShortTitle);
         cy.addSubcaseMandatee(4);
-        cy.addDocumentsToSubcase([
-          {
-            folder: 'files', fileName: fileNameSubcase, fileExtension: 'pdf', newFileName: newFileNameDocs, fileType: 'Nota',
-          }
-        ]);
+        cy.addDocumentsToSubcase(filesSubcase);
         cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
         cy.openAgendaForDate(agendaDate);
-        cy.addAgendaitemToAgenda(subcaseTitle1);
-        cy.addDocumentsToAgendaitem(subcaseTitle1, files);
+        cy.addAgendaitemToAgenda(subcaseShortTitle);
+        cy.addDocumentsToAgendaitem(subcaseShortTitle, files);
         cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
         cy.addDocumentToTreatment(fileTreatment);
         cy.get(auk.confirmationModal.footer.confirm).click();
+        // change name
+        cy.get(document.documentCard.actions).should('not.be.disabled')
+          .children(appuniversum.button)
+          .click();
+        cy.get(document.documentCard.editPiece).forceClick();
+        cy.get(document.documentEdit.nameInput).type(newFileNameTreatment);
+        cy.get(auk.confirmationModal.footer.confirm).click();
         cy.wait('@patchDecisionActivities');
 
-        cy.openAgendaitemKortBestekTab(subcaseTitle1);
+        cy.openAgendaitemKortBestekTab(subcaseShortTitle);
         // create new KB
         cy.intercept('GET', '/themes**').as('getThemes');
         cy.intercept('POST', '/news-items').as('postNewsItem');
@@ -434,7 +449,7 @@ context('Search tests', () => {
         cy.wait('@postNewsItem');
         cy.wait('@getThemes');
         cy.get(newsletter.editItem.shortTitle).clear()
-          .type(longTitle2);
+          .type(newsItemShortTitle);
         cy.get(newsletter.editItem.rdfaEditor).type(newsItemContent);
         cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
         cy.get(newsletter.editItem.save).click();
@@ -445,44 +460,125 @@ context('Search tests', () => {
         cy.setFormalOkOnItemWithIndex(1);
         cy.approveDesignAgenda();
 
-        cy.openAgendaitemKortBestekTab(subcaseTitle1);
-        cy.get(newsletter.newsItem.edit).click();
-        cy.get(newsletter.editItem.shortTitle).clear()
-          .type(subcaseTitle2);
-        cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
-        cy.get(newsletter.editItem.save).click();
-        cy.get(auk.confirmationModal.footer.confirm).click();
-        cy.wait('@patchNewsItems');
+        // *agendaItem titles and subcase titles are the same unless we change the agendaitem once on approved agenda
+        // cy.openAgendaitemKortBestekTab(subcaseShortTitle);
+        // cy.get(newsletter.newsItem.edit).click();
+        // cy.get(newsletter.editItem.shortTitle).clear()
+        // // TODO make this a unique title
+        //   .type(newsItemShortTitle);
+        // cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+        // cy.get(newsletter.editItem.save).click();
+        // cy.get(auk.confirmationModal.footer.confirm).click();
+        // cy.wait('@patchNewsItems');
 
         // wait for indexing
         cy.wait(60000);
       });
 
       it('Search all fields on case', () => {
+        const searchFlow = 'decisionmaking-flows';
+        const resultRow = route.searchCases.row;
+
         cy.visit('/zoeken/dossiers');
 
         // titles
-        searchDossier(caseTitle, caseTitle);
-        searchDossier(subcaseTitle1, caseTitle);
-        searchDossier(subcaseTitle2, caseTitle);
-        searchDossier(longTitle1, caseTitle);
+        searchOnRoute(caseShortTitle, searchFlow, resultRow, caseShortTitle);
+        // searching caselongtitle is possible but we cannot add longtitle, legacy only
+        searchOnRoute(subcaseShortTitle, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(subcaseLongTitle, searchFlow, resultRow, caseShortTitle);
         // mandatees
-        searchDossier('Ben', caseTitle);
-        searchDossier('Weyts', caseTitle);
-        searchDossier('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', caseTitle);
+        searchOnRoute('Ben', searchFlow, resultRow, caseShortTitle);
+        searchOnRoute('Weyts', searchFlow, resultRow, caseShortTitle);
+        searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, caseShortTitle);
         // news-item
-        searchDossier(longTitle2, caseTitle);
-        searchDossier(newsItemContent, caseTitle);
+        searchOnRoute(newsItemShortTitle, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(newsItemLongTitle, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(newsItemContent, searchFlow, resultRow, caseShortTitle);
         // documents
-        searchDossier(fileNameDocs, caseTitle);
-        searchDossier(fileNameSubcase, caseTitle);
-        searchDossier(newFileNameDocs, caseTitle);
-        searchDossier('fax', caseTitle);
-        searchDossier('Telefoon', caseTitle);
+        searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(fileNameSubcase, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(newFileNameNota, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(newFileNameBvr, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute('walkman', searchFlow, resultRow, caseShortTitle);
+        searchOnRoute('Telefoon', searchFlow, resultRow, caseShortTitle);
         // decision
-        searchDossier(fileNameTreatment, caseTitle);
-        searchDossier(newFileNameTreatment, caseTitle);
-        searchDossier('krokkettenmaker', caseTitle);
+        searchOnRoute(fileNameTreatment, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(newFileNameTreatment, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute('krokkettenmaker', searchFlow, resultRow, caseShortTitle);
+      });
+
+      it('Search all fields on agenda', () => {
+        const searchFlow = 'agendaitems';
+        const resultRow = route.searchAgendaitems.row.shortTitle;
+
+        cy.visit('/zoeken/agendapunten');
+
+        // mandatees
+        searchOnRoute('Ben', searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('Weyts', searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, subcaseShortTitle);
+        // news-item
+        searchOnRoute(newsItemContent, searchFlow, resultRow, subcaseShortTitle);
+        // documents
+        searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(fileNameSubcase, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(newFileNameNota, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(newFileNameBvr, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('walkman', searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('Telefoon', searchFlow, resultRow, subcaseShortTitle);
+        // decision
+        searchOnRoute(fileNameTreatment, searchFlow, resultRow, subcaseShortTitle);
+        // searchOnRoute(newFileNameTreatment, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('krokkettenmaker', searchFlow, resultRow, subcaseShortTitle);
+      });
+
+      it('Search all fields on documents', () => {
+        const searchFlow = 'pieces';
+        const resultRow = route.searchDocuments.row;
+
+        cy.visit('/zoeken/documenten');
+
+        // documents
+        searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(fileNameSubcase, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(newFileNameNota, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute(newFileNameBvr, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('walkman', searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('Telefoon', searchFlow, resultRow, subcaseShortTitle);
+        // decision
+        searchOnRoute(fileNameTreatment, searchFlow, resultRow, newFileNameTreatment);
+        searchOnRoute(newFileNameTreatment, searchFlow, resultRow, newFileNameTreatment);
+        searchOnRoute('krokkettenmaker', searchFlow, resultRow, newFileNameTreatment);
+      });
+
+      it('Search all fields on decisions', () => {
+        const searchFlow = 'agendaitems';
+        const resultRow = route.searchDecisions.row;
+
+        cy.visit('/zoeken/beslissingen');
+
+        // titles
+        // searchOnRoute(caseShortTitle, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(subcaseShortTitle, searchFlow, resultRow, subcaseShortTitle);
+        // searchOnRoute(subcaseTitle2, searchFlow, resultRow, caseShortTitle);
+        searchOnRoute(subcaseLongTitle, searchFlow, resultRow, subcaseShortTitle);
+        // decision
+        searchOnRoute(fileNameTreatment, searchFlow, resultRow, subcaseShortTitle);
+        // searchOnRoute(newFileNameTreatment, searchFlow, resultRow, subcaseShortTitle);
+        searchOnRoute('krokkettenmaker', searchFlow, resultRow, subcaseShortTitle);
+      });
+
+      it('Search all fields on news-items', () => {
+        const searchFlow = 'news-items';
+        const resultRow = route.searchNewsletters.dataTable;
+
+        cy.visit('/zoeken/kort-bestek');
+
+        // titles
+        searchOnRoute(newsItemLongTitle, searchFlow, resultRow, newsItemShortTitle);
+        // news-item
+        searchOnRoute(newsItemShortTitle, searchFlow, resultRow, newsItemShortTitle);
+        searchOnRoute(newsItemContent, searchFlow, resultRow, newsItemShortTitle);
       });
     });
   });
