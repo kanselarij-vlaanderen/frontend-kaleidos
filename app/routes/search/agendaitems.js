@@ -57,10 +57,10 @@ export default class AgendaitemSearchRoute extends Route {
     AgendaitemSearchRoute.postProcessPastAgendaVersions(entry);
 
     if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
-      entry.shortTitle = entry.shortTitle.join('');
+      entry.shortTitle = entry.shortTitle.join(' ');
     }
     if (entry.title && Array.isArray(entry.title)) {
-      entry.title = entry.title.join('');
+      entry.title = entry.title.join(' ');
     }
     return entry;
   };

@@ -2,23 +2,10 @@
 {{#if this.loadDecisionResultCodes.isRunning}}
   <Auk::Loader />
 {{else}}
-  <AuLink
-    @skin="naked"
-    {{on "click" this.toggleAll}}
-  >
-    {{#if this.allSelected}}
-      {{capitalize (t "deselect-all")}}
-    {{else}}
-      {{capitalize (t "select-all")}}
-    {{/if}}
-  </AuLink>
-  <Auk::CheckboxList>
-    {{#each this.decisionResultCodes as |decisionResultCode|}}
-      <AuControlCheckbox
-        @checked={{includes decisionResultCode.id @selected}}
-        @label={{decisionResultCode.label}}
-        @onChange={{fn this.toggle decisionResultCode}}
-      />
-    {{/each}}
-  </Auk::CheckboxList>
+  <Auk::CheckboxTree
+    @label={{capitalize (t "all-results")}}
+    @items={{this.decisionResultCodes}}
+    @selectedItems={{this.selectedDecisionResultCodes}}
+    @didUpdate={{this.onChangeDecisionResultCodes}}
+  />
 {{/if}}

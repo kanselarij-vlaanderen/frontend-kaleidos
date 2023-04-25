@@ -1,69 +1,65 @@
 {{page-title (t "search")}}
-<div class="au-c-search-container">
-  <Auk::Navbar>
-    <form
-      {{on "submit" this.search}}
-      class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4"
-    >
-      <div class="auk-form-group au-u-margin-bottom-none au-u-3-4">
-        <div class="auk-o-flex auk-o-flex--align-baseline">
-          <Auk::Label for="keyword" class="auk-u-mr">
-            {{capitalize (t "keyword")}}
-          </Auk::Label>
-          <Utils::SearchTooltip />
-        </div>
-        <AuInput
-          data-test-route-search-input
-          @width="block"
-          @value={{this.searchTextBuffer}}
-          id="keyword"
-          placeholder={{t "search-placeholder"}}
-        />
+<Auk::Navbar>
+  <form
+    {{on "submit" this.search}}
+    class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4"
+  >
+    <div class="auk-form-group au-u-margin-bottom-none au-u-3-4">
+      <div class="auk-o-flex auk-o-flex--align-baseline">
+        <Auk::Label for="keyword" class="auk-u-mr">
+          {{capitalize (t "keyword")}}
+        </Auk::Label>
+        <Utils::SearchTooltip />
       </div>
-      <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
-        <AuButton
-          data-test-route-search-trigger
-          @skin="primary"
-          @icon="search"
-          @width="block"
-          type="submit"
+      <AuInput
+        data-test-route-search-input
+        @width="block"
+        @value={{this.searchTextBuffer}}
+        id="keyword"
+        placeholder={{t "search-placeholder"}}
+      />
+    </div>
+    <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
+      <AuButton
+        data-test-route-search-trigger
+        @skin="primary"
+        @icon="search"
+        @width="block"
+        type="submit"
+      >
+        {{t "search"}}
+      </AuButton>
+    </div>
+  </form>
+</Auk::Navbar>
+<AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
+  <m.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <Search::Navigation />
+        <div
+          id="search-subroute-filters-area"
+          class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
         >
-          {{t "search"}}
-        </AuButton>
-      </div>
-    </form>
-  </Auk::Navbar>
-  <div class="au-u-background-gray-100 au-c-search-container__content">
-    <AuMainContainer as |m|>
-      <m.sidebar>
-        <div class="au-c-sidebar">
-          <div class="au-c-sidebar__content">
-            <Search::Navigation />
-            <div
-              id="search-subroute-filters-area"
-              class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
-            >
-              <Search::DateRangeFilter
-                @dateFrom={{this.dateFrom}}
-                @dateTo={{this.dateTo}}
-                @onDateFromChange={{this.setDateFrom}}
-                @onDateToChange={{this.setDateTo}}
-                @onDateFromClear={{set this "dateFrom" undefined}}
-                @onDateToClear={{set this "dateTo" undefined}}
-              />
-              <div class="au-c-card au-o-box au-o-box--small">
-                <Search::MinisterFilter
-                  @selected={{this.mandatees}}
-                  @onChange={{this.setMandatees}}
-                />
-              </div>
-            </div>
+          <Search::DateRangeFilter
+            @dateFrom={{this.dateFrom}}
+            @dateTo={{this.dateTo}}
+            @onDateFromChange={{this.setDateFrom}}
+            @onDateToChange={{this.setDateTo}}
+            @onDateFromClear={{set this "dateFrom" undefined}}
+            @onDateToClear={{set this "dateTo" undefined}}
+          />
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Search::MinisterFilter
+              @selected={{this.mandatees}}
+              @onChange={{this.setMandatees}}
+            />
           </div>
         </div>
-      </m.sidebar>
-      <m.content @scroll={{true}}>
-        {{outlet}}
-      </m.content>
-    </AuMainContainer>
-  </div>
-</div>
+      </div>
+    </div>
+  </m.sidebar>
+  <m.content @scroll={{true}}>
+    {{outlet}}
+  </m.content>
+</AuMainContainer>

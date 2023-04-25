@@ -31,12 +31,13 @@
           />
         </div>
         <div class="auk-form-group auk-u-mt-4">
-          <AuControlCheckbox
+          <AuCheckbox
             data-test-proof-request-update-status
-            @label={{t "update-publication-status-proof-requested"}}
             @checked={{this.mustUpdatePublicationStatus}}
             @onChange={{this.setProofRequestedStatus}}
-          />
+          >
+            {{t "update-publication-status-proof-requested"}}
+          </AuCheckbox>
         </div>
         <div class="auk-form-group">
           <Auk::Label for="proofRequestSubject" @required={{true}}>

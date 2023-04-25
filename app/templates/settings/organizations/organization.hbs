@@ -1,0 +1,269 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <AuLink
+        data-test-auk-back-button
+        @skin="button-naked"
+        @icon="hierarchical-back"
+        @hideText={{true}}
+        @route="settings.organizations.index"
+        class="auk-u-mr-2"
+      >
+        {{t "back"}}
+      </AuLink>
+      <Auk::Toolbar::Item>
+        <h4 data-test-settings-header-title class="auk-toolbar-complex__title">
+          {{t "manage-organization" name=this.model.name}}
+        </h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      {{yield}}
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+<div class="auk-u-overflow-hidden">
+  <div class="au-o-grid">
+    <div class="au-o-grid__item au-u-3-4@medium au-u-2-3@large">
+      <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+        <Auk::Panel>
+          <Auk::Panel::Header>
+            <AuToolbar class="auk-u-maximize-width" as |Group|>
+              <Group>
+                <h4
+                  data-test-route-settings---user-general-info
+                  class="auk-panel__title"
+                >
+                  {{t "manage-users-general-info"}}
+                </h4>
+              </Group>
+              <Group>
+                {{#if @model.isBlocked}}
+                  <AuButton
+                    data-test-route-settings---user-unblock
+                    {{on "click" (toggle "showUnblockOrganization" this)}}
+                  >
+                    {{t "unblock-organization"}}
+                  </AuButton>
+                {{else}}
+                  <AuButton
+                    data-test-route-settings---user-block
+                    @alert={{true}}
+                    {{on "click" (toggle "showBlockOrganization" this)}}
+                  >
+                    {{t "block-organization"}}
+                  </AuButton>
+                {{/if}}
+              </Group>
+            </AuToolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body>
+            <dl>
+              <div class="auk-key-value-item auk-key-value-item--horizontal">
+                <div class="auk-key-value-item__label">
+                  {{t "manage-users-full-name"}}
+                </div>
+                <div
+                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
+                >
+                  {{this.model.name}}
+                </div>
+              </div>
+            </dl>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      </div>
+      <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+        <Auk::Panel>
+          <Auk::Panel::Header>
+            <h4
+              data-test-route-settings---organisation-technical-info
+              class="auk-panel__title"
+            >
+              {{t "linked-mandatees"}}
+            </h4>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body class="au-u-padding-none">
+            <AuTable>
+              <:header>
+                <tr>
+                  <th>
+                    {{capitalize (t "mandatee")}}
+                  </th>
+                  <th></th>
+                </tr>
+              </:header>
+              <:body>
+                {{#each this.model.mandatees as |mandatee|}}
+                  <tr>
+                    <td>
+                      {{mandatee.fullDisplayName}}
+                    </td>
+                    <td class="au-u-text-right">
+                      <AuButton
+                        data-test-route-settings---organisation-unlink-mandatee
+                        @skin="naked"
+                        @icon="circle-full"
+                        {{on
+                          "click"
+                          (queue
+                            (toggle "showUnlinkMandatee" this)
+                            (set this "mandateeBeingUnlinked" mandatee)
+                          )
+                        }}
+                      >
+                        {{t "unlink"}}
+                      </AuButton>
+                    </td>
+                  </tr>
+                {{/each}}
+                <tr>
+                  <td>
+                    <Mandatees::MandateeSelector
+                      @referenceDate={{@referenceDate}}
+                      @openSearch={{this.openSearch}}
+                      @onSelectMandatee={{fn (mut this.selectedMandatee)}}
+                      @selectedMandatees={{this.selectedMandatee}}
+                    />
+                  </td>
+                  <td class="au-u-text-right">
+                    {{#if this.selectedMandatee.id}}
+                      <AuButton {{on "click" this.linkMandatee}}>
+                        {{t "connect"}}
+                      </AuButton>
+                    {{/if}}
+                  </td>
+                </tr>
+              </:body>
+            </AuTable>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      </div>
+    </div>
+  </div>
+</div>
+<AuModal
+  @modalOpen={{this.showBlockOrganization}}
+  @closeModal={{toggle "showBlockOrganization" this}}
+>
+  <:title>
+    {{t "block-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>
+        {{t "block-organization-explanation"}}
+      </p>
+      <p>
+        {{t "block-organization-are-you-sure" htmlSafe=true}}
+      </p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showBlockOrganization" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          data-test-route-settings---organization-confirm-block-organization
+          @alert={{true}}
+          {{on
+            "click"
+            (queue this.blockOrganization (toggle "showBlockOrganization" this))
+          }}
+        >
+          {{t "block-organization"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+<AuModal
+  @modalOpen={{this.showUnblockOrganization}}
+  @closeModal={{toggle "showUnblockOrganization" this}}
+>
+  <:title>
+    {{t "unblock-organization"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>
+        {{t "unblock-organization-explanation"}}
+      </p>
+      <p>
+        {{t "unblock-organization-are-you-sure" htmlSafe=true}}
+      </p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnblockOrganization" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          data-test-route-settings---organisation-confirm-unblock-organisation
+          @alert={{true}}
+          {{on
+            "click"
+            (queue
+              this.unblockOrganization (toggle "showUnblockOrganization" this)
+            )
+          }}
+        >
+          {{t "unblock-organization"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
+<AuModal
+  @modalOpen={{this.showUnlinkMandatee}}
+  @closeModal={{toggle "showUnlinkMandatee" this}}
+>
+  <:title>
+    {{t "unlink-mandatee"}}
+  </:title>
+  <:body>
+    <div class="au-o-flow au-o-flow--small">
+      <p>
+        {{t "unlink-mandatee-are-you-sure" htmlSafe=true}}
+      </p>
+    </div>
+  </:body>
+  <:footer>
+    <AuToolbar as |Group|>
+      <Group>
+        <AuButton
+          @skin="naked"
+          {{on "click" (toggle "showUnlinkMandatee" this)}}
+        >
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton
+          data-test-route-settings---organisation-confirm-unlink-mandatee
+          @alert={{true}}
+          {{on
+            "click"
+            (queue this.unlinkMandatee (toggle "showUnlinkMandatee" this))
+          }}
+        >
+          {{t "unlink-mandatee"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</AuModal>
