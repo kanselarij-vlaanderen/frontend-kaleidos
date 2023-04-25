@@ -17,20 +17,21 @@
           <AuFieldset as |Fieldset|>
             <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
             <Fieldset.content>
-              <Auk::RadioList
+              <AuRadioGroup
                 data-test-subcase-description-edit-type
-                @layout="inline"
-                as |List|
+                @alignment="inline"
+                @selected={{this.agendaItemType}}
+                @onChange={{this.onChangeAgendaItemType}}
+                as |Group|
               >
                 {{#each this.agendaItemTypes as |type|}}
-                  <List.Radio
-                    @label={{type.label}}
-                    @value={{type.id}}
-                    @onChange={{this.selectAgendaItemType}}
-                    checked={{eq type.uri this.agendaItemType.uri}}
-                  />
+                  <Group.Radio
+                    @value={{type}}
+                  >
+                    {{type.label}}
+                  </Group.Radio>
                 {{/each}}
-              </Auk::RadioList>
+              </AuRadioGroup>
             </Fieldset.content>
           </AuFieldset>
         </div>

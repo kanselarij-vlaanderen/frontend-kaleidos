@@ -36,11 +36,11 @@
 >
   <:header>
     <th>
-      <AuControlCheckbox>
+      <AuCheckbox>
         <span class="auk-u-sr-only">
           {{t "select"}}
         </span>
-      </AuControlCheckbox>
+      </AuCheckbox>
     </th>
     <th>{{t "document-name"}}</th>
     <th>{{t "document-type"}}</th>
@@ -50,11 +50,11 @@
   </:header>
   <:body as |piece|>
     <td>
-      <AuControlCheckbox>
+      <AuCheckbox>
         <span class="auk-u-sr-only">
           {{t "select"}}
         </span>
-      </AuControlCheckbox>
+      </AuCheckbox>
     </td>
     <td>
       <AuLink @route="document" @model={{piece.id}}>
