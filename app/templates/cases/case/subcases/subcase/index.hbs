@@ -8,12 +8,13 @@
         </div>
       </div>
       {{#if (user-may "manage-cases")}}
-        <AuControlCheckbox
+        <AuCheckbox
           data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
-          @label={{t "limited-access"}}
           @checked={{@model.subcase.confidential}}
           @disabled={{true}}
-        />
+        >
+          {{t "limited-access"}}
+        </AuCheckbox>
       {{/if}}
       <Subcase::SubcaseTitlesPanel
         @subcase={{@model.subcase}}

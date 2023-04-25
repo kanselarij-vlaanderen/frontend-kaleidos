@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import * as CONFIG from 'frontend-kaleidos/config/config';
 
@@ -41,15 +41,6 @@ export default class GenerateReportModalComponent extends Component {
   @tracked publicationYearMax;
   @tracked publicationYearMin;
 
-  // LIMITATION:
-  //  1. a person will not show up in the select
-  //    if: a mandatee resigned in the year before the publication
-  //  2. a person can be selected person that was not a mandatee in that year
-  //    if a person is selected
-  //      and then the publication year is changed
-  @tracked mandateePersons;
-  @tracked selectedMandateePersons = [];
-
   @tracked governmentDomains;
   @tracked selectedGovernmentDomains = [];
 
@@ -79,10 +70,6 @@ export default class GenerateReportModalComponent extends Component {
 
     if (this.args.userInputFields.regulationTypes) {
       this.loadRegulationTypes.perform();
-    }
-
-    if (this.args.userInputFields.mandateePersons) {
-      this.loadMandateePersons();
     }
   }
 
@@ -162,36 +149,6 @@ export default class GenerateReportModalComponent extends Component {
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
-  @action
-  loadMandateePersons() {
-    if (this.args.userInputFields.mandateePersons) {
-      // Assign a promise to mandateePersons to enable loading state on ember-power-select
-      this.mandateePersons = this.fetchMandateePersons.perform(undefined);
-    }
-  }
-
-  @task({
-    restartable: true,
-  })
-  // only called when search text input is not empty
-  *searchMandateePersons(searchText) {
-    yield timeout(CONFIG.LIVE_SEARCH_DEBOUNCE_TIME);
-    return this.fetchMandateePersons.perform(searchText);
-  }
-
-  @task
-  *fetchMandateePersons(searchText) {
-    const [dateRangeStart, dateRangeEnd] = this.dateRange;
-    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(dateRangeStart, dateRangeEnd, searchText);
-    const persons = [];
-    for (const mandatee of mandatees) {
-      const person = yield mandatee.person;
-      persons.addObject(person);
-    }
-
-    return persons.sortBy('lastName');
-  }
-
   @task
   *loadGovernmentDomains() {
     let governmentDomains = yield this.store.query('concept', {
@@ -210,12 +167,8 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectGovernmentDomain(governmentDomain, checked) {
-    if (checked) {
-      this.selectedGovernmentDomains.addObject(governmentDomain); // addObject ensures no duplicates
-    } else {
-      this.selectedGovernmentDomains.removeObject(governmentDomain);
-    }
+  onChangeGovernmentDomains(selectedGovernmentDomains) {
+    this.selectedGovernmentDomains = selectedGovernmentDomains;
   }
 
   @task // @task: for consistency with other loadData tasks
@@ -230,12 +183,8 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   @action
-  selectRegulationType(regulationType, checked) {
-    if (checked) {
-      this.selectedRegulationTypes.addObject(regulationType); // addObject ensures no duplicates
-    } else {
-      this.selectedRegulationTypes.removeObject(regulationType);
-    }
+  onChangeRegulationTypes(selectedRegulationTypes) {
+    this.selectedRegulationTypes = selectedRegulationTypes;
   }
 
   get isValid() {

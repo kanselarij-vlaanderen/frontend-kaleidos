@@ -6,12 +6,16 @@
 >
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-      <p class="au-u-para-small au-u-muted au-u-medium">
+      <p
+        data-test-route-search-result-cards-decision-date
+        class="au-u-para-small au-u-muted au-u-medium"
+      >
         {{date @date}}
       </p>
     </div>
     <AuHeading @level="3" @skin="6">
       <AuLink
+        data-test-route-search-result-cards-decision-shorttitle
         class="au-u-padding-none card-link"
         @route="agenda.agendaitems.agendaitem.decisions"
         @models={{array @meetingId @agendaId @agendaItemId}}
@@ -33,7 +37,10 @@
       />
     </p>
     {{#if @decisionResultCode}}
-      <p class="au-u-margin-top-small">
+      <p 
+        data-test-route-search-result-cards-decision-result
+        class="au-u-margin-top-small"
+      >
         <Decision::DecisionResultPill
           @decisionResultCode={{@decisionResultCode}}
           @showUndecided={{false}}

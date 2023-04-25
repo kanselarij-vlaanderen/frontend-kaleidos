@@ -161,12 +161,13 @@ context('Search tests', () => {
     });
 
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
-    it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
+    // duplicated tests, see search-new-views.spec.js
+    it.skip('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
       cy.visit('zoeken/agendapunten');
       searchFunction(options, options[2]);
     });
 
-    it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
+    it.skip('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
       cy.visit('zoeken/dossiers');
       searchFunction(options, options[2]);
     });
@@ -362,9 +363,9 @@ context('Search tests', () => {
       cy.wait('@searchCall');
 
       // sorted default by relevance and not dates
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(0)
         .contains('accenten');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(1)
         .contains('Hawaï');
 
       cy.intercept('GET', '/agendaitems/search?**').as('searchCall2');
@@ -372,9 +373,9 @@ context('Search tests', () => {
       cy.wait('@searchCall2');
       cy.url().should('contain', 'sorteer=-session-dates');
 
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(0)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(0)
         .contains('Hawaï');
-      cy.get(route.searchAgendaitems.row.shortTitle).eq(1)
+      cy.get(route.agendaitemResultCard.shortTitleLink).eq(1)
         .contains('accenten');
     });
 

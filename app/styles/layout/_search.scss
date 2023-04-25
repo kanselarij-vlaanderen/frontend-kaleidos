@@ -1,0 +1,24 @@
+/* Search page
+   ========================================================================== */
+
+.l-search-container {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+
+  height: auto;
+  min-height: 0;
+
+  @include mq(medium) {
+    overflow: hidden;
+  }
+
+  .au-c-main-container {
+    height: 100%;
+    display: block;
+
+    @include mq(medium) {
+      display: flex;
+    }
+  }
+}
