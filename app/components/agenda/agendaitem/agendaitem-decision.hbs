@@ -51,7 +51,6 @@
                     {{t "create"}}
                   </AuButton>
                 </Group.Item>
-
               {{/if}}
             {{/unless}}
           {{/if}}
@@ -112,11 +111,15 @@
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
-        <Agenda::Agendaitem::AgendaitemDecisionEditor
+        <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+          @piecePart={{this.betreftPiecePart}}
+          @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
         />
-        <Agenda::Agendaitem::AgendaitemDecisionEditor
+        <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+          @piecePart={{this.beslissingPiecePart}}
+          @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
         />
       </Auk::Panel::Body>
     {{else}}

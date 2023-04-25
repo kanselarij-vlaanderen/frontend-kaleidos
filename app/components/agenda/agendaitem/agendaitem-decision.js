@@ -199,9 +199,19 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  setBetreftEditorContent(content) {
+    this.editorInstanceBetreft.setHtmlContent(content);
+  }
+
+  @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     this.editorInstanceBeslissing = editorInterface;
     editorInterface.setHtmlContent(this.beslissingPiecePart?.value ?? '');
+  }
+
+  @action
+  setBeslissingEditorContent(content) {
+    this.editorInstanceBeslissing.setHtmlContent(content);
   }
 
   onSaveReport = task(async () => {
@@ -226,11 +236,13 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async attachPieceParts() {
+    const now = new Date();
     await this.store
       .createRecord('piece-part', {
         title: 'Betreft',
         value: this.editorInstanceBetreft.htmlContent,
         report: this.report,
+        created: now,
       })
       .save();
 
@@ -239,12 +251,14 @@ export default class AgendaitemDecisionComponent extends Component {
         title: 'Beslissing',
         value: this.editorInstanceBeslissing.htmlContent,
         report: this.report,
+        created: now,
       })
       .save();
   }
 
   @action
   async updatePieceParts() {
+    const now = new Date();
     const betreftPiecePart = this.betreftPiecePart;
     const beslissingPiecePart = this.beslissingPiecePart;
 
@@ -257,6 +271,7 @@ export default class AgendaitemDecisionComponent extends Component {
           value: this.editorInstanceBetreft.htmlContent,
           report: this.report,
           previousPiecePart: betreftPiecePart,
+          created: now,
         })
         .save();
       await betreftPiecePart.save();
@@ -272,6 +287,7 @@ export default class AgendaitemDecisionComponent extends Component {
           value: this.editorInstanceBeslissing.htmlContent,
           report: this.report,
           previousPiecePart: beslissingPiecePart,
+          created: now,
         })
         .save();
       await beslissingPiecePart.save();
