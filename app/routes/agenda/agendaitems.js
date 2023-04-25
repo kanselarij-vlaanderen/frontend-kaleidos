@@ -36,7 +36,7 @@ export default class AgendaAgendaitemsRoute extends Route {
       'filter[agenda][:id:]': agenda.id,
       include: 'type',
       'page[size]': PAGE_SIZE.AGENDAITEMS,
-      sort: 'type,number',
+      sort: 'type.position,number',
     });
 
     // Ensure mandatee data for each agendaitem is loaded
