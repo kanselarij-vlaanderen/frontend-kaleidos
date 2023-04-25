@@ -1204,5 +1204,6 @@
   "marked-for-signing": "Gemarkeerd voor handtekenen",
   "preview": "Voorvertoning",
   "filter-on-signer": "Filter op ondertekenaar",
-  "filter-content": "Filter inhoud"
+  "filter-content": "Filter inhoud",
+  "apply": "Toepassen"
 }
