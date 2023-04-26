@@ -1205,5 +1205,7 @@
   "preview": "Voorvertoning",
   "filter-on-signer": "Filter op ondertekenaar",
   "filter-content": "Filter inhoud",
-  "apply": "Toepassen"
+  "apply": "Toepassen",
+  "email-address": "E-mailadres",
+  "add-approval": "Goedkeuring toevoegen"
 }

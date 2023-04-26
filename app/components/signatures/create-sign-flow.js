@@ -13,7 +13,10 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   @service store;
 
   @tracked showMinisterModal = false;
+  @tracked showApproversModal = false;
+
   @tracked signers = new TrackedArray([]);
+  @tracked approvers = new TrackedArray([]);
 
   primeMinister = null;
 
@@ -44,6 +47,17 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       this.signers.push(mandatee);
     }
   });
+
+  @action
+  saveApprover(approver) {
+    this.approvers.addObject(approver);
+    this.showApproversModal = false;
+  }
+
+  @action
+  removeApprover(approver) {
+    this.approvers.removeObject(approver);
+  }
 
   saveSigners = task(async (selected) => {
     const records = await this.mandateeIdsToRecords(selected);
