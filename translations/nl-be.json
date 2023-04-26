@@ -1207,5 +1207,6 @@
   "filter-content": "Filter inhoud",
   "apply": "Toepassen",
   "email-address": "E-mailadres",
-  "add-approval": "Goedkeuring toevoegen"
+  "add-approval": "Goedkeuring toevoegen",
+  "add-notification": "Notificatie toevoegen"
 }

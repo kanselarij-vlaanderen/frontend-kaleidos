@@ -14,9 +14,11 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @tracked showMinisterModal = false;
   @tracked showApproversModal = false;
+  @tracked showNotificationAddressesModal = false;
 
   @tracked signers = new TrackedArray([]);
   @tracked approvers = new TrackedArray([]);
+  @tracked notificationAddresses = new TrackedArray([]);
 
   primeMinister = null;
 
@@ -57,6 +59,17 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   @action
   removeApprover(approver) {
     this.approvers.removeObject(approver);
+  }
+
+  @action
+  saveNotificationAddress(address) {
+    this.notificationAddresses.addObject(address);
+    this.showNotificationAddressesModal = false;
+  }
+
+  @action
+  removeNotificationAddress(address) {
+    this.notificationAddresses.removeObject(address);
   }
 
   saveSigners = task(async (selected) => {
