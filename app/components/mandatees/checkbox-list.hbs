@@ -5,7 +5,6 @@
     {{#each this.ministers as |minister|}}
       <AuCheckbox
         @checked={{this.isChecked minister}}
-        @disabled={{includes minister.id @disabledOptions}}
         @onChange={{fn this.toggle minister}}
       >
         {{await (this.getMinisterNameAndTitle minister)}}

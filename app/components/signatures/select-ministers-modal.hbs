@@ -7,7 +7,6 @@
   <Auk::Modal::Body>
     <Mandatees::CheckboxList
       @selected={{this.selectedMinisters}}
-      @disabledOptions={{@disabledOptions}}
       @onChange={{fn (mut this.selectedMinisters)}}
       @allowPartialMatch={{true}}
     />
