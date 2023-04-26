@@ -59,28 +59,6 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
-  {{#if (and (not this.isEditing) this.report.pieceParts)}}
-    {{! We need to guarantee the report has a file attached to it.
-    We can have reports with only piece parts, then we need to display
-    the previous version (which is guaranteed to have a file) }}
-    {{#if (or this.report.file this.report.previousPiece)}}
-      <Auk::Panel::Body
-        class="{{if this.isEditing 'au-u-background-gray-100'}}"
-      >
-        {{#if (or this.report.file this.previousPiece)}}
-          <Documents::DocumentCard
-            @piece={{if this.report.file this.report this.previousPiece}}
-            @isEditable={{true}}
-            @agendaContext={{@agendaContext}}
-            @hideNewerVersions={{true}}
-            @hideActions={{true}}
-            @bordered={{true}}
-          />
-        {{/if}}
-      </Auk::Panel::Body>
-    {{/if}}
-  {{/if}}
-
   <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -107,6 +85,26 @@
   </Auk::Panel::Body>
 
   {{#if this.loadReport.isIdle}}
+    {{#if (and (not this.isEditing) this.report.pieceParts)}}
+      {{! We need to guarantee the report has a file attached to it.
+      We can have reports with only piece parts, then we need to display
+      the previous version (which is guaranteed to have a file) }}
+      {{#if (or this.report.file this.previousReport)}}
+        <Auk::Panel::Body
+          class="{{if this.isEditing 'au-u-background-gray-100'}}"
+        >
+          <Documents::DocumentCard
+            @piece={{if this.report.file this.report this.previousReport}}
+            @isEditable={{true}}
+            @agendaContext={{@agendaContext}}
+            @hideNewerVersions={{true}}
+            @hideActions={{true}}
+            @bordered={{true}}
+          />
+        </Auk::Panel::Body>
+      {{/if}}
+    {{/if}}
+
     {{#if this.isEditing}}
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
@@ -133,7 +131,7 @@
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
             @onOpenUploadModal={{@onOpenUploadModal}}
-            @onAddPiece={{this.attachNewReportVersion}}
+            @onAddPiece={{this.attachNewReportVersionDepr}}
             @didDeleteContainer={{perform this.loadReport}}
             @bordered={{false}}
           />
@@ -143,15 +141,6 @@
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
-          {{! TODO: decide if we want to use this }}
-          {{!-- <Agenda::Agendaitem::DecisionViewer
-            {{did-insert this.setDecisionViewerElement}}
-            @meeting={{@agendaContext.meeting}}
-            @agendaitem={{@agendaContext.agendaitem}}
-            @concernsHtmlString={{this.betreftPiecePart.value}}
-            @decisionHtmlString={{this.beslissingPiecePart.value}}
-          /> --}}
-
           <AuContent @size="small">
             <h4>Betreft :</h4>
             <SanitizeHtml

@@ -7,6 +7,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEmpty } from '@ember/utils';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { trackedFunction } from 'ember-resources/util/function';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -18,12 +19,15 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
  */
 export default class AgendaitemDecisionComponent extends Component {
   @service fileConversionService;
+  @service intl;
   @service pieceAccessLevelService;
   @service store;
   @service toaster;
-  @service intl;
 
   @tracked report;
+  @tracked previousReport;
+  @tracked betreftPiecePart;
+  @tracked beslissingPiecePart;
 
   @tracked isEditing = false;
   @tracked isEditingPill = false;
@@ -55,6 +59,22 @@ export default class AgendaitemDecisionComponent extends Component {
 
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.report;
+    if (this.report) {
+      this.betreftPiecePart = await this.store.queryOne('piece-part', {
+        filter: {
+          report: { ':id:': this.report.id },
+          ':has-no:next-piece-part': true,
+          title: 'Betreft',
+        },
+      });
+      this.beslissingPiecePart = await this.store.queryOne('piece-part', {
+        filter: {
+          report: { ':id:': this.report.id },
+          ':has-no:next-piece-part': true,
+          title: 'Beslissing',
+        },
+      });
+    }
     this.previousReport = await this.report?.previousPiece;
   });
 
@@ -77,80 +97,11 @@ export default class AgendaitemDecisionComponent extends Component {
     this.toggleEditPill();
   });
 
-  @action
-  async attachReport() {
-    const now = new Date();
-    const report = this.store.createRecord('report', {
-      created: now,
-      modified: now,
-      name: `${
-        this.args.agendaContext.meeting.numberRepresentation
-      } - punt ${addLeadingZeros(
-        this.args.agendaContext.agendaitem.number,
-        4
-      )}`,
-    });
-
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-      type: this.decisionDocType,
-    });
-
-    const subcase = await this.args.decisionActivity.subcase;
-    const subcaseIsConfidential = subcase?.confidential;
-
-    const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept',
-      subcaseIsConfidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
-    );
-
-    await documentContainer.save();
-    report.setProperties({
-      accessLevel: defaultAccessLevel,
-      documentContainer,
-    });
-    await report.save();
-
-    this.args.decisionActivity.report = report;
-
-    await this.args.decisionActivity.save();
-    await this.loadReport.perform();
-  }
-
-  @action
-  async updateReport() {
-    const previousReport = this.report;
-    const now = new Date();
-    let newName;
-    try {
-      newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
-        (await (await previousReport.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = previousReport.name;
-    }
-    this.report = await this.store
-      .createRecord('report', {
-        name: newName,
-        created: now,
-        modified: now,
-        previousPiece: previousReport,
-        accessLevel: previousReport.accessLevel,
-        documentContainer: previousReport.documentContainer,
-      })
-      .save();
-    await previousReport.save();
-    this.args.decisionActivity.report = this.report;
-    await this.args.decisionActivity.save();
-  }
-
   /**
    * Deprecated but needed for backwards compat
    */
   @action
-  async attachNewReportVersion(piece) {
+  async attachNewReportVersionDepr(piece) {
     await piece.save();
     try {
       const sourceFile = await piece.file;
@@ -193,8 +144,13 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
+    if (this.betreftPiecePart) {
+      editorInterface.setHtmlContent(this.betreftPiecePart.value);
+    } else if (this.editorInstanceBetreft) {
+      editorInterface.setHtmlContent(this.editorInstanceBetreft.htmlContent);
+    }
+
     this.editorInstanceBetreft = editorInterface;
-    editorInterface.setHtmlContent(this.betreftPiecePart?.value ?? '');
   }
 
   @action
@@ -204,8 +160,13 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
+    if (this.beslissingPiecePart) {
+      editorInterface.setHtmlContent(this.beslissingPiecePart.value);
+    } else if (this.editorInstanceBeslissing) {
+      editorInterface.setHtmlContent(this.editorInstanceBeslissing.htmlContent);
+    }
+
     this.editorInstanceBeslissing = editorInterface;
-    editorInterface.setHtmlContent(this.beslissingPiecePart?.value ?? '');
   }
 
   @action
@@ -214,85 +175,183 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   onSaveReport = task(async () => {
+    debugger;
+    let report;
+    let documentContainer;
     if (!this.report) {
-      await this.attachReport();
+      documentContainer = this.createNewDocumentContainer();
+      report = await this.createNewReport(documentContainer);
+    } else {
+      documentContainer = await this.report.documentContainer;
+      report = this.report;
     }
 
     // To make sure the content of the PDF matches the piece parts,
     // we need to create a new report version here
-    if (await this.report.file) {
-      await this.updateReport();
+    if (await this.report?.file) {
+      report = await this.attachNewReportVersion(this.report);
     }
 
-    if (isEmpty(await this.report.pieceParts)) {
-      await this.attachPieceParts();
+    debugger;
+
+    let betreftPiecePart;
+    let beslissingPiecePart;
+
+    if (isEmpty(await this.report?.pieceParts)) {
+      ({ betreftPiecePart, beslissingPiecePart } =
+        this.createAndAttachPieceParts(
+          report,
+          this.editorInstanceBetreft.htmlContent,
+          this.editorInstanceBeslissing.htmlContent
+        ));
     } else {
-      await this.updatePieceParts();
+      ({ betreftPiecePart, beslissingPiecePart } =
+        this.attachNewPiecePartsVersion(
+          report,
+          this.betreftPiecePart,
+          this.beslissingPiecePart
+        ));
     }
+
+    await documentContainer.save();
+    await report.save();
+    await betreftPiecePart?.save();
+    await beslissingPiecePart?.save();
+
+    this.args.decisionActivity.report = report;
+
+    await this.args.decisionActivity.save();
+    await this.loadReport.perform();
 
     this.isEditing = false;
   });
 
-  @action
-  async attachPieceParts() {
-    const now = new Date();
-    await this.store
-      .createRecord('piece-part', {
-        title: 'Betreft',
-        value: this.editorInstanceBetreft.htmlContent,
-        report: this.report,
-        created: now,
-      })
-      .save();
+  createNewDocumentContainer() {
+    const documentContainer = this.store.createRecord('document-container', {
+      created: new Date(),
+      type: this.decisionDocType,
+    });
 
-    await this.store
-      .createRecord('piece-part', {
-        title: 'Beslissing',
-        value: this.editorInstanceBeslissing.htmlContent,
-        report: this.report,
-        created: now,
-      })
-      .save();
+    return documentContainer;
   }
 
-  @action
-  async updatePieceParts() {
+  async createNewReport(documentContainer) {
     const now = new Date();
-    const betreftPiecePart = this.betreftPiecePart;
-    const beslissingPiecePart = this.beslissingPiecePart;
+    const report = this.store.createRecord('report', {
+      created: now,
+      modified: now,
+      name: `${
+        this.args.agendaContext.meeting.numberRepresentation
+      } - punt ${addLeadingZeros(
+        this.args.agendaContext.agendaitem.number,
+        4
+      )}`,
+    });
 
-    // Check again because only one of the editors might have changed
-    if (editorContentChanged(betreftPiecePart, this.editorInstanceBetreft)) {
-      betreftPiecePart.report = null;
-      await this.store
-        .createRecord('piece-part', {
-          title: 'Betreft',
-          value: this.editorInstanceBetreft.htmlContent,
-          report: this.report,
-          previousPiecePart: betreftPiecePart,
-          created: now,
-        })
-        .save();
-      await betreftPiecePart.save();
+    const subcase = await this.args.decisionActivity.subcase;
+    const subcaseIsConfidential = subcase?.confidential;
+
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      subcaseIsConfidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
+    );
+
+    report.setProperties({
+      accessLevel: defaultAccessLevel,
+      documentContainer,
+    });
+
+    return report;
+  }
+
+  async attachNewReportVersion(previousReport) {
+    const now = new Date();
+    let newName;
+    try {
+      newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
+        (await (await previousReport.documentContainer).pieces).length + 1
+      );
+    } catch (e) {
+      newName = previousReport.name;
+    }
+    const report = this.store.createRecord('report', {
+      name: newName,
+      created: now,
+      modified: now,
+      previousPiece: previousReport,
+      accessLevel: previousReport.accessLevel,
+      documentContainer: previousReport.documentContainer,
+      pieceParts: await previousReport.pieceParts,
+    });
+
+    return report;
+  }
+
+  createAndAttachPieceParts(report, betreftContent, beslissingContent) {
+    const now = new Date();
+    const betreftPiecePart = this.store.createRecord('piece-part', {
+      title: 'Betreft',
+      value: betreftContent,
+      report: report,
+      created: now,
+    });
+
+    const beslissingPiecePart = this.store.createRecord('piece-part', {
+      title: 'Beslissing',
+      value: beslissingContent,
+      report: report,
+      created: now,
+    });
+
+    return {
+      betreftPiecePart,
+      beslissingPiecePart,
+    };
+  }
+
+  attachNewPiecePartsVersion(
+    report,
+    previousBetreftPiecePart,
+    previousBeslissingPiecePart
+  ) {
+    const now = new Date();
+
+    let betreftPiecePart = null;
+    let beslissingPiecePart = null;
+
+    if (
+      editorContentChanged(previousBetreftPiecePart, this.editorInstanceBetreft)
+    ) {
+      betreftPiecePart = this.store.createRecord('piece-part', {
+        title: 'Betreft',
+        value: this.editorInstanceBetreft.htmlContent,
+        report: report,
+        previousPiecePart: previousBetreftPiecePart,
+        created: now,
+      });
     }
 
     if (
-      editorContentChanged(beslissingPiecePart, this.editorInstanceBeslissing)
+      editorContentChanged(
+        previousBeslissingPiecePart,
+        this.editorInstanceBeslissing
+      )
     ) {
-      beslissingPiecePart.report = null;
-      await this.store
-        .createRecord('piece-part', {
-          title: 'Beslissing',
-          value: this.editorInstanceBeslissing.htmlContent,
-          report: this.report,
-          previousPiecePart: beslissingPiecePart,
-          created: now,
-        })
-        .save();
-      await beslissingPiecePart.save();
+      beslissingPiecePart = this.store.createRecord('piece-part', {
+        title: 'Beslissing',
+        value: this.editorInstanceBeslissing.htmlContent,
+        report: report,
+        previousPiecePart: previousBeslissingPiecePart,
+        created: now,
+      });
     }
 
-    await this.report.save();
+    return {
+      betreftPiecePart,
+      beslissingPiecePart,
+    };
   }
 
   get disableSaveButton() {
@@ -323,13 +382,5 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     return false;
-  }
-
-  get betreftPiecePart() {
-    return this.report?.pieceParts?.find((x) => x.title === 'Betreft');
-  }
-
-  get beslissingPiecePart() {
-    return this.report?.pieceParts?.find((x) => x.title === 'Beslissing');
   }
 }
