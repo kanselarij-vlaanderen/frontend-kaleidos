@@ -62,7 +62,7 @@ export default class AgendaitemSearchRoute extends Route {
     if (entry.title && Array.isArray(entry.title)) {
       entry.title = entry.title.join('');
     }
-    if (agendaitem.highlight.shortTitle[0]?.split(" ").length < agendaitem.attributes.shortTitle?.split(" ").length) {
+    if ((agendaitem.highlight && agendaitem.highlight.shortTitle) && agendaitem.highlight.shortTitle[0]?.split(" ").length < agendaitem.attributes.shortTitle?.split(" ").length) {
       const highlightShortTitleEmsRemoved = agendaitem.highlight.shortTitle[0].replace(/<em>|<\/em>/g, "");
       entry.shortTitle = agendaitem.attributes.shortTitle.replace(highlightShortTitleEmsRemoved, agendaitem.highlight.shortTitle[0]);
     } 
