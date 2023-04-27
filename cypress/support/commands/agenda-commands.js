@@ -511,17 +511,21 @@ function agendaitemExists(agendaitemName) {
   cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
-  cy.get(agenda.agendaTabs.tabs).find(auk.tab.activeHref)
-    .then((element) => {
-      const selectedReverseTab = element[0].text.trim();
-      if (selectedReverseTab.includes('Detail')) {
+  cy.get(agenda.agendaTabs.tabs).children()
+    .not(auk.tab.hierarchicalBack)
+    .find(auk.tab.activeHref)
+    .find(auk.tab.label)
+    .invoke('text')
+    .then((text) => {
+      const selectedReverseTab = text.trim();
+      if (selectedReverseTab === 'Detail') {
         cy.get(agenda.agendaDetailSidebar.subitem)
           .contains(agendaitemName, {
             timeout: 12000,
           })
           .as('foundAgendaitem');
       } else {
-        if (!selectedReverseTab.includes('Overzicht')) {
+        if (selectedReverseTab !== 'Overzicht') {
           cy.clickReverseTab('Overzicht');
           cy.get(agenda.agendaOverviewItem.subitem);
           // data loading could be awaited  '/agendaitem?filter**' or next get() fails, solved bij checking loading modal
@@ -565,19 +569,22 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
     timeout: 60000,
   }).should('not.exist');
   cy.url().should('include', 'agendapunten');
-  cy.get(agenda.agendaitemNav.activeTab).then((element) => {
-    const selectedTab = element[0].text;
-    if (!selectedTab.includes('Dossier')) {
-      cy.get(agenda.agendaitemNav.caseTab).click();
-      // after changing the tab, we have to wait for data to load
-      cy.get(auk.loader).should('not.exist');
-    }
+  cy.get(agenda.agendaitemNav.tabs).find(auk.tab.activeHref)
+    .find(auk.tab.label)
+    .invoke('text')
+    .then((element) => {
+      const selectedTab = element.trim();
+      if (selectedTab !== 'Dossier') {
+        cy.get(agenda.agendaitemNav.caseTab).click();
+        // after changing the tab, we have to wait for data to load
+        cy.get(auk.loader).should('not.exist');
+      }
 
-    if (isAdmin) {
-      // This is used for approval items and other profiles who don't have a link to a subcase
-      cy.get(agenda.agendaitemTitlesView.linkToSubcase);
-    }
-  });
+      if (isAdmin) {
+        // This is used for approval items and other profiles who don't have a link to a subcase
+        cy.get(agenda.agendaitemTitlesView.linkToSubcase);
+      }
+    });
   cy.log('/openDetailOfAgendaitem');
 }
 
