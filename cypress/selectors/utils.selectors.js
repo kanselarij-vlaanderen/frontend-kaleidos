@@ -61,6 +61,9 @@ const selectors = {
     add: '[data-test-mandatees-selector-add]',
   },
 
+  // mandatee-person-selector
+  mandateePersonSelector: '[data-test-mandatee-person-selector]',
+
   // government-fields-panel
   governmentAreasPanel: {
     edit: '[data-test-government-areas-panel-edit]',
