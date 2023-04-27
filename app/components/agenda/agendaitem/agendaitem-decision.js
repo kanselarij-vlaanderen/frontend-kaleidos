@@ -8,6 +8,7 @@ import { isEmpty } from '@ember/utils';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { trackedFunction } from 'ember-resources/util/function';
+import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -130,17 +131,21 @@ export default class AgendaitemDecisionComponent extends Component {
     this.decisionViewerElement = element;
   }
 
-  exportPdf = task(async () => {
-    const resp = await fetch(`/generate-decision-report/${this.report.id}`);
+  exportPdf = task(async (report) => {
+    const resp = await fetch(`/generate-decision-report/${report.id}`);
     if (!resp.ok) {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
       return;
     }
-    const fileMeta = await resp.json();
-    this.report.file = await this.store.findRecord('file', fileMeta.id);
-    this.report.modified = new Date();
-    await this.report.save();
+    return await resp.json();
   });
+
+  async replaceReportFile(report, fileId) {
+    await deleteFile(report.file);
+    const file = await this.store.findRecord('file', fileId);
+    report.file = file;
+    report.modified = new Date();
+  }
 
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
@@ -175,29 +180,14 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   onSaveReport = task(async () => {
-    debugger;
     let report;
     let documentContainer;
-    if (!this.report) {
-      documentContainer = this.createNewDocumentContainer();
-      report = await this.createNewReport(documentContainer);
-    } else {
-      documentContainer = await this.report.documentContainer;
-      report = this.report;
-    }
-
-    // To make sure the content of the PDF matches the piece parts,
-    // we need to create a new report version here
-    if (await this.report?.file) {
-      report = await this.attachNewReportVersion(this.report);
-    }
-
-    debugger;
-
     let betreftPiecePart;
     let beslissingPiecePart;
 
-    if (isEmpty(await this.report?.pieceParts)) {
+    if (!this.report) {
+      documentContainer = this.createNewDocumentContainer();
+      report = await this.createNewReport(documentContainer);
       ({ betreftPiecePart, beslissingPiecePart } =
         this.createAndAttachPieceParts(
           report,
@@ -205,6 +195,13 @@ export default class AgendaitemDecisionComponent extends Component {
           this.editorInstanceBeslissing.htmlContent
         ));
     } else {
+      documentContainer = await this.report.documentContainer;
+      // To make sure the content of the PDF matches the piece parts,
+      // we might need to create a new report version here
+      // report = this.report?.file
+      //   ? await this.attachNewReportVersion(this.report)
+      //   : this.report;
+      report = this.report;
       ({ betreftPiecePart, beslissingPiecePart } =
         this.attachNewPiecePartsVersion(
           report,
@@ -221,6 +218,13 @@ export default class AgendaitemDecisionComponent extends Component {
     this.args.decisionActivity.report = report;
 
     await this.args.decisionActivity.save();
+
+    // If this is too slow, we should make a task and do this asynchronously
+    const fileMeta = await this.exportPdf.perform(report);
+    await this.replaceReportFile(report, fileMeta.id);
+
+    await report.save();
+
     await this.loadReport.perform();
 
     this.isEditing = false;
