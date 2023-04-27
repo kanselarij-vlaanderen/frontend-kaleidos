@@ -94,11 +94,13 @@
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
           @piecePart={{this.betreftPiecePart}}
           @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
+          @onUpdateContentClicked={{this.updateBetreftContent}}
         />
         <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
           @piecePart={{this.beslissingPiecePart}}
           @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
+          @onUpdateContentClicked={{this.updateBeslissingContent}}
         />
       </Auk::Panel::Body>
     {{else}}

@@ -3,10 +3,12 @@
     class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
   >
     <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-      <AuButton @skin="link" @icon="renew" class="au-u-padding-left-none">{{t
-          "update-thing"
-          thing=(t "content")
-        }}</AuButton>
+      <AuButton
+        @skin="link"
+        @icon="renew"
+        class="au-u-padding-left-none"
+        {{on "click" @onUpdateContentClicked}}
+      >{{t "update-thing" thing=(t "content")}}</AuButton>
     </div>
     <Agenda::Agendaitem::Decision::PiecePartVersion
       @piecePart={{@piecePart}}

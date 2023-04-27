@@ -164,6 +164,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  updateBetreftContent() {
+    this.setBetreftEditorContent(
+      `<p>${this.args.agendaContext.agendaitem.shortTitle}</p>`
+    );
+  }
+
+  @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     if (this.beslissingPiecePart) {
       editorInterface.setHtmlContent(this.beslissingPiecePart.value);
@@ -177,6 +184,11 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   setBeslissingEditorContent(content) {
     this.editorInstanceBeslissing.setHtmlContent(content);
+  }
+
+  @action
+  updateBeslissingContent() {
+    return;
   }
 
   onSaveReport = task(async () => {
