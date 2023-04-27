@@ -1,0 +1,48 @@
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <KDataTable @content={{@model}} @enablePagination={{false}}>
+      <:header>
+        <th>{{t "document-name"}}</th>
+        <th>{{t "document-type"}}</th>
+        <th>{{t "minister"}}</th>
+        <th>{{t "decision-date"}}</th>
+        <th></th>
+      </:header>
+      <:body as |row|>
+        <td>
+          <AuLink @route="document" @model={{row.id}}>
+            {{row.name}}
+          </AuLink>
+        </td>
+        <td>
+          <AuPill>
+            {{row.documentContainer.type.label}}
+          </AuPill>
+        </td>
+        <td>
+          {{#each (await (this.getMandateeNames row)) as |name|}}
+            {{name}}
+          {{/each}}
+        </td>
+        <td>{{date (await (this.getDecisionDate row))}}</td>
+        <td>
+          <AuButton
+            @skin="naked"
+            @icon="add"
+            {{on "click" (fn this.openNewPublicationModal row)}}
+          >
+            {{t "publications-new"}}
+          </AuButton>
+        </td>
+      </:body>
+    </KDataTable>
+  </div>
+</div>
+{{#if this.isOpenNewPublicationModal}}
+  <Publications::NewPublicationModal
+    @agendaitem={{this.agendaitemForPublication}}
+    @decisionActivity={{this.decisionActivityForPublication}}
+    @onSave={{this.saveNewPublication}}
+    @onCancel={{this.closeNewPublicationModal}}
+  />
+{{/if}}
