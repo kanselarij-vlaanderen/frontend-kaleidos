@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import sanitizeHtml from 'sanitize-html';
+import {decode as decodeEntities} from 'html-entities';
 
 export default class NewsItemTableRowComponent extends Component {
   @service toaster;
@@ -65,12 +66,14 @@ export default class NewsItemTableRowComponent extends Component {
     }
 
     copyText +=
-      sanitizeHtml(
-        newsItem.htmlContent
-          .replace(/<p>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
-          .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
-          .trim() // Trim whitespaces at start & end of the string
-        , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
+      decodeEntities(
+        sanitizeHtml(
+          newsItem.htmlContent
+            .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
+            .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
+            .trim() // Trim whitespaces at start & end of the string
+          , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
+        )
       );
 
     if (newsItem.remark) {
