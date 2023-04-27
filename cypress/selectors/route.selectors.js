@@ -108,6 +108,7 @@ const selectors = {
   searchCases: {
     removedCasesList: '[data-test-route-search-removed-cases-list]',
     dataTable: '[data-test-route-search-cases-data-table]',
+    row: '[data-test-route-search-cases-data-table-row]',
   },
 
   // search/newsletters

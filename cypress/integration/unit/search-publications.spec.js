@@ -321,16 +321,16 @@ context('Search tests', () => {
       .click();
     addMandatee(mandatee3);
 
-    // add urgent
-    visitPublications();
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields6.number)
-      .click();
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.urgencyLevelCheckbox).parent()
-      .click();
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.publicationCaseInfo.editView.save).click()
-      .wait('@patchPublicationFlow');
+    // add urgent !only when not running publication-new-features.spec!
+    // visitPublications();
+    // cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields6.number)
+    //   .click();
+    // cy.get(publication.publicationCaseInfo.edit).click();
+    // cy.get(publication.urgencyLevelCheckbox).parent()
+    //   .click();
+    // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    // cy.get(publication.publicationCaseInfo.editView.save).click()
+    //   .wait('@patchPublicationFlow');
   });
 
   it('check mandatees filters', () => {
