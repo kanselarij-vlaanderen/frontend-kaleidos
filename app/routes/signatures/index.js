@@ -24,7 +24,7 @@ export default class SignaturesIndexRoute extends Route {
     });
     const result = await response.json();
 
-    if (result.data?.length) {
+    if (result?.data?.length) {
       const query = {
         include: [
           'agendaitems.agenda.next-version',
