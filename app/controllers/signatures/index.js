@@ -2,12 +2,14 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
   @service store;
 
   @tracked piece = null;
+  @tracked decisionActivity = null;
   @tracked agendaitem = null;
   @tracked agenda = null;
   @tracked meeting = null;
@@ -16,6 +18,10 @@ export default class SignaturesIndexController extends Controller {
   @tracked showFilterModal = false;
   @tracked selectedMinisters = [];
   @tracked filteredMinisters = [];
+
+  signers = [];
+  approvers = [];
+  notificationAddresses = [];
 
   localStorageKey = 'signatures.shortlist.minister-filter';
 
@@ -120,4 +126,14 @@ export default class SignaturesIndexController extends Controller {
     );
   }
 
+  createSignFlow = task(async () => {
+    await this.signatureService.createSignFlow(
+      this.piece,
+      this.decisionActivity,
+      this.signers,
+      this.approvers,
+      this.notificationAddresses,
+    );
+    await this.router.refresh(this.router.routeName);
+  });
 }

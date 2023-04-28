@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { TrackedArray } from 'tracked-built-ins';
+import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
@@ -27,14 +28,10 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     this.loadSigners.perform();
   }
 
-  get isLoading() {
-    return this.loadSigners.isRunning;
-  }
-
   loadSigners = task(async () => {
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
-      'filter[:lt:start]': new Date().toISOString(),
+      'filter[:lt:start]': startOfDay(new Date()).toISOString(),
       'filter[:has-no:end]': true,
       include: 'person,mandate.role',
     });
@@ -48,28 +45,33 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     if (mandatee) {
       this.signers.push(mandatee);
     }
+    this.args.onChangeSigners?.(this.signers);
   });
 
   @action
   saveApprover(approver) {
     this.approvers.addObject(approver);
     this.showApproversModal = false;
+    this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   removeApprover(approver) {
     this.approvers.removeObject(approver);
+    this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   saveNotificationAddress(address) {
     this.notificationAddresses.addObject(address);
     this.showNotificationAddressesModal = false;
+    this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
   @action
   removeNotificationAddress(address) {
     this.notificationAddresses.removeObject(address);
+    this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
   saveSigners = task(async (selected) => {
@@ -77,11 +79,13 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     const filtered = await this.filterSelectedSigners(records);
     this.signers = filtered.sortBy('priority');
     this.showMinisterModal = false;
+    this.args.onChangeSigners?.(this.signers);
   });
 
   @action
   removeSigner(signer) {
     this.signers.removeObject(signer);
+    this.args.onChangeSigners?.(this.signers);
   }
 
   async mandateeIdsToRecords(mandatees) {

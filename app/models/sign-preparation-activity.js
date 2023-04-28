@@ -18,4 +18,9 @@ export default class SignPreparationActivityModel extends Model {
     async: true,
   })
   signSigningActivities;
+  @hasMany('sign-approval-activity', {
+    inverse: 'signPreparationActivity',
+    async: true,
+  })
+  signApprovalActivities;
 }

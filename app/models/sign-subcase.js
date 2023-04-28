@@ -2,6 +2,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class SignSubcaseModel extends Model {
   @attr title;
+  @attr notified;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
@@ -26,6 +27,8 @@ export default class SignSubcaseModel extends Model {
 
   @hasMany('sign-signing-activity', { inverse: 'signSubcase', async: true })
   signSigningActivities;
+  @hasMany('sign-approval-activity', { inverse: 'signSubcase', async: true })
+  signApprovalActivities;
   @hasMany('sign-refusal-activity', { inverse: 'signSubcase', async: true })
   signRefusalActivities;
 }
