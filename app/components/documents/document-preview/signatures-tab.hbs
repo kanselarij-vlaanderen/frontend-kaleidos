@@ -28,5 +28,13 @@
         </AuButton>
       </Group>
     </AuToolbar>
+  {{else}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "cannot-sign"}}
+    >
+      <p>{{t "cannot-sign-message"}}</p>
+    </AuAlert>
   {{/if}}
 </div>

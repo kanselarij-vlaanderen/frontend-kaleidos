@@ -31,8 +31,8 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
-    const treatment = await this.agendaitem.treatment;
-    this.decisionActivity = await treatment.decisionActivity;
+    const treatment = await this.agendaitem?.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
   });
 
   createSignFlow = task(async () => {
