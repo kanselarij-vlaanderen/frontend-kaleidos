@@ -132,5 +132,10 @@ const selectors = {
     from: '[data-test-route-search-date-from]',
     to: '[data-test-route-search-date-to]',
   },
+
+  // ministerFilter
+  ministerFilter: {
+    pastMinisters: '[data-test-search-minister-filter-past-ministers]',
+  },
 };
 export default selectors;

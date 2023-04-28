@@ -112,12 +112,6 @@ export default class PublicationsOverviewShortlistController extends Controller 
           CONSTANTS.REGULATION_TYPES.BVR
         );
         break;
-      case CONSTANTS.DOCUMENT_TYPES.MB:
-        regulationType = await this.store.findRecordByUri(
-          'regulation-type',
-          CONSTANTS.REGULATION_TYPES.MB
-        );
-        break;
       default:
         regulationType = undefined;
         break;

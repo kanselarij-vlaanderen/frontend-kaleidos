@@ -74,7 +74,13 @@ $say-editor-border-radius: $au-input-border-radius;
   border-bottom-left-radius: $say-editor-border-radius;
 }
 
+.say-editor {
+  padding: 1.5rem 2rem;
+}
+
 .say-editor__inner {
+  padding: 0;
+
   overflow-wrap: anywhere;
 
   p {
@@ -151,10 +157,10 @@ $say-editor-border-radius: $au-input-border-radius;
 
   .say-editor__paper,
   .say-editor__inner {
-    min-height: calc(100vh - 13.1rem);
+    min-height: calc((100vh - 6.5rem) * 2);
   }
 
   .say-editor {
-    padding-top: 3rem;
+    padding: 3rem 4rem;
   }
 }

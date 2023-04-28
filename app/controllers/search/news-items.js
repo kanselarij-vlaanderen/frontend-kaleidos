@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
-import sanitizeHtml from 'sanitize-html';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class SearchNewsItemsControllers extends Controller {
@@ -81,31 +80,5 @@ export default class SearchNewsItemsControllers extends Controller {
         );
       }
     }
-  }
-
-  @action
-  copyText(row, event) {
-    if (event) {
-      event.stopPropagation();
-    }
-
-    let copyText = '';
-
-    if (row.title) {
-      copyText += `${row.title}\n\n`;
-    }
-
-    if (row.htmlContent) {
-      copyText += sanitizeHtml(
-        row.htmlContent
-          .replace(/<p>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
-          .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
-          .trim(), // Trim whitespaces at start & end of the string
-        { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
-      );
-    }
-
-    navigator.clipboard.writeText(copyText);
-    this.toaster.success(this.intl.t('text-copied'));
   }
 }
