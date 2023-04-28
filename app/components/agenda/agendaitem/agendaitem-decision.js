@@ -33,6 +33,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isEditing = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
+  @tracked saveAsNewVersion = false;
 
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
@@ -208,18 +209,23 @@ export default class AgendaitemDecisionComponent extends Component {
         ));
     } else {
       documentContainer = await this.report.documentContainer;
-      // To make sure the content of the PDF matches the piece parts,
-      // we might need to create a new report version here
-      // report = this.report?.file
-      //   ? await this.attachNewReportVersion(this.report)
-      //   : this.report;
-      report = this.report;
-      ({ betreftPiecePart, beslissingPiecePart } =
-        this.attachNewPiecePartsVersion(
-          report,
-          this.betreftPiecePart,
-          this.beslissingPiecePart
-        ));
+      if (this.saveAsNewVersion) {
+        report = await this.attachNewReportVersion(this.report);
+        ({ betreftPiecePart, beslissingPiecePart } =
+          this.createAndAttachPieceParts(
+            report,
+            this.editorInstanceBetreft.htmlContent,
+            this.editorInstanceBeslissing.htmlContent
+          ));
+      } else {
+        report = this.report;
+        ({ betreftPiecePart, beslissingPiecePart } =
+          this.attachNewPiecePartsVersion(
+            report,
+            this.betreftPiecePart,
+            this.beslissingPiecePart
+          ));
+      }
     }
 
     await documentContainer.save();
@@ -239,6 +245,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     await this.loadReport.perform();
 
+    this.saveAsNewVersion = false;
     this.isEditing = false;
   });
 
@@ -299,7 +306,6 @@ export default class AgendaitemDecisionComponent extends Component {
       previousPiece: previousReport,
       accessLevel: previousReport.accessLevel,
       documentContainer: previousReport.documentContainer,
-      pieceParts: await previousReport.pieceParts,
     });
 
     return report;

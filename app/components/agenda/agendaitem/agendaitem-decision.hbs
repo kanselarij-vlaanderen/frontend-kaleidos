@@ -158,6 +158,16 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
+          {{#if this.report}}
+            <Auk::Toolbar::Item>
+              <AuCheckbox
+                @checked={{this.saveAsNewVersion}}
+                @onChange={{fn (set this "saveAsNewVersion")}}
+              >
+                {{t "save-as-new-version"}}
+              </AuCheckbox>
+            </Auk::Toolbar::Item>
+          {{/if}}
           <Auk::Toolbar::Item>
             <AuButton
               @disabled={{this.disableSaveButton}}
