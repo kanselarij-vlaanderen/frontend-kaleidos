@@ -121,7 +121,6 @@ Router.map(function() {
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
-    this.route('checkbox-list');
     this.route('checkbox-tree');
     this.route('colors');
     this.route('color-badge');
@@ -139,7 +138,6 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('radio-list');
     this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
