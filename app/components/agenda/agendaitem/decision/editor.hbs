@@ -1,19 +1,24 @@
 <div class="auk-rdfa-holder">
-  <div
-    class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
-  >
-    <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-      <AuButton
-        @skin="link"
-        @icon="renew"
-        class="au-u-padding-left-none"
-        {{on "click" @onUpdateContentClicked}}
-      >{{t "update-thing" thing=(t "content")}}</AuButton>
-    </div>
-    <Agenda::Agendaitem::Decision::PiecePartVersion
-      @piecePart={{@piecePart}}
-      @onVersionClicked={{@onPiecePartVersionClicked}}
-    />
+  <div class="auk-rdfa-holder__header">
+    <AuToolbar class="au-u-margin-bottom-tiny" as |Group|>
+      <Group>
+        <AuButtonGroup>
+          <AuButton
+            @skin="link"
+            @icon="renew"
+            @disabled={{@disableUpdateContent}}
+            class="au-u-padding-left-none"
+            {{on "click" @onUpdateContentClicked}}
+          >
+            {{t "update-thing" thing=(t "content")}}
+          </AuButton>
+          <Agenda::Agendaitem::Decision::PiecePartVersion
+            @piecePart={{@piecePart}}
+            @onVersionClicked={{@onPiecePartVersionClicked}}
+          />
+        </AuButtonGroup>
+      </Group>
+    </AuToolbar>
   </div>
   <WebComponents::VlRdfaEditor
     data-test-newsletter-edit-item-rdfa-editor

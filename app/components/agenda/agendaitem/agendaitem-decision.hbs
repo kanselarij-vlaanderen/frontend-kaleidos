@@ -45,6 +45,21 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
+  {{#if
+    (and (not this.isEditing) this.report.pieceParts this.loadReport.isIdle)
+  }}
+    <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
+      <Documents::DocumentCard
+        @piece={{this.report}}
+        @isEditable={{true}}
+        @agendaContext={{@agendaContext}}
+        @hideNewerVersions={{true}}
+        @hideActions={{true}}
+        @bordered={{true}}
+      />
+    </Auk::Panel::Body>
+  {{/if}}
+
   <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -71,36 +86,25 @@
   </Auk::Panel::Body>
 
   {{#if this.loadReport.isIdle}}
-    {{#if (and (not this.isEditing) this.report.pieceParts)}}
-      <Auk::Panel::Body
-        class="{{if this.isEditing 'au-u-background-gray-100'}}"
-      >
-        <Documents::DocumentCard
-          @piece={{this.report}}
-          @isEditable={{true}}
-          @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
-          @hideActions={{true}}
-          @bordered={{true}}
-        />
-      </Auk::Panel::Body>
-    {{/if}}
 
     {{#if this.isEditing}}
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
+        <h4 class="auk-h4">Betreft</h4>
         <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
           @piecePart={{this.betreftPiecePart}}
           @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
           @onUpdateContentClicked={{this.updateBetreftContent}}
         />
+        <h4 class="auk-h4 au-u-padding-top">Beslissing</h4>
         <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
           @piecePart={{this.beslissingPiecePart}}
           @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
           @onUpdateContentClicked={{this.updateBeslissingContent}}
+          @disableUpdateContent={{not this.nota}}
         />
       </Auk::Panel::Body>
     {{else}}

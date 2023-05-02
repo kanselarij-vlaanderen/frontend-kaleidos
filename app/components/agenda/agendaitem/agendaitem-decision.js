@@ -19,6 +19,7 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
  * @argument decisionActivity
  */
 export default class AgendaitemDecisionComponent extends Component {
+  @service agendaitemNota;
   @service fileConversionService;
   @service intl;
   @service pieceAccessLevelService;
@@ -29,6 +30,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
+  @tracked nota;
 
   @tracked isEditing = false;
   @tracked isEditingPill = false;
@@ -45,7 +47,27 @@ export default class AgendaitemDecisionComponent extends Component {
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
+    this.loadNota.perform();
   }
+
+  loadNota = task(async () => {
+    const nota = await this.agendaitemNota.notaOrVisieNota(
+      this.args.agendaContext.agendaitem
+    );
+    if (!nota) {
+      return;
+    }
+
+    const resp = await fetch(`/decision-extraction/${nota.id}`);
+    if (!resp.ok) {
+      this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
+      return;
+    }
+
+    const json = await resp.json();
+    console.log(json.content);
+    this.nota = json.content;
+  });
 
   loadCodelists = task(async () => {
     this.decisionDocType = await this.store.findRecordByUri(
@@ -188,8 +210,8 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  updateBeslissingContent() {
-    return;
+  async updateBeslissingContent() {
+    this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
   }
 
   onSaveReport = task(async () => {
