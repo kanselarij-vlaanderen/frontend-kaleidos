@@ -49,14 +49,22 @@
     (and (not this.isEditing) this.report.pieceParts this.loadReport.isIdle)
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
-      <Documents::DocumentCard
-        @piece={{this.report}}
-        @isEditable={{true}}
-        @agendaContext={{@agendaContext}}
-        @hideNewerVersions={{true}}
-        @hideActions={{true}}
-        @bordered={{true}}
-      />
+      {{#if this.onCreateNewVersion.isIdle}}
+        <Documents::DocumentCard
+          @piece={{this.report}}
+          @isEditable={{true}}
+          @agendaContext={{@agendaContext}}
+          @hideNewerVersions={{true}}
+          @hideDelete={{true}}
+          @hideEdit={{true}}
+          @hideUpload={{true}}
+          @showCreateNewVersion={{true}}
+          @onCreateNewVersion={{perform this.onCreateNewVersion}}
+          @bordered={{true}}
+        />
+      {{else}}
+        <Auk::Loader />
+      {{/if}}
     </Auk::Panel::Body>
   {{/if}}
 
@@ -162,16 +170,6 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
-          {{#if this.report}}
-            <Auk::Toolbar::Item>
-              <AuCheckbox
-                @checked={{this.saveAsNewVersion}}
-                @onChange={{fn (set this "saveAsNewVersion")}}
-              >
-                {{t "save-as-new-version"}}
-              </AuCheckbox>
-            </Auk::Toolbar::Item>
-          {{/if}}
           <Auk::Toolbar::Item>
             <AuButton
               @disabled={{this.disableSaveButton}}
@@ -179,7 +177,7 @@
               @loading={{this.onSaveReport.isRunning}}
               {{on "click" (perform this.onSaveReport)}}
             >
-              {{t "save"}}
+              {{t "update"}}
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>

@@ -4,10 +4,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEmpty } from '@ember/utils';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import { trackedFunction } from 'ember-resources/util/function';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -35,7 +33,6 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isEditing = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
-  @tracked saveAsNewVersion = false;
 
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
@@ -65,7 +62,6 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     const json = await resp.json();
-    console.log(json.content);
     this.nota = json.content;
   });
 
@@ -80,6 +76,23 @@ export default class AgendaitemDecisionComponent extends Component {
   toggleEditPill() {
     this.isEditingPill = !this.isEditingPill;
   }
+
+  onCreateNewVersion = task(async () => {
+    const report = await this.attachNewReportVersion(this.report);
+    const { betreftPiecePart, beslissingPiecePart } =
+      this.createAndAttachPieceParts(
+        report,
+        this.beslissingPiecePart.value,
+        this.betreftPiecePart.value
+      );
+
+    await this.saveReport(
+      await report.documentContainer,
+      report,
+      betreftPiecePart,
+      beslissingPiecePart
+    );
+  });
 
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.report;
@@ -231,25 +244,31 @@ export default class AgendaitemDecisionComponent extends Component {
         ));
     } else {
       documentContainer = await this.report.documentContainer;
-      if (this.saveAsNewVersion) {
-        report = await this.attachNewReportVersion(this.report);
-        ({ betreftPiecePart, beslissingPiecePart } =
-          this.createAndAttachPieceParts(
-            report,
-            this.editorInstanceBetreft.htmlContent,
-            this.editorInstanceBeslissing.htmlContent
-          ));
-      } else {
-        report = this.report;
-        ({ betreftPiecePart, beslissingPiecePart } =
-          this.attachNewPiecePartsVersion(
-            report,
-            this.betreftPiecePart,
-            this.beslissingPiecePart
-          ));
-      }
+      report = this.report;
+      ({ betreftPiecePart, beslissingPiecePart } =
+        this.attachNewPiecePartsVersion(
+          report,
+          this.betreftPiecePart,
+          this.beslissingPiecePart
+        ));
     }
 
+    await this.saveReport(
+      documentContainer,
+      report,
+      beslissingPiecePart,
+      betreftPiecePart
+    );
+
+    this.isEditing = false;
+  });
+
+  async saveReport(
+    documentContainer,
+    report,
+    beslissingPiecePart,
+    betreftPiecePart
+  ) {
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -266,10 +285,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await report.save();
 
     await this.loadReport.perform();
-
-    this.saveAsNewVersion = false;
-    this.isEditing = false;
-  });
+  }
 
   createNewDocumentContainer() {
     const documentContainer = this.store.createRecord('document-container', {
