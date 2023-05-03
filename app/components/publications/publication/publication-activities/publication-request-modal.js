@@ -55,8 +55,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     return (
       !this.validators.areValid ||
       this.sumOfUploadedPiecesIsTooLarge ||
-      this.cancel.isRunning ||
-      this.save.isRunning
+      this.cancel.isRunning
     );
   }
 

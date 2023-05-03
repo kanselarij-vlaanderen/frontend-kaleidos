@@ -30,9 +30,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   get isProcessing() {
     return (
-      this.saveDetails.isRunning
-        || this.cancelEditDetails.isRunning
-        || this.isUploadingReplacementSourceFile
+      this.cancelEditDetails.isRunning ||
+      this.isUploadingReplacementSourceFile
     );
   }
 

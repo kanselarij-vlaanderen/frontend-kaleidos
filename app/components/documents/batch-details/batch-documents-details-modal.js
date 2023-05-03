@@ -26,7 +26,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get isSaveDisabled() {
-    return this.isLoading || this.save.isRunning;
+    return this.isLoading;
   }
 
   @task

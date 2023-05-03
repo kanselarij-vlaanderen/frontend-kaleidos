@@ -51,10 +51,7 @@ export default class CreateAgendaitem extends Component {
   }
 
   get isSaveDisabled() {
-    return (
-      this.selectedSubcases.length === 0 ||
-      this.addSubcasesToAgenda.isRunning
-    );
+    return this.selectedSubcases.length === 0;
   }
 
   setFocus() {

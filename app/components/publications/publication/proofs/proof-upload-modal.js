@@ -25,8 +25,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     return (
       this.uploadedPieces.length === 0 ||
       isEmpty(this.receivedDate) ||
-      this.cancel.isRunning ||
-      this.save.isRunning
+      this.cancel.isRunning
     );
   }
 

@@ -60,8 +60,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     return (
       !this.validators.areValid ||
       this.sumOfUploadedPiecesIsTooLarge ||
-      this.cancel.isRunning ||
-      this.save.isRunning
+      this.cancel.isRunning
     );
   }
 

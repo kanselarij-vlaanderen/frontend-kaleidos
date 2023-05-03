@@ -14,7 +14,7 @@ export default class MandateesMandateesSelectorModalComponent extends Component 
   @tracked openSearch = false;
 
   get canAdd() {
-    return !!this.selectedMandatee || this.onAdd.isRunning;
+    return !!this.selectedMandatee;
   }
 
   @task
