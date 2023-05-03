@@ -443,9 +443,7 @@ context('Search tests', () => {
     triggerSearchPublication(mandatee2);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
     // search without date
-    cy.get(route.search.from).find(auk.datepicker.clear)
-      .click();
-    // TODO doesn't remove properly without clicking twice
+    // TODO doesn't always work on a first click?
     cy.get(route.search.from).find(auk.datepicker.clear)
       .click();
     cy.get(route.search.from).find(auk.datepicker.datepicker)

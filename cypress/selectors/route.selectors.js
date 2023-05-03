@@ -219,6 +219,10 @@ const selectors = {
   // newsletter/nota-updates/template
   notaUpdates: {
     dataTable: '[data-test-route-newsletter-nota-updates-data-table]',
+    row: {
+      showPieceViewer: '[data-test-route-newsletter-nota-updates-show-piece-viewer]',
+      goToAgendaitemDocuments: '[data-test-route-newsletter-nota-updates-go-to-agendaitem-documents]',
+    },
   },
 
   /**
