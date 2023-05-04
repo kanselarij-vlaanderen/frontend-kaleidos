@@ -919,6 +919,7 @@
   "publications-tabs-late": "Te laat in BS",
   "publications-tabs-reports": "Rapporten",
   "publications-tabs-search": "Dossier zoeken",
+  "publications-tabs-shortlist": "Op te starten",
   "publication-reports-title": "Jaarlijkse rapporten",
   "publication-reports-last-request": "Laatst aangevraagd op {date} om {time} door {user}",
   "publication-reports-running": "Rapportgeneratie bezig...",
@@ -1202,5 +1203,6 @@
   "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
   "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
   "error-while-fetching-nota-content": "Er ging iets fout tijdens het ophalen van de nota inhoud",
-  "update": "Bijwerken"
+  "update": "Bijwerken",
+  "document-name": "Documentnaam"
 }

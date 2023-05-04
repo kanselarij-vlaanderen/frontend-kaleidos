@@ -81,10 +81,9 @@ context('Delete BIS tests', () => {
       .wait('@deletePiece')
       .wait('@restoreFile')
       .wait('@piecesFilter');
-    // TODO-BUG clicking close to fast uses old context
-    // cy.get(auk.auModal.header.close).click();
     cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
+    cy.get(auk.auModal.header.close).click();
     cy.go('back');
     cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
@@ -117,34 +116,9 @@ context('Delete BIS tests', () => {
       .wait('@deleteFile')
       .wait('@deletePiece')
       .wait('@piecesFilter');
-    // TODO-BUG clicking close to fast uses old context
-    // cy.get(auk.auModal.header.close).click();
-    cy.go('back');
     cy.get(auk.loader).should('not.exist');
+    cy.get(auk.auModal.header.close).click();
     cy.get('@documentCard2').contains(files[1].newFileName);
     cy.get('@documentCard2').should('not.contain', /BIS/);
-  });
-
-  it.skip('should test deleting a BIS from document viewer after opening document directly', () => {
-    // TODO find better BIS
-    cy.visit('document/6273BCE47590117083BAD7AA');
-
-    cy.get(document.documentPreviewSidebar.open).click();
-    cy.get(document.previewDetailsTab.delete).click();
-    cy.intercept('PUT', '**/restore**').as('restoreFile');
-    cy.intercept('DELETE', 'files/**').as('deleteFile');
-    cy.intercept('DELETE', 'pieces/**').as('deletePiece');
-    cy.intercept('GET', 'pieces?filter**').as('piecesFilter');
-    cy.get(utils.vlModalVerify.save).click()
-      .wait('@restoreFile')
-      .wait('@deleteFile')
-      .wait('@deletePiece')
-      .wait('@piecesFilter');
-    // TODO-BUG clicking close to fast uses old context
-    // cy.get(auk.auModal.header.close).click();
-    cy.go('back');
-    cy.get(auk.loader).should('not.exist');
-    cy.get(document.documentCard.name.value).contains('VR 2020 0404 DOC.0001-1.pdf');
-    cy.get(document.documentCard.name.value).should('not.contain', /BIS/);
   });
 });
