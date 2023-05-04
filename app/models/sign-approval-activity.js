@@ -2,7 +2,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class SignApprovalActivity extends Model {
   @attr title;
-  @attr approver;
+  @attr('email') approver;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 

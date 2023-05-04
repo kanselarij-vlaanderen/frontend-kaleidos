@@ -2,7 +2,7 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class SignSubcaseModel extends Model {
   @attr title;
-  @attr notified;
+  @attr('email-set') notified;
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
