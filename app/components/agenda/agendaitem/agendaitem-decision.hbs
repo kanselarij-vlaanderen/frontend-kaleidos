@@ -10,43 +10,32 @@
         </h4>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        {{#if this.loadReport.isIdle}}
-          {{#if (user-may "manage-decisions")}}
-            {{#unless this.isEditing}}
-              {{#if this.report.pieceParts}}
-                <Group.Item>
-                  <AuButton
-                    @skin="naked"
-                    @icon="pencil"
-                    @iconAlignment="left"
-                    @disabled={{this.exportPdf.isRunning}}
-                    {{on "click" (set this "isEditing")}}
-                  >
-                    {{t "edit"}}
-                  </AuButton>
-                </Group.Item>
-              {{/if}}
-              {{#if (and (not this.report.pieceParts) (not this.report.file))}}
-                <Group.Item>
-                  <AuButton
-                    @skin="naked"
-                    @icon="pencil"
-                    @iconAlignment="left"
-                    {{on "click" (set this "isEditing")}}
-                  >
-                    {{t "create"}}
-                  </AuButton>
-                </Group.Item>
-              {{/if}}
-            {{/unless}}
-          {{/if}}
+        {{#if
+          (and
+            this.loadReport.isIdle
+            (user-may "manage-decisions")
+            (not this.isEditing)
+            (or this.report.pieceParts (not this.report))
+          )
+        }}
+          <Group.Item>
+            <AuButton
+              @skin="naked"
+              @icon="pencil"
+              @iconAlignment="left"
+              @disabled={{this.exportPdf.isRunning}}
+              {{on "click" (set this "isEditing")}}
+            >
+              {{t (if this.report "edit" "create")}}
+            </AuButton>
+          </Group.Item>
         {{/if}}
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
   {{#if
-    (and (not this.isEditing) this.report.pieceParts this.loadReport.isIdle)
+    (and this.loadReport.isIdle (not this.isEditing) this.report.pieceParts)
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
       {{#if this.onCreateNewVersion.isIdle}}
@@ -94,7 +83,6 @@
   </Auk::Panel::Body>
 
   {{#if this.loadReport.isIdle}}
-
     {{#if this.isEditing}}
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
@@ -117,9 +105,7 @@
       </Auk::Panel::Body>
     {{else}}
       {{#if (and this.report.file (not this.report.pieceParts))}}
-        <Auk::Panel::Body
-          class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
-        >
+        <Auk::Panel::Body class="au-o-flow">
           <Documents::DocumentCard
             @piece={{this.report}}
             @isEditable={{true}}
@@ -137,12 +123,12 @@
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
           <AuContent @size="small">
-            <h4>Betreft :</h4>
+            <h4>{{t "concerns"}}:</h4>
             <SanitizeHtml
               @raw={{true}}
               @value={{this.betreftPiecePart.value}}
             />
-            <h4>Beslissing :</h4>
+            <h4>{{t "agenda-item-treatment"}}:</h4>
             <SanitizeHtml
               @raw={{true}}
               @value={{this.beslissingPiecePart.value}}
@@ -153,7 +139,7 @@
     {{/if}}
   {{else}}
     <Auk::Panel::Body
-      class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+      class="au-o-flow"
     >
       <Auk::Loader />
     </Auk::Panel::Body>

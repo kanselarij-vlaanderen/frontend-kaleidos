@@ -54,13 +54,11 @@ export default class AgendaitemDecisionComponent extends Component {
     if (!nota) {
       return;
     }
-
     const resp = await fetch(`/decision-extraction/${nota.id}`);
     if (!resp.ok) {
       this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
       return;
     }
-
     const json = await resp.json();
     this.nota = json.content;
   });
@@ -111,8 +109,8 @@ export default class AgendaitemDecisionComponent extends Component {
           title: 'Beslissing',
         },
       });
+      this.previousReport = await this.report.previousPiece;
     }
-    this.previousReport = await this.report?.previousPiece;
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -160,11 +158,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const documentContainer = await piece.documentContainer;
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
-  }
-
-  @action
-  setDecisionViewerElement(element) {
-    this.decisionViewerElement = element;
   }
 
   exportPdf = task(async (report) => {

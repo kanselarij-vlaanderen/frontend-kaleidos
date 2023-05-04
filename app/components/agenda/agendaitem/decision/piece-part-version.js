@@ -24,7 +24,7 @@ export default class PiecePartVersionComponent extends Component {
   @action
   onVersionClicked(piecePart) {
     this.selectedVersion = piecePart;
-    this.args.onVersionClicked(piecePart.value);
+    this.args.onVersionClicked?.(piecePart.value);
   }
 
   previousVersions = trackedFunction(this, async () => {
