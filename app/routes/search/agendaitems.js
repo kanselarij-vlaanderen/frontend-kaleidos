@@ -57,10 +57,10 @@ export default class AgendaitemSearchRoute extends Route {
     AgendaitemSearchRoute.postProcessPastAgendaVersions(entry);
 
     if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
-      entry.shortTitle = entry.shortTitle.join('');
+      entry.shortTitle = entry.shortTitle.join(' ');
     }
     if (entry.title && Array.isArray(entry.title)) {
-      entry.title = entry.title.join('');
+      entry.title = entry.title.join(' ');
     }
     if ((agendaitem.highlight && agendaitem.highlight.shortTitle) && agendaitem.highlight.shortTitle[0]?.split(" ").length < agendaitem.attributes.shortTitle?.split(" ").length) {
       const highlightShortTitleEmsRemoved = agendaitem.highlight.shortTitle[0].replace(/<em>|<\/em>/g, "");

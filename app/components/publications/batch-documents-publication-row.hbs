@@ -5,7 +5,7 @@
   <td>
     {{@piece.documentContainer.type.label}}
   </td>
-  {{#if this.isLinkingRunning}}
+  {{#if (or this.isLinkingRunning (not this.selectedLinkModeOption))}}
     <td colspan="2" class="auk-u-text-align--center">
       <Auk::Loader />
     </td>
