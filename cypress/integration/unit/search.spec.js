@@ -510,7 +510,7 @@ context('Search tests', () => {
 
       it('Search all fields on agenda', () => {
         const searchFlow = 'agendaitems';
-        const resultRow = route.searchAgendaitems.row.shortTitle;
+        const resultRow = route.searchAgendaitems.dataTable;
 
         cy.visit('/zoeken/agendapunten');
 
