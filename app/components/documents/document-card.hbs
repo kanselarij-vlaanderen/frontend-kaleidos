@@ -114,7 +114,10 @@
                 </Group.Item>
               {{else if this.signMarkingActivity}}
                 <Group.Item>
-                  <SignaturePill @signMarkingActivity={{this.signMarkingActivity}}/>
+                  <SignaturePill
+                    @piece={{this.piece}}
+                    @signMarkingActivity={{this.signMarkingActivity}}
+                  />
                 </Group.Item>
               {{/if}}
           {{/if}}

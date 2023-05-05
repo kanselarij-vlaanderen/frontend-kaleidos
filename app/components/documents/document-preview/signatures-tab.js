@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import fetch from 'fetch'
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
   @service store;
@@ -46,4 +47,17 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     await this.args.piece.reload();
     this.signMarkingActivity = await this.args.piece.signMarkingActivity;
   });
+
+  syncSignFlow = async () => {
+    const signSubcase = await this.signMarkingActivity.signSubcase;
+    const signFlow = await signSubcase.signFlow;
+    await fetch(`/signing-flows/${signFlow.id}/sync`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/vnd.api+json'
+      }
+    });
+    await this.args.piece.reload();
+    this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+  }
 }
