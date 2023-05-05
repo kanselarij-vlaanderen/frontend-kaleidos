@@ -512,7 +512,6 @@ function agendaitemExists(agendaitemName) {
     timeout: 20000,
   }).should('not.exist');
   cy.get(agenda.agendaTabs.tabs).children()
-    .not(auk.tab.hierarchicalBack)
     .find(auk.tab.activeHref)
     .find(auk.tab.label)
     .invoke('text')

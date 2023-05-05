@@ -22,30 +22,32 @@
     </LinkTo>
   </li>
 {{else if @isHierarchicalBack}}
-  <li class="auk-tabs__tab auk-tabs__hierarchical-back">
-    {{!-- Here the tab always has the active class because that's how it would
-          behave if passed in a @route to the parent route, because the parent
-          route is always active --}}
-    <a
+  <li
+    class="auk-tabs__tab auk-tabs__hierarchical-back"
+    ...attributes
+  >
+    <button
       type="button"
-      disabled={{not this.hasHistory}} {{!-- TODO: this does nothing at the moment as `disabled` can't be used on link/anchor elements --}}
-      class="auk-tabs__tab__link auk-tabs__tab__link--active"
+      {{!-- disabled={{not this.hasHistory}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
+      class="auk-tabs__tab__link"
       {{on "click" this.transitionBack}}
-      ...attributes
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
         @icon={{this.icon}}
         @counter={{@counter}}
       />
-    </a>
+    </button>
   </li>
 {{else}}
-  <li class="auk-tabs__tab">
+  <li
+    class="auk-tabs__tab"
+    ...attributes
+  >
     <button
       type="button"
+      disabled={{@disabled}}
       class="auk-tabs__tab__link {{if @active "auk-tabs__tab__link--active"}}"
-      ...attributes
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
