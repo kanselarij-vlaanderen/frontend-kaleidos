@@ -208,8 +208,7 @@ export default class PieceAccessLevelService extends Service {
       let subcase;
       if (submissionActivity) {
         subcase = await submissionActivity.subcase;
-      }
-      else {
+      } else {
         const decisionActivity = await this.store.queryOne('decision-activity', {
           filter: {
             report: {
