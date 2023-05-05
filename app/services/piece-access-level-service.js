@@ -205,8 +205,23 @@ export default class PieceAccessLevelService extends Service {
           },
         },
       });
+      let subcase;
       if (submissionActivity) {
-        const subcase = await submissionActivity.subcase;
+        subcase = await submissionActivity.subcase;
+      }
+      else {
+        const decisionActivity = await this.store.queryOne('decision-activity', {
+          filter: {
+            report: {
+              ':id:': piece?.id,
+            },
+          },
+        });
+        if (decisionActivity) {
+          subcase = await decisionActivity.subcase;
+        }
+      }
+      if (subcase) {
         const mandatees = await subcase.mandatees;
         const currentUserOrganization = await this.currentSession.organization;
         const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
