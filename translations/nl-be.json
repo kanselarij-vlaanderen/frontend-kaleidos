@@ -1210,5 +1210,7 @@
   "add-notification": "Notificatie toevoegen",
   "start-signing": "Tekenen opstarten",
   "cannot-sign": "Kan niet ondertekenen",
-  "cannot-sign-message": "Dit stuk is niet verbonden aan een agendapunt en kan niet aangeboden worden om getekend te worden."
+  "cannot-sign-message": "Dit stuk is niet verbonden aan een agendapunt en kan niet aangeboden worden om getekend te worden.",
+  "signed-document": "Getekend document",
+  "on": "op"
 }

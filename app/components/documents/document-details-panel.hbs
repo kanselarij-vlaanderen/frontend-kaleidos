@@ -177,6 +177,21 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
+      {{#if @piece.signedPiece.file}}
+        <Auk::KeyValue
+          @key={{t "signed-document"}}
+        >
+          <AuLinkExternal
+            href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >
+            {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+          </AuLinkExternal>
+        </Auk::KeyValue>
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 {{/if}}
