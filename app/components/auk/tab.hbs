@@ -46,7 +46,7 @@
   >
     <button
       type="button"
-      disabled={{@disabled}}
+      {{!-- disabled={{@disabled}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
       class="auk-tabs__tab__link {{if @active "auk-tabs__tab__link--active"}}"
     >
       <Auk::Tab::InnerLayout
