@@ -32,9 +32,7 @@
               {{#if this.loadFiles.isRunning}}
                 <AuLoader @padding="small"/>
               {{else}}
-                {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
-                  {{this.piece.name}}.{{extension}}
-                {{/let}}
+                {{this.piece.name}}.{{this.extension}}
               {{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">

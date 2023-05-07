@@ -136,4 +136,7 @@ export default {
     USER_PAGEVIEW: 'Pageview (per rol)',
     FIRST_ACTION: 'Eerste actie',
   },
+  DEFAULTS: {
+    FALLBACK_EXTENSION : 'pdf',
+  }
 };
