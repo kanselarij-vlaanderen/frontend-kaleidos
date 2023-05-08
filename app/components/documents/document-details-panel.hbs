@@ -163,7 +163,7 @@
         data-test-document-details-panel-source-file
         @key={{t "source-file"}}
       >
-        {{#if @piece.file}}
+        {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"

@@ -1,4 +1,4 @@
-{{#if @file}}
+{{#if (and @file (await (this.canViewConfidentialPiece)))}}
   {{#if this.isPdfDocument}}
     <object
       type="application/pdf"

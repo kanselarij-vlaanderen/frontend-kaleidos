@@ -20,11 +20,12 @@ export default class DocumentRoute extends Route {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
-  model(params) {
-    return this.store.queryOne('piece', {
+  async model(params) {
+    const model = await this.store.queryOne('piece', {
       'filter[:id:]': params.piece_id,
       include: 'file',
     });
+    return model;
   }
 
   async afterModel(model) {
