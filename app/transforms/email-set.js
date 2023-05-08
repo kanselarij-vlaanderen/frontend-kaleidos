@@ -1,6 +1,7 @@
 import { typeOf } from '@ember/utils';
 import { assert } from '@ember/debug';
 import Transform from '@ember-data/serializer/transform';
+import { warn } from '@ember/debug';
 
 export default class EmailSetTransform extends Transform {
   deserialize(serialized) {
