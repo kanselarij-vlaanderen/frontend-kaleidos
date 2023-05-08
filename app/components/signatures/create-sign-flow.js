@@ -41,9 +41,12 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
     const subcase = await this.args.decisionActivity.subcase;
     const mandatee = await subcase.requestedBy;
-    await mandatee?.person;
-    if (mandatee && mandatee.id !== this.primeMinister?.id) {
-      this.signers.push(mandatee);
+    if (mandatee) {
+      const person = await mandatee?.person;
+      const primeMinisterPerson = await this.primeMinister?.person;
+      if (person.id !== primeMinisterPerson?.id) {
+        this.signers.push(mandatee);
+      }
     }
     this.args.onChangeSigners?.(this.signers);
   });
