@@ -11,8 +11,8 @@ export default class AgendaMinutesRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    // const meeting = this.modelFor('agenda').meeting;
-    // controller.meeting = meeting;
+    const meeting = this.modelFor('agenda').meeting;
+    controller.meeting = meeting;
     // const agenda = this.modelFor('agenda').agenda;
     // controller.agenda = agenda;
     // controller.defaultAccessLevel = this.defaultAccessLevel;

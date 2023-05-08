@@ -16,7 +16,7 @@
                 <AuButton
                   @icon="pdf"
                   @skin="naked"
-                  {{on "click" this.showVersion}}
+                  {{on "click" (perform this.exportPdf)}}
                 >
                   {{t "export-as-pdf"}}
                 </AuButton>
@@ -27,7 +27,7 @@
                     @skin="naked"
                     @icon="pencil"
                     @iconAlignment="left"
-                    {{on "click" this.toggleEdit}}
+                    {{on "click" (fn (set this "isEditing" true))}}
                   >
                     {{t (if @model "edit" "create")}}
                   </AuButton>
@@ -224,11 +224,15 @@
                       @skin="naked"
                       @icon="minimize"
                       @iconAlignment="left"
-                      {{on "click" this.toggleFullscreen}}
+                      {{!-- {{on "click" this.toggleFullscreen}} --}}
                     >
                       {{t "close-fullscreen"}}
                     </AuButton>
-                    <AuButton @skin="primary" {{on "click" this.toggleAll}}>
+                    <AuButton
+                      @skin="primary"
+                      @loading={{this.saveMinutes.isRunning}}
+                      {{on "click" (perform this.saveMinutes)}}
+                    >
                       {{t "save"}}
                     </AuButton>
                   </AuButtonGroup>
@@ -260,7 +264,7 @@
                     @skin="naked"
                     @icon="expand"
                     @iconAlignment="left"
-                    {{on "click" this.toggleFullscreen}}
+                    {{!-- {{on "click" this.toggleFullscreen}} --}}
                   >
                     {{t "fullscreen"}}
                   </AuButton>
@@ -757,13 +761,6 @@
                   minister-president van de Vlaamse Regering, Martelaarsplein 19
                   - 1000 BRUSSEL.</p>
               </div>
-              {{!-- <p>
-            {{#if this.isSigned}}
-            <AuPill @icon="sign" @size="small" @skin="success">Getekend</AuPill>
-            {{else}}
-            <AuPill @icon="no-sign" @size="small">Niet getekend</AuPill>
-            {{/if}}
-          </p> --}}
             {{/if}}
           {{/if}}
         </Auk::Panel::Body>
@@ -772,14 +769,21 @@
             <Auk::Toolbar>
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
-                  <AuButton @skin="naked" {{on "click" this.toggleEdit}}>
+                  <AuButton
+                    @skin="naked"
+                    {{on "click" (fn (set this "isEditing" false))}}
+                  >
                     {{t "cancel"}}
                   </AuButton>
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
-                  <AuButton @skin="primary" {{on "click" this.toggleEdit}}>
+                  <AuButton
+                    @skin="primary"
+                    @loading={{this.saveMinutes.isRunning}}
+                    {{on "click" (perform this.saveMinutes)}}
+                  >
                     {{t "save"}}
                   </AuButton>
                 </Auk::Toolbar::Item>
