@@ -1,9 +1,7 @@
 import Route from '@ember/routing/route';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { inject as service } from '@ember/service';
 
-export default class AgendaNotesRoute extends Route {
+export default class AgendaMinutesRoute extends Route {
   @service store;
 
   async model() {

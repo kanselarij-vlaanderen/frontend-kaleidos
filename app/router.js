@@ -28,7 +28,7 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
-    this.route('notes', { path: '/notulen', });
+    this.route('minutes', { path: '/notulen', });
   });
 
   this.route('cases', { path: '/dossiers', }, function() {

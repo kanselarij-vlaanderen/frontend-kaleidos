@@ -71,7 +71,8 @@
                           </span>
                         </div>
                         <LinkTo
-                          @route="export.notes",
+                          @route="export.notes"
+                          ,
                           target="_blank"
                           rel="noopener noreferrer"
                           class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
@@ -270,23 +271,7 @@
                 @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
               />
             </div>
-            {{!-- <div>
-            <AuToggleSwitch
-              @label="Ondertekend"
-              @identifier="signature"
-              @name="signature"
-              @checked={{if (eq this.isSigned true) "true" ""}}
-              {{on "click" this.toggleSigned}}
-            />
-          </div> --}}
           {{else}}
-            {{!-- <AuAlert
-            @title="Nog geen tekst toegevoegd"
-            @icon="circle-info"
-            @skin="info"
-            @size="small"
-            @closable={{false}}
-          /> --}}
             {{#if @model}}
               <div class="au-c-content au-c-content--small">
                 <h4>AANWEZIG</h4>
