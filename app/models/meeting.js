@@ -34,10 +34,11 @@ export default class Meeting extends Model {
   })
   internalDocumentPublicationActivity;
   @belongsTo('piece', {
-    inverse: 'meeting',
+    inverse: 'isMinutesForMeeting',
     async: true,
   })
   minutes;
+
   @hasMany('themis-publication-activity', { inverse: 'meeting', async: true })
   themisPublicationActivities;
   @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
