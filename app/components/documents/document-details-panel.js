@@ -116,4 +116,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     this.isOpenVerifyDeleteModal = false;
   }
+  
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
+  }
 }

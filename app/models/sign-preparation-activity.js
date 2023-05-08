@@ -5,7 +5,7 @@ export default class SignPreparationActivityModel extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
 
-  @belongsTo('sign-subcase', { inverse: 'signPreprationActivity', async: true })
+  @belongsTo('sign-subcase', { inverse: 'signPreparationActivity', async: true })
   signSubcase;
   @belongsTo('sign-marking-activity', {
     inverse: 'signPreparationActivity',
@@ -18,4 +18,9 @@ export default class SignPreparationActivityModel extends Model {
     async: true,
   })
   signSigningActivities;
+  @hasMany('sign-approval-activity', {
+    inverse: 'signPreparationActivity',
+    async: true,
+  })
+  signApprovalActivities;
 }

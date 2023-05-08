@@ -43,7 +43,7 @@
                 <p data-test-document-card-primary-source-created={{if this.piece.file.derived ""}}>
                   {{t "uploaded-at"}}
                   {{datetime-at this.piece.created}}
-                  {{#if this.piece.file.derived}}
+                  {{#if (and this.piece.file.derived (await (this.canViewConfidentialPiece)))}}
                     {{t "as"}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
@@ -53,6 +53,18 @@
                       {{t "source-file-lowercase"}}
                     </AuLinkExternal>
                   {{/if}}
+                </p>
+              {{/if}}
+              {{#if this.piece.signedPiece.file}}
+                <p>
+                  <AuLinkExternal
+                    href={{await this.piece.signedPiece.namedDownloadLinkPromise}}
+                    download
+                  >
+                    {{t "signed-document"}}
+                  </AuLinkExternal>
+                  {{t "on"}}
+                  {{datetime-at this.piece.signedPiece.created}}
                 </p>
               {{/if}}
             </div>
@@ -102,7 +114,10 @@
                 </Group.Item>
               {{else if this.signMarkingActivity}}
                 <Group.Item>
-                  <SignaturePill @signMarkingActivity={{this.signMarkingActivity}}/>
+                  <SignaturePill
+                    @piece={{this.piece}}
+                    @signMarkingActivity={{this.signMarkingActivity}}
+                  />
                 </Group.Item>
               {{/if}}
           {{/if}}
@@ -159,51 +174,6 @@
                 >
                   {{t "document-delete"}}
                 </AuButton>
-                {{#if this.isDebugMode}}
-                  <AuHr />
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowMarked}}
-                  >
-                    DEBUG!! Sign flow gemarkeerd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowPrepared}}
-                  >
-                    DEBUG!! Sign flow verstuurd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowToBeSigned}}
-                  >
-                    DEBUG!! Sign flow te tekenen
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowSigned}}
-                  >
-                    DEBUG!! Sign flow getekend
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowRefused}}
-                  >
-                    DEBUG!! Sign flow geweigerd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.removeSignFlow}}
-                  >
-                    DEBUG!! Sign flow verwijderen
-                  </AuButton>
-                {{/if}}
               </AuDropdown>
             </Group.Item>
           {{/if}}

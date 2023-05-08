@@ -17,7 +17,18 @@
         {{! search here}}
       </Group.Item>
       <Group.Item>
-        {{! filter here}}
+        {{#if this.filteredMinisters}}
+          <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuButton
+          @skin="secondary"
+          @icon="filter"
+          {{on "click" this.openFilterModal}}
+        >
+          {{t "filter-on-signer"}}
+        </AuButton>
       </Group.Item>
       <Group.Item>
         {{! bundle signature here}}
@@ -73,11 +84,13 @@
       </AuPill>
     </td>
     <td>
-      {{#each (await (this.getMandateeNames piece)) as |name|}}
-        {{name}}
-      {{else}}
-        -
-      {{/each}}
+      {{#let (await (this.getMandateeName piece)) as |name|}}
+        {{#if name}}
+          {{name}}
+        {{else}}
+          -
+        {{/if}}
+      {{/let}}
     </td>
     <td>{{date (await (this.getDecisionDate piece))}}</td>
     <td>
@@ -86,7 +99,7 @@
         @icon="sign"
         {{on "click" (fn this.openSidebar piece)}}
       >
-        {{t "start-process"}}
+        {{t "start-signing"}}
       </AuButton>
     </td>
   </:body>
@@ -94,7 +107,7 @@
     <div class="auk-sidebar">
       <div class="auk-sidebar__header">
         <h4 class="auk-toolbar-complex__title">
-          {{t "start-process"}}
+          {{t "start-signing"}}
         </h4>
         <Auk::Button
           @icon="x"
@@ -107,7 +120,7 @@
         <p class="au-u-muted auk-u-mt-2">
           {{or this.piece.documentContainer.type.label (t "no-document-type")}}
           -
-          {{date (await (this.getDecisionDate this.piece))}}
+          {{date this.decisionActivity.startDate}}
         </p>
         <h5 class="auk-h4">{{this.piece.name}}</h5>
         <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
@@ -128,105 +141,60 @@
             {{t "consult-agendaitem-decision"}}
           </AuLink>
         </div>
-        <Auk::Panel class="auk-u-mt-4">
-          <Auk::Panel::Header class="auk-u-px-1">
-            <Auk::Toolbar as |Toolbar|>
-              <Toolbar.Group @position="left" as |Group|>
-                <Group.Item>
-                  <h4 class="auk-h4 auk-u-m-0">
-                    {{t "to-sign-by"}}
-                  </h4>
-                </Group.Item>
-              </Toolbar.Group>
-              <Toolbar.Group @position="right" as |Group|>
-                <Group.Item>
-                  <AuButton @skin="secondary" @icon="pencil">
-                    {{t "edit-list"}}
-                  </AuButton>
-                </Group.Item>
-              </Toolbar.Group>
-            </Auk::Toolbar>
-          </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-0">
-            <Auk::List @bordered={{true}}>
-              {{#each this.signers}}
-                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                </Auk::List::Item>
-              {{else}}
-                <Auk::List::Item>
-                  {{t "no-signers-selected"}}
-                </Auk::List::Item>
-              {{/each}}
-            </Auk::List>
-          </Auk::Panel::Body>
-        </Auk::Panel>
-        <Auk::Panel class="auk-u-mt-4">
-          <Auk::Panel::Header class="auk-u-px-1">
-            <Auk::Toolbar as |Toolbar|>
-              <Toolbar.Group @position="left" as |Group|>
-                <Group.Item>
-                  <h4 class="auk-h4 auk-u-m-0">
-                    {{t "to-approve-by"}}
-                  </h4>
-                </Group.Item>
-              </Toolbar.Group>
-              <Toolbar.Group @position="right" as |Group|>
-                <Group.Item>
-                  <AuButton @skin="secondary" @icon="plus">
-                    {{t "add"}}
-                  </AuButton>
-                </Group.Item>
-              </Toolbar.Group>
-            </Auk::Toolbar>
-          </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-0">
-            <Auk::List @bordered={{true}}>
-              {{#each this.approvers}}
-                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                </Auk::List::Item>
-              {{else}}
-                <Auk::List::Item>
-                  {{t "no-approvers-selected"}}
-                </Auk::List::Item>
-              {{/each}}
-            </Auk::List>
-          </Auk::Panel::Body>
-        </Auk::Panel>
-        <Auk::Panel class="auk-u-mt-4">
-          <Auk::Panel::Header class="auk-u-px-1">
-            <Auk::Toolbar as |Toolbar|>
-              <Toolbar.Group @position="left" as |Group|>
-                <Group.Item>
-                  <h4 class="auk-h4 auk-u-m-0">
-                    {{t "signing-hub-notifications"}}
-                  </h4>
-                </Group.Item>
-              </Toolbar.Group>
-              <Toolbar.Group @position="right" as |Group|>
-                <Group.Item>
-                  <AuButton @skin="secondary" @icon="plus">
-                    {{t "add"}}
-                  </AuButton>
-                </Group.Item>
-              </Toolbar.Group>
-            </Auk::Toolbar>
-          </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-0">
-            <Auk::List @bordered={{true}}>
-              {{#each this.notificationAddresses}}
-                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                </Auk::List::Item>
-              {{else}}
-                <Auk::List::Item>
-                  {{t "no-notification-addresses-selected"}}
-                </Auk::List::Item>
-              {{/each}}
-            </Auk::List>
-          </Auk::Panel::Body>
-        </Auk::Panel>
+        <Signatures::CreateSignFlow
+          @piece={{this.piece}}
+          @decisionActivity={{this.decisionActivity}}
+          @onChangeSigners={{fn (mut this.signers)}}
+          @onChangeApprovers={{fn (mut this.approvers)}}
+          @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+        />
       </div>
       <div class="auk-sidebar__footer">
+        <AuToolbar as |Group|>
+          <Group>
+            <AuButton
+              @loading={{this.createSignFlow.isRunning}}
+              {{on "click" this.createSignFlow.perform}}
+            >
+              {{t "start-signing"}}
+            </AuButton>
+          </Group>
+        </AuToolbar>
       </div>
     </div>
   </:aside>
 </KDataTable>
+
+<ConfirmationModal
+  @modalOpen={{this.showFilterModal}}
+  @title={{t "filter-content"}}
+  @onCancel={{this.closeFilterModal}}
+>
+  <:body>
+    <Mandatees::CheckboxList
+      @selected={{this.selectedMinisters}}
+      @onChange={{fn (mut this.selectedMinisters)}}
+    />
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton @skin="naked" {{on "click" this.closeFilterModal}}>
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        {{#if this.filteredMinisters}}
+          <AuButton @skin="secondary" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuButton @icon="filter" {{on "click" this.applyFilter}}>
+          {{t "filter-content"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</ConfirmationModal>
