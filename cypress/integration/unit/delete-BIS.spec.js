@@ -83,8 +83,7 @@ context('Delete BIS tests', () => {
       .wait('@piecesFilter');
     cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
-    cy.get(auk.auModal.header.close).click();
-    cy.go('back');
+    cy.get(auk.auModal.header.close).click(); // closing modal equals a cy.go('back')
     cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
     cy.get('@documentCard1').contains(files[0].newFileName);
@@ -116,6 +115,7 @@ context('Delete BIS tests', () => {
       .wait('@deleteFile')
       .wait('@deletePiece')
       .wait('@piecesFilter');
+    cy.get(auk.loader);
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.auModal.header.close).click();
     cy.get('@documentCard2').contains(files[1].newFileName);
