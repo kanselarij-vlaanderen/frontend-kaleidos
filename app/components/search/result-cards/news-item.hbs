@@ -28,13 +28,11 @@
     </AuHeading>
   </c.header>
   {{#if @text}}
-    <c.content>
-      <p data-test-route-search-result-cards-news-item-text>
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@text}}
-        />
-      </p>
+    <c.content data-test-route-search-result-cards-news-item-text>
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{@text}}
+      />
     </c.content>
   {{/if}}
   <c.footer>
