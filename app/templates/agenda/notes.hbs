@@ -13,23 +13,13 @@
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
               <Group.Item>
-                {{#if this.document}}
-                  <AuButton
-                    @icon="pdf"
-                    @skin="naked"
-                    {{on "click" this.showVersion}}
-                  >
-                    Exporteren als pdf
-                  </AuButton>
-                {{else}}
-                  <AuButton
-                    @icon="pdf"
-                    @skin="naked"
-                    {{on "click" this.showDocument}}
-                  >
-                    Exporteren als pdf
-                  </AuButton>
-                {{/if}}
+                <AuButton
+                  @icon="pdf"
+                  @skin="naked"
+                  {{on "click" this.showVersion}}
+                >
+                  {{t "export-as-pdf"}}
+                </AuButton>
               </Group.Item>
               {{#unless this.isEditing}}
                 <Group.Item>
@@ -39,7 +29,7 @@
                     @iconAlignment="left"
                     {{on "click" this.toggleEdit}}
                   >
-                    Wijzigen
+                    {{t (if @model "edit" "create")}}
                   </AuButton>
                 </Group.Item>
               {{/unless}}
@@ -81,7 +71,7 @@
                           </span>
                         </div>
                         <LinkTo
-                          @route="export.notes"
+                          @route="export.notes",
                           target="_blank"
                           rel="noopener noreferrer"
                           class="auk-h4 au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
