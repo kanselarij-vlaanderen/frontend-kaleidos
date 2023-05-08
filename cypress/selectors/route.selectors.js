@@ -108,6 +108,7 @@ const selectors = {
   searchCases: {
     removedCasesList: '[data-test-route-search-removed-cases-list]',
     dataTable: '[data-test-route-search-cases-data-table]',
+    row: '[data-test-route-search-cases-data-table-row]',
   },
 
   // search/newsletters
@@ -218,6 +219,10 @@ const selectors = {
   // newsletter/nota-updates/template
   notaUpdates: {
     dataTable: '[data-test-route-newsletter-nota-updates-data-table]',
+    row: {
+      showPieceViewer: '[data-test-route-newsletter-nota-updates-show-piece-viewer]',
+      goToAgendaitemDocuments: '[data-test-route-newsletter-nota-updates-go-to-agendaitem-documents]',
+    },
   },
 
   /**

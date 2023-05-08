@@ -3,16 +3,27 @@
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
-// import publication from '../../selectors/publication.selectors';
+import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function visitPublicationSearch() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.intercept('GET', '/publication-flows/search?**').as('publicationInitialSearchCall');
+  cy.intercept('GET', '/mandatees?**').as('getMandatees');
   cy.visit('publicaties/overzicht/zoeken');
   cy.wait('@getRegulationTypes');
   cy.wait('@publicationInitialSearchCall');
+  cy.wait('@getMandatees');
+}
+
+function visitPublications() {
+  cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
+  cy.visit('/publicaties');
+  cy.wait('@getRegulationTypes');
+  cy.get(auk.loader, {
+    timeout: 60000,
+  }).should('not.exist');
 }
 
 function checkPublicationSearch(searchTerm, result) {
@@ -139,6 +150,23 @@ function triggerSearchPublication(checkboxContains) {
   }
   cy.wait(`@publicationSearchCall${randomInt}`);
   cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+}
+
+function addMandatee(mandatee) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+  cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
+  cy.get(publication.mandateesPanel.add).click();
+  cy.wait(`@getMandatees${randomInt}`);
+  cy.get(dependency.emberPowerSelect.trigger).click();
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.option).contains(mandatee)
+    .scrollIntoView()
+    .click();
+  cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
+  cy.get(utils.mandateesSelector.add).click();
+  cy.wait(`@patchPublicationFlow${randomInt}`);
 }
 
 // TODO-publication make Test to register publication
@@ -272,9 +300,86 @@ context('Search tests', () => {
     checkPublicationSearchForRegulationType(fields6.regulationType, fields6.number);
   });
 
+  it('setup: add some mandatees', () => {
+    const mandatee1 = 'Jan Jambon';
+    const mandatee2 = 'Hilde Crevits';
+    const mandatee3 = 'Bart Somers';
+
+    visitPublications();
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields2.number)
+      .click();
+    addMandatee(mandatee2);
+
+    visitPublications();
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields4.number)
+      .click();
+    addMandatee(mandatee1);
+    addMandatee(mandatee2);
+
+    visitPublications();
+    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fieldsWithDoubleDates.number)
+      .click();
+    addMandatee(mandatee3);
+
+    // add urgent !only when not running publication-new-features.spec!
+    // visitPublications();
+    // cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields6.number)
+    //   .click();
+    // cy.get(publication.publicationCaseInfo.edit).click();
+    // cy.get(publication.urgencyLevelCheckbox).parent()
+    //   .click();
+    // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    // cy.get(publication.publicationCaseInfo.editView.save).click()
+    //   .wait('@patchPublicationFlow');
+  });
+
+  it('check mandatees filters', () => {
+    const searchTerm = 'Besluitvorming Vlaamse Regering hoed';
+    const mandatee1 = 'Jan Jambon';
+    const mandatee2 = 'Hilde Crevits';
+    const mandatee4 = 'Paul Akkermans';
+
+    visitPublicationSearch();
+    cy.get(route.search.input).clear()
+      .type(searchTerm);
+
+    // filter on Jan Jambon
+    triggerSearchPublication(mandatee1);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length.at.least', 2)
+      .contains(fields4.number);
+
+    // add Hilde Crevits
+    triggerSearchPublication(mandatee2);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length.at.least', 3)
+      .as('rows');
+    cy.get('@rows').contains(fields4.number);
+    cy.get('@rows').contains(fields2.number);
+
+    // remove Jan Jambon
+    triggerSearchPublication(mandatee1);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length.at.least', 1);
+
+    // remove Hilde Crevits
+    triggerSearchPublication(mandatee2);
+
+    // check previous mandatees works
+    cy.get(utils.ministerFilter.pastMinisters).click();
+    // add Pauk Akkermans
+    triggerSearchPublication(mandatee4);
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+  });
+
   it('combined searches in publicaties', () => {
     const generalTerm = '"Besluitvorming Vlaamse Regering hoed"';
     const urgent = 'Dringend';
+    const mandatee2 = 'Hilde Crevits';
+    const mandatee3 = 'Bart Somers';
 
     visitPublicationSearch();
 
@@ -319,6 +424,12 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
+    // add Bart Somers
+    triggerSearchPublication(mandatee3);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains(fieldsWithDoubleDates.number);
 
     // change status
     cy.get(appuniversum.checkbox)
@@ -327,6 +438,25 @@ context('Search tests', () => {
     // search with searchterm + decisionDate + regulation-type but with different status
     triggerSearchPublication(fields2.status);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+
+    // filter on Crevits
+    triggerSearchPublication(mandatee2);
+    cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+    // search without date
+    // TODO doesn't always work on a first click?
+    cy.get(route.search.from).find(auk.datepicker.clear)
+      .click();
+    cy.get(route.search.from).find(auk.datepicker.datepicker)
+      .should('have.value', '');
+    cy.get(route.search.to).find(auk.datepicker.clear)
+      .click();
+    cy.get(route.search.to).find(auk.datepicker.datepicker)
+      .should('have.value', '');
+    cy.get(route.search.trigger).click();
+    // remove regulation type
+    triggerSearchPublication(fieldsWithDoubleDates.regulationType);
+    cy.get(route.searchPublications.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1);
   });
 });
-
