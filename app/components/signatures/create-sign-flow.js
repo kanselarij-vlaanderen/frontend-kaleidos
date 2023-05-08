@@ -42,7 +42,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     const subcase = await this.args.decisionActivity.subcase;
     const mandatee = await subcase.requestedBy;
     await mandatee?.person;
-    if (mandatee) {
+    if (mandatee && mandatee.id !== this.primeMinister?.id) {
       this.signers.push(mandatee);
     }
     this.args.onChangeSigners?.(this.signers);
@@ -77,7 +77,9 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   saveSigners = task(async (selected) => {
     const records = await this.mandateeIdsToRecords(selected);
     const filtered = await this.filterSelectedSigners(records);
-    this.signers = filtered.sortBy('priority');
+    this.signers = filtered.sort(
+      (m1, m2) => m1.priority - m2.priority
+    );
     this.showMinisterModal = false;
     this.args.onChangeSigners?.(this.signers);
   });

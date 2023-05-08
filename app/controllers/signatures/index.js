@@ -28,15 +28,15 @@ export default class SignaturesIndexController extends Controller {
   getDecisionDate = async (piece) => {
     const decisionActivity = await this.getDecisionActivity(piece);
     return decisionActivity.startDate;
-  }
+  };
 
   getMandateeName = async (piece) => {
     const decisionActivity = await this.getDecisionActivity(piece);
     const subcase = await decisionActivity.subcase;
     const mandatee = await subcase.requestedBy;
     const person = await mandatee.person;
-    return person.fullName
-  }
+    return person.fullName;
+  };
 
   async getAgendaitem(piece) {
     const agendaitems = await piece.agendaitems;
@@ -71,12 +71,12 @@ export default class SignaturesIndexController extends Controller {
   @action
   async openSidebar(piece) {
     this.piece = piece;
-    [
-      this.meeting,
-      this.agenda,
-      this.agendaitem
-    ] = await this.getAgendaitemRouteModels(piece);
+    [this.meeting, this.agenda, this.agendaitem] =
+      await this.getAgendaitemRouteModels(piece);
     this.decisionActivity = await this.getDecisionActivity(piece);
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
     this.showSidebar = true;
   }
 
@@ -87,6 +87,9 @@ export default class SignaturesIndexController extends Controller {
     this.agenda = null;
     this.meeting = null;
     this.decisionActivity = null;
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
     this.showSidebar = false;
   }
 
@@ -132,7 +135,7 @@ export default class SignaturesIndexController extends Controller {
       this.decisionActivity,
       this.signers,
       this.approvers,
-      this.notificationAddresses,
+      this.notificationAddresses
     );
     await this.router.refresh(this.router.routeName);
   });

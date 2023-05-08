@@ -174,51 +174,6 @@
                 >
                   {{t "document-delete"}}
                 </AuButton>
-                {{#if this.isDebugMode}}
-                  <AuHr />
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowMarked}}
-                  >
-                    DEBUG!! Sign flow gemarkeerd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowPrepared}}
-                  >
-                    DEBUG!! Sign flow verstuurd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowToBeSigned}}
-                  >
-                    DEBUG!! Sign flow te tekenen
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowSigned}}
-                  >
-                    DEBUG!! Sign flow getekend
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.signFlowRefused}}
-                  >
-                    DEBUG!! Sign flow geweigerd
-                  </AuButton>
-                  <AuButton
-                    @skin="link"
-                    role="menuitem"
-                    {{on "click" this.removeSignFlow}}
-                  >
-                    DEBUG!! Sign flow verwijderen
-                  </AuButton>
-                {{/if}}
               </AuDropdown>
             </Group.Item>
           {{/if}}

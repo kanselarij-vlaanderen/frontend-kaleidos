@@ -101,24 +101,7 @@ export default class SignatureService extends Service {
       return {
         signFlow,
         signSubcase,
-        signMarkingActivity,
       }
     }
-  }
-
-  async unmarkDocumentForSignature(piece) {
-    const signMarkingActivity = await piece.signMarkingActivity;
-    const signPreparationActivity = await signMarkingActivity.signPreparationActivity;
-
-    if (signPreparationActivity) {
-      this.toaster.error(this.intl.t('unmarking-not-possible'));
-      return;
-    }
-    const signSubcase = await signMarkingActivity.signSubcase;
-    const signFlow = await signSubcase.signFlow;
-
-    await signFlow.destroyRecord();
-    await signSubcase.destroyRecord();
-    await signMarkingActivity.destroyRecord();
   }
 }

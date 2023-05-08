@@ -46,6 +46,7 @@ export default class SignaturePillComponent extends Component {
     } else if (this.isMarked) {
       return this.intl.t('to-sign');
     }
+    return "";
   }
 
   loadData = task(async () => {
