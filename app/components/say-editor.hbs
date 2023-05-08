@@ -1,0 +1,67 @@
+<div
+  class="auk-rdfa-holder
+    {{if this.isFullscreen 'auk-rdfa-fullscreen au-u-margin-top-none'}}"
+>
+  {{#if this.editorInstance}}
+    <div
+      class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
+    >
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+        {{#if this.isFullscreen}}
+          <h4 class="auk-toolbar__title">
+            {{if @title @title "Say Editor"}}
+          </h4>
+        {{/if}}
+        {{#if (and @showUpdateContent @onUpdateContent)}}
+          <AuButton
+            @skin="link"
+            @icon="renew"
+            class="{{if (not this.isFullscreen) 'au-u-padding-left-none'}}"
+            {{on "click" @onUpdateContent}}
+          >{{t "update-thing" thing=(t "content")}}</AuButton>
+        {{/if}}
+        {{#if @showVersioning}}
+          <VersionsDropdown
+            @record={{@versioningRecord}}
+            @timestampKey={{@versioningTimestampKey}}
+            @previousVersionKey={{@versioningPreviousTimestampKey}}
+            @onVersionClicked={{this.revertToVersion}}
+          />
+        {{/if}}
+      </div>
+      {{#if this.isFullscreen}}
+        <AuButtonGroup>
+          <AuButton
+            @skin="naked"
+            @icon="minimize"
+            @iconAlignment="left"
+            {{on "click" (fn (set this "isFullscreen" false))}}
+          >
+            {{t "close-fullscreen"}}
+          </AuButton>
+          {{#if (and @showSave @onSaveTask)}}
+            <AuButton
+              @skin="primary"
+              @loading={{@onSaveTask.isRunning}}
+              {{on "click" @onSaveTask}}
+            >
+              {{t "save"}}
+            </AuButton>
+          {{/if}}
+        </AuButtonGroup>
+      {{else}}
+        <AuButton
+          @skin="naked"
+          @icon="expand"
+          @iconAlignment="left"
+          {{on "click" (fn (set this "isFullscreen" true))}}
+        >
+          {{t "fullscreen"}}
+        </AuButton>
+      {{/if}}
+    </div>
+  {{/if}}
+  <WebComponents::VlRdfaEditor
+    @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+  />
+</div>
