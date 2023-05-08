@@ -36,14 +36,15 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[type][:id:]': agendaItemType.id,
-      'filter[:lte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
+      'filter[number]': previousNumber, // Needs quotes because of bug in mu-cl-resources
     });
     if (neighbouringItem) {
       this.router.transitionTo(
         'agenda.agendaitems.agendaitem',
         this.meeting.id,
         this.agenda.id,
-        neighbouringItem.id
+        neighbouringItem.id,
+        { queryParams: { anchor: neighbouringItem.id}}
       );
     } else {
       // If there is no neighbour, we most likely just deleted the last and only agendaitem

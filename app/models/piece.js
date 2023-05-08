@@ -17,6 +17,8 @@ export default class Piece extends Model {
   documentContainer;
   @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
   @belongsTo('piece', { inverse: 'nextPiece', async: true }) previousPiece;
+  @belongsTo('piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
+  @belongsTo('piece', { inverse: 'signedPiece', async: true }) unsignedPiece;
 
   // resources with pieces linked:
 
@@ -36,7 +38,6 @@ export default class Piece extends Model {
   translationActivityGeneratedBy;
   @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
   signMarkingActivity;
-  @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })

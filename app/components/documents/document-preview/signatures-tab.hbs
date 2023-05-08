@@ -1,20 +1,43 @@
 <div class="auk-u-m-4">
-  <Auk::KeyValue @key={{t "validation-signature"}}>
-    {{#if (not this.loadSignatureRelatedData.isRunning)}}
-      {{#if this.agendaitem}} {{! don't allow this action unless there is an agendaitem ergo a treatment}}
-        {{#if this.markOrUnmarkForSignature.isRunning}}
-          <Auk::Loader/>
-        {{else}}
-          <AuCheckbox
-            @checked={{this.signMarkingActivity}}
-            @onChange={{perform this.markOrUnmarkForSignature}}
-          >
-            {{t "signature-needed"}}
-          </AuCheckbox>
-        {{/if}}
-      {{else}}
-        <p>{{t "signature-not-possible"}}</p>
-      {{/if}}
-    {{/if}}
-  </Auk::KeyValue>
+  {{#if this.loadSignatureRelatedData.isRunning}}
+    <Auk::Loader />
+  {{else if this.signMarkingActivity}}
+    <SignaturePill
+      @piece={{@piece}}
+      @signMarkingActivity={{this.signMarkingActivity}}
+    />
+  {{else if this.agendaitem}}
+    <p class="au-u-muted auk-u-mt-2">
+      {{or @piece.documentContainer.type.label (t "no-document-type")}}
+      -
+      {{date this.decisionActivity.startDate}}
+    </p>
+    <h5 class="auk-h4">{{@piece.name}}</h5>
+    <Signatures::CreateSignFlow
+      @piece={{@piece}}
+      @decisionActivity={{this.decisionActivity}}
+      @onChangeSigners={{fn (mut this.signers)}}
+      @onChangeApprovers={{fn (mut this.approvers)}}
+      @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+    />
+
+    <AuToolbar class="auk-u-mt-4" as |Group|>
+      <Group>
+        <AuButton
+          @loading={{this.createSignFlow.isRunning}}
+          {{on "click" this.createSignFlow.perform}}
+        >
+          {{t "start-signing"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  {{else}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "cannot-sign"}}
+    >
+      <p>{{t "cannot-sign-message"}}</p>
+    </AuAlert>
+  {{/if}}
 </div>

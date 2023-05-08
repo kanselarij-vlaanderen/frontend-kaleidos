@@ -513,6 +513,8 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
   cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.get(editSelector).click();
+  cy.get(auk.loader);
+  cy.get(auk.loader).should('not.exist');
   cy.get(document.documentDetailsRow.row).as('documentRows');
   cy.get('@documentRows').eq(indexToDelete)
     .find(document.documentDetailsRow.input)
@@ -528,39 +530,6 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   }).wait(`@putRestoreAgendaitems${randomInt}`);
   cy.wait(2000);
   cy.log('/deletePieceBatchEditRow');
-}
-
-/**
- * @description verifies if a piece in the history view of a document-card should be deletable (show icon)
- * @name isPieceDeletable
- * @memberOf Cypress.Chainable#
- * @function
- * @param String fileName - The exact name of the file (as seen in document-card title)
- * @param Number indexToCheck - The index of the piece in the list
- * @param Boolean shouldBeDeletable - True if icon should be shown
- */
-// **NOTE: this is untested afer refactor!
-function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
-  cy.log('isPieceDeletable');
-
-  cy.get(document.documentCard.name.value)
-    .contains(fileName)
-    .parents(document.documentCard.card)
-    .within(() => {
-      cy.get(document.documentCard.versionHistory)
-        .find(auk.accordion.header.button)
-        .click();
-      cy.get(document.vlDocument.piece).eq(indexToCheck)
-        .within(() => {
-          if (shouldBeDeletable) {
-            cy.get(document.vlDocument.delete).should('be.visible');
-          } else {
-            cy.get(document.vlDocument.delete).should('not.exist');
-          }
-        });
-    });
-
-  cy.log('/isPieceDeletable');
 }
 
 // ***********************************************
@@ -583,5 +552,4 @@ Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
-Cypress.Commands.add('isPieceDeletable', isPieceDeletable);
 Cypress.Commands.add('deletePieceBatchEditRow', deletePieceBatchEditRow);
