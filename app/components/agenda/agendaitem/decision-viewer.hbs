@@ -1,0 +1,31 @@
+<div class="l-decision-viewer">
+  <div
+    class="au-u-padding-left-large au-u-padding-right-large au-u-padding-bottom-huge au-u-padding-top l-decision-viewer__page" ...attributes
+  >
+    <div class="au-u-margin-bottom-large au-u-flex au-u-flex--column">
+      <Utils::LogoHeader />
+      <p class="au-u-text-center au-u-flex-self-center">{{t "session-of"}}
+        {{date-weekday @meeting.plannedStart}}
+        {{date-phrase @meeting.plannedStart}}</p>
+      <hr
+        class="au-u-margin-top au-u-flex-self-center l-decision-viewer__header-underline"
+      />
+    </div>
+    <AuContent @size="small">
+      <h5
+        class="auk-u-text-decoration-underline"
+      >{{@meeting.numberRepresentation}}
+        -
+        {{t "point"}}
+        {{add-leading-zeros @agendaitem.number 4}}</h5>
+      <h5 class="auk-u-text-decoration-underline au-u-padding-top">{{t
+          "concerns"
+        }}:</h5>
+      <SanitizeHtml @raw={{true}} @value={{@concernsHtmlString}} />
+      <h5 class="auk-u-text-decoration-underline au-u-padding-top">{{capitalize
+          (t "decision")
+        }}:</h5>
+      <SanitizeHtml @raw={{true}} @value={{@decisionHtmlString}} />
+    </AuContent>
+  </div>
+</div>

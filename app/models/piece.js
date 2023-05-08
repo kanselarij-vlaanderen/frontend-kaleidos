@@ -16,7 +16,8 @@ export default class Piece extends Model {
   @belongsTo('document-container', { inverse: 'pieces', async: true })
   documentContainer;
   @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
-  @belongsTo('piece', { inverse: 'nextPiece', async: true }) previousPiece;
+  @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true })
+  previousPiece;
 
   // resources with pieces linked:
 
