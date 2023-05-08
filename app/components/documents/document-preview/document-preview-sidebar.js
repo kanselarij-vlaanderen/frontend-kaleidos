@@ -22,6 +22,9 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   constructor() {
     super(...arguments);
     this.loadPieceData.perform();
+    if (this.args.activeTab) {
+      this.activeTab = this.args.activeTab;
+    }
   }
 
   get isShownSignatureTab() {

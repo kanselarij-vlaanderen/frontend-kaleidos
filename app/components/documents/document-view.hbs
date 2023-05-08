@@ -8,22 +8,25 @@
     </object>
   {{else}}
     <div class="auk-u-p-4">
-      <Auk::Alert
+      <AuAlert
         @skin="warning"
+        @icon="alert-triangle"
         @title={{t "file-type-unsupported"}}
-        @message={{t
-                     "file-viewer-type-unsupported"
-                     fileType=@file.extension
-                 }}
-      />
+      >
+        <p>
+          {{t "file-viewer-type-unsupported" fileType=@file.extension}}
+        </p>
+      </AuAlert>
     </div>
   {{/if}}
 {{else}}
   <div class="auk-u-p-4">
-    <Auk::Alert
+    <AuAlert
       @skin="warning"
+      @icon="alert-triangle"
       @title={{t "document-unauthorized"}}
-      @message={{t "document-unauthorized-message"}}
-    />
+    >
+      <p>{{t "document-unauthorized-message"}}</p>
+    </AuAlert>
   </div>
 {{/if}}

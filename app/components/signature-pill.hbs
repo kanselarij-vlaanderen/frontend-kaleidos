@@ -1,0 +1,21 @@
+{{#if this.loadData.isRunning}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else}}
+  {{#if this.signingHubUrl}}
+    <AuPill
+      @icon="sign"
+      @skin={{this.skin}}
+      @href={{this.signingHubUrl}}
+      target="_blank"
+    >
+      {{this.title}}
+    </AuPill>
+  {{else}}
+    <AuPill
+      @icon="sign"
+      @skin={{this.skin}}
+    >
+      {{this.title}}
+    </AuPill>
+  {{/if}}
+{{/if}}

@@ -23,7 +23,7 @@
           @renderInPlace={{true}}
         />
       </Auk::KeyValue>
-      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+      <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
         <Textarea
           data-test-details-tab-edit-name
           aria-labelledby="piece-name"
@@ -148,7 +148,7 @@
           {{this.documentType.label}}
         </Auk::KeyValue>
       {{/if}}
-      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+      <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
           {{@piece.name}}.{{extension}}
         {{/let}}
@@ -177,6 +177,21 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
+      {{#if @piece.signedPiece.file}}
+        <Auk::KeyValue
+          @key={{t "signed-document"}}
+        >
+          <AuLinkExternal
+            href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+            @skin="primary"
+            @icon="download"
+            @iconAlignment="left"
+            download
+          >
+            {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+          </AuLinkExternal>
+        </Auk::KeyValue>
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 {{/if}}
