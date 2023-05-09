@@ -1,6 +1,6 @@
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
-    <KDataTable @content={{@model}} @enablePagination={{false}}>
+    <KDataTable data-test-route-publications-overview-shortlist-table @content={{@model}} @enablePagination={{false}}>
       <:header>
         <th>{{t "document-name"}}</th>
         <th>{{t "document-type"}}</th>
@@ -10,12 +10,12 @@
       </:header>
       <:body as |row|>
         <td>
-          <AuLink @route="document" @model={{row.id}}>
+          <AuLink data-test-route-publications-overview-shortlist-row-name @route="document" @model={{row.id}}>
             {{row.name}}
           </AuLink>
         </td>
         <td>
-          <AuPill>
+          <AuPill data-test-route-publications-overview-shortlist-row-type>
             {{row.documentContainer.type.label}}
           </AuPill>
         </td>
@@ -27,6 +27,7 @@
         <td>{{date (await (this.getDecisionDate row))}}</td>
         <td>
           <AuButton
+            data-test-route-publications-overview-shortlist-row-open-new-publication
             @skin="naked"
             @icon="add"
             {{on "click" (fn this.openNewPublicationModal row)}}
