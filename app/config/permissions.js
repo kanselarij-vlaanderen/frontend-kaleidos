@@ -167,6 +167,7 @@ const groups = [
     roles: [KABINET_DOSSIERBEHEERDER],
     defaultRoute: 'agendas',
     permissions: [
+      'manage-signatures',
       'view-document-version-info',
       'view-documents-before-release',
       'view-only-specific-confidential-documents'
