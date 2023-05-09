@@ -63,4 +63,16 @@ export default class SignaturesIndexRoute extends Route {
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.showSidebar = false;
+      controller.showFilterModal = false;
+      controller.piece = null;
+      controller.decisionActivity = null;
+      controller.agendaitem = null;
+      controller.agenda = null;
+      controller.meeting = null;
+    }
+  }
 }
