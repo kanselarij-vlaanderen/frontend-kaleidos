@@ -12,7 +12,7 @@ export default class SignaturesIndexRoute extends Route {
   beforeModel() {
     this.ministerIds = JSON.parse(
       localStorage.getItem(this.localStorageKey)
-    );
+    ) ?? [];
   }
 
   async model() {
@@ -38,7 +38,7 @@ export default class SignaturesIndexRoute extends Route {
           ':id:': result.data.map((record) => record.id).join(','),
         }
       };
-      if (this.ministerIds.length) {
+      if (this.ministerIds?.length) {
         query.filter.agendaitems = {
           treatment: {
             'decision-activity': {
@@ -62,5 +62,17 @@ export default class SignaturesIndexRoute extends Route {
     super.setupController(controller, model, transition);
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.showSidebar = false;
+      controller.showFilterModal = false;
+      controller.piece = null;
+      controller.decisionActivity = null;
+      controller.agendaitem = null;
+      controller.agenda = null;
+      controller.meeting = null;
+    }
   }
 }
