@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
 export default class SignaturesIndexController extends Controller {
   @service router;
   @service store;
+  @service signatureService;
 
   @tracked piece = null;
   @tracked decisionActivity = null;
