@@ -12,7 +12,7 @@ export default class SignaturesIndexRoute extends Route {
   beforeModel() {
     this.ministerIds = JSON.parse(
       localStorage.getItem(this.localStorageKey)
-    );
+    ) ?? [];
   }
 
   async model() {
