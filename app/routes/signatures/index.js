@@ -38,7 +38,7 @@ export default class SignaturesIndexRoute extends Route {
           ':id:': result.data.map((record) => record.id).join(','),
         }
       };
-      if (this.ministerIds.length) {
+      if (this.ministerIds?.length) {
         query.filter.agendaitems = {
           treatment: {
             'decision-activity': {
