@@ -105,7 +105,7 @@
       </Auk::Panel::Body>
     {{else}}
       {{#if (and this.report.file (not this.report.pieceParts))}}
-        <Auk::Panel::Body class="au-o-flow">
+        <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
             @isEditable={{true}}
