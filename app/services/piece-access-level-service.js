@@ -124,9 +124,9 @@ export default class PieceAccessLevelService extends Service {
       const accessLevel = await piece.accessLevel;
       if (accessLevel.uri !== vertrouwelijk.uri) {
         piece.accessLevel = vertrouwelijk;
-        piece.save();
-        await this.updatePreviousAccessLevels(piece);
+        await piece.save();
       }
+      await this.updatePreviousAccessLevels(piece);
     }));
   }
 
