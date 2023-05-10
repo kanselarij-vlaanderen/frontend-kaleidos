@@ -80,8 +80,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const { betreftPiecePart, beslissingPiecePart } =
       this.createAndAttachPieceParts(
         report,
-        this.beslissingPiecePart.value,
-        this.betreftPiecePart.value
+        this.betreftPiecePart.value,
+        this.beslissingPiecePart.value
       );
 
     await this.saveReport(
