@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
@@ -10,6 +11,19 @@ import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
+}
+
+function formatDocuments(pieceRecords) {
+  const names = pieceRecords.map((record) => record.name);
+  if (pieceRecords.length === 0) {
+    return '()';
+  } else if (pieceRecords.length === 1) {
+    return `(${names[0]})`;
+  } else {
+    return `(${names.slice(0, names.length - 1).join(', ')} en ${
+      names[names.length - 1]
+    })`;
+  }
 }
 
 /**
@@ -45,6 +59,7 @@ export default class AgendaitemDecisionComponent extends Component {
     this.loadReport.perform();
     this.loadCodelists.perform();
     this.loadNota.perform();
+    this.loadDocuments.perform();
   }
 
   loadNota = task(async () => {
@@ -68,6 +83,13 @@ export default class AgendaitemDecisionComponent extends Component {
       'concept',
       CONSTANTS.DOCUMENT_TYPES.DECISION
     );
+  });
+
+  loadDocuments = task(async () => {
+    this.pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+    });
   });
 
   @action
@@ -194,8 +216,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   updateBetreftContent() {
+    const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const documents = this.pieces;
     this.setBetreftEditorContent(
-      `<p>${this.args.agendaContext.agendaitem.shortTitle}</p>`
+      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
+        documents ? `<br/>${formatDocuments(documents)}` : ''
+      }</p>`
     );
   }
 
