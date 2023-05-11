@@ -30,6 +30,8 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   loadSigners = trackedFunction(this, async () => {
     const decisionActivity = this.args.decisionActivity;
+    const signers = [];
+
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
       'filter[:lt:start]': startOfDay(new Date()).toISOString(),
@@ -37,7 +39,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       include: 'person,mandate.role',
     });
     if (this.primeMinister) {
-      this.signers.push(this.primeMinister);
+      signers.push(this.primeMinister);
     }
 
     const subcase = await decisionActivity.subcase;
@@ -46,9 +48,10 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       const person = await mandatee?.person;
       const primeMinisterPerson = await this.primeMinister?.person;
       if (person.id !== primeMinisterPerson?.id) {
-        this.signers.push(mandatee);
+        signers.push(mandatee);
       }
     }
+    this.signers = new TrackedArray(signers);
     this.args.onChangeSigners?.(this.signers);
   });
 
