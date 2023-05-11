@@ -37,6 +37,7 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - view-only-specific-confidential-documents: allow the viewing of a restricted selection of confidential documents.
 // - search-confidential-cases: allow searching of cases that have at least 1 confidential subcase
 // - search-confidential-documents: allow searching of documents that have vertrouwelijk access level
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
@@ -162,8 +163,19 @@ const groups = [
     ],
   },
   {
-    name: 'KABINET',
-    roles: [KABINET_DOSSIERBEHEERDER, KABINET_MEDEWERKER],
+    name: 'KABINET_DOSSIERBEHEERDER',
+    roles: [KABINET_DOSSIERBEHEERDER],
+    defaultRoute: 'agendas',
+    permissions: [
+      'manage-signatures',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-only-specific-confidential-documents'
+    ],
+  },
+  {
+    name: 'KABINET_MEDEWERKER',
+    roles: [KABINET_MEDEWERKER],
     defaultRoute: 'agendas',
     permissions: [
       'view-document-version-info',

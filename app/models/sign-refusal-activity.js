@@ -15,4 +15,9 @@ export default class SignRefusalActivityModel extends Model {
     async: true,
   })
   signSigningActivity;
+  @belongsTo('sign-approval-activity', {
+    inverse: 'signRefusalActivity',
+    async: true,
+  })
+  signApprovalActivity;
 }

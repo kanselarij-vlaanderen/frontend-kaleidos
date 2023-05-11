@@ -14,7 +14,7 @@
         {{/if}}
       </p>
     </div>
-    <AuHeading @level="3" @skin="6">
+    <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       <AuLink
         data-test-route-search-result-cards-document-filename
         class="au-u-padding-none card-link"
@@ -32,14 +32,16 @@
       </AuLink>
     </AuHeading>
   </c.header>
-  <c.content>
-    {{#if @contentHighlight}}
-      <p class="au-u-para">
+  {{#if @contentHighlight}}
+    <c.content>
+      <p>
         …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
       </p>
-    {{/if}}
+    </c.content>
+  {{/if}}
+  <c.footer>
     {{#if (and @meetingId @agendaId @agendaitemId)}}
-      <p 
+      <p
         data-test-route-search-result-cards-document-agendaitem
         class="au-u-para-small au-u-muted"
       >
@@ -73,5 +75,5 @@
         {{t "document-not-on-agendaitem"}}
       </p>
     {{/if}}
-  </c.content>
+  </c.footer>
 </AuCard>

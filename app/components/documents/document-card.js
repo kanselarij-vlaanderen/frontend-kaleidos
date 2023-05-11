@@ -57,6 +57,11 @@ export default class DocumentsDocumentCardComponent extends Component {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  get mayCreateSignMarkingActivity() {
+    return !this.signMarkingActivity
+      && this.currentSession.may('manage-signatures');
+  }
+
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
@@ -119,9 +124,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    if (this.args.hasMarkForSignature) {
-      this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    }
+    this.signMarkingActivity = yield this.piece.signMarkingActivity;
   }
 
   @task
@@ -206,16 +209,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = false;
   }
 
-  @task
-  *markOrUnmarkForSignature() {
-    if (!this.signMarkingActivity) {
-      yield this.args.markForSignature(this.args.piece);
-    } else {
-      yield this.args.unmarkForSignature(this.args.piece);
-    }
-    yield this.loadSignatureRelatedData.perform();
-  }
-
   @action
   deleteDocumentContainer() {
     this.isOpenVerifyDeleteModal = true;
@@ -279,5 +272,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
 }

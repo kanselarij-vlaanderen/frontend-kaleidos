@@ -1,81 +1,143 @@
 import Controller from '@ember/controller';
-import { action, set } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import * as digitalSigning from 'frontend-kaleidos/utils/digital-signing';
-import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { task } from 'ember-concurrency';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
   @service store;
+  @service signatureService;
 
-  queryParams = [
-    {
-      page: {
-        type: 'number',
-      },
-      size: {
-        type: 'number',
-      },
-      sort: {
-        type: 'string',
-      },
-    },
-  ];
-  page = 0;
-  size = PAGINATION_SIZES[1];
+  @tracked piece = null;
+  @tracked decisionActivity = null;
+  @tracked agendaitem = null;
+  @tracked agenda = null;
+  @tracked meeting = null;
 
-  @action
-  prevPage() {
-    if (this.page > 0) {
-      set(this, 'page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  @tracked showSidebar = false;
+  @tracked showFilterModal = false;
+  @tracked selectedMinisters = [];
+  @tracked filteredMinisters = [];
+
+  signers = [];
+  approvers = [];
+  notificationAddresses = [];
+
+  localStorageKey = 'signatures.shortlist.minister-filter';
+
+  getDecisionDate = async (piece) => {
+    const decisionActivity = await this.getDecisionActivity(piece);
+    return decisionActivity.startDate;
+  };
+
+  getMandateeName = async (piece) => {
+    const decisionActivity = await this.getDecisionActivity(piece);
+    const subcase = await decisionActivity.subcase;
+    const mandatee = await subcase.requestedBy;
+    const person = await mandatee.person;
+    return person.fullName;
+  };
+
+  async getAgendaitem(piece) {
+    const agendaitems = await piece.agendaitems;
+    let agendaitem;
+    for (let maybeAgendaitem of agendaitems) {
+      const agenda = await maybeAgendaitem.agenda;
+      const nextVersion = await agenda.nextVersion;
+      if (!nextVersion) {
+        agendaitem = maybeAgendaitem;
+        break;
+      }
     }
+    return agendaitem;
+  }
+
+  async getDecisionActivity(piece) {
+    const agendaitem = await this.getAgendaitem(piece);
+    const treatment = await agendaitem.treatment;
+    return treatment.decisionActivity;
+  }
+
+  async getAgendaitemRouteModels(piece) {
+    const agendaitem = await this.getAgendaitem(piece);
+    if (agendaitem) {
+      const agenda = await agendaitem.agenda;
+      const meeting = await agenda.meeting;
+      return [meeting, agenda, agendaitem];
+    }
+    return [];
   }
 
   @action
-  nextPage() {
-    set(this, 'page', this.page + 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  async openSidebar(piece) {
+    this.piece = piece;
+    [this.meeting, this.agenda, this.agendaitem] =
+      await this.getAgendaitemRouteModels(piece);
+    this.decisionActivity = await this.getDecisionActivity(piece);
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
+    this.showSidebar = true;
   }
 
   @action
-  setSizeOption(size) {
-    // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-    set(this, 'size', size);
-    set(this, 'page', 0);
+  closeSidebar() {
+    this.piece = null;
+    this.agendaitem = null;
+    this.agenda = null;
+    this.meeting = null;
+    this.decisionActivity = null;
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
+    this.showSidebar = false;
   }
 
   @action
-  changeSorting(sort) {
-    // TODO: remove setter once "sort" is tracked
-    set(this, 'sort', sort);
+  openFilterModal() {
+    this.selectedMinisters = this.filteredMinisters;
+    this.showFilterModal = true;
   }
 
   @action
-  async navigateToDecision(decisionActivity) {
-    const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[treatment][decision-activity][:id:]': decisionActivity.id,
-      'filter[:has-no:next-version]': 't',
-      sort: '-created',
-    });
-    const agenda = await agendaitem.get('agenda');
-    const meeting = await agenda.get('createdFor');
-    this.router.transitionTo(
-      'agenda.agendaitems.agendaitem.decisions',
-      meeting.id,
-      agenda.id,
-      agendaitem.id
+  closeFilterModal() {
+    this.showFilterModal = false;
+    this.selectedMinisters = this.filteredMinisters;
+  }
+
+  @action
+  clearFilter() {
+    this.showFilterModal = false;
+    this.selectedMinisters = [];
+    this.filteredMinisters = [];
+    this.saveSelectedToLocalStorage();
+    this.router.refresh(this.router.routeName);
+  }
+
+  @action
+  applyFilter() {
+    this.filteredMinisters = this.selectedMinisters;
+    this.saveSelectedToLocalStorage();
+    this.router.refresh(this.router.routeName);
+    this.showFilterModal = false;
+  }
+
+  saveSelectedToLocalStorage() {
+    localStorage.setItem(
+      this.localStorageKey,
+      JSON.stringify(this.filteredMinisters)
     );
   }
 
-  @action
-  async uploadPiecesToSigninghub(signingFlow) {
-    const pieces = [
-      await (await (await signingFlow.signSubcase).signMarkingActivity).piece,
-    ];
-    digitalSigning.uploadPiecesToSigninghub(signingFlow, pieces);
-  }
-
-  @action
-  async startSigning(signingFlow) {
-    digitalSigning.startSigning(signingFlow);
-  }
+  createSignFlow = task(async () => {
+    await this.signatureService.createSignFlow(
+      this.piece,
+      this.decisionActivity,
+      this.signers,
+      this.approvers,
+      this.notificationAddresses
+    );
+    await this.router.refresh(this.router.routeName);
+  });
 }
