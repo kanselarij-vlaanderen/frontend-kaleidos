@@ -4,11 +4,17 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaitemNotaService extends Service {
   @service store;
 
-  async notaOrVisieNota(agendaitem) {
+  async nota(agendaitem) {
     const latestNotaVersion = await this.getLatestAgendaitemPieceOfDocumentType(
       agendaitem,
       CONSTANTS.DOCUMENT_TYPES.NOTA
     );
+
+    return latestNotaVersion;
+  }
+
+  async notaOrVisieNota(agendaitem) {
+    const latestNotaVersion = this.nota(agendaitem);
     if (latestNotaVersion) {
       return latestNotaVersion;
     }
