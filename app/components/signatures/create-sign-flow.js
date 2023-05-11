@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -25,10 +26,10 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadSigners.perform();
   }
 
-  loadSigners = task(async () => {
+  loadSigners = trackedFunction(this, async () => {
+    const decisionActivity = this.args.decisionActivity;
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
       'filter[:lt:start]': startOfDay(new Date()).toISOString(),
@@ -39,7 +40,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       this.signers.push(this.primeMinister);
     }
 
-    const subcase = await this.args.decisionActivity.subcase;
+    const subcase = await decisionActivity.subcase;
     const mandatee = await subcase.requestedBy;
     if (mandatee) {
       const person = await mandatee?.person;
