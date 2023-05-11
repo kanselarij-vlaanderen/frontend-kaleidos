@@ -154,11 +154,8 @@ export default class AgendaitemDecisionComponent extends Component {
     this.toggleEditPill();
   });
 
-  /**
-   * Deprecated but needed for backwards compat
-   */
   @action
-  async attachNewReportVersionDepr(piece) {
+  async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
       const sourceFile = await piece.file;
