@@ -63,7 +63,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   loadNota = task(async () => {
-    const nota = await this.agendaitemNota.notaOrVisieNota(
+    const nota = await this.agendaitemNota.nota(
       this.args.agendaContext.agendaitem
     );
     if (!nota) {
