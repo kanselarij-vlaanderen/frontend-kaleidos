@@ -200,6 +200,8 @@ export default class AgendaitemDecisionComponent extends Component {
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
       editorInterface.setHtmlContent(this.betreftPiecePart.value);
+    
+      // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
       editorInterface.setHtmlContent(this.editorInstanceBetreft.htmlContent);
     }
