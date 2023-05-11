@@ -17,14 +17,16 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('subcase-type', { inverse: 'subcases', async: true }) type;
   @belongsTo('decisionmaking-flow', { inverse: 'subcases', async: true })
   decisionmakingFlow;
-  @belongsTo('mandatee', { inverse: 'requestedSubcases', async: true }) requestedBy;
+  @belongsTo('mandatee', { inverse: 'requestedSubcases', async: true })
+  requestedBy;
   @belongsTo('concept', { inverse: null, async: true }) agendaItemType;
 
   @hasMany('agenda-activity', { inverse: 'subcase', async: true })
   agendaActivities;
   @hasMany('submission-activity', { inverse: 'subcase', async: true })
   submissionActivities;
-  @hasMany('piece', { inverse: null, async: true }) linkedPieces; // Actual inverse is linkedSubcase(s), but unsure if it should be a one-to-many or many-to-many yet
+  @hasMany('piece', { inverse: null, async: true, polymorphic: true })
+  linkedPieces; // Actual inverse is linkedSubcase(s), but unsure if it should be a one-to-many or many-to-many yet
   @hasMany('mandatee', { inverse: 'subcases', async: true }) mandatees;
   @hasMany('decision-activity', { inverse: 'subcase', async: true })
   decisionActivities;

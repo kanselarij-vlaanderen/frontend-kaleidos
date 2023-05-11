@@ -1,69 +1,182 @@
 <Auk::Panel>
-  <Auk::Panel::Header @size="auto">
+  <Auk::Panel::Header
+    @size="auto"
+    class="{{if this.isEditing 'au-u-background-gray-100'}}"
+  >
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left">
+        <h4 class="auk-toolbar__title">
+          {{t "decision-title"}}
+        </h4>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        {{#if
+          (and
+            this.loadReport.isIdle
+            (user-may "manage-decisions")
+            (not this.isEditing)
+            (or this.report.pieceParts (not this.report))
+          )
+        }}
+          <Group.Item>
+            <AuButton
+              @skin="naked"
+              @icon="pencil"
+              @iconAlignment="left"
+              @disabled={{this.exportPdf.isRunning}}
+              {{on "click" (set this "isEditing")}}
+            >
+              {{t (if this.report "edit" "create")}}
+            </AuButton>
+          </Group.Item>
+        {{/if}}
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+
+  {{#if
+    (and this.loadReport.isIdle (not this.isEditing) this.report.pieceParts)
+  }}
+    <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
+      {{#if this.onCreateNewVersion.isIdle}}
+        <Documents::DocumentCard
+          @piece={{this.report}}
+          @isEditable={{true}}
+          @agendaContext={{@agendaContext}}
+          @hideNewerVersions={{true}}
+          @hideDelete={{true}}
+          @hideEdit={{true}}
+          @hideUpload={{true}}
+          @showCreateNewVersion={{true}}
+          @onCreateNewVersion={{perform this.onCreateNewVersion}}
+          @bordered={{true}}
+        />
+      {{else}}
+        <Auk::Loader />
+      {{/if}}
+    </Auk::Panel::Body>
+  {{/if}}
+
+  <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
           <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
-          {{#if (not this.isEditing)}}
+          {{#if (not this.isEditingPill)}}
             <div class="auk-u-my-2">
               <Decision::DecisionResultPill
                 @decisionResultCode={{@decisionActivity.decisionResultCode}}
                 @isEditable={{user-may "manage-decisions"}}
-                @onEdit={{this.toggleEdit}}
+                @onEdit={{this.toggleEditPill}}
               />
             </div>
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
               @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
-              @onCancel={{this.toggleEdit}}
+              @onCancel={{this.toggleEditPill}}
             />
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
-  </Auk::Panel::Header>
-  <Auk::Panel::Body @noPadding={{true}}>
-    {{#if this.loadReport.isIdle}}
-      {{#if this.report}}
-        <Documents::DocumentCard
-          @piece={{this.report}}
-          @isEditable={{true}}
-          @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
-          @onOpenUploadModal={{@onOpenUploadModal}}
-          @onAddPiece={{this.attachNewReportVersion}}
-          @didDeleteContainer={{perform this.loadReport}}
-          @bordered={{false}}
-        />
-      {{else if (user-may "manage-decisions")}}
-        <div class="auk-u-p-2">
-          <AuButton
-            data-test-agendaitem-decision-upload-file
-            @skin="naked"
-            @icon="upload"
-            {{on "click" this.toggleIsAddingReport}}
-          >
-            {{t "signed-decision-add"}}
-          </AuButton>
-        </div>
-      {{/if}}
-    {{else}}
-      <Auk::Loader />
-    {{/if}}
   </Auk::Panel::Body>
+
+  {{#if this.loadReport.isIdle}}
+    {{#if this.isEditing}}
+      <Auk::Panel::Body
+        class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+      >
+        <h4 class="auk-h4">Betreft</h4>
+        <Agenda::Agendaitem::Decision::Editor
+          @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+          @piecePart={{this.betreftPiecePart}}
+          @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
+          @onUpdateContentClicked={{this.updateBetreftContent}}
+        />
+        <h4 class="auk-h4 au-u-padding-top">Beslissing</h4>
+        <Agenda::Agendaitem::Decision::Editor
+          @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+          @piecePart={{this.beslissingPiecePart}}
+          @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
+          @onUpdateContentClicked={{this.updateBeslissingContent}}
+          @disableUpdateContent={{not this.nota}}
+        />
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer class="au-u-background-gray-100">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                {{on "click" (set this "isEditing" false)}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @disabled={{this.disableSaveButton}}
+                @skin="primary"
+                @loading={{this.onSaveReport.isRunning}}
+                {{on "click" (perform this.onSaveReport)}}
+              >
+                {{t "update"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{else}}
+      {{#if (and this.report.file (not this.report.pieceParts))}}
+        <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
+          <Documents::DocumentCard
+            @piece={{this.report}}
+            @isEditable={{true}}
+            @agendaContext={{@agendaContext}}
+            @hideNewerVersions={{true}}
+            @onOpenUploadModal={{@onOpenUploadModal}}
+            @onAddPiece={{this.attachNewReportVersionAsPiece}}
+            @pieceSubtype="report"
+            @didDeleteContainer={{perform this.loadReport}}
+            @bordered={{false}}
+          />
+        </Auk::Panel::Body>
+      {{/if}}
+      {{#if this.report.pieceParts}}
+        <Auk::Panel::Body
+          class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+        >
+          <AuContent @size="small">
+            <h4>{{t "concerns"}}:</h4>
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{this.betreftPiecePart.value}}
+            />
+            <h4>{{t "agenda-item-treatment"}}:</h4>
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{this.beslissingPiecePart.value}}
+            />
+          </AuContent>
+        </Auk::Panel::Body>
+      {{/if}}
+    {{/if}}
+  {{else}}
+    <Auk::Panel::Body class="au-o-flow">
+      <Auk::Loader />
+    </Auk::Panel::Body>
+  {{/if}}
 </Auk::Panel>
-{{#if this.isAddingReport}}
-  <Utils::AddDocument
-    @title={{t "signed-decision-add"}}
-    @onSave={{this.attachReport}}
-    @onCancel={{this.toggleIsAddingReport}}
-  />
-{{/if}}
 
 {{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
   <Auk::Modal @size="medium">
-    <Auk::Modal::Header @title={{t "saving-decision-result-title"}} @closeable={{false}} />
+    <Auk::Modal::Header
+      @title={{t "saving-decision-result-title"}}
+      @closeable={{false}}
+    />
     <Auk::Modal::Body>
       <Auk::Loader @message={{t "saving-decision-result-message"}} />
     </Auk::Modal::Body>

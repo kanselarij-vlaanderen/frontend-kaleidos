@@ -123,10 +123,7 @@
             {{/if}}
           {{/if}}
           {{#if
-              (and
-                @isEditable
-                (user-may "manage-documents")
-              )
+            (and @isEditable (user-may "manage-documents") (not @hideActions))
           }}
             <Group.Item>
               <AuDropdown
@@ -137,32 +134,47 @@
                 @disabled={{this.loadPieceRelatedData.isRunning}}
                 @alignment="right"
               >
-                <AuButton
-                  data-test-document-upload-new-piece
-                  @skin="link"
-                  {{on "click" this.openUploadModal}}
-                  role="menuitem"
-                >
-                  {{t "new-version"}}
-                </AuButton>
-                <AuButton
-                  data-test-document-edit-piece
-                  @skin="link"
-                  {{on "click" (toggle "isEditingPiece" this)}}
-                  role="menuitem"
-                >
-                  {{t "edit"}}
-                </AuButton>
-                <AuHr />
-                <AuButton
-                  data-test-document-card-delete
-                  @skin="link"
-                  @alert={{true}}
-                  {{on "click" this.deleteDocumentContainer}}
-                  role="menuitem"
-                >
-                  {{t "document-delete"}}
-                </AuButton>
+                {{#if @showCreateNewVersion}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" @onCreateNewVersion}}
+                    role="menuitem"
+                  >
+                    {{t "create-new-version"}}
+                  </AuButton>
+                {{/if}}
+                {{#if (not @hideUpload)}}
+                  <AuButton
+                    data-test-document-upload-new-piece
+                    @skin="link"
+                    {{on "click" this.openUploadModal}}
+                    role="menuitem"
+                  >
+                    {{t "new-version"}}
+                  </AuButton>
+                {{/if}}
+                {{#if (not @hideEdit)}}
+                  <AuButton
+                    data-test-document-edit-piece
+                    @skin="link"
+                    {{on "click" (toggle "isEditingPiece" this)}}
+                    role="menuitem"
+                  >
+                    {{t "edit"}}
+                  </AuButton>
+                {{/if}}
+                {{#if (not @hideDelete)}}
+                  <AuHr />
+                  <AuButton
+                    data-test-document-card-delete
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteDocumentContainer}}
+                    role="menuitem"
+                  >
+                    {{t "document-delete"}}
+                  </AuButton>
+                {{/if}}
               </AuDropdown>
             </Group.Item>
           {{/if}}
