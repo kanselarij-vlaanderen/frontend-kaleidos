@@ -131,6 +131,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   canViewSignedPiece = async () => {
-    return await this.signatureService.canManageSignFlow(this.args.piece);
+    if (this.currentSession.may('manage-signatures')) {
+      return await this.signatureService.canManageSignFlow(this.args.piece);
+    }
+    return false;
   }
 }
