@@ -35,17 +35,27 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       'filter[:has-no:end]': true,
       include: 'person,mandate.role',
     });
+    let primeMinisterPerson, submitterPerson;
     if (this.primeMinister) {
+      primeMinisterPerson = await this.primeMinister?.person;
       this.signers.push(this.primeMinister);
     }
 
     const subcase = await this.args.decisionActivity.subcase;
-    const mandatee = await subcase.requestedBy;
-    if (mandatee) {
-      const person = await mandatee?.person;
-      const primeMinisterPerson = await this.primeMinister?.person;
-      if (person.id !== primeMinisterPerson?.id) {
-        this.signers.push(mandatee);
+    const submitter = await subcase.requestedBy;
+    if (submitter) {
+      submitterPerson = await submitter?.person;
+      if (submitterPerson.id !== primeMinisterPerson?.id) {
+        this.signers.push(submitter);
+      }
+    }
+    const cosigners = await subcase.mandatees
+    if (cosigners) {
+      for (const cosigner of cosigners) {
+        const person = await cosigner?.person;
+        if (person.id !== primeMinisterPerson?.id && person.id !== submitterPerson?.id ) {
+          this.signers.push(cosigner);
+        }
       }
     }
     this.args.onChangeSigners?.(this.signers);
