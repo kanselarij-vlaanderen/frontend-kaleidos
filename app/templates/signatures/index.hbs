@@ -16,20 +16,22 @@
       <Group.Item>
         {{! search here}}
       </Group.Item>
-      <Group.Item>
-        {{#if this.filteredMinisters}}
-          <AuButton @skin="naked" {{on "click" this.clearFilter}}>
-            {{t "clear-filter"}}
+      {{#unless (user-may "manage-only-specific-signatures")}}
+        <Group.Item>
+          {{#if this.filteredMinisters}}
+            <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+              {{t "clear-filter"}}
+            </AuButton>
+          {{/if}}
+          <AuButton
+            @skin="secondary"
+            @icon="filter"
+            {{on "click" this.openFilterModal}}
+          >
+            {{t "filter-on-signer"}}
           </AuButton>
-        {{/if}}
-        <AuButton
-          @skin="secondary"
-          @icon="filter"
-          {{on "click" this.openFilterModal}}
-        >
-          {{t "filter-on-signer"}}
-        </AuButton>
-      </Group.Item>
+        </Group.Item>
+      {{/unless}}
       <Group.Item>
         {{! bundle signature here}}
       </Group.Item>
