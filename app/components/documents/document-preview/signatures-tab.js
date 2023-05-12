@@ -10,6 +10,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @tracked signMarkingActivity;
   @tracked agendaitem;
   @tracked decisionActivity;
+  @tracked canCreateSignFlow = false;
 
   signers = [];
   approvers = [];
@@ -18,6 +19,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   constructor() {
     super(...arguments);
     this.loadSignatureRelatedData.perform();
+    this.loadCanCreateSignFlow.perform();
   }
 
   loadSignatureRelatedData = task(async () => {
@@ -45,5 +47,9 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     );
     await this.args.piece.reload();
     this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+  });
+
+  loadCanCreateSignFlow = task(async () => {
+    this.canCreateSignFlow =  await this.signatureService.canProfileCreateSignFlow(this.args.piece);
   });
 }

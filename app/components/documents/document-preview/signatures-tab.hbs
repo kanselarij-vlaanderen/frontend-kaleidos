@@ -7,30 +7,42 @@
       @signMarkingActivity={{this.signMarkingActivity}}
     />
   {{else if this.agendaitem}}
-    <p class="au-u-muted auk-u-mt-2">
-      {{or @piece.documentContainer.type.label (t "no-document-type")}}
-      -
-      {{date this.decisionActivity.startDate}}
-    </p>
-    <h5 class="auk-h4">{{@piece.name}}</h5>
-    <Signatures::CreateSignFlow
-      @piece={{@piece}}
-      @decisionActivity={{this.decisionActivity}}
-      @onChangeSigners={{fn (mut this.signers)}}
-      @onChangeApprovers={{fn (mut this.approvers)}}
-      @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
-    />
+    {{#if this.loadCanCreateSignFlow.isRunning}}
+      <Auk::Loader />
+    {{else if this.canCreateSignFlow}}
+      <p class="au-u-muted auk-u-mt-2">
+        {{or @piece.documentContainer.type.label (t "no-document-type")}}
+        -
+        {{date this.decisionActivity.startDate}}
+      </p>
+      <h5 class="auk-h4">{{@piece.name}}</h5>
+      <Signatures::CreateSignFlow
+        @piece={{@piece}}
+        @decisionActivity={{this.decisionActivity}}
+        @onChangeSigners={{fn (mut this.signers)}}
+        @onChangeApprovers={{fn (mut this.approvers)}}
+        @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+      />
 
-    <AuToolbar class="auk-u-mt-4" as |Group|>
-      <Group>
-        <AuButton
-          @loading={{this.createSignFlow.isRunning}}
-          {{on "click" this.createSignFlow.perform}}
+      <AuToolbar class="auk-u-mt-4" as |Group|>
+        <Group>
+          <AuButton
+            @loading={{this.createSignFlow.isRunning}}
+            {{on "click" this.createSignFlow.perform}}
+          >
+            {{t "start-signing"}}
+          </AuButton>
+        </Group>
+      </AuToolbar>
+      {{else}}
+        <AuAlert
+          @skin="warning"
+          @icon="alert-triangle"
+          @title={{t "cannot-sign"}}
         >
-          {{t "start-signing"}}
-        </AuButton>
-      </Group>
-    </AuToolbar>
+          <p>{{t "cannot-create-sign-flow-message"}}</p>
+        </AuAlert>
+      {{/if}}
   {{else}}
     <AuAlert
       @skin="warning"
