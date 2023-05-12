@@ -49,7 +49,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
         this.signers.push(submitter);
       }
     }
-    const cosigners = await subcase.mandatees
+    const cosigners = await subcase.mandatees;
     if (cosigners) {
       for (const cosigner of cosigners) {
         const person = await cosigner?.person;
