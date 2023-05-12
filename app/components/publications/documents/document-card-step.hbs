@@ -45,6 +45,18 @@
               {{/if}}
             </Group.Item>
           </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item class="auk-o-flex">
+              {{#if this.signMarkingActivity}}
+                <Group.Item>
+                  <SignaturePill
+                    @piece={{@piece}}
+                    @signMarkingActivity={{this.signMarkingActivity}}
+                  />
+                </Group.Item>
+              {{/if}}
+          </Group.Item>
+        </Toolbar.Group>
         </Auk::Toolbar>
       </div>
     </div>
