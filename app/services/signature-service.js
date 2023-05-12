@@ -105,7 +105,8 @@ export default class SignatureService extends Service {
     }
   }
 
-  async canProfileCreateSignFlow(piece) {
+  async canManageSignFlow(piece) {
+    // the base permission 'manage-signatures' does not cover cabinet specific requirements
     if (this.currentSession.may('manage-only-specific-signatures')) {
       const submissionActivity = await this.store.queryOne('submission-activity', {
         filter: {
