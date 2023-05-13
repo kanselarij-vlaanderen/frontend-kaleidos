@@ -22,6 +22,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   @tracked approvers = new TrackedArray([]);
   @tracked notificationAddresses = new TrackedArray([]);
 
+  @tracked hasConflictingSigners = false;
   primeMinister = null;
 
   constructor() {
@@ -29,8 +30,11 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   }
 
   loadSigners = trackedFunction(this, async () => {
-    const decisionActivity = this.args.decisionActivity;
-    const signers = [];
+    if (!this.args.decisionActivities) {
+      return;
+    }
+    const decisionActivities = this.args.decisionActivities.toArray();
+    let hasConflictingSigners = false;
 
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
@@ -38,20 +42,49 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       'filter[:has-no:end]': true,
       include: 'person,mandate.role',
     });
-    if (this.primeMinister) {
-      signers.push(this.primeMinister);
+
+    const getSubmitterAndCosigners = async (decisionActivity) => {
+      const subcase = await decisionActivity.subcase;
+      const submitter = await subcase.requestedBy;
+      const cosigners = await subcase.mandatees;
+      return { submitter, cosigners };
     }
 
-    const subcase = await decisionActivity.subcase;
-    const mandatee = await subcase.requestedBy;
-    if (mandatee) {
-      const person = await mandatee?.person;
-      const primeMinisterPerson = await this.primeMinister?.person;
-      if (person.id !== primeMinisterPerson?.id) {
-        signers.push(mandatee);
+    const [head, ...tail] = decisionActivities;
+    const {
+      submitter,
+      cosigners,
+    } = await getSubmitterAndCosigners(head);
+
+    for (let decisionActivity of tail)  {
+      const {
+        submitter: _submitter,
+        cosigners: _cosigners,
+      } = await getSubmitterAndCosigners(decisionActivity);
+
+      if (submitter !== _submitter) {
+        hasConflictingSigners = true;
+        break;
       }
+      for (const mandatee of _cosigners) {
+        if (!cosigners.includes(mandatee)) {
+          hasConflictingSigners = true;
+          break;
+        }
+      }
+      if (hasConflictingSigners) break;
     }
-    this.signers = new TrackedArray(signers);
+
+    this.hasConflictingSigners = hasConflictingSigners;
+    if (hasConflictingSigners) {
+      this.signers = new TrackedArray([]);
+    } else {
+      this.signers = new TrackedArray([...new Set([
+        this.primeMinister,
+        submitter,
+        ...cosigners,
+      ])]);
+    }
     this.args.onChangeSigners?.(this.signers);
   });
 
