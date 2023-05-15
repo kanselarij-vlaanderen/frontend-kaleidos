@@ -17,18 +17,20 @@
         {{! search here}}
       </Group.Item>
       <Group.Item>
-        {{#if this.filteredMinisters}}
-          <AuButton @skin="naked" {{on "click" this.clearFilter}}>
-            {{t "clear-filter"}}
+        {{#unless (user-may "manage-only-specific-signatures")}}
+          {{#if this.filteredMinisters}}
+            <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+              {{t "clear-filter"}}
+            </AuButton>
+          {{/if}}
+          <AuButton
+            @skin="secondary"
+            @icon="filter"
+            {{on "click" this.openFilterModal}}
+          >
+            {{t "filter-on-signer"}}
           </AuButton>
-        {{/if}}
-        <AuButton
-          @skin="secondary"
-          @icon="filter"
-          {{on "click" this.openFilterModal}}
-        >
-          {{t "filter-on-signer"}}
-        </AuButton>
+        {{/unless}}
         {{#if this.selectedPieces.length}}
           <AuButton
             @icon="sign"
@@ -37,7 +39,7 @@
             {{t "start-signing-for-n-selected-documents" n=this.selectedPieces.length}}
           </AuButton>
         {{/if}}
-      </Group.Item>
+        </Group.Item>
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
