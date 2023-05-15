@@ -36,6 +36,10 @@ export default class SignaturesIndexController extends Controller {
     );
   });
 
+  get customNavbarButtonsElement() {
+    return document.getElementById('signatures-navbar-buttons-area');
+  }
+
   get isSelectedAllItems() {
     return this.model.every((piece) => this.selectedPieces.indexOf(piece) >= 0);
   }
