@@ -26,6 +26,9 @@ export default class SignaturesOngoingRoute extends Route {
         creator: {
           ':id:': this.currentSession.user.id,
         },
+        'sign-subcase': {
+          ':has-no:sign-completion-activity': true,
+        },
       },
       include: [
         'creator',
