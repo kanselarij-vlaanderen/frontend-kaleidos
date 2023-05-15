@@ -191,6 +191,10 @@
             >
               {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
             </AuLinkExternal>
+            <AccessLevelPill 
+              @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              @isEditable={{false}}
+            />
           </Auk::KeyValue>
         {{/if}}
       {{/if}}
