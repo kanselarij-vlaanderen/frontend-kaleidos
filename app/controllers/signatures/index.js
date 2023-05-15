@@ -3,6 +3,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { trackedFunction } from 'ember-resources/util/function';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class SignaturesIndexController extends Controller {
   @service router;
@@ -20,11 +22,53 @@ export default class SignaturesIndexController extends Controller {
   @tracked selectedMinisters = [];
   @tracked filteredMinisters = [];
 
+  @tracked selectedPieces = new TrackedArray([]);
+
   signers = [];
   approvers = [];
   notificationAddresses = [];
 
   localStorageKey = 'signatures.shortlist.minister-filter';
+
+  selectedDecisionActivities = trackedFunction(this, async () => {
+    return await Promise.all(
+      this.selectedPieces.map(async (piece) => await this.getDecisionActivity(piece))
+    );
+  });
+
+  get isSelectedAllItems() {
+    return this.model.every((piece) => this.selectedPieces.indexOf(piece) >= 0);
+  }
+
+  get isSelectedSomeItems() {
+    return this.model.some((piece) => this.selectedPieces.indexOf(piece) >= 0);
+  }
+
+  @action
+  selectAll() {
+    this.clearSidebarContentSingleItem();
+    if (this.isSelectedAllItems) {
+      this.closeSidebar();
+      this.selectedPieces = new TrackedArray([]);
+    } else {
+      this.selectedPieces = new TrackedArray(this.model.toArray());
+    }
+  }
+
+  @action
+  toggleItem(item) {
+    this.clearSidebarContentSingleItem();
+    const index = this.selectedPieces.indexOf(item);
+    if (index >= 0) {
+      if (this.selectedPieces.length === 1) {
+        // The untoggled checkbox is the last one, close the sidebar
+        this.closeSidebar();
+      }
+      this.selectedPieces.splice(index, 1);
+    } else {
+      this.selectedPieces.push(item);
+    }
+  }
 
   getDecisionDate = async (piece) => {
     const decisionActivity = await this.getDecisionActivity(piece);
@@ -38,6 +82,12 @@ export default class SignaturesIndexController extends Controller {
     const person = await mandatee.person;
     return person.fullName;
   };
+
+  getDecisionActivity = async (piece) => {
+    const agendaitem = await this.getAgendaitem(piece);
+    const treatment = await agendaitem.treatment;
+    return treatment.decisionActivity;
+  }
 
   async getAgendaitem(piece) {
     const agendaitems = await piece.agendaitems;
@@ -53,12 +103,6 @@ export default class SignaturesIndexController extends Controller {
     return agendaitem;
   }
 
-  async getDecisionActivity(piece) {
-    const agendaitem = await this.getAgendaitem(piece);
-    const treatment = await agendaitem.treatment;
-    return treatment.decisionActivity;
-  }
-
   async getAgendaitemRouteModels(piece) {
     const agendaitem = await this.getAgendaitem(piece);
     if (agendaitem) {
@@ -69,8 +113,27 @@ export default class SignaturesIndexController extends Controller {
     return [];
   }
 
+  clearSidebarContentSingleItem() {
+    this.piece = null;
+    this.meeting = null;
+    this.agenda = null;
+    this.agnedaitem = null;
+    this.decisionActivity = null;
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
+  }
+
+  clearSidebarContentMultiItem() {
+    this.selectedPieces = new TrackedArray([]);
+    this.signers = [];
+    this.approvers = [];
+    this.notificationAddresses = [];
+  }
+
   @action
-  async openSidebar(piece) {
+  async openSidebarSingleItem(piece) {
+    this.clearSidebarContentMultiItem();
     this.piece = piece;
     [this.meeting, this.agenda, this.agendaitem] =
       await this.getAgendaitemRouteModels(piece);
@@ -82,16 +145,18 @@ export default class SignaturesIndexController extends Controller {
   }
 
   @action
-  closeSidebar() {
-    this.piece = null;
-    this.agendaitem = null;
-    this.agenda = null;
-    this.meeting = null;
-    this.decisionActivity = null;
+  async openSidebarMultiItem() {
     this.signers = [];
     this.approvers = [];
     this.notificationAddresses = [];
+    this.showSidebar = true;
+  }
+
+  @action
+  closeSidebar() {
     this.showSidebar = false;
+    this.clearSidebarContentMultiItem();
+    this.clearSidebarContentSingleItem();
   }
 
   @action
@@ -131,13 +196,27 @@ export default class SignaturesIndexController extends Controller {
   }
 
   createSignFlow = task(async () => {
-    await this.signatureService.createSignFlow(
-      this.piece,
-      this.decisionActivity,
-      this.signers,
-      this.approvers,
-      this.notificationAddresses
-    );
+    if (this.selectedPieces.length) {
+      await Promise.all(this.selectedPieces.map(async (piece) => {
+        const decisionActivity = await this.getDecisionActivity(piece);
+        await this.signatureService.createSignFlow(
+          piece,
+          decisionActivity,
+          this.signers,
+          this.approvers,
+          this.notificationAddresses
+        );
+      }));
+    } else if (this.piece) {
+      await this.signatureService.createSignFlow(
+        this.piece,
+        this.decisionActivity,
+        this.signers,
+        this.approvers,
+        this.notificationAddresses
+      );
+    }
+    this.closeSidebar();
     await this.router.refresh(this.router.routeName);
   });
 }

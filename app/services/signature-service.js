@@ -14,13 +14,6 @@ export default class SignatureService extends Service {
     approvers,
     notified,
   ) {
-    if (!this.currentSession.user.email) {
-      // None of the flow works if the user has no email to identify
-      // with on SigningHub, so abort prematurely
-      // TODO: throw an exception
-      return;
-    }
-
     // Create sign flow, sign subcase and marking activity
     const {
       signFlow,
