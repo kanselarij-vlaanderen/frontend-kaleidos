@@ -1,48 +1,29 @@
-<Auk::Navbar
-  @skin="gray-100"
-  @auto={{true}}
->
-  <Auk::Toolbar as |Toolbar|>
-    <Toolbar.Group @position="left" as |Group|>
-      <Group.Item>
-        <div class="auk-o-flex auk-o-flex--vertical">
-          <h4 class="auk-toolbar-complex__title">
-            {{t "signatures"}}
-          </h4>
-        </div>
-      </Group.Item>
-    </Toolbar.Group>
-    <Toolbar.Group @position="right" as |Group|>
-      <Group.Item>
-        {{! search here}}
-      </Group.Item>
-      <Group.Item>
-        {{#unless (user-may "manage-only-specific-signatures")}}
-          {{#if this.filteredMinisters}}
-            <AuButton @skin="naked" {{on "click" this.clearFilter}}>
-              {{t "clear-filter"}}
-            </AuButton>
-          {{/if}}
-          <AuButton
-            @skin="secondary"
-            @icon="filter"
-            {{on "click" this.openFilterModal}}
-          >
-            {{t "filter-on-signer"}}
-          </AuButton>
-        {{/unless}}
-        {{#if this.selectedPieces.length}}
-          <AuButton
-            @icon="sign"
-            {{on "click" this.openSidebarMultiItem}}
-          >
-            {{t "start-signing-for-n-selected-documents" n=this.selectedPieces.length}}
-          </AuButton>
-        {{/if}}
-        </Group.Item>
-    </Toolbar.Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
+{{page-title (t "to-sign")}}
+
+{{#in-element this.customNavbarButtonsElement}}
+  {{#unless (user-may "manage-only-specific-signatures")}}
+    {{#if this.filteredMinisters}}
+      <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+        {{t "clear-filter"}}
+      </AuButton>
+    {{/if}}
+    <AuButton
+      @skin="secondary"
+      @icon="filter"
+      {{on "click" this.openFilterModal}}
+    >
+      {{t "filter-on-signer"}}
+    </AuButton>
+  {{/unless}}
+  {{#if this.selectedPieces.length}}
+    <AuButton
+      @icon="sign"
+      {{on "click" this.openSidebarMultiItem}}
+    >
+      {{t "start-signing-for-n-selected-documents" n=this.selectedPieces.length}}
+    </AuButton>
+  {{/if}}
+{{/in-element}}
 
 <KDataTable
   @scrollable={{true}}
