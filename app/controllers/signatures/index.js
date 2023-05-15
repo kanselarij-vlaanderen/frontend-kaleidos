@@ -154,9 +154,9 @@ export default class SignaturesIndexController extends Controller {
 
   @action
   closeSidebar() {
+    this.showSidebar = false;
     this.clearSidebarContentMultiItem();
     this.clearSidebarContentSingleItem();
-    this.showSidebar = false;
   }
 
   @action
@@ -216,6 +216,7 @@ export default class SignaturesIndexController extends Controller {
         this.notificationAddresses
       );
     }
+    this.closeSidebar();
     await this.router.refresh(this.router.routeName);
   });
 }
