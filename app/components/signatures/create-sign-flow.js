@@ -62,12 +62,18 @@ export default class SignaturesCreateSignFlowComponent extends Component {
         cosigners: _cosigners,
       } = await getSubmitterAndCosigners(decisionActivity);
 
-      if (submitter !== _submitter) {
+      if (submitter.id !== _submitter.id) {
         hasConflictingSigners = true;
         break;
       }
-      for (const mandatee of _cosigners) {
-        if (!cosigners.includes(mandatee)) {
+      if (_cosigners.length !== cosigners.length) {
+        hasConflictingSigners = true;
+        break;
+      }
+      const _cosignersIds = _cosigners.map((signer => signer.id));
+      const cosignersIds = cosigners.map((signer => signer.id));
+      for (const mandateeId of _cosignersIds) {
+        if (!cosignersIds.includes(mandateeId)) {
           hasConflictingSigners = true;
           break;
         }
