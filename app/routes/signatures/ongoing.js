@@ -20,7 +20,7 @@ export default class SignaturesOngoingRoute extends Route {
     },
   };
 
-  model(params) {
+  async model(params) {
     return this.store.query('sign-flow', {
       filter: {
         creator: {

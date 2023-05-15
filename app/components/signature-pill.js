@@ -69,12 +69,14 @@ export default class SignaturePillComponent extends Component {
       if (!this.isRefused) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
-        const response = await fetch(
-          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          this.signingHubUrl = result.url;
+        if (piece) {
+          const response = await fetch(
+            `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
+          );
+          if (response.ok) {
+            const result = await response.json();
+            this.signingHubUrl = result.url;
+          }
         }
       }
     }

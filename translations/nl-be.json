@@ -1208,6 +1208,7 @@
   "start-signing": "Tekenen opstarten",
   "cannot-sign": "Kan niet ondertekenen",
   "cannot-sign-message": "Dit stuk is niet verbonden aan een agendapunt en kan niet aangeboden worden om getekend te worden.",
+  "cannot-create-sign-flow-message": "Dit stuk is niet ingediend door uw mandataris en kan niet aangeboden worden om getekend te worden.",
   "signed-document": "Getekend document",
   "on": "op",
   "start-signing-for-n-selected-documents": "Tekenen opstarten voor {n, plural, =1 {1 geselecteerd document} other { # geselecteerde documenten }}",

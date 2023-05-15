@@ -32,9 +32,11 @@
     {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
       {{#let signMarkingActivity.piece as |piece|}}
         <td>
-          <AuLink @route="document" @model={{piece.id}}>
-            {{piece.name}}
-          </AuLink>
+          {{#if piece}}
+            <AuLink @route="document" @model={{piece.id}}>
+              {{piece.name}}
+            </AuLink>
+          {{/if}}
         </td>
         <td>
           <AuPill @size="small">
