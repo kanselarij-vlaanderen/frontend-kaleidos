@@ -188,8 +188,12 @@
             @iconAlignment="left"
             download
           >
-            {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+            {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}} 
           </AuLinkExternal>
+            <AccessLevelPill 
+              @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              @isEditable={{false}}
+            />
         </Auk::KeyValue>
       {{/if}}
     </Auk::Panel::Body>
