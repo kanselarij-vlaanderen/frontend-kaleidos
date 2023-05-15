@@ -55,7 +55,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       submitter,
       cosigners,
     } = await getSubmitterAndCosigners(head);
-debugger;
+
     for (let decisionActivity of tail)  {
       const {
         submitter: _submitter,
