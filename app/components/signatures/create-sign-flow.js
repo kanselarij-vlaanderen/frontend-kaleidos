@@ -89,7 +89,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
         this.primeMinister,
         submitter,
         ...cosigners,
-      ])]);
+      ].filter(m => m))]);
     }
     this.args.onChangeSigners?.(this.signers);
   });
