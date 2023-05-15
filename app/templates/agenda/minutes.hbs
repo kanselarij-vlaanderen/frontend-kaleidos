@@ -190,9 +190,18 @@
               @showSave={{true}}
               @showUpdateContent={{true}}
               @showVersioning={{true}}
+              @onUpdateContent={{this.updateEditorContent}}
+              @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
             />
           {{else}}
             {{#if @model}}
+              {{#each @model.ministers as |minister|}}
+                <p>{{minister.mandate.role.label}}
+                  {{minister.person.firstName}}
+                  {{minister.person.lastName}}
+                  {{date minister.start}}
+                  {{date minister.end}}</p>
+              {{/each}}
               <div class="au-c-content au-c-content--small">
                 <h4>AANWEZIG</h4>
                 <table class="say-table" contenteditable="false"><tbody><tr><td
