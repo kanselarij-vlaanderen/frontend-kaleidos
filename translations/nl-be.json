@@ -1209,5 +1209,9 @@
   "cannot-sign": "Kan niet ondertekenen",
   "cannot-sign-message": "Dit stuk is niet verbonden aan een agendapunt en kan niet aangeboden worden om getekend te worden.",
   "signed-document": "Getekend document",
-  "on": "op"
+  "on": "op",
+  "start-signing-for-n-selected-documents": "Tekenen opstarten voor {n, plural, =1 {1 geselecteerd document} other { # geselecteerde documenten }}",
+  "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
+  "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen.",
+  "creating-sign-flows-message": "Handtekenstromen worden aangemaakt. Dit kan even duren."
 }
