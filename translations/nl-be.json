@@ -1212,5 +1212,6 @@
   "on": "op",
   "start-signing-for-n-selected-documents": "Tekenen opstarten voor {n, plural, =1 {1 geselecteerd document} other { # geselecteerde documenten }}",
   "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
-  "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen."
+  "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen.",
+  "creating-sign-flows-message": "Handtekenstromen worden aangemaakt. Dit kan even duren."
 }

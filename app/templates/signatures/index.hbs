@@ -221,3 +221,16 @@
     </AuToolbar>
   </:footer>
 </ConfirmationModal>
+
+{{#if this.createSignFlow.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "loading-text"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{concat
+                              (t "creating-sign-flows-message")
+                              " "
+                              (t "please-be-patient")}}
+      />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
