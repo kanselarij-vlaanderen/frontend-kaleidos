@@ -148,13 +148,13 @@ export default class SignatureService extends Service {
       await signCompletionActivity?.destroyRecord();
       await signCancellationActivity?.destroyRecord();
       await signApprovalActivities?.map(async (activity) => {
-        await activity.destroyRecord
+        await activity.destroyRecord()
       })
       await signSigningActivities?.map(async (activity) => {
-        await activity.destroyRecord
+        await activity.destroyRecord()
       })
       await signRefusalActivities?.map(async (activity) => {
-        await activity.destroyRecord
+        await activity.destroyRecord()
       })
       await signSubcase?.destroyRecord();
       await signFlow?.destroyRecord();
