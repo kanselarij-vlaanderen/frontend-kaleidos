@@ -91,7 +91,7 @@
         <Auk::List::Item
           class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
         >
-          {{approver}}
+          {{this.ellipsify approver}}
           <AuButton
             @skin="naked"
             @alert={{true}}
@@ -139,7 +139,7 @@
         <Auk::List::Item
           class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
         >
-          {{notificationAddress}}
+          {{this.ellipsify notificationAddress}}
           <AuButton
             @skin="naked"
             @alert={{true}}
