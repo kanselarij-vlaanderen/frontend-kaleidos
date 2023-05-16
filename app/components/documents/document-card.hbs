@@ -167,6 +167,17 @@
                   </AuLink>
                   <AuHr />
                 {{/if}}
+                {{#if this.mayRemoveSignFlow}}
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteSignFlow}}
+                    role="menuitem"
+                  >
+                    {{t "delete-signed-piece"}}
+                  </AuButton>
+                  <AuHr />
+                {{/if}}
                 <AuButton
                   data-test-document-card-delete
                   @skin="link"
@@ -256,6 +267,17 @@
   @message={{t "delete-document-container-message"}}
   @onConfirm={{this.verifyDeleteDocumentContainer}}
   @onCancel={{this.cancelDeleteDocumentContainer}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+/>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyDeleteSignFlow}}
+  @title={{t "delete-signed-piece"}}
+  @message={{t "verify-delete-signed-piece"}}
+  @onConfirm={{this.verifyDeleteSignFlow}}
+  @onCancel={{this.cancelDeleteSignFlow}}
   @confirmMessage={{t "delete"}}
   @confirmIcon="trash"
   @alert={{true}}

@@ -1215,5 +1215,7 @@
   "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
   "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen.",
   "creating-sign-flows-message": "Handtekenstromen worden aangemaakt. Dit kan even duren.",
-  "ongoing": "In verwerking"
+  "ongoing": "In verwerking",
+  "delete-signed-piece": "Getekend document verwijderen",
+  "verify-delete-signed-piece": "Bent u zeker dat u het getekend document wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden. Het volledige handtekenprocess voor dit document zal mee verwijderd worden."
 }

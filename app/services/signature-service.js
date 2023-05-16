@@ -126,4 +126,26 @@ export default class SignatureService extends Service {
     }
     return false;
   }
+
+  async removeSignFlow(piece) {
+    const signMarkingActivity = await piece.signMarkingActivity;
+    if (signMarkingActivity) {
+      const signSubcase = await signMarkingActivity.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      // const signPreparationActivity = await signSubcase?.signPreparationActivity;
+      // const signCompletionActivity = await signSubcase?.signCompletionActivity;
+      // const signApprovalActivities = await signSubcase?.signApprovalActivities;
+      // const signSigningActivities = await signSubcase?.signSigningActivities;
+      // const signRefusalActivities = await signSubcase?.signRefusalActivities;
+      const signedPiece = await piece.signedPiece;
+
+      await signedPiece?.destroyRecord();
+      await 
+      await signSubcase?.destroyRecord();
+      await signFlow?.destroyRecord();
+      await signMarkingActivity.destroyRecord();
+      await piece.belongsTo('signedPiece').reload();
+      await piece.belongsTo('signMarkingActivity').reload();
+    }
+  }
 }
