@@ -18,7 +18,7 @@ function checkRoleFilterSingle(name, numberOfResults) {
     .click();
 }
 
-context('testing user and organisation management', () => {
+context('testing user and organization management', () => {
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -291,6 +291,60 @@ context('testing user and organisation management', () => {
           cy.get(auk.pagination.previous).should('be.disabled');
         });
     });
+
+    it('should link and unlink person to user', () => {
+      const person1 = 'Benjamin Dalle';
+      const person2 = 'Zuhal Demir';
+
+      cy.visit('instellingen/gebruikers/92d97fe7-79b8-416d-b18c-e719cb7d78ad');
+
+      // link person
+      cy.get(utils.mandateePersonSelector)
+        .click();
+      cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
+      cy.get(dependency.emberPowerSelect.option).contains(person1)
+        .click();
+      cy.intercept('PATCH', '/users/**').as('patchUsers1');
+      cy.get(settings.user.linkPerson).click()
+        .wait('@patchUsers1');
+      cy.get(utils.mandateePersonSelector).contains(person1);
+      // check overview
+      cy.get(auk.backButton).click();
+      cy.get(settings.usersIndex.row.name).contains('Admin Test')
+        .parents('tr')
+        .as('currentRow');
+      cy.get('@currentRow').find(settings.usersIndex.row.person)
+        .contains(person1);
+
+      // check that linking new person overwrites previous
+      cy.get('@currentRow').find(settings.goToUserDetail)
+        .click();
+      cy.get(utils.mandateePersonSelector)
+        .click();
+      cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
+      cy.get(dependency.emberPowerSelect.option).contains(person2)
+        .click();
+      cy.intercept('PATCH', '/users/**').as('patchUsers2');
+      cy.get(settings.user.linkPerson).click()
+        .wait('@patchUsers2');
+      cy.get(utils.mandateePersonSelector).contains(person2);
+      // check overview
+      cy.get(auk.backButton).click();
+      cy.get('@currentRow').find(settings.usersIndex.row.person)
+        .contains(person2);
+
+      // unlink person
+      cy.get('@currentRow').find(settings.goToUserDetail)
+        .click();
+      cy.intercept('PATCH', '/users/**').as('patchUsers3');
+      cy.get(settings.user.unlinkPerson).click()
+        .wait('@patchUsers3');
+      cy.get(utils.mandateePersonSelector).should('not.contain', person2);
+      // check overview
+      cy.get(auk.backButton).click();
+      cy.get('@currentRow').find(settings.usersIndex.row.person)
+        .should('not.contain', person2);
+    });
   });
 
   context('testing organizations index', () => {
@@ -431,6 +485,32 @@ context('testing user and organisation management', () => {
         .click();
     });
 
+    it('should test org detail', () => {
+      cy.get(settings.organizationsIndex.row.name).contains('Kaleidos Test Organisatie')
+        .parents('tr')
+        .as('currentRow');
+
+      cy.get('@currentRow').find(settings.organizationsIndex.row.organizationDetail)
+        .click();
+
+      cy.get(settings.settingsHeader.title).contains('Organisatie: Kaleidos Test Organisatie');
+      cy.get(settings.organization.generalInfo).contains('Algemene informatie');
+      cy.get(settings.organization.technicalInfo.header).contains('Gekoppelde mandatarissen');
+
+      cy.intercept('PATCH', '/user-organizations/**').as('patchOrgs1');
+      cy.get(settings.organization.block).click();
+      cy.get(settings.organization.confirm.blockOrganization).click()
+        .wait('@patchOrgs1');
+
+      cy.intercept('PATCH', '/user-organizations/**').as('patchOrgs2');
+      cy.get(settings.organization.unblock).click();
+      cy.get(settings.organization.confirm.unBlockOrganization).click()
+        .wait('@patchOrgs2');
+
+      cy.get(auk.backButton).click();
+      cy.url().should('include', 'instellingen/organisaties');
+    });
+
     // TODO totalcount is array(6)
     it.skip('should test the pagination by clicking previous and next', () => {
       cy.get(utils.numberPagination.size).click();
@@ -460,6 +540,57 @@ context('testing user and organisation management', () => {
           cy.url().should('not.contain', 'pagina=');
           cy.get(auk.pagination.previous).should('be.disabled');
         });
+    });
+
+    it('should link and unlink mandatee to org', () => {
+      const person1 = 'Benjamin Dalle';
+      const person2 = 'Zuhal Demir';
+
+      cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+
+      // link mandatee
+      cy.get(utils.mandateeSelector.container).click();
+      cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.option).contains(person1)
+        .click();
+      cy.intercept('PATCH', '/user-organizations/**').as('patchorgs1');
+      cy.get(settings.organization.technicalInfo.row.linkMandatee).click()
+        .wait('@patchorgs1');
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person1);
+      // link second mandatee
+      cy.get(utils.mandateeSelector.container).click();
+      cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+      cy.get(dependency.emberPowerSelect.option).contains(person2)
+        .click();
+      cy.intercept('PATCH', '/user-organizations/**').as('patchorgs2');
+      cy.get(settings.organization.technicalInfo.row.linkMandatee).click()
+        .wait('@patchorgs2');
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person1);
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person2);
+
+      // unlink mandatee
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person1)
+        .parents('tr')
+        .as('row');
+      cy.intercept('PATCH', '/user-organizations/**').as('patchorgs3');
+      cy.get('@row').find(settings.organization.technicalInfo.row.unlinkMandatee)
+        .click();
+      cy.get(settings.organization.confirm.unlinkMandatee).click()
+        .wait('@patchorgs3');
+      cy.get(settings.organization.technicalInfo.row.mandatee).should('not.contain', person1);
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person2);
+      // unlink second mandatee
+      cy.get(settings.organization.technicalInfo.row.mandatee).contains(person2)
+        .parents('tr')
+        .as('row');
+      cy.intercept('PATCH', '/user-organizations/**').as('patchorgs4');
+      cy.get('@row').find(settings.organization.technicalInfo.row.unlinkMandatee)
+        .click();
+      cy.get(settings.organization.confirm.unlinkMandatee).click()
+        .wait('@patchorgs4');
+      cy.get(settings.organization.technicalInfo.row.mandatee).should('not.exist');
     });
   });
 });

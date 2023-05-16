@@ -2,11 +2,14 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   /**
    * @argument piece
    */
+
+  @service pieceAccessLevelService;
 
   @tracked sidebarIsOpen = true;
   @tracked selectedVersion;
@@ -37,5 +40,9 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
     const file = yield this.selectedVersion.file;
     const derivedFile = yield file?.derived;
     this.file = derivedFile || file;
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.selectedVersion);
   }
 }
