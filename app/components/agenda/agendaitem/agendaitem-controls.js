@@ -83,7 +83,7 @@ export default class AgendaitemControls extends Component {
     this.isVerifying = false;
     this.showLoader = true;
     const agendaItemType = await agendaitem.type;
-    const previousNumber = agendaitem.number;
+    const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
     if (await this.isDeletable) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {

@@ -9,9 +9,12 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 export default class DocumentController extends Controller {
   @service router;
   @service store;
-  @service signatureService;
 
   @tracked decisionActivity;
+
+  queryParams = ['isSigning'];
+  @tracked isSigning = false;
+  @tracked activeTab = 'details';
 
   @action
   transitionBack() {
@@ -21,16 +24,6 @@ export default class DocumentController extends Controller {
     } else {
       this.router.transitionTo('agendas');
     }
-  }
-
-  @action
-  async markForSignature(piece, decisionActivity) {
-    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
-  }
-
-  @action
-  async unmarkForSignature(piece) {
-    await this.signatureService.unmarkDocumentForSignature(piece);
   }
 
   @action
