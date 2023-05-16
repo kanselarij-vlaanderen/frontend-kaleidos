@@ -179,23 +179,35 @@
       </Auk::KeyValue>
       {{#if (and this.isSignaturesEnabled (await (this.canViewSignedPiece)))}}
         {{#if @piece.signedPiece.file}}
-          <Auk::KeyValue
-            @key={{t "signed-document"}}
-          >
-            <AuLinkExternal
-              href={{await @piece.signedPiece.namedDownloadLinkPromise}}
-              @skin="primary"
-              @icon="download"
-              @iconAlignment="left"
-              download
-            >
-              {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
-            </AuLinkExternal>
-            <AccessLevelPill 
-              @accessLevel={{await @piece.signedPiece.accessLevel}} 
-              @isEditable={{false}}
-            />
-          </Auk::KeyValue>
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+            <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              <AuLinkExternal
+                href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+                @skin="primary"
+                @icon="download"
+                @iconAlignment="left"
+                download
+              >
+                {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+              </AuLinkExternal>
+              {{#if (user-may "remove-signatures")}}
+                <AuButton
+                  @skin="naked"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (fn (mut this.isOpenVerifyDeleteSignFlow) true)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              {{/if}}
+              <AccessLevelPill 
+                @accessLevel={{await @piece.signedPiece.accessLevel}} 
+                @isEditable={{false}}
+              />
+            </div>
+          </div>
         {{/if}}
       {{/if}}
     </Auk::Panel::Body>
@@ -214,5 +226,21 @@
     @message={{t "delete-document-message"}}
     @onCancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
     @onVerify={{this.verifyDeleteDocument}}
+  />
+{{/if}}
+
+{{#if this.isOpenVerifyDeleteSignFlow}}
+  {{!-- TODO: vl-refactor --}}
+  {{!-- We can't use AuModal here because said modals get rendered inside a
+        "wormhole" div. The current component is also part of a modal which gets
+        rendered in the same "wormhole", so opening another AuModal here will
+        overwrite the existing page content, and break the route. If AuModals
+        ever support rendering multiple modals over each other, we can use one
+        here, otherwise we might want to make the doc view not be a modal. --}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-signed-piece"}}
+    @message={{t "verify-delete-signed-piece"}}
+    @onCancel={{fn (mut this.isOpenVerifyDeleteSignFlow) false}}
+    @onVerify={{this.verifyDeleteSignFlow}}
   />
 {{/if}}

@@ -21,6 +21,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isReplacingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
+  @tracked isOpenVerifyDeleteSignFlow = false;
   @tracked replacementSourceFile;
   @tracked documentType;
   @tracked accessLevel;
@@ -124,6 +125,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.didDeletePiece(this.args.piece);
     }
     this.isOpenVerifyDeleteModal = false;
+  }
+
+  @action
+  async verifyDeleteSignFlow() {
+    await this.signatureService.removeSignFlow(this.args.piece)
+    this.isOpenVerifyDeleteSignFlow = false;
   }
   
   canViewConfidentialPiece = async () => {

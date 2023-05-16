@@ -132,15 +132,30 @@ export default class SignatureService extends Service {
     if (signMarkingActivity) {
       const signSubcase = await signMarkingActivity.signSubcase;
       const signFlow = await signSubcase?.signFlow;
-      // const signPreparationActivity = await signSubcase?.signPreparationActivity;
-      // const signCompletionActivity = await signSubcase?.signCompletionActivity;
-      // const signApprovalActivities = await signSubcase?.signApprovalActivities;
-      // const signSigningActivities = await signSubcase?.signSigningActivities;
-      // const signRefusalActivities = await signSubcase?.signRefusalActivities;
       const signedPiece = await piece.signedPiece;
+      const signedFile = await signedPiece?.file;
+      const signPreparationActivity = await signSubcase?.signPreparationActivity;
+      const signCompletionActivity = await signSubcase?.signCompletionActivity;
+      const signCancellationActivity = await signSubcase?.signCancellationActivity;
+      const signApprovalActivities = await signSubcase?.signApprovalActivities;
+      const signSigningActivities = await signSubcase?.signSigningActivities;
+      const signRefusalActivities = await signSubcase?.signRefusalActivities;
 
+      // delete in reverse order of creation
+      await signedFile?.destroyRecord();
       await signedPiece?.destroyRecord();
-      await 
+      await signPreparationActivity?.destroyRecord();
+      await signCompletionActivity?.destroyRecord();
+      await signCancellationActivity?.destroyRecord();
+      await signApprovalActivities?.map(async (activity) => {
+        await activity.destroyRecord
+      })
+      await signSigningActivities?.map(async (activity) => {
+        await activity.destroyRecord
+      })
+      await signRefusalActivities?.map(async (activity) => {
+        await activity.destroyRecord
+      })
       await signSubcase?.destroyRecord();
       await signFlow?.destroyRecord();
       await signMarkingActivity.destroyRecord();
