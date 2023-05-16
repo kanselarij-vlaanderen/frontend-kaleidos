@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PieceAccessLevelService extends Service {
   @service agendaService;
   @service store;
+  @service currentSession;
 
 /*
  * This method is used to update the access levels of the previous version of a piece.
@@ -196,5 +197,49 @@ export default class PieceAccessLevelService extends Service {
         return false;
       }
     }
+  }
+
+  async canViewConfidentialPiece(piece) {
+    const accessLevel = await piece?.accessLevel;
+    if (this.currentSession.may('view-only-specific-confidential-documents') && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        filter: {
+          pieces: {
+            ':id:': piece?.id,
+          },
+        },
+      });
+      let subcase;
+      if (submissionActivity) {
+        subcase = await submissionActivity.subcase;
+      } else {
+        const decisionActivity = await this.store.queryOne('decision-activity', {
+          filter: {
+            report: {
+              ':id:': piece?.id,
+            },
+          },
+        });
+        if (decisionActivity) {
+          subcase = await decisionActivity.subcase;
+        }
+      }
+      if (subcase) {
+        const mandatees = await subcase.mandatees;
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandatees.length && mandateeUris.includes(orgMandateeUri)) {
+            return true;
+          }
+        }
+      }
+    } else {
+      // default to standard behaviour (if confidential doc is in your graph it can be accessed normally)
+      return true;
+    }
+    return false;
   }
 }

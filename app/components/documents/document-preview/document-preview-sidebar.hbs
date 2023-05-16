@@ -2,7 +2,7 @@
   @size="xlarge"
   @position="right"
   @skin="white"
-  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical auk-u-sidebar-min-width
+  class="auk-u-pb-6 auk-o-flex auk-o-flex--vertical
     {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
@@ -83,8 +83,6 @@
           <Documents::DocumentPreview::SignaturesTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
-            @markForSignature={{@markForSignature}}
-            @unmarkForSignature={{@unmarkForSignature}}
           />
           {{! VERSIONS }}
         {{else if (eq this.activeTab "versions")}}

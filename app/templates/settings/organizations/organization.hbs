@@ -31,7 +31,7 @@
             <AuToolbar class="auk-u-maximize-width" as |Group|>
               <Group>
                 <h4
-                  data-test-route-settings---user-general-info
+                  data-test-route-settings---organization-general-info
                   class="auk-panel__title"
                 >
                   {{t "manage-users-general-info"}}
@@ -40,14 +40,14 @@
               <Group>
                 {{#if @model.isBlocked}}
                   <AuButton
-                    data-test-route-settings---user-unblock
+                    data-test-route-settings---organization-unblock
                     {{on "click" (toggle "showUnblockOrganization" this)}}
                   >
                     {{t "unblock-organization"}}
                   </AuButton>
                 {{else}}
                   <AuButton
-                    data-test-route-settings---user-block
+                    data-test-route-settings---organization-block
                     @alert={{true}}
                     {{on "click" (toggle "showBlockOrganization" this)}}
                   >
@@ -77,7 +77,7 @@
         <Auk::Panel>
           <Auk::Panel::Header>
             <h4
-              data-test-route-settings---organisation-technical-info
+              data-test-route-settings---organization-technical-info-header
               class="auk-panel__title"
             >
               {{t "linked-mandatees"}}
@@ -96,12 +96,12 @@
               <:body>
                 {{#each this.model.mandatees as |mandatee|}}
                   <tr>
-                    <td>
+                    <td data-test-route-settings---organization-technical-info-row-mandatee>
                       {{mandatee.fullDisplayName}}
                     </td>
                     <td class="au-u-text-right">
                       <AuButton
-                        data-test-route-settings---organisation-unlink-mandatee
+                        data-test-route-settings---organization-technical-info-row-unlink-mandatee
                         @skin="naked"
                         @icon="circle-full"
                         {{on
@@ -128,7 +128,10 @@
                   </td>
                   <td class="au-u-text-right">
                     {{#if this.selectedMandatee.id}}
-                      <AuButton {{on "click" this.linkMandatee}}>
+                      <AuButton
+                        data-test-route-settings---organization-technical-info-row-link-mandatee
+                        {{on "click" this.linkMandatee}}
+                      >
                         {{t "connect"}}
                       </AuButton>
                     {{/if}}
@@ -213,7 +216,7 @@
       </Group>
       <Group>
         <AuButton
-          data-test-route-settings---organisation-confirm-unblock-organisation
+          data-test-route-settings---organization-confirm-unblock-organization
           @alert={{true}}
           {{on
             "click"
@@ -254,7 +257,7 @@
       </Group>
       <Group>
         <AuButton
-          data-test-route-settings---organisation-confirm-unlink-mandatee
+          data-test-route-settings---organization-confirm-unlink-mandatee
           @alert={{true}}
           {{on
             "click"

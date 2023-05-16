@@ -150,28 +150,28 @@ context('Propagation of confidentiality setup', () => {
     cy.login('Kabinetdossierbeheerder');
     cy.visitAgendaWithLink(agendaitem1Link);
     checkAccess(docName1, false);
-    checkAccess(docName2, false);
+    checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
     cy.openAgendaitemDocumentTab(subcaseTitle2);
     checkAccess(docNameLocked1, false);
-    checkAccess(docNameLocked2, false);
+    checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
     cy.visit(procedurestep1Link);
     checkAccess(docName1, false);
-    checkAccess(docName2, false);
+    checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
     cy.visit(procedurestep2Link);
     checkAccess(docNameLocked1, false);
-    checkAccess(docNameLocked2, false);
+    checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);

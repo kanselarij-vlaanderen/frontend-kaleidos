@@ -60,6 +60,7 @@ Router.map(function() {
       this.route('late', { path: '/te-laat-in-bs' });
       this.route('reports', { path: '/rapporten' });
       this.route('search', { path: '/zoeken' });
+      this.route('shortlist', { path: '/op-te-starten' });
     });
     this.route('publication', { path: ':publication_id', }, function() {
       this.route('case', { path: '/dossier', });
@@ -71,10 +72,8 @@ Router.map(function() {
   });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekenmap', }, function() {
-      this.route('signing-flow', { path: '/:signingflow_id' }, function() {
-        this.route('documents', { path: '/documenten' });
-      });
+    this.route('signatures', { path: '/handtekeningen', }, function() {
+      this.route('ongoing', { path: '/wordt-verwerkt' })
     });
   }
 

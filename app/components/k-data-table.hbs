@@ -1,50 +1,75 @@
-<table
-  class="auk-table
-  {{if @hoverable "auk-table--hoverable"}}
-  {{if @striped "auk-table--striped"}}
-  {{if @stickyHeader "auk-table--sticky-header"}}
-  {{if @stickyActionColumn "auk-table--sticky-action-column"}}
-  {{if @list "auk-table--list"}}"
-  ...attributes
->
-  <thead>
-    <tr>
-      {{yield to="header"}}
-    </tr>
-  </thead>
-  <tbody class="{{if (or @clickable @onClickRow) "auk-table--clickable-rows"}}">
-    {{#if @loading}}
-      <tr>
-        <td colspan="100%" class="is-loading-data">
+{{#let (component "k-data-table/table"
+   clickable=@clickable
+   hoverable=@hoverable
+   striped=@striped
+   stickyHeader=@stickyHeader
+   stickyActionColumn=@stickyActionColumn
+   list=@list
+   loading=@loading
+   content=@content
+   onClickRow=@onClickRow) as |Table|}}
+  {{#let (and @asideVisible (has-block "aside"))
+     as |showAside|}}
+    {{#if @scrollable}}
+      <div
+        class="auk-scroll-wrapper
+        {{if showAside "auk-scroll-wrapper--sidebar"}}"
+      >
+        <div class="auk-scroll-wrapper__body">
+          <Table ...attributes>
+            <:header>{{yield to="header"}}</:header>
+            <:loading>
+              {{#if (has-block "loading")}}
+                {{yield to="loading"}}
+              {{else}}
+                {{this.loadingMessage}}
+              {{/if}}
+            </:loading>
+            <:body as |row|>
+              {{yield row to="body"}}
+            </:body>
+            <:no-data>
+              {{#if (has-block "no-data")}}
+                {{yield to="no-data"}}
+              {{else}}
+                {{this.noDataMessage}}
+              {{/if}}
+            </:no-data>
+          </Table>
+        </div>
+        {{#if showAside}}
+          <div class="auk-scroll-wrapper__sidebar">
+            {{yield to="aside"}}
+          </div>
+        {{/if}}
+      </div>
+    {{else}}
+      <Table ...attributes>
+        <:header>{{yield to="header"}}</:header>
+        <:loading>
           {{#if (has-block "loading")}}
             {{yield to="loading"}}
           {{else}}
             {{this.loadingMessage}}
           {{/if}}
-        </td>
-      </tr>
-    {{else if @content}}
-      {{#each @content as |row|}}
-        <tr
-          role="button"
-          {{on "click" (fn (optional @onClickRow) row)}}
-        >
+        </:loading>
+        <:body as |row|>
           {{yield row to="body"}}
-        </tr>
-      {{/each}}
-    {{else}}
-      <tr>
-        <td colspan="100%">
+        </:body>
+        <:no-data>
           {{#if (has-block "no-data")}}
             {{yield to="no-data"}}
           {{else}}
             {{this.noDataMessage}}
           {{/if}}
-        </td>
-      </tr>
+        </:no-data>
+      </Table>
+      {{#if showAside}}
+        {{yield to="aside"}}
+      {{/if}}
     {{/if}}
-  </tbody>
-</table>
+  {{/let}}
+{{/let}}
 {{#if this.enablePagination}}
   <AuToolbar
     class="auk-table__actions--bottom"

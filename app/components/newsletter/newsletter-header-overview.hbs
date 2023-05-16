@@ -17,10 +17,15 @@
           <Auk::Tabs @reversed={{true}}>
             <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
             {{#if (user-may "manage-news-items")}}
-              <Auk::Tab @route="newsletter.index" @model={{@meeting.id}}>
+              <Auk::Tab
+                data-test-newsletter-header-overview-index
+                @route="newsletter.index"
+                @model={{@meeting.id}}
+              >
                 {{t "overview"}}
               </Auk::Tab>
               <Auk::Tab
+                data-test-newsletter-header-overview-print-draft
                 @route="newsletter.print"
                 @model={{@meeting.id}}
                 @query={{hash showDraft=true}}
@@ -28,13 +33,17 @@
                 {{t "design"}}
               </Auk::Tab>
               <Auk::Tab
+                data-test-newsletter-header-overview-print
                 @route="newsletter.print"
                 @model={{@meeting.id}}
                 @query={{hash showDraft=false}}
               >
                 {{t "definite"}}
               </Auk::Tab>
-              <Auk::Tab @route="newsletter.nota-updates">
+              <Auk::Tab
+                data-test-newsletter-header-overview-nota-updates
+                @route="newsletter.nota-updates"
+              >
                 {{t "newsletter-update-notas"}}
               </Auk::Tab>
             {{/if}}
@@ -58,6 +67,7 @@
               </div>
             {{else}}
               <AuButton
+                data-test-newsletter-header-actions-publish-all
                 @skin="link"
                 {{on "click" this.openConfirmPublishAll}}
                 role="menuitem"
@@ -73,6 +83,7 @@
                 {{t "send-newsitem-to-mail"}}
               </AuButton>
               <AuButton
+                data-test-newsletter-header-actions-publish-belga
                 @skin="link"
                 {{on "click" this.openConfirmPublishBelga}}
                 role="menuitem"
@@ -83,6 +94,7 @@
           {{/if}}
           {{#if (user-may "manage-themis-publications")}}
             <AuButton
+              data-test-newsletter-header-actions-publish-themis
               @skin="link"
               {{on "click" this.openConfirmPublishThemis}}
               role="menuitem"
@@ -93,6 +105,7 @@
           {{#if this.shouldShowPrintButton}}
             <AuHr />
             <AuButton
+              data-test-newsletter-header-actions-print
               @skin="link"
               {{on "click" this.print}}
               role="menuitem"
@@ -123,6 +136,7 @@
             {{#if this.mailCampaign}}
               <AuHr />
               <AuButton
+                data-test-newsletter-header-actions-delete-campaign
                 @skin="link"
                 @alert={{true}}
                 {{on "click" (perform this.deleteCampaign)}}
@@ -137,6 +151,7 @@
             {{#if this.isAlreadyPublished}}
               <AuHr />
               <AuButton
+                data-test-newsletter-header-actions-unpublish-themis
                 @skin="link"
                 @alert={{true}}
                 {{on "click" this.openConfirmUnpublishThemis}}

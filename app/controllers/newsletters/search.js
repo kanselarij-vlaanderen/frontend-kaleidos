@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
 import sanitizeHtml from 'sanitize-html';
+import {decode as decodeEntities} from 'html-entities';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class NewslettersSearchController extends Controller {
@@ -102,13 +103,16 @@ export default class NewslettersSearchController extends Controller {
     }
 
     if (row.htmlContent) {
-      copyText += sanitizeHtml(
-        row.htmlContent
-          .replace(/<p>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
-          .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
-          .trim(), // Trim whitespaces at start & end of the string
-        { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
-      );
+      copyText +=
+        decodeEntities(
+          sanitizeHtml(
+            row.htmlContent
+              .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')  // Replace p-tags with \n line breaks
+              .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
+              .trim(), // Trim whitespaces at start & end of the string
+            { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
+          )
+        );
     }
 
     navigator.clipboard.writeText(copyText);
