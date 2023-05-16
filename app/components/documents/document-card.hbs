@@ -43,7 +43,7 @@
                 <p data-test-document-card-primary-source-created={{if this.piece.file.derived ""}}>
                   {{t "uploaded-at"}}
                   {{datetime-at this.piece.created}}
-                  {{#if this.piece.file.derived}}
+                  {{#if (and this.piece.file.derived (await (this.canViewConfidentialPiece)))}}
                     {{t "as"}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
@@ -54,6 +54,20 @@
                     </AuLinkExternal>
                   {{/if}}
                 </p>
+              {{/if}}
+              {{#if (and this.signaturesEnabled (await (this.canViewSignedPiece)))}}
+                {{#if this.piece.signedPiece.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await this.piece.signedPiece.namedDownloadLinkPromise}}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at this.piece.signedPiece.created}}
+                  </p>
+                {{/if}}
               {{/if}}
             </div>
           </Group.Item>
@@ -95,32 +109,19 @@
               />
             {{/unless}}
           </Group.Item>
-          {{#if this.signaturesEnabled}} {{! feature flag }}
-            {{#if
-              (and
-                @isEditable
-                (user-may "manage-signatures")
-                (not this.loadSignatureRelatedData.isRunning)
-                (not this.loadPieceRelatedData.isRunning)
-              )
-            }}
-              <Group.Item>
-                <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--center">
-                  <AuToggleSwitch
-                    @checked={{if this.signMarkingActivity true false}}
-                    @onChange={{perform this.markOrUnmarkForSignature}}
-                    id="signatureToggle"
+          {{#if this.signaturesEnabled}}
+              {{#if this.loadSignatureRelatedData.isRunning}}
+                <Group.Item>
+                  <div class="auk-loader au-u-margin-left-small" role="alert" aria-busy="true"></div>
+                </Group.Item>
+              {{else if this.signMarkingActivity}}
+                <Group.Item>
+                  <SignaturePill
+                    @piece={{this.piece}}
+                    @signMarkingActivity={{this.signMarkingActivity}}
                   />
-                  <label for="signatureToggle" class="auk-c-toggle-label auk-u-text-muted">
-                    {{#if this.markOrUnmarkForSignature.isRunning}}
-                      <Auk::Loader />
-                    {{else}}
-                      {{t "to-sign"}}
-                    {{/if}}
-                  </label>
-                </div>
-              </Group.Item>
-            {{/if}}
+                </Group.Item>
+              {{/if}}
           {{/if}}
           {{#if
               (and
@@ -154,6 +155,18 @@
                   {{t "edit"}}
                 </AuButton>
                 <AuHr />
+                {{#if this.mayCreateSignMarkingActivity}}
+                  <AuLink
+                    @skin="link"
+                    @route="document"
+                    @model={{this.piece.id}}
+                    @query={{hash isSigning=true}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuLink>
+                  <AuHr />
+                {{/if}}
                 <AuButton
                   data-test-document-card-delete
                   @skin="link"
