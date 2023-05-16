@@ -177,20 +177,26 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
-      {{#if @piece.signedPiece.file}}
-        <Auk::KeyValue
-          @key={{t "signed-document"}}
-        >
-          <AuLinkExternal
-            href={{await @piece.signedPiece.namedDownloadLinkPromise}}
-            @skin="primary"
-            @icon="download"
-            @iconAlignment="left"
-            download
+      {{#if (and this.isSignaturesEnabled (await (this.canViewSignedPiece)))}}
+        {{#if @piece.signedPiece.file}}
+          <Auk::KeyValue
+            @key={{t "signed-document"}}
           >
-            {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
-          </AuLinkExternal>
-        </Auk::KeyValue>
+            <AuLinkExternal
+              href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+            </AuLinkExternal>
+            <AccessLevelPill 
+              @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              @isEditable={{false}}
+            />
+          </Auk::KeyValue>
+        {{/if}}
       {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>

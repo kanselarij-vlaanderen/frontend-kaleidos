@@ -1,3 +1,12 @@
+{{#if this.hasConflictingSigners}}
+  <AuAlert
+    @skin="warning"
+    @icon="alert-triangle"
+    @title={{t "create-sign-flow-conflicting-signers-title"}}
+  >
+    <p>{{t "create-sign-flow-conflicting-signers-message"}}</p>
+  </AuAlert>
+{{/if}}
 <Auk::Panel class="auk-u-mt-2">
   <Auk::Panel::Header class="auk-u-px-1">
     <Auk::Toolbar as |Toolbar|>
