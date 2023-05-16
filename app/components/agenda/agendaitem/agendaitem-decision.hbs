@@ -103,16 +103,43 @@
           @disableUpdateContent={{not this.nota}}
         />
       </Auk::Panel::Body>
+      <Auk::Panel::Footer class="au-u-background-gray-100">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                {{on "click" (set this "isEditing" false)}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @disabled={{this.disableSaveButton}}
+                @skin="primary"
+                @loading={{this.onSaveReport.isRunning}}
+                {{on "click" (perform this.onSaveReport)}}
+              >
+                {{t "update"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
     {{else}}
       {{#if (and this.report.file (not this.report.pieceParts))}}
-        <Auk::Panel::Body class="au-o-flow">
+        <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
             @onOpenUploadModal={{@onOpenUploadModal}}
-            @onAddPiece={{this.attachNewReportVersionDepr}}
+            @onAddPiece={{this.attachNewReportVersionAsPiece}}
+            @pieceSubtype="report"
             @didDeleteContainer={{perform this.loadReport}}
             @bordered={{false}}
           />
@@ -138,37 +165,9 @@
       {{/if}}
     {{/if}}
   {{else}}
-    <Auk::Panel::Body
-      class="au-o-flow"
-    >
+    <Auk::Panel::Body class="au-o-flow">
       <Auk::Loader />
     </Auk::Panel::Body>
-  {{/if}}
-
-  {{#if this.isEditing}}
-    <Auk::Panel::Footer class="au-u-background-gray-100">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <AuButton @skin="naked" {{on "click" (set this "isEditing" false)}}>
-              {{t "cancel"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <AuButton
-              @disabled={{this.disableSaveButton}}
-              @skin="primary"
-              @loading={{this.onSaveReport.isRunning}}
-              {{on "click" (perform this.onSaveReport)}}
-            >
-              {{t "update"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Footer>
   {{/if}}
 </Auk::Panel>
 

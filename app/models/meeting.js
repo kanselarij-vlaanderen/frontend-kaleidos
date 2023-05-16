@@ -33,7 +33,7 @@ export default class Meeting extends Model {
     async: true,
   })
   internalDocumentPublicationActivity;
-  @belongsTo('piece', {
+  @belongsTo('minutes', {
     inverse: 'isMinutesForMeeting',
     async: true,
   })

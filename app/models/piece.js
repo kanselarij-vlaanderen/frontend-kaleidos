@@ -15,7 +15,12 @@ export default class Piece extends Model {
   @belongsTo('file', { inverse: null, async: true }) file;
   @belongsTo('document-container', { inverse: 'pieces', async: true })
   documentContainer;
-  @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
+  @belongsTo('piece', {
+    inverse: 'previousPiece',
+    async: true,
+    polymorphic: true,
+  })
+  nextPiece;
   @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true })
   previousPiece;
 
@@ -40,8 +45,6 @@ export default class Piece extends Model {
   @belongsTo('signed-piece', { inverse: 'unsignedPiece', async: true })
   signedPiece;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
-  @belongsTo('meeting', { inverse: 'minutes', async: true })
-  isMinutesForMeeting;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
   requestActivitiesUsedBy;

@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
@@ -10,6 +11,19 @@ import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
+}
+
+function formatDocuments(pieceRecords) {
+  const names = pieceRecords.map((record) => record.name);
+  if (pieceRecords.length === 0) {
+    return '()';
+  } else if (pieceRecords.length === 1) {
+    return `(${names[0]})`;
+  } else {
+    return `(${names.slice(0, names.length - 1).join(', ')} en ${
+      names[names.length - 1]
+    })`;
+  }
 }
 
 /**
@@ -45,10 +59,11 @@ export default class AgendaitemDecisionComponent extends Component {
     this.loadReport.perform();
     this.loadCodelists.perform();
     this.loadNota.perform();
+    this.loadDocuments.perform();
   }
 
   loadNota = task(async () => {
-    const nota = await this.agendaitemNota.notaOrVisieNota(
+    const nota = await this.agendaitemNota.nota(
       this.args.agendaContext.agendaitem
     );
     if (!nota) {
@@ -70,6 +85,13 @@ export default class AgendaitemDecisionComponent extends Component {
     );
   });
 
+  loadDocuments = task(async () => {
+    this.pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
+    });
+  });
+
   @action
   toggleEditPill() {
     this.isEditingPill = !this.isEditingPill;
@@ -80,8 +102,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const { betreftPiecePart, beslissingPiecePart } =
       this.createAndAttachPieceParts(
         report,
-        this.beslissingPiecePart.value,
-        this.betreftPiecePart.value
+        this.betreftPiecePart.value,
+        this.beslissingPiecePart.value
       );
 
     await this.saveReport(
@@ -132,11 +154,8 @@ export default class AgendaitemDecisionComponent extends Component {
     this.toggleEditPill();
   });
 
-  /**
-   * Deprecated but needed for backwards compat
-   */
   @action
-  async attachNewReportVersionDepr(piece) {
+  async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
       const sourceFile = await piece.file;
@@ -174,12 +193,15 @@ export default class AgendaitemDecisionComponent extends Component {
     const file = await this.store.findRecord('file', fileId);
     report.file = file;
     report.modified = new Date();
+    report.save();
   }
 
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
       editorInterface.setHtmlContent(this.betreftPiecePart.value);
+    
+      // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
       editorInterface.setHtmlContent(this.editorInstanceBetreft.htmlContent);
     }
@@ -194,8 +216,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   updateBetreftContent() {
+    const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const documents = this.pieces;
     this.setBetreftEditorContent(
-      `<p>${this.args.agendaContext.agendaitem.shortTitle}</p>`
+      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
+        documents ? `<br/>${formatDocuments(documents)}` : ''
+      }</p>`
     );
   }
 
