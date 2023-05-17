@@ -104,6 +104,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isReplacingSourceFile = !this.isReplacingSourceFile;
   }
 
+  verifyDeleteSignFlow = task(async () => {
+    await this.signatureService.removeSignFlow(this.args.piece);
+    this.isOpenVerifyDeleteSignFlow = false;
+  })
+
   @action
   openEditDetails() {
     this.isEditingDetails = true;
@@ -125,12 +130,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.didDeletePiece(this.args.piece);
     }
     this.isOpenVerifyDeleteModal = false;
-  }
-
-  @action
-  async verifyDeleteSignFlow() {
-    await this.signatureService.removeSignFlow(this.args.piece)
-    this.isOpenVerifyDeleteSignFlow = false;
   }
   
   canViewConfidentialPiece = async () => {

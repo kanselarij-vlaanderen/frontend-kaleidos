@@ -191,21 +191,25 @@
               >
                 {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
               </AuLinkExternal>
-              {{#if (user-may "remove-signatures")}}
-                <AuButton
-                  @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
-                  @hideText={{true}}
-                  {{on "click" (fn (mut this.isOpenVerifyDeleteSignFlow) true)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
-              {{/if}}
               <AccessLevelPill 
                 @accessLevel={{await @piece.signedPiece.accessLevel}} 
                 @isEditable={{false}}
               />
+              <AuDropdown
+                @icon="three-dots"
+                @title={{t "more"}}
+                @hideText={{true}}
+                @alignment="right"
+              >
+                <AuButton
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+                  role="menuitem"
+                >
+                  {{t "delete-signed-piece"}}
+                </AuButton>
+              </AuDropdown>
             </div>
           </div>
         {{/if}}
@@ -240,7 +244,8 @@
   <WebComponents::VlModalVerify
     @title={{t "delete-signed-piece"}}
     @message={{t "verify-delete-signed-piece"}}
-    @onCancel={{fn (mut this.isOpenVerifyDeleteSignFlow) false}}
-    @onVerify={{this.verifyDeleteSignFlow}}
+    @onCancel={{toggle "isOpenVerifyDeleteSignFlow" this}}
+    @onVerify={{this.verifyDeleteSignFlow.perform}}
+    @isLoading={{this.verifyDeleteSignFlow.isRunning}}
   />
 {{/if}}
