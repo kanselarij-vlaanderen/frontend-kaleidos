@@ -15,6 +15,9 @@
           {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
         >
           {{t "delete-all-sign-flow-data"}}
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "delete-all-sign-flow-tooltip"}}
+          </EmberTooltip>
         </AuButton>
       {{/if}}
     </div>
