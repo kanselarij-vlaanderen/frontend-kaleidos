@@ -12,7 +12,7 @@
       @disabled={{@disabled}}
       @allowClear={{true}}
       @renderInPlace={{@renderInPlace}}
-      @searchField="label"
+      @searchField="altLabel"
       @searchEnabled={{true}}
       @searchMessage={{null}}
       @loadingMessage={{t "please-be-patient"}}
@@ -20,7 +20,7 @@
       ...attributes
       as |option|
     >
-      {{option.label}}
+      {{option.altLabel}}
     </PowerSelect>
   </div>
 {{/if}}
