@@ -9,7 +9,7 @@ import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
   return `
-    <h1>Aanwezig</h1>
+    <h4>Aanwezig</h4>
     <table>
       <tbody>
         <tr>
@@ -34,23 +34,30 @@ function renderAttendees(attendees) {
 }
 
 function renderNotas(notas) {
-  return renderAnnouncements(notas);
+  return renderAgendaitemList(notas);
 }
 
 function renderAnnouncements(announcements) {
   return `
-    <h1>Mededelingen</h1>
-    <ul>
-      ${announcements
-        .map((announcement) => `<li>${announcement.shortTitle}</li>`)
-        .join('')}
-    </ul>
+    <h4>Mededelingen</h4>
+    ${renderAgendaitemList(announcements)}
   `;
+}
+
+function renderAgendaitemList(agendaitems) {
+  return agendaitems
+    .map(
+      (agendaitem) => `
+        <h4>${agendaitem.number}. ${agendaitem.shortTitle}</h4>
+        ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
+      `
+    )
+    .join('');
 }
 
 function renderAbsentees() {
   return `
-    <h1>Afwezig met kennisgeving</h1>
+    <h4>Afwezig met kennisgeving</h4>
     <table>
       <tbody>
         <tr>
@@ -65,10 +72,10 @@ function renderAbsentees() {
 function renderMinutes(data) {
   const { attendees, notas, announcements } = data;
   return `
-    ${renderAttendees(attendees)}<br />
+    ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? `<br/>${renderNotas(notas)}` : ''}
-    ${announcements ? `<br /> ${renderAnnouncements(announcements)}` : ''}
+    ${notas ? renderNotas(notas) : ''}
+    ${announcements ? renderAnnouncements(announcements) : ''}
   `;
 }
 
@@ -144,18 +151,18 @@ export default class AgendaMinutesController extends Controller {
 
   saveMinutes = task(async () => {
     const now = new Date();
-    // TODO: add value here
     await this.store
-      .createRecord('piece', {
+      .createRecord('minutes', {
         name: 'TODO not sure what to put here',
         created: now,
         modified: now,
         isMinutesForMeeting: this.meeting,
-        ...(this.model ? { previousPiece: this.model } : {}),
+        value: this.editor.htmlContent,
+        // ...(this.model.minutes ? { previousPiece: this.model.minutes } : {}),
       })
       .save();
+
     this.isEditing = false;
-    return;
   });
 
   @action
