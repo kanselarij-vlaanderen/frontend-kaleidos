@@ -54,7 +54,10 @@ export default class SignatureService extends Service {
     await signSubcase.save();
 
     // Prepare sign flow: create preparation activity and send to SH
-    await uploadPiecesToSigninghub(signFlow, [piece]);
+    const response = await uploadPiecesToSigninghub(signFlow, [piece]);
+    if (!response.ok) {
+      throw new Error('Failed to upload piece to Signing Hub');
+    }
   }
 
   async markDocumentForSignature(piece, decisionActivity) {

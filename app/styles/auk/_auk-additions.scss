@@ -400,3 +400,7 @@ table tr.lt-expanded-row {
     text-transform: none;
   };
 }
+
+.auk-alert-stack {
+  z-index: 10000;
+}

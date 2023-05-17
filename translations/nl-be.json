@@ -1215,5 +1215,10 @@
   "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
   "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen.",
   "creating-sign-flows-message": "Handtekenstromen worden aangemaakt. Dit kan even duren.",
-  "ongoing": "In verwerking"
+  "ongoing": "In verwerking",
+  "create-sign-flow-error-message": "Er ging iets mis met het doorsturen van dit document, contacteer kaleidos.servicedesk@vlaanderen.be als het probleem aanhoudt.",
+  "successfully-started-sign-flow": "Tekenproces succesvol opgestart",
+  "successfully-started-sign-flows": "Tekenprocessen succesvol opgestart",
+  "document-was-sent-to-signinghub": "Het document werd doorgestuurd naar SigningHub en kan worden voorbereid",
+  "documents-were-sent-to-signinghub": "De documenten werden doorgestuurd naar SigningHub en kunnen worden voorbereid"
 }
