@@ -400,3 +400,9 @@ table tr.lt-expanded-row {
     text-transform: none;
   };
 }
+
+.auk-u-text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
