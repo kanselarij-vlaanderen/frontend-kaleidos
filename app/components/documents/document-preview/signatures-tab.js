@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
@@ -55,10 +54,9 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     this.canManageSignFlow =  await this.signatureService.canManageSignFlow(this.args.piece);
   });
 
-  @action
-  async verifyDeleteSignFlow() {
+  verifyDeleteSignFlow = task(async () => {
     await this.signatureService.removeSignFlow(this.args.piece);
     await this.loadSignatureRelatedData.perform();
     this.isOpenVerifyDeleteSignFlow = false;
-  }
+  })
 }

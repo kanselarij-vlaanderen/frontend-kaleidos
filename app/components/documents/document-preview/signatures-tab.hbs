@@ -78,6 +78,7 @@
     @title={{t "delete-all-sign-flow-data"}}
     @message={{t "verify-delete-all-sign-flow-data"}}
     @onCancel={{toggle "isOpenVerifyDeleteSignFlow" this}}
-    @onVerify={{this.verifyDeleteSignFlow}}
+    @onVerify={{this.verifyDeleteSignFlow.perform}}
+    @isLoading={{this.verifyDeleteSignFlow.isRunning}}
   />
 {{/if}}
