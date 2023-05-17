@@ -107,7 +107,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   verifyDeleteSignFlow = task(async () => {
     await this.signatureService.removeSignFlow(this.args.piece);
     this.isOpenVerifyDeleteSignFlow = false;
-  })
+  });
 
   @action
   openEditDetails() {

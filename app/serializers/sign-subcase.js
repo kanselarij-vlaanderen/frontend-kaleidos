@@ -7,7 +7,7 @@ const SKIP_SERIALIZED = [
   'signCompletionActivity',
   'signSigningActivities',
   'signApprovalActivities',
-  'signRefusalActivities'
+  'signRefusalActivities',
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {
