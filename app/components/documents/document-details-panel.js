@@ -70,6 +70,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
+      const now = new Date();
+      this.args.piece.created = now;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
       try {
@@ -82,8 +84,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       this.args.onChangeFile();
     }
-    const now = new Date();
-    this.args.piece.created = now;
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
