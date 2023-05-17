@@ -82,6 +82,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       this.args.onChangeFile();
     }
+    const now = new Date();
+    this.args.piece.created = now;
     this.args.piece.accessLevel = this.accessLevel;
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
