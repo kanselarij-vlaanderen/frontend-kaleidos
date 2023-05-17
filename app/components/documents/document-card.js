@@ -45,28 +45,16 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
-  @tracked extension = CONSTANTS.DEFAULTS.FALLBACK_EXTENSION;
-
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.loadFiles.perform();
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    this.loadExtension.perform();
   }
 
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
-  }
-
-  @task
-  *loadExtension() {
-    const file = yield this.args.piece.file;
-    const derived = yield file.derived;
-    if (derived?.extension || file?.extension) {
-      this.extension = file.extension ? file.extension : derived.extension;
-    }
   }
 
   @task
