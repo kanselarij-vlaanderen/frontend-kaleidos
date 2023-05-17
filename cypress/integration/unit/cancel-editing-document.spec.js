@@ -386,10 +386,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const accesLevelOption1 = 'Intern Regering';
     const accesLevelOption3 = 'Publiek';
     const accesLevelOption4 = 'Vertrouwelijk';
-    const typeOption = 'IF';
-    const typeOption2 = 'BVR';
-    const typeOption3 = 'VOD';
-    const typeSearchOption = 'Advies AgO';
+    const typeOption = 'Advies van Inspectie Financiën';
+    const typeOption2 = 'Besluit van de Vlaamse Regering';
+    const typeOption3 = 'Voorontwerp van decreet';
+    const typeSearchOption = 'Advies agentschap overheidspersoneel';
 
     // *Setup of this test:
     // Designagenda A with 1 proposed subcase with 2 pieces uploaded
