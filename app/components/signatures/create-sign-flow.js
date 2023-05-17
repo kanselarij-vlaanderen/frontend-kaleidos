@@ -8,7 +8,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const MAX_EMAIL_DISPLAY_LENGTH = 65;
+const MAX_EMAIL_DISPLAY_LENGTH = 55;
 
 /**
  */
