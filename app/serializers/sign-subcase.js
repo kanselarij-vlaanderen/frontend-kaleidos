@@ -5,9 +5,6 @@ const SKIP_SERIALIZED = [
   'signPreparationActivity',
   'signCancellationActivity',
   'signCompletionActivity',
-  'signSigningActivities',
-  'signApprovalActivities',
-  'signRefusalActivities'
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {
@@ -15,13 +12,6 @@ export default class PieceSerializer extends ApplicationSerializer {
     const key = relationship.key;
     if (!SKIP_SERIALIZED.includes(key)) {
       super.serializeBelongsTo(snapshot, json, relationship);
-    }
-  }
-
-  serializeHasMany(snapshot, json, relationship) {
-    const key = relationship.key;
-    if (!SKIP_SERIALIZED.includes(key)) {
-      super.serializeHasMany(snapshot, json, relationship);
     }
   }
 }
