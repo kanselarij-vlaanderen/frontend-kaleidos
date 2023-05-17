@@ -144,12 +144,6 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     );
   }
 
-  ellipsify = (word) => {
-    return word.length > MAX_EMAIL_DISPLAY_LENGTH
-      ? word.slice(0, MAX_EMAIL_DISPLAY_LENGTH - 1) + '…'
-      : word;
-  };
-
   /**
    * Filter the selected ministers for signing so that it only contains
    * the selected mandatees except for the Minister-President's non-PM
