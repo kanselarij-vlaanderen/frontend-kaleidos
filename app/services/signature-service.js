@@ -156,6 +156,8 @@ export default class SignatureService extends Service {
       await signRefusalActivities?.map(async (activity) => {
         await activity.destroyRecord()
       });
+      // destroying signSubcase can throw ember errors. reload fixed that problem.
+      await signSubcase?.reload();
       await signSubcase?.destroyRecord();
       await signFlow?.destroyRecord();
       await signMarkingActivity.destroyRecord();
