@@ -134,12 +134,12 @@ export default class SignatureService extends Service {
       const signFlow = await signSubcase?.signFlow;
       const signedPiece = await piece.signedPiece;
       const signedFile = await signedPiece?.file;
-      const signPreparationActivity = await signSubcase?.signPreparationActivity;
-      const signCompletionActivity = await signSubcase?.signCompletionActivity;
-      const signCancellationActivity = await signSubcase?.signCancellationActivity;
-      const signApprovalActivities = await signSubcase?.signApprovalActivities;
-      const signSigningActivities = await signSubcase?.signSigningActivities;
-      const signRefusalActivities = await signSubcase?.signRefusalActivities;
+      const signPreparationActivity = await signSubcase?.belongsTo('signPreparationActivity').reload();
+      const signCompletionActivity = await signSubcase?.belongsTo('signCompletionActivity').reload();
+      const signCancellationActivity = await signSubcase?.belongsTo('signCancellationActivity').reload();
+      const signApprovalActivities = await signSubcase?.hasMany('signApprovalActivities').reload();
+      const signSigningActivities = await signSubcase?.hasMany('signSigningActivities').reload();
+      const signRefusalActivities = await signSubcase?.hasMany('signRefusalActivities').reload();
 
       // delete in reverse order of creation
       await signedFile?.destroyRecord();
@@ -149,13 +149,13 @@ export default class SignatureService extends Service {
       await signCancellationActivity?.destroyRecord();
       await signApprovalActivities?.map(async (activity) => {
         await activity.destroyRecord()
-      })
+      });
       await signSigningActivities?.map(async (activity) => {
         await activity.destroyRecord()
-      })
+      });
       await signRefusalActivities?.map(async (activity) => {
         await activity.destroyRecord()
-      })
+      });
       await signSubcase?.destroyRecord();
       await signFlow?.destroyRecord();
       await signMarkingActivity.destroyRecord();
