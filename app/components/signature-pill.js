@@ -31,7 +31,7 @@ export default class SignaturePillComponent extends Component {
     } else if( this.signingHubUrl) {
       return "link"
     } else {
-      return "default"
+      return "ongoing"
     }
   }
 

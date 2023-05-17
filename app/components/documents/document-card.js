@@ -64,6 +64,12 @@ export default class DocumentsDocumentCardComponent extends Component {
       && this.currentSession.may('manage-signatures');
   }
 
+  get showSignaturePill() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
+  }
+
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
