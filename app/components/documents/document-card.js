@@ -40,8 +40,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked documentContainer;
   @tracked isDraftAccessLevel;
   @tracked signMarkingActivity;
-  @tracked isOpenVerifyDeleteSignFlow = false;
-  @tracked signedpiece;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -64,13 +62,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures');
-  }
-
-  get mayRemoveSignFlow() {
-    return this.signMarkingActivity
-      && this.signedPiece
-      && this.signaturesEnabled
-      && this.currentSession.may('remove-signatures');
   }
 
   @task
@@ -136,7 +127,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadSignatureRelatedData() {
     this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    this.signedPiece = yield this.args.piece.signedPiece;
   }
 
   @task
@@ -295,22 +285,5 @@ export default class DocumentsDocumentCardComponent extends Component {
       return await this.signatureService.canManageSignFlow(this.args.piece);
     }
     return false;
-  }
-
-  @action
-  deleteSignFlow() {
-    this.isOpenVerifyDeleteSignFlow = true;
-  }
-
-  @action
-  cancelDeleteSignFlow() {
-    this.isOpenVerifyDeleteSignFlow = false;
-  }
-
-  @action
-  async verifyDeleteSignFlow() {
-    await this.signatureService.removeSignFlow(this.args.piece);
-    await this.loadSignatureRelatedData.perform();
-    this.isOpenVerifyDeleteSignFlow = false;
   }
 }
