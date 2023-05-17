@@ -9,6 +9,7 @@ import { task } from 'ember-concurrency';
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
+  @service currentSession;
 
   @tracked signingHubUrl;
   @tracked isMarked = false;
@@ -27,8 +28,10 @@ export default class SignaturePillComponent extends Component {
   get skin() {
     if (this.isRefused) {
       return "error";
-    } else {
+    } else if( this.signingHubUrl) {
       return "link"
+    } else {
+      return "default"
     }
   }
 
@@ -69,14 +72,16 @@ export default class SignaturePillComponent extends Component {
       if (!this.isRefused) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
-        if (piece) {
+        const signFlowCreator = await signFlow.creator;
+        const currentUser = this.currentSession.user;
+        if (piece && (signFlowCreator.id === currentUser.id) && !this.isSigned) {
           const response = await fetch(
             `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
           );
           if (response.ok) {
             const result = await response.json();
             this.signingHubUrl = result.url;
-          }
+          } 
         }
       }
     }
