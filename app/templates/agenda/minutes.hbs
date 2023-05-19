@@ -233,6 +233,7 @@
                   <AuButton
                     @skin="primary"
                     @loading={{this.saveMinutes.isRunning}}
+                    @disabled={{this.saveDisabled}}
                     {{on "click" (perform this.saveMinutes)}}
                   >
                     {{t "save"}}

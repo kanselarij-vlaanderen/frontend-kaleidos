@@ -184,6 +184,14 @@ export default class AgendaMinutesController extends Controller {
     }
   }
 
+  get saveDisabled() {
+    if (this.model.minutes?.value === this.editor?.htmlContent) {
+      return true;
+    }
+
+    return this.editor?.mainEditorState.doc.textContent.length === 0;
+  }
+
   @action
   refresh() {
     this.router.refresh('agenda.documents');
