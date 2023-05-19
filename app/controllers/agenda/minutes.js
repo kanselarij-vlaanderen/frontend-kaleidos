@@ -151,16 +151,16 @@ export default class AgendaMinutesController extends Controller {
 
   saveMinutes = task(async () => {
     const now = new Date();
-    await this.store
-      .createRecord('minutes', {
-        name: 'TODO not sure what to put here',
-        created: now,
-        modified: now,
-        isMinutesForMeeting: this.meeting,
-        value: this.editor.htmlContent,
-        // ...(this.model.minutes ? { previousPiece: this.model.minutes } : {}),
-      })
-      .save();
+    const record = this.store.createRecord('minutes', {
+      name: 'TODO not sure what to put here',
+      created: now,
+      isMinutesForMeeting: this.meeting,
+      value: this.editor.htmlContent,
+      ...(this.model.minutes ? { previousPiece: this.model.minutes } : {}),
+    });
+
+    await record.save();
+    this.meeting.save();
 
     this.isEditing = false;
   });
@@ -179,6 +179,9 @@ export default class AgendaMinutesController extends Controller {
   @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
+    if (this.model.minutes) {
+      this.editor.setHtmlContent(this.model.minutes.value);
+    }
   }
 
   @action

@@ -35,6 +35,9 @@ export default class VersionsDropdownComponent extends Component {
   previousVersions = trackedFunction(this, async () => {
     let current = this.args.record;
     if (!current || !this.args.previousVersionKey) {
+      console.warn(
+        'You used versioned-dropdown without supplying @record or @previousVersionKey'
+      );
       return [];
     }
 
