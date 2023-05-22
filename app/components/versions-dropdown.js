@@ -5,6 +5,18 @@ import { tracked } from '@glimmer/tracking';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { action } from '@ember/object';
 
+/**
+ * A dropdown that allow selection of versions
+ *
+ * @argument record: the record for which versions should be shown
+ * @argument labelForVersion: a function that returns the label to be shown for a given version
+ * @argument timestampKey: when labelForVersion is not supplied, the component generates a default label
+ *     based on the 'created' property, if you want to use another property for the default label, 
+ *     specify that property here
+ * @argument previousVersionKey: name of the relationship that points to the previous version
+ * @argument onVersionClicked: function that is called when a previous version is clicked.
+ *     receives the clicked version as argument
+ */
 export default class VersionsDropdownComponent extends Component {
   @service intl;
 
