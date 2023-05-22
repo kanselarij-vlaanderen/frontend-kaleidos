@@ -21,6 +21,7 @@ const selectors = {
     row: {
       name: '[data-test-route-settings-users-row-name]',
       group: '[data-test-route-settings-users-row-group]',
+      person: '[data-test-route-settings-users-row-person]',
       actions: '[data-test-route-settings-users-row-actions]',
       actionsDropdown: '[data-test-route-settings-users-row-actions-dropdown]',
       action: {
@@ -49,6 +50,7 @@ const selectors = {
         unblockOrganization: '[data-test-route-settings-organizations-unblock-organization]',
         blockOrganization: '[data-test-route-settings-organizations-block-organization]',
       },
+      organizationDetail: '[data-test-route-settings-organizations-detail]',
     },
   },
 
@@ -60,11 +62,33 @@ const selectors = {
     unblockMembership: '[data-test-route-settings---user-unblock-membership]',
     blockMembership: '[data-test-route-settings---user-block-membership]',
     technicalInfo: '[data-test-route-settings---user-technical-info]',
+    unlinkPerson: '[data-test-route-settings---user-unlink-person]',
+    linkPerson: '[data-test-route-settings---user-link-person]',
     confirm: {
       blockMembership: '[data-test-route-settings---user-confirm-block-membership]',
       unblockMembership: '[data-test-route-settings---user-confirm-unblock-membership]',
       blockUser: '[data-test-route-settings---user-confirm-block-user]',
       unblockUser: '[data-test-route-settings---user-confirm-unblock-user]',
+    },
+  },
+
+  // route settings/organizations/organization/index
+  organization: {
+    generalInfo: '[data-test-route-settings---organization-general-info]',
+    unblock: '[data-test-route-settings---organization-unblock]',
+    block: '[data-test-route-settings---organization-block]',
+    technicalInfo: {
+      header: '[data-test-route-settings---organization-technical-info-header]',
+      row: {
+        mandatee: '[data-test-route-settings---organization-technical-info-row-mandatee]',
+        unlinkMandatee: '[data-test-route-settings---organization-technical-info-row-unlink-mandatee]',
+        linkMandatee: '[data-test-route-settings---organization-technical-info-row-link-mandatee]',
+      },
+    },
+    confirm: {
+      blockOrganization: '[data-test-route-settings---organization-confirm-block-organization]',
+      unBlockOrganization: '[data-test-route-settings---organization-confirm-unblock-organization]',
+      unlinkMandatee: '[data-test-route-settings---organization-confirm-unlink-mandatee]',
     },
   },
 

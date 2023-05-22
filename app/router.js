@@ -73,10 +73,8 @@ Router.map(function() {
   });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekenmap', }, function() {
-      this.route('signing-flow', { path: '/:signingflow_id' }, function() {
-        this.route('documents', { path: '/documenten' });
-      });
+    this.route('signatures', { path: '/handtekeningen', }, function() {
+      this.route('ongoing', { path: '/wordt-verwerkt' })
     });
   }
 

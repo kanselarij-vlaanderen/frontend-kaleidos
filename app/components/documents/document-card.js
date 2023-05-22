@@ -30,6 +30,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service toaster;
   @service intl;
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -55,6 +56,12 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
+  }
+
+  get mayCreateSignMarkingActivity() {
+    return !this.signMarkingActivity
+      && this.signaturesEnabled
+      && this.currentSession.may('manage-signatures');
   }
 
   @task
@@ -119,9 +126,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    if (this.args.hasMarkForSignature) {
-      this.signMarkingActivity = yield this.piece.signMarkingActivity;
-    }
+    this.signMarkingActivity = yield this.piece.signMarkingActivity;
   }
 
   @task
@@ -206,16 +211,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = false;
   }
 
-  @task
-  *markOrUnmarkForSignature() {
-    if (!this.signMarkingActivity) {
-      yield this.args.markForSignature(this.args.piece);
-    } else {
-      yield this.args.unmarkForSignature(this.args.piece);
-    }
-    yield this.loadSignatureRelatedData.perform();
-  }
-
   @action
   deleteDocumentContainer() {
     this.isOpenVerifyDeleteModal = true;
@@ -279,5 +274,16 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
+  }
+
+  canViewSignedPiece = async () => {
+    if (this.currentSession.may('manage-signatures')) {
+      return await this.signatureService.canManageSignFlow(this.args.piece);
+    }
+    return false;
   }
 }
