@@ -195,21 +195,23 @@
                 @accessLevel={{await @piece.signedPiece.accessLevel}} 
                 @isEditable={{false}}
               />
-              <AuDropdown
-                @icon="three-dots"
-                @title={{t "more"}}
-                @hideText={{true}}
-                @alignment="right"
-              >
-                <AuButton
-                  @skin="link"
-                  @alert={{true}}
-                  {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
-                  role="menuitem"
+              {{#if (user-may "remove-signatures")}}
+                <AuDropdown
+                  @icon="three-dots"
+                  @title={{t "more"}}
+                  @hideText={{true}}
+                  @alignment="right"
                 >
-                  {{t "delete-signed-piece"}}
-                </AuButton>
-              </AuDropdown>
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+                    role="menuitem"
+                  >
+                    {{t "delete-signed-piece"}}
+                  </AuButton>
+                </AuDropdown>
+              {{/if}}
             </div>
           </div>
         {{/if}}
