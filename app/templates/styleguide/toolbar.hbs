@@ -186,41 +186,6 @@
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
-
-<div class="auk-content">
-  <h2>Button toolbar</h2>
-</div>
-
-
-<StyleguideSample @title="Button toolbar in toolbar example" @description="A button toolbar is used to group related buttons. Combine toolbar groups with specific button toolbars." @snippet="button-toolbar-in-toolbar.hbs">
-  {{!-- BEGIN-SNIPPET button-toolbar-in-toolbar --}}
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <Auk::Button>Left button 1</Auk::Button>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::AuButtonToolbar>
-          <Auk::Button @icon="chevron-left" @layout="icon-only">Toevoegen</Auk::Button>
-          <Auk::Button @icon="chevron-right" @layout="icon-only">Toevoegen</Auk::Button>
-        </WebComponents::AuButtonToolbar>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Button>Right button 1</Auk::Button>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::AuButtonToolbar>
-          <Auk::Button @icon="pencil" @layout="icon-only">Bewerken</Auk::Button>
-          <Auk::Button @icon="trash" @skin="danger-hover" @layout="icon-only">Verwijderen</Auk::Button>
-        </WebComponents::AuButtonToolbar>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-  {{!-- END-SNIPPET --}}
-</StyleguideSample>
-
 <h3 class="auk-h3">Arguments</h3>
 
 <table class="auk-table">
