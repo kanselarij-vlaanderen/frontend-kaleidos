@@ -69,9 +69,10 @@ context('new document viewer tests', () => {
   const defaultAccessLevel = 'Intern Regering';
   const bisName = 'test pdfBIS';
   const newName = 'new name test';
-  const newDocumentType = 'BVR';
+  const newDocumentType = 'Besluit Vlaamse Regering';
   const newAccessLevel = 'Intern Overheid';
-  const searchDocumentType = 'Advies AgO';
+  const searchDocumentType = 'Advies agentschap overheidspersoneel';
+  const searchDocumentTypeAbbr = 'ADVIES AGO';
 
   beforeEach(() => {
     cy.login('Admin');
@@ -159,7 +160,7 @@ context('new document viewer tests', () => {
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentTypeAbbr}`);
       });
     cy.get(document.previewVersionCard.name).eq(1)
       .parents(document.previewVersionCard.container)
@@ -168,7 +169,7 @@ context('new document viewer tests', () => {
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentTypeAbbr}`);
       });
     cy.get(document.documentPreviewSidebar.tabs.details).click();
     cy.get(document.previewDetailsTab.name).should('contain', `${fileName}.pdf`);
