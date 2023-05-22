@@ -43,7 +43,7 @@ export default class CurrentSessionService extends Service {
     this.impersonation.stopImpersonation();
   }
 
-  may(permission, checkImpersonator=false) {
+  may(permission, checkImpersonator = false) {
     return checkImpersonator
       ? this.impersonatorUserGroup?.permissions.includes(permission)
       : this.userGroup?.permissions.includes(permission);

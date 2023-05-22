@@ -2,6 +2,7 @@
   class={{this.class}}
   @route={{this.currentRouteName}}
   @model={{@agendaitem.id}}
+  @query={{hash anchor=@agendaitem.id}}
 >
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
     With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status

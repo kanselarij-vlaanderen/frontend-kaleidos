@@ -434,3 +434,7 @@ $au-button-height: 3.4rem;
     width: calc(33% - 2rem);
   }
 }
+
+.au-c-input--mask-normal-letter-spacing {
+  letter-spacing: inherit;
+}

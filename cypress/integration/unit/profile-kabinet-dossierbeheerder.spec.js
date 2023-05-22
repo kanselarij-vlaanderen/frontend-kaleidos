@@ -22,9 +22,9 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(utils.mHeader.search).should('exist');
       cy.get(utils.mHeader.agendas).should('exist');
       cy.get(utils.mHeader.cases).should('exist');
+      cy.get(utils.mHeader.signatures).should('exist');
 
       cy.get(utils.mHeader.publications).should('not.exist');
-      cy.get(utils.mHeader.signatures).should('not.exist');
       cy.get(utils.mHeader.newsletters).should('not.exist');
       cy.get(utils.mHeader.settings).should('not.exist');
     });

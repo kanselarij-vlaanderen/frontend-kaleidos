@@ -1,6 +1,7 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class Mandatee extends Model {
+  @attr('string') uri;
   @attr title;
   @attr newsletterTitle;
   @attr('number') priority;
