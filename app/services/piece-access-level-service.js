@@ -131,6 +131,29 @@ export default class PieceAccessLevelService extends Service {
     }));
   }
 
+  async updateSubmissionAccessLevelOfSubcase(subcase) {
+    const vertrouwelijk = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
+    const submissionActivities = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': subcase.id,
+      include:'pieces',
+    });
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
+
+    await Promise.all(pieces.map(async (piece) => {
+      const accessLevel = await piece.accessLevel;
+      if (accessLevel.uri !== vertrouwelijk.uri) {
+        piece.accessLevel = vertrouwelijk;
+        await piece.save();
+      }
+      await this.updatePreviousAccessLevels(piece);
+    }));
+  }
+
   /*
    * Returns whether the given access level already applies in the given agenda-context.
    * I.e. whether the document has already been propagated based on the access-level

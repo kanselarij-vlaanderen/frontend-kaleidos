@@ -47,6 +47,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
     );
     if (this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+      yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
     }
     this.args.onSave();
   }
