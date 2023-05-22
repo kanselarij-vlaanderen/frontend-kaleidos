@@ -184,6 +184,11 @@ export default class AgendaMinutesController extends Controller {
     }
   }
 
+  @action
+  revertToVersion(record) {
+    this.editor.setHtmlContent(record.value);
+  }
+
   get saveDisabled() {
     if (this.model.minutes?.value === this.editor?.htmlContent) {
       return true;

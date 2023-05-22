@@ -12,23 +12,7 @@
             {{if @title @title "Say Editor"}}
           </h4>
         {{/if}}
-        {{#if (and @showUpdateContent @onUpdateContent)}}
-          <AuButton
-            @skin="link"
-            @icon="renew"
-            class="{{if (not this.isFullscreen) 'au-u-padding-left-none'}}"
-            {{on "click" @onUpdateContent}}
-          >{{t "update-thing" thing=(t "content")}}</AuButton>
-        {{/if}}
-        {{#if @showVersioning}}
-          <VersionsDropdown
-            @record={{@versioningRecord}}
-            @timestampKey={{@versioningTimestampKey}}
-            @previousVersionKey={{@versioningPreviousTimestampKey}}
-            @onVersionClicked={{this.revertToVersion}}
-            @previousVersionKey={{@versioningPreviousVersionKey}}
-          />
-        {{/if}}
+        {{yield to="header"}}
       </div>
       {{#if this.isFullscreen}}
         <AuButtonGroup>
@@ -51,14 +35,16 @@
           {{/if}}
         </AuButtonGroup>
       {{else}}
-        <AuButton
-          @skin="naked"
-          @icon="expand"
-          @iconAlignment="left"
-          {{on "click" (fn (set this "isFullscreen" true))}}
-        >
-          {{t "fullscreen"}}
-        </AuButton>
+        {{#if @allowFullscreen}}
+          <AuButton
+            @skin="naked"
+            @icon="expand"
+            @iconAlignment="left"
+            {{on "click" (fn (set this "isFullscreen" true))}}
+          >
+            {{t "fullscreen"}}
+          </AuButton>
+        {{/if}}
       {{/if}}
     </div>
   {{/if}}

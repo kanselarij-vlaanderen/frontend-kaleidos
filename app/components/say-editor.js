@@ -20,16 +20,4 @@ export default class SayEditorComponent extends Component {
 
     this.args.handleRdfaEditorInit?.(editorInterface);
   }
-
-  @action
-  revertToVersion(record) {
-    if (!this.args.versioningValueKey) {
-      console.warn(
-        'You are trying to revert to a version without supplying a value key. Supply a @versioningValueKey argument'
-      );
-      return;
-    }
-
-    this.editorInstance.setHtmlContent(record[this.args.versioningValueKey]);
-  }
 }

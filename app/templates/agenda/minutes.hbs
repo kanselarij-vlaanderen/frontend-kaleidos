@@ -42,15 +42,24 @@
             class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
           >
             <SayEditor
+              @allowFullscreen={{true}}
               @showSave={{true}}
-              @showUpdateContent={{true}}
-              @showVersioning={{true}}
-              @onUpdateContent={{this.updateEditorContent}}
               @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
-              @versioningRecord={{this.model.minutes}}
-              @versioningValueKey="value"
-              @versioningPreviousVersionKey="previousPiece"
-            />
+            >
+              <:header>
+                <AuButton
+                  @skin="link"
+                  @icon="renew"
+                  class="au-u-padding-left-none"
+                  {{on "click" this.updateEditorContent}}
+                >{{t "update-thing" thing=(t "content")}}</AuButton>
+                <VersionsDropdown
+                  @record={{this.model.minutes}}
+                  @previousVersionKey="previousPiece"
+                  @onVersionClicked={{this.revertToVersion}}
+                />
+              </:header>
+            </SayEditor>
           </Auk::Panel::Body>
           <Auk::Panel::Footer class="au-u-background-gray-100">
             <Auk::Toolbar>
