@@ -15,15 +15,8 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
 
 function formatDocuments(pieceRecords) {
   const names = pieceRecords.map((record) => record.name);
-  if (pieceRecords.length === 0) {
-    return '()';
-  } else if (pieceRecords.length === 1) {
-    return `(${names[0]})`;
-  } else {
-    return `(${names.slice(0, names.length - 1).join(', ')} en ${
-      names[names.length - 1]
-    })`;
-  }
+  const formatter = new Intl.ListFormat('nl-be');
+  return `(${formatter.format(names)})`;
 }
 
 /**
