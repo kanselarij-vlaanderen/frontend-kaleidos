@@ -210,6 +210,18 @@
                     {{t "edit"}}
                   </AuButton>
                 {{/if}}
+                {{#if (and (not @hideSign) this.mayCreateSignMarkingActivity)}}
+                  <AuLink
+                    @skin="link"
+                    @route="document"
+                    @model={{this.piece.id}}
+                    @query={{hash isSigning=true}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuLink>
+                  <AuHr />
+                {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
                   {{#if this.mayCreateSignMarkingActivity}}
