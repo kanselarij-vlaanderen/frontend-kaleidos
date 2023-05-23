@@ -62,6 +62,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     );
     if (this.args.subcase && this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+      yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
     }
 
     if (this.newsItem) {
