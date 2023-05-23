@@ -14,13 +14,6 @@ export default class SignatureService extends Service {
     approvers,
     notified,
   ) {
-    if (!this.currentSession.user.email) {
-      // None of the flow works if the user has no email to identify
-      // with on SigningHub, so abort prematurely
-      // TODO: throw an exception
-      return;
-    }
-
     // Create sign flow, sign subcase and marking activity
     const {
       signFlow,
@@ -103,5 +96,34 @@ export default class SignatureService extends Service {
         signSubcase,
       }
     }
+  }
+
+  async canManageSignFlow(piece) {
+    // the base permission 'manage-signatures' does not cover cabinet specific requirements
+    if (this.currentSession.may('manage-only-specific-signatures')) {
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        filter: {
+          pieces: {
+            ':id:': piece?.id,
+          },
+        },
+      });
+      const subcase = await submissionActivity.subcase;
+      if (subcase) {
+        const mandatee = await subcase.requestedBy;
+        if (mandatee) {
+          const currentUserOrganization = await this.currentSession.organization;
+          const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+          const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees?.map((mandatee) => mandatee.uri);
+          if (currentUserOrganizationMandateesUris?.includes(mandatee.uri)) {
+            return true;
+          }
+        }
+      }
+    } else {
+      // default to standard permissions
+      return true;
+    }
+    return false;
   }
 }
