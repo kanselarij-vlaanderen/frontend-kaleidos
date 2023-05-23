@@ -211,6 +211,7 @@
                   </AuButton>
                 {{/if}}
                 {{#if (and (not @hideSign) this.mayCreateSignMarkingActivity)}}
+                  <AuHr />
                   <AuLink
                     @skin="link"
                     @route="document"
@@ -220,22 +221,9 @@
                   >
                     {{t "present-for-signing"}}
                   </AuLink>
-                  <AuHr />
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
-                  {{#if this.mayCreateSignMarkingActivity}}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash isSigning=true}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/if}}
                   <AuButton
                     data-test-document-card-delete
                     @skin="link"
