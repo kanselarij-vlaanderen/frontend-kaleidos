@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
+import ENV from 'frontend-kaleidos/config/environment';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -187,6 +188,47 @@ export default class AgendaitemDecisionComponent extends Component {
     report.file = file;
     report.modified = new Date();
     report.save();
+  }
+
+  /**
+   * Needed for uploading a PDF manually 
+   */
+  @action
+  async attachReportPdf(piece) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+      type: this.decisionDocType,
+    });
+
+    const subcase = await this.args.decisionActivity.subcase;
+    const subcaseIsConfidential = subcase?.confidential;
+
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept', subcaseIsConfidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
+    );
+
+    await documentContainer.save();
+    piece.setProperties({
+      accessLevel: defaultAccessLevel,
+      documentContainer,
+    });
+    await piece.save();
+    try {
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+    this.args.decisionActivity.report = piece;
+    await this.args.decisionActivity.save();
+    this.isAddingReport = false;
+    await this.loadReport.perform();
   }
 
   @action
@@ -454,5 +496,9 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     return false;
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA;
   }
 }

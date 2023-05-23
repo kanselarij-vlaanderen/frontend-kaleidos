@@ -16,6 +16,7 @@
             (user-may "manage-decisions")
             (not this.isEditing)
             (or this.report.pieceParts (not this.report))
+            this.enableDigitalAgenda
           )
         }}
           <Group.Item>
@@ -145,6 +146,19 @@
             @bordered={{false}}
           />
         </Auk::Panel::Body>
+      {{else if (and (user-may "manage-decisions") (not this.enableDigitalAgenda))}}
+        <Auk::Panel::Body @noPadding={{true}}>
+          <div class="auk-u-p-2">
+            <AuButton
+              data-test-agendaitem-decision-upload-file
+              @skin="naked"
+              @icon="upload"
+              {{on "click" (fn (set this "isAddingReport" true))}}
+            >
+              {{t "signed-decision-add"}}
+            </AuButton>
+          </div>
+        </Auk::Panel::Body>
       {{/if}}
       {{#if this.report.pieceParts}}
         <Auk::Panel::Body
@@ -166,11 +180,22 @@
       {{/if}}
     {{/if}}
   {{else}}
-    <Auk::Panel::Body class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}">
+    <Auk::Panel::Body
+      class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+    >
       <Auk::Loader />
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>
+
+{{#if this.isAddingReport}} 
+  <Utils::AddDocument
+    @title={{t "signed-decision-add"}}
+    @onSave={{this.attachReportPdf}}
+    @onCancel={{fn (set this "isAddingReport" false)}}
+    @pieceSubtype="report"
+  />
+{{/if}}
 
 {{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
   <Auk::Modal @size="medium">
