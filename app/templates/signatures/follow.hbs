@@ -34,6 +34,21 @@
           <div class="au-c-sidebar__content">
             <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
               <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::Label>Status</Auk::Label>
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Voor te bereiden"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Te handtekenen"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Gehandtekend"
+                />
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
                 <Auk::Label>Indiener</Auk::Label>
                 <Auk::Checkbox
                   @checked={{false}}
@@ -70,21 +85,6 @@
                 <Auk::Checkbox
                   @checked={{false}}
                   @label="Benjamin Dalle"
-                />
-              </div>
-              <div class="au-c-card au-o-box au-o-box--small">
-                <Auk::Label>Status</Auk::Label>
-                <Auk::Checkbox
-                  @checked={{false}}
-                  @label="Voor te bereiden"
-                />
-                <Auk::Checkbox
-                  @checked={{false}}
-                  @label="Te handtekenen"
-                />
-                <Auk::Checkbox
-                  @checked={{false}}
-                  @label="Gehandtekend"
                 />
               </div>
             </div>
