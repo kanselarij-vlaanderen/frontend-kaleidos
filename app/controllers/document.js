@@ -12,7 +12,7 @@ export default class DocumentController extends Controller {
 
   @tracked decisionActivity;
 
-  queryParams = ['isSigning'];
+  queryParams = ['isSigning', 'activeTab'];
   @tracked isSigning = false;
   @tracked activeTab = 'details';
 
@@ -24,6 +24,20 @@ export default class DocumentController extends Controller {
     } else {
       this.router.transitionTo('agendas');
     }
+  }
+
+  @action
+  tabChanged(tabName){
+    this.activeTab = tabName;
+  }
+
+  @action
+  setSelectedVersion(piece) {
+    this.router.transitionTo(
+      'document',
+      piece.id,
+      { queryParams: { activeTab: 'versions'}}
+    );
   }
 
   @action

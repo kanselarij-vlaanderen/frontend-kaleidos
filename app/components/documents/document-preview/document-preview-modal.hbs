@@ -35,11 +35,12 @@
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
-          @onSelectVersion={{this.setSelectedVersion}}
+          @onSelectVersion={{@onSelectVersion}}
           @transitionBack={{@onClose}}
           @didDeletePiece={{@didDeletePiece}}
           @onChangeFile={{perform this.loadFile}}
           @activeTab={{@activeTab}}
+          @onTabChanged={{@onTabChanged}}
         />
       </div>
     </div>

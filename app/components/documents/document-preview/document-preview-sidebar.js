@@ -41,5 +41,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @action
   setActiveTab(tabName) {
     this.activeTab = tabName;
+    this.args.onTabChanged(tabName);
   }
 }

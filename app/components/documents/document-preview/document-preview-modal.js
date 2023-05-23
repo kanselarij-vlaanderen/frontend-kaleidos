@@ -28,12 +28,6 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
     localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
   }
 
-  @action
-  setSelectedVersion(piece) {
-    this.selectedVersion = piece;
-    this.loadFile.perform();
-  }
-
   @task
   *loadFile() {
     this.file = null;

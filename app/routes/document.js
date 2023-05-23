@@ -11,6 +11,9 @@ export default class DocumentRoute extends Route {
     isSigning: {
       refreshModel: true,
       as: 'aanbieden_voor_handtekenen',
+    },
+    activeTab: {
+      refreshModel: false,
     }
   }
 
