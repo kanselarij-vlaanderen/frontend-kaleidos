@@ -1,7 +1,7 @@
 {{#if this.loadMinisters.isRunning}}
   <Auk::Loader />
 {{else}}
-  <Auk::CheckboxList>
+  <Auk::CheckboxList data-test-mandatee-checkbox-list>
     {{#each this.ministers as |minister|}}
       <AuCheckbox
         @checked={{this.isChecked minister}}

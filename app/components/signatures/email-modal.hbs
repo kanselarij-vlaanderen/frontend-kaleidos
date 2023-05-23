@@ -7,6 +7,7 @@
     <div class="auk-form-group">
       <AuLabel>{{t "email-address"}}</AuLabel>
       <AuInput
+        data-test-signatures-create-email-input
         @onChange={{fn (mut this.emailBuffer)}}
         @maskOptions={{this.inputmaskOptions}}
         @warning={{and this.emailBuffer (not this.isValid)}}
@@ -31,6 +32,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-email-add
             @disabled={{not this.isValid}}
             {{on "click" (fn @onConfirm this.emailBuffer)}}
           >

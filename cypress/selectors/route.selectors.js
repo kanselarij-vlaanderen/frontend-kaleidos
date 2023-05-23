@@ -242,6 +242,29 @@ const selectors = {
   */
 
   /**
+    ROUTE SIGNATURES
+  */
+
+  // signatures/template
+  signatures: {
+    openMinisterFilter: '[data-test-route-signatures-open-minister-filter]',
+    applyFilter: '[data-test-route-signatures-apply-filter]',
+    dataTable: '[data-test-route-signatures-data-table]',
+    row: {
+      name: '[data-test-route-signatures-row-name]',
+      mandatee: '[data-test-route-signatures-row-mandatee]',
+      openSidebar: '[data-test-route-signatures-row-open-sidebar]',
+    },
+    sidebar: {
+      close: '[data-test-route-signatures-sidebar-close]',
+      info: '[data-test-route-signatures-sidebar-info]',
+      preview: '[data-test-route-signatures-sidebar-preview]',
+      lastAgendaitem: '[data-test-route-signatures-sidebar-last-agendaitem]',
+      startSignflow: '[data-test-route-signatures-sidebar-start-signflow]',
+    },
+  },
+
+  /**
     ROUTE LOGIN
   */
 
