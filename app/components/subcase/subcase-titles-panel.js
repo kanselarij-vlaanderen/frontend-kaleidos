@@ -8,10 +8,12 @@ import { action } from '@ember/object';
  */
 export default class SubcaseTitlesPanel extends Component {
   @tracked isEditing = false;
+  @tracked startEditingConfidential = false;
 
   @action
   startEditing() {
     this.isEditing = true;
+    this.startEditingConfidential = !!this.args.subcase.confidential;
   }
 
   @action

@@ -8,6 +8,7 @@ import { task } from 'ember-concurrency';
  * @argument subcase
  * @argument onCancel
  * @argument onSave
+ * @argument startEditingConfidential
  */
 export default class SubcaseTitlesPanelEdit extends Component {
   @service pieceAccessLevelService;
@@ -45,7 +46,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
       propertiesToSetOnSubcase,
       true,
     );
-    if (this.args.subcase.confidential) {
+    if (this.args.subcase.confidential && !this.args.startEditingConfidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
     }
