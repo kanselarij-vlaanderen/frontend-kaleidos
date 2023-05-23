@@ -18,6 +18,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked documentType;
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
+  @tracked showSigned = true;
 
   constructor() {
     super(...arguments);
@@ -87,5 +88,10 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.didDeletePiece(this.args.piece);
     }
     this.isOpenVerifyDeleteModal = false;
+  }
+
+  @action
+  deleteSigned() {
+    this.showSigned = false;
   }
 }

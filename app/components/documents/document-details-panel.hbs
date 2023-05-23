@@ -67,6 +67,54 @@
       {{#if this.isUploadingReplacementSourceFile}}
         <Auk::FileUploader @onUpload={{set this "replacementSourceFile"}} />
       {{/if}}
+      <Auk::KeyValue
+        data-test-document-details-panel-source-file
+        @key="Getekend document"
+      >
+        {{#if this.showSigned}}
+        <div class="au-o-flow au-o-flow--small">
+           <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
+            {{#if @piece.file.primarySource}}
+              <AuLinkExternal
+                href={{@piece.file.primarySource.namedDownloadLink}}
+                @skin="primary"
+                @icon="download"
+                @iconAlignment="left"
+                download
+              >{{@piece.name}}-getekend.{{@piece.file.primarySource.extension}}</AuLinkExternal>
+            {{else if @piece.file}}
+              <AuLinkExternal
+                href={{@piece.file.namedDownloadLink}}
+                @skin="primary"
+                @icon="download"
+                @iconAlignment="left"
+                download
+              >{{@piece.name}}-getekend</AuLinkExternal>
+              {{else}}
+              {{@piece.name}}
+            {{/if}}
+            <AuPill
+              @skin="warning"
+              @icon="circle"
+            >
+              Intern regering
+            </AuPill>
+          </div>
+          <AuButton
+            data-test-document-details-panel-upload
+            @icon="bin"
+            @iconAlignment="left"
+            @skin="secondary"
+            @alert={{true}}
+            {{on "click" this.deleteSigned}}
+          >
+            Verwijder document
+          </AuButton>
+        </div>
+        {{else}}
+        <AuHelpText @skin="secondary">Geen getekend document</AuHelpText>
+        {{/if}}
+      </Auk::KeyValue>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
@@ -182,10 +230,12 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
+     
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key="Getekend document"
       > 
+        {{#if this.showSigned}}
         <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--between au-u-flex--vertical-center">
           {{#if @piece.file.primarySource}}
             <AuLinkExternal
@@ -213,6 +263,9 @@
             Intern regering
           </AuPill>
         </div>
+        {{else}}
+        <AuHelpText @skin="secondary">Geen getekend document</AuHelpText>
+        {{/if}}
       </Auk::KeyValue>
     </Auk::Panel::Body>
   </Auk::Panel>
