@@ -37,6 +37,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showConfirmUnpublishThemis = false;
 
   @tracked showDownloadAllDocumentsModal = false;
+  @tracked showDownloadSignedDocumentsModal = false;
   @tracked showDownloadAllDecisionsModal = false;
 
   @tracked decisionPublicationActivity;
@@ -458,6 +459,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   cancelDownloadAllDocumentsModal() {
     this.showDownloadAllDocumentsModal = false;
+  }
+
+  @action
+  downloadSignedDocumentsModal() {
+    this.showDownloadSignedDocumentsModal = true;
+  }
+
+  @action
+  cancelDownloadSignedDocumentsModal() {
+    this.showDownloadSignedDocumentsModal = false;
   }
 
   @action
