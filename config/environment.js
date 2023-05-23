@@ -20,7 +20,8 @@ module.exports = function (environment) {
       // eslint-disable-next-line quotes
       ENABLE_SIGNATURES: '{{ENABLE_SIGNATURES}}',
       ENABLE_IMPERSONATION: '{{ENABLE_IMPERSONATION}}',
-      ENABLE_DEBUG: '{{ENABLE_DEBUG}}'
+      ENABLE_DEBUG: '{{ENABLE_DEBUG}}',
+      ENABLE_DIGITAL_AGENDA: '{{ENABLE_DIGITAL_AGENDA}}'
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -54,6 +55,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_SIGNATURES = true;
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_DEBUG = true;
+    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -68,6 +70,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.rootElement = '#ember-testing';
@@ -79,6 +82,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_SIGNATURES = true;
+    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
     ENV.APP.ENABLE_DEBUG = false;
   }
 
