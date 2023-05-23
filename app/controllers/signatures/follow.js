@@ -3,7 +3,7 @@ import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-export default class SignaturesIndexController extends Controller {
+export default class SignaturesFollowController extends Controller {
   @service router;
   @service currentSession;
 
@@ -67,11 +67,9 @@ export default class SignaturesIndexController extends Controller {
   @tracked isShowSidebar = false;
   @tracked isShowSidebarMultiple = false;
   @tracked isShowAddMinister = false;
-  @tracked isUpdatedAddMinister = false;
   @tracked isShowCancelSignatures = false;
   @tracked isShowSignButton = false;
   @tracked isSelectAll = false;
-  @tracked isSelectAllMaster = false;
   @tracked isShowAddCC = false;
   @tracked isShowApproval = false;
 
@@ -106,10 +104,9 @@ export default class SignaturesIndexController extends Controller {
   }
 
   @action
-  selectAllMaster() {
-    this.isShowSignButton = !this.isShowSignButton;
-    this.isSelectAll = !this.isSelectAll;
-    this.isSelectAllMaster = !this.isSelectAllMaster;
+  selectAll() {
+    this.isShowSignButton = true;
+    this.isSelectAll = true;
   }
 
   @action
@@ -121,9 +118,6 @@ export default class SignaturesIndexController extends Controller {
   showSidebar() {
     this.isShowSidebar = true;
     this.isShowSidebarMultiple = false;
-    this.isSelectAllMaster = false;
-    this.isSelectAll = false;
-    this.isShowSignButton = false;
   }
 
   @action
@@ -150,7 +144,6 @@ export default class SignaturesIndexController extends Controller {
   @action
   closeAddMinister() {
     this.isShowAddMinister = false;
-    this.isUpdatedAddMinister = true;
   }
 
   @action
@@ -161,5 +154,10 @@ export default class SignaturesIndexController extends Controller {
   @action
   closeCancelSignatures() {
     this.isShowCancelSignatures = false;
+  }
+
+  @action
+  navigateToSigningFlow() {
+    this.router.transitionTo('signatures.signinghub');
   }
 }

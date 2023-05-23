@@ -1,0 +1,221 @@
+<Auk::Navbar
+  class="auk-signature-overview-navbar"
+  @skin="gray-100"
+  @auto={{true}}
+>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <div class="auk-o-flex auk-o-flex--vertical">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "signature-folder"}}
+          </h4>
+        </div>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="signatures.index">
+            Op te starten
+          </Auk::Tab>
+          <Auk::Tab @route="signatures.follow">
+            Op te volgen
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<div class="au-c-search-container au-c-search-container--publications">
+  <div class="au-c-search-container__content au-u-background-gray-100">
+    <AuMainContainer as |m|>
+      <m.sidebar>
+        <div class="au-c-sidebar">
+          <div class="au-c-sidebar__content">
+            <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::Label>Indiener</Auk::Label>
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Jan Jambon"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Hilde Crevits"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Bart Somers"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Ben Weyts"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Zuhal Demir"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Wouter Beke"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Matthias Diependaele"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Lydia Peeters"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Benjamin Dalle"
+                />
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Auk::Label>Status</Auk::Label>
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Voor te bereiden"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Te handtekenen"
+                />
+                <Auk::Checkbox
+                  @checked={{false}}
+                  @label="Gehandtekend"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+       </m.sidebar>
+      <m.content @scroll={{true}}>
+        <div class="au-o-box au-o-box--small">
+          {{#if this.model.length}}
+            <DataTable
+              @content={{await this.model}}
+              @page={{this.page}}
+              @noDataMessage={{t "no-results-found"}}
+              @size={{this.size}}
+              @sort={{this.sort}}
+              @class="auk-table auk-table--striped auk-table--vertical-align-top auk-table--noactions"
+              @isLoading={{this.isLoadingModel}}
+              @onClickRow={{this.navigateToSigningFlow}}
+              as |table|
+            >
+              <table.content as |c|>
+                <c.header>
+                  <th class="auk-table__col--7">Documentnaam</th>
+                  <ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="openingDate"
+                    @label="Type document"
+                  />
+                  <ThSortable
+                    @class="auk-table__col--1"
+                    @currentSorting={{this.sort}}
+                    @field="openingDate"
+                    @label="Ministers"
+                  />
+                  <ThSortable
+                    @class="auk-table__col--2"
+                    @currentSorting={{this.sort}}
+                    @field="statusId"
+                    @label="Datum goedgekeurd"
+                  />
+                  <ThSortable
+                    @class="auk-table__col--2"
+                    @currentSorting={{this.sort}}
+                    @field="statusId"
+                    @label={{t "status"}}
+                  />
+                  <th class="auk-table__col--1"></th>
+                </c.header>
+                <tbody class="auk-table--clickable-rows">
+                  {{#each this.model as |signFlow index|}}
+                    {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
+                    <tr class="auk-table__row" {{on 'click' this.navigateToSigningFlow}}>
+                      <td>
+                        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+                          {{# if signFlow.signSubcase.signMarkingActivity.piece.name }}
+                            {{signFlow.signSubcase.signMarkingActivity.piece.name}}
+                          {{else}}
+                            VR 2020 3004 DOC.0398 {{signFlow.signSubcase.signFlow.shortTitle}}
+                          {{/if}}
+                          {{#if (eq index 1)}}
+                          <AuPill @skin="warning" @icon="lock-closed" @size="small">Vertrouwelijk</AuPill>
+                          {{/if}}
+                        </div>
+                      </td>
+                      <td>
+                        <AuPill @size="small">{{type signFlow.signSubcase.signMarkingActivity.piece.name}}</AuPill>
+                      </td>
+                      <td>
+                        {{#if (eq index 1)}}
+                        Jan Jambon
+                        {{else}}
+                        Jan Jambon, Hilde Crevits
+                        {{/if}}
+                      </td>
+                      <td>
+                        {{moment-format
+                          signFlow.decisionActivity.startDate
+                          "DD-MM-YYYY"
+                        }}
+                      </td>
+                      <td>
+                        {{#if (eq index 1)}}
+                        <Auk::StatusPill
+                          @step="0"
+                          @status="paused"
+                        >
+                          Voor te bereiden
+                        </Auk::StatusPill>
+                        {{/if}}
+                        {{#if (eq index 3)}}
+                        <Auk::StatusPill
+                          @step="0"
+                        >
+                          Te handtekenen
+                        </Auk::StatusPill>
+                        {{/if}}
+                        {{#if (eq index 4)}}
+                        <Auk::StatusPill
+                          @step="success"
+                          @status="success"
+                        >
+                          Gehandtekend
+                        </Auk::StatusPill>
+                        {{/if}}
+                      </td>
+                      <td class="auk-u-text-align--right">
+                        <AuLink
+                          @skin="button-naked"
+                          @icon="chevron-right"
+                          @hideText={{true}}
+                          @route="signatures.signinghub"
+                          @model={{row.id}}
+                        >
+                          {{t "open"}}
+                        </AuLink>
+                      </td>
+                    </tr>
+                    {{/if}}
+                  {{/each}}
+                </tbody>
+              </table.content>
+            </DataTable>
+          {{else}}
+            <Auk::EmptyState
+              @bordered={{true}}
+              @message={{t "no-results-found-modify-term"}}
+            />
+          {{/if}}
+        </div>
+      </m.content>
+    </AuMainContainer>
+  </div>
+</div>

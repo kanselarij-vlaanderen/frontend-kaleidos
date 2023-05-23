@@ -92,7 +92,8 @@ Router.map(function() {
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekeningen', }, function() {
-      this.route('index', { path: '/overzicht', });
+      this.route('index', { path: '/op-te-starten', });
+      this.route('follow', { path: '/op-te-volgen', });
       this.route('busy', { path: '/overzicht-bezig', });
       this.route('open', { path: '/overzicht-open', });
       this.route('success', { path: '/overzicht-notificatie', });

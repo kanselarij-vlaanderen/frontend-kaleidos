@@ -12,6 +12,16 @@
           </h4>
         </div>
       </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="signatures.index">
+            Op te starten
+          </Auk::Tab>
+          <Auk::Tab @route="signatures.follow">
+            Op te volgen
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{#if (eq this.currentSession.role.label "Minister")}}
     <Auk::Toolbar::Group @position="right">
@@ -150,9 +160,9 @@
             <tr>
               <th>
                 <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
-                <Auk::Checkbox
-                  {{on "input" (action "selectAll")}}
-                  />
+                <Auk::Checkbox @checked={{this.isSelectAllMaster}}
+                  {{on "input" (action "selectAllMaster")}}
+                />
               </th>
               <Utils::ThSortable
                 @label="Documentnaam"
@@ -182,7 +192,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.model as |signFlow|}}
+            {{#each this.model as |signFlow index|}}
               {{#if signFlow.signSubcase.signMarkingActivity.piece.name}}
               <tr class="auk-table__row">
                 <td
@@ -191,7 +201,6 @@
                   <Auk::Label class="auk-u-sr-only">Selecteer</Auk::Label>
                   <Auk::Checkbox
                     @checked={{this.isSelectAll}}
-                    {{on "input" (action "showSignButton")}}
                   />
                 </td>
                 <td>
@@ -206,14 +215,14 @@
                   {{/if}}
                 </td>
                 <td>
-                  {{# if signFlow.signSubcase.signMarkingActivity.piece.name }}
-                    <AuPill @size="small">Nota</AuPill>
-                  {{else}}
-                    <AuPill @size="small">Decreet</AuPill>
-                  {{/if}}
+                  <AuPill @size="small">{{type signFlow.signSubcase.signMarkingActivity.piece.name}}</AuPill>
                 </td>
                 <td>
-                  –
+                  {{#if (eq index 1)}}
+                  Jan Jambon
+                  {{else}}
+                  Jan Jambon, Hilde Crevits
+                  {{/if}}
                 </td>
                 <td>
                   {{moment-format
@@ -547,20 +556,33 @@
               </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>
-          <Auk::Panel::Body class="auk-u-p-0">
-            <Auk::List @bordered={{true}}>
-              <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <span>Jan Jambon</span>
-                <Auk::Button
-                  @skin="danger-borderless"
-                  @layout="icon-only"
-                  @icon="trash"
-                >
-                  {{t "util.delete"}}
-                </Auk::Button>
-              </Auk::List::Item>
-            </Auk::List>
+          {{#if this.isUpdatedAddMinister}}
+            <Auk::Panel::Body class="auk-u-p-0">
+              <Auk::List @bordered={{true}}>
+                <Auk::List::Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <span>Jan Jambon</span>
+                  <Auk::Button
+                    @skin="danger-borderless"
+                    @layout="icon-only"
+                    @icon="trash"
+                  >
+                    {{t "util.delete"}}
+                  </Auk::Button>
+                </Auk::List::Item>
+              </Auk::List>
+            </Auk::Panel::Body>
+          {{else}}
+          <Auk::Panel::Body class="auk-u-p-2">
+            <AuAlert
+              @skin="warning"
+              @icon="alert-triangle"
+              @size="small"
+              class="auk-u-m-0"
+            >
+              <p>De geselecteerde documenten hebben andere ondertekenaars, aan jou om de juiste aan te duiden.</p>
+            </AuAlert>
           </Auk::Panel::Body>
+          {{/if}}
         </Auk::Panel>
         <Auk::Panel class="auk-u-mt-4">
           <Auk::Panel::Header class="auk-u-px-1">
