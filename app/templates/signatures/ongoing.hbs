@@ -1,0 +1,64 @@
+{{page-title (t "ongoing")}}
+
+<KDataTable
+  @scrollable={{true}}
+  @stickyHeader={{true}}
+  @clickable={{false}}
+  @content={{@model}}
+  @page={{this.page}}
+  @size={{this.size}}
+  @numberOfItems={{@model.length}}
+  @totalNumberOfItems={{@model.meta.count}}
+  @onChangeSize={{fn (mut this.size)}}
+  @onChangePage={{fn (mut this.page)}}
+>
+  <:header>
+    <th class="auk-u-text-nowrap">{{t "document-name"}}</th>
+    <Utils::ThSortable
+      @label={{t "document-type"}}
+      @field="sign-subcase.sign-marking-activity.piece.document-container.type.label"
+      @currentSorting={{this.sort}}
+      @onChange={{fn (mut this.sort)}}
+    />
+    <Utils::ThSortable
+      @label={{t "date-approved"}}
+      @field="decision-activity.start-date"
+      @currentSorting={{this.sort}}
+      @onChange={{fn (mut this.sort)}}
+    />
+    <th>{{t "status"}}</th>
+  </:header>
+  <:body as |signFlow|>
+    {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+      {{#let signMarkingActivity.piece as |piece|}}
+        <td>
+          {{#if piece}}
+            <AuLink @route="document" @model={{piece.id}}>
+              {{piece.name}}
+            </AuLink>
+          {{/if}}
+        </td>
+        <td>
+          <AuPill @size="small">
+            {{#let piece.documentContainer.type as |type|}}
+              {{#if type}}
+                {{type.label}}
+              {{else}}
+                {{t "no-document-type"}}
+              {{/if}}
+            {{/let}}
+          </AuPill>
+        </td>
+      {{/let}}
+      <td>
+        {{date signFlow.decisionActivity.startDate}}
+      </td>
+      <td>
+        <SignaturePill
+          @piece={{signMarkingActivity.piece}}
+          @signMarkingActivity={{signMarkingActivity}}
+        />
+      </td>
+    {{/let}}
+  </:body>
+</KDataTable>

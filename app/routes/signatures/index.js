@@ -4,15 +4,23 @@ import { inject as service } from '@ember/service';
 
 export default class SignaturesIndexRoute extends Route {
   @service store;
+  @service currentSession;
 
   localStorageKey = 'signatures.shortlist.minister-filter';
 
   ministerIds = [];
 
-  beforeModel() {
-    this.ministerIds = JSON.parse(
-      localStorage.getItem(this.localStorageKey)
-    ) ?? [];
+  async beforeModel() {
+    if (this.currentSession.may('manage-only-specific-signatures')) {
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesIds = currentUserOrganizationMandatees?.map((mandatee) => mandatee.id);
+      this.ministerIds = currentUserOrganizationMandateesIds;
+    } else {
+      this.ministerIds = JSON.parse(
+        localStorage.getItem(this.localStorageKey)
+      ) ?? [];
+    }
   }
 
   async model() {
@@ -51,7 +59,9 @@ export default class SignaturesIndexRoute extends Route {
           }
         };
       }
-
+      if (this.currentSession.may('manage-only-specific-signatures') && !this.ministerIds?.length) {
+        return [];
+      }
       return this.store.query('piece', query);
     }
 
@@ -62,5 +72,17 @@ export default class SignaturesIndexRoute extends Route {
     super.setupController(controller, model, transition);
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.showSidebar = false;
+      controller.showFilterModal = false;
+      controller.piece = null;
+      controller.decisionActivity = null;
+      controller.agendaitem = null;
+      controller.agenda = null;
+      controller.meeting = null;
+    }
   }
 }
