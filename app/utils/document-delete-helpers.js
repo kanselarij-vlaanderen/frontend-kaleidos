@@ -61,6 +61,6 @@ export async function deleteFile(fileOrPromise) {
       file.derived = null;
       await file.save();
     }
-    return Promise.all([file.destroyRecord(), derivedFile?.destroyRecord]);
+    return Promise.all([file.destroyRecord(), derivedFile?.destroyRecord()]);
   }
 }
