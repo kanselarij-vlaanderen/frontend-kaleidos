@@ -1,178 +1,219 @@
-<Auk::Navbar
-  @skin="gray-100"
-  @auto={{true}}
+{{page-title (t "to-sign")}}
+
+{{#in-element this.customNavbarButtonsElement}}
+  {{#unless (user-may "manage-only-specific-signatures")}}
+    {{#if this.filteredMinisters}}
+      <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+        {{t "clear-filter"}}
+      </AuButton>
+    {{/if}}
+    <AuButton
+      @skin="secondary"
+      @icon="filter"
+      {{on "click" this.openFilterModal}}
+    >
+      {{t "filter-on-signer"}}
+    </AuButton>
+  {{/unless}}
+  {{#if this.selectedPieces.length}}
+    <AuButton
+      @icon="sign"
+      {{on "click" this.openSidebarMultiItem}}
+    >
+      {{t "start-signing-for-n-selected-documents" n=this.selectedPieces.length}}
+    </AuButton>
+  {{/if}}
+{{/in-element}}
+
+<KDataTable
+  @scrollable={{true}}
+  @stickyHeader={{true}}
+  @clickable={{false}}
+  @asideVisible={{this.showSidebar}}
+  @content={{@model}}
+  @enablePagination={{false}}
 >
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <div class="auk-o-flex auk-o-flex--vertical">
-          <h4 class="auk-toolbar-complex__title">
-            {{t "signature-folder"}}
-          </h4>
-        </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{! search here}}
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        {{! filter here}}
-      </Auk::Toolbar::Item>
-
-      <Auk::Toolbar::Item>
-        {{! bundle signature here}}
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
-
-<div class="auk-scroll-wrapper">
-  <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-4">
-      {{#if this.model.length}}
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th class="auk-u-text-nowrap">{{t "document-name"}}</th>
-              <Utils::ThSortable
-                @label={{t "document-type"}}
-                @field="sign-subcase.sign-marking-activity.piece.document-container.type.label"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
-              <Utils::ThSortable
-                @label={{t "counselor"}}
-                @field="creator"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
-              <Utils::ThSortable
-                @label={{t "date-approved"}}
-                @field="decision-activity.start-date"
-                @currentSorting={{this.sort}}
-                @onChange={{this.changeSorting}}
-              />
-              <th>{{t "status"}}</th>
-              <th>{{! Actions}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each this.model as |signFlow|}}
-              <tr class="auk-table__row">
-                <td>{{signFlow.signSubcase.signMarkingActivity.piece.name}}</td>
-                <td>
-                  {{signFlow.signSubcase.signMarkingActivity.piece.documentContainer.type.label}}
-                </td>
-                <td>
-                  <Auk::Avatar @icon="user" @size="small">
-                    {{signFlow.creator.fullName}}
-                  </Auk::Avatar>
-                </td>
-                <td>
-                  {{date signFlow.decisionActivity.startDate}}
-                </td>
-                <td>
-                  <DigitalSigning::SigningFlowStatus @signingFlow={{signFlow}} />
-                </td>
-                <td>
-                  <WebComponents::AuButtonToolbar>
-                    <AuLinkExternal
-                      @icon="book"
-                      @hideText={{true}}
-                      href={{signFlow.signSubcase.signMarkingActivity.piece.viewDocumentURL}}
-                      target="_blank"
-                    >
-                      {{t "read"}}
-                    </AuLinkExternal>
-
-                    <AuDropdown
-                      @icon="three-dots"
-                      @title={{t "more"}}
-                      @hideText={{true}}
-                      @alignment="right"
-                    >
-                      <AuButton
-                        @skin="link"
-                        {{on
-                          "click"
-                          (fn this.navigateToDecision signFlow.decisionActivity)
-                        }}
-                        role="menuitem"
-                      >
-                        {{t "consult-agendaitem-decision"}}
-                      </AuButton>
-                      <AuButton
-                        @skin="link"
-                        {{on
-                          "click"
-                          (fn this.uploadPiecesToSigninghub signFlow)
-                        }}
-                        role="menuitem"
-                      >
-                        {{t "send-to-signinghub"}}
-                      </AuButton>
-                      <AuLink
-                        @route="signatures.signing-flow.documents"
-                        @model={{signFlow}}
-                        role="menuitem"
-                      >
-                        {{t "view-in-signinghub"}}
-                      </AuLink>
-                      <AuButton
-                        @skin="link"
-                        {{on
-                          "click"
-                          (fn this.startSigning signFlow)
-                        }}
-                        role="menuitem"
-                      >
-                        {{t "present-for-signing"}}
-                      </AuButton>
-                    </AuDropdown>
-                  </WebComponents::AuButtonToolbar>
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      {{else}}
-        <Auk::Panel>
-          <Auk::Panel::Body>
-            <Auk::EmptyState @message={{t "no-results-found"}} />
-          </Auk::Panel::Body>
-        </Auk::Panel>
-      {{/if}}
+  <:header>
+    <th>
+      <AuCheckbox
+        @checked={{this.isSelectedAllItems}}
+        @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
+        @onChange={{this.selectAll}}
+      >
+        <span class="auk-u-sr-only">
+          {{t "select"}}
+        </span>
+      </AuCheckbox>
+    </th>
+    <th>{{t "document-name"}}</th>
+    <th>{{t "document-type"}}</th>
+    <th>{{t "minister"}}</th>
+    <th>{{t "decision-date"}}</th>
+    <th></th>
+  </:header>
+  <:body as |piece|>
+    <td>
+      <AuCheckbox
+        @checked={{includes piece this.selectedPieces}}
+        @onChange={{fn this.toggleItem piece}}
+      >
+        <span class="auk-u-sr-only">
+          {{t "select"}}
+        </span>
+      </AuCheckbox>
+    </td>
+    <td>
+      <AuLink @route="document" @model={{piece.id}}>
+        {{piece.name}}
+      </AuLink>
+    </td>
+    <td>
+      <AuPill @size="small">
+        {{#let piece.documentContainer.type as |type|}}
+          {{#if type}}
+            {{type.label}}
+          {{else}}
+            {{t "no-document-type"}}
+          {{/if}}
+        {{/let}}
+      </AuPill>
+    </td>
+    <td>
+      {{#let (await (this.getMandateeName piece)) as |name|}}
+        {{#if name}}
+          {{name}}
+        {{else}}
+          -
+        {{/if}}
+      {{/let}}
+    </td>
+    <td>{{date (await (this.getDecisionDate piece))}}</td>
+    <td>
+      <AuButton
+        @skin="naked"
+        @icon="sign"
+        {{on "click" (fn this.openSidebarSingleItem piece)}}
+      >
+        {{t "start-signing"}}
+      </AuButton>
+    </td>
+  </:body>
+  <:aside>
+    <div class="auk-sidebar">
+      <div class="auk-sidebar__header">
+        <h4 class="auk-toolbar-complex__title">
+          {{t "start-signing"}}
+        </h4>
+        <Auk::Button
+          @icon="x"
+          @skin="borderless"
+          @layout="icon-only"
+          {{on "click" this.closeSidebar}}
+        />
+      </div>
+      <div class="auk-sidebar__body">
+        {{#unless this.selectedPieces.length}}
+          <p class="au-u-muted auk-u-mt-2">
+            {{or this.piece.documentContainer.type.label (t "no-document-type")}}
+            -
+            {{date this.decisionActivity.startDate}}
+          </p>
+          <h5 class="auk-h4">{{this.piece.name}}</h5>
+          <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
+            <AuLink
+              @skin="naked"
+              @icon="book"
+              @route="document"
+              @model={{this.piece.id}}
+            >
+              {{t "preview"}}
+            </AuLink>
+            <AuLink
+              @skin="naked"
+              @icon="document"
+              @route="agenda.agendaitems.agendaitem"
+              @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
+            >
+              {{t "consult-agendaitem-decision"}}
+            </AuLink>
+          </div>
+        {{/unless}}
+        {{#if this.decisionActivity}}
+          <Signatures::CreateSignFlow
+            @decisionActivities={{array this.decisionActivity}}
+            @onChangeSigners={{fn (mut this.signers)}}
+            @onChangeApprovers={{fn (mut this.approvers)}}
+            @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+          />
+        {{else if this.selectedPieces.length}}
+          <Signatures::CreateSignFlow
+            @decisionActivities={{this.selectedDecisionActivities.value}}
+            @onChangeSigners={{fn (mut this.signers)}}
+            @onChangeApprovers={{fn (mut this.approvers)}}
+            @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+          />
+        {{/if}}
+      </div>
+      <div class="auk-sidebar__footer">
+        <AuToolbar as |Group|>
+          <Group>
+            <AuButton
+              @loading={{this.createSignFlow.isRunning}}
+              @disabled={{not this.signers.length}}
+              {{on "click" this.createSignFlow.perform}}
+            >
+              {{t "start-signing"}}
+            </AuButton>
+          </Group>
+        </AuToolbar>
+      </div>
     </div>
-  </div>
-</div>
-<div>
-  <hr />
-</div>
-<div class="auk-u-mx-4">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <Auk::Pagination
-          @page={{this.page}}
-          @size={{this.size}}
-          @nbOfItems={{this.model.length}}
-          @total={{this.model.meta.count}}
-          @onNextPage={{this.nextPage}}
-          @onPreviousPage={{this.prevPage}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{t "amount-showed"}}
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <WebComponents::AuPageSize
-          @selectedSize={{this.size}}
-          @onChange={{this.setSizeOption}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</div>
+  </:aside>
+</KDataTable>
+
+<ConfirmationModal
+  @modalOpen={{this.showFilterModal}}
+  @title={{t "filter-content"}}
+  @onCancel={{this.closeFilterModal}}
+>
+  <:body>
+    <Mandatees::CheckboxList
+      @selected={{this.selectedMinisters}}
+      @onChange={{fn (mut this.selectedMinisters)}}
+    />
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+    >
+      <Group>
+        <AuButton @skin="naked" {{on "click" this.closeFilterModal}}>
+          {{t "cancel"}}
+        </AuButton>
+      </Group>
+      <Group>
+        {{#if this.filteredMinisters}}
+          <AuButton @skin="secondary" {{on "click" this.clearFilter}}>
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuButton @icon="filter" {{on "click" this.applyFilter}}>
+          {{t "filter-content"}}
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
+</ConfirmationModal>
+
+{{#if this.createSignFlow.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "loading-text"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{concat
+                              (t "creating-sign-flows-message")
+                              " "
+                              (t "please-be-patient")}}
+      />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

@@ -23,7 +23,7 @@
         {{date @date}}
       </p>
     </div>
-    <AuHeading @level="3" @skin="6">
+    <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       <AuLink
         data-test-route-search-result-cards-agendaitem-shorttitle
         class="au-u-padding-none card-link"
@@ -40,19 +40,20 @@
       </AuLink>
     </AuHeading>
   </c.header>
-  <c.content>
-    <p
-      data-test-route-search-result-cards-agendaitem-title
-      class="au-u-para"
-    >
-      <SanitizeHtml
-        @raw={{true}}
-        @value={{@title}}
-      />
-    </p>
+  {{#if @title}}
+    <c.content>
+      <p data-test-route-search-result-cards-agendaitem-title>
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{@title}}
+        />
+      </p>
+    </c.content>
+  {{/if}}
+  <c.footer>
     <p
       data-test-route-search-result-cards-agendaitem-agenda-serial-number
-      class="au-u-para-small au-u-margin-top-small au-u-muted"
+      class="au-u-para-small au-u-muted"
     >
       {{t "out"}}
       <span class="au-u-medium">
@@ -73,5 +74,5 @@
         {{/each}}
       </p>
     {{/if}}
-  </c.content>
+  </c.footer>
 </AuCard>

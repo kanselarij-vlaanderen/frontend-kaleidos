@@ -321,16 +321,16 @@ context('Search tests', () => {
       .click();
     addMandatee(mandatee3);
 
-    // add urgent
-    visitPublications();
-    cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields6.number)
-      .click();
-    cy.get(publication.publicationCaseInfo.edit).click();
-    cy.get(publication.urgencyLevelCheckbox).parent()
-      .click();
-    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
-    cy.get(publication.publicationCaseInfo.editView.save).click()
-      .wait('@patchPublicationFlow');
+    // add urgent !only when not running publication-new-features.spec!
+    // visitPublications();
+    // cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields6.number)
+    //   .click();
+    // cy.get(publication.publicationCaseInfo.edit).click();
+    // cy.get(publication.urgencyLevelCheckbox).parent()
+    //   .click();
+    // cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    // cy.get(publication.publicationCaseInfo.editView.save).click()
+    //   .wait('@patchPublicationFlow');
   });
 
   it('check mandatees filters', () => {
@@ -443,9 +443,9 @@ context('Search tests', () => {
     triggerSearchPublication(mandatee2);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
     // search without date
-    cy.get(route.search.from).find(auk.datepicker.clear)
-      .click();
-    // TODO doesn't remove properly without clicking twice
+    // *Note doesn't always work on a first click
+    // when route is loading and clicking the clear button can result in the date coming back
+    cy.wait(1000);
     cy.get(route.search.from).find(auk.datepicker.clear)
       .click();
     cy.get(route.search.from).find(auk.datepicker.datepicker)

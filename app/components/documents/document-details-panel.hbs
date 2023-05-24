@@ -23,7 +23,7 @@
           @renderInPlace={{true}}
         />
       </Auk::KeyValue>
-      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+      <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
         <Textarea
           data-test-details-tab-edit-name
           aria-labelledby="piece-name"
@@ -145,10 +145,10 @@
           data-test-details-tab-document-type
           @key={{t "document-type"}}
         >
-          {{this.documentType.label}}
+          {{this.documentType.altLabel}}
         </Auk::KeyValue>
       {{/if}}
-      <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
+      <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
           {{@piece.name}}.{{extension}}
         {{/let}}
@@ -163,7 +163,7 @@
         data-test-document-details-panel-source-file
         @key={{t "source-file"}}
       >
-        {{#if @piece.file}}
+        {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
@@ -177,6 +177,27 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
+      {{#if (and this.isSignaturesEnabled (await (this.canViewSignedPiece)))}}
+        {{#if @piece.signedPiece.file}}
+          <Auk::KeyValue
+            @key={{t "signed-document"}}
+          >
+            <AuLinkExternal
+              href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+            </AuLinkExternal>
+            <AccessLevelPill 
+              @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              @isEditable={{false}}
+            />
+          </Auk::KeyValue>
+        {{/if}}
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 {{/if}}
