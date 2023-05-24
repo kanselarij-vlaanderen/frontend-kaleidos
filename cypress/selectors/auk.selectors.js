@@ -70,8 +70,9 @@ const selectors = {
 
   tab: {
     tab: '.auk-tabs__tab',
-    activeHref: '.auk-tabs__tab--active > *',
+    activeHref: '.auk-tabs__tab__link--active > *',
     hierarchicalBack: '.auk-tabs__hierarchical-back',
+    label: '.auk-tabs__tab__label',
   },
 
   tabs: {

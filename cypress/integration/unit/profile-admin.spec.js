@@ -413,13 +413,19 @@ context('Testing the application as Admin user', () => {
       cy.visitAgendaWithLink(agendaitemLinkOnOpen1);
       cy.get(agenda.agendaitemNav.documentsTab);
       cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/documenten`);
-      cy.get(agenda.agendaitemNav.activeTab).contains('Documenten');
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Documenten');
       cy.get(agenda.agendaitemNav.decisionTab);
       cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/beslissingen`);
-      cy.get(agenda.agendaitemNav.activeTab).contains('Beslissing');
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Beslissing');
       cy.get(agenda.agendaitemNav.newsletterTab);
       cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/kort-bestek`);
-      cy.get(agenda.agendaitemNav.activeTab).contains('Kort bestek');
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Kort bestek');
 
       // Approval item (no newsletter tab);
       cy.visitAgendaWithLink(approvalLinkOnOpen);
