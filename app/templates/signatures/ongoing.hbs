@@ -1,4 +1,4 @@
-{{page-title (t "ongoing")}}
+{{page-title (t "to-follow-up")}}
 
 <KDataTable
   @scrollable={{true}}
@@ -33,7 +33,7 @@
   <:body as |signFlow|>
     {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
       {{#let signMarkingActivity.piece as |piece|}}
-        <td class="au-u-flex au-u-flex--spaced-tiny">
+        <td class="au-u-flex--spaced-tiny">
           {{#if piece}}
             <AuLink @route="document" @model={{piece.id}}>
               {{piece.name}}
@@ -90,7 +90,7 @@
           {{else}}
             <AuButton
               @skin="naked"
-              @icon="chevron-right"
+              @icon="link-broken"
               @hideText={{true}}
               @disabled={{true}}
             >

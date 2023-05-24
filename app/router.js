@@ -73,7 +73,8 @@ Router.map(function() {
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
     this.route('signatures', { path: '/handtekeningen', }, function() {
-      this.route('ongoing', { path: '/wordt-verwerkt' })
+      this.route('ongoing', { path: '/op-te-starten' });
+      this.route('ongoing', { path: '/op-te-volgen' });
     });
   }
 
