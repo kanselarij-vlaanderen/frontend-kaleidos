@@ -134,6 +134,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       yield file.save();
       yield derivedFile.destroyRecord();
     }
+    this.args.piece.created = now;
     yield this.args.piece.save();
 
     this.name = null;
