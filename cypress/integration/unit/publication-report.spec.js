@@ -112,7 +112,7 @@ context('Publications reports tests', () => {
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.create)
       .click();
 
-    cy.get(publication.generateReport.selectMandatee)
+    cy.get(utils.mandateePersonSelector)
       // .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
@@ -213,7 +213,7 @@ context('Publications reports tests', () => {
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.create)
       .click();
 
-    cy.get(publication.generateReport.selectMandatee)
+    cy.get(utils.mandateePersonSelector)
       // .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');

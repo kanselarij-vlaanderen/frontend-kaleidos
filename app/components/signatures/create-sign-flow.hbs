@@ -22,7 +22,7 @@
           <AuButton
             @skin="secondary"
             @icon="pencil"
-            @loading={{this.loadSigners.isRunning}}
+            @loading={{this.loadSigners.isPending}}
             {{on "click" (toggle "showMinisterModal" this)}}
           >
             {{t "edit-list"}}
@@ -33,7 +33,7 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-p-0">
     <Auk::List @bordered={{true}}>
-      {{#if this.loadSigners.isRunning}}
+      {{#if this.loadSigners.isPending}}
         <Auk::List::Item>
           <Auk::Loader />
         </Auk::List::Item>
