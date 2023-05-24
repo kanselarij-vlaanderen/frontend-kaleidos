@@ -150,7 +150,7 @@
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "document-name"}}>
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
-          {{@piece.name}}.{{extension}}
+          {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
         {{/let}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
