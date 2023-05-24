@@ -24,7 +24,7 @@ export default class PublicationEditModal extends Component {
   }
 
   get isSaveDisabled() {
-    return !this.validators.areValid;
+    return !this.validators.areValid || this.save.isRunning;
   }
 
   @action
