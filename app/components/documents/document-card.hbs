@@ -33,7 +33,7 @@
                 <AuLoader @padding="small"/>
               {{else}}
                 {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
-                  {{this.piece.name}}.{{extension}}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
