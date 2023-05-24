@@ -6,7 +6,6 @@ import { isEmpty } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class PublicationsDocumentsDocumentCardStepComponent extends Component {
-
   @service currentSession;
 
   @tracked signMarkingActivity;
