@@ -19,7 +19,7 @@
             <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
               <span data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
-                  {{this.documentContainer.type.label}}
+                  {{this.documentContainer.type.altLabel}}
                 {{/unless}}
               </span>
             </div>
@@ -33,7 +33,7 @@
                 <AuLoader @padding="small"/>
               {{else}}
                 {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
-                  {{this.piece.name}}.{{extension}}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -109,7 +109,7 @@
               />
             {{/unless}}
           </Group.Item>
-          {{#if this.signaturesEnabled}}
+          {{#if this.showSignaturePill}}
               {{#if this.loadSignatureRelatedData.isRunning}}
                 <Group.Item>
                   <div class="auk-loader au-u-margin-left-small" role="alert" aria-busy="true"></div>

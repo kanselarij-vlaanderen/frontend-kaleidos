@@ -26,7 +26,7 @@
           data-test-new-case-save={{true}}
           @skin="primary"
           @disabled={{this.isCreateDisabled}}
-          @loading={{this.isLoading}}
+          @loading={{this.createCase.isRunning}}
           {{on "click" (perform this.createCase)}}
         >
           {{t "create-case"}}

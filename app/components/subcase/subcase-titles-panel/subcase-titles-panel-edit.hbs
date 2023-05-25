@@ -53,7 +53,6 @@
             data-test-subcase-titles-edit-save={{true}}
             @skin="primary"
             @loading={{this.saveChanges.isRunning}}
-            @disabled={{this.saveChanges.isRunning}}
             {{on "click" (perform this.saveChanges)}}
           >
             {{t "save"}}

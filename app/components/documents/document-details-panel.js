@@ -33,9 +33,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   get isProcessing() {
     return (
-      this.saveDetails.isRunning
-        || this.cancelEditDetails.isRunning
-        || this.isUploadingReplacementSourceFile
+      this.saveDetails.isRunning ||
+      this.cancelEditDetails.isRunning ||
+      this.isUploadingReplacementSourceFile
     );
   }
 
@@ -79,6 +79,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
+      const now = new Date();
+      this.args.piece.created = now;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
       try {

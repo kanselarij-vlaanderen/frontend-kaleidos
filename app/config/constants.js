@@ -135,5 +135,5 @@ export default {
     USER_LOGIN: 'Aanmelding (per rol)',
     USER_PAGEVIEW: 'Pageview (per rol)',
     FIRST_ACTION: 'Eerste actie',
-  },
+  }
 };

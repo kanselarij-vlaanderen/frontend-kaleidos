@@ -133,17 +133,12 @@ const selectors = {
 
   // search/documents
   searchDocuments: {
-    row: {
-      title: '[data-test-route-search-documents-row-title]',
-    },
+    row: '[data-test-route-search-documents-row]',
   },
 
   // search/decisions
   searchDecisions: {
-    dataTable: '[data-test-route-search-decisions-data-table]',
-    row: {
-      title: '[data-test-route-search-decisions-title]',
-    },
+    row: '[data-test-route-search-decisions-data-table-row]',
   },
 
   // components (?)
