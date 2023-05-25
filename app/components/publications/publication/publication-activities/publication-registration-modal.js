@@ -24,9 +24,7 @@ export default class PublicationDetailsModal extends Component {
   }
 
   get isSaveDisabled() {
-    return (
-      !this.validators.areValid || this.save.isRunning
-    );
+    return !this.validators.areValid || this.save.isRunning;
   }
 
   @action
