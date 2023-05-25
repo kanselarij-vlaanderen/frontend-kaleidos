@@ -17,7 +17,6 @@
       </p>
       <h5 class="auk-h4">{{@piece.name}}</h5>
       <Signatures::CreateSignFlow
-        @piece={{@piece}}
         @decisionActivities={{array this.decisionActivity}}
         @onChangeSigners={{fn (mut this.signers)}}
         @onChangeApprovers={{fn (mut this.approvers)}}
