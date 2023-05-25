@@ -21,6 +21,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isReplacingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
+  @tracked isOpenVerifyDeleteSignFlow = false;
   @tracked replacementSourceFile;
   @tracked documentType;
   @tracked accessLevel;
@@ -104,6 +105,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.replacementSourceFile = null;
     this.isReplacingSourceFile = !this.isReplacingSourceFile;
   }
+
+  verifyDeleteSignFlow = task(async () => {
+    await this.signatureService.removeSignFlow(this.args.piece);
+    this.isOpenVerifyDeleteSignFlow = false;
+  });
 
   @action
   openEditDetails() {
