@@ -1134,7 +1134,7 @@
   "last-seen": "Laatst gezien",
   "filter-on-rights": "Filteren op rechtengroep",
   "filter-on-last-seen": "Filteren op laatst gezien",
-  "blocked-on": "Geblokkeerd op",
+  "blocked-on": "Geblokkeerd op",Admin should be able to do it
   "filter-on-organization": "Filteren op organisatie",
   "id-or-organization": "Organisatie ID of naam",
   "list-of-ovo-codes": "Lijst met OVO codes",
@@ -1220,5 +1220,7 @@
   "verify-delete-signed-piece": "Bent u zeker dat u het getekend document wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden. Het volledige handtekenprocess voor dit document zal mee verwijderd worden uit Kaleidos. In Signinghub zal het proces blijven bestaan tenzij dit manueel verwijderd wordt.",
   "delete-all-sign-flow-data": "Verwijder volledig handtekeningproces",
   "verify-delete-all-sign-flow-data": "Bent u zeker dat u het handtekenproces volledig wilt verwijderen uit Kaleidos? Deze actie kan niet meer ongedaan gemaakt worden. In Signinghub zal het proces blijven bestaan tenzij dit manueel verwijderd wordt.",
-  "delete-all-sign-flow-tooltip": "Verwijder het volledige handtekenproces uit Kaleidos, zodat het document opnieuw ondertekend kan worden"
+  "delete-all-sign-flow-tooltip": "Verwijder het volledige handtekenproces uit Kaleidos, zodat het document opnieuw ondertekend kan worden",
+  "to-start-up": "Op te starten",
+  "to-follow-up": "Op te volgen"
 }

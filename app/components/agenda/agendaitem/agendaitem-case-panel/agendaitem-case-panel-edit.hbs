@@ -9,6 +9,7 @@
               data-test-agendaitem-titles-edit-confidential={{true}}
               @checked={{@subcase.confidential}}
               id="subcase-confidential"
+              @onChange={{set this "confidentialChanged" true}}
             />
           </div>
         {{/if}}
@@ -100,7 +101,6 @@
               data-test-agendaitem-titles-edit-save={{true}}
               @skin="primary"
               @loading={{this.saveChanges.isRunning}}
-              @disabled={{this.saveChanges.isRunning}}
               {{on "click" (perform this.saveChanges)}}
             >
               {{t "save"}}

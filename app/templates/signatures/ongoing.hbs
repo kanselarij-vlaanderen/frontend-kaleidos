@@ -1,4 +1,4 @@
-{{page-title (t "ongoing")}}
+{{page-title (t "to-follow-up")}}
 
 <KDataTable
   @scrollable={{true}}
@@ -20,6 +20,7 @@
       @currentSorting={{this.sort}}
       @onChange={{fn (mut this.sort)}}
     />
+    <th>{{t "minister"}}</th>
     <Utils::ThSortable
       @label={{t "date-approved"}}
       @field="decision-activity.start-date"
@@ -27,15 +28,22 @@
       @onChange={{fn (mut this.sort)}}
     />
     <th>{{t "status"}}</th>
+    <th></th>
   </:header>
   <:body as |signFlow|>
     {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
       {{#let signMarkingActivity.piece as |piece|}}
-        <td>
+        <td class="au-u-flex--spaced-tiny">
           {{#if piece}}
             <AuLink @route="document" @model={{piece.id}}>
               {{piece.name}}
             </AuLink>
+            {{#if (this.isConfidential piece.accessLevel)}}
+              <AccessLevelPill
+                @accessLevel={{piece.accessLevel}}
+                @isEditable={{false}}
+              />
+            {{/if}}
           {{/if}}
         </td>
         <td>
@@ -51,6 +59,15 @@
         </td>
       {{/let}}
       <td>
+        {{#let (await (this.getMandateeNames signFlow)) as |names|}}
+          {{#if names}}
+            {{join ", " names}}
+          {{else}}
+            -
+          {{/if}}
+        {{/let}}
+      </td>
+      <td>
         {{date signFlow.decisionActivity.startDate}}
       </td>
       <td>
@@ -58,6 +75,29 @@
           @piece={{signMarkingActivity.piece}}
           @signMarkingActivity={{signMarkingActivity}}
         />
+      </td>
+      <td>
+        {{#let (await (this.getSigningHubUrl signFlow)) as |url|}}
+          {{#if url}}
+            <AuLinkExternal
+              @skin="button-naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+              href={{url}}
+            >
+              {{t "open"}}
+            </AuLinkExternal>
+          {{else}}
+            <AuButton
+              @skin="naked"
+              @icon="link-broken"
+              @hideText={{true}}
+              @disabled={{true}}
+            >
+              {{t "open"}}
+            </AuButton>
+          {{/if}}
+        {{/let}}
       </td>
     {{/let}}
   </:body>

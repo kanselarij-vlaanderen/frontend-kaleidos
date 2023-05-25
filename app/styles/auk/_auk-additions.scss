@@ -400,3 +400,15 @@ table tr.lt-expanded-row {
     text-transform: none;
   };
 }
+
+// Text ellipsis helper
+.auk-u-text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Loadable content
+.auk-loadable-content__content {
+  min-width: 0;
+}

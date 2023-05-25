@@ -205,8 +205,6 @@ context('New search views tests', () => {
       cy.get(route.search.trigger).click()
         .wait('@searchCall2');
 
-      // cy.get(route.searchDocuments.dataTable).find('tbody')
-      //   .children('tr');
       cy.get(route.documentResultCard.filename).contains('test pdf');
       // TODO check if changing document title shows in result?
 
@@ -258,8 +256,6 @@ context('New search views tests', () => {
       cy.get(route.search.trigger).click()
         .wait('@searchCall2');
 
-      // cy.get(route.searchDecisions.dataTable).find('tbody')
-      //   .children('tr');
       cy.get(route.decisionResultCard.shortTitleLink).contains(searchTerm);
 
       // check resultcard
