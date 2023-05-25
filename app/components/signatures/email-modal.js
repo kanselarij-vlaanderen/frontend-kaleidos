@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import Inputmask from 'inputmask';
 
 export default class SignaturesEmailModalComponent extends Component {
@@ -16,6 +17,11 @@ export default class SignaturesEmailModalComponent extends Component {
     return {
       alias: 'email',
     };
+  }
+
+  @action
+  onInputEvent(event) {
+    this.emailBuffer = event.target.value;
   }
 
   get isValid() {
