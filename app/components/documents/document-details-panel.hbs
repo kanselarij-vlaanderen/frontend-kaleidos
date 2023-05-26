@@ -108,7 +108,7 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#if (user-may "manage-documents")}}
+        {{#if (and (user-may "manage-documents") this.mayEditOrDelete)}}
           <Toolbar.Group @position="right" as |Group|>
             {{#if this.isLastVersionOfPiece}}
               <Group.Item>

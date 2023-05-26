@@ -7,11 +7,12 @@
       <AuCheckbox
         @checked={{@isSelected}}
         @onChange={{fn @onSelect @row}}
+        @disabled={{not @row.canBeEditedOrDeleted}}
       />
     </td>
   {{/if}}
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if @row.canBeEditedOrDeleted}}
       <AuInput
         data-test-document-details-input
         @width="block"
@@ -22,7 +23,7 @@
     {{/if}}
   </td>
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if @row.canBeEditedOrDeleted}}
       <Utils::DocumentTypeSelector
         data-test-document-details-row-type
         @selectedDocumentType={{@row.documentType}}
@@ -69,7 +70,7 @@
         >
           {{t "undo"}}
         </AuButton>
-      {{else}}
+      {{else if @row.canBeEditedOrDeleted}}
         <AuButton
           data-test-document-details-row-delete
           @skin="naked"

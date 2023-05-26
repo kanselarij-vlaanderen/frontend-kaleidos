@@ -5,11 +5,13 @@ import { tracked } from '@glimmer/tracking';
 export class Row {
   piece;
   documentContainer;
+  canBeEditedOrDeleted;
 
   @tracked name;
   @tracked documentType;
   @tracked accessLevel;
   @tracked isToBeDeleted = false;
+
 
   @action
   setDocumentType(documentType) {

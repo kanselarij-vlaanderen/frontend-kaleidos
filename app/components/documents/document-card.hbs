@@ -127,6 +127,7 @@
               (and
                 @isEditable
                 (user-may "manage-documents")
+                this.mayEditOrDelete
               )
           }}
             <Group.Item>
@@ -138,6 +139,7 @@
                 @disabled={{this.loadPieceRelatedData.isRunning}}
                 @alignment="right"
               >
+              {{#if this.mayEditOrDelete}}
                 <AuButton
                   data-test-document-upload-new-piece
                   @skin="link"
@@ -154,6 +156,7 @@
                 >
                   {{t "edit"}}
                 </AuButton>
+                {{/if}}
                 <AuHr />
                 {{#if this.mayCreateSignMarkingActivity}}
                   <AuLink
@@ -167,6 +170,7 @@
                   </AuLink>
                   <AuHr />
                 {{/if}}
+                {{#if this.mayEditOrDelete}}
                 <AuButton
                   data-test-document-card-delete
                   @skin="link"
@@ -176,8 +180,10 @@
                 >
                   {{t "document-delete"}}
                 </AuButton>
+                {{/if}}
               </AuDropdown>
             </Group.Item>
+
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>

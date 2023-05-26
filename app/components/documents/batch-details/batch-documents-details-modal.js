@@ -54,12 +54,16 @@ export default class BatchDocumentsDetailsModal extends Component {
 
     this.rows = yield Promise.all(
       latestDocs.map(async (piece) => {
+        const signMarkingActivity = await piece.signMarkingActivity;
+        const signCompletionActivity = await piece.signCompletionActivity;
+        const signedPiece = await piece.signedPiece;
         const row = new Row();
         row.piece = piece;
         row.name = piece.name;
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
+        row.canBeEditedOrDeleted = signMarkingActivity || signCompletionActivity || signedPiece ? false : true;
         return row;
       })
     );

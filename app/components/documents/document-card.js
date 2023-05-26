@@ -46,6 +46,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
+  @tracked mayEditOrDelete = false;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
@@ -62,6 +64,15 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures');
+  }
+
+  @task
+  *loadPieceMayBeEditedOrDeleted() {
+    const signCompletionActivity = yield this.piece.signCompletionActivity;
+    const signedPiece = yield this.piece.signedPiece;
+    if (!this.signMarkingActivity && !signCompletionActivity && !signedPiece){
+      this.mayEditOrDelete = true;
+    }
   }
 
   @task
@@ -100,6 +111,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+    this.loadPieceMayBeEditedOrDeleted.perform();
   }
 
   @task

@@ -26,9 +26,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
 
+  @tracked mayEditOrDelete = false;
+
   constructor() {
     super(...arguments);
     this.loadDetailsData.perform();
+    this.loadPieceMayBeEditedOrDeleted.perform();
   }
 
   get isProcessing() {
@@ -43,6 +46,16 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
     return isEnabled && hasPermission;
+  }
+
+  @task
+  *loadPieceMayBeEditedOrDeleted() {
+    const signMarkingActivity = yield this.args.piece.signMarkingActivity;
+    const signCompletionActivity = yield this.args.piece.signCompletionActivity;
+    const signedPiece = yield this.args.piece.signedPiece;
+    if (!signMarkingActivity && !signCompletionActivity && !signedPiece){
+      this.mayEditOrDelete = true;
+    }
   }
 
   @task
