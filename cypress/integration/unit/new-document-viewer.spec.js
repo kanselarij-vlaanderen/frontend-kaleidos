@@ -64,7 +64,8 @@ context('new document viewer tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addDocumentsToApprovalItem('Goedkeuring van het verslag', files);
     cy.addNewPieceToApprovalItem('Goedkeuring van het verslag', file.newFileName, newVersionfile);
-    cy.logoutFlow();
+    cy.wait(3000);
+    cy.logout();
   });
   const defaultAccessLevel = 'Intern Regering';
   const bisName = 'test pdfBIS';
@@ -72,7 +73,7 @@ context('new document viewer tests', () => {
   const newDocumentType = 'Besluit Vlaamse Regering';
   const newAccessLevel = 'Intern Overheid';
   const searchDocumentType = 'Advies agentschap overheidspersoneel';
-  const searchDocumentTypeAbbr = 'ADVIES AGO';
+  const searchDocumentTypeAbbr = 'Advies AgO';
 
   beforeEach(() => {
     cy.login('Admin');

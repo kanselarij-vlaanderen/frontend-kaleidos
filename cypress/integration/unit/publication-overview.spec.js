@@ -5,6 +5,33 @@ import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
+
+function currentTimestamp() {
+  return Cypress.dayjs().unix();
+}
+
+function createPublicationViaMR(subcaseTitle, fileName, publicationNumber) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.openAgendaitemDocumentTab(subcaseTitle);
+  cy.get(route.agendaitemDocuments.openPublication).click();
+  cy.get(publication.batchDocumentsPublicationRow.name).contains(fileName)
+    .parent()
+    .find(publication.batchDocumentsPublicationRow.new)
+    .click();
+
+  // create new publication
+  cy.get(publication.newPublication.number).click()
+    .clear()
+    .type(publicationNumber);
+  cy.intercept('POST', '/publication-flows').as(`createNewPublicationFlow${randomInt}`);
+  // more posts happen, but the patch is the final part of the create action
+  cy.intercept('PATCH', '/pieces/**').as(`patchPieceForPublication${randomInt}`);
+  cy.get(publication.newPublication.create).click();
+  cy.wait(`@createNewPublicationFlow${randomInt}`);
+  cy.wait(`@patchPieceForPublication${randomInt}`);
+}
 
 context('Publications overview tests', () => {
   beforeEach(() => {
@@ -277,5 +304,101 @@ context('Publications overview tests', () => {
         .find(publication.publicationTableRow.row.goToPublication)
         .click();
     });
+  });
+
+  it('should test the shortlist route', () => {
+    cy.logout();
+    cy.login('Admin');
+
+    const caseTitle1 = `Cypress test: shortlist publications route case 1- ${currentTimestamp()}`;
+    const caseTitle2 = `Cypress test: shortlist publications route case 2- ${currentTimestamp()}`;
+
+    const type1 = 'Nota';
+    const subcaseTitleShort1 = `Cypress test: subcase shortlist publications route subcase 1 - ${currentTimestamp()}`;
+    const subcaseTitleLong1 = 'Cypress test voor shortlist publications route subcase 1';
+    const subcaseType1 = 'Definitieve goedkeuring';
+    const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
+
+    const type2 = 'Nota';
+    const subcaseTitleShort2 = `Cypress test: subcase shortlist publications route subcase 2 - ${currentTimestamp()}`;
+    const subcaseTitleLong2 = 'Cypress test voor shortlist publications route subcase 2';
+    const subcaseType2 = 'Bekrachtiging Vlaamse Regering';
+    const subcaseName2 = 'Goedkeuring na adviezen';
+
+    const files1 = [
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'BVR',
+      }
+    ];
+
+    const files2 = [
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
+      }
+    ];
+
+    const publicationNumber1 = 1123;
+    const publicationNumber2 = 1124;
+
+    const fields = {
+      number: publicationNumber2,
+      shortTitle: 'Some text',
+      longTitle: 'Some text',
+    };
+
+    const agendaDate = Cypress.dayjs().add(16, 'weeks')
+      .day(6);
+
+    // setup
+    cy.createCase(caseTitle1);
+    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
+    cy.createCase(caseTitle2);
+    cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
+
+    cy.createAgenda('Ministerraad', agendaDate);
+    cy.openAgendaForDate(agendaDate);
+    cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.addAgendaitemToAgenda(subcaseTitleShort2);
+    cy.addDocumentsToAgendaitem(subcaseTitleShort1, files1);
+    cy.addDocumentsToAgendaitem(subcaseTitleShort2, files2);
+
+    // check if both docs show correctly
+    cy.get(utils.mHeader.publications).click();
+    cy.get(publication.publicationsIndex.tabs.shortlist).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(publication.shortlist.row.documentName).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('doc1');
+    cy.get(publication.shortlist.row.documentName).contains(files2[0].newFileName)
+      .parents('tr')
+      .as('doc2');
+    cy.get('@doc1').find(publication.shortlist.row.documentType)
+      .contains(files1[0].fileType);
+    cy.get('@doc2').find(publication.shortlist.row.documentType)
+      .contains(files2[0].fileType);
+
+    cy.openAgendaForDate(agendaDate);
+    createPublicationViaMR(subcaseTitleShort1, files1[0].newFileName, publicationNumber1);
+
+    // check if doc1 is no longer visible and create publication for doc2
+    cy.get(auk.loader).should('not.exist');
+    cy.get(auk.modal.header.close).click();
+    cy.get(utils.mHeader.publications).click();
+    cy.get(publication.publicationsIndex.tabs.shortlist).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(publication.shortlist.row.documentName).should('not.contain', files1[0].newFileName);
+    cy.get('@doc2').find(publication.shortlist.row.openNewPublication)
+      .click();
+    cy.fillInNewPublicationFields(fields);
+    cy.intercept('POST', '/cases').as('createNewCase');
+    cy.intercept('POST', '/publication-flows').as('createNewPublicationFlow');
+    cy.intercept('GET', '/publication-flows/shortlist').as('getShortlist');
+    cy.get(publication.newPublication.create).click()
+      .wait('@createNewCase')
+      .wait('@createNewPublicationFlow');
+    // check if doc1 is no longer visible
+    cy.wait('@getShortlist');
+    cy.get(auk.loader).should('not.exist');
+    cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
   });
 });

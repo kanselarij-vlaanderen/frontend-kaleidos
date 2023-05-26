@@ -37,7 +37,7 @@
       @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-documents-row>
           <Search::ResultCards::Document
             @date={{row.attributes.meetingDate}}
             @created={{row.attributes.created}}

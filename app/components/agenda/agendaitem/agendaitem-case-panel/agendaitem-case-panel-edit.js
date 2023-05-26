@@ -16,6 +16,7 @@ export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 
+  confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
   get newsItem() {
@@ -60,8 +61,9 @@ export default class AgendaitemCasePanelEdit extends Component {
       propertiesToSetOnSubcase,
       shouldResetFormallyOk,
     );
-    if (this.args.subcase && this.args.subcase.confidential) {
+    if (this.confidentialChanged && (this.args.subcase && this.args.subcase.confidential)) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+      yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
     }
 
     if (this.newsItem) {

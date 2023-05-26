@@ -152,7 +152,7 @@
             data-test-new-publication-create
             @skin="primary"
             @loading={{this.save.isRunning}}
-            @disabled={{or (not this.isValid) this.save.isRunning}}
+            @disabled={{not this.isValid}}
             {{on "click" (perform this.save)}}
           >
             {{t "publications-new-button-text"}}

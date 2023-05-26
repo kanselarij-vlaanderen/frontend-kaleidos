@@ -20,10 +20,6 @@ export default class NewCase extends Component {
     );
   }
 
-  get isLoading() {
-    return this.createCase.isRunning;
-  }
-
   @task
   *createCase() {
     const now = new Date();

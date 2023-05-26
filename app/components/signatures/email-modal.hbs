@@ -7,8 +7,7 @@
     <div class="auk-form-group">
       <AuLabel>{{t "email-address"}}</AuLabel>
       <AuInput
-        @onChange={{fn (mut this.emailBuffer)}}
-        @maskOptions={{this.inputmaskOptions}}
+        {{on "input" this.onInputEvent}}
         @warning={{and this.emailBuffer (not this.isValid)}}
         @type="text"
         @width="block"
