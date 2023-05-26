@@ -43,6 +43,7 @@ export default class SignatureService extends Service {
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlow, [piece]);
     if (!response.ok) {
+      await this.removeSignFlow(piece);
       throw new Error('Failed to upload piece to Signing Hub');
     }
   }
