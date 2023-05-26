@@ -1,11 +1,13 @@
 import ApplicationSerializer from './application';
 
 const SKIP_SERIALIZED = [
-  'agendaitems',
-  'submissionActivity',
-  'signedPiece',
   'signMarkingActivity',
+  'signPreparationActivity',
+  'signCancellationActivity',
   'signCompletionActivity',
+  'signSigningActivities',
+  'signApprovalActivities',
+  'signRefusalActivities',
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {

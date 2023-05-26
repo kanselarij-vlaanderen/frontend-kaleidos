@@ -7,30 +7,20 @@ export default class SignatureService extends Service {
   @service intl;
   @service currentSession;
 
-  async createSignFlow(
-    piece,
-    decisionActivity,
-    signers,
-    approvers,
-    notified,
-  ) {
+  async createSignFlow(piece, decisionActivity, signers, approvers, notified) {
     // Create sign flow, sign subcase and marking activity
-    const {
-      signFlow,
-      signSubcase,
-    } = await this.markDocumentForSignature(piece, decisionActivity);
-
+    const { signFlow, signSubcase } = await this.markDocumentForSignature(
+      piece,
+      decisionActivity
+    );
 
     // Attach signers
     await Promise.all(
       signers.map((mandatee) => {
-        const record = this.store.createRecord(
-          'sign-signing-activity',
-          {
-            signSubcase,
-            mandatee,
-          }
-        );
+        const record = this.store.createRecord('sign-signing-activity', {
+          signSubcase,
+          mandatee,
+        });
         return record.save();
       })
     );
@@ -38,13 +28,10 @@ export default class SignatureService extends Service {
     // Attach approvers
     await Promise.all(
       approvers.map((approver) => {
-        const record = this.store.createRecord(
-          'sign-approval-activity',
-          {
-            approver,
-            signSubcase,
-          }
-        );
+        const record = this.store.createRecord('sign-approval-activity', {
+          approver,
+          signSubcase,
+        });
         return record.save();
       })
     );
@@ -97,27 +84,33 @@ export default class SignatureService extends Service {
       return {
         signFlow,
         signSubcase,
-      }
+      };
     }
   }
 
   async canManageSignFlow(piece) {
     // the base permission 'manage-signatures' does not cover cabinet specific requirements
     if (this.currentSession.may('manage-only-specific-signatures')) {
-      const submissionActivity = await this.store.queryOne('submission-activity', {
-        filter: {
-          pieces: {
-            ':id:': piece?.id,
+      const submissionActivity = await this.store.queryOne(
+        'submission-activity',
+        {
+          filter: {
+            pieces: {
+              ':id:': piece?.id,
+            },
           },
-        },
-      });
+        }
+      );
       const subcase = await submissionActivity.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {
-          const currentUserOrganization = await this.currentSession.organization;
-          const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
-          const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees?.map((mandatee) => mandatee.uri);
+          const currentUserOrganization = await this.currentSession
+            .organization;
+          const currentUserOrganizationMandatees =
+            await currentUserOrganization.mandatees;
+          const currentUserOrganizationMandateesUris =
+            currentUserOrganizationMandatees?.map((mandatee) => mandatee.uri);
           if (currentUserOrganizationMandateesUris?.includes(mandatee.uri)) {
             return true;
           }
@@ -128,5 +121,56 @@ export default class SignatureService extends Service {
       return true;
     }
     return false;
+  }
+
+  async removeSignFlow(piece) {
+    const signMarkingActivity = await piece.signMarkingActivity;
+    if (signMarkingActivity) {
+      const signSubcase = await signMarkingActivity.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const signedPiece = await piece.signedPiece;
+      const signedFile = await signedPiece?.file;
+      const signPreparationActivity = await signSubcase
+        ?.belongsTo('signPreparationActivity')
+        .reload();
+      const signCompletionActivity = await signSubcase
+        ?.belongsTo('signCompletionActivity')
+        .reload();
+      const signCancellationActivity = await signSubcase
+        ?.belongsTo('signCancellationActivity')
+        .reload();
+      const signApprovalActivities = await signSubcase
+        ?.hasMany('signApprovalActivities')
+        .reload();
+      const signSigningActivities = await signSubcase
+        ?.hasMany('signSigningActivities')
+        .reload();
+      const signRefusalActivities = await signSubcase
+        ?.hasMany('signRefusalActivities')
+        .reload();
+
+      // delete in reverse order of creation
+      await signedFile?.destroyRecord();
+      await signedPiece?.destroyRecord();
+      await signPreparationActivity?.destroyRecord();
+      await signCompletionActivity?.destroyRecord();
+      await signCancellationActivity?.destroyRecord();
+      await signApprovalActivities?.map(async (activity) => {
+        await activity.destroyRecord();
+      });
+      await signSigningActivities?.map(async (activity) => {
+        await activity.destroyRecord();
+      });
+      await signRefusalActivities?.map(async (activity) => {
+        await activity.destroyRecord();
+      });
+      // destroying signSubcase can throw ember errors. reload fixed that problem.
+      await signSubcase?.reload();
+      await signSubcase?.destroyRecord();
+      await signFlow?.destroyRecord();
+      await signMarkingActivity.destroyRecord();
+      await piece.belongsTo('signedPiece').reload();
+      await piece.belongsTo('signMarkingActivity').reload();
+    }
   }
 }
