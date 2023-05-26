@@ -27,7 +27,6 @@
     <AuButton
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}
-      @disabled={{this.confirmUnpublish.isRunning}}
       {{on "click" (perform this.confirmUnpublish)}}
     >
       {{t "retract-from-public"}}

@@ -61,9 +61,11 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
   }
 
   get isDisabledSave() {
-    return isBlank(this.documentPublicationPlannedDate) ||
+    return (
+      isBlank(this.documentPublicationPlannedDate) ||
       isBlank(this.themisPublicationPlannedDate) ||
-      this.save.isRunning;
+      this.save.isRunning
+    );
   }
 
   @action

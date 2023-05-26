@@ -14,7 +14,6 @@
             data-test-route-agenda---agendaitem-documents-batch-edit
             @icon="pencil"
             @loading={{this.ensureFreshData.isRunning}}
-            @disabled={{this.ensureFreshData.isRunning}}
             {{on "click" this.openBatchDetails}}
           >
             {{t "batch-edit"}}
@@ -44,8 +43,6 @@
       @onOpenUploadModal={{this.openUploadModalForNewPiece}}
       @onAddPiece={{perform this.addPiece}}
       @didDeleteContainer={{this.refresh}}
-      @markForSignature={{this.markForSignature}}
-      @unmarkForSignature={{this.unmarkForSignature}}
       @isEditable={{true}}
     />
   {{else}}

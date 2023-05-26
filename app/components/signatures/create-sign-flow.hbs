@@ -1,0 +1,185 @@
+{{#if this.hasConflictingSigners}}
+  <AuAlert
+    @skin="warning"
+    @icon="alert-triangle"
+    @title={{t "create-sign-flow-conflicting-signers-title"}}
+  >
+    <p>{{t "create-sign-flow-conflicting-signers-message"}}</p>
+  </AuAlert>
+{{/if}}
+<Auk::Panel class="auk-u-mt-2">
+  <Auk::Panel::Header class="auk-u-px-1">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-h4 auk-u-m-0">
+            {{t "to-sign-by"}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="secondary"
+            @icon="pencil"
+            @loading={{this.loadSigners.isPending}}
+            {{on "click" (toggle "showMinisterModal" this)}}
+          >
+            {{t "edit-list"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="auk-u-p-0">
+    <Auk::List @bordered={{true}}>
+      {{#if this.loadSigners.isPending}}
+        <Auk::List::Item>
+          <Auk::Loader />
+        </Auk::List::Item>
+      {{else}}
+        {{#each this.signers as |signer|}}
+          <Auk::List::Item
+            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+          >
+            {{signer.person.fullName}}
+            <AuButton
+              @skin="naked"
+              @alert={{true}}
+              @hideText={{true}}
+              @icon="trash"
+              {{on "click" (fn this.removeSigner signer)}}
+            >
+              {{t "delete"}}
+            </AuButton>
+          </Auk::List::Item>
+        {{else}}
+          <Auk::List::Item>
+            {{t "no-signers-selected"}}
+          </Auk::List::Item>
+        {{/each}}
+      {{/if}}
+    </Auk::List>
+  </Auk::Panel::Body>
+</Auk::Panel>
+<Auk::Panel class="auk-u-mt-4">
+  <Auk::Panel::Header class="auk-u-px-1">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-h4 auk-u-m-0">
+            {{t "to-approve-by"}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="secondary"
+            @icon="plus"
+            {{on "click" (toggle "showApproversModal" this)}}
+          >
+            {{t "add"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="auk-u-p-0">
+    <Auk::List @bordered={{true}}>
+      {{#each this.approvers as |approver|}}
+        <Auk::List::Item class="auk-o-flex--justify-between">
+          <span class="auk-u-text-ellipsis">
+            {{approver}}
+          </span>
+          <AuButton
+            @skin="naked"
+            @alert={{true}}
+            @hideText={{true}}
+            @icon="trash"
+            {{on "click" (fn this.removeApprover approver)}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        </Auk::List::Item>
+      {{else}}
+        <Auk::List::Item>
+          {{t "no-approvers-selected"}}
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
+  </Auk::Panel::Body>
+</Auk::Panel>
+<Auk::Panel class="auk-u-mt-4">
+  <Auk::Panel::Header class="auk-u-px-1">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-h4 auk-u-m-0">
+            {{t "signing-hub-notifications"}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="secondary"
+            @icon="plus"
+            {{on "click" (toggle "showNotificationAddressesModal" this)}}
+          >
+            {{t "add"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="auk-u-p-0">
+    <Auk::List @bordered={{true}}>
+      {{#each this.notificationAddresses as |notificationAddress|}}
+        <Auk::List::Item class="auk-o-flex--justify-between">
+          <span class="auk-u-text-ellipsis">
+            {{notificationAddress}}
+          </span>
+          <AuButton
+            @skin="naked"
+            @alert={{true}}
+            @hideText={{true}}
+            @icon="trash"
+            {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        </Auk::List::Item>
+      {{else}}
+        <Auk::List::Item>
+          {{t "no-notification-addresses-selected"}}
+        </Auk::List::Item>
+      {{/each}}
+    </Auk::List>
+  </Auk::Panel::Body>
+</Auk::Panel>
+
+{{#if this.showMinisterModal}}
+  <Signatures::SelectMinistersModal
+    @loading={{this.saveSigners.isRunning}}
+    @selected={{map-by "id" this.signers}}
+    @onConfirm={{this.saveSigners.perform}}
+    @onCancel={{toggle "showMinisterModal" this}}
+  />
+{{/if}}
+
+{{#if this.showApproversModal}}
+  <Signatures::EmailModal
+    @title={{t "add-approval"}}
+    @onConfirm={{this.saveApprover}}
+    @onCancel={{toggle "showApproversModal" this}}
+  />
+{{/if}}
+
+{{#if this.showNotificationAddressesModal}}
+  <Signatures::EmailModal
+    @title={{t "add-notification"}}
+    @onConfirm={{this.saveNotificationAddress}}
+    @onCancel={{toggle "showNotificationAddressesModal" this}}
+  />
+{{/if}}

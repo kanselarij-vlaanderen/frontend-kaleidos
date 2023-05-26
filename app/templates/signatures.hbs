@@ -1,1 +1,35 @@
+{{ page-title (t "signatures") }}
+
+<Auk::Navbar
+  @skin="gray-100"
+  @auto={{true}}
+>
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <div class="auk-o-flex auk-o-flex--vertical">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "signatures"}}
+          </h4>
+        </div>
+      </Group.Item>
+      <Group.Item>
+        <Auk::Tabs>
+          <Auk::Tab @route="signatures.index">
+            {{t "to-start-up"}}
+          </Auk::Tab>
+          <Auk::Tab @route="signatures.ongoing">
+            {{t "to-follow-up"}}
+          </Auk::Tab>
+        </Auk::Tabs>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      <Group.Item>
+        <div id="signatures-navbar-buttons-area">
+        </div>
+      </Group.Item>
+    </Toolbar.Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 {{outlet}}

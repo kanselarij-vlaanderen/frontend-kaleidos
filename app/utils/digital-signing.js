@@ -1,7 +1,7 @@
 import fetch from 'fetch';
 
 async function uploadPiecesToSigninghub(signingFlow, pieces) {
-  const endpoint = `/signing-flows/${signingFlow.id}/upload-document-to-signinghub`;
+  const endpoint = `/signing-flows/${signingFlow.id}/upload-to-signinghub`;
   const data = [];
   for (const piece of pieces) {
     data.push({

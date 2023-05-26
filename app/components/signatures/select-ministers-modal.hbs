@@ -1,0 +1,39 @@
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header
+    @title={{t "to-sign-by"}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{@loading}}
+  />
+  <Auk::Modal::Body>
+    <Mandatees::CheckboxList
+      @selected={{this.selectedMinisters}}
+      @onChange={{fn (mut this.selectedMinisters)}}
+      @allowPartialMatch={{true}}
+    />
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large" as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="naked"
+            @disabled={{@loading}}
+            {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @loading={{@loading}}
+            {{on "click" (fn @onConfirm this.selectedMinisters)}}
+          >
+            {{t "apply"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

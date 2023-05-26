@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /*
  * This service is used to make necessary changes to access levels of certain pieces when an access level
@@ -8,6 +9,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PieceAccessLevelService extends Service {
   @service agendaService;
   @service store;
+  @service currentSession;
 
 /*
  * This method is used to update the access levels of the previous version of a piece.
@@ -108,24 +110,57 @@ export default class PieceAccessLevelService extends Service {
     }
   }
 
+  /**
+   * Strengthen the access level of the piece to vertrouwelijk (unless the
+   * access level was already this level or higher) and then update all the previous access
+   * levels.
+   */
+  async strengthenAccessLevelToConfidential(piece) {
+    const accessLevel = await piece.accessLevel;
+    if(
+      ![
+        CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+      ].includes(accessLevel.uri)
+    ) {
+      const confidential = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
+      piece.accessLevel = confidential;
+      await piece.save();
+      await this.updatePreviousAccessLevels(piece);
+    }
+  }
+
   /*
    * This method is used to update the access levels of the reports related to of a subcase's decision-activity.
    * When a subcase has been updated to being confidential, all the reports of the decision-activity get the
    * "Vertrouwelijk" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    const vertrouwelijk = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
     const pieces = await this.store.query('piece', {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       include: 'access-level',
     });
 
     await Promise.all(pieces.toArray().map(async (piece) => {
-      const accessLevel = await piece.accessLevel;
-      if (accessLevel.uri !== vertrouwelijk.uri) {
-        piece.accessLevel = vertrouwelijk;
-        return piece.save();
-      }
+      await this.strengthenAccessLevelToConfidential(piece);
+    }));
+  }
+
+    /*
+   * This method is used to update the access levels of the documents related to of a subcase's submission-activity.
+   * When a subcase has been updated to being confidential, all the documents of the submission-activity get the
+   * "Vertrouwelijk" access level.
+   */
+
+  async updateSubmissionAccessLevelOfSubcase(subcase) {
+    const pieces = await this.store.query('piece', {
+      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:next-piece]': true,
+      'page[size]': PAGE_SIZE.PIECES,
+    });
+    
+    await Promise.all(pieces.toArray().map(async (piece) => {
+      await this.strengthenAccessLevelToConfidential(piece);
     }));
   }
 
@@ -195,5 +230,49 @@ export default class PieceAccessLevelService extends Service {
         return false;
       }
     }
+  }
+
+  async canViewConfidentialPiece(piece) {
+    const accessLevel = await piece?.accessLevel;
+    if (this.currentSession.may('view-only-specific-confidential-documents') && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        filter: {
+          pieces: {
+            ':id:': piece?.id,
+          },
+        },
+      });
+      let subcase;
+      if (submissionActivity) {
+        subcase = await submissionActivity.subcase;
+      } else {
+        const decisionActivity = await this.store.queryOne('decision-activity', {
+          filter: {
+            report: {
+              ':id:': piece?.id,
+            },
+          },
+        });
+        if (decisionActivity) {
+          subcase = await decisionActivity.subcase;
+        }
+      }
+      if (subcase) {
+        const mandatees = await subcase.mandatees;
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandatees.length && mandateeUris.includes(orgMandateeUri)) {
+            return true;
+          }
+        }
+      }
+    } else {
+      // default to standard behaviour (if confidential doc is in your graph it can be accessed normally)
+      return true;
+    }
+    return false;
   }
 }

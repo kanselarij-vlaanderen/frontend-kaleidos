@@ -10,7 +10,6 @@
     <AuButton
       @skin="primary"
       @loading={{this.confirmPublish.isRunning}}
-      @disabled={{this.confirmPublish.isRunning}}
       {{on "click" (perform this.confirmPublish)}}
     >
       {{t "publish-to-public"}}

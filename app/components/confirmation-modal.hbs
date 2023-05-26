@@ -42,7 +42,7 @@
             <AuButton
               data-test-confirmation-modal-confirm
               @alert={{@alert}}
-              @disabled={{or @disabled @loading}}
+              @disabled={{@disabled}}
               @loading={{@loading}}
               @icon={{@confirmIcon}}
               {{on "click" @onConfirm}}

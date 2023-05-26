@@ -11,7 +11,7 @@ const selectors = {
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
-    activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
+    tabs: '[data-test-agendaitem-nav-tabs]',
   },
 
   // agendaitem-decision
