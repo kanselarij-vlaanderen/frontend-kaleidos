@@ -243,6 +243,21 @@
       @referenceAgenda={{@currentAgenda}}
       @onChange={{set this "selectedMandatees"}}
     />
+    <Auk::Label>{{t "file-types"}}</Auk::Label>
+    <AuRadioGroup
+      @alignment="inline"
+      @selected={{this.selectedDownloadOption}}
+      @onChange={{this.onChangeDownloadOption}}
+      as |Group|
+    >
+      {{#each this.downloadOptions as |option|}}
+      <Group.Radio
+        @value={{option.value}}
+        >
+        {{option.label}}
+      </Group.Radio>
+      {{/each}}
+    </AuRadioGroup>
   </:body>
 </ConfirmationModal>
 
