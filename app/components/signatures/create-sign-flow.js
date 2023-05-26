@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -21,32 +22,74 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   @tracked approvers = new TrackedArray([]);
   @tracked notificationAddresses = new TrackedArray([]);
 
+  @tracked hasConflictingSigners = false;
   primeMinister = null;
 
   constructor() {
     super(...arguments);
-    this.loadSigners.perform();
   }
 
-  loadSigners = task(async () => {
+  loadSigners = trackedFunction(this, async () => {
+    if (!this.args.decisionActivities) {
+      return;
+    }
+    const decisionActivities = this.args.decisionActivities.toArray();
+    let hasConflictingSigners = false;
+
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
       'filter[:lt:start]': startOfDay(new Date()).toISOString(),
       'filter[:has-no:end]': true,
       include: 'person,mandate.role',
     });
-    if (this.primeMinister) {
-      this.signers.push(this.primeMinister);
+
+    const getSubmitterAndCosigners = async (decisionActivity) => {
+      const subcase = await decisionActivity.subcase;
+      const submitter = await subcase.requestedBy;
+      const cosigners = await subcase.mandatees;
+      return { submitter, cosigners };
     }
 
-    const subcase = await this.args.decisionActivity.subcase;
-    const mandatee = await subcase.requestedBy;
-    if (mandatee) {
-      const person = await mandatee?.person;
-      const primeMinisterPerson = await this.primeMinister?.person;
-      if (person.id !== primeMinisterPerson?.id) {
-        this.signers.push(mandatee);
+    const [head, ...tail] = decisionActivities;
+    const {
+      submitter,
+      cosigners,
+    } = await getSubmitterAndCosigners(head);
+
+    for (let decisionActivity of tail)  {
+      const {
+        submitter: _submitter,
+        cosigners: _cosigners,
+      } = await getSubmitterAndCosigners(decisionActivity);
+
+      if (submitter.id !== _submitter.id) {
+        hasConflictingSigners = true;
+        break;
       }
+      if (_cosigners.length !== cosigners.length) {
+        hasConflictingSigners = true;
+        break;
+      }
+      const _cosignersIds = _cosigners.map((signer => signer.id));
+      const cosignersIds = cosigners.map((signer => signer.id));
+      for (const mandateeId of _cosignersIds) {
+        if (!cosignersIds.includes(mandateeId)) {
+          hasConflictingSigners = true;
+          break;
+        }
+      }
+      if (hasConflictingSigners) break;
+    }
+
+    this.hasConflictingSigners = hasConflictingSigners;
+    if (hasConflictingSigners) {
+      this.signers = new TrackedArray([]);
+    } else {
+      this.signers = new TrackedArray([...new Set([
+        this.primeMinister,
+        submitter,
+        ...cosigners,
+      ].filter(m => m))]);
     }
     this.args.onChangeSigners?.(this.signers);
   });

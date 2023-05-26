@@ -64,14 +64,16 @@ context('new document viewer tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addDocumentsToApprovalItem('Goedkeuring van het verslag', files);
     cy.addNewPieceToApprovalItem('Goedkeuring van het verslag', file.newFileName, newVersionfile);
-    cy.logoutFlow();
+    cy.wait(3000);
+    cy.logout();
   });
   const defaultAccessLevel = 'Intern Regering';
   const bisName = 'test pdfBIS';
   const newName = 'new name test';
-  const newDocumentType = 'BVR';
+  const newDocumentType = 'Besluit Vlaamse Regering';
   const newAccessLevel = 'Intern Overheid';
-  const searchDocumentType = 'Advies AgO';
+  const searchDocumentType = 'Advies agentschap overheidspersoneel';
+  const searchDocumentTypeAbbr = 'Advies AgO';
 
   beforeEach(() => {
     cy.login('Admin');
@@ -159,7 +161,7 @@ context('new document viewer tests', () => {
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentTypeAbbr}`);
       });
     cy.get(document.previewVersionCard.name).eq(1)
       .parents(document.previewVersionCard.container)
@@ -168,7 +170,7 @@ context('new document viewer tests', () => {
       .parents(document.previewVersionCard.container)
       .should('have.class', 'active')
       .within(() => {
-        cy.get(document.previewVersionCard.details).contains(`${searchDocumentType}`);
+        cy.get(document.previewVersionCard.details).contains(`${searchDocumentTypeAbbr}`);
       });
     cy.get(document.documentPreviewSidebar.tabs.details).click();
     cy.get(document.previewDetailsTab.name).should('contain', `${fileName}.pdf`);

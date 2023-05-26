@@ -10,7 +10,7 @@
             <Group.Item class="auk-u-maximize-width">
               <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
                 <span class="auk-overline">
-                  {{@piece.documentContainer.type.label}}
+                  {{@piece.documentContainer.type.altLabel}}
                 </span>
               </div>
               <LinkTo @route="document" @model={{@piece.id}} class="auk-h4">
@@ -45,6 +45,18 @@
               {{/if}}
             </Group.Item>
           </Toolbar.Group>
+          {{#if this.signaturesEnabled}}
+            <Toolbar.Group @position="right" as |Group|>
+              <Group.Item class="auk-o-flex">
+                <Group.Item>
+                  <SignaturePill
+                    @piece={{@piece}}
+                    @signMarkingActivity={{this.signMarkingActivity}}
+                  />
+                </Group.Item>
+              </Group.Item>
+            </Toolbar.Group>
+          {{/if}}
         </Auk::Toolbar>
       </div>
     </div>

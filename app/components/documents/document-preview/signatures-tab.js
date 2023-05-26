@@ -10,6 +10,8 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @tracked signMarkingActivity;
   @tracked agendaitem;
   @tracked decisionActivity;
+  @tracked canManageSignFlow = false;
+  @tracked isOpenVerifyDeleteSignFlow = false;
 
   signers = [];
   approvers = [];
@@ -18,6 +20,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   constructor() {
     super(...arguments);
     this.loadSignatureRelatedData.perform();
+    this.loadCanManageSignFlow.perform();
   }
 
   loadSignatureRelatedData = task(async () => {
@@ -41,9 +44,21 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       this.decisionActivity,
       this.signers,
       this.approvers,
-      this.notificationAddresses,
+      this.notificationAddresses
     );
     await this.args.piece.reload();
     this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+  });
+
+  loadCanManageSignFlow = task(async () => {
+    this.canManageSignFlow = await this.signatureService.canManageSignFlow(
+      this.args.piece
+    );
+  });
+
+  verifyDeleteSignFlow = task(async () => {
+    await this.signatureService.removeSignFlow(this.args.piece);
+    await this.loadSignatureRelatedData.perform();
+    this.isOpenVerifyDeleteSignFlow = false;
   });
 }
