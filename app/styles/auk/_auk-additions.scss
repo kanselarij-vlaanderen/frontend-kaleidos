@@ -173,16 +173,6 @@ table tr.lt-expanded-row {
 
 // Table
 
-.auk-table {
-  .auk-button-toolbar {
-    .au-c-button,
-    .au-c-link {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-}
-
 .auk-table--list {
   thead {
     display: none;
@@ -202,45 +192,6 @@ table tr.lt-expanded-row {
     tr:focus-within td {
       background-color: transparent;
     }
-  }
-}
-
-// Button toolbar
-
-.auk-button-toolbar {
-  .au-c-button {
-    margin: 0.4rem 0.8rem 0.4rem 0;
-  }
-
-  .au-c-button:last-child {
-    margin-right: 0;
-  }
-
-  .au-c-link {
-    margin: 0.4rem 1.6rem 0.4rem 0;
-  }
-
-  .au-c-link:last-child {
-    margin-right: 0;
-  }
-}
-
-.auk-button-toolbar--compact {
-  .au-c-button,
-  .au-c-button:last-child,
-  .au-c-link,
-  .au-c-link:last-child {
-    margin: 0 -0.1rem 0 0;
-  }
-
-  .au-c-button:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .au-c-button:last-child {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
   }
 }
 

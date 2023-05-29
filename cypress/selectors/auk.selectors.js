@@ -26,10 +26,6 @@ const selectors = {
     close: '.auk-alert--error > button',
   },
 
-  label: {
-    error: '.auk-label-error',
-  },
-
   modal: {
     container: '.auk-modal',
     body: '.auk-modal__body',
