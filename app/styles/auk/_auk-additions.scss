@@ -339,14 +339,6 @@ table tr.lt-expanded-row {
   }
 }
 
-// Override default capitalization of first letter in paragraphs
-.au-c-content,
-.say-editor {
-  p::first-letter {
-    text-transform: none;
-  };
-}
-
 .auk-alert-stack {
   z-index: 10000;
 }
