@@ -145,12 +145,12 @@
           data-test-details-tab-document-type
           @key={{t "document-type"}}
         >
-          {{this.documentType.label}}
+          {{this.documentType.altLabel}}
         </Auk::KeyValue>
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
-          {{@piece.name}}.{{extension}}
+          {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
         {{/let}}
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
@@ -179,23 +179,41 @@
       </Auk::KeyValue>
       {{#if (and this.isSignaturesEnabled (await (this.canViewSignedPiece)))}}
         {{#if @piece.signedPiece.file}}
-          <Auk::KeyValue
-            @key={{t "signed-document"}}
-          >
-            <AuLinkExternal
-              href={{await @piece.signedPiece.namedDownloadLinkPromise}}
-              @skin="primary"
-              @icon="download"
-              @iconAlignment="left"
-              download
-            >
-              {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
-            </AuLinkExternal>
-            <AccessLevelPill 
-              @accessLevel={{await @piece.signedPiece.accessLevel}} 
-              @isEditable={{false}}
-            />
-          </Auk::KeyValue>
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+            <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              <AuLinkExternal
+                href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+                @skin="primary"
+                @icon="download"
+                @iconAlignment="left"
+                download
+              >
+                {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+              </AuLinkExternal>
+              <AccessLevelPill 
+                @accessLevel={{await @piece.signedPiece.accessLevel}} 
+                @isEditable={{false}}
+              />
+              {{#if (user-may "remove-signatures")}}
+                <AuDropdown
+                  @icon="three-dots"
+                  @title={{t "more"}}
+                  @hideText={{true}}
+                  @alignment="right"
+                >
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+                    role="menuitem"
+                  >
+                    {{t "delete-signed-piece"}}
+                  </AuButton>
+                </AuDropdown>
+              {{/if}}
+            </div>
+          </div>
         {{/if}}
       {{/if}}
     </Auk::Panel::Body>
@@ -214,5 +232,22 @@
     @message={{t "delete-document-message"}}
     @onCancel={{fn (mut this.isOpenVerifyDeleteModal) false}}
     @onVerify={{this.verifyDeleteDocument}}
+  />
+{{/if}}
+
+{{#if this.isOpenVerifyDeleteSignFlow}}
+  {{!-- TODO: vl-refactor --}}
+  {{!-- We can't use AuModal here because said modals get rendered inside a
+        "wormhole" div. The current component is also part of a modal which gets
+        rendered in the same "wormhole", so opening another AuModal here will
+        overwrite the existing page content, and break the route. If AuModals
+        ever support rendering multiple modals over each other, we can use one
+        here, otherwise we might want to make the doc view not be a modal. --}}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-signed-piece"}}
+    @message={{t "verify-delete-signed-piece"}}
+    @onCancel={{toggle "isOpenVerifyDeleteSignFlow" this}}
+    @onVerify={{this.verifyDeleteSignFlow.perform}}
+    @isLoading={{this.verifyDeleteSignFlow.isRunning}}
   />
 {{/if}}

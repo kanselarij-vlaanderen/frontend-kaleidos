@@ -34,6 +34,7 @@ export default class SignaturesOngoingRoute extends Route {
         'creator',
         'decision-activity',
         'sign-subcase.sign-marking-activity.piece.document-container.type',
+        // 'sign-subcase.sign-signing-activities.mandatee.person',
       ].join(','),
       page: {
         number: params.page,
