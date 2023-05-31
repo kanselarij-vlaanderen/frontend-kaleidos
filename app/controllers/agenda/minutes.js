@@ -163,6 +163,7 @@ export default class AgendaMinutesController extends Controller {
     this.meeting.save();
 
     this.isEditing = false;
+    this.refresh();
   });
 
   @action
@@ -199,6 +200,6 @@ export default class AgendaMinutesController extends Controller {
 
   @action
   refresh() {
-    this.router.refresh('agenda.documents');
+    this.router.refresh('agenda.minutes');
   }
 }
