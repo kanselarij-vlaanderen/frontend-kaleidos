@@ -97,7 +97,6 @@
                   <AuButton
                     data-test-news-item-edit-item-save
                     @loading={{this.confirmSave.isRunning}}
-                    @disabled={{this.confirmSave.isRunning}}
                     {{on "click" this.save}}
                   >
                     {{t "save"}}
@@ -162,7 +161,6 @@
               <AuButton
                 data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
-                @disabled={{this.confirmSave.isRunning}}
                 {{on "click" this.save}}
               >
                 {{t "save"}}

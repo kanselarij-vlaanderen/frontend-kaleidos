@@ -1,5 +1,8 @@
 {{!-- TODO: when a new radio-list component is added to the ember-appuniversum library, replace the HTML below with the correct components --}}
-<div class="auk-radio-list auk-radio-list--inline auk-u-mb-2">
+<AuRadioGroup
+  @alignment="inline"
+  class="auk-u-mb-2"
+>
   {{#each this.radioOptions as |opt index|}}
     {{#let (concat this.radioName "-" index) as |radioId|}}
       <label class="au-c-control au-c-control--radio" data-children-count="1" for={{radioId}}>
@@ -33,7 +36,7 @@
       {{t "option-others"}}
     </label>
   {{/let}}
-</div>
+</AuRadioGroup>
 {{#if this.othersShown}}
   <PowerSelect
     @options={{this.otherOptions}}

@@ -7,7 +7,7 @@
         class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
         data-test-vl-document-name>
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
-          {{@piece.name}}.{{extension}}
+          {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
         {{/let}}
       </LinkTo>
     {{else}}

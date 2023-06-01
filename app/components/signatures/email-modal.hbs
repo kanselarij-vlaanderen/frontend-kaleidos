@@ -8,8 +8,7 @@
       <AuLabel>{{t "email-address"}}</AuLabel>
       <AuInput
         data-test-signatures-create-email-input
-        @onChange={{fn (mut this.emailBuffer)}}
-        @maskOptions={{this.inputmaskOptions}}
+        {{on "input" this.onInputEvent}}
         @warning={{and this.emailBuffer (not this.isValid)}}
         @type="text"
         @width="block"

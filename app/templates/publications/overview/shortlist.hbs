@@ -22,6 +22,8 @@
         <td>
           {{#each (await (this.getMandateeNames row)) as |name|}}
             {{name}}
+          {{else}}
+            -
           {{/each}}
         </td>
         <td>{{date (await (this.getDecisionDate row))}}</td>

@@ -94,9 +94,11 @@
       {{#each this.approvers as |approver|}}
         <Auk::List::Item
           data-test-signatures-create-sign-flow-approvers-item
-          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+          class="auk-o-flex--justify-between"
         >
-          {{approver}}
+          <span class="auk-u-text-ellipsis">
+            {{approver}}
+          </span>
           <AuButton
             data-test-signatures-create-sign-flow-approvers-remove
             @skin="naked"
@@ -145,9 +147,11 @@
       {{#each this.notificationAddresses as |notificationAddress|}}
         <Auk::List::Item
           data-test-signatures-create-sign-flow-notification-adresses-item
-          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+          class="auk-o-flex--justify-between"
         >
-          {{notificationAddress}}
+          <span class="auk-u-text-ellipsis">
+            {{notificationAddress}}
+          </span>
           <AuButton
             data-test-signatures-create-sign-flow-notification-adresses-remove
             @skin="naked"
