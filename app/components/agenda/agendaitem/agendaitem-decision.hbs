@@ -36,7 +36,12 @@
   </Auk::Panel::Header>
 
   {{#if
-    (and this.loadReport.isIdle (not this.isEditing) this.report.pieceParts)
+    (and
+      this.loadReport.isIdle
+      (not this.isEditing)
+      this.report.pieceParts
+      this.enableDigitalAgenda
+    )
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
       {{#if this.onCreateNewVersion.isIdle}}
@@ -89,14 +94,14 @@
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
-        <h4 class="auk-h4">Betreft</h4>
+        <h4 class="auk-h4">{{t "concerns"}}</h4>
         <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
           @piecePart={{this.betreftPiecePart}}
           @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
           @onUpdateContentClicked={{this.updateBetreftContent}}
         />
-        <h4 class="auk-h4 au-u-padding-top">Beslissing</h4>
+        <h4 class="auk-h4 au-u-padding-top">{{t "decision"}}</h4>
         <Agenda::Agendaitem::Decision::Editor
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
           @piecePart={{this.beslissingPiecePart}}
@@ -132,7 +137,12 @@
         </Auk::Toolbar>
       </Auk::Panel::Footer>
     {{else}}
-      {{#if (and this.report.file (not this.report.pieceParts))}}
+      {{#if
+        (or
+          (and this.report.file (not this.report.pieceParts))
+          (not this.enableDigitalAgenda)
+        )
+      }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
@@ -146,7 +156,9 @@
             @bordered={{false}}
           />
         </Auk::Panel::Body>
-      {{else if (and (user-may "manage-decisions") (not this.enableDigitalAgenda))}}
+      {{else if
+        (and (user-may "manage-decisions") (not this.enableDigitalAgenda))
+      }}
         <Auk::Panel::Body @noPadding={{true}}>
           <div class="auk-u-p-2">
             <AuButton
@@ -160,7 +172,7 @@
           </div>
         </Auk::Panel::Body>
       {{/if}}
-      {{#if this.report.pieceParts}}
+      {{#if (and this.report.pieceParts this.enableDigitalAgenda)}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
@@ -188,7 +200,7 @@
   {{/if}}
 </Auk::Panel>
 
-{{#if this.isAddingReport}} 
+{{#if this.isAddingReport}}
   <Utils::AddDocument
     @title={{t "signed-decision-add"}}
     @onSave={{this.attachReportPdf}}
