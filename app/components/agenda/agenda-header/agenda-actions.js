@@ -32,12 +32,12 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   downloadOptions = [
     {
       label: this.intl.t('document-type-pdf-only'),
-      value: "pdf"
+      value: 'pdf',
     },
     {
       label: this.intl.t('all-filetypes'),
-      value:"all"
-    }
+      value: 'all',
+    },
   ];
 
   @tracked isAddingAgendaitems = false;
