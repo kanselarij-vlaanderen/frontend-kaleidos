@@ -33,7 +33,7 @@
       @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-decisions-data-table-row>
           <Search::ResultCards::Decision
             @date={{row.decisionStartDate}}
             @title={{row.subcaseTitle}}

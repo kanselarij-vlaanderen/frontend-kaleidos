@@ -30,6 +30,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service toaster;
   @service intl;
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -59,7 +60,14 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get mayCreateSignMarkingActivity() {
     return !this.signMarkingActivity
+      && this.signaturesEnabled
       && this.currentSession.may('manage-signatures');
+  }
+
+  get showSignaturePill() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
   }
 
   @task
@@ -276,5 +284,12 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
+  }
+
+  canViewSignedPiece = async () => {
+    if (this.currentSession.may('manage-signatures')) {
+      return await this.signatureService.canManageSignFlow(this.args.piece);
+    }
+    return false;
   }
 }

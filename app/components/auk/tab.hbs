@@ -1,32 +1,16 @@
 {{#if @route}}
-  {{!-- Outer LinkTo used merely for active-class (taking into account current-when etc),
-      therefore disabled and in need of the deprecated @tagName.
-      Inner LinkTo used for navigation --}}
-  {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}
-  <LinkTo
-    @tagName="li"
-    class="auk-tabs__tab
-      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
-    @activeClass="auk-tabs__tab--active"
-    @loadingClass=""
-    @disabledClass=""
-    @disabled={{true}}
-    @route={{@route}}
-    @models={{this.models}}
-    @current-when={{@current-when}}
-    @query={{this.query}}
+  <li
+    class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
     ...attributes
   >
-    {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
     <LinkTo
-      @activeClass=""
-      @loadingClass=""
-      @disabledClass=""
       @route={{@route}}
       @models={{this.models}}
-      @disabled={{@disabled}}
-      @current-when={{@current-when}}
       @query={{this.query}}
+      @current-when={{@current-when}}
+      @disabled={{@disabled}}
+      @activeClass="auk-tabs__tab__link--active"
+      class="auk-tabs__tab__link"
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
@@ -36,36 +20,35 @@
         {{yield}}
       </Auk::Tab::InnerLayout>
     </LinkTo>
-  </LinkTo>
+  </li>
 {{else if @isHierarchicalBack}}
   <li
-    class="auk-tabs__tab auk-tabs__hierarchical-back auk-tabs__tab--active"
-    {{!-- Here the tab always has the active class because that's how it would
-          behave if passed in a @route to the parent route, because the parent
-          route is always active --}}
+    class="auk-tabs__tab auk-tabs__hierarchical-back"
+    ...attributes
   >
-    {{!-- template-lint-disable link-href-attributes no-invalid-interactive --}}
-    <a
+    <button
       type="button"
-      disabled={{not this.hasHistory}}
+      {{!-- disabled={{not this.hasHistory}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
+      class="auk-tabs__tab__link"
       {{on "click" this.transitionBack}}
-      ...attributes
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
         @icon={{this.icon}}
         @counter={{@counter}}
       />
-    </a>
-    {{!-- template-lint-enable link-href-attributes no-invalid-interactive --}}
+    </button>
   </li>
 {{else}}
   <li
-    class="auk-tabs__tab
-      {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}
-      {{if @active "auk-tabs__tab--active"}}"
+    class="auk-tabs__tab"
+    ...attributes
   >
-    <button type="button" ...attributes>
+    <button
+      type="button"
+      {{!-- disabled={{@disabled}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
+      class="auk-tabs__tab__link {{if @active "auk-tabs__tab__link--active"}}"
+    >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
         @icon={{this.icon}}

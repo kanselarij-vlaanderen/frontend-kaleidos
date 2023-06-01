@@ -19,6 +19,8 @@ const {
 // Available permissions are:
 // - manage-signatures: currently everything related to digital signing. Will be detailed later
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
+// - manage-only-specific-signatures: allow the profile to only create signing flows for their own mandatee.
+// - remove-signatures: Remove the signed piece and all data of a sign-flow 
 // - search-publication-flows
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
@@ -49,6 +51,7 @@ const groups = [
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
+      'remove-signatures',
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
@@ -79,6 +82,7 @@ const groups = [
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
+      'remove-signatures',
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
@@ -105,6 +109,7 @@ const groups = [
     defaultRoute: 'agendas',
     permissions: [
       'manage-signatures',
+      'remove-signatures',
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
@@ -167,6 +172,8 @@ const groups = [
     roles: [KABINET_DOSSIERBEHEERDER],
     defaultRoute: 'agendas',
     permissions: [
+      'manage-signatures',
+      'manage-only-specific-signatures',
       'view-document-version-info',
       'view-documents-before-release',
       'view-only-specific-confidential-documents'

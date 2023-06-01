@@ -4,12 +4,16 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent extends Component {
+  @service intl;
   @service store;
   @service signatureService;
+  @service toaster;
 
   @tracked signMarkingActivity;
   @tracked agendaitem;
   @tracked decisionActivity;
+  @tracked canManageSignFlow = false;
+  @tracked isOpenVerifyDeleteSignFlow = false;
 
   signers = [];
   approvers = [];
@@ -18,6 +22,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   constructor() {
     super(...arguments);
     this.loadSignatureRelatedData.perform();
+    this.loadCanManageSignFlow.perform();
   }
 
   loadSignatureRelatedData = task(async () => {
@@ -36,14 +41,37 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   });
 
   createSignFlow = task(async () => {
-    await this.signatureService.createSignFlow(
-      this.args.piece,
-      this.decisionActivity,
-      this.signers,
-      this.approvers,
-      this.notificationAddresses,
+    try {
+      await this.signatureService.createSignFlow(
+        this.args.piece,
+        this.decisionActivity,
+        this.signers,
+        this.approvers,
+        this.notificationAddresses,
+      );
+      await this.args.piece.reload();
+      this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+      this.toaster.success(
+        this.intl.t('document-was-sent-to-signinghub'),
+        this.intl.t('successfully-started-sign-flow')
+      )
+    } catch {
+      this.toaster.error(
+        this.intl.t('create-sign-flow-error-message'),
+        this.intl.t('warning-title')
+      );
+    }
+  });
+
+  loadCanManageSignFlow = task(async () => {
+    this.canManageSignFlow = await this.signatureService.canManageSignFlow(
+      this.args.piece
     );
-    await this.args.piece.reload();
-    this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+  });
+
+  verifyDeleteSignFlow = task(async () => {
+    await this.signatureService.removeSignFlow(this.args.piece);
+    await this.loadSignatureRelatedData.perform();
+    this.isOpenVerifyDeleteSignFlow = false;
   });
 }
