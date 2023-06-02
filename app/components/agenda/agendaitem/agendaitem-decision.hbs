@@ -138,9 +138,9 @@
       </Auk::Panel::Footer>
     {{else}}
       {{#if
-        (or
-          (and this.report.file (not this.report.pieceParts))
-          (not this.enableDigitalAgenda)
+        (and
+          this.report.file
+          (or (not this.report.pieceParts) (not this.enableDigitalAgenda))
         )
       }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
