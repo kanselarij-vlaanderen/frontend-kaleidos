@@ -9,12 +9,18 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 export default class DocumentController extends Controller {
   @service router;
   @service store;
+  @service intl;
 
   @tracked decisionActivity;
-
-  queryParams = ['isSigning', 'activeTab'];
-  @tracked isSigning = false;
+  queryParams = [
+    {
+      activeTab: {
+        type: 'string',
+      },
+    },
+  ];
   @tracked activeTab = 'details';
+  @tracked isLoadingModel;
 
   @action
   transitionBack() {
@@ -33,10 +39,10 @@ export default class DocumentController extends Controller {
 
   @action
   setSelectedVersion(piece) {
-    this.router.transitionTo(
+    this.router.replaceWith(
       'document',
       piece.id,
-      { queryParams: { activeTab: 'versions'}}
+      { queryParams: { tab: this.intl.t('versions')}}
     );
   }
 

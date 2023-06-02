@@ -1,8 +1,24 @@
-<Documents::DocumentPreview::DocumentPreviewModal
-  @piece={{this.model}}
-  @onClose={{this.transitionBack}}
-  @didDeletePiece={{this.didDeletePiece}}
-  @activeTab={{this.activeTab}}
-  @onSelectVersion={{this.setSelectedVersion}}
-  @onTabChanged={{this.tabChanged}}
-/>
+{{#if this.isLoadingModel}}
+  <AuModal
+    @modalOpen={{true}}
+    @closeModal={{this.transitionBack}}
+    @size="fullscreen"
+    @padding="none"
+  >
+    <:title>
+      <AuLoader @padding="small"/>
+    </:title>
+    <:body>
+      <WebComponents::LoadingPage />
+    </:body>
+  </AuModal>
+{{else}}
+  <Documents::DocumentPreview::DocumentPreviewModal
+    @piece={{this.model}}
+    @onClose={{this.transitionBack}}
+    @didDeletePiece={{this.didDeletePiece}}
+    @activeTab={{this.activeTab}}
+    @onSelectVersion={{this.setSelectedVersion}}
+    @onTabChanged={{this.tabChanged}}
+  />
+{{/if}}

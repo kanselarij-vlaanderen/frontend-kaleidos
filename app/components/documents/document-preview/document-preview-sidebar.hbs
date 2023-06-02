@@ -21,16 +21,16 @@
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
-                  {{on "click" (fn this.setActiveTab "signatures")}}
-                  @active={{eq this.activeTab "signatures"}}
+                  {{on "click" (fn this.setActiveTab (t "signatures"))}}
+                  @active={{eq this.activeTab (t "signatures")}}
                 >
                   {{t "signatures"}}
                 </Auk::Tab>
               {{/if}}
               <Auk::Tab
                 data-test-document-preview-sidebar-tab-versions
-                {{on "click" (fn this.setActiveTab "versions")}}
-                @active={{eq this.activeTab "versions"}}
+                {{on "click" (fn this.setActiveTab (t "versions"))}}
+                @active={{eq this.activeTab (t "versions")}}
               >
                 {{t "versions"}}
               </Auk::Tab>
@@ -79,13 +79,13 @@
             @onChangeFile={{@onChangeFile}}
           />
           {{! SIGNATURES }}
-        {{else if (eq this.activeTab "signatures")}}
+        {{else if (eq this.activeTab (t "signatures"))}}
           <Documents::DocumentPreview::SignaturesTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
           />
           {{! VERSIONS }}
-        {{else if (eq this.activeTab "versions")}}
+        {{else if (eq this.activeTab (t "versions"))}}
           <Documents::DocumentPreview::VersionsTab
             @documentContainer={{this.documentContainer}}
             @currentVersion={{@piece}}

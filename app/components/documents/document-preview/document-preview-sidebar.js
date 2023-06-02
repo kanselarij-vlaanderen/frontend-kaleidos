@@ -10,8 +10,8 @@ import { task } from 'ember-concurrency';
  *
  * Contains tabs:
  * - "details"
- * - "signatures"
- * - "versions"
+ * - "signatures" (translated to dutch for display)
+ * - "versions" (translated to dutch for display)
  */
 export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service currentSession;

@@ -156,16 +156,18 @@
                 </AuButton>
                 <AuHr />
                 {{#if this.mayCreateSignMarkingActivity}}
-                  <AuLink
-                    @skin="link"
-                    @route="document"
-                    @model={{this.piece.id}}
-                    @query={{hash isSigning=true}}
-                    role="menuitem"
-                  >
-                    {{t "present-for-signing"}}
-                  </AuLink>
-                  <AuHr />
+                  {{#let (t "signatures") as |signTab| }}
+                    <AuLink
+                      @skin="link"
+                      @route="document"
+                      @model={{this.piece.id}}
+                      @query={{hash activeTab=signTab}}
+                      role="menuitem"
+                    >
+                      {{t "present-for-signing"}}
+                    </AuLink>
+                    <AuHr />
+                  {{/let}}
                 {{/if}}
                 <AuButton
                   data-test-document-card-delete
