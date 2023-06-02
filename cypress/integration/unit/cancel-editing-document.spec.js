@@ -386,8 +386,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const accesLevelOption1 = 'Intern Regering';
     const accesLevelOption3 = 'Publiek';
     const accesLevelOption4 = 'Vertrouwelijk';
-    const typeOption = 'Advies van Inspectie Financiën';
-    const typeOption2 = 'Besluit van de Vlaamse Regering';
+    const typeOption = 'Advies Inspectie Financiën';
+    const typeOption2 = 'Besluit Vlaamse Regering';
     const typeOption3 = 'Voorontwerp van decreet';
     const typeSearchOption = 'Advies agentschap overheidspersoneel';
 
