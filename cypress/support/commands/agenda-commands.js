@@ -421,6 +421,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('GET', '/subcases?**sort**').as(`getSubcasesFiltered_${randomInt}`);
   cy.intercept('POST', '/agendaitems').as(`createNewAgendaitem_${randomInt}`);
   cy.intercept('POST', '/agenda-activities').as(`createAgendaActivity_${randomInt}`);
+  cy.intercept('POST', '/decision-activities').as(`createDecisionActivity_${randomInt}`);
+  cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
 
   cy.get(auk.loader).should('not.exist');
@@ -464,6 +466,12 @@ function addAgendaitemToAgenda(subcaseTitle) {
   });
 
   cy.wait(`@createAgendaActivity_${randomInt}`, {
+    timeout: 20000,
+  });
+  cy.wait(`@createDecisionActivity_${randomInt}`, {
+    timeout: 20000,
+  });
+  cy.wait(`@createAgendaItemTreatment_${randomInt}`, {
     timeout: 20000,
   });
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems_${randomInt}`);

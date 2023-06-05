@@ -62,13 +62,16 @@ context('meeting actions tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaitemControls.action.delete).forceClick();
-    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
-      .click();
-
     cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');
     cy.intercept('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
+    cy.intercept('DELETE', 'agenda-item-treatments/**').as('deleteAgendaItemTreatment');
+    cy.intercept('DELETE', 'decision-activities/**').as('deleteDecisionActivity');
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
+      .click();
     cy.wait('@deleteAgendaitem'); // 2 of these happen
     cy.wait('@deleteAgendaActivity');
+    cy.wait('@deleteAgendaItemTreatment');
+    cy.wait('@deleteDecisionActivity');
     cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.loader, {
       timeout: 60000,
