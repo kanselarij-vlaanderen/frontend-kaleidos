@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
-import { trackedFunction } from 'ember-resources/util/function';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 function renderAttendees(attendees) {
@@ -146,9 +146,9 @@ export default class AgendaMinutesController extends Controller {
 
   @tracked editor = null;
 
-  currentPiecePart = trackedFunction(this, async () => {
+  loadCurrentPiecePart = task(async () => {
     if (!this.model.minutes) return null;
-
+    
     return await this.store.queryOne('piece-part', {
       filter: {
         minutes: { ':id:': this.model.minutes.id },
@@ -156,6 +156,8 @@ export default class AgendaMinutesController extends Controller {
       },
     });
   });
+
+  currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
 
   exportPdf = task(async () => {
     console.log('not implemented');
@@ -214,7 +216,7 @@ export default class AgendaMinutesController extends Controller {
   }
 
   get saveDisabled() {
-    if (this.model.minutes?.value === this.editor?.htmlContent) {
+    if (this.currentPiecePart?.value?.value === this.editor?.htmlContent) {
       return true;
     }
 
