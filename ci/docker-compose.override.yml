@@ -16,7 +16,7 @@ services:
       NO_COLOR: 1
     volumes:
       - ../cypress:/app/cypress
-      - ../cypress.test.json:/app/cypress.json
+      - ../cypress.test.json:/app/cypress.config.js
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
