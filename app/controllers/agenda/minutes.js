@@ -5,6 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
+import { trackedFunction } from 'ember-resources/util/function';
+import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
@@ -144,23 +146,44 @@ export default class AgendaMinutesController extends Controller {
 
   @tracked editor = null;
 
+  currentPiecePart = trackedFunction(this, async () => {
+    if (!this.model.minutes) return null;
+
+    return await this.store.queryOne('piece-part', {
+      filter: {
+        minutes: { ':id:': this.model.minutes.id },
+        ':has-no:next-piece-part': true,
+      },
+    });
+  });
+
   exportPdf = task(async () => {
     console.log('not implemented');
     return;
   });
 
   saveMinutes = task(async () => {
-    const now = new Date();
-    const record = this.store.createRecord('minutes', {
-      name: 'TODO not sure what to put here',
-      created: now,
-      isMinutesForMeeting: this.meeting,
+    const minutes =
+      this.model.minutes ??
+      this.store.createRecord('minutes', {
+        name: `Notulen - P${dateFormat(
+          this.meeting.plannedStart,
+          'yyyy-MM-dd'
+        )}`,
+        created: new Date(),
+        minutesForMeeting: this.meeting,
+      });
+
+    const piecePart = this.store.createRecord('piece-part', {
       value: this.editor.htmlContent,
-      ...(this.model.minutes ? { previousPiece: this.model.minutes } : {}),
+      created: new Date(),
+      previousPiecePart: this.currentPiecePart.value,
+      minutes,
     });
 
-    await record.save();
-    this.meeting.save();
+    await minutes.save();
+    await piecePart.save();
+    await this.meeting.save();
 
     this.isEditing = false;
     this.refresh();
@@ -180,8 +203,8 @@ export default class AgendaMinutesController extends Controller {
   @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
-    if (this.model.minutes) {
-      this.editor.setHtmlContent(this.model.minutes.value);
+    if (this.currentPiecePart.value) {
+      this.editor.setHtmlContent(this.currentPiecePart.value.value);
     }
   }
 

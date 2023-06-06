@@ -91,11 +91,11 @@
           <Auk::Panel::Body
             class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
           >
-            {{#if @model.minutes}}
+            {{#if this.currentPiecePart.value}}
               <AuContent>
                 <SanitizeHtml
                   @raw={{true}}
-                  @value={{this.model.minutes.value}}
+                  @value={{this.currentPiecePart.value.value}}
                 />
               </AuContent>
             {{else}}
