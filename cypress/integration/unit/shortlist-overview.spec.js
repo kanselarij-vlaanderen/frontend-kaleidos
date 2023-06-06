@@ -193,7 +193,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.row.mandatee).contains(mandatee2);
   });
 
-  it.only('should check the signatures overview sidebar', () => {
+  it('should check the signatures overview sidebar', () => {
     cy.intercept('GET', '/sign-flows/shortlist').as('getShortlist1');
     cy.get(utils.mHeader.signatures).click()
       .wait('@getShortlist1');
