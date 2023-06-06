@@ -57,9 +57,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get label() {
     if (this.args.isGenerated) {
-      return "created-on";
+      return this.intl.t('created-on');
     } else {
-      return "uploaded-at";
+      return this.intl.t('uploaded-at');
     }
   }
 
