@@ -56,5 +56,8 @@ export default class AgendaMinutesRoute extends Route {
     // const agenda = this.modelFor('agenda').agenda;
     // controller.agenda = agenda;
     // controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.editor = null;
+    controller.isEditing = false;
+    controller.isFullscreen = false;
   }
 }
