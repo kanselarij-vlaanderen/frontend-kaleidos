@@ -12,6 +12,7 @@ export default class decisionActivity extends Model {
   @belongsTo('subcase', { inverse: 'decisionActivities', async: true }) subcase;
   @belongsTo('concept', { inverse: null, async: true }) decisionResultCode;
   @belongsTo('piece', { inverse: 'decisionActivity', async: true }) report;
+  @belongsTo('user', { inverse: 'secretaryForDecisions', async: true }) secretary;
 
   @hasMany('publication-flow', { inverse: 'decisionActivity', async: true })
   publicationFlows;

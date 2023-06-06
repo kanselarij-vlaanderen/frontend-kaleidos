@@ -18,6 +18,7 @@ export default class Agenda extends Model.extend(LoadableModel) {
   @belongsTo('agendastatus', { inverse: null, async: true }) status;
   @belongsTo('agenda', { inverse: 'previousVersion', async: true }) nextVersion; // Set in agenda-approve-service, read-only here
   @belongsTo('agenda', { inverse: 'nextVersion', async: true }) previousVersion; // Set in agenda-approve-service, read-only here
+  @belongsTo('user', { inverse: 'secretaryForAgendas', async: true }) secretary;
 
   @hasMany('agendaitem', { inverse: 'agenda', async: true }) agendaitems;
   @hasMany('agenda-status-activity', { inverse: 'agenda', async: true}) agendaStatusActivities;
