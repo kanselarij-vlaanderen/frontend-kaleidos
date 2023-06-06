@@ -34,7 +34,7 @@ export default class Meeting extends Model {
   })
   internalDocumentPublicationActivity;
   @belongsTo('minutes', {
-    inverse: 'isMinutesForMeeting',
+    inverse: 'minutesForMeeting',
     async: true,
   })
   minutes;
