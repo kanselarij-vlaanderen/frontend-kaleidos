@@ -468,12 +468,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait(`@createAgendaActivity_${randomInt}`, {
     timeout: 20000,
   });
-  cy.wait(`@createDecisionActivity_${randomInt}`, {
-    timeout: 20000,
-  });
-  cy.wait(`@createAgendaItemTreatment_${randomInt}`, {
-    timeout: 20000,
-  });
+  cy.wait(`@createDecisionActivity_${randomInt}`);
+  cy.wait(`@createAgendaItemTreatment_${randomInt}`);
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems_${randomInt}`);
   cy.wait(`@createNewAgendaitem_${randomInt}`, {
     timeout: 30000,

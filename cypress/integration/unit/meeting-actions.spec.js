@@ -70,8 +70,8 @@ context('meeting actions tests', () => {
       .click();
     cy.wait('@deleteAgendaitem'); // 2 of these happen
     cy.wait('@deleteAgendaActivity');
-    cy.wait('@deleteAgendaItemTreatment');
     cy.wait('@deleteDecisionActivity');
+    cy.wait('@deleteAgendaItemTreatment');
     cy.get(auk.modal.container).should('not.exist');
     cy.get(auk.loader, {
       timeout: 60000,
