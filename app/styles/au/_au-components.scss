@@ -73,6 +73,10 @@ $au-button-height: 3.4rem;
   background-color: transparent; // fix UA default background-color styling
 }
 
+.au-c-alert__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
 
 // Overrides
 
@@ -408,6 +412,12 @@ $au-button-height: 3.4rem;
       @include style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
     }
   }
+}
+
+// Alert
+
+.au-c-alert {
+  font-size: 1.5rem;
 }
 
 // Additions
