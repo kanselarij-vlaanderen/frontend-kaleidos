@@ -7,6 +7,7 @@ import constants from 'frontend-kaleidos/config/constants';
 import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
+import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
@@ -148,7 +149,7 @@ export default class AgendaMinutesController extends Controller {
 
   loadCurrentPiecePart = task(async () => {
     if (!this.model.minutes) return null;
-    
+
     return await this.store.queryOne('piece-part', {
       filter: {
         minutes: { ':id:': this.model.minutes.id },
@@ -159,15 +160,19 @@ export default class AgendaMinutesController extends Controller {
 
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
 
-  exportPdf = task(async () => {
-    console.log('not implemented');
-    return;
+  exportPdf = task(async (minutes) => {
+    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    return await resp.json();
   });
 
   saveMinutes = task(async () => {
-    const minutes =
-      this.model.minutes ??
-      this.store.createRecord('minutes', {
+    let minutes = null;
+    if (!this.model.minutes) {
+      minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
           this.meeting.plannedStart,
           'yyyy-MM-dd'
@@ -175,13 +180,21 @@ export default class AgendaMinutesController extends Controller {
         created: new Date(),
         minutesForMeeting: this.meeting,
       });
-
+      minutes.save();
+    } else {
+      minutes = this.model.minutes;
+    }
     const piecePart = this.store.createRecord('piece-part', {
       value: this.editor.htmlContent,
       created: new Date(),
       previousPiecePart: this.currentPiecePart.value,
       minutes,
     });
+
+    const fileMeta = await this.exportPdf.perform(minutes);
+    if (fileMeta) {
+      await this.replaceMinutesFile(minutes, fileMeta.id);
+    }
 
     await minutes.save();
     await piecePart.save();
@@ -190,6 +203,14 @@ export default class AgendaMinutesController extends Controller {
     this.isEditing = false;
     this.refresh();
   });
+
+  async replaceMinutesFile(minutes, fileId) {
+    await deleteFile(minutes.file);
+    const file = await this.store.findRecord('file', fileId);
+    minutes.file = file;
+    minutes.modified = new Date();
+    minutes.save();
+  }
 
   @action
   updateEditorContent() {
