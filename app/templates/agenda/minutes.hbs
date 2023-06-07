@@ -12,15 +12,6 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              <Group.Item>
-                <AuButton
-                  @icon="pdf"
-                  @skin="naked"
-                  {{on "click" (perform this.exportPdf)}}
-                >
-                  {{t "export-as-pdf"}}
-                </AuButton>
-              </Group.Item>
               {{#unless this.isEditing}}
                 <Group.Item>
                   <AuButton
