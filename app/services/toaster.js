@@ -14,7 +14,7 @@ export default class ToasterService extends Service {
   // TODO: Below "newToasts" & "oldToasts" getters are a temporary to be able to render "old toasts" that
   // don't have an equivalent in new design yet, while already implementing new design for those types that support it.
   get newToasts() {
-    return this.toasts.filter((toast) => ['success', 'warning', 'error'].includes(toast.options.type));
+    return this.toasts.filter((toast) => ['success', 'warning', 'error', 'info'].includes(toast.options.type));
   }
 
   get oldToasts() {
@@ -35,7 +35,7 @@ export default class ToasterService extends Service {
   notify(message, title, options) {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
-    options.type = options.type || 'success';
+    options.type = options.type || 'info';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 3000;
     }
@@ -51,6 +51,8 @@ export default class ToasterService extends Service {
   info(message, title, options) {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
+    options.type = 'info';
+    options.icon = 'info-circle';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 2000;
     }
@@ -61,6 +63,7 @@ export default class ToasterService extends Service {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
     options.type = 'success';
+    options.icon = 'check';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 3200;
     }
@@ -71,6 +74,7 @@ export default class ToasterService extends Service {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
     options.type = 'warning';
+    options.icon = 'alert-triangle';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 5000;
     }
@@ -81,6 +85,7 @@ export default class ToasterService extends Service {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
     options.type = 'error';
+    options.icon = 'circle-x';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 60000;
     }
@@ -96,7 +101,8 @@ export default class ToasterService extends Service {
   loading(message, title, options) {
     // eslint-disable-next-line no-param-reassign
     options = options || {};
-    options.type = 'loading';
+    options.type = 'info';
+    options.icon = 'renew';
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 10000;
     }
