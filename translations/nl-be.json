@@ -1043,6 +1043,7 @@
   "send-to-signinghub": "Doorsturen naar SigningHub",
   "present-for-signing": "Aanbieden voor handtekenen",
   "signing-status": "Handtekenstatus",
+  "signing-status-to-be-prepared": "Voor te bereiden",
   "signing-status-to-be-presented": "Door te sturen voor tekenen",
   "signing-status-wait-for-signature": "Wacht op handtekening",
   "signing-status-to-be-signed": "Te tekenen",

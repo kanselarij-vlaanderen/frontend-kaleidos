@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class SignaturesOngoingRoute extends Route {
   @service currentSession;
@@ -18,18 +19,39 @@ export default class SignaturesOngoingRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    mandatees: {
+      refreshModel: true,
+      as: 'indieners',
+    },
+    statuses: {
+      refreshModel: true,
+      as: 'statuses',
+    }
   };
 
+  constructor() {
+    super(...arguments);
+  }
+
   async model(params) {
+    let filter = {
+      // creator: {
+      //   ':id:': this.currentSession.user.id,
+      // },
+    }
+    if (params.mandatees?.length > 0) {
+      filter['decision-activity'] = {
+        'subcase': {
+          'requested-by': {
+            'person': {
+              ':id:': params.mandatees.join(','),
+            }
+          }
+        }
+      }
+    }
     return this.store.query('sign-flow', {
-      filter: {
-        creator: {
-          ':id:': this.currentSession.user.id,
-        },
-        'sign-subcase': {
-          ':has-no:sign-completion-activity': true,
-        },
-      },
+      filter: filter,
       include: [
         'creator',
         'decision-activity',
@@ -42,5 +64,18 @@ export default class SignaturesOngoingRoute extends Route {
       },
       sort: params.sort,
     });
+  }
+
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    // Disable bubbling of loading event to prevent parent loading route to be shown.
+    // Otherwise it causes a 'flickering' effect because the search filters disappear.
+    return false;
   }
 }
