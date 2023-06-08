@@ -191,13 +191,15 @@ export default class AgendaMinutesController extends Controller {
       minutes,
     });
 
+    await minutes.save();
+    await piecePart.save();
+
     const fileMeta = await this.exportPdf.perform(minutes);
     if (fileMeta) {
       await this.replaceMinutesFile(minutes, fileMeta.id);
     }
 
     await minutes.save();
-    await piecePart.save();
     await this.meeting.save();
 
     this.isEditing = false;
@@ -242,6 +244,13 @@ export default class AgendaMinutesController extends Controller {
     }
 
     return this.editor?.mainEditorState.doc.textContent.length === 0;
+  }
+
+  get agendaContext() {
+    return {
+      agenda: this.agenda,
+      meeting: this.meeting,
+    };
   }
 
   @action

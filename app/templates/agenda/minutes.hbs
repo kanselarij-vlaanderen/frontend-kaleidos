@@ -79,6 +79,25 @@
             </Auk::Toolbar>
           </Auk::Panel::Footer>
         {{else}}
+          {{#if this.model.minutes}}
+            <Auk::Panel::Body
+              class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+            >
+              <Documents::DocumentCard
+                @piece={{this.model.minutes}}
+                @isEditable={{true}}
+                @agendaContext={{this.agendaContext}}
+                @hideNewerVersions={{true}}
+                @hideDelete={{true}}
+                @hideEdit={{true}}
+                @hideUpload={{true}}
+                @hideSign={{true}}
+                @showCreateNewVersion={{true}}
+                @onCreateNewVersion={{perform this.onCreateNewVersion}}
+                @bordered={{true}}
+              />
+            </Auk::Panel::Body>
+          {{/if}}
           <Auk::Panel::Body
             class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
           >
