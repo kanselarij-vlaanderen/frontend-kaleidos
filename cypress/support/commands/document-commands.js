@@ -1,8 +1,6 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-import 'cypress-file-upload';
-
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
