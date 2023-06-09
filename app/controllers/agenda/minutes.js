@@ -8,6 +8,7 @@ import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
@@ -172,6 +173,17 @@ export default class AgendaMinutesController extends Controller {
   saveMinutes = task(async () => {
     let minutes = null;
     if (!this.model.minutes) {
+      const minutesType = await this.store.findRecordByUri(
+        'concept',
+        constants.DOCUMENT_TYPES.NOTULEN
+      );
+
+      const documentContainer = this.store.createRecord('document-container', {
+        created: new Date(),
+        type: minutesType,
+      });
+      await documentContainer.save();
+
       minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
           this.meeting.plannedStart,
@@ -179,8 +191,9 @@ export default class AgendaMinutesController extends Controller {
         )}`,
         created: new Date(),
         minutesForMeeting: this.meeting,
+        documentContainer
       });
-      minutes.save();
+      await minutes.save();
     } else {
       minutes = this.model.minutes;
     }
@@ -211,8 +224,48 @@ export default class AgendaMinutesController extends Controller {
     const file = await this.store.findRecord('file', fileId);
     minutes.file = file;
     minutes.modified = new Date();
-    minutes.save();
+    await minutes.save();
   }
+
+  onCreateNewVersion = task(async () => {
+    const minutes = this.model.minutes;
+    let newName;
+    try {
+      newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
+        (await (await minutes.documentContainer).pieces).length + 1
+      );
+    } catch (e) {
+      newName = minutes.name;
+    }
+
+    const newVersion = this.store.createRecord('minutes', {
+      name: newName,
+      created: new Date(),
+      minutesForMeeting: this.meeting,
+      previousPiece: minutes,
+      documentContainer: minutes.documentContainer,
+    });
+
+    const newPiecePart = this.store.createRecord('piece-part', {
+      value: this.currentPiecePart.value.value,
+      created: new Date(),
+      previousPiecePart: this.currentPiecePart.value,
+      minutes: newVersion,
+    });
+
+    await newVersion.save();
+    await newPiecePart.save();
+
+    const fileMeta = await this.exportPdf.perform(newVersion);
+    if (fileMeta) {
+      await this.replaceMinutesFile(newVersion, fileMeta.id);
+    }
+
+    await newVersion.save();
+    await this.meeting.save();
+
+    this.refresh();
+  });
 
   @action
   updateEditorContent() {

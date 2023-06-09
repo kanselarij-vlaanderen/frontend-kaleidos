@@ -186,7 +186,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const file = await this.store.findRecord('file', fileId);
     report.file = file;
     report.modified = new Date();
-    report.save();
+    await report.save();
   }
 
   @action
