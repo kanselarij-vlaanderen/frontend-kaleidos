@@ -295,8 +295,8 @@ context('Search tests', () => {
       cy.wait(500);
 
       // Should find nothing.
-      cy.get(utils.auAlert.message).contains(alertMessageNota);
-      cy.get(utils.auAlert.message).contains(alertMessageRemark);
+      cy.get(appuniversum.alert.message).contains(alertMessageNota);
+      cy.get(appuniversum.alert.message).contains(alertMessageRemark);
 
       const wordsToCheck1 = [
         'peerd',

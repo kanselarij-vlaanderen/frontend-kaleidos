@@ -23,7 +23,13 @@
           </AuButton>
           {{#if acmidm.errorMessage}}
             <div class="auk-u-mt-2">
-              <Auk::Alert @skin="error" @message={{acmidm.errorMessage}} />
+              <AuAlert
+                @skin="error"
+                @icon="circle-x"
+                @size="small"
+              >
+                <p>{{acmidm.errorMessage}}</p>
+              </AuAlert>
             </div>
           {{/if}}
       </Acmidm::Login>

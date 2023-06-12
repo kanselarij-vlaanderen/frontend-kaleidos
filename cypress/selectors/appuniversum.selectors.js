@@ -9,5 +9,10 @@ const selectors = {
   checkbox: '.au-c-control--checkbox',
   button: '.au-c-button',
   loader: '.au-c-loader',
+  alert: {
+    container: '.au-c-alert',
+    message: '.au-c-alert__message',
+    close: '.au-c-alert__close',
+  },
 };
 export default selectors;
