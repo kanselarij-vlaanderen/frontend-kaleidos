@@ -13,7 +13,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
   return `
-    <h4>Aanwezig</h4>
+    <p><u>AANWEZIG</u></p>
     <table>
       <tbody>
         <tr>
@@ -43,7 +43,7 @@ function renderNotas(notas) {
 
 function renderAnnouncements(announcements) {
   return `
-    <h4>Mededelingen</h4>
+    <h4><u>MEDEDELINGEN</u></h4>
     ${renderAgendaitemList(announcements)}
   `;
 }
@@ -52,7 +52,7 @@ function renderAgendaitemList(agendaitems) {
   return agendaitems
     .map(
       (agendaitem) => `
-        <h4>${agendaitem.number}. ${agendaitem.shortTitle}</h4>
+        <h4><u>${agendaitem.number}. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
         ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
       `
     )
@@ -61,7 +61,7 @@ function renderAgendaitemList(agendaitems) {
 
 function renderAbsentees() {
   return `
-    <h4>Afwezig met kennisgeving</h4>
+    <p><u>AFWEZIG MET KENNISGEVING</u></p>
     <table>
       <tbody>
         <tr>
