@@ -215,12 +215,16 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaData_${randomInt}`);
   cy.intercept('GET', '/subcases?filter**decisionmaking-flow**').as(`loadSubcase_${randomInt}`);
+  cy.intercept('POST', '/decision-activities').as(`createDecisionActivity_${randomInt}`);
+  cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
   cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
     .click();
   cy.get(cases.subcaseHeader.showProposedAgendas)
     .should('not.exist');
   cy.wait('@createAgendaActivity')
     .wait('@createNewAgendaitem')
+    .wait(`@createDecisionActivity_${randomInt}`)
+    .wait(`@createAgendaItemTreatment_${randomInt}`)
     .wait('@patchAgenda', {
       timeout: 24000,
     });
