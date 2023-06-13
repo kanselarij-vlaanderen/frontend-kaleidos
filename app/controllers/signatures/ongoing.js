@@ -32,29 +32,29 @@ export default class SignaturesOngoingController extends Controller {
     },
   ];
 
-  //TODO : add all statuses 
-  statuses = [
+  statusFilterItems = [
     {
       label: this.intl.t('signing-status-to-be-prepared'),
-      value: 'toBePrepared',
+      value: CONSTANTS.SIGNFLOW_STATUSES.PREPARED,
     }, 
     {
       label: this.intl.t('signing-status-to-be-signed'),
-      value: 'isMarked',
+      value: CONSTANTS.SIGNFLOW_STATUSES.MARKED,
     },
     {
       label: this.intl.t('signing-status-signed'),
-      value: 'isSigned',
+      value: CONSTANTS.SIGNFLOW_STATUSES.SIGNED,
     },
   ];
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[1];
   @tracked sort = 'decision-activity.start-date';
-
+  @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked selectedStatuses = [];
-  @tracked isLoadingModel;
+  @tracked statuses = [];
+
 
   isConfidential = (accessLevel) => {
     return [
@@ -86,8 +86,9 @@ export default class SignaturesOngoingController extends Controller {
   }
 
   @action
-  updateSelectedStatuses(statuses) {
+  onChangeStatus(statuses) {
     this.selectedStatuses = statuses;
+    this.statuses = statuses.map((status) => status.value);
   }
 
   @action

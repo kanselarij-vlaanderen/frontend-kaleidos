@@ -35,9 +35,9 @@ export default class SignaturesOngoingRoute extends Route {
 
   async model(params) {
     let filter = {
-      // creator: {
-      //   ':id:': this.currentSession.user.id,
-      // },
+      creator: {
+        ':id:': this.currentSession.user.id,
+      },
     }
     if (params.mandatees?.length > 0) {
       filter['decision-activity'] = {
@@ -50,12 +50,18 @@ export default class SignaturesOngoingRoute extends Route {
         }
       }
     }
+    if (params.statuses?.length > 0) {
+      filter['status'] = {
+        ':uri:': params.statuses.join(','),
+      }
+    }
     return this.store.query('sign-flow', {
       filter: filter,
       include: [
         'creator',
         'decision-activity',
         'sign-subcase.sign-marking-activity.piece.document-container.type',
+        'status',
         // 'sign-subcase.sign-signing-activities.mandatee.person',
       ].join(','),
       page: {

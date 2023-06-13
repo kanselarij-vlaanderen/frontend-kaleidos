@@ -11,9 +11,9 @@
           <div class="au-c-card au-o-box au-o-box--small">
             <Auk::CheckboxTree
               @label={{t "status"}}
-              @items={{this.statuses}}
+              @items={{this.statusFilterItems}}
               @selectedItems={{this.selectedStatuses}}
-              @didUpdate={{this.updateSelectedStatuses}}
+              @didUpdate={{this.onChangeStatus}}
               />
           </div>
           {{#if this.currentSession.isAdmin}}
