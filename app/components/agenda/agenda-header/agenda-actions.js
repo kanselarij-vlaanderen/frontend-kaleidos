@@ -29,6 +29,17 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service jobMonitor;
   @service toaster;
 
+  downloadOptions = [
+    {
+      label: this.intl.t('document-type-pdf-only'),
+      value: 'pdf',
+    },
+    {
+      label: this.intl.t('all-filetypes'),
+      value: 'all',
+    },
+  ];
+
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
@@ -45,9 +56,15 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked themisPublicationActivity;
   @tracked latestThemisPublicationActivity;
 
+  @tracked downloadOption = this.downloadOptions[0].value;
+
   constructor() {
     super(...arguments);
     this.loadPublicationActivities.perform();
+  }
+
+  get selectedDownloadOption() {
+    return this.downloadOption;
   }
 
   get showPrintButton() {
@@ -254,14 +271,15 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         timeOut: 60 * 10 * 1000,
       },
     };
-
+    const pdfOnly = this.downloadOption === 'pdf' ? true : false;
     const namePromise = constructArchiveName(this.args.currentAgenda);
     debug('Checking if archive exists ...');
     const jobPromise = fetchArchivingJobForAgenda(
       this.args.currentAgenda,
       this.selectedMandatees,
       decisions,
-      this.store
+      this.store,
+      pdfOnly
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
@@ -424,5 +442,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   closeAddAgendaitemsModal() {
     this.isAddingAgendaitems = false;
+  }
+
+  @action
+  onChangeDownloadOption(selectedDownloadOption) {
+    this.downloadOption = selectedDownloadOption;
   }
 }
