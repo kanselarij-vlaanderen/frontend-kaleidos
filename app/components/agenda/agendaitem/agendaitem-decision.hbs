@@ -15,12 +15,13 @@
             this.loadReport.isIdle
             (user-may "manage-decisions")
             (not this.isEditing)
-            (or this.report.pieceParts (not this.report))
+            (or this.pieceParts (not this.report))
             this.enableDigitalAgenda
           )
         }}
           <Group.Item>
             <AuButton
+              data-test-agendaitem-decision-create
               @skin="naked"
               @icon="pencil"
               @iconAlignment="left"
@@ -36,7 +37,7 @@
   </Auk::Panel::Header>
 
   {{#if
-    (and this.loadReport.isIdle (not this.isEditing) this.report.pieceParts)
+    (and this.loadReport.isIdle (not this.isEditing) this.pieceParts)
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
       {{#if this.onCreateNewVersion.isIdle}}
@@ -120,6 +121,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
+                data-test-agendaitem-decision-save
                 @disabled={{this.disableSaveButton}}
                 @skin="primary"
                 @loading={{this.onSaveReport.isRunning}}
@@ -132,7 +134,7 @@
         </Auk::Toolbar>
       </Auk::Panel::Footer>
     {{else}}
-      {{#if (and this.report.file (not this.report.pieceParts))}}
+      {{#if (and this.report (not this.pieceParts))}}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
@@ -160,7 +162,7 @@
           </div>
         </Auk::Panel::Body>
       {{/if}}
-      {{#if this.report.pieceParts}}
+      {{#if this.pieceParts}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >

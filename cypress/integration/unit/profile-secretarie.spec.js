@@ -190,12 +190,12 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort2);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -338,12 +338,12 @@ context('Testing the application as Secretarie user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)

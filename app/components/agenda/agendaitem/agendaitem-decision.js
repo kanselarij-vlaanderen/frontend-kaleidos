@@ -108,6 +108,10 @@ export default class AgendaitemDecisionComponent extends Component {
     );
   });
 
+  get pieceParts() {
+    return !!this.betreftPiecePart || !!this.beslissingPiecePart;
+  }
+
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.report;
     if (this.report) {

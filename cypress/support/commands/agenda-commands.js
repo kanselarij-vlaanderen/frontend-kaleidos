@@ -745,6 +745,47 @@ function agendaNameExists(serialnumber, design = true) {
   // TODO-command this can fail on collapsed sidenav
 }
 
+/**
+ * @description Generate the decision report
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function generateDecision(concerns, decision) {
+  cy.log('generateDecision');
+  cy.get(agenda.agendaitemNav.decisionTab).click();
+  cy.get(agenda.agendaitemDecision.create).click();
+
+  cy.get(agenda.agendaitemDecision.rdfaEditor).eq(0)
+    .as('concernsEditor');
+  if (concerns) {
+    cy.get('@concernsEditor').type(concerns);
+  } else {
+    cy.get('@concernsEditor').type('Betreft');
+  }
+
+  cy.get(agenda.agendaitemDecision.rdfaEditor).eq(1)
+    .as('decisionsEditor');
+  if (decision) {
+    cy.get('@decisionsEditor').type(decision);
+  } else {
+    cy.get('@decisionsEditor').type('Beslissing');
+  }
+
+  cy.intercept('POST', 'pieces').as('createNewPiece');
+  cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
+  cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+  cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
+  cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
+    .click();
+  cy.wait('@createNewPiece');
+  cy.wait('@createNewDocumentContainer');
+  cy.wait('@createNewPiecePart');
+  cy.wait('@patchDecisionActivities');
+  cy.wait('@patchReport');
+  cy.log('/generateDecision');
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -765,3 +806,4 @@ Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab)
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
+Cypress.Commands.add('generateDecision', generateDecision);

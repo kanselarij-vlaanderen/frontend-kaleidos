@@ -183,6 +183,7 @@
               >
                 {{#if @showCreateNewVersion}}
                   <AuButton
+                    data-test-document-generate-new-version
                     @skin="link"
                     {{on "click" @onCreateNewVersion}}
                     role="menuitem"
