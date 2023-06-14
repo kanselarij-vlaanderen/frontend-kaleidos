@@ -52,7 +52,9 @@ function renderAgendaitemList(agendaitems) {
   return agendaitems
     .map(
       (agendaitem) => `
-        <h4><u>${agendaitem.number}. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
+        <h4><u>${
+          agendaitem.number
+        }. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
         ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
       `
     )
@@ -184,6 +186,11 @@ export default class AgendaMinutesController extends Controller {
       });
       await documentContainer.save();
 
+      const defaultAccessLevel = await this.store.findRecordByUri(
+        'concept',
+        constants.ACCESS_LEVELS.INTERN_OVERHEID
+      );
+
       minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
           this.meeting.plannedStart,
@@ -191,7 +198,8 @@ export default class AgendaMinutesController extends Controller {
         )}`,
         created: new Date(),
         minutesForMeeting: this.meeting,
-        documentContainer
+        accessLevel: defaultAccessLevel,
+        documentContainer,
       });
       await minutes.save();
     } else {
@@ -244,6 +252,7 @@ export default class AgendaMinutesController extends Controller {
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
+      accessLevel: minutes.accessLevel
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
