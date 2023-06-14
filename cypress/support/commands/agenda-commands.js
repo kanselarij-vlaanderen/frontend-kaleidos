@@ -771,15 +771,15 @@ function generateDecision(concerns, decision) {
     cy.get('@decisionsEditor').type('Beslissing');
   }
 
-  cy.intercept('POST', 'pieces').as('createNewPiece');
+  cy.intercept('POST', 'reports').as('createNewReport');
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
   cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
   cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
   cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
     .click();
-  cy.wait('@createNewPiece');
   cy.wait('@createNewDocumentContainer');
+  cy.wait('@createNewReport');
   cy.wait('@createNewPiecePart');
   cy.wait('@patchDecisionActivities');
   cy.wait('@patchReport');
