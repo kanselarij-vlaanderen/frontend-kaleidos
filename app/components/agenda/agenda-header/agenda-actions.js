@@ -436,6 +436,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   openAddAgendaitemsModal() {
+    this.toaster.error(
+      this.intl.t('error-publish-to-web'),
+      this.intl.t('warning-title')
+    );
     this.isAddingAgendaitems = true;
   }
 
