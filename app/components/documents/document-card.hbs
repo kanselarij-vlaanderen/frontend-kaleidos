@@ -49,7 +49,7 @@
                   )
                   as |extension|
                 }}
-                  {{this.piece.name}}.{{extension}}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -170,7 +170,7 @@
             {{/if}}
           {{/if}}
           {{#if
-            (and @isEditable (user-may "manage-documents") (not @hideActions))
+            (and @isEditable (user-may "manage-documents"))
           }}
             <Group.Item>
               <AuDropdown

@@ -14,7 +14,7 @@ export default class AgendaitemNotaService extends Service {
   }
 
   async notaOrVisieNota(agendaitem) {
-    const latestNotaVersion = this.nota(agendaitem);
+    const latestNotaVersion = await this.nota(agendaitem);
     if (latestNotaVersion) {
       return latestNotaVersion;
     }

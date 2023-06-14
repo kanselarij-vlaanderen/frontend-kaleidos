@@ -340,8 +340,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const fileMeta = await this.exportPdf.perform(report);
     await this.replaceReportFile(report, fileMeta.id);
 
-    await report.save();
-
     await this.loadReport.perform();
   }
 
