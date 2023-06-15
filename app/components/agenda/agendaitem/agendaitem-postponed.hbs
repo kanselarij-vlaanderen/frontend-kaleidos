@@ -1,10 +1,14 @@
-<div class="auk-alert auk-alert--warning">
-  <div class="auk-alert__body">
-    <Auk::Badge @icon="alert-triangle" @skin={{"warning"}} />
-    <div class="auk-alert__text">
-      <p class="auk-alert__message">
-        {{t "postponed-item"}}
-      </p>
+{{!-- TODO: replace custom HTML structure with adjusted AuAlert component when support for action buttons is implemented --}}
+<div
+  class="au-c-alert au-c-alert--warning au-c-alert--small auk-o-flex--vertical-center"
+  role="alert"
+>
+  <div class="auk-o-flex__item auk-o-flex">
+    <div class="au-c-alert__icon">
+      <AuIcon @icon="alert-triangle"/>
+    </div>
+    <div class="au-c-alert__content">
+      <div class="au-c-alert__message">{{t "postponed-item"}}</div>
     </div>
   </div>
   {{#if (and @meeting.internalDecisionPublicationActivity.startDate this.loadProposedStatus.isIdle)}}
@@ -16,6 +20,7 @@
         @icon="chevron-right"
         @route="agenda.agendaitems.agendaitem"
         @models={{this.modelsForProposedAgenda}}
+        class="auk-u-ml-2"
       >
         {{t "open-agenda"}}
         {{date-phrase this.latestMeeting.plannedStart}}
@@ -27,6 +32,7 @@
           @skin="primary"
           @title={{t "propose-again"}}
           @alignment="right"
+          class="auk-u-ml-2"
         >
           {{#if this.loadProposableMeetings.isRunning}}
             <div role="menuitem">
