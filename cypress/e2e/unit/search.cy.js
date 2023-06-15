@@ -358,6 +358,7 @@ context('Search tests', () => {
       cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseTitleShort);
+      cy.wait(5000); // wait for elasticsearch
 
       cy.visit('/zoeken/agendapunten');
       cy.get(route.search.input).clear();
