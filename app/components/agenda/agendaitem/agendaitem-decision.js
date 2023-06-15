@@ -108,6 +108,10 @@ export default class AgendaitemDecisionComponent extends Component {
     );
   });
 
+  get pieceParts() {
+    return !!this.betreftPiecePart || !!this.beslissingPiecePart;
+  }
+
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.report;
     if (this.report) {
@@ -187,7 +191,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const file = await this.store.findRecord('file', fileId);
     report.file = file;
     report.modified = new Date();
-    report.save();
+    await report.save();
   }
 
   /**
@@ -335,8 +339,6 @@ export default class AgendaitemDecisionComponent extends Component {
     // If this is too slow, we should make a task and do this asynchronously
     const fileMeta = await this.exportPdf.perform(report);
     await this.replaceReportFile(report, fileMeta.id);
-
-    await report.save();
 
     await this.loadReport.perform();
   }

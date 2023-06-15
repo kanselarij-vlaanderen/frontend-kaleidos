@@ -15,12 +15,13 @@
             this.loadReport.isIdle
             (user-may "manage-decisions")
             (not this.isEditing)
-            (or this.report.pieceParts (not this.report))
+            (or this.pieceParts (not this.report))
             this.enableDigitalAgenda
           )
         }}
           <Group.Item>
             <AuButton
+              data-test-agendaitem-decision-create
               @skin="naked"
               @icon="pencil"
               @iconAlignment="left"
@@ -39,7 +40,7 @@
     (and
       this.loadReport.isIdle
       (not this.isEditing)
-      this.report.pieceParts
+      this.pieceParts
       this.enableDigitalAgenda
     )
   }}
@@ -68,7 +69,7 @@
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item class="auk-content">
-          <h4 class="auk-u-my-2">{{t "result-decision"}}</h4>
+          <h4 class="auk-u-mb-2">{{t "result-decision"}}</h4>
           {{#if (not this.isEditingPill)}}
             <div class="auk-u-my-2">
               <Decision::DecisionResultPill
@@ -125,6 +126,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
+                data-test-agendaitem-decision-save
                 @disabled={{this.disableSaveButton}}
                 @skin="primary"
                 @loading={{this.onSaveReport.isRunning}}
@@ -139,8 +141,8 @@
     {{else}}
       {{#if
         (and
-          this.report.file
-          (or (not this.report.pieceParts) (not this.enableDigitalAgenda))
+          this.report
+          (or (not this.pieceParts) (not this.enableDigitalAgenda))
         )
       }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
@@ -172,7 +174,7 @@
           </div>
         </Auk::Panel::Body>
       {{/if}}
-      {{#if (and this.report.pieceParts this.enableDigitalAgenda)}}
+      {{#if (and this.pieceParts this.enableDigitalAgenda)}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >

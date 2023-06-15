@@ -4,9 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import formatDate from '../../utils/format-date-search-param';
-import sanitizeHtml from 'sanitize-html';
-import {decode as decodeEntities} from 'html-entities';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { copyText } from 'frontend-kaleidos/utils/copy-text-to-clipboard';
 
 export default class NewslettersSearchController extends Controller {
   @service router;
@@ -91,31 +90,13 @@ export default class NewslettersSearchController extends Controller {
   }
 
   @action
-  copyText(row, event) {
+  copyItemText(row, event) {
     if (event) {
       event.stopPropagation();
     }
 
-    let copyText = '';
-
-    if (row.title) {
-      copyText += `${row.title}\n\n`;
-    }
-
-    if (row.htmlContent) {
-      copyText +=
-        decodeEntities(
-          sanitizeHtml(
-            row.htmlContent
-              .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')  // Replace p-tags with \n line breaks
-              .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
-              .trim(), // Trim whitespaces at start & end of the string
-            { allowedTags: [], allowedAttributes: {} } // Remove all remaining tags from the string
-          )
-        );
-    }
-
-    navigator.clipboard.writeText(copyText);
-    this.toaster.success(this.intl.t('text-copied'));
+    copyText([row.title, row.htmlContent]).then(() => {
+      this.toaster.success(this.intl.t('text-copied'));
+    });
   }
 }

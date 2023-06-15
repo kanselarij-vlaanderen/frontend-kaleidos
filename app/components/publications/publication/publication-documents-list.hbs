@@ -1,18 +1,22 @@
 <Auk::List class="au-u-margin-top-tiny">
   {{#if this.sumOfPiecesShouldBlock.value}}
-    <Auk::Alert
+    <AuAlert
       @title={{t "warning-title"}}
-      @message={{t "sum-of-attachments-exceeds-maximum-threshold"}}
       @skin="warning"
       @icon="alert-triangle"
-    />
+      @size="small"
+    >
+      <p>{{t "sum-of-attachments-exceeds-maximum-threshold"}}</p>
+    </AuAlert>
   {{else if this.sumOfPiecesShouldWarn.value}}
-    <Auk::Alert
+    <AuAlert
       @title={{t "warning-title"}}
-      @message={{t "sum-of-attachments-exceeds-warning-threshold"}}
       @skin="warning"
       @icon="alert-triangle"
-    />
+      @size="small"
+    >
+      <p>{{t "sum-of-attachments-exceeds-warning-threshold"}}</p>
+    </AuAlert>
   {{/if}}
   {{#each @pieces as |piece|}}
     <Auk::List::Item data-test-publication-document-list-piece>

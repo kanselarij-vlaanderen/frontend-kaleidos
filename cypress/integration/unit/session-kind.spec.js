@@ -182,19 +182,19 @@ context('Different session kinds should show different titles', () => {
     cy.createAgenda('Ministerraad - Plan Vlaamse Veerkracht', agendaDate, null, null, null, null, relatedMainMeeting).then((result) => {
       cy.log(result);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.auAlert.message).eq(0)
+      cy.get(appuniversum.alert.message).eq(0)
         .contains(alertMessage);
     });
 
     cy.createAgenda('Bijzondere ministerraad', agendaDate).then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.auAlert.message).eq(0)
+      cy.get(appuniversum.alert.message).eq(0)
         .contains(alertMessage);
     });
 
     cy.createAgenda('Elektronische procedure', agendaDate).then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(utils.auAlert.message).eq(0)
+      cy.get(appuniversum.alert.message).eq(0)
         .contains(alertMessage);
     });
   });

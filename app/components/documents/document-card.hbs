@@ -49,7 +49,7 @@
                   )
                   as |extension|
                 }}
-                  {{this.piece.name}}.{{extension}}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -62,7 +62,7 @@
                     ""
                   }}
                 >
-                  {{t "uploaded-at"}}
+                  {{this.label}}
                   {{datetime-at this.piece.created}}
                   {{#if
                     (and
@@ -170,7 +170,7 @@
             {{/if}}
           {{/if}}
           {{#if
-            (and @isEditable (user-may "manage-documents") (not @hideActions))
+            (and @isEditable (user-may "manage-documents"))
           }}
             <Group.Item>
               <AuDropdown
@@ -183,6 +183,7 @@
               >
                 {{#if @showCreateNewVersion}}
                   <AuButton
+                    data-test-document-generate-new-version
                     @skin="link"
                     {{on "click" @onCreateNewVersion}}
                     role="menuitem"
