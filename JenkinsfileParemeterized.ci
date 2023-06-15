@@ -68,7 +68,7 @@ pipeline {
 
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  search"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report decision-extraction decision-report-generation"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata && rm -rf testdata-elasticsearch"
                 sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project && unzip -o testdata-elasticsearch.zip -d ${WORKSPACE}/kaleidos-project && mv ${WORKSPACE}/kaleidos-project/testdata-elasticsearch/* ${WORKSPACE}/kaleidos-project/testdata"
                 sh "cd ${WORKSPACE}/kaleidos-project && chmod 1777 -R data"
@@ -84,9 +84,11 @@ pipeline {
         }
         stage('Automated tests: Cypress') {
             steps {
-                 // sh "npx cypress run"
-                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+                // sh "npx cypress run"
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/*.spec.js'"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/unit/search.spec.js'"
             }
         }
 
