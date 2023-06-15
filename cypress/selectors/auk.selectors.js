@@ -20,12 +20,6 @@ const selectors = {
     container: '.auk-alert-stack',
   },
 
-  alert: {
-    message: '.auk-alert__message',
-    error: '.auk-alert--error',
-    close: '.auk-alert--error > button',
-  },
-
   modal: {
     container: '.auk-modal',
     body: '.auk-modal__body',

@@ -16,12 +16,14 @@
   <Auk::AlertStack as |Alert|>
     {{#each this.toaster.newToasts as |toast|}}
       <Alert
-        @skin={{toast.options.type}}
         @title={{toast.title}}
-        @message={{toast.message}}
-        @isClosable={{not (eq toast.options.type "success")}}
+        @skin={{toast.options.type}}
+        @icon={{toast.options.icon}}
+        @closable={{not (eq toast.options.type "success")}}
         @onClose={{fn this.toaster.clear toast}}
-      />
+      >
+        <p>{{toast.message}}</p>
+      </Alert>
     {{/each}}
   </Auk::AlertStack>
 {{/if}}

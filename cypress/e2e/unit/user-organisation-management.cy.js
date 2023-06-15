@@ -450,7 +450,7 @@ context('testing user and organization management', () => {
       //   cy.contains('User with Blocked Organization Test').click()
       //     .wait('@mockLogin');
       // });
-      // cy.get(auk.alert.error).contains('U hebt geen toegang tot de applicatie');
+      // cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot de applicatie');
       // cy.login('Admin');
       // cy.get(utils.mHeader.settings).click();
       // cy.get(settings.settings.manageOrganizations).click();
