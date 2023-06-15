@@ -111,8 +111,6 @@ Router.map(function() {
   this.route('styleguide', function() {
     this.route('accordion');
     this.route('accordion-panel');
-    this.route('alert-skins');
-    this.route('alert-types');
     this.route('alert-stack');
     this.route('avatar');
     this.route('brand');
