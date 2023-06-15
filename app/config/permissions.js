@@ -32,6 +32,7 @@ const {
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
 // - manage-decisions: Change the decision result, upload a decision report
+// - manage-minutes: Edit the minutes of a meeting
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
 // - manage-system-alerts: Manage systeem notifications to be shown in the application
@@ -53,6 +54,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -83,6 +85,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -109,6 +112,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',

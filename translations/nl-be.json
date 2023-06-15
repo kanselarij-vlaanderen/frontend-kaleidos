@@ -1229,5 +1229,6 @@
   "create-sign-flow-conflicting-signers-message": "De gekozen bestanden zijn geagendeerd door verschillende ministers waardoor Kaleidos de ondertekenaars niet automatisch kan bepalen.",
   "creating-sign-flows-message": "Handtekenstromen worden aangemaakt. Dit kan even duren.",
   "ongoing": "In verwerking",
-  "create-minutes-click-create-button-message": "Klik op \"Aanmaken\" om de notulen aan te maken"
+  "create-minutes-click-create-button-message": "Klik op \"Aanmaken\" om de notulen aan te maken",
+  "no-minutes-for-meeting": "Er zijn nog geen notulen voor deze vergadering"
 }

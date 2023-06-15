@@ -12,7 +12,7 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              {{#unless this.isEditing}}
+              {{#if (and (not this.isEditing) (user-may "manage-minutes"))}}
                 <Group.Item>
                   <AuButton
                     @skin="naked"
@@ -23,7 +23,7 @@
                     {{t (if @model.minutes "edit" "create")}}
                   </AuButton>
                 </Group.Item>
-              {{/unless}}
+              {{/if}}
             </Toolbar.Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
@@ -111,13 +111,23 @@
                 />
               </AuContent>
             {{else}}
-              <AuAlert
-                @title={{t "create-minutes-click-create-button-message"}}
-                @icon="circle-info"
-                @skin="info"
-                @size="small"
-                @closable={{false}}
-              />
+              {{#if (user-may "manage-minutes")}}
+                <AuAlert
+                  @title={{t "create-minutes-click-create-button-message"}}
+                  @icon="circle-info"
+                  @skin="info"
+                  @size="small"
+                  @closable={{false}}
+                />
+              {{else}}
+                <AuAlert
+                  @title={{t "no-minutes-for-meeting"}}
+                  @icon="circle-info"
+                  @skin="info"
+                  @size="small"
+                  @closable={{false}}
+                />
+              {{/if}}
             {{/if}}
           </Auk::Panel::Body>
         {{/if}}
