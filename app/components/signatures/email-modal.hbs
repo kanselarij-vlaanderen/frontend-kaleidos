@@ -1,0 +1,42 @@
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header
+    @title={{@title}}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+    <div class="auk-form-group">
+      <AuLabel>{{t "email-address"}}</AuLabel>
+      <AuInput
+        {{on "input" this.onInputEvent}}
+        @warning={{and this.emailBuffer (not this.isValid)}}
+        @type="text"
+        @width="block"
+        class="au-c-input--mask-normal-letter-spacing"
+      />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large" as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @disabled={{not this.isValid}}
+            {{on "click" (fn @onConfirm this.emailBuffer)}}
+          >
+            {{t "add"}}
+          </AuButton>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

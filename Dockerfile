@@ -14,6 +14,8 @@ FROM semtech/static-file-service:0.2.0
 
 ENV EMBER_ENABLE_SIGNATURES=""
 ENV EMBER_ENABLE_IMPERSONATION=""
+ENV EMBER_ENABLE_DEBUG=""
+ENV ENABLE_DIGITAL_AGENDA=""
 
 COPY ./proxy/compression.conf /config/compression.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf

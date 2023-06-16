@@ -18,7 +18,11 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
     }
     while (latestPiece) {
       const previousPiece = await latestPiece.previousPiece;
-      await deletePiece(latestPiece);
+      if (latestPiece.constructor.modelName === 'piece') {
+        await deletePiece(latestPiece);
+      } else if (latestPiece.constructor.modelName === 'report') {
+        await deleteReport(latestPiece);
+      }
       latestPiece = previousPiece;
     }
   }
@@ -48,6 +52,22 @@ export async function deletePiece(pieceOrPromise) {
 }
 
 /**
+ * Deletes the provided report and its file(s), and its document container if the
+ * container would otherwise be orphaned.
+ *
+ * @param reportOrPromise {Report | Promise<Report>}
+ * @returns {Promise}
+ */
+export async function deleteReport(reportOrPromise) {
+  const report = await reportOrPromise;
+  const pieceParts = await report.pieceParts.toArray();
+  for (const piecePart of pieceParts) {
+    await piecePart.destroyRecord();
+  }
+  await deletePiece(report);
+}
+
+/**
  * Deletes the provided file and its derived file if it exists.
  *
  * @param fileOrPromise {File | Promise<File>}
@@ -61,6 +81,6 @@ export async function deleteFile(fileOrPromise) {
       file.derived = null;
       await file.save();
     }
-    return Promise.all([file.destroyRecord(), derivedFile?.destroyRecord]);
+    return Promise.all([file.destroyRecord(), derivedFile?.destroyRecord()]);
   }
 }

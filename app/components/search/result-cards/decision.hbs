@@ -13,7 +13,7 @@
         {{date @date}}
       </p>
     </div>
-    <AuHeading @level="3" @skin="6">
+    <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       <AuLink
         data-test-route-search-result-cards-decision-shorttitle
         class="au-u-padding-none card-link"
@@ -29,23 +29,24 @@
       </AuLink>
     </AuHeading>
   </c.header>
-  <c.content>
-    <p class="au-u-para">
-      <SanitizeHtml
-        @raw={{true}}
-        @value={{@title}}
-      />
-    </p>
-    {{#if @decisionResultCode}}
-      <p 
-        data-test-route-search-result-cards-decision-result
-        class="au-u-margin-top-small"
-      >
+  {{#if @title}}
+    <c.content>
+      <p>
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{@title}}
+        />
+      </p>
+    </c.content>
+  {{/if}}
+  {{#if @decisionResultCode}}
+    <c.footer>
+      <p data-test-route-search-result-cards-decision-result>
         <Decision::DecisionResultPill
           @decisionResultCode={{@decisionResultCode}}
           @showUndecided={{false}}
         />
       </p>
-    {{/if}}
-  </c.content>
+    </c.footer>
+  {{/if}}
 </AuCard>

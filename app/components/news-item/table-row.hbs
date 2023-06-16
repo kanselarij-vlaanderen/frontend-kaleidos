@@ -66,7 +66,7 @@
         @icon="copy"
         @hideText={{true}}
         @disabled={{not @newsItem}}
-        {{on "click" (fn this.copyText @newsItem)}}
+        {{on "click" (fn this.copyItemText @newsItem)}}
       >
         {{t "copy"}}
       </AuButton>

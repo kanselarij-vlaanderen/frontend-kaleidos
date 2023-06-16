@@ -61,6 +61,9 @@ const selectors = {
     add: '[data-test-mandatees-selector-add]',
   },
 
+  // mandatee-person-selector
+  mandateePersonSelector: '[data-test-mandatee-person-selector]',
+
   // government-fields-panel
   governmentAreasPanel: {
     edit: '[data-test-government-areas-panel-edit]',
@@ -95,13 +98,6 @@ const selectors = {
     close: '[data-test-vl-alert-close]',
     container: '[data-test-vl-alert]',
     message: '[data-test-vl-alert-message]',
-  },
-
-  // au-alert
-  auAlert: {
-    close: '[data-test-alert-close]',
-    container: '[data-test-alert]',
-    message: '[data-test-alert-message]',
   },
 
   // case-search

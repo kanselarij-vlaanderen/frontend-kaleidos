@@ -6,7 +6,7 @@
   {{! template-lint-disable no-down-event-binding}}
   {{on "keydown" this.keyDown}}
 >
-  <div class="auk-modal auk-modal--small" role="dialog">
+  <div class="auk-modal auk-modal--medium" role="dialog">
     <div class="auk-modal__push"></div>
     <div class="auk-modal__content">
       <div class="auk-modal__header auk-modal__header--bordered">
@@ -59,7 +59,6 @@
                     @alert={{this.isAlertButton}}
                     @icon={{if this.showDestructiveIcon "trash"}}
                     @loading={{@isLoading}}
-                    @disabled={{@isLoading}}
                     {{on "click" @onVerify}}
                   >
                     {{this.verifyButtonText}}

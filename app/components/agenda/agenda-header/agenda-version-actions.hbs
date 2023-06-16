@@ -59,29 +59,35 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.reloadAgendaitemsData.isRunning}} @reserveSpace={{true}}>
       {{#if (await (this.canBeApproved))}}
-      {{t "approve-agenda-confirmation"}}
-      {{else}}
-      <Auk::Alert @skin="error" @message={{t "approve-agenda-not-ok-message" }} />
-      <div>
         {{t "approve-agenda-confirmation"}}
-      </div>
-      {{#if (await (this.approvedAgendaitemsNotOk))}}
-      <br />
-      <div data-test-agenda-version-actions-approve-agenda-rollback-message class="auk-u-mb-2">
-        {{t "rollback-agendaitem-on-approving-agenda"}}
-      </div>
-      <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.approvedAgendaitemsNotOk)}} />
-      {{/if}}
-      {{#if (await (this.newAgendaitemsNotOk))}}
-      <br />
-      <div data-test-agenda-version-actions-approve-agenda-move-message class="auk-u-mb-2">
-        {{t
-        "move-agendaitem-on-approving-agenda"
-        serialnumber=@currentAgenda.serialnumber
-        }}
-      </div>
-      <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.newAgendaitemsNotOk)}} />
-      {{/if}}
+      {{else}}
+        <AuAlert
+          @skin="error"
+          @icon="circle-x"
+          @size="small"
+        >
+          <p>{{t "approve-agenda-not-ok-message"}}</p>
+        </AuAlert>
+        <div>
+          {{t "approve-agenda-confirmation"}}
+        </div>
+        {{#if (await (this.approvedAgendaitemsNotOk))}}
+          <br />
+          <div data-test-agenda-version-actions-approve-agenda-rollback-message class="auk-u-mb-2">
+            {{t "rollback-agendaitem-on-approving-agenda"}}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.approvedAgendaitemsNotOk)}} />
+        {{/if}}
+        {{#if (await (this.newAgendaitemsNotOk))}}
+          <br />
+          <div data-test-agenda-version-actions-approve-agenda-move-message class="auk-u-mb-2">
+            {{t
+            "move-agendaitem-on-approving-agenda"
+            serialnumber=@currentAgenda.serialnumber
+            }}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.newAgendaitemsNotOk)}} />
+        {{/if}}
       {{/if}}
     </Utils::LoadableContent>
   </Auk::Modal::Body>
@@ -101,29 +107,35 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.reloadAgendaitemsData.isRunning}} @reserveSpace={{true}}>
       {{#if (await (this.canBeApproved))}}
-      {{t "approve-agenda-close-meeting-confirmation"}}
-      {{else}}
-      <Auk::Alert @skin="error" @message={{t "approve-agenda-close-meeting-not-ok-message" }} />
-      <div>
         {{t "approve-agenda-close-meeting-confirmation"}}
-      </div>
-      {{#if (await (this.approvedAgendaitemsNotOk))}}
-      <br />
-      <div data-test-agenda-version-actions-approve-and-close-agenda-rollback-message class="auk-u-mb-2">
-        {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
-      </div>
-      <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.approvedAgendaitemsNotOk)}} />
-      {{/if}}
-      {{#if (await (this.newAgendaitemsNotOk))}}
-      <br />
-      <div data-test-agenda-version-actions-approve-and-close-agenda-delete-message class="auk-u-mb-2">
-        {{t
-        "delete-agendaitem-on-closing-meeting"
-        serialnumber=@currentAgenda.serialnumber
-        }}
-      </div>
-      <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.newAgendaitemsNotOk)}} />
-      {{/if}}
+      {{else}}
+        <AuAlert
+          @skin="error"
+          @icon="circle-x"
+          @size="small"
+        >
+          <p>{{t "approve-agenda-close-meeting-not-ok-message" }}</p>
+        </AuAlert>
+        <div>
+          {{t "approve-agenda-close-meeting-confirmation"}}
+        </div>
+        {{#if (await (this.approvedAgendaitemsNotOk))}}
+          <br />
+          <div data-test-agenda-version-actions-approve-and-close-agenda-rollback-message class="auk-u-mb-2">
+            {{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.approvedAgendaitemsNotOk)}} />
+        {{/if}}
+        {{#if (await (this.newAgendaitemsNotOk))}}
+          <br />
+          <div data-test-agenda-version-actions-approve-and-close-agenda-delete-message class="auk-u-mb-2">
+            {{t
+            "delete-agendaitem-on-closing-meeting"
+            serialnumber=@currentAgenda.serialnumber
+            }}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await (this.newAgendaitemsNotOk)}} />
+        {{/if}}
       {{/if}}
     </Utils::LoadableContent>
   </Auk::Modal::Body>
@@ -141,7 +153,13 @@
   <Auk::Modal::Header @title={{t "agenda-close" }} @onClose={{this.cancelCloseMeeting}} />
   <Auk::Modal::Body>
     {{#if (await this.latestAgenda.status.isDesignAgenda)}}
-    <Auk::Alert @skin="error" @message={{t "agenda-design-delete-message" agenda=this.latestAgenda.agendaName }} />
+      <AuAlert
+        @skin="error"
+        @icon="circle-x"
+        @size="small"
+      >
+        <p>{{t "agenda-design-delete-message" agenda=this.latestAgenda.agendaName }}</p>
+      </AuAlert>
     {{/if}}
     <div>
       {{t "close-meeting-confirmation"}}
@@ -160,7 +178,13 @@
   <Auk::Modal::Header @title={{t "agenda-delete" }} @onClose={{this.cancelDeleteSelectedAgenda}} />
   <Auk::Modal::Body>
     {{#if (eq @reverseSortedAgendas.length 1)}}
-    <Auk::Alert @skin="error" @message={{t "delete-final-agenda-and-meeting" }} />
+      <AuAlert
+        @skin="error"
+        @icon="circle-x"
+        @size="small"
+      >
+        <p>{{t "delete-final-agenda-and-meeting" }}</p>
+      </AuAlert>
     {{/if}}
     <div>
       {{t "delete-agenda-message" agenda=@currentAgenda.agendaName}}
@@ -179,45 +203,56 @@
   <Auk::Modal::Header @title={{t "agenda-reopen-previous-version" }} @onClose={{this.cancelReopenPreviousAgenda}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.loadPiecesToDelete.isRunning}} @reserveSpace={{true}}>
-      <Auk::Alert data-test-agenda-version-actions-reopen-modal-error @skin="error"
-        @message={{t "agenda-reopen-confirmation" designAgenda=@currentAgenda.agendaName
-        approvedAgenda=this.lastApprovedAgenda.agendaName }} />
+      <AuAlert
+        data-test-agenda-version-actions-reopen-modal-error
+        @skin="error"
+        @icon="circle-x"
+        @size="small"
+      >
+        <p>{{t "agenda-reopen-confirmation" designAgenda=@currentAgenda.agendaName approvedAgenda=this.lastApprovedAgenda.agendaName}}</p>
+      </AuAlert>
       {{#if this.loadPiecesToDelete.isRunning}}
-      <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-        <Auk::Loader @message={{t "loading" }} />
-      </div>
+        <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+          <Auk::Loader @message={{t "loading" }} />
+        </div>
       {{/if}}
       {{#if this.piecesToDeleteReopenPreviousAgenda}}
-      <Auk::Alert data-test-agenda-version-actions-reopen-modal-warning @skin="warning"
-        @message={{t "agenda-reopen-pieces-delete" }} />
-      <div class="vlc-document-card-versions">
-        <Auk::Accordion>
-          <Auk::Accordion::Item @isDefaultActive={{true}} @title={{t "view-documents-details" }}>
-            {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
-            <div class="vlc-document-holder">
-              <div class="vlc-document-card-item" data-test-agenda-version-actions-reopen-modal-piece>
-                <div class="vlc-document-card-item__title">
-                  <LinkTo @route="document" @model={{piece.id}} target="_blank"
-                    class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                    data-test-agenda-version-actions-reopen-modal-piece-name>
-                    {{! prettier-ignore}}
-                    {{piece.name}}.{{piece.file.extension}}
-                  </LinkTo>
-                  <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
-                </div>
-                <div class="vlc-document-card-item__meta au-u-muted">
-                  {{t "uploaded-at"}}
-                  {{datetime-at piece.created}}
-                </div>
-                <div class="vlc-document-card-item__icon">
-                  <Auk::Icon @name="clock-rewind" @size="small" />
+        <AuAlert
+          data-test-agenda-version-actions-reopen-modal-warning
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{t "agenda-reopen-pieces-delete" }}</p>
+        </AuAlert>
+        <div class="vlc-document-card-versions">
+          <Auk::Accordion>
+            <Auk::Accordion::Item @isDefaultActive={{true}} @title={{t "view-documents-details" }}>
+              {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
+              <div class="vlc-document-holder">
+                <div class="vlc-document-card-item" data-test-agenda-version-actions-reopen-modal-piece>
+                  <div class="vlc-document-card-item__title">
+                    <LinkTo @route="document" @model={{piece.id}} target="_blank"
+                      class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                      data-test-agenda-version-actions-reopen-modal-piece-name>
+                      {{! prettier-ignore}}
+                      {{piece.name}}.{{piece.file.extension}}
+                    </LinkTo>
+                    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
+                  </div>
+                  <div class="vlc-document-card-item__meta au-u-muted">
+                    {{t "uploaded-at"}}
+                    {{datetime-at piece.created}}
+                  </div>
+                  <div class="vlc-document-card-item__icon">
+                    <Auk::Icon @name="clock-rewind" @size="small" />
+                  </div>
                 </div>
               </div>
-            </div>
-            {{/each}}
-          </Auk::Accordion::Item>
-        </Auk::Accordion>
-      </div>
+              {{/each}}
+            </Auk::Accordion::Item>
+          </Auk::Accordion>
+        </div>
       {{/if}}
     </Utils::LoadableContent>
   </Auk::Modal::Body>

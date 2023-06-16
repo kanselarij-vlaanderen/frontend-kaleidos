@@ -2,6 +2,7 @@
 
 // / <reference types="Cypress" />
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -55,7 +56,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
@@ -85,7 +86,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
@@ -112,7 +113,7 @@ context('Publications reports tests', () => {
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.create)
       .click();
 
-    cy.get(publication.generateReport.selectMandatee)
+    cy.get(utils.mandateePersonSelector)
       // .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
@@ -123,7 +124,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
@@ -153,7 +154,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
@@ -183,7 +184,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
@@ -213,7 +214,7 @@ context('Publications reports tests', () => {
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.create)
       .click();
 
-    cy.get(publication.generateReport.selectMandatee)
+    cy.get(utils.mandateePersonSelector)
       // .find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
@@ -224,7 +225,7 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(utils.vlAlert.message).eq(0)
+    cy.get(appuniversum.alert.message).eq(0)
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);

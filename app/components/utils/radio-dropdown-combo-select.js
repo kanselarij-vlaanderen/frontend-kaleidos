@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { guidFor } from '@ember/object/internals';
 
 export default class RadioDropdownComboSelectComponent extends Component {
   @tracked othersShown = false;
@@ -16,20 +15,12 @@ export default class RadioDropdownComboSelectComponent extends Component {
     this.othersShown = this.selectedIsInOthers;
   }
 
-  get labelKey() {
-    return this.args.labelKey || 'label';
-  }
-
   get radioLabelKey() {
     return this.args.radioLabelKey || this.args.labelKey || 'label';
   }
 
   get dropdownLabelKey() {
     return this.args.dropdownLabelKey || this.args.labelKey || 'label';
-  }
-
-  get radioName() {
-    return `${guidFor(this)}-radio`;
   }
 
   get radioOptionsSize() {

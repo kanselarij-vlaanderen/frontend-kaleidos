@@ -35,8 +35,8 @@ function checkPublishMail(alertMessage) {
   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
   cy.get(auk.confirmationModal.footer.confirm).click();
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.alert.message).contains(alertMessage);
-  cy.get(auk.alert.close).click();
+  cy.get(appuniversum.alert.message).contains(alertMessage);
+  cy.get(appuniversum.alert.close).click();
 }
 
 function checkUncheckInNewsletter(index) {
@@ -205,7 +205,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .wait('@postMailCampaigns')
       .then((responseBody) => {
         if (responseBody.error || responseBody.response?.statusCode === 500) {
-          cy.get(auk.alert.message).should('not.exist');
+          cy.get(appuniversum.alert.container).should('not.exist');
         }
       });
   });
