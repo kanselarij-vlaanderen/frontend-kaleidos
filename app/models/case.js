@@ -11,7 +11,8 @@ export default class CaseModel extends Model {
   @belongsTo('decisionmaking-flow', { inverse: 'case', async: true })
   decisionmakingFlow;
 
-  @hasMany('piece', { inverse: 'cases', async: true }) pieces;
+  @hasMany('piece', { inverse: 'cases', async: true, polymorphic: true })
+  pieces;
   @hasMany('publication-flow', { inverse: 'case', async: true })
   publicationFlows;
   @hasMany('sign-flow', { inverse: 'case', async: true }) signFlows;

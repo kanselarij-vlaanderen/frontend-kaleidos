@@ -12,5 +12,5 @@ export default class SignMarkingActivityModel extends Model {
     async: true,
   })
   signPreparationActivity;
-  @belongsTo('piece', { inverse: 'signMarkingActivity', async: true }) piece;
+  @belongsTo('piece', { inverse: 'signMarkingActivity', async: true, polymorphic: true }) piece;
 }
