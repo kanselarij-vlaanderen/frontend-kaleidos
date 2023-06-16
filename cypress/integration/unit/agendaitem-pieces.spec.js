@@ -58,7 +58,6 @@ context('Tests of pieces on agendaitems', () => {
   it('should test deleting a BIS from document viewer after opening document directly', () => {
     cy.intercept('GET', '/pieces/62823C417471A1FC25E6DB61/next-piece').as('getNextPiece');
     cy.visit('/document/62823C417471A1FC25E6DB61');
-    cy.get(document.documentPreviewSidebar.open).click();
     cy.wait('@getNextPiece');
     cy.get(auk.loader).should('not.exist');
     // can't delete previous version
