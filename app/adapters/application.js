@@ -17,7 +17,10 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       }
       return await this.retryOnError(super.ajax.bind(this), arguments); // return-await of importance to be able to catch errors
     } catch (error) {
-      this.toaster.error(this.intl.t('couldnt-answer-net-req'));
+      this.toaster.error(
+        this.intl.t('couldnt-answer-net-req'),
+        this.intl.t('warning-title')
+      );
       throw error;
     }
   }
@@ -44,7 +47,10 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       return await ajax(...ajaxArgs);
     } catch (error) {
       if (retryCount === 0) { // Only warn on first-time occurence in order not to bug users with warnings on each retry.
-        this.toaster.warning(this.intl.t('invalid-net-req-answer'));
+        this.toaster.warning(
+          this.intl.t('invalid-net-req-answer'),
+          this.intl.t('warning-title')
+        );
       }
       if (retryCount < maxRetries) {
         await sleep(250 * (retryCount + 1));

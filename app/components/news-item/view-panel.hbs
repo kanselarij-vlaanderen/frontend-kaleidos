@@ -68,7 +68,12 @@
         </div>
       {{else}}
         <div class="auk-u-mt-2">
-          <Auk::Alert @message={{t "no-themes-yet"}} />
+          <AuAlert
+            @icon="info-circle"
+            @size="small"
+          >
+            <p>{{t "no-themes-yet"}}</p>
+          </AuAlert>
         </div>
       {{/if}}
     </div>

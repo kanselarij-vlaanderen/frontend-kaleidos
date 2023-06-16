@@ -84,8 +84,8 @@ context('Agenda reopen previous tests', () => {
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
     cy.get(auk.loader).should('not.exist');
-    cy.get(auk.alert.message).contains(designAgendaB);
-    cy.get(auk.alert.message).contains(approvedagendaA);
+    cy.get(appuniversum.alert.message).contains(designAgendaB);
+    cy.get(appuniversum.alert.message).contains(approvedagendaA);
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(designAgendaB);
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(approvedagendaA);
     cy.get(agenda.agendaVersionActions.reopenModal.warning).should('not.exist');

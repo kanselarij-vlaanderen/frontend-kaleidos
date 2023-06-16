@@ -4,6 +4,7 @@
 import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
@@ -385,7 +386,7 @@ context('Publications tests', () => {
       force: true,
     });
     // When trying to enter a number that already exists, we suggest a new number and a yellow toast is shown
-    cy.get(auk.alertStack.container).find(auk.alert.message)
+    cy.get(auk.alertStack.container).find(appuniversum.alert.message)
       .contains('nieuw nummer');
     // Validation happened, save is enabled because a new number was suggested
     cy.get(publication.newPublication.create).should('not.be.disabled');

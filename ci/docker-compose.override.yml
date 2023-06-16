@@ -79,3 +79,9 @@ services:
   mail-delivery:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  decision-report-generation:
+    user: ${HOST_UID_GID}
+  decision-extraction:
+    user: ${HOST_UID_GID}
+  chrome-browser:
+    user: ${HOST_UID_GID}
