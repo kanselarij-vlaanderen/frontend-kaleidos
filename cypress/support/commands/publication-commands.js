@@ -167,7 +167,7 @@ function addPublicationDocuments(files) {
         cy.get('.vl-uploaded-document').eq(index)
           .within(() => {
             cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-            cy.get('.auk-radio-list')
+            cy.get('.au-c-control-group')
               .within(($t) => {
                 if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
                   cy.get('input[type="radio"]').check(file.fileType, {

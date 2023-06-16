@@ -24,6 +24,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
+   * @argument isGenerated: used to determine what label should be used
    */
   @service store;
   @service currentSession;
@@ -56,6 +57,14 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
+  get label() {
+    if (this.args.isGenerated) {
+      return this.intl.t('created-on');
+    } else {
+      return this.intl.t('uploaded-at');
+    }
+  }
+
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
@@ -64,6 +73,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures');
+  }
+
+  get showSignaturePill() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
   }
 
   @task
@@ -180,7 +195,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
-    this.newPiece = this.store.createRecord('piece', {
+    this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
       created: now,
       modified: now,
       file: file,

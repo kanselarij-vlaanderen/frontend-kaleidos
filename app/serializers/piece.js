@@ -4,9 +4,8 @@ const SKIP_SERIALIZED = [
   'agendaitems',
   'submissionActivity',
   'signedPiece',
-  'unsignedPiece',
   'signMarkingActivity',
-  'signCompletionActivity'
+  'signCompletionActivity',
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {

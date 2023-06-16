@@ -1,5 +1,10 @@
 <div
-  class="vlc-document-card {{if (not this.bordered) 'vlc-document-card--borderless'}} {{if this.deleteDocumentContainerWithUndo.isRunning 'vlc-document--deleted-state'}}"
+  class="vlc-document-card
+    {{if (not this.bordered) 'vlc-document-card--borderless'}}
+    {{if
+      this.deleteDocumentContainerWithUndo.isRunning
+      'vlc-document--deleted-state'
+    }}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
   data-test-document-card
@@ -10,13 +15,19 @@
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
-              <Auk::Badge @skin="success" @icon="document-added" @size="large" />
+              <Auk::Badge
+                @skin="success"
+                @icon="document-added"
+                @size="large"
+              />
             {{else}}
               <Auk::Badge @icon="document" @size="large" />
             {{/if}}
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
-            <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+            <div
+              class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+            >
               <span data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.altLabel}}
@@ -30,20 +41,35 @@
               data-test-document-card-name-value
             >
               {{#if this.loadFiles.isRunning}}
-                <AuLoader @padding="small"/>
+                <AuLoader @padding="small" />
               {{else}}
-                {{#let (or this.piece.file.derived.extension this.piece.file.extension) as |extension|}}
-                  {{this.piece.name}}.{{extension}}
+                {{#let
+                  (or
+                    this.piece.file.derived.extension this.piece.file.extension
+                  )
+                  as |extension|
+                }}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
-                <p data-test-document-card-primary-source-created={{if this.piece.file.derived ""}}>
-                  {{t "uploaded-at"}}
+                <p
+                  data-test-document-card-primary-source-created={{if
+                    this.piece.file.derived
+                    ""
+                  }}
+                >
+                  {{this.label}}
                   {{datetime-at this.piece.created}}
-                  {{#if (and this.piece.file.derived (await (this.canViewConfidentialPiece)))}}
+                  {{#if
+                    (and
+                      this.piece.file.derived
+                      (await (this.canViewConfidentialPiece))
+                    )
+                  }}
                     {{t "as"}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
@@ -55,11 +81,15 @@
                   {{/if}}
                 </p>
               {{/if}}
-              {{#if (and this.signaturesEnabled (await (this.canViewSignedPiece)))}}
+              {{#if
+                (and this.signaturesEnabled (await (this.canViewSignedPiece)))
+              }}
                 {{#if this.piece.signedPiece.file}}
                   <p>
                     <AuLinkExternal
-                      href={{await this.piece.signedPiece.namedDownloadLinkPromise}}
+                      href={{await
+                        this.piece.signedPiece.namedDownloadLinkPromise
+                      }}
                       download
                     >
                       {{t "signed-document"}}
@@ -93,10 +123,22 @@
           {{/if}}
           <Group.Item
             class="auk-o-flex"
-            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDecisionPublicationActivity.status}}
-            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.meeting.internalDocumentPublicationActivity.status}}
-            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.status}}
-            {{did-update (perform this.loadAccessLevelRelatedData) @agendaContext.agenda.previousVersion}}
+            {{did-update
+              (perform this.loadAccessLevelRelatedData)
+              @agendaContext.meeting.internalDecisionPublicationActivity.status
+            }}
+            {{did-update
+              (perform this.loadAccessLevelRelatedData)
+              @agendaContext.meeting.internalDocumentPublicationActivity.status
+            }}
+            {{did-update
+              (perform this.loadAccessLevelRelatedData)
+              @agendaContext.agenda.status
+            }}
+            {{did-update
+              (perform this.loadAccessLevelRelatedData)
+              @agendaContext.agenda.previousVersion
+            }}
           >
             {{#unless this.loadAccessLevelRelatedData.isRunning}}
               <AccessLevelPill
@@ -110,25 +152,29 @@
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}}
-              {{#if this.loadSignatureRelatedData.isRunning}}
-                <Group.Item>
-                  <div class="auk-loader au-u-margin-left-small" role="alert" aria-busy="true"></div>
-                </Group.Item>
-              {{else if this.signMarkingActivity}}
-                <Group.Item>
-                  <SignaturePill
-                    @piece={{this.piece}}
-                    @signMarkingActivity={{this.signMarkingActivity}}
-                  />
-                </Group.Item>
-              {{/if}}
+            {{#if this.loadSignatureRelatedData.isRunning}}
+              <Group.Item>
+                <div
+                  class="auk-loader au-u-margin-left-small"
+                  role="alert"
+                  aria-busy="true"
+                ></div>
+              </Group.Item>
+            {{else if this.signMarkingActivity}}
+              <Group.Item>
+                <SignaturePill
+                  @piece={{this.piece}}
+                  @signMarkingActivity={{this.signMarkingActivity}}
+                />
+              </Group.Item>
+            {{/if}}
           {{/if}}
           {{#if
-              (and
-                @isEditable
-                (user-may "manage-documents")
-                this.mayEditOrDelete
-              )
+            (and
+              @isEditable
+              (user-may "manage-documents")
+              this.mayEditOrDelete
+            )
           }}
             <Group.Item>
               <AuDropdown
@@ -139,26 +185,38 @@
                 @disabled={{this.loadPieceRelatedData.isRunning}}
                 @alignment="right"
               >
-              {{#if this.mayEditOrDelete}}
-                <AuButton
-                  data-test-document-upload-new-piece
-                  @skin="link"
-                  {{on "click" this.openUploadModal}}
-                  role="menuitem"
-                >
-                  {{t "new-version"}}
-                </AuButton>
-                <AuButton
-                  data-test-document-edit-piece
-                  @skin="link"
-                  {{on "click" (toggle "isEditingPiece" this)}}
-                  role="menuitem"
-                >
-                  {{t "edit"}}
-                </AuButton>
+                {{#if @showCreateNewVersion}}
+                  <AuButton
+                    data-test-document-generate-new-version
+                    @skin="link"
+                    {{on "click" @onCreateNewVersion}}
+                    role="menuitem"
+                  >
+                    {{t "create-new-version"}}
+                  </AuButton>
                 {{/if}}
-                <AuHr />
+                {{#if (not @hideUpload)}}
+                  <AuButton
+                    data-test-document-upload-new-piece
+                    @skin="link"
+                    {{on "click" this.openUploadModal}}
+                    role="menuitem"
+                  >
+                    {{t "new-version"}}
+                  </AuButton>
+                {{/if}}
+                {{#if (not @hideEdit)}}
+                  <AuButton
+                    data-test-document-edit-piece
+                    @skin="link"
+                    {{on "click" (toggle "isEditingPiece" this)}}
+                    role="menuitem"
+                  >
+                    {{t "edit"}}
+                  </AuButton>
+                {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
+                  <AuHr />
                   <AuLink
                     @skin="link"
                     @route="document"
@@ -168,22 +226,21 @@
                   >
                     {{t "present-for-signing"}}
                   </AuLink>
-                  <AuHr />
                 {{/if}}
-                {{#if this.mayEditOrDelete}}
-                <AuButton
-                  data-test-document-card-delete
-                  @skin="link"
-                  @alert={{true}}
-                  {{on "click" this.deleteDocumentContainer}}
-                  role="menuitem"
-                >
-                  {{t "document-delete"}}
-                </AuButton>
+                {{#if (not @hideDelete)}}
+                  <AuHr />
+                  <AuButton
+                    data-test-document-card-delete
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteDocumentContainer}}
+                    role="menuitem"
+                  >
+                    {{t "document-delete"}}
+                  </AuButton>
                 {{/if}}
               </AuDropdown>
             </Group.Item>
-
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>
@@ -213,8 +270,14 @@
                     @piece={{piece}}
                     @agendaContext={{@agendaContext}}
                     @isEditable={{@isEditable}}
-                    @onChangeAccessLevel={{fn this.changeAccessLevelOfPiece piece}}
-                    @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfPiece piece}}
+                    @onChangeAccessLevel={{fn
+                      this.changeAccessLevelOfPiece
+                      piece
+                    }}
+                    @onConfirmChangeAccessLevel={{fn
+                      this.saveAccessLevelOfPiece
+                      piece
+                    }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
                   />
                 </div>
