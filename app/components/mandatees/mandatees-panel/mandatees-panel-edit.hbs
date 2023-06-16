@@ -83,7 +83,6 @@
             data-test-mandatee-panel-edit-save
             @skin="primary"
             @loading={{this.save.isRunning}}
-            @disabled={{this.save.isRunning}}
             {{on "click" (perform this.save)}}
           >
             {{t "save"}}

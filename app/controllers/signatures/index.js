@@ -7,9 +7,11 @@ import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 
 export default class SignaturesIndexController extends Controller {
+  @service intl;
   @service router;
   @service store;
   @service signatureService;
+  @service toaster;
 
   @tracked piece = null;
   @tracked decisionActivity = null;
@@ -200,27 +202,47 @@ export default class SignaturesIndexController extends Controller {
   }
 
   createSignFlow = task(async () => {
-    if (this.selectedPieces.length) {
-      await Promise.all(this.selectedPieces.map(async (piece) => {
-        const decisionActivity = await this.getDecisionActivity(piece);
+    try {
+      if (this.selectedPieces.length) {
+        await Promise.all(this.selectedPieces.map(async (piece) => {
+          const decisionActivity = await this.getDecisionActivity(piece);
+          await this.signatureService.createSignFlow(
+            piece,
+            decisionActivity,
+            this.signers,
+            this.approvers,
+            this.notificationAddresses
+          );
+        }));
+      } else if (this.piece) {
         await this.signatureService.createSignFlow(
-          piece,
-          decisionActivity,
+          this.piece,
+          this.decisionActivity,
           this.signers,
           this.approvers,
           this.notificationAddresses
         );
-      }));
-    } else if (this.piece) {
-      await this.signatureService.createSignFlow(
-        this.piece,
-        this.decisionActivity,
-        this.signers,
-        this.approvers,
-        this.notificationAddresses
+      }
+      this.closeSidebar();
+      await this.router.refresh(this.router.routeName);
+      if (this.selectedPieces.length > 1) {
+        this.toaster.success(
+          this.intl.t('documents-were-sent-to-signinghub'),
+          this.intl.t('successfully-started-sign-flows')
+        );
+      } else {
+        this.toaster.success(
+          this.intl.t('document-was-sent-to-signinghub'),
+          this.intl.t('successfully-started-sign-flow')
+        );
+      }
+    } catch {
+      this.closeSidebar();
+      await this.router.refresh(this.router.routeName);
+      this.toaster.error(
+        this.intl.t('create-sign-flow-error-message'),
+        this.intl.t('warning-title')
       );
     }
-    this.closeSidebar();
-    await this.router.refresh(this.router.routeName);
   });
 }

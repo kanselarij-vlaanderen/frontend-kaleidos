@@ -50,37 +50,35 @@
       />
     </td>
   {{/if}}
-  <td>
-    <WebComponents::AuButtonToolbar>
-      {{#if (not @isEditingEnabled)}}
-        <AuLinkExternal
-          @icon="book"
-          @hideText={{true}}
-          href={{@row.piece.viewDocumentURL}}
-          target="_blank"
-        />
-      {{else if @row.isToBeDeleted}}
-        <AuButton
-          data-test-document-details-row-undo-delete
-          @skin="naked"
-          @icon="undo"
-          @hideText={{true}}
-          {{on "click" (fn @row.setToBeDeleted false)}}
-        >
-          {{t "undo"}}
-        </AuButton>
-      {{else}}
-        <AuButton
-          data-test-document-details-row-delete
-          @skin="naked"
-          @alert={{true}}
-          @icon="trash"
-          @hideText={{true}}
-          {{on "click" (fn @row.setToBeDeleted true)}}
-        >
-          {{t "delete"}}
-        </AuButton>
-      {{/if}}
-    </WebComponents::AuButtonToolbar>
+  <td class="auk-u-text-align--right">
+    {{#if (not @isEditingEnabled)}}
+      <AuLinkExternal
+        @icon="book"
+        @hideText={{true}}
+        href={{@row.piece.viewDocumentURL}}
+        target="_blank"
+      />
+    {{else if @row.isToBeDeleted}}
+      <AuButton
+        data-test-document-details-row-undo-delete
+        @skin="naked"
+        @icon="undo"
+        @hideText={{true}}
+        {{on "click" (fn @row.setToBeDeleted false)}}
+      >
+        {{t "undo"}}
+      </AuButton>
+    {{else}}
+      <AuButton
+        data-test-document-details-row-delete
+        @skin="naked"
+        @alert={{true}}
+        @icon="trash"
+        @hideText={{true}}
+        {{on "click" (fn @row.setToBeDeleted true)}}
+      >
+        {{t "delete"}}
+      </AuButton>
+    {{/if}}
   </td>
 </tr>

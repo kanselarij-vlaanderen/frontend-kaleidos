@@ -58,12 +58,12 @@ context('Agenda tests', () => {
     // should get different message when trying to approve with formal not ok items
     cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message)
+    cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message)
+    cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
 
@@ -82,22 +82,22 @@ context('Agenda tests', () => {
 
     // alert message exists after agendaitem that is not formally ok
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(auk.modal.footer.cancel).click();
 
     cy.setAllItemsFormallyOk(1);
     // alert message no longer exists after agendaitems are formally ok
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message)
+    cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message)
+    cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
   });
@@ -109,7 +109,7 @@ context('Agenda tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaVersionActions.actions.deleteAgenda).forceClick();
-    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(agenda.agendaVersionActions.confirm.deleteAgenda);
     cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
@@ -263,7 +263,7 @@ context('Agenda tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaVersionActions.actions.lockAgenda).forceClick();
-    cy.get(auk.modal.body).find(auk.alert.message)
+    cy.get(auk.modal.body).find(appuniversum.alert.message)
       .contains('met alle wijzigingen wil verwijderen?');
     cy.get(auk.modal.footer.cancel).click();
     // let the command do the work

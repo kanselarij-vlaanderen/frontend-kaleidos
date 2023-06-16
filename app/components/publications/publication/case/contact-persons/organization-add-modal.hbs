@@ -52,10 +52,7 @@
             data-test-organization-add-submit
             @skin="primary"
             @icon="plus"
-            @disabled={{or
-              (not this.validators.areValid)
-              this.save.isRunning
-            }}
+            @disabled={{not this.validators.areValid}}
             @loading={{this.save.isRunning}}
             {{on "click" (perform this.save)}}
           >

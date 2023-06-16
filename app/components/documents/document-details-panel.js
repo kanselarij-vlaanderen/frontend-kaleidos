@@ -21,6 +21,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isReplacingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
+  @tracked isOpenVerifyDeleteSignFlow = false;
   @tracked replacementSourceFile;
   @tracked documentType;
   @tracked accessLevel;
@@ -33,9 +34,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   get isProcessing() {
     return (
-      this.saveDetails.isRunning
-        || this.cancelEditDetails.isRunning
-        || this.isUploadingReplacementSourceFile
+      this.saveDetails.isRunning ||
+      this.cancelEditDetails.isRunning ||
+      this.isUploadingReplacementSourceFile
     );
   }
 
@@ -79,6 +80,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       yield oldFile.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
+      const now = new Date();
+      this.args.piece.created = now;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
       try {
@@ -102,6 +105,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.replacementSourceFile = null;
     this.isReplacingSourceFile = !this.isReplacingSourceFile;
   }
+
+  verifyDeleteSignFlow = task(async () => {
+    await this.signatureService.removeSignFlow(this.args.piece);
+    this.isOpenVerifyDeleteSignFlow = false;
+  });
 
   @action
   openEditDetails() {

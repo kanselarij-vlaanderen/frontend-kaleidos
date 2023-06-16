@@ -11,15 +11,21 @@
               <MockLogin as |login|>
                 {{#if login.errorMessage}}
                   {{#if (includes "403" (w (lowercase login.errorMessage)))}}
-                    <Auk::Alert
+                    <AuAlert
                       @skin="error"
-                      @message={{t "application-unauthorized-message"}}
-                    />
+                      @icon="circle-x"
+                      @size="small"
+                    >
+                      <p>{{t "application-unauthorized-message"}}</p>
+                    </AuAlert>
                   {{else}}
-                    <Auk::Alert
+                    <AuAlert
                       @skin="error"
-                      @message={{login.errorMessage}}
-                    />
+                      @icon="circle-x"
+                      @size="small"
+                    >
+                      <p>{{login.errorMessage}}</p>
+                    </AuAlert>
                   {{/if}}
                 {{/if}}
                 {{#if this.model.length}}
