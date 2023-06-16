@@ -54,7 +54,10 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       'filter[agenda-item-treatment][:id:]': this.agendaItemTreatment.id,
     })) > 1;
     if (hasMultipleNewsItems) {
-      this.toaster.error(this.intl.t('error-multiple-newsitem'));
+      this.toaster.error(
+        this.intl.t('error-multiple-newsitem'),
+        this.intl.t('warning-title')
+      );
     }
   }
 
