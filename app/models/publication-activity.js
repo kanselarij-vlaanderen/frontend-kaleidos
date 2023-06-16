@@ -17,7 +17,11 @@ export default class PublicationActivity extends Model {
   })
   requestActivity;
 
-  @hasMany('piece', { inverse: 'publicationActivitiesUsedBy', async: true })
+  @hasMany('piece', {
+    inverse: 'publicationActivitiesUsedBy',
+    async: true,
+    polymorphic: true,
+  })
   usedPieces;
   @hasMany('decision', { inverse: 'publicationActivity', async: true })
   decisions;
