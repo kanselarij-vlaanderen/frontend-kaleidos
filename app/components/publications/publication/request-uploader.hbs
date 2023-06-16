@@ -5,13 +5,15 @@
   @validateFile={{this.validateFile}}
 />
 {{#if this.triedToUploadTooLargeFile}}
-  <Auk::Alert
+  <AuAlert
     @title={{t "warning-title"}}
-    @message={{t "attachment-was-too-large"}}
     @skin="error"
-    @icon="alert-triangle"
-    @isClosable={{true}}
+    @icon="circle-x"
+    @size="small"
+    @closable={{true}}
     @onClose={{toggle "triedToUploadTooLargeFile" this}}
     class="au-u-margin-top-tiny"
-  />
+  >
+    <p>{{t "attachment-was-too-large"}}</p>
+  </AuAlert>
 {{/if}}

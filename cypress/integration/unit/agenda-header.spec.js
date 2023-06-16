@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 
@@ -115,7 +116,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShortNew);
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveAndCloseDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.rollbackItems);
     cy.get(agenda.agendaVersionActions.messages.approveAndCloseAgenda.deleteItems);
     cy.get(agenda.agendaVersionActions.confirm.approveAndCloseAgenda).click();
@@ -167,7 +168,7 @@ context('Agenda-Header actions tests', () => {
     cy.visitAgendaWithLink(agendaLinkApprovedOnB);
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 3);
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(agenda.agendaVersionActions.messages.approveAgenda.rollbackItems);
     cy.get(agenda.agendaVersionActions.messages.approveAgenda.moveItems);
     cy.get(agenda.agendaVersionActions.confirm.approveAgenda).click();
