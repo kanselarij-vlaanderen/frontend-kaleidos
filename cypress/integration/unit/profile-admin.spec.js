@@ -77,11 +77,11 @@ context('Testing the application as Admin user', () => {
     // 1 open agenda B, with a document, nothing released:
     // - 1 approval agendaitem
     // - 1 agendaitem with 5 documents, 1 of each accessLevel (not used yet in test), no decision doc
-    // - 1 agendaitem with 0 documents, decision doc
+    // - 1 agendaitem with 0 documents, decision doc (pre piece parts)
     // 1 closed agenda A, with a document, fully released:
     // - 1 approval agendaitem
     // - 1 agendaitem with 5 documents (1BIS), 1 of each accessLevel (not used yet in test), no decision doc
-    // - 1 agendaitem with 0 documents, decision doc (BIS)
+    // - 1 agendaitem with 0 documents, decision doc (BIS) (pre piece parts)
     // 1 existing closed agenda A
     // This agenda has documents "published" but decisions and documents have not been released yet.
     // This gives the option to "unpublish" but also "plan document release" and "release decisons". May not be representative to actual work flow.
@@ -221,12 +221,12 @@ context('Testing the application as Admin user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort2);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -371,12 +371,12 @@ context('Testing the application as Admin user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
