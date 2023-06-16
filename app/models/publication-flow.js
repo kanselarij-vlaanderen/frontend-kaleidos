@@ -42,7 +42,7 @@ export default class PublicationFlow extends Model {
   @hasMany('contact-person', { inverse: 'publicationFlow', async: true })
   contactPersons;
   @hasMany('mandatee', { inverse: 'publicationFlows', async: true }) mandatees;
-  @hasMany('piece', { inverse: 'publicationFlow', async: true })
+  @hasMany('piece', { inverse: 'publicationFlow', async: true, polymorphic: true })
   referenceDocuments;
   @hasMany('concept', { inverse: null, async: true }) governmentAreas;
 }
