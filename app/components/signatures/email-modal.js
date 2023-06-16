@@ -12,6 +12,6 @@ export default class SignaturesEmailModalComponent extends Component {
 
   get isValid() {
     return this.emailBuffer?.length <= 254
-      && /.+\@.+\..+/.test(this.emailBuffer);
+      && /.+@.+\..+/.test(this.emailBuffer);
   }
 }
