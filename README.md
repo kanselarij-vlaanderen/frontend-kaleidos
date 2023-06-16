@@ -23,7 +23,6 @@ You will need the following things properly installed on your computer.
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
 ## Tests
-
 There are multiple make commands ready for you.
 Check the file `Makefile` for specifics.
 
