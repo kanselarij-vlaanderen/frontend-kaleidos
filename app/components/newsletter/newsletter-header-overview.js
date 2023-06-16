@@ -84,7 +84,10 @@ export default class NewsletterHeaderOverviewComponent extends Component {
         yield this.ensureMailCampaign();
 
         if (this.mailCampaign.isSent) {
-          this.toaster.error(this.intl.t('error-already-sent-newsletter'));
+          this.toaster.error(
+            this.intl.t('error-already-sent-newsletter'),
+            this.intl.t('warning-title')
+          );
         } else {
           if (yield this.validateMailCampaign()) {
             try {

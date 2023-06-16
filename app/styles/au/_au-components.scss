@@ -73,6 +73,10 @@ $au-button-height: 3.4rem;
   background-color: transparent; // fix UA default background-color styling
 }
 
+.au-c-alert__close {
+  background-color: transparent; // fix UA default background-color styling
+}
+
 
 // Overrides
 
@@ -407,6 +411,32 @@ $au-button-height: 3.4rem;
     > .au-c-control-group {
       @include style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
     }
+  }
+}
+
+// Alert
+
+.au-c-alert {
+  font-size: 1.5rem;
+}
+
+// Toaster
+
+.auk-alert-stack {
+  .au-c-alert__icon {
+    height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
+    width: $au-unit;
+    margin-right: $au-unit * 0.5;
+  }
+
+  .au-c-icon {
+    height: $au-alert-small-icon-size - 0.1rem; // compensate for visual distortion of perfect circle
+    width: $au-alert-small-icon-size;
+  }
+
+  .au-c-alert__close {
+    align-self: center;
+    margin-left: 1.5rem;
   }
 }
 

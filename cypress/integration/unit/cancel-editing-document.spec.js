@@ -6,7 +6,6 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 
 function uploadFileToCancel(file) {
   cy.get(document.documentCard.name.value).contains(file.fileName)
@@ -255,7 +254,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).should('not.exist');
 
     // both documents and linked documents show emptyState
-    cy.get(utils.auAlert.message).should('have.length', 2)
+    cy.get(appuniversum.alert.message).should('have.length', 2)
       .eq(0)
       .contains('geen documenten');
   });

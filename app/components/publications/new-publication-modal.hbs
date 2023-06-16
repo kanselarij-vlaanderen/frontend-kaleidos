@@ -14,11 +14,13 @@
       @reserveSpace={{true}}
     >
       {{#unless this.isViaCouncilOfMinisters}}
-        <Auk::Alert
+        <AuAlert
           data-test-new-publication-alert-info
-          @icon="circle-info"
-          @message={{t "publications-new-warning-message"}}
-        />
+          @icon="info-circle"
+          @size="small"
+        >
+          <p>{{t "publications-new-warning-message"}}</p>
+        </AuAlert>
       {{/unless}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group">

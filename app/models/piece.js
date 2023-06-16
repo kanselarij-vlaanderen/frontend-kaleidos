@@ -15,10 +15,26 @@ export default class Piece extends Model {
   @belongsTo('file', { inverse: null, async: true }) file;
   @belongsTo('document-container', { inverse: 'pieces', async: true })
   documentContainer;
-  @belongsTo('piece', { inverse: 'previousPiece', async: true }) nextPiece;
-  @belongsTo('piece', { inverse: 'nextPiece', async: true }) previousPiece;
-  @belongsTo('piece', { inverse: 'unsignedPiece', async: true }) signedPiece;
-  @belongsTo('piece', { inverse: 'signedPiece', async: true }) unsignedPiece;
+  @belongsTo('piece', {
+    inverse: 'previousPiece',
+    async: true,
+    polymorphic: true,
+  })
+  nextPiece;
+  @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true })
+  previousPiece;
+  @belongsTo('piece', {
+    inverse: 'unsignedPiece',
+    async: true,
+    polymorphic: true,
+  })
+  signedPiece;
+  @belongsTo('piece', {
+    inverse: 'signedPiece',
+    async: true,
+    polymorphic: true,
+  })
+  unsignedPiece;
 
   // resources with pieces linked:
 
@@ -39,7 +55,10 @@ export default class Piece extends Model {
   @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
   signMarkingActivity;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
-  @belongsTo('sign-completion-activity', { inverse: 'signedPiece', async: true })
+  @belongsTo('sign-completion-activity', {
+    inverse: 'signedPiece',
+    async: true,
+  })
   signCompletionActivity;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
@@ -53,7 +72,8 @@ export default class Piece extends Model {
 
   @hasMany('case', { inverse: 'pieces', async: true }) cases;
   @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
-  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true }) linkedAgendaitems;
+  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
+  linkedAgendaitems;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

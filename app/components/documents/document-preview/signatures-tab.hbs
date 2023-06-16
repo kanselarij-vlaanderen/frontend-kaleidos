@@ -42,6 +42,7 @@
         <Group>
           <AuButton
             @loading={{this.createSignFlow.isRunning}}
+            @disabled={{not this.signers.length}}
             {{on "click" this.createSignFlow.perform}}
           >
             {{t "start-signing"}}

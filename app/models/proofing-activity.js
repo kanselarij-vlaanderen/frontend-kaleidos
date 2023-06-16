@@ -14,9 +14,17 @@ export default class ProofingActivity extends Model {
   @belongsTo('request-activity', { inverse: 'proofingActivity', async: true })
   requestActivity;
 
-  @hasMany('piece', { inverse: 'proofingActivitiesUsedBy', async: true })
+  @hasMany('piece', {
+    inverse: 'proofingActivitiesUsedBy',
+    async: true,
+    polymorphic: true,
+  })
   usedPieces;
-  @hasMany('piece', { inverse: 'proofingActivityGeneratedBy', async: true })
+  @hasMany('piece', {
+    inverse: 'proofingActivityGeneratedBy',
+    async: true,
+    polymorphic: true,
+  })
   generatedPieces;
 
   get isFinished() {
