@@ -55,7 +55,6 @@ export default class AgendaitemSearchRoute extends Route {
     const entry = { ...agendaitem.attributes, ...agendaitem.highlight };
     entry.id = agendaitem.id;
     AgendaitemSearchRoute.postProcessPastAgendaVersions(entry);
-
     if (entry.shortTitle && Array.isArray(entry.shortTitle)) {
       entry.shortTitle = entry.shortTitle.join(' ');
     }
@@ -69,6 +68,13 @@ export default class AgendaitemSearchRoute extends Route {
         entry.shortTitle = entry.shortTitle.replaceAll(highlightShortTitleEmsRemoved, agendaitem.highlight.shortTitle[i]);
       }
     } 
+    if ((agendaitem.highlight && agendaitem.highlight.title) && agendaitem.highlight.title[0]?.split(" ").length < agendaitem.attributes.title?.split(" ").length ) {
+      entry.title = agendaitem.attributes.title;
+      for (let i = 0; i < agendaitem.highlight.title.length; i++){
+        const highlightTitleEmsRemoved = agendaitem.highlight.title[i].replace(/<em>|<\/em>/g, "");
+        entry.title = entry.title.replaceAll(highlightTitleEmsRemoved, agendaitem.highlight.title[i]);
+      }
+    }
     return entry;
   };
 
