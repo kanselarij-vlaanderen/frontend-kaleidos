@@ -141,7 +141,6 @@
   "unlink-mandatee-are-you-sure": "Ben je zeker dat je deze mandataris wil ontkoppelen?",
   "document-number": "Nummer Document",
   "document-title-edit": "Bestandsnaam wijzigen",
-  "document-name": "Documentnaam",
   "document-type": "Type document",
   "no-document-type": "Geen document type",
   "document-type-pdf": "PDF",
@@ -1200,6 +1199,8 @@
   "download-agenda-decisions-info": "Deze functie brengt standaard alle beslissingen van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de beslissingen ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
   "error-while-fetching-nota-content": "Er ging iets fout tijdens het ophalen van de nota inhoud",
   "update": "Bijwerken",
+  "document-name": "Documentnaam",
+  "minutes": "Notulen",
   "signed": "Getekend",
   "sent": "Verstuurd",
   "edit-list": "Lijst bewerken",
@@ -1240,5 +1241,6 @@
   "verify-delete-all-sign-flow-data": "Bent u zeker dat u het handtekenproces volledig wilt verwijderen uit Kaleidos? Deze actie kan niet meer ongedaan gemaakt worden. In Signinghub zal het proces blijven bestaan tenzij dit manueel verwijderd wordt.",
   "delete-all-sign-flow-tooltip": "Verwijder het volledige handtekenproces uit Kaleidos, zodat het document opnieuw ondertekend kan worden",
   "to-start-up": "Op te starten",
-  "to-follow-up": "Op te volgen"
+  "to-follow-up": "Op te volgen",
+  "create-minutes-click-create-button-message": "Klik op \"Aanmaken\" om de notulen aan te maken"
 }

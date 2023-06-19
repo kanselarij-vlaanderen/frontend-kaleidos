@@ -1,0 +1,24 @@
+<AuDropdown
+  @title={{this.labelForVersion this.selectedVersion}}
+  @alignment="left"
+  @skin="naked"
+  @icon="chevron-down"
+  @iconAlignment="right"
+>
+  <AuButton
+    @skin="link-secondary"
+    role="menuitem"
+    {{on "click" (fn this.onVersionClicked @record)}}
+  >
+    {{t "current-version"}}
+  </AuButton>
+  {{#each this.previousVersions.value as |previousVersion|}}
+    <AuButton
+      @skin="link-secondary"
+      role="menuitem"
+      {{on "click" (fn this.onVersionClicked previousVersion)}}
+    >
+      {{this.labelForVersion previousVersion}}
+    </AuButton>
+  {{/each}}
+</AuDropdown>
