@@ -249,6 +249,12 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  onRevertBetreftVersion(betreftPiecePart) {
+    console.log(betreftPiecePart.value);
+    this.setBetreftEditorContent(betreftPiecePart.value);
+  }
+
+  @action
   setBetreftEditorContent(content) {
     this.editorInstanceBetreft.setHtmlContent(content);
   }
@@ -273,6 +279,11 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     this.editorInstanceBeslissing = editorInterface;
+  }
+
+  @action
+  onRevertBeslissingVersion(beslissingPiecePart) {
+    this.setBeslissingEditorContent(beslissingPiecePart.value);
   }
 
   @action
