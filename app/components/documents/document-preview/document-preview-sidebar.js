@@ -39,7 +39,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   }
 
   @action
-  etTab(tabName) {
+  setTab(tabName) {
     this.tab = tabName;
     this.args.onTabChanged(tabName);
   }
