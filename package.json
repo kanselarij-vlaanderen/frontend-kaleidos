@@ -135,7 +135,6 @@
     "eslint-plugin-qunit": "^7.3.1",
     "flatpickr": "^4.6.13",
     "html-entities": "^2.3.3",
-    "inputmask": "^5.0.7",
     "loader.js": "^4.7.0",
     "lodash.invert": "^4.3.0",
     "marked": "^4.2.12",
