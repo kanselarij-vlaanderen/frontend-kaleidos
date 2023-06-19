@@ -1,8 +1,6 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-import 'cypress-file-upload';
-
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
@@ -372,19 +370,31 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   const filePath = `${folder}/${fileFullName}`;
   // note: double encoding is needed or pdf will be blank (cy.fixture also needs encoding)
 
-  cy.fixture(filePath, 'base64').then((fileContent) => {
-    cy.get('[type=file]').attachFile(
+  // cy.fixture(filePath, 'base64').then((fileContent) => {
+  //   cy.get('[type=file]').attachFile(
+  //     {
+  //       fileContent,
+  //       fileName: fileFullName,
+  //       mimeType,
+  //       encoding: 'base64',
+  //     },
+  //     {
+  //       uploadType: 'input',
+  //     }
+  //   );
+  // });
+  cy.fixture(filePath, {
+    encoding: null,
+  }).then((fileContent) => {
+    cy.get('[type=file]').selectFile(
       {
-        fileContent,
+        contents: fileContent,
         fileName: fileFullName,
         mimeType,
-        encoding: 'base64',
-      },
-      {
-        uploadType: 'input',
       }
     );
   });
+
   cy.wait(`@createNewFile${randomInt}`);
   cy.wait(`@getNewFile${randomInt}`);
   cy.get(auk.loader).should('not.exist');

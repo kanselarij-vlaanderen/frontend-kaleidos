@@ -96,9 +96,7 @@
           data-test-signatures-create-sign-flow-approvers-item
           class="auk-o-flex--justify-between"
         >
-          <span class="auk-u-text-ellipsis">
-            {{approver}}
-          </span>
+          <Auk::AbbreviatedText @text={{approver}} @maxLength={{35}} />
           <AuButton
             data-test-signatures-create-sign-flow-approvers-remove
             @skin="naked"
@@ -149,9 +147,7 @@
           data-test-signatures-create-sign-flow-notification-adresses-item
           class="auk-o-flex--justify-between"
         >
-          <span class="auk-u-text-ellipsis">
-            {{notificationAddress}}
-          </span>
+          <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
           <AuButton
             data-test-signatures-create-sign-flow-notification-adresses-remove
             @skin="naked"
