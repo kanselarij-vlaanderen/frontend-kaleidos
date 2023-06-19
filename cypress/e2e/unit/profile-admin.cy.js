@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, Cypress, beforeEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -10,30 +10,39 @@ import mandatee from '../../selectors/mandatee.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
-// import settings from '../../selectors/settings.selectors';
+import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
+function currentTimestamp() {
+  return Cypress.dayjs().unix();
+}
 
-context('Testing the application as Kanselarij user', () => {
+context('Testing the application as Admin user', () => {
   beforeEach(() => {
-    cy.login('Kanselarij');
+    cy.login('Admin');
   });
 
   context('M-header toolbar tests', () => {
-    it('Should have  agenda, case, newsletters, search, publications and signatures in toolbar', () => {
-      cy.get(utils.mHeader.publications);
-      cy.get(utils.mHeader.agendas);
-      cy.get(utils.mHeader.cases);
-      cy.get(utils.mHeader.newsletters);
-      cy.get(utils.mHeader.search);
-      cy.get(utils.mHeader.signatures);
-      cy.get(utils.mHeader.settings).should('not.exist');
+    it('Should have publications, meeting, Case, Newsletter, search and Settings in toolbar', () => {
+      cy.get(utils.mHeader.publications).should('exist');
+      cy.get(utils.mHeader.agendas).should('exist');
+      cy.get(utils.mHeader.cases).should('exist');
+      cy.get(utils.mHeader.newsletters).should('exist');
+      cy.get(utils.mHeader.search).should('exist');
+      cy.get(utils.mHeader.signatures).should('exist');
+      cy.get(utils.mHeader.settings).should('exist');
+    });
+
+    it('Should switch to Publications tab when publications is clicked', () => {
+      cy.get(utils.mHeader.publications).click();
+      cy.get(publication.publicationsIndex.title).should('exist');
+      cy.url().should('include', 'publicaties');
     });
 
     it('Should switch to Agenda tab when agenda is clicked', () => {
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.title).should('exist');
-      cy.url().should('include', '/overzicht');
+      cy.url().should('include', 'overzicht');
     });
 
     it('Should switch to cases tab when cases is clicked', () => {
@@ -44,7 +53,7 @@ context('Testing the application as Kanselarij user', () => {
 
     it('Should switch to newsletter tab when newsletter is clicked', () => {
       cy.get(utils.mHeader.newsletters).click();
-      cy.get(newsletter.newsletterHeader.title).should('exist');
+      cy.get(newsletter.newsletterHeader.title);
       cy.url().should('include', '/kort-bestek');
     });
 
@@ -53,10 +62,29 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(route.search.trigger).should('exist');
       cy.url().should('include', '/zoeken');
     });
+
+    it('Should switch to settings tab when settings is clicked', () => {
+      cy.get(utils.mHeader.settings).click();
+      cy.get(settings.settings.generalSettings).should('exist');
+      cy.get(settings.settings.manageMinisters).should('exist');
+      cy.get(settings.settings.manageUsers).should('exist');
+      cy.url().should('include', '/instellingen');
+    });
   });
 
   context('Profile rights checks for agendas/agenda routes', () => {
-    // setup for this context -> see profile-admin.spec context
+    // setup for this context
+    // 1 open agenda B, with a document, nothing released:
+    // - 1 approval agendaitem
+    // - 1 agendaitem with 5 documents, 1 of each accessLevel (not used yet in test), no decision doc
+    // - 1 agendaitem with 0 documents, decision doc (pre piece parts)
+    // 1 closed agenda A, with a document, fully released:
+    // - 1 approval agendaitem
+    // - 1 agendaitem with 5 documents (1BIS), 1 of each accessLevel (not used yet in test), no decision doc
+    // - 1 agendaitem with 0 documents, decision doc (BIS) (pre piece parts)
+    // 1 existing closed agenda A
+    // This agenda has documents "published" but decisions and documents have not been released yet.
+    // This gives the option to "unpublish" but also "plan document release" and "release decisons". May not be representative to actual work flow.
 
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
@@ -68,7 +96,7 @@ context('Testing the application as Kanselarij user', () => {
     // agendaitems op open agenda
     const approvalLinkOnOpen = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3df64f10-65bd-11ed-a5a5-db2587a216a4';
     const subcaseTitleShort1 = 'Cypress test: profile rights - subcase 1 no decision docs';
-    // const agendaitemLinkOnOpen1 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3e04f510-65bd-11ed-a5a5-db2587a216a4';
+    const agendaitemLinkOnOpen1 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3e04f510-65bd-11ed-a5a5-db2587a216a4';
     const subcaseTitleShort2 = 'Cypress test: profile rights - subcase 2 with decision docs';
     // const agendaitemLinkOnOpen2 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3de5ad40-65bd-11ed-a5a5-db2587a216a4';
 
@@ -79,6 +107,7 @@ context('Testing the application as Kanselarij user', () => {
     // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
+      cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting);
     });
 
@@ -105,7 +134,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaVersionActions.actions.lockAgenda);
       cy.get(agenda.agendaVersionActions.actions.unlockAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.deleteAgenda);
-      cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion);
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -117,7 +146,6 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaActions.downloadDocuments);
       cy.get(agenda.agendaActions.toggleEditingMeeting);
       cy.get(agenda.agendaActions.approveAllAgendaitems);
-      // TODO-profileRights test that non-editor profiles can never see these.
       // Also, only some editors should be able to do these actions (might not be implemented yet)
       cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
       cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
@@ -193,12 +221,12 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort2);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -240,7 +268,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.unlockAgenda);
-      cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.deleteAgenda);
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -249,7 +277,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
-      cy.get(agenda.agendaActions.downloadDocuments);
+      cy.get(agenda.agendaActions.downloadDocuments); // TODO KAS-3696 overheid shouldn't get this button before doc release
       cy.get(agenda.agendaActions.toggleEditingMeeting);
       cy.get(agenda.agendaActions.approveAllAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.releaseDecisions);
@@ -273,7 +301,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
       cy.get(agenda.agendaVersionActions.actions.unlockAgenda);
-      cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.deleteAgenda);
       cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
@@ -297,6 +325,8 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
+      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort3);
@@ -341,12 +371,12 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.uploadFile);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -380,13 +410,30 @@ context('Testing the application as Kanselarij user', () => {
 
     it('check if agenda details tabs can be accessed even if button is absent', () => {
       // If the tab is not displayed, you should not be able to get to it.
-      // Approval item (no newsletter tab)
+      cy.visitAgendaWithLink(agendaitemLinkOnOpen1);
+      cy.get(agenda.agendaitemNav.documentsTab);
+      cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/documenten`);
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Documenten');
+      cy.get(agenda.agendaitemNav.decisionTab);
+      cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/beslissingen`);
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Beslissing');
+      cy.get(agenda.agendaitemNav.newsletterTab);
+      cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/kort-bestek`);
+      cy.get(agenda.agendaitemNav.tabs)
+        .find(auk.tab.activeHref)
+        .contains('Kort bestek');
+
+      // Approval item (no newsletter tab);
       cy.visitAgendaWithLink(approvalLinkOnOpen);
       cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
       cy.visitAgendaWithLink(`${approvalLinkOnOpen}/kort-bestek`);
       // TODO-bug
       // !This fails because you can go to the address and not get rerouted.
-      // cy.get(agenda.agendaitemNav.activeTab).contains('dossier');
+      // cy.get(agenda.agendaitemNav.activeTab).contains('Dossier');
     });
 
     it('check agenda documents', () => {
@@ -412,6 +459,7 @@ context('Testing the application as Kanselarij user', () => {
 
       // Fully released agenda
       // Documents Tab (with doc)
+      // TODO-profileRights should some editors be blocked from editing after a full release?
       cy.visitAgendaWithLink(agendaReleasedLink);
       cy.clickReverseTab('Documenten');
       cy.get(route.agendaDocuments.addDocuments);
@@ -439,6 +487,42 @@ context('Testing the application as Kanselarij user', () => {
   });
 
   context('Profile rights checks for kort-bestek routes', () => {
+    const agendaDate = Cypress.dayjs().add(3, 'weeks')
+      .day(3);
+
+    it.skip('setup for update notas tests', () => {
+      const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
+      const caseTitle = `testId=${currentTimestamp()}: Cypress test nota updates`;
+      const subcaseTitle1 = `${caseTitle} test stap 1`;
+      const file = {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
+      };
+      const files = [file];
+
+      cy.createCase(caseTitle);
+      cy.addSubcase('Nota',
+        subcaseTitle1,
+        'Cypress test voor nota updates',
+        'Principiële goedkeuring',
+        'Principiële goedkeuring m.h.o. op adviesaanvraag');
+      cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
+
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(subcaseTitle1);
+      cy.addDocumentsToAgendaitem(subcaseTitle1, files);
+      cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
+
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
+      cy.approveAndCloseDesignAgenda();
+      cy.releaseDecisions();
+      cy.wait(80000);
+      // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
+      cy.get(agenda.publicationPills.container).within(() => {
+        cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
+      });
+    });
+
     it('check kort bestek route', () => {
       cy.visit('/kort-bestek');
       cy.get(newsletter.newsletterHeader.overview);
@@ -643,6 +727,20 @@ context('Testing the application as Kanselarij user', () => {
           .click()
           .wait('@patchNewsItem');
       });
+
+      // TODO We need setup for this test, needs to be added to ZIP
+      it.skip('check update notas view', () => {
+        // setup: create nota with bis
+        cy.openAgendaForDate(agendaDate);
+        cy.get(agenda.agendaActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+        cy.get(newsletter.newsletterHeaderOverview.notaUpdates).click();
+
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
+      });
     });
 
     context('check kort bestek route on closed agenda', () => {
@@ -703,6 +801,19 @@ context('Testing the application as Kanselarij user', () => {
           .parent()
           .click()
           .wait('@patchNewsItem');
+      });
+
+      it.skip('check update notas view', () => {
+        // setup: create nota with bis
+        cy.openAgendaForDate(agendaDate);
+        cy.get(agenda.agendaActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+        cy.get(newsletter.newsletterHeaderOverview.notaUpdates).click();
+
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
       });
     });
   });

@@ -4,44 +4,54 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
-// import cases from '../../selectors/case.selectors';
+import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
+// import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as OVRB', () => {
+context('Testing the application as Kanselarij user', () => {
   beforeEach(() => {
-    // cy.login does not trigger the transtition to the default route for this profile for some reason
-    cy.loginFlow('OVRB');
-    cy.wait(1000);
+    cy.login('Kanselarij');
   });
 
   context('M-header toolbar tests', () => {
-    it('Should have agenda, case, search, publications and signatures in toolbar', () => {
-      cy.get(utils.mHeader.search).should('exist');
-      cy.get(utils.mHeader.agendas).should('exist');
-      cy.get(utils.mHeader.cases).should('exist');
-      cy.get(utils.mHeader.publications).should('exist');
-      cy.get(utils.mHeader.signatures).should('exist');
-
-      cy.get(utils.mHeader.newsletters).should('not.exist');
+    it('Should have  agenda, case, newsletters, search, publications and signatures in toolbar', () => {
+      cy.get(utils.mHeader.publications);
+      cy.get(utils.mHeader.agendas);
+      cy.get(utils.mHeader.cases);
+      cy.get(utils.mHeader.newsletters);
+      cy.get(utils.mHeader.search);
+      cy.get(utils.mHeader.signatures);
       cy.get(utils.mHeader.settings).should('not.exist');
     });
 
-    it('Should start on publications tab after logging in and switch to publications tab when publications is clicked', () => {
-      cy.get(publication.publicationsIndex.title).should('exist');
-      cy.url().should('include', 'publicaties');
-
+    it('Should switch to Agenda tab when agenda is clicked', () => {
       cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.title).should('exist');
+      cy.url().should('include', '/overzicht');
+    });
 
-      cy.get(utils.mHeader.publications).click();
-      cy.get(publication.publicationsIndex.title).should('exist');
-      cy.url().should('include', 'publicaties');
+    it('Should switch to cases tab when cases is clicked', () => {
+      cy.get(utils.mHeader.cases).click();
+      cy.get(cases.casesHeader.title).should('exist');
+      cy.url().should('include', '/dossiers');
+    });
+
+    it('Should switch to newsletter tab when newsletter is clicked', () => {
+      cy.get(utils.mHeader.newsletters).click();
+      cy.get(newsletter.newsletterHeader.title).should('exist');
+      cy.url().should('include', '/kort-bestek');
+    });
+
+    it('Should switch to search tab when search is clicked', () => {
+      cy.get(utils.mHeader.search).click();
+      cy.get(route.search.trigger).should('exist');
+      cy.url().should('include', '/zoeken');
     });
   });
 
@@ -51,20 +61,25 @@ context('Testing the application as OVRB', () => {
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
     const agendaClosedLink = '/vergadering/5DD7CDA58C70A70008000001/agenda/5DD7CDA58C70A70008000002/agendapunten';
+    // const agendaDateOpen = Cypress.dayjs('2022-04-22');
+    // const agendaDateReleased = Cypress.dayjs('2022-04-23');
+    // const agendaDateReleased = Cypress.dayjs('2020-04-22');
 
     // agendaitems op open agenda
+    const approvalLinkOnOpen = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3df64f10-65bd-11ed-a5a5-db2587a216a4';
     const subcaseTitleShort1 = 'Cypress test: profile rights - subcase 1 no decision docs';
-    const agendaitemLinkOnOpen1 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3e04f510-65bd-11ed-a5a5-db2587a216a4';
+    // const agendaitemLinkOnOpen1 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3e04f510-65bd-11ed-a5a5-db2587a216a4';
     const subcaseTitleShort2 = 'Cypress test: profile rights - subcase 2 with decision docs';
+    // const agendaitemLinkOnOpen2 = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten/3de5ad40-65bd-11ed-a5a5-db2587a216a4';
 
     // agendaitems op released agenda
     const subcaseTitleShort3 = 'Cypress test: profile rights - subcase 1 released no decision docs';
+    // const agendaitemLinkOnReleased1 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FA9CD9A98BD0A2288581';
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
+    // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
-      cy.visit('/overzicht'); // ovrb starts on publication route by default
-      cy.get(route.agendas.title);
-      cy.get(route.agendas.action.newMeeting).should('not.exist');
+      cy.get(route.agendas.action.newMeeting);
     });
 
     it('check agenda route on open agenda', () => {
@@ -80,66 +95,91 @@ context('Testing the application as OVRB', () => {
       cy.agendaNameExists('B');
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
+      // The agenda actions should be admin/kanselarij only so we only test if the button is showing.
+      // Some of the options are very dependent on agenda status and are tested elsewhere.
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaVersionActions.actions.approveAgenda);
+      cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda);
+      cy.get(agenda.agendaVersionActions.actions.lockAgenda);
+      cy.get(agenda.agendaVersionActions.actions.unlockAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.deleteAgenda);
+      cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
 
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
         .click();
-      cy.get(agenda.agendaActions.addAgendaitems).should('not.exist');
+      cy.get(agenda.agendaActions.addAgendaitems);
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
-      cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');
-      cy.get(agenda.agendaActions.approveAllAgendaitems).should('not.exist');
+      cy.get(agenda.agendaActions.toggleEditingMeeting);
+      cy.get(agenda.agendaActions.approveAllAgendaitems);
+      // TODO-profileRights test that non-editor profiles can never see these.
+      // Also, only some editors should be able to do these actions (might not be implemented yet)
       cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
       cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
       cy.get(agenda.agendaActions.publishToWeb).should('not.exist');
       cy.get(agenda.agendaActions.unpublishFromWeb).should('not.exist');
+      cy.clickReverseTab('Overzicht'); // close dropdown
 
       // Main view - Search
       cy.get(agenda.agendaitemSearch.input);
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit);
+
+      // Overview Tab - General action - Dragging
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit).click();
+      cy.get(agenda.agendaOverviewItem.dragging);
+      cy.get(agenda.agendaOverviewItem.moveUp);
+      cy.get(agenda.agendaOverviewItem.moveDown);
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort1);
       cy.get(agenda.agendaitemNav.caseTab);
       cy.get(agenda.agendaitemNav.documentsTab);
-      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
-      cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
+      cy.get(agenda.agendaitemNav.decisionTab);
+      cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      cy.get(agenda.agendaitemControls.actions);
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
-      cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
-      cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
-      cy.get(utils.governmentAreasPanel.edit).should('not.exist');
+      cy.get(agenda.agendaitemTitlesView.edit);
+      cy.get(mandatee.mandateePanelView.actions.edit);
+      cy.get(utils.governmentAreasPanel.edit);
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
       cy.get(auk.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
-      cy.get(route.agendaitemDocuments.add).should('not.exist');
+      cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
       cy.get(auk.loader).should('not.exist');
-      cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
+      cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
-      cy.get(route.agendaitemDocuments.add).should('not.exist');
+      cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab - Document Card
       cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.pubLink);
-      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
         .click();
@@ -147,15 +187,61 @@ context('Testing the application as OVRB', () => {
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
+        .find(document.accessLevelPill.edit);
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit);
+      cy.get(agenda.agendaitemDecision.create);
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShort2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit);
+
+      // Detail Tab - Newsletter tab (with newsletter)
+      cy.openAgendaitemKortBestekTab(subcaseTitleShort2);
+      cy.get(newsletter.newsItem.create).should('not.exist');
+      cy.get(newsletter.newsItem.fullscreenEdit);
+      cy.get(newsletter.newsItem.edit);
+
+      // Detail Tab - Newsletter tab (no newsletter)
+      cy.openAgendaitemKortBestekTab(subcaseTitleShort1);
+      cy.get(newsletter.newsItem.create);
+      cy.get(newsletter.newsItem.fullscreenEdit).should('not.exist');
+      cy.get(newsletter.newsItem.edit).should('not.exist');
     });
 
     it('check agenda route on closed agenda', () => {
       cy.visitAgendaWithLink(agendaClosedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.unlockAgenda);
+      cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
@@ -164,12 +250,12 @@ context('Testing the application as OVRB', () => {
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
-      cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');
+      cy.get(agenda.agendaActions.toggleEditingMeeting);
       cy.get(agenda.agendaActions.approveAllAgendaitems).should('not.exist');
-      cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
-      cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
+      cy.get(agenda.agendaActions.releaseDecisions);
+      cy.get(agenda.agendaActions.planReleaseDocuments);
       cy.get(agenda.agendaActions.publishToWeb).should('not.exist');
-      cy.get(agenda.agendaActions.unpublishFromWeb).should('not.exist');
+      cy.get(agenda.agendaActions.unpublishFromWeb);
 
       // The rest of the agenda should be the same regardless of released statussen. (for now)
       // The only thing that changes is the visibility of decisions/documents but that is for a propagation test
@@ -180,8 +266,15 @@ context('Testing the application as OVRB', () => {
       cy.visitAgendaWithLink(agendaReleasedLink);
 
       // Main view - Agenda actions
-      cy.get(agenda.agendaVersionActions.optionsDropdown).should('not.exist');
-
+      cy.get(agenda.agendaVersionActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaVersionActions.actions.approveAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.lockAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.unlockAgenda);
+      cy.get(agenda.agendaVersionActions.actions.deleteAgenda).should('not.exist');
+      cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).should('not.exist');
       // Main view - Actions
       cy.get(agenda.agendaActions.optionsDropdown)
         .children(appuniversum.button)
@@ -190,12 +283,12 @@ context('Testing the application as OVRB', () => {
       cy.get(agenda.agendaActions.navigateToNewsletter);
       cy.get(agenda.agendaActions.navigateToPrintableAgenda);
       cy.get(agenda.agendaActions.downloadDocuments);
-      cy.get(agenda.agendaActions.toggleEditingMeeting).should('not.exist');
+      cy.get(agenda.agendaActions.toggleEditingMeeting);
       cy.get(agenda.agendaActions.approveAllAgendaitems).should('not.exist');
       cy.get(agenda.agendaActions.releaseDecisions).should('not.exist');
       cy.get(agenda.agendaActions.planReleaseDocuments).should('not.exist');
-      cy.get(agenda.agendaActions.publishToWeb).should('not.exist'); // re-publish is same button
-      cy.get(agenda.agendaActions.unpublishFromWeb).should('not.exist');
+      cy.get(agenda.agendaActions.publishToWeb); // re-publish is same button
+      cy.get(agenda.agendaActions.unpublishFromWeb);
 
       // Main view - Search
       cy.get(agenda.agendaitemSearch.input);
@@ -204,58 +297,64 @@ context('Testing the application as OVRB', () => {
       cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
-      cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
-      cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
 
       // Detail Tab - tabs
       cy.openDetailOfAgendaitem(subcaseTitleShort3);
       cy.get(agenda.agendaitemNav.caseTab);
       cy.get(agenda.agendaitemNav.documentsTab);
       cy.get(agenda.agendaitemNav.decisionTab);
-      cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
-      cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.openDetailOfAgendaitem(subcaseTitleShort3);
       cy.get(agenda.agendaitemControls.actions).should('not.exist');
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
-      cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
-      cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
-      cy.get(utils.governmentAreasPanel.edit).should('not.exist');
+      cy.get(agenda.agendaitemTitlesView.edit);
+      cy.get(mandatee.mandateePanelView.actions.edit);
+      cy.get(utils.governmentAreasPanel.edit);
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
       cy.get(auk.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
-      cy.get(route.agendaitemDocuments.add).should('not.exist');
+      cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
       cy.get(auk.loader).should('not.exist');
-      cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
+      cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
-      cy.get(route.agendaitemDocuments.add).should('not.exist');
+      cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab - Document Card
       cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
 
       // Detail Tab - Decisions tab (no decision doc)
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
-      cy.get(agenda.decisionResultPill.edit).should('not.exist');
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.decisionResultPill.edit);
+      cy.get(agenda.agendaitemDecision.create);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
         .click();
@@ -263,12 +362,17 @@ context('Testing the application as OVRB', () => {
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
+        .find(document.accessLevelPill.edit);
 
       // Detail Tab - Newsletter tab (with newsletter)
       cy.openAgendaitemKortBestekTab(subcaseTitleShort4);
       cy.get(newsletter.newsItem.create).should('not.exist');
+      cy.get(newsletter.newsItem.fullscreenEdit);
+      cy.get(newsletter.newsItem.edit);
+
+      // Detail Tab - Newsletter tab (no newsletter)
+      cy.openAgendaitemKortBestekTab(subcaseTitleShort3);
+      cy.get(newsletter.newsItem.create);
       cy.get(newsletter.newsItem.fullscreenEdit).should('not.exist');
       cy.get(newsletter.newsItem.edit).should('not.exist');
     });
@@ -276,15 +380,13 @@ context('Testing the application as OVRB', () => {
 
     it('check if agenda details tabs can be accessed even if button is absent', () => {
       // If the tab is not displayed, you should not be able to get to it.
-      cy.visitAgendaWithLink(agendaitemLinkOnOpen1);
-      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
-      cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/beslissingen`);
-      // !This fails because you can go to the address and not get rerouted.
-      // cy.get(agenda.agendaitemNav.activeTab).contains('Dossier');
+      // Approval item (no newsletter tab)
+      cy.visitAgendaWithLink(approvalLinkOnOpen);
       cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
-      cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/kort-bestek`);
+      cy.visitAgendaWithLink(`${approvalLinkOnOpen}/kort-bestek`);
+      // TODO-bug
       // !This fails because you can go to the address and not get rerouted.
-      // cy.get(agenda.agendaitemNav.activeTab).contains('Dossier');
+      // cy.get(agenda.agendaitemNav.activeTab).contains('dossier');
     });
 
     it('check agenda documents', () => {
@@ -293,27 +395,38 @@ context('Testing the application as OVRB', () => {
       // Documents Tab (with doc)
       cy.visitAgendaWithLink(agendaOpenLink);
       cy.clickReverseTab('Documenten');
-      cy.get(route.agendaDocuments.addDocuments).should('not.exist');
-      cy.get(route.agendaDocuments.batchEdit).should('not.exist');
+      cy.get(route.agendaDocuments.addDocuments);
+      cy.get(route.agendaDocuments.batchEdit);
 
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
 
 
       // Fully released agenda
       // Documents Tab (with doc)
-      // TODO-profileRights should some editors be blocked from editing after a full release?
       cy.visitAgendaWithLink(agendaReleasedLink);
       cy.clickReverseTab('Documenten');
-      cy.get(route.agendaDocuments.addDocuments).should('not.exist');
-      cy.get(route.agendaDocuments.batchEdit).should('not.exist');
+      cy.get(route.agendaDocuments.addDocuments);
+      cy.get(route.agendaDocuments.batchEdit);
 
       // Documents Tab - Document Card
       cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
         .click();
@@ -321,20 +434,23 @@ context('Testing the application as OVRB', () => {
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
+        .find(document.accessLevelPill.edit);
     });
   });
 
   context('Profile rights checks for kort-bestek routes', () => {
+    it('check kort bestek route', () => {
+      cy.visit('/kort-bestek');
+      cy.get(newsletter.newsletterHeader.overview);
+      cy.get(newsletter.newsletterHeader.search);
+    });
+
     it('check kort bestek general view tabs', () => {
       cy.visit('vergadering/6374F696D9A98BD0A2288559/kort-bestek');
-      // no tabs visible, but using address works
-      cy.get(newsletter.newsletterHeaderOverview.title);
-      cy.get(newsletter.newsletterHeaderOverview.index).should('not.exist');
-      cy.get(newsletter.newsletterHeaderOverview.printDraft).should('not.exist');
-      cy.get(newsletter.newsletterHeaderOverview.print).should('not.exist');
-      cy.get(newsletter.newsletterHeaderOverview.notaUpdates).should('not.exist');
+      cy.get(newsletter.newsletterHeaderOverview.index);
+      cy.get(newsletter.newsletterHeaderOverview.printDraft);
+      cy.get(newsletter.newsletterHeaderOverview.print);
+      cy.get(newsletter.newsletterHeaderOverview.notaUpdates);
     });
 
     context('check kort bestek route on open agenda', () => {
@@ -353,46 +469,42 @@ context('Testing the application as OVRB', () => {
           .should('be.disabled');
 
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
-          .find(newsletter.buttonToolbar.edit)
-          .should('not.exist');
+          .find(newsletter.buttonToolbar.edit);
 
         cy.get(newsletter.tableRow.newsletterRow).eq(1)
           .find(newsletter.tableRow.inNewsletterCheckbox)
-          .should('be.disabled');
+          .should('not.be.disabled');
 
         cy.get(newsletter.tableRow.newsletterRow).eq(1)
-          .find(newsletter.buttonToolbar.edit)
-          .should('not.exist');
-
-        // check actions
-        // TODO, actions is available but without options, which throws an error in the frontend
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-        //   .children(appuniversum.button)
-        //   .click();
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
-      });
-
-      it('check klad view', () => {
-        cy.visit(kladViewOpenAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
-
-        // check edit
-        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+          .find(newsletter.buttonToolbar.edit);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+      });
+
+      it('check klad view', () => {
+        cy.visit(kladViewOpenAgenda);
+
+        // check edit
+        cy.get(newsletter.newsletterPrint.edit);
+
+        // check actions
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
@@ -400,23 +512,37 @@ context('Testing the application as OVRB', () => {
 
       it('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
+        cy.visit(kortBestekLinkOpenAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+
         cy.visit(definitiefViewOpenAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
 
         // check edit doesn't exist
         cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkOpenAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
       });
 
       it('check update notas view', () => {
@@ -442,115 +568,141 @@ context('Testing the application as OVRB', () => {
           .should('be.disabled');
 
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
-          .find(newsletter.buttonToolbar.edit)
-          .should('not.exist');
+          .find(newsletter.buttonToolbar.edit);
 
         cy.get(newsletter.tableRow.newsletterRow).eq(1)
           .find(newsletter.tableRow.inNewsletterCheckbox)
-          .should('be.disabled');
+          .should('not.be.disabled');
 
         cy.get(newsletter.tableRow.newsletterRow).eq(1)
-          .find(newsletter.buttonToolbar.edit)
-          .should('not.exist');
+          .find(newsletter.buttonToolbar.edit);
 
         // check actions
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
-        //   .children(appuniversum.button)
-        //   .click();
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        // cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+          .children(appuniversum.button)
+          .click();
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
       it('check klad view', () => {
         cy.visit(kladViewReleasedAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
 
         // check edit
-        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+        cy.get(newsletter.newsletterPrint.edit);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
       it('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
-        cy.visit(definitiefViewReleasedAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
+        cy.visit(kortBestekLinkReleasedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
 
-        // check edit doesn't exist
-        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+        cy.visit(definitiefViewReleasedAgenda);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
+
+        // check edit doesn't exist
+        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkReleasedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(1)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
       });
     });
 
     context('check kort bestek route on closed agenda', () => {
+      const kortBestekLinkClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek';
       const kladViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/afdrukken?klad=true';
       const definitiefViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/afdrukken';
       // const notaUpdatesViewClosedAgenda = 'vergadering/5DD7CDA58C70A70008000001/kort-bestek/nota-updates';
 
       it('check klad view', () => {
         cy.visit(kladViewClosedAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
 
         // check edit
-        cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+        cy.get(newsletter.newsletterPrint.edit);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
       it('check definitief view', () => {
+        // setup: make sure there is a nota to check in definitief view
+        cy.visit(kortBestekLinkClosedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(0)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
+
         cy.visit(definitiefViewClosedAgenda);
-        cy.get(newsletter.newsletterMeeting.title);
 
         // check actions
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
           .children(appuniversum.button)
           .click();
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishAll);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishBelga);
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishThemis);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.print);
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.deleteCampaign).should('not.exist');
-        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
+        cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
 
         // check edit doesn't exist
         cy.get(newsletter.newsletterPrint.edit).should('not.exist');
+
+        // undo setup in case it matters for other tests
+        cy.visit(kortBestekLinkClosedAgenda);
+        cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
+        cy.get(newsletter.tableRow.inNewsletterCheckbox).eq(0)
+          .parent()
+          .click()
+          .wait('@patchNewsItem');
       });
     });
   });

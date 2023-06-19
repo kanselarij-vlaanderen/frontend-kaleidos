@@ -4,49 +4,29 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
-import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-// *NOTE* Moved to all-flaky-tests because deleting a meeting is not propagated properly in yggdrasil, agendas route no longer loads
 
-context('Testing the application as Minister user', () => {
+context('Testing the application as Kabinetmedewerker', () => {
   beforeEach(() => {
-    cy.login('Minister');
+    cy.login('Kabinetmedewerker');
+    cy.wait(1000);
   });
 
   context('M-header toolbar tests', () => {
-    it('Should have meeting, Case, search and Newsletter in toolbar', () => {
-      cy.get(utils.mHeader.publications).should('not.exist');
+    it('Should have agenda, case, search, publications and signatures in toolbar', () => {
+      cy.get(utils.mHeader.search).should('exist');
       cy.get(utils.mHeader.agendas).should('exist');
       cy.get(utils.mHeader.cases).should('exist');
+
+      cy.get(utils.mHeader.publications).should('not.exist');
+      cy.get(utils.mHeader.signatures).should('not.exist');
       cy.get(utils.mHeader.newsletters).should('not.exist');
-      cy.get(utils.mHeader.signatures).should('exist');
-      cy.get(utils.mHeader.search).should('exist');
       cy.get(utils.mHeader.settings).should('not.exist');
-    });
-
-    it('Should switch to Agenda tab when agenda is clicked as minister', () => {
-      cy.get(utils.mHeader.agendas).click();
-      cy.get(route.agendas.title).should('exist');
-      cy.url().should('include', '/overzicht');
-    });
-
-    it('Should switch to cases tab when cases is clicked as minister', () => {
-      cy.get(utils.mHeader.cases).click();
-      cy.get(cases.casesHeader.title).should('exist');
-      cy.url().should('include', '/dossiers');
-    });
-
-    // there is no newsletter tab here so no tests
-
-    it('Should switch to search tab when search is clicked as minister', () => {
-      cy.get(utils.mHeader.search).click();
-      cy.get(route.search.trigger).should('exist');
-      cy.url().should('include', '/zoeken');
     });
   });
 
@@ -253,12 +233,12 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit).should('not.exist');
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
@@ -343,7 +323,7 @@ context('Testing the application as Minister user', () => {
       const kortBestekLinkOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek';
       // const kladViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/afdrukken?klad=true';
       // const definitiefViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/afdrukken';
-      // const notaUpdatesViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/nota-updates';
+      const notaUpdatesViewOpenAgenda = 'vergadering/6374F696D9A98BD0A2288559/kort-bestek/nota-updates';
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
@@ -421,6 +401,12 @@ context('Testing the application as Minister user', () => {
       //   // check edit doesn't exist
       //   cy.get(newsletter.newsletterPrint.edit).should('not.exist');
       // });
+
+      it('check update notas view', () => {
+        cy.visit(notaUpdatesViewOpenAgenda);
+        cy.get(route.notaUpdates.row.showPieceViewer);
+        cy.get(route.notaUpdates.row.goToAgendaitemDocuments);
+      });
     });
 
     context('check kort bestek route on released agenda', () => {
