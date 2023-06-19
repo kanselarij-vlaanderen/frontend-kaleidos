@@ -89,9 +89,7 @@
     <Auk::List @bordered={{true}}>
       {{#each this.approvers as |approver|}}
         <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{approver}}
-          </span>
+          <Auk::AbbreviatedText @text={{approver}} @maxLength={{35}} />
           <AuButton
             @skin="naked"
             @alert={{true}}
@@ -137,9 +135,7 @@
     <Auk::List @bordered={{true}}>
       {{#each this.notificationAddresses as |notificationAddress|}}
         <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{notificationAddress}}
-          </span>
+          <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
           <AuButton
             @skin="naked"
             @alert={{true}}
