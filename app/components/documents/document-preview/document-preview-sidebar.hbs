@@ -14,23 +14,23 @@
             <Auk::Tabs>
               <Auk::Tab
                 data-test-document-preview-sidebar-tab-details
-                {{on "click" (fn this.setActiveTab "details")}}
-                @active={{eq this.activeTab "details"}}
+                {{on "click" (fn this.setTab "details")}}
+                @active={{eq this.tab "details"}}
               >
                 {{t "detail"}}
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
-                  {{on "click" (fn this.setActiveTab (t "signatures"))}}
-                  @active={{eq this.activeTab (t "signatures")}}
+                  {{on "click" (fn this.setTab (t "signatures"))}}
+                  @active={{eq this.tab (t "signatures")}}
                 >
                   {{t "signatures"}}
                 </Auk::Tab>
               {{/if}}
               <Auk::Tab
                 data-test-document-preview-sidebar-tab-versions
-                {{on "click" (fn this.setActiveTab (t "versions"))}}
-                @active={{eq this.activeTab (t "versions")}}
+                {{on "click" (fn this.setTab (t "versions"))}}
+                @active={{eq this.tab (t "versions")}}
               >
                 {{t "versions"}}
               </Auk::Tab>
@@ -71,7 +71,7 @@
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
         {{! DETAILS }}
-        {{#if (eq this.activeTab "details")}}
+        {{#if (eq this.tab "details")}}
           <Documents::DocumentPreview::DetailsTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
@@ -79,13 +79,13 @@
             @onChangeFile={{@onChangeFile}}
           />
           {{! SIGNATURES }}
-        {{else if (eq this.activeTab (t "signatures"))}}
+        {{else if (eq this.tab (t "signatures"))}}
           <Documents::DocumentPreview::SignaturesTab
             @piece={{@piece}}
             @documentContainer={{this.documentContainer}}
           />
           {{! VERSIONS }}
-        {{else if (eq this.activeTab (t "versions"))}}
+        {{else if (eq this.tab (t "versions"))}}
           <Documents::DocumentPreview::VersionsTab
             @documentContainer={{this.documentContainer}}
             @currentVersion={{@piece}}

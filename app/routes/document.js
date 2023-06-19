@@ -10,7 +10,7 @@ export default class DocumentRoute extends Route {
   @service intl;
 
   queryParams = {
-    activeTab: {
+    tab: {
       refreshModel: false,
       replace: true,
       as: 'tab',
@@ -52,9 +52,9 @@ export default class DocumentRoute extends Route {
 
     if (this.isSigning) {
       if (signaturesEnabled && canSign) {
-        controller.activeTab = this.intl.t('signatures');
+        controller.tab = this.intl.t('signatures');
       }  else {
-        controller.activeTab = 'details';
+        controller.tab = 'details';
       }
     }
     controller.decisionActivity = this.decisionActivity;
@@ -63,7 +63,7 @@ export default class DocumentRoute extends Route {
   resetController(controller, isExiting) {
     if (isExiting) {
       controller.isSigning = false;
-      controller.activeTab = 'details';
+      controller.tab = 'details';
     }
   }
 

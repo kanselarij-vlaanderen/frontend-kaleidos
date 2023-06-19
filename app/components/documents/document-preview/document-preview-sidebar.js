@@ -17,13 +17,13 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   @service currentSession;
 
   @tracked documentContainer;
-  @tracked activeTab = 'details';
+  @tracked tab = 'details';
 
   constructor() {
     super(...arguments);
     this.loadPieceData.perform();
-    if (this.args.activeTab) {
-      this.activeTab = this.args.activeTab;
+    if (this.args.tab) {
+      this.tab = this.args.tab;
     }
   }
 
@@ -39,8 +39,8 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   }
 
   @action
-  setActiveTab(tabName) {
-    this.activeTab = tabName;
+  etTab(tabName) {
+    this.tab = tabName;
     this.args.onTabChanged(tabName);
   }
 }

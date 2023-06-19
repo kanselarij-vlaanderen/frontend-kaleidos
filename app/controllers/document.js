@@ -14,12 +14,12 @@ export default class DocumentController extends Controller {
   @tracked decisionActivity;
   queryParams = [
     {
-      activeTab: {
+      tab: {
         type: 'string',
       },
     },
   ];
-  @tracked activeTab = 'details';
+  @tracked tab = 'details';
   @tracked isLoadingModel;
 
   @action
@@ -34,7 +34,7 @@ export default class DocumentController extends Controller {
 
   @action
   tabChanged(tabName){
-    this.activeTab = tabName;
+    this.tab = tabName;
   }
 
   @action
