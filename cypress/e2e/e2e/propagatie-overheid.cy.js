@@ -1,7 +1,6 @@
 /* global context, it, cy, Cypress */
 // / <reference types="Cypress" />
 
-import auk from '../../selectors/auk.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
@@ -20,9 +19,7 @@ context('Propagation to other graphs', () => {
     .day(6); // Next friday
   const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
   const subcaseTitle1 = `${caseTitle} test stap 1`;
-  const file = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf',
-  };
+  const decisionName = 'VR PV'; // partial match
 
   it('Propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
@@ -51,8 +48,7 @@ context('Propagation to other graphs', () => {
     cy.approveAndCloseDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.addDocumentToTreatment(file);
-    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.generateDecision();
 
     // Change the rights of the treatment report
     cy.get(document.documentCard.card).within(() => {
@@ -110,7 +106,7 @@ context('Propagation to other graphs', () => {
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(file.fileName);
+      .contains(decisionName);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 0);
     cy.logoutFlow();

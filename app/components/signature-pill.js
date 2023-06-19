@@ -18,6 +18,7 @@ export default class SignaturePillComponent extends Component {
   @tracked hasToBeSigned = false;
   @tracked isSigned = false;
   @tracked isRefused = false;
+  @tracked isCancelled = false;
 
   constructor() {
     super(...arguments);
@@ -26,9 +27,9 @@ export default class SignaturePillComponent extends Component {
   }
 
   get skin() {
-    if (this.isRefused) {
+    if (this.isRefused || this.isCancelled) {
       return "error";
-    } else if( this.signingHubUrl) {
+    } else if (this.signingHubUrl) {
       return "link"
     } else {
       return "ongoing"
@@ -36,7 +37,9 @@ export default class SignaturePillComponent extends Component {
   }
 
   get title() {
-    if (this.isRefused) {
+    if (this.isCancelled) {
+      return this.intl.t('cancelled');
+    } else if (this.isRefused) {
       return this.intl.t('refused');
     } else if (this.isSigned) {
       return this.intl.t('signed');
@@ -61,13 +64,15 @@ export default class SignaturePillComponent extends Component {
       const signSigningActivities = await signSubcase.signSigningActivities;
       const signCompletionActivity = await signSubcase.signCompletionActivity;
       const signRefusalActivities = await signSubcase.signRefusalActivities;
+      const signCancellationActivity = await signSubcase.signCancellationActivity;
 
       this.isMarked = !!signMarkingActivity;
       this.isPrepared = !!signPreparationActivity;
-      this.hasToBeApproved = signApprovalActivities?.length && !signSigningActivities?.length;
-      this.hasToBeSigned = signSigningActivities?.length && !signCompletionActivity;
+      this.hasToBeApproved = signApprovalActivities?.some((activity) => activity.startDate && !activity.endDate);
+      this.hasToBeSigned = signSigningActivities?.some((activity) => activity.startDate && !activity.endDate);
       this.isSigned = !!signCompletionActivity;
       this.isRefused = signRefusalActivities?.length;
+      this.isCancelled = !!signCancellationActivity;
 
       if (!this.isRefused) {
         const piece = await this.args.piece;
