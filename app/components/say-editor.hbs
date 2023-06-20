@@ -28,7 +28,7 @@
             <AuButton
               @skin="primary"
               @loading={{@onSaveTask.isRunning}}
-              {{on "click" @onSaveTask}}
+              {{on "click" (perform @onSaveTask)}}
             >
               {{t "save"}}
             </AuButton>

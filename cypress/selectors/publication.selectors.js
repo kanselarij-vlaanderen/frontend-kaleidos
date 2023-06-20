@@ -9,6 +9,7 @@ const selectors = {
     title: '[data-test-route-publications-index-title]',
     tabs: {
       all: '[data-test-route-publications-index-tabs-all]',
+      shortlist: '[data-test-route-publications-index-tabs-shortlist]',
       urgent: '[data-test-route-publications-index-tabs-urgent]',
       translations: '[data-test-route-publications-index-tabs-translation]',
       proof: '[data-test-route-publications-index-tabs-proof]',
@@ -53,6 +54,16 @@ const selectors = {
   publicationActivities: {
     register: '[data-test-route-publications---publication-activities-register]',
     request: '[data-test-route-publications---publication-activities-request]',
+  },
+
+  // publications\overview\shortlist
+  shortlist: {
+    table: '[data-test-route-publications-overview-shortlist-table]',
+    row: {
+      documentName: '[data-test-route-publications-overview-shortlist-row-name]',
+      documentType: '[data-test-route-publications-overview-shortlist-row-type]',
+      openNewPublication: '[data-test-route-publications-overview-shortlist-row-open-new-publication]',
+    },
   },
 
   /**

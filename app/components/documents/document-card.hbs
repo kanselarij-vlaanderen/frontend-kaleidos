@@ -30,7 +30,7 @@
             >
               <span data-test-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
-                  {{this.documentContainer.type.label}}
+                  {{this.documentContainer.type.altLabel}}
                 {{/unless}}
               </span>
             </div>
@@ -49,7 +49,7 @@
                   )
                   as |extension|
                 }}
-                  {{this.piece.name}}.{{extension}}
+                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -62,7 +62,7 @@
                     ""
                   }}
                 >
-                  {{t "uploaded-at"}}
+                  {{this.label}}
                   {{datetime-at this.piece.created}}
                   {{#if
                     (and
@@ -170,7 +170,7 @@
             {{/if}}
           {{/if}}
           {{#if
-            (and @isEditable (user-may "manage-documents") (not @hideActions))
+            (and @isEditable (user-may "manage-documents"))
           }}
             <Group.Item>
               <AuDropdown
@@ -183,6 +183,7 @@
               >
                 {{#if @showCreateNewVersion}}
                   <AuButton
+                    data-test-document-generate-new-version
                     @skin="link"
                     {{on "click" @onCreateNewVersion}}
                     role="menuitem"
@@ -210,7 +211,8 @@
                     {{t "edit"}}
                   </AuButton>
                 {{/if}}
-                {{#if (and (not @hideSign) this.mayCreateSignMarkingActivity)}}
+                {{#if this.mayCreateSignMarkingActivity}}
+                  <AuHr />
                   <AuLink
                     @skin="link"
                     @route="document"
@@ -220,22 +222,9 @@
                   >
                     {{t "present-for-signing"}}
                   </AuLink>
-                  <AuHr />
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
-                  {{#if this.mayCreateSignMarkingActivity}}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash isSigning=true}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/if}}
                   <AuButton
                     data-test-document-card-delete
                     @skin="link"

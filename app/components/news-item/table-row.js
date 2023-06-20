@@ -3,8 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import sanitizeHtml from 'sanitize-html';
-import {decode as decodeEntities} from 'html-entities';
+import { copyText } from 'frontend-kaleidos/utils/copy-text-to-clipboard';
 
 export default class NewsItemTableRowComponent extends Component {
   @service toaster;
@@ -13,10 +12,27 @@ export default class NewsItemTableRowComponent extends Component {
 
   @tracked isOpenEditView = false;
   @tracked notaOrVisieNota;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
     this.loadNotaOrVisienota.perform();
+    this.loadDecisionActivity.perform();
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
+  }
+
+  get class() {
+    const classes = ['lt-row'];
+    if (this.decisionActivity?.get('isPostponed') || this.decisionActivity?.get('isRetracted')) {
+      classes.push('auk-u-opacity--1/3');
+    }
+    return classes.join(' ');
   }
 
   @task
@@ -58,29 +74,9 @@ export default class NewsItemTableRowComponent extends Component {
   }
 
   @action
-  copyText(newsItem) {
-    let copyText = '';
-
-    if (newsItem.title) {
-      copyText += `${newsItem.title}\n\n`;
-    }
-
-    copyText +=
-      decodeEntities(
-        sanitizeHtml(
-          newsItem.htmlContent
-            .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n') // Replace p-tags with \n line breaks
-            .replace(/<br\s*[/]?>/gi, '\n') // Replace br-tags with \n line break
-            .trim() // Trim whitespaces at start & end of the string
-          , {allowedTags: [], allowedAttributes: {}} // Remove all remaining tags from the string
-        )
-      );
-
-    if (newsItem.remark) {
-      copyText += `\n\n${newsItem.remark}`;
-    }
-
-    navigator.clipboard.writeText(copyText);
-    this.toaster.success(this.intl.t('text-copied'));
+  copyItemText(newsItem) {
+    copyText([newsItem.title, newsItem.htmlContent, newsItem.remark]).then(() => {
+      this.toaster.success(this.intl.t('text-copied'));
+    });
   }
 }

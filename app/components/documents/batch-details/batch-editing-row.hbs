@@ -24,30 +24,28 @@
       @onChange={{this.setAccessLevel}}
     />
   </td>
-  <td>
-    <WebComponents::AuButtonToolbar>
-      {{#if this.isToBeDeleted}}
-        <AuButton
-          @skin="naked"
-          @icon="undo"
-          @hideText={{true}}
-          @disabled={{this.isDisabled}}
-          {{on "click" (fn this.setToBeDeleted false)}}
-        >
-          {{t "undo"}}
-        </AuButton>
-      {{else}}
-        <AuButton
-          @skin="naked"
-          @alert={{true}}
-          @icon="trash"
-          @hideText={{true}}
-          @disabled={{this.isDisabled}}
-          {{on "click" (fn this.setToBeDeleted true)}}
-        >
-          {{t "delete"}}
-        </AuButton>
-      {{/if}}
-    </WebComponents::AuButtonToolbar>
+  <td class="auk-u-text-align--right">
+    {{#if this.isToBeDeleted}}
+      <AuButton
+        @skin="naked"
+        @icon="undo"
+        @hideText={{true}}
+        @disabled={{this.isDisabled}}
+        {{on "click" (fn this.setToBeDeleted false)}}
+      >
+        {{t "undo"}}
+      </AuButton>
+    {{else}}
+      <AuButton
+        @skin="naked"
+        @alert={{true}}
+        @icon="trash"
+        @hideText={{true}}
+        @disabled={{this.isDisabled}}
+        {{on "click" (fn this.setToBeDeleted true)}}
+      >
+        {{t "delete"}}
+      </AuButton>
+    {{/if}}
   </td>
 </tr>

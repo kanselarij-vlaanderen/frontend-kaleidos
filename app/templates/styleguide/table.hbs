@@ -50,38 +50,36 @@
         <td>Data punt</td>
         <td>Data punt</td>
         <td>Data punt</td>
-        <td>
-          <WebComponents::AuButtonToolbar>
-            <AuDropdown
-              @skin="naked"
-              @icon="three-dots"
-              @title="Acties"
-              @hideText={{true}}
-              @alignment="right"
+        <td class="auk-u-text-align--right">
+          <AuDropdown
+            @skin="naked"
+            @icon="three-dots"
+            @title="Acties"
+            @hideText={{true}}
+            @alignment="right"
+          >
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
             >
-              <AuLink
-                @skin="primary"
-                @route="styleguide.brand"
-                role="menuitem"
-              >
-                Actie
-              </AuLink>
-              <AuLink
-                @skin="primary"
-                @route="styleguide.brand"
-                role="menuitem"
-              >
-                Actie
-              </AuLink>
-              <AuLink
-                @skin="primary"
-                @route="styleguide.brand"
-                role="menuitem"
-              >
-                Actie
-              </AuLink>
-            </AuDropdown>
-          </WebComponents::AuButtonToolbar>
+              Actie
+            </AuLink>
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
+            >
+              Actie
+            </AuLink>
+            <AuLink
+              @skin="primary"
+              @route="styleguide.brand"
+              role="menuitem"
+            >
+              Actie
+            </AuLink>
+          </AuDropdown>
         </td>
       </tr>
     {{/each}}
@@ -110,11 +108,9 @@
         <td>Data punt</td>
         <td>Data punt</td>
         <td>Data punt</td>
-        <td>
-          <WebComponents::AuButtonToolbar>
-            <Auk::Button @skin="borderless" @icon="pencil" @layout="icon-only" @route="styleguide">Edit item</Auk::Button>
-            <Auk::Button @skin="borderless" @icon="trash" @layout="icon-only" @route="styleguide">Delete item</Auk::Button>
-          </WebComponents::AuButtonToolbar>
+        <td class="auk-u-text-align--right">
+          <Auk::Button @skin="borderless" @icon="pencil" @layout="icon-only" @route="styleguide">Edit item</Auk::Button>
+          <Auk::Button @skin="borderless" @icon="trash" @layout="icon-only" @route="styleguide">Delete item</Auk::Button>
         </td>
       </tr>
     {{/each}}

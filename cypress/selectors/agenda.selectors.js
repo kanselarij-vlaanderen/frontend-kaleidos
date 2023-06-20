@@ -11,12 +11,15 @@ const selectors = {
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
-    activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
+    tabs: '[data-test-agendaitem-nav-tabs]',
   },
 
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
+    create: '[data-test-agendaitem-decision-create]',
+    save: '[data-test-agendaitem-decision-save]',
+    rdfaEditor: '[data-test-agendaitem-decision-rdfa-editor]',
   },
 
   // agendaitem-decision-edit

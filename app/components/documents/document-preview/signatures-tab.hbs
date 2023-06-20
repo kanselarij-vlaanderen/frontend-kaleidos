@@ -2,10 +2,25 @@
   {{#if this.loadSignatureRelatedData.isRunning}}
     <Auk::Loader />
   {{else if this.signMarkingActivity}}
-    <SignaturePill
-      @piece={{@piece}}
-      @signMarkingActivity={{this.signMarkingActivity}}
-    />
+    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+      <SignaturePill
+        @piece={{@piece}}
+        @signMarkingActivity={{this.signMarkingActivity}}
+      />
+      {{#if (user-may "remove-signatures")}}
+        <AuButton
+          @skin="naked"
+          @alert={{true}}
+          @icon="trash"
+          {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+        >
+          {{t "delete-all-sign-flow-data"}}
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "delete-all-sign-flow-tooltip"}}
+          </EmberTooltip>
+        </AuButton>
+      {{/if}}
+    </div>
   {{else if this.agendaitem}}
     {{#if this.loadCanManageSignFlow.isRunning}}
       <Auk::Loader />
@@ -17,8 +32,7 @@
       </p>
       <h5 class="auk-h4">{{@piece.name}}</h5>
       <Signatures::CreateSignFlow
-        @piece={{@piece}}
-        @decisionActivity={{this.decisionActivity}}
+        @decisionActivities={{array this.decisionActivity}}
         @onChangeSigners={{fn (mut this.signers)}}
         @onChangeApprovers={{fn (mut this.approvers)}}
         @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
@@ -28,6 +42,7 @@
         <Group>
           <AuButton
             @loading={{this.createSignFlow.isRunning}}
+            @disabled={{not this.signers.length}}
             {{on "click" this.createSignFlow.perform}}
           >
             {{t "start-signing"}}
@@ -35,21 +50,34 @@
         </Group>
       </AuToolbar>
     {{else}}
-        <AuAlert
-          @skin="warning"
-          @icon="alert-triangle"
-          @title={{t "cannot-sign"}}
-        >
-          <p>{{t "cannot-create-sign-flow-message"}}</p>
-        </AuAlert>
+      <AuAlert
+        @skin="warning"
+        @icon="alert-triangle"
+        @title={{t "cannot-sign"}}
+      >
+        <p>{{t "cannot-create-sign-flow-message"}}</p>
+      </AuAlert>
     {{/if}}
   {{else}}
-    <AuAlert
-      @skin="warning"
-      @icon="alert-triangle"
-      @title={{t "cannot-sign"}}
-    >
+    <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
       <p>{{t "cannot-sign-message"}}</p>
     </AuAlert>
   {{/if}}
 </div>
+
+{{#if this.isOpenVerifyDeleteSignFlow}}
+  {{! TODO: vl-refactor }}
+  {{! We can't use AuModal here because said modals get rendered inside a
+        "wormhole" div. The current component is also part of a modal which gets
+        rendered in the same "wormhole", so opening another AuModal here will
+        overwrite the existing page content, and break the route. If AuModals
+        ever support rendering multiple modals over each other, we can use one
+        here, otherwise we might want to make the doc view not be a modal. }}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-all-sign-flow-data"}}
+    @message={{t "verify-delete-all-sign-flow-data"}}
+    @onCancel={{toggle "isOpenVerifyDeleteSignFlow" this}}
+    @onVerify={{this.verifyDeleteSignFlow.perform}}
+    @isLoading={{this.verifyDeleteSignFlow.isRunning}}
+  />
+{{/if}}

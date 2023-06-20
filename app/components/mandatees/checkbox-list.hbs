@@ -1,7 +1,7 @@
 {{#if this.loadMinisters.isRunning}}
   <Auk::Loader />
 {{else}}
-  <Auk::CheckboxList>
+  <div>
     {{#each this.ministers as |minister|}}
       <AuCheckbox
         @checked={{this.isChecked minister}}
@@ -10,5 +10,5 @@
         {{await (this.getMinisterNameAndTitle minister)}}
       </AuCheckbox>
     {{/each}}
-  </Auk::CheckboxList>
+  </div>
 {{/if}}

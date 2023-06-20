@@ -41,10 +41,13 @@
       </:default>
     </EditorContainer>
   {{else}}
-    <Auk::Alert
-      @skin="warning"
+    <AuAlert
       @title={{t "browser-unsupported-short"}}
-      @message={{t "browser-unsupported-editor" browserName=this.browserName}}
-    />
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      <p>{{t "browser-unsupported-editor" browserName=this.browserName}}</p>
+    </AuAlert>
   {{/if}}
 </div>

@@ -2,6 +2,7 @@
   <Auk::Tab @isHierarchicalBack={{true}} />
   <Auk::Tab
     @route="agenda.agendaitems.index"
+    @current-when="agenda.agendaitems.index" {{!-- NOTE: without explicitly defining `@current-when` the active state seems to be missing in some cases --}}
     @query={{if
       this.currentAgendaItemId
       (hash anchor=this.currentAgendaItemId)

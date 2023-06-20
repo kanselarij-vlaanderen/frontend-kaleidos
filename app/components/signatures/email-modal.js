@@ -1,24 +1,17 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import Inputmask from 'inputmask';
+import { action } from '@ember/object';
 
 export default class SignaturesEmailModalComponent extends Component {
-  inputmask;
   @tracked emailBuffer;
 
-  constructor() {
-    super(...arguments);
-
-    this.inputmask = new Inputmask(this.inputmaskOptions);
-  }
-
-  get inputmaskOptions() {
-    return {
-      alias: 'email',
-    };
+  @action
+  onInputEvent(event) {
+    this.emailBuffer = event.target.value;
   }
 
   get isValid() {
-    return this.inputmask.isValid(this.emailBuffer);
+    return this.emailBuffer?.length <= 254
+      && /.+@.+\..+/.test(this.emailBuffer);
   }
 }

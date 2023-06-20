@@ -20,16 +20,6 @@ const selectors = {
     container: '.auk-alert-stack',
   },
 
-  alert: {
-    message: '.auk-alert__message',
-    error: '.auk-alert--error',
-    close: '.auk-alert--error > button',
-  },
-
-  label: {
-    error: '.auk-label-error',
-  },
-
   modal: {
     container: '.auk-modal',
     body: '.auk-modal__body',
@@ -70,8 +60,9 @@ const selectors = {
 
   tab: {
     tab: '.auk-tabs__tab',
-    activeHref: '.auk-tabs__tab--active > *',
+    activeHref: '.auk-tabs__tab__link--active > *',
     hierarchicalBack: '.auk-tabs__hierarchical-back',
+    label: '.auk-tabs__tab__label',
   },
 
   tabs: {
