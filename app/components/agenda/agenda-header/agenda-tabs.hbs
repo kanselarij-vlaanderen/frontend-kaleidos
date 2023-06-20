@@ -22,8 +22,10 @@
     {{t "documents"}}
   </Auk::Tab>
   {{#if this.enableDigitalMinutes}}
-    <Auk::Tab @route="agenda.minutes">
-      {{t "minutes"}}
-    </Auk::Tab>
+    {{#if (user-may "manage-minutes")}}
+      <Auk::Tab @route="agenda.minutes">
+        {{t "minutes"}}
+      </Auk::Tab>
+    {{/if}}
   {{/if}}
 </Auk::Tabs>
