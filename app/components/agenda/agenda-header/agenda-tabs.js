@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task, lastValue } from 'ember-concurrency';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   /**
@@ -52,5 +53,9 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
       return agendaItemsRoute.queryParams.anchor;
     }
     return null;
+  }
+  
+  get enableDigitalMinutes() {
+    return ENV.APP.ENABLE_DIGITAL_MINUTES;
   }
 }

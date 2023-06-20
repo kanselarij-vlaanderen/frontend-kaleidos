@@ -126,7 +126,7 @@ context('Access level tests', () => {
     cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieMB', file);
     // set accesLevels to publiek
     setCurrentVersionAccesLevel('publicatieMB', accessPublic, true);
-    setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', accessPublic, true);
+    setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', accessPublic);
     // change access level to overheid, check previous version got a stricter level
     setCurrentVersionAccesLevel('publicatieMB', accessGovernment, true);
     checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB', accessCabinet);
