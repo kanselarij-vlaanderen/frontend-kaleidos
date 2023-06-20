@@ -18,7 +18,7 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   constructor() {
     super(...arguments);
     this.selectedVersion = this.args.piece;
-    this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar'));
+    this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar')) ?? true;
     this.loadFile.perform();
   }
 
