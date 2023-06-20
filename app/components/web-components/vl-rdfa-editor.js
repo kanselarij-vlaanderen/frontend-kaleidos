@@ -4,9 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 
-import {
-  Schema,
-} from '@lblod/ember-rdfa-editor';
+import { Schema } from '@lblod/ember-rdfa-editor';
 
 import {
   block_rdfa,
@@ -41,11 +39,16 @@ import {
   ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 
+import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+
 export default class WebComponentsVlRdfaEditor extends Component {
   @service userAgent;
 
   @tracked controller;
-  @tracked plugins = [tablePlugin, tableKeymap];
+
+  get plugins() {
+    return [tablePlugin, tableKeymap];
+  }
 
   get browserName() {
     const browser = this.userAgent.browser;
@@ -54,11 +57,13 @@ export default class WebComponentsVlRdfaEditor extends Component {
 
   get browserIsSupported() {
     const browser = this.userAgent.browser;
-    return (window.Cypress
-      || browser.isFirefox
-      || browser.isChrome
-      || browser.isChromeHeadless); // Headless in order not to break automated tests.
-    }
+    return (
+      window.Cypress ||
+      browser.isFirefox ||
+      browser.isChrome ||
+      browser.isChromeHeadless
+    ); // Headless in order not to break automated tests.
+  }
 
   get schema() {
     return new Schema({
@@ -70,6 +75,7 @@ export default class WebComponentsVlRdfaEditor extends Component {
         ordered_list,
         bullet_list,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+        heading,
         text,
         hard_break,
         invisible_rdfa,

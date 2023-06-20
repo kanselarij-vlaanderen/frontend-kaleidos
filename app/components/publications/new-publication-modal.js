@@ -119,7 +119,10 @@ export default class NewPublicationModal extends Component {
     if (this.numberIsAlreadyUsed) {
       // another user was creating a publication at the same time, we suggest a new number and show a toast
       yield this.initPublicationNumber.perform();
-      this.toaster.warning(this.intl.t('publication-number-already-taken-new-number-created'));
+      this.toaster.warning(
+        this.intl.t('publication-number-already-taken-new-number-created'),
+        this.intl.t('warning-title')
+      );
       return true;
     } else {
       return false;

@@ -1,6 +1,6 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['agendas', 'themisPublicationActivities', 'mailCampaign'];
+const SKIP_SERIALIZED = ['agendas', 'themisPublicationActivities', 'mailCampaign', 'minutes'];
 
 export default class MeetingSerializer extends ApplicationSerializer {
   serializeBelongsTo(snapshot, json, relationship) {

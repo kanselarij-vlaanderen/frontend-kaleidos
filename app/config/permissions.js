@@ -35,7 +35,8 @@ const {
 // - manage-decisions: Change the decision result, upload a decision report
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
-// - manage-system-alerts: Manage systeem notifications to be shown in the application
+// - manage-alerts: Manage systeem notifications to be shown in the application
+// - manage-minutes: Create and update minutes for a meeting
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
@@ -68,6 +69,7 @@ const groups = [
       'manage-settings',
       'manage-users',
       'manage-alerts',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -96,6 +98,7 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -121,6 +124,7 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',

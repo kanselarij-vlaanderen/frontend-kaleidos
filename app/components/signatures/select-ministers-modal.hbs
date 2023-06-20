@@ -27,6 +27,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-select-ministers-apply
             @loading={{@loading}}
             {{on "click" (fn @onConfirm this.selectedMinisters)}}
           >

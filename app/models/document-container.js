@@ -5,5 +5,10 @@ export default class DocumentContainerModel extends Model {
 
   @belongsTo('concept', { inverse: null, async: true, polymorphic: true }) type;
 
-  @hasMany('piece', { inverse: 'documentContainer', async: true }) pieces;
+  @hasMany('piece', {
+    inverse: 'documentContainer',
+    async: true,
+    polymorphic: true,
+  })
+  pieces;
 }
