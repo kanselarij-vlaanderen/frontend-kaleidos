@@ -28,7 +28,10 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
-    this.route('minutes', { path: '/notulen', });
+    if (!isEmpty(ENV.APP.ENABLE_DIGITAL_MINUTES)) {
+      this.route('minutes', { path: '/notulen', });
+    }
+    
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
