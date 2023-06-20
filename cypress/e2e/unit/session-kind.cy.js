@@ -40,11 +40,9 @@ context('Different session kinds should show different titles', () => {
     cy.get(route.newsletters.dataTable).find('tbody')
       .children('tr')
       .as('rows');
-    cy.get('@rows').within(() => {
-      cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad van');
-      cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad via elektronische procedure van');
-      cy.get(route.newsletters.row.title).contains('Kort bestek voor de bijzondere ministerraad van');
-    });
+    cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad van');
+    cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad via elektronische procedure van');
+    cy.get(route.newsletters.row.title).contains('Kort bestek voor de bijzondere ministerraad van');
   });
 
   it('should show the correct translations for normal session in news-item print overview', () => {
