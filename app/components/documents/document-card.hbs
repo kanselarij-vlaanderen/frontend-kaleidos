@@ -173,7 +173,7 @@
             (and
               @isEditable
               (user-may "manage-documents")
-              this.mayEditOrDelete
+              (not this.hasSignFlow)
             )
           }}
             <Group.Item>

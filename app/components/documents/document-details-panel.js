@@ -27,12 +27,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
 
-  @tracked mayEditOrDelete = false;
+  @tracked hasSignFlow = false;
 
   constructor() {
     super(...arguments);
     this.loadDetailsData.perform();
-    this.loadPieceMayBeEditedOrDeleted.perform();
+    this.loadSignatureRelatedData.perform();
   }
 
   get isProcessing() {
@@ -50,13 +50,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   @task
-  *loadPieceMayBeEditedOrDeleted() {
-    const signMarkingActivity = yield this.args.piece.signMarkingActivity;
-    const signCompletionActivity = yield this.args.piece.signCompletionActivity;
-    const signedPiece = yield this.args.piece.signedPiece;
-    if (!signMarkingActivity && !signCompletionActivity && !signedPiece){
-      this.mayEditOrDelete = true;
-    }
+  *loadSignatureRelatedData() {
+    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
   }
 
   @task

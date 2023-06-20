@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class SignatureService extends Service {
   @service store;
@@ -172,6 +173,23 @@ export default class SignatureService extends Service {
       await signMarkingActivity.destroyRecord();
       await piece.belongsTo('signedPiece').reload();
       await piece.belongsTo('signMarkingActivity').reload();
+    }
+  }
+
+  async hasSignFlow(piece) {
+    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
+    if (signaturesEnabled) {
+      if (await piece.signMarkingActivity) {
+        return true;
+      } else if (await piece.signCompletionActivity) {
+        return true;
+      } else if (await piece.signedPiece) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
     }
   }
 }

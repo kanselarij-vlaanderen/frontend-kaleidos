@@ -107,7 +107,7 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#if (and (user-may "manage-documents") this.mayEditOrDelete)}}
+        {{#if (and (user-may "manage-documents") (not this.hasSignFlow))}}
           <Toolbar.Group @position="right" as |Group|>
             {{#if this.isLastVersionOfPiece}}
               <Group.Item>

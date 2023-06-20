@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 export class Row {
   piece;
   documentContainer;
-  canBeEditedOrDeleted;
+  hasSignFlow;
 
   @tracked name;
   @tracked documentType;

@@ -47,7 +47,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
-  @tracked mayEditOrDelete = false;
+  @tracked hasSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -154,6 +154,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadSignatureRelatedData() {
     this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
   }
 
   @task

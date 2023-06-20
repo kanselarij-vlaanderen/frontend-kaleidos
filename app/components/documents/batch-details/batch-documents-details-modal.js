@@ -12,6 +12,7 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -54,23 +55,26 @@ export default class BatchDocumentsDetailsModal extends Component {
 
     this.rows = yield Promise.all(
       latestDocs.map(async (piece) => {
-        const signMarkingActivity = await piece.signMarkingActivity;
-        const signCompletionActivity = await piece.signCompletionActivity;
-        const signedPiece = await piece.signedPiece;
         const row = new Row();
         row.piece = piece;
         row.name = piece.name;
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        row.canBeEditedOrDeleted = signMarkingActivity || signCompletionActivity || signedPiece ? false : true;
+        row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })
     );
   }
 
   get areAllSelected() {
-    return this.rows.length === this.selectedRows.length;
+    const selectableRows = [];
+    this.rows.forEach(row => {
+      if(!row.hasSignFlow) {
+        selectableRows.pushObject(row);
+      }
+    })
+    return selectableRows.length === this.selectedRows.length;
   }
 
   @action
@@ -88,7 +92,11 @@ export default class BatchDocumentsDetailsModal extends Component {
     if (this.areAllSelected) {
       this.selectedRows = [];
     } else {
-      this.selectedRows = [...this.rows];
+      this.rows.forEach(row => {
+        if(!row.hasSignFlow) {
+          this.selectedRows.pushObject(row)
+        }
+      });
     }
   }
 
