@@ -74,7 +74,6 @@ context('Delete BIS tests', () => {
       .parent()
       .click();
 
-    cy.get(document.documentPreviewSidebar.open).click();
     cy.get(document.previewDetailsTab.delete).click();
     cy.intercept('PUT', '**/restore**').as('restoreFile');
     cy.intercept('DELETE', 'files/**').as('deleteFile');
@@ -113,7 +112,6 @@ context('Delete BIS tests', () => {
       .parent()
       .click();
 
-    // cy.get(document.documentPreviewSidebar.open).click();
     cy.get(document.previewDetailsTab.delete).click();
     cy.intercept('PUT', '**/restore**').as('restoreFile');
     cy.intercept('DELETE', 'files/**').as('deleteFile');

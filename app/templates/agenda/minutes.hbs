@@ -12,17 +12,19 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              {{#if (and (not this.isEditing) (user-may "manage-minutes"))}}
-                <Group.Item>
-                  <AuButton
-                    @skin="naked"
-                    @icon="pencil"
-                    @iconAlignment="left"
-                    {{on "click" (fn (set this "isEditing" true))}}
-                  >
-                    {{t (if @model.minutes "edit" "create")}}
-                  </AuButton>
-                </Group.Item>
+              {{#if (user-may "manage-minutes")}}
+                {{#unless this.isEditing}}
+                  <Group.Item>
+                    <AuButton
+                      @skin="naked"
+                      @icon="pencil"
+                      @iconAlignment="left"
+                      {{on "click" (fn (set this "isEditing" true))}}
+                    >
+                      {{t (if @model.minutes "edit" "create")}}
+                    </AuButton>
+                  </Group.Item>
+                {{/unless}}
               {{/if}}
             </Toolbar.Group>
           </Auk::Toolbar>

@@ -33,10 +33,10 @@ const {
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
 // - manage-decisions: Change the decision result, upload a decision report
-// - manage-minutes: Edit the minutes of a meeting
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
-// - manage-system-alerts: Manage systeem notifications to be shown in the application
+// - manage-alerts: Manage systeem notifications to be shown in the application
+// - manage-minutes: Create and update minutes for a meeting
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
@@ -56,7 +56,6 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
-      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -70,6 +69,7 @@ const groups = [
       'manage-settings',
       'manage-users',
       'manage-alerts',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -88,7 +88,6 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
-      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -99,6 +98,7 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -116,7 +116,6 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
-      'manage-minutes',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -125,6 +124,7 @@ const groups = [
       'manage-decision-publications',
       'manage-document-publications',
       'manage-themis-publications',
+      'manage-minutes',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
