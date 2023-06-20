@@ -23,5 +23,8 @@ const selectors = {
       save: '[data-test-mandatee-panel-edit-save]',
     },
   },
+
+  // mandatees-checkbox-list
+  mandateeCheckboxList: '[data-test-mandatee-checkbox-list]',
 };
 export default selectors;

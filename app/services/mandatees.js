@@ -1,52 +1,72 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const VISIBLE_ROLES = [
-  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
-  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
-  'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
-  'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
+const DEFAULT_VISIBLE_ROLES = [
+  CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
+  CONSTANTS.MANDATE_ROLES.MINISTER,
+  CONSTANTS.MANDATE_ROLES.VOORZITTER,
+  CONSTANTS.MANDATE_ROLES.GEMEENSCHAPSMINISTER,
 ];
 
 // Generates a sorting function (argument for Array.prototype.sort) for sorting
 // by absolute distance to a referenceDate
 function sortByDeltaToRef(referenceDate) {
-  return function(a, b) {
+  return function (a, b) {
     return Math.abs(referenceDate - a) - Math.abs(referenceDate - b);
   };
 }
 
 export default class MandateesService extends Service {
+  @service conceptStore;
   @service store;
+
+  roles = null;
 
   constructor() {
     super(...arguments);
-    this.loadVisibleRoles.perform();
+    this.loadRoles.perform();
   }
 
-  @task
-  *loadVisibleRoles() {
-    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
-    this.visibleRoles = visibleRoles;
-  }
+  loadRoles = task(async () => {
+    this.roles = await this.store.findAll('role');
+  });
 
-  @task
-  *getMandateesActiveOn(referenceDateFrom=new Date(), referenceDateTo, searchText) {
-    if (!referenceDateTo) {
-      referenceDateTo = referenceDateFrom;
+  getMandateesActiveOn = task(
+    async (
+      referenceDateFrom = new Date(),
+      referenceDateTo,
+      searchText,
+      visibleRoleUris = DEFAULT_VISIBLE_ROLES
+    ) => {
+      const visibleRoles = await Promise.all(
+        visibleRoleUris.map((role) => this.store.findRecordByUri('role', role))
+      );
+      if (!referenceDateTo) {
+        referenceDateTo = referenceDateFrom;
+      }
+      // Since this data is static, a local memoization/caching mechanism can be added
+      // here in case of performance issues
+      const activeMandateesInRange = [];
+      const governmentBodies = await this.fetchGovernmentBodies.perform(
+        referenceDateFrom,
+        referenceDateTo
+      );
+      for (const governmentBody of governmentBodies) {
+        const mandatees = await this.fetchMandateesForGovernmentBody.perform(
+          governmentBody,
+          referenceDateFrom,
+          referenceDateTo,
+          searchText,
+          visibleRoles
+        );
+        activeMandateesInRange.addObjects(mandatees);
+      }
+
+      return activeMandateesInRange;
     }
-    // Since this data is static, a local memoization/caching mechanism can be added
-    // here in case of performance issues
-    const activeMandateesInRange = [];
-    const governmentBodies = yield this.fetchGovernmentBodies.perform(referenceDateFrom, referenceDateTo);
-    for (const governmentBody of governmentBodies) {
-      const mandatees = yield this.fetchMandateesForGovernmentBody.perform(governmentBody, referenceDateFrom, referenceDateTo, searchText);
-      activeMandateesInRange.addObjects(mandatees);
-    }
-
-    return activeMandateesInRange;
-  }
+  );
 
   @task
   *fetchGovernmentBodies(referenceDateFrom, referenceDateTo) {
@@ -59,10 +79,13 @@ export default class MandateesService extends Service {
     const activeRange = this.store.queryOne('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
       'filter[generation][:lt:time]': referenceDateTo.toISOString(),
-      'filter[:has-no:invalidation]': 'yes'
+      'filter[:has-no:invalidation]': 'yes',
     });
 
-    const [closedBodies, activeBody] = yield Promise.all([closedInRange, activeRange]);
+    const [closedBodies, activeBody] = yield Promise.all([
+      closedInRange,
+      activeRange,
+    ]);
     governmentBodies.addObjects(closedBodies);
     if (activeBody) {
       governmentBodies.addObject(activeBody);
@@ -72,16 +95,24 @@ export default class MandateesService extends Service {
   }
 
   @task
-  *fetchMandateesForGovernmentBody(governmentBody, referenceDateFrom, referenceDateTo, searchText) {
-    yield this.loadVisibleRoles.last; // Make sure visible roles are loaded
+  *fetchMandateesForGovernmentBody(
+    governmentBody,
+    referenceDateFrom,
+    referenceDateTo,
+    searchText,
+    visibleRoles
+  ) {
+    yield this.loadRoles.last; // Make sure visible roles are loaded
     // If no referenceDate is specified, all mandatees within the given governmentBody.
     // Can be multiple versions (see documentation on https://themis-test.vlaanderen.be/docs/catalogs#ministers ,
     // 2.2.4 mandatarissen)
     const queryOptions = {
       'filter[government-body][:uri:]': governmentBody.uri,
       include: 'person,mandate.role',
-      'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-      'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY
+      'filter[mandate][role][:id:]': visibleRoles
+        .map((role) => role.id)
+        .join(','),
+      'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY,
     };
     if (searchText) {
       queryOptions['filter[person][last-name]'] = searchText;
@@ -117,25 +148,27 @@ export default class MandateesService extends Service {
       'filter[person][last-name]': nameSearchTerm,
       'filter[:has:government-body]': 'yes',
       include: 'person,mandate.role',
-      'page[size]': 20
+      'page[size]': 20,
     };
     const preOptions = {
       ...queryOptions,
-      'sort': '-start',
-      'filter[:lt:start]': referenceDate.toISOString()
+      sort: '-start',
+      'filter[:lt:start]': referenceDate.toISOString(),
     };
     const postOptions = {
       ...queryOptions,
-      'sort': 'start',
-      'filter[:gte:start]': referenceDate.toISOString()
+      sort: 'start',
+      'filter[:gte:start]': referenceDate.toISOString(),
     };
     const requests = [
       this.store.query('mandatee', preOptions),
-      this.store.query('mandatee', postOptions)
+      this.store.query('mandatee', postOptions),
     ];
     const [preMandatees, postMandatees] = yield Promise.all(requests);
     const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
-    const sortedMandatees = mandatees.sort((a, b) => sortByDeltaToRef(referenceDate)(a.start, b.start));
+    const sortedMandatees = mandatees.sort((a, b) =>
+      sortByDeltaToRef(referenceDate)(a.start, b.start)
+    );
     return sortedMandatees;
   }
 }
