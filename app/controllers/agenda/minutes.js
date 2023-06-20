@@ -185,7 +185,7 @@ export default class AgendaMinutesController extends Controller {
 
     await minutes.save();
     await piecePart.save();
-    await this.meeting.save();
+    await this.meeting.belongsTo('minutes').reload();
 
     this.isEditing = false;
     this.refresh();
