@@ -82,15 +82,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @task
-  *loadPieceMayBeEditedOrDeleted() {
-    const signCompletionActivity = yield this.piece.signCompletionActivity;
-    const signedPiece = yield this.piece.signedPiece;
-    if (!this.signMarkingActivity && !signCompletionActivity && !signedPiece){
-      this.mayEditOrDelete = true;
-    }
-  }
-
-  @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
       'concept',
