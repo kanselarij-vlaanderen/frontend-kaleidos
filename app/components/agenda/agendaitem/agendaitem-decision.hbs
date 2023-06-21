@@ -26,7 +26,7 @@
               @icon="pencil"
               @iconAlignment="left"
               @disabled={{this.exportPdf.isRunning}}
-              {{on "click" (set this "isEditing")}}
+              {{on "click" this.startEditing}}
             >
               {{t (if this.report "edit" "create")}}
             </AuButton>
@@ -109,6 +109,7 @@
           @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
           @onUpdateContentClicked={{this.updateBeslissingContent}}
           @disableUpdateContent={{not this.nota}}
+          @loadingUpdateContent={{this.loadNota.isRunning}}
         />
       </Auk::Panel::Body>
       <Auk::Panel::Footer class="au-u-background-gray-100">
