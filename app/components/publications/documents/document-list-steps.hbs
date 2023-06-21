@@ -1,11 +1,10 @@
 {{#each @pieces as |piece|}}
   <div class="vlc-procedure-step vlc-procedure-step--nopadding">
     <div class="vlc-procedure-step__badge-wrapper">
-      <Auk::Badge
-        @skin="primary"
-        @size="medium"
+      <AuBadge
         @icon="document"
-        class="vlc-procedure-step__badge"
+        @skin="action"
+        class="au-c-badge--medium"
       />
     </div>
     <div>
@@ -22,11 +21,10 @@
 {{else}}
   <div class="vlc-procedure-step vlc-procedure-step--nopadding">
     <div class="vlc-procedure-step__badge-wrapper">
-      <Auk::Badge
-        @skin="default"
-        @size="medium"
+      <AuBadge
         @icon="circle-info"
-        class="vlc-procedure-step__badge"
+        @skin="action"
+        class="au-c-badge--medium"
       />
     </div>
     <div>
