@@ -6,6 +6,7 @@
           <AuButton
             @skin="link"
             @icon="renew"
+            @loading={{@loadingUpdateContent}}
             @disabled={{@disableUpdateContent}}
             class="au-u-padding-left-none"
             {{on "click" @onUpdateContentClicked}}
