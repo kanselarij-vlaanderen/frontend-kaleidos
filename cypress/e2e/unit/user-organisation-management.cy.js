@@ -304,9 +304,9 @@ context('testing user and organization management', () => {
       cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
       cy.get(dependency.emberPowerSelect.option).contains(person1)
         .click();
-      cy.intercept('PATCH', '/users/**').as('patchUsers1');
+      cy.intercept('PATCH', '/persons/**').as('patchPerson1');
       cy.get(settings.user.linkPerson).click()
-        .wait('@patchUsers1');
+        .wait('@patchPerson1');
       cy.get(utils.mandateePersonSelector).contains(person1);
       // check overview
       cy.get(auk.backButton).click();
@@ -324,9 +324,9 @@ context('testing user and organization management', () => {
       cy.get(dependency.emberPowerSelect.option).should('not.contain', 'Aan het zoeken');
       cy.get(dependency.emberPowerSelect.option).contains(person2)
         .click();
-      cy.intercept('PATCH', '/users/**').as('patchUsers2');
+      cy.intercept('PATCH', '/persons/**').as('patchPerson2');
       cy.get(settings.user.linkPerson).click()
-        .wait('@patchUsers2');
+        .wait('@patchPerson2');
       cy.get(utils.mandateePersonSelector).contains(person2);
       // check overview
       cy.get(auk.backButton).click();
@@ -336,9 +336,9 @@ context('testing user and organization management', () => {
       // unlink person
       cy.get('@currentRow').find(settings.goToUserDetail)
         .click();
-      cy.intercept('PATCH', '/users/**').as('patchUsers3');
+      cy.intercept('PATCH', '/persons/**').as('patchPerson3');
       cy.get(settings.user.unlinkPerson).click()
-        .wait('@patchUsers3');
+        .wait('@patchPerson3');
       cy.get(utils.mandateePersonSelector).should('not.contain', person2);
       // check overview
       cy.get(auk.backButton).click();

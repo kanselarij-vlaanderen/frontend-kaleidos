@@ -136,7 +136,6 @@ context('signatures shortlist overview tests', () => {
       .invoke('removeAttr', 'target')
       .click();
     cy.url().should('include', 'document');
-    cy.get(document.documentPreviewSidebar.open).click();
     cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
       .contains(files1[0].newFileName);
     cy.go('back');
