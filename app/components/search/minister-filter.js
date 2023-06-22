@@ -38,14 +38,6 @@ export default class SearchMinisterFilterComponent extends Component {
     );
   }
 
-  get label() {
-    if(this.args.label) {
-      return this.args.label;
-    } else {
-      return "current-ministers";
-    }
-  }
-
   @action
   onChangeCurrentMinisters(selected) {
     this.selectedCurrentMinisterIds = selected.map((m) => m.id)

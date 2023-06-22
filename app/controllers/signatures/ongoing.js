@@ -10,7 +10,7 @@ export default class SignaturesOngoingController extends Controller {
   @service router;
   @service mandatees;
   @service intl;
-  @service currentSession
+  @service currentSession;
 
   queryParams = [
     {
@@ -34,11 +34,11 @@ export default class SignaturesOngoingController extends Controller {
 
   statusFilterItems = [
     {
-      label: this.intl.t('signing-status-to-be-prepared'),
+      label: this.intl.t('signing-status-prepared'),
       value: CONSTANTS.SIGNFLOW_STATUSES.PREPARED,
     }, 
     {
-      label: this.intl.t('signing-status-to-be-signed'),
+      label: this.intl.t('signing-status-marked'),
       value: CONSTANTS.SIGNFLOW_STATUSES.MARKED,
     },
     {
@@ -75,7 +75,7 @@ export default class SignaturesOngoingController extends Controller {
       );
       if (response.ok) {
         const result = await response.json();
-        window.location.replace(result.url);
+        window.location.href = result.url;
       } else {
         this.router.transitionTo(
           'document',

@@ -9,8 +9,9 @@
           class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
         >
           <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "status"}}</Auk::Label>
             <Auk::CheckboxTree
-              @label={{t "status"}}
+              @label={{t "th-select-all"}}
               @items={{this.statusFilterItems}}
               @selectedItems={{this.selectedStatuses}}
               @didUpdate={{this.onChangeStatus}}
@@ -18,11 +19,12 @@
           </div>
           {{#if this.currentSession.isAdmin}}
           <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "submitter"}}</Auk::Label>
               <Search::MinisterFilter
                 @selected={{this.mandatees}}
                 @onChange={{this.setMandatees}}
                 @hidePastMinistersOption={{true}}
-                @label={{"submitter"}}
+                @label={{"th-select-all"}}
               />
           </div>
           {{/if}}
@@ -113,7 +115,7 @@
             {{else}}
               <Auk::EmptyState
                 @bordered={{true}}
-                @message={{t "no-results-found-modify-term"}}
+                @message={{t "no-results-found-modify-filter"}}
               />
             {{/if}}
   </m.content>

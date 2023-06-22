@@ -25,7 +25,7 @@ export default class SignaturesOngoingRoute extends Route {
     },
     statuses: {
       refreshModel: true,
-      as: 'statuses',
+      as: 'statussen',
     }
   };
 
@@ -82,6 +82,10 @@ export default class SignaturesOngoingRoute extends Route {
     });
     // Disable bubbling of loading event to prevent parent loading route to be shown.
     // Otherwise it causes a 'flickering' effect because the search filters disappear.
-    return false;
+    if (transition.from && transition.to && transition.queryParamsOnly) {
+      return transition.from.queryParams?.filter === transition.to.queryParams?.filter;
+    } else {
+      return true;
+    }
   }
 }

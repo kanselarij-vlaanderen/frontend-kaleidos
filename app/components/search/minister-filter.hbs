@@ -2,7 +2,7 @@
   <Auk::Loader />
 {{else}}
   <Auk::CheckboxTree
-    @label={{t this.label}}
+    @label={{t (or @label "current-ministers")}}
     @items={{this.currentMinisters}}
     @itemStructure={{hash label="fullName"}}
     @selectedItems={{this.selectedCurrentMinisters}}
