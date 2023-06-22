@@ -26,7 +26,7 @@
               @icon="pencil"
               @iconAlignment="left"
               @disabled={{this.exportPdf.isRunning}}
-              {{on "click" (set this "isEditing")}}
+              {{on "click" this.startEditing}}
             >
               {{t (if this.report "edit" "create")}}
             </AuButton>
@@ -124,6 +124,7 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
+              @loading={{this.loadNota.isRunning}}
               @disabled={{not this.nota}}
               {{on "click" this.updateBeslissingContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>

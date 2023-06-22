@@ -52,8 +52,6 @@ export default class AgendaitemDecisionComponent extends Component {
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
-    this.loadNota.perform();
-    this.loadDocuments.perform();
   }
 
   loadNota = task(async () => {
@@ -513,5 +511,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   get enableDigitalAgenda() {
     return ENV.APP.ENABLE_DIGITAL_AGENDA;
+  }
+
+  @action
+  startEditing() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.isEditing = true;
   }
 }
