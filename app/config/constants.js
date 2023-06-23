@@ -49,6 +49,7 @@ export default {
     MB: 'https://data.vlaanderen.be/id/concept/AardWetgeving/MinisterieelBesluit',
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
+    NOTULEN: 'http://themis.vlaanderen.be/id/concept/document-type/d638e0dc-c879-4a75-9485-9e6970a83d67',
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
