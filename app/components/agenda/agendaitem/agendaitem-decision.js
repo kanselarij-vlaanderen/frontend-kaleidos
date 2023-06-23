@@ -248,7 +248,6 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBetreftVersion(betreftPiecePart) {
-    console.log(betreftPiecePart.value);
     this.setBetreftEditorContent(betreftPiecePart.value);
   }
 
