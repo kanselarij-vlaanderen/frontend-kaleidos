@@ -1,11 +1,11 @@
-{{#if this.loadData.isRunning}}
+{{#if (or this.status.isLoading this.signingHubUrl.isLoading)}}
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  {{#if this.signingHubUrl}}
+  {{#if this.signingHubUrl.value}}
     <AuPill
       @icon="sign"
       @skin={{this.skin}}
-      @href={{this.signingHubUrl}}
+      @href={{this.signingHubUrl.value}}
       target="_blank"
     >
       {{this.title}}
