@@ -28,7 +28,8 @@
         @selectedDocumentType={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
       />
-    {{else}}
+    {{/if}}
+    {{#if (or (not @isEditingEnabled) @row.hasSignFlow)}}
       {{@row.documentType.label}}
     {{/if}}
   </td>
