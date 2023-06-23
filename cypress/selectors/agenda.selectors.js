@@ -19,7 +19,6 @@ const selectors = {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     create: '[data-test-agendaitem-decision-create]',
     save: '[data-test-agendaitem-decision-save]',
-    rdfaEditor: '[data-test-agendaitem-decision-rdfa-editor]',
   },
 
   // agendaitem-decision-edit
