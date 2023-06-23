@@ -23,7 +23,7 @@
     {{/if}}
   </td>
   <td>
-    {{#if (not @row.hasSignFlow)}}
+    {{#if (and @isEditingEnabled (not @row.hasSignFlow))}}
       <Utils::DocumentTypeSelector
         data-test-document-details-row-type
         @selectedDocumentType={{@row.documentType}}
