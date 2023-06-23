@@ -10,7 +10,7 @@ export default class User extends Model {
   @belongsTo('account', { inverse: 'user', async: true }) account;
   @belongsTo('concept', { inverse: null, async: true }) status;
   @belongsTo('login-activity', { inverse: 'user', async: true }) loginActivity;
-  @belongsTo('person', { inverse: 'user', async: true }) person;
+  @belongsTo('person', { inverse: 'user', async: true }) person; // read-only, set the inverse instead
 
   @hasMany('membership', { inverse: 'user', async: true }) memberships;
 
