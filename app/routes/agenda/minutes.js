@@ -56,7 +56,6 @@ export default class AgendaMinutesRoute extends Route {
     controller.meeting = meeting;
     const agenda = this.modelFor('agenda').agenda;
     controller.agenda = agenda;
-    controller.editor = null;
     controller.isEditing = false;
     controller.isFullscreen = false;
     controller.editor = null;
