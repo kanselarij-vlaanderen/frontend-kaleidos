@@ -84,7 +84,8 @@ $say-editor-border-radius: $au-input-border-radius;
   padding: 1.5rem 2rem;
 }
 
-.say-editor__paper {
+.say-editor__paper,
+.say-editor__inner {
   .vl-rdfa-editor--small & {
     min-height: $say-paper-min-height-small;
   }
