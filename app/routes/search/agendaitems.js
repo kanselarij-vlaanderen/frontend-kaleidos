@@ -61,18 +61,30 @@ export default class AgendaitemSearchRoute extends Route {
     if (entry.title && Array.isArray(entry.title)) {
       entry.title = entry.title.join(' ');
     }
-    if ((agendaitem.highlight && agendaitem.highlight.shortTitle) && agendaitem.highlight.shortTitle[0]?.split(" ").length < agendaitem.attributes.shortTitle?.split(" ").length) {
+
+    if (
+      agendaitem.highlight?.shortTitle &&
+      agendaitem.highlight.shortTitle[0]?.split(' ').length <
+        agendaitem.attributes.shortTitle?.split(' ').length
+    ) {
       entry.shortTitle = agendaitem.attributes.shortTitle;
-      for (let i = 0; i < agendaitem.highlight.shortTitle.length; i++) {
-        const highlightShortTitleEmsRemoved = agendaitem.highlight.shortTitle[i].replace(/<em>|<\/em>/g, "");
-        entry.shortTitle = entry.shortTitle.replaceAll(highlightShortTitleEmsRemoved, agendaitem.highlight.shortTitle[i]);
+      for (const shortTitle of agendaitem.highlight.shortTitle) {
+        const shortTitleEmsRemoved = shortTitle.replace(/<em>|<\/em>/g, '');
+        entry.shortTitle = entry.shortTitle.replaceAll(
+          shortTitleEmsRemoved,
+          shortTitle
+        );
       }
-    } 
-    if ((agendaitem.highlight && agendaitem.highlight.title) && agendaitem.highlight.title[0]?.split(" ").length < agendaitem.attributes.title?.split(" ").length ) {
+    }
+    if (
+      agendaitem.highlight?.title &&
+      agendaitem.highlight.title[0]?.split(' ').length <
+        agendaitem.attributes.title?.split(' ').length
+    ) {
       entry.title = agendaitem.attributes.title;
-      for (let i = 0; i < agendaitem.highlight.title.length; i++){
-        const highlightTitleEmsRemoved = agendaitem.highlight.title[i].replace(/<em>|<\/em>/g, "");
-        entry.title = entry.title.replaceAll(highlightTitleEmsRemoved, agendaitem.highlight.title[i]);
+      for (const title of agendaitem.highlight.title) {
+        const titleEmsRemoved = title.replace(/<em>|<\/em>/g, '');
+        entry.title = entry.title.replaceAll(titleEmsRemoved, title);
       }
     }
     return entry;
