@@ -68,13 +68,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get areAllSelected() {
-    const selectableRows = [];
-    this.rows.forEach(row => {
-      if(!row.hasSignFlow) {
-        selectableRows.pushObject(row);
-      }
-    })
-    return selectableRows.length === this.selectedRows.length;
+    return this.rows.length === this.selectedRows.length;
   }
 
   @action
@@ -92,11 +86,7 @@ export default class BatchDocumentsDetailsModal extends Component {
     if (this.areAllSelected) {
       this.selectedRows = [];
     } else {
-      this.rows.forEach(row => {
-        if(!row.hasSignFlow) {
-          this.selectedRows.pushObject(row)
-        }
-      });
+      this.selectedRows = [...this.rows];
     }
   }
 

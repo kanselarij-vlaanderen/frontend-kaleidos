@@ -185,11 +185,8 @@ export default class SignatureService extends Service {
         return true;
       } else if (await piece.signedPiece) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
     }
+    return false;
   }
 }
