@@ -28,10 +28,10 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
-    if (!isEmpty(ENV.APP.ENABLE_DIGITAL_MINUTES)) {
+    if (ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true) {
       this.route('minutes', { path: '/notulen', });
     }
-    
+
   });
 
   this.route('cases', { path: '/dossiers', }, function() {

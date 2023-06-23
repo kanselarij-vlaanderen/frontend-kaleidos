@@ -54,8 +54,8 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
     }
     return null;
   }
-  
+
   get enableDigitalMinutes() {
-    return ENV.APP.ENABLE_DIGITAL_MINUTES;
+    return ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true;
   }
 }
