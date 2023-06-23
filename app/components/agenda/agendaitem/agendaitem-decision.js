@@ -128,6 +128,9 @@ export default class AgendaitemDecisionComponent extends Component {
         },
       });
       this.previousReport = await this.report.previousPiece;
+    } else {
+      this.betreftPiecePart = null;
+      this.beslissingPiecePart = null;
     }
   });
 

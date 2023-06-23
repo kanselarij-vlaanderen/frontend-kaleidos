@@ -51,13 +51,13 @@
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
-          @hideDelete={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
           @hideSign={{true}}
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
+          @didDeleteContainer={{perform this.loadReport}}
         />
       {{else}}
         <Auk::Loader />
@@ -142,8 +142,7 @@
     {{else}}
       {{#if
         (and
-          this.report
-          (or (not this.pieceParts) (not this.enableDigitalAgenda))
+          this.report (or (not this.pieceParts) (not this.enableDigitalAgenda))
         )
       }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
