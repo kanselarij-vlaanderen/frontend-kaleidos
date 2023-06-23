@@ -13,6 +13,8 @@ $say-paper-min-height: 120rem;
 // Custom variables
 
 $say-container-height: 60rem;
+$say-container-height-small: 30rem;
+$say-paper-min-height-small: 60rem;
 $say-editor-border-color: $au-input-border-color;
 $say-editor-border-radius: $au-input-border-radius;
 
@@ -37,6 +39,10 @@ $say-editor-border-radius: $au-input-border-radius;
 
   border: .1rem solid $say-editor-border-color;
   border-radius: $say-editor-border-radius;
+
+  .vl-rdfa-editor--small & {
+    height: $say-container-height-small;
+  }
 }
 
 .auk-rdfa-fullscreen .say-container {
@@ -76,6 +82,12 @@ $say-editor-border-radius: $au-input-border-radius;
 
 .say-editor {
   padding: 1.5rem 2rem;
+}
+
+.say-editor__paper {
+  .vl-rdfa-editor--small & {
+    min-height: $say-paper-min-height-small;
+  }
 }
 
 .say-editor__inner {
