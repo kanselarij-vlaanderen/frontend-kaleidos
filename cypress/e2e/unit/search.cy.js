@@ -42,14 +42,11 @@ function searchOnRoute(searchTerm, searchFlow, resultRow, Result) {
   cy.get(resultRow).contains(Result);
 }
 
-function setDocNameInViewer(docName, newName, openSidebar = false) {
+function setDocNameInViewer(docName, newName) {
   // Open correct versionHistory
   cy.get(document.documentCard.name.value).contains(docName)
     .invoke('removeAttr', 'target')
     .forceClick();
-  if (openSidebar) {
-    cy.get(document.documentPreviewSidebar.open).click();
-  }
   cy.get(document.previewDetailsTab.edit).click();
   cy.wait(1000);
   cy.get(document.previewDetailsTab.editing.name)
@@ -385,6 +382,7 @@ context('Search tests', () => {
       cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseTitleShort);
+      cy.wait(5000); // wait for elasticsearch
 
       cy.visit('/zoeken/agendapunten');
       cy.get(route.search.input).clear();
@@ -461,7 +459,7 @@ context('Search tests', () => {
       cy.addAgendaitemToAgenda(subcaseShortTitle);
       cy.addDocumentsToAgendaitem(subcaseShortTitle, files);
       cy.generateDecision(treatmentWords, null);
-      setDocNameInViewer(fileNameTreatment, newFileNameTreatment, true);
+      setDocNameInViewer(fileNameTreatment, newFileNameTreatment);
 
       // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       // cy.addDocumentToTreatment(fileTreatment);

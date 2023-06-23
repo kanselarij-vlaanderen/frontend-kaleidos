@@ -1,0 +1,112 @@
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <Auk::Panel>
+        <Auk::Panel::Header
+          class="{{if this.isEditing 'au-u-background-gray-100'}}"
+        >
+          <Auk::Toolbar as |Toolbar|>
+            <Toolbar.Group @position="left" as |Group|>
+              <h4 class="auk-toolbar__title">
+                {{t "minutes"}}
+              </h4>
+            </Toolbar.Group>
+            <Toolbar.Group @position="right" as |Group|>
+              {{#if (user-may "manage-minutes")}}
+                {{#unless this.isEditing}}
+                  <Group.Item>
+                    <AuButton
+                      @skin="naked"
+                      @icon="pencil"
+                      @iconAlignment="left"
+                      {{on "click" (fn (set this "isEditing" true))}}
+                    >
+                      {{t (if @model.minutes "edit" "create")}}
+                    </AuButton>
+                  </Group.Item>
+                {{/unless}}
+              {{/if}}
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+
+        {{#if this.isEditing}}
+          <Auk::Panel::Body
+            class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+          >
+            <SayEditor
+              @allowFullscreen={{true}}
+              @showSave={{true}}
+              @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+              @onSaveTask={{this.saveMinutes}}
+              @title={{t "minutes"}}
+            >
+              <:header>
+                <AuButton
+                  @skin="link"
+                  @icon="renew"
+                  class="au-u-padding-left-none"
+                  {{on "click" this.updateEditorContent}}
+                >{{t "update-thing" thing=(t "content")}}</AuButton>
+                <VersionsDropdown
+                  @record={{this.currentPiecePart.value}}
+                  @previousVersionKey="previousPiecePart"
+                  @onVersionClicked={{this.revertToVersion}}
+                />
+              </:header>
+            </SayEditor>
+          </Auk::Panel::Body>
+          <Auk::Panel::Footer class="au-u-background-gray-100">
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="naked"
+                    {{on "click" (fn (set this "isEditing" false))}}
+                  >
+                    {{t "cancel"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="primary"
+                    @loading={{this.saveMinutes.isRunning}}
+                    @disabled={{this.saveDisabled}}
+                    {{on "click" (perform this.saveMinutes)}}
+                  >
+                    {{t "save"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Footer>
+        {{else}}
+          <Auk::Panel::Body
+            class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+          >
+            {{#if this.currentPiecePart.isRunning}}
+              <Auk::Loader />
+            {{else if this.currentPiecePart.value}}
+              <AuContent>
+                <SanitizeHtml
+                  @raw={{true}}
+                  @value={{this.currentPiecePart.value.value}}
+                />
+              </AuContent>
+            {{else}}
+              <AuAlert
+                @title={{t "create-minutes-click-create-button-message"}}
+                @icon="circle-info"
+                @skin="info"
+                @size="small"
+                @closable={{false}}
+              />
+            {{/if}}
+          </Auk::Panel::Body>
+        {{/if}}
+      </Auk::Panel>
+    </div>
+  </div>
+</div>

@@ -10,20 +10,20 @@ import { task } from 'ember-concurrency';
  *
  * Contains tabs:
  * - "details"
- * - "signatures"
- * - "versions"
+ * - "signatures" (translated to dutch for display)
+ * - "versions" (translated to dutch for display)
  */
 export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Component {
   @service currentSession;
 
   @tracked documentContainer;
-  @tracked activeTab = 'details';
+  @tracked tab = 'details';
 
   constructor() {
     super(...arguments);
     this.loadPieceData.perform();
-    if (this.args.activeTab) {
-      this.activeTab = this.args.activeTab;
+    if (this.args.tab) {
+      this.tab = this.args.tab;
     }
   }
 
@@ -39,7 +39,8 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
   }
 
   @action
-  setActiveTab(tabName) {
-    this.activeTab = tabName;
+  setTab(tabName) {
+    this.tab = tabName;
+    this.args.onTabChanged(tabName);
   }
 }

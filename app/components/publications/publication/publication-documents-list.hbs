@@ -24,7 +24,11 @@
         class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
       >
         <div class="auk-o-flex auk-o-flex--spaced">
-          <Auk::Badge @icon="paperclip" @size="regular" />
+          <AuBadge
+            @icon="paperclip"
+            @skin="gray"
+            @size="small"
+          />
           <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
           <AuPill
             @skin={{this.fileSizePillSkin piece.file.size}}

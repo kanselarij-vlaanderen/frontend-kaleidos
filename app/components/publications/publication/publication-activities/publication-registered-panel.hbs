@@ -40,7 +40,11 @@
     <Auk::List>
       {{#each this.decisions as |decision|}}
         <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-          <Auk::Badge @icon="document" @size="regular" />
+          <AuBadge
+            @icon="document"
+            @skin="gray"
+            @size="small"
+          />
           <h5 class="auk-u-m-0">
             {{t "published-in-belgian-official-gazette-on"}}
             {{date decision.publicationDate}}
