@@ -117,7 +117,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
-    this.loadPieceMayBeEditedOrDeleted.perform();
   }
 
   @task
