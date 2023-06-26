@@ -152,6 +152,11 @@ export default class DocumentsDocumentCardComponent extends Component {
     }
   }
 
+  markForSignature = task(async () => {
+    await this.args.markForSignature?.(this.piece);
+    await this.loadSignatureRelatedData.perform();
+  });
+
   get sortedPieces() {
     return A(sortPieces(this.pieces.toArray()).reverse());
   }

@@ -156,7 +156,7 @@
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}}
-            {{#if this.loadSignatureRelatedData.isRunning}}
+            {{#if (or this.markForSignature.isRunning this.loadSignatureRelatedData.isRunning)}}
               <Group.Item>
                 <div
                   class="auk-loader au-u-margin-left-small"
@@ -216,18 +216,14 @@
                   </AuButton>
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
-                  {{#let (t "signatures") as |signTab| }}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash tab=signTab}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/let}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.markForSignature.perform}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                  <AuHr />
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />

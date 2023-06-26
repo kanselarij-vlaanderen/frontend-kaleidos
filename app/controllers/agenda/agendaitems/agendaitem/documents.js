@@ -20,6 +20,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service fileConversionService;
   @service router;
+  @service signatureService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -324,6 +325,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   closePublicationModal() {
     this.isOpenPublicationModal = false;
+  }
+
+  @action
+  async markForSignature(piece) {
+    // Placed the getting of these variables here to lessen loading time in router
+    const agendaItemTreatment = await this.agendaitem.treatment;
+    const decisionActivity = await agendaItemTreatment.decisionActivity;
+    await this.signatureService.markDocumentForSignature(piece, decisionActivity);
   }
 
   @action
