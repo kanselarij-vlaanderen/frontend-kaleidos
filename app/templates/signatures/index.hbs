@@ -33,7 +33,12 @@
   @clickable={{false}}
   @asideVisible={{this.showSidebar}}
   @content={{@model}}
-  @enablePagination={{false}}
+  @page={{this.page}}
+  @size={{this.size}}
+  @numberOfItems={{@model.length}}
+  @totalNumberOfItems={{@model.meta.count}}
+  @onChangeSize={{fn (mut this.size)}}
+  @onChangePage={{fn (mut this.page)}}
 >
   <:header>
     <th>
@@ -47,59 +52,94 @@
         </span>
       </AuCheckbox>
     </th>
-    <th>{{t "document-name"}}</th>
-    <th>{{t "document-type"}}</th>
-    <th>{{t "minister"}}</th>
-    <th>{{t "decision-date"}}</th>
+    <Utils::ThSortable
+      @currentSorting={{this.sortField}}
+      @field={{"sign-subcase.sign-marking-activity.piece.name"}}
+      @onChange={{this.changeSort}}
+      @label={{t "document-name"}}
+    />
+    <Utils::ThSortable
+      @currentSorting={{this.sortField}}
+      @field={{"sign-subcase.sign-marking-activity.piece.document-container.type.label"}}
+      @onChange={{this.changeSort}}
+      @label={{t "document-type"}}
+    />
+    <Utils::ThSortable
+      @currentSorting={{this.sortField}}
+      @field={{"decision-activity.treatment.agendaitems.short-title"}}
+      @onChange={{this.changeSort}}
+      @label={{capitalize (t "agendaitem")}}
+    />
+    <Utils::ThSortable
+      @currentSorting={{this.sortField}}
+      @field={{"decision-activity.subcase.mandatees.priority"}}
+      @onChange={{this.changeSort}}
+      @label={{t "ministers"}}
+    />
+    <Utils::ThSortable
+      @currentSorting={{this.sortField}}
+      @field={{"decision-activity.start-date"}}
+      @onChange={{this.changeSort}}
+      @label={{t "decision-date"}}
+    />
     <th></th>
   </:header>
-  <:body as |piece|>
-    <td>
-      <AuCheckbox
-        @checked={{includes piece this.selectedPieces}}
-        @onChange={{fn this.toggleItem piece}}
-      >
-        <span class="auk-u-sr-only">
-          {{t "select"}}
-        </span>
-      </AuCheckbox>
-    </td>
-    <td data-test-route-signatures-row-name>
-      <AuLink @route="document" @model={{piece.id}}>
-        {{piece.name}}
-      </AuLink>
-    </td>
-    <td>
-      <AuPill @size="small">
-        {{#let piece.documentContainer.type as |type|}}
-          {{#if type}}
-            {{type.label}}
-          {{else}}
-            {{t "no-document-type"}}
-          {{/if}}
-        {{/let}}
-      </AuPill>
-    </td>
-    <td data-test-route-signatures-row-mandatee>
-      {{#let (await (this.getMandateeName piece)) as |name|}}
-        {{#if name}}
-          {{name}}
-        {{else}}
-          -
-        {{/if}}
+  <:body as |signFlow|>
+    {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+      {{#let signMarkingActivity.piece as |piece|}}
+        <td>
+          <AuCheckbox
+            @checked={{includes piece this.selectedPieces}}
+            @onChange={{fn this.toggleItem piece}}
+          >
+            <span class="auk-u-sr-only">
+              {{t "select"}}
+            </span>
+          </AuCheckbox>
+        </td>
+        <td data-test-route-signatures-row-name>
+          <AuLink @route="document" @model={{piece.id}}>
+            {{piece.name}}
+          </AuLink>
+        </td>
+        <td>
+          <AuPill @size="small">
+            {{#let piece.documentContainer.type as |type|}}
+              {{#if type}}
+                {{type.label}}
+              {{else}}
+                {{t "no-document-type"}}
+              {{/if}}
+            {{/let}}
+          </AuPill>
+        </td>
+        <td>
+          {{#let (await (this.getAgendaitem piece)) as |agendaitem|}}
+            {{agendaitem.shortTitle}}
+          {{/let}}
+        </td>
+        <td data-test-route-signatures-row-mandatee>
+          {{#let (await (this.getMandateeNames signFlow)) as |names|}}
+            {{#if names}}
+              {{join ", " names}}
+            {{else}}
+              -
+            {{/if}}
+          {{/let}}
+        </td>
+        <td>{{date signFlow.decisionActivity.startDate}}</td>
+        <td>
+          <AuButton
+            data-test-route-signatures-row-open-sidebar
+            @skin="naked"
+            @icon="sign"
+            {{on "click" (fn this.openSidebarSingleItem piece)}}
+          >
+            {{t "start-signing"}}
+          </AuButton>
+        </td>
       {{/let}}
-    </td>
-    <td>{{date (await (this.getDecisionDate piece))}}</td>
-    <td>
-      <AuButton
-        data-test-route-signatures-row-open-sidebar
-        @skin="naked"
-        @icon="sign"
-        {{on "click" (fn this.openSidebarSingleItem piece)}}
-      >
-        {{t "start-signing"}}
-      </AuButton>
-    </td>
+    {{/let}}
   </:body>
   <:aside>
     <div class="auk-sidebar">

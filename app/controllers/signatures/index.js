@@ -5,6 +5,14 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+
+const MANDATORY_SORT_OPTION = 'decision-activity';
+const DEFAULT_SORT_OPTIONS = [
+  '-decision-activity.start-date',
+  MANDATORY_SORT_OPTION,
+  '-sign-subcase.sign-marking-activity.piece.name',
+];
 
 export default class SignaturesIndexController extends Controller {
   @service intl;
@@ -26,9 +34,20 @@ export default class SignaturesIndexController extends Controller {
 
   @tracked selectedPieces = new TrackedArray([]);
 
+  @tracked size = PAGINATION_SIZES[1];
+  @tracked page = 0;
+  @tracked sort = DEFAULT_SORT_OPTIONS.join(',');
+  @tracked sortField;
+
   signers = [];
   approvers = [];
   notificationAddresses = [];
+
+  queryParams = [
+    { size: { type: 'number' } },
+    { page: { type: 'number' } },
+    { sort: { type: 'string' } },
+  ];
 
   localStorageKey = 'signatures.shortlist.minister-filter';
 
@@ -76,18 +95,52 @@ export default class SignaturesIndexController extends Controller {
     }
   }
 
-  getDecisionDate = async (piece) => {
-    const decisionActivity = await this.getDecisionActivity(piece);
-    return decisionActivity.startDate;
-  };
+  @action
+  changeSort(sortField) {
+    this.sortField = sortField;
+    // Because we want to group the documents/sign flows per decision
+    // activity we need to keep the sort options in the same order.
+    // Toggle default options in place and add new options in the right
+    // place w.r.t. `decision-activity`
+    if (this.sortField) {
+      let newSortOptions = [...DEFAULT_SORT_OPTIONS];
+      const index = newSortOptions
+            .map((option) => option.replace(/-/g, ''))
+            .indexOf(this.sortField.replace(/-/g, ''));
+      if (index >= 0) {
+        newSortOptions[index] = this.sortField;
+      } else if (this.sortField.includes('sign-subcase.sign-marking-activity.piece.document-container.type')) {
+        newSortOptions = [...new Set([
+          MANDATORY_SORT_OPTION,
+          this.sortField,
+          ...DEFAULT_SORT_OPTIONS,
+        ])];
+      } else {
+        newSortOptions = [...new Set([
+          this.sortField,
+          MANDATORY_SORT_OPTION,
+          ...DEFAULT_SORT_OPTIONS,
+        ])];
+      }
+      this.sort = newSortOptions.join(',');
+    } else {
+      this.sort = DEFAULT_SORT_OPTIONS.join(',');
+    }
+    console.debug(this.sort);
+  }
 
-  getMandateeName = async (piece) => {
-    const decisionActivity = await this.getDecisionActivity(piece);
+  getMandateeNames = async (signFlow) => {
+    const decisionActivity = await signFlow.decisionActivity;
     const subcase = await decisionActivity.subcase;
-    const mandatee = await subcase.requestedBy;
-    const person = await mandatee.person;
-    return person.fullName;
-  };
+    const mandatees = await subcase.mandatees;
+    const persons = await Promise.all(
+      mandatees
+        .toArray()
+        .sort((m1, m2) => m1.priority - m2.priority)
+        .map((mandatee) => mandatee.person)
+    );
+    return persons.map((person) => person.fullName);
+  }
 
   getDecisionActivity = async (piece) => {
     const agendaitem = await this.getAgendaitem(piece);
@@ -95,7 +148,8 @@ export default class SignaturesIndexController extends Controller {
     return treatment.decisionActivity;
   }
 
-  async getAgendaitem(piece) {
+  getAgendaitem = async (pieceOrPromise) => {
+    const piece = await pieceOrPromise;
     const agendaitems = await piece.agendaitems;
     let agendaitem;
     for (let maybeAgendaitem of agendaitems) {
