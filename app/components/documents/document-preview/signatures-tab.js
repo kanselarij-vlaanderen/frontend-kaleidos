@@ -9,7 +9,9 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   @service signatureService;
   @service toaster;
 
+  @tracked signSubcase;
   @tracked signMarkingActivity;
+  @tracked signPreparationActivity;
   @tracked agendaitem;
   @tracked decisionActivity;
   @tracked canManageSignFlow = false;
@@ -27,6 +29,8 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
 
   loadSignatureRelatedData = task(async () => {
     this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+    this.signSubcase = await this.signMarkingActivity?.signSubcase;
+    this.signPreparationActivity = await this.signSubcase?.signPreparationActivity;
     // we want to get the agendaitem this piece is linked to so we can use a treatment of it later
     // it should be the latest version, although any version should yield the same treatment if they are all versions on 1 agenda
     // There are situations where 1 piece is linked to different versions of agendaitems on multiple agendas (postponed)
@@ -45,17 +49,20 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
       await this.signatureService.createSignFlow(
         this.args.piece,
         this.decisionActivity,
+        this.signSubcase,
         this.signers,
         this.approvers,
         this.notificationAddresses,
       );
       await this.args.piece.reload();
       this.signMarkingActivity = await this.args.piece.signMarkingActivity;
+      this.signPreparationActivity = await this.args.piece.signPreparationActivity;
       this.toaster.success(
         this.intl.t('document-was-sent-to-signinghub'),
         this.intl.t('successfully-started-sign-flow')
       )
-    } catch {
+    } catch (e) {
+      console.error(e);
       this.toaster.error(
         this.intl.t('create-sign-flow-error-message'),
         this.intl.t('warning-title')

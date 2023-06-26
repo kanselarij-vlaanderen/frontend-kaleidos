@@ -1,7 +1,8 @@
 <div class="auk-u-m-4">
   {{#if this.loadSignatureRelatedData.isRunning}}
     <Auk::Loader />
-  {{else if this.signMarkingActivity}}
+  {{! {else if this.signMarkingActivity}}
+  {{else if this.signPreparationActivity}}
     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
       <SignaturePill
         @piece={{@piece}}
