@@ -43,6 +43,42 @@
         @onChange={{@row.setAccessLevel}}
       />
     </td>
+    <td>
+    {{#if (or @row.signMarkingActivity @row.hideMarkForSignature)}}
+      <SignaturePill
+        @piece={{@row.piece}}
+        @signMarkingActivity={{@row.signMarkingActivity}}
+      />
+    {{else}}
+    {{#if @row.markedForSignature}}
+      <AuButton
+        @skin="primary"
+        @disabled="true"
+      >
+        {{t "marked-for-signing"}}
+      </AuButton>
+      <AuButton
+        data-test-document-details-row-undo-delete
+        @skin="naked"
+        @icon="undo"
+        @hideText={{true}}
+        {{on "click" (fn @row.setMarkedForSignature false)}}
+      >
+        {{t "undo"}}
+      </AuButton>
+    {{else}}
+      <AuButton
+        @skin="primary"
+        {{on "click" (fn @row.setMarkedForSignature true)}}
+      >
+        {{t "present-for-signing"}}
+      </AuButton>
+
+      {{/if}}
+    
+    {{/if}}
+    </td>
+
   {{else}}
     <td>
       <Utils::Documents::FileTypePill

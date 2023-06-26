@@ -18,6 +18,7 @@
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
               <th>{{t "publicity"}}</th>
+              <th>{{t "signature"}}</th>
             {{else}}
               <th>{{t "file-type"}}</th>
             {{/if}}
@@ -36,6 +37,7 @@
               @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
+              @markForSigning={{this.markForSigning}}
             />
           {{/each}}
         </tbody>
