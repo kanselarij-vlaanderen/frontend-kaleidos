@@ -100,8 +100,7 @@ export default class SignaturesIndexController extends Controller {
     this.sortField = sortField;
     // Because we want to group the documents/sign flows per decision
     // activity we need to keep the sort options in the same order.
-    // Toggle default options in place and add new options in the right
-    // place w.r.t. `decision-activity`
+    // Toggle default options in place and add new options in front.
     if (this.sortField) {
       let newSortOptions = [...DEFAULT_SORT_OPTIONS];
       const index = newSortOptions
@@ -109,18 +108,8 @@ export default class SignaturesIndexController extends Controller {
             .indexOf(this.sortField.replace(/-/g, ''));
       if (index >= 0) {
         newSortOptions[index] = this.sortField;
-      } else if (this.sortField.includes('sign-subcase.sign-marking-activity.piece.document-container.type')) {
-        newSortOptions = [...new Set([
-          MANDATORY_SORT_OPTION,
-          this.sortField,
-          ...DEFAULT_SORT_OPTIONS,
-        ])];
       } else {
-        newSortOptions = [...new Set([
-          this.sortField,
-          MANDATORY_SORT_OPTION,
-          ...DEFAULT_SORT_OPTIONS,
-        ])];
+        newSortOptions = [this.sortField, ...DEFAULT_SORT_OPTIONS];
       }
       this.sort = newSortOptions.join(',');
     } else {
