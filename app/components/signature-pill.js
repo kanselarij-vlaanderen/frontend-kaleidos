@@ -14,8 +14,9 @@ export default class SignaturePillComponent extends Component {
   status = trackedFunction(this, async () => {
     const signMarkingActivity = await this.args.signMarkingActivity;
     const signSubcase = await signMarkingActivity.signSubcase;
+    const signFlow = await signSubcase.signFlow;
 
-    return await (await signSubcase.signFlow).status;
+    return await signFlow.status;
   });
 
   signingHubUrl = trackedFunction(this, async () => {
@@ -25,15 +26,13 @@ export default class SignaturePillComponent extends Component {
     }
 
     const currentUser = this.currentSession.user;
-    const status = this.status.value;
-    const pieceArg = this.args.piece;
+    const piece = await this.args.piece;
     const signMarkingActivity = await this.args.signMarkingActivity;
     const signSubcase = await signMarkingActivity.signSubcase;
-    const piece = await pieceArg;
     const signFlow = await signSubcase.signFlow;
     const signFlowCreator = await signFlow.creator;
 
-    if (piece && signFlowCreator.id === currentUser.id && !status.uri === SIGNED) {
+    if (piece && signFlowCreator.id === currentUser.id && !this.status.uri === SIGNED) {
       const response = await fetch(
         `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
       );
