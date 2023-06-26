@@ -1,8 +1,6 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-import 'cypress-file-upload';
-
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
@@ -372,19 +370,31 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   const filePath = `${folder}/${fileFullName}`;
   // note: double encoding is needed or pdf will be blank (cy.fixture also needs encoding)
 
-  cy.fixture(filePath, 'base64').then((fileContent) => {
-    cy.get('[type=file]').attachFile(
+  // cy.fixture(filePath, 'base64').then((fileContent) => {
+  //   cy.get('[type=file]').attachFile(
+  //     {
+  //       fileContent,
+  //       fileName: fileFullName,
+  //       mimeType,
+  //       encoding: 'base64',
+  //     },
+  //     {
+  //       uploadType: 'input',
+  //     }
+  //   );
+  // });
+  cy.fixture(filePath, {
+    encoding: null,
+  }).then((fileContent) => {
+    cy.get('[type=file]').selectFile(
       {
-        fileContent,
+        contents: fileContent,
         fileName: fileFullName,
         mimeType,
-        encoding: 'base64',
-      },
-      {
-        uploadType: 'input',
       }
     );
   });
+
   cy.wait(`@createNewFile${randomInt}`);
   cy.wait(`@getNewFile${randomInt}`);
   cy.get(auk.loader).should('not.exist');
@@ -432,6 +442,37 @@ function addNewPieceToDecision(oldFileName, file) {
   cy.get(auk.auModal.container).should('not.exist');
   cy.get(auk.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
+}
+
+/**
+ * @description Add a new version to a decision.
+ * @name addNewPieceToGeneratedDecision
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ */
+function addNewPieceToGeneratedDecision(oldFileName) {
+  cy.log('addNewPieceToGeneratedDecision');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
+  // cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+
+  cy.get(document.documentCard.name.value).contains(oldFileName)
+    .parents(document.documentCard.card)
+    .within(() => {
+      cy.get(document.documentCard.actions)
+        .should('not.be.disabled')
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.generateNewPiece).forceClick();
+    });
+
+  cy.wait(`@patchDecisionActivity_${randomInt}`);
+  // cy.wait(`@getPreviousPiece_${randomInt}`);
+  cy.get(auk.auModal.container).should('not.exist');
+  cy.get(auk.loader).should('not.exist');
+  cy.log('/addNewPieceToGeneratedDecision');
 }
 
 /**
@@ -547,6 +588,7 @@ Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);
 Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
+Cypress.Commands.add('addNewPieceToGeneratedDecision', addNewPieceToGeneratedDecision);
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);

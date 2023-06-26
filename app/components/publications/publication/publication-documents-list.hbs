@@ -1,18 +1,22 @@
 <Auk::List class="au-u-margin-top-tiny">
   {{#if this.sumOfPiecesShouldBlock.value}}
-    <Auk::Alert
+    <AuAlert
       @title={{t "warning-title"}}
-      @message={{t "sum-of-attachments-exceeds-maximum-threshold"}}
       @skin="warning"
       @icon="alert-triangle"
-    />
+      @size="small"
+    >
+      <p>{{t "sum-of-attachments-exceeds-maximum-threshold"}}</p>
+    </AuAlert>
   {{else if this.sumOfPiecesShouldWarn.value}}
-    <Auk::Alert
+    <AuAlert
       @title={{t "warning-title"}}
-      @message={{t "sum-of-attachments-exceeds-warning-threshold"}}
       @skin="warning"
       @icon="alert-triangle"
-    />
+      @size="small"
+    >
+      <p>{{t "sum-of-attachments-exceeds-warning-threshold"}}</p>
+    </AuAlert>
   {{/if}}
   {{#each @pieces as |piece|}}
     <Auk::List::Item data-test-publication-document-list-piece>
@@ -20,7 +24,11 @@
         class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
       >
         <div class="auk-o-flex auk-o-flex--spaced">
-          <Auk::Badge @icon="paperclip" @size="regular" />
+          <AuBadge
+            @icon="paperclip"
+            @skin="gray"
+            @size="small"
+          />
           <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
           <AuPill
             @skin={{this.fileSizePillSkin piece.file.size}}

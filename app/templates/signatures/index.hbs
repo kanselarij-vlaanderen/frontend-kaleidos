@@ -8,6 +8,7 @@
       </AuButton>
     {{/if}}
     <AuButton
+      data-test-route-signatures-open-minister-filter
       @skin="secondary"
       @icon="filter"
       {{on "click" this.openFilterModal}}
@@ -26,6 +27,7 @@
 {{/in-element}}
 
 <KDataTable
+  data-test-route-signatures-data-table
   @scrollable={{true}}
   @stickyHeader={{true}}
   @clickable={{false}}
@@ -62,7 +64,7 @@
         </span>
       </AuCheckbox>
     </td>
-    <td>
+    <td data-test-route-signatures-row-name>
       <AuLink @route="document" @model={{piece.id}}>
         {{piece.name}}
       </AuLink>
@@ -78,7 +80,7 @@
         {{/let}}
       </AuPill>
     </td>
-    <td>
+    <td data-test-route-signatures-row-mandatee>
       {{#let (await (this.getMandateeName piece)) as |name|}}
         {{#if name}}
           {{name}}
@@ -90,6 +92,7 @@
     <td>{{date (await (this.getDecisionDate piece))}}</td>
     <td>
       <AuButton
+        data-test-route-signatures-row-open-sidebar
         @skin="naked"
         @icon="sign"
         {{on "click" (fn this.openSidebarSingleItem piece)}}
@@ -105,13 +108,14 @@
           {{t "start-signing"}}
         </h4>
         <Auk::Button
+          data-test-route-signatures-sidebar-close
           @icon="x"
           @skin="borderless"
           @layout="icon-only"
           {{on "click" this.closeSidebar}}
         />
       </div>
-      <div class="auk-sidebar__body">
+      <div data-test-route-signatures-sidebar-info class="auk-sidebar__body">
         {{#unless this.selectedPieces.length}}
           <p class="au-u-muted auk-u-mt-2">
             {{or this.piece.documentContainer.type.label (t "no-document-type")}}
@@ -121,6 +125,7 @@
           <h5 class="auk-h4">{{this.piece.name}}</h5>
           <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
             <AuLink
+              data-test-route-signatures-sidebar-preview
               @skin="naked"
               @icon="book"
               @route="document"
@@ -129,6 +134,7 @@
               {{t "preview"}}
             </AuLink>
             <AuLink
+              data-test-route-signatures-sidebar-last-agendaitem
               @skin="naked"
               @icon="document"
               @route="agenda.agendaitems.agendaitem"
@@ -158,6 +164,7 @@
         <AuToolbar as |Group|>
           <Group>
             <AuButton
+              data-test-route-signatures-sidebar-start-signflow
               @loading={{this.createSignFlow.isRunning}}
               @disabled={{not this.signers.length}}
               {{on "click" this.createSignFlow.perform}}
@@ -197,7 +204,7 @@
             {{t "clear-filter"}}
           </AuButton>
         {{/if}}
-        <AuButton @icon="filter" {{on "click" this.applyFilter}}>
+        <AuButton data-test-route-signatures-apply-filter @icon="filter" {{on "click" this.applyFilter}}>
           {{t "filter-content"}}
         </AuButton>
       </Group>

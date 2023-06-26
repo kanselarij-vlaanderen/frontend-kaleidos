@@ -49,6 +49,7 @@ export default {
     MB: 'https://data.vlaanderen.be/id/concept/AardWetgeving/MinisterieelBesluit',
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
+    NOTULEN: 'http://themis.vlaanderen.be/id/concept/document-type/d638e0dc-c879-4a75-9485-9e6970a83d67',
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
@@ -135,6 +136,7 @@ export default {
     MINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0', // Minister
     VOORZITTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
     GEMEENSCHAPSMINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
+    VICEMINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03df', // Viceminister-president
   },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {

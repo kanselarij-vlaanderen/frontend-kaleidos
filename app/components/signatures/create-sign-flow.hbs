@@ -20,6 +20,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-signers-edit
             @skin="secondary"
             @icon="pencil"
             @loading={{this.loadSigners.isPending}}
@@ -40,10 +41,12 @@
       {{else}}
         {{#each this.signers as |signer|}}
           <Auk::List::Item
+            data-test-signatures-create-sign-flow-signers-item
             class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
           >
             {{signer.person.fullName}}
             <AuButton
+              data-test-signatures-create-sign-flow-signers-remove
               @skin="naked"
               @alert={{true}}
               @hideText={{true}}
@@ -75,6 +78,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-approvers-add
             @skin="secondary"
             @icon="plus"
             {{on "click" (toggle "showApproversModal" this)}}
@@ -88,11 +92,13 @@
   <Auk::Panel::Body class="auk-u-p-0">
     <Auk::List @bordered={{true}}>
       {{#each this.approvers as |approver|}}
-        <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{approver}}
-          </span>
+        <Auk::List::Item
+          data-test-signatures-create-sign-flow-approvers-item
+          class="auk-o-flex--justify-between"
+        >
+          <Auk::AbbreviatedText @text={{approver}} @maxLength={{35}} />
           <AuButton
+            data-test-signatures-create-sign-flow-approvers-remove
             @skin="naked"
             @alert={{true}}
             @hideText={{true}}
@@ -123,6 +129,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-notification-adresses-add
             @skin="secondary"
             @icon="plus"
             {{on "click" (toggle "showNotificationAddressesModal" this)}}
@@ -136,11 +143,13 @@
   <Auk::Panel::Body class="auk-u-p-0">
     <Auk::List @bordered={{true}}>
       {{#each this.notificationAddresses as |notificationAddress|}}
-        <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{notificationAddress}}
-          </span>
+        <Auk::List::Item
+          data-test-signatures-create-sign-flow-notification-adresses-item
+          class="auk-o-flex--justify-between"
+        >
+          <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
           <AuButton
+            data-test-signatures-create-sign-flow-notification-adresses-remove
             @skin="naked"
             @alert={{true}}
             @hideText={{true}}

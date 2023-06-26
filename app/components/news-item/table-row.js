@@ -12,10 +12,27 @@ export default class NewsItemTableRowComponent extends Component {
 
   @tracked isOpenEditView = false;
   @tracked notaOrVisieNota;
+  @tracked decisionActivity;
 
   constructor() {
     super(...arguments);
     this.loadNotaOrVisienota.perform();
+    this.loadDecisionActivity.perform();
+  }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.decisionResultCode;
+  }
+
+  get class() {
+    const classes = ['lt-row'];
+    if (this.decisionActivity?.get('isPostponed') || this.decisionActivity?.get('isRetracted')) {
+      classes.push('auk-u-opacity--1/3');
+    }
+    return classes.join(' ');
   }
 
   @task

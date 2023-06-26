@@ -28,6 +28,10 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
+    if (ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true) {
+      this.route('minutes', { path: '/notulen', });
+    }
+
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
@@ -111,9 +115,6 @@ Router.map(function() {
   this.route('styleguide', function() {
     this.route('accordion');
     this.route('accordion-panel');
-    this.route('alert-skins');
-    this.route('alert-types');
-    this.route('alert-stack');
     this.route('avatar');
     this.route('brand');
     this.route('badge');

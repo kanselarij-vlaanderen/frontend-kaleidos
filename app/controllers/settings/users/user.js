@@ -56,14 +56,16 @@ export default class SettingsUsersUserController extends Controller {
 
   @action
   async linkPerson() {
-    this.model.person = this.selectedPerson;
-    await this.model.save();
+    this.selectedPerson.user = this.model;
+    await this.selectedPerson.save();
   }
 
   @action
   async unlinkPerson() {
-    this.model.person = null;
+    const person = await this.model.person;
+    person.user = null;
     this.selectedPerson = null;
-    await this.model.save();
+    await person.save();
+    await this.model.belongsTo('person').reload();
   }
 }

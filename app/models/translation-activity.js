@@ -13,18 +13,23 @@ export default class TranslationActivity extends Model {
     async: true,
   })
   subcase;
-  @belongsTo('request-activity', { inverse: 'translationActivity', async: true })
+  @belongsTo('request-activity', {
+    inverse: 'translationActivity',
+    async: true,
+  })
   requestActivity;
   @belongsTo('language', { inverse: null, async: true }) language;
 
   @hasMany('piece', {
     inverse: 'translationActivitiesUsedBy',
     async: true,
+    polymorphic: true
   })
   usedPieces;
   @hasMany('piece', {
     inverse: 'translationActivityGeneratedBy',
     async: true,
+    polymorphic: true
   })
   generatedPieces;
 

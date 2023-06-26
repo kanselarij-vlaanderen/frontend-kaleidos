@@ -47,6 +47,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked defaultAccessLevel;
   @tracked pieces = A();
 
+  @tracked hasSignFlow = false;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
@@ -142,6 +144,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadSignatureRelatedData() {
     this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
   }
 
   @task
@@ -183,7 +186,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
-    this.newPiece = this.store.createRecord('piece', {
+    this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
       created: now,
       modified: now,
       file: file,

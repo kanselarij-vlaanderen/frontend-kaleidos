@@ -10,13 +10,13 @@ services:
     volumes:
       - /usr/share/elasticsearch/data
   e2e-electron:
-    image: "kanselarij/kaleidos-cypress:2.0.0"
+    image: "kanselarij/kaleidos-cypress:3.0.0"
     ipc: host
     environment:
       NO_COLOR: 1
     volumes:
       - ../cypress:/app/cypress
-      - ../cypress.test.json:/app/cypress.json
+      - ../cypress.test.config.js:/app/cypress.config.js
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -79,3 +79,9 @@ services:
   mail-delivery:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  decision-report-generation:
+    user: ${HOST_UID_GID}
+  decision-extraction:
+    user: ${HOST_UID_GID}
+  chrome-browser:
+    user: ${HOST_UID_GID}
