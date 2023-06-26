@@ -55,67 +55,67 @@
           <th class="auk-table__col--2">{{t "status"}}</th>
           <th class="auk-table__col--1"></th>
           </:header>
-          <:body as |signFlow|>
-            {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
-              {{#let signMarkingActivity.piece as |piece|}}
-                <td>
-                  {{#if piece}}
-                    {{piece.name}}
-                    {{#if (this.isConfidential piece.accessLevel)}}
-                      <AccessLevelPill
-                        @accessLevel={{piece.accessLevel}}
-                        @isEditable={{false}}
-                      />
-                    {{/if}}
-                  {{/if}}
-                </td>
-                <td>
-                  <AuPill @size="small">
-                    {{#let piece.documentContainer.type as |type|}}
-                      {{#if type}}
-                        {{type.label}}
-                      {{else}}
-                        {{t "no-document-type"}}
-                      {{/if}}
-                    {{/let}}
-                  </AuPill>
-                </td>
-              {{/let}}
+        <:body as |signFlow|>
+          {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+            {{#let signMarkingActivity.piece as |piece|}}
               <td>
-                {{#let (await (this.getMandateeNames signFlow)) as |names|}}
-                  {{#if names}}
-                    {{join ", " names}}
+                {{#if piece}}
+                  {{piece.name}}
+                  {{#if (this.isConfidential piece.accessLevel)}}
+                    <AccessLevelPill
+                      @accessLevel={{piece.accessLevel}}
+                      @isEditable={{false}}
+                    />
+                  {{/if}}
+                {{/if}}
+              </td>
+              <td>
+                {{#let piece.documentContainer.type as |type|}}
+                  {{#if type}}
+                    <AuPill @size="small">
+                      {{type.label}}
+                    </AuPill>
                   {{else}}
                     -
                   {{/if}}
                 {{/let}}
               </td>
-              <td>
-                {{date signFlow.decisionActivity.startDate}}
-              </td>
-              <td>
-                <SignaturePill
-                  @piece={{signMarkingActivity.piece}}
-                  @signMarkingActivity={{signMarkingActivity}}
-                />
-              </td>
             {{/let}}
-              <td class="auk-u-text-align--right">
-                <AuButton
-                  @skin="naked"
-                  @icon="chevron-right"
-                  @hideText={{true}}
-                >
-                  {{t "open"}}
-                </AuButton>
-              </td>
-                </:body>
-              </KDataTable>
-            {{else}}
-              <Auk::EmptyState
-                @bordered={{true}}
-                @message={{t "no-results-found-modify-filter"}}
+            <td>
+              {{#let (await (this.getMandateeNames signFlow)) as |names|}}
+                {{#if names}}
+                  {{join ", " names}}
+                {{else}}
+                  -
+                {{/if}}
+              {{/let}}
+            </td>
+            <td>
+              {{date signFlow.decisionActivity.startDate}}
+            </td>
+            <td>
+              <SignaturePill
+                @piece={{signMarkingActivity.piece}}
+                @signMarkingActivity={{signMarkingActivity}}
               />
-            {{/if}}
+            </td>
+          {{/let}}
+          <td class="auk-u-text-align--right">
+            <AuButton
+              @skin="naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+            >
+              {{t "open"}}
+            </AuButton>
+          </td>
+        </:body>
+      </KDataTable>
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-filter"}}
+      />
+    {{/if}}
   </m.content>
 </AuMainContainer>

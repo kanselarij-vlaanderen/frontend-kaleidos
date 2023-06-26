@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SignaturesOngoingRoute extends Route {
   @service currentSession;
@@ -31,14 +32,26 @@ export default class SignaturesOngoingRoute extends Route {
 
   constructor() {
     super(...arguments);
+    this.lastParams = new Snapshot();
   }
 
   async model(params) {
-    let filter = {
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'page')
+      )
+    ) {
+      params.page = 0;
+    }
+
+    const filter = {
       creator: {
         ':id:': this.currentSession.user.id,
       },
     }
+
     if (params.mandatees?.length > 0) {
       filter['decision-activity'] = {
         'subcase': {
@@ -55,7 +68,10 @@ export default class SignaturesOngoingRoute extends Route {
         ':uri:': params.statuses.join(','),
       }
     }
+    this.lastParams.commit();
+
     return this.store.query('sign-flow', {
+      'filter[sign-subcase][sign-marking-activity][:has:piece]': 'yes',
       filter: filter,
       include: [
         'creator',
@@ -82,10 +98,19 @@ export default class SignaturesOngoingRoute extends Route {
     });
     // Disable bubbling of loading event to prevent parent loading route to be shown.
     // Otherwise it causes a 'flickering' effect because the search filters disappear.
-    if (transition.from && transition.to && transition.queryParamsOnly) {
-      return transition.from.queryParams?.filter === transition.to.queryParams?.filter;
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
     } else {
       return true;
     }
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    if (controller.page !== this.lastParams.committed.page) {
+      controller.page = this.lastParams.committed.page;
+    }
+    controller.mandatees = this.lastParams.committed.mandatees;
+    controller.statuses = this.lastParams.committed.statuses;
   }
 }
