@@ -50,7 +50,7 @@ export default class SignaturePillComponent extends Component {
     } else if (this.isPrepared) {
       return this.intl.t('sent');
     } else if (this.isMarked) {
-      return this.intl.t('to-sign');
+      return this.intl.t('marked-for-signing');
     }
     return "";
   }
@@ -74,7 +74,7 @@ export default class SignaturePillComponent extends Component {
       this.isRefused = signRefusalActivities?.length;
       this.isCancelled = !!signCancellationActivity;
 
-      if (!this.isRefused) {
+      if (this.isPrepared && !this.isRefused && !this.isCancelled) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
