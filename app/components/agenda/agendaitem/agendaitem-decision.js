@@ -193,7 +193,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   /**
-   * Needed for uploading a PDF manually 
+   * Needed for uploading a PDF manually
    */
   @action
   async attachReportPdf(piece) {
@@ -237,7 +237,7 @@ export default class AgendaitemDecisionComponent extends Component {
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
       editorInterface.setHtmlContent(this.betreftPiecePart.value);
-    
+
       // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
       editorInterface.setHtmlContent(this.editorInstanceBetreft.htmlContent);
@@ -509,7 +509,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA;
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
   @action
