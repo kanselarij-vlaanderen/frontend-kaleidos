@@ -2,13 +2,13 @@
   <Auk::Loader />
 {{else}}
   <Auk::CheckboxTree
-    @label={{t (or @label "current-ministers")}}
+    @label={{or @label (t "current-ministers")}}
     @items={{this.currentMinisters}}
     @itemStructure={{hash label="fullName"}}
     @selectedItems={{this.selectedCurrentMinisters}}
     @didUpdate={{this.onChangeCurrentMinisters}}
   />
-  {{#if (not @hidePastMinistersOption)}}
+  {{#if @showPastMinisters}}
     {{#if this.pastMinistersHidden}}
       <AuButton
         data-test-search-minister-filter-past-ministers
