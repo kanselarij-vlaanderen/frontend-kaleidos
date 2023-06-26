@@ -1,5 +1,4 @@
 import Service, { inject as service } from '@ember/service';
-import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
 
 export default class SignatureService extends Service {
   @service store;
@@ -7,12 +6,12 @@ export default class SignatureService extends Service {
   @service intl;
   @service currentSession;
 
-  async createSignFlow(piece, decisionActivity, signers, approvers, notified) {
+  async createSignFlow(piece, decisionActivity, signSubcase, signers, approvers, notified) {
     // Create sign flow, sign subcase and marking activity
-    const { signFlow, signSubcase } = await this.markDocumentForSignature(
-      piece,
-      decisionActivity
-    );
+    // const { signFlow, signSubcase } = await this.markDocumentForSignature(
+    //   piece,
+    //   decisionActivity
+    // );
 
     // Attach signers
     await Promise.all(
@@ -41,11 +40,11 @@ export default class SignatureService extends Service {
     await signSubcase.save();
 
     // Prepare sign flow: create preparation activity and send to SH
-    const response = await uploadPiecesToSigninghub(signFlow, [piece]);
-    if (!response.ok) {
-      await this.removeSignFlow(piece);
-      throw new Error('Failed to upload piece to Signing Hub');
-    }
+    // const response = await uploadPiecesToSigninghub(signFlow, [piece]);
+    // if (!response.ok) {
+    //   await this.removeSignFlow(piece);
+    //   throw new Error('Failed to upload piece to Signing Hub');
+    // }
   }
 
   async markDocumentForSignature(piece, decisionActivity) {
