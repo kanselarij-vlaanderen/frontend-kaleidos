@@ -15,12 +15,12 @@ export default class SignaturePillComponent extends Component {
     const signMarkingActivity = await this.args.signMarkingActivity;
     const signSubcase = await signMarkingActivity.signSubcase;
 
-    return (await (await signSubcase.signFlow).status).uri;
+    return await (await signSubcase.signFlow).status;
   });
 
   signingHubUrl = trackedFunction(this, async () => {
     const { SIGNED, REFUSED } = constants.SIGNFLOW_STATUSES;
-    if (!this.status.value || this.status.value === REFUSED) {
+    if (!this.status.value || this.status.value.uri === REFUSED) {
       return null;
     }
 
@@ -33,7 +33,7 @@ export default class SignaturePillComponent extends Component {
     const signFlow = await signSubcase.signFlow;
     const signFlowCreator = await signFlow.creator;
 
-    if (piece && signFlowCreator.id === currentUser.id && !status === SIGNED) {
+    if (piece && signFlowCreator.id === currentUser.id && !status.uri === SIGNED) {
       const response = await fetch(
         `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
       );
@@ -48,43 +48,12 @@ export default class SignaturePillComponent extends Component {
 
   get skin() {
     const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    if (this.status.value === REFUSED || this.status.value === CANCELED) {
+    if (this.status.value.uri === REFUSED || this.status.value.uri === CANCELED) {
       return 'error';
     } else if (this.signingHubUrl.value) {
       return 'link';
     } else {
       return 'ongoing';
-    }
-  }
-
-  get title() {
-    const {
-      MARKED,
-      PREPARED,
-      to_be_approved,
-      to_be_signed,
-      SIGNED,
-      REFUSED,
-      CANCELED,
-    } = constants.SIGNFLOW_STATUSES;
-
-    switch (this.status.value) {
-      case MARKED:
-        return this.intl.t('to-sign');
-      case PREPARED:
-        return this.intl.t('sent');
-      case to_be_approved:
-        return this.intl.t('to-approve');
-      case to_be_signed:
-        return this.intl.t('to-sign');
-      case SIGNED:
-        return this.intl.t('signed');
-      case REFUSED:
-        return this.intl.t('refused');
-      case CANCELED:
-        return this.intl.t('cancelled');
-      default:
-        return '';
     }
   }
 }
