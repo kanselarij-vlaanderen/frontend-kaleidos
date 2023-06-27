@@ -48,7 +48,7 @@ export default class SignaturesOngoingController extends Controller {
   }
 
   @action
-  async navigateToPublicationFlow (signFlow) {
+  async navigateToSignFlow (signFlow) {
     const signSubcase = await signFlow.signSubcase;
     const signMarkingActivity = await signSubcase.signMarkingActivity;
     const piece = await signMarkingActivity.piece;
