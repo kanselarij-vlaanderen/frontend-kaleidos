@@ -248,21 +248,16 @@ export default class SignaturesIndexController extends Controller {
 
   createSignFlow = task(async () => {
     try {
-        await Promise.all(this.selectedPieces.map(async (piece) => {
-          const decisionActivity = await this.getDecisionActivity(piece);
-          await this.signatureService.createSignFlow(
-            piece,
-            decisionActivity,
-            this.signers,
-            this.approvers,
-            this.notificationAddresses
-          );
-        }));
-      } else if (this.piece) {
       if (this.selectedSignFlows.length) {
         await this.signatureService.createSignFlow(
-          this.piece,
-          this.decisionActivity,
+          this.selectedSignFlows,
+          this.signers,
+          this.approvers,
+          this.notificationAddresses,
+        );
+      } else if (this.signFlow) {
+        await this.signatureService.createSignFlow(
+          [this.signFlow],
           this.signers,
           this.approvers,
           this.notificationAddresses
