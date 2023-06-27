@@ -16,12 +16,12 @@
       {{t "filter-on-signer"}}
     </AuButton>
   {{/unless}}
-  {{#if this.selectedPieces.length}}
+  {{#if this.selectedSignFlows.length}}
     <AuButton
       @icon="sign"
       {{on "click" this.openSidebarMultiItem}}
     >
-      {{t "start-signing-for-n-selected-documents" n=this.selectedPieces.length}}
+      {{t "start-signing-for-n-selected-documents" n=this.selectedSignFlows.length}}
     </AuButton>
   {{/if}}
 {{/in-element}}
@@ -79,8 +79,8 @@
       {{#let signMarkingActivity.piece as |piece|}}
         <td>
           <AuCheckbox
-            @checked={{includes piece this.selectedPieces}}
-            @onChange={{fn this.toggleItem piece}}
+            @checked={{includes signFlow this.selectedSignFlows}}
+            @onChange={{fn this.toggleItem signFlow}}
           >
             <span class="auk-u-sr-only">
               {{t "select"}}
@@ -123,7 +123,7 @@
             data-test-route-signatures-row-open-sidebar
             @skin="naked"
             @icon="sign"
-            {{on "click" (fn this.openSidebarSingleItem piece)}}
+            {{on "click" (fn this.openSidebarSingleItem signFlow piece)}}
           >
             {{t "start-signing"}}
           </AuButton>
@@ -146,7 +146,7 @@
         />
       </div>
       <div data-test-route-signatures-sidebar-info class="auk-sidebar__body">
-        {{#unless this.selectedPieces.length}}
+        {{#unless this.selectedSignFlows.length}}
           <p class="au-u-muted auk-u-mt-2">
             {{or this.piece.documentContainer.type.label (t "no-document-type")}}
             -
@@ -181,7 +181,7 @@
             @onChangeApprovers={{fn (mut this.approvers)}}
             @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
           />
-        {{else if this.selectedPieces.length}}
+        {{else if this.selectedSignFlows.length}}
           <Signatures::CreateSignFlow
             @decisionActivities={{this.selectedDecisionActivities.value}}
             @onChangeSigners={{fn (mut this.signers)}}

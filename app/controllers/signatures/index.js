@@ -21,6 +21,7 @@ export default class SignaturesIndexController extends Controller {
   @service signatureService;
   @service toaster;
 
+  @tracked signFlow = null;
   @tracked piece = null;
   @tracked decisionActivity = null;
   @tracked agendaitem = null;
@@ -32,7 +33,7 @@ export default class SignaturesIndexController extends Controller {
   @tracked selectedMinisters = [];
   @tracked filteredMinisters = [];
 
-  @tracked selectedPieces = new TrackedArray([]);
+  @tracked selectedSignFlows = new TrackedArray([]);
 
   @tracked size = PAGINATION_SIZES[1];
   @tracked page = 0;
@@ -53,7 +54,7 @@ export default class SignaturesIndexController extends Controller {
 
   selectedDecisionActivities = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedPieces.map(async (piece) => await this.getDecisionActivity(piece))
+      this.selectedSignFlows.map(async (signFlow) => await signFlow.decisionActivity)
     );
   });
 
@@ -62,11 +63,11 @@ export default class SignaturesIndexController extends Controller {
   }
 
   get isSelectedAllItems() {
-    return this.model.every((piece) => this.selectedPieces.indexOf(piece) >= 0);
+    return this.model.every((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
 
   get isSelectedSomeItems() {
-    return this.model.some((piece) => this.selectedPieces.indexOf(piece) >= 0);
+    return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
 
   @action
@@ -74,24 +75,24 @@ export default class SignaturesIndexController extends Controller {
     this.clearSidebarContentSingleItem();
     if (this.isSelectedAllItems) {
       this.closeSidebar();
-      this.selectedPieces = new TrackedArray([]);
+      this.selectedSignFlows = new TrackedArray([]);
     } else {
-      this.selectedPieces = new TrackedArray(this.model.toArray());
+      this.selectedSignFlows = new TrackedArray(this.model.toArray());
     }
   }
 
   @action
   toggleItem(item) {
     this.clearSidebarContentSingleItem();
-    const index = this.selectedPieces.indexOf(item);
+    const index = this.selectedSignFlows.indexOf(item);
     if (index >= 0) {
-      if (this.selectedPieces.length === 1) {
+      if (this.selectedSignFlows.length === 1) {
         // The untoggled checkbox is the last one, close the sidebar
         this.closeSidebar();
       }
-      this.selectedPieces.splice(index, 1);
+      this.selectedSignFlows.splice(index, 1);
     } else {
-      this.selectedPieces.push(item);
+      this.selectedSignFlows.push(item);
     }
   }
 
@@ -115,7 +116,6 @@ export default class SignaturesIndexController extends Controller {
     } else {
       this.sort = DEFAULT_SORT_OPTIONS.join(',');
     }
-    console.debug(this.sort);
   }
 
   getMandateeNames = async (signFlow) => {
@@ -163,6 +163,7 @@ export default class SignaturesIndexController extends Controller {
   }
 
   clearSidebarContentSingleItem() {
+    this.signFlow = null;
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
@@ -174,15 +175,16 @@ export default class SignaturesIndexController extends Controller {
   }
 
   clearSidebarContentMultiItem() {
-    this.selectedPieces = new TrackedArray([]);
+    this.selectedSignFlows = new TrackedArray([]);
     this.signers = [];
     this.approvers = [];
     this.notificationAddresses = [];
   }
 
   @action
-  async openSidebarSingleItem(piece) {
+  async openSidebarSingleItem(signFlow, piece) {
     this.clearSidebarContentMultiItem();
+    this.signFlow = signFlow;
     this.piece = piece;
     [this.meeting, this.agenda, this.agendaitem] =
       await this.getAgendaitemRouteModels(piece);
@@ -246,7 +248,6 @@ export default class SignaturesIndexController extends Controller {
 
   createSignFlow = task(async () => {
     try {
-      if (this.selectedPieces.length) {
         await Promise.all(this.selectedPieces.map(async (piece) => {
           const decisionActivity = await this.getDecisionActivity(piece);
           await this.signatureService.createSignFlow(
@@ -258,6 +259,7 @@ export default class SignaturesIndexController extends Controller {
           );
         }));
       } else if (this.piece) {
+      if (this.selectedSignFlows.length) {
         await this.signatureService.createSignFlow(
           this.piece,
           this.decisionActivity,
@@ -268,7 +270,7 @@ export default class SignaturesIndexController extends Controller {
       }
       this.closeSidebar();
       await this.router.refresh(this.router.routeName);
-      if (this.selectedPieces.length > 1) {
+      if (this.selectedSignFlows.length > 1) {
         this.toaster.success(
           this.intl.t('documents-were-sent-to-signinghub'),
           this.intl.t('successfully-started-sign-flows')
