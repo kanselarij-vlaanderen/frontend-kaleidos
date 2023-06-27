@@ -10,7 +10,7 @@ export default class SignaturesStatusFilterComponent extends Component {
   @service intl;
   @service store;
   @tracked statusFilterItems = [];
-  selectedStatuses = [];
+  @tracked selectedStatuses = [];
 
   constructor() {
     super(...arguments);
@@ -36,7 +36,7 @@ export default class SignaturesStatusFilterComponent extends Component {
           value: status.id
         };
         this.statusFilterItems.push(statusItem);
-        if (this.args.statuses?.indexOf(statusItem.value) > -1) {
+        if (this.args.selectedStatusIds?.indexOf(statusItem.value) > -1) {
           this.selectedStatuses.push(statusItem);
         }
       }

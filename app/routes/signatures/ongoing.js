@@ -48,7 +48,7 @@ export default class SignaturesOngoingRoute extends Route {
 
     const filter = {
       creator: {
-        // ':id:': this.currentSession.user.id,
+        ':id:': this.currentSession.user.id,
       },
     }
 

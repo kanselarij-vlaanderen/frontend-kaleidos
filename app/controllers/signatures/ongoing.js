@@ -34,7 +34,7 @@ export default class SignaturesOngoingController extends Controller {
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[1];
-  @tracked sort = 'decision-activity.start-date';
+  @tracked sort = '-decision-activity.start-date';
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
@@ -52,19 +52,27 @@ export default class SignaturesOngoingController extends Controller {
     const signSubcase = await signFlow.signSubcase;
     const signMarkingActivity = await signSubcase.signMarkingActivity;
     const piece = await signMarkingActivity.piece;
+    const status = await signFlow.status;
 
     if (piece) {
-      const response = await fetch(
-        `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-      );
-      if (response.ok) {
-        const result = await response.json();
-        window.location.href = result.url;
-      } else {
+      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
         this.router.transitionTo(
           'document',
           piece.id
         );
+      } else {
+        const response = await fetch(
+          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          window.location.href = result.url;
+        } else {
+          this.router.transitionTo(
+            'document',
+            piece.id
+          );
+        }
       }
     }
   }

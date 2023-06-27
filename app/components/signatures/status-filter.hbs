@@ -1,6 +1,8 @@
-<Auk::CheckboxTree
-  @label={{t "th-select-all"}}
-  @items={{this.statusFilterItems}}
-  @selectedItems={{this.selectedStatuses}}
-  @didUpdate={{this.onChangeStatus}}
-/>
+{{#if this.statusFilterItems}}
+  <Auk::CheckboxTree
+    @label={{t "th-select-all"}}
+    @items={{this.statusFilterItems}}
+    @selectedItems={{this.selectedStatuses}}
+    @didUpdate={{this.onChangeStatus}}
+  />
+{{/if}}
