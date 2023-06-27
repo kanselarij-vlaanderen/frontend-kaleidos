@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
-import { trackedFunction } from 'ember-resources/util/function';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { task } from 'ember-concurrency';
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
@@ -11,45 +12,50 @@ export default class SignaturePillComponent extends Component {
   @service intl;
   @service currentSession;
 
-  status = trackedFunction(this, async () => {
-    const signMarkingActivity = await this.args.signMarkingActivity;
-    const signSubcase = await signMarkingActivity.signSubcase;
-    const signFlow = await signSubcase.signFlow;
-
-    return await signFlow.status;
-  });
-
-  signingHubUrl = trackedFunction(this, async () => {
+  loadData = task(async () => {
     const { SIGNED, REFUSED } = constants.SIGNFLOW_STATUSES;
-    if (!this.status.value || this.status.value.uri === REFUSED) {
-      return null;
-    }
-
-    const currentUser = this.currentSession.user;
-    const piece = await this.args.piece;
     const signMarkingActivity = await this.args.signMarkingActivity;
+    if (!signMarkingActivity) return;
     const signSubcase = await signMarkingActivity.signSubcase;
     const signFlow = await signSubcase.signFlow;
-    const signFlowCreator = await signFlow.creator;
+    const status = await signFlow.status;
+    let signingHubUrl = null;
 
-    if (piece && signFlowCreator.id === currentUser.id && !this.status.uri === SIGNED) {
-      const response = await fetch(
-        `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-      );
-      if (response.ok) {
-        const result = await response.json();
-        return result.url;
+    if (status.uri !== REFUSED) {
+      const piece = await this.args.piece;
+      const signFlow = await signSubcase.signFlow;
+      const signFlowCreator = await signFlow.creator;
+      const currentUser = this.currentSession.user;
+      if (
+        piece &&
+        signFlowCreator.id === currentUser.id &&
+        status.uri !== SIGNED
+      ) {
+        const response = await fetch(
+          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          signingHubUrl = result.url;
+        }
       }
-    } else {
-      return null;
     }
+
+    return {
+      signingHubUrl,
+      status,
+    };
   });
+
+  data = trackedTask(this, this.loadData);
 
   get skin() {
     const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    if (this.status.value.uri === REFUSED || this.status.value.uri === CANCELED) {
+    const statusUri = this.data.value.status.uri;
+    const signingHubUrl = this.data.value.signingHubUrl;
+    if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (this.signingHubUrl.value) {
+    } else if (signingHubUrl) {
       return 'link';
     } else {
       return 'ongoing';
