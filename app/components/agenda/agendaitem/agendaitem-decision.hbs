@@ -57,7 +57,7 @@
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
-          @didDeleteContainer={{perform this.loadReport}}
+          @didDeleteContainer={{this.didDeleteReport}}
         />
       {{else}}
         <Auk::Loader />
@@ -154,7 +154,7 @@
             @onOpenUploadModal={{@onOpenUploadModal}}
             @onAddPiece={{this.attachNewReportVersionAsPiece}}
             @pieceSubtype="report"
-            @didDeleteContainer={{perform this.loadReport}}
+            @didDeleteContainer={{this.didDeleteReport}}
             @bordered={{false}}
           />
         </Auk::Panel::Body>

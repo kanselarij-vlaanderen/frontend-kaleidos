@@ -154,6 +154,13 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   @action
+  async didDeleteReport() {
+    await this.loadReport.perform();
+    this.setBetreftEditorContent('');
+    this.setBeslissingEditorContent('');
+  }
+
+  @action
   async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
