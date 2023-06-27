@@ -32,27 +32,11 @@ export default class SignaturesOngoingController extends Controller {
     },
   ];
 
-  statusFilterItems = [
-    {
-      label: this.intl.t('signing-status-prepared'),
-      value: CONSTANTS.SIGNFLOW_STATUSES.PREPARED,
-    }, 
-    {
-      label: this.intl.t('signing-status-marked'),
-      value: CONSTANTS.SIGNFLOW_STATUSES.MARKED,
-    },
-    {
-      label: this.intl.t('signing-status-signed'),
-      value: CONSTANTS.SIGNFLOW_STATUSES.SIGNED,
-    },
-  ];
-
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[1];
   @tracked sort = 'decision-activity.start-date';
   @tracked isLoadingModel;
   @tracked mandatees = [];
-  @tracked selectedStatuses = [];
   @tracked statuses = [];
 
 
@@ -87,8 +71,7 @@ export default class SignaturesOngoingController extends Controller {
 
   @action
   onChangeStatus(statuses) {
-    this.selectedStatuses = statuses;
-    this.statuses = statuses.map((status) => status.value);
+    this.statuses = statuses;
   }
 
   @action

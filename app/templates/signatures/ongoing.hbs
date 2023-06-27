@@ -10,12 +10,10 @@
         >
           <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "status"}}</Auk::Label>
-            <Auk::CheckboxTree
-              @label={{t "th-select-all"}}
-              @items={{this.statusFilterItems}}
-              @selectedItems={{this.selectedStatuses}}
-              @didUpdate={{this.onChangeStatus}}
-              />
+            <Signatures::StatusFilter
+              @selectedItems={{this.statuses}}
+              @onChange={{this.onChangeStatus}}
+            />
           </div>
           {{#if this.currentSession.isAdmin}}
           <div class="au-c-card au-o-box au-o-box--small">

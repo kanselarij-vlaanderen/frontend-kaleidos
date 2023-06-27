@@ -48,7 +48,7 @@ export default class SignaturesOngoingRoute extends Route {
 
     const filter = {
       creator: {
-        ':id:': this.currentSession.user.id,
+        // ':id:': this.currentSession.user.id,
       },
     }
 
@@ -65,7 +65,7 @@ export default class SignaturesOngoingRoute extends Route {
     }
     if (params.statuses?.length > 0) {
       filter['status'] = {
-        ':uri:': params.statuses.join(','),
+        ':id:': params.statuses.join(','),
       }
     }
     this.lastParams.commit();
