@@ -1,4 +1,4 @@
-{{#if this.statusFilterItems}}
+{{#if (and this.statusFilterItems this.statusFilterItems.length) }}
   <Auk::CheckboxTree
     @label={{t "th-select-all"}}
     @items={{this.statusFilterItems}}

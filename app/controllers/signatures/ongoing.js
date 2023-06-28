@@ -55,7 +55,7 @@ export default class SignaturesOngoingController extends Controller {
     const status = await signFlow.status;
 
     if (piece) {
-      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
+      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
         this.router.transitionTo(
           'document',
           piece.id
