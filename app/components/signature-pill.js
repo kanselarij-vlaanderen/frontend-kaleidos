@@ -13,7 +13,7 @@ export default class SignaturePillComponent extends Component {
   @service currentSession;
 
   loadData = task(async () => {
-    const { SIGNED, REFUSED } = constants.SIGNFLOW_STATUSES;
+    const { SIGNED, REFUSED, MARKED } = constants.SIGNFLOW_STATUSES;
     const signMarkingActivity = await this.args.signMarkingActivity;
     if (!signMarkingActivity) return;
     const signSubcase = await signMarkingActivity.signSubcase;
@@ -29,7 +29,8 @@ export default class SignaturePillComponent extends Component {
       if (
         piece &&
         signFlowCreator.id === currentUser.id &&
-        status.uri !== SIGNED
+        status.uri !== SIGNED &&
+        status.uri !== MARKED
       ) {
         const response = await fetch(
           `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
