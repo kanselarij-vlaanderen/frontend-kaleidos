@@ -39,6 +39,7 @@
               @showSave={{true}}
               @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
               @onSaveTask={{this.saveMinutes}}
+              @title={{t "minutes"}}
             >
               <:header>
                 <AuButton
@@ -82,6 +83,25 @@
             </Auk::Toolbar>
           </Auk::Panel::Footer>
         {{else}}
+          {{#if this.model.minutes}}
+            <Auk::Panel::Body
+              class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+            >
+              <Documents::DocumentCard
+                @piece={{this.model.minutes}}
+                @isEditable={{true}}
+                @agendaContext={{this.agendaContext}}
+                @hideNewerVersions={{true}}
+                @hideDelete={{true}}
+                @hideEdit={{true}}
+                @hideUpload={{true}}
+                @hideSign={{true}}
+                @showCreateNewVersion={{true}}
+                @onCreateNewVersion={{perform this.onCreateNewVersion}}
+                @bordered={{true}}
+              />
+            </Auk::Panel::Body>
+          {{/if}}
           <Auk::Panel::Body
             class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
           >
@@ -95,13 +115,23 @@
                 />
               </AuContent>
             {{else}}
-              <AuAlert
-                @title={{t "create-minutes-click-create-button-message"}}
-                @icon="circle-info"
-                @skin="info"
-                @size="small"
-                @closable={{false}}
-              />
+              {{#if (user-may "manage-minutes")}}
+                <AuAlert
+                  @title={{t "create-minutes-click-create-button-message"}}
+                  @icon="circle-info"
+                  @skin="info"
+                  @size="small"
+                  @closable={{false}}
+                />
+              {{else}}
+                <AuAlert
+                  @title={{t "no-minutes-for-meeting"}}
+                  @icon="circle-info"
+                  @skin="info"
+                  @size="small"
+                  @closable={{false}}
+                />
+              {{/if}}
             {{/if}}
           </Auk::Panel::Body>
         {{/if}}

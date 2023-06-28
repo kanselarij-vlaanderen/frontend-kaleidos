@@ -133,5 +133,9 @@ const selectors = {
   ministerFilter: {
     pastMinisters: '[data-test-search-minister-filter-past-ministers]',
   },
+
+  sayEditor: {
+    rdfa: '[data-test-say-editor-rdfa]',
+  },
 };
 export default selectors;

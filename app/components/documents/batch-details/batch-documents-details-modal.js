@@ -12,6 +12,7 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -60,6 +61,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
+        row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })
     );

@@ -42,7 +42,7 @@
         {{#if event.isRequestActivity}}
           <Utils::Timeline::Event
             @badgeIcon="mail"
-            @badgeSkin="primary"
+            @badgeSkin="action"
             @event={{event}} as |event|>
             <Publications::Publication::RequestActivityPanel
               @title={{t "requested-translation"}}

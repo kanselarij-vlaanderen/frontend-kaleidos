@@ -440,6 +440,14 @@ $au-button-height: 3.4rem;
   }
 }
 
+// Badge
+
+.auk-empty-state {
+  .au-c-badge {
+    margin-right: 2rem;
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {
@@ -449,7 +457,8 @@ $au-button-height: 3.4rem;
 }
 
 @media print {
-  .au-c-pill {
+  .au-c-pill,
+  .au-c-badge {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
@@ -467,4 +476,19 @@ $au-button-height: 3.4rem;
 
 .au-c-input--mask-normal-letter-spacing {
   letter-spacing: inherit;
+}
+
+.au-c-badge--medium {
+  height: 3.5rem - 0.1rem; // compensate for visual distortion of perfect circle
+  width: 3.5rem;
+  margin-right: 0;
+
+  .au-c-icon {
+    height: 2.1rem - 0.1rem; // compensate for visual distortion of perfect circle
+    width: 2.1rem;
+  }
+
+  .au-c-badge__number {
+    font-size: 1.8rem;
+  }
 }
