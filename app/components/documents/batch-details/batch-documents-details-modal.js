@@ -94,7 +94,8 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
-    const decisionActivity = yield this.args.agendaitem?.treatment.get('decisionActivity');
+    const treatment = yield this.args.agendaitem?.treatment;
+    const decisionActivity = yield treatment.decisionActivity;
     yield all(this.rows.map(async (row) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
