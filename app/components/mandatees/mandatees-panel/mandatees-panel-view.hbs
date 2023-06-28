@@ -39,7 +39,11 @@
                 data-test-mandatee-panel-view-row-name
               >
                 <div class="auk-o-flex auk-o-flex--vertical-center">
-                  <Auk::Badge @icon="user" />
+                  <AuBadge
+                    @icon="user"
+                    @skin="gray"
+                    @size="small"
+                  />
                   <span class="auk-u-mx-2">
                     {{mandatee.person.fullName}}
                   </span>

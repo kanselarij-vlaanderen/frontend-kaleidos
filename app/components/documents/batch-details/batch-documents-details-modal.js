@@ -62,7 +62,8 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
         row.signMarkingActivity = await piece.signMarkingActivity;
-        row.hideMarkForSignature = await this.args.agendaitem ? false : true;
+        row.hideMarkForSignature = this.args.agendaitem ? false : true;
+        row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })
     );

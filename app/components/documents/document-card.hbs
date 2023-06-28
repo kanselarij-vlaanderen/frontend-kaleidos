@@ -15,13 +15,17 @@
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
-              <Auk::Badge
-                @skin="success"
+              <AuBadge
                 @icon="document-added"
-                @size="large"
+                @skin="success"
+                class="au-c-badge--medium"
               />
             {{else}}
-              <Auk::Badge @icon="document" @size="large" />
+              <AuBadge
+                @icon="document"
+                @skin="gray"
+                class="au-c-badge--medium"
+              />
             {{/if}}
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
@@ -170,7 +174,11 @@
             {{/if}}
           {{/if}}
           {{#if
-            (and @isEditable (user-may "manage-documents"))
+            (and
+              @isEditable
+              (user-may "manage-documents")
+              (not this.hasSignFlow)
+            )
           }}
             <Group.Item>
               <AuDropdown

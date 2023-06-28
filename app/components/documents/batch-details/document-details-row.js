@@ -10,12 +10,14 @@ export class Row {
   documentContainer;
   hideMarkForSignature;
   signMarkingActivity;
+  hasSignFlow;
 
   @tracked name;
   @tracked documentType;
   @tracked accessLevel;
   @tracked markedForSignature = false;
   @tracked isToBeDeleted = false;
+
 
   @action
   setDocumentType(documentType) {
