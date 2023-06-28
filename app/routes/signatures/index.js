@@ -44,16 +44,11 @@ export default class SignaturesIndexRoute extends Route {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       },
       'decision-activity': {
+        ':lte:start-date': (new Date()).toISOString().slice(0, 10), // Cache-busting
         treatment: {
           agendaitems: {
             agenda: {
-              meeting: {
-                agenda: {
-                  status: {
-                    ':uri:': CONSTANTS.AGENDA_STATUSSES.APPROVED,
-                  }
-                }
-              }
+              ':has:meeting': true,
             }
           }
         }
