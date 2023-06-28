@@ -42,15 +42,28 @@ export default class SignaturesIndexRoute extends Route {
     const filter = {
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
+      },
+      'decision-activity': {
+        treatment: {
+          agendaitems: {
+            agenda: {
+              meeting: {
+                agenda: {
+                  status: {
+                    ':uri:': CONSTANTS.AGENDA_STATUSSES.APPROVED,
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     };
 
     if (this.ministerIds?.length) {
-      filter['decision-activity'] = {
-        subcase: {
-          'requested-by': {
-            ':id:': this.ministerIds.join(',')
-          }
+      filter['decision-activity']['subcase'] = {
+        'requested-by': {
+          ':id:': this.ministerIds.join(',')
         }
       };
     } else if (this.currentSession.may('manage-only-specific-signatures')) {
