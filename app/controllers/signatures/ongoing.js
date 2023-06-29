@@ -38,6 +38,7 @@ export default class SignaturesOngoingController extends Controller {
     );
     const persons = await Promise.all(
       mandatees
+        .toArray()
         .sort((m1, m2) => m1.priority - m2.priority)
         .map((mandatee) => mandatee.person)
     );
