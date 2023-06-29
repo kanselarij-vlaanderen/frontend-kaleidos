@@ -306,7 +306,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         if (job.status === job.SUCCESS) {
           const url = await fileDownloadUrlFromJob(job, name);
           debug(`Archive ready. Prompting for download now (${url})`);
-          fileDownloadToast.options.downloadLink = url;
+          fileDownloadToast.options.archiveLink = url;
           fileDownloadToast.options.fileName = name;
           this.toaster.displayToast.perform(fileDownloadToast);
         } else {
@@ -320,7 +320,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     } else {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);
-      fileDownloadToast.options.downloadLink = url;
+      fileDownloadToast.options.archiveLink = url;
       fileDownloadToast.options.fileName = name;
       this.toaster.displayToast.perform(fileDownloadToast);
     }
