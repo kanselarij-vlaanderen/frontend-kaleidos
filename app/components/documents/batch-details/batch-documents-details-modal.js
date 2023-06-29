@@ -6,7 +6,8 @@ import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
-import { isPresent } from '@ember/utils';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -14,6 +15,7 @@ import { isPresent } from '@ember/utils';
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
+  @service currentSession;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -29,6 +31,12 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
+  }
+
+  get isSignaturesEnabled() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
   }
 
   @task
@@ -63,7 +71,9 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
         row.signMarkingActivity = await piece.signMarkingActivity;
-        row.showSignature = isPresent(this.args.decisionActivity);
+        if (this.isSignaturesEnabled) {
+          row.showSignature = isPresent(this.args.decisionActivity);
+        }
         row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })

@@ -24,7 +24,7 @@
       @onChange={{this.setAccessLevel}}
     />
   </td>
-  {{#if @decisionActivity}}
+  {{#if (and @isSignaturesEnabled @decisionActivity)}}
     <td>
       <AuButton
         @skin="primary"
