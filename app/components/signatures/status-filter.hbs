@@ -1,4 +1,6 @@
-{{#if (and this.statusFilterItems this.statusFilterItems.length) }}
+{{#if this.loadStatuses.isRunning}}
+  <AuLoader @padding="small" />
+{{else}}
   <Auk::CheckboxTree
     @label={{t "th-select-all"}}
     @items={{this.statusFilterItems}}
