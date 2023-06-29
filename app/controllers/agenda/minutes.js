@@ -166,9 +166,8 @@ export default class AgendaMinutesController extends Controller {
   get label() {
     if (this.currentPiecePart) {
       return "created-on";
-    } else {
-      return "uploaded-at"
-    }
+    } 
+    return "uploaded-at";
   }
 
   exportPdf = task(async (minutes) => {
