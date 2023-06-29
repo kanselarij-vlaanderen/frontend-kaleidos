@@ -60,9 +60,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   get label() {
     if (isPresent(this.args.label)){
       return this.intl.t(this.args.label);
-    } else {
-      return this.intl.t('uploaded-at');
     }
+    return this.intl.t('uploaded-at');
   }
 
   get bordered() {
