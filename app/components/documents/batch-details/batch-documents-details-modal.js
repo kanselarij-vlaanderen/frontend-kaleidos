@@ -70,11 +70,11 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        row.signMarkingActivity = await piece.signMarkingActivity;
         if (this.isSignaturesEnabled) {
+          row.signMarkingActivity = await piece.signMarkingActivity;
           row.showSignature = isPresent(this.args.decisionActivity);
+          row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         }
-        row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })
     );
