@@ -58,7 +58,7 @@
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
-          @isGenerated={{true}}
+          @label={{'created-on'}}
         />
       {{else}}
         <Auk::Loader />
@@ -183,6 +183,7 @@
             @pieceSubtype="report"
             @didDeleteContainer={{perform this.loadReport}}
             @bordered={{false}}
+            @label={{"uploaded-at"}}
           />
         </Auk::Panel::Body>
       {{else if

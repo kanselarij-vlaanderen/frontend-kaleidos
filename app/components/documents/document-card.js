@@ -24,7 +24,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
-   * @argument isGenerated: used to determine what label should be used
+   * @argument label: used to determine what label should be used with the date
    */
   @service store;
   @service currentSession;
@@ -58,11 +58,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get label() {
-    if (this.args.isGenerated) {
-      return this.intl.t('created-on');
-    } else {
-      return this.intl.t('uploaded-at');
-    }
+    console.log(this.args.label);
+    return this.intl.t(this.args.label);
   }
 
   get bordered() {
