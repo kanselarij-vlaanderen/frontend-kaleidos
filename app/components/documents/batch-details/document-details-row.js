@@ -8,7 +8,7 @@ export class Row {
 
   piece;
   documentContainer;
-  hideMarkForSignature;
+  showSignature;
   signMarkingActivity;
   hasSignFlow;
 

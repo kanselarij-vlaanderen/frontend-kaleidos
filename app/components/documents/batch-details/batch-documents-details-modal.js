@@ -6,13 +6,14 @@ import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
-  @service signatureService
+  @service signatureService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -62,7 +63,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
         row.signMarkingActivity = await piece.signMarkingActivity;
-        row.hideMarkForSignature = this.args.agendaitem ? false : true;
+        row.showSignature = isPresent(this.args.decisionActivity);
         row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
         return row;
       })
@@ -94,8 +95,6 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
-    const treatment = yield this.args.agendaitem?.treatment;
-    const decisionActivity = yield treatment.decisionActivity;
     yield all(this.rows.map(async (row) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
@@ -120,8 +119,8 @@ export default class BatchDocumentsDetailsModal extends Component {
           accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
         }
-        if(row.markedForSignature) {
-          await this.signatureService.markDocumentForSignature(piece, decisionActivity)
+        if (row.markedForSignature) {
+          await this.signatureService.markDocumentForSignature(piece, this.args.decisionActivity);
         }
         if (hasChanged) {
           await piece.save();

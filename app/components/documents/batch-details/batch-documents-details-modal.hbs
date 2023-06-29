@@ -18,7 +18,9 @@
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
               <th>{{t "publicity"}}</th>
-              <th>{{t "signature"}}</th>
+              {{#if @decisionActivity}}
+                <th>{{t "signature"}}</th>
+              {{/if}}
             {{else}}
               <th>{{t "file-type"}}</th>
             {{/if}}
@@ -29,6 +31,7 @@
           {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
+              @decisionActivity={{@decisionActivity}}
             />
           {{/if}}
           {{#each this.rows as |row|}}

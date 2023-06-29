@@ -44,6 +44,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.previousAgenda = await this.currentAgenda.previousVersion;
     this.agendaActivity = await this.agendaitem.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
+    this.treatment = await this.agendaitem.treatment;
+    this.decisionActivity = await this.treatment.decisionActivity;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase?.confidential
@@ -77,6 +79,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.agendaActivity = this.agendaActivity;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.meeting = this.meeting;
+    controller.decisionActivity = this.decisionActivity;
     controller.loadNewPieces.perform();
   }
 }

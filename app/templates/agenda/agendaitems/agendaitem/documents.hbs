@@ -72,7 +72,7 @@
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
-    @agendaitem={{this.agendaitem}}
+    @decisionActivity={{this.decisionActivity}}
     @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
