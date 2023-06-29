@@ -1,15 +1,15 @@
 import fetch from 'fetch';
 
-async function uploadPiecesToSigninghub(signingFlow, pieces) {
-  const endpoint = `/signing-flows/${signingFlow.id}/upload-to-signinghub`;
+async function uploadPiecesToSigninghub(signFlows) {
+  const endpoint = `/signing-flows/upload-to-signinghub`;
   const data = [];
-  for (const piece of pieces) {
+  for (let signFlow of signFlows) {
     data.push({
-      type: 'pieces',
-      id: piece.id
+      type: 'sign-flows',
+      id: signFlow.id,
     });
   }
-  const body = { data: data };
+  const body = { data };
   const options = {
     method: 'POST',
     headers: {

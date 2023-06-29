@@ -755,7 +755,7 @@ function generateDecision(concerns, decision) {
   cy.get(agenda.agendaitemNav.decisionTab).click();
   cy.get(agenda.agendaitemDecision.create).click();
 
-  cy.get(agenda.agendaitemDecision.rdfaEditor).eq(0)
+  cy.get(utils.sayEditor.rdfa).eq(0)
     .as('concernsEditor');
   if (concerns) {
     cy.get('@concernsEditor').type(concerns);
@@ -763,7 +763,7 @@ function generateDecision(concerns, decision) {
     cy.get('@concernsEditor').type('Betreft');
   }
 
-  cy.get(agenda.agendaitemDecision.rdfaEditor).eq(1)
+  cy.get(utils.sayEditor.rdfa).eq(1)
     .as('decisionsEditor');
   if (decision) {
     cy.get('@decisionsEditor').type(decision);

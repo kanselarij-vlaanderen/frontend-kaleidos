@@ -1,4 +1,4 @@
-<div ...attributes>
+<div class={{this.sizeClass}} ...attributes>
   {{#if this.browserIsSupported}}
     <EditorContainer>
       <:top>
@@ -22,6 +22,7 @@
           </Tb.Group>
           <Tb.Group>
             <Plugins::List::Unordered @controller={{this.controller}} />
+            <Plugins::List::Ordered @controller={{this.controller}} />
             <Plugins::List::IndentationControls
               @controller={{this.controller}}
             />

@@ -58,7 +58,9 @@ export default class SearchMinisterFilterComponent extends Component {
   @task
   *prepareMinisters() {
     yield this.prepareCurrentMinisters.perform();
-    yield this.preparePastMinisters.perform();
+    if (this.args.showPastMinisters) {
+      yield this.preparePastMinisters.perform();
+    }
   }
 
   @task

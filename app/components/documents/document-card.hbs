@@ -174,7 +174,11 @@
             {{/if}}
           {{/if}}
           {{#if
-            (and @isEditable (user-may "manage-documents"))
+            (and
+              @isEditable
+              (user-may "manage-documents")
+              (not this.hasSignFlow)
+            )
           }}
             <Group.Item>
               <AuDropdown
@@ -281,6 +285,7 @@
                       piece
                     }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                    @label={{this.label}}
                   />
                 </div>
               {{/each}}

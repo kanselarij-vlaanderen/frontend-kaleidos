@@ -58,6 +58,7 @@
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
           @didDeleteContainer={{this.didDeleteReport}}
+          @label={{'created-on'}}
         />
       {{else}}
         <Auk::Loader />
@@ -96,21 +97,48 @@
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
         <h4 class="auk-h4">{{t "concerns"}}</h4>
-        <Agenda::Agendaitem::Decision::Editor
+        <SayEditor
+          @size="small"
+          @allowFullscreen={{true}}
+          @title={{t "concerns"}}
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
-          @piecePart={{this.betreftPiecePart}}
-          @onPiecePartVersionClicked={{this.setBetreftEditorContent}}
-          @onUpdateContentClicked={{this.updateBetreftContent}}
-        />
+        >
+          <:header>
+            <AuButton
+              @skin="link"
+              @icon="renew"
+              class="au-u-padding-left-none"
+              {{on "click" this.updateBetreftContent}}
+            >{{t "update-thing" thing=(t "content")}}</AuButton>
+            <VersionsDropdown
+              @record={{this.betreftPiecePart}}
+              @previousVersionKey="previousPiecePart"
+              @onVersionClicked={{this.onRevertBetreftVersion}}
+            />
+          </:header>
+        </SayEditor>
         <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
-        <Agenda::Agendaitem::Decision::Editor
+        <SayEditor
+          @allowFullscreen={{true}}
+          @title={{t "agendaitem-decision"}}
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
-          @piecePart={{this.beslissingPiecePart}}
-          @onPiecePartVersionClicked={{this.setBeslissingEditorContent}}
-          @onUpdateContentClicked={{this.updateBeslissingContent}}
-          @disableUpdateContent={{not this.nota}}
-          @loadingUpdateContent={{this.loadNota.isRunning}}
-        />
+        >
+          <:header>
+            <AuButton
+              @skin="link"
+              @icon="renew"
+              class="au-u-padding-left-none"
+              @loading={{this.loadNota.isRunning}}
+              @disabled={{not this.nota}}
+              {{on "click" this.updateBeslissingContent}}
+            >{{t "update-thing" thing=(t "content")}}</AuButton>
+            <VersionsDropdown
+              @record={{this.beslissingPiecePart}}
+              @previousVersionKey="previousPiecePart"
+              @onVersionClicked={{this.onRevertBeslissingVersion}}
+            />
+          </:header>
+        </SayEditor>
       </Auk::Panel::Body>
       <Auk::Panel::Footer class="au-u-background-gray-100">
         <Auk::Toolbar>
@@ -156,6 +184,7 @@
             @pieceSubtype="report"
             @didDeleteContainer={{this.didDeleteReport}}
             @bordered={{false}}
+            @label={{"uploaded-at"}}
           />
         </Auk::Panel::Body>
       {{else if

@@ -1,10 +1,25 @@
 import Route from '@ember/routing/route';
-import fetch from 'fetch';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SignaturesIndexRoute extends Route {
   @service store;
   @service currentSession;
+
+  queryParams = {
+    page: {
+      refreshModel: true,
+      as: 'pagina',
+    },
+    size: {
+      refreshModel: true,
+      as: 'aantal',
+    },
+    sort: {
+      refreshModel: true,
+      as: 'sorteer',
+    }
+  };
 
   localStorageKey = 'signatures.shortlist.minister-filter';
 
@@ -23,49 +38,45 @@ export default class SignaturesIndexRoute extends Route {
     }
   }
 
-  async model() {
-    const endpoint = '/sign-flows/shortlist';
-    const response = await fetch(endpoint, {
-      Headers: {
-        'Accept': 'application/vnd.api+json',
-      }
-    });
-    const result = await response.json();
-
-    if (result?.data?.length) {
-      const query = {
-        include: [
-          'agendaitems.agenda.next-version',
-          'agendaitems.mandatees.person',
-          'agendaitems.treatment.decision-activity',
-          'document-container.type',
-        ].join(','),
-        sort: '-created',
-        'page[size]': result.data.length,
-        filter: {
-          ':id:': result.data.map((record) => record.id).join(','),
-        }
-      };
-      if (this.ministerIds?.length) {
-        query.filter.agendaitems = {
-          treatment: {
-            'decision-activity': {
-              subcase: {
-                'requested-by': {
-                  ':id:': this.ministerIds.join(',')
-                }
-              }
+  async model(params) {
+    const filter = {
+      status: {
+        ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
+      },
+      'decision-activity': {
+        ':lte:start-date': (new Date()).toISOString().slice(0, 10), // Cache-busting
+        treatment: {
+          agendaitems: {
+            agenda: {
+              ':has:meeting': true,
             }
           }
-        };
+        }
       }
-      if (this.currentSession.may('manage-only-specific-signatures') && !this.ministerIds?.length) {
-        return [];
-      }
-      return this.store.query('piece', query);
+    };
+
+    if (this.ministerIds?.length) {
+      filter['decision-activity']['subcase'] = {
+        'requested-by': {
+          ':id:': this.ministerIds.join(',')
+        }
+      };
+    } else if (this.currentSession.may('manage-only-specific-signatures')) {
+      return [];
     }
 
-    return [];
+    return this.store.query('sign-flow', {
+      filter,
+      include: [
+        'decision-activity',
+        'sign-subcase.sign-marking-activity.piece.document-container.type'
+      ].join(','),
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+      sort: params.sort,
+    });
   }
 
   setupController(controller, model, transition) {
