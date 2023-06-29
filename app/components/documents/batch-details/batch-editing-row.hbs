@@ -24,6 +24,17 @@
       @onChange={{this.setAccessLevel}}
     />
   </td>
+  {{#if (and @isSignaturesEnabled @decisionActivity)}}
+    <td>
+      <AuButton
+        @skin="primary"
+        @disabled={{(or this.isDisabled this.isSignMarkingDisabled)}}
+        {{on "click" (fn this.setMarkedForSignature true)}}
+      >
+        {{t "present-for-signing"}}
+      </AuButton>
+    </td>
+  {{/if}}
   <td class="auk-u-text-align--right">
     {{#if this.isToBeDeleted}}
       <AuButton
