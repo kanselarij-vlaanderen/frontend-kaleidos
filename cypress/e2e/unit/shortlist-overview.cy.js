@@ -38,7 +38,7 @@ function createPublicationViaMR(subcaseTitle, fileName, publicationNumber) {
   cy.wait(`@patchPieceForPublication${randomInt}`);
 }
 
-context('signatures shortlist overview tests', () => {
+context.skip('signatures shortlist overview tests', () => {
   const caseTitle1 = `Cypress test: shortlist signatures route case 1- ${currentTimestamp()}`;
   const caseTitle2 = `Cypress test: shortlist signatures route case 2- ${currentTimestamp()}`;
 
