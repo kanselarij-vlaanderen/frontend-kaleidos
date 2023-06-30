@@ -62,7 +62,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
         cosigners: _cosigners,
       } = await getSubmitterAndCosigners(decisionActivity);
 
-      if (submitter.id !== _submitter.id) {
+      if (submitter?.id !== _submitter?.id) {
         hasConflictingSigners = true;
         break;
       }
