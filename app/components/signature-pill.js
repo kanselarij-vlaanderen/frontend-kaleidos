@@ -40,9 +40,9 @@ export default class SignaturePillComponent extends Component {
 
     const signMarkingActivity = await this.args.signMarkingActivity;
     if (!signMarkingActivity) return;
-    const signSubcase = await signMarkingActivity.signSubcase.reload();
-    const signFlow = await signSubcase.signFlow.reload();
-    const status = await signFlow.status.reload();
+    const signSubcase = await signMarkingActivity.signSubcase;
+    const signFlow = await signSubcase.signFlow;
+    const status = await signFlow.belongsTo('status').reload();
     let signingHubUrl = null;
 
     if (status.uri !== REFUSED) {
