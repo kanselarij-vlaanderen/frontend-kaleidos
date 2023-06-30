@@ -40,15 +40,19 @@ export default class SignaturesIndexRoute extends Route {
 
   async model(params) {
     const filter = {
+      'sign-subcase': {
+        'sign-marking-activity': {
+          ':has:piece': 'yes',
+        }
+      },
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       },
       'decision-activity': {
-        ':lte:start-date': (new Date()).toISOString().slice(0, 10), // Cache-busting
         treatment: {
           agendaitems: {
             agenda: {
-              ':has:meeting': true,
+              ':has:meeting': `ye-date-added-for-cache-busting-${(new Date()).toISOString()}`,
             }
           }
         }
