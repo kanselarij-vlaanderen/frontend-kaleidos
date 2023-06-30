@@ -76,10 +76,10 @@ export default class SignaturesIndexRoute extends Route {
         'sign-subcase.sign-marking-activity.piece.document-container.type'
       ].join(','),
       page: {
-        number: params.page,
-        size: params.size,
+        number: params.pageSignaturesIndex,
+        size: params.sizeSignaturesIndex,
       },
-      sort: params.sort,
+      sort: params.sortSignaturesIndex,
     });
   }
 
