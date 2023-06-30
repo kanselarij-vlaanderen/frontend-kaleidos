@@ -14,6 +14,7 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
+  @service store;
   @service currentSession;
   @service signatureService;
 
@@ -41,23 +42,27 @@ export default class SignaturePillComponent extends Component {
     const signMarkingActivity = await this.args.signMarkingActivity;
     if (!signMarkingActivity) return;
     const signSubcase = await signMarkingActivity.signSubcase;
-    const signFlow = await signSubcase.signFlow;
-    const status = await signFlow.belongsTo('status').reload();
+    const signFlow = await signSubcase?.signFlow;
+    let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
-
-    if (status.uri !== REFUSED) {
-      const piece = await this.args.piece;
-      const signFlow = await signSubcase.signFlow;
-      const signFlowCreator = await signFlow.creator;
-      const currentUser = this.currentSession.user;
-      if (
-        piece &&
-        signFlowCreator.id === currentUser.id &&
-        status.uri !== SIGNED &&
-        status.uri !== MARKED
-      ) {
-        signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
+    if (status) {
+      if (status.uri !== REFUSED) {
+        const piece = await this.args.piece;
+        const signFlow = await signSubcase.signFlow;
+        const signFlowCreator = await signFlow.creator;
+        const currentUser = this.currentSession.user;
+        if (
+          piece &&
+          signFlowCreator.id === currentUser.id &&
+          status.uri !== SIGNED &&
+          status.uri !== MARKED
+        ) {
+          signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
+        }
       }
+    } else {
+      // status can be null, if the sync service hasn't caught up yet. In this case we default to MARKED and wait for the next scheduled reload
+      status = await this.store.findRecordByUri('concept', MARKED);
     }
 
     this.scheduleSignFlowStatusRefresh();
@@ -72,14 +77,13 @@ export default class SignaturePillComponent extends Component {
 
   get skin() {
     const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    const statusUri = this.data.value.status.uri;
-    const signingHubUrl = this.data.value.signingHubUrl;
+    const statusUri = this.data.value?.status?.uri;
+    const signingHubUrl = this.data.value?.signingHubUrl;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
     } else if (signingHubUrl) {
       return 'link';
-    } else {
-      return 'ongoing';
     }
+    return 'ongoing';
   }
 }
