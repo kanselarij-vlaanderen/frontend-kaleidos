@@ -7,15 +7,15 @@ export default class SignaturesIndexRoute extends Route {
   @service currentSession;
 
   queryParams = {
-    page: {
+    pageSignaturesIndex: {
       refreshModel: true,
       as: 'pagina',
     },
-    size: {
+    sizeSignaturesIndex: {
       refreshModel: true,
       as: 'aantal',
     },
-    sort: {
+    sortSignaturesIndex: {
       refreshModel: true,
       as: 'sorteer',
     }

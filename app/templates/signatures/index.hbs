@@ -36,12 +36,12 @@
     @clickable={{false}}
     @asideVisible={{this.showSidebar}}
     @content={{@model}}
-    @page={{this.page}}
-    @size={{this.size}}
+    @page={{this.pageSignaturesIndex}}
+    @size={{this.sizeSignaturesIndex}}
     @numberOfItems={{@model.length}}
     @totalNumberOfItems={{@model.meta.count}}
-    @onChangeSize={{fn (mut this.size)}}
-    @onChangePage={{fn (mut this.page)}}
+    @onChangeSize={{fn (mut this.sizeSignaturesIndex)}}
+    @onChangePage={{fn (mut this.pageSignaturesIndex)}}
   >
     <:header>
       <th>
