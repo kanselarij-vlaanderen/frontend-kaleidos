@@ -25,7 +25,7 @@ export default class SignaturePillComponent extends Component {
     cancel(this.scheduledRefresh);
   }
 
-  schedulePublicationActivitiesRefresh() {
+  scheduleSignFlowStatusRefresh() {
     if (![REFUSED, SIGNED, CANCELED].includes(this.data?.value?.status?.uri)) {
       this.scheduledRefresh = later(this, async () => {
         this.args.signMarkingActivity.reload();
@@ -69,7 +69,7 @@ export default class SignaturePillComponent extends Component {
       }
     }
 
-    this.schedulePublicationActivitiesRefresh();
+    this.scheduleSignFlowStatusRefresh();
 
     return {
       signingHubUrl,
