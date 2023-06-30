@@ -1,6 +1,9 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
 import ENV from 'frontend-kaleidos/config/environment';
+import constants from 'frontend-kaleidos/config/constants';
+
+const MARKED = constants.SIGNFLOW_STATUSES.MARKED;
 
 export default class SignatureService extends Service {
   @service store;
@@ -55,6 +58,7 @@ export default class SignatureService extends Service {
       const _case = await decisionmakingFlow.case;
       const creator = await this.currentSession.user;
       const now = new Date();
+      const status = await this.store.findRecordByUri('concept', MARKED);
 
       // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
       const signFlow = this.store.createRecord('sign-flow', {
@@ -64,6 +68,7 @@ export default class SignatureService extends Service {
         case: _case,
         decisionActivity,
         creator: creator,
+        status: status,
       });
       await signFlow.save();
       const signSubcase = this.store.createRecord('sign-subcase', {
