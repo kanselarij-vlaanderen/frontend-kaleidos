@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { task } from 'ember-concurrency';
@@ -16,6 +15,7 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 export default class SignaturePillComponent extends Component {
   @service intl;
   @service currentSession;
+  @service signatureService;
 
   scheduledRefresh;
   @tracked triggerTask;
@@ -56,13 +56,7 @@ export default class SignaturePillComponent extends Component {
         status.uri !== SIGNED &&
         status.uri !== MARKED
       ) {
-        const response = await fetch(
-          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          signingHubUrl = result.url;
-        }
+        signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
       }
     }
 
