@@ -45,7 +45,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.agendaActivity = await this.agendaitem.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
     this.treatment = await this.agendaitem.treatment;
-    this.decisionActivity = await this.treatment.decisionActivity;
+    this.decisionActivity = await this.treatment?.decisionActivity;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase?.confidential
