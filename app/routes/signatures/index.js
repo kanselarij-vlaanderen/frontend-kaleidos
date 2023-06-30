@@ -7,15 +7,15 @@ export default class SignaturesIndexRoute extends Route {
   @service currentSession;
 
   queryParams = {
-    page: {
+    pageSignaturesIndex: {
       refreshModel: true,
       as: 'pagina',
     },
-    size: {
+    sizeSignaturesIndex: {
       refreshModel: true,
       as: 'aantal',
     },
-    sort: {
+    sortSignaturesIndex: {
       refreshModel: true,
       as: 'sorteer',
     }
@@ -40,15 +40,19 @@ export default class SignaturesIndexRoute extends Route {
 
   async model(params) {
     const filter = {
+      'sign-subcase': {
+        'sign-marking-activity': {
+          ':has:piece': 'yes',
+        }
+      },
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       },
       'decision-activity': {
-        ':lte:start-date': (new Date()).toISOString().slice(0, 10), // Cache-busting
         treatment: {
           agendaitems: {
             agenda: {
-              ':has:meeting': true,
+              ':has:meeting': `ye-date-added-for-cache-busting-${(new Date()).toISOString()}`,
             }
           }
         }
@@ -72,10 +76,10 @@ export default class SignaturesIndexRoute extends Route {
         'sign-subcase.sign-marking-activity.piece.document-container.type'
       ].join(','),
       page: {
-        number: params.page,
-        size: params.size,
+        number: params.pageSignaturesIndex,
+        size: params.sizeSignaturesIndex,
       },
-      sort: params.sort,
+      sort: params.sortSignaturesIndex,
     });
   }
 
