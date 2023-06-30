@@ -285,4 +285,16 @@ export default class SignaturesIndexController extends Controller {
       );
     }
   });
+
+  removeSignFlow = task(async () => {
+    if (this.selectedSignFlows.length) {
+      for (let signFlow of this.selectedSignFlows) {
+        await this.signatureService.removeSignFlow(signFlow);
+      }
+    } else if (this.signFlow) {
+      await this.signatureService.removeSignFlow(this.signFlow);
+    }
+    this.closeSidebar();
+    this.router.refresh(this.router.routeName);
+  });
 }
