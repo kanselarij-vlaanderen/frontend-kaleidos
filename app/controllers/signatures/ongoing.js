@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import fetch from 'fetch';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
@@ -11,6 +10,7 @@ export default class SignaturesOngoingController extends Controller {
   @service mandatees;
   @service intl;
   @service currentSession;
+  @service signatureService;
 
   queryParams = [
     {
@@ -61,12 +61,9 @@ export default class SignaturesOngoingController extends Controller {
           piece.id
         );
       } else {
-        const response = await fetch(
-          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          window.location.href = result.url;
+        const signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
+        if (signingHubUrl) {
+          window.location.href = signingHubUrl;
         } else {
           this.router.transitionTo(
             'document',

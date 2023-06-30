@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
 import ENV from 'frontend-kaleidos/config/environment';
+import fetch from 'fetch';
 
 export default class SignatureService extends Service {
   @service store;
@@ -187,5 +188,15 @@ export default class SignatureService extends Service {
       }
     }
     return false;
+  }
+
+  async getSigningHubUrl(signFlow, piece) {
+    const response = await fetch(
+      `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
+    );
+    if (response.ok && response.status === 200) {
+      const result = await response.json();
+      return result.url;
+    }
   }
 }
