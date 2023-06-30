@@ -28,10 +28,6 @@ export default class SignaturePillComponent extends Component {
   scheduleSignFlowStatusRefresh() {
     if (![REFUSED, SIGNED, CANCELED].includes(this.data?.value?.status?.uri)) {
       this.scheduledRefresh = later(this, async () => {
-        this.args.signMarkingActivity.reload();
-        const signSubcase = await this.args.signMarkingActivity.signSubcase.reload();
-        const signFlow = await signSubcase.signFlow.reload();
-        await signFlow.status.reload();
         this.triggerTask = new Date();
       }, SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS);
     }
@@ -41,11 +37,12 @@ export default class SignaturePillComponent extends Component {
     // Cancel the scheduled refresh, in case we're retriggering because
     // a dependency (marking activity) changed
     cancel(this.scheduledRefresh);
+
     const signMarkingActivity = await this.args.signMarkingActivity;
     if (!signMarkingActivity) return;
-    const signSubcase = await signMarkingActivity.signSubcase;
-    const signFlow = await signSubcase.signFlow;
-    const status = await signFlow.status;
+    const signSubcase = await signMarkingActivity.signSubcase.reload();
+    const signFlow = await signSubcase.signFlow.reload();
+    const status = await signFlow.status.reload();
     let signingHubUrl = null;
 
     if (status.uri !== REFUSED) {
