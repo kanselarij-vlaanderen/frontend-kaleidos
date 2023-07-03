@@ -5,6 +5,14 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
+import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+
+const MANDATORY_SORT_OPTION = 'decision-activity';
+const DEFAULT_SORT_OPTIONS = [
+  '-decision-activity.start-date',
+  MANDATORY_SORT_OPTION,
+  '-sign-subcase.sign-marking-activity.piece.name',
+];
 
 export default class SignaturesIndexController extends Controller {
   @service intl;
@@ -13,6 +21,7 @@ export default class SignaturesIndexController extends Controller {
   @service signatureService;
   @service toaster;
 
+  @tracked signFlow = null;
   @tracked piece = null;
   @tracked decisionActivity = null;
   @tracked agendaitem = null;
@@ -24,17 +33,28 @@ export default class SignaturesIndexController extends Controller {
   @tracked selectedMinisters = [];
   @tracked filteredMinisters = [];
 
-  @tracked selectedPieces = new TrackedArray([]);
+  @tracked selectedSignFlows = new TrackedArray([]);
+
+  @tracked sizeSignaturesIndex = PAGINATION_SIZES[1];
+  @tracked pageSignaturesIndex = 0;
+  @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+  @tracked sortField;
 
   signers = [];
   approvers = [];
   notificationAddresses = [];
 
+  queryParams = [
+    { sizeSignaturesIndex: { type: 'number' } },
+    { pageSignaturesIndex: { type: 'number' } },
+    { sortSignaturesIndex: { type: 'string' } },
+  ];
+
   localStorageKey = 'signatures.shortlist.minister-filter';
 
   selectedDecisionActivities = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedPieces.map(async (piece) => await this.getDecisionActivity(piece))
+      this.selectedSignFlows.map(async (signFlow) => await signFlow.decisionActivity)
     );
   });
 
@@ -43,11 +63,11 @@ export default class SignaturesIndexController extends Controller {
   }
 
   get isSelectedAllItems() {
-    return this.model.every((piece) => this.selectedPieces.indexOf(piece) >= 0);
+    return this.model.every((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
 
   get isSelectedSomeItems() {
-    return this.model.some((piece) => this.selectedPieces.indexOf(piece) >= 0);
+    return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
 
   @action
@@ -55,39 +75,61 @@ export default class SignaturesIndexController extends Controller {
     this.clearSidebarContentSingleItem();
     if (this.isSelectedAllItems) {
       this.closeSidebar();
-      this.selectedPieces = new TrackedArray([]);
+      this.selectedSignFlows = new TrackedArray([]);
     } else {
-      this.selectedPieces = new TrackedArray(this.model.toArray());
+      this.selectedSignFlows = new TrackedArray(this.model.toArray());
     }
   }
 
   @action
   toggleItem(item) {
     this.clearSidebarContentSingleItem();
-    const index = this.selectedPieces.indexOf(item);
+    const index = this.selectedSignFlows.indexOf(item);
     if (index >= 0) {
-      if (this.selectedPieces.length === 1) {
+      if (this.selectedSignFlows.length === 1) {
         // The untoggled checkbox is the last one, close the sidebar
         this.closeSidebar();
       }
-      this.selectedPieces.splice(index, 1);
+      this.selectedSignFlows.splice(index, 1);
     } else {
-      this.selectedPieces.push(item);
+      this.selectedSignFlows.push(item);
     }
   }
 
-  getDecisionDate = async (piece) => {
-    const decisionActivity = await this.getDecisionActivity(piece);
-    return decisionActivity.startDate;
-  };
+  @action
+  changeSort(sortField) {
+    this.sortField = sortField;
+    // Because we want to group the documents/sign flows per decision
+    // activity we need to keep the sort options in the same order.
+    // Toggle default options in place and add new options in front.
+    if (this.sortField) {
+      let newSortOptions = [...DEFAULT_SORT_OPTIONS];
+      const index = newSortOptions
+            .map((option) => option.replace(/-/g, ''))
+            .indexOf(this.sortField.replace(/-/g, ''));
+      if (index >= 0) {
+        newSortOptions[index] = this.sortField;
+      } else {
+        newSortOptions = [this.sortField, ...DEFAULT_SORT_OPTIONS];
+      }
+      this.sortSignaturesIndex = newSortOptions.join(',');
+    } else {
+      this.sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+    }
+  }
 
-  getMandateeName = async (piece) => {
-    const decisionActivity = await this.getDecisionActivity(piece);
+  getMandateeNames = async (signFlow) => {
+    const decisionActivity = await signFlow.decisionActivity;
     const subcase = await decisionActivity.subcase;
-    const mandatee = await subcase.requestedBy;
-    const person = await mandatee.person;
-    return person.fullName;
-  };
+    const mandatees = await subcase.mandatees;
+    const persons = await Promise.all(
+      mandatees
+        .toArray()
+        .sort((m1, m2) => m1.priority - m2.priority)
+        .map((mandatee) => mandatee.person)
+    );
+    return persons.map((person) => person.fullName);
+  }
 
   getDecisionActivity = async (piece) => {
     const agendaitem = await this.getAgendaitem(piece);
@@ -95,7 +137,8 @@ export default class SignaturesIndexController extends Controller {
     return treatment.decisionActivity;
   }
 
-  async getAgendaitem(piece) {
+  getAgendaitem = async (pieceOrPromise) => {
+    const piece = await pieceOrPromise;
     const agendaitems = await piece.agendaitems;
     let agendaitem;
     for (let maybeAgendaitem of agendaitems) {
@@ -120,6 +163,7 @@ export default class SignaturesIndexController extends Controller {
   }
 
   clearSidebarContentSingleItem() {
+    this.signFlow = null;
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
@@ -131,15 +175,16 @@ export default class SignaturesIndexController extends Controller {
   }
 
   clearSidebarContentMultiItem() {
-    this.selectedPieces = new TrackedArray([]);
+    this.selectedSignFlows = new TrackedArray([]);
     this.signers = [];
     this.approvers = [];
     this.notificationAddresses = [];
   }
 
   @action
-  async openSidebarSingleItem(piece) {
+  async openSidebarSingleItem(signFlow, piece) {
     this.clearSidebarContentMultiItem();
+    this.signFlow = signFlow;
     this.piece = piece;
     [this.meeting, this.agenda, this.agendaitem] =
       await this.getAgendaitemRouteModels(piece);
@@ -203,21 +248,16 @@ export default class SignaturesIndexController extends Controller {
 
   createSignFlow = task(async () => {
     try {
-      if (this.selectedPieces.length) {
-        await Promise.all(this.selectedPieces.map(async (piece) => {
-          const decisionActivity = await this.getDecisionActivity(piece);
-          await this.signatureService.createSignFlow(
-            piece,
-            decisionActivity,
-            this.signers,
-            this.approvers,
-            this.notificationAddresses
-          );
-        }));
-      } else if (this.piece) {
+      if (this.selectedSignFlows.length) {
         await this.signatureService.createSignFlow(
-          this.piece,
-          this.decisionActivity,
+          this.selectedSignFlows,
+          this.signers,
+          this.approvers,
+          this.notificationAddresses,
+        );
+      } else if (this.signFlow) {
+        await this.signatureService.createSignFlow(
+          [this.signFlow],
           this.signers,
           this.approvers,
           this.notificationAddresses
@@ -225,7 +265,7 @@ export default class SignaturesIndexController extends Controller {
       }
       this.closeSidebar();
       await this.router.refresh(this.router.routeName);
-      if (this.selectedPieces.length > 1) {
+      if (this.selectedSignFlows.length > 1) {
         this.toaster.success(
           this.intl.t('documents-were-sent-to-signinghub'),
           this.intl.t('successfully-started-sign-flows')
@@ -244,5 +284,17 @@ export default class SignaturesIndexController extends Controller {
         this.intl.t('warning-title')
       );
     }
+  });
+
+  removeSignFlow = task(async () => {
+    if (this.selectedSignFlows.length) {
+      for (let signFlow of this.selectedSignFlows) {
+        await this.signatureService.removeSignFlow(signFlow);
+      }
+    } else if (this.signFlow) {
+      await this.signatureService.removeSignFlow(this.signFlow);
+    }
+    this.closeSidebar();
+    this.router.refresh(this.router.routeName);
   });
 }

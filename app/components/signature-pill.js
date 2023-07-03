@@ -1,94 +1,89 @@
 import Component from '@glimmer/component';
+import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import fetch from 'fetch';
+import constants from 'frontend-kaleidos/config/constants';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { task } from 'ember-concurrency';
+import { SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/config/config';
+
+const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
+  @service store;
   @service currentSession;
+  @service signatureService;
 
-  @tracked signingHubUrl;
-  @tracked isMarked = false;
-  @tracked isPrepared = false;
-  @tracked hasToBeApproved = false;
-  @tracked hasToBeSigned = false;
-  @tracked isSigned = false;
-  @tracked isRefused = false;
-  @tracked isCancelled = false;
+  scheduledRefresh;
+  @tracked triggerTask;
 
-  constructor() {
-    super(...arguments);
-
-    this.loadData.perform();
+  willDestroy() {
+    super.willDestroy(...arguments);
+    cancel(this.scheduledRefresh);
   }
 
-  get skin() {
-    if (this.isRefused || this.isCancelled) {
-      return "error";
-    } else if (this.signingHubUrl) {
-      return "link"
-    } else {
-      return "ongoing"
+  scheduleSignFlowStatusRefresh() {
+    if (![REFUSED, SIGNED, CANCELED].includes(this.data?.value?.status?.uri)) {
+      this.scheduledRefresh = later(this, async () => {
+        this.triggerTask = new Date();
+      }, SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS);
     }
-  }
-
-  get title() {
-    if (this.isCancelled) {
-      return this.intl.t('cancelled');
-    } else if (this.isRefused) {
-      return this.intl.t('refused');
-    } else if (this.isSigned) {
-      return this.intl.t('signed');
-    } else if (this.hasToBeSigned) {
-      return this.intl.t('to-sign');
-    } else if (this.hasToBeApproved) {
-      return this.intl.t('to-approve');
-    } else if (this.isPrepared) {
-      return this.intl.t('sent');
-    } else if (this.isMarked) {
-      return this.intl.t('to-sign');
-    }
-    return "";
   }
 
   loadData = task(async () => {
+    // Cancel the scheduled refresh, in case we're retriggering because
+    // a dependency (marking activity) changed
+    cancel(this.scheduledRefresh);
+
     const signMarkingActivity = await this.args.signMarkingActivity;
-    if (signMarkingActivity) {
-      const signSubcase = await signMarkingActivity.signSubcase;
-      const signPreparationActivity = await signSubcase.signPreparationActivity;
-      const signApprovalActivities = await signSubcase.signApprovalActivities;
-      const signSigningActivities = await signSubcase.signSigningActivities;
-      const signCompletionActivity = await signSubcase.signCompletionActivity;
-      const signRefusalActivities = await signSubcase.signRefusalActivities;
-      const signCancellationActivity = await signSubcase.signCancellationActivity;
-
-      this.isMarked = !!signMarkingActivity;
-      this.isPrepared = !!signPreparationActivity;
-      this.hasToBeApproved = signApprovalActivities?.some((activity) => activity.startDate && !activity.endDate);
-      this.hasToBeSigned = signSigningActivities?.some((activity) => activity.startDate && !activity.endDate);
-      this.isSigned = !!signCompletionActivity;
-      this.isRefused = signRefusalActivities?.length;
-      this.isCancelled = !!signCancellationActivity;
-
-      if (!this.isRefused) {
+    if (!signMarkingActivity) return;
+    const signSubcase = await signMarkingActivity.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    let status = await signFlow?.belongsTo('status').reload();
+    let signingHubUrl = null;
+    if (status) {
+      if (status.uri !== REFUSED) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
         const currentUser = this.currentSession.user;
-        if (piece && (signFlowCreator.id === currentUser.id) && !this.isSigned) {
-          const response = await fetch(
-            `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-          );
-          if (response.ok) {
-            const result = await response.json();
-            this.signingHubUrl = result.url;
-          } 
+        if (
+          piece &&
+          status.uri !== SIGNED &&
+          status.uri !== MARKED &&
+          signFlowCreator?.id === currentUser.id
+        ) {
+          signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         }
       }
+    } else {
+      // status can be null, if the sync service hasn't caught up yet. In this case we default to MARKED and wait for the next scheduled reload
+      status = await this.store.findRecordByUri('concept', MARKED);
     }
+
+    this.scheduleSignFlowStatusRefresh();
+
+    return {
+      signingHubUrl,
+      status,
+    };
   });
+
+  data = trackedTask(this, this.loadData, () => [this.triggerTask]); // Make the resource dependant on this.triggerTask
+
+  get skin() {
+    const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
+    const statusUri = this.data.value?.status?.uri;
+    const signingHubUrl = this.data.value?.signingHubUrl;
+    if (statusUri === REFUSED || statusUri === CANCELED) {
+      return 'error';
+    } else if (signingHubUrl) {
+      return 'link';
+    }
+    return 'ongoing';
+  }
 }

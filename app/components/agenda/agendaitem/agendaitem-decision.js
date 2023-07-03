@@ -128,6 +128,9 @@ export default class AgendaitemDecisionComponent extends Component {
         },
       });
       this.previousReport = await this.report.previousPiece;
+    } else {
+      this.betreftPiecePart = null;
+      this.beslissingPiecePart = null;
     }
   });
 
@@ -149,6 +152,13 @@ export default class AgendaitemDecisionComponent extends Component {
     }
     this.toggleEditPill();
   });
+
+  @action
+  async didDeleteReport() {
+    await this.loadReport.perform();
+    this.setBetreftEditorContent('');
+    this.setBeslissingEditorContent('');
+  }
 
   @action
   async attachNewReportVersionAsPiece(piece) {
