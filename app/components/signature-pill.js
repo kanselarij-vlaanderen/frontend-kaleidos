@@ -53,9 +53,9 @@ export default class SignaturePillComponent extends Component {
         const currentUser = this.currentSession.user;
         if (
           piece &&
-          signFlowCreator.id === currentUser.id &&
           status.uri !== SIGNED &&
-          status.uri !== MARKED
+          status.uri !== MARKED &&
+          signFlowCreator?.id === currentUser.id
         ) {
           signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         }

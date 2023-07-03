@@ -40,6 +40,10 @@ export default class SignatureService extends Service {
       // Attach notified
       signSubcase.notified = notified;
       await signSubcase.save();
+      // set creator
+      const creator = await this.currentSession.user;
+      signFlow.creator = creator;
+      await signFlow.save();
     }
 
     // Prepare sign flow: create preparation activity and send to SH
@@ -57,7 +61,6 @@ export default class SignatureService extends Service {
     if (subcase) {
       const decisionmakingFlow = await subcase.decisionmakingFlow;
       const _case = await decisionmakingFlow.case;
-      const creator = await this.currentSession.user;
       const now = new Date();
       const status = await this.store.findRecordByUri('concept', MARKED);
 
@@ -68,7 +71,6 @@ export default class SignatureService extends Service {
         longTitle: _case.title,
         case: _case,
         decisionActivity,
-        creator: creator,
         status: status,
       });
       await signFlow.save();
