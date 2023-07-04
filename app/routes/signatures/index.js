@@ -43,7 +43,8 @@ export default class SignaturesIndexRoute extends Route {
       'sign-subcase': {
         'sign-marking-activity': {
           ':has:piece': 'yes',
-        }
+        },
+        ':has-no:sign-preparation-activity': 'yes',
       },
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,

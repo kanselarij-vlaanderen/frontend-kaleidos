@@ -4,7 +4,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
-const MARKED = constants.SIGNFLOW_STATUSES.MARKED;
+const { MARKED, PREPARED } = constants.SIGNFLOW_STATUSES;
 
 export default class SignatureService extends Service {
   @service store;
@@ -43,6 +43,8 @@ export default class SignatureService extends Service {
       // set creator
       const creator = await this.currentSession.user;
       signFlow.creator = creator;
+      const status = await this.store.findRecordByUri('concept', PREPARED);
+      signFlow.status = status;
       await signFlow.save();
     }
 
