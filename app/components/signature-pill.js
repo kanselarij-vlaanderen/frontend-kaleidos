@@ -46,15 +46,16 @@ export default class SignaturePillComponent extends Component {
     let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
     if (status) {
-      if (status.uri !== REFUSED) {
+      if (status.uri !== REFUSED &&
+          status.uri !== CANCELED &&
+          status.uri !== SIGNED &&
+          status.uri !== MARKED) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
         const currentUser = this.currentSession.user;
         if (
           piece &&
-          status.uri !== SIGNED &&
-          status.uri !== MARKED &&
           signFlowCreator?.id === currentUser.id
         ) {
           signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
