@@ -46,10 +46,4 @@ export default class KDataTableComponent extends Component {
   onPreviousPage() {
     this.args.onChangePage(this.args.page - 1);
   }
-
-  @action
-  onChangeSize() {
-    this.args.onChangePage(0);
-    this.args.onChangeSize(...arguments);
-  }
 }
