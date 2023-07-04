@@ -33,7 +33,7 @@ export default class SignaturesOngoingController extends Controller {
   ];
 
   @tracked page = 0;
-  @tracked size = PAGINATION_SIZES[1];
+  @tracked size = PAGINATION_SIZES[3];
   @tracked sort = '-decision-activity.start-date';
   @tracked isLoadingModel;
   @tracked mandatees = [];
