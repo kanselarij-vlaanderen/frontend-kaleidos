@@ -35,7 +35,7 @@ export default class SignaturesIndexController extends Controller {
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
-  @tracked sizeSignaturesIndex = PAGINATION_SIZES[1];
+  @tracked sizeSignaturesIndex = PAGINATION_SIZES[3];
   @tracked pageSignaturesIndex = 0;
   @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;
