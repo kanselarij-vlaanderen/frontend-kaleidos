@@ -88,7 +88,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return isAgendaDraftOrLegacy || this.hasConfirmedDocEditOnApproved;
   }
 
-
   @task
   *openWarnUploadOnApproved() {
     this.isOpenWarnDocEditOnApproved = true;
