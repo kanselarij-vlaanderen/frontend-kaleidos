@@ -137,7 +137,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     // This is causing many visual refreshes in our code in cetain situations.
     // https://github.com/emberjs/ember.js/issues/19497
     // In order to fix this: When searching we do a transitionTo from the controller and a manual model refresh instead
-    // In that case, we can just rely on the default behavior of ember and not block the transition.    
+    // In that case, we can just rely on the default behavior of ember and not block the transition.
 
     // When should we show the loader on this level:
     // - when searching the model should reload (manual refresh from controller)

@@ -69,9 +69,14 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @action
   searchAgendaitems(value) {
-    set(this,'filter', value);
+    set(this, 'filter', value);
     // bug in ember with refreshModel, (more info in loading action in route)
-    this.router.transitionTo(('agenda.agendaitems', this.meeting.id, this.agenda.id, {queryParams: {filter: value}}));
+    this.router.transitionTo(
+      ('agenda.agendaitems',
+      this.meeting.id,
+      this.agenda.id,
+      { queryParams: { filter: value } })
+    );
     this.router.refresh('agenda.agendaitems');
   }
 
