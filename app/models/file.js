@@ -25,10 +25,6 @@ export default class File extends Model {
       replacement: '_',
     });
   }
-  
-  get archiveLink() {
-    return `/archive-files/${this.id}/download`;
-  }
 
   get downloadLink() {
     return `/files/${this.id}/download`;
