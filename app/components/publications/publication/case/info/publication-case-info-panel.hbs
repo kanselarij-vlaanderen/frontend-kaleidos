@@ -281,9 +281,8 @@
               <p
                 class="auk-u-m-0"
               >
-                {{log @publicationFlow.threadId.idName}}
                 {{#if @publicationFlow.threadId.idName}}
-                  {{@publicationFlow.threadId.idName}}
+                  <p class="auk-u-text-uncapitalize">thread::{{@publicationFlow.threadId.idName}}::</p>
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
