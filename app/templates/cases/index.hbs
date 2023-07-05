@@ -88,7 +88,7 @@
                   "click"
                   (fn
                     (if
-                      row.case.isArchived
+                      row.closed
                       this.unarchiveCase
                       this.requestArchiveCase
                     )
@@ -97,7 +97,7 @@
                 }}
                 role="menuitem"
               >
-                {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
+                {{t (if row.closed "unarchive-case" "archive-case")}}
               </AuButton>
             </AuDropdown>
           {{/if}}
