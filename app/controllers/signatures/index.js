@@ -11,7 +11,7 @@ const MANDATORY_SORT_OPTION = 'decision-activity';
 const DEFAULT_SORT_OPTIONS = [
   '-decision-activity.start-date',
   MANDATORY_SORT_OPTION,
-  '-sign-subcase.sign-marking-activity.piece.name',
+  'sign-subcase.sign-marking-activity.piece.name',
 ];
 
 export default class SignaturesIndexController extends Controller {
