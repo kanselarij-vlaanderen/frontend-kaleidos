@@ -329,13 +329,16 @@ export default class AgendaitemDecisionComponent extends Component {
         ));
     }
 
-    await this.saveReport(
-      documentContainer,
-      report,
-      beslissingPiecePart,
-      betreftPiecePart
-    );
-
+    try {
+      await this.saveReport(
+        documentContainer,
+        report,
+        beslissingPiecePart,
+        betreftPiecePart
+      );
+    } catch {
+      this.toaster.error();
+    }
     this.isEditing = false;
   });
 
