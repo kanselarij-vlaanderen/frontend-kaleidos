@@ -411,3 +411,9 @@ table tr.lt-expanded-row {
 .auk-loadable-content__content {
   min-width: 0;
 }
+
+.auk-u-text-uncapitalize {
+  &::first-letter {
+    text-transform: lowercase !important;
+  }
+}
