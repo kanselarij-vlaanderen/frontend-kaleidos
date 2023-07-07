@@ -33,6 +33,11 @@ export default class PublicationFlow extends Model {
   translationSubcase;
   @belongsTo('decision-activity', { inverse: 'publicationFlows', async: true })
   decisionActivity;
+  @belongsTo('identification', {
+    invserse: 'publicationFlowForThreadId',
+    async: true,
+  })
+  threadId; // Not serialized on pub-flow side to prevent errors when deleting
 
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',

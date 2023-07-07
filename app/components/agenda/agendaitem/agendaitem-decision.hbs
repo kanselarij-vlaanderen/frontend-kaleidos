@@ -51,14 +51,14 @@
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
-          @hideDelete={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
           @hideSign={{true}}
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
-          @isGenerated={{true}}
+          @didDeleteContainer={{this.didDeleteReport}}
+          @label={{'created-on'}}
         />
       {{else}}
         <Auk::Loader />
@@ -182,8 +182,9 @@
             @onOpenUploadModal={{@onOpenUploadModal}}
             @onAddPiece={{this.attachNewReportVersionAsPiece}}
             @pieceSubtype="report"
-            @didDeleteContainer={{perform this.loadReport}}
+            @didDeleteContainer={{this.didDeleteReport}}
             @bordered={{false}}
+            @label={{"uploaded-at"}}
           />
         </Auk::Panel::Body>
       {{else if

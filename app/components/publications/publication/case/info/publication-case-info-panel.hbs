@@ -112,6 +112,21 @@
                 </div>
               </div>
 
+              {{! BS Thread ID}}
+              <div class="auk-o-grid-col-3">
+                <div
+                  class="auk-form-group"
+                >
+                  <Auk::Label>
+                    {{t "publication-flow-thread-id"}}
+                  </Auk::Label>
+                  <AuInput
+                    @value={{mut this.threadId}}
+                  />
+                </div>
+              </div>
+
+
               {{! wijze van publicatie }}
               <div class="auk-o-grid-col-3">
                 <div
@@ -252,6 +267,22 @@
               >
                 {{#if @publicationFlow.numacNumbers}}
                   {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </p>
+            </div>
+          </div>
+
+          {{! BS Thread Id}}
+          <div class="auk-o-grid-col-3">
+            <div class="auk-content">
+              <h4 class="auk-u-m-0">{{t "publication-flow-thread-id"}}</h4>
+              <p
+                class="auk-u-m-0"
+              >
+                {{#if @publicationFlow.threadId.idName}}
+                  <p class="auk-u-text-uncapitalize">thread::{{@publicationFlow.threadId.idName}}::</p>
                 {{else}}
                   {{t "dash"}}
                 {{/if}}

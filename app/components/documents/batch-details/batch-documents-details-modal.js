@@ -6,6 +6,8 @@ import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -13,6 +15,7 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
+  @service currentSession;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -28,6 +31,12 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
+  }
+
+  get isSignaturesEnabled() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
   }
 
   @task
@@ -61,7 +70,11 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
+        if (this.isSignaturesEnabled) {
+          row.signMarkingActivity = await piece.signMarkingActivity;
+          row.showSignature = isPresent(this.args.decisionActivity);
+          row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
+        }
         return row;
       })
     );
@@ -115,6 +128,9 @@ export default class BatchDocumentsDetailsModal extends Component {
           hasChanged = true;
           accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
+        }
+        if (row.markedForSignature) {
+          await this.signatureService.markDocumentForSignature(piece, this.args.decisionActivity);
         }
         if (hasChanged) {
           await piece.save();
