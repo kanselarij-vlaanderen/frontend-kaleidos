@@ -38,6 +38,7 @@ export default class SignaturesOngoingController extends Controller {
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
+  @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED]
 
 
   isConfidential = (accessLevel) => {
