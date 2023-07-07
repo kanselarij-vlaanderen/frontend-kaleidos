@@ -14,7 +14,7 @@ export default class DocumentsDocumentPreviewVersionsTabComponent extends Compon
   @task
   *loadVersionsData() {
     const pieces = yield this.args.documentContainer.hasMany('pieces').reload();
-    this.versions = pieces.toArray();
+    this.versions = pieces.slice();
   }
 
   get sortedVersions() {

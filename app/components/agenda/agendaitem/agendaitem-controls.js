@@ -138,7 +138,7 @@ export default class AgendaitemControls extends Component {
     yield this.decisionActivity.save();
     if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
       const pieces = yield this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
       }
     }

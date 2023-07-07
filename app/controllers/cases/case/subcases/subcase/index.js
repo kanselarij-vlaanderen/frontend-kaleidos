@@ -47,7 +47,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   async saveGovernmentAreas(newGovernmentAreas) {
     const governmentAreas = this.model.subcase.governmentAreas;
     governmentAreas.clear();
-    governmentAreas.pushObjects(newGovernmentAreas);
+    governmentAreas.push(...newGovernmentAreas);
     await this.model.subcase.save();
     const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,

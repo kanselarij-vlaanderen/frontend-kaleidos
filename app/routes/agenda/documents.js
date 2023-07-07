@@ -14,7 +14,7 @@ export default class AgendaDocumentsRoute extends Route {
       'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
       include: 'document-container',
     });
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     return sortPieces(pieces);
   }
 

@@ -5,6 +5,7 @@ import {
   task, timeout
 } from 'ember-concurrency';
 import { A } from '@ember/array';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class ToasterService extends Service {
   @service intl;
@@ -23,13 +24,11 @@ export default class ToasterService extends Service {
 
   @task
   *displayToast(toast) {
-    toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
-    this.toasts.pushObject(toast);
+    toast.options.onClose = toast.options.onClose || (() => removeObject(this.toasts, toast));
+    this.toasts.push(toast);
     // TODO: At first glance one might think the below timeout doesn't work properly after 5 seconds. This is caused by following CSS-animation: https://github.com/kanselarij-vlaanderen/au-kaleidos-css/blob/766b9b410fae626988fc7bf0542437889c4e94b7/_auk-alert-stack.scss#L24
     yield timeout(toast.options.timeOut);
-    if (this.toasts.includes(toast)) {
-      this.toasts.removeObject(toast);
-    }
+    removeObject(this.toasts, toast);
   }
 
   notify(message, title, options) {
@@ -112,7 +111,7 @@ export default class ToasterService extends Service {
   @action
   clear(toast) {
     if (arguments.length > 0) {
-      this.toasts.removeObject(toast);
+      removeObject(this.toasts, toast);
     } else {
       this.toasts.clear();
     }

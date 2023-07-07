@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
-import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import {
   keepLatestTask,
   task,
@@ -14,6 +14,7 @@ import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
   @service intl;
@@ -29,7 +30,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
 
   @action
   async openPieceUploadModal() {
@@ -52,7 +53,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       documentContainer: documentContainer,
       cases: [this.case],
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
@@ -68,7 +69,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     yield all(savePromises);
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.router.refresh('cases.case.subcases.subcase.documents');
   }
 
@@ -96,7 +97,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   */
   @task
   *addPiece(piece) {
-    piece.cases.pushObject(this.case);
+    piece.cases.push(this.case);
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
@@ -115,7 +116,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   *cancelUploadPieces() {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -123,7 +124,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -160,7 +161,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       // only continue if there is a piece left in the container (a container could have 0 pieces left)
       if (lastPiece) {
         const agendaActivities = await this.subcase.agendaActivities;
-        const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+        const latestActivity = agendaActivities.slice().sort((a1, a2) => a1.startDate - a2.startDate).at(-1);
         if (latestActivity) {
           const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
           const latestMeeting = await this.store.queryOne('meeting', {
@@ -168,10 +169,10 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
             sort: '-planned-start',
           });
           const agendas = await latestMeeting.agendas;
-          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
-          const latestAgenda = sortedAgendas.firstObject;
+          const sortedAgendas = agendas.slice().sort((a1, a2) => a1.serialnumber.localeCompare(a2.serialnumber)).reverse();
+          const latestAgenda = sortedAgendas.at(0);
           for (let index = 0; index < agendaitems.length; index++) {
-            const agendaitem = agendaitems.objectAt(index);
+            const agendaitem = agendaitems.at(index);
             const agenda = await agendaitem.agenda;
 
             if (agenda.id === latestAgenda.id) {
@@ -233,7 +234,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
     if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
-      submissionPieces.pushObjects(pieces);
+      submissionPieces.push(...pieces);
 
       yield submissionActivity.save();
       return submissionActivity;
@@ -253,7 +254,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
     // agendaitems can only have more than 1 item
     // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.toArray()) {
+    for (const agendaitem of agendaitems.slice()) {
       setNotYetFormallyOk(agendaitem);
       // save prior to adding pieces, micro-service does all the changes with docs
       yield agendaitem.save();

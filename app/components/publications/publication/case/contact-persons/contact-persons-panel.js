@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -11,10 +11,15 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @tracked isOpenAddModal = false;
 
+  // eslint-disable ember/no-get
   get contactPersons() {
-    return this.args.publicationFlow.contactPersons.sortBy(
-      'person.lastName', 'person.firstName');
+    return this.args.publicationFlow.contactPersons
+               .slice()
+               .sort((p1, p2) =>
+                 get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
+                   || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')));
   }
+  // eslint-enable ember/no-get
 
   @action
   openAddModal() {

@@ -43,7 +43,7 @@ export default class PublicationsPublicationCaseGovernmentAreasGovernmnetAreasPa
     const governmentAreas = await this.args.publicationFlow.governmentAreas;
 
     governmentAreas.clear();
-    governmentAreas.pushObjects(newGovernmentAreas);
+    governmentAreas.push(...newGovernmentAreas);
     await this.args.publicationFlow.save();
   }
 }

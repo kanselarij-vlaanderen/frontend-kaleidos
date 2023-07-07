@@ -6,25 +6,25 @@ export const sortDocumentContainers = (pieces, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
-  const sortedPieces = A(pieces.toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
+  const sortedPieces = A(pieces.slice()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   /*
     Code below for compatibility towards mixin consumers.
     Since names are now on each piece
     we can sort on the pieces themselves instead of on containers
   */
-  return A(containers.toArray()).sort((containerA, containerB) => {
+  return A(containers.slice()).sort((containerA, containerB) => {
     let matchingPieceA = null;
     let matchingPieceB = null;
     for (let index = 0; index < containerA.get('pieces.length'); index++) {
-      const piece = containerA.get('pieces').objectAt(index);
-      matchingPieceA = sortedPieces.filterBy('id', piece.id).sortBy('created').lastObject;
+      const piece = containerA.get('pieces').slice().at(index);
+      matchingPieceA = sortedPieces.filter((p) => p.id === piece.id).slice().sort((p1, p2) => p1.created - p2.created).at(-1);
       if (matchingPieceA) {
         break;
       }
     }
     for (let index = 0; index < containerB.get('pieces.length'); index++) {
-      const piece = containerB.get('pieces').objectAt(index);
-      matchingPieceB = sortedPieces.filterBy('id', piece.id).sortBy('created').lastObject;
+      const piece = containerB.get('pieces').slice().at(index);
+      matchingPieceB = sortedPieces.filter((p) => p.id === piece.id).slice().sort((p1, p2) => p1.created - p2.created).at(-1);
       if (matchingPieceB) {
         break;
       }
@@ -45,7 +45,7 @@ export const sortPieces = (pieces, NameClass = VRDocumentName, sortingFunc = com
     }
   }
   validNamedPieces.sort((docA, docB) => sortingFunc(new NameClass(docA.name), new NameClass(docB.name)));
-  invalidNamedPieces = invalidNamedPieces.sortBy('created').toArray();
+  invalidNamedPieces = invalidNamedPieces.sort((p1, p2) => p1.created - p2.created);
   invalidNamedPieces.reverse();
 
   return [...validNamedPieces, ...invalidNamedPieces];

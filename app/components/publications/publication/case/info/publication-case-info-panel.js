@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { timeout, task, restartableTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PublicationsPublicationCaseInfoPanelComponent extends Component {
   @service store;
@@ -66,7 +67,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get publicationModes() {
-    return this.store.peekAll('publication-mode').sortBy('position');
+    return this.store.peekAll('publication-mode').slice().sort((c1, c2) => c1.position - c2.position);
   }
 
   get isValid() {
@@ -139,12 +140,12 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.args.publicationFlow,
     });
-    this.numacNumbers.pushObject(numacNumber);
+    this.numacNumbers.push(numacNumber);
   }
 
   @action
   deleteNumacNumber(numacNumber) {
-    this.numacNumbers.removeObject(numacNumber);
+    removeObject(this.numacNumbers, numacNumber);
     this.numacNumbersToDelete.push(numacNumber);
   }
 
@@ -198,7 +199,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(numacNumber.destroyRecord());
     }
 
-    for (const numacNumber of this.numacNumbers.toArray()) {
+    for (const numacNumber of this.numacNumbers.slice()) {
       if (numacNumber.isNew) {
         saves.push(numacNumber.save());
       }

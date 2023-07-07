@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import * as CONFIG from 'frontend-kaleidos/config/config';
+import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument dateRange
@@ -81,9 +82,9 @@ export default class MandateePersonSelector extends Component {
     const persons = [];
     for (const mandatee of mandatees) {
       const person = yield mandatee.person;
-      persons.addObject(person);
+      addObject(persons, person);
     }
 
-    return persons.sortBy('lastName');
+    return persons.sort((p1, p2) => p1.lastName.localeCompare(p2.lastName));
   }
 }

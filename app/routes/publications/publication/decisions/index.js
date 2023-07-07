@@ -20,7 +20,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
         'access-level'
       ].join(',')
     });
-    return pieces.toArray();
+    return pieces.slice();
   }
 
   async afterModel() {

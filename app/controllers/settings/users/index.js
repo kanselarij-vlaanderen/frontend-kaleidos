@@ -7,6 +7,7 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class UsersSettingsController extends Controller {
   @service store;
@@ -78,12 +79,12 @@ export default class UsersSettingsController extends Controller {
 
   @task
   *loadSelectedOrganizations() {
-    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
   }
 
   @task
   *loadSelectedRoles() {
-    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).toArray();
+    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).slice();
   }
 
   @action
@@ -101,9 +102,9 @@ export default class UsersSettingsController extends Controller {
   @action
   toggleMembershipBeingBlocked(membership, isChecked) {
     if (isChecked) {
-      this.membershipsBeingBlocked.addObject(membership);
+      addObject(this.membershipsBeingBlocked, membership);
     } else {
-      this.membershipsBeingBlocked.removeObject(membership);
+      removeObject(this.membershipsBeingBlocked, membership);
     }
   }
 

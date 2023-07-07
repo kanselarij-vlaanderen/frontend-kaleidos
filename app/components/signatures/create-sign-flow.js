@@ -7,6 +7,7 @@ import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  */
@@ -33,7 +34,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     if (!this.args.decisionActivities) {
       return;
     }
-    const decisionActivities = this.args.decisionActivities.toArray();
+    const decisionActivities = this.args.decisionActivities.slice();
     let hasConflictingSigners = false;
 
     this.primeMinister = await this.store.queryOne('mandatee', {
@@ -111,27 +112,27 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @action
   saveApprover(approver) {
-    this.approvers.addObject(approver);
+    addObject(this.approvers, approver);
     this.showApproversModal = false;
     this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   removeApprover(approver) {
-    this.approvers.removeObject(approver);
+    removeObject(this.approvers, approver);
     this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   saveNotificationAddress(address) {
-    this.notificationAddresses.addObject(address);
+    addObject(this.notificationAddresses, address);
     this.showNotificationAddressesModal = false;
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
   @action
   removeNotificationAddress(address) {
-    this.notificationAddresses.removeObject(address);
+    removeObject(this.notificationAddresses, address);
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
@@ -147,7 +148,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @action
   removeSigner(signer) {
-    this.signers.removeObject(signer);
+    removeObject(this.signers, signer);
     this.args.onChangeSigners?.(this.signers);
   }
 

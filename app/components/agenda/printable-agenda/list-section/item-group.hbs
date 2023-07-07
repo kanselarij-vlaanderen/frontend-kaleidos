@@ -15,7 +15,7 @@
             {{#if mandatees}}
               {{#each mandatees as |mandatee|}}
                 {{mandatee.title}}
-                {{#if (not-eq mandatee mandatees.lastObject)}}
+                {{#if (has-next mandatee mandatees)}}
                   <br />&
                 {{/if}}
               {{/each}}

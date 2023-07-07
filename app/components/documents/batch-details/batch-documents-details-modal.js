@@ -8,6 +8,7 @@ import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent, isEmpty } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -88,9 +89,9 @@ export default class BatchDocumentsDetailsModal extends Component {
   toggleSelection(row) {
     const isSelected = this.selectedRows.includes(row);
     if (isSelected) {
-      this.selectedRows.removeObject(row);
+      removeObject(this.selectedRows, row);
     } else {
-      this.selectedRows.pushObject(row);
+      this.selectedRows.push(row);
     }
   }
 

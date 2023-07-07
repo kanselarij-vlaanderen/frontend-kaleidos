@@ -149,7 +149,7 @@ export default class AgendaService extends Service {
         'filter[:id:]': submissionActivity.id,
         include: 'pieces', // query with include to avoid pagination issues
       });
-      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
+      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).slice());
     }
     const agendaitem = await this.store.createRecord('agendaitem', {
       created: now,
@@ -186,7 +186,7 @@ export default class AgendaService extends Service {
       agendaitems.map(async(agendaitem) => {
         let currentAgendaitemGroupName;
         const mandatees = await agendaitem.mandatees;
-        const sortedMandatees = mandatees.sortBy('priority');
+        const sortedMandatees = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);

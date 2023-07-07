@@ -12,7 +12,7 @@ export default class ExtendedStoreService extends Store {
     }
     const results = await this.query(modelName, query, options);
     if (results.length) {
-      return results.firstObject;
+      return results[0];
     }
     return null;
   }
@@ -34,7 +34,7 @@ export default class ExtendedStoreService extends Store {
 
     const results = await Promise.all(batches);
     return ArrayProxy.create({
-      content: results.map((result) => result.toArray()).flat(),
+      content: results.map((result) => result.slice()).flat(),
       meta: {
         count
       }
@@ -52,7 +52,8 @@ export default class ExtendedStoreService extends Store {
   }
 
   findRecordByUri(modelName, uri) {
-    const cachedRecord = this.peekAll(modelName).findBy('uri', uri);
+    // const cachedRecord = this.peekAll(modelName).find((model) => model.uri === uri);
+    const cachedRecord = this.peekAll(modelName).slice().findBy("uri", uri);
     if (cachedRecord) {
       return cachedRecord;
     }

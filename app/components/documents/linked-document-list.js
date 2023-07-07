@@ -36,7 +36,7 @@ export default class LinkedDocumentList extends Component {
     const sortedHistories = A([]);
     for (const container of sortedContainers) {
       const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
-      sortedHistories.pushObject(history);
+      sortedHistories.push(history);
     }
     return sortedHistories;
   }
@@ -72,7 +72,7 @@ export default class LinkedDocumentList extends Component {
     const containerPieces = yield documentContainer.pieces;
 
     const heads = [];
-    for (const piece of containerPieces.toArray()) {
+    for (const piece of containerPieces.slice()) {
       const previousPiece = yield piece.previousPiece;
       if (!previousPiece) {
         heads.push(piece);
@@ -84,7 +84,7 @@ export default class LinkedDocumentList extends Component {
       warn('More than 1 possible head found for linked list of pieces. Falling back to sort by document creation date', {
         id: 'multiple-possible-linked-list-heads',
       });
-      sortedContainerPieces = containerPieces.sortBy('created');
+      sortedContainerPieces = containerPieces.slice().sort((p1, p2) => p1.created - p2.created);
     } else {
       let next = heads[0];
       while (next) {

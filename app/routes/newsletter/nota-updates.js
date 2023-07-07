@@ -48,11 +48,11 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'page[size]': PAGE_SIZE.NOTAS,
       sort: params.sort,
     });
-    for (const nota of notas.toArray()) { // proxyarray to native JS array
+    for (const nota of notas.slice()) { // proxyarray to native JS array
       const agendaitemsLinkedToNota = await nota.get('agendaitems');
       let agendaitemOnLatestAgenda;
       for (let index = 0; index < agendaitemsLinkedToNota.length; index++) {
-        const agendaitemToFetch = agendaitemsLinkedToNota.objectAt(index);
+        const agendaitemToFetch = agendaitemsLinkedToNota.at(index);
         const agendaitemFromStore = await this.store.findRecord('agendaitem', agendaitemToFetch.id,
           {
             reload: true,
@@ -76,7 +76,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         agendaitemShortTitle,
         ...pieceData,
       };
-      processedNotas.pushObject(processedNota);
+      processedNotas.push(processedNota);
     }
     return processedNotas;
   }

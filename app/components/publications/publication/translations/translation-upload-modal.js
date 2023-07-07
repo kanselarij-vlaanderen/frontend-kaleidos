@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
   @service publicationService;
@@ -28,7 +29,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
   }
 
   @dropTask
@@ -58,6 +59,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
   }
 }

@@ -105,7 +105,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      const lastPiece = this.reverseSortedPieces.lastObject;
+      const lastPiece = this.reverseSortedPieces.at(-1);
       this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
@@ -149,13 +149,13 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
-    for (const piece of this.pieces.toArray()) {
+    for (const piece of this.pieces.slice()) {
       yield piece.belongsTo('accessLevel').reload();
     }
   }
 
   get sortedPieces() {
-    return A(sortPieces(this.pieces.toArray()).reverse());
+    return A(sortPieces(this.pieces.slice()).reverse());
   }
 
   get reverseSortedPieces() {
@@ -182,7 +182,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
-    const previousPiece = this.sortedPieces.lastObject;
+    const previousPiece = this.sortedPieces.at(-1);
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
     this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
@@ -216,7 +216,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteUploadedPiece() {
     if (this.newPiece) {
-      this.pieces.removeObject(this.newPiece);
+      const index = this.pieces.indexOf(this.newPiece);
+      if (index >= 0) {
+        this.pieces.splice(index, 1);
+      }
       yield deletePiece(this.newPiece);
       this.newPiece = null;
     }
@@ -250,7 +253,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     };
     verificationToast.options.onUndo = () => {
       this.deleteDocumentContainerWithUndo.cancelAll();
-      this.toaster.toasts.removeObject(verificationToast);
+      const index = this.toaster.toasts.indexOf(verificationToast);
+      if (index >= 0) {
+        this.toaster.toasts.splice(index, 1);
+      }
     };
     this.toaster.displayToast.perform(verificationToast);
     this.deleteDocumentContainerWithUndo.perform();

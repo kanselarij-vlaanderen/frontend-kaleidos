@@ -7,6 +7,7 @@ import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PublicationsPublicationPublicationActivitiesPublicationRequestModal extends Component {
   @service publicationService;
@@ -69,8 +70,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     let proofingActivity = this.args.proofingActivity;
     if (proofingActivity) {
       let generatedPieces = yield proofingActivity.generatedPieces;
-      generatedPieces = generatedPieces.toArray();
-      generatedPieces = generatedPieces.sortBy('name', 'receivedDate');
+      generatedPieces = generatedPieces
+        .slice()
+        .sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.receivedDate - p2.receivedDate);
+
       this.transferredPieces = generatedPieces;
     } else {
       this.transferredPieces = [];
@@ -131,18 +134,18 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
   }
 
   @action
   unlinkTransferredPiece(piece) {
-    this.transferredPieces.removeObject(piece);
+    removeObject(this.transferredPieces, piece);
   }
 
   @action

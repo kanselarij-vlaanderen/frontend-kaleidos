@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -14,7 +14,7 @@ class Row {
   }
 
   get sortedGovernmentFields() {
-    return this.governmentFields.sortBy('label');
+    return this.governmentFields.slice().sort((f1, f2) => f1.label.localeCompare(f2.label));
   }
 }
 
@@ -37,7 +37,7 @@ export default class GovernmentAreasPanel extends Component {
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentAreas = this.args.governmentAreas?.toArray();
+    const governmentAreas = this.args.governmentAreas?.slice();
     if (!governmentAreas) {
       return;
     }
@@ -45,20 +45,21 @@ export default class GovernmentAreasPanel extends Component {
     const fields = [];
     for (let governmentArea of governmentAreas) {
       const topConceptSchemes = yield governmentArea.topConceptSchemes;
-      if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
-        domains.pushObject(governmentArea);
-      } else if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
-        fields.pushObject(governmentArea);
+      if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
+        domains.push(governmentArea);
+      } else if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
+        fields.push(governmentArea);
       }
     }
 
-    const fieldsByDomain = yield groupBy(fields.toArray(), 'broader', domains.toArray());
+    const fieldsByDomain = yield groupBy(fields.slice(), 'broader', domains.slice());
     this.rows = [...fieldsByDomain.entries()]
       .map(([domain, fields]) => new Row({
         governmentDomain: domain,
         governmentFields: fields,
       }))
-      .sortBy('governmentDomain.label');
+      // eslint-disable-next-line ember/no-get
+      .sort((r1, r2) => get(r1, 'governmentDomain.label').localeCompare(get(r2, 'governmentDomain.label')));
     this.governmentFields = fields;
     this.governmentDomains = domains;
   }

@@ -16,11 +16,11 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
   @task
   *loadData() {
     const decisions = yield this.args.publicationActivity.decisions;
-    this.decisions = decisions.toArray();
+    this.decisions = decisions.slice();
   }
 
   get latestDecision() {
-    return this.decisions.sortBy('publicationDate').lastObject;
+    return this.decisions.slice().sort((d1, d2) => d1.publicationDate - d2.publicationDate).at(-1);
   }
 
   get isEditDisabled() {

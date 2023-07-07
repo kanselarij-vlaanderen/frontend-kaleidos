@@ -2,9 +2,10 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
+import { TrackedArray } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
 import { all } from 'ember-concurrency';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class AgendaDocumentsController extends Controller {
   @service store;
@@ -18,7 +19,7 @@ export default class AgendaDocumentsController extends Controller {
   defaultAccessLevel;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
 
   @action
   openPieceUploadModal() {
@@ -40,7 +41,7 @@ export default class AgendaDocumentsController extends Controller {
       meeting: this.meeting,
       documentContainer: documentContainer,
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
@@ -55,7 +56,7 @@ export default class AgendaDocumentsController extends Controller {
     });
     yield all(savePromises);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.router.refresh('agenda.documents');
   }
 
@@ -101,7 +102,7 @@ export default class AgendaDocumentsController extends Controller {
   *cancelUploadPieces() {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -109,7 +110,7 @@ export default class AgendaDocumentsController extends Controller {
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();

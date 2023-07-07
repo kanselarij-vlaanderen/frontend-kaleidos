@@ -93,7 +93,7 @@ function proofRequestEmail(params) {
 function publicationRequestEmail(params) {
   const targetEndDate = params.targetEndDate ? dateFormat(params.targetEndDate, 'dd-MM-yyyy') : '-';
   const numacNumbers = params.numacNumbers
-        ? params.numacNumbers.mapBy('idName').join(', ')
+        ? params.numacNumbers.map((n) => n.idName).join(', ')
         : '-';
   let subject = '';
 

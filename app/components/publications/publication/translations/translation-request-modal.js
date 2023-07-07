@@ -7,6 +7,7 @@ import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-ema
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
@@ -91,7 +92,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
       numberOfDocuments: this.uploadedPieces.length,
-      contactPersons: contactPersons.toArray(),
+      contactPersons: contactPersons.slice(),
     };
 
     const mailTemplate = yield translationRequestEmail(mailParams);
@@ -108,7 +109,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
     this.setEmailFields.perform();
   }
 
@@ -120,7 +121,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
     this.setEmailFields.perform();
   }
 

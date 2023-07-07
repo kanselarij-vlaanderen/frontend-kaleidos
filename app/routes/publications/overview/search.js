@@ -168,8 +168,8 @@ export default class PublicationsOverviewSearchRoute extends Route {
     controller.page = params.page;
     controller.dateFromBuffer = parseDate(params.dateFrom);
     controller.dateToBuffer = parseDate(params.dateTo);
-    controller.publicationStatuses = this.publicationStatuses.toArray();
-    controller.regulationTypes = this.regulationTypes.toArray();
+    controller.publicationStatuses = this.publicationStatuses.slice();
+    controller.regulationTypes = this.regulationTypes.slice();
     controller.mandatees = params.mandatees;
 
     if (controller.page !== this.lastParams.committed.page) {
@@ -197,7 +197,7 @@ export default class PublicationsOverviewSearchRoute extends Route {
       const hasMultipleStatuses = Array.isArray(statusId);
       if (hasMultipleStatuses) {
         // due to inserts of double statuses we take the first one to not break the search
-        statusId = statusId.firstObject;
+        statusId = statusId.at(0);
         warn(`Publication flow ${attributes.id} contains multiple statusses in search index`, !hasMultipleStatuses, { id: 'search.invalid-data' });
       }
       const status = this.publicationStatuses.find((status) => status.id === statusId);

@@ -77,7 +77,7 @@ export default class SignaturesIndexController extends Controller {
       this.closeSidebar();
       this.selectedSignFlows = new TrackedArray([]);
     } else {
-      this.selectedSignFlows = new TrackedArray(this.model.toArray());
+      this.selectedSignFlows = new TrackedArray(this.model.slice());
     }
   }
 
@@ -124,7 +124,7 @@ export default class SignaturesIndexController extends Controller {
     const mandatees = await subcase.mandatees;
     const persons = await Promise.all(
       mandatees
-        .toArray()
+        .slice()
         .sort((m1, m2) => m1.priority - m2.priority)
         .map((mandatee) => mandatee.person)
     );

@@ -13,11 +13,11 @@ export class TimelineActivity {
         row.activity.usedPieces,
         row.activity.generatedPieces,
       ]);
-      pieces = pieces.map((pieces) => pieces.toArray());
+      pieces = pieces.map((pieces) => pieces.slice());
       pieces = pieces.flat();
-      let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
+      let proofingActivities = pieces.map((a) => a.proofingActivitiesUsedBy);
       proofingActivities = await Promise.all(proofingActivities);
-      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.toArray());
+      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.slice());
       proofingActivities = proofingActivities.flat();
       row.canDeletePieces = proofingActivities.length === 0;
     }
@@ -91,7 +91,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       ...requestActivities.map((request) => TimelineActivity.create(request)),
       ...translationActivities.map((translation) => TimelineActivity.create(translation)),
     ]);
-    rows = rows.sortBy('date').reverseObjects();
+    rows = rows.sort((r1, r2) => r1.date - r2.date).reverse();
     return rows;
   }
 

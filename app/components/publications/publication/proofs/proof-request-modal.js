@@ -7,6 +7,7 @@ import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
@@ -96,9 +97,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.generatedPieces,
       ]);
       this.transferredPieces = [
-        ...usedPieces.toArray(),
-        ...generatedPieces.toArray(),
-      ].sortBy('name', 'created');
+        ...usedPieces.slice(),
+        ...generatedPieces.slice(),
+      ]
+        .sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.created - p2.created);
     } else {
       this.transferredPieces = [];
     }
@@ -155,18 +157,18 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
   }
 
   @action
   unlinkTransferredPiece(piece) {
-    this.transferredPieces.removeObject(piece);
+    removeObject(this.transferredPieces, piece);
   }
 
   @action

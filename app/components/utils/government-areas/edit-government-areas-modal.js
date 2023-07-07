@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { removeObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class EditGovernmentAreasModal extends Component {
   @service conceptStore;
@@ -22,7 +23,7 @@ export default class EditGovernmentAreasModal extends Component {
   *loadGovernmentAreas() {
     const concepts = yield this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
-    for (const concept of concepts.toArray()) {
+    for (const concept of concepts.slice()) {
       const isInDateRange =
         concept.startDate <= this.args.referenceDate &&
         (this.args.referenceDate <= concept.endDate ||
@@ -44,22 +45,22 @@ export default class EditGovernmentAreasModal extends Component {
   }
 
   @action
-  selectField(selectedField) {
-    this.selectedGovernmentFields.pushObjects(selectedField);
+  selectField(selectedFields) {
+    this.selectedGovernmentFields.push(...selectedFields);
   }
 
   @action
-  deselectField(selectedField) {
-    this.selectedGovernmentFields.removeObjects(selectedField);
+  deselectField(selectedFields) {
+    removeObjects(this.selectedGovernmentFields, selectedFields);
   }
 
   @action
-  selectDomain(selectedDomain) {
-    this.selectedGovernmentDomains.pushObjects(selectedDomain);
+  selectDomain(selectedDomains) {
+    this.selectedGovernmentDomains.push(...selectedDomains);
   }
 
   @action
-  deselectDomain(selectedDomain) {
-    this.selectedGovernmentDomains.removeObjects(selectedDomain);
+  deselectDomain(selectedDomains) {
+    removeObjects(this.selectedGovernmentDomains, selectedDomains);
   }
 }

@@ -12,20 +12,20 @@ export default class AgendaPrintController extends Controller {
   get notaGroups() {
     const agendaitems = this.model.notas;
     if (agendaitems.length > 0) {
-      const mandatees = agendaitems.firstObject.mandatees;
-      let currentSubmittersArray = mandatees.sortBy('priority');
+      const mandatees = agendaitems.at(0).mandatees;
+      let currentSubmittersArray = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
       let currentItemArray = A([]);
       const groups = [];
-      groups.pushObject(currentItemArray);
+      groups.push(currentItemArray);
       for (let index = 0; index < agendaitems.length; index++) {
-        const agendaitem = agendaitems.objectAt(index);
+        const agendaitem = agendaitems.at(index);
         const mandatees = agendaitem.mandatees;
-        const subm = mandatees.sortBy('priority');
+        const subm = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
         if (equalContentArrays(currentSubmittersArray, subm)) {
-          currentItemArray.pushObject(agendaitem);
+          currentItemArray.push(agendaitem);
         } else {
           currentItemArray = A([agendaitem]);
-          groups.pushObject(currentItemArray);
+          groups.push(currentItemArray);
           currentSubmittersArray = subm;
         }
       }

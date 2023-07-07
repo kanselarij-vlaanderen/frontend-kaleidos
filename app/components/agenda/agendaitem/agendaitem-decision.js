@@ -144,7 +144,7 @@ export default class AgendaitemDecisionComponent extends Component {
       ].includes(decisionResultCode.uri)
     ) {
       const pieces = this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );

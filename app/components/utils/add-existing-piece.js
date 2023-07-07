@@ -86,4 +86,10 @@ export default class AddExistingPiece extends Component {
     this.size = size;
     this.findAll.perform();
   }
+
+  @action
+  preventClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
