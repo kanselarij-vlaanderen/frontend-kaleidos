@@ -117,7 +117,6 @@ Router.map(function() {
     this.route('accordion-panel');
     this.route('avatar');
     this.route('brand');
-    this.route('badge');
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
