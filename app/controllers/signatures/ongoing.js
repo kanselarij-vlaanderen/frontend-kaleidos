@@ -56,19 +56,13 @@ export default class SignaturesOngoingController extends Controller {
 
     if (piece) {
       if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
-        this.router.transitionTo(
-          'document',
-          piece.id
-        );
+        window.open(`/document/${piece.id}`, '_blank');
       } else {
         const signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         if (signingHubUrl) {
           window.open(signingHubUrl, '_blank');
         } else {
-          this.router.transitionTo(
-            'document',
-            piece.id
-          );
+          window.open(`/document/${piece.id}`, '_blank');
         }
       }
     }
