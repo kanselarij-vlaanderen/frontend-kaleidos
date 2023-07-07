@@ -183,9 +183,10 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
   cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
   cy.wait(`@patchAgendaitem${randomInt}`, {
     timeout: 40000,
-  }).wait(`@patchAgenda${randomInt}`, {
-    timeout: 40000,
   });
+  // .wait(`@patchAgenda${randomInt}`, {
+  //   timeout: 40000,
+  // });
   // the mandatee groups have to be recalculated.
   cy.wait(2000);
 

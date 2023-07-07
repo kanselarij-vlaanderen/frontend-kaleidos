@@ -104,6 +104,7 @@ const selectors = {
       releaseDecisions: '[data-test-agenda-actions-release-decisions-confirm]',
       approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems-confirm]',
     },
+    downloadDocumentsFiletypeSelector: '[data-test-agenda-actions-download-documents-filetype-selector]',
   },
 
   // publication-planning-modal

@@ -247,6 +247,7 @@
       <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
       <Fieldset.content>
         <AuRadioGroup
+          data-test-agenda-actions-download-documents-filetype-selector
           @alignment="inline"
           @selected={{this.selectedDownloadOption}}
           @onChange={{this.onChangeDownloadOption}}
