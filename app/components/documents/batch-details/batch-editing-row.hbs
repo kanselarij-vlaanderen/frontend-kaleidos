@@ -8,7 +8,7 @@
   <td>
     <Utils::DocumentTypeSelector
       data-test-batch-editing-row-type
-      @disabled={{this.isDisabled}}
+      @disabled={{or this.hasSignFlow this.isDisabled}}
       @selectedDocumentType={{this.documentType}}
       @onChange={{this.setDocumentType}}
     />
@@ -24,13 +24,24 @@
       @onChange={{this.setAccessLevel}}
     />
   </td>
+  {{#if (and @isSignaturesEnabled @decisionActivity)}}
+    <td>
+      <AuButton
+        @skin="primary"
+        @disabled={{(or this.isDisabled this.isSignMarkingDisabled)}}
+        {{on "click" (fn this.setMarkedForSignature true)}}
+      >
+        {{t "present-for-signing"}}
+      </AuButton>
+    </td>
+  {{/if}}
   <td class="auk-u-text-align--right">
     {{#if this.isToBeDeleted}}
       <AuButton
         @skin="naked"
         @icon="undo"
         @hideText={{true}}
-        @disabled={{this.isDisabled}}
+        @disabled={{or this.hasSignFlow this.isDisabled}}
         {{on "click" (fn this.setToBeDeleted false)}}
       >
         {{t "undo"}}
@@ -41,7 +52,7 @@
         @alert={{true}}
         @icon="trash"
         @hideText={{true}}
-        @disabled={{this.isDisabled}}
+        @disabled={{or this.hasSignFlow this.isDisabled}}
         {{on "click" (fn this.setToBeDeleted true)}}
       >
         {{t "delete"}}

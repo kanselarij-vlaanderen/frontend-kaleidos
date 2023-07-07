@@ -1,4 +1,5 @@
-import templateOnly from '@ember/component/template-only';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 /**
  * @param title {string} Optional. The title of the modal. Is overriden by a :title block
  * @param message {string} Optional. The message displayed in the body of the modal. Is overriden by a :body block
@@ -12,4 +13,12 @@ import templateOnly from '@ember/component/template-only';
  * @param disabled {boolean} Whether the confirm button is in a disabled state
  * @param loading {boolean} Whether the confirm button is in a loading state (and also disabled)
  */
-export default templateOnly();
+export default class ConfirmationModalComponent extends Component {
+
+  @action
+  cancel () {
+    if (!this.args.loading) {
+      this.args.onCancel();
+    }
+  }
+}

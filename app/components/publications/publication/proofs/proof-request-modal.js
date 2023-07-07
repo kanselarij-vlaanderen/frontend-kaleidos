@@ -137,6 +137,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     const publicationFlow = this.args.publicationFlow;
     const identification = yield publicationFlow.identification;
     const urgencyLevel = yield publicationFlow.urgencyLevel;
+    const threadId = yield publicationFlow.threadId;
     const mailParams = {
       identifier: identification.idName,
       shortTitle: publicationFlow.shortTitle,
@@ -144,6 +145,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       longTitle: publicationFlow.longTitle
         ? publicationFlow.longTitle
         : publicationFlow.shortTitle,
+      threadId: threadId?.idName,
     };
 
     const mailTemplate = proofRequestEmail(mailParams);

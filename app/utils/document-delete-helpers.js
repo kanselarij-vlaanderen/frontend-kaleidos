@@ -22,6 +22,10 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
         await deletePiece(latestPiece);
       } else if (latestPiece.constructor.modelName === 'report') {
         await deleteReport(latestPiece);
+      } else {
+        console.debug(
+          'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
+        );
       }
       latestPiece = previousPiece;
     }
@@ -60,8 +64,8 @@ export async function deletePiece(pieceOrPromise) {
  */
 export async function deleteReport(reportOrPromise) {
   const report = await reportOrPromise;
-  const pieceParts = await report.pieceParts.toArray();
-  for (const piecePart of pieceParts) {
+  const pieceParts = await report.pieceParts;
+  for (const piecePart of pieceParts.toArray()) {
     await piecePart.destroyRecord();
   }
   await deletePiece(report);

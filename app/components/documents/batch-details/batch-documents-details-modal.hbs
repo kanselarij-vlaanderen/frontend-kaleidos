@@ -18,6 +18,11 @@
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
               <th>{{t "publicity"}}</th>
+              {{#if this.isSignaturesEnabled}}
+                {{#if @decisionActivity}}
+                  <th>{{t "signature"}}</th>
+                {{/if}}
+              {{/if}}
             {{else}}
               <th>{{t "file-type"}}</th>
             {{/if}}
@@ -28,6 +33,8 @@
           {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
+              @decisionActivity={{@decisionActivity}}
+              @isSignaturesEnabled={{this.isSignaturesEnabled}}
             />
           {{/if}}
           {{#each this.rows as |row|}}

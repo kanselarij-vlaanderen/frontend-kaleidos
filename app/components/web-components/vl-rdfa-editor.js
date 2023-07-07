@@ -46,6 +46,11 @@ export default class WebComponentsVlRdfaEditor extends Component {
 
   @tracked controller;
 
+  get sizeClass() {
+    if (this.args.size == 'small') return 'vl-rdfa-editor--small';
+    else return '';
+  }
+
   get plugins() {
     return [tablePlugin, tableKeymap];
   }

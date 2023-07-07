@@ -38,6 +38,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked previousAgenda;
   @tracked agendaActivity;
   @tracked subcase;
+  @tracked decisionActivity;
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
@@ -86,7 +87,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     }
     return isAgendaDraftOrLegacy || this.hasConfirmedDocEditOnApproved;
   }
-
 
   @task
   *openWarnUploadOnApproved() {

@@ -6,6 +6,19 @@ export default class BatchEditingRow extends Component {
     return this.args.selectedRows.length === 0;
   }
 
+  get isSignMarkingDisabled() {
+    for (const row of this.args.selectedRows) {
+      if (row.signMarkingActivity) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  get hasSignFlow() {
+    return this.args.selectedRows.some((row) => row.hasSignFlow);
+  }
+
   get documentType() {
     return this.getBatchSelectedValue((row) => row.documentType);
   }
@@ -54,6 +67,15 @@ export default class BatchEditingRow extends Component {
   setToBeDeleted(isToBeDeleted) {
     for (const row of this.args.selectedRows) {
       row.isToBeDeleted = isToBeDeleted;
+    }
+  }
+
+  @action
+  setMarkedForSignature(markedForSignature) {
+    for (const row of this.args.selectedRows) {
+      if (!row.signMarkingActivity) {
+        row.markedForSignature = markedForSignature;
+      }
     }
   }
 }

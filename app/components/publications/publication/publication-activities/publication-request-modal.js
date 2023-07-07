@@ -108,6 +108,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
   @task
   *setEmailFields() {
     const publicationFlow = this.args.publicationFlow;
+    const threadId = yield publicationFlow.threadId;
     const [identification, numacNumbers, publicationSubcase, urgencyLevel] =
       yield Promise.all([
         publicationFlow.identification,
@@ -121,6 +122,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
       isUrgent: urgencyLevel?.isUrgent,
       targetEndDate: publicationSubcase.targetEndDate,
       numacNumbers: numacNumbers,
+      threadId: threadId?.idName,
     };
 
     const mailTemplate = publicationRequestEmail(mailParams);
