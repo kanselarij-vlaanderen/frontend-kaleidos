@@ -63,7 +63,7 @@ export default class SignaturesOngoingController extends Controller {
       } else {
         const signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         if (signingHubUrl) {
-          window.location.href = signingHubUrl;
+          window.open(signingHubUrl, '_blank');
         } else {
           this.router.transitionTo(
             'document',
