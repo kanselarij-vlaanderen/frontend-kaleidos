@@ -2,11 +2,17 @@ import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import fetch from 'fetch';
 
-export const sortDocumentContainers = (pieces, containers) => {
+export const sortDocumentContainers = async (piecesOrPromise, containersOrPromise) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
+  const pieces = await piecesOrPromise;
+  const containers = await containersOrPromise;
+
   const sortedPieces = A(pieces.slice()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
+  // Load the pieces linked to container so we can access them later
+  await Promise.all(containers.map(async (container) => await container.pieces));
+
   /*
     Code below for compatibility towards mixin consumers.
     Since names are now on each piece
@@ -15,15 +21,20 @@ export const sortDocumentContainers = (pieces, containers) => {
   return A(containers.slice()).sort((containerA, containerB) => {
     let matchingPieceA = null;
     let matchingPieceB = null;
-    for (let index = 0; index < containerA.get('pieces.length'); index++) {
-      const piece = containerA.get('pieces').slice().at(index);
+    // Use .value() to get the value of a ManyArray, instead of working with the
+    // deprecated PromiseManyArray. Because we loaded them earlier we're sure
+    // there's data (if they were unloaded, they would be null here)
+    let piecesA = containerA.hasMany('pieces').value();
+    let piecesB = containerB.hasMany('pieces').value();
+    for (let index = 0; index < piecesA.length; index++) {
+      const piece = piecesA.slice().at(index);
       matchingPieceA = sortedPieces.filter((p) => p.id === piece.id).slice().sort((p1, p2) => p1.created - p2.created).at(-1);
       if (matchingPieceA) {
         break;
       }
     }
-    for (let index = 0; index < containerB.get('pieces.length'); index++) {
-      const piece = containerB.get('pieces').slice().at(index);
+    for (let index = 0; index < piecesB.length; index++) {
+      const piece = piecesB.slice().at(index);
       matchingPieceB = sortedPieces.filter((p) => p.id === piece.id).slice().sort((p1, p2) => p1.created - p2.created).at(-1);
       if (matchingPieceB) {
         break;
