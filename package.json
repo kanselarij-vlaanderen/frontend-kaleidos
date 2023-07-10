@@ -108,7 +108,7 @@
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^7.0.0",
     "ember-plausible": "^0.1.1",
-    "ember-power-select": "^5.0.4",
+    "ember-power-select": "^6.0.2",
     "ember-prism": "^0.13.0",
     "ember-promise-helpers": "2.0.0",
     "ember-qunit": "^6.0.0",
