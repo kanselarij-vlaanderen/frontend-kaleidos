@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { action, get } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
+import { resource, use } from 'ember-resources';
 
 /**
  * @argument {PublicationFlow} publicationFlow include: contact-persons,contact-persons.person
@@ -12,13 +14,20 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @tracked isOpenAddModal = false;
 
   /* eslint-disable ember/no-get */
-  get contactPersons() {
-    return this.args.publicationFlow.contactPersons
-               .slice()
-               .sort((p1, p2) =>
-                 get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
-                   || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')));
-  }
+  @use contactPersons = resource(() => {
+    const contactPersons = new TrackedArray([]);
+    const calculateContactPersons = async () => {
+      contactPersons.length = 0;
+      (await this.args.publicationFlow.contactPerson)
+        ?.slice()
+        ?.sort((p1, p2) =>
+          get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
+            || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')))
+        ?.forEach((p) => contactPersons.push(p));
+    };
+    calculateContactPersons();
+    return contactPersons;
+  });
   /* eslint-enable ember/no-get */
 
   @action

@@ -97,7 +97,8 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   */
   @task
   *addPiece(piece) {
-    piece.cases.push(this.case);
+    const cases = yield piece.cases;
+    cases.push(this.case);
     yield piece.save();
     try {
       const sourceFile = yield piece.file;

@@ -250,11 +250,13 @@
                 data-test-publication-case-info-panel-numac-number
                 class="auk-u-m-0"
               >
-                {{#if @publicationFlow.numacNumbers}}
-                  {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
+                {{#let (await @publicationFlow.numacNumbers) as |numacNumbers|}}
+                  {{#if numacNumbers}}
+                    {{join ", " (map-by "idName" numacNumbers)}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                {{/let}}
               </p>
             </div>
           </div>

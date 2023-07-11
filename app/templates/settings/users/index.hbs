@@ -128,7 +128,7 @@
           </span>
         </td>
         <td class="au-o-flow au-o-flow--tiny">
-          {{#each (this.filterMemberships user.memberships) as |membership|}}
+          {{#each (await (this.filterMemberships user.memberships)) as |membership|}}
             <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
               <div>
                 <p class="au-u-muted au-u-h-functional">
@@ -148,7 +148,7 @@
         </td>
         <td data-test-route-settings-users-row-group>
           <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
-            {{#each (this.filterMemberships user.memberships) as |membership|}}
+            {{#each (await (this.filterMemberships user.memberships)) as |membership|}}
               <p>{{membership.role.label}}</p>
             {{/each}}
           </div>

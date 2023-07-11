@@ -21,7 +21,7 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if @publicationFlow.mandatees}}
+    {{#if (await @publicationFlow.mandatees)}}
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table">
           <thead>
