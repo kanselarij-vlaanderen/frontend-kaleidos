@@ -25,6 +25,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
+   * @argument decisionActivity
    */
   @service store;
   @service currentSession;
@@ -291,6 +292,11 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async reloadAccessLevel() {
     await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  markDocumentForSigning() {
+    this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
   }
 
   canViewConfidentialPiece = async () => {

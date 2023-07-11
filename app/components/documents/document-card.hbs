@@ -221,15 +221,13 @@
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
                   {{#let (t "signatures") as |signTab| }}
-                    <AuLink
+                    <AuButton
                       @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash tab=signTab}}
+                      {{on "click" this.markDocumentForSigning}}
                       role="menuitem"
                     >
                       {{t "present-for-signing"}}
-                    </AuLink>
+                    </AuButton>
                     <AuHr />
                   {{/let}}
                 {{/if}}
