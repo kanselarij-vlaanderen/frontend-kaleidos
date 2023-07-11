@@ -42,9 +42,9 @@ export default class SignaturesStatusFilterComponent extends Component {
         };
         if (isBlank(this.args.excludedStatuses) || this.args.excludedStatuses.indexOf(status.uri) == -1 ) {
           this.statusFilterItems.push(statusItem);
-        }
-        if (this.args.selectedStatusIds?.indexOf(statusItem.value) > -1) {
-          this.selectedStatuses.push(statusItem);
+          if (this.args.selectedStatusIds?.indexOf(statusItem.value) > -1) {
+            this.selectedStatuses.push(statusItem);
+          }
         }
       }
     }
