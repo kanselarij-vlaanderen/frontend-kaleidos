@@ -18,7 +18,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
     const contactPersons = new TrackedArray([]);
     const calculateContactPersons = async () => {
       contactPersons.length = 0;
-      (await this.args.publicationFlow.contactPerson)
+      (await this.args.publicationFlow.contactPersons)
         ?.slice()
         ?.sort((p1, p2) =>
           get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
