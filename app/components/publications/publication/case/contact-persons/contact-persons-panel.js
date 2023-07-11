@@ -11,7 +11,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @tracked isOpenAddModal = false;
 
-  // eslint-disable ember/no-get
+  /* eslint-disable ember/no-get */
   get contactPersons() {
     return this.args.publicationFlow.contactPersons
                .slice()
@@ -19,7 +19,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
                  get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
                    || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')));
   }
-  // eslint-enable ember/no-get
+  /* eslint-enable ember/no-get */
 
   @action
   openAddModal() {
