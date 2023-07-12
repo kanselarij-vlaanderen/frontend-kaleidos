@@ -52,7 +52,7 @@ export default class SignatureService extends Service {
     const response = await uploadPiecesToSigninghub(signFlows);
     if (!response.ok) {
       for (let signFlow of signFlows) {
-        await this.removeSignFlow(signFlow);
+        await this.removeSignFlow(signFlow, true);
       }
       throw new Error('Failed to upload piece to Signing Hub');
     }
@@ -134,7 +134,7 @@ export default class SignatureService extends Service {
     return false;
   }
 
-  async removeSignFlow(signFlow) {
+  async removeSignFlow(signFlow, keepMarkingActivity) {
     if (signFlow) {
       const signSubcase = await signFlow.signSubcase;
       const signMarkingActivity = await signSubcase.signMarkingActivity;
@@ -177,9 +177,16 @@ export default class SignatureService extends Service {
       });
       // destroying signSubcase can throw ember errors. reload fixed that problem.
       await signSubcase?.reload();
-      await signSubcase?.destroyRecord();
-      await signFlow?.destroyRecord();
-      await signMarkingActivity.destroyRecord();
+      if (!keepMarkingActivity) {
+        await signSubcase?.destroyRecord();
+        await signFlow?.destroyRecord();
+        await signMarkingActivity.destroyRecord();
+      } else if (signFlow) {
+        const status = await this.store.findRecordByUri('concept', MARKED);
+        signFlow.status = status;
+        signFlow.creator = null;
+        await signFlow.save();
+      }
       await piece.belongsTo('signedPiece').reload();
       await piece.belongsTo('signMarkingActivity').reload();
     }
