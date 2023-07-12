@@ -40,6 +40,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked piece;
   @tracked documentContainer;
   @tracked isDraftAccessLevel;
+  @tracked signFlow;
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
@@ -48,6 +49,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked pieces = A();
 
   @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -72,6 +74,14 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures');
+  }
+
+  get mayShowEditDropdown() {
+    return this.args.isEditable
+      && this.currentSession.may('manage-documents')
+      && this.loadSignatureRelatedData.isIdle
+      && this.loadSignatureRelatedData.performCount > 0
+      && (!this.hasSignFlow || this.hasMarkedSignFlow);
   }
 
   get showSignaturePill() {
@@ -143,7 +153,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadSignatureRelatedData() {
     this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    const signSubcase = yield this.signMarkingActivity?.signSubcase;
+    this.signFlow = yield signSubcase?.signFlow;
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
+    this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
   }
 
   @task

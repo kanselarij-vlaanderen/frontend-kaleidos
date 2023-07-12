@@ -199,6 +199,18 @@ export default class SignatureService extends Service {
     return false;
   }
 
+  async hasMarkedSignFlow(piece) {
+    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
+    if (signaturesEnabled) {
+      const signMarkingActivity = await piece.signMarkingActivity;
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const status = await signFlow?.status;
+      return status?.uri === MARKED;
+    }
+    return false;
+  }
+
   async getSigningHubUrl(signFlow, piece) {
     const response = await fetch(
       `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`

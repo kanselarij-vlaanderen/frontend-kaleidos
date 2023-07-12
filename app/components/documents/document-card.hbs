@@ -173,13 +173,7 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if
-            (and
-              @isEditable
-              (user-may "manage-documents")
-              (not this.hasSignFlow)
-            )
-          }}
+          {{#if this.mayShowEditDropdown}}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
