@@ -295,8 +295,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  markDocumentForSigning() {
-    this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+  async markDocumentForSigning() {
+    await this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    await this.loadPieceRelatedData.perform();
   }
 
   canViewConfidentialPiece = async () => {
