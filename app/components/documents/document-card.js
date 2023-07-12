@@ -25,7 +25,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
-   * @argument decisionActivity
+   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
    */
   @service store;
   @service currentSession;
@@ -72,7 +72,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return !this.signMarkingActivity
       && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures');
+      && this.currentSession.may('manage-signatures')
+      && !!this.args.decisionActivity;
   }
 
   get showSignaturePill() {
