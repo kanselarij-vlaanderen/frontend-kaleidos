@@ -77,11 +77,14 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get mayShowEditDropdown() {
-    return this.args.isEditable
+    return (
+      this.args.isEditable
       && this.currentSession.may('manage-documents')
       && this.loadSignatureRelatedData.isIdle
       && this.loadSignatureRelatedData.performCount > 0
-      && (!this.hasSignFlow || this.hasMarkedSignFlow);
+      && (!this.hasSignFlow
+          || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
+    );
   }
 
   get showSignaturePill() {
