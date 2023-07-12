@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DocumentsDocumentCardEditModalComponent extends Component {
   /**
@@ -11,6 +12,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
   @service intl;
+  @service router;
   @service toaster;
   @service fileConversionService;
 
@@ -92,6 +94,19 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   }
 
   saveEdit = task(async () => {
+    if (this.args.signFlow) {
+      const status = await this.args.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        await this.router.refresh();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        this.args.onCancel?.();
+        return;
+      }
+    }
+
     const now = new Date();
     this.args.piece.modified = now;
     this.args.piece.name = this.name;

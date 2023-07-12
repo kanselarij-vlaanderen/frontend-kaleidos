@@ -27,6 +27,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument label: used to determine what label should be used with the date
    */
   @service store;
+  @service router;
   @service currentSession;
   @service toaster;
   @service intl;
@@ -216,6 +217,19 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *addPiece() {
+    if (this.signFlow) {
+      const status = yield this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        yield this.deleteUploadedPiece.perform();
+        yield this.router.refresh();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        return;
+      }
+    }
+
     try {
       yield this.args.onAddPiece(this.newPiece, this.signFlow);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
@@ -255,7 +269,19 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  verifyDeleteDocumentContainer() {
+  async verifyDeleteDocumentContainer() {
+    if (this.signFlow) {
+      const status = await this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        await this.router.refresh();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        return;
+      }
+    }
+
     const verificationToast = {
       type: 'revert-action',
       title: this.intl.t('warning-title'),
