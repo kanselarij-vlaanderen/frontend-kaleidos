@@ -20,6 +20,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service fileConversionService;
   @service router;
+  @service pieceAccessLevelService;
   @service signatureService;
 
   documentsAreVisible;
@@ -179,6 +180,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     if (shouldReplaceSignFlow) {
       yield this.signatureService.markDocumentForSignature(piece, this.decisionActivity);
     }
+    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;
       yield this.fileConversionService.convertSourceFile(sourceFile);
