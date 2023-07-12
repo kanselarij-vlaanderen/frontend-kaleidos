@@ -214,7 +214,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *addPiece() {
     try {
-      yield this.args.onAddPiece(this.newPiece);
+      yield this.args.onAddPiece(this.newPiece, this.signFlow);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
@@ -273,6 +273,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteDocumentContainerWithUndo() {
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+    if (this.signFlow) {
+      yield this.signatureService.removeSignFlow(this.signFlow);
+    }
     yield deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
   }
