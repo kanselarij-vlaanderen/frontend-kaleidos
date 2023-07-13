@@ -83,8 +83,15 @@ export default class DocumentsDocumentCardComponent extends Component {
       && this.currentSession.may('manage-documents')
       && this.loadSignatureRelatedData.isIdle
       && this.loadSignatureRelatedData.performCount > 0
-      && (!this.hasSignFlow
-          || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
+      && (!this.hasSignFlow || this.hasMarkedSignFlow)
+    );
+  }
+
+  get mayShowUploadNewVersion() {
+    return (
+      !this.args.hideUpload
+        && (!this.hasSignFlow
+            || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
     );
   }
 

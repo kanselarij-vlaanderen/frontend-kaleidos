@@ -193,7 +193,7 @@
                     {{t "create-new-version"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideUpload)}}
+                {{#if this.mayShowUploadNewVersion}}
                   <AuButton
                     data-test-document-upload-new-piece
                     @skin="link"
