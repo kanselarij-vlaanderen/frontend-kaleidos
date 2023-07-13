@@ -38,12 +38,7 @@
         @onChange={{@onSelectMandatee}}
         as |mandatee|
       >
-        {{mandatee.fullDisplayName}}
-        <span class="auk-u-text-muted auk-u-text-size--small">
-          {{date mandatee.start}}
-          {{t "until"}}
-          {{if mandatee.end (date mandatee.end) (t "present-time")}}
-        </span>
+        <Mandatee::NameWithRange @mandatee={{mandatee}} />
       </PowerSelect>
     {{/if}}
   {{/if}}
