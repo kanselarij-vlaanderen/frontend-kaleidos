@@ -11,6 +11,8 @@ export default class DocumentController extends Controller {
   @service router;
   @service store;
   @service intl;
+  @service toaster;
+  @service signatureService;
 
   @tracked decisionActivity;
   queryParams = [
@@ -51,7 +53,7 @@ export default class DocumentController extends Controller {
   async didDeletePiece(piece) {
     const previousPiece = await piece.previousPiece;
 
-    const signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
     if (signMarkingActivity) {
       const signSubcase = await signMarkingActivity?.signSubcase;
       const signFlow = await signSubcase?.signFlow;
@@ -64,6 +66,7 @@ export default class DocumentController extends Controller {
         );
         return;
       }
+      // dont use this.decisionActivity since it is loaded for decision report
       const decisionActivity = await signFlow.decisionActivity;
       await this.signatureService.removeSignFlow(signFlow);
       await this.signatureService.markDocumentForSignature(previousPiece, decisionActivity);
