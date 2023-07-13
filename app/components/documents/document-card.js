@@ -230,11 +230,12 @@ export default class DocumentsDocumentCardComponent extends Component {
       const status = yield this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
         yield this.deleteUploadedPiece.perform();
-        this.router.refresh();
+        yield this.loadSignatureRelatedData.perform();
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
           this.intl.t('changes-could-not-be-saved-title'),
         );
+        this.isOpenUploadModal = false;
         return;
       }
     }
@@ -282,7 +283,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (this.signFlow) {
       const status = await this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        this.router.refresh();
+        await this.loadSignatureRelatedData.perform();
+        this.isOpenVerifyDeleteModal = false;
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
           this.intl.t('changes-could-not-be-saved-title'),
@@ -362,5 +364,12 @@ export default class DocumentsDocumentCardComponent extends Component {
       return await this.signatureService.canManageSignFlow(this.args.piece);
     }
     return false;
+  }
+
+  @action
+  async cancelEditPiece() {
+    await this.loadPieceRelatedData.perform();
+    await this.loadSignatureRelatedData.perform();
+    this.isEditingPiece = false;
   }
 }

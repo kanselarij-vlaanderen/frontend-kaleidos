@@ -290,7 +290,7 @@
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
     @signFlow={{this.signFlow}}
-    @onCancel={{toggle "isEditingPiece" this}}
+    @onCancel={{this.cancelEditPiece}}
     @onSave={{toggle "isEditingPiece" this}}
   />
 {{/if}}
