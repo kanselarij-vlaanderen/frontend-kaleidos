@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { restorePiecesFromPreviousAgendaitem } from 'frontend-kaleidos/utils/documents';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DocumentController extends Controller {
   @service router;
@@ -49,6 +50,25 @@ export default class DocumentController extends Controller {
   @action
   async didDeletePiece(piece) {
     const previousPiece = await piece.previousPiece;
+
+    const signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
+    if (signMarkingActivity) {
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const status = await signFlow?.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        this.router.refresh('document');
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        return;
+      }
+      const decisionActivity = await signFlow.decisionActivity;
+      await this.signatureService.removeSignFlow(signFlow);
+      await this.signatureService.markDocumentForSignature(previousPiece, decisionActivity);
+    }
+
     if (isPresent(this.decisionActivity)) {
       await deletePiece(piece);
       await this._didDeletePieceFromDecision(this.decisionActivity, previousPiece);

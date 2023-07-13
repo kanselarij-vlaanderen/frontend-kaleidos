@@ -108,7 +108,7 @@
           </Group.Item>
         </Toolbar.Group>
         {{#unless (or this.loadDetailsData.isRunning this.loadSignatureRelatedData.isRunning)}}
-          {{#if (and (user-may "manage-documents") (not this.hasSignFlow))}}
+          {{#if (and (user-may "manage-documents") this.canEditPieceWithSignFlow)}}
           <Toolbar.Group @position="right" as |Group|>
             {{#if this.isLastVersionOfPiece}}
               <Group.Item>
