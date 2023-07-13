@@ -251,10 +251,11 @@
       <Group>
         <AuButton
           data-test-route-settings---organization-confirm-unlink-mandatee
+          @loading={{this.unlinkMandatee.isRunning}}
           @alert={{true}}
           {{on
             "click"
-            (queue this.unlinkMandatee (toggle "showUnlinkMandatee" this))
+            (queue (perform this.unlinkMandatee) (toggle "showUnlinkMandatee" this))
           }}
         >
           {{t "unlink-mandatee"}}

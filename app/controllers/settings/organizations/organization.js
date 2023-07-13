@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -44,8 +45,7 @@ export default class SettingsOrganizationsOrganizationController extends Control
     this.showSelectMandateeModal = false;
   }
 
-  @action
-  async unlinkMandatee() {
+  unlinkMandatee = task(async () => {
     this.linkedMandatees.splice(
       this.linkedMandatees.indexOf(this.mandateeBeingUnlinked),
       1
@@ -53,5 +53,5 @@ export default class SettingsOrganizationsOrganizationController extends Control
     this.model.mandatees = this.linkedMandatees;
     this.selectedMandatee = null;
     await this.model.save();
-  }
+  });
 }
