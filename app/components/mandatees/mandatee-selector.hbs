@@ -18,7 +18,7 @@
       @onChange={{@onSelectMandatee}}
       as |mandatee|
     >
-      <Mandatee::NameWithRange @mandatee=mandatee />
+      <Mandatee::NameWithRange @mandatee={{mandatee}} />
     </PowerSelectMultiple>
   {{else}}
     <PowerSelect
