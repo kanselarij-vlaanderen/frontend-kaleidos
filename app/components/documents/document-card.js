@@ -144,7 +144,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
   }
 
