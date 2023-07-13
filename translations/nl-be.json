@@ -1237,6 +1237,7 @@
   "create-minutes-click-create-button-message": "Klik op \"Aanmaken\" om de notulen aan te maken",
   "no-minutes-for-meeting": "Er zijn nog geen notulen voor deze vergadering",
   "create-sign-flow-error-message": "Er ging iets mis met het doorsturen van dit document, contacteer kaleidos.servicedesk@vlaanderen.be als het probleem aanhoudt.",
+  "create-sign-marking-error-message": "Er ging iets mis met het markeren van dit document voor handtekenen, contacteer kaleidos.servicedesk@vlaanderen.be als het probleem aanhoudt.",
   "successfully-started-sign-flow": "Tekenproces succesvol opgestart",
   "successfully-started-sign-flows": "Tekenprocessen succesvol opgestart",
   "document-was-sent-to-signinghub": "Het document werd doorgestuurd naar SigningHub en kan worden voorbereid",
