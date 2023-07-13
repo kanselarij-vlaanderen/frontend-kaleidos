@@ -25,6 +25,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
+   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
    */
   @service store;
   @service router;
@@ -74,7 +75,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return !this.signMarkingActivity
       && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures');
+      && this.currentSession.may('manage-signatures')
+      && !!this.args.decisionActivity;
   }
 
   get mayShowEditDropdown() {
@@ -342,6 +344,12 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async reloadAccessLevel() {
+    await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  async markDocumentForSigning() {
+    await this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
     await this.loadPieceRelatedData.perform();
   }
 

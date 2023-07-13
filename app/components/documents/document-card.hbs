@@ -214,18 +214,14 @@
                   </AuButton>
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
-                  {{#let (t "signatures") as |signTab| }}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash tab=signTab}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/let}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.markDocumentForSigning}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                  <AuHr />
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
