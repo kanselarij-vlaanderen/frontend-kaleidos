@@ -220,16 +220,14 @@
                   </AuButton>
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
-                  {{#let (t "signatures") as |signTab| }}
-                    <AuButton
-                      @skin="link"
-                      {{on "click" this.markDocumentForSigning}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuButton>
-                    <AuHr />
-                  {{/let}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.markDocumentForSigning}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                  <AuHr />
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
