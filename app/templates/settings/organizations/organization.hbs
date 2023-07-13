@@ -278,7 +278,6 @@
 
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
-    @referenceDate={{@referenceDate}}
     @onClose={{fn (set this "showSelectMandateeModal" false)}}
     @onAdd={{this.linkMandatee}}
   />
