@@ -230,7 +230,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       const status = yield this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
         yield this.deleteUploadedPiece.perform();
-        yield this.loadSignatureRelatedData.perform();
+        yield this.loadPieceRelatedData.perform();
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
           this.intl.t('changes-could-not-be-saved-title'),
@@ -283,7 +283,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (this.signFlow) {
       const status = await this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        await this.loadSignatureRelatedData.perform();
+        await this.loadPieceRelatedData.perform();
         this.isOpenVerifyDeleteModal = false;
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
@@ -369,7 +369,6 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
-    await this.loadSignatureRelatedData.perform();
     this.isEditingPiece = false;
   }
 }
