@@ -13,7 +13,6 @@ export default class SettingsOrganizationsOrganizationController extends Control
   @tracked showUnblockOrganization = false;
   @tracked showUnlinkMandatee = false;
   @tracked showSelectMandateeModal = false;
-  @tracked selectedMandatee = null;
   @tracked linkedMandatees;
 
   @action
@@ -40,7 +39,6 @@ export default class SettingsOrganizationsOrganizationController extends Control
   async linkMandatee(mandatee) {
     this.linkedMandatees.push(mandatee);
     this.model.mandatees = this.linkedMandatees;
-    this.selectedMandatee = null;
     await this.model.save();
     this.showSelectMandateeModal = false;
   }
@@ -51,7 +49,6 @@ export default class SettingsOrganizationsOrganizationController extends Control
       1
     );
     this.model.mandatees = this.linkedMandatees;
-    this.selectedMandatee = null;
     await this.model.save();
   });
 }
