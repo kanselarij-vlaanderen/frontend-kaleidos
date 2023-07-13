@@ -97,9 +97,9 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     if (this.args.signFlow) {
       const status = await this.args.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        await this.router.refresh();
+        this.router.refresh();
         this.toaster.error(
-          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
           this.intl.t('changes-could-not-be-saved-title'),
         );
         this.args.onCancel?.();

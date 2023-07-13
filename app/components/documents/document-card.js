@@ -221,9 +221,9 @@ export default class DocumentsDocumentCardComponent extends Component {
       const status = yield this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
         yield this.deleteUploadedPiece.perform();
-        yield this.router.refresh();
+        this.router.refresh();
         this.toaster.error(
-          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
           this.intl.t('changes-could-not-be-saved-title'),
         );
         return;
@@ -273,9 +273,9 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (this.signFlow) {
       const status = await this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        await this.router.refresh();
+        this.router.refresh();
         this.toaster.error(
-          this.intl.t('sign-flow-was-sent-while-you-were-editing'),
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
           this.intl.t('changes-could-not-be-saved-title'),
         );
         return;
