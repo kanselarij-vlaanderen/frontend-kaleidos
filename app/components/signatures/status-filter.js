@@ -3,10 +3,15 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { isPresent } from '@ember/utils';
+import { isPresent, isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SignaturesStatusFilterComponent extends Component {
+  
+  /**
+   * @argument excludedStatuses: list of status uri that won't be added to the filter
+   */
+
   @service intl;
   @service store;
   @tracked statusFilterItems = [];
@@ -35,9 +40,11 @@ export default class SignaturesStatusFilterComponent extends Component {
           label: status.label,
           value: status.id
         };
-        this.statusFilterItems.push(statusItem);
-        if (this.args.selectedStatusIds?.indexOf(statusItem.value) > -1) {
-          this.selectedStatuses.push(statusItem);
+        if (isBlank(this.args.excludedStatuses) || this.args.excludedStatuses.indexOf(status.uri) == -1 ) {
+          this.statusFilterItems.push(statusItem);
+          if (this.args.selectedStatusIds?.indexOf(statusItem.value) > -1) {
+            this.selectedStatuses.push(statusItem);
+          }
         }
       }
     }
