@@ -8,7 +8,7 @@ export default class BatchEditingRow extends Component {
 
   get isSignMarkingDisabled() {
     for (const row of this.args.selectedRows) {
-      if (row.signMarkingActivity) {
+      if (row.signMarkingActivity && !row.hasMarkedSignFlow) {
         return true;
       }
     }
@@ -17,6 +17,10 @@ export default class BatchEditingRow extends Component {
 
   get hasSignFlow() {
     return this.args.selectedRows.some((row) => row.hasSignFlow);
+  }
+
+  get hasMarkedSignFlow() {
+    return this.getBatchSelectedValue((row) => row.hasMarkedSignFlow);
   }
 
   get documentType() {
@@ -73,7 +77,8 @@ export default class BatchEditingRow extends Component {
   @action
   setMarkedForSignature(markedForSignature) {
     for (const row of this.args.selectedRows) {
-      if (!row.signMarkingActivity) {
+      // don't set flag when a signFlow has been sent to SH (toggle should also be disabled in that case)
+      if (!row.signMarkingActivity || row.hasMarkedSignFlow) {
         row.markedForSignature = markedForSignature;
       }
     }

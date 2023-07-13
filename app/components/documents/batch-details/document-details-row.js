@@ -11,6 +11,7 @@ export class Row {
   showSignature;
   signMarkingActivity;
   hasSignFlow;
+  hasMarkedSignFlow;
 
   @tracked name;
   @tracked documentType;

@@ -46,36 +46,19 @@
     </td>
     {{#if @row.showSignature}}
       <td>
-        {{#if (and @row.signMarkingActivity)}}
+        {{#if (and @row.hasSignFlow (not @row.hasMarkedSignFlow))}}
           <SignaturePill
             @piece={{@row.piece}}
             @signMarkingActivity={{@row.signMarkingActivity}}
           />
         {{else}}
-        {{#if @row.markedForSignature}}
-          <AuButton
+          <AuToggleSwitch
             @skin="primary"
-            @disabled="true"
-          >
-            {{t "marked-for-signing"}}
-          </AuButton>
-          <AuButton
-            data-test-document-details-row-undo-delete
-            @skin="naked"
-            @icon="undo"
-            @hideText={{true}}
-            {{on "click" (fn @row.setMarkedForSignature false)}}
-          >
-            {{t "undo"}}
-          </AuButton>
-        {{else}}
-          <AuButton
-            @skin="primary"
-            {{on "click" (fn @row.setMarkedForSignature true)}}
-          >
-            {{t "present-for-signing"}}
-          </AuButton>
-        {{/if}}
+            @label={{t "present-for-signing"}}
+            @checked={{@row.markedForSignature}}
+            @onChange={{fn @row.setMarkedForSignature}}
+            @disabled={{or this.isDisabled this.isSignMarkingDisabled}}
+          />
       {{/if}}
     </td>
   {{/if}}

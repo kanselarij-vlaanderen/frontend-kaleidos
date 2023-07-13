@@ -215,4 +215,18 @@ export default class SignatureService extends Service {
       return result.url;
     }
   }
+
+  // TODO this a near duplicate from Sergio's PR, cleanup during merge (mine has relation reloads)
+  async hasMarkedSignFlow(piece) {
+    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
+    if (signaturesEnabled) {
+      const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const status = await signFlow?.belongsTo('status').reload();
+      console.log('status', status)
+      return status?.uri === MARKED;
+    }
+    return false;
+  }
 }
