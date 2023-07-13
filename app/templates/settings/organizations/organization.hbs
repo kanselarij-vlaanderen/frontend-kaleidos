@@ -93,7 +93,10 @@
                     <AuButton
                       @skin="naked"
                       @icon="plus"
-                      {{on "click" (fn (set this "showSelectMandateeModal" true))}}
+                      {{on
+                        "click"
+                        (fn (set this "showSelectMandateeModal" true))
+                      }}
                     >
                       {{t "add-minister"}}
                     </AuButton>
@@ -110,7 +113,7 @@
                     <td
                       data-test-route-settings---organization-technical-info-row-mandatee
                     >
-                      {{mandatee.fullDisplayName}}
+                      <Mandatee::NameWithRange @mandatee="mandatee" />
                     </td>
                     <td class="au-u-text-right">
                       <AuButton
@@ -129,7 +132,7 @@
                       </AuButton>
                     </td>
                   </tr>
-                  {{else}}
+                {{else}}
                   <tr>
                     <td>
                       {{t "no-linked-mandatees"}}
@@ -261,7 +264,9 @@
           @alert={{true}}
           {{on
             "click"
-            (queue (perform this.unlinkMandatee) (toggle "showUnlinkMandatee" this))
+            (queue
+              (perform this.unlinkMandatee) (toggle "showUnlinkMandatee" this)
+            )
           }}
         >
           {{t "unlink-mandatee"}}
