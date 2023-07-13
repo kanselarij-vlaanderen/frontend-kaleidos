@@ -2,45 +2,49 @@
   data-test-mandatee-selector-container
   {{did-update (perform this.loadMandatees) @openSearch}}
 >
-  {{#if @multiple}}
-    <PowerSelectMultiple
-      @options={{this.mandateeOptions}}
-      @selected={{await @selectedMandatees}}
-      @disabled={{@disabled}}
-      @closeOnSelect={{false}}
-      @searchEnabled={{true}}
-      @search={{if
-        @openSearch
-        (perform this.searchMandatee)
-        (perform this.filterMandatees)
-      }}
-      @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onChange={{@onSelectMandatee}}
-      as |mandatee|
-    >
-      <Mandatee::NameWithRange @mandatee={{mandatee}} />
-    </PowerSelectMultiple>
+  {{#if this.loadMandatees.isRunning}}
+    <AuLoader />
   {{else}}
-    <PowerSelect
-      @options={{this.mandateeOptions}}
-      @selected={{await @selectedMandatees}}
-      @disabled={{@disabled}}
-      @searchEnabled={{true}}
-      @search={{if
-        @openSearch
-        (perform this.searchMandatee)
-        (perform this.filterMandatees)
-      }}
-      @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onChange={{@onSelectMandatee}}
-      as |mandatee|
-    >
-      {{mandatee.fullDisplayName}}
-      <span class="auk-u-text-muted auk-u-text-size--small">
-        {{date mandatee.start}}
-        {{t "until"}}
-        {{if mandatee.end (date mandatee.end) (t "present-time")}}
-      </span>
-    </PowerSelect>
+    {{#if @multiple}}
+      <PowerSelectMultiple
+        @options={{this.mandateeOptions}}
+        @selected={{await @selectedMandatees}}
+        @disabled={{@disabled}}
+        @closeOnSelect={{false}}
+        @searchEnabled={{true}}
+        @search={{if
+          @openSearch
+          (perform this.searchMandatee)
+          (perform this.filterMandatees)
+        }}
+        @oninput={{this.resetMandateeOptionsIfEmpty}}
+        @onChange={{@onSelectMandatee}}
+        as |mandatee|
+      >
+        <Mandatee::NameWithRange @mandatee={{mandatee}} />
+      </PowerSelectMultiple>
+    {{else}}
+      <PowerSelect
+        @options={{this.mandateeOptions}}
+        @selected={{await @selectedMandatees}}
+        @disabled={{@disabled}}
+        @searchEnabled={{true}}
+        @search={{if
+          @openSearch
+          (perform this.searchMandatee)
+          (perform this.filterMandatees)
+        }}
+        @oninput={{this.resetMandateeOptionsIfEmpty}}
+        @onChange={{@onSelectMandatee}}
+        as |mandatee|
+      >
+        {{mandatee.fullDisplayName}}
+        <span class="auk-u-text-muted auk-u-text-size--small">
+          {{date mandatee.start}}
+          {{t "until"}}
+          {{if mandatee.end (date mandatee.end) (t "present-time")}}
+        </span>
+      </PowerSelect>
+    {{/if}}
   {{/if}}
 </div>
