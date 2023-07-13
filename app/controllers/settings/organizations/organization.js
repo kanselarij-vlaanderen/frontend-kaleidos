@@ -11,6 +11,7 @@ export default class SettingsOrganizationsOrganizationController extends Control
   @tracked showBlockOrganization = false;
   @tracked showUnblockOrganization = false;
   @tracked showUnlinkMandatee = false;
+  @tracked showSelectMandateeModal = false;
   @tracked selectedMandatee = null;
   @tracked linkedMandatees;
 
@@ -35,11 +36,12 @@ export default class SettingsOrganizationsOrganizationController extends Control
   }
 
   @action
-  async linkMandatee() {
-    this.linkedMandatees.push(this.selectedMandatee);
+  async linkMandatee(mandatee) {
+    this.linkedMandatees.push(mandatee);
     this.model.mandatees = this.linkedMandatees;
     this.selectedMandatee = null;
     await this.model.save();
+    this.showSelectMandateeModal = false;
   }
 
   @action
