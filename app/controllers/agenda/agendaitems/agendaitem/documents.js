@@ -153,6 +153,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
+    piece.name = piece.name.trim();
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
