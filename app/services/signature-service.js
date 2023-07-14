@@ -58,7 +58,18 @@ export default class SignatureService extends Service {
     }
   }
 
+  // return results are currently not used by any caller
   async markDocumentForSignature(piece, decisionActivity) {
+    const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
+    if (existingSignMarking) {
+      // someone else may have made a signflow, returning that one instead
+      const signSubcase = await existingSignMarking.signSubcase;
+      const signFlow = await signSubcase.signFlow;
+      return {
+        signFlow,
+        signSubcase,
+      };
+    }
     const subcase = await decisionActivity?.subcase;
     if (subcase) {
       const decisionmakingFlow = await subcase.decisionmakingFlow;

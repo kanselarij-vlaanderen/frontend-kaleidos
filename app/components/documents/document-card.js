@@ -321,6 +321,21 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.args.didDeleteContainer?.(this.documentContainer);
   }
 
+  @task
+  *deleteMarkedSignFlow() {
+    const status = yield this.signFlow.belongsTo('status').reload();
+    if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+      this.toaster.error(
+        this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
+        this.intl.t('changes-could-not-be-saved-title'),
+      );
+      yield this.loadPieceRelatedData.perform();
+      return;
+    }
+    yield this.signatureService.removeSignFlow(this.signFlow);
+    yield this.loadPieceRelatedData.perform();
+  }
+
   @action
   changeAccessLevel(accessLevel) {
     this.piece.accessLevel = accessLevel;

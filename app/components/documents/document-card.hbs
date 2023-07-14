@@ -221,7 +221,17 @@
                   >
                     {{t "present-for-signing"}}
                   </AuButton>
+                {{/if}}
+                {{#if this.hasMarkedSignFlow}}
                   <AuHr />
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteMarkedSignFlow.perform}}
+                    role="menuitem"
+                  >
+                    {{t "stop-sign-flow"}}
+                  </AuButton>
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
