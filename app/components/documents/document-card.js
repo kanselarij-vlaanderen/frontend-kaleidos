@@ -28,6 +28,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
    */
   @service store;
+  @service router;
   @service currentSession;
   @service toaster;
   @service intl;
@@ -41,6 +42,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked piece;
   @tracked documentContainer;
   @tracked isDraftAccessLevel;
+  @tracked signFlow;
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
@@ -49,6 +51,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked pieces = A();
 
   @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -74,6 +77,24 @@ export default class DocumentsDocumentCardComponent extends Component {
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures')
       && !!this.args.decisionActivity;
+  }
+
+  get mayShowEditDropdown() {
+    return (
+      this.args.isEditable
+      && this.currentSession.may('manage-documents')
+      && this.loadSignatureRelatedData.isIdle
+      && this.loadSignatureRelatedData.performCount > 0
+      && (!this.hasSignFlow || this.hasMarkedSignFlow)
+    );
+  }
+
+  get mayShowUploadNewVersion() {
+    return (
+      !this.args.hideUpload
+        && (!this.hasSignFlow
+            || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
+    );
   }
 
   get showSignaturePill() {
@@ -145,7 +166,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadSignatureRelatedData() {
     this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = yield this.signMarkingActivity?.signSubcase;
+    this.signFlow = yield signSubcase?.signFlow;
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
+    this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
   }
 
   @task
@@ -202,8 +226,22 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *addPiece() {
+    if (this.signFlow) {
+      const status = yield this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        yield this.deleteUploadedPiece.perform();
+        yield this.loadPieceRelatedData.perform();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        this.isOpenUploadModal = false;
+        return;
+      }
+    }
+
     try {
-      yield this.args.onAddPiece(this.newPiece);
+      yield this.args.onAddPiece(this.newPiece, this.signFlow);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
@@ -241,7 +279,20 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  verifyDeleteDocumentContainer() {
+  async verifyDeleteDocumentContainer() {
+    if (this.signFlow) {
+      const status = await this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        await this.loadPieceRelatedData.perform();
+        this.isOpenVerifyDeleteModal = false;
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        return;
+      }
+    }
+
     const verificationToast = {
       type: 'revert-action',
       title: this.intl.t('warning-title'),
@@ -262,6 +313,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteDocumentContainerWithUndo() {
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+    if (this.signFlow) {
+      yield this.signatureService.removeSignFlow(this.signFlow);
+    }
     yield deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
   }
@@ -310,5 +364,11 @@ export default class DocumentsDocumentCardComponent extends Component {
       return await this.signatureService.canManageSignFlow(this.args.piece);
     }
     return false;
+  }
+
+  @action
+  async cancelEditPiece() {
+    await this.loadPieceRelatedData.perform();
+    this.isEditingPiece = false;
   }
 }

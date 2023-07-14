@@ -1249,5 +1249,8 @@
   "delete-all-sign-flow-tooltip": "Verwijder het volledige handtekenproces uit Kaleidos, zodat het document opnieuw ondertekend kan worden",
   "to-start-up": "Op te starten",
   "to-follow-up": "Op te volgen",
-  "stop-sign-flow": "Tekenen stopzetten"
+  "stop-sign-flow": "Tekenen stopzetten",
+  "sign-flow-was-sent-while-you-were-editing-could-not-add-new-version": "Dit document is reeds verstuurd naar de Handtekenmap. De nieuwe versie is niet geüpload.",
+  "sign-flow-was-sent-while-you-were-editing-could-not-edit": "Dit document is reeds verstuurd naar de Handtekenmap. De wijzigingen zijn niet opgeslagen.",
+  "sign-flow-was-sent-while-you-were-editing-could-not-delete": "Dit document is reeds verstuurd naar de Handtekenmap. Het document is niet verwijderd uit Kaleidos."
 }

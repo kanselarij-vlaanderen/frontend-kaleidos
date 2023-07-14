@@ -206,17 +206,6 @@ export default class SignatureService extends Service {
     return false;
   }
 
-  async getSigningHubUrl(signFlow, piece) {
-    const response = await fetch(
-      `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-    );
-    if (response.ok && response.status === 200) {
-      const result = await response.json();
-      return result.url;
-    }
-  }
-
-  // TODO this a near duplicate from Sergio's PR, cleanup during merge (mine has relation reloads)
   async hasMarkedSignFlow(piece) {
     const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     if (signaturesEnabled) {
@@ -228,5 +217,15 @@ export default class SignatureService extends Service {
       return status?.uri === MARKED;
     }
     return false;
+  }
+
+  async getSigningHubUrl(signFlow, piece) {
+    const response = await fetch(
+      `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
+    );
+    if (response.ok && response.status === 200) {
+      const result = await response.json();
+      return result.url;
+    }
   }
 }

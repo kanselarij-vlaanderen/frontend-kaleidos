@@ -173,13 +173,7 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if
-            (and
-              @isEditable
-              (user-may "manage-documents")
-              (not this.hasSignFlow)
-            )
-          }}
+          {{#if this.mayShowEditDropdown}}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
@@ -199,7 +193,7 @@
                     {{t "create-new-version"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideUpload)}}
+                {{#if this.mayShowUploadNewVersion}}
                   <AuButton
                     data-test-document-upload-new-piece
                     @skin="link"
@@ -295,7 +289,8 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
-    @onCancel={{toggle "isEditingPiece" this}}
+    @signFlow={{this.signFlow}}
+    @onCancel={{this.cancelEditPiece}}
     @onSave={{toggle "isEditingPiece" this}}
   />
 {{/if}}
