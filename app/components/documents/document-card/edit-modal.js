@@ -94,7 +94,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   saveEdit = task(async () => {
     const now = new Date();
     this.args.piece.modified = now;
-    this.args.piece.name = this.name;
+    this.args.piece.name = this.name?.trim();
     // If a piece has pieceParts, remove them
     // Might need to be improved to work for other piece subtypes
     const pieceParts = await this.args.piece.pieceParts;

@@ -116,7 +116,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         // container is cleaned up in deletePiece if no more pieces exist
       } else {
-        piece.name = row.name;
+        piece.name = row.name?.trim();
         // does not check for relationship changes
         let accessLevelHasChanged = false;
         let hasChanged = piece.dirtyType === 'updated';

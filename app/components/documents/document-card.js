@@ -203,6 +203,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *addPiece() {
     try {
+      this.newPiece.name = this.newPiece.name.trim();
       yield this.args.onAddPiece(this.newPiece);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
