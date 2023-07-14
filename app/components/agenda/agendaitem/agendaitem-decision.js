@@ -348,10 +348,16 @@ export default class AgendaitemDecisionComponent extends Component {
       await report.save();
       await betreftPiecePart?.save();
       await beslissingPiecePart?.save();
-    } catch {
-      this.toaster.error();
-    }
 
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('decision-could-not-be-saved-message'),
+        this.intl.t('changes-could-not-be-saved-title'),
+        {
+          timeOut: 600000,
+        }
+        );
+      }
     this.args.decisionActivity.report = report;
 
     await this.args.decisionActivity.save();
@@ -361,6 +367,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.replaceReportFile(report, fileMeta.id);
 
     await this.loadReport.perform();
+    this.toaster.success(this.intl.t('successfully-saved'));
   }
 
   createNewDocumentContainer() {

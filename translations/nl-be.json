@@ -701,6 +701,7 @@
   "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
   "decision-activity-result": "op de agenda van",
+  "decision-could-not-be-saved-message": "De beslissing werd in tussentijd aangepast. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "result-decision": "Resultaat beslissing",
   "no-decision-set": "Nog geen beslissing ingesteld",
   "loading-active-agendas": "De actieve agendas worden geladen.",
