@@ -10,7 +10,8 @@ export class Row {
   documentContainer;
   showSignature;
   signMarkingActivity;
-  hasSignFlow;
+  hasMarkedSignFlow;
+  hasSentSignFlow;
 
   @tracked name;
   @tracked documentType;

@@ -20,6 +20,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service fileConversionService;
   @service router;
+  @service pieceAccessLevelService;
+  @service signatureService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -170,8 +172,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
    * Add new piece to an existing document container
    */
   @task
-  *addPiece(piece) {
+  *addPiece(piece, signFlow) {
+    const shouldReplaceSignFlow = !!signFlow;
+    if (shouldReplaceSignFlow) {
+      yield this.signatureService.removeSignFlow(signFlow);
+    }
     yield piece.save();
+    if (shouldReplaceSignFlow) {
+      yield this.signatureService.markDocumentForSignature(piece, this.decisionActivity);
+    }
+    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;
       yield this.fileConversionService.convertSourceFile(sourceFile);
