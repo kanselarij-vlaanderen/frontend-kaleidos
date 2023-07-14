@@ -19,10 +19,6 @@ export default class BatchEditingRow extends Component {
     return this.args.selectedRows.some((row) => row.hasSentSignFlow);
   }
 
-  get hasMarkedSignFlow() {
-    return this.getBatchSelectedValue((row) => row.hasMarkedSignFlow);
-  }
-
   get documentType() {
     return this.getBatchSelectedValue((row) => row.documentType);
   }

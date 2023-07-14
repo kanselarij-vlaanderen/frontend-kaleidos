@@ -12,7 +12,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
   @service intl;
-  @service router;
   @service toaster;
   @service fileConversionService;
 

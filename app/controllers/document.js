@@ -69,7 +69,9 @@ export default class DocumentController extends Controller {
       // dont use this.decisionActivity since it is loaded for decision report
       const decisionActivity = await signFlow.decisionActivity;
       await this.signatureService.removeSignFlow(signFlow);
-      await this.signatureService.markDocumentForSignature(previousPiece, decisionActivity);
+      if (previousPiece) {
+        await this.signatureService.markDocumentForSignature(previousPiece, decisionActivity);
+      }
     }
 
     if (isPresent(this.decisionActivity)) {

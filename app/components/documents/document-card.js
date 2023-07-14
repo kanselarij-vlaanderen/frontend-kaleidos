@@ -28,7 +28,6 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
    */
   @service store;
-  @service router;
   @service currentSession;
   @service toaster;
   @service intl;
