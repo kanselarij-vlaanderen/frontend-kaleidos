@@ -8,15 +8,15 @@ export default class BatchEditingRow extends Component {
 
   get isSignMarkingDisabled() {
     for (const row of this.args.selectedRows) {
-      if (row.signMarkingActivity && !row.hasMarkedSignFlow) {
+      if (row.hasSentSignFlow) {
         return true;
       }
     }
     return false;
   }
 
-  get hasSignFlow() {
-    return this.args.selectedRows.some((row) => row.hasSignFlow);
+  get hasSentSignFlow() {
+    return this.args.selectedRows.some((row) => row.hasSentSignFlow);
   }
 
   get hasMarkedSignFlow() {

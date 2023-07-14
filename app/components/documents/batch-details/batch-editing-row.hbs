@@ -8,7 +8,7 @@
   <td>
     <Utils::DocumentTypeSelector
       data-test-batch-editing-row-type
-      @disabled={{or this.hasSignFlow this.isDisabled}}
+      @disabled={{or this.hasSentSignFlow this.isDisabled}}
       @selectedDocumentType={{this.documentType}}
       @onChange={{this.setDocumentType}}
     />
@@ -40,7 +40,7 @@
         @skin="naked"
         @icon="undo"
         @hideText={{true}}
-        @disabled={{or this.hasSignFlow this.isDisabled}}
+        @disabled={{or this.hasSentSignFlow this.isDisabled}}
         {{on "click" (fn this.setToBeDeleted false)}}
       >
         {{t "undo"}}
@@ -51,7 +51,7 @@
         @alert={{true}}
         @icon="trash"
         @hideText={{true}}
-        @disabled={{or this.hasSignFlow this.isDisabled}}
+        @disabled={{or this.hasSentSignFlow this.isDisabled}}
         {{on "click" (fn this.setToBeDeleted true)}}
       >
         {{t "delete"}}
