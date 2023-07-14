@@ -121,6 +121,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.onChangeFile();
     }
     this.args.piece.accessLevel = this.accessLevel;
+    this.args.piece.name = this.args.piece.name?.trim();
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
       this.args.piece
