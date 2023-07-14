@@ -216,7 +216,7 @@
                 {{#if this.mayCreateSignMarkingActivity}}
                   <AuButton
                     @skin="link"
-                    {{on "click" this.markDocumentForSigning}}
+                    {{on "click" this.markDocumentForSigning.perform}}
                     role="menuitem"
                   >
                     {{t "present-for-signing"}}
