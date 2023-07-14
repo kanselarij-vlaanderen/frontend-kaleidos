@@ -11,7 +11,7 @@ const MANDATORY_SORT_OPTION = 'decision-activity';
 const DEFAULT_SORT_OPTIONS = [
   '-decision-activity.start-date',
   MANDATORY_SORT_OPTION,
-  '-sign-subcase.sign-marking-activity.piece.name',
+  'sign-subcase.sign-marking-activity.piece.name',
 ];
 
 export default class SignaturesIndexController extends Controller {
@@ -35,7 +35,7 @@ export default class SignaturesIndexController extends Controller {
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
-  @tracked sizeSignaturesIndex = PAGINATION_SIZES[3];
+  @tracked sizeSignaturesIndex = PAGINATION_SIZES[5];
   @tracked pageSignaturesIndex = 0;
   @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;

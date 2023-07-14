@@ -11,6 +11,8 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
+ * @param piece {Piece|Promise<Piece>}
+ * @param isClickable {boolean} Defaults to true, can be used to disable the click behaviour
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
@@ -20,6 +22,11 @@ export default class SignaturePillComponent extends Component {
 
   scheduledRefresh;
   @tracked triggerTask;
+
+  get isClickable() {
+    // use passed in argument, otherwise default to true
+    return this.args.isClickable ?? true;
+  }
 
   willDestroy() {
     super.willDestroy(...arguments);
