@@ -104,6 +104,7 @@ export default class AgendaitemDecisionComponent extends Component {
       betreftPiecePart,
       beslissingPiecePart
     );
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
   });
 
   get pieceParts() {
@@ -148,6 +149,13 @@ export default class AgendaitemDecisionComponent extends Component {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );
+      }
+      let reportToUpdate = this.report;
+      while (reportToUpdate) {
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+          reportToUpdate
+        );
+        reportToUpdate = await reportToUpdate.previousPiece
       }
     }
     this.toggleEditPill();
