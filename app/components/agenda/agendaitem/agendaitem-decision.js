@@ -328,17 +328,12 @@ export default class AgendaitemDecisionComponent extends Component {
           this.beslissingPiecePart
         ));
     }
-
-    try {
-      await this.saveReport(
-        documentContainer,
-        report,
-        beslissingPiecePart,
-        betreftPiecePart
-      );
-    } catch {
-      this.toaster.error();
-    }
+    await this.saveReport(
+      documentContainer,
+      report,
+      beslissingPiecePart,
+      betreftPiecePart
+    );
     this.isEditing = false;
   });
 
@@ -348,10 +343,14 @@ export default class AgendaitemDecisionComponent extends Component {
     beslissingPiecePart,
     betreftPiecePart
   ) {
-    await documentContainer.save();
-    await report.save();
-    await betreftPiecePart?.save();
-    await beslissingPiecePart?.save();
+    try {
+      await documentContainer.save();
+      await report.save();
+      await betreftPiecePart?.save();
+      await beslissingPiecePart?.save();
+    } catch {
+      this.toaster.error();
+    }
 
     this.args.decisionActivity.report = report;
 
