@@ -203,6 +203,16 @@ export default class SignatureService extends Service {
     }
   }
 
+  async removeSignFlowForPiece(piece) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.status;
+    if (signFlow && status.uri === MARKED) {
+      await this.removeSignFlow(signFlow);
+    }
+  }
+
   async replaceDecisionActivity(piece, decisionActivity) {
     const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
     const signSubcase = await signMarkingActivity?.signSubcase;
