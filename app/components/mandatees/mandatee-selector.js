@@ -62,5 +62,8 @@ export default class MandateeSelector extends Component {
       searchTerm,
       this.referenceDate
     );
+    this.mandateeOptions = this.mandateeOptions.filter(
+      (mandatee) => !this.args.excludeMandatees.includes(mandatee)
+    );
   }
 }
