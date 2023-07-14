@@ -28,6 +28,7 @@ export const PUBLICATIONS_IN_KALEIDOS_START_DATE = new Date(2022, 2 /* March */,
 // Number of milliseconds it takes to release a publication via Yggdrasil/Themis
 export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;
 export const PUBLICATION_ACTIVITY_REFRESH_INTERVAL_MS = 60 * 1000;
+export const SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS = 60 * 1000;
 
 export const DOCUMENT_DELETE_UNDO_TIME_MS = 15000;
 
@@ -38,3 +39,4 @@ export const DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES = [
 ];
 export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
 export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB
+export const SECRETARIS_NAME = 'Jeroen Overmeer';

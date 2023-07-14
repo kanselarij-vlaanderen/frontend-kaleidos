@@ -25,7 +25,7 @@ export default class VRDocumentName {
   }
 
   constructor(name, options) {
-    this.name = name;
+    this.name = name?.trim();
     this.strict = !!options && !!options.strict;
     if (this.strict && !this.isValid) {
       throw new Error(`Invalid VR Document Name "${this.name}" (strict mode)`);

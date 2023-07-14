@@ -20,6 +20,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service agendaService;
   @service fileConversionService;
   @service router;
+  @service pieceAccessLevelService;
+  @service signatureService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -38,6 +40,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked previousAgenda;
   @tracked agendaActivity;
   @tracked subcase;
+  @tracked decisionActivity;
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
@@ -86,7 +89,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     }
     return isAgendaDraftOrLegacy || this.hasConfirmedDocEditOnApproved;
   }
-
 
   @task
   *openWarnUploadOnApproved() {
@@ -153,6 +155,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
+    piece.name = piece.name.trim();
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
@@ -169,8 +172,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
    * Add new piece to an existing document container
    */
   @task
-  *addPiece(piece) {
+  *addPiece(piece, signFlow) {
+    const shouldReplaceSignFlow = !!signFlow;
+    if (shouldReplaceSignFlow) {
+      yield this.signatureService.removeSignFlow(signFlow);
+    }
     yield piece.save();
+    if (shouldReplaceSignFlow) {
+      yield this.signatureService.markDocumentForSignature(piece, this.decisionActivity);
+    }
+    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;
       yield this.fileConversionService.convertSourceFile(sourceFile);

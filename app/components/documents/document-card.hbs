@@ -15,13 +15,17 @@
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
-              <Auk::Badge
-                @skin="success"
+              <AuBadge
                 @icon="document-added"
-                @size="large"
+                @skin="success"
+                class="au-c-badge--medium"
               />
             {{else}}
-              <Auk::Badge @icon="document" @size="large" />
+              <AuBadge
+                @icon="document"
+                @skin="gray"
+                class="au-c-badge--medium"
+              />
             {{/if}}
           </Group.Item>
           <Group.Item class="auk-u-maximize-width">
@@ -169,9 +173,7 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if
-            (and @isEditable (user-may "manage-documents"))
-          }}
+          {{#if this.mayShowEditDropdown}}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
@@ -191,7 +193,7 @@
                     {{t "create-new-version"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideUpload)}}
+                {{#if this.mayShowUploadNewVersion}}
                   <AuButton
                     data-test-document-upload-new-piece
                     @skin="link"
@@ -212,18 +214,24 @@
                   </AuButton>
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
-                  {{#let (t "signatures") as |signTab| }}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash tab=signTab}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/let}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.markDocumentForSigning}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                {{/if}}
+                {{#if this.hasMarkedSignFlow}}
+                  <AuHr />
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteMarkedSignFlow.perform}}
+                    role="menuitem"
+                  >
+                    {{t "stop-sign-flow"}}
+                  </AuButton>
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
@@ -277,6 +285,7 @@
                       piece
                     }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                    @label={{this.label}}
                   />
                 </div>
               {{/each}}
@@ -290,7 +299,8 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
-    @onCancel={{toggle "isEditingPiece" this}}
+    @signFlow={{this.signFlow}}
+    @onCancel={{this.cancelEditPiece}}
     @onSave={{toggle "isEditingPiece" this}}
   />
 {{/if}}

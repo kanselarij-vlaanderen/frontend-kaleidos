@@ -420,6 +420,13 @@ $au-button-height: 3.4rem;
   font-size: 1.5rem;
 }
 
+.au-c-alert--small {
+  .au-c-icon {
+    height: 1.5rem;
+    width: 1.6rem;
+  }
+}
+
 // Toaster
 
 .auk-alert-stack {
@@ -430,13 +437,31 @@ $au-button-height: 3.4rem;
   }
 
   .au-c-icon {
-    height: $au-alert-small-icon-size - 0.1rem; // compensate for visual distortion of perfect circle
-    width: $au-alert-small-icon-size;
+    height: ($au-alert-small-icon-size + 0.1rem) - 0.1rem; // compensate for visual distortion of perfect circle
+    width: $au-alert-small-icon-size + 0.1rem;
   }
 
   .au-c-alert__close {
     align-self: center;
     margin-left: 1.5rem;
+  }
+}
+
+// Badge
+
+.auk-empty-state {
+  .au-c-badge {
+    margin-right: 2rem;
+  }
+}
+
+.au-c-badge--small {
+  height: 2.3rem;
+  width: 2.4rem;
+
+  .au-c-icon {
+    height: 1.5rem;
+    width: 1.6rem;
   }
 }
 
@@ -449,7 +474,8 @@ $au-button-height: 3.4rem;
 }
 
 @media print {
-  .au-c-pill {
+  .au-c-pill,
+  .au-c-badge {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
@@ -467,4 +493,19 @@ $au-button-height: 3.4rem;
 
 .au-c-input--mask-normal-letter-spacing {
   letter-spacing: inherit;
+}
+
+.au-c-badge--medium {
+  height: 3.5rem - 0.1rem; // compensate for visual distortion of perfect circle
+  width: 3.5rem;
+  margin-right: 0;
+
+  .au-c-icon {
+    height: 2.1rem - 0.1rem; // compensate for visual distortion of perfect circle
+    width: 2.1rem;
+  }
+
+  .au-c-badge__number {
+    font-size: 1.8rem;
+  }
 }
