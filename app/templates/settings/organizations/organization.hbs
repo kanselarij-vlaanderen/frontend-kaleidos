@@ -278,6 +278,7 @@
 
 {{#if this.showSelectMandateeModal}}
   <Mandatees::MandateesSelectorModal
+    @excludeMandatees={{this.linkedMandatees}}
     @onClose={{fn (set this "showSelectMandateeModal" false)}}
     @onAdd={{this.linkMandatee}}
   />

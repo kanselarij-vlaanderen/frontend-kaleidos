@@ -10,6 +10,7 @@ import { inject as service } from '@ember/service';
  * @argument disabled
  * @argument selectedMandatee
  * @argument onSelectMandatee
+ * @argument excludeMandatees
  * @argument {Date} referenceDate: Date to get active Mandatees for
  */
 export default class MandateeSelector extends Component {
@@ -29,7 +30,12 @@ export default class MandateeSelector extends Component {
     if (this.args.openSearch) {
       this.mandateeOptions = [];
     } else {
-      this.mandateeOptions = yield this.mandatees.getMandateesActiveOn.perform(this.referenceDate);
+      this.mandateeOptions = yield this.mandatees.getMandateesActiveOn.perform(
+        this.referenceDate
+      );
+      this.mandateeOptions = this.mandateeOptions.filter(
+        (mandatee) => !this.args.excludeMandatees.includes(mandatee)
+      );
     }
   }
 
@@ -52,6 +58,9 @@ export default class MandateeSelector extends Component {
   @restartableTask
   *searchMandatee(searchTerm) {
     yield timeout(300);
-    this.mandateeOptions = yield this.mandatees.fetchMandateesByName.perform(searchTerm, this.referenceDate);
+    this.mandateeOptions = yield this.mandatees.fetchMandateesByName.perform(
+      searchTerm,
+      this.referenceDate
+    );
   }
 }
