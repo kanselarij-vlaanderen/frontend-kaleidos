@@ -1,8 +1,4 @@
-{{#if this.isLoading}}
-  <div class="auk-panel-layout__main-content auk-u-bg-alt">
-    <Auk::Loader @message={{t "agenda-loading"}} />
-  </div>
-{{else if this.isAgendaitemDetailRoute}}
+{{#if this.isAgendaitemDetailRoute}}
   <div class="auk-panel-layout__agenda-items">
     <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
       <div class="auk-scroll-wrapper">

@@ -73,7 +73,9 @@ export default class BatchDocumentsDetailsModal extends Component {
         if (this.isSignaturesEnabled) {
           row.signMarkingActivity = await piece.signMarkingActivity;
           row.showSignature = isPresent(this.args.decisionActivity);
-          row.hasSignFlow = await this.signatureService.hasSignFlow(piece);
+          row.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(piece);
+          row.hasSentSignFlow = row.signMarkingActivity && !row.hasMarkedSignFlow;
+          row.markedForSignature = row.signMarkingActivity && row.hasMarkedSignFlow;
         }
         return row;
       })
@@ -109,6 +111,11 @@ export default class BatchDocumentsDetailsModal extends Component {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
+        if (row.hasMarkedSignFlow) {
+          const signSubcase = await row.signMarkingActivity?.signSubcase;
+          const signFlow = await signSubcase?.signFlow;
+          await this.signatureService.removeSignFlow(signFlow);
+        }
         const previousPiece = await piece.previousPiece;
         await deletePiece(piece);
         if (this.args.didDeletePiece && previousPiece) {
@@ -116,7 +123,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         // container is cleaned up in deletePiece if no more pieces exist
       } else {
-        piece.name = row.name;
+        piece.name = row.name?.trim();
         // does not check for relationship changes
         let accessLevelHasChanged = false;
         let hasChanged = piece.dirtyType === 'updated';
@@ -129,8 +136,13 @@ export default class BatchDocumentsDetailsModal extends Component {
           accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
         }
-        if (row.markedForSignature) {
+        if (row.markedForSignature && !row.hasMarkedSignFlow) {
           await this.signatureService.markDocumentForSignature(piece, this.args.decisionActivity);
+        }
+        if (!row.markedForSignature && row.hasMarkedSignFlow) {
+          const signSubcase = await row.signMarkingActivity?.signSubcase;
+          const signFlow = await signSubcase?.signFlow;
+          await this.signatureService.removeSignFlow(signFlow);
         }
         if (hasChanged) {
           await piece.save();

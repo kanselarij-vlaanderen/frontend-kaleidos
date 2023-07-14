@@ -5,7 +5,7 @@ export default class CasesCaseSubcasesSubcaseDecisionRoute extends Route {
   @service store;
   async model() {
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    const pieces = await this.store.query('piece', {
+    const pieces = await this.store.query('report', {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       sort: '-created',
     });
