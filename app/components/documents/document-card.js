@@ -82,6 +82,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     return (
       this.args.isEditable
       && this.currentSession.may('manage-documents')
+      && this.markDocumentForSigning.isIdle
+      && this.deleteMarkedSignFlow.isIdle
       && this.loadSignatureRelatedData.isIdle
       && this.loadSignatureRelatedData.performCount > 0
       && (!this.hasSignFlow || this.hasMarkedSignFlow)
@@ -94,6 +96,12 @@ export default class DocumentsDocumentCardComponent extends Component {
         && (!this.hasSignFlow
             || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
     );
+  }
+
+  get showSignatureLoader() {
+    return this.loadSignatureRelatedData.isRunning ||
+           this.markDocumentForSigning.isRunning ||
+           this.deleteMarkedSignFlow.isRunning;
   }
 
   get showSignaturePill() {
@@ -335,6 +343,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     yield this.loadPieceRelatedData.perform();
   }
 
+  @task
+  *markDocumentForSigning() {
+    yield this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    yield this.loadPieceRelatedData.perform();
+  }
+
   @action
   changeAccessLevel(accessLevel) {
     this.piece.accessLevel = accessLevel;
@@ -361,12 +375,6 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async reloadAccessLevel() {
-    await this.loadPieceRelatedData.perform();
-  }
-
-  @action
-  async markDocumentForSigning() {
-    await this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
     await this.loadPieceRelatedData.perform();
   }
 

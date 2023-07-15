@@ -10,6 +10,7 @@ export default class AgendaService extends Service {
   @service intl;
   @service currentSession;
   @service newsletterService;
+  @service signatureService;
 
   @tracked addedPieces = null;
   @tracked addedAgendaitems = null;
@@ -151,6 +152,12 @@ export default class AgendaService extends Service {
       });
       submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
     }
+
+    // signFlows
+    for (const piece of submittedPieces) {
+      await this.signatureService.replaceDecisionActivity(piece, decisionActivity);
+    }
+
     const agendaitem = await this.store.createRecord('agendaitem', {
       created: now,
       number: numberToAssign,
