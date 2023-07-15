@@ -98,6 +98,12 @@ export default class DocumentsDocumentCardComponent extends Component {
     );
   }
 
+  get showSignatureLoader() {
+    return this.loadSignatureRelatedData.isRunning ||
+           this.markDocumentForSigning.isRunning ||
+           this.deleteMarkedSignFlow.isRunning;
+  }
+
   get showSignaturePill() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
