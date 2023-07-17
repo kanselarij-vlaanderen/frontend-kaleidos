@@ -203,6 +203,27 @@ export default class SignatureService extends Service {
     }
   }
 
+  async removeSignFlowForPiece(piece) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.status;
+    if (signFlow && status.uri === MARKED) {
+      await this.removeSignFlow(signFlow);
+    }
+  }
+
+  async replaceDecisionActivity(piece, decisionActivity) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.status;
+    if (signFlow && status.uri === MARKED) {
+      signFlow.decisionActivity = decisionActivity;
+      await signFlow.save();
+    }
+  }
+
   async hasSignFlow(piece) {
     const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     if (signaturesEnabled) {
@@ -224,7 +245,6 @@ export default class SignatureService extends Service {
       const signSubcase = await signMarkingActivity?.signSubcase;
       const signFlow = await signSubcase?.signFlow;
       const status = await signFlow?.belongsTo('status').reload();
-      console.log('status', status)
       return status?.uri === MARKED;
     }
     return false;

@@ -76,34 +76,50 @@
       <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
         <Auk::Panel>
           <Auk::Panel::Header>
-            <h4
-              data-test-route-settings---organization-technical-info-header
-              class="auk-panel__title"
-            >
-              {{t "linked-mandatees"}}
-            </h4>
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <h4
+                    data-test-route-settings---organization-technical-info-header
+                    class="auk-panel__title"
+                  >
+                    {{t "linked-mandatees"}}
+                  </h4>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
+                {{#if true}}
+                  <Auk::Toolbar::Item>
+                    <AuButton
+                      @skin="naked"
+                      @icon="plus"
+                      {{on
+                        "click"
+                        (fn (set this "showSelectMandateeModal" true))
+                      }}
+                    >
+                      {{t "add-minister"}}
+                    </AuButton>
+                  </Auk::Toolbar::Item>
+                {{/if}}
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body class="au-u-padding-none">
             <AuTable>
-              <:header>
-                <tr>
-                  <th>
-                    {{capitalize (t "mandatee")}}
-                  </th>
-                  <th></th>
-                </tr>
-              </:header>
               <:body>
                 {{#each this.model.mandatees as |mandatee|}}
                   <tr>
-                    <td data-test-route-settings---organization-technical-info-row-mandatee>
-                      {{mandatee.fullDisplayName}}
+                    <td
+                      data-test-route-settings---organization-technical-info-row-mandatee
+                    >
+                      <Mandatee::NameWithRange @mandatee={{mandatee}}/>
                     </td>
                     <td class="au-u-text-right">
                       <AuButton
                         data-test-route-settings---organization-technical-info-row-unlink-mandatee
                         @skin="naked"
-                        @icon="circle-full"
+                        @icon="link-broken"
                         {{on
                           "click"
                           (queue
@@ -116,27 +132,13 @@
                       </AuButton>
                     </td>
                   </tr>
+                {{else}}
+                  <tr>
+                    <td>
+                      {{t "no-linked-mandatees"}}
+                    </td>
+                  </tr>
                 {{/each}}
-                <tr>
-                  <td>
-                    <Mandatees::MandateeSelector
-                      @referenceDate={{@referenceDate}}
-                      @openSearch={{this.openSearch}}
-                      @onSelectMandatee={{fn (mut this.selectedMandatee)}}
-                      @selectedMandatees={{this.selectedMandatee}}
-                    />
-                  </td>
-                  <td class="au-u-text-right">
-                    {{#if this.selectedMandatee.id}}
-                      <AuButton
-                        data-test-route-settings---organization-technical-info-row-link-mandatee
-                        {{on "click" this.linkMandatee}}
-                      >
-                        {{t "connect"}}
-                      </AuButton>
-                    {{/if}}
-                  </td>
-                </tr>
               </:body>
             </AuTable>
           </Auk::Panel::Body>
@@ -258,10 +260,13 @@
       <Group>
         <AuButton
           data-test-route-settings---organization-confirm-unlink-mandatee
+          @loading={{this.unlinkMandatee.isRunning}}
           @alert={{true}}
           {{on
             "click"
-            (queue this.unlinkMandatee (toggle "showUnlinkMandatee" this))
+            (queue
+              (perform this.unlinkMandatee) (toggle "showUnlinkMandatee" this)
+            )
           }}
         >
           {{t "unlink-mandatee"}}
@@ -270,3 +275,11 @@
     </AuToolbar>
   </:footer>
 </AuModal>
+
+{{#if this.showSelectMandateeModal}}
+  <Mandatees::MandateesSelectorModal
+    @excludeMandatees={{this.linkedMandatees}}
+    @onClose={{fn (set this "showSelectMandateeModal" false)}}
+    @onAdd={{this.linkMandatee}}
+  />
+{{/if}}

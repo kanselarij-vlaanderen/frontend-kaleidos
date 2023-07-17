@@ -82,7 +82,7 @@
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
-              @onSave={{perform this.updateAgendaitemPiecesAccessLevels}}
+              @onSave={{perform this.onDecisionEdit}}
               @onCancel={{this.toggleEditPill}}
             />
           {{/if}}
