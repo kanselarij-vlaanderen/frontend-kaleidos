@@ -196,6 +196,7 @@ context('Publications tests', () => {
     cy.wait('@getMandatees');
     cy.get(utils.mandateesSelector.add).should('be.disabled');
     cy.get(utils.mandateeSelector.container).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandateeName)

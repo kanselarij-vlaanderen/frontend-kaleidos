@@ -404,6 +404,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
@@ -434,6 +435,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).should('have.length', 10);
@@ -448,6 +450,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
     cy.get(utils.mandateeSelector.container).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
@@ -467,6 +470,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(utils.mandateesSelector.openSearch).parent()
       .click();
     cy.get(utils.mandateeSelector.container).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.searchInput).clear()
       .type('Martens');
