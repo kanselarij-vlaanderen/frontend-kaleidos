@@ -52,6 +52,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
+  @tracked label;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
@@ -125,12 +127,26 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-
+    const loadPiecePart = (id) => 
+      this.store.queryOne('piece-part', {
+        'filter[report][:id:]': id,
+      });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
+      if (isPresent(this.args.label)) {
+        this.label = this.args.label;
+      } else {
+        const piecePart = yield loadPiecePart(this.piece.id);
+        console.log(piecePart);
+        if (piecePart) {
+          this.label = this.intl.t('created-on');
+        } else {
+          this.label = this.intl.t('uploaded-at');
+        }
+      }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
