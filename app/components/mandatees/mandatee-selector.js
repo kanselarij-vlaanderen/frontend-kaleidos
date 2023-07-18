@@ -34,7 +34,7 @@ export default class MandateeSelector extends Component {
         this.referenceDate
       );
       this.mandateeOptions = this.mandateeOptions.filter(
-        (mandatee) => !this.args.excludeMandatees.includes(mandatee)
+        (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
       );
     }
   }
@@ -63,7 +63,7 @@ export default class MandateeSelector extends Component {
       this.referenceDate
     );
     this.mandateeOptions = this.mandateeOptions.filter(
-      (mandatee) => !this.args.excludeMandatees.includes(mandatee)
+      (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
     );
   }
 }
