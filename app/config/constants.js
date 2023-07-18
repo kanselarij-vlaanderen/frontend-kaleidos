@@ -138,6 +138,8 @@ export default {
     VOORZITTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
     GEMEENSCHAPSMINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
     VICEMINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03df', // Viceminister-president
+    SECRETARIS: 'http://themis.vlaanderen.be/id/gebruikersrol/9d5ebfb9-3829-4b1f-a2a8-15033f7e2097',
+    WAARNEMEND_SECRETARIS: 'http://themis.vlaanderen.be/id/gebruikersrol/cfa6ed74-bb6f-4d4c-b905-9a205be135d7',
   },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {
