@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
@@ -14,8 +15,8 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
 
   @tracked subject;
   @tracked message;
-  @tracked uploadedPieces = [];
-  @tracked transferredPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
+  @tracked transferredPieces = new TrackedArray([]);
   @tracked mustUpdatePublicationStatus = true;
 
   validators;
@@ -74,9 +75,9 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
         .slice()
         .sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.receivedDate - p2.receivedDate);
 
-      this.transferredPieces = generatedPieces;
+      this.transferredPieces = new TrackedArray(generatedPieces);
     } else {
-      this.transferredPieces = [];
+      this.transferredPieces = new TrackedArray([]);
     }
   }
 

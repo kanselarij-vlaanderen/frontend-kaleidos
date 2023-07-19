@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
@@ -21,8 +22,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @tracked subject;
   @tracked message;
-  @tracked uploadedPieces = [];
-  @tracked transferredPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
+  @tracked transferredPieces = new TrackedArray([]);
   @tracked mustUpdatePublicationStatus = true;
 
   validators;
@@ -96,13 +97,13 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.usedPieces,
         translationActivity.generatedPieces,
       ]);
-      this.transferredPieces = [
+      this.transferredPieces = new TrackedArray([
         ...usedPieces.slice(),
         ...generatedPieces.slice(),
-      ]
+      ])
         .sort((p1, p2) => p1.name.localeCompare(p2.name) || p1.created - p2.created);
     } else {
-      this.transferredPieces = [];
+      this.transferredPieces = new TrackedArray([]);
     }
   }
 
