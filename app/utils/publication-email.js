@@ -75,15 +75,17 @@ function proofRequestEmail(params) {
 
   subject += `Drukproefaanvraag VO-dossier: ${params.identifier} - ${params.shortTitle}`;
 
-   const message = 'Beste,\n'
-      + '\n'
-      + 'In bijlage voor drukproef:\n'
-      + '\n'
-      + `Titel: ${params.longTitle}\t\n`
-      + '\n'
-      + `VO-dossier: ${params.identifier}\n`
-      + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n';
+  const threadIdSection = params.threadId ? `thread::${params.threadId}::\t\n` : '';
+  const message = 'Beste,\n'
+        + '\n'
+        + 'In bijlage voor drukproef:\n'
+        + '\n'
+        + `Titel: ${params.longTitle}\t\n`
+        + '\n'
+        + `VO-dossier: ${params.identifier}\n`
+        + threadIdSection
+        + '\n'
+        + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.\t\n';
   return {
     subject: subject,
     message: [message, footer].join('\n\n'),
@@ -101,12 +103,15 @@ function publicationRequestEmail(params) {
     subject +=  `DRINGEND: `;
   }
   subject += `Publicatieaanvraag BS-werknr: ${numacNumbers} VO-dossier: ${params.identifier}`;
+
+  const threadIdSection = params.threadId ? `thread::${params.threadId}::\t\n` : '';
   const message = 'Beste,\n'
     + '\n'
     + 'Hierbij de verbeterde drukproef :\n'
     + '\n'
     + `BS-werknummer: ${numacNumbers}\n`
     + `VO-dossier: ${params.identifier}\n`
+    + threadIdSection
     + '\n'
     + `De gewenste datum van publicatie is: ${targetEndDate}\t\n`
     + '\t\n'

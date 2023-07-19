@@ -42,7 +42,6 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked selectedAgendaitem; // set in setupController of child-route
   @tracked documentLoadCount = 0;
   @tracked totalCount = 0;
-  @tracked isLoading;
   @tracked isEditingOverview = false;
 
   // @tracked filter; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
@@ -70,7 +69,15 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @action
   searchAgendaitems(value) {
-    set(this,'filter', value);
+    set(this, 'filter', value);
+    // bug in ember with refreshModel, (more info in loading action in route)
+    this.router.transitionTo(
+      ('agenda.agendaitems',
+      this.meeting.id,
+      this.agenda.id,
+      { queryParams: { filter: value } })
+    );
+    this.router.refresh('agenda.agendaitems');
   }
 
   @task

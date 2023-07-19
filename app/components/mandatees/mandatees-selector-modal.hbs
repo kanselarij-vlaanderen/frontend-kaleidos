@@ -23,6 +23,7 @@
     >
       <Auk::Label>{{t "minister"}}</Auk::Label>
       <Mandatees::MandateeSelector
+        @excludeMandatees={{@excludeMandatees}}
         @referenceDate={{@referenceDate}}
         @openSearch={{this.openSearch}}
         @onSelectMandatee={{fn (mut this.selectedMandatee)}}

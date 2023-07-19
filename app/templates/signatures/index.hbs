@@ -34,7 +34,8 @@
     @scrollable={{true}}
     @stickyHeader={{true}}
     @clickable={{false}}
-    @asideVisible={{this.showSidebar}}
+    @loading={{this.createSignFlow.isRunning}}
+    @asideVisible={{and this.showSidebar (not this.createSignFlow.isRunning)}}
     @content={{@model}}
     @page={{this.pageSignaturesIndex}}
     @size={{this.sizeSignaturesIndex}}

@@ -5,13 +5,17 @@
     <AuPill
       @icon="sign"
       @skin={{this.skin}}
-      @href={{this.data.value.signingHubUrl}}
+      @href={{if this.isClickable this.data.value.signingHubUrl}}
       target="_blank"
     >
       {{this.data.value.status.label}}
     </AuPill>
   {{else}}
-    <AuPill @icon="sign" @skin={{this.skin}}>
+    <AuPill 
+      @icon="sign" 
+      @skin={{this.skin}}
+      @route={{if (and this.isClickable this.data.value.route) this.data.value.route}}
+      >
       {{this.data.value.status.label}}
     </AuPill>
   {{/if}}

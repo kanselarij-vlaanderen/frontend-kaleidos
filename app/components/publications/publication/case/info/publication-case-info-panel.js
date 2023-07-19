@@ -21,6 +21,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
 
+  @tracked threadId;
   numacNumbersToDelete;
 
   constructor() {
@@ -44,6 +45,8 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     // Numac-nummers
     this.numacNumbers = yield this.args.publicationFlow.numacNumbers;
+    // Thread ID
+    this.threadId = (yield this.args.publicationFlow.threadId)?.idName;
     // Datum beslissing
     this.decisionActivity = yield this.args.publicationFlow
       .decisionActivity;
@@ -154,11 +157,35 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.args.publicationFlow.mode = publicationMode;
   }
 
+  async saveThreadId() {
+    this.threadId = this.threadId?.trim()
+    const existingThreadId = await this.args.publicationFlow.threadId;
+    if (existingThreadId) {
+      if (!this.threadId) {
+        return existingThreadId.destroyRecord();
+      } else if (existingThreadId.idName !== this.threadId) {
+        existingThreadId.idName = this.threadId;
+        return existingThreadId.save();
+      }
+    } else {
+      if (this.threadId) {
+        const threadIdIdentification = this.store.createRecord('identification', {
+          idName: this.threadId,
+          agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
+          publicationFlowForThreadId: this.args.publicationFlow,
+        });
+        return threadIdIdentification.save();
+      }
+    }
+  }
+
   @task
   *closeEditingPanel() {
     // Remove locally created numac-numbers that are not yet persisted in the backend
     const newNumacNumbers = this.numacNumbers.filter((number) => number.isNew);
     newNumacNumbers.forEach((number) => number.deleteRecord());
+    // Reset thread ID
+    this.threadId = (yield this.args.publicationFlow.threadId)?.idName;
 
     const reloads = [
       this.args.publicationFlow.belongsTo('urgencyLevel').reload(),
@@ -204,6 +231,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
         saves.push(numacNumber.save());
       }
     }
+
+    // Thread ID
+    saves.push(this.saveThreadId());
 
     // Datum beslissing
     if (!this.isViaCouncilOfMinisters) {

@@ -13,6 +13,7 @@
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
               @onChange={{this.onChangeStatus}}
+              @excludedStatuses={{this.excludedStatuses}}
             />
           </div>
           {{#if this.currentSession.isAdmin}}
@@ -94,6 +95,7 @@
             <SignaturePill
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
+              @isClickable={{false}}
             />
           </td>
         {{/let}}

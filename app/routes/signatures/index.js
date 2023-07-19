@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SignaturesIndexRoute extends Route {
   @service store;
@@ -24,6 +25,12 @@ export default class SignaturesIndexRoute extends Route {
   localStorageKey = 'signatures.shortlist.minister-filter';
 
   ministerIds = [];
+  lastParams;
+
+  constructor() {
+    super(...arguments);
+    this.lastParams = new Snapshot();
+  }
 
   async beforeModel() {
     if (this.currentSession.may('manage-only-specific-signatures')) {
@@ -39,25 +46,44 @@ export default class SignaturesIndexRoute extends Route {
   }
 
   async model(params) {
+    this.lastParams.stageLive(params);
+
+    if (
+      this.lastParams.anyFieldChanged(
+        Object.keys(params).filter((key) => key !== 'pageSignaturesIndex')
+      )
+    ) {
+      params.pageSignaturesIndex = 0;
+    }
+
     const filter = {
       'sign-subcase': {
         'sign-marking-activity': {
-          ':has:piece': 'yes',
-        }
+          piece: {
+            agendaitems: {
+              agenda: {
+                meeting: {
+                  'internal-decision-publication-activity': {
+                    ':has:start-date': `date-added-for-cache-busting-${(new Date()).toISOString()}`,
+                  }
+                }
+              }
+            }
+          }
+        },
+        ':has-no:sign-preparation-activity': 'yes',
       },
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       },
       'decision-activity': {
-        treatment: {
-          agendaitems: {
-            agenda: {
-              ':has:meeting': `ye-date-added-for-cache-busting-${(new Date()).toISOString()}`,
-            }
-          }
-        }
+        'decision-result-code': {
+          ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+        },
       }
     };
+
+    this.lastParams.commit();
 
     if (this.ministerIds?.length) {
       filter['decision-activity']['subcase'] = {
@@ -87,6 +113,10 @@ export default class SignaturesIndexRoute extends Route {
     super.setupController(controller, model, transition);
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
+
+    if (controller.pageSignaturesIndex !== this.lastParams.committed.pageSignaturesIndex) {
+      controller.pageSignaturesIndex = this.lastParams.committed.pageSignaturesIndex;
+    }
   }
 
   resetController(controller, isExiting) {

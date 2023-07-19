@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { task } from 'ember-concurrency';
@@ -12,13 +11,22 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
+ * @param piece {Piece|Promise<Piece>}
+ * @param isClickable {boolean} Defaults to true, can be used to disable the click behaviour
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
+  @service store;
   @service currentSession;
+  @service signatureService;
 
   scheduledRefresh;
   @tracked triggerTask;
+
+  get isClickable() {
+    // use passed in argument, otherwise default to true
+    return this.args.isClickable ?? true;
+  }
 
   willDestroy() {
     super.willDestroy(...arguments);
@@ -41,29 +49,32 @@ export default class SignaturePillComponent extends Component {
     const signMarkingActivity = await this.args.signMarkingActivity;
     if (!signMarkingActivity) return;
     const signSubcase = await signMarkingActivity.signSubcase;
-    const signFlow = await signSubcase.signFlow;
-    const status = await signFlow.belongsTo('status').reload();
+    const signFlow = await signSubcase?.signFlow;
+    let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
-
-    if (status.uri !== REFUSED) {
-      const piece = await this.args.piece;
-      const signFlow = await signSubcase.signFlow;
-      const signFlowCreator = await signFlow.creator;
-      const currentUser = this.currentSession.user;
-      if (
-        piece &&
-        signFlowCreator.id === currentUser.id &&
-        status.uri !== SIGNED &&
-        status.uri !== MARKED
-      ) {
-        const response = await fetch(
-          `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          signingHubUrl = result.url;
+    let route = null;
+    if (status) {
+      if (status.uri === MARKED) {
+        route = "signatures.index";
+      }
+      if (status.uri !== REFUSED &&
+          status.uri !== CANCELED &&
+          status.uri !== SIGNED &&
+          status.uri !== MARKED) {
+        const piece = await this.args.piece;
+        const signFlow = await signSubcase.signFlow;
+        const signFlowCreator = await signFlow.creator;
+        const currentUser = this.currentSession.user;
+        if (
+          piece &&
+          signFlowCreator?.id === currentUser.id
+        ) {
+          signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         }
       }
+    } else {
+      // status can be null, if the sync service hasn't caught up yet. In this case we default to MARKED and wait for the next scheduled reload
+      status = await this.store.findRecordByUri('concept', MARKED);
     }
 
     this.scheduleSignFlowStatusRefresh();
@@ -71,6 +82,7 @@ export default class SignaturePillComponent extends Component {
     return {
       signingHubUrl,
       status,
+      route
     };
   });
 
@@ -78,14 +90,13 @@ export default class SignaturePillComponent extends Component {
 
   get skin() {
     const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    const statusUri = this.data.value.status.uri;
-    const signingHubUrl = this.data.value.signingHubUrl;
+    const statusUri = this.data.value?.status?.uri;
+    const signingHubUrl = this.data.value?.signingHubUrl;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
     } else if (signingHubUrl) {
       return 'link';
-    } else {
-      return 'ongoing';
     }
+    return 'ongoing';
   }
 }

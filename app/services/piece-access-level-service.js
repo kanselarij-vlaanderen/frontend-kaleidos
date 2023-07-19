@@ -131,18 +131,18 @@ export default class PieceAccessLevelService extends Service {
   }
 
   /*
-   * This method is used to update the access levels of the reports related to of a subcase's decision-activity.
+   * This method is used to update the access levels of the reports related to a subcase's decision-activity.
    * When a subcase has been updated to being confidential, all the reports of the decision-activity get the
    * "Vertrouwelijk" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    const pieces = await this.store.query('piece', {
+    const reports = await this.store.query('report', {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       include: 'access-level',
     });
 
-    await Promise.all(pieces.slice().map(async (piece) => {
-      await this.strengthenAccessLevelToConfidential(piece);
+    await Promise.all(reports.slice().map(async (report) => {
+      await this.strengthenAccessLevelToConfidential(report);
     }));
   }
 

@@ -1,6 +1,6 @@
 <AuModal
   @modalOpen={{@modalOpen}}
-  @closeModal={{@onCancel}}
+  @closeModal={{this.cancel}}
 >
   <:title>
     {{#if (has-block "title")}}
@@ -29,7 +29,8 @@
             <AuButton
               data-test-confirmation-modal-cancel
               @skin="naked"
-              {{on "click" @onCancel}}
+              @disabled={{@loading}}
+              {{on "click" this.cancel}}
             >
               {{#if @cancelMessage}}
                 {{@cancelMessage}}

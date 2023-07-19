@@ -43,8 +43,6 @@ export default class Piece extends Model {
 
   @belongsTo('submission-activity', { inverse: 'pieces', async: true, as: 'piece' })
   submissionActivity;
-  @belongsTo('decision-activity', { inverse: 'report', async: true, as: 'piece' })
-  decisionActivity;
   @belongsTo('meeting', { inverse: 'pieces', async: true, as: 'piece' }) meeting;
   @belongsTo('publication-flow', { inverse: 'referenceDocuments', async: true, as: 'piece' })
   publicationFlow;
