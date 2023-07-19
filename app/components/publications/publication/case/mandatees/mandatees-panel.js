@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { trackedFunction } from 'ember-resources/util/function';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
@@ -18,6 +19,12 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
   closeSelectMandateeModal() {
     this.showSelectMandateeModal = false;
   }
+
+  mandatees = trackedFunction(this, async () => {
+    const publicationFlow = await this.args.publicationFlow;
+    const mandatees = await publicationFlow.mandatees;
+    return mandatees.slice();
+  });
 
   @action
   async addMandatee(mandatee) {
