@@ -21,14 +21,18 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
 
   @action
   async addMandatee(mandatee) {
-    addObject(this.args.publicationFlow.mandatees, mandatee);
+    const mandatees = await this.args.publicationFlow.mandatees;
+    addObject(mandatees, mandatee);
+    this.args.publicationFlow.mandatees = mandatees;
     await this.args.publicationFlow.save();
     this.showSelectMandateeModal = false;
   }
 
   @action
   async removeMandatee(mandatee) {
-    removeObject(this.args.publicationFlow.mandatees, mandatee);
+    const mandatees = await this.args.publicationFlow.mandatees;
+    removeObject(mandatees, mandatee);
+    this.args.publicationFlow.mandatees = mandatees;
     await this.args.publicationFlow.save();
   }
 }
