@@ -15,7 +15,7 @@ export default class PublicationStatusModal extends Component {
   }
 
   get publicationStatusses() {
-    return this.store.peekAll('publication-status').sort((s1, s2) => s1.position - s2.position);
+    return this.store.peekAll('publication-status').slice().sort((s1, s2) => s1.position - s2.position);
   }
 
   get isDisabledSave() {
