@@ -1,6 +1,7 @@
 /* eslint-disable */
 self.deprecationWorkflow = self.deprecationWorkflow || {};
 self.deprecationWorkflow.config = {
+  throwOnUnhandled: true, // throw on any deprecation
   workflow: [
     { handler: "throw", matchId: "remove-owner-inject" },
     { handler: "throw", matchId: "ember-data:deprecate-array-like" },
