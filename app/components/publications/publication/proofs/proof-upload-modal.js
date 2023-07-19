@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
@@ -13,7 +14,7 @@ import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
   @service publicationService;
 
-  @tracked uploadedPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
   @tracked receivedDate = new Date();
   @tracked mustUpdatePublicationStatus = true;
   @tracked proofPrintCorrector;
