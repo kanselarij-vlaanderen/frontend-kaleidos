@@ -79,10 +79,10 @@ const selectors = {
     block: '[data-test-route-settings---organization-block]',
     technicalInfo: {
       header: '[data-test-route-settings---organization-technical-info-header]',
+      showSelectMandateeModal: '[data-test-route-settings--organization-tehcnical-info-show-select-mandatee-modal]',
       row: {
         mandatee: '[data-test-route-settings---organization-technical-info-row-mandatee]',
         unlinkMandatee: '[data-test-route-settings---organization-technical-info-row-unlink-mandatee]',
-        linkMandatee: '[data-test-route-settings---organization-technical-info-row-link-mandatee]',
       },
     },
     confirm: {
