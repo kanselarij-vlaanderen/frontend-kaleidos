@@ -164,7 +164,7 @@ export default class AgendaitemDecisionComponent extends Component {
       .decisionResultCode;
     if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
       const pieces = await this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.signatureService.removeSignFlowForPiece(piece);
       }
     }
