@@ -10,8 +10,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
     filter: {
-      // bug in ember with refreshModel, keep this false (more info in loading action)
-      refreshModel: false, 
+      refreshModel: true,
     },
     showModifiedOnly: {
       refreshModel: true,
@@ -131,26 +130,21 @@ export default class AgendaAgendaitemsRoute extends Route {
   }
 
   @action
-  // eslint-disable-next-line no-unused-vars
   loading(transition) {
-    // Currently there is a bug in ember with refreshModel where the model keeps refresing even though it there is no need.
-    // This is causing many visual refreshes in our code in cetain situations.
-    // https://github.com/emberjs/ember.js/issues/19497
-    // In order to fix this: When searching we do a transitionTo from the controller and a manual model refresh instead
-    // In that case, we can just rely on the default behavior of ember and not block the transition.
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoading = true;
+    transition.promise.finally(() => {
+      controller.isLoading = false;
+    });
 
-    // When should we show the loader on this level:
-    // - when searching the model should reload (manual refresh from controller)
-    // - when filtering on modifiedOnly the model should reload (ember default behavior with refreshModel, this one is not broken)
-    // - when entering the route the first time (ember default behavior building top down)
-    // - when switching subroutes on 'agenda' route (ex. agenda.documents to agenda.agendaitem, ember default behavior)
-
-    // When should we NOT show the loader on this level:
-    // - when switching between agendaitems (agenda.agendaitems.agendaitem.* subroutes with id to a different id)
-    // - when switching between agendaitem tabs (agenda.agendaitems.agendaitem.* subroutes with same id)
-    // in both those cases ember default behavior will trigger 'agenda.agendaitems.agendaitem.loading' to show
-
-    // so for all of those cases, we can just bubble and let ember handle it.
+    // If only the filter queryParam changed, we don't want to bubble
+    // the loading event so we can handle it ourselves with an inline loader.
+    // When changing routes, e.g. when switching tabs, or when other queryParams
+    // change we do want to display the loading page.
+    if (transition.queryParamsOnly && transition.from && transition.to) {
+      return transition.from.queryParams?.filter === transition.to.queryParams?.filter;
+    }
     return true;
   }
 }
