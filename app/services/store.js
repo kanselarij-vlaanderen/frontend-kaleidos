@@ -52,8 +52,7 @@ export default class ExtendedStoreService extends Store {
   }
 
   findRecordByUri(modelName, uri) {
-    // const cachedRecord = this.peekAll(modelName).find((model) => model.uri === uri);
-    const cachedRecord = this.peekAll(modelName).slice().findBy("uri", uri);
+    const cachedRecord = this.peekAll(modelName).find((model) => model.uri === uri);
     if (cachedRecord) {
       return cachedRecord;
     }
