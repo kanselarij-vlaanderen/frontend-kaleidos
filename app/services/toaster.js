@@ -1,16 +1,16 @@
 import Service, { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import {
   task, timeout
 } from 'ember-concurrency';
-import { A } from '@ember/array';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class ToasterService extends Service {
   @service intl;
 
-  @tracked toasts = A([]);
+  @tracked toasts = new TrackedArray([]);
 
   // TODO: Below "newToasts" & "oldToasts" getters are a temporary to be able to render "old toasts" that
   // don't have an equivalent in new design yet, while already implementing new design for those types that support it.
