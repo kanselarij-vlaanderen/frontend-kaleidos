@@ -21,8 +21,8 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
   }
 
   mandatees = trackedFunction(this, async () => {
-    const publicationFlow = await this.args.publicationFlow;
-    const mandatees = await publicationFlow.mandatees;
+    const mandateesPromise = this.args.publicationFlow.mandatees;
+    const mandatees = await mandateesPromise;
     return mandatees.slice();
   });
 
