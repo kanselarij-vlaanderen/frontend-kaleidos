@@ -76,7 +76,7 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sort((g1, g2) => g1.groupNumber - g2.groupNumber).map((group) => EmberObject.create(group));
+  groupsArray = groupsArray.sort((g1, g2) => g1.groupNumber.localeCompare(g2.groupNumber)).map((group) => EmberObject.create(group));
 
   return groupsArray;
 };
