@@ -52,7 +52,11 @@ export default class SignaturePillComponent extends Component {
     const signFlow = await signSubcase?.signFlow;
     let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
+    let route = null;
     if (status) {
+      if (status.uri === MARKED) {
+        route = "signatures.index";
+      }
       if (status.uri !== REFUSED &&
           status.uri !== CANCELED &&
           status.uri !== SIGNED &&
@@ -78,6 +82,7 @@ export default class SignaturePillComponent extends Component {
     return {
       signingHubUrl,
       status,
+      route
     };
   });
 

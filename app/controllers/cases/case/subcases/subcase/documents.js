@@ -21,6 +21,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   @service router;
   @service fileConversionService;
   @service toaster;
+  @service pieceAccessLevelService;
 
   case;
   subcase;
@@ -79,6 +80,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
+    piece.name = piece.name.trim();
     yield piece.save();
     try {
       const sourceFile = yield piece.file;
@@ -98,6 +100,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
   *addPiece(piece) {
     piece.cases.pushObject(this.case);
     yield piece.save();
+    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;
       yield this.fileConversionService.convertSourceFile(sourceFile);

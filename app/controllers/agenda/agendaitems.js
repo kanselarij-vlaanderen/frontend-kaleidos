@@ -45,7 +45,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked isLoading;
   @tracked isEditingOverview = false;
 
-  // @tracked filter; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  @tracked filter;
   // @tracked showModifiedOnly;
   // @tracked anchor;
 
@@ -70,7 +70,7 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @action
   searchAgendaitems(value) {
-    set(this,'filter', value);
+    this.filter = value;
   }
 
   @task

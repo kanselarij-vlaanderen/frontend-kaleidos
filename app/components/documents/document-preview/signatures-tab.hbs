@@ -1,7 +1,7 @@
 <div class="auk-u-m-4">
-  {{#if this.loadSignatureRelatedData.isRunning}}
+  {{#if (or this.loadSignatureRelatedData.isRunning this.markForSignFlow.isRunning)}}
     <Auk::Loader />
-  {{else if this.signPreparationActivity}}
+  {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
       <SignaturePill
         @piece={{@piece}}
@@ -25,30 +25,13 @@
     {{#if this.loadCanManageSignFlow.isRunning}}
       <Auk::Loader />
     {{else if this.canManageSignFlow}}
-      <p class="au-u-muted auk-u-mt-2">
-        {{or @piece.documentContainer.type.label (t "no-document-type")}}
-        -
-        {{date this.decisionActivity.startDate}}
-      </p>
-      <h5 class="auk-h4">{{@piece.name}}</h5>
-      <Signatures::CreateSignFlow
-        @decisionActivities={{array this.decisionActivity}}
-        @onChangeSigners={{fn (mut this.signers)}}
-        @onChangeApprovers={{fn (mut this.approvers)}}
-        @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+      <AuToggleSwitch
+        @skin="primary"
+        @label={{t "present-for-signing"}}
+        @checked={{this.hasMarkedSignFlow}}
+        @onChange={{fn this.markForSignFlow.perform}}
+        @disabled={{this.markForSignFlow.isRunning}}
       />
-
-      <AuToolbar class="auk-u-mt-4" as |Group|>
-        <Group>
-          <AuButton
-            @loading={{this.createSignFlow.isRunning}}
-            @disabled={{not this.signers.length}}
-            {{on "click" this.createSignFlow.perform}}
-          >
-            {{t "start-signing"}}
-          </AuButton>
-        </Group>
-      </AuToolbar>
     {{else}}
       <AuAlert
         @skin="warning"

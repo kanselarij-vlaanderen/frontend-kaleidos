@@ -137,7 +137,6 @@ Router.map(function() {
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');

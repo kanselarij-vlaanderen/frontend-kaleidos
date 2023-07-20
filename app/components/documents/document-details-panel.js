@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { isPresent, isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import ENV from 'frontend-kaleidos/config/environment';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @param {Piece} piece
@@ -27,7 +28,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
 
-  @tracked hasSignFlow = false;
+  @tracked canEditPieceWithSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -51,7 +52,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
+    const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
+    const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
+    return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
   }
 
   @task
@@ -78,6 +81,21 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *saveDetails() {
+    const signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    if (signMarkingActivity) {
+      const signSubcase = yield signMarkingActivity?.signSubcase;
+      const signFlow = yield signSubcase?.signFlow;
+      const status = yield signFlow?.belongsTo('status').reload();
+      if (status?.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        yield this.cancelEditDetails.perform();
+        yield this.loadSignatureRelatedData.perform();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
+          this.intl.t('changes-could-not-be-saved-title'),
+        );
+        return;
+      }
+    }
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
       const derivedFile = yield oldFile.derived;
@@ -103,6 +121,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.onChangeFile();
     }
     this.args.piece.accessLevel = this.accessLevel;
+    this.args.piece.name = this.args.piece.name?.trim();
     yield this.args.piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevels(
       this.args.piece

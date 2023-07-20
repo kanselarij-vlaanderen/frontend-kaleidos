@@ -59,7 +59,17 @@ export default class SignaturesIndexRoute extends Route {
     const filter = {
       'sign-subcase': {
         'sign-marking-activity': {
-          ':has:piece': 'yes',
+          piece: {
+            agendaitems: {
+              agenda: {
+                meeting: {
+                  'internal-decision-publication-activity': {
+                    ':has:start-date': `date-added-for-cache-busting-${(new Date()).toISOString()}`,
+                  }
+                }
+              }
+            }
+          }
         },
         ':has-no:sign-preparation-activity': 'yes',
       },
@@ -67,13 +77,9 @@ export default class SignaturesIndexRoute extends Route {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       },
       'decision-activity': {
-        treatment: {
-          agendaitems: {
-            agenda: {
-              ':has:meeting': `ye-date-added-for-cache-busting-${(new Date()).toISOString()}`,
-            }
-          }
-        }
+        'decision-result-code': {
+          ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+        },
       }
     };
 
