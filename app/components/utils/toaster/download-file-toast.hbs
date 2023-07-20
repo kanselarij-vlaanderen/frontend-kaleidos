@@ -1,24 +1,23 @@
-<ClickOutside @onClickOutside={{@onClose}}>
-  <WebComponents::VlAlert
-    class="vl-alert-relative vl-alert-relative--center-mid"
-    aria-live="assertive"
-    @type="success"
-    @title={{@title}}
-    @closeable={{true}}
-    @onClose={{@options.onClose}}
-  >
-    <div class="vl-alert__message auk-u-text-capitalize">
-      <p data-test-download-file-toast-message>{{@message}}</p>
-      <AuLinkExternal
-        data-test-download-file-toast-link
-        @skin="button-secondary"
-        href={{@options.downloadLink}}
-        {{on "click" @options.onClose}}
-        class="auk-u-mt-4"
-        download
-      >
-        {{t "download"}}
-      </AuLinkExternal>
-    </div>
-  </WebComponents::VlAlert>
-</ClickOutside>
+<WebComponents::VlAlert
+  class="vl-alert-relative vl-alert-relative--center-mid"
+  aria-live="assertive"
+  @type="success"
+  @title={{@title}}
+  @closeable={{true}}
+  @onClose={{@options.onClose}}
+  {{on-click-outside @onClose}}
+>
+  <div class="vl-alert__message auk-u-text-capitalize">
+    <p data-test-download-file-toast-message>{{@message}}</p>
+    <AuLinkExternal
+      data-test-download-file-toast-link
+      @skin="button-secondary"
+      href={{@options.downloadLink}}
+      {{on "click" @options.onClose}}
+      class="auk-u-mt-4"
+      download
+    >
+      {{t "download"}}
+    </AuLinkExternal>
+  </div>
+</WebComponents::VlAlert>
