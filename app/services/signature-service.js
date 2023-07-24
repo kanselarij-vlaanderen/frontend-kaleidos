@@ -29,16 +29,18 @@ export default class SignatureService extends Service {
       // Attach approvers
       await Promise.all(
         approvers.map((approver) => {
+          const approverLowerCase = approver.toLowerCase();
           const record = this.store.createRecord('sign-approval-activity', {
-            approver,
+            approverLowerCase,
             signSubcase,
           });
           return record.save();
         })
       );
 
+      const notifiedLowerCase = notified.map(notifyEmail => notifyEmail.toLowerCase())
       // Attach notified
-      signSubcase.notified = notified;
+      signSubcase.notified = notifiedLowerCase;
       await signSubcase.save();
       // set creator
       const creator = await this.currentSession.user;
