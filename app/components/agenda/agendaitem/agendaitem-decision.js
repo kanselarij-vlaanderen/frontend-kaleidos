@@ -215,7 +215,6 @@ export default class AgendaitemDecisionComponent extends Component {
     await deleteFile(report.file);
     const file = await this.store.findRecord('file', fileId);
     report.file = file;
-    report.modified = new Date();
     await report.save();
   }
 
@@ -325,7 +324,7 @@ export default class AgendaitemDecisionComponent extends Component {
     let documentContainer;
     let betreftPiecePart;
     let beslissingPiecePart;
-
+    this.report?.reload();
     if (!this.report) {
       documentContainer = this.createNewDocumentContainer();
       report = await this.createNewReport(documentContainer);
@@ -360,21 +359,11 @@ export default class AgendaitemDecisionComponent extends Component {
     beslissingPiecePart,
     betreftPiecePart
   ) {
-    try {
-      await documentContainer.save();
-      await report.save();
-      await betreftPiecePart?.save();
-      await beslissingPiecePart?.save();
+    await documentContainer.save();
+    await report.save();
+    await betreftPiecePart?.save();
+    await beslissingPiecePart?.save();
 
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('decision-could-not-be-saved-message'),
-        this.intl.t('changes-could-not-be-saved-title'),
-        {
-          timeOut: 600000,
-        }
-        );
-      }
     this.args.decisionActivity.report = report;
 
     await this.args.decisionActivity.save();
@@ -400,7 +389,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const now = new Date();
     const report = this.store.createRecord('report', {
       created: now,
-      modified: now,
       name: `${
         this.args.agendaContext.meeting.numberRepresentation
       } - punt ${addLeadingZeros(
@@ -408,6 +396,7 @@ export default class AgendaitemDecisionComponent extends Component {
         4
       )}`,
     });
+
 
     const subcase = await this.args.decisionActivity.subcase;
     const subcaseIsConfidential = subcase?.confidential;
@@ -440,7 +429,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const report = this.store.createRecord('report', {
       name: newName,
       created: now,
-      modified: now,
       previousPiece: previousReport,
       accessLevel: previousReport.accessLevel,
       documentContainer: previousReport.documentContainer,

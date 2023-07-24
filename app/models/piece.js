@@ -1,7 +1,8 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { attr, belongsTo, hasMany } from '@ember-data/model';
+import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import sanitize from 'sanitize-filename';
 
-export default class Piece extends Model {
+export default class Piece extends ModelWithModifier {
   @attr('string') name;
   @attr('number') numberOfPages;
   @attr('number') numberOfWords;
@@ -97,7 +98,6 @@ export default class Piece extends Model {
     const dirtyType = this.dirtyType;
     if (dirtyType != 'deleted') {
       const now = new Date();
-      this.modified = now;
       this.accessLevelLastModified = now;
     }
     return super.save(...arguments);
