@@ -21,9 +21,19 @@ function checkLastReportAndDownloadlink(currentPanelEntry, dateLastReportFormat,
 context('Publications reports tests', () => {
   const profile = 'OVRB Test';
   const date = Cypress.dayjs();
+  const dateMinOne = Cypress.dayjs().add(-1, 'days');
+  const datePlusOne = Cypress.dayjs().add(1, 'days');
   const dateEarlier = Cypress.dayjs().add(-1, 'months');
-  const dateLastReportFormat = date.format('DD-MM-YYYY');
-  const dateDowloadLinkFormat = date.format('YYYYMMDD');
+  const dateLastReportFormatMid = date.format('DD-MM-YYYY');
+  const dateLastReportFormatMinOne = dateMinOne.format('DD-MM-YYYY');
+  const dateLastReportFormaPlusOne = dateEarlier.format('DD-MM-YYYY');
+  const runout = [dateLastReportFormatMinOne, dateLastReportFormatMid, dateLastReportFormaPlusOne];
+  const dateLastReportFormat = new RegExp(`${runout.join('|')}`, 'g');
+  const dateDowloadLinkFormatMid = date.format('YYYYMMDD');
+  const dateDowloadLinkFormatMinOne = dateMinOne.format('YYYYMMDD');
+  const dateDowloadLinkFormatPlusOne = datePlusOne.format('YYYYMMDD');
+  const runout2 = [dateDowloadLinkFormatMinOne, dateDowloadLinkFormatMid, dateDowloadLinkFormatPlusOne];
+  const dateDowloadLinkFormat = new RegExp(`${runout2.join('|')}`, 'g');
   const alertMessage1 = 'Het gevraagde rapport wordt gemaakt.';
   const alertMessage2 = 'Het gevraagde rapport is gereed.';
 
