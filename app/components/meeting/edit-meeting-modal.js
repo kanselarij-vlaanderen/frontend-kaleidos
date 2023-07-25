@@ -30,9 +30,15 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked documentPublicationActivity;
   @tracked themisPublicationActivity;
   @tracked plannedDocumentPublicationDate;
+  @tracked secretary;
   @tracked extraInfo;
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
+
+  VISIBLE_ROLES = [
+    CONSTANTS.MANDATE_ROLES.SECRETARIS,
+    CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
+  ];
 
   currentYear = new Date().getFullYear();
 
@@ -45,9 +51,11 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
 
-    this.meetingYear = this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
+    this.meetingYear =
+      this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
+    this.secretary = this.args.meeting.secretary;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
@@ -56,7 +64,10 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get numberRepresentation() {
-    return this._numberRepresentation ?? `VR PV ${this.meetingYear}/${this.meetingNumber}`;
+    return (
+      this._numberRepresentation ??
+      `VR PV ${this.meetingYear}/${this.meetingNumber}`
+    );
   }
 
   set numberRepresentation(numberRepresentation) {
@@ -76,20 +87,23 @@ export default class MeetingEditMeetingComponent extends Component {
 
   get savingIsDisabled() {
     return (
-        (this.isAnnexMeeting && !this.selectedMainMeeting) ||
-        !this.meetingNumber ||
-        !this.numberRepresentation ||
-        this.initializeKind.isRunning ||
-        this.initializeMainMeeting.isRunning ||
-        this.saveMeeting.isRunning
-      );
+      (this.isAnnexMeeting && !this.selectedMainMeeting) ||
+      !this.meetingNumber ||
+      !this.numberRepresentation ||
+      this.initializeKind.isRunning ||
+      this.initializeMainMeeting.isRunning ||
+      this.saveMeeting.isRunning
+    );
   }
 
   @action
   setStartDate(date) {
     this.startDate = date;
     if (!this.isDisabledPlannedDocumentPublicationDate) {
-      const nextBusinessDay = setMinutes(setHours(addBusinessDays(date, 1), 14), 0);
+      const nextBusinessDay = setMinutes(
+        setHours(addBusinessDays(date, 1), 14),
+        0
+      );
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
   }
@@ -102,7 +116,10 @@ export default class MeetingEditMeetingComponent extends Component {
   @task
   *initializeKind() {
     this.selectedKind = yield this.args.meeting.kind;
-    this.selectedKind ??= yield this.store.findRecordByUri('concept', CONSTANTS.MEETING_KINDS.MINISTERRAAD);
+    this.selectedKind ??= yield this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.MEETING_KINDS.MINISTERRAAD
+    );
     const broader = yield this.selectedKind?.broader;
     this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
   }
@@ -115,7 +132,11 @@ export default class MeetingEditMeetingComponent extends Component {
       const meeting = yield this.store.queryOne('meeting', {
         filter: {
           ':gte:planned-start': new Date(this.currentYear, 0, 1).toISOString(),
-          ':lt:planned-start': new Date(this.currentYear + 1, 0, 1).toISOString(),
+          ':lt:planned-start': new Date(
+            this.currentYear + 1,
+            0,
+            1
+          ).toISOString(),
         },
         sort: '-number',
       });
@@ -128,35 +149,49 @@ export default class MeetingEditMeetingComponent extends Component {
   @task
   *initializePublicationModels() {
     if (this.isNew) {
-      this.decisionPublicationActivity = yield this.args.meeting.internalDecisionPublicationActivity;
-      this.documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-      const themisPublicationActivities = yield this.args.meeting.themisPublicationActivities;
+      this.decisionPublicationActivity = yield this.args.meeting
+        .internalDecisionPublicationActivity;
+      this.documentPublicationActivity = yield this.args.meeting
+        .internalDocumentPublicationActivity;
+      const themisPublicationActivities = yield this.args.meeting
+        .themisPublicationActivities;
       this.themisPublicationActivity = themisPublicationActivities.firstObject;
     } else {
       // Ensure we get fresh data to avoid concurrency conflicts
-      this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-      this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+      this.decisionPublicationActivity = yield this.args.meeting
+        .belongsTo('internalDecisionPublicationActivity')
+        .reload();
+      this.documentPublicationActivity = yield this.args.meeting
+        .belongsTo('internalDocumentPublicationActivity')
+        .reload();
       // Documents can be published multiple times to Themis.
       // We're only interested in the first (earliest) publication of documents.
-      this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
-        'filter[meeting][:uri:]': this.args.meeting.uri,
-        'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-        sort: 'planned-date',
-        include: 'status'
-      });
+      this.themisPublicationActivity = yield this.store.queryOne(
+        'themis-publication-activity',
+        {
+          'filter[meeting][:uri:]': this.args.meeting.uri,
+          'filter[scope]': CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
+          sort: 'planned-date',
+          include: 'status',
+        }
+      );
     }
 
     // Get the planned date from existing data. We could get this from either document
     // or Themis publication activity, but both should be equal at this point
-    this.plannedDocumentPublicationDate = this.documentPublicationActivity.plannedDate;
+    this.plannedDocumentPublicationDate =
+      this.documentPublicationActivity.plannedDate;
 
     const documentPublicationStatuses = yield Promise.all([
       this.documentPublicationActivity.status,
-      this.themisPublicationActivity.status
+      this.themisPublicationActivity.status,
     ]);
     // If either internal documents or Themis documents activies have already been
     // confirmed/released, the planned date should no longer be editable
-    this.isDisabledPlannedDocumentPublicationDate = documentPublicationStatuses.some((status) => status.uri != CONSTANTS.RELEASE_STATUSES.PLANNED);
+    this.isDisabledPlannedDocumentPublicationDate =
+      documentPublicationStatuses.some(
+        (status) => status.uri != CONSTANTS.RELEASE_STATUSES.PLANNED
+      );
   }
 
   @dropTask
@@ -164,6 +199,7 @@ export default class MeetingEditMeetingComponent extends Component {
     const now = new Date();
 
     this.args.meeting.extraInfo = this.extraInfo;
+    this.args.meeting.secretary = this.secretary;
     this.args.meeting.plannedStart = this.startDate || now;
     this.args.meeting.kind = this.selectedKind;
     this.args.meeting.number = this.meetingNumber;
@@ -171,8 +207,10 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     // update the planned date of the publication activities (not needed for decisions)
-    this.themisPublicationActivity.plannedDate = this.plannedDocumentPublicationDate;
-    this.documentPublicationActivity.plannedDate = this.plannedDocumentPublicationDate;
+    this.themisPublicationActivity.plannedDate =
+      this.plannedDocumentPublicationDate;
+    this.documentPublicationActivity.plannedDate =
+      this.plannedDocumentPublicationDate;
 
     try {
       yield this.args.meeting.save();
@@ -203,10 +241,14 @@ export default class MeetingEditMeetingComponent extends Component {
     this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
     this.startDate = mainMeeting.plannedStart;
     if (!this.isDisabledPlannedDocumentPublicationDate) {
-      const nextBusinessDay = setMinutes(setHours(addBusinessDays(this.startDate, 1), 14), 0);
+      const nextBusinessDay = setMinutes(
+        setHours(addBusinessDays(this.startDate, 1), 14),
+        0
+      );
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
+    this.secretary = mainMeeting.secretary;
   }
 
   @action
@@ -224,7 +266,6 @@ export default class MeetingEditMeetingComponent extends Component {
 
   @action
   toggleEditingNumberRepresentation() {
-    this.isEditingNumberRepresentation =
-      !this.isEditingNumberRepresentation;
+    this.isEditingNumberRepresentation = !this.isEditingNumberRepresentation;
   }
 }

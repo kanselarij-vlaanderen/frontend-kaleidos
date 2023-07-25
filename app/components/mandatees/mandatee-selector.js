@@ -31,7 +31,10 @@ export default class MandateeSelector extends Component {
       this.mandateeOptions = [];
     } else {
       this.mandateeOptions = yield this.mandatees.getMandateesActiveOn.perform(
-        this.referenceDate
+        this.referenceDate,
+        undefined,
+        undefined,
+        this.args.visibleRoles
       );
       this.mandateeOptions = this.mandateeOptions.filter(
         (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
