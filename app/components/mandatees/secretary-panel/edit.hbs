@@ -1,0 +1,43 @@
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">{{t "secretary"}}</h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Mandatees::MandateeSelector
+      @onSelectMandatee={{fn (mut this.secretary)}}
+      @selectedMandatees={{this.selectedSecretary}}
+      @visibleRoles={{this.VISIBLE_ROLES}}
+    />
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            {{on "click" (perform this.save)}}
+          >
+            {{t "save"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
