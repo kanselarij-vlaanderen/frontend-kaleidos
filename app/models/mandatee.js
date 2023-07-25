@@ -7,6 +7,7 @@ export default class Mandatee extends Model {
   @attr('number') priority;
   @attr('datetime') start;
   @attr('datetime') end;
+  @attr('boolean') isCurrentSecretary;
 
   @belongsTo('person', { inverse: 'mandatees', async: true }) person;
   @belongsTo('mandate', { inverse: 'mandatee', async: true }) mandate;
@@ -23,6 +24,8 @@ export default class Mandatee extends Model {
   signSigningActivities;
   @hasMany('user-organization', { inverse: 'mandatees', async: true })
   organizations;
+  @hasMany('meeting', { inverse: 'secretary', async: true }) secretaryForAgendas;
+  @hasMany('decision-activity', { inverse: 'secretary', async: true }) secretaryForDecisions;
 
   get fullDisplayName() {
     const fullName = this.person.get('fullName');

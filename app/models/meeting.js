@@ -33,6 +33,8 @@ export default class Meeting extends Model {
     async: true,
   })
   internalDocumentPublicationActivity;
+  @belongsTo('mandatee', { inverse: 'secretaryForAgendas', async: true })
+  secretary;
 
   @hasMany('themis-publication-activity', { inverse: 'meeting', async: true })
   themisPublicationActivities;

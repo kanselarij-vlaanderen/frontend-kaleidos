@@ -6,7 +6,6 @@ export default class User extends Model {
   @attr('string') lastName;
   @attr('email') email;
   @attr('string') identifier;
-  @attr('boolean') isCurrentSecretary;
 
   @belongsTo('account', { inverse: 'user', async: true }) account;
   @belongsTo('concept', { inverse: null, async: true }) status;
@@ -14,8 +13,6 @@ export default class User extends Model {
   @belongsTo('person', { inverse: 'user', async: true }) person;
 
   @hasMany('membership', { inverse: 'user', async: true }) memberships;
-  @hasMany('agenda', { inverse: 'secretary', async: true }) secretaryForAgendas;
-  @hasMany('decision-activity', { inverse: 'secretary', async: true }) secretaryForDecisions;
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
