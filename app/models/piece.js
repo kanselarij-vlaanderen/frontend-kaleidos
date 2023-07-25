@@ -8,7 +8,6 @@ export default class Piece extends ModelWithModifier {
   @attr('number') numberOfWords;
   @attr('datetime') created;
   @attr('datetime') receivedDate;
-  @attr('datetime') modified;
   @attr('datetime') accessLevelLastModified;
 
   @belongsTo('concept', { inverse: null, async: true }) accessLevel;
