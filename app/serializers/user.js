@@ -1,6 +1,11 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['loginActivity', 'account', 'person'];
+const SKIP_SERIALIZED = [
+  'loginActivity',
+  'account',
+  'secretaryForAgendas',
+  'secretaryForDecisions',
+];
 
 export default class AgendaSerializer extends ApplicationSerializer {
   serializeBelongsTo(snapshot, json, relationship) {

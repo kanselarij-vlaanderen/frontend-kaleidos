@@ -38,7 +38,9 @@ export default class Meeting extends Model {
     async: true,
   })
   minutes;
-  @belongsTo('mandatee', { async: true }) secretary;
+  @belongsTo('mandatee', { inverse: 'secretaryForAgendas', async: true })
+  secretary;
+
   @hasMany('themis-publication-activity', { inverse: 'meeting', async: true })
   themisPublicationActivities;
   @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
