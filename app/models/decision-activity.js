@@ -11,17 +11,13 @@ export default class decisionActivity extends Model {
   treatment;
   @belongsTo('subcase', { inverse: 'decisionActivities', async: true }) subcase;
   @belongsTo('concept', { inverse: null, async: true }) decisionResultCode;
-<<<<<<< HEAD
   @belongsTo('report', {
     inverse: 'decisionActivity',
     async: true,
     polymorphic: true,
   })
   report;
-=======
-  @belongsTo('piece', { inverse: 'decisionActivity', async: true }) report;
   @belongsTo('mandatee', { inverse: 'secretaryForDecisions', async: true }) secretary;
->>>>>>> feature/KAS-4118-secretary-data
 
   @hasMany('publication-flow', { inverse: 'decisionActivity', async: true })
   publicationFlows;
