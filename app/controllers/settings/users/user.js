@@ -14,6 +14,15 @@ export default class SettingsUsersUserController extends Controller {
   @tracked showUnblockMembership = false;
   @tracked selectedPerson = null;
 
+  VISIBLE_ROLES = [
+    CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
+    CONSTANTS.MANDATE_ROLES.MINISTER,
+    CONSTANTS.MANDATE_ROLES.VOORZITTER,
+    CONSTANTS.MANDATE_ROLES.GEMEENSCHAPSMINISTER,
+    CONSTANTS.MANDATE_ROLES.SECRETARIS,
+    CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
+  ];
+
   @action
   async blockUser() {
     const blocked = await this.store.findRecordByUri(
