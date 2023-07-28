@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, dropTask } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
@@ -50,12 +51,12 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
+    this.loadSecretary.perform();
 
     this.meetingYear =
       this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
-    this.secretary = this.args.meeting.secretary;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
   }
 
@@ -105,6 +106,18 @@ export default class MeetingEditMeetingComponent extends Component {
         0
       );
       this.plannedDocumentPublicationDate = nextBusinessDay;
+    }
+  }
+
+  @task
+  *loadSecretary() {
+    if (isPresent(this.args.meeting.secretary)) {
+      this.secretary = this.args.meeting.secretary;
+    } else {
+      const currentApplicationSecretary = yield this.store.queryOne('mandatee', {
+        'filter[is-current-secretary]': true,
+      })
+      this.secretary = currentApplicationSecretary;
     }
   }
 
@@ -206,6 +219,15 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
+    if(this.args.meeting.secretary != this.secretary) {
+      const decisionActivities = yield this.store.query('decision-activity', {
+        'filter[treatment][agendaitems][agenda][created-for][:id:]': this.args.meeting.id
+      });
+      for (let decisionActivity of decisionActivities.toArray()) {
+        decisionActivity.secretary = this.secretary;
+        yield decisionActivity.save(); 
+      }
+    }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
       this.plannedDocumentPublicationDate;

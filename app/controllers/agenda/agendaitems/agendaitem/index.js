@@ -98,6 +98,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async saveSecretary(secretary) {
+    this.decisionActivity.secretary = secretary;
+    await this.decisionActivity.save();
   }
 
   @action

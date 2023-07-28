@@ -9,6 +9,7 @@ export default class MandateesSecretaryPanelEditComponent extends Component {
    * @argument onCancel
    * @argument onSave
    * @argument {Date} referenceDate: Date to get active Mandatees for
+   * @argument secretary
    */
 
   @tracked secretary;
