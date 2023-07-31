@@ -1254,5 +1254,7 @@
   "sign-flow-was-sent-while-you-were-editing-could-not-edit": "Dit document is reeds verstuurd naar de Handtekenmap. De wijzigingen zijn niet opgeslagen.",
   "sign-flow-was-sent-while-you-were-editing-could-not-delete": "Dit document is reeds verstuurd naar de Handtekenmap. Het document is niet verwijderd uit Kaleidos.",
   "decisions-and-notes-to-start-up": "Beslissingen en notulen",
-  "decisions-and-notes-to-follow-up": "Beslissingen en notulen opvolgen"
+  "decisions-and-notes-to-follow-up": "Beslissingen en notulen opvolgen",
+  "decisions-and-notes-signee": "Ondertekenaar beslissingsfiches",
+  "manage-decisions-and-notes-signees": "Beslissingsondertekenaars beheer"
 }

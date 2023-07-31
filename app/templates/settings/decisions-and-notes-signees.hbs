@@ -1,0 +1,72 @@
+{{page-title (t "manage-emails")}}
+
+<div class="auk-u-m-8">
+  <div class="auk-u-mb-3">
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <h4 class="auk-panel__title">{{t "manage-decisions-and-notes-signees"}}</h4>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <div class="auk-form-group-layout--horizontal">
+            <div class="auk-form-group">
+              <Auk::Label @required={{true}}>
+                {{t "decisions-and-notes-signee"}}
+              </Auk::Label>
+              <select
+                name="signee"
+                id="signee"
+                class="auk-select auk-select--block"
+              >
+                <option
+                  value="Jeroen Overmere"
+                  selected="selected"
+                >
+                  Jeroen Overmere
+                </option>
+                <option
+                  value="Substituut Vermeire"
+                >
+                  Substituut Vermeire
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer>
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <AuButton
+                @skin="naked"
+                @disabled={{this.save.isRunning}}
+                {{on "click" this.cancel}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
+              <AuButton
+                @skin="primary"
+                @disabled={{this.isDisabled}}
+                @loading={{this.save.isRunning}}
+                {{on "click" (perform this.save)}}
+              >
+                {{t "save"}}
+              </AuButton>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    </Auk::Panel>
+  </div>
+</div>

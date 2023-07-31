@@ -1,0 +1,98 @@
+<div class="auk-u-mb-8">
+  {{#if this.isEditing}}
+    <Auk::Panel class="auk-panel--editing">
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-panel__title">{{t "decisions-and-notes-signee"}}</h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <div class="auk-form-group">
+          <Auk::Label for="signee">
+            {{t "decisions-and-notes-signee"}}
+          </Auk::Label>
+          <select
+            name="signee"
+            id="signee"
+            class="auk-select auk-select--block"
+          >
+            <option
+              value="Jeroen Overmere"
+              selected="selected"
+            >
+              Jeroen Overmere
+            </option>
+            <option
+              value="Substituut Vermeire"
+            >
+              Substituut Vermeire
+            </option>
+          </select>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer>
+        <Auk::Toolbar @auto={{true}}>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                {{on "click" this.cancelEditing}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="primary"
+                {{on "click" this.cancelEditing}}
+              >
+                {{t "save"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    </Auk::Panel>
+  {{else}}
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-panel__title">{{t "decisions-and-notes-signee"}}</h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" this.startEditing}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <div class="auk-o-flex auk-o-flex--vertical-center">
+          <AuBadge
+            @icon="user"
+            @skin="gray"
+            @size="small"
+          />
+          <span class="auk-u-mx-2">
+            Jeroen Overmere
+          </span>
+        </div>
+      </Auk::Panel::Body>
+    </Auk::Panel>
+  {{/if}}
+</div>

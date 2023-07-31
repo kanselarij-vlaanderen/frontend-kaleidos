@@ -106,6 +106,7 @@ Router.map(function() {
       this.route('new', { path: '/nieuw', });
     });
     this.route('emails', { path: '/emailberichten', });
+    this.route('decisions-and-notes-signees', { path: '/beslissingondertekenaars-beheer', });
   });
 
   this.route('document', { path: '/document/:piece_id', });

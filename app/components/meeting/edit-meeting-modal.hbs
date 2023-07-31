@@ -117,6 +117,30 @@
         </div>
       {{/if}}
     </div>
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <Auk::Label for="signee">
+          {{t "decisions-and-notes-signee"}}
+        </Auk::Label>
+        <select
+          name="signee"
+          id="signee"
+          class="auk-select auk-select--block"
+        >
+          <option
+            value="Jeroen Overmere"
+            selected="selected"
+          >
+            Jeroen Overmere
+          </option>
+          <option
+            value="Substituut Vermeire"
+          >
+            Substituut Vermeire
+          </option>
+        </select>
+      </div>
+    </div>
     {{#unless this.isAnnexMeeting}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
