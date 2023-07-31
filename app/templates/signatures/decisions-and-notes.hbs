@@ -1,0 +1,271 @@
+{{page-title (t "to-start-up")}}
+
+{{#if this.removeSignFlow.isRunning}}
+  <WebComponents::LoadingPage />
+{{else}}
+  {{#in-element this.customNavbarButtonsElement}}
+    {{#unless (user-may "manage-only-specific-signatures")}}
+      {{#if this.filteredMinisters}}
+        <AuButton @skin="naked" {{on "click" this.clearFilter}}>
+          {{t "clear-filter"}}
+        </AuButton>
+      {{/if}}
+      <AuButton
+        data-test-route-signatures-open-minister-filter
+        @skin="secondary"
+        @icon="filter"
+        {{on "click" this.openFilterModal}}
+      >
+        {{t "filter-on-signer"}}
+      </AuButton>
+    {{/unless}}
+    {{#if this.selectedSignFlows.length}}
+      <AuButton
+        @icon="sign"
+        {{on "click" this.openSidebarMultiItem}}
+      >
+        {{t "start-signing-for-n-selected-documents" n=this.selectedSignFlows.length}}
+      </AuButton>
+    {{/if}}
+  {{/in-element}}
+
+  <KDataTable
+    data-test-route-signatures-data-table
+    @scrollable={{true}}
+    @stickyHeader={{true}}
+    @clickable={{false}}
+    @loading={{this.createSignFlow.isRunning}}
+    @asideVisible={{and this.showSidebar (not this.createSignFlow.isRunning)}}
+    @content={{@model}}
+    @page={{this.pageSignaturesIndex}}
+    @size={{this.sizeSignaturesIndex}}
+    @numberOfItems={{@model.length}}
+    @totalNumberOfItems={{@model.meta.count}}
+    @onChangeSize={{fn (mut this.sizeSignaturesIndex)}}
+    @onChangePage={{fn (mut this.pageSignaturesIndex)}}
+  >
+    <:header>
+      <th>
+        <AuCheckbox
+          @checked={{this.isSelectedAllItems}}
+          @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
+          @onChange={{this.selectAll}}
+        >
+          <span class="auk-u-sr-only">
+            {{t "select"}}
+          </span>
+        </AuCheckbox>
+      </th>
+      <Utils::ThSortable
+        @currentSorting={{this.sortField}}
+        @field={{"sign-subcase.sign-marking-activity.piece.name"}}
+        @onChange={{this.changeSort}}
+        @label={{t "document-name"}}
+      />
+      <th>{{t "document-type"}}</th>
+      <Utils::ThSortable
+        @currentSorting={{this.sortField}}
+        @field={{"decision-activity.treatment.agendaitems.short-title"}}
+        @onChange={{this.changeSort}}
+        @label={{capitalize (t "agendaitem")}}
+      />
+      <th>{{t "ministers"}}</th>
+      <Utils::ThSortable
+        @currentSorting={{this.sortField}}
+        @field={{"decision-activity.start-date"}}
+        @onChange={{this.changeSort}}
+        @label={{t "decision-date"}}
+      />
+      <th></th>
+    </:header>
+    <:body as |signFlow|>
+      {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+        {{#let signMarkingActivity.piece as |piece|}}
+          <td>
+            <AuCheckbox
+              @checked={{includes signFlow this.selectedSignFlows}}
+              @onChange={{fn this.toggleItem signFlow}}
+            >
+              <span class="auk-u-sr-only">
+                {{t "select"}}
+              </span>
+            </AuCheckbox>
+          </td>
+          <td data-test-route-signatures-row-name>
+            <AuLink @route="document" @model={{piece.id}}>
+              {{piece.name}}
+            </AuLink>
+          </td>
+          <td>
+            <AuPill @size="small">
+              {{#let piece.documentContainer.type as |type|}}
+                {{#if type}}
+                  {{type.label}}
+                {{else}}
+                  {{t "no-document-type"}}
+                {{/if}}
+              {{/let}}
+            </AuPill>
+          </td>
+          <td>
+            {{#let (await (this.getAgendaitem piece)) as |agendaitem|}}
+              {{agendaitem.shortTitle}}
+            {{/let}}
+          </td>
+          <td data-test-route-signatures-row-mandatee>
+            {{#let (await (this.getMandateeNames signFlow)) as |names|}}
+              {{#if names}}
+                {{join ", " names}}
+              {{else}}
+                -
+              {{/if}}
+            {{/let}}
+          </td>
+          <td>{{date signFlow.decisionActivity.startDate}}</td>
+          <td>
+            <AuButton
+              data-test-route-signatures-row-open-sidebar
+              @skin="naked"
+              @icon="sign"
+              {{on "click" (fn this.openSidebarSingleItem signFlow piece)}}
+            >
+              {{t "start-signing"}}
+            </AuButton>
+          </td>
+        {{/let}}
+      {{/let}}
+    </:body>
+    <:aside>
+      <div class="auk-sidebar">
+        <div class="auk-sidebar__header">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "start-signing"}}
+          </h4>
+          <Auk::Button
+            data-test-route-signatures-sidebar-close
+            @icon="x"
+            @skin="borderless"
+            @layout="icon-only"
+            {{on "click" this.closeSidebar}}
+          />
+        </div>
+        <div data-test-route-signatures-sidebar-info class="auk-sidebar__body">
+          {{#unless this.selectedSignFlows.length}}
+            <p class="au-u-muted auk-u-mt-2">
+              {{or this.piece.documentContainer.type.label (t "no-document-type")}}
+              -
+              {{date this.decisionActivity.startDate}}
+            </p>
+            <h5 class="auk-h4">{{this.piece.name}}</h5>
+            <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
+              <AuLink
+                data-test-route-signatures-sidebar-preview
+                @skin="naked"
+                @icon="book"
+                @route="document"
+                @model={{this.piece.id}}
+              >
+                {{t "preview"}}
+              </AuLink>
+              <AuLink
+                data-test-route-signatures-sidebar-last-agendaitem
+                @skin="naked"
+                @icon="document"
+                @route="agenda.agendaitems.agendaitem"
+                @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
+              >
+                {{t "consult-agendaitem-decision"}}
+              </AuLink>
+            </div>
+          {{/unless}}
+          {{#if this.decisionActivity}}
+            <Signatures::CreateSignFlow
+              @decisionActivities={{array this.decisionActivity}}
+              @onChangeSigners={{fn (mut this.signers)}}
+              @onChangeApprovers={{fn (mut this.approvers)}}
+              @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+            />
+          {{else if this.selectedSignFlows.length}}
+            <Signatures::CreateSignFlow
+              @decisionActivities={{this.selectedDecisionActivities.value}}
+              @onChangeSigners={{fn (mut this.signers)}}
+              @onChangeApprovers={{fn (mut this.approvers)}}
+              @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+            />
+          {{/if}}
+        </div>
+        <div class="auk-sidebar__footer">
+          <AuToolbar as |Group|>
+            <Group>
+              <AuButton
+                data-test-route-signatures-sidebar-start-signflow
+                @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                @disabled={{not this.signers.length}}
+                {{on "click" this.createSignFlow.perform}}
+              >
+                {{t "start-signing"}}
+              </AuButton>
+            </Group>
+            <Group>
+              <AuButton
+                @alert={{true}}
+                @skin="naked"
+                @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                {{on "click" this.removeSignFlow.perform}}
+              >
+                {{t "stop-sign-flow"}}
+              </AuButton>
+            </Group>
+          </AuToolbar>
+        </div>
+      </div>
+    </:aside>
+  </KDataTable>
+
+  <ConfirmationModal
+    @modalOpen={{this.showFilterModal}}
+    @title={{t "filter-content"}}
+    @onCancel={{this.closeFilterModal}}
+  >
+    <:body>
+      <Mandatees::CheckboxList
+        @selected={{this.selectedMinisters}}
+        @onChange={{fn (mut this.selectedMinisters)}}
+      />
+    </:body>
+    <:footer>
+      <AuToolbar
+        as |Group|
+      >
+        <Group>
+          <AuButton @skin="naked" {{on "click" this.closeFilterModal}}>
+            {{t "cancel"}}
+          </AuButton>
+        </Group>
+        <Group>
+          {{#if this.filteredMinisters}}
+            <AuButton @skin="secondary" {{on "click" this.clearFilter}}>
+              {{t "clear-filter"}}
+            </AuButton>
+          {{/if}}
+          <AuButton data-test-route-signatures-apply-filter @icon="filter" {{on "click" this.applyFilter}}>
+            {{t "filter-content"}}
+          </AuButton>
+        </Group>
+      </AuToolbar>
+    </:footer>
+  </ConfirmationModal>
+
+  {{#if this.createSignFlow.isRunning}}
+    <Auk::Modal @size="medium">
+      <Auk::Modal::Header @title={{t "loading-text"}} @closeable={{false}} />
+      <Auk::Modal::Body>
+        <Auk::Loader @message={{concat
+                                (t "creating-sign-flows-message")
+                                " "
+                                (t "please-be-patient")}}
+        />
+      </Auk::Modal::Body>
+    </Auk::Modal>
+  {{/if}}
+{{/if}}

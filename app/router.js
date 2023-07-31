@@ -79,6 +79,8 @@ Router.map(function() {
     this.route('signatures', { path: '/handtekeningen', }, function() {
       this.route('index', { path: '/op-te-starten' });
       this.route('ongoing', { path: '/op-te-volgen' });
+      this.route('decisions-and-notes', { path: '/beslissingen-en-notulen' });
+      this.route('ongoing-decisions-and-notes', { path: '/op-te-volgen-beslissingen-en-notulen' });
     });
   }
 
