@@ -213,7 +213,7 @@
                     {{t "edit"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideSign)}}
+                {{#if @showMockupSign}}
                   <AuButton
                     @skin="link"
                     {{on "click" this.markDocumentForSigning.perform}}
