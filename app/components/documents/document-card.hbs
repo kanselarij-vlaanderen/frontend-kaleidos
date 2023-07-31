@@ -213,6 +213,15 @@
                     {{t "edit"}}
                   </AuButton>
                 {{/if}}
+                {{#if (not @hideSign)}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.markDocumentForSigning.perform}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
                   <AuButton
                     @skin="link"

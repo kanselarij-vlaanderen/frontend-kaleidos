@@ -39,7 +39,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked beslissingPiecePart;
   @tracked nota;
 
-  @tracked isEditing = false;
+  @tracked isEditingConcerns = false;
+  @tracked isEditingTreatment = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
 
@@ -505,19 +506,17 @@ export default class AgendaitemDecisionComponent extends Component {
     };
   }
 
-  get disableSaveButton() {
+  get disableSaveButtonConcerns() {
     if (this.loadReport.isRunning) {
       return true;
     }
 
-    if (!this.editorInstanceBetreft || !this.editorInstanceBeslissing) {
+    if (!this.editorInstanceBetreft) {
       return true;
     }
 
     // If any editor is empty, disable
     if (
-      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length ===
-        0 ||
       this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0
     ) {
       return true;
@@ -525,9 +524,35 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to any of the parts, disable
     if (
-      this.beslissingPiecePart?.value ===
-        this.editorInstanceBeslissing.htmlContent &&
       this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  get disableSaveButtonTreatment() {
+    if (this.loadReport.isRunning) {
+      return true;
+    }
+
+    if (!this.editorInstanceBeslissing) {
+      return true;
+    }
+
+    // If any editor is empty, disable
+    if (
+      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length ===
+        0
+    ) {
+      return true;
+    }
+
+    // If there is no change to any of the parts, disable
+    if (
+      this.beslissingPiecePart?.value ===
+        this.editorInstanceBeslissing.htmlContent
     ) {
       return true;
     }
@@ -540,9 +565,16 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  startEditing() {
+  startEditingConcerns() {
     this.loadDocuments.perform();
     this.loadNota.perform();
-    this.isEditing = true;
+    this.isEditingConcerns = true;
+  }
+
+  @action
+  startEditingTreatment() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.isEditingTreatment = true;
   }
 }
