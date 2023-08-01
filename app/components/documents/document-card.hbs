@@ -117,6 +117,7 @@
             {{#if this.piece.publicationFlow}}
               <AuPill
                 @size="small"
+                @skin="link"
                 @route="publications.publication"
                 @model={{this.piece.publicationFlow.id}}
                 data-test-document-card-publication-link

@@ -86,7 +86,8 @@ $au-button-height: 3.4rem;
   padding-top: 0;
 }
 
-.au-c-pill--link {
+.au-c-pill.au-c-pill--link,
+.au-c-pill.au-c-pill--hover {
   cursor: pointer;
 }
 

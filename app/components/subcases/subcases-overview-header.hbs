@@ -38,6 +38,7 @@
               {{#each this.publicationFlows as |publicationFlow|}}
                 <AuPill
                   @size="small"
+                  @skin="link"
                   @route="publications.publication"
                   @model={{publicationFlow.id}}
                 >

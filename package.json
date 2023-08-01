@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "2.7.0",
+    "@appuniversum/ember-appuniversum": "2.10.0",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",
