@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 /**
  * @argument {isNew}
@@ -207,6 +208,23 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
+  exportPdf = task(async (report) => {
+    const resp = await fetch(`/generate-decision-report/${report.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    return await resp.json();
+  });
+
+  async replaceReportFile(report, fileId) {
+    await deleteFile(report.file);
+    const file = await this.store.findRecord('file', fileId);
+    report.file = file;
+    report.modified = new Date();
+    await report.save();
+  }
+
   @dropTask
   *saveMeeting() {
     const now = new Date();
@@ -226,6 +244,12 @@ export default class MeetingEditMeetingComponent extends Component {
       for (let decisionActivity of decisionActivities.toArray()) {
         decisionActivity.secretary = this.secretary;
         yield decisionActivity.save(); 
+        const report = yield this.store.queryOne('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[decision-activity][:id:]': decisionActivity.id,
+        });
+        const fileMeta = yield this.exportPdf.perform(report);
+        yield this.replaceReportFile(report, fileMeta.id);
       }
     }
     // update the planned date of the publication activities (not needed for decisions)

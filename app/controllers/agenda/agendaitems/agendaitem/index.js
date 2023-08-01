@@ -1,10 +1,12 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
+import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -96,10 +98,33 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.agendaitemsController.groupNotasOnGroupName.perform();
   }
 
+  exportPdf = task(async (report) => {
+    const resp = await fetch(`/generate-decision-report/${report.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    return await resp.json();
+  });
+
+  async replaceReportFile(report, fileId) {
+    await deleteFile(report.file);
+    const file = await this.store.findRecord('file', fileId);
+    report.file = file;
+    report.modified = new Date();
+    await report.save();
+  }
+
   @action
   async saveSecretary(secretary) {
     this.decisionActivity.secretary = secretary;
     await this.decisionActivity.save();
+    const report = await this.store.queryOne('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[decision-activity][:id:]': this.decisionActivity.id,
+    });
+    const fileMeta = await this.exportPdf.perform(report);
+    await this.replaceReportFile(report, fileMeta.id);
   }
 
   @action
