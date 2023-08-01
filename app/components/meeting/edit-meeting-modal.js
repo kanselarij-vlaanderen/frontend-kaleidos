@@ -248,8 +248,10 @@ export default class MeetingEditMeetingComponent extends Component {
           'filter[:has-no:next-piece]': true,
           'filter[decision-activity][:id:]': decisionActivity.id,
         });
-        const fileMeta = yield this.exportPdf.perform(report);
-        yield this.replaceReportFile(report, fileMeta.id);
+        if (report) {
+          const fileMeta = yield this.exportPdf.perform(report);
+          yield this.replaceReportFile(report, fileMeta.id);
+        }
       }
     }
     // update the planned date of the publication activities (not needed for decisions)

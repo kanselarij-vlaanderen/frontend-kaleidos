@@ -123,8 +123,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'filter[:has-no:next-piece]': true,
       'filter[decision-activity][:id:]': this.decisionActivity.id,
     });
-    const fileMeta = await this.exportPdf.perform(report);
-    await this.replaceReportFile(report, fileMeta.id);
+    if (report) {
+      const fileMeta = await this.exportPdf.perform(report);
+      await this.replaceReportFile(report, fileMeta.id);
+    }
   }
 
   @action
