@@ -38,8 +38,8 @@
       <:header>
         <th class="auk-table__col--6">{{t "document-name"}}</th>
         <th class="auk-table__col--1">{{t "document-type"}}</th>
-        <th class="auk-table__col--1">{{t "ministers"}}</th>
-        <th class="auk-table__col--2">{{t "date-approved"}}</th>
+        {{!-- <th class="auk-table__col--1">{{t "ministers"}}</th> --}}
+        <th class="auk-table__col--2">Datum agenda</th>
         <th class="auk-table__col--2">{{t "status"}}</th>
         <th class="auk-table__col--1"></th>
         </:header>
@@ -69,7 +69,7 @@
               {{/let}}
             </td>
           {{/let}}
-          <td>
+          {{!-- <td>
             {{#let (await (this.getMandateeNames signFlow)) as |names|}}
               {{#if names}}
                 {{join ", " names}}
@@ -77,7 +77,7 @@
                 -
               {{/if}}
             {{/let}}
-          </td>
+          </td> --}}
           <td>
             {{date signFlow.decisionActivity.startDate}}
           </td>

@@ -10,14 +10,14 @@
           {{t "clear-filter"}}
         </AuButton>
       {{/if}}
-      <AuButton
+      {{!-- <AuButton
         data-test-route-signatures-open-minister-filter
         @skin="secondary"
         @icon="filter"
         {{on "click" this.openFilterModal}}
       >
         {{t "filter-on-signer"}}
-      </AuButton>
+      </AuButton> --}}
     {{/unless}}
     {{#if this.selectedSignFlows.length}}
       <AuButton
@@ -65,16 +65,9 @@
       <th>{{t "document-type"}}</th>
       <Utils::ThSortable
         @currentSorting={{this.sortField}}
-        @field={{"decision-activity.treatment.agendaitems.short-title"}}
-        @onChange={{this.changeSort}}
-        @label={{capitalize (t "agendaitem")}}
-      />
-      <th>{{t "ministers"}}</th>
-      <Utils::ThSortable
-        @currentSorting={{this.sortField}}
         @field={{"decision-activity.start-date"}}
         @onChange={{this.changeSort}}
-        @label={{t "decision-date"}}
+        @label="Datum agenda"
       />
       <th></th>
     </:header>
@@ -100,14 +93,15 @@
             <AuPill @size="small">
               {{#let piece.documentContainer.type as |type|}}
                 {{#if type}}
-                  {{type.label}}
+                  Beslissing
+                  {{!-- {{type.label}} --}}
                 {{else}}
                   {{t "no-document-type"}}
                 {{/if}}
               {{/let}}
             </AuPill>
           </td>
-          <td>
+          {{!-- <td>
             {{#let (await (this.getAgendaitem piece)) as |agendaitem|}}
               {{agendaitem.shortTitle}}
             {{/let}}
@@ -120,9 +114,9 @@
                 -
               {{/if}}
             {{/let}}
-          </td>
+          </td> --}}
           <td>{{date signFlow.decisionActivity.startDate}}</td>
-          <td>
+          <td class="au-u-text-right">
             <AuButton
               data-test-route-signatures-row-open-sidebar
               @skin="naked"
