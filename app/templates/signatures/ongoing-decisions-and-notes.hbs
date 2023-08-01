@@ -16,16 +16,6 @@
               @excludedStatuses={{this.excludedStatuses}}
             />
           </div>
-          {{#if this.currentSession.isAdmin}}
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "submitter"}}</Auk::Label>
-              <Search::MinisterFilter
-                @selected={{this.mandatees}}
-                @onChange={{this.setMandatees}}
-                @label={{t "th-select-all"}}
-              />
-          </div>
-          {{/if}}
         </div>
       </div>
     </div>

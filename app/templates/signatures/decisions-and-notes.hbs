@@ -323,23 +323,14 @@
       @closeDisabled={{@loading}}
     />
     <Auk::Modal::Body>
-      <div class="au-u-flex au-u-flex--column au-u-flex--spaced-small">
-        <AuCheckbox
-          @checked={{true}}
-        >
-          Jeroen Overmere
-        </AuCheckbox>
-        <AuCheckbox
-          @checked={{false}}
-        >
-          Substituut Vermeire
-        </AuCheckbox>
-        <AuCheckbox
-          @checked={{false}}
-        >
-          Vervanger Van Coillie
-        </AuCheckbox>
-      </div>
+      <AuRadioGroup
+        @name="signee"
+        @selected="radioOne"
+      as |Group|>
+        <Group.Radio @value="radioOne">Jeroen Overmere</Group.Radio>
+        <Group.Radio @value="radioTwo">Substituut Vermeire</Group.Radio>
+        <Group.Radio @value="radioThree">Vervanger Van Coillie</Group.Radio>
+      </AuRadioGroup>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
       <Auk::Toolbar @size="large" as |Toolbar|>
