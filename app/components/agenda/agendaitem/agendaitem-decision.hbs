@@ -12,6 +12,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
 
+  {{#if this.report}}
   <Auk::Panel::Body>
     {{#if this.onCreateNewVersion.isIdle}}
       <Documents::DocumentCard
@@ -32,6 +33,7 @@
       <Auk::Loader />
     {{/if}}
   </Auk::Panel::Body>
+  {{/if}}
 
   <Auk::Panel::Body>
     <Auk::Toolbar @auto={{true}} as |Toolbar|>

@@ -173,6 +173,17 @@
                 />
               </Group.Item>
             {{/if}}
+            {{#if @showMockupSign}}
+              <Group.Item>
+                <AuPill
+                  @icon="sign"
+                  @skin="link"
+                  @route="signatures.decisions-and-notes"
+                >
+                  Op te starten
+                </AuPill>
+              </Group.Item>
+            {{/if}}
           {{/if}}
           {{#if this.mayShowEditDropdown}}
             <Group.Item>
