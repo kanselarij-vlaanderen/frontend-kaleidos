@@ -103,6 +103,18 @@
                   </p>
                 {{/if}}
               {{/if}}
+              {{#if @showMockupSign}}
+              <p>
+                <AuLinkExternal
+                  href="#!"
+                  download
+                >
+                  {{t "signed-document"}}
+                </AuLinkExternal>
+                {{t "on"}}
+                26-04-2023 om 16:00
+              </p>
+              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
