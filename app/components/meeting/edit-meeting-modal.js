@@ -116,13 +116,8 @@ export default class MeetingEditMeetingComponent extends Component {
     if (isPresent(secretary)) {
       this.secretary = secretary;
     } else {
-      const [currentApplicationSecretary] =
-        await this.mandatees.getMandateesActiveOn.perform(
-          new Date(),
-          undefined,
-          undefined,
-          [constants.MANDATE_ROLES.SECRETARIS]
-        );
+      const currentApplicationSecretary =
+        await this.mandatees.getCurrentApplicationSecretary();
       this.secretary = currentApplicationSecretary;
     }
   });
