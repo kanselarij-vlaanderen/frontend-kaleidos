@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import constants from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {isNew}
@@ -18,6 +19,7 @@ import setMinutes from 'date-fns/setMinutes';
 export default class MeetingEditMeetingComponent extends Component {
   @service store;
   @service toaster;
+  @service mandatees;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -109,17 +111,21 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  @task
-  *loadSecretary() {
-    if (isPresent(this.args.meeting.secretary)) {
-      this.secretary = this.args.meeting.secretary;
+  loadSecretary = task(async () => {
+    const secretary = await this.args.meeting.secretary;
+    if (isPresent(secretary)) {
+      this.secretary = secretary;
     } else {
-      const currentApplicationSecretary = yield this.store.queryOne('mandatee', {
-        'filter[is-current-secretary]': true,
-      })
+      const [currentApplicationSecretary] =
+        await this.mandatees.getMandateesActiveOn.perform(
+          new Date(),
+          undefined,
+          undefined,
+          [constants.MANDATE_ROLES.SECRETARIS]
+        );
       this.secretary = currentApplicationSecretary;
     }
-  }
+  });
 
   @task
   *initializeMainMeeting() {
@@ -219,13 +225,14 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if(this.args.meeting.secretary != this.secretary) {
+    if (this.args.meeting.secretary != this.secretary) {
       const decisionActivities = yield this.store.query('decision-activity', {
-        'filter[treatment][agendaitems][agenda][created-for][:id:]': this.args.meeting.id
+        'filter[treatment][agendaitems][agenda][created-for][:id:]':
+          this.args.meeting.id,
       });
       for (let decisionActivity of decisionActivities.toArray()) {
         decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save(); 
+        yield decisionActivity.save();
       }
     }
     // update the planned date of the publication activities (not needed for decisions)
