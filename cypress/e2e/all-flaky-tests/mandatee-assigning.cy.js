@@ -403,6 +403,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
@@ -433,6 +434,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
@@ -447,6 +449,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openDetailOfAgendaitem(subcaseShortTitle);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
@@ -464,6 +467,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(mandatee.mandateePanelView.actions.edit).click();
     cy.get(mandatee.mandateePanelEdit.actions.add).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(utils.mandateesSelector.openSearch).parent()
       .click();
     cy.get(utils.mandateeSelector.container).click();
