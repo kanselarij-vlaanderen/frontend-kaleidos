@@ -7,7 +7,6 @@ export default class Mandatee extends Model {
   @attr('number') priority;
   @attr('datetime') start;
   @attr('datetime') end;
-  @attr('boolean') isCurrentSecretary;
 
   @belongsTo('person', { inverse: 'mandatees', async: true }) person;
   @belongsTo('mandate', { inverse: 'mandatee', async: true }) mandate;
