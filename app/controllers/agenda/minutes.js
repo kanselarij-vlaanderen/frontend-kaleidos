@@ -4,14 +4,13 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
-import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function renderAttendees(attendees) {
-  const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
+  const { primeMinister, viceMinisters, ministers, secretary } = attendees;
   return `
     <p><u>AANWEZIG</u></p>
     <table>
@@ -30,7 +29,7 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De secretaris</td>
-          <td>${secretaris}</td>
+          <td>${secretary}</td>
         </tr>
       </tbody>
     </table>
@@ -114,11 +113,12 @@ function getAttendees(model) {
     .map(mandateeName)
     .filter((x) => !seen.has(x));
 
+  const secretary = mandateeName(model.secretary);
   return {
     primeMinister,
     viceMinisters,
     ministers,
-    secretaris: SECRETARIS_NAME,
+    secretary,
   };
 }
 
