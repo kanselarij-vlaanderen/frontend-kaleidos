@@ -8,7 +8,7 @@
   <AuButton
     @skin="link-secondary"
     role="menuitem"
-    {{on "click" (fn this.onVersionClicked @piecePart)}}
+    {{on "click" (fn this.onVersionClicked @record)}}
   >
     {{t "current-version"}}
   </AuButton>
@@ -18,11 +18,7 @@
       role="menuitem"
       {{on "click" (fn this.onVersionClicked previousVersion)}}
     >
-      {{t
-        "version-of-date-at-time"
-        date=(date previousVersion.created)
-        time=(time previousVersion.created)
-      }}
+      {{this.labelForVersion previousVersion}}
     </AuButton>
   {{/each}}
 </AuDropdown>

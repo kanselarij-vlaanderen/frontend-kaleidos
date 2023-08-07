@@ -1,6 +1,10 @@
 <div class="vlc-procedure-step vlc-procedure-step--nopadding">
   <div class="vlc-procedure-step__badge-wrapper">
-    <Auk::Badge @size="medium" @icon={{@badgeIcon}} @skin={{@badgeSkin}} />
+    <AuBadge
+      @icon={{@badgeIcon}}
+      @skin={{@badgeSkin}}
+      class="au-c-badge--medium"
+    />
   </div>
   {{yield @event}}
 </div>

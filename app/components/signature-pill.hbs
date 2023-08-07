@@ -1,21 +1,22 @@
-{{#if this.loadData.isRunning}}
+{{#if (or this.data.isRunning)}}
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  {{#if this.signingHubUrl}}
+  {{#if this.data.value.signingHubUrl}}
     <AuPill
       @icon="sign"
       @skin={{this.skin}}
-      @href={{this.signingHubUrl}}
+      @href={{if this.isClickable this.data.value.signingHubUrl}}
       target="_blank"
     >
-      {{this.title}}
+      {{this.data.value.status.label}}
     </AuPill>
   {{else}}
-    <AuPill
-      @icon="sign"
+    <AuPill 
+      @icon="sign" 
       @skin={{this.skin}}
-    >
-      {{this.title}}
+      @route={{if (and this.isClickable this.data.value.route) this.data.value.route}}
+      >
+      {{this.data.value.status.label}}
     </AuPill>
   {{/if}}
 {{/if}}

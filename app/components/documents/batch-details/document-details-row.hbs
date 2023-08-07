@@ -11,7 +11,7 @@
     </td>
   {{/if}}
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
         data-test-document-details-input
         @width="block"
@@ -22,13 +22,14 @@
     {{/if}}
   </td>
   <td>
-    {{#if @isEditingEnabled}}
+    {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <Utils::DocumentTypeSelector
         data-test-document-details-row-type
         @selectedDocumentType={{@row.documentType}}
         @onChange={{@row.setDocumentType}}
       />
-    {{else}}
+    {{/if}}
+    {{#if (or (not @isEditingEnabled) @row.hasSentSignFlow)}}
       {{@row.documentType.label}}
     {{/if}}
   </td>
@@ -43,6 +44,23 @@
         @onChange={{@row.setAccessLevel}}
       />
     </td>
+    {{#if @row.showSignature}}
+      <td>
+        {{#if @row.hasSentSignFlow}}
+          <SignaturePill
+            @piece={{@row.piece}}
+            @signMarkingActivity={{@row.signMarkingActivity}}
+          />
+        {{else}}
+          <AuToggleSwitch
+            @skin="primary"
+            @label={{t "present-for-signing"}}
+            @checked={{@row.markedForSignature}}
+            @onChange={{fn @row.setMarkedForSignature}}
+          />
+      {{/if}}
+    </td>
+  {{/if}}
   {{else}}
     <td>
       <Utils::Documents::FileTypePill
@@ -51,7 +69,7 @@
     </td>
   {{/if}}
   <td class="auk-u-text-align--right">
-    {{#if (not @isEditingEnabled)}}
+    {{#if (or @row.hasSentSignFlow (not @isEditingEnabled))}}
       <AuLinkExternal
         @icon="book"
         @hideText={{true}}
@@ -68,7 +86,7 @@
       >
         {{t "undo"}}
       </AuButton>
-    {{else}}
+    {{else if (not @row.hasSentSignFlow)}}
       <AuButton
         data-test-document-details-row-delete
         @skin="naked"

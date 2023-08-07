@@ -6,12 +6,16 @@ import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent, isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
+  @service signatureService;
+  @service currentSession;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -27,6 +31,12 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get isSaveDisabled() {
     return this.isLoading || this.save.isRunning;
+  }
+
+  get isSignaturesEnabled() {
+    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return isEnabled && hasPermission;
   }
 
   @task
@@ -60,6 +70,13 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
+        if (this.isSignaturesEnabled) {
+          row.signMarkingActivity = await piece.signMarkingActivity;
+          row.showSignature = isPresent(this.args.decisionActivity);
+          row.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(piece);
+          row.hasSentSignFlow = row.signMarkingActivity && !row.hasMarkedSignFlow;
+          row.markedForSignature = row.signMarkingActivity && row.hasMarkedSignFlow;
+        }
         return row;
       })
     );
@@ -94,6 +111,11 @@ export default class BatchDocumentsDetailsModal extends Component {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
+        if (row.hasMarkedSignFlow) {
+          const signSubcase = await row.signMarkingActivity?.signSubcase;
+          const signFlow = await signSubcase?.signFlow;
+          await this.signatureService.removeSignFlow(signFlow);
+        }
         const previousPiece = await piece.previousPiece;
         await deletePiece(piece);
         if (this.args.didDeletePiece && previousPiece) {
@@ -101,7 +123,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         // container is cleaned up in deletePiece if no more pieces exist
       } else {
-        piece.name = row.name;
+        piece.name = row.name?.trim();
         // does not check for relationship changes
         let accessLevelHasChanged = false;
         let hasChanged = piece.dirtyType === 'updated';
@@ -113,6 +135,14 @@ export default class BatchDocumentsDetailsModal extends Component {
           hasChanged = true;
           accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
+        }
+        if (row.markedForSignature && !row.hasMarkedSignFlow) {
+          await this.signatureService.markDocumentForSignature(piece, this.args.decisionActivity);
+        }
+        if (!row.markedForSignature && row.hasMarkedSignFlow) {
+          const signSubcase = await row.signMarkingActivity?.signSubcase;
+          const signFlow = await signSubcase?.signFlow;
+          await this.signatureService.removeSignFlow(signFlow);
         }
         if (hasChanged) {
           await piece.save();

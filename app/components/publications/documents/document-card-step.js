@@ -28,6 +28,6 @@ export default class PublicationsDocumentsDocumentCardStepComponent extends Comp
 
   @task
   *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.args.piece.signMarkingActivity;
+    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
   }
 }

@@ -29,6 +29,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service fileConversionService;
   @service intl;
   @service pieceAccessLevelService;
+  @service signatureService;
   @service store;
   @service toaster;
 
@@ -52,8 +53,6 @@ export default class AgendaitemDecisionComponent extends Component {
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
-    this.loadNota.perform();
-    this.loadDocuments.perform();
   }
 
   loadNota = task(async () => {
@@ -130,7 +129,15 @@ export default class AgendaitemDecisionComponent extends Component {
         },
       });
       this.previousReport = await this.report.previousPiece;
+    } else {
+      this.betreftPiecePart = null;
+      this.beslissingPiecePart = null;
     }
+  });
+
+  onDecisionEdit = task(async () => {
+    await this.updateAgendaitemPiecesAccessLevels.perform();
+    await this.updatePiecesSignFlows.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -142,7 +149,7 @@ export default class AgendaitemDecisionComponent extends Component {
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
       ].includes(decisionResultCode.uri)
     ) {
-      const pieces = this.args.agendaitem.pieces;
+      const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
@@ -151,6 +158,24 @@ export default class AgendaitemDecisionComponent extends Component {
     }
     this.toggleEditPill();
   });
+
+  updatePiecesSignFlows = task(async () => {
+    const decisionResultCode = await this.args.decisionActivity
+      .decisionResultCode;
+    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      const pieces = await this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        await this.signatureService.removeSignFlowForPiece(piece);
+      }
+    }
+  });
+
+  @action
+  async didDeleteReport() {
+    await this.loadReport.perform();
+    this.setBetreftEditorContent('');
+    this.setBeslissingEditorContent('');
+  }
 
   @action
   async attachNewReportVersionAsPiece(piece) {
@@ -195,7 +220,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   /**
-   * Needed for uploading a PDF manually 
+   * Needed for uploading a PDF manually
    */
   @action
   async attachReportPdf(piece) {
@@ -239,13 +264,18 @@ export default class AgendaitemDecisionComponent extends Component {
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
       editorInterface.setHtmlContent(this.betreftPiecePart.value);
-    
+
       // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
       editorInterface.setHtmlContent(this.editorInstanceBetreft.htmlContent);
     }
 
     this.editorInstanceBetreft = editorInterface;
+  }
+
+  @action
+  onRevertBetreftVersion(betreftPiecePart) {
+    this.setBetreftEditorContent(betreftPiecePart.value);
   }
 
   @action
@@ -273,6 +303,11 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     this.editorInstanceBeslissing = editorInterface;
+  }
+
+  @action
+  onRevertBeslissingVersion(beslissingPiecePart) {
+    this.setBeslissingEditorContent(beslissingPiecePart.value);
   }
 
   @action
@@ -501,6 +536,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA;
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  @action
+  startEditing() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.isEditing = true;
   }
 }
