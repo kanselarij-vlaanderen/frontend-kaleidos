@@ -13,6 +13,49 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
+function openAgendaForDateWithStatusCheck(agendaDate, index = 0, status = 'open') {
+  cy.log('openAgendaForDateWithStatusCheck');
+  const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
+  cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
+
+  cy.visit('/overzicht?sizeAgendas=2');
+  cy.wait(1000);
+  cy.get(route.agendasOverview.filter.container).within(() => {
+    cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
+  });
+  cy.get(route.agendasOverview.loader, {
+    timeout: 10000,
+  }).should('not.exist');
+  cy.wait('@getFilteredAgendas', {
+    timeout: 20000,
+  });
+
+  if (status === 'open') {
+    cy.get(route.agendasOverview.dataTable, {
+      timeout: 20000,
+    }).find('tbody')
+      .children('tr')
+      .eq(index)
+      .find(route.agendasOverview.row.statusOpened);
+  } else {
+    cy.get(route.agendasOverview.dataTable, {
+      timeout: 20000,
+    }).find('tbody')
+      .children('tr')
+      .eq(index)
+      .find(route.agendasOverview.row.statusOpened);
+  }
+  cy.get(route.agendasOverview.dataTable).find('tbody')
+    .children('tr')
+    .eq(index)
+    .find(route.agendasOverview.row.navButton)
+    .click();
+
+  cy.url().should('include', '/vergadering');
+  cy.url().should('include', '/agenda');
+  cy.log('/openAgendaForDateWithStatusCheck');
+}
+
 context('Propagation to other graphs', () => {
   const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
@@ -43,6 +86,22 @@ context('Propagation to other graphs', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveDesignAgenda();
+    cy.wait(80000);
+
+    // check to see if Overheid sees open agenda properly
+    cy.logoutFlow();
+    cy.login('Overheidsorganisatie');
+    openAgendaForDateWithStatusCheck(agendaDate);
+    cy.agendaNameExists('A', false);
+    cy.get(agenda.agendaSideNav.agendaName).should('not.contain', 'Ontwerpagenda B');
+    cy.get(agenda.agendaHeader.isFinalPillOpened);
+
+    cy.logoutFlow();
+    cy.login('Admin');
+    cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda();
@@ -102,7 +161,9 @@ context('Propagation to other graphs', () => {
 
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
-    cy.openAgendaForDate(agendaDate);
+    openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Ontwerpagenda B');
+    cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.documentCard.name.value).eq(0)
@@ -130,10 +191,30 @@ context('Propagation to other graphs', () => {
 
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
-    cy.openAgendaForDate(agendaDate);
+    openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Ontwerpagenda B');
+    cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 2);
     cy.logoutFlow();
+  });
+
+  it('Test overzicht as Overheidsorganisatie', () => {
+    cy.login('Overheidsorganisatie');
+    cy.visit('/overzicht?sizeAgendas=2');
+    cy.get(route.agendasOverview.loader, {
+      timeout: 10000,
+    }).should('not.exist');
+    cy.wait('@getFilteredAgendas', {
+      timeout: 20000,
+    });
+    cy.visit('/overzicht');
+    cy.get(route.agendasOverview.loader, {
+      timeout: 10000,
+    }).should('not.exist');
+    cy.wait('@getFilteredAgendas', {
+      timeout: 20000,
+    });
   });
 });
