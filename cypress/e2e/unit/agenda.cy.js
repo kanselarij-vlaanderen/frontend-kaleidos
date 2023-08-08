@@ -38,6 +38,10 @@ function getTranslatedMonth(month) {
   }
 }
 
+function currentTimestamp() {
+  return Cypress.dayjs().unix();
+}
+
 function downloadDocs(postAgenda = true) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
@@ -484,5 +488,97 @@ context('Agenda tests', () => {
       .should('contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
       .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf')
       .should('contain', file.newFileName);
+  });
+
+  it('Setup for downloading all decisions', () => {
+    const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
+      .day(5);
+    const date = currentTimestamp();
+    const testId = `testId=${date}`;
+    const caseShortTitle = `Cypress download decisions - ${testId}`;
+    const type = 'Nota';
+    const subcaseShortTitle1 = `Subcase 1 for downloading decisions - ${testId}`;
+    const subcaseLongTitle1 = `Subcase containing decision to check download succes - ${testId}`;
+    const subcaseShortTitle2 = `Subcase 2 for downloading decisions - ${testId}`;
+    const subcaseLongTitle2 = `Second subcase containing decision to check download succes - ${testId}`;
+    const concerns = 'Cypress test for downloading decisions';
+    const decision = 'Goedgekeurd';
+
+    cy.createAgenda(null, dateToCreateAgenda, 'download all decisions');
+    cy.createCase(caseShortTitle);
+    cy.addSubcase(type, subcaseShortTitle1, subcaseLongTitle1, null, null);
+    cy.addSubcase(type, subcaseShortTitle2, subcaseLongTitle2, null, null);
+    cy.openSubcase(0, subcaseShortTitle1);
+    cy.addSubcaseMandatee(1);
+    cy.go('back');
+    cy.openSubcase(1, subcaseShortTitle2);
+    cy.addSubcaseMandatee(2);
+
+    cy.openAgendaForDate(dateToCreateAgenda);
+    cy.addAgendaitemToAgenda(subcaseShortTitle1);
+    cy.addAgendaitemToAgenda(subcaseShortTitle2);
+
+    cy.openDetailOfAgendaitem(subcaseShortTitle1);
+    cy.get(agenda.agendaitemNav.decisionTab)
+      .should('be.visible')
+      .click();
+    cy.generateDecision(concerns, decision);
+    cy.openDetailOfAgendaitem(subcaseShortTitle2);
+    cy.get(agenda.agendaitemNav.decisionTab)
+      .should('be.visible')
+      .click();
+    cy.generateDecision(concerns, decision);
+  });
+
+  it('Should download all decisions for Jambon', () => {
+    const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
+      .day(5);
+
+    cy.openAgendaForDate(dateToCreateAgenda);
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Jambon')
+      .click();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_27_10_2023_ontwerpagenda_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'VR PV 2023_1 - punt 0003');
+  });
+
+  it('Should download all decisions for Crevits', () => {
+    const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
+      .day(5);
+
+    cy.openAgendaForDate(dateToCreateAgenda);
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Crevits')
+      .click();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_27_10_2023_ontwerpagenda_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'VR PV 2023_1 - punt 0002');
+  });
+
+  it('Should download all decisions', () => {
+    const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
+      .day(5);
+
+    cy.openAgendaForDate(dateToCreateAgenda);
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_27_10_2023_ontwerpagenda_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'VR PV 2023_1 - punt 0002')
+      .should('contain', 'VR PV 2023_1 - punt 0003');
   });
 });

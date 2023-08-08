@@ -93,6 +93,7 @@ const selectors = {
     navigateToNewsletter: '[data-test-agenda-actions-navigate-to-newsletter]',
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
     downloadDocuments: '[data-test-agenda-actions-download-documents]',
+    downloadDecisions: '[data-test-agenda-actions-download-decisions]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
     planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
