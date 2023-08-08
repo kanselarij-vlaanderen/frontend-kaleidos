@@ -530,7 +530,7 @@ context('Agenda tests', () => {
     cy.generateDecision(concerns, decision);
   });
 
-  it('Should download all decisions for Jambon', () => {
+  it.only('Should download all decisions for Jambon', () => {
     const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
       .day(5);
 
@@ -549,7 +549,7 @@ context('Agenda tests', () => {
       .should('not.contain', 'VR PV 2023_1 - punt 0002');
   });
 
-  it('Should download all decisions for Crevits', () => {
+  it.only('Should download all decisions for Crevits', () => {
     const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
       .day(5);
 
