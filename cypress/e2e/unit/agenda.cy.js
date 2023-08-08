@@ -530,7 +530,7 @@ context('Agenda tests', () => {
     cy.generateDecision(concerns, decision);
   });
 
-  it('Should download all decisions for Jambon', () => {
+  it.only('Should download all decisions for Jambon', () => {
     const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
       .day(5);
 
@@ -545,10 +545,11 @@ context('Agenda tests', () => {
     downloadDocs(false);
     cy.readFile('cypress/downloads/VR_zitting_27_10_2023_ontwerpagenda_alle_punten.zip', {
       timeout: 25000,
-    }).should('contain', 'VR PV 2023_1 - punt 0003');
+    }).should('contain', 'VR PV 2023_1 - punt 0003')
+      .should('not.contain', 'VR PV 2023_1 - punt 0002');
   });
 
-  it('Should download all decisions for Crevits', () => {
+  it.only('Should download all decisions for Crevits', () => {
     const dateToCreateAgenda = Cypress.dayjs().add(11, 'weeks')
       .day(5);
 
@@ -563,7 +564,8 @@ context('Agenda tests', () => {
     downloadDocs(false);
     cy.readFile('cypress/downloads/VR_zitting_27_10_2023_ontwerpagenda_alle_punten.zip', {
       timeout: 25000,
-    }).should('contain', 'VR PV 2023_1 - punt 0002');
+    }).should('contain', 'VR PV 2023_1 - punt 0002')
+      .should('not.contain', 'VR PV 2023_1 - punt 0003');
   });
 
   it('Should download all decisions', () => {
