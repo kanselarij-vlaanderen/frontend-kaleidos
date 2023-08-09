@@ -18,6 +18,7 @@ export default class AgendaitemControls extends Component {
   @service agendaService;
   @service currentSession;
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -140,6 +141,9 @@ export default class AgendaitemControls extends Component {
       const pieces = yield this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
+        if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+          yield this.signatureService.removeSignFlowForPiece(piece);
+        }
       }
     }
   }

@@ -549,23 +549,27 @@ context('testing user and organization management', () => {
       cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
 
       // link mandatee
+      cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(utils.mandateeSelector.container).click();
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).contains(person1)
         .click();
       cy.intercept('PATCH', '/user-organizations/**').as('patchorgs1');
-      cy.get(settings.organization.technicalInfo.row.linkMandatee).click()
+      cy.get(utils.mandateesSelector.add).click()
         .wait('@patchorgs1');
       cy.get(settings.organization.technicalInfo.row.mandatee).contains(person1);
       // link second mandatee
+      cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(utils.mandateeSelector.container).click();
       cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
       cy.get(dependency.emberPowerSelect.option).contains(person2)
         .click();
       cy.intercept('PATCH', '/user-organizations/**').as('patchorgs2');
-      cy.get(settings.organization.technicalInfo.row.linkMandatee).click()
+      cy.get(utils.mandateesSelector.add).click()
         .wait('@patchorgs2');
       cy.get(settings.organization.technicalInfo.row.mandatee).contains(person1);
       cy.get(settings.organization.technicalInfo.row.mandatee).contains(person2);

@@ -23,7 +23,11 @@
     </div>
   </div>
   <div class="auk-panel-layout__main-content">
-    {{outlet}}
+    {{#if this.isLoading}}
+      <Auk::Loader @message={{t "agenda-loading"}} />
+    {{else}}
+      {{outlet}}
+    {{/if}}
   </div>
 {{else}}
   <div
@@ -36,7 +40,9 @@
         @onSearch={{this.searchAgendaitems}}
       />
       <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
-        {{#if this.loadDocuments.isRunning}}
+        {{#if this.isLoading}}
+          <Auk::Loader @message={{t "agenda-loading"}} />
+        {{else if this.loadDocuments.isRunning}}
           <Auk::Loader @message={{this.documentLoadingMessage}} />
         {{else}}
           <Agenda::AgendaOverview
