@@ -207,6 +207,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -234,6 +235,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -365,6 +367,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
 
       // Detail Tab - Decisions tab (no decision doc)
@@ -384,6 +387,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -454,6 +458,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
 
 
@@ -474,6 +479,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -945,7 +951,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.accessLevelPill.edit);
 
@@ -1006,7 +1012,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.accessLevelPill.edit);
 
@@ -1068,7 +1074,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.signMarking).should('not.exist');
       cy.get(document.documentCard.delete);
       cy.get(document.accessLevelPill.edit);
 
