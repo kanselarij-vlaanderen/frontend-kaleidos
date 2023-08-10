@@ -37,9 +37,9 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <Auk::List>
+    <AuList as |Item|>
       {{#each this.decisions as |decision|}}
-        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
+        <Item class="auk-o-flex auk-o-flex--spaced-wide au-u-padding-top-tiny au-u-padding-bottom-tiny">
           <AuBadge
             @icon="document"
             @skin="gray"
@@ -60,9 +60,9 @@
               {{t "open-publication"}}
             </AuLinkExternal>
           {{/if}}
-        </Auk::List::Item>
+        </Item>
       {{/each}}
-    </Auk::List>
+    </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
 

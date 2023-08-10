@@ -32,6 +32,11 @@
         @onChange={{fn this.markForSignFlow.perform}}
         @disabled={{this.markForSignFlow.isRunning}}
       />
+    {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
+      <SignaturePill 
+        @piece={{@piece}} 
+        @signMarkingActivity={{this.signMarkingActivity}} 
+      />
     {{else}}
       <AuAlert
         @skin="warning"
