@@ -17,7 +17,6 @@ const DEFAULT_SORT_OPTIONS = [
 export default class SignaturesIndexController extends Controller {
   @service intl;
   @service router;
-  @service store;
   @service signatureService;
   @service toaster;
 
