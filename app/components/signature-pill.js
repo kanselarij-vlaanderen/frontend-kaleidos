@@ -23,12 +23,12 @@ export default class SignaturePillComponent extends Component {
   @tracked triggerTask;
 
   get isClickable() {
-    const statusUri = this.data.value?.status?.uri;
-    const signingHubUrl = this.data.value?.signingHubUrl;
-    if (statusUri === REFUSED || statusUri === CANCELED || statusUri === SIGNED || !signingHubUrl) {
-      return false;
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
+    if (signingHubUrl || route) {
+      return true;
     } 
-    return true;
+    return false;
   }
 
   willDestroy() {
@@ -92,15 +92,16 @@ export default class SignaturePillComponent extends Component {
   data = trackedTask(this, this.loadData, () => [this.triggerTask]); // Make the resource dependant on this.triggerTask
 
   get skin() {
-    const statusUri = this.data.value?.status?.uri;
-    const signingHubUrl = this.data.value?.signingHubUrl;
+    const statusUri = this.data?.value?.status?.uri;
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (signingHubUrl) {
-      return 'default';
+    } else if (signingHubUrl || route) {
+      return 'link';
     } else if (statusUri === SIGNED) {
       return 'success';
     }
-    return 'link';
+    return 'default';
   }
 }
