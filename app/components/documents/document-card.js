@@ -75,7 +75,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures')
-      && !!this.args.decisionActivity;
   }
 
   get mayShowEditDropdown() {
