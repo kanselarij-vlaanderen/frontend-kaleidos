@@ -1255,5 +1255,6 @@
   "sign-flow-was-sent-while-you-were-editing-could-not-delete": "Dit document is reeds verstuurd naar de Handtekenmap. Het document is niet verwijderd uit Kaleidos.",
   "secretary-for-meeting": "Secretaris voor de vergadering",
   "secretary": "Secretaris",
-  "no-secretary-assigned": "Er werd nog geen secretaris toegewezen"
+  "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
+  "decisions-and-minutes": "Beslissingen en notulen"
 }

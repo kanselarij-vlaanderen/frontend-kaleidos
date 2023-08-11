@@ -68,6 +68,7 @@
     </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
+{{#unless @isDecisionOrNota}}
 <Auk::Panel class="auk-u-mt-4">
   <Auk::Panel::Header class="auk-u-px-1">
     <Auk::Toolbar as |Toolbar|>
@@ -176,7 +177,16 @@
     </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
+{{/unless}}
+{{#if this.showSecretaryModal}}
+  <Signatures::SelectSecretaryModal
+    @loading={{this.saveSigners.isRunning}}
+    @selected={{this.signers}}
+    @onConfirm={{this.saveSigners.perform}}
+    @onCancel={{toggle "showSecretaryModal" this}}
+  />
 
+{{/if}}
 {{#if this.showMinisterModal}}
   <Signatures::SelectMinistersModal
     @loading={{this.saveSigners.isRunning}}
