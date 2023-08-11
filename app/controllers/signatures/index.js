@@ -166,7 +166,7 @@ export default class SignaturesIndexController extends Controller {
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
-    this.agnedaitem = null;
+    this.agendaitem = null;
     this.decisionActivity = null;
     this.signers = [];
     this.approvers = [];
