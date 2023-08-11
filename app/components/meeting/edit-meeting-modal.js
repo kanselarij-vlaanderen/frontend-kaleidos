@@ -8,7 +8,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import constants from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument {isNew}
