@@ -25,10 +25,7 @@ export default class SignaturePillComponent extends Component {
   get isClickable() {
     const signingHubUrl = this.data?.value?.signingHubUrl;
     const route = this.data?.value?.route;
-    if (signingHubUrl || route) {
-      return true;
-    } 
-    return false;
+    return !!signingHubUrl || !!route;
   }
 
   willDestroy() {
