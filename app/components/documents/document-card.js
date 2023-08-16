@@ -333,7 +333,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     const status = yield this.signFlow.belongsTo('status').reload();
     if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
       this.toaster.error(
-        this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
+        this.intl.t('sign-flow-was-sent-cannot-stop-it'),
         this.intl.t('action-could-not-be-executed-title'),
       );
       yield this.loadPieceRelatedData.perform();
