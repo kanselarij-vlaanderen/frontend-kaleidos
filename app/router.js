@@ -131,7 +131,6 @@ Router.map(function() {
     this.route('icons');
     this.route('key-value');
     this.route('link-button');
-    this.route('list');
     this.route('loader');
     this.route('panel');
     this.route('pager');

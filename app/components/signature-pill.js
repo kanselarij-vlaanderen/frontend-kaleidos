@@ -12,7 +12,6 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
  * @param piece {Piece|Promise<Piece>}
- * @param isClickable {boolean} Defaults to true, can be used to disable the click behaviour
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
@@ -24,8 +23,9 @@ export default class SignaturePillComponent extends Component {
   @tracked triggerTask;
 
   get isClickable() {
-    // use passed in argument, otherwise default to true
-    return this.args.isClickable ?? true;
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
+    return !!signingHubUrl || !!route;
   }
 
   willDestroy() {
@@ -89,14 +89,16 @@ export default class SignaturePillComponent extends Component {
   data = trackedTask(this, this.loadData, () => [this.triggerTask]); // Make the resource dependant on this.triggerTask
 
   get skin() {
-    const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    const statusUri = this.data.value?.status?.uri;
-    const signingHubUrl = this.data.value?.signingHubUrl;
+    const statusUri = this.data?.value?.status?.uri;
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (signingHubUrl) {
+    } else if (signingHubUrl || route) {
       return 'link';
+    } else if (statusUri === SIGNED) {
+      return 'success';
     }
-    return 'ongoing';
+    return 'default';
   }
 }
