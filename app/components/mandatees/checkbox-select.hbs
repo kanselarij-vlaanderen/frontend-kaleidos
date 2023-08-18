@@ -1,7 +1,6 @@
 {{#if this.loadMinisters.isRunning}}
   <Auk::Loader />
 {{else if this.ministers}}
-<div class="auk-form-group">
   <Auk::CheckboxTree
     @label={{t "ministers"}}
     @layout="grid"
@@ -10,7 +9,6 @@
     @selectedItems={{this.selectedMinisters}}
     @didUpdate={{this.onChangeMinisters}}
   />
- </div>
 {{else}}
   <p>{{t "no-ministers-submitted-on-this-agenda"}}</p>
 {{/if}}
