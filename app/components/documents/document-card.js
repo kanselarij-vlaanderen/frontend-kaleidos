@@ -63,10 +63,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get label() {
-    if (isPresent(this.args.label)){
+    if (isPresent(this.args.label)) {
       return this.intl.t(this.args.label);
     }
-    if (isPresent(this.altLabel)){
+    if (isPresent(this.altLabel)) {
       return this.altLabel;
     }
     return this.intl.t('uploaded-at');
@@ -130,11 +130,11 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadReportPiecePart = (id) => 
+    const loadReportPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[report][:id:]': id,
       });
-    const loadMinutesPiecePart = (id) => 
+    const loadMinutesPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[minutes][:id:]': id,
       });
