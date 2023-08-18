@@ -49,7 +49,6 @@ There you will need some customsations in your docker-compose.override.yml
  * `make run-cypress-spec-files` will prepare all DB search and cache and run the specified spec files.
 
 ### Preparation of the Data:
-
 These commands are used in the above commands. you only need them if you want to reset the DB in between tests or ad hoc.
  * `make reset-cache-resource-only` will only reset the resource and cache.
  * `make reset-cache` will reset the database and cache .
