@@ -17,7 +17,6 @@ const DEFAULT_SORT_OPTIONS = [
 export default class SignaturesIndexController extends Controller {
   @service intl;
   @service router;
-  @service store;
   @service signatureService;
   @service toaster;
 
@@ -167,7 +166,7 @@ export default class SignaturesIndexController extends Controller {
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
-    this.agnedaitem = null;
+    this.agendaitem = null;
     this.decisionActivity = null;
     this.signers = [];
     this.approvers = [];

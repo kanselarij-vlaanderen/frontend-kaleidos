@@ -240,7 +240,7 @@ export default class DocumentsDocumentCardComponent extends Component {
         yield this.loadPieceRelatedData.perform();
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
-          this.intl.t('changes-could-not-be-saved-title'),
+          this.intl.t('action-could-not-be-executed-title'),
         );
         this.isOpenUploadModal = false;
         return;
@@ -295,7 +295,7 @@ export default class DocumentsDocumentCardComponent extends Component {
         this.isOpenVerifyDeleteModal = false;
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
-          this.intl.t('changes-could-not-be-saved-title'),
+          this.intl.t('action-could-not-be-executed-title'),
         );
         return;
       }
@@ -333,8 +333,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     const status = yield this.signFlow.belongsTo('status').reload();
     if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
       this.toaster.error(
-        this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
-        this.intl.t('changes-could-not-be-saved-title'),
+        this.intl.t('sign-flow-was-sent-cannot-stop-it'),
+        this.intl.t('action-could-not-be-executed-title'),
       );
       yield this.loadPieceRelatedData.perform();
       return;

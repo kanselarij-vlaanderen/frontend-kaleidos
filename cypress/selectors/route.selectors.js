@@ -71,6 +71,7 @@ const selectors = {
         edit: '[data-test-route-cases-overview-row-actions-edit]',
         archive: '[data-test-route-cases-overview-row-actions-archive]',
       },
+      goToCase: '[data-test-route-cases-overview-row-go-to-case]',
     },
   },
 
