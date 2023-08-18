@@ -52,7 +52,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
-  @tracked label;
+  @tracked altLabel;
 
   constructor() {
     super(...arguments);
@@ -65,6 +65,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   get label() {
     if (isPresent(this.args.label)){
       return this.intl.t(this.args.label);
+    }
+    if (isPresent(this.altLabel)){
+      return this.altLabel;
     }
     return this.intl.t('uploaded-at');
   }
@@ -127,25 +130,29 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadPiecePart = (id) => 
+    const loadReportPiecePart = (id) => 
       this.store.queryOne('piece-part', {
         'filter[report][:id:]': id,
+      });
+    const loadMinutesPiecePart = (id) => 
+      this.store.queryOne('piece-part', {
+        'filter[minutes][:id:]': id,
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
-      if (isPresent(this.args.label)) {
-        this.label = this.args.label;
-      } else {
-        const piecePart = yield loadPiecePart(this.piece.id);
-        console.log(piecePart);
-        if (piecePart) {
-          this.label = this.intl.t('created-on');
-        } else {
-          this.label = this.intl.t('uploaded-at');
+      // check for alternative label
+      const modelName = this.args.piece.constructor.modelName;
+      if (!isPresent(this.args.label)) {
+        let piecePart;
+        if (modelName === 'report') {
+          piecePart = yield loadReportPiecePart(this.piece.id);
+        } else if (modelName === 'minutes') {
+          piecePart = yield loadMinutesPiecePart(this.piece.id);
         }
+        this.altLabel = piecePart ? this.intl.t('created-on') : null;
       }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
