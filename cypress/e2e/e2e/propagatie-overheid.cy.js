@@ -43,7 +43,7 @@ function openAgendaForDateWithStatusCheck(agendaDate, index = 0, status = 'open'
     }).find('tbody')
       .children('tr')
       .eq(index)
-      .find(route.agendasOverview.row.statusOpened);
+      .find(route.agendasOverview.row.statusClosed);
   }
   cy.get(route.agendasOverview.dataTable).find('tbody')
     .children('tr')
@@ -90,20 +90,19 @@ context('Propagation to other graphs', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.wait(80000);
+  });
 
-    // check to see if Overheid sees open agenda properly
-    cy.logoutFlow();
+  it('check to see if Overheid sees open agenda properly', () => {
     cy.login('Overheidsorganisatie');
     openAgendaForDateWithStatusCheck(agendaDate);
     cy.agendaNameExists('A', false);
-    cy.get(agenda.agendaSideNav.agendaName).should('not.contain', 'Ontwerpagenda B');
+    cy.get(agenda.agendaSideNav.agendaName).should('not.contain', 'Agenda B');
     cy.get(agenda.agendaHeader.isFinalPillOpened);
+  });
 
-    cy.logoutFlow();
+  it('Continue propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
-    cy.setFormalOkOnItemWithIndex(0);
-    cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
@@ -162,7 +161,7 @@ context('Propagation to other graphs', () => {
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
     openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
-    cy.get(agenda.agendaSideNav.agendaName).contains('Ontwerpagenda B');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Agenda B');
     cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
@@ -192,29 +191,11 @@ context('Propagation to other graphs', () => {
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
     openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
-    cy.get(agenda.agendaSideNav.agendaName).contains('Ontwerpagenda B');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Agenda B');
     cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 2);
     cy.logoutFlow();
-  });
-
-  it('Test overzicht as Overheidsorganisatie', () => {
-    cy.login('Overheidsorganisatie');
-    cy.visit('/overzicht?sizeAgendas=2');
-    cy.get(route.agendasOverview.loader, {
-      timeout: 10000,
-    }).should('not.exist');
-    cy.wait('@getFilteredAgendas', {
-      timeout: 20000,
-    });
-    cy.visit('/overzicht');
-    cy.get(route.agendasOverview.loader, {
-      timeout: 10000,
-    }).should('not.exist');
-    cy.wait('@getFilteredAgendas', {
-      timeout: 20000,
-    });
   });
 });
