@@ -156,7 +156,7 @@
             {{/unless}}
           </Group.Item>
           {{#if this.signaturesEnabled}}
-            {{#if this.loadSignatureRelatedData.isRunning}}
+            {{#if this.showSignatureLoader}}
               <Group.Item>
                 <div
                   class="auk-loader au-u-margin-left-small"
@@ -173,13 +173,7 @@
               </Group.Item>
             {{/if}}
           {{/if}}
-          {{#if
-            (and
-              @isEditable
-              (user-may "manage-documents")
-              (not this.hasSignFlow)
-            )
-          }}
+          {{#if this.mayShowEditDropdown}}
             <Group.Item>
               <AuDropdown
                 data-test-document-card-actions={{true}}
@@ -199,7 +193,7 @@
                     {{t "create-new-version"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideUpload)}}
+                {{#if this.mayShowUploadNewVersion}}
                   <AuButton
                     data-test-document-upload-new-piece
                     @skin="link"
@@ -220,18 +214,25 @@
                   </AuButton>
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
-                  {{#let (t "signatures") as |signTab| }}
-                    <AuLink
-                      @skin="link"
-                      @route="document"
-                      @model={{this.piece.id}}
-                      @query={{hash tab=signTab}}
-                      role="menuitem"
-                    >
-                      {{t "present-for-signing"}}
-                    </AuLink>
-                    <AuHr />
-                  {{/let}}
+                  <AuButton
+                    data-test-document-card-sign-marking
+                    @skin="link"
+                    {{on "click" this.markDocumentForSigning.perform}}
+                    role="menuitem"
+                  >
+                    {{t "present-for-signing"}}
+                  </AuButton>
+                {{/if}}
+                {{#if this.hasMarkedSignFlow}}
+                  <AuHr />
+                  <AuButton
+                    @skin="link"
+                    @alert={{true}}
+                    {{on "click" this.deleteMarkedSignFlow.perform}}
+                    role="menuitem"
+                  >
+                    {{t "stop-sign-flow"}}
+                  </AuButton>
                 {{/if}}
                 {{#if (not @hideDelete)}}
                   <AuHr />
@@ -299,7 +300,8 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
-    @onCancel={{toggle "isEditingPiece" this}}
+    @signFlow={{this.signFlow}}
+    @onCancel={{this.cancelEditPiece}}
     @onSave={{toggle "isEditingPiece" this}}
   />
 {{/if}}

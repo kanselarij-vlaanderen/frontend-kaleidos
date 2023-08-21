@@ -117,7 +117,6 @@ Router.map(function() {
     this.route('accordion-panel');
     this.route('avatar');
     this.route('brand');
-    this.route('badge');
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
@@ -132,13 +131,11 @@ Router.map(function() {
     this.route('icons');
     this.route('key-value');
     this.route('link-button');
-    this.route('list');
     this.route('loader');
     this.route('panel');
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');

@@ -397,6 +397,8 @@ context('publications shortlist overview tests', () => {
     // check if doc2 is no longer visible
     cy.wait('@getShortlist');
     cy.get(auk.loader).should('not.exist');
-    cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
+    // different table when signature data is enabled.
+    // cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
+    cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
   });
 });

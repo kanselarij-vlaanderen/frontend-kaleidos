@@ -11,13 +11,12 @@ const MANDATORY_SORT_OPTION = 'decision-activity';
 const DEFAULT_SORT_OPTIONS = [
   '-decision-activity.start-date',
   MANDATORY_SORT_OPTION,
-  '-sign-subcase.sign-marking-activity.piece.name',
+  'sign-subcase.sign-marking-activity.piece.name',
 ];
 
 export default class SignaturesIndexController extends Controller {
   @service intl;
   @service router;
-  @service store;
   @service signatureService;
   @service toaster;
 
@@ -35,7 +34,7 @@ export default class SignaturesIndexController extends Controller {
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
-  @tracked sizeSignaturesIndex = PAGINATION_SIZES[1];
+  @tracked sizeSignaturesIndex = PAGINATION_SIZES[5];
   @tracked pageSignaturesIndex = 0;
   @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;
@@ -167,7 +166,7 @@ export default class SignaturesIndexController extends Controller {
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
-    this.agnedaitem = null;
+    this.agendaitem = null;
     this.decisionActivity = null;
     this.signers = [];
     this.approvers = [];

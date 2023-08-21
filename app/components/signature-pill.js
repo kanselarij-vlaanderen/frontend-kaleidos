@@ -11,6 +11,7 @@ const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
+ * @param piece {Piece|Promise<Piece>}
  */
 export default class SignaturePillComponent extends Component {
   @service intl;
@@ -20,6 +21,12 @@ export default class SignaturePillComponent extends Component {
 
   scheduledRefresh;
   @tracked triggerTask;
+
+  get isClickable() {
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
+    return !!signingHubUrl || !!route;
+  }
 
   willDestroy() {
     super.willDestroy(...arguments);
@@ -45,16 +52,21 @@ export default class SignaturePillComponent extends Component {
     const signFlow = await signSubcase?.signFlow;
     let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
+    let route = null;
     if (status) {
-      if (status.uri !== REFUSED) {
+      if (status.uri === MARKED) {
+        route = "signatures.index";
+      }
+      if (status.uri !== REFUSED &&
+          status.uri !== CANCELED &&
+          status.uri !== SIGNED &&
+          status.uri !== MARKED) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
         const currentUser = this.currentSession.user;
         if (
           piece &&
-          status.uri !== SIGNED &&
-          status.uri !== MARKED &&
           signFlowCreator?.id === currentUser.id
         ) {
           signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
@@ -70,20 +82,23 @@ export default class SignaturePillComponent extends Component {
     return {
       signingHubUrl,
       status,
+      route
     };
   });
 
   data = trackedTask(this, this.loadData, () => [this.triggerTask]); // Make the resource dependant on this.triggerTask
 
   get skin() {
-    const { REFUSED, CANCELED } = constants.SIGNFLOW_STATUSES;
-    const statusUri = this.data.value?.status?.uri;
-    const signingHubUrl = this.data.value?.signingHubUrl;
+    const statusUri = this.data?.value?.status?.uri;
+    const signingHubUrl = this.data?.value?.signingHubUrl;
+    const route = this.data?.value?.route;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (signingHubUrl) {
+    } else if (signingHubUrl || route) {
       return 'link';
+    } else if (statusUri === SIGNED) {
+      return 'success';
     }
-    return 'ongoing';
+    return 'default';
   }
 }

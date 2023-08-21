@@ -33,11 +33,12 @@ export default class SignaturesOngoingController extends Controller {
   ];
 
   @tracked page = 0;
-  @tracked size = PAGINATION_SIZES[1];
+  @tracked size = PAGINATION_SIZES[3];
   @tracked sort = '-decision-activity.start-date';
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
+  @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED]
 
 
   isConfidential = (accessLevel) => {
@@ -55,20 +56,17 @@ export default class SignaturesOngoingController extends Controller {
     const status = await signFlow.status;
 
     if (piece) {
-      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
-        this.router.transitionTo(
-          'document',
-          piece.id
-        );
+      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.REFUSED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.CANCELED) {
+        window.open(`/document/${piece.id}`, '_blank');
       } else {
         const signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);
         if (signingHubUrl) {
-          window.location.href = signingHubUrl;
+          window.open(signingHubUrl, '_blank');
         } else {
-          this.router.transitionTo(
-            'document',
-            piece.id
-          );
+          window.open(`/document/${piece.id}`, '_blank');
         }
       }
     }

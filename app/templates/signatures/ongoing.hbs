@@ -13,6 +13,7 @@
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
               @onChange={{this.onChangeStatus}}
+              @excludedStatuses={{this.excludedStatuses}}
             />
           </div>
           {{#if this.currentSession.isAdmin}}
