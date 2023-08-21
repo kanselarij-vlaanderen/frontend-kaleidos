@@ -4,14 +4,14 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    <Utils::KindSelector
-      @onChange={{this.selectKind}}
-      @selectedKind={{this.selectedKind}}
-      @isLoading={{this.initializeKind.isRunning}}
-    />
-    {{#if this.isAnnexMeeting}}
-      <div class="auk-u-mb-2">
-        <div class="auk-form-group">
+    <div class="au-c-form">
+      <Utils::KindSelector
+        @onChange={{this.selectKind}}
+        @selectedKind={{this.selectedKind}}
+        @isLoading={{this.initializeKind.isRunning}}
+      />
+      {{#if this.isAnnexMeeting}}
+        <AuFormRow>
           <Auk::Label>
             {{t "related-main-meeting-field-label"}}
           </Auk::Label>
@@ -31,23 +31,19 @@
             {{date model.plannedStart}}
             ({{model.numberRepresentation}})
           </Utils::ModelSelector>
-        </div>
-      </div>
-    {{else}}
-      <div class="auk-u-mb-2">
-        <div class="auk-form-group" data-test-edit-meeting-datepicker>
+        </AuFormRow>
+      {{else}}
+        <AuFormRow data-test-edit-meeting-datepicker>
           <Auk::Label>{{t "start-date"}}</Auk::Label>
           <Auk::Datepicker
             @enableTime={{true}}
             @date={{this.startDate}}
             @onChange={{this.setStartDate}}
           />
-        </div>
-      </div>
-    {{/if}}
-    {{!Publicatiedatum}}
-    <div class="auk-u-mb-2">
-      <div data-test-edit-meeting-document-publication-date class="auk-form-group">
+        </AuFormRow>
+      {{/if}}
+      {{!Publicatiedatum}}
+      <AuFormRow data-test-edit-meeting-document-publication-date>
         <Auk::Label>
           {{t "date-publication-documents"}}
         </Auk::Label>
@@ -61,10 +57,8 @@
           @icon="circle-info"
           @text={{t "agenda-publication--publication-date--help"}}
         />
-      </div>
-    </div>
-    <div class="auk-u-mb-2">
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label>
           {{t "meeting-number"}}
         </Auk::Label>
@@ -99,27 +93,27 @@
             </AuButton>
           </div>
         </div>
-      </div>
+      </AuFormRow>
       {{#if this.isEditingNumberRepresentation}}
-        <div class="auk-o-flex">
-          <AuInput
-            data-test-edit-meeting-number-representation-input
-            @value={{this.numberRepresentation}}
-            class="auk-input-group--w-medium auk-u-mr-2" {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
-          />
-          <AuButton
-            data-test-edit-meeting-number-representation-save
-            @skin="primary"
-            {{on "click" this.toggleEditingNumberRepresentation}}
-          >
-            {{t "save"}}
-          </AuButton>
-        </div>
+        <AuFormRow>
+          <div class="auk-o-flex">
+            <AuInput
+              data-test-edit-meeting-number-representation-input
+              @value={{this.numberRepresentation}}
+              class="auk-input-group--w-medium auk-u-mr-2" {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
+            />
+            <AuButton
+              data-test-edit-meeting-number-representation-save
+              @skin="primary"
+              {{on "click" this.toggleEditingNumberRepresentation}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </div>
+        </AuFormRow>
       {{/if}}
-    </div>
-    {{#unless this.isAnnexMeeting}}
-      <div class="auk-u-mb-2">
-        <div class="auk-form-group">
+      {{#unless this.isAnnexMeeting}}
+        <AuFormRow>
           <Auk::Label>
             {{t "meeting-location"}}
           </Auk::Label>
@@ -128,9 +122,9 @@
             @width="block"
             @value={{this.extraInfo}}
           />
-        </div>
-      </div>
-    {{/unless}}
+        </AuFormRow>
+      {{/unless}}
+    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <AuButton

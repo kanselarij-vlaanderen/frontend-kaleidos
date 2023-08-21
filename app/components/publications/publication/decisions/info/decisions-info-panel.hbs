@@ -31,15 +31,12 @@
           @isLoading={{this.save.isRunning}}
           @reserveSpace={{true}}
         >
-          <div class="auk-form-group-layout auk-form-group-layout--grid">
+          <div class="au-c-form">
             <div class="auk-o-grid">
 
               {{! Type regelgeving }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-decisions-info-panel-edit-regulation-type
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-decisions-info-panel-edit-regulation-type>
                   <Auk::Label>
                     {{t "regulation-type"}}
                   </Auk::Label>
@@ -52,12 +49,12 @@
                   >
                     {{regulationType.label}}
                   </PowerSelect>
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-3">
-                <div class="auk-form-group">
+                <AuFormRow>
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <AuLink
@@ -80,29 +77,24 @@
                       @onChange={{set this.decisionActivity "startDate"}}
                     />
                   {{/if}}
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Number of pages }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-decisions-info-panel-edit-number-of-pages
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-decisions-info-panel-edit-number-of-pages>
                   <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
                   <AuInput
                     @type="number"
                     @width="block"
                     @value={{@publicationFlow.numberOfPages}}
                   />
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Aantal uittreksels }}
               <div class="auk-o-grid-col-3">
-                <div
-                  class="auk-form-group"
-                >
+                <AuFormRow>
                   <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
                   <AuInput
                     data-test-decisions-info-panel-edit-number-of-extracts
@@ -110,7 +102,7 @@
                     @width="block"
                     @value={{@publicationFlow.numberOfExtracts}}
                   />
-                </div>
+                </AuFormRow>
               </div>
             </div>
           </div>

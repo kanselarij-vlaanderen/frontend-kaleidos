@@ -170,11 +170,13 @@
             </AuToolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
-            <Mandatees::MandateePersonSelector
-              @onChange={{fn (mut this.selectedPerson)}}
-              @multiple={{false}}
-              @selectedPerson={{this.model.person}}
-            />
+            <div class="au-c-form">
+              <Mandatees::MandateePersonSelector
+                @onChange={{fn (mut this.selectedPerson)}}
+                @multiple={{false}}
+                @selectedPerson={{this.model.person}}
+              />
+            </div>
           </Auk::Panel::Body>
         </Auk::Panel>
       </div>

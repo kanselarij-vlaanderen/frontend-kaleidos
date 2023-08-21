@@ -40,7 +40,7 @@
             </AuPill>
           </div>
           {{#if @setReceivedDate}}
-            <div class="auk-form-group auk-u-width-medium auk-u-m-0">
+            <div class="auk-u-width-medium">
               <Auk::Datepicker
                 @placeholder={{t "date-received-placeholder"}}
                 @date={{piece.receivedDate}}
@@ -48,40 +48,38 @@
               />
             </div>
           {{/if}}
-          <div>
-            <AuButtonGroup>
+          <AuButtonGroup>
+            <AuLinkExternal
+              @icon="download"
+              @hideText={{true}}
+              href={{piece.file.namedDownloadLink}}
+              download={{piece.file.downloadFilename}}
+            >
+              {{t "download"}}
+            </AuLinkExternal>
+            {{#if @viewable}}
               <AuLinkExternal
-                @icon="download"
+                @icon="book"
                 @hideText={{true}}
-                href={{piece.file.namedDownloadLink}}
-                download={{piece.file.downloadFilename}}
+                href={{piece.viewDocumentURL}}
+                target="_blank"
               >
-                {{t "download"}}
+                {{t "read"}}
               </AuLinkExternal>
-              {{#if @viewable}}
-                <AuLinkExternal
-                  @icon="book"
-                  @hideText={{true}}
-                  href={{piece.viewDocumentURL}}
-                  target="_blank"
-                >
-                  {{t "read"}}
-                </AuLinkExternal>
-              {{/if}}
-              {{#if @onDeletePiece}}
-                <AuButton
-                  data-test-publication-document-list-delete-piece
-                  @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
-                  @hideText={{true}}
-                  {{on "click" (fn @onDeletePiece piece)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
-              {{/if}}
-            </AuButtonGroup>
-          </div>
+            {{/if}}
+            {{#if @onDeletePiece}}
+              <AuButton
+                data-test-publication-document-list-delete-piece
+                @skin="naked"
+                @alert={{true}}
+                @icon="trash"
+                @hideText={{true}}
+                {{on "click" (fn @onDeletePiece piece)}}
+              >
+                {{t "delete"}}
+              </AuButton>
+            {{/if}}
+          </AuButtonGroup>
         </div>
       </Item>
     {{/each}}
