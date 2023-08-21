@@ -11,9 +11,11 @@ const selectors = {
     pubLink: '[data-test-document-card-publication-link]',
     versionHistory: '[data-test-document-card-version-history]',
     actions: '[data-test-document-card-actions]',
+    signMarking: '[data-test-document-card-sign-marking]',
     delete: '[data-test-document-card-delete]',
     uploadPiece: '[data-test-document-upload-new-piece]',
     editPiece: '[data-test-document-edit-piece]',
+    generateNewPiece: '[data-test-document-generate-new-version]',
   },
 
   // document-edit-modal

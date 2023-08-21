@@ -1,6 +1,6 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['publicationStatusChange'];
+const SKIP_SERIALIZED = ['publicationStatusChange', 'threadId'];
 
 export default class PublicationFlowSerializer extends ApplicationSerializer {
   serializeBelongsTo(snapshot, json, relationship) {

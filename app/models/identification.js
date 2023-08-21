@@ -14,6 +14,11 @@ export default class Identification extends Model {
     async: true,
   })
   publicationFlowForNumac;
+  @belongsTo('publication-flow', {
+    inverse: 'threadId',
+    async: true,
+  })
+  publicationFlowForThreadId;
   @belongsTo('structured-identifier', {
     inverse: 'identification',
     async: true,

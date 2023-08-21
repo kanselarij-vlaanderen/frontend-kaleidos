@@ -1,22 +1,21 @@
 <div data-test-subcase-item-container class="vlc-procedure-step">
   <div class="vlc-procedure-step__badge-wrapper">
     {{#if this.loadSubcaseIsApproved.isRunning}}
-        <Auk::Badge @size="medium" />
+        <AuBadge class="au-c-badge--medium"/>
     {{else}}
       {{#if this.approved}}
-        <Auk::Badge
-          @skin="success"
-          @size="medium"
-          @icon="check"
-          class="vlc-procedure-step__badge"
+        <AuBadge
           data-test-subcase-item-approved
+          @icon="check"
+          @skin="success"
+          class="au-c-badge--medium"
         />
       {{else}}
-        <Auk::Badge
-          @skin="warning"
-          @size="medium"
+        <AuBadge
+          data-test-subcase-item-pending
           @icon="sitemap"
-          class="vlc-procedure-step__badge"
+          @skin="warning"
+          class="au-c-badge--medium"
         />
       {{/if}}
     {{/if}}
@@ -56,6 +55,7 @@
   {{#if this.hasDocumentsToShow}}
     <Auk::Accordion>
       <Auk::Accordion::Item
+        data-test-subcase-item-show-documents
         @title={{t "documents"}}
         @expandTask={{this.loadSubcaseDocuments}}
       >

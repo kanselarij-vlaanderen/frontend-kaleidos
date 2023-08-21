@@ -3,29 +3,39 @@
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-p-4">
       <div class="auk-o-flex auk-o-flex--horizontal-center">
-        <div class="auk-content auk-u-maximize-width auk-u-max-width-xlarge">
+        <div class="auk-u-maximize-width auk-u-max-width-xlarge">
           <div class="auk-u-my-4">
-            <h4 class="auk-u-mb-2">Aanmelden als bepaald profiel (generiek)</h4>
+            <h5 class="au-u-h5 au-u-medium auk-u-mb-2">Aanmelden als bepaald profiel (generiek)</h5>
             <p class="auk-u-mb-4">Kies een type gebruiker om mee aan te melden:</p>
             <div class="auk-panel auk-u-mb-8">
               <MockLogin as |login|>
                 {{#if login.errorMessage}}
                   {{#if (includes "403" (w (lowercase login.errorMessage)))}}
-                    <Auk::Alert
+                    <AuAlert
                       @skin="error"
-                      @message={{t "application-unauthorized-message"}}
-                    />
+                      @icon="circle-x"
+                      @size="small"
+                    >
+                      <p>{{t "application-unauthorized-message"}}</p>
+                    </AuAlert>
                   {{else}}
-                    <Auk::Alert
+                    <AuAlert
                       @skin="error"
-                      @message={{login.errorMessage}}
-                    />
+                      @icon="circle-x"
+                      @size="small"
+                    >
+                      <p>{{login.errorMessage}}</p>
+                    </AuAlert>
                   {{/if}}
                 {{/if}}
                 {{#if this.model.length}}
-                  <ul class="auk-list auk-list--view" data-test-mock-login-list>
+                  <AuList
+                    class="auk-u-mb"
+                    data-test-mock-login-list
+                    as |Item|
+                  >
                     <login.each-account @accounts={{this.model}} as |account|>
-                      <Auk::List::Item>
+                      <Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small">
                         <div class="auk-u-mx-2">
                           <span>{{account.user.firstName}} {{account.user.lastName}}</span>
                         </div>
@@ -36,9 +46,9 @@
                         >
                           {{t "login"}}
                         </AuButton>
-                      </Auk::List::Item>
+                      </Item>
                     </login.each-account>
-                  </ul>
+                  </AuList>
                 {{else}}
                   Geen accounts gevonden.
                 {{/if}}

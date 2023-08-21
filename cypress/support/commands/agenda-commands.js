@@ -421,6 +421,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('GET', '/subcases?**sort**').as(`getSubcasesFiltered_${randomInt}`);
   cy.intercept('POST', '/agendaitems').as(`createNewAgendaitem_${randomInt}`);
   cy.intercept('POST', '/agenda-activities').as(`createAgendaActivity_${randomInt}`);
+  cy.intercept('POST', '/decision-activities').as(`createDecisionActivity_${randomInt}`);
+  cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
 
   cy.get(auk.loader).should('not.exist');
@@ -466,6 +468,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait(`@createAgendaActivity_${randomInt}`, {
     timeout: 20000,
   });
+  cy.wait(`@createDecisionActivity_${randomInt}`);
+  cy.wait(`@createAgendaItemTreatment_${randomInt}`);
   cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems_${randomInt}`);
   cy.wait(`@createNewAgendaitem_${randomInt}`, {
     timeout: 30000,
@@ -741,6 +745,47 @@ function agendaNameExists(serialnumber, design = true) {
   // TODO-command this can fail on collapsed sidenav
 }
 
+/**
+ * @description Generate the decision report
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function generateDecision(concerns, decision) {
+  cy.log('generateDecision');
+  cy.get(agenda.agendaitemNav.decisionTab).click();
+  cy.get(agenda.agendaitemDecision.create).click();
+
+  cy.get(utils.sayEditor.rdfa).eq(0)
+    .as('concernsEditor');
+  if (concerns) {
+    cy.get('@concernsEditor').type(concerns);
+  } else {
+    cy.get('@concernsEditor').type('Betreft');
+  }
+
+  cy.get(utils.sayEditor.rdfa).eq(1)
+    .as('decisionsEditor');
+  if (decision) {
+    cy.get('@decisionsEditor').type(decision);
+  } else {
+    cy.get('@decisionsEditor').type('Beslissing');
+  }
+
+  cy.intercept('POST', 'reports').as('createNewReport');
+  cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
+  cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+  cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
+  cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
+    .click();
+  cy.wait('@createNewDocumentContainer');
+  cy.wait('@createNewReport');
+  cy.wait('@createNewPiecePart');
+  cy.wait('@patchDecisionActivities');
+  cy.wait('@patchReport');
+  cy.log('/generateDecision');
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -761,3 +806,4 @@ Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab)
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
+Cypress.Commands.add('generateDecision', generateDecision);

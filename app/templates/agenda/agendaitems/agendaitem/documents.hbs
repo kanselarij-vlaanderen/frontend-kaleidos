@@ -44,6 +44,7 @@
       @onAddPiece={{perform this.addPiece}}
       @didDeleteContainer={{this.refresh}}
       @isEditable={{true}}
+      @decisionActivity={{this.decisionActivity}}
     />
   {{else}}
     <div class="auk-u-mt-2">
@@ -72,6 +73,7 @@
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
+    @decisionActivity={{this.decisionActivity}}
     @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}

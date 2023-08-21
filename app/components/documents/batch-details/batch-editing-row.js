@@ -6,6 +6,19 @@ export default class BatchEditingRow extends Component {
     return this.args.selectedRows.length === 0;
   }
 
+  get isSignMarkingDisabled() {
+    for (const row of this.args.selectedRows) {
+      if (row.hasSentSignFlow) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  get hasSentSignFlow() {
+    return this.args.selectedRows.some((row) => row.hasSentSignFlow);
+  }
+
   get documentType() {
     return this.getBatchSelectedValue((row) => row.documentType);
   }
@@ -54,6 +67,16 @@ export default class BatchEditingRow extends Component {
   setToBeDeleted(isToBeDeleted) {
     for (const row of this.args.selectedRows) {
       row.isToBeDeleted = isToBeDeleted;
+    }
+  }
+
+  @action
+  setMarkedForSignature(markedForSignature) {
+    for (const row of this.args.selectedRows) {
+      // don't set flag when a signFlow has been sent to SH (toggle should also be disabled in that case)
+      if (!row.signMarkingActivity || row.hasMarkedSignFlow) {
+        row.markedForSignature = markedForSignature;
+      }
     }
   }
 }

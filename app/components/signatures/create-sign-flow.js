@@ -62,7 +62,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
         cosigners: _cosigners,
       } = await getSubmitterAndCosigners(decisionActivity);
 
-      if (submitter.id !== _submitter.id) {
+      if (submitter?.id !== _submitter?.id) {
         hasConflictingSigners = true;
         break;
       }
@@ -85,18 +85,33 @@ export default class SignaturesCreateSignFlowComponent extends Component {
     if (hasConflictingSigners) {
       this.signers = new TrackedArray([]);
     } else {
-      this.signers = new TrackedArray([...new Set([
-        this.primeMinister,
-        submitter,
-        ...cosigners,
-      ].filter(m => m))]);
+      const signersSet = new Set([this.primeMinister]);
+      const primeMinisterPerson = await this.primeMinister.person;
+
+      if (submitter) {
+        const submitterPerson = await submitter.person;
+        if (primeMinisterPerson.id !== submitterPerson.id) {
+          signersSet.add(submitter);
+        }
+      }
+
+      for (let cosigner of cosigners) {
+        if (cosigner) {
+          const cosignerPerson = await cosigner.person;
+          if (primeMinisterPerson.id !== cosignerPerson.id) {
+            signersSet.add(cosigner);
+          }
+        }
+      }
+
+      this.signers = new TrackedArray([...signersSet]);
     }
     this.args.onChangeSigners?.(this.signers);
   });
 
   @action
   saveApprover(approver) {
-    this.approvers.addObject(approver);
+    this.approvers.addObject(approver.toLowerCase());
     this.showApproversModal = false;
     this.args.onChangeApprovers?.(this.approvers);
   }
@@ -109,7 +124,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @action
   saveNotificationAddress(address) {
-    this.notificationAddresses.addObject(address);
+    this.notificationAddresses.addObject(address.toLowerCase());
     this.showNotificationAddressesModal = false;
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }

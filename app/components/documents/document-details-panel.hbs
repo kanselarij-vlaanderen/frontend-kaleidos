@@ -20,7 +20,6 @@
           data-test-details-tab-edit-document-type
           @selectedDocumentType={{this.documentType}}
           @onChange={{this.setDocumentType}}
-          @renderInPlace={{true}}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
@@ -108,7 +107,8 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#if (user-may "manage-documents")}}
+        {{#unless (or this.loadDetailsData.isRunning this.loadSignatureRelatedData.isRunning)}}
+          {{#if (and (user-may "manage-documents") this.canEditPieceWithSignFlow)}}
           <Toolbar.Group @position="right" as |Group|>
             {{#if this.isLastVersionOfPiece}}
               <Group.Item>
@@ -137,6 +137,7 @@
             </Group.Item>
           </Toolbar.Group>
         {{/if}}
+        {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-p-1">

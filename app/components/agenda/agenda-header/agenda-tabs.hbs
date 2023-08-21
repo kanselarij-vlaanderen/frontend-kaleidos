@@ -13,6 +13,7 @@
   {{#if this.firstAgendaitem}}
     <Auk::Tab
       @route="agenda.agendaitems.agendaitem"
+      @current-when="agenda.agendaitems.agendaitem"
       @models={{this.modelsForDetailRoute}}
     >
       {{t "detail"}}
@@ -21,4 +22,11 @@
   <Auk::Tab @route="agenda.documents">
     {{t "documents"}}
   </Auk::Tab>
+  {{#if this.enableDigitalMinutes}}
+    {{#if (user-may "manage-minutes")}}
+      <Auk::Tab @route="agenda.minutes">
+        {{t "minutes"}}
+      </Auk::Tab>
+    {{/if}}
+  {{/if}}
 </Auk::Tabs>

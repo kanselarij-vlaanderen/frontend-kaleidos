@@ -18,7 +18,15 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
     }
     while (latestPiece) {
       const previousPiece = await latestPiece.previousPiece;
-      await deletePiece(latestPiece);
+      if (latestPiece.constructor.modelName === 'piece') {
+        await deletePiece(latestPiece);
+      } else if (latestPiece.constructor.modelName === 'report') {
+        await deleteReport(latestPiece);
+      } else {
+        console.debug(
+          'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
+        );
+      }
       latestPiece = previousPiece;
     }
   }
@@ -45,6 +53,22 @@ export async function deletePiece(pieceOrPromise) {
       return documentContainer.destroyRecord();
     }
   }
+}
+
+/**
+ * Deletes the provided report and its file(s), and its document container if the
+ * container would otherwise be orphaned.
+ *
+ * @param reportOrPromise {Report | Promise<Report>}
+ * @returns {Promise}
+ */
+export async function deleteReport(reportOrPromise) {
+  const report = await reportOrPromise;
+  const pieceParts = await report.pieceParts;
+  for (const piecePart of pieceParts.toArray()) {
+    await piecePart.destroyRecord();
+  }
+  await deletePiece(report);
 }
 
 /**

@@ -28,6 +28,10 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
+    if (ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true) {
+      this.route('minutes', { path: '/notulen', });
+    }
+
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
@@ -111,12 +115,8 @@ Router.map(function() {
   this.route('styleguide', function() {
     this.route('accordion');
     this.route('accordion-panel');
-    this.route('alert-skins');
-    this.route('alert-types');
-    this.route('alert-stack');
     this.route('avatar');
     this.route('brand');
-    this.route('badge');
     this.route('button-loading');
     this.route('button-skins');
     this.route('button-types');
@@ -131,13 +131,11 @@ Router.map(function() {
     this.route('icons');
     this.route('key-value');
     this.route('link-button');
-    this.route('list');
     this.route('loader');
     this.route('panel');
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');

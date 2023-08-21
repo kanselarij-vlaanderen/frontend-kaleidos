@@ -133,9 +133,9 @@ export default class AgendaAgendaitemsRoute extends Route {
   loading(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controllerFor(this.routeName);
-    controller.isLoadingModel = true;
+    controller.isLoading = true;
     transition.promise.finally(() => {
-      controller.isLoadingModel = false;
+      controller.isLoading = false;
     });
 
     // If only the filter queryParam changed, we don't want to bubble

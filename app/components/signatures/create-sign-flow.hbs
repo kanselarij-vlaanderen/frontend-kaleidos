@@ -20,6 +20,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-signers-edit
             @skin="secondary"
             @icon="pencil"
             @loading={{this.loadSigners.isPending}}
@@ -32,18 +33,23 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-p-0">
-    <Auk::List @bordered={{true}}>
+    <AuList
+      @divider={{true}}
+      as |Item|
+    >
       {{#if this.loadSigners.isPending}}
-        <Auk::List::Item>
+        <Item class="au-u-padding-small">
           <Auk::Loader />
-        </Auk::List::Item>
+        </Item>
       {{else}}
         {{#each this.signers as |signer|}}
-          <Auk::List::Item
-            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+          <Item
+            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+            data-test-signatures-create-sign-flow-signers-item
           >
             {{signer.person.fullName}}
             <AuButton
+              data-test-signatures-create-sign-flow-signers-remove
               @skin="naked"
               @alert={{true}}
               @hideText={{true}}
@@ -52,14 +58,14 @@
             >
               {{t "delete"}}
             </AuButton>
-          </Auk::List::Item>
+          </Item>
         {{else}}
-          <Auk::List::Item>
+          <Item class="au-u-padding-small">
             {{t "no-signers-selected"}}
-          </Auk::List::Item>
+          </Item>
         {{/each}}
       {{/if}}
-    </Auk::List>
+    </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
 <Auk::Panel class="auk-u-mt-4">
@@ -75,6 +81,7 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-approvers-add
             @skin="secondary"
             @icon="plus"
             {{on "click" (toggle "showApproversModal" this)}}
@@ -86,13 +93,18 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-p-0">
-    <Auk::List @bordered={{true}}>
+    <AuList
+      @divider={{true}}
+      as |Item|
+    >
       {{#each this.approvers as |approver|}}
-        <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{approver}}
-          </span>
+        <Item
+          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+          data-test-signatures-create-sign-flow-approvers-item
+        >
+          <Auk::AbbreviatedText @text={{approver}} @maxLength={{35}} />
           <AuButton
+            data-test-signatures-create-sign-flow-approvers-remove
             @skin="naked"
             @alert={{true}}
             @hideText={{true}}
@@ -101,13 +113,13 @@
           >
             {{t "delete"}}
           </AuButton>
-        </Auk::List::Item>
+        </Item>
       {{else}}
-        <Auk::List::Item>
+        <Item class="au-u-padding-small">
           {{t "no-approvers-selected"}}
-        </Auk::List::Item>
+        </Item>
       {{/each}}
-    </Auk::List>
+    </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
 <Auk::Panel class="auk-u-mt-4">
@@ -116,13 +128,14 @@
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item>
           <h4 class="auk-h4 auk-u-m-0">
-            {{t "signing-hub-notifications"}}
+            {{t "signing-hub-cc"}}
           </h4>
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           <AuButton
+            data-test-signatures-create-sign-flow-notification-adresses-add
             @skin="secondary"
             @icon="plus"
             {{on "click" (toggle "showNotificationAddressesModal" this)}}
@@ -134,13 +147,18 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-p-0">
-    <Auk::List @bordered={{true}}>
+    <AuList
+      @divider={{true}}
+      as |Item|
+    >
       {{#each this.notificationAddresses as |notificationAddress|}}
-        <Auk::List::Item class="auk-o-flex--justify-between">
-          <span class="auk-u-text-ellipsis">
-            {{notificationAddress}}
-          </span>
+        <Item
+          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+          data-test-signatures-create-sign-flow-notification-adresses-item
+        >
+          <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
           <AuButton
+            data-test-signatures-create-sign-flow-notification-adresses-remove
             @skin="naked"
             @alert={{true}}
             @hideText={{true}}
@@ -149,13 +167,13 @@
           >
             {{t "delete"}}
           </AuButton>
-        </Auk::List::Item>
+        </Item>
       {{else}}
-        <Auk::List::Item>
+        <Item class="au-u-padding-small">
           {{t "no-notification-addresses-selected"}}
-        </Auk::List::Item>
+        </Item>
       {{/each}}
-    </Auk::List>
+    </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
 

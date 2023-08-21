@@ -160,7 +160,7 @@ export default class AllTypes extends Route {
     this.trackSearch(
       params.searchText,
       flatResults.length,
-      params.mandatees,
+      params.mandatees || [],
       params.dateFrom,
       params.dateTo,
     );

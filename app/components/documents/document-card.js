@@ -24,6 +24,8 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onOpenUploadModal: action triggered before the modal to upload a new version opens
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
+   * @argument label: used to determine what label should be used with the date
+   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
    */
   @service store;
   @service currentSession;
@@ -39,12 +41,16 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked piece;
   @tracked documentContainer;
   @tracked isDraftAccessLevel;
+  @tracked signFlow;
   @tracked signMarkingActivity;
 
   @tracked uploadedFile;
   @tracked newPiece;
   @tracked defaultAccessLevel;
   @tracked pieces = A();
+
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -54,6 +60,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
+  get label() {
+    if (isPresent(this.args.label)){
+      return this.intl.t(this.args.label);
+    }
+    return this.intl.t('uploaded-at');
+  }
+
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
@@ -61,7 +74,34 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return !this.signMarkingActivity
       && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures');
+      && this.currentSession.may('manage-signatures')
+      && !!this.args.decisionActivity;
+  }
+
+  get mayShowEditDropdown() {
+    return (
+      this.args.isEditable
+      && this.currentSession.may('manage-documents')
+      && this.markDocumentForSigning.isIdle
+      && this.deleteMarkedSignFlow.isIdle
+      && this.loadSignatureRelatedData.isIdle
+      && this.loadSignatureRelatedData.performCount > 0
+      && (!this.hasSignFlow || this.hasMarkedSignFlow)
+    );
+  }
+
+  get mayShowUploadNewVersion() {
+    return (
+      !this.args.hideUpload
+        && (!this.hasSignFlow
+            || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
+    );
+  }
+
+  get showSignatureLoader() {
+    return this.loadSignatureRelatedData.isRunning ||
+           this.markDocumentForSigning.isRunning ||
+           this.deleteMarkedSignFlow.isRunning;
   }
 
   get showSignaturePill() {
@@ -132,7 +172,11 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.piece.signMarkingActivity;
+    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = yield this.signMarkingActivity?.signSubcase;
+    this.signFlow = yield signSubcase?.signFlow;
+    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
+    this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
   }
 
   @task
@@ -174,7 +218,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     const previousPiece = this.sortedPieces.lastObject;
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
-    this.newPiece = this.store.createRecord('piece', {
+    this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
       created: now,
       modified: now,
       file: file,
@@ -189,8 +233,23 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *addPiece() {
+    if (this.signFlow) {
+      const status = yield this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        yield this.deleteUploadedPiece.perform();
+        yield this.loadPieceRelatedData.perform();
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
+          this.intl.t('action-could-not-be-executed-title'),
+        );
+        this.isOpenUploadModal = false;
+        return;
+      }
+    }
+
     try {
-      yield this.args.onAddPiece(this.newPiece);
+      this.newPiece.name = this.newPiece.name.trim();
+      yield this.args.onAddPiece(this.newPiece, this.signFlow);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
@@ -228,7 +287,20 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  verifyDeleteDocumentContainer() {
+  async verifyDeleteDocumentContainer() {
+    if (this.signFlow) {
+      const status = await this.signFlow.belongsTo('status').reload();
+      if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+        await this.loadPieceRelatedData.perform();
+        this.isOpenVerifyDeleteModal = false;
+        this.toaster.error(
+          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
+          this.intl.t('action-could-not-be-executed-title'),
+        );
+        return;
+      }
+    }
+
     const verificationToast = {
       type: 'revert-action',
       title: this.intl.t('warning-title'),
@@ -249,8 +321,32 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteDocumentContainerWithUndo() {
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+    if (this.signFlow) {
+      yield this.signatureService.removeSignFlow(this.signFlow);
+    }
     yield deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
+  }
+
+  @task
+  *deleteMarkedSignFlow() {
+    const status = yield this.signFlow.belongsTo('status').reload();
+    if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+      this.toaster.error(
+        this.intl.t('sign-flow-was-sent-cannot-stop-it'),
+        this.intl.t('action-could-not-be-executed-title'),
+      );
+      yield this.loadPieceRelatedData.perform();
+      return;
+    }
+    yield this.signatureService.removeSignFlow(this.signFlow);
+    yield this.loadPieceRelatedData.perform();
+  }
+
+  @task
+  *markDocumentForSigning() {
+    yield this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    yield this.loadPieceRelatedData.perform();
   }
 
   @action
@@ -291,5 +387,11 @@ export default class DocumentsDocumentCardComponent extends Component {
       return await this.signatureService.canManageSignFlow(this.args.piece);
     }
     return false;
+  }
+
+  @action
+  async cancelEditPiece() {
+    await this.loadPieceRelatedData.perform();
+    this.isEditingPiece = false;
   }
 }

@@ -37,10 +37,14 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <Auk::List>
+    <AuList as |Item|>
       {{#each this.decisions as |decision|}}
-        <Auk::List::Item class="auk-o-flex auk-o-flex--spaced-wide">
-          <Auk::Badge @icon="document" @size="regular" />
+        <Item class="auk-o-flex auk-o-flex--spaced-wide au-u-padding-top-tiny au-u-padding-bottom-tiny">
+          <AuBadge
+            @icon="document"
+            @skin="gray"
+            @size="small"
+          />
           <h5 class="auk-u-m-0">
             {{t "published-in-belgian-official-gazette-on"}}
             {{date decision.publicationDate}}
@@ -56,9 +60,9 @@
               {{t "open-publication"}}
             </AuLinkExternal>
           {{/if}}
-        </Auk::List::Item>
+        </Item>
       {{/each}}
-    </Auk::List>
+    </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
 

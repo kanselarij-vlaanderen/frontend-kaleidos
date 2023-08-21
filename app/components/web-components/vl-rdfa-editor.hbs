@@ -1,26 +1,34 @@
-<div ...attributes>
+<div class={{this.sizeClass}} ...attributes>
   {{#if this.browserIsSupported}}
     <EditorContainer>
       <:top>
         <Toolbar as |Tb|>
           <Tb.Group>
-            <Plugins::History::Undo @controller={{this.controller}}/>
-            <Plugins::History::Redo @controller={{this.controller}}/>
+            <Plugins::History::Undo @controller={{this.controller}} />
+            <Plugins::History::Redo @controller={{this.controller}} />
           </Tb.Group>
           <Tb.Group>
-            <Plugins::TextStyle::Bold @controller={{this.controller}}/>
-            <Plugins::TextStyle::Italic @controller={{this.controller}}/>
-            <Plugins::TextStyle::Strikethrough @controller={{this.controller}}/>
-            <Plugins::TextStyle::Underline @controller={{this.controller}}/>
-            <Plugins::TextStyle::Subscript @controller={{this.controller}}/>
-            <Plugins::TextStyle::Superscript @controller={{this.controller}}/>
+            <Plugins::Heading::HeadingMenu @controller={{this.controller}} />
           </Tb.Group>
           <Tb.Group>
-            <Plugins::List::Unordered @controller={{this.controller}}/>
-            <Plugins::List::IndentationControls @controller={{this.controller}}/>
+            <Plugins::TextStyle::Bold @controller={{this.controller}} />
+            <Plugins::TextStyle::Italic @controller={{this.controller}} />
+            <Plugins::TextStyle::Strikethrough
+              @controller={{this.controller}}
+            />
+            <Plugins::TextStyle::Underline @controller={{this.controller}} />
+            <Plugins::TextStyle::Subscript @controller={{this.controller}} />
+            <Plugins::TextStyle::Superscript @controller={{this.controller}} />
           </Tb.Group>
           <Tb.Group>
-              <Plugins::Table::TableMenu @controller={{this.controller}}/>
+            <Plugins::List::Unordered @controller={{this.controller}} />
+            <Plugins::List::Ordered @controller={{this.controller}} />
+            <Plugins::List::IndentationControls
+              @controller={{this.controller}}
+            />
+          </Tb.Group>
+          <Tb.Group>
+            <Plugins::Table::TableMenu @controller={{this.controller}} />
           </Tb.Group>
         </Toolbar>
       </:top>
@@ -31,12 +39,15 @@
           @plugins={{this.plugins}}
         />
       </:default>
-  </EditorContainer>
+    </EditorContainer>
   {{else}}
-    <Auk::Alert
-      @skin="warning"
+    <AuAlert
       @title={{t "browser-unsupported-short"}}
-      @message={{t "browser-unsupported-editor" browserName=this.browserName}}
-    />
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      <p>{{t "browser-unsupported-editor" browserName=this.browserName}}</p>
+    </AuAlert>
   {{/if}}
 </div>
