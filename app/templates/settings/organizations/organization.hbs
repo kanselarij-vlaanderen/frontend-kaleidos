@@ -88,20 +88,19 @@
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                {{#if true}}
-                  <Auk::Toolbar::Item>
-                    <AuButton
-                      @skin="naked"
-                      @icon="plus"
-                      {{on
-                        "click"
-                        (fn (set this "showSelectMandateeModal" true))
-                      }}
-                    >
-                      {{t "add-minister"}}
-                    </AuButton>
-                  </Auk::Toolbar::Item>
-                {{/if}}
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    data-test-route-settings--organization-tehcnical-info-show-select-mandatee-modal
+                    @skin="naked"
+                    @icon="plus"
+                    {{on
+                      "click"
+                      (fn (set this "showSelectMandateeModal" true))
+                    }}
+                  >
+                    {{t "add-minister"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>

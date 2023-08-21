@@ -1,36 +1,40 @@
-<Auk::List @bordered={{true}}>
+<AuList
+  @divider={{true}}
+  class="au-u-background-gray-100"
+  as |Item|
+>
   {{#each (await @agendaitems) as |agendaitem|}}
-    <Auk::List::Item @skin="gray-100">
-      <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-u-block auk-u-maximize-width">
+    <Item class="au-u-padding">
+      <div>
         {{t
           "number-point-title"
           number=agendaitem.number
           title=(if agendaitem.shortTitle agendaitem.shortTitle agendaitem.title)
         }}
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              {{#if (await (this.checkAdded agendaitem))}}
-                <Auk::Icon @name="calendar-new" @skin="muted" />
-              {{/if}}
-              {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
-                <Auk::Icon @name="lock-closed" @skin="muted" />
-              {{/if}}
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <p class="{{agendaitem.formallyOkToShow.classNames}}">
-                <Auk::Icon
-                  @name={{agendaitem.formallyOkToShow.svg.icon}}
-                  class="formally-ok-icon"
-                />
-                {{agendaitem.formallyOkToShow.label}}
-              </p>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
       </div>
-    </Auk::List::Item>
+      <Auk::Toolbar @auto={{true}} class="au-u-margin-top-small">
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            {{#if (await (this.checkAdded agendaitem))}}
+              <Auk::Icon @name="calendar-new" @skin="muted" />
+            {{/if}}
+            {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
+              <Auk::Icon @name="lock-closed" @skin="muted" />
+            {{/if}}
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <span class="{{agendaitem.formallyOkToShow.classNames}}">
+              <Auk::Icon
+                @name={{agendaitem.formallyOkToShow.svg.icon}}
+                class="formally-ok-icon"
+              />
+              {{agendaitem.formallyOkToShow.label}}
+            </span>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Item>
   {{/each}}
-</Auk::List>
+</AuList>

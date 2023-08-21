@@ -215,6 +215,7 @@
                 {{/if}}
                 {{#if this.mayCreateSignMarkingActivity}}
                   <AuButton
+                    data-test-document-card-sign-marking
                     @skin="link"
                     {{on "click" this.markDocumentForSigning.perform}}
                     role="menuitem"

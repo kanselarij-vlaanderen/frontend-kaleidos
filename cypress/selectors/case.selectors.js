@@ -23,6 +23,8 @@ const selectors = {
   // subcase-overview-header
   subcaseOverviewHeader: {
     titleContainer: '[data-test-subcase-overview-header-title-container]',
+    publicationFlowLink: '[data-test-subcase-overview-header-publication-flow-link]',
+    editCase: '[data-test-subcase-overview-header-edit-case]',
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
   },
 
@@ -69,6 +71,8 @@ const selectors = {
     container: '[data-test-subcase-item-container]',
     link: '[data-test-subcase-item-link]',
     approved: '[data-test-subcase-item-approved]',
+    pending: '[data-test-subcase-item-pending]',
+    showDocuments: '[data-test-subcase-item-show-documents]',
   },
 
   // subcase-header
