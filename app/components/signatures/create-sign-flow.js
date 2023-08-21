@@ -112,7 +112,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @action
   saveApprover(approver) {
-    addObject(this.approvers, approver);
+    addObject(this.approvers, approver.toLowerCase());
     this.showApproversModal = false;
     this.args.onChangeApprovers?.(this.approvers);
   }
@@ -125,7 +125,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
   @action
   saveNotificationAddress(address) {
-    addObject(this.notificationAddresses, address);
+    addObject(this.notificationAddresses, address.toLowerCase());
     this.showNotificationAddressesModal = false;
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }

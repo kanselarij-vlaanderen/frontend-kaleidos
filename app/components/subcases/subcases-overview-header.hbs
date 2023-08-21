@@ -37,6 +37,7 @@
             <div>
               {{#each this.publicationFlows as |publicationFlow|}}
                 <AuPill
+                  data-test-subcase-overview-header-publication-flow-link
                   @size="small"
                   @route="publications.publication"
                   @model={{publicationFlow.id}}
@@ -53,6 +54,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <AuButton
+            data-test-subcase-overview-header-edit-case
             @skin="primary"
             @icon="pencil"
             {{on "click" this.openEditCaseModal}}

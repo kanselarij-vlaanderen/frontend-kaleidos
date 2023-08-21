@@ -12,6 +12,7 @@
         />
       {{else}}
         <AuBadge
+          data-test-subcase-item-pending
           @icon="sitemap"
           @skin="warning"
           class="au-c-badge--medium"
@@ -54,6 +55,7 @@
   {{#if this.hasDocumentsToShow}}
     <Auk::Accordion>
       <Auk::Accordion::Item
+        data-test-subcase-item-show-documents
         @title={{t "documents"}}
         @expandTask={{this.loadSubcaseDocuments}}
       >
