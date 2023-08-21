@@ -108,13 +108,13 @@ export default class PublicationsOverviewSearchController extends Controller {
   }
 
   get selectedRegulationTypes() {
-    return this.regulationTypeIds.map((typeId) =>
+    return this.regulationTypeIds?.map((typeId) =>
       this.regulationTypes.find((type) => type.id === typeId)
     );
   }
 
   get selectedPublicationStatuses() {
-    return this.publicationStatusIds.map((statusId) =>
+    return this.publicationStatusIds?.map((statusId) =>
       this.publicationStatuses.find((status) => status.id === statusId)
     );
   }
