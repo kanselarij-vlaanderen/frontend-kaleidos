@@ -23,9 +23,11 @@ export default class SignaturePillComponent extends Component {
   @tracked triggerTask;
 
   get isClickable() {
+    // Use the passed in argument if it exists but default to true
+    const isClickable = this.args.isClickable ?? true;
     const signingHubUrl = this.data?.value?.signingHubUrl;
     const route = this.data?.value?.route;
-    return !!signingHubUrl || !!route;
+    return isClickable && (!!signingHubUrl || !!route);
   }
 
   willDestroy() {
