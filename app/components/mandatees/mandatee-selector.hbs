@@ -1,45 +1,47 @@
 <div
   data-test-mandatee-selector-container
-  {{did-update (perform this.loadMandatees) @openSearch}}
+  {{did-update this.openSearchChanged @openSearch}}
 >
-  {{#if this.loadMandatees.isRunning}}
-    <AuLoader />
+  {{#if @multiple}}
+    <PowerSelectMultiple
+      @options={{if
+        @openSearch
+        this.openSearchMandateeOptions
+        this.mandateeOptions
+      }}
+      @searchField="fullDisplayName"
+      @loadingMessage={{t "loading"}}
+      @noMatchesMessage={{t "no-results-found"}}
+      @selected={{@selectedMandatees}}
+      @disabled={{@disabled}}
+      @closeOnSelect={{false}}
+      @searchEnabled={{true}}
+      @search={{if @openSearch (perform this.searchMandatee) undefined}}
+      @oninput={{this.resetMandateeOptionsIfEmpty}}
+      @onChange={{@onSelectMandatee}}
+      as |mandatee|
+    >
+      <Mandatee::NameWithRange @mandatee={{mandatee}} />
+    </PowerSelectMultiple>
   {{else}}
-    {{#if @multiple}}
-      <PowerSelectMultiple
-        @options={{this.mandateeOptions}}
-        @selected={{await @selectedMandatees}}
-        @disabled={{@disabled}}
-        @closeOnSelect={{false}}
-        @searchEnabled={{true}}
-        @search={{if
-          @openSearch
-          (perform this.searchMandatee)
-          (perform this.filterMandatees)
-        }}
-        @oninput={{this.resetMandateeOptionsIfEmpty}}
-        @onChange={{@onSelectMandatee}}
-        as |mandatee|
-      >
-        <Mandatee::NameWithRange @mandatee={{mandatee}} />
-      </PowerSelectMultiple>
-    {{else}}
-      <PowerSelect
-        @options={{this.mandateeOptions}}
-        @selected={{await @selectedMandatees}}
-        @disabled={{@disabled}}
-        @searchEnabled={{true}}
-        @search={{if
-          @openSearch
-          (perform this.searchMandatee)
-          (perform this.filterMandatees)
-        }}
-        @oninput={{this.resetMandateeOptionsIfEmpty}}
-        @onChange={{@onSelectMandatee}}
-        as |mandatee|
-      >
-        <Mandatee::NameWithRange @mandatee={{mandatee}} />
-      </PowerSelect>
-    {{/if}}
+    <PowerSelect
+      @options={{if
+        @openSearch
+        this.openSearchMandateeOptions
+        this.mandateeOptions
+      }}
+      @searchField="fullDisplayName"
+      @loadingMessage={{t "loading"}}
+      @noMatchesMessage={{t "no-results-found"}}
+      @selected={{@selectedMandatees}}
+      @disabled={{@disabled}}
+      @searchEnabled={{true}}
+      @search={{if @openSearch (perform this.searchMandatee) undefined}}
+      @oninput={{this.resetMandateeOptionsIfEmpty}}
+      @onChange={{@onSelectMandatee}}
+      as |mandatee|
+    >
+      <Mandatee::NameWithRange @mandatee={{mandatee}} />
+    </PowerSelect>
   {{/if}}
 </div>
