@@ -1,47 +1,19 @@
-<div
-  data-test-mandatee-selector-container
-  {{did-update this.openSearchChanged @openSearch}}
->
-  {{#if @multiple}}
-    <PowerSelectMultiple
-      @options={{if
-        @openSearch
-        this.openSearchMandateeOptions
-        this.mandateeOptions
-      }}
-      @searchField="fullDisplayName"
-      @loadingMessage={{t "loading"}}
-      @noMatchesMessage={{t "no-results-found"}}
-      @selected={{@selectedMandatees}}
-      @disabled={{@disabled}}
-      @closeOnSelect={{false}}
-      @searchEnabled={{true}}
-      @search={{if @openSearch (perform this.searchMandatee) undefined}}
-      @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onChange={{@onSelectMandatee}}
-      as |mandatee|
-    >
-      <Mandatee::NameWithRange @mandatee={{mandatee}} />
-    </PowerSelectMultiple>
+<div data-test-mandatee-selector-container>
+  {{#if @openSearch}}
+    <Mandatees::MandateeSelector::OpenSearch
+      @openSearch={{@openSearch}}
+      @excludeMandatees={{@excludeMandatees}}
+      @referenceDate={{@referenceDate}}
+      @onSelectMandatee={{@onSelectMandatee}}
+      @selectedMandatees={{@selectedMandatees}}
+    />
   {{else}}
-    <PowerSelect
-      @options={{if
-        @openSearch
-        this.openSearchMandateeOptions
-        this.mandateeOptions
-      }}
-      @searchField="fullDisplayName"
-      @loadingMessage={{t "loading"}}
-      @noMatchesMessage={{t "no-results-found"}}
-      @selected={{@selectedMandatees}}
-      @disabled={{@disabled}}
-      @searchEnabled={{true}}
-      @search={{if @openSearch (perform this.searchMandatee) undefined}}
-      @oninput={{this.resetMandateeOptionsIfEmpty}}
-      @onChange={{@onSelectMandatee}}
-      as |mandatee|
-    >
-      <Mandatee::NameWithRange @mandatee={{mandatee}} />
-    </PowerSelect>
+    <Mandatees::MandateeSelector::Default
+      @openSearch={{@openSearch}}
+      @excludeMandatees={{@excludeMandatees}}
+      @referenceDate={{@referenceDate}}
+      @onSelectMandatee={{@onSelectMandatee}}
+      @selectedMandatees={{@selectedMandatees}}
+    />
   {{/if}}
 </div>
