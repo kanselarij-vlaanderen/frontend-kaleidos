@@ -137,4 +137,83 @@ context('Create case as Admin user', () => {
     cy.url().should('not.contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
   });
+
+  it('should change the short title', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    const caseTitle = `test change shorttitle - ${randomInt}`;
+    const caseTitleChanged = `test changed shorttitle for test - ${randomInt}`;
+    const caseTitleChangedWithSpaces = ` test changed shorttitle for test with trailing and leading spaces - ${randomInt} `;
+
+    cy.visit('/dossiers');
+    cy.createCase(caseTitle);
+    cy.visit('/dossiers');
+
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitle)
+      .parents('tr')
+      .as('currentRow');
+    cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get('@currentRow').find(route.casesOverview.row.actions.edit)
+      .forceClick();
+
+    // ** overview **
+
+    // check empty title field not allowed
+    cy.get(cases.editCase.shortTitle).should('have.value', caseTitle);
+    cy.get(cases.editCase.save).should('not.be.disabled');
+    cy.get(cases.editCase.shortTitle).clear();
+    cy.get(cases.editCase.save).should('be.disabled');
+    // check only space not allowed
+    cy.get(cases.editCase.shortTitle).type('      ');
+    cy.get(cases.editCase.save).should('be.disabled');
+
+    // change title and cancel
+    cy.get(cases.editCase.shortTitle).clear()
+      .type(caseTitleChanged);
+    cy.get(auk.modal.footer.cancel).click();
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
+
+    // change title and save
+    cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get('@currentRow').find(route.casesOverview.row.actions.edit)
+      .forceClick();
+    cy.get(cases.editCase.shortTitle).clear()
+      .type(caseTitleChanged);
+    cy.intercept('PATCH', '/cases/**').as('patchCase1');
+    cy.get(cases.editCase.save).click()
+      .wait('@patchCase1');
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitleChanged)
+      .parents('tr')
+      .as('currentRow');
+
+    // change title with spaces and save
+    cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get('@currentRow').find(route.casesOverview.row.actions.edit)
+      .forceClick();
+    cy.get(cases.editCase.shortTitle).clear()
+      .type(caseTitleChangedWithSpaces);
+    cy.intercept('PATCH', '/cases/**').as('patchCase1');
+    cy.get(cases.editCase.save).click()
+      .wait('@patchCase1');
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitleChangedWithSpaces)
+      .click();
+
+    // ** subcase overview **
+
+    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitleChangedWithSpaces);
+    cy.get(cases.subcaseOverviewHeader.editCase).click();
+    cy.get(cases.editCase.shortTitle).clear()
+      .type(caseTitleChanged);
+    cy.intercept('PATCH', '/cases/**').as('patchCase1');
+    cy.get(cases.editCase.save).click()
+      .wait('@patchCase1');
+    cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitleChanged);
+    cy.go('back');
+    cy.get(route.casesOverview.row.caseTitle).contains(caseTitleChanged);
+  });
 });

@@ -102,5 +102,11 @@ const selectors = {
       save: '[data-test-subcase-titles-edit-save]',
     },
   },
+
+  // edit-case-modal
+  editCase: {
+    shortTitle: '[data-test-edit-case-shorttitle]',
+    save: '[data-test-edit-case-save]',
+  },
 };
 export default selectors;
