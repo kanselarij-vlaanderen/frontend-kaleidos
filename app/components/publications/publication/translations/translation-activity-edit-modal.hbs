@@ -4,15 +4,17 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    <div class="auk-form-group">
-      <Auk::Label for="translationActivityEditEndDate">
-        {{t "date-received"}}
-      </Auk::Label>
-      <Auk::Datepicker
-        id="translationActivityEditEndDate"
-        @date={{this.receivedDate}}
-        @onChange={{set this "receivedDate"}}
-      />
+    <div class="au-c-form">
+      <AuFormRow>
+        <Auk::Label for="translationActivityEditEndDate">
+          {{t "date-received"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          id="translationActivityEditEndDate"
+          @date={{this.receivedDate}}
+          @onChange={{set this "receivedDate"}}
+        />
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>

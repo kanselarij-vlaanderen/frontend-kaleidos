@@ -5,42 +5,44 @@
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader
-      @multiple={{true}}
-      @reusable={{true}}
-      @onUpload={{this.uploadPiece}}
-    />
-    <Publications::Publication::PublicationDocumentsList
-      @pieces={{this.uploadedPieces}}
-      @onDeletePiece={{perform this.deleteUploadedPiece}}
-    />
-    <div class="auk-form-group auk-u-mt-4">
-      <AuCheckbox
-        data-test-proof-upload-update-status
-        @checked={{this.mustUpdatePublicationStatus}}
-        @onChange={{this.setMustUpdatePublicationStatus}}
-      >
-        {{t "update-publication-status-proof-received"}}
-      </AuCheckbox>
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
-        {{t "date"}}
-      </Auk::Label>
-      <Auk::Datepicker
-        id="proofUploadReceivedDate"
-        @date={{this.receivedDate}}
-        @onChange={{set this "receivedDate"}}
+    <div class="au-c-form">
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
       />
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label for="proofPrintCorrector">
-        {{t "who-proof-reads"}}
-      </Auk::Label>
-      <AuInput
-        @value={{mut this.proofPrintCorrector}}
-        id="proofPrintCorrector"
+      <Publications::Publication::PublicationDocumentsList
+        @pieces={{this.uploadedPieces}}
+        @onDeletePiece={{perform this.deleteUploadedPiece}}
       />
+      <AuFormRow>
+        <AuCheckbox
+          data-test-proof-upload-update-status
+          @checked={{this.mustUpdatePublicationStatus}}
+          @onChange={{this.setMustUpdatePublicationStatus}}
+        >
+          {{t "update-publication-status-proof-received"}}
+        </AuCheckbox>
+      </AuFormRow>
+      <AuFormRow>
+        <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+          {{t "date"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          id="proofUploadReceivedDate"
+          @date={{this.receivedDate}}
+          @onChange={{set this "receivedDate"}}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <Auk::Label for="proofPrintCorrector">
+          {{t "who-proof-reads"}}
+        </Auk::Label>
+        <AuInput
+          @value={{mut this.proofPrintCorrector}}
+          id="proofPrintCorrector"
+        />
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer

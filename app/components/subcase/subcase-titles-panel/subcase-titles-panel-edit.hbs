@@ -1,7 +1,7 @@
 <Auk::Panel class="auk-panel--editing auk-u-mb-8">
   <Auk::Panel::Body>
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
+    <div class="au-c-form">
+      <AuFormRow>
         <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
         <AuToggleSwitch
           data-test-subcase-titles-edit-confidential={{true}}
@@ -9,10 +9,8 @@
           id="subcase-confidential"
           @onChange={{set this "confidentialChanged" true}}
         />
-      </div>
-    </div>
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
         <Textarea
           data-test-subcase-titles-edit-shorttitle={{true}}
@@ -21,10 +19,8 @@
           class="auk-textarea"
           @value={{@subcase.shortTitle}}
         />
-      </div>
-    </div>
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
         <Textarea
           data-test-subcase-titles-edit-title={{true}}
@@ -33,7 +29,7 @@
           class="auk-textarea"
           @value={{@subcase.title}}
         />
-      </div>
+      </AuFormRow>
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>
