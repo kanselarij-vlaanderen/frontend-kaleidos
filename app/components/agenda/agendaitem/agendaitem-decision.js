@@ -156,13 +156,6 @@ export default class AgendaitemDecisionComponent extends Component {
           piece
         );
       }
-      let reportToUpdate = this.report;
-      while (reportToUpdate) {
-        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
-          reportToUpdate
-        );
-        reportToUpdate = await reportToUpdate.previousPiece
-      }
     }
     this.toggleEditPill();
   });
