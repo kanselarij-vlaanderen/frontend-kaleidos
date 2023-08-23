@@ -27,7 +27,7 @@ export default class SignaturesOngoingRoute extends Route {
     statuses: {
       refreshModel: true,
       as: 'statussen',
-    }
+    },
   };
 
   constructor() {
@@ -46,27 +46,27 @@ export default class SignaturesOngoingRoute extends Route {
       params.page = 0;
     }
 
-    const filter = {
-      creator: {
+    const filter = {};
+    if (!this.currentSession.isAdmin) {
+      filter['creator'] = {
         ':id:': this.currentSession.user.id,
-      },
+      };
     }
-
     if (params.mandatees?.length > 0) {
       filter['decision-activity'] = {
-        'subcase': {
+        subcase: {
           'requested-by': {
-            'person': {
+            person: {
               ':id:': params.mandatees.join(','),
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      };
     }
     if (params.statuses?.length > 0) {
       filter['status'] = {
         ':id:': params.statuses.join(','),
-      }
+      };
     }
     this.lastParams.commit();
 
