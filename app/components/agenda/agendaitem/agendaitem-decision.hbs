@@ -48,6 +48,7 @@
       {{#if this.onCreateNewVersion.isIdle}}
         <Documents::DocumentCard
           @piece={{this.report}}
+          @decisionActivity={{@decisionActivity}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}

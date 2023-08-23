@@ -56,94 +56,45 @@ export default class SignaturesDecisionsRoute extends Route {
       params.pageSignaturesDecisions = 0;
     }
 
-    const reportFilter = {
-      'decision-activity': {
-        'decision-result-code': {
-          ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+    const filter = {
+      'sign-subcase': {
+        'sign-marking-activity': {
+          piece: {
+            'is-report-or-minutes': true,
+            ':has-no:next-piece': 'yes'
+          }
         },
-        'sign-flow': {
-          'sign-subcase': {
-            ':has-no:sign-preparation-activity': 'yes',
-          },
-          status: {
-            ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED
-          }
-        }
+        ':has-no:sign-preparation-activity': 'yes',
+      },
+      status: {
+        ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
       }
-    }
-
-    const minutesFilter = {
-      meeting: {
-        agenda: {
-          agendaitems: {
-            piece: {
-              'sign-marking-activity': {
-                'sign-subcase': {
-                  ':has-no:sign-preparation-activity': 'yes',
-                  'sign-flow': {
-                    status: {
-                      ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
-                    },
-                    'decision-activity': {
-                      'decision-result-code': {
-                        ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    };
 
     this.lastParams.commit();
 
     if (this.ministerIds?.length) {
-      reportFilter['decision-activity']['secretary'] = {
+      filter['decision-activity']['subcase'] = {
+        'requested-by': {
           ':id:': this.ministerIds.join(',')
+        }
       };
     } else if (this.currentSession.may('manage-only-specific-signatures')) {
       return [];
     }
 
-    const reports = this.store.query('report', {
-      reportFilter,
+    return this.store.query('sign-flow', {
+      filter,
       include: [
         'decision-activity',
-        'decision-activity.sign-flow',
+        'sign-subcase.sign-marking-activity.piece.document-container.type'
       ].join(','),
       page: {
         number: params.pageSignaturesDecisions,
-        size: params.sizeSignaturesDecisions
+        size: params.sizeSignaturesDecisions,
       },
-      sort: params.sortSignaturesDecisions
-    })
-
-    let reportSignfFlows = reports.map((report) => {
-      return report.decisionActivity.signflows
+      sort: params.sortSignaturesDecisions,
     });
-
-    const minutes = this.store.query('minutes', {
-      minutesFilter,
-      include: [
-        'meeting.agenda.agendaitems.piece.sign-marking-activity.sign-subcase.sign-flow',
-        'meeting.agenda.agendaitems.piece.sign-marking-activity.sign-subcase.sign-flow.decision-activity',
-      ].join(','),
-      page: {
-        number: params.pageSignaturesDecisions,
-        size: params.sizeSignaturesDecisions
-      },
-      sort: params.sortSignaturesDecisions
-    })
-
-    let minutesSignFlows = minutes.map((minute) => {
-      return minute.meeting.agenda.agendaitems.signMarkingActivity.signSubcase.signFlow;
-    });
-
-    const signflows = [...reportSignfFlows, ...minutesSignFlows];
-    return signflows;
   }
 
   setupController(controller, model, transition) {
@@ -151,8 +102,8 @@ export default class SignaturesDecisionsRoute extends Route {
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
 
-    if (controller.pageSignaturesIndex !== this.lastParams.committed.pageSignaturesIndex) {
-      controller.pageSignaturesIndex = this.lastParams.committed.pageSignaturesIndex;
+    if (controller.pageSignaturesDecisions !== this.lastParams.committed.pageSignaturesDecisions) {
+      controller.pageSignaturesDecisions = this.lastParams.committed.pageSignaturesDecisions;
     }
   }
 

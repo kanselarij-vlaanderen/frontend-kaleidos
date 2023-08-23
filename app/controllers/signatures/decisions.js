@@ -131,10 +131,8 @@ export default class SignaturesDecisionsController extends Controller {
     return persons.map((person) => person.fullName);
   }
 
-  getDecisionActivity = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const treatment = await agendaitem.treatment;
-    return treatment.decisionActivity;
+  getDecisionActivity = async (report) => {
+    return report.get('decisionActivity');
   }
 
   getAgendaitem = async (pieceOrPromise) => {
