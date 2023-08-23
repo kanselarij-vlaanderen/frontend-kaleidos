@@ -12,6 +12,7 @@ export default class AgendaDocumentsController extends Controller {
   @service fileConversionService;
   @service router;
   @service intl;
+  @service pieceAccessLevelService;
 
   agenda;
   meeting;
@@ -86,6 +87,7 @@ export default class AgendaDocumentsController extends Controller {
   *addPiece(piece) {
     piece.meeting = this.meeting;
     yield piece.save();
+    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;
       yield this.fileConversionService.convertSourceFile(sourceFile);

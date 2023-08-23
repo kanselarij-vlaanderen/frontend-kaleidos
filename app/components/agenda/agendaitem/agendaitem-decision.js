@@ -29,6 +29,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service fileConversionService;
   @service intl;
   @service pieceAccessLevelService;
+  @service signatureService;
   @service store;
   @service toaster;
 
@@ -135,6 +136,11 @@ export default class AgendaitemDecisionComponent extends Component {
     }
   });
 
+  onDecisionEdit = task(async () => {
+    await this.updateAgendaitemPiecesAccessLevels.perform();
+    await this.updatePiecesSignFlows.perform();
+  });
+
   updateAgendaitemPiecesAccessLevels = task(async () => {
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
@@ -144,7 +150,7 @@ export default class AgendaitemDecisionComponent extends Component {
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
       ].includes(decisionResultCode.uri)
     ) {
-      const pieces = this.args.agendaitem.pieces;
+      const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
@@ -159,6 +165,17 @@ export default class AgendaitemDecisionComponent extends Component {
       }
     }
     this.toggleEditPill();
+  });
+
+  updatePiecesSignFlows = task(async () => {
+    const decisionResultCode = await this.args.decisionActivity
+      .decisionResultCode;
+    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      const pieces = await this.args.agendaitem.pieces;
+      for (const piece of pieces.toArray()) {
+        await this.signatureService.removeSignFlowForPiece(piece);
+      }
+    }
   });
 
   @action

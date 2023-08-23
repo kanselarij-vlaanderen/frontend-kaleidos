@@ -56,7 +56,10 @@ export default class SignaturesOngoingController extends Controller {
     const status = await signFlow.status;
 
     if (piece) {
-      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED) {
+      if (status.uri === CONSTANTS.SIGNFLOW_STATUSES.MARKED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.SIGNED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.REFUSED
+          || status.uri === CONSTANTS.SIGNFLOW_STATUSES.CANCELED) {
         window.open(`/document/${piece.id}`, '_blank');
       } else {
         const signingHubUrl = await this.signatureService.getSigningHubUrl(signFlow, piece);

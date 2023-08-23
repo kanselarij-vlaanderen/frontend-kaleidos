@@ -29,16 +29,18 @@ export default class SignatureService extends Service {
       // Attach approvers
       await Promise.all(
         approvers.map((approver) => {
+          const approverLowerCase = approver.toLowerCase();
           const record = this.store.createRecord('sign-approval-activity', {
-            approver,
+            approver: approverLowerCase,
             signSubcase,
           });
           return record.save();
         })
       );
 
+      const notifiedLowerCase = notified.map(notifyEmail => notifyEmail.toLowerCase())
       // Attach notified
-      signSubcase.notified = notified;
+      signSubcase.notified = notifiedLowerCase;
       await signSubcase.save();
       // set creator
       const creator = await this.currentSession.user;
@@ -58,7 +60,18 @@ export default class SignatureService extends Service {
     }
   }
 
+  // return results are currently not used by any caller
   async markDocumentForSignature(piece, decisionActivity) {
+    const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
+    if (existingSignMarking) {
+      // someone else may have made a signflow, returning that one instead
+      const signSubcase = await existingSignMarking.signSubcase;
+      const signFlow = await signSubcase.signFlow;
+      return {
+        signFlow,
+        signSubcase,
+      };
+    }
     const subcase = await decisionActivity?.subcase;
     if (subcase) {
       const decisionmakingFlow = await subcase.decisionmakingFlow;
@@ -192,6 +205,27 @@ export default class SignatureService extends Service {
     }
   }
 
+  async removeSignFlowForPiece(piece) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.status;
+    if (signFlow && status.uri === MARKED) {
+      await this.removeSignFlow(signFlow);
+    }
+  }
+
+  async replaceDecisionActivity(piece, decisionActivity) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.status;
+    if (signFlow && status.uri === MARKED) {
+      signFlow.decisionActivity = decisionActivity;
+      await signFlow.save();
+    }
+  }
+
   async hasSignFlow(piece) {
     const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     if (signaturesEnabled) {
@@ -202,6 +236,18 @@ export default class SignatureService extends Service {
       } else if (await piece.signedPiece) {
         return true;
       }
+    }
+    return false;
+  }
+
+  async hasMarkedSignFlow(piece) {
+    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
+    if (signaturesEnabled) {
+      const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const status = await signFlow?.belongsTo('status').reload();
+      return status?.uri === MARKED;
     }
     return false;
   }

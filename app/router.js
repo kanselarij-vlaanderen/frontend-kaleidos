@@ -131,13 +131,11 @@ Router.map(function() {
     this.route('icons');
     this.route('key-value');
     this.route('link-button');
-    this.route('list');
     this.route('loader');
     this.route('panel');
     this.route('pager');
     this.route('pagination');
     this.route('popover');
-    this.route('search-results-list');
     this.route('status-pill');
     this.route('table');
     this.route('tabs');
