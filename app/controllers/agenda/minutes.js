@@ -163,13 +163,6 @@ export default class AgendaMinutesController extends Controller {
 
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
 
-  get label() {
-    if (this.currentPiecePart) {
-      return "created-on";
-    } 
-    return "uploaded-at";
-  }
-
   exportPdf = task(async (minutes) => {
     const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
     if (!resp.ok) {
