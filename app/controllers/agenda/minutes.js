@@ -141,6 +141,7 @@ export default class AgendaMinutesController extends Controller {
   @service toaster;
   @service router;
   @service intl;
+  @service pieceAccessLevelService;
 
   // agenda;
   meeting;
@@ -271,6 +272,7 @@ export default class AgendaMinutesController extends Controller {
     }
 
     await newVersion.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 
     this.refresh();
