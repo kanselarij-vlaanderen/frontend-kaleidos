@@ -32,6 +32,7 @@
           <AuButton
             @skin="primary"
             @loading={{this.save.isRunning}}
+            @disabled={{not this.secretary}}
             {{on "click" (perform this.save)}}
           >
             {{t "save"}}
