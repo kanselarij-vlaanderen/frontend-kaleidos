@@ -105,6 +105,7 @@ export default class AgendaitemDecisionComponent extends Component {
       betreftPiecePart,
       beslissingPiecePart
     );
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
   });
 
   get pieceParts() {
