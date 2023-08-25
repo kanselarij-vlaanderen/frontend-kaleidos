@@ -227,11 +227,25 @@ export default class SignatureService extends Service {
   async hasSignFlow(piece) {
     const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     if (signaturesEnabled) {
-      if (await piece.signMarkingActivity) {
-        return true;
-      } else if (await piece.signCompletionActivity) {
-        return true;
-      } else if (await piece.signedPiece) {
+      if (await piece.decisionActivity) {
+        const signFlow = await this.store.queryOne('sign-flow', {
+          'filter[decision-activity][:id:]' : await piece.decisionActivity.get('id'),
+        });
+        const signSubcase = await signFlow.signSubcase;
+        if (await signSubcase.signMarkingActivity) {
+          return true;
+        }
+        if (await signSubcase.signCompletionActivity) {
+          return true;
+        }
+      } else {
+        if (await piece.signMarkingActivity) {
+          return true;
+        } else if (await piece.signCompletionActivity) {
+          return true;
+        }
+      }
+      if (await piece.signedPiece) {
         return true;
       }
     }
@@ -241,11 +255,19 @@ export default class SignatureService extends Service {
   async hasMarkedSignFlow(piece) {
     const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     if (signaturesEnabled) {
+      if (await piece.decisionActivity) {
+        const signFlow = await this.store.queryOne('sign-flow', {
+          'filter[decision-activity][:id:]' : await piece.decisionActivity.get('id'),
+        });
+        const status = await signFlow?.belongsTo('status').reload();
+        return status?.uri === MARKED;
+      } else {
       const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
       const signSubcase = await signMarkingActivity?.signSubcase;
       const signFlow = await signSubcase?.signFlow;
       const status = await signFlow?.belongsTo('status').reload();
       return status?.uri === MARKED;
+      }
     }
     return false;
   }

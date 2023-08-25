@@ -21,10 +21,6 @@ export default class SignaturesDecisionsRoute extends Route {
       as: 'sorteer',
     }
   };
-
-  localStorageKey = 'signatures.shortlist.minister-filter';
-
-  ministerIds = [];
   lastParams;
 
   constructor() {
@@ -33,15 +29,8 @@ export default class SignaturesDecisionsRoute extends Route {
   }
 
   async beforeModel() {
-    if (this.currentSession.may('manage-only-specific-signatures')) {
-      const currentUserOrganization = await this.currentSession.organization;
-      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
-      const currentUserOrganizationMandateesIds = currentUserOrganizationMandatees?.map((mandatee) => mandatee.id);
-      this.ministerIds = currentUserOrganizationMandateesIds;
-    } else {
-      this.ministerIds = JSON.parse(
-        localStorage.getItem(this.localStorageKey)
-      ) ?? [];
+    if (!this.currentSession.may('manage-secretary-signatures')) {
+      this.router.transitionTo('index');
     }
   }
 
@@ -61,10 +50,10 @@ export default class SignaturesDecisionsRoute extends Route {
         'sign-marking-activity': {
           piece: {
             'is-report-or-minutes': true,
-            ':has-no:next-piece': 'yes'
+            ':has-no:next-piece': true
           }
         },
-        ':has-no:sign-preparation-activity': 'yes',
+        ':has-no:sign-preparation-activity': true,
       },
       status: {
         ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
@@ -72,16 +61,6 @@ export default class SignaturesDecisionsRoute extends Route {
     };
 
     this.lastParams.commit();
-
-    if (this.ministerIds?.length) {
-      filter['decision-activity']['subcase'] = {
-        'requested-by': {
-          ':id:': this.ministerIds.join(',')
-        }
-      };
-    } else if (this.currentSession.may('manage-only-specific-signatures')) {
-      return [];
-    }
 
     return this.store.query('sign-flow', {
       filter,
@@ -99,8 +78,6 @@ export default class SignaturesDecisionsRoute extends Route {
 
   setupController(controller, model, transition) {
     super.setupController(controller, model, transition);
-    controller.filteredMinisters = this.ministerIds;
-    controller.selectedMinisters = this.ministerIds;
 
     if (controller.pageSignaturesDecisions !== this.lastParams.committed.pageSignaturesDecisions) {
       controller.pageSignaturesDecisions = this.lastParams.committed.pageSignaturesDecisions;
@@ -110,7 +87,6 @@ export default class SignaturesDecisionsRoute extends Route {
   resetController(controller, isExiting) {
     if (isExiting) {
       controller.showSidebar = false;
-      controller.showFilterModal = false;
       controller.piece = null;
       controller.decisionActivity = null;
       controller.agendaitem = null;

@@ -4,21 +4,6 @@
   <WebComponents::LoadingPage />
 {{else}}
   {{#in-element this.customNavbarButtonsElement}}
-    {{#unless (user-may "manage-only-specific-signatures")}}
-      {{#if this.filteredMinisters}}
-        <AuButton @skin="naked" {{on "click" this.clearFilter}}>
-          {{t "clear-filter"}}
-        </AuButton>
-      {{/if}}
-      <AuButton
-        data-test-route-signatures-open-minister-filter
-        @skin="secondary"
-        @icon="filter"
-        {{on "click" this.openFilterModal}}
-      >
-        {{t "filter-on-signer"}}
-      </AuButton>
-    {{/unless}}
     {{#if this.selectedSignFlows.length}}
       <AuButton
         @icon="sign"
@@ -65,16 +50,9 @@
       <th>{{t "document-type"}}</th>
       <Utils::ThSortable
         @currentSorting={{this.sortField}}
-        @field={{"decision-activity.treatment.agendaitems.short-title"}}
-        @onChange={{this.changeSort}}
-        @label={{capitalize (t "agendaitem")}}
-      />
-      <th>{{t "ministers"}}</th>
-      <Utils::ThSortable
-        @currentSorting={{this.sortField}}
         @field={{"decision-activity.start-date"}}
         @onChange={{this.changeSort}}
-        @label={{t "decision-date"}}
+        @label={{t "meeting-date"}}
       />
       <th></th>
     </:header>
@@ -92,9 +70,15 @@
             </AuCheckbox>
           </td>
           <td data-test-route-signatures-row-name>
+            {{#if piece.id}}
             <AuLink @route="document" @model={{piece.id}}>
               {{piece.name}}
             </AuLink>
+            {{else}}
+            <span>
+              geen piece.id gevonden
+            </span>
+            {{/if}}
           </td>
           <td>
             <AuPill @size="small">
@@ -106,20 +90,6 @@
                 {{/if}}
               {{/let}}
             </AuPill>
-          </td>
-          <td>
-            {{#let (await (this.getAgendaitem piece)) as |agendaitem|}}
-              {{agendaitem.shortTitle}}
-            {{/let}}
-          </td>
-          <td data-test-route-signatures-row-mandatee>
-            {{#let (await (this.getMandateeNames signFlow)) as |names|}}
-              {{#if names}}
-                {{join ", " names}}
-              {{else}}
-                -
-              {{/if}}
-            {{/let}}
           </td>
           <td>{{date signFlow.decisionActivity.startDate}}</td>
           <td>
@@ -223,40 +193,6 @@
       </div>
     </:aside>
   </KDataTable>
-
-  <ConfirmationModal
-    @modalOpen={{this.showFilterModal}}
-    @title={{t "filter-content"}}
-    @onCancel={{this.closeFilterModal}}
-  >
-    <:body>
-      <Mandatees::CheckboxList
-        @selected={{this.selectedMinisters}}
-        @onChange={{fn (mut this.selectedMinisters)}}
-      />
-    </:body>
-    <:footer>
-      <AuToolbar
-        as |Group|
-      >
-        <Group>
-          <AuButton @skin="naked" {{on "click" this.closeFilterModal}}>
-            {{t "cancel"}}
-          </AuButton>
-        </Group>
-        <Group>
-          {{#if this.filteredMinisters}}
-            <AuButton @skin="secondary" {{on "click" this.clearFilter}}>
-              {{t "clear-filter"}}
-            </AuButton>
-          {{/if}}
-          <AuButton data-test-route-signatures-apply-filter @icon="filter" {{on "click" this.applyFilter}}>
-            {{t "filter-content"}}
-          </AuButton>
-        </Group>
-      </AuToolbar>
-    </:footer>
-  </ConfirmationModal>
 
   {{#if this.createSignFlow.isRunning}}
     <Auk::Modal @size="medium">

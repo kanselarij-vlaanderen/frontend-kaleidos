@@ -1256,5 +1256,6 @@
   "secretary-for-meeting": "Secretaris voor de vergadering",
   "secretary": "Secretaris",
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
-  "decisions-and-minutes": "Beslissingen en notulen"
+  "decisions-and-minutes": "Beslissingen en notulen",
+  "decisions-and-minutes-ongoing": "Beslissingen en notulen opvolgen"
 }

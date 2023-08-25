@@ -80,6 +80,7 @@ Router.map(function() {
       this.route('index', { path: '/op-te-starten' });
       this.route('ongoing', { path: '/op-te-volgen' });
       this.route('decisions', { path: '/beslissingen-en-notulen' });
+      this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
     });
   }
 

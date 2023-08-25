@@ -171,9 +171,19 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
-    const signSubcase = yield this.signMarkingActivity?.signSubcase;
-    this.signFlow = yield signSubcase?.signFlow;
+    const decisionActivity = yield this.args.piece.decisionActivity;
+    if (decisionActivity) {
+      const signFlow = yield this.store.queryOne('sign-flow', {
+        'filter[decision-activity][:id:]' : decisionActivity.get('id'),
+      });
+      this.signFlow = signFlow;
+      const signSubcase = yield this.signFlow.signSubcase;
+      this.signMarkingActivity = yield signSubcase.signMarkingActivity;
+    } else {
+      this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+      const signSubcase = yield this.signMarkingActivity?.signSubcase;
+      this.signFlow = yield signSubcase?.signFlow;
+    }
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
     this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
   }

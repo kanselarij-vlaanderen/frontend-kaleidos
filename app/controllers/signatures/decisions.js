@@ -29,9 +29,6 @@ export default class SignaturesDecisionsController extends Controller {
   @tracked meeting = null;
 
   @tracked showSidebar = false;
-  @tracked showFilterModal = false;
-  @tracked selectedMinisters = [];
-  @tracked filteredMinisters = [];
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
@@ -118,35 +115,15 @@ export default class SignaturesDecisionsController extends Controller {
     }
   }
 
-  getMandateeNames = async (signFlow) => {
-    const decisionActivity = await signFlow.decisionActivity;
-    const subcase = await decisionActivity.subcase;
-    const mandatees = await subcase.mandatees;
-    const persons = await Promise.all(
-      mandatees
-        .toArray()
-        .sort((m1, m2) => m1.priority - m2.priority)
-        .map((mandatee) => mandatee.person)
-    );
-    return persons.map((person) => person.fullName);
-  }
-
   getDecisionActivity = async (report) => {
     return report.get('decisionActivity');
   }
 
   getAgendaitem = async (pieceOrPromise) => {
     const piece = await pieceOrPromise;
-    const agendaitems = await piece.agendaitems;
-    let agendaitem;
-    for (let maybeAgendaitem of agendaitems) {
-      const agenda = await maybeAgendaitem.agenda;
-      const nextVersion = await agenda.nextVersion;
-      if (!nextVersion) {
-        agendaitem = maybeAgendaitem;
-        break;
-      }
-    }
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatment][decision-activity][report][:id:]' : piece.id,
+    });
     return agendaitem;
   }
 
@@ -154,7 +131,7 @@ export default class SignaturesDecisionsController extends Controller {
     const agendaitem = await this.getAgendaitem(piece);
     if (agendaitem) {
       const agenda = await agendaitem.agenda;
-      const meeting = await agenda.meeting;
+      const meeting = await agenda.createdFor;
       return [meeting, agenda, agendaitem];
     }
     return [];
@@ -181,6 +158,7 @@ export default class SignaturesDecisionsController extends Controller {
 
   @action
   async openSidebarSingleItem(signFlow, piece) {
+
     this.clearSidebarContentMultiItem();
     this.signFlow = signFlow;
     this.piece = piece;
@@ -207,43 +185,7 @@ export default class SignaturesDecisionsController extends Controller {
     this.clearSidebarContentMultiItem();
     this.clearSidebarContentSingleItem();
   }
-
-  @action
-  openFilterModal() {
-    this.selectedMinisters = this.filteredMinisters;
-    this.showFilterModal = true;
-  }
-
-  @action
-  closeFilterModal() {
-    this.showFilterModal = false;
-    this.selectedMinisters = this.filteredMinisters;
-  }
-
-  @action
-  clearFilter() {
-    this.showFilterModal = false;
-    this.selectedMinisters = [];
-    this.filteredMinisters = [];
-    this.saveSelectedToLocalStorage();
-    this.router.refresh(this.router.routeName);
-  }
-
-  @action
-  applyFilter() {
-    this.filteredMinisters = this.selectedMinisters;
-    this.saveSelectedToLocalStorage();
-    this.router.refresh(this.router.routeName);
-    this.showFilterModal = false;
-  }
-
-  saveSelectedToLocalStorage() {
-    localStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify(this.filteredMinisters)
-    );
-  }
-
+  
   createSignFlow = task(async () => {
     try {
       if (this.selectedSignFlows.length) {

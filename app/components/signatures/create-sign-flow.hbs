@@ -24,7 +24,7 @@
             @skin="secondary"
             @icon="pencil"
             @loading={{this.loadSigners.isPending}}
-            {{on "click" (toggle "showMinisterModal" this)}}
+            {{on "click" this.startEditSigners}}
           >
             {{t "edit-list"}}
           </AuButton>

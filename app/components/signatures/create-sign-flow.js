@@ -35,16 +35,15 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       return;
     }
     const decisionActivities = this.args.decisionActivities.toArray();
-    let hasConflictingSigners = false;
 
     const [head, ...tail] = decisionActivities;
     let submitter;
     let cosigners = [];
 
-    if (this.args.isDesicionOrNota) {
+    if (this.args.isDecisionOrNota) {
       for (let decisionActivity of tail) {
         if (head.secretary?.id !== decisionActivity.secretary?.id) {
-          hasConflictingSigners = true;
+          this.hasConflictingSigners = true;
           break;
         }
       }
@@ -71,31 +70,30 @@ export default class SignaturesCreateSignFlowComponent extends Component {
           await getSubmitterAndCosigners(decisionActivity);
 
         if (submitter?.id !== _submitter?.id) {
-          hasConflictingSigners = true;
+          this.hasConflictingSigners = true;
           break;
         }
         if (_cosigners.length !== cosigners.length) {
-          hasConflictingSigners = true;
+          this.hasConflictingSigners = true;
           break;
         }
         const _cosignersIds = _cosigners.map((signer) => signer.id);
         const cosignersIds = cosigners.map((signer) => signer.id);
         for (const mandateeId of _cosignersIds) {
           if (!cosignersIds.includes(mandateeId)) {
-            hasConflictingSigners = true;
+            this.hasConflictingSigners = true;
             break;
           }
         }
-        if (hasConflictingSigners) break;
+        if (this.hasConflictingSigners) break;
       }
     }
-    this.hasConflictingSigners = hasConflictingSigners;
-    if (hasConflictingSigners) {
+    if (this.hasConflictingSigners) {
       this.signers = new TrackedArray([]);
     } else {
       const signersSet = new Set();
-      if (this.args.isDesicionOrNota) {
-        const secretary = await this.head.secretary;
+      if (this.args.isDecisionOrNota) {
+        const secretary = await head.secretary;
         signersSet.add(secretary);
       } else {
         signersSet.add(this.primeMinister);
@@ -117,15 +115,15 @@ export default class SignaturesCreateSignFlowComponent extends Component {
           }
         }
 
-        this.signers = new TrackedArray([...signersSet]);
       }
+      this.signers = new TrackedArray([...signersSet]);
     }
     this.args.onChangeSigners?.(this.signers);
   });
 
   @action
   startEditSigners() {
-    if (this.args.isDesicionOrNota) {
+    if (this.args.isDecisionOrNota) {
       this.showSecretaryModal = true;
     } else {
       this.showMinisterModal = true;
@@ -159,7 +157,8 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   }
 
   saveSigners = task(async (selected) => {
-    if (this.args.isDesicionOrNota) {
+    console.log(selected);
+    if (this.args.isDecisionOrNota) {
       const decisionActivities = this.args.decisionActivities.toArray();
       for (let decisionActivity of decisionActivities) {
         const secretary = await decisionActivity.secretary;

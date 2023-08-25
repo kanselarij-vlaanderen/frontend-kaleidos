@@ -21,9 +21,14 @@
           <Auk::Tab @route="signatures.ongoing">
             {{t "to-follow-up"}}
           </Auk::Tab>
-          <Auk::Tab @route="signatures.decisions">
-            {{t "decisions-and-minutes"}}
-          </Auk::Tab>
+          {{#if (user-may "manage-secretary-signatures")}}
+            <Auk::Tab @route="signatures.decisions">
+              {{t "decisions-and-minutes"}}
+            </Auk::Tab>  
+            <Auk::Tab @route="signatures.ongoing-decisions">
+              {{t "decisions-and-minutes-ongoing"}}
+            </Auk::Tab>
+          {{/if}}
         </Auk::Tabs>
       </Group.Item>
     </Toolbar.Group>
