@@ -8,28 +8,38 @@
       <div class="au-c-form">
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6">
-            <AuFormRow class={{this.validators.firstName.errorClass}}>
-              <Auk::Label for="firstNameInput" @required={{true}}>
+            <AuFormRow>
+              <AuLabel
+                for="firstNameInput"
+                @required={{true}}
+                @error={{this.validators.firstName.showError}}
+              >
                 {{t "first-name"}}
-              </Auk::Label>
+              </AuLabel>
               <AuInput
                 data-test-contact-person-add-first-name
                 @width="block"
                 @value={{this.firstName}}
+                @error={{this.validators.firstName.showError}}
                 {{on "input" this.validators.firstName.enableError}}
                 id="firstNameInput"
               />
             </AuFormRow>
           </div>
           <div class="auk-o-grid-col-6">
-            <AuFormRow class={{this.validators.lastName.errorClass}}>
-              <Auk::Label for="lastNameInput" @required={{true}}>
+            <AuFormRow>
+              <AuLabel
+                for="lastNameInput"
+                @required={{true}}
+                @error={{this.validators.lastName.showError}}
+              >
                 {{t "last-name"}}
-              </Auk::Label>
+              </AuLabel>
               <AuInput
                 data-test-contact-person-add-last-name
                 @width="block"
                 @value={{this.lastName}}
+                @error={{this.validators.lastName.showError}}
                 {{on "input" this.validators.lastName.enableError}}
                 id="lastNameInput"
               />
@@ -37,7 +47,9 @@
           </div>
         </div>
         <AuFormRow>
-          <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
+          <AuLabel for="emailInput">
+            {{t "email"}}
+          </AuLabel>
           <AuInput
             data-test-contact-person-add-email
             @width="block"
@@ -46,9 +58,9 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>
+          <AuLabel for="organizationInput">
             {{t "organization"}}
-          </Auk::Label>
+          </AuLabel>
           <div data-test-contact-person-select-organization class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
@@ -59,6 +71,7 @@
               @placeholder={{t "search-organization"}}
               @onChange={{this.setOrganization}}
               @allowClear={{true}}
+              @triggerId="organizationInput"
               as |organization|>
               {{ organization.name }}
             </PowerSelect>
