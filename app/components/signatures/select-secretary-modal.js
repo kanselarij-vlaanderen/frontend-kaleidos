@@ -8,7 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class SignaturesSelectSecretaryModalComponent extends Component {
   @service mandatees;
 
-  @tracked selectedSecretary = [];
+  @tracked selectedSecretary;
   @tracked secretaryOptions = [];
   @tracked referenceDate;
 
@@ -40,10 +40,7 @@ export default class SignaturesSelectSecretaryModalComponent extends Component {
       this.referenceDate,
       undefined,
       undefined,
-      this.args.visibleRoles
-    );
-    this.secretaryOptions = this.secretaryOptions.filter(
-      (secretary) => !this.args.excludeMandatees?.includes(secretary)
+      this.VISIBLE_ROLES
     );
   }
 }
