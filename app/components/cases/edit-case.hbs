@@ -1,20 +1,22 @@
 <Auk::Modal>
-  <Auk::Modal::Header
-    @title={{t "edit-case"}}
-    @onClose={{this.close}}
-  />
+  <Auk::Modal::Header @title={{t "edit-case"}} @onClose={{this.close}} />
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
         <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-        <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
+        <Auk::Textarea
+          data-test-edit-case-shorttitle
+          @rows="2"
+          @value={{mut this.shortTitle}}
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @cancelDisabled={{this.save.isRunning}}
-    @onCancel={{this.close}}>
+    @onCancel={{this.close}}
+  >
     <AuButton
+      data-test-edit-case-save
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}

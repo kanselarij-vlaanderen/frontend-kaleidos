@@ -32,6 +32,7 @@
 # cypress
 /cypress/videos/
 /cypress/screenshots/
+/cypress/downloads/
 
 .DS_Store
 *~
