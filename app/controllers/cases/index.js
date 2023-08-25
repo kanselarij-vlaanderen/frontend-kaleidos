@@ -72,7 +72,6 @@ export default class CasesIndexController extends Controller {
     const decisionmakingFlow = await caseModel.decisionmakingFlow;
     decisionmakingFlow.closed = new Date();
     await decisionmakingFlow.save();
-    await caseModel.save();
     this.selectedCase = null;
     this.router.refresh();
     this.isArchivingCase = false;
@@ -84,7 +83,6 @@ export default class CasesIndexController extends Controller {
     const decisionmakingFlow = await caseModel.decisionmakingFlow;
     decisionmakingFlow.closed = null;
     await decisionmakingFlow.save();
-    await caseModel.save();
     this.router.refresh();
   }
 

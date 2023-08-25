@@ -104,11 +104,9 @@ context('Create case as Admin user', () => {
       .click();
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
       .forceClick();
-    cy.intercept('PATCH', '/cases/**').as('patchCases1');
-    cy.intercept('PATCH', '/subcases/**').as('patchSubcases1');
+    cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
     cy.get(auk.confirmationModal.footer.confirm).click()
-      .wait('@patchCases1')
-      .wait('@patchSubcases1');
+      .wait('@patchDecisionFlow');
     cy.get(auk.loader).should('not.exist');
     cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
 
@@ -123,12 +121,10 @@ context('Create case as Admin user', () => {
     cy.get('@currentRow').find(route.casesOverview.row.actionsDropdown)
       .children(appuniversum.button)
       .click();
-    cy.intercept('PATCH', '/cases/**').as('patchCases2');
-    cy.intercept('PATCH', '/subcases/**').as('patchSubcases2');
+    cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
     cy.get('@currentRow').find(route.casesOverview.row.actions.archive)
       .forceClick()
-      .wait('@patchCases2')
-      .wait('@patchSubcases2');
+      .wait('@patchDecisionFlow');
 
     cy.get(route.casesOverview.showArchived)
       .parent()
