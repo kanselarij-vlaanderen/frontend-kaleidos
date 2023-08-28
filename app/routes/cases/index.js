@@ -33,9 +33,9 @@ export default class CasesIndexRoute extends Route {
       },
     };
     if (params.showArchivedOnly) {
-      options['filter[case][is-archived]'] = true;
+      options['filter[:has:closed]'] = true;
     } else {
-      options['filter[case][is-archived]'] = false;
+      options['filter[:has-no:closed]'] = true;
     }
 
     return this.store.query('decisionmaking-flow', options);
