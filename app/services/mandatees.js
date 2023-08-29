@@ -132,7 +132,7 @@ export default class MandateesService extends Service {
     if (referenceDateFrom) {
       mandatees = mandatees.filter((mandatee) => {
         if (mandatee.end) {
-          return mandatee.end >= referenceDateFrom;
+          return mandatee.end > referenceDateFrom;
         } else {
           return true; // currently active mandatees
         }
