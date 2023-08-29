@@ -31,7 +31,7 @@ export default class SignatureService extends Service {
         approvers.map((approver) => {
           const approverLowerCase = approver.toLowerCase();
           const record = this.store.createRecord('sign-approval-activity', {
-            approverLowerCase,
+            approver: approverLowerCase,
             signSubcase,
           });
           return record.save();

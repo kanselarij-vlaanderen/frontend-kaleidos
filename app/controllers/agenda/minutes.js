@@ -141,6 +141,7 @@ export default class AgendaMinutesController extends Controller {
   @service toaster;
   @service router;
   @service intl;
+  @service pieceAccessLevelService;
 
   // agenda;
   meeting;
@@ -162,13 +163,6 @@ export default class AgendaMinutesController extends Controller {
   });
 
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
-
-  get label() {
-    if (this.currentPiecePart) {
-      return "created-on";
-    } 
-    return "uploaded-at";
-  }
 
   exportPdf = task(async (minutes) => {
     const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
@@ -278,6 +272,7 @@ export default class AgendaMinutesController extends Controller {
     }
 
     await newVersion.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 
     this.refresh();
