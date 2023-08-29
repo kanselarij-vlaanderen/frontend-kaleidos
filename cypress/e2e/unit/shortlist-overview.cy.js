@@ -1,12 +1,13 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
-// import dependency from '../../selectors/dependency.selectors';
+import dependency from '../../selectors/dependency.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
+import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import route from '../../selectors/route.selectors';
 import signature from '../../selectors/signature.selectors';
@@ -38,7 +39,7 @@ function createPublicationViaMR(subcaseTitle, fileName, publicationNumber) {
   cy.wait(`@patchPieceForPublication${randomInt}`);
 }
 
-context.skip('signatures shortlist overview tests', () => {
+context('signatures shortlist overview tests', () => {
   const caseTitle1 = `Cypress test: shortlist signatures route case 1- ${currentTimestamp()}`;
   const caseTitle2 = `Cypress test: shortlist signatures route case 2- ${currentTimestamp()}`;
 
@@ -115,8 +116,14 @@ context.skip('signatures shortlist overview tests', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
     cy.addAgendaitemMandatee(3);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).forceClick();
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.addAgendaitemMandatee(4);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).forceClick();
 
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
@@ -293,6 +300,58 @@ context.skip('signatures shortlist overview tests', () => {
     cy.wait(5000);
     // TODO where patchcalls?
   });
+
+  it('check dossierbeheerder add one minister', () => {
+    // setup: add minister to dossierbeheerder
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
+      .click();
+    cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
+      .click();
+    cy.wait('@patchUserOrganizations');
+
+    cy.logout();
+    cy.login('Kabinetdossierbeheerder');
+
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.get(utils.mHeader.signatures).click()
+      .wait('@getShortlist1');
+
+    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).should('have.length', 1);
+  });
+
+  it('check dossierbeheerder add second minister', () => {
+    // setup: add minister to dossierbeheerder
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
+      .click();
+    cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
+      .click();
+    cy.wait('@patchUserOrganizations');
+
+    cy.logout();
+    cy.login('Kabinetdossierbeheerder');
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.get(utils.mHeader.signatures).click()
+      .wait('@getShortlist1');
+
+    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).should('have.length', 2);
+  });
 });
 
 context('publications shortlist overview tests', () => {
@@ -398,7 +457,7 @@ context('publications shortlist overview tests', () => {
     cy.wait('@getShortlist');
     cy.get(auk.loader).should('not.exist');
     // different table when signature data is enabled.
-    // cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
-    cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
+    cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
+    // cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
   });
 });
