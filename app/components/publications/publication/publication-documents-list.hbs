@@ -1,4 +1,4 @@
-<Auk::List class="au-u-margin-top-tiny">
+<div class="au-u-margin-top-tiny">
   {{#if this.sumOfPiecesShouldBlock.value}}
     <AuAlert
       @title={{t "warning-title"}}
@@ -18,69 +18,72 @@
       <p>{{t "sum-of-attachments-exceeds-warning-threshold"}}</p>
     </AuAlert>
   {{/if}}
-  {{#each @pieces as |piece|}}
-    <Auk::List::Item data-test-publication-document-list-piece>
-      <div
-        class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
-      >
-        <div class="auk-o-flex auk-o-flex--spaced">
-          <AuBadge
-            @icon="paperclip"
-            @skin="gray"
-            @size="small"
-          />
-          <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-          <AuPill
-            @skin={{this.fileSizePillSkin piece.file.size}}
-            @icon={{this.fileSizePillIcon piece.file.size}}
-          >
-            {{file-size piece.file.size}}
-          </AuPill>
-        </div>
-        {{#if @setReceivedDate}}
-          <div class="auk-form-group auk-u-width-medium auk-u-m-0">
-            <Auk::Datepicker
-              @placeholder={{t "date-received-placeholder"}}
-              @date={{piece.receivedDate}}
-              @onChange={{fn @setReceivedDate piece}}
+
+  <AuList as |Item|>
+    {{#each @pieces as |piece|}}
+      <Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny" data-test-publication-document-list-piece>
+        <div
+          class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
+        >
+          <div class="auk-o-flex auk-o-flex--spaced">
+            <AuBadge
+              @icon="paperclip"
+              @skin="gray"
+              @size="small"
             />
-          </div>
-        {{/if}}
-        <div>
-          <AuButtonGroup>
-            <AuLinkExternal
-              @icon="download"
-              @hideText={{true}}
-              href={{piece.file.namedDownloadLink}}
-              download={{piece.file.downloadFilename}}
+            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+            <AuPill
+              @skin={{this.fileSizePillSkin piece.file.size}}
+              @icon={{this.fileSizePillIcon piece.file.size}}
             >
-              {{t "download"}}
-            </AuLinkExternal>
-            {{#if @viewable}}
+              {{file-size piece.file.size}}
+            </AuPill>
+          </div>
+          {{#if @setReceivedDate}}
+            <div class="auk-form-group auk-u-width-medium auk-u-m-0">
+              <Auk::Datepicker
+                @placeholder={{t "date-received-placeholder"}}
+                @date={{piece.receivedDate}}
+                @onChange={{fn @setReceivedDate piece}}
+              />
+            </div>
+          {{/if}}
+          <div>
+            <AuButtonGroup>
               <AuLinkExternal
-                @icon="book"
+                @icon="download"
                 @hideText={{true}}
-                href={{piece.viewDocumentURL}}
-                target="_blank"
+                href={{piece.file.namedDownloadLink}}
+                download={{piece.file.downloadFilename}}
               >
-                {{t "read"}}
+                {{t "download"}}
               </AuLinkExternal>
-            {{/if}}
-            {{#if @onDeletePiece}}
-              <AuButton
-                data-test-publication-document-list-delete-piece
-                @skin="naked"
-                @alert={{true}}
-                @icon="trash"
-                @hideText={{true}}
-                {{on "click" (fn @onDeletePiece piece)}}
-              >
-                {{t "delete"}}
-              </AuButton>
-            {{/if}}
-          </AuButtonGroup>
+              {{#if @viewable}}
+                <AuLinkExternal
+                  @icon="book"
+                  @hideText={{true}}
+                  href={{piece.viewDocumentURL}}
+                  target="_blank"
+                >
+                  {{t "read"}}
+                </AuLinkExternal>
+              {{/if}}
+              {{#if @onDeletePiece}}
+                <AuButton
+                  data-test-publication-document-list-delete-piece
+                  @skin="naked"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (fn @onDeletePiece piece)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              {{/if}}
+            </AuButtonGroup>
+          </div>
         </div>
-      </div>
-    </Auk::List::Item>
-  {{/each}}
-</Auk::List>
+      </Item>
+    {{/each}}
+  </AuList>
+</div>

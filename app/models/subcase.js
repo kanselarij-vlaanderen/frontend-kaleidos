@@ -7,7 +7,6 @@ export default class Subcase extends ModelWithModifier {
   @attr shortTitle;
   @attr title;
   @attr('boolean') confidential; // this is now "limited access"
-  @attr('boolean') isArchived;
   @attr subcaseName;
 
   get modelName() {

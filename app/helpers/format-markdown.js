@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import { htmlSafe } from '@ember/template';
 import { helper as buildHelper } from '@ember/component/helper';
 

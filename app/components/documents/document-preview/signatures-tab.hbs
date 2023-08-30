@@ -25,12 +25,23 @@
     {{#if this.loadCanManageSignFlow.isRunning}}
       <Auk::Loader />
     {{else if this.canManageSignFlow}}
-      <AuToggleSwitch
-        @skin="primary"
-        @label={{t "present-for-signing"}}
-        @checked={{this.hasMarkedSignFlow}}
-        @onChange={{fn this.markForSignFlow.perform}}
-        @disabled={{this.markForSignFlow.isRunning}}
+      {{#if this.decisionActivity}}
+        <AuToggleSwitch
+          @skin="primary"
+          @label={{t "present-for-signing"}}
+          @checked={{this.hasMarkedSignFlow}}
+          @onChange={{fn this.markForSignFlow.perform}}
+          @disabled={{this.markForSignFlow.isRunning}}
+        />
+      {{else}}
+        <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+          <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
+        </AuAlert>
+      {{/if}}
+    {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
+      <SignaturePill 
+        @piece={{@piece}} 
+        @signMarkingActivity={{this.signMarkingActivity}} 
       />
     {{else}}
       <AuAlert
