@@ -84,52 +84,6 @@ function renderMinutes(data) {
   `;
 }
 
-function getAttendees(model) {
-  const seen = new Set();
-  const primeMinister = mandateeName(
-    model.mandatees.find(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.MINISTER_PRESIDENT
-    )
-  );
-  seen.add(primeMinister);
-  const viceMinisters = model.mandatees
-    .filter(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.VICEMINISTER_PRESIDENT
-    )
-    .map(mandateeName)
-    .filter((x) => !seen.has(x));
-  viceMinisters.forEach((x) => seen.add(x));
-
-  const ministers = model.mandatees
-    .filter(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.MINISTER
-    )
-    .map(mandateeName)
-    .filter((x) => !seen.has(x));
-
-  const secretary = mandateeName(model.secretary);
-  return {
-    primeMinister,
-    viceMinisters,
-    ministers,
-    secretary,
-  };
-}
-
-function reshapeModelForRender(model) {
-  return {
-    attendees: getAttendees(model),
-    notas: model.notas,
-    announcements: model.announcements,
-  };
-}
-
 function mandateeName(mandatee) {
   return `${mandatee.person.get('firstName')} ${mandatee.person.get(
     'lastName'
@@ -284,13 +238,13 @@ export default class AgendaMinutesController extends Controller {
   });
 
   @action
-  updateEditorContent() {
+  async updateEditorContent() {
     if (!this.editor) {
       return;
     }
 
     this.editor.setHtmlContent(
-      renderMinutes(reshapeModelForRender(this.model))
+      renderMinutes(await this.reshapeModelForRender())
     );
   }
 
@@ -325,5 +279,58 @@ export default class AgendaMinutesController extends Controller {
   @action
   refresh() {
     this.router.refresh('agenda.minutes');
+  }
+
+
+  async getAttendees() {
+    const seen = new Set();
+    const primeMinister = mandateeName(
+      this.model.mandatees.find(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.MINISTER_PRESIDENT
+      )
+    );
+    seen.add(primeMinister);
+    const viceMinisters = this.model.mandatees
+      .filter(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.VICEMINISTER_PRESIDENT
+      )
+      .map(mandateeName)
+      .filter((x) => !seen.has(x));
+    viceMinisters.forEach((x) => seen.add(x));
+
+    const ministers = this.model.mandatees
+      .filter(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.MINISTER
+      )
+      .map(mandateeName)
+      .filter((x) => !seen.has(x));
+
+    const secretary = mandateeName(
+      await this.store.queryOne('mandatee', {
+        'filter[secretary-for-agendas][:id:]': this.meeting.id,
+        include: 'person',
+      })
+    ) ?? '';
+
+    return {
+      primeMinister,
+      viceMinisters,
+      ministers,
+      secretary,
+    };
+  }
+
+  async reshapeModelForRender() {
+    return {
+      attendees: await this.getAttendees(),
+      notas: this.model.notas,
+      announcements: this.model.announcements,
+    };
   }
 }

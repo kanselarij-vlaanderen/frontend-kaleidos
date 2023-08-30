@@ -29,10 +29,6 @@ export default class AgendaMinutesRoute extends Route {
     const mandatees = await this.getMandatees();
     const notas = [];
     const announcements = [];
-    const secretary = await this.store.queryOne('mandatee', {
-      'filter[secretary-for-agendas][:id:]': meeting.id,
-      include: 'person',
-    });
 
     // Could be optimized not to make below query again when only query params changed
     // *NOTE* Do not change this query, this call is pre-cached by cache-warmup-service
@@ -51,7 +47,7 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const meetingMinutes = await meeting.minutes;
-    return { minutes: meetingMinutes, mandatees, notas, announcements, secretary };
+    return { minutes: meetingMinutes, mandatees, notas, announcements };
   }
 
   setupController(controller) {
