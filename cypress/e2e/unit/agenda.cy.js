@@ -382,9 +382,9 @@ context('Agenda tests', () => {
     cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
     // setup
     cy.openAgendaitemDossierTab(shortSubcaseTitle1);
-    cy.addAgendaitemMandatee(1);
+    cy.addAgendaitemMandatee(1, null, null, false);
     cy.openAgendaitemDossierTab(shortSubcaseTitle2);
-    cy.addAgendaitemMandatee(2);
+    cy.addAgendaitemMandatee(2, null, null, false);
 
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)

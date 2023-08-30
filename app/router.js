@@ -76,9 +76,9 @@ Router.map(function() {
   });
 
   if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/handtekeningen', }, function() {
-      this.route('index', { path: '/op-te-starten' });
-      this.route('ongoing', { path: '/op-te-volgen' });
+    this.route('signatures', { path: '/ondertekenen', }, function() {
+      this.route('index', { path: '/opstarten' });
+      this.route('ongoing', { path: '/opvolgen' });
     });
   }
 
@@ -131,7 +131,6 @@ Router.map(function() {
     this.route('icons');
     this.route('key-value');
     this.route('link-button');
-    this.route('list');
     this.route('loader');
     this.route('panel');
     this.route('pager');
