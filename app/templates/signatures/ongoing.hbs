@@ -16,7 +16,7 @@
               @excludedStatuses={{this.excludedStatuses}}
             />
           </div>
-          {{#if this.currentSession.isAdmin}}
+          {{#if (user-may "view-all-ongoing-signatures")}}
           <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "submitter"}}</Auk::Label>
               <Search::MinisterFilter
@@ -95,6 +95,7 @@
             <SignaturePill
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
+              @isClickable={{false}}
             />
           </td>
         {{/let}}

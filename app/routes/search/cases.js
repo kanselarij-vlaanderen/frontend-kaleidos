@@ -140,9 +140,9 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (params.archived === 'hide') {
-      filter.isArchived = 'false';
+      filter[':has-no:closedDate'] = 't';
     } else if (params.archived === 'only') {
-      filter.isArchived = 'true';
+      filter[':has:closedDate'] = 't';
     }
 
     if (params.confidentialOnly) {

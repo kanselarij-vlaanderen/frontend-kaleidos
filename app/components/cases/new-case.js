@@ -25,7 +25,6 @@ export default class NewCase extends Component {
     const now = new Date();
     const _case = this.store.createRecord('case', {
       shortTitle: this.shortTitle,
-      isArchived: false,
       created: now,
     });
     yield _case.save();

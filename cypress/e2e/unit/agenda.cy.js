@@ -38,6 +38,21 @@ function getTranslatedMonth(month) {
   }
 }
 
+function downloadDocs(postAgenda = true) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+  cy.get(auk.loader).should('not.exist');
+  cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
+  cy.intercept('GET', '/file-bundling-jobs/**').as(`fileBundlingJobs${randomInt}`);
+  cy.get(auk.confirmationModal.footer.confirm).click();
+  cy.get(utils.downloadFileToast.link).eq(0)
+    .click()
+    .wait(`@fileBundlingJobs${randomInt}`);
+  if (postAgenda) {
+    cy.wait(`@postAgendas${randomInt}`);
+  }
+}
+
 context('Agenda tests', () => {
   const typeNota = 'Nota';
   const agendaKind = 'Ministerraad';
@@ -354,5 +369,120 @@ context('Agenda tests', () => {
     cy.wait('@patchInternalActivity');
     cy.get(agenda.agendaHeader.title).contains(dateFormatPVV);
     cy.get(agenda.agendaHeader.kind).contains(mrKind);
+  });
+
+  it('Should download all files', () => {
+    const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
+    const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
+
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+    // setup
+    cy.openAgendaitemDossierTab(shortSubcaseTitle1);
+    cy.addAgendaitemMandatee(1, null, null, false);
+    cy.openAgendaitemDossierTab(shortSubcaseTitle2);
+    cy.addAgendaitemMandatee(2, null, null, false);
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDocuments).forceClick();
+    downloadDocs();
+    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
+      .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
+      .should('contain', 'DOC.0001-03 propagatie intern regering.pdf')
+      .should('contain', 'DOC.0001-04 propagatie intern overheid.pdf')
+      .should('contain', 'DOC.0001-05 propagatie publiek.pdf')
+      .should('contain', 'DOC.0002-01 propagatie vertrouwelijk intern secretarie.pdf')
+      .should('contain', 'DOC.0002-02 propagatie vertrouwelijk ministerraad.pdf')
+      .should('contain', 'DOC.0002-03 propagatie vertrouwelijk intern regering.pdf')
+      .should('contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
+      .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf');
+  });
+
+  it('Should download all files for Jambon', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDocuments).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Jambon')
+      .click();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
+      .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
+      .should('contain', 'DOC.0001-03 propagatie intern regering.pdf')
+      .should('contain', 'DOC.0001-04 propagatie intern overheid.pdf')
+      .should('contain', 'DOC.0001-05 propagatie publiek.pdf')
+      .should('not.contain', 'DOC.0002-01 propagatie vertrouwelijk intern secretarie.pdf')
+      .should('not.contain', 'DOC.0002-02 propagatie vertrouwelijk ministerraad.pdf')
+      .should('not.contain', 'DOC.0002-03 propagatie vertrouwelijk intern regering.pdf')
+      .should('not.contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
+      .should('not.contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf');
+  });
+
+  it('Should download all files for Crevits', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDocuments).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Crevits')
+      .click();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+      timeout: 25000,
+    }).should('not.contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
+      .should('not.contain', 'DOC.0001-02 propagatie ministerraad.pdf')
+      .should('not.contain', 'DOC.0001-03 propagatie intern regering.pdf')
+      .should('not.contain', 'DOC.0001-04 propagatie intern overheid.pdf')
+      .should('not.contain', 'DOC.0001-05 propagatie publiek.pdf')
+      .should('contain', 'DOC.0002-01 propagatie vertrouwelijk intern secretarie.pdf')
+      .should('contain', 'DOC.0002-02 propagatie vertrouwelijk ministerraad.pdf')
+      .should('contain', 'DOC.0002-03 propagatie vertrouwelijk intern regering.pdf')
+      .should('contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
+      .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf');
+  });
+
+  it('Should download all filetypes', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EECEC3CB8277FF058F3/documenten?anchor=62B06EECEC3CB8277FF058F3');
+
+    const file = {
+      folder: 'files', fileName: 'test', fileExtension: 'docx', newFileName: 'test wordfile for download all filetypes',
+    };
+
+    // setup
+    cy.get(route.agendaitemDocuments.add).click();
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.addNewDocumentsInUploadModal([file], 'agendaitems');
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDocuments).forceClick();
+    cy.get(agenda.agendaActions.downloadDocumentsFiletypeSelector)
+      .contains('Alle bestandstypes')
+      .click();
+    downloadDocs(false);
+    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+      timeout: 25000,
+    }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
+      .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
+      .should('contain', 'DOC.0001-03 propagatie intern regering.pdf')
+      .should('contain', 'DOC.0001-04 propagatie intern overheid.pdf')
+      .should('contain', 'DOC.0001-05 propagatie publiek.pdf')
+      .should('contain', 'DOC.0002-01 propagatie vertrouwelijk intern secretarie.pdf')
+      .should('contain', 'DOC.0002-02 propagatie vertrouwelijk ministerraad.pdf')
+      .should('contain', 'DOC.0002-03 propagatie vertrouwelijk intern regering.pdf')
+      .should('contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
+      .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf')
+      .should('contain', file.newFileName);
   });
 });
