@@ -107,7 +107,6 @@ export default class CasesNewSubcase extends Component {
       decisionmakingFlow: this.args.decisionmakingFlow,
       created: date,
       modified: date,
-      isArchived: false,
       subcaseName: this.subcaseName,
       agendaActivities: [],
     });
