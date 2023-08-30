@@ -1,5 +1,5 @@
 <div class="au-c-form">
-  <AuFormRow data-test-system-alert-form-from-date>
+  <AuFormRow class="auk-u-position-relative" data-test-system-alert-form-from-date>
     <Auk::Label>{{t "start-date"}}</Auk::Label>
     <Auk::Datepicker
       @enableTime={{true}}
@@ -7,7 +7,7 @@
       @onChange={{this.selectBeginDate}}
     />
   </AuFormRow>
-  <AuFormRow>
+  <AuFormRow class="auk-u-position-relative">
     <Auk::Label>{{t "end-date"}}</Auk::Label>
     <Auk::Datepicker
       @enableTime={{true}}

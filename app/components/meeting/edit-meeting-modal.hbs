@@ -33,7 +33,7 @@
           </Utils::ModelSelector>
         </AuFormRow>
       {{else}}
-        <AuFormRow data-test-edit-meeting-datepicker>
+        <AuFormRow class="auk-u-position-relative" data-test-edit-meeting-datepicker>
           <Auk::Label>{{t "start-date"}}</Auk::Label>
           <Auk::Datepicker
             @enableTime={{true}}
@@ -43,7 +43,7 @@
         </AuFormRow>
       {{/if}}
       {{!Publicatiedatum}}
-      <AuFormRow data-test-edit-meeting-document-publication-date>
+      <AuFormRow class="auk-u-position-relative" data-test-edit-meeting-document-publication-date>
         <Auk::Label>
           {{t "date-publication-documents"}}
         </Auk::Label>

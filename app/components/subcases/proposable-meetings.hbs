@@ -2,7 +2,7 @@
   <Auk::Modal::Header @title={{t "propose-for-agenda"}} @onClose={{@onCancel}}/>
   <Auk::Modal::Body>
     <div class="au-c-form">
-      <AuFormRow>
+      <AuFormRow class="auk-u-position-relative">
         {{#if this.loadMeetings.isRunning}}
           <Auk::Loader @message={{t "loading-active-agendas"}} />
         {{else}}

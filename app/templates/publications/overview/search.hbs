@@ -37,7 +37,7 @@
           {{/each}}
         </select>
       </AuFormRow>
-      <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-from>
+      <AuFormRow class="auk-u-position-relative au-u-margin-top-none au-u-1-6" data-test-route-search-date-from>
         <Auk::Label>{{t "from"}}</Auk::Label>
         <Auk::Datepicker
           @date={{this.dateFromBuffer}}
@@ -46,7 +46,7 @@
           @onClear={{set this "dateFromBuffer" undefined}}
         />
       </AuFormRow>
-      <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-to>
+      <AuFormRow class="auk-u-position-relative au-u-margin-top-none au-u-1-6" data-test-route-search-date-to>
         <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
         <Auk::Datepicker
           @date={{this.dateToBuffer}}
