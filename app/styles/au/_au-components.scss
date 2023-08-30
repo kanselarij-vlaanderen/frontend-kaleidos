@@ -47,6 +47,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-modal';
 @import "ember-appuniversum/c-sidebar";
 @import 'ember-appuniversum/c-table';
+@import 'ember-appuniversum/c-toaster';
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-toggle-switch';
 
@@ -463,6 +464,12 @@ $au-button-height: 3.4rem;
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+// Toaster
+
+.au-c-toaster {
+  width: 420px;
 }
 
 // Additions
