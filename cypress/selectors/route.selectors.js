@@ -247,6 +247,7 @@ const selectors = {
     applyFilter: '[data-test-route-signatures-apply-filter]',
     dataTable: '[data-test-route-signatures-data-table]',
     row: {
+      checkbox: '[data-test-route-signatures-row-checkbox]',
       name: '[data-test-route-signatures-row-name]',
       mandatee: '[data-test-route-signatures-row-mandatee]',
       openSidebar: '[data-test-route-signatures-row-open-sidebar]',
@@ -257,6 +258,15 @@ const selectors = {
       preview: '[data-test-route-signatures-sidebar-preview]',
       lastAgendaitem: '[data-test-route-signatures-sidebar-last-agendaitem]',
       startSignflow: '[data-test-route-signatures-sidebar-start-signflow]',
+      stopSignflow: '[data-test-route-signatures-sidebar-stop-signflow]',
+    },
+  },
+
+  // signatures/ongoing
+
+  ongoing: {
+    row: {
+      documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
     },
   },
 

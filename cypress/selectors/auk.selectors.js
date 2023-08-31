@@ -96,5 +96,9 @@ const selectors = {
   icon: {
     warning: '.auk-icon--warning',
   },
+
+  alert: {
+    close: '.au-c-alert__close',
+  },
 };
 export default selectors;

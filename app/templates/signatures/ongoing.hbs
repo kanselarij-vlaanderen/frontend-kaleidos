@@ -56,7 +56,7 @@
       <:body as |signFlow|>
         {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
           {{#let signMarkingActivity.piece as |piece|}}
-            <td>
+            <td data-test-route-search-signatures-ongoing-row-document-name>
               {{#if piece}}
                 {{piece.name}}
                 {{#if (this.isConfidential piece.accessLevel)}}

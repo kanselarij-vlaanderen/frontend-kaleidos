@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+// import CONSTANTS from 'frontend-kaleidos/config/constants';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 
 export default class SignaturesIndexRoute extends Route {
@@ -56,32 +56,33 @@ export default class SignaturesIndexRoute extends Route {
       params.pageSignaturesIndex = 0;
     }
 
-    const filter = {
-      'sign-subcase': {
-        'sign-marking-activity': {
-          piece: {
-            agendaitems: {
-              agenda: {
-                meeting: {
-                  'internal-decision-publication-activity': {
-                    ':has:start-date': `date-added-for-cache-busting-${(new Date()).toISOString()}`,
-                  }
-                }
-              }
-            }
-          }
-        },
-        ':has-no:sign-preparation-activity': 'yes',
-      },
-      status: {
-        ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
-      },
-      'decision-activity': {
-        'decision-result-code': {
-          ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
-        },
-      }
-    };
+    const filter = {}
+    // const filter = {
+    //   'sign-subcase': {
+    //     'sign-marking-activity': {
+    //       piece: {
+    //         agendaitems: {
+    //           agenda: {
+    //             meeting: {
+    //               'internal-decision-publication-activity': {
+    //                 ':has:start-date': `date-added-for-cache-busting-${(new Date()).toISOString()}`,
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     },
+    //     ':has-no:sign-preparation-activity': 'yes',
+    //   },
+    //   status: {
+    //     ':uri:': CONSTANTS.SIGNFLOW_STATUSES.MARKED,
+    //   },
+    //   'decision-activity': {
+    //     'decision-result-code': {
+    //       ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+    //     },
+    //   }
+    // };
 
     this.lastParams.commit();
 

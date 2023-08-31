@@ -352,6 +352,77 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.row.mandatee).contains(mandatee2);
     cy.get(route.signatures.row.mandatee).should('have.length', 2);
   });
+
+  it.only('check starting/stopping signflow', () => {
+    const staticResponse = {
+      statusCode: 200,
+      ok: true,
+    };
+
+    cy.visit('ondertekenen/opstarten');
+
+    cy.log(files1.newFileName);
+    cy.get(route.signatures.row.name).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
+
+    // ** start signflow **
+
+    // check fail
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
+    cy.intercept('POST', '/signing-flows/update-to-signinghub', {
+      forceNetworkError: true,
+    }).as('updateToSigningHubError');
+    cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    cy.get(route.signatures.sidebar.startSignflow).click();
+    cy.wait('@postSigningActivities');
+    cy.wait('@patchSignSubcases');
+    cy.wait('@patchSignFlows');
+    cy.wait('@deleteSigningActivities');
+    cy.get(auk.alertStack.container);
+    cy.get(auk.alert.close).click();
+
+    // check succes
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows2');
+    cy.intercept('POST', '/signing-flows/upload-to-signinghub', staticResponse).as('stubUpload');
+    cy.get(route.signatures.sidebar.startSignflow).click();
+    cy.wait('@postSigningActivities2');
+    cy.wait('@patchSignSubcases2');
+    cy.wait('@patchSignFlows2');
+
+    cy.visit('ondertekenen/opvolgen');
+    cy.get(route.ongoing.row.documentName).contains(files1[0].newFileName);
+
+    // ** stop signflow **
+
+    cy.visit('ondertekenen/opstarten');
+    cy.get(route.signatures.row.name).contains(files2[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
+
+    // check succes
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+
+    cy.intercept('DELETE', '/sign-subcases/**').as('deleteSignSubcases3');
+    cy.intercept('DELETE', '/sign-flows/**').as('deleteSignFlows3');
+    cy.intercept('DELETE', '/sign-marking-activities/**').as('deleteSigningActivities3');
+    cy.get(route.signatures.sidebar.stopSignflow).click();
+    cy.wait('@deleteSignSubcases3');
+    cy.wait('@deleteSignFlows3');
+    cy.wait('@deleteSigningActivities3');
+    cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
+  });
 });
 
 context('publications shortlist overview tests', () => {
