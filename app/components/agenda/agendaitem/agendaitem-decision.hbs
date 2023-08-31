@@ -15,7 +15,7 @@
             this.loadReport.isIdle
             (user-may "manage-decisions")
             (not this.isEditing)
-            (or this.pieceParts (not this.report))
+            (not this.pieceParts this.report)
             this.enableDigitalAgenda
           )
         }}
@@ -28,7 +28,7 @@
               @disabled={{this.exportPdf.isRunning}}
               {{on "click" this.startEditing}}
             >
-              {{t (if this.report "edit" "create")}}
+              {{t "signed-decision-create"}}
             </AuButton>
           </Group.Item>
         {{/if}}
@@ -206,16 +206,175 @@
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
           <AuContent @size="small">
-            <h4>{{t "concerns"}}:</h4>
+        {{#if (and this.isEditingConcern this.enableDigitalAgenda)}}
+           <h4 class="auk-h4">{{t "concerns"}}</h4>
+        <SayEditor
+          @size="small"
+          @allowFullscreen={{true}}
+          @title={{t "concerns"}}
+          @handleRdfaEditorInit={{this.handleRdfaEditorInitBetreft}}
+        >
+          <:header>
+            <AuButton
+              @skin="link"
+              @icon="renew"
+              class="au-u-padding-left-none"
+              {{on "click" this.updateBetreftContent}}
+            >{{t "update-thing" thing=(t "content")}}</AuButton>
+            <VersionsDropdown
+              @record={{this.betreftPiecePart}}
+              @previousVersionKey="previousPiecePart"
+              @onVersionClicked={{this.onRevertBetreftVersion}}
+            />
+          </:header>
+        </SayEditor>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                {{on "click" (set this "isEditingConcern" false)}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-agendaitem-decision-save
+                @disabled={{this.disableSaveConcernButton}}
+                @skin="primary"
+                @loading={{this.onUpdateConcern.isRunning}}
+                {{on "click" (perform this.onUpdateConcern)}}
+              >
+                {{t "update"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+        {{else}}
+              <Auk::Toolbar @auto={{true}} as |Toolbar|>
+                <Toolbar.Group @position="left">
+                  <h4 class="auk-toolbar__title">
+                      {{t "concerns"}}:
+                  </h4>
+                </Toolbar.Group>
+                <Toolbar.Group @position="right" as |Group|>
+                  {{#if
+                      (and
+                        this.loadReport.isIdle
+                        (user-may "manage-decisions")
+                        (not this.isEditingConcern)
+                        (or this.pieceParts (not this.report))
+                        this.enableDigitalAgenda
+                      )
+                    }}
+                      <Group.Item>
+                        <AuButton
+                          data-test-agendaitem-decision-create
+                          @skin="naked"
+                          @icon="pencil"
+                          @iconAlignment="left"
+                          @disabled={{this.exportPdf.isRunning}}
+                          {{on "click" this.startEditingConcern}}
+                        >
+                          {{t "edit"}}
+                        </AuButton>
+                      </Group.Item>
+                    {{/if}}
+                </Toolbar.Group>
+              </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
               @value={{this.betreftPiecePart.value}}
             />
-            <h4>{{t "agenda-item-treatment"}}:</h4>
+            {{/if}}
+             {{#if (and this.isEditingTreatment this.enableDigitalAgenda)}}
+              <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
+              <SayEditor
+                @allowFullscreen={{true}}
+                @title={{t "agendaitem-decision"}}
+                @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
+              >
+                <:header>
+                  <AuButton
+                    @skin="link"
+                    @icon="renew"
+                    class="au-u-padding-left-none"
+                    @loading={{this.loadNota.isRunning}}
+                    @disabled={{not this.nota}}
+                    {{on "click" this.updateBeslissingContent}}
+                  >{{t "update-thing" thing=(t "content")}}</AuButton>
+                  <VersionsDropdown
+                    @record={{this.beslissingPiecePart}}
+                    @previousVersionKey="previousPiecePart"
+                    @onVersionClicked={{this.onRevertBeslissingVersion}}
+                  />
+                </:header>
+              </SayEditor>
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="left">
+                  <Auk::Toolbar::Item>
+                    <AuButton
+                      @skin="naked"
+                      {{on "click" (set this "isEditingTreatment" false)}}
+                    >
+                      {{t "cancel"}}
+                    </AuButton>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+                <Auk::Toolbar::Group @position="right">
+                  <Auk::Toolbar::Item>
+                    <AuButton
+                      data-test-agendaitem-decision-save
+                      @disabled={{this.disableSaveTreatmentButton}}
+                      @skin="primary"
+                      @loading={{this.onUpdateTreatment.isRunning}}
+                      {{on "click" (perform this.onUpdateTreatment)}}
+                    >
+                      {{t "update"}}
+                    </AuButton>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
+             {{else}}
+              <Auk::Toolbar @auto={{true}} as |Toolbar|>
+                  <Toolbar.Group @position="left">
+                    <h4 class="auk-toolbar__title">
+                        {{t "agenda-item-treatment"}}:
+                    </h4>
+                  </Toolbar.Group>
+                  <Toolbar.Group @position="right" as |Group|>
+                     {{#if
+                      (and
+                        this.loadReport.isIdle
+                        (user-may "manage-decisions")
+                        (not this.isEditingTreatment)
+                        (or this.pieceParts (not this.report))
+                        this.enableDigitalAgenda
+                      )
+                    }}
+                      <Group.Item>
+                        <AuButton
+                          data-test-agendaitem-decision-create
+                          @skin="naked"
+                          @icon="pencil"
+                          @iconAlignment="left"
+                          @disabled={{this.exportPdf.isRunning}}
+                          {{on "click" this.startEditingTreatment}}
+                        >
+                          {{t "edit"}}
+                        </AuButton>
+                      </Group.Item>
+                    {{/if}}
+                  </Toolbar.Group>
+              </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
               @value={{this.beslissingPiecePart.value}}
             />
+            {{/if}}
           </AuContent>
         </Auk::Panel::Body>
       {{/if}}
