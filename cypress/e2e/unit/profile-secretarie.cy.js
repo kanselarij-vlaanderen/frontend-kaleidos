@@ -710,7 +710,7 @@ context('Testing the application as Secretarie user', () => {
     });
   });
 
-  context.only('Profile rights checks for signatures routes', () => {
+  context('Profile rights checks for signatures routes', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
       cy.get(auk.loader).should('not.exist');
