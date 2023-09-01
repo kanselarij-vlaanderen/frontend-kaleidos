@@ -30,25 +30,19 @@ function openAgendaForDateWithStatusCheck(agendaDate, index = 0, status = 'open'
     timeout: 20000,
   });
 
-  if (status === 'open') {
-    cy.get(route.agendasOverview.dataTable, {
-      timeout: 20000,
-    }).find('tbody')
-      .children('tr')
-      .eq(index)
-      .find(route.agendasOverview.row.statusOpened);
-  } else {
-    cy.get(route.agendasOverview.dataTable, {
-      timeout: 20000,
-    }).find('tbody')
-      .children('tr')
-      .eq(index)
-      .find(route.agendasOverview.row.statusClosed);
-  }
-  cy.get(route.agendasOverview.dataTable).find('tbody')
+  cy.get(route.agendasOverview.dataTable, {
+    timeout: 20000,
+  }).find('tbody')
     .children('tr')
     .eq(index)
-    .find(route.agendasOverview.row.navButton)
+    .as('row');
+
+  if (status === 'open') {
+    cy.get('@row').find(route.agendasOverview.row.statusOpened);
+  } else {
+    cy.get('@row').find(route.agendasOverview.row.statusClosed);
+  }
+  cy.get('@row').find(route.agendasOverview.row.navButton)
     .click();
 
   cy.url().should('include', '/vergadering');
@@ -103,8 +97,6 @@ context('Propagation to other graphs', () => {
   it('Continue propagate decisions and documents to overheid graph by releasing them', () => {
     cy.login('Admin');
     cy.openAgendaForDate(agendaDate);
-    cy.approveAndCloseDesignAgenda();
-
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.generateDecision();
 
@@ -132,6 +124,11 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).should('not.exist');
     });
+
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.agendaNameExists('A', false);
+    cy.agendaNameExists('B', false);
 
     cy.releaseDecisions();
     cy.wait(80000);
