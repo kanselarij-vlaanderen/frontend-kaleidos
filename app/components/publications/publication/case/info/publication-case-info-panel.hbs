@@ -141,7 +141,7 @@
 
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-3">
-                <AuFormRow class="auk-u-position-relative" data-test-publication-case-info-panel-edit-decision-date>
+                <AuFormRow data-test-publication-case-info-panel-edit-decision-date>
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <AuLink
@@ -169,7 +169,7 @@
 
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-3">
-                <AuFormRow class="auk-u-position-relative" data-test-publication-case-info-panel-edit-opening-date>
+                <AuFormRow data-test-publication-case-info-panel-edit-opening-date>
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   <Auk::Datepicker
                     @date={{@publicationFlow.openingDate}}
@@ -180,7 +180,7 @@
 
               {{! Limiet publicatie }}
               <div class="auk-o-grid-col-3">
-                <AuFormRow class="auk-u-position-relative" data-test-publication-case-info-panel-edit-publication-due-date>
+                <AuFormRow data-test-publication-case-info-panel-edit-publication-due-date>
                   <Auk::Label>
                     {{t "publication-flow-publication-due-date"}}
                   </Auk::Label>
