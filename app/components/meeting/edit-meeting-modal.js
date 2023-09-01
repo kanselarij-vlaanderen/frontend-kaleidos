@@ -99,6 +99,10 @@ export default class MeetingEditMeetingComponent extends Component {
     );
   }
 
+  get cancelIsDisabled() {
+    return this.saveMeeting.isRunning;
+  }
+
   @action
   setStartDate(date) {
     this.startDate = date;

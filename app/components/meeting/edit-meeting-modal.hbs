@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{if this.isNew (t "new-agenda") (t "edit-meeting")}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.cancelIsDisabled}}
   />
   <Auk::Modal::Body>
     <Utils::KindSelector
@@ -149,11 +150,12 @@
       </div>
     {{/unless}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.cancelIsDisabled}}>
     <AuButton
       data-test-edit-meeting-save
       @skin="primary"
       @disabled={{this.savingIsDisabled}}
+      @loading={{this.saveMeeting.isRunning}}
       {{on "click" (perform this.saveMeeting)}}
     >
       {{#if this.isNew}}

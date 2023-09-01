@@ -1237,5 +1237,6 @@
   "sign-flow-was-sent-cannot-stop-it": "De ondertekenflow is opgestart. Het is niet mogelijk om de flow te stoppen. Neem contact op met de Secretarie.",
   "secretary-for-meeting": "Secretaris voor de vergadering",
   "secretary": "Secretaris",
-  "no-secretary-assigned": "Er werd nog geen secretaris toegewezen"
+  "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
+  "type-to-search": "Typ om te zoeken"
 }
