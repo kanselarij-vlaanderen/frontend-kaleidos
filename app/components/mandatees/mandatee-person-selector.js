@@ -2,8 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
-import * as CONFIG from 'frontend-kaleidos/config/config';
 
 /**
  * @argument dateRange
@@ -25,25 +23,17 @@ export default class MandateePersonSelector extends Component {
   //    if a person is selected
   //      and then the publication year is changed
 
-  @tracked mandateePersons;
   @tracked selectedMandateePerson;
   @tracked selectedMandateePersons = [];
 
   constructor() {
     super(...arguments);
-    this.loadMandateePersons();
 
     if (this.args.multiple) {
       this.selectedMandateePersons = this.args.selectedPersons || [];
     } else {
       this.selectedMandateePerson = this.args.selectedPerson;
     }
-  }
-
-  @action
-  loadMandateePersons() {
-    // Assign a promise to mandateePersons to enable loading state on ember-power-select
-    this.mandateePersons = this.fetchMandateePersons.perform(undefined);
   }
 
   @action
@@ -58,29 +48,24 @@ export default class MandateePersonSelector extends Component {
     }
   }
 
-  @task({
-    restartable: true,
-  })
-  // only called when search text input is not empty
-  *searchMandateePersons(searchText) {
-    yield timeout(CONFIG.LIVE_SEARCH_DEBOUNCE_TIME);
-    return this.fetchMandateePersons.perform(searchText);
-  }
+  loadOptions = new Promise((resolve) => {
+    this.fetchMandateePersons().then(resolve);
+  });
 
-  @task
-  *fetchMandateePersons(searchText) {
+  async fetchMandateePersons() {
     const [dateRangeStart, dateRangeEnd] = this.args.dateRange || [
       undefined,
       undefined,
     ];
-    const mandatees = yield this.mandatees.getMandateesActiveOn.perform(
+    const mandatees = await this.mandatees.getMandateesActiveOn.perform(
       dateRangeStart,
       dateRangeEnd,
-      searchText
+      undefined,
+      this.args.visibleRoles
     );
     const persons = [];
     for (const mandatee of mandatees) {
-      const person = yield mandatee.person;
+      const person = await mandatee.person;
       persons.addObject(person);
     }
 

@@ -1,45 +1,20 @@
-<div
-  data-test-mandatee-selector-container
-  {{did-update (perform this.loadMandatees) @openSearch}}
->
-  {{#if this.loadMandatees.isRunning}}
-    <AuLoader />
+<div data-test-mandatee-selector-container>
+  {{#if @openSearch}}
+    <Mandatees::MandateeSelector::OpenSearch
+      @openSearch={{@openSearch}}
+      @excludeMandatees={{@excludeMandatees}}
+      @referenceDate={{@referenceDate}}
+      @onSelectMandatee={{@onSelectMandatee}}
+      @selectedMandatees={{@selectedMandatees}}
+    />
   {{else}}
-    {{#if @multiple}}
-      <PowerSelectMultiple
-        @options={{this.mandateeOptions}}
-        @selected={{await @selectedMandatees}}
-        @disabled={{@disabled}}
-        @closeOnSelect={{false}}
-        @searchEnabled={{true}}
-        @search={{if
-          @openSearch
-          (perform this.searchMandatee)
-          (perform this.filterMandatees)
-        }}
-        @oninput={{this.resetMandateeOptionsIfEmpty}}
-        @onChange={{@onSelectMandatee}}
-        as |mandatee|
-      >
-        <Mandatee::NameWithRange @mandatee={{mandatee}} />
-      </PowerSelectMultiple>
-    {{else}}
-      <PowerSelect
-        @options={{this.mandateeOptions}}
-        @selected={{await @selectedMandatees}}
-        @disabled={{@disabled}}
-        @searchEnabled={{true}}
-        @search={{if
-          @openSearch
-          (perform this.searchMandatee)
-          (perform this.filterMandatees)
-        }}
-        @oninput={{this.resetMandateeOptionsIfEmpty}}
-        @onChange={{@onSelectMandatee}}
-        as |mandatee|
-      >
-        <Mandatee::NameWithRange @mandatee={{mandatee}} />
-      </PowerSelect>
-    {{/if}}
+    <Mandatees::MandateeSelector::Default
+      @openSearch={{@openSearch}}
+      @excludeMandatees={{@excludeMandatees}}
+      @referenceDate={{@referenceDate}}
+      @onSelectMandatee={{@onSelectMandatee}}
+      @selectedMandatees={{@selectedMandatees}}
+      @visibleRoles={{@visibleRoles}}
+    />
   {{/if}}
 </div>
