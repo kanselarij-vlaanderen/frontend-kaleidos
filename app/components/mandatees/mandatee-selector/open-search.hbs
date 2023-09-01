@@ -1,0 +1,33 @@
+{{#if @multiple}}
+  <PowerSelectMultiple
+    @options={{this.mandateeOptions}}
+    @searchMessage={{t "type-to-search"}}
+    @loadingMessage={{t "loading"}}
+    @noMatchesMessage={{t "no-results-found"}}
+    @selected={{@selectedMandatees}}
+    @disabled={{@disabled}}
+    @closeOnSelect={{false}}
+    @searchEnabled={{true}}
+    @search={{perform this.searchMandatee}}
+    @onChange={{@onSelectMandatee}}
+    as |mandatee|
+  >
+    <Mandatee::NameWithRange @mandatee={{mandatee}} />
+  </PowerSelectMultiple>
+{{else}}
+  <PowerSelect
+    @options={{this.mandateeOptions}}
+    @searchMessage={{t "type-to-search"}}
+    @searchField="fullDisplayName"
+    @loadingMessage={{t "loading"}}
+    @noMatchesMessage={{t "no-results-found"}}
+    @selected={{@selectedMandatees}}
+    @disabled={{@disabled}}
+    @searchEnabled={{true}}
+    @search={{perform this.searchMandatee}}
+    @onChange={{@onSelectMandatee}}
+    as |mandatee|
+  >
+    <Mandatee::NameWithRange @mandatee={{mandatee}} />
+  </PowerSelect>
+{{/if}}

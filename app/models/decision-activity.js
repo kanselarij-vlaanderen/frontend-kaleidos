@@ -19,7 +19,6 @@ export default class decisionActivity extends Model {
   report;
   @belongsTo('mandatee', { inverse: 'secretaryForDecisions', async: true }) secretary;
 
-
   @hasMany('publication-flow', { inverse: 'decisionActivity', async: true })
   publicationFlows;
   @hasMany('sign-flow', { inverse: 'decisionActivity', async: true }) signFlows;
