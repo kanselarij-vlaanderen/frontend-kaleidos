@@ -23,6 +23,8 @@ export default class Mandatee extends Model {
   signSigningActivities;
   @hasMany('user-organization', { inverse: 'mandatees', async: true })
   organizations;
+  @hasMany('meeting', { inverse: 'secretary', async: true }) secretaryForAgendas;
+  @hasMany('decision-activity', { inverse: 'secretary', async: true }) secretaryForDecisions;
 
   get fullDisplayName() {
     const fullName = this.person.get('fullName');

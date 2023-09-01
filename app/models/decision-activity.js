@@ -17,6 +17,8 @@ export default class decisionActivity extends Model {
     polymorphic: true,
   })
   report;
+  @belongsTo('mandatee', { inverse: 'secretaryForDecisions', async: true }) secretary;
+
 
   @hasMany('publication-flow', { inverse: 'decisionActivity', async: true })
   publicationFlows;
