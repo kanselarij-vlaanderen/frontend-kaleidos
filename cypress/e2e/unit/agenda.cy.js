@@ -358,7 +358,7 @@ context('Agenda tests', () => {
     cy.get(utils.kindSelector.kind).click();
     cy.selectFromDropdown(mrKind);
     cy.get(agenda.editMeeting.datepicker)
-      .children(auk.datepicker.datepicker)
+      .find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(agendaDatePVV);
     // TODO-BUG when creating agendas for next year, the year in numberRep acts strange after switch
