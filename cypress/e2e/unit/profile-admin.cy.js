@@ -888,6 +888,21 @@ context('Testing the application as Admin user', () => {
     });
   });
 
+  context.only('Profile rights checks for signatures routes', () => {
+    it('check signatures/start route', () => {
+      cy.visit('ondertekenen/opstarten');
+      cy.get(auk.loader).should('not.exist');
+      cy.get(route.signatures.openMinisterFilter);
+    });
+
+    it('check signatures/ongoing route', () => {
+      cy.visit('ondertekenen/opvolgen');
+      cy.get(auk.loader).should('not.exist');
+      cy.get(route.ongoing.statusFilter).find(appuniversum.checkbox);
+      cy.get(route.ongoing.ministerFilter).find(appuniversum.checkbox);
+    });
+  });
+
   context('Profile rights checks for case routes', () => {
     it('check cases route', () => {
       cy.visit('dossiers');

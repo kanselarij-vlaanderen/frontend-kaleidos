@@ -8,7 +8,7 @@
           id="search-subroute-filters-area"
           class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
         >
-          <div class="au-c-card au-o-box au-o-box--small">
+          <div data-test-route-signatures-ongoing-status-filter class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "status"}}</Auk::Label>
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
@@ -17,7 +17,7 @@
             />
           </div>
           {{#if (user-may "view-all-ongoing-signatures")}}
-          <div class="au-c-card au-o-box au-o-box--small">
+          <div data-test-route-signatures-ongoing-minister-filter class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "submitter"}}</Auk::Label>
               <Search::MinisterFilter
                 @selected={{this.mandatees}}

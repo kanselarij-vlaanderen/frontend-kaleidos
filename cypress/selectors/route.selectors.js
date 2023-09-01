@@ -265,6 +265,8 @@ const selectors = {
   // signatures/ongoing
 
   ongoing: {
+    statusFilter: '[data-test-route-signatures-ongoing-status-filter]',
+    ministerFilter: '[data-test-route-signatures-ongoing-minister-filter]',
     row: {
       documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
     },
