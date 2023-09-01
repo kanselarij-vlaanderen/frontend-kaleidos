@@ -97,6 +97,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   @action
+  async saveSecretary(secretary) {
+    this.decisionActivity.secretary = secretary;
+    await this.decisionActivity.save();
+  }
+
+  @action
   async saveGovernmentAreas(newGovernmentAreas) {
     const governmentAreas = await this.subcase.governmentAreas;
     governmentAreas.clear();

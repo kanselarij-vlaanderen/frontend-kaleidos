@@ -44,7 +44,8 @@ export default class Meeting extends Model {
   @hasMany('themis-publication-activity', { inverse: 'meeting', async: true })
   themisPublicationActivities;
   @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
-  @hasMany('piece', { inverse: 'meeting', async: true, polymorphic: true }) pieces;
+  @hasMany('piece', { inverse: 'meeting', async: true, polymorphic: true })
+  pieces;
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
