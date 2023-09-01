@@ -1,0 +1,23 @@
+<AuAlert
+  @title={{@options.title}}
+  @skin="success"
+  @icon="check"
+  @size="small"
+  @closable={{true}}
+  @onClose={{@close}}
+>
+  <p class="auk-u-text-capitalize" data-test-download-file-toast-message>
+    {{@options.message}}
+  </p>
+  <AuLinkExternal
+    data-test-download-file-toast-link
+    @skin="button"
+    @icon="download"
+    {{on "click" @close}}
+    href={{@options.downloadLink}}
+    class="auk-u-mt-4"
+    download
+  >
+    {{t "download"}}
+  </AuLinkExternal>
+</AuAlert>
