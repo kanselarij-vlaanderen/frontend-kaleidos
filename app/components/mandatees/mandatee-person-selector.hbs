@@ -4,15 +4,14 @@
       {{t "ministers"}}
     </Auk::Label>
   {{/if}}
-  {{#if this.mandateePersons}}
     {{#if @multiple}}
       <PowerSelectMultiple
         data-test-mandatee-person-selector
-        @options={{this.mandateePersons}}
+        @options={{this.loadOptions}}
         @selected={{this.selectedMandateePersons}}
         @onChange={{this.onChange}}
         @searchEnabled={{true}}
-        @search={{perform this.searchMandateePersons}}
+        @searchField="fullName"
         @noMatchesMessage={{t "no-ministers-found"}}
         @searchMessage={{t "no-ministers-found"}}
         @loadingMessage={{t "search-loading-text"}} as |person|
@@ -22,17 +21,16 @@
     {{else}}
       <PowerSelect
         data-test-mandatee-person-selector
-        @options={{this.mandateePersons}}
+        @options={{this.loadOptions}}
         @selected={{this.selectedMandateePerson}}
         @onChange={{this.onChange}}
         @searchEnabled={{true}}
-        @search={{perform this.searchMandateePersons}}
+        @searchField="fullName"
         @noMatchesMessage={{t "no-ministers-found"}}
         @searchMessage={{t "no-ministers-found"}}
         @loadingMessage={{t "search-loading-text"}} as |person|
       >
         {{person.fullName}}
       </PowerSelect>
-    {{/if}}
   {{/if}}
 </AuFormRow>

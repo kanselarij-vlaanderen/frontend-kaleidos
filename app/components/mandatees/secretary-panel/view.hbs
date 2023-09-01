@@ -1,0 +1,51 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">{{t "secretary"}}</h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#if @showEditButton}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-mandatee-panel-view-edit={{true}}
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" @onClickEdit}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if @secretary}}
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <tbody>
+          <tr data-test-mandatee-panel-view-mandatee-row>
+            <td
+              class="auk-table__col--10"
+              data-test-mandatee-panel-view-row-name
+            >
+              <div class="auk-o-flex auk-o-flex--vertical-center">
+                <AuBadge @icon="user" @skin="gray" @size="small" />
+                <span class="auk-u-mx-2">
+                  {{@secretary.fullDisplayName}}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState @message={{t "no-secretary-assigned"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
