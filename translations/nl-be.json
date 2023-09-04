@@ -1234,5 +1234,9 @@
   "sign-flow-was-sent-while-you-were-editing-could-not-add-new-version": "Dit document is naar het platform Digitaal Ondertekenen verzonden. Het is niet mogelijk om een nieuwe versie op te laden.",
   "sign-flow-was-sent-while-you-were-editing-could-not-edit": "Dit document is naar het platform Digitaal Ondertekenen verzonden. Het is niet mogelijk om de gegevens van het document aan te passen.",
   "sign-flow-was-sent-while-you-were-editing-could-not-delete": "Dit document is naar het platform Digitaal Ondertekenen verzonden. Het is niet mogelijk om het document in Kaleidos te verwijderen.",
-  "sign-flow-was-sent-cannot-stop-it": "De ondertekenflow is opgestart. Het is niet mogelijk om de flow te stoppen. Neem contact op met de Secretarie."
+  "sign-flow-was-sent-cannot-stop-it": "De ondertekenflow is opgestart. Het is niet mogelijk om de flow te stoppen. Neem contact op met de Secretarie.",
+  "secretary-for-meeting": "Secretaris voor de vergadering",
+  "secretary": "Secretaris",
+  "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
+  "type-to-search": "Typ om te zoeken"
 }
