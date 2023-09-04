@@ -4,7 +4,7 @@
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   </div>
 {{else}}
-  <div data-test-utils-kind-selector class="auk-form-group">
+  <AuFormRow data-test-utils-kind-selector>
     <Auk::Label>{{t "kind"}}</Auk::Label>
     <PowerSelect
       @options={{this.options}}
@@ -14,5 +14,5 @@
     >
       {{option.label}}
     </PowerSelect>
-  </div>
+  </AuFormRow>
 {{/if}}

@@ -6,15 +6,17 @@
     {{t "manage-alerts"}}
   </:title>
   <:body>
-    <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
-      <PowerSelect
-        @options={{@model}}
-        @selected={{this.selectedAlert}}
-        @onChange={{this.selectAlert}}
-        as |alert|
-      >
-        {{alert.title}}
-      </PowerSelect>
+    <div class="au-c-form">
+      <AuFormRow data-test-route-settings-system-alerts-index-alerts-dropdown>
+        <PowerSelect
+          @options={{@model}}
+          @selected={{this.selectedAlert}}
+          @onChange={{this.selectAlert}}
+          as |alert|
+        >
+          {{alert.title}}
+        </PowerSelect>
+      </AuFormRow>
     </div>
   </:body>
   <:footer>

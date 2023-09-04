@@ -1,40 +1,42 @@
 <Auk::Modal @size="medium">
   <Auk::Modal::Header @title={{t "edit-status"}} @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <div class="auk-form-group">
-      <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
-      <PowerSelect
-        data-test-publication-status-select
-        @options={{this.publicationStatusses}}
-        @selected={{this.publicationStatus}}
-        @onChange={{this.selectPublicationStatus}}
-        as |status|
-      >
-        {{#if status.isPublished}}
-          <Auk::Icon @name="circle-check" @skin="success"/>
-        {{else if status.isPaused}}
-          <Auk::Icon @name="circle-pause" @skin="muted"/>
-        {{else if status.isWithdrawn}}
-          <Auk::Icon @name="circle-x" @skin="danger"/>
-        {{else if status.isTranslationRequested}}
-          <Auk::Icon @name="circle-step-1" @skin="primary"/>
-        {{else if status.isTranslationReceived}}
-          <Auk::Icon @name="circle-step-2" @skin="primary"/>
-        {{else if status.isProofRequested}}
-          <Auk::Icon @name="circle-step-3" @skin="primary"/>
-        {{else if status.isProofReceived}}
-          <Auk::Icon @name="circle-step-4" @skin="primary"/>
-        {{else if status.isProofRecalled}}
-          <Auk::Icon @name="circle-step-5" @skin="primary"/>
-        {{else if status.isProofCorrected}}
-          <Auk::Icon @name="circle-step-6" @skin="primary"/>
-        {{else if status.isPublicationRequested}}
-          <Auk::Icon @name="circle-full" @skin="primary"/>
-        {{else}}
-          <Auk::Icon @name="circle" @skin="primary"/>
-        {{/if}}
-        {{status.label}}
-      </PowerSelect>
+    <div class="au-c-form">
+      <AuFormRow>
+        <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
+        <PowerSelect
+          data-test-publication-status-select
+          @options={{this.publicationStatusses}}
+          @selected={{this.publicationStatus}}
+          @onChange={{this.selectPublicationStatus}}
+          as |status|
+        >
+          {{#if status.isPublished}}
+            <Auk::Icon @name="circle-check" @skin="success"/>
+          {{else if status.isPaused}}
+            <Auk::Icon @name="circle-pause" @skin="muted"/>
+          {{else if status.isWithdrawn}}
+            <Auk::Icon @name="circle-x" @skin="danger"/>
+          {{else if status.isTranslationRequested}}
+            <Auk::Icon @name="circle-step-1" @skin="primary"/>
+          {{else if status.isTranslationReceived}}
+            <Auk::Icon @name="circle-step-2" @skin="primary"/>
+          {{else if status.isProofRequested}}
+            <Auk::Icon @name="circle-step-3" @skin="primary"/>
+          {{else if status.isProofReceived}}
+            <Auk::Icon @name="circle-step-4" @skin="primary"/>
+          {{else if status.isProofRecalled}}
+            <Auk::Icon @name="circle-step-5" @skin="primary"/>
+          {{else if status.isProofCorrected}}
+            <Auk::Icon @name="circle-step-6" @skin="primary"/>
+          {{else if status.isPublicationRequested}}
+            <Auk::Icon @name="circle-full" @skin="primary"/>
+          {{else}}
+            <Auk::Icon @name="circle" @skin="primary"/>
+          {{/if}}
+          {{status.label}}
+        </PowerSelect>
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>

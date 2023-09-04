@@ -31,19 +31,21 @@
           @isLoading={{this.save.isRunning}}
           @reserveSpace={{true}}
         >
-          <div class="auk-form-group">
-            <Auk::Label>
-              <span>{{t "publication-remark"}}</span>
-              {{!(i) inside label to maintain Auk:Label's layout}}
-              <Utils::Generic::TooltipHelp>
-                {{t "publication-remark-help"}}
-              </Utils::Generic::TooltipHelp>
-            </Auk::Label>
-            <Auk::Textarea
-              data-test-remark-panel-textarea
-              @rows="12"
-              @value={{this.remark}}
-            />
+          <div class="au-c-form">
+            <AuFormRow>
+              <Auk::Label>
+                <span>{{t "publication-remark"}}</span>
+                {{!(i) inside label to maintain Auk:Label's layout}}
+                <Utils::Generic::TooltipHelp>
+                  {{t "publication-remark-help"}}
+                </Utils::Generic::TooltipHelp>
+              </Auk::Label>
+              <Auk::Textarea
+                data-test-remark-panel-textarea
+                @rows="12"
+                @value={{this.remark}}
+              />
+            </AuFormRow>
           </div>
         </Utils::LoadableContent>
       {{else}}
