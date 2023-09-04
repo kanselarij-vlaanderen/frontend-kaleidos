@@ -13,7 +13,7 @@ import {
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
 import { isPresent } from '@ember/utils';
-import DownloadFileToast from 'frontend-kaleidos/components/auk/custom-toasts/download-file-toast';
+import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 
 /**
  * @argument {Meeting} meeting
