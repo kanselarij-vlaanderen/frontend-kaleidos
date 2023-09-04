@@ -1,10 +1,9 @@
 <Auk::Modal::Body>
-  <div
-    class="auk-form-group"
-    data-test-new-case-shorttitle
-  >
-    <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
-    <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
+  <div class="au-c-form">
+    <AuFormRow data-test-new-case-shorttitle>
+      <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
+      <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
+    </AuFormRow>
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @custom={{true}}>

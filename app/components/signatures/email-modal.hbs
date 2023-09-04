@@ -4,16 +4,18 @@
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    <div class="auk-form-group">
-      <AuLabel>{{t "email-address"}}</AuLabel>
-      <AuInput
-        data-test-signatures-create-email-input
-        {{on "input" this.onInputEvent}}
-        @warning={{and this.emailBuffer (not this.isValid)}}
-        @type="text"
-        @width="block"
-        class="au-c-input--mask-normal-letter-spacing"
-      />
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel>{{t "email-address"}}</AuLabel>
+        <AuInput
+          data-test-signatures-create-email-input
+          {{on "input" this.onInputEvent}}
+          @warning={{and this.emailBuffer (not this.isValid)}}
+          @type="text"
+          @width="block"
+          class="au-c-input--mask-normal-letter-spacing"
+        />
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
