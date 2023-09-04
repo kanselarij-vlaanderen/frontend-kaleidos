@@ -1204,6 +1204,8 @@
   "email-address": "E-mailadres",
   "add-approval": "Goed te keuren door",
   "start-signing": "Ondertekenen opstarten",
+  "cannot-start-signing": "Ondertekenen kan niet worden opgestart",
+  "cannot-start-signing-message": "Eén of meerdere ondertekenaars van de geselecteerde documenten moeten zich nog authentificeren in Kaleidos. Dit wordt zo snel mogelijk in orde gebracht.",
   "cannot-sign": "Ondertekenen is niet mogelijk",
   "cannot-sign-message": "Dit document is niet gekoppeld aan een agendapunt. Het is niet mogelijk om de ondertekenflow op te starten.",
   "cannot-create-sign-flow-message": "Dit document is niet ingediend door uw minister. U kunt de ondertekenflow niet opstarten.",
