@@ -300,13 +300,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         }
       );
       this.jobMonitor.register(job, async (job) => {
-        this.toaster.clear(inCreationToast);
+        this.toaster.close(inCreationToast);
         if (job.status === job.SUCCESS) {
           const url = await fileDownloadUrlFromJob(job, name);
           debug(`Archive ready. Prompting for download now (${url})`);
           downloadFileToastOptions.downloadLink = url;
-          // downloadFileToastOptions.options.fileName = name;
-          // this.toaster.displayToast.perform(downloadFileToastOptions);
           this.toaster.show(DownloadFileToast, downloadFileToastOptions);
         } else {
           debug('Something went wrong while generating archive.');
@@ -320,8 +318,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);
       downloadFileToastOptions.downloadLink = url;
-      // downloadFileToastOptions.options.fileName = name;
-      // this.toaster.displayToast.perform(downloadFileToastOptions);
       this.toaster.show(DownloadFileToast, downloadFileToastOptions);
     }
   }
