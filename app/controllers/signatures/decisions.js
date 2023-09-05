@@ -32,9 +32,9 @@ export default class SignaturesDecisionsController extends Controller {
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
-  @tracked sizeSignaturesIndex = PAGINATION_SIZES[5];
-  @tracked pageSignaturesIndex = 0;
-  @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+  @tracked sizeSignaturesDecisions = PAGINATION_SIZES[5];
+  @tracked pageSignaturesDecisions = 0;
+  @tracked sortSignaturesDecisions = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;
 
   signers = [];
@@ -42,9 +42,9 @@ export default class SignaturesDecisionsController extends Controller {
   notificationAddresses = [];
 
   queryParams = [
-    { sizeSignaturesIndex: { type: 'number' } },
-    { pageSignaturesIndex: { type: 'number' } },
-    { sortSignaturesIndex: { type: 'string' } },
+    { sizeSignaturesDecisions: { type: 'number' } },
+    { pageSignaturesDecisions: { type: 'number' } },
+    { sortSignaturesDecisions: { type: 'string' } },
   ];
 
   localStorageKey = 'signatures.shortlist.minister-filter';
@@ -109,9 +109,9 @@ export default class SignaturesDecisionsController extends Controller {
       } else {
         newSortOptions = [this.sortField, ...DEFAULT_SORT_OPTIONS];
       }
-      this.sortSignaturesIndex = newSortOptions.join(',');
+      this.sortSignaturesDecisions = newSortOptions.join(',');
     } else {
-      this.sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+      this.sortSignaturesDecisions = DEFAULT_SORT_OPTIONS.join(',');
     }
   }
 
