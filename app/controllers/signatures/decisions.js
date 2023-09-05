@@ -38,16 +38,12 @@ export default class SignaturesDecisionsController extends Controller {
   @tracked sortField;
 
   signers = [];
-  approvers = [];
-  notificationAddresses = [];
 
   queryParams = [
     { sizeSignaturesDecisions: { type: 'number' } },
     { pageSignaturesDecisions: { type: 'number' } },
     { sortSignaturesDecisions: { type: 'string' } },
   ];
-
-  localStorageKey = 'signatures.shortlist.minister-filter';
 
   selectedDecisionActivities = trackedFunction(this, async () => {
     return await Promise.all(
@@ -145,15 +141,11 @@ export default class SignaturesDecisionsController extends Controller {
     this.agnedaitem = null;
     this.decisionActivity = null;
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
   }
 
   clearSidebarContentMultiItem() {
     this.selectedSignFlows = new TrackedArray([]);
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
   }
 
   @action
@@ -166,16 +158,12 @@ export default class SignaturesDecisionsController extends Controller {
       await this.getAgendaitemRouteModels(piece);
     this.decisionActivity = await this.getDecisionActivity(piece);
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
     this.showSidebar = true;
   }
 
   @action
   async openSidebarMultiItem() {
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
     this.showSidebar = true;
   }
 
@@ -192,15 +180,15 @@ export default class SignaturesDecisionsController extends Controller {
         await this.signatureService.createSignFlow(
           this.selectedSignFlows,
           this.signers,
-          this.approvers,
-          this.notificationAddresses,
+          [],
+          [],
         );
       } else if (this.signFlow) {
         await this.signatureService.createSignFlow(
           [this.signFlow],
           this.signers,
-          this.approvers,
-          this.notificationAddresses
+          [],
+          [],
         );
       }
       this.closeSidebar();

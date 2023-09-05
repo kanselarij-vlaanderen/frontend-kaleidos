@@ -15,7 +15,6 @@
   {{/in-element}}
 
   <KDataTable
-    data-test-route-signatures-data-table
     @scrollable={{true}}
     @stickyHeader={{true}}
     @clickable={{false}}
@@ -69,7 +68,7 @@
               </span>
             </AuCheckbox>
           </td>
-          <td data-test-route-signatures-row-name>
+          <td>
             {{#if piece.id}}
             <AuLink @route="document" @model={{piece.id}}>
               {{piece.name}}
@@ -94,7 +93,6 @@
           <td>{{date signFlow.decisionActivity.startDate}}</td>
           <td>
             <AuButton
-              data-test-route-signatures-row-open-sidebar
               @skin="naked"
               @icon="sign"
               {{on "click" (fn this.openSidebarSingleItem signFlow piece)}}
@@ -112,14 +110,13 @@
             {{t "start-signing"}}
           </h4>
           <Auk::Button
-            data-test-route-signatures-sidebar-close
             @icon="x"
             @skin="borderless"
             @layout="icon-only"
             {{on "click" this.closeSidebar}}
           />
         </div>
-        <div data-test-route-signatures-sidebar-info class="auk-sidebar__body">
+        <div class="auk-sidebar__body">
           {{#unless this.selectedSignFlows.length}}
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
@@ -138,7 +135,6 @@
                 {{t "preview"}}
               </AuLink>
               <AuLink
-                data-test-route-signatures-sidebar-last-agendaitem
                 @skin="naked"
                 @icon="document"
                 @route="agenda.agendaitems.agendaitem"
@@ -152,16 +148,12 @@
             <Signatures::CreateSignFlow
               @decisionActivities={{array this.decisionActivity}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @onChangeApprovers={{fn (mut this.approvers)}}
-              @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
               @isDecisionOrNota={{true}}
             />
           {{else if this.selectedSignFlows.length}}
             <Signatures::CreateSignFlow
               @decisionActivities={{this.selectedDecisionActivities.value}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @onChangeApprovers={{fn (mut this.approvers)}}
-              @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
               @isDecisionOrNota={{true}}
             />
           {{/if}}
@@ -170,7 +162,6 @@
           <AuToolbar as |Group|>
             <Group>
               <AuButton
-                data-test-route-signatures-sidebar-start-signflow
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
                 @disabled={{not this.signers.length}}
                 {{on "click" this.createSignFlow.perform}}
