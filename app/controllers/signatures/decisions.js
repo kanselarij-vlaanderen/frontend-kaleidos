@@ -23,7 +23,7 @@ export default class SignaturesDecisionsController extends Controller {
 
   @tracked signFlow = null;
   @tracked piece = null;
-  @tracked decisionActivity = null;
+  @tracked decisionActivityOrMeeting = null;
   @tracked agendaitem = null;
   @tracked agenda = null;
   @tracked meeting = null;
@@ -45,9 +45,9 @@ export default class SignaturesDecisionsController extends Controller {
     { sortSignaturesDecisions: { type: 'string' } },
   ];
 
-  selectedDecisionActivities = trackedFunction(this, async () => {
+  selectedDecisionActivitiesOrMeetings = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedSignFlows.map(async (signFlow) => await signFlow.decisionActivity)
+      this.selectedSignFlows.map(async (signFlow) => this.getDecisionActivityOrMeeting(signFlow))
     );
   });
 
@@ -111,8 +111,27 @@ export default class SignaturesDecisionsController extends Controller {
     }
   }
 
-  getDecisionActivity = async (report) => {
-    return report.get('decisionActivity');
+  getDecisionActivityOrMeeting = async (signFlowOrPromise) => {
+    const signFlow = await signFlowOrPromise;
+    const decisionActivity = await signFlow.decisionActivity;
+    if (decisionActivity) {
+      return decisionActivity;
+    } else {
+      return await this.store.queryOne('meeting', {
+        'filter[minutes][sign-marking-activity][sign-subcase][sign-flow][:id:]': signFlow.id,
+      });
+    }
+  }
+
+  getMeetingDate = async (signFlowOrPromise) => {
+    const record = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+
+    const modelName = record.constructor.modelName;
+    if (modelName === 'decision-activity') {
+      return record.startDate;
+    } else {
+      return record.plannedStart;
+    }
   }
 
   getAgendaitem = async (pieceOrPromise) => {
@@ -130,7 +149,10 @@ export default class SignaturesDecisionsController extends Controller {
       const meeting = await agenda.createdFor;
       return [meeting, agenda, agendaitem];
     }
-    return [];
+    const meeting = await this.store.queryOne('meeting', {
+      'filter[minutes][:id:]': piece.id,
+    });
+    return [meeting, null, null];
   }
 
   clearSidebarContentSingleItem() {
@@ -139,7 +161,7 @@ export default class SignaturesDecisionsController extends Controller {
     this.meeting = null;
     this.agenda = null;
     this.agnedaitem = null;
-    this.decisionActivity = null;
+    this.decisionActivityOrMeeting = null;
     this.signers = [];
   }
 
@@ -152,11 +174,11 @@ export default class SignaturesDecisionsController extends Controller {
   async openSidebarSingleItem(signFlow, piece) {
 
     this.clearSidebarContentMultiItem();
-    this.signFlow = signFlow;
-    this.piece = piece;
+    this.signFlow = await signFlow;
+    this.piece = await piece;
     [this.meeting, this.agenda, this.agendaitem] =
-      await this.getAgendaitemRouteModels(piece);
-    this.decisionActivity = await this.getDecisionActivity(piece);
+      await this.getAgendaitemRouteModels(this.piece);
+    this.decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlow);
     this.signers = [];
     this.showSidebar = true;
   }

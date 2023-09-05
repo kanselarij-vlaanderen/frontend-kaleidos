@@ -90,7 +90,7 @@
               {{/let}}
             </AuPill>
           </td>
-          <td>{{date signFlow.decisionActivity.startDate}}</td>
+          <td>{{date (await (this.getMeetingDate signFlow))}}</td>
           <td>
             <AuButton
               @skin="naked"
@@ -121,12 +121,11 @@
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
               -
-              {{date this.decisionActivity.startDate}}
+              {{date this.piece.created}}
             </p>
             <h5 class="auk-h4">{{this.piece.name}}</h5>
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
               <AuLink
-                data-test-route-signatures-sidebar-preview
                 @skin="naked"
                 @icon="book"
                 @route="document"
@@ -134,27 +133,38 @@
               >
                 {{t "preview"}}
               </AuLink>
-              <AuLink
-                @skin="naked"
-                @icon="document"
-                @route="agenda.agendaitems.agendaitem"
-                @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
-              >
-                {{t "consult-agendaitem-decision"}}
-              </AuLink>
+              {{#if (and this.meeting.id this.agenda.id this.agendaitem.id)}}
+                <AuLink
+                  @skin="naked"
+                  @icon="document"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
+                >
+                  {{t "consult-agendaitem-decision"}}
+                </AuLink>
+              {{else if this.meeting.id}}
+                <AuLink
+                  @skin="naked"
+                  @icon="document"
+                  @route="meeting"
+                  @models={{array this.meeting.id}}
+                >
+                  {{t "consult-agendaitem-decision"}}
+                </AuLink>
+              {{/if}}
             </div>
           {{/unless}}
-          {{#if this.decisionActivity}}
+          {{#if this.decisionActivityOrMeeting}}
             <Signatures::CreateSignFlow
-              @decisionActivities={{array this.decisionActivity}}
+              @decisionActivities={{array this.decisionActivityOrMeeting}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isDecisionOrNota={{true}}
+              @isReportOrMinute={{true}}
             />
           {{else if this.selectedSignFlows.length}}
             <Signatures::CreateSignFlow
-              @decisionActivities={{this.selectedDecisionActivities.value}}
+              @decisionActivities={{this.selectedDecisionActivitiesOrMeeting.value}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isDecisionOrNota={{true}}
+              @isReportOrMinute={{true}}
             />
           {{/if}}
         </div>
