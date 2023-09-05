@@ -53,6 +53,7 @@ export default class SignaturesOngoingRoute extends Route {
     }
 
     const filter = {
+      ':has:creator': true,
       'sign-subcase': {
         'sign-marking-activity': {
           piece: {
