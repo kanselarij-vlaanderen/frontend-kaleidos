@@ -69,7 +69,7 @@
             </td>
           {{/let}}
           <td>
-            {{date signFlow.decisionActivity.startDate}}
+            {{date (await (this.getMeetingDate signFlow))}}
           </td>
           <td>
             <SignaturePill

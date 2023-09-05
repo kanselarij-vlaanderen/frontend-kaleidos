@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class SignaturesOngoingDecisionsController extends Controller {
+  @service store;
   @service router;
   @service mandatees;
   @service intl;
@@ -75,5 +76,28 @@ export default class SignaturesOngoingDecisionsController extends Controller {
   @action
   onChangeStatus(statuses) {
     this.statuses = statuses;
+  }
+
+  getDecisionActivityOrMeeting = async (signFlowOrPromise) => {
+    const signFlow = await signFlowOrPromise;
+    const decisionActivity = await signFlow.decisionActivity;
+    if (decisionActivity) {
+      return decisionActivity;
+    } else {
+      return await this.store.queryOne('meeting', {
+        'filter[minutes][sign-marking-activity][sign-subcase][sign-flow][:id:]': signFlow.id,
+      });
+    }
+  }
+
+  getMeetingDate = async (signFlowOrPromise) => {
+    const record = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+
+    const modelName = record?.constructor?.modelName;
+    if (modelName === 'decision-activity') {
+      return record.startDate;
+    } else if (modelName === 'meeting') {
+      return record.plannedStart;
+    }
   }
 }
