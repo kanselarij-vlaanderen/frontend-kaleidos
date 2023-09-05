@@ -50,6 +50,13 @@ export default class SignaturesOngoingRoute extends Route {
       creator: {
         ':id:': this.currentSession.user.id,
       },
+      'sign-subcase': {
+        'sign-marking-activity': {
+          piece: {
+            'is-report-or-minutes': false,
+          }
+        }
+      }
     }
 
     if (params.mandatees?.length > 0) {
