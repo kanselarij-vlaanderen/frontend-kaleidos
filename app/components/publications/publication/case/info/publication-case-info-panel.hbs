@@ -116,6 +116,7 @@
                     {{t "publication-flow-thread-id"}}
                   </Auk::Label>
                   <AuInput
+                    data-test-publication-case-info-panel-edit-thread-id
                     @value={{mut this.threadId}}
                   />
                 </AuFormRow>
@@ -262,6 +263,7 @@
             <div class="auk-content">
               <h4 class="auk-u-m-0">{{t "publication-flow-thread-id"}}</h4>
               <p
+                data-test-publication-case-info-panel-thread-id
                 class="auk-u-m-0"
               >
                 {{#if @publicationFlow.threadId.idName}}
