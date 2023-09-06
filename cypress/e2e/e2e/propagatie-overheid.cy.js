@@ -13,6 +13,43 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
+function openAgendaForDateWithStatusCheck(agendaDate, index = 0, status = 'open') {
+  cy.log('openAgendaForDateWithStatusCheck');
+  const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
+  cy.intercept('GET', '/agendas?filter**').as('getFilteredAgendas');
+
+  cy.visit('/overzicht?sizeAgendas=2');
+  cy.wait(1000);
+  cy.get(route.agendasOverview.filter.container).within(() => {
+    cy.get(route.agendasOverview.filter.input).type(`${searchDate}{enter}`);
+  });
+  cy.get(route.agendasOverview.loader, {
+    timeout: 10000,
+  }).should('not.exist');
+  cy.wait('@getFilteredAgendas', {
+    timeout: 20000,
+  });
+
+  cy.get(route.agendasOverview.dataTable, {
+    timeout: 20000,
+  }).find('tbody')
+    .children('tr')
+    .eq(index)
+    .as('row');
+
+  if (status === 'open') {
+    cy.get('@row').find(route.agendasOverview.row.statusOpened);
+  } else {
+    cy.get('@row').find(route.agendasOverview.row.statusClosed);
+  }
+  cy.get('@row').find(route.agendasOverview.row.navButton)
+    .click();
+
+  cy.url().should('include', '/vergadering');
+  cy.url().should('include', '/agenda');
+  cy.log('/openAgendaForDateWithStatusCheck');
+}
+
 context('Propagation to other graphs', () => {
   const todayFormatted = Cypress.dayjs().format('DD-MM-YYYY');
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
@@ -45,8 +82,21 @@ context('Propagation to other graphs', () => {
 
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
-    cy.approveAndCloseDesignAgenda();
+    cy.approveDesignAgenda();
+    cy.wait(80000);
+  });
 
+  it('check to see if Overheid sees open agenda properly', () => {
+    cy.login('Overheidsorganisatie');
+    openAgendaForDateWithStatusCheck(agendaDate);
+    cy.agendaNameExists('A', false);
+    cy.get(agenda.agendaSideNav.agendaName).should('not.contain', 'Agenda B');
+    cy.get(agenda.agendaHeader.isFinalPillOpened);
+  });
+
+  it('Continue propagate decisions and documents to overheid graph by releasing them', () => {
+    cy.login('Admin');
+    cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.generateDecision();
 
@@ -75,6 +125,11 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).should('not.exist');
     });
 
+    cy.setFormalOkOnItemWithIndex(1);
+    cy.approveAndCloseDesignAgenda();
+    cy.agendaNameExists('A', false);
+    cy.agendaNameExists('B', false);
+
     cy.releaseDecisions();
     cy.wait(80000);
     // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
@@ -102,7 +157,9 @@ context('Propagation to other graphs', () => {
 
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
-    cy.openAgendaForDate(agendaDate);
+    openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Agenda B');
+    cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.documentCard.name.value).eq(0)
@@ -130,7 +187,9 @@ context('Propagation to other graphs', () => {
 
   it('Test as Overheidsorganisatie', () => {
     cy.login('Overheidsorganisatie');
-    cy.openAgendaForDate(agendaDate);
+    openAgendaForDateWithStatusCheck(agendaDate, 0, 'closed');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Agenda B');
+    cy.get(agenda.agendaHeader.isFinalPillClosed);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 2);
