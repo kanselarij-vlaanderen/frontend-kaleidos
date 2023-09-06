@@ -1,4 +1,4 @@
-<Auk::Panel>
+<Auk::Panel class="auk-panel--editing">
   <Auk::Panel::Header @size="auto">
     <Auk::Toolbar as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -50,100 +50,104 @@
     @reserveSpace={{true}}
   >
     {{#unless this.ensureNewsItem.isRunning}}
-      <Auk::Panel::Body class="au-u-background-gray-100">
-        <div class="auk-form-group">
-          <Auk::Label>{{t "title"}}</Auk::Label>
-          <p data-test-news-item-edit-item-long-title>
-            {{@agendaitem.title}}
-          </p>
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "short-title"}}</Auk::Label>
-          <AuInput
-            data-test-news-item-edit-item-short-title
-            @width="block"
-            @value={{this.title}}
-          />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
-          <p
-            data-test-news-item-edit-item-mandatee-proposal
-          >
-            {{#if this.proposalText}}
-              {{this.proposalText}}
-            {{else}}
-              {{t "not-applicable"}}
-            {{/if}}
-          </p>
-        </div>
-        <div class="auk-form-group">
-          <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen"}}">
-            <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-              <Auk::Label class="auk-u-p-0">
-                {{t "decision-in-newsletter"}}
-                <span class={{unless this.isFullscreen "au-u-hidden-visually"}}> voor {{this.title}}</span>
-              </Auk::Label>
-              {{#if this.isFullscreen}}
-                <AuButtonGroup>
+      <Auk::Panel::Body>
+        <div class="au-c-form">
+          <AuFormRow>
+            <Auk::Label>{{t "title"}}</Auk::Label>
+            <p data-test-news-item-edit-item-long-title>
+              {{@agendaitem.title}}
+            </p>
+          </AuFormRow>
+          <AuFormRow>
+            <Auk::Label>{{t "short-title"}}</Auk::Label>
+            <AuInput
+              data-test-news-item-edit-item-short-title
+              @width="block"
+              @value={{this.title}}
+            />
+          </AuFormRow>
+          <AuFormRow>
+            <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
+            <p
+              data-test-news-item-edit-item-mandatee-proposal
+            >
+              {{#if this.proposalText}}
+                {{this.proposalText}}
+              {{else}}
+                {{t "not-applicable"}}
+              {{/if}}
+            </p>
+          </AuFormRow>
+          <AuFormRow>
+            <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen"}}">
+              <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <Auk::Label class="auk-u-p-0">
+                  {{t "decision-in-newsletter"}}
+                  <span class={{unless this.isFullscreen "au-u-hidden-visually"}}> voor {{this.title}}</span>
+                </Auk::Label>
+                {{#if this.isFullscreen}}
+                  <AuButtonGroup>
+                    <AuButton
+                      @skin="naked"
+                      @icon="minimize"
+                      @iconAlignment="left"
+                      {{on "click" this.toggleFullscreen}}
+                    >
+                      {{t "close-fullscreen"}}
+                    </AuButton>
+                    <AuButton
+                      data-test-news-item-edit-item-save
+                      @loading={{this.confirmSave.isRunning}}
+                      {{on "click" this.save}}
+                    >
+                      {{t "save"}}
+                    </AuButton>
+                  </AuButtonGroup>
+                {{else}}
                   <AuButton
                     @skin="naked"
-                    @icon="minimize"
+                    @icon="expand"
                     @iconAlignment="left"
                     {{on "click" this.toggleFullscreen}}
                   >
-                    {{t "close-fullscreen"}}
+                    {{t "fullscreen"}}
                   </AuButton>
-                  <AuButton
-                    data-test-news-item-edit-item-save
-                    @loading={{this.confirmSave.isRunning}}
-                    {{on "click" this.save}}
-                  >
-                    {{t "save"}}
-                  </AuButton>
-                </AuButtonGroup>
-              {{else}}
-                <AuButton
-                  @skin="naked"
-                  @icon="expand"
-                  @iconAlignment="left"
-                  {{on "click" this.toggleFullscreen}}
-                >
-                  {{t "fullscreen"}}
-                </AuButton>
-              {{/if}}
+                {{/if}}
+              </div>
+              <WebComponents::VlRdfaEditor
+                data-test-news-item-edit-item-rdfa-editor
+                @richtext={{this.htmlContent}}
+                @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+              />
             </div>
-            <WebComponents::VlRdfaEditor
-              data-test-news-item-edit-item-rdfa-editor
-              @richtext={{this.htmlContent}}
-              @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
+          </AuFormRow>
+        </div>
+      </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="au-c-form">
+          <AuFormRow class="auk-u-text-capitalize">
+            <Auk::Label>{{t "comment-title"}}</Auk::Label>
+            <AuInput
+              data-test-news-item-edit-item-remark
+              @width="block"
+              @value={{this.remark}}
             />
-          </div>
+          </AuFormRow>
+          <AuFormRow>
+            <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
+            <AuToggleSwitch
+              data-test-news-item-edit-item-toggle-finished
+              @checked={{this.isFinished}}
+              id="item-finished"
+            />
+          </AuFormRow>
+          <AuFormRow data-test-news-item-edit-item-themes-selector>
+            <Auk::Label>{{t "themes"}}</Auk::Label>
+            <Utils::ThemesSelector @selectedThemes={{this.selectedThemes}} />
+          </AuFormRow>
         </div>
       </Auk::Panel::Body>
-      <Auk::Panel::Body class="au-u-background-gray-100">
-        <div class="auk-form-group auk-u-text-capitalize">
-          <Auk::Label>{{t "comment-title"}}</Auk::Label>
-          <AuInput
-            data-test-news-item-edit-item-remark
-            @width="block"
-            @value={{this.remark}}
-          />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
-          <AuToggleSwitch
-            data-test-news-item-edit-item-toggle-finished
-            @checked={{this.isFinished}}
-            id="item-finished"
-          />
-        </div>
-        <div class="auk-form-group" data-test-news-item-edit-item-themes-selector>
-          <Auk::Label>{{t "themes"}}</Auk::Label>
-          <Utils::ThemesSelector @selectedThemes={{this.selectedThemes}} />
-        </div>
-      </Auk::Panel::Body>
-      <Auk::Panel::Body class="au-u-background-gray-100">
+      <Auk::Panel::Footer>
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
@@ -168,7 +172,7 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
-      </Auk::Panel::Body>
+      </Auk::Panel::Footer>
     {{/unless}}
   </Utils::LoadableContent>
 </Auk::Panel>

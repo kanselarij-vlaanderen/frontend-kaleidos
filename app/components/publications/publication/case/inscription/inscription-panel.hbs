@@ -12,31 +12,33 @@
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-          <div class="auk-form-group">
-            <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
-              {{t "short-title"}}
-            </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-short-title
-              @rows="2"
-              @value={{this.shortTitle}}
-              {{on "focusout" this.enableErrorDisplay}}
-            />
-            {{#if this.showShortTitleError}}
-              <Auk::FormHelpText
-                @text={{t "input-error-message"}}
-                @skin="danger"
-                @icon="alert-triangle"
+          <div class="au-c-form">
+            <AuFormRow>
+              <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
+                {{t "short-title"}}
+              </Auk::Label>
+              <Auk::Textarea data-test-inscription-edit-short-title
+                @rows="2"
+                @value={{this.shortTitle}}
+                {{on "focusout" this.enableErrorDisplay}}
               />
-            {{/if}}
-          </div>
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "long-title"}}
-            </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-long-title
-              @rows="4"
-              @value={{this.longTitle}}
-            />
+              {{#if this.showShortTitleError}}
+                <Auk::FormHelpText
+                  @text={{t "input-error-message"}}
+                  @skin="danger"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </AuFormRow>
+            <AuFormRow>
+              <Auk::Label>
+                {{t "long-title"}}
+              </Auk::Label>
+              <Auk::Textarea data-test-inscription-edit-long-title
+                @rows="4"
+                @value={{this.longTitle}}
+              />
+            </AuFormRow>
           </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>

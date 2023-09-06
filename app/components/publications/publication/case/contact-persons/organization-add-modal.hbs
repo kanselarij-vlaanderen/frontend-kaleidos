@@ -5,30 +5,34 @@
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group {{this.validators.name.errorClass}}">
-          <Auk::Label for="organizationNameInput"
-            @required={{true}}>
+      <div class="au-c-form">
+        <AuFormRow>
+          <AuLabel
+            for="organizationNameInput"
+            @required={{true}}
+            @error={{this.validators.name.showError}}
+          >
             {{t "name"}}
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             data-test-organization-add-name
             @width="block"
             @value={{this.name}}
+            @error={{this.validators.name.showError}}
             {{on "input" this.validators.name.enableError}}
             id="organizationNameInput"
           />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label for="organizationIdentifierInput">
+        </AuFormRow>
+        <AuFormRow>
+          <AuLabel for="organizationIdentifierInput">
             {{t "identifier"}} ({{t "ovo-code"}})
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             @width="block"
             @value={{this.identifier}}
             id="organizationIdentifierInput"
           />
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
