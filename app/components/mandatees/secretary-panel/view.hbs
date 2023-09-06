@@ -10,7 +10,6 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
-              data-test-mandatee-panel-view-edit={{true}}
               @skin="naked"
               @icon="pencil"
               {{on "click" @onClickEdit}}
@@ -24,39 +23,25 @@
   </Auk::Panel::Header>
   {{#if @secretary}}
     <Auk::Panel::Body @noPadding={{true}}>
-            <table class="auk-table">
-        <thead>
-          <tr>
-            <th>{{t "minister"}}</th>
-          </tr>
-        </thead>
+      <table class="auk-table">
         <tbody>
-            <tr data-test-mandatee-panel-view-mandatee-row>
-              <td
-                class="auk-table__col--10"
-                data-test-mandatee-panel-view-row-name
-              >
-                <div class="auk-o-flex auk-o-flex--vertical-center">
-                  <AuBadge
-                    @icon="user"
-                    @skin="gray"
-                    @size="small"
-                  />
-                  <span class="auk-u-mx-2">
-                    {{@secretary.fullDisplayName}}
-                  </span>
-                </div>
-              </td>
-            </tr>
+          <tr>
+            <td class="auk-table__col--10">
+              <div class="auk-o-flex auk-o-flex--vertical-center">
+                <AuBadge @icon="user" @skin="gray" @size="small" />
+                <span class="auk-u-mx-2">
+                  {{@secretary.fullDisplayName}}
+                </span>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
-      
+
     </Auk::Panel::Body>
   {{else}}
     <Auk::Panel::Body>
-      <Auk::EmptyState
-        @message={{t "no-secretary-assigned"}}
-      />
+      <Auk::EmptyState @message={{t "no-secretary-assigned"}} />
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>

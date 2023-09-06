@@ -62,7 +62,7 @@ export default class DocumentController extends Controller {
         this.router.refresh('document');
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-delete'),
-          this.intl.t('changes-could-not-be-saved-title'),
+          this.intl.t('action-could-not-be-executed-title'),
         );
         return;
       }

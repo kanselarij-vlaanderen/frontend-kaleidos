@@ -9,8 +9,8 @@
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
-    <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group auk-u-max-width-medium">
+    <div class="au-c-form">
+      <AuFormRow class="auk-u-max-width-medium">
         <Auk::Label for="translationRequestDueDate" @required={{true}}>
           {{t "publication-flow-translation-due-date"}}
         </Auk::Label>
@@ -19,53 +19,49 @@
           @date={{this.translationDueDate}}
           @onChange={{this.setTranslationDueDate}}
         />
-      </div>
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label>{{t "translation-burden"}}</Auk::Label>
-        <div
-          class="auk-form-group-layout auk-form-group-layout--grid"
-        >
-          <div class="auk-o-grid">
-            <div class="auk-o-grid-col-6">
-              <div class="auk-form-group">
-                <Auk::Label
-                  for="translationNumberOfPages"
-                  class="auk-label--light"
-                >
-                  {{t "number-of-pages-to-translate"}}
-                </Auk::Label>
-                <AuInput
-                  data-test-publication-translation-request-number-of-pages
-                  @type="number"
-                  @width="block"
-                  @value={{mut this.numberOfPages}}
-                  {{on "focusout" (perform this.setEmailFields)}}
-                  id="translationNumberOfPages"
-                />
-              </div>
-            </div>
-            <div class="auk-o-grid-col-6">
-              <div class="auk-form-group">
-                <Auk::Label
-                  for="translationNumberOfWords"
-                  class="auk-label--light"
-                >
-                  {{t "number-of-words-to-translate"}}
-                </Auk::Label>
-                <AuInput
-                  data-test-publication-translation-request-number-of-words
-                  @type="number"
-                  @width="block"
-                  @value={{mut this.numberOfWords}}
-                  {{on "focusout" (perform this.setEmailFields)}}
-                  id="translationNumberOfWords"
-                />
-              </div>
-            </div>
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <Auk::Label
+                for="translationNumberOfPages"
+                class="auk-label--light"
+              >
+                {{t "number-of-pages-to-translate"}}
+              </Auk::Label>
+              <AuInput
+                data-test-publication-translation-request-number-of-pages
+                @type="number"
+                @width="block"
+                @value={{mut this.numberOfPages}}
+                {{on "focusout" (perform this.setEmailFields)}}
+                id="translationNumberOfPages"
+              />
+            </AuFormRow>
+          </div>
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <Auk::Label
+                for="translationNumberOfWords"
+                class="auk-label--light"
+              >
+                {{t "number-of-words-to-translate"}}
+              </Auk::Label>
+              <AuInput
+                data-test-publication-translation-request-number-of-words
+                @type="number"
+                @width="block"
+                @value={{mut this.numberOfWords}}
+                {{on "focusout" (perform this.setEmailFields)}}
+                id="translationNumberOfWords"
+              />
+            </AuFormRow>
           </div>
         </div>
-      </div>
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label @required={{true}}>
           {{t "attachments"}}
         </Auk::Label>
@@ -75,9 +71,10 @@
         <Publications::Publication::PublicationDocumentsList
           @pieces={{this.uploadedPieces}}
           @onDeletePiece={{perform this.deleteUploadedPiece}}
+          class="au-u-margin-top-tiny"
         />
-      </div>
-      <div class="auk-form-group auk-u-mt-4">
+      </AuFormRow>
+      <AuFormRow>
         <AuCheckbox
           data-test-publication-translation-request-update-status
           @checked={{this.mustUpdatePublicationStatus}}
@@ -85,8 +82,8 @@
         >
           {{t "update-publication-status-translation-requested"}}
         </AuCheckbox>
-      </div>
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label for="translationRequestSubject" @required={{true}}>
           {{t "subject"}}
         </Auk::Label>
@@ -95,8 +92,8 @@
           @value={{mut this.subject}}
           id="translationRequestSubject"
         />
-      </div>
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label for="translationRequestMessage" @required={{true}}>
           {{t "message"}}
         </Auk::Label>
@@ -106,7 +103,7 @@
           rows="16"
           @value={{mut this.message}}
         />
-      </div>
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer

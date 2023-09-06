@@ -5,11 +5,8 @@
     @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
-    <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div
-        data-test-publication-registration-publication-date
-        class="auk-form-group"
-      >
+    <div class="au-c-form">
+      <AuFormRow data-test-publication-registration-publication-date>
         <Auk::Label for="publicationRegisterModal_publicationDate">
           {{t "date"}}
         </Auk::Label>
@@ -18,16 +15,15 @@
           @date={{this.publicationDate}}
           @onChange={{this.setPublicationDate}}
         />
-      </div>
-
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <AuCheckbox
           @checked={{this.mustUpdatePublicationStatus}}
           @onChange={{this.setMustUpdatePublicationStatus}}
         >
           {{t "update-publication-status-published"}}
         </AuCheckbox>
-      </div>
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer

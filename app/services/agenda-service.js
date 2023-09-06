@@ -10,6 +10,7 @@ export default class AgendaService extends Service {
   @service intl;
   @service currentSession;
   @service newsletterService;
+  @service mandatees;
   @service signatureService;
 
   @tracked addedPieces = null;
@@ -128,11 +129,16 @@ export default class AgendaService extends Service {
     const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
 
+    // default secretary
+    const meetingSecretary = await meeting.secretary;
+    const currentApplicationSecretary = await this.mandatees.getCurrentApplicationSecretary();
+
     // decision-activity
     const decisionActivity = await this.store.createRecord('decision-activity', {
       subcase,
       startDate: meeting.plannedStart,
       decisionResultCode,
+      secretary: meetingSecretary ? meetingSecretary : currentApplicationSecretary
     });
     await decisionActivity.save();
 

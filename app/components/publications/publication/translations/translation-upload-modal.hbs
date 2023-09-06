@@ -5,36 +5,35 @@
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
-    <Auk::FileUploader
-      @multiple={{true}}
-      @reusable={{true}}
-      @onUpload={{this.uploadPiece}}
-    />
-    <Publications::Publication::PublicationDocumentsList
-      @pieces={{this.uploadedPieces}}
-      @onDeletePiece={{perform this.deleteUploadedPiece}}
-    />
-    <div class="auk-form-group auk-u-mt-4">
-      <AuCheckbox
-        data-test-translation-upload-update-status
-        @checked={{this.mustUpdatePublicationStatus}}
-        @onChange={{this.setTranslationReceivedStatus}}
-      >
-        {{t "update-publication-status-translation-received"}}
-      </AuCheckbox>
-    </div>
-    <div
-      data-test-translation-upload-received-date
-      class="auk-form-group"
-    >
-      <Auk::Label for="translationUploadReceivedAtDate">
-        {{t "date-received"}}
-      </Auk::Label>
-      <Auk::Datepicker
-        id="translationUploadReceivedAtDate"
-        @date={{this.receivedDate}}
-        @onChange={{set this "receivedDate"}}
+    <div class="au-c-form">
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
       />
+      <Publications::Publication::PublicationDocumentsList
+        @pieces={{this.uploadedPieces}}
+        @onDeletePiece={{perform this.deleteUploadedPiece}}
+      />
+      <AuFormRow>
+        <AuCheckbox
+          data-test-translation-upload-update-status
+          @checked={{this.mustUpdatePublicationStatus}}
+          @onChange={{this.setTranslationReceivedStatus}}
+        >
+          {{t "update-publication-status-translation-received"}}
+        </AuCheckbox>
+      </AuFormRow>
+      <AuFormRow data-test-translation-upload-received-date>
+        <Auk::Label for="translationUploadReceivedAtDate">
+          {{t "date-received"}}
+        </Auk::Label>
+        <Auk::Datepicker
+          id="translationUploadReceivedAtDate"
+          @date={{this.receivedDate}}
+          @onChange={{set this "receivedDate"}}
+        />
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
