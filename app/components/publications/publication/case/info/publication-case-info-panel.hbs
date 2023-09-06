@@ -33,7 +33,7 @@
           @isLoading={{or this.closeEditingPanel.isRunning this.save.isRunning}}
           @reserveSpace={{true}}
         >
-          <div class="auk-form-group-layout auk-form-group-layout--grid">
+          <div class="au-c-form">
             <div class="auk-o-grid">
               {{! Dringend }}
               <div class="auk-o-grid-col-3">
@@ -55,7 +55,7 @@
 
               {{! Publicatienummer }}
               <div class="auk-o-grid-col-3">
-                <div class="auk-form-group">
+                <AuFormRow>
                   <Auk::Label
                     @required={{true}}
                     @error={{this.publicationNumberErrorTranslationKey}}
@@ -88,15 +88,12 @@
                       @icon="alert-triangle"
                     />
                   {{/if}}
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Numac-nummers }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-publication-case-info-panel-edit-numac-number
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-publication-case-info-panel-edit-numac-number>
                   <Auk::Label>
                     {{t "publication-flow-numac-number"}}
                   </Auk::Label>
@@ -109,30 +106,26 @@
                   >
                     {{numac.idName}}
                   </Auk::InputPills>
-                </div>
+                </AuFormRow>
               </div>
 
               {{! BS Thread ID}}
               <div class="auk-o-grid-col-3">
-                <div
-                  class="auk-form-group"
-                >
+                <AuFormRow>
                   <Auk::Label>
                     {{t "publication-flow-thread-id"}}
                   </Auk::Label>
                   <AuInput
+                    data-test-publication-case-info-panel-edit-thread-id
                     @value={{mut this.threadId}}
                   />
-                </div>
+                </AuFormRow>
               </div>
 
 
               {{! wijze van publicatie }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-publication-case-info-panel-edit-publication-mode
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-publication-case-info-panel-edit-publication-mode>
                   <Auk::Label>
                     {{t "kind-of-publication"}}
                   </Auk::Label>
@@ -144,15 +137,12 @@
                   >
                     {{mode.label}}
                   </PowerSelect>
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Datum beslissing }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-publication-case-info-panel-edit-decision-date
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-publication-case-info-panel-edit-decision-date>
                   <Auk::Label>{{t "decision-date"}}</Auk::Label>
                   {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                     <AuLink
@@ -175,29 +165,23 @@
                       @onChange={{set this.decisionActivity "startDate"}}
                     />
                   {{/if}}
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Datum ontvangst }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-publication-case-info-panel-edit-opening-date
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-publication-case-info-panel-edit-opening-date>
                   <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
                   <Auk::Datepicker
                     @date={{@publicationFlow.openingDate}}
                     @onChange={{set @publicationFlow "openingDate"}}
                   />
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Limiet publicatie }}
               <div class="auk-o-grid-col-3">
-                <div
-                  data-test-publication-case-info-panel-edit-publication-due-date
-                  class="auk-form-group"
-                >
+                <AuFormRow data-test-publication-case-info-panel-edit-publication-due-date>
                   <Auk::Label>
                     {{t "publication-flow-publication-due-date"}}
                   </Auk::Label>
@@ -205,12 +189,12 @@
                     @date={{this.publicationSubcase.dueDate}}
                     @onChange={{set this.publicationSubcase "dueDate"}}
                   />
-                </div>
+                </AuFormRow>
               </div>
 
               {{! Dossier aangemaakt }}
               <div class="auk-o-grid-col-3">
-                <div class="auk-form-group">
+                <AuFormRow>
                   <Auk::Label>
                     {{t "case-created"}}
                   </Auk::Label>
@@ -219,7 +203,7 @@
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
-                </div>
+                </AuFormRow>
               </div>
 
             </div>
@@ -279,6 +263,7 @@
             <div class="auk-content">
               <h4 class="auk-u-m-0">{{t "publication-flow-thread-id"}}</h4>
               <p
+                data-test-publication-case-info-panel-thread-id
                 class="auk-u-m-0"
               >
                 {{#if @publicationFlow.threadId.idName}}

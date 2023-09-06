@@ -1,39 +1,28 @@
-<div class="auk-form-group">
-  <div class="auk-o-flex--align-end auk-u-mb-2">
-    <div
-      data-test-system-alert-form-from-date
-      class="auk-form-group"
-    >
-      <Auk::Label>{{t "start-date"}}</Auk::Label>
-      <Auk::Datepicker
-        @enableTime={{true}}
-        @date={{this.beginDate}}
-        @onChange={{this.selectBeginDate}}
-      />
-    </div>
-    <div class="auk-form-group auk-u-mb-3">
-      <Auk::Label>{{t "end-date"}}</Auk::Label>
-      <Auk::Datepicker
-        @enableTime={{true}}
-        @date={{this.endDate}}
-        @onChange={{this.selectEndDate}}
-      />
-    </div>
-  </div>
-  <div
-    data-test-system-alert-form-title
-    class="auk-form-group"
-  >
+<div class="au-c-form">
+  <AuFormRow data-test-system-alert-form-from-date>
+    <Auk::Label>{{t "start-date"}}</Auk::Label>
+    <Auk::Datepicker
+      @enableTime={{true}}
+      @date={{this.beginDate}}
+      @onChange={{this.selectBeginDate}}
+    />
+  </AuFormRow>
+  <AuFormRow>
+    <Auk::Label>{{t "end-date"}}</Auk::Label>
+    <Auk::Datepicker
+      @enableTime={{true}}
+      @date={{this.endDate}}
+      @onChange={{this.selectEndDate}}
+    />
+  </AuFormRow>
+  <AuFormRow data-test-system-alert-form-title>
     <Auk::Label>{{t "title"}}</Auk::Label>
     <AuInput
       @width="block"
       @value={{this.alert.title}}
     />
-  </div>
-  <div
-    data-test-system-alert-form-message
-    class="auk-form-group"
-  >
+  </AuFormRow>
+  <AuFormRow data-test-system-alert-form-message>
     <Auk::Label id="system-message">{{t "system-message"}}</Auk::Label>
     <Textarea
       rows="2"
@@ -41,8 +30,8 @@
       aria-labelledby="system-message"
       @value={{this.alert.message}}
     />
-  </div>
-  <div class="auk-form-group">
+  </AuFormRow>
+  <AuFormRow>
     <Auk::Label>{{t "severity"}}</Auk::Label>
     <Utils::ModelSelector
       @modelName="alert-type"
@@ -52,5 +41,5 @@
       @selected={{this.alert.type}}
       @onChange={{this.selectType}}
     />
-  </div>
+  </AuFormRow>
 </div>

@@ -4,23 +4,21 @@
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   </div>
 {{else}}
-  <div class="auk-form-group">
-    <PowerSelect
-      @options={{this.options}}
-      @selected={{@selectedDocumentType}}
-      @onChange={{@onChange}}
-      @disabled={{@disabled}}
-      @allowClear={{true}}
-      @renderInPlace={{@renderInPlace}}
-      @searchField="altLabel"
-      @searchEnabled={{true}}
-      @searchMessage={{null}}
-      @loadingMessage={{t "please-be-patient"}}
-      @noMatchesMessage={{t "no-results-found"}}
-      ...attributes
-      as |option|
-    >
-      {{option.altLabel}}
-    </PowerSelect>
-  </div>
+  <PowerSelect
+    @options={{this.options}}
+    @selected={{@selectedDocumentType}}
+    @onChange={{@onChange}}
+    @disabled={{@disabled}}
+    @allowClear={{true}}
+    @renderInPlace={{@renderInPlace}}
+    @searchField="altLabel"
+    @searchEnabled={{true}}
+    @searchMessage={{null}}
+    @loadingMessage={{t "please-be-patient"}}
+    @noMatchesMessage={{t "no-results-found"}}
+    ...attributes
+    as |option|
+  >
+    {{option.altLabel}}
+  </PowerSelect>
 {{/if}}

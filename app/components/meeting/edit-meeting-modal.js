@@ -18,6 +18,7 @@ import setMinutes from 'date-fns/setMinutes';
 export default class MeetingEditMeetingComponent extends Component {
   @service store;
   @service toaster;
+  @service mandatees;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -36,7 +37,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
 
-  VISIBLE_ROLES = [
+  visibleRoles = [
     CONSTANTS.MANDATE_ROLES.SECRETARIS,
     CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
   ];
@@ -97,6 +98,10 @@ export default class MeetingEditMeetingComponent extends Component {
     );
   }
 
+  get cancelIsDisabled() {
+    return this.saveMeeting.isRunning;
+  }
+
   @action
   setStartDate(date) {
     this.startDate = date;
@@ -109,17 +114,16 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  @task
-  *loadSecretary() {
-    if (isPresent(this.args.meeting.secretary)) {
-      this.secretary = this.args.meeting.secretary;
+  loadSecretary = task(async () => {
+    const secretary = await this.args.meeting.secretary;
+    if (isPresent(secretary)) {
+      this.secretary = secretary;
     } else {
-      const currentApplicationSecretary = yield this.store.queryOne('mandatee', {
-        'filter[is-current-secretary]': true,
-      })
+      const currentApplicationSecretary =
+        await this.mandatees.getCurrentApplicationSecretary();
       this.secretary = currentApplicationSecretary;
     }
-  }
+  });
 
   @task
   *initializeMainMeeting() {
@@ -219,13 +223,14 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if(this.args.meeting.secretary != this.secretary) {
-      const decisionActivities = yield this.store.query('decision-activity', {
-        'filter[treatment][agendaitems][agenda][created-for][:id:]': this.args.meeting.id
+    if (this.args.meeting.secretary != this.secretary) {
+      const decisionActivities = yield this.store.queryAll('decision-activity', {
+        'filter[treatment][agendaitems][agenda][created-for][:id:]':
+          this.args.meeting.id,
       });
-      for (let decisionActivity of decisionActivities.toArray()) {
+      for (let decisionActivity of decisionActivities.slice()) {
         decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save(); 
+        yield decisionActivity.save();
       }
     }
     // update the planned date of the publication activities (not needed for decisions)

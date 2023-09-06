@@ -12,8 +12,8 @@
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
     >
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group">
+      <div class="au-c-form">
+        <AuFormRow>
           <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
@@ -24,13 +24,15 @@
             @pieces={{this.transferredPieces}}
             @viewable={{true}}
             @onDeletePiece={{this.unlinkTransferredPiece}}
+            class="au-u-margin-top-tiny"
           />
           <Publications::Publication::PublicationDocumentsList
             @pieces={{this.uploadedPieces}}
             @onDeletePiece={{perform this.deleteUploadedPiece}}
+            class="au-u-margin-top-tiny"
           />
-        </div>
-        <div class="auk-form-group auk-u-mt-4">
+        </AuFormRow>
+        <AuFormRow>
           <AuCheckbox
             data-test-proof-request-update-status
             @checked={{this.mustUpdatePublicationStatus}}
@@ -38,8 +40,8 @@
           >
             {{t "update-publication-status-proof-requested"}}
           </AuCheckbox>
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
@@ -49,8 +51,8 @@
             @value={{mut this.subject}}
             id="proofRequestSubject"
           />
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
@@ -60,7 +62,7 @@
             rows="16"
             @value={{mut this.message}}
           />
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

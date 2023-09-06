@@ -1,39 +1,28 @@
 <div class="au-c-card au-o-box au-o-box--small">
-  <div class="auk-form-group">
-    <Auk::Label>{{t "document-type"}}</Auk::Label>
-    {{#if this.loadDocumentTypes.isRunning}}
-      <Auk::Loader />
-    {{else}}
-      <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
-        <AuCheckbox
-          data-test-route-search-document-type-filter
-          @checked={{this.allDocumentTypesSelected}}
-          @indeterminate={{and
-            (not this.allDocumentTypesSelected)
-            this.someDocumentTypesSelected
-          }}
-          @onChange={{this.toggleAllDocumentTypes}}
-        >
-          <span class="au-u-medium">{{t "all-document-types"}}</span>
-        </AuCheckbox>
-        <AuCheckboxGroup
-          @selected={{this.selected}}
-          as |Group|
-        >
-          {{#each this.documentTypes as |documentType|}}
-            {{#if (includes documentType.uri this.defaultVisibleTypes)}}
-              <Group.Checkbox
-                @value={{documentType}}
-                @onChange={{fn this.toggleDocumentType documentType}}
-              >
-                {{documentType.altLabel}}
-              </Group.Checkbox>
-            {{/if}}
-          {{/each}}
-
-          {{#if this.showAllTypes}}
+  <div class="au-c-form">
+    <AuFormRow>
+      <Auk::Label>{{t "document-type"}}</Auk::Label>
+      {{#if this.loadDocumentTypes.isRunning}}
+        <Auk::Loader />
+      {{else}}
+        <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+          <AuCheckbox
+            data-test-route-search-document-type-filter
+            @checked={{this.allDocumentTypesSelected}}
+            @indeterminate={{and
+              (not this.allDocumentTypesSelected)
+              this.someDocumentTypesSelected
+            }}
+            @onChange={{this.toggleAllDocumentTypes}}
+          >
+            <span class="au-u-medium">{{t "all-document-types"}}</span>
+          </AuCheckbox>
+          <AuCheckboxGroup
+            @selected={{this.selected}}
+            as |Group|
+          >
             {{#each this.documentTypes as |documentType|}}
-              {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
+              {{#if (includes documentType.uri this.defaultVisibleTypes)}}
                 <Group.Checkbox
                   @value={{documentType}}
                   @onChange={{fn this.toggleDocumentType documentType}}
@@ -42,20 +31,33 @@
                 </Group.Checkbox>
               {{/if}}
             {{/each}}
-          {{/if}}
-        </AuCheckboxGroup>
-      </AuCheckboxGroup>
 
-      <div class="au-u-margin-top-tiny">
-        <AuButton
-          {{on "click" (toggle "showAllTypes" this)}}
-          @skin="link"
-          class="au-u-h-functional au-u-padding-left-none"
-          @icon={{if this.showAllTypes "remove" "add"}}
-        >
-          {{if this.showAllTypes (t "hide-document-types") (t "show-all-document-types")}}
-        </AuButton>
-      </div>
-    {{/if}}
+            {{#if this.showAllTypes}}
+              {{#each this.documentTypes as |documentType|}}
+                {{#if (not (includes documentType.uri this.defaultVisibleTypes))}}
+                  <Group.Checkbox
+                    @value={{documentType}}
+                    @onChange={{fn this.toggleDocumentType documentType}}
+                  >
+                    {{documentType.altLabel}}
+                  </Group.Checkbox>
+                {{/if}}
+              {{/each}}
+            {{/if}}
+          </AuCheckboxGroup>
+        </AuCheckboxGroup>
+
+        <div class="au-u-margin-top-tiny">
+          <AuButton
+            {{on "click" (toggle "showAllTypes" this)}}
+            @skin="link"
+            class="au-u-h-functional au-u-padding-left-none"
+            @icon={{if this.showAllTypes "remove" "add"}}
+          >
+            {{if this.showAllTypes (t "hide-document-types") (t "show-all-document-types")}}
+          </AuButton>
+        </div>
+      {{/if}}
+    </AuFormRow>
   </div>
 </div>

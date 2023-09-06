@@ -1,8 +1,8 @@
 {{page-title (t "newsletters-tabs-search")}}
 <div class="auk-u-maximize-height auk-scroll-wrapper">
   <Auk::Navbar>
-    <form {{on "submit" this.search}} class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
-      <div class="auk-form-group au-u-margin-bottom-none au-u-3-6">
+    <form {{on "submit" this.search}} class="au-c-form au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
+      <AuFormRow class="au-u-3-6">
         <div class="auk-o-flex auk-o-flex--align-baseline">
           <Auk::Label for="keyword" class="auk-u-mr">
             {{capitalize (t "keyword")}}
@@ -16,8 +16,8 @@
           id="keyword"
           placeholder={{t "search-placeholder"}}
         />
-      </div>
-      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6" data-test-route-search-date-from>
+      </AuFormRow>
+      <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-from>
         <Auk::Label>{{t "from"}}</Auk::Label>
         <Auk::Datepicker
           @date={{this.dateFromBuffer}}
@@ -25,8 +25,8 @@
           @enableClear={{this.dateFromBuffer}}
           @onClear={{set this "dateFromBuffer" undefined}}
         />
-      </div>
-      <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-none au-u-1-6" data-test-route-search-date-to>
+      </AuFormRow>
+      <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-to>
         <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
         <Auk::Datepicker
           @date={{this.dateToBuffer}}
@@ -34,8 +34,8 @@
           @enableClear={{this.dateToBuffer}}
           @onClear={{set this "dateToBuffer" undefined}}
         />
-      </div>
-      <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
+      </AuFormRow>
+      <AuFormRow class="au-u-margin-top-none au-u-1-6">
         <Auk::Label for="ministerName">
           {{t "minister"}}
         </Auk::Label>
@@ -45,8 +45,8 @@
           @value={{this.mandateesBuffer}}
           id="ministerName"
         />
-      </div>
-      <div class="auk-form-group au-u-margin-bottom-none au-u-1-6">
+      </AuFormRow>
+      <AuFormRow class="au-u-margin-top-none au-u-1-6">
         <AuButton
           data-test-route-search-trigger
           @skin="primary"
@@ -56,7 +56,7 @@
         >
           {{t "search"}}
         </AuButton>
-      </div>
+      </AuFormRow>
     </form>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">

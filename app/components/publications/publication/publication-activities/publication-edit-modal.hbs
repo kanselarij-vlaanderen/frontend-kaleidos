@@ -9,8 +9,8 @@
       @isLoading={{this.save.isRunning}}
       @reserveSpace={{true}}
     >
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group">
+      <div class="au-c-form">
+        <AuFormRow>
           <Auk::Label for="publicationRegisterModal_publicationDate">
             {{t "publication-date"}}
           </Auk::Label>
@@ -19,7 +19,7 @@
             @date={{this.publicationDate}}
             @onChange={{this.setPublicationDate}}
           />
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

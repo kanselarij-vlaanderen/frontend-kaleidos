@@ -14,5 +14,6 @@ const selectors = {
     message: '.au-c-alert__message',
     close: '.au-c-alert__close',
   },
+  formRow: '.au-c-form-row',
 };
 export default selectors;
