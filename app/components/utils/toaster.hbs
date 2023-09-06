@@ -14,6 +14,13 @@
           @message={{toast.message}}
           @options={{toast.options}}
         />
+      {{else if (eq toast.type "copy-error-to-clipboard")}}
+        <Utils::Toaster::CopyErrorToClipboardToast
+          @title={{toast.title}}
+          @message={{toast.message}}
+          @errorContent={{toast.errorContent}}
+          @options={{toast.options}}
+        />
       {{else}}
         <Utils::Toaster::Toast
           @type={{toast.options.type}}

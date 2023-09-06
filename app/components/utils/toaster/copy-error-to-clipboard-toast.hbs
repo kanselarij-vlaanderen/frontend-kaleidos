@@ -1,0 +1,15 @@
+<AuAlert
+  class="vl-alert-relative vl-alert-relative--center-mid"
+  aria-live="assertive"
+  @skin="error"
+  @icon="alert-triangle"
+  @title={{@title}}
+  @closable={{true}}
+>
+  <div class="vl-alert__message auk-u-text-capitalize">
+    <p>{{@message}}</p>
+    <div class="au-u-margin-top-small au-o-box--small au-u-background-gray-100">
+      <Utils::ClipboardableContent @content={{@errorContent}} />
+    </div>
+  </div>
+</AuAlert>

@@ -53,7 +53,9 @@ export default class SignaturesIndexController extends Controller {
 
   selectedDecisionActivities = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedSignFlows.map(async (signFlow) => await signFlow.decisionActivity)
+      this.selectedSignFlows.map(
+        async (signFlow) => await signFlow.decisionActivity
+      )
     );
   });
 
@@ -62,11 +64,15 @@ export default class SignaturesIndexController extends Controller {
   }
 
   get isSelectedAllItems() {
-    return this.model.every((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
+    return this.model.every(
+      (signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0
+    );
   }
 
   get isSelectedSomeItems() {
-    return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
+    return this.model.some(
+      (signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0
+    );
   }
 
   @action
@@ -104,8 +110,8 @@ export default class SignaturesIndexController extends Controller {
     if (this.sortField) {
       let newSortOptions = [...DEFAULT_SORT_OPTIONS];
       const index = newSortOptions
-            .map((option) => option.replace(/-/g, ''))
-            .indexOf(this.sortField.replace(/-/g, ''));
+        .map((option) => option.replace(/-/g, ''))
+        .indexOf(this.sortField.replace(/-/g, ''));
       if (index >= 0) {
         newSortOptions[index] = this.sortField;
       } else {
@@ -128,13 +134,13 @@ export default class SignaturesIndexController extends Controller {
         .map((mandatee) => mandatee.person)
     );
     return persons.map((person) => person.fullName);
-  }
+  };
 
   getDecisionActivity = async (piece) => {
     const agendaitem = await this.getAgendaitem(piece);
     const treatment = await agendaitem.treatment;
     return treatment.decisionActivity;
-  }
+  };
 
   getAgendaitem = async (pieceOrPromise) => {
     const piece = await pieceOrPromise;
@@ -149,7 +155,7 @@ export default class SignaturesIndexController extends Controller {
       }
     }
     return agendaitem;
-  }
+  };
 
   async getAgendaitemRouteModels(piece) {
     const agendaitem = await this.getAgendaitem(piece);
@@ -252,7 +258,7 @@ export default class SignaturesIndexController extends Controller {
           this.selectedSignFlows,
           this.signers,
           this.approvers,
-          this.notificationAddresses,
+          this.notificationAddresses
         );
       } else if (this.signFlow) {
         await this.signatureService.createSignFlow(
@@ -275,13 +281,19 @@ export default class SignaturesIndexController extends Controller {
           this.intl.t('successfully-started-sign-flow')
         );
       }
-    } catch {
+    } catch (error) {
       this.closeSidebar();
       await this.router.refresh(this.router.routeName);
-      this.toaster.error(
-        this.intl.t('create-sign-flow-error-message'),
-        this.intl.t('warning-title')
-      );
+      const digitalSigningErrorToast = {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('create-sign-flow-error-message'),
+        type: 'copy-error-to-clipboard',
+        errorContent: error.message,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      };
+      this.toaster.displayToast.perform(digitalSigningErrorToast);
     }
   });
 
