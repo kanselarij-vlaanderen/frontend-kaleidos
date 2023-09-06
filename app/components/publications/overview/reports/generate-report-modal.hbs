@@ -8,81 +8,81 @@
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
     >
-      {{#if @userInputFields.decisionDateRange}}
-        <div class="auk-o-grid">
-          {{!Beslissingsdatum}}
-          <div class="auk-o-grid-col-6">
-            <div class="auk-form-group">
-              <Auk::Label
-                for="publicationReportsDecisionStartDate"
-                @required={{true}}
-                @error={{not this.isDecisionDateRangeStartValid}}
-              >
-                {{t "start-date"}}
-              </Auk::Label>
-              <Auk::Datepicker
-                id="publicationReportsDecisionStartDate"
-                @date={{this.decisionDateRangeStart}}
-                {{!validation of start being before end is done in controller to allow flexible editing}}
-                @min={{this.decisionDateMin}}
-                @max={{this.decisionDateMax}}
-                @onChange={{fn (mut this.decisionDateRangeStart)}}
-                @error={{not this.isDecisionDateRangeStartValid}}
-              />
+      <div class="au-c-form">
+        {{#if @userInputFields.decisionDateRange}}
+          <div class="auk-o-grid">
+            {{!Beslissingsdatum}}
+            <div class="auk-o-grid-col-6">
+              <AuFormRow>
+                <Auk::Label
+                  for="publicationReportsDecisionStartDate"
+                  @required={{true}}
+                  @error={{not this.isDecisionDateRangeStartValid}}
+                >
+                  {{t "start-date"}}
+                </Auk::Label>
+                <Auk::Datepicker
+                  id="publicationReportsDecisionStartDate"
+                  @date={{this.decisionDateRangeStart}}
+                  {{!validation of start being before end is done in controller to allow flexible editing}}
+                  @min={{this.decisionDateMin}}
+                  @max={{this.decisionDateMax}}
+                  @onChange={{fn (mut this.decisionDateRangeStart)}}
+                  @error={{not this.isDecisionDateRangeStartValid}}
+                />
+              </AuFormRow>
+            </div>
+            <div class="auk-o-grid-col-6">
+              <AuFormRow>
+                <Auk::Label
+                  for="publicationReportsDecisionEndDate"
+                  @error={{not this.isDecisionDateRangeEndValid}}
+                >
+                  {{t "end-date"}}
+                </Auk::Label>
+                <Auk::Datepicker
+                  id="publicationReportsDecisionEndDate"
+                  @date={{this.decisionDateRangeEnd}}
+                  @min={{this.decisionDateMin}}
+                  @max={{this.decisionDateMax}}
+                  @onChange={{fn (mut this.decisionDateRangeEnd)}}
+                  @error={{not this.isDecisionDateRangeEndValid}}
+                />
+              </AuFormRow>
             </div>
           </div>
-          <div class="auk-o-grid-col-6">
-            <div class="auk-form-group">
-              <Auk::Label
-                for="publicationReportsDecisionEndDate"
-                @error={{not this.isDecisionDateRangeEndValid}}
-              >
-                {{t "end-date"}}
-              </Auk::Label>
-              <Auk::Datepicker
-                id="publicationReportsDecisionEndDate"
-                @date={{this.decisionDateRangeEnd}}
-                @min={{this.decisionDateMin}}
-                @max={{this.decisionDateMax}}
-                @onChange={{fn (mut this.decisionDateRangeEnd)}}
-                @error={{not this.isDecisionDateRangeEndValid}}
-              />
-            </div>
-          </div>
-        </div>
-      {{/if}}
-      {{#if @userInputFields.publicationYear}}
-        <div class="auk-form-group">
-          <Auk::Label
-            for="publicationReportsPublicationYear"
-            @error={{not this.isPublicationYearValid}}
-          >
-            {{t "year"}}
-          </Auk::Label>
-          <AuInput
-            @type="number"
-            @value={{this.publicationYearAsString}}
-            @error={{not this.isPublicationYearValid}}
-            {{on "focusout" (perform this.loadGovernmentDomains)}}
-            {{on "change" (perform this.loadGovernmentDomains)}}
-            id="publicationReportsPublicationYear"
-            {{!min/max does not prevent input of invalid year by typing}}
-            min={{this.publicationYearMin}}
-            max={{this.publicationYearMax}}
-            class="auk-input-group--w-small" {{! TODO: replace `auk-input-group--w-small` with matching @width argument when it is implemented }}
+        {{/if}}
+        {{#if @userInputFields.publicationYear}}
+          <AuFormRow>
+            <Auk::Label
+              for="publicationReportsPublicationYear"
+              @error={{not this.isPublicationYearValid}}
+            >
+              {{t "year"}}
+            </Auk::Label>
+            <AuInput
+              @type="number"
+              @value={{this.publicationYearAsString}}
+              @error={{not this.isPublicationYearValid}}
+              {{on "focusout" (perform this.loadGovernmentDomains)}}
+              {{on "change" (perform this.loadGovernmentDomains)}}
+              id="publicationReportsPublicationYear"
+              {{!min/max does not prevent input of invalid year by typing}}
+              min={{this.publicationYearMin}}
+              max={{this.publicationYearMax}}
+              class="auk-input-group--w-small" {{! TODO: replace `auk-input-group--w-small` with matching @width argument when it is implemented }}
+            />
+          </AuFormRow>
+        {{/if}}
+        {{#if @userInputFields.mandateePersons}}
+          <Mandatees::MandateePersonSelector
+            @onChange={{fn (mut this.selectedMandateePersons)}}
+            @dateRange={{this.dateRange}}
+            @multiple={{true}}
+            @showLabel={{true}}
           />
-        </div>
-      {{/if}}
-      {{#if @userInputFields.mandateePersons}}
-        <Mandatees::MandateePersonSelector
-          @onChange={{fn (mut this.selectedMandateePersons)}}
-          @dateRange={{this.dateRange}}
-          @multiple={{true}}
-          @showLabel={{true}}
-        />
-      {{/if}}
-      {{#if @userInputFields.governmentDomains}}
-        <div class="auk-form-group">
+        {{/if}}
+        {{#if @userInputFields.governmentDomains}}
           <AuFieldset as |Fieldset|>
             <Fieldset.legend>{{t "government-domains"}}</Fieldset.legend>
             <Fieldset.content>
@@ -101,30 +101,30 @@
               </AuCheckboxGroup>
             </Fieldset.content>
           </AuFieldset>
-        </div>
-      {{/if}}
-      {{#if @userInputFields.regulationTypes}}
-        <div class="auk-form-group">
-          <AuFieldset as |Fieldset|>
-            <Fieldset.legend>{{t "regulation-types"}}</Fieldset.legend>
-            <Fieldset.content>
-              <AuCheckboxGroup
-                @selected={{this.selectedRegulationTypes}}
-                @onChange={{this.onChangeRegulationTypes}}
-                as |Group|
-              >
-                {{#each this.regulationTypes as |regulationType|}}
-                  <Group.Checkbox
-                    @value={{regulationType}}
-                  >
-                    {{regulationType.label}}
-                  </Group.Checkbox>
-                {{/each}}
-              </AuCheckboxGroup>
-            </Fieldset.content>
-          </AuFieldset>
-        </div>
-      {{/if}}
+        {{/if}}
+        {{#if @userInputFields.regulationTypes}}
+          <AuFormRow>
+            <AuFieldset as |Fieldset|>
+              <Fieldset.legend>{{t "regulation-types"}}</Fieldset.legend>
+              <Fieldset.content>
+                <AuCheckboxGroup
+                  @selected={{this.selectedRegulationTypes}}
+                  @onChange={{this.onChangeRegulationTypes}}
+                  as |Group|
+                >
+                  {{#each this.regulationTypes as |regulationType|}}
+                    <Group.Checkbox
+                      @value={{regulationType}}
+                    >
+                      {{regulationType.label}}
+                    </Group.Checkbox>
+                  {{/each}}
+                </AuCheckboxGroup>
+              </Fieldset.content>
+            </AuFieldset>
+          </AuFormRow>
+        {{/if}}
+      </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onClose}}>

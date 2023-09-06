@@ -1,52 +1,54 @@
 <Auk::Modal @size="large">
   <Auk::Modal::Header @title={{t "propose-for-agenda"}} @onClose={{@onCancel}}/>
   <Auk::Modal::Body>
-    <div class="auk-form-group">
-      {{#if this.loadMeetings.isRunning}}
-        <Auk::Loader @message={{t "loading-active-agendas"}} />
-      {{else}}
-        <Auk::Datepicker
-          @enable={{this.datesToEnable}}
-          @onChange={{this.selectPlannedStart}}
-        />
+    <div class="au-c-form">
+      <AuFormRow>
+        {{#if this.loadMeetings.isRunning}}
+          <Auk::Loader @message={{t "loading-active-agendas"}} />
+        {{else}}
+          <Auk::Datepicker
+            @enable={{this.datesToEnable}}
+            @onChange={{this.selectPlannedStart}}
+          />
+        {{/if}}
+      </AuFormRow>
+      {{#if this.meetingsForSelectedDate}}
+        <table class="auk-table auk-table--striped">
+          <thead>
+            <tr>
+              <th class="auk-table__col--4">{{t "kind"}}</th>
+              <th class="auk-table__col--6">{{t "agenda"}}</th>
+              <th class="auk-table__col--2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.meetingsForSelectedDate as |meeting|}}
+              <tr>
+                <td class="auk-table__col--4">
+                  {{meeting.kind.label}}
+                </td>
+                <td class="auk-table__col--6">
+                  {{date-format meeting.plannedStart "dd MMMM yyyy"}}
+                  {{#if meeting.numberRepresentation}}
+                    {{concat " - " meeting.numberRepresentation}}
+                  {{/if}}
+                </td>
+                <td class="auk-table__col--2">
+                  {{! disable proposing to the same meeting if present}}
+                  <AuButton
+                    @skin="primary"
+                    {{on "click" (fn this.proposeForMeeting meeting)}}
+                    @disabled={{eq meeting.id @meeting.id}}
+                  >
+                    {{t "propose"}}
+                  </AuButton>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
       {{/if}}
     </div>
-    {{#if this.meetingsForSelectedDate}}
-      <table class="auk-table auk-table--striped">
-        <thead>
-          <tr>
-            <th class="auk-table__col--4">{{t "kind"}}</th>
-            <th class="auk-table__col--6">{{t "agenda"}}</th>
-            <th class="auk-table__col--2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.meetingsForSelectedDate as |meeting|}}
-            <tr>
-              <td class="auk-table__col--4">
-                {{meeting.kind.label}}
-              </td>
-              <td class="auk-table__col--6">
-                {{date-format meeting.plannedStart "dd MMMM yyyy"}}
-                {{#if meeting.numberRepresentation}}
-                  {{concat " - " meeting.numberRepresentation}}
-                {{/if}}
-              </td>
-              <td class="auk-table__col--2">
-                {{! disable proposing to the same meeting if present}}
-                <AuButton
-                  @skin="primary"
-                  {{on "click" (fn this.proposeForMeeting meeting)}}
-                  @disabled={{eq meeting.id @meeting.id}}
-                >
-                  {{t "propose"}}
-                </AuButton>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
   </Auk::Modal::Footer>

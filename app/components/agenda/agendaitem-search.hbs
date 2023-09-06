@@ -2,7 +2,7 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item class="auk-u-maximize-width">
-        <div class="auk-form-group">
+        <AuFormRow>
           <AuInput
             data-test-agendaitem-search-input
             @icon="search"
@@ -12,7 +12,7 @@
             {{on "input" (perform this.debouncedSearch)}}
             placeholder={{t "search-placeholder"}}
           />
-        </div>
+        </AuFormRow>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="auk-u-m-0">
         <AuButton

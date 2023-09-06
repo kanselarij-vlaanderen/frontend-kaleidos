@@ -5,14 +5,14 @@
   as |card|
 >
   <card.header>
-    <div class="au-u-flex">
+    <div class="au-u-flex auk-o-flex-gap--small">
       <p
         data-test-route-search-result-cards-case-date
         class="au-u-para-small au-u-muted au-u-medium"
       >
         {{date @date}}
       </p>
-      {{#if (eq @isArchived "true")}}
+      {{#if @isArchived}}
         <AuPill @size="small" @skin="border">{{t "deleted-case"}}</AuPill>
       {{/if}}
     </div>

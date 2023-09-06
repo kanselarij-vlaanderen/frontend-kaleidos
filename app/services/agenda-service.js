@@ -130,6 +130,7 @@ export default class AgendaService extends Service {
     const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
 
     // default secretary
+    const meetingSecretary = await meeting.secretary;
     const currentApplicationSecretary = await this.mandatees.getCurrentApplicationSecretary();
 
     // decision-activity
@@ -137,7 +138,7 @@ export default class AgendaService extends Service {
       subcase,
       startDate: meeting.plannedStart,
       decisionResultCode,
-      secretary: currentApplicationSecretary
+      secretary: meetingSecretary ? meetingSecretary : currentApplicationSecretary
     });
     await decisionActivity.save();
 

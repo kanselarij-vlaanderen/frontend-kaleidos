@@ -27,29 +27,28 @@
 
   {{#if this.isEditing}}
     <Auk::Panel::Body>
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3">
-          <div
-            data-test-publication-translations-info-panel-edit-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{@translationSubcase.dueDate}}
-              @onChange={{set @translationSubcase "dueDate"}}
-            />
-            {{#if
-              (and
-                (not @isFinal)
-                (is-after-days @translationSubcase.dueDate)
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
+      <div class="au-c-form">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-3">
+            <AuFormRow data-test-publication-translations-info-panel-edit-due-date>
+              <Auk::Label>{{t "publication-flow-translation-due-date"}}</Auk::Label>
+              <Auk::Datepicker
+                @date={{@translationSubcase.dueDate}}
+                @onChange={{set @translationSubcase "dueDate"}}
               />
-            {{/if}}
+              {{#if
+                (and
+                  (not @isFinal)
+                  (is-after-days @translationSubcase.dueDate)
+                )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </AuFormRow>
           </div>
         </div>
       </div>

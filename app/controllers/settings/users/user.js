@@ -14,7 +14,7 @@ export default class SettingsUsersUserController extends Controller {
   @tracked showUnblockMembership = false;
   @tracked selectedPerson = null;
 
-  VISIBLE_ROLES = [
+  visibleRoles = [
     CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
     CONSTANTS.MANDATE_ROLES.MINISTER,
     CONSTANTS.MANDATE_ROLES.VOORZITTER,

@@ -172,8 +172,9 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
  * @param {Number} mandateeNumber - The list index of the mandatee
  * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
  * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
+ * @param {isDesignAgenda} isDesignAgenda - whether or not the agenda has status designagenda. Defaults to true
  */
-function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
+function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle, isDesignAgenda = true) {
   cy.log('addAgendaitemMandatee');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('PATCH', '/agendaitems/*').as(`patchAgendaitem${randomInt}`);
@@ -183,9 +184,13 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
   cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
   cy.wait(`@patchAgendaitem${randomInt}`, {
     timeout: 40000,
-  }).wait(`@patchAgenda${randomInt}`, {
-    timeout: 40000,
   });
+  // the modified property is only changed on a designagenda.
+  if (isDesignAgenda) {
+    cy.wait(`@patchAgenda${randomInt}`, {
+      timeout: 40000,
+    });
+  }
   // the mandatee groups have to be recalculated.
   cy.wait(2000);
 
