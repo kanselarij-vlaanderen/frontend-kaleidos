@@ -85,9 +85,9 @@ function renderMinutes(data) {
 }
 
 function mandateeName(mandatee) {
-  return `${mandatee.person.get('firstName')} ${mandatee.person.get(
+  return mandatee ? `${mandatee.person.get('firstName')} ${mandatee.person.get(
     'lastName'
-  )}`;
+  )}` : '';
 }
 
 export default class AgendaMinutesController extends Controller {
