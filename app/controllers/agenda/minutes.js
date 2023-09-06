@@ -9,6 +9,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
@@ -171,12 +172,11 @@ export default class AgendaMinutesController extends Controller {
   }
 
   exportPdf = task(async (minutes) => {
-    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
+    try {
+      return await generateMinutes(minutes.id);
+    } catch (error) {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
     }
-    return await resp.json();
   });
 
   saveMinutes = task(async () => {

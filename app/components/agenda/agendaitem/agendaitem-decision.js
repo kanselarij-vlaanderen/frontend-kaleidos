@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { generateDecisionReport } from 'frontend-kaleidos/utils/generate-pdf';
 import ENV from 'frontend-kaleidos/config/environment';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -203,12 +204,11 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   exportPdf = task(async (report) => {
-    const resp = await fetch(`/generate-decision-report/${report.id}`);
-    if (!resp.ok) {
+    try {
+      return await generateDecisionReport(report.id);
+    } catch (error) {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
     }
-    return await resp.json();
   });
 
   async replaceReportFile(report, fileId) {
