@@ -3,8 +3,7 @@ import ApplicationSerializer from './application';
 const SKIP_SERIALIZED = [
   'loginActivity',
   'account',
-  'secretaryForAgendas',
-  'secretaryForDecisions',
+  'person',
 ];
 
 export default class AgendaSerializer extends ApplicationSerializer {

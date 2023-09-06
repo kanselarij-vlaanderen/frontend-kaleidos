@@ -37,7 +37,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @tracked _meetingNumber;
   @tracked _numberRepresentation;
 
-  VISIBLE_ROLES = [
+  visibleRoles = [
     CONSTANTS.MANDATE_ROLES.SECRETARIS,
     CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
   ];
@@ -96,6 +96,10 @@ export default class MeetingEditMeetingComponent extends Component {
       this.initializeMainMeeting.isRunning ||
       this.saveMeeting.isRunning
     );
+  }
+
+  get cancelIsDisabled() {
+    return this.saveMeeting.isRunning;
   }
 
   @action
@@ -220,11 +224,11 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     if (this.args.meeting.secretary != this.secretary) {
-      const decisionActivities = yield this.store.query('decision-activity', {
+      const decisionActivities = yield this.store.queryAll('decision-activity', {
         'filter[treatment][agendaitems][agenda][created-for][:id:]':
           this.args.meeting.id,
       });
-      for (let decisionActivity of decisionActivities.toArray()) {
+      for (let decisionActivity of decisionActivities.slice()) {
         decisionActivity.secretary = this.secretary;
         yield decisionActivity.save();
       }

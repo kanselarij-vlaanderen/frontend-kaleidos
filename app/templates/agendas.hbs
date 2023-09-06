@@ -136,9 +136,9 @@
                   </td>
                   <td>
                     {{#if agenda.createdFor.agenda}}
-                      <AuPill @size="small">{{t "closed"}}</AuPill>
+                      <AuPill data-test-route-agendas-overview-row-status-closed @size="small">{{t "closed"}}</AuPill>
                     {{else}}
-                      <AuPill @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
+                      <AuPill data-test-route-agendas-overview-row-status-opened @size="small" @skin="ongoing">{{t "opened"}}</AuPill>
                     {{/if}}
                   </td>
                   <td data-test-route-agendas-overview-row-kind>

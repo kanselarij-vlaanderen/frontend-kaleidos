@@ -27,40 +27,39 @@
 
   {{#if this.isEditing}}
     <Auk::Panel::Body>
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3">
-          <div
-            data-test-proof-info-panel-edit-due-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{@publicationSubcase.dueDate}}
-              @onChange={{set @publicationSubcase "dueDate"}}
-            />
-            {{#if
-              (and
-                (not @isFinal)
-                (is-after-days @publicationSubcase.dueDate)
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
+      <div class="au-c-form">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-3">
+            <AuFormRow data-test-proof-info-panel-edit-due-date>
+              <Auk::Label>{{t "publication-flow-publication-due-date"}}</Auk::Label>
+              <Auk::Datepicker
+                @date={{@publicationSubcase.dueDate}}
+                @onChange={{set @publicationSubcase "dueDate"}}
               />
-            {{/if}}
+              {{#if
+                (and
+                  (not @isFinal)
+                  (is-after-days @publicationSubcase.dueDate)
+                )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </AuFormRow>
           </div>
-        </div>
-        <div class="auk-o-grid-col-3">
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "proofprint-corrector"}}
-            </Auk::Label>
-            <AuInput
-              data-test-proof-info-panel-edit-corrector
-              @value={{mut @publicationSubcase.proofPrintCorrector}}
-            />
+          <div class="auk-o-grid-col-3">
+            <AuFormRow>
+              <Auk::Label>
+                {{t "proofprint-corrector"}}
+              </Auk::Label>
+              <AuInput
+                data-test-proof-info-panel-edit-corrector
+                @value={{mut @publicationSubcase.proofPrintCorrector}}
+              />
+            </AuFormRow>
           </div>
         </div>
       </div>

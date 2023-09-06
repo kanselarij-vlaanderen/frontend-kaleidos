@@ -7,7 +7,7 @@ reset-cache-resource-only:
 	- sleep 5
 
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file forever-cache cache resource migrations cache-warmup publication-report
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file forever-cache cache resource migrations cache-warmup publication-report decision-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d
@@ -62,3 +62,39 @@ drc-up-d-service:
 
 drc:
 	- docker-compose ${COMPOSE_FILE} ${args}
+
+new-zip-run-migrations:
+# start with a clean DB (no tests run yet / reset before test)
+# optional, make a backup of current zips (or discard changes if final zips are wrong)
+	- make drc-kill
+	- rm -rf ${PROJECT_PATH}/testdata
+	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
+	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
+	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
+	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
+	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
+# instead of backup up the zips you could rename the current ones after this step
+# wait till migrations are done
+
+new-zip-run-yggdrasil:
+# make sure the yggdrasil env flags are enabled => USE_DIRECT_QUERIES: "yes" / RELOAD_ON_INIT: "true"
+# manually remove all 3 graphs via sparql
+# DROP SILENT GRAPH <http://mu.semte.ch/graphs/organizations/intern-regering>
+# DROP SILENT GRAPH <http://mu.semte.ch/graphs/organizations/intern-overheid>
+# DROP SILENT GRAPH <http://mu.semte.ch/graphs/organizations/minister>
+	-	docker-compose ${COMPOSE_FILE} up -d database
+	- docker-compose ${COMPOSE_FILE} up -d yggdrasil && docker-compose ${COMPOSE_FILE} logs -f yggdrasil
+# wait for yggdrasil to complete, remove the flags and docker-compose kill yggdrasil.
+
+new-zip-run-reindex:
+# run ./scripts/reset-elastic-test.sh in the project folder
+	- docker-compose ${COMPOSE_FILE} logs -f search
+# wait for search reindex to complete
+# testdata folder should now contain new index and new database.
+# put the elasticsearch folder in a folder named "testdata-elasticsearch" and zip it
+# keep the other folders in the testdata folder and zip the "testdata" folder.
+# these 2 should be the new zips
+# run make reset-elastic-and-cache and verify
+# testdata.zip contains folder named "testdata" with subfolders "db", "files", "tika"
+# testdata-elasticsearch.zip contains folder named "testdata-elasticsearch" with subfolder "elasticsearch"

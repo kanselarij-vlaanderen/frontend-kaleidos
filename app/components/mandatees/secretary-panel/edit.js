@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -14,7 +13,7 @@ export default class MandateesSecretaryPanelEditComponent extends Component {
 
   @tracked secretary;
 
-  VISIBLE_ROLES = [
+  visibleRoles = [
     CONSTANTS.MANDATE_ROLES.SECRETARIS,
     CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
   ];
@@ -23,11 +22,6 @@ export default class MandateesSecretaryPanelEditComponent extends Component {
     await this.args.onSave?.(this.secretary);
     this.isEditing = false;
   });
-
-  @action
-  cancel() {
-    this.args.onCancel?.();
-  }
 
   get selectedSecretary() {
     if (this.secretary) {
