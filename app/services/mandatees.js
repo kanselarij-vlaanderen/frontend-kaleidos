@@ -171,4 +171,16 @@ export default class MandateesService extends Service {
     );
     return sortedMandatees;
   }
+
+  async getCurrentApplicationSecretary() {
+    const [currentApplicationSecretary] =
+      await this.getMandateesActiveOn.perform(
+        new Date(),
+        undefined,
+        undefined,
+        [CONSTANTS.MANDATE_ROLES.SECRETARIS]
+      );
+
+    return currentApplicationSecretary;
+  }
 }

@@ -1,13 +1,15 @@
 <Auk::Modal>
   <Auk::Modal::Header @title={{t "edit-case"}} @onClose={{this.close}} />
   <Auk::Modal::Body>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      <Auk::Textarea
-        data-test-edit-case-shorttitle
-        @rows="2"
-        @value={{mut this.shortTitle}}
-      />
+    <div class="au-c-form">
+      <AuFormRow>
+        <Auk::Label>{{t "short-title-case"}}</Auk::Label>
+        <Auk::Textarea
+          data-test-edit-case-shorttitle
+          @rows="2"
+          @value={{mut this.shortTitle}}
+        />
+      </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer

@@ -2,9 +2,9 @@
 <Auk::Navbar>
   <form
     {{on "submit" this.search}}
-    class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4"
+    class="au-c-form au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4"
   >
-    <div class="auk-form-group au-u-margin-bottom-none au-u-3-4">
+    <AuFormRow class="au-u-3-4">
       <div class="auk-o-flex auk-o-flex--align-baseline">
         <Auk::Label for="keyword" class="auk-u-mr">
           {{capitalize (t "keyword")}}
@@ -18,8 +18,8 @@
         id="keyword"
         placeholder={{t "search-placeholder"}}
       />
-    </div>
-    <div class="auk-form-group au-u-margin-bottom-none au-u-1-4">
+    </AuFormRow>
+    <AuFormRow class="au-u-margin-top-none au-u-1-4">
       <AuButton
         data-test-route-search-trigger
         @skin="primary"
@@ -29,7 +29,7 @@
       >
         {{t "search"}}
       </AuButton>
-    </div>
+    </AuFormRow>
   </form>
 </Auk::Navbar>
 <AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
