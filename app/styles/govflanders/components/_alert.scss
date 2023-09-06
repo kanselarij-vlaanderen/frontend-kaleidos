@@ -190,3 +190,25 @@ $alert-padding-small: 1.5rem;
     }
   }
 }
+
+// Moved from app/styles/custom-application/toast.scss
+.vl-alert-relative {
+  opacity: 0.85;
+  position: fixed;
+  z-index: 9999999; // from ember-appuniversum
+  box-shadow: $auk-shadow-small;
+
+  animation: fpFadeInLeft 0.3s linear;
+  opacity: 1;
+
+  &--center {
+    left: 20%;
+    top: 60px;
+    right: 20%;
+    width: 60%;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
