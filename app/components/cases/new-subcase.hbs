@@ -1,5 +1,5 @@
 <Auk::Modal>
-  <Auk::Modal::Header @title={{t "create-subcase"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header @closeDisabled={{this.saveSubcase.isRunning}} @title={{t "create-subcase"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent
       @isLoading={{this.areLoadingTasksRunning}}

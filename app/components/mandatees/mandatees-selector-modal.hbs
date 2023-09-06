@@ -1,5 +1,5 @@
 <Auk::Modal @size="large">
-  <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header @closeDisabled={{this.onAdd.isRunning}} @title={{t "add-minister"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
       <AuCheckbox

@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{t "unpublish-publication-modal-title"}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.confirmUnpublish.isRunning}}
   />
   <Auk::Modal::Body>
     <AuFieldset as |Fieldset|>

@@ -1,5 +1,5 @@
 <Auk::Modal @size="large">
-  <Auk::Modal::Header @title={{t "add-agendaitems"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header @closeDisabled={{this.addSubcasesToAgenda.isRunning}} @title={{t "add-agendaitems"}} @onClose={{@onClose}} />
   <Auk::Modal::Body>
     {{#if this.addSubcasesToAgenda.isRunning}}
       <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">

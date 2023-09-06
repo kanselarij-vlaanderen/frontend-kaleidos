@@ -2,7 +2,8 @@
   @size="medium">
   <Auk::Modal::Header
     @title={{t "add-organization"}}
-    @onClose={{@onCancel}} />
+    @onClose={{@onCancel}} 
+    @closeDisabled={{this.save.isRunning}}/>
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">

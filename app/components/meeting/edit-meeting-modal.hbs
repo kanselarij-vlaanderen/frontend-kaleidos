@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{if this.isNew (t "new-agenda") (t "edit-meeting")}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.saveMeeting.isRunning}}
   />
   <Auk::Modal::Body>
     <Utils::KindSelector

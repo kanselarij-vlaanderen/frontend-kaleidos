@@ -1,5 +1,5 @@
 <Auk::Modal @size="full-screen-padded">
-  <Auk::Modal::Header @title={{t "documents"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Header @closeDisabled={{this.save.isRunning}} @title={{t "documents"}} @onClose={{@onCancel}} />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{this.isLoading}}>
       <table class="auk-table auk-table--styled auk-table--bordered">

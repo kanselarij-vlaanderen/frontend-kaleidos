@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{or @title (t "publish-publication-modal-title")}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.confirmPublish.isRunning}}
   />
   <Auk::Modal::Body>
     {{this.confirmationMessage}}
