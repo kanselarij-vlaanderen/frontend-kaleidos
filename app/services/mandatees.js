@@ -120,7 +120,7 @@ export default class MandateesService extends Service {
     if (referenceDateTo) {
       // Many versions of a mandatee exist within a government-body.
       // We only want those versions with a start-end range that covers the given referenceDate
-      queryOptions['filter[:lt:start]'] = referenceDateTo.toISOString();
+      queryOptions['filter[:lte:start]'] = referenceDateTo.toISOString();
       // No queryOptions[':lt:end'] = referenceDate; here
       // "end" is optional in data.
       // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
@@ -132,7 +132,7 @@ export default class MandateesService extends Service {
     if (referenceDateFrom) {
       mandatees = mandatees.filter((mandatee) => {
         if (mandatee.end) {
-          return mandatee.end >= referenceDateFrom;
+          return mandatee.end > referenceDateFrom;
         } else {
           return true; // currently active mandatees
         }
@@ -170,5 +170,17 @@ export default class MandateesService extends Service {
       sortByDeltaToRef(referenceDate)(a.start, b.start)
     );
     return sortedMandatees;
+  }
+
+  async getCurrentApplicationSecretary() {
+    const [currentApplicationSecretary] =
+      await this.getMandateesActiveOn.perform(
+        new Date(),
+        undefined,
+        undefined,
+        [CONSTANTS.MANDATE_ROLES.SECRETARIS]
+      );
+
+    return currentApplicationSecretary;
   }
 }

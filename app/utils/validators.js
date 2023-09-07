@@ -32,11 +32,4 @@ export class Validator {
   get showError() {
     return this.isErrorEnabled && !this.check();
   }
-
-  get errorClass() {
-    if (this.showError) {
-      return 'auk-form-group--error';
-    }
-    return '';
-  }
 }

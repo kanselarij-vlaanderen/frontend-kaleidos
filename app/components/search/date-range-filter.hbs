@@ -1,20 +1,22 @@
 <div class="au-c-card au-o-box au-o-box--small">
-  <div class="auk-form-group auk-u-position-relative au-u-margin-bottom-small" data-test-route-search-date-from>
-    <Auk::Label>{{t "from"}}</Auk::Label>
-    <Auk::Datepicker
-      @date={{@dateFrom}}
-      @onChange={{@onDateFromChange}}
-      @enableClear={{@dateFrom}}
-      @onClear={{@onDateFromClear}}
-    />
-  </div>
-  <div class="auk-form-group auk-u-position-relative" data-test-route-search-date-to>
-    <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
-    <Auk::Datepicker
-      @date={{@dateTo}}
-      @onChange={{@onDateToChange}}
-      @enableClear={{@dateTo}}
-      @onClear={{@onDateToClear}}
-    />
+  <div class="au-c-form">
+    <AuFormRow data-test-route-search-date-from>
+      <Auk::Label>{{t "from"}}</Auk::Label>
+      <Auk::Datepicker
+        @date={{@dateFrom}}
+        @onChange={{@onDateFromChange}}
+        @enableClear={{@dateFrom}}
+        @onClear={{@onDateFromClear}}
+      />
+    </AuFormRow>
+    <AuFormRow class="au-u-margin-top-small" data-test-route-search-date-to>
+      <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+      <Auk::Datepicker
+        @date={{@dateTo}}
+        @onChange={{@onDateToChange}}
+        @enableClear={{@dateTo}}
+        @onClear={{@onDateToClear}}
+      />
+    </AuFormRow>
   </div>
 </div>

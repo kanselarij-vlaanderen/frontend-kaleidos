@@ -11,6 +11,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service currentSession;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
+  @service decisionReportGeneration;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -94,6 +95,20 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       true,
     );
     this.agendaitemsController.groupNotasOnGroupName.perform();
+  }
+
+  @action
+  async saveSecretary(secretary) {
+    this.decisionActivity.secretary = secretary;
+    await this.decisionActivity.save();
+    const report = await this.store.queryOne('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[decision-activity][:id:]': this.decisionActivity.id,
+    });
+    const pieceParts = await report?.pieceParts;
+    if (pieceParts) {
+      await this.decisionReportGeneration.generateReplacementReport.perform(report);
+    }
   }
 
   @action

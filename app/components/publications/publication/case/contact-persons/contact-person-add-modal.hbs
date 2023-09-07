@@ -6,46 +6,62 @@
     @closeDisabled={{this.save.isRunning}}/>
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group auk-form-group--grid">
-          <div class={{this.validators.firstName.errorClass}}>
-            <Auk::Label for="firstNameInput" @required={{true}}>
-              {{t "first-name"}}
-            </Auk::Label>
-            <AuInput
-              data-test-contact-person-add-first-name
-              @width="block"
-              @value={{this.firstName}}
-              {{on "input" this.validators.firstName.enableError}}
-              id="firstNameInput"
-            />
+      <div class="au-c-form">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <AuLabel
+                for="firstNameInput"
+                @required={{true}}
+                @error={{this.validators.firstName.showError}}
+              >
+                {{t "first-name"}}
+              </AuLabel>
+              <AuInput
+                data-test-contact-person-add-first-name
+                @width="block"
+                @value={{this.firstName}}
+                @error={{this.validators.firstName.showError}}
+                {{on "input" this.validators.firstName.enableError}}
+                id="firstNameInput"
+              />
+            </AuFormRow>
           </div>
-          <div class={{this.validators.lastName.errorClass}}>
-            <Auk::Label for="lastNameInput" @required={{true}}>
-              {{t "last-name"}}
-            </Auk::Label>
-            <AuInput
-              data-test-contact-person-add-last-name
-              @width="block"
-              @value={{this.lastName}}
-              {{on "input" this.validators.lastName.enableError}}
-              id="lastNameInput"
-            />
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <AuLabel
+                for="lastNameInput"
+                @required={{true}}
+                @error={{this.validators.lastName.showError}}
+              >
+                {{t "last-name"}}
+              </AuLabel>
+              <AuInput
+                data-test-contact-person-add-last-name
+                @width="block"
+                @value={{this.lastName}}
+                @error={{this.validators.lastName.showError}}
+                {{on "input" this.validators.lastName.enableError}}
+                id="lastNameInput"
+              />
+            </AuFormRow>
           </div>
         </div>
-        <div class="auk-form-group">
-          <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
+        <AuFormRow>
+          <AuLabel for="emailInput">
+            {{t "email"}}
+          </AuLabel>
           <AuInput
             data-test-contact-person-add-email
             @width="block"
             @value={{this.email}}
             id="emailInput"
           />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>
+        </AuFormRow>
+        <AuFormRow>
+          <AuLabel for="organizationInput">
             {{t "organization"}}
-          </Auk::Label>
+          </AuLabel>
           <div data-test-contact-person-select-organization class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
@@ -56,6 +72,7 @@
               @placeholder={{t "search-organization"}}
               @onChange={{this.setOrganization}}
               @allowClear={{true}}
+              @triggerId="organizationInput"
               as |organization|>
               {{ organization.name }}
             </PowerSelect>
@@ -70,7 +87,7 @@
               {{t "add-organization"}}
             </AuButton>
           </div>
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

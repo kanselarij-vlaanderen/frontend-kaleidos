@@ -7,10 +7,12 @@
 
   &__title-container {
     margin-left: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+
     .title {
       display: flex;
       align-items: center;
+      gap: 1rem;
     }
   }
   &__title {

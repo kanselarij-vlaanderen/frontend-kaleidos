@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, beforeEach, afterEach */
+/* global context, expect, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
 import publication from '../../selectors/publication.selectors';
@@ -338,5 +338,63 @@ context('Publications proofs tests', () => {
     cy.get(publication.publicationNav.proofs).click();
     cy.get(publication.proofInfoPanel.view.dueDate).contains('-');
     cy.get(auk.formHelpText).should('not.exist');
+  });
+
+  it('should check the threadId field in proofs', () => {
+    const threadId = 123456;
+    const formattedThreadId = `thread::${threadId}::`;
+
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/dossier');
+
+    // setup
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear()
+      .type(threadId);
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.intercept('PATCH', '/identifications/**').as('patchThreadId1');
+    cy.intercept('POST', '/identifications').as('postThreadId');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    cy.wait('@patchThreadId1');
+    cy.wait('@postThreadId');
+
+    // check if message contains thread id
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(publication.proofRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(formattedThreadId);
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // remove id
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.intercept('PATCH', '/identifications/**').as('patchThreadId2');
+    cy.intercept('DELETE', '/identifications/**').as('deleteThreadId');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    cy.wait('@patchThreadId2');
+    cy.wait('@deleteThreadId');
+    cy.get(publication.publicationCaseInfo.threadId).contains('-');
+
+    // check if message does not contain thread id
+    cy.get(publication.publicationNav.proofs).click();
+    cy.get(publication.proofsIndex.newRequest).click();
+    cy.get(publication.proofRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain('Titel: Besluitvorming Vlaamse Regering hoed');
+      expect($p).to.not.contain(formattedThreadId);
+    });
   });
 });

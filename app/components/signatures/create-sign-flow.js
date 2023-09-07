@@ -38,7 +38,7 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
-      'filter[:lt:start]': startOfDay(new Date()).toISOString(),
+      'filter[:lte:start]': startOfDay(new Date()).toISOString(),
       'filter[:has-no:end]': true,
       include: 'person,mandate.role',
     });

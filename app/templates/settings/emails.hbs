@@ -15,102 +15,75 @@
       <Auk::Panel::Body>
         <div class="auk-content">
           <h4>{{t "translation-requests"}}</h4>
-          <div class="auk-form-group-layout--horizontal">
-            <div class="auk-form-group">
-              <Auk::Label @required={{true}}>
+          <div class="au-c-form">
+            <AuFormRow @alignment="inline">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.translationRequestToEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.translationRequestToEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.translationRequestCcEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.translationRequestCcEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.translationRequestReplyToEmail}}
-                @width="block"
-              />
-            </div>
+              </AuLabel>
+              <AuInput @value={{mut this.model.translationRequestReplyToEmail}}/>
+            </AuFormRow>
           </div>
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Body>
         <div class="auk-content">
           <h4>{{t "proof-requests"}}</h4>
-          <div class="auk-form-group-layout--horizontal">
-            <div class="auk-form-group">
-              <Auk::Label @required={{true}}>
+          <div class="au-c-form">
+            <AuFormRow @alignment="inline">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.proofRequestToEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.proofRequestToEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.proofRequestCcEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.proofRequestCcEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.proofRequestReplyToEmail}}
-                @width="block"
-              />
-            </div>
+              </AuLabel>
+              <AuInput @value={{mut this.model.proofRequestReplyToEmail}}/>
+            </AuFormRow>
           </div>
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Body>
         <div class="auk-content">
           <h4>{{t "publication-requests"}}</h4>
-          <div class="auk-form-group-layout--horizontal">
-            <div class="auk-form-group">
-              <Auk::Label @required={{true}}>
+          <div class="au-c-form">
+            <AuFormRow @alignment="inline">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.publicationRequestToEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.publicationRequestToEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.publicationRequestCcEmail}}
-                @width="block"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label>
+              </AuLabel>
+              <AuInput @value={{mut this.model.publicationRequestCcEmail}}/>
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
-              </Auk::Label>
-              <AuInput
-                @value={{mut this.model.publicationRequestReplyToEmail}}
-                @width="block"
-              />
-            </div>
+              </AuLabel>
+              <AuInput @value={{mut this.model.publicationRequestReplyToEmail}}/>
+            </AuFormRow>
           </div>
         </div>
       </Auk::Panel::Body>
