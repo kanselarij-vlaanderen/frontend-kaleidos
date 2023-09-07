@@ -55,7 +55,8 @@ export default class SignatureService extends Service {
       for (let signFlow of signFlows) {
         await this.removeSignFlow(signFlow, true);
       }
-      throw new Error(response.statusText);
+      const json = await response.json();
+      throw new Error(JSON.stringify(json) ?? response.statusText);
     }
   }
 
