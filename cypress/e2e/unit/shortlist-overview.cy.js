@@ -298,9 +298,11 @@ context('signatures shortlist overview tests', () => {
     cy.get(signature.createSignFlow.notificationAdresses.item).should('not.exist');
 
     // start signflow
-    cy.get(route.signatures.sidebar.startSignflow).click();
-    cy.wait(5000);
-    // TODO where patchcalls?
+    // cy.get(route.signatures.sidebar.startSignflow).click();
+    // cy.wait(5000);
+
+    // no email set
+    cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
   });
 
   it('check dossierbeheerder add one minister', () => {
@@ -381,7 +383,8 @@ context('signatures shortlist overview tests', () => {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
     cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
-    cy.get(route.signatures.sidebar.startSignflow).click();
+    // no email set so forcing through
+    cy.get(route.signatures.sidebar.startSignflow).forceClick(); // disabled button
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
@@ -397,7 +400,8 @@ context('signatures shortlist overview tests', () => {
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows2');
     cy.intercept('POST', '/signing-flows/upload-to-signinghub', staticResponse).as('stubUpload');
-    cy.get(route.signatures.sidebar.startSignflow).click();
+    // no email set so forcing through
+    cy.get(route.signatures.sidebar.startSignflow).forceClick(); // disabled button
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
@@ -425,6 +429,22 @@ context('signatures shortlist overview tests', () => {
     cy.wait('@deleteSigningActivities3');
     // table currently empty at this point, but could contain more data in the future
     // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
+  });
+
+  it('remove mandatees from organisation', () => {
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    // unlink first mandatee
+    cy.intercept('PATCH', '/user-organizations/**').as('patchorgs');
+    cy.get(settings.organization.technicalInfo.row.unlinkMandatee).eq(0)
+      .click();
+    cy.get(settings.organization.confirm.unlinkMandatee).click()
+      .wait('@patchorgs');
+    // unlink second mandatee
+    cy.get(settings.organization.technicalInfo.row.unlinkMandatee).eq(0)
+      .click();
+    cy.get(settings.organization.confirm.unlinkMandatee).click()
+      .wait('@patchorgs');
+    cy.get(settings.organization.technicalInfo.row.mandatee).should('not.exist');
   });
 });
 
