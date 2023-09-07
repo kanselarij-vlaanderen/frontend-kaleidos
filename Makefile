@@ -7,7 +7,7 @@ reset-cache-resource-only:
 	- sleep 5
 
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file forever-cache cache resource migrations cache-warmup publication-report
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file forever-cache cache resource migrations cache-warmup publication-report decision-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d

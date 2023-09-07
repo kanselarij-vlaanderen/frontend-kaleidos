@@ -12,8 +12,8 @@
       @isLoading={{this.isLoading}}
       @reserveSpace={{true}}
     >
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group" data-test-publication-request-body>
+      <div class="au-c-form">
+        <AuFormRow data-test-publication-request-body>
           <Auk::Label @required={{true}}>
             {{t "attachments"}}
           </Auk::Label>
@@ -24,21 +24,23 @@
             @pieces={{this.transferredPieces}}
             @viewable={{true}}
             @onDeletePiece={{this.unlinkTransferredPiece}}
+            class="au-u-margin-top-tiny"
           />
           <Publications::Publication::PublicationDocumentsList
             @pieces={{this.uploadedPieces}}
             @onDeletePiece={{perform this.deleteUploadedPiece}}
+            class="au-u-margin-top-tiny"
           />
-        </div>
-        <div class="auk-form-group auk-u-mt-4">
+        </AuFormRow>
+        <AuFormRow>
           <AuCheckbox
             @checked={{this.mustUpdatePublicationStatus}}
             @onChange={{this.setPublicationRequestedStatus}}
           >
             {{t "update-publication-status-publication-requested"}}
           </AuCheckbox>
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label for="publicationRequestModal_subject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
@@ -48,8 +50,8 @@
             @value={{mut this.subject}}
             id="publicationRequestModal_subject"
           />
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label for="publicationRequestModal_message" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
@@ -60,7 +62,7 @@
             rows="16"
             @value={{mut this.message}}
           />
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

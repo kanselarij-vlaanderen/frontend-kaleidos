@@ -66,25 +66,27 @@
       @onClose={{this.closeEditProofModal}}
     />
     <Auk::Modal::Body>
-      <div class="auk-form-group">
-        <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
-          {{t "date"}}
-        </Auk::Label>
-        <Auk::Datepicker
-          id="proofUploadReceivedDate"
-          @date={{this.newReceivedDate}}
-          @onChange={{set this "newReceivedDate"}}
-        />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label for="proofPrintCorrector">
-          {{t "who-proof-reads"}}
-        </Auk::Label>
-        <AuInput
-          data-test-proof-received-panel-edit-corrector
-          @value={{mut this.newProofPrintCorrector}}
-          id="proofPrintCorrector"
-        />
+      <div class="au-c-form">
+        <AuFormRow>
+          <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+            {{t "date"}}
+          </Auk::Label>
+          <Auk::Datepicker
+            id="proofUploadReceivedDate"
+            @date={{this.newReceivedDate}}
+            @onChange={{set this "newReceivedDate"}}
+          />
+        </AuFormRow>
+        <AuFormRow>
+          <Auk::Label for="proofPrintCorrector">
+            {{t "who-proof-reads"}}
+          </Auk::Label>
+          <AuInput
+            data-test-proof-received-panel-edit-corrector
+            @value={{mut this.newProofPrintCorrector}}
+            id="proofPrintCorrector"
+          />
+        </AuFormRow>
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer

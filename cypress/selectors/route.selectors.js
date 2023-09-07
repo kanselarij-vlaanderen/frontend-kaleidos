@@ -27,6 +27,8 @@ const selectors = {
     loader: '[data-test-route-agendas-overview-loader]',
     row: {
       title: '[data-test-route-agendas-overview-row-title]',
+      statusOpened: '[data-test-route-agendas-overview-row-status-opened]',
+      statusClosed: '[data-test-route-agendas-overview-row-status-closed]',
       kind: '[data-test-route-agendas-overview-row-kind]',
       navButton: '[data-test-route-agendas-overview-row-nav-button]',
     },

@@ -22,8 +22,8 @@
           <p>{{t "publications-new-warning-message"}}</p>
         </AuAlert>
       {{/unless}}
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group">
+      <div class="au-c-form">
+        <AuFormRow>
           <Auk::Label
             for="publicationNumberInput"
             @required={{true}}
@@ -60,8 +60,8 @@
               @icon="alert-triangle"
             />
           {{/if}}
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label
             for="shortTitleInput"
             @required={{true}}
@@ -84,8 +84,8 @@
               @icon="alert-triangle"
             />
           {{/if}}
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label for="longTitleInput">
             {{t "title-subcase"}}
           </Auk::Label>
@@ -95,9 +95,9 @@
             @value={{mut this.longTitle}}
             data-test-new-publication-long-title
           />
-        </div>
+        </AuFormRow>
         <div class="auk-o-grid-auto">
-          <div class="auk-form-group">
+          <AuFormRow>
             <Auk::Label>
               {{t "decision-date"}}
             </Auk::Label>
@@ -111,8 +111,8 @@
                 @onChange={{set this "decisionDate"}}
               />
             {{/if}}
-          </div>
-          <div class="auk-form-group">
+          </AuFormRow>
+          <AuFormRow>
             <Auk::Label>
               {{t "publication-flow-opening-date"}}
             </Auk::Label>
@@ -120,8 +120,8 @@
               @date={{this.openingDate}}
               @onChange={{set this "openingDate"}}
             />
-          </div>
-          <div class="auk-form-group">
+          </AuFormRow>
+          <AuFormRow>
             <Auk::Label>
               {{t "publication-flow-publication-due-date"}}
             </Auk::Label>
@@ -129,7 +129,7 @@
               @date={{this.publicationDueDate}}
               @onChange={{set this "publicationDueDate"}}
             />
-          </div>
+          </AuFormRow>
         </div>
       </div>
     </Utils::LoadableContent>

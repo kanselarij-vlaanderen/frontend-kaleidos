@@ -60,4 +60,62 @@ context('Publications proofs tests', () => {
       expect($p).to.contain(formattedLateEndDate);
     });
   });
+
+  it('should check the threadId field in proofs', () => {
+    const threadId = 123456;
+    const formattedThreadId = `thread::${threadId}::`;
+
+    cy.visit('/publicaties/626FBC3BCB00108193DC4361/dossier');
+
+    // setup
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear()
+      .type(threadId);
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.intercept('PATCH', '/identifications/**').as('patchThreadId1');
+    cy.intercept('POST', '/identifications').as('postThreadId');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    cy.wait('@patchThreadId1');
+    cy.wait('@postThreadId');
+
+    // check if message contains thread id
+    cy.get(publication.publicationNav.publications).click();
+    cy.get(publication.publicationActivities.request).click();
+    cy.get(publication.publicationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain(formattedThreadId);
+    });
+    cy.get(auk.modal.footer.cancel).click();
+
+    // remove id
+    cy.get(publication.publicationNav.case).click();
+    cy.get(publication.publicationCaseInfo.edit).click();
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear();
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
+    cy.intercept('PATCH', '/identifications/**').as('patchThreadId2');
+    cy.intercept('DELETE', '/identifications/**').as('deleteThreadId');
+    cy.get(publication.publicationCaseInfo.editView.save).click();
+    cy.wait('@patchPublicationFlow');
+    cy.wait('@patchPublicationSubcase');
+    cy.wait('@patchThreadId2');
+    cy.wait('@deleteThreadId');
+    cy.get(publication.publicationCaseInfo.threadId).contains('-');
+
+    // check if message does not contain thread id
+    cy.get(publication.publicationNav.publications).click();
+    cy.get(publication.publicationActivities.request).click();
+    cy.get(publication.publicationRequest.message).invoke('val')
+      .as('value');
+    cy.get('@value').should(($p) => {
+      expect($p).to.contain('De gewenste datum van publicatie is');
+      expect($p).to.not.contain(formattedThreadId);
+    });
+  });
 });
