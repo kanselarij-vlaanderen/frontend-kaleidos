@@ -26,6 +26,8 @@ context('Publications via MR tests', () => {
   const dueDate = Cypress.dayjs().add(3, 'weeks');
   const formattedDueDate = dueDate.format('DD-MM-YYYY');
   const numacNumber = 134792468;
+  const threadId = 123456;
+  const formattedThreadId = `thread::${threadId}::`;
   const subcaseTitleShort = 'Cypress test: Publications via MR - 1652967454';
   const nameToCheck = 'Jambon';
   const fileName1 = 'nieuwePublicatie'; // type nota
@@ -163,12 +165,16 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear()
+      .type(threadId);
     cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
     cy.get(publication.publicationCaseInfo.editView.cancel).click();
     cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber1);
     cy.get(publication.publicationCaseInfo.numacNumber).contains('-');
+    cy.get(publication.publicationCaseInfo.threadId).contains('-');
     cy.get(publication.publicationCaseInfo.dueDate).contains('-');
 
     // check edit and save
@@ -179,6 +185,9 @@ context('Publications via MR tests', () => {
     cy.get(publication.publicationCaseInfo.editView.numacNumber).find(dependency.emberTagInput.input)
       .click()
       .type(`${numacNumber}{enter}`);
+    cy.get(publication.publicationCaseInfo.editView.threadId).click()
+      .clear()
+      .type(` ${threadId} `); // leading and trailing space to check formatting
     cy.get(publication.publicationCaseInfo.editView.dueDate).find(auk.datepicker.datepicker)
       .click();
     cy.setDateInFlatpickr(dueDate);
@@ -189,6 +198,7 @@ context('Publications via MR tests', () => {
     cy.wait('@patchPublicationSubcase');
     cy.get(publication.publicationCaseInfo.publicationNumber).contains(publicationNumber2);
     cy.get(publication.publicationCaseInfo.numacNumber).contains(numacNumber);
+    cy.get(publication.publicationCaseInfo.threadId).contains(formattedThreadId);
     cy.get(publication.publicationCaseInfo.dueDate).contains(formattedDueDate);
 
     // check document access not changeable

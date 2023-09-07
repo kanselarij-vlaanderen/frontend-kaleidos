@@ -27,59 +27,58 @@
 
   {{#if this.isEditing}}
     <Auk::Panel::Body>
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col-3">
-          <div
-            data-test-publications-info-panel-edit-view-target-end-date
-            class="auk-form-group"
-          >
-            <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
-            <Auk::Datepicker
-              @date={{@publicationSubcase.targetEndDate}}
-              @onChange={{this.setTargetEndDate}}
-            />
-            {{#if
-              (and
-                (not @publicationFlow.status.isFinal)
-                @publicationSubcase.isOverdue
-              )
-            }}
-              <Auk::FormHelpText
-                @text={{t "date-expired"}}
-                @skin="warning"
-                @icon="alert-triangle"
+      <div class="au-c-form">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-3">
+            <AuFormRow data-test-publications-info-panel-edit-view-target-end-date>
+              <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
+              <Auk::Datepicker
+                @date={{@publicationSubcase.targetEndDate}}
+                @onChange={{this.setTargetEndDate}}
               />
-            {{/if}}
+              {{#if
+                (and
+                  (not @publicationFlow.status.isFinal)
+                  @publicationSubcase.isOverdue
+                )
+              }}
+                <Auk::FormHelpText
+                  @text={{t "date-expired"}}
+                  @skin="warning"
+                  @icon="alert-triangle"
+                />
+              {{/if}}
+            </AuFormRow>
           </div>
-        </div>
-        <div class="auk-o-grid-col-3">
-          <div class="auk-form-group">
-            <Auk::Label>
-              {{t "publication-date"}}
-            </Auk::Label>
-            {{#unless this.loadDecision.isRunning}}
-              {{#if @publicationFlow.status.isPublished}}
-                {{#if this.decision.isStaatsbladResource}}
-                  {{#if this.decision.publicationDate}}
-                    {{date this.decision.publicationDate}}
+          <div class="auk-o-grid-col-3">
+            <AuFormRow>
+              <Auk::Label>
+                {{t "publication-date"}}
+              </Auk::Label>
+              {{#unless this.loadDecision.isRunning}}
+                {{#if @publicationFlow.status.isPublished}}
+                  {{#if this.decision.isStaatsbladResource}}
+                    {{#if this.decision.publicationDate}}
+                      {{date this.decision.publicationDate}}
+                    {{else}}
+                      {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
+                      <div class="auk-u-text-muted auk-u-italic">
+                        {{t "not-known"}}
+                      </div>
+                    {{/if}}
                   {{else}}
-                    {{!case: publication-date is not found in Staatsblad (does not seem to occur)}}
-                    <div class="auk-u-text-muted auk-u-italic">
-                      {{t "not-known"}}
-                    </div>
+                    <Auk::Datepicker
+                      @date={{this.decision.publicationDate}}
+                      @onChange={{set this.decision "publicationDate"}}
+                    />
                   {{/if}}
                 {{else}}
-                  <Auk::Datepicker
-                    @date={{this.decision.publicationDate}}
-                    @onChange={{set this.decision "publicationDate"}}
-                  />
+                  <div class="auk-u-text-muted auk-u-italic">
+                    {{t "not-published"}}
+                  </div>
                 {{/if}}
-              {{else}}
-                <div class="auk-u-text-muted auk-u-italic">
-                  {{t "not-published"}}
-                </div>
-              {{/if}}
-            {{/unless}}
+              {{/unless}}
+            </AuFormRow>
           </div>
         </div>
       </div>

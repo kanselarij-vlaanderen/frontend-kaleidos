@@ -9,8 +9,8 @@
       @isLoading={{or this.ensureFreshData.isRunning this.save.isRunning}}
       @reserveSpace={{true}}
     >
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group">
+      <div class="au-c-form">
+        <AuFormRow>
           <Auk::Label>
             {{t "agenda-publication-internal-documents-question"}}
           </Auk::Label>
@@ -32,8 +32,8 @@
               {{t "now"}}
             </AuButton>
           </div>
-        </div>
-        <div class="auk-form-group">
+        </AuFormRow>
+        <AuFormRow>
           <Auk::Label>
             {{t "agenda-publication-website-question"}}
           </Auk::Label>
@@ -54,7 +54,7 @@
               {{t "now"}}
             </AuButton>
           </div>
-        </div>
+        </AuFormRow>
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

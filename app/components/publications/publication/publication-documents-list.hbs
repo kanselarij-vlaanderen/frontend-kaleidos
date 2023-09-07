@@ -1,54 +1,54 @@
-<div class="au-u-margin-top-tiny">
-  {{#if this.sumOfPiecesShouldBlock.value}}
-    <AuAlert
-      @title={{t "warning-title"}}
-      @skin="warning"
-      @icon="alert-triangle"
-      @size="small"
-    >
-      <p>{{t "sum-of-attachments-exceeds-maximum-threshold"}}</p>
-    </AuAlert>
-  {{else if this.sumOfPiecesShouldWarn.value}}
-    <AuAlert
-      @title={{t "warning-title"}}
-      @skin="warning"
-      @icon="alert-triangle"
-      @size="small"
-    >
-      <p>{{t "sum-of-attachments-exceeds-warning-threshold"}}</p>
-    </AuAlert>
-  {{/if}}
+{{#if (gt @pieces.length 0)}}
+  <div ...attributes>
+    {{#if this.sumOfPiecesShouldBlock.value}}
+      <AuAlert
+        @title={{t "warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{t "sum-of-attachments-exceeds-maximum-threshold"}}</p>
+      </AuAlert>
+    {{else if this.sumOfPiecesShouldWarn.value}}
+      <AuAlert
+        @title={{t "warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{t "sum-of-attachments-exceeds-warning-threshold"}}</p>
+      </AuAlert>
+    {{/if}}
 
-  <AuList as |Item|>
-    {{#each @pieces as |piece|}}
-      <Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny" data-test-publication-document-list-piece>
-        <div
-          class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
-        >
-          <div class="auk-o-flex auk-o-flex--spaced">
-            <AuBadge
-              @icon="paperclip"
-              @skin="gray"
-              @size="small"
-            />
-            <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
-            <AuPill
-              @skin={{this.fileSizePillSkin piece.file.size}}
-              @icon={{this.fileSizePillIcon piece.file.size}}
-            >
-              {{file-size piece.file.size}}
-            </AuPill>
-          </div>
-          {{#if @setReceivedDate}}
-            <div class="auk-form-group auk-u-width-medium auk-u-m-0">
-              <Auk::Datepicker
-                @placeholder={{t "date-received-placeholder"}}
-                @date={{piece.receivedDate}}
-                @onChange={{fn @setReceivedDate piece}}
+    <AuList as |Item|>
+      {{#each @pieces as |piece|}}
+        <Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny" data-test-publication-document-list-piece>
+          <div
+            class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
+          >
+            <div class="auk-o-flex auk-o-flex--spaced">
+              <AuBadge
+                @icon="paperclip"
+                @skin="gray"
+                @size="small"
               />
+              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+              <AuPill
+                @skin={{this.fileSizePillSkin piece.file.size}}
+                @icon={{this.fileSizePillIcon piece.file.size}}
+              >
+                {{file-size piece.file.size}}
+              </AuPill>
             </div>
-          {{/if}}
-          <div>
+            {{#if @setReceivedDate}}
+              <div class="auk-u-width-medium">
+                <Auk::Datepicker
+                  @placeholder={{t "date-received-placeholder"}}
+                  @date={{piece.receivedDate}}
+                  @onChange={{fn @setReceivedDate piece}}
+                />
+              </div>
+            {{/if}}
             <AuButtonGroup>
               <AuLinkExternal
                 @icon="download"
@@ -82,8 +82,8 @@
               {{/if}}
             </AuButtonGroup>
           </div>
-        </div>
-      </Item>
-    {{/each}}
-  </AuList>
-</div>
+        </Item>
+      {{/each}}
+    </AuList>
+  </div>
+{{/if}}

@@ -11,28 +11,30 @@
           data-test-vl-uploaded-document-filename>
           {{@name}}
         </h6>
-        {{#if @downloadLink}}
-          <AuLinkExternal
-            @icon="download"
-            @hideText={{true}}
-            href={{@downloadLink}}
-            download={{if @downloadName @downloadName @name}}
-          >
-            {{t "download"}}
-          </AuLinkExternal>
-        {{/if}}
-        {{#if @onDelete}}
-          <AuButton
-            data-test-vl-uploaded-document-delete-piece
-            @skin="naked"
-            @alert={{true}}
-            @icon="trash"
-            @hideText={{true}}
-            {{on "click" @onDelete}}
-          >
-            {{t "delete"}}
-          </AuButton>
-        {{/if}}
+        <AuButtonGroup>
+          {{#if @downloadLink}}
+            <AuLinkExternal
+              @icon="download"
+              @hideText={{true}}
+              href={{@downloadLink}}
+              download={{if @downloadName @downloadName @name}}
+            >
+              {{t "download"}}
+            </AuLinkExternal>
+          {{/if}}
+          {{#if @onDelete}}
+            <AuButton
+              data-test-vl-uploaded-document-delete-piece
+              @skin="naked"
+              @alert={{true}}
+              @icon="trash"
+              @hideText={{true}}
+              {{on "click" @onDelete}}
+            >
+              {{t "delete"}}
+            </AuButton>
+          {{/if}}
+        </AuButtonGroup>
       </div>
       <div class="auk-u-text-muted">
         {{@extension}}
