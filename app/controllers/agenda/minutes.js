@@ -278,7 +278,7 @@ export default class AgendaMinutesController extends Controller {
 
 
   async getAttendees() {
-    const seen = new Set();
+    const attending = new Set();
     const primeMinister = mandateeName(
       this.model.mandatees.find(
         (mandatee) =>
@@ -286,7 +286,7 @@ export default class AgendaMinutesController extends Controller {
           constants.MANDATE_ROLES.MINISTER_PRESIDENT
       )
     );
-    seen.add(primeMinister);
+    attending.add(primeMinister);
     const viceMinisters = this.model.mandatees
       .filter(
         (mandatee) =>
@@ -294,8 +294,8 @@ export default class AgendaMinutesController extends Controller {
           constants.MANDATE_ROLES.VICEMINISTER_PRESIDENT
       )
       .map(mandateeName)
-      .filter((x) => !seen.has(x));
-    viceMinisters.forEach((x) => seen.add(x));
+      .filter((x) => !attending.has(x));
+    viceMinisters.forEach((x) => attending.add(x));
 
     const ministers = this.model.mandatees
       .filter(
@@ -304,7 +304,7 @@ export default class AgendaMinutesController extends Controller {
           constants.MANDATE_ROLES.MINISTER
       )
       .map(mandateeName)
-      .filter((x) => !seen.has(x));
+      .filter((x) => !attending.has(x));
 
     const secretary = mandateeName(
       await this.store.queryOne('mandatee', {
