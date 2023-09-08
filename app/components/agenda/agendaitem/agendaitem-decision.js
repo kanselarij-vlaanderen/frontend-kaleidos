@@ -7,7 +7,6 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import ENV from 'frontend-kaleidos/config/environment';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -32,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service signatureService;
   @service store;
   @service toaster;
+  @service decisionReportGeneration;
 
   @tracked report;
   @tracked previousReport;
@@ -108,6 +108,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart
     );
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
+    await this.loadReport.perform();
   });
 
   get pieceParts() {
@@ -135,7 +136,7 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadReport = task(async () => {
-    this.report = await this.args.decisionActivity.report;
+    this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
@@ -211,23 +212,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const documentContainer = await piece.documentContainer;
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
-  }
-
-  exportPdf = task(async (report) => {
-    const resp = await fetch(`/generate-decision-report/${report.id}`);
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
-    }
-    return await resp.json();
-  });
-
-  async replaceReportFile(report, fileId) {
-    await deleteFile(report.file);
-    const file = await this.store.findRecord('file', fileId);
-    report.file = file;
-    report.modified = new Date();
-    await report.save();
   }
 
   /**
@@ -421,8 +405,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
 
     // If this is too slow, we should make a task and do this asynchronously
-    const fileMeta = await this.exportPdf.perform(report);
-    await this.replaceReportFile(report, fileMeta.id);
+    await this.decisionReportGeneration.generateReplacementReport.perform(report);
   }
 
   createNewDocumentContainer() {

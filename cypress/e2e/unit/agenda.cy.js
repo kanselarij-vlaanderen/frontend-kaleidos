@@ -58,6 +58,11 @@ context('Agenda tests', () => {
   const agendaKind = 'Ministerraad';
   const agendaPlace = 'Cypress Room';
 
+  const agendaDate = Cypress.dayjs('2022-04-20');
+  const agendaDateFormatted = agendaDate.format('DD_MM_YYYY');
+  const downloadPath = 'cypress/downloads';
+  const downloadZipAgendaA = `${downloadPath}/VR_zitting_${agendaDateFormatted}_agenda_A_alle_punten.zip`;
+
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -389,7 +394,7 @@ context('Agenda tests', () => {
       .click();
     cy.get(agenda.agendaActions.downloadDocuments).forceClick();
     downloadDocs();
-    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+    cy.readFile(downloadZipAgendaA, {
       timeout: 25000,
     }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
       .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
@@ -414,7 +419,7 @@ context('Agenda tests', () => {
       .contains('Jambon')
       .click();
     downloadDocs(false);
-    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+    cy.readFile(downloadZipAgendaA, {
       timeout: 25000,
     }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
       .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
@@ -439,7 +444,7 @@ context('Agenda tests', () => {
       .contains('Crevits')
       .click();
     downloadDocs(false);
-    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+    cy.readFile(downloadZipAgendaA, {
       timeout: 25000,
     }).should('not.contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
       .should('not.contain', 'DOC.0001-02 propagatie ministerraad.pdf')
@@ -473,7 +478,7 @@ context('Agenda tests', () => {
       .contains('Alle bestandstypes')
       .click();
     downloadDocs(false);
-    cy.readFile('cypress/downloads/VR_zitting_20_04_2022_agenda_A_alle_punten.zip', {
+    cy.readFile(downloadZipAgendaA, {
       timeout: 25000,
     }).should('contain', 'DOC.0001-01 propagatie intern secretarie.pdf')
       .should('contain', 'DOC.0001-02 propagatie ministerraad.pdf')
@@ -486,5 +491,73 @@ context('Agenda tests', () => {
       .should('contain', 'DOC.0002-04 propagatie vertrouwelijk intern overheid.pdf')
       .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf')
       .should('contain', file.newFileName);
+  });
+
+  it('Setup for downloading all decisions', () => {
+    const concerns = 'Cypress test for downloading decisions';
+    const decision = 'Goedgekeurd';
+
+    const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
+    const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
+
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+
+    cy.openDetailOfAgendaitem(shortSubcaseTitle1);
+    cy.addAgendaitemMandatee(1, null, null, false);
+    cy.get(agenda.agendaitemNav.decisionTab)
+      .should('be.visible')
+      .click();
+    cy.generateDecision(concerns, decision);
+    cy.openDetailOfAgendaitem(shortSubcaseTitle2);
+    cy.addAgendaitemMandatee(2, null, null, false);
+    cy.get(agenda.agendaitemNav.decisionTab)
+      .should('be.visible')
+      .click();
+    cy.generateDecision(concerns, decision);
+  });
+
+  it('Should download all decisions for Jambon', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Jambon')
+      .click();
+    downloadDocs(false);
+    cy.readFile(downloadZipAgendaA, {
+      timeout: 25000,
+    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
+      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
+  });
+
+  it('Should download all decisions for Crevits', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    cy.get(appuniversum.checkbox)
+      .contains('Crevits')
+      .click();
+    downloadDocs(false);
+    cy.readFile(downloadZipAgendaA, {
+      timeout: 25000,
+    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`)
+      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`);
+  });
+
+  it('Should download all decisions', () => {
+    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+    downloadDocs(false);
+    cy.readFile(downloadZipAgendaA, {
+      timeout: 25000,
+    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
+      .should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
   });
 });

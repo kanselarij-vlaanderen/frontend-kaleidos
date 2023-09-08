@@ -19,6 +19,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @service store;
   @service toaster;
   @service mandatees;
+  @service decisionReportGeneration;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -211,7 +212,7 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  @dropTask
+  @task
   *saveMeeting() {
     const now = new Date();
 
@@ -230,7 +231,15 @@ export default class MeetingEditMeetingComponent extends Component {
       });
       for (let decisionActivity of decisionActivities.slice()) {
         decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save();
+        yield decisionActivity.save(); 
+        const report = yield this.store.queryOne('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[decision-activity][:id:]': decisionActivity.id,
+        });
+        const pieceParts = yield report?.pieceParts;
+        if (pieceParts) {
+          yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+        }
       }
     }
     // update the planned date of the publication activities (not needed for decisions)
