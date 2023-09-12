@@ -365,7 +365,6 @@ context('signatures shortlist overview tests', () => {
 
     cy.visit('ondertekenen/opstarten');
 
-    cy.log(files1.newFileName);
     cy.get(route.signatures.row.name).contains(files1[0].newFileName)
       .parents('tr')
       .as('currentDoc');
@@ -375,6 +374,7 @@ context('signatures shortlist overview tests', () => {
     // check fail
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
+    cy.get(signature.createSignFlow.signers.item); // wait for signers to load
 
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
@@ -383,29 +383,34 @@ context('signatures shortlist overview tests', () => {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
     cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
-    // no email set so forcing through
-    cy.get(route.signatures.sidebar.startSignflow).forceClick(); // disabled button
+    // no email set so forcing through disabled button
+    cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
     cy.wait('@deleteSigningActivities');
-    cy.get(auk.alertStack.container);
-    cy.get(auk.alert.close).click();
+    cy.get(appuniversum.toaster).find(auk.alert.close)
+      .click();
 
     // check succes
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
+    cy.get(signature.createSignFlow.signers.item); // wait for signers to load
 
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows2');
     cy.intercept('POST', '/signing-flows/upload-to-signinghub', staticResponse).as('stubUpload');
-    // no email set so forcing through
-    cy.get(route.signatures.sidebar.startSignflow).forceClick(); // disabled button
+    // no email set so forcing through disabled button
+    cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
 
+    // this works because signflow-status-sync service is not active.
+    // Normally the status becomes 'Marked' because there is no preparation-activity created.
     cy.visit('ondertekenen/opvolgen');
     cy.get(route.ongoing.row.documentName).contains(files1[0].newFileName);
 
