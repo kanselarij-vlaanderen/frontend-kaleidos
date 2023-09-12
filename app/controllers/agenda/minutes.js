@@ -189,8 +189,8 @@ export default class AgendaMinutesController extends Controller {
 
       const defaultAccessLevel = await this.store.findRecordByUri(
         'concept',
-        constants.ACCESS_LEVELS.INTERN_OVERHEID
-      );
+        constants.ACCESS_LEVELS.INTERN_SECRETARIE,
+      ); // Default Intern Secretarie so that the minutes aren't visible to other users by default
 
       minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
