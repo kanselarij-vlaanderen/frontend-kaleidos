@@ -13,6 +13,7 @@ import {
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
 import { isPresent } from '@ember/utils';
+import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 
 /**
  * @argument {Meeting} meeting
@@ -263,13 +264,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   async downloadDocuments(decisions = false) {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
-    const fileDownloadToast = {
+    const downloadFileToastOptions = {
       title: this.intl.t('file-ready'),
       message: this.intl.t('agenda-documents-download-ready'),
-      type: 'download-file',
-      options: {
-        timeOut: 60 * 10 * 1000,
-      },
+      timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
     const namePromise = constructArchiveName(this.args.currentAgenda);
@@ -302,13 +300,12 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
         }
       );
       this.jobMonitor.register(job, async (job) => {
-        this.toaster.clear(inCreationToast);
+        this.toaster.close(inCreationToast);
         if (job.status === job.SUCCESS) {
           const url = await fileDownloadUrlFromJob(job, name);
           debug(`Archive ready. Prompting for download now (${url})`);
-          fileDownloadToast.options.downloadLink = url;
-          fileDownloadToast.options.fileName = name;
-          this.toaster.displayToast.perform(fileDownloadToast);
+          downloadFileToastOptions.downloadLink = url;
+          this.toaster.show(DownloadFileToast, downloadFileToastOptions);
         } else {
           debug('Something went wrong while generating archive.');
           this.toaster.error(
@@ -320,9 +317,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     } else {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);
-      fileDownloadToast.options.downloadLink = url;
-      fileDownloadToast.options.fileName = name;
-      this.toaster.displayToast.perform(fileDownloadToast);
+      downloadFileToastOptions.downloadLink = url;
+      this.toaster.show(DownloadFileToast, downloadFileToastOptions);
     }
   }
 

@@ -16,10 +16,6 @@ const selectors = {
 
   /** Section multiple selector AUK components **/
 
-  alertStack: {
-    container: '.auk-alert-stack',
-  },
-
   modal: {
     container: '.auk-modal',
     body: '.auk-modal__body',

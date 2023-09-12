@@ -15,5 +15,6 @@ const selectors = {
     close: '.au-c-alert__close',
   },
   formRow: '.au-c-form-row',
+  toaster: '.au-c-toaster',
 };
 export default selectors;

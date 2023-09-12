@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import ENV from 'frontend-kaleidos/config/environment';
 
 /**
  * @argument {isNew}
@@ -101,6 +102,10 @@ export default class MeetingEditMeetingComponent extends Component {
 
   get cancelIsDisabled() {
     return this.saveMeeting.isRunning;
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
   @action
@@ -217,7 +222,6 @@ export default class MeetingEditMeetingComponent extends Component {
     const now = new Date();
 
     this.args.meeting.extraInfo = this.extraInfo;
-    this.args.meeting.secretary = this.secretary;
     this.args.meeting.plannedStart = this.startDate || now;
     this.args.meeting.kind = this.selectedKind;
     this.args.meeting.number = this.meetingNumber;
@@ -225,6 +229,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     if (this.args.meeting.secretary != this.secretary) {
+      this.args.meeting.secretary = this.secretary;
       const decisionActivities = yield this.store.queryAll('decision-activity', {
         'filter[treatment][agendaitems][agenda][created-for][:id:]':
           this.args.meeting.id,
@@ -232,13 +237,15 @@ export default class MeetingEditMeetingComponent extends Component {
       for (let decisionActivity of decisionActivities.slice()) {
         decisionActivity.secretary = this.secretary;
         yield decisionActivity.save(); 
-        const report = yield this.store.queryOne('report', {
-          'filter[:has-no:next-piece]': true,
-          'filter[decision-activity][:id:]': decisionActivity.id,
-        });
-        const pieceParts = yield report?.pieceParts;
-        if (pieceParts) {
-          yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+        if (this.enableDigitalAgenda) {
+          const report = yield this.store.queryOne('report', {
+            'filter[:has-no:next-piece]': true,
+            'filter[decision-activity][:id:]': decisionActivity.id,
+          });
+          const pieceParts = yield report?.pieceParts;
+          if (pieceParts) {
+            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+          }
         }
       }
     }

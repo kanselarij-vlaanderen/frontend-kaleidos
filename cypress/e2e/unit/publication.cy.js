@@ -387,7 +387,7 @@ context('Publications tests', () => {
       force: true,
     });
     // When trying to enter a number that already exists, we suggest a new number and a yellow toast is shown
-    cy.get(auk.alertStack.container).find(appuniversum.alert.message)
+    cy.get(appuniversum.toaster).find(appuniversum.alert.message)
       .contains('nieuw nummer');
     // Validation happened, save is enabled because a new number was suggested
     cy.get(publication.newPublication.create).should('not.be.disabled');
