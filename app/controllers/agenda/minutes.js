@@ -85,17 +85,17 @@ function renderMinutes(data) {
 }
 
 function mandateeName(mandatee) {
-  return mandatee ? `${mandatee.person.get('firstName')} ${mandatee.person.get(
-    'lastName'
-  )}` : '';
+  return mandatee
+    ? `${mandatee.person.get('firstName')} ${mandatee.person.get('lastName')}`
+    : '';
 }
 
 export default class AgendaMinutesController extends Controller {
   @service store;
-  @service toaster;
   @service router;
   @service intl;
   @service pieceAccessLevelService;
+  @service decisionReportGeneration;
 
   // agenda;
   meeting;
@@ -117,15 +117,6 @@ export default class AgendaMinutesController extends Controller {
   });
 
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
-
-  exportPdf = task(async (minutes) => {
-    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
-    }
-    return await resp.json();
-  });
 
   saveMinutes = task(async () => {
     let minutes = null;
@@ -170,10 +161,10 @@ export default class AgendaMinutesController extends Controller {
     await minutes.save();
     await piecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(minutes);
-    if (fileMeta) {
-      await this.replaceMinutesFile(minutes, fileMeta.id);
-    }
+    this.decisionReportGeneration.generateReplacementReport.perform(
+      minutes,
+      'minutes'
+    );
 
     await minutes.save();
     await this.meeting.belongsTo('minutes').reload();
@@ -181,14 +172,6 @@ export default class AgendaMinutesController extends Controller {
     this.isEditing = false;
     this.refresh();
   });
-
-  async replaceMinutesFile(minutes, fileId) {
-    await deleteFile(minutes.file);
-    const file = await this.store.findRecord('file', fileId);
-    minutes.file = file;
-    minutes.modified = new Date();
-    await minutes.save();
-  }
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
@@ -207,7 +190,7 @@ export default class AgendaMinutesController extends Controller {
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel
+      accessLevel: minutes.accessLevel,
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
@@ -276,7 +259,6 @@ export default class AgendaMinutesController extends Controller {
     this.router.refresh('agenda.minutes');
   }
 
-
   async getAttendees() {
     const attending = new Set();
     const primeMinister = mandateeName(
@@ -306,12 +288,13 @@ export default class AgendaMinutesController extends Controller {
       .map(mandateeName)
       .filter((x) => !attending.has(x));
 
-    const secretary = mandateeName(
-      await this.store.queryOne('mandatee', {
-        'filter[secretary-for-agendas][:id:]': this.meeting.id,
-        include: 'person',
-      })
-    ) ?? '';
+    const secretary =
+      mandateeName(
+        await this.store.queryOne('mandatee', {
+          'filter[secretary-for-agendas][:id:]': this.meeting.id,
+          include: 'person',
+        })
+      ) ?? '';
 
     return {
       primeMinister,
