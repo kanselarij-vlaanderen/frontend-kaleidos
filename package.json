@@ -67,6 +67,7 @@
     "broccoli-funnel": "^3.0.8",
     "cypress": "^12.14.0",
     "date-fns": "^2.29.3",
+    "date-fns-tz": "^2.0.0",
     "dayjs": "^1.11.7",
     "ember-auto-import": "^2.5.0",
     "ember-cli": "~4.8.0",
