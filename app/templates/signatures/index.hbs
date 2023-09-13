@@ -83,6 +83,7 @@
         {{#let signMarkingActivity.piece as |piece|}}
           <td>
             <AuCheckbox
+              data-test-route-signatures-row-checkbox
               @checked={{includes signFlow this.selectedSignFlows}}
               @onChange={{fn this.toggleItem signFlow}}
             >
@@ -228,6 +229,7 @@
             </Group>
             <Group>
               <AuButton
+                data-test-route-signatures-sidebar-stop-signflow
                 @alert={{true}}
                 @skin="naked"
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
