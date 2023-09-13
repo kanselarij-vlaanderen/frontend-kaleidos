@@ -20,6 +20,16 @@ export default class MandateeSelector extends Component {
     return this.args.referenceDate || new Date();
   }
 
+  get dropdownAlignment() {
+    if (this.args.dropdownAlignment === 'top') {
+      return 'above';
+    } else if (this.args.dropdownAlignment === 'bottom') {
+      return 'below';
+    } else {
+      return 'auto';
+    }
+  }
+
   @restartableTask
   *searchMandatee(searchTerm) {
     this.mandateeOptions = [];
