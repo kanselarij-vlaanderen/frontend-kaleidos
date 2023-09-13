@@ -15,8 +15,13 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
 
 function formatDocuments(pieceRecords) {
   const names = pieceRecords.map((record) => record.name);
+  const regex = new RegExp('VR \\d+ \\d+ DOC.\\d+-\\d+');
+  const simplifiedNames = names.map((name) => {
+    const match = name.match(regex);
+    return match ? match[0] : name;
+  });
   const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(names)})`;
+  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
