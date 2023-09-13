@@ -19,7 +19,7 @@ export default class SignaturesIndexRoute extends Route {
     sortSignaturesIndex: {
       refreshModel: true,
       as: 'sorteer',
-    }
+    },
   };
 
   localStorageKey = 'signatures.shortlist.minister-filter';
@@ -35,13 +35,14 @@ export default class SignaturesIndexRoute extends Route {
   async beforeModel() {
     if (this.currentSession.may('manage-only-specific-signatures')) {
       const currentUserOrganization = await this.currentSession.organization;
-      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
-      const currentUserOrganizationMandateesIds = currentUserOrganizationMandatees?.map((mandatee) => mandatee.id);
+      const currentUserOrganizationMandatees =
+        await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesIds =
+        currentUserOrganizationMandatees?.map((mandatee) => mandatee.id);
       this.ministerIds = currentUserOrganizationMandateesIds;
     } else {
-      this.ministerIds = JSON.parse(
-        localStorage.getItem(this.localStorageKey)
-      ) ?? [];
+      this.ministerIds =
+        JSON.parse(localStorage.getItem(this.localStorageKey)) ?? [];
     }
   }
 
@@ -64,12 +65,12 @@ export default class SignaturesIndexRoute extends Route {
               agenda: {
                 meeting: {
                   'internal-decision-publication-activity': {
-                    ':has:start-date': `date-added-for-cache-busting-${(new Date()).toISOString()}`,
-                  }
-                }
-              }
-            }
-          }
+                    ':has:start-date': `date-added-for-cache-busting-${new Date().toISOString()}`,
+                  },
+                },
+              },
+            },
+          },
         },
         ':has-no:sign-preparation-activity': 'yes',
       },
@@ -78,9 +79,12 @@ export default class SignaturesIndexRoute extends Route {
       },
       'decision-activity': {
         'decision-result-code': {
-          ':uri:': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+          ':id:': [
+            CONSTANTS.DECISION_RESULT_CODE_IDS.GOEDGEKEURD,
+            CONSTANTS.DECISION_RESULT_CODE_IDS.KENNISNAME,
+          ].join(','),
         },
-      }
+      },
     };
 
     this.lastParams.commit();
@@ -88,8 +92,8 @@ export default class SignaturesIndexRoute extends Route {
     if (this.ministerIds?.length) {
       filter['decision-activity']['subcase'] = {
         'requested-by': {
-          ':id:': this.ministerIds.join(',')
-        }
+          ':id:': this.ministerIds.join(','),
+        },
       };
     } else if (this.currentSession.may('manage-only-specific-signatures')) {
       return [];
@@ -99,7 +103,7 @@ export default class SignaturesIndexRoute extends Route {
       filter,
       include: [
         'decision-activity',
-        'sign-subcase.sign-marking-activity.piece.document-container.type'
+        'sign-subcase.sign-marking-activity.piece.document-container.type',
       ].join(','),
       page: {
         number: params.pageSignaturesIndex,
@@ -114,8 +118,12 @@ export default class SignaturesIndexRoute extends Route {
     controller.filteredMinisters = this.ministerIds;
     controller.selectedMinisters = this.ministerIds;
 
-    if (controller.pageSignaturesIndex !== this.lastParams.committed.pageSignaturesIndex) {
-      controller.pageSignaturesIndex = this.lastParams.committed.pageSignaturesIndex;
+    if (
+      controller.pageSignaturesIndex !==
+      this.lastParams.committed.pageSignaturesIndex
+    ) {
+      controller.pageSignaturesIndex =
+        this.lastParams.committed.pageSignaturesIndex;
     }
   }
 

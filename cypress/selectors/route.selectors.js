@@ -27,6 +27,8 @@ const selectors = {
     loader: '[data-test-route-agendas-overview-loader]',
     row: {
       title: '[data-test-route-agendas-overview-row-title]',
+      statusOpened: '[data-test-route-agendas-overview-row-status-opened]',
+      statusClosed: '[data-test-route-agendas-overview-row-status-closed]',
       kind: '[data-test-route-agendas-overview-row-kind]',
       navButton: '[data-test-route-agendas-overview-row-nav-button]',
     },
@@ -247,6 +249,7 @@ const selectors = {
     applyFilter: '[data-test-route-signatures-apply-filter]',
     dataTable: '[data-test-route-signatures-data-table]',
     row: {
+      checkbox: '[data-test-route-signatures-row-checkbox]',
       name: '[data-test-route-signatures-row-name]',
       mandatee: '[data-test-route-signatures-row-mandatee]',
       openSidebar: '[data-test-route-signatures-row-open-sidebar]',
@@ -257,6 +260,17 @@ const selectors = {
       preview: '[data-test-route-signatures-sidebar-preview]',
       lastAgendaitem: '[data-test-route-signatures-sidebar-last-agendaitem]',
       startSignflow: '[data-test-route-signatures-sidebar-start-signflow]',
+      stopSignflow: '[data-test-route-signatures-sidebar-stop-signflow]',
+    },
+  },
+
+  // signatures/ongoing
+
+  ongoing: {
+    statusFilter: '[data-test-route-signatures-ongoing-status-filter]',
+    ministerFilter: '[data-test-route-signatures-ongoing-minister-filter]',
+    row: {
+      documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
     },
   },
 

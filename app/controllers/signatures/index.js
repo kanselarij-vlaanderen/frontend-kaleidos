@@ -39,7 +39,8 @@ export default class SignaturesIndexController extends Controller {
   @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;
 
-  signers = [];
+  @tracked signers = new TrackedArray([]);
+
   approvers = [];
   notificationAddresses = [];
 
@@ -68,6 +69,18 @@ export default class SignaturesIndexController extends Controller {
   get isSelectedSomeItems() {
     return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
+
+  allSignersHaveEmail = trackedFunction(this, async () => {
+    for (const signer of this.signers) {
+      const person = await signer.person;
+      const user = await person.user;
+      if (!user?.email) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   @action
   selectAll() {

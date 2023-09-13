@@ -11,32 +11,28 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
-        <div class="auk-u-mb-4">
-          <AuFieldset as |Fieldset|>
-            <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
-            <Fieldset.content>
-              <AuRadioGroup
-                data-test-subcase-description-edit-type
-                @alignment="inline"
-                @selected={{this.agendaItemType}}
-                @onChange={{this.onChangeAgendaItemType}}
-                as |Group|
+    <div class="au-c-form">
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            data-test-subcase-description-edit-type
+            @alignment="inline"
+            @selected={{this.agendaItemType}}
+            @onChange={{this.onChangeAgendaItemType}}
+            as |Group|
+          >
+            {{#each this.agendaItemTypes as |type|}}
+              <Group.Radio
+                @value={{type}}
               >
-                {{#each this.agendaItemTypes as |type|}}
-                  <Group.Radio
-                    @value={{type}}
-                  >
-                    {{type.label}}
-                  </Group.Radio>
-                {{/each}}
-              </AuRadioGroup>
-            </Fieldset.content>
-          </AuFieldset>
-        </div>
-      </div>
-      <div class="auk-form-group">
+                {{type.label}}
+              </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+      <AuFormRow>
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         <Utils::ModelSelector
           @modelName="subcase-type"
@@ -46,14 +42,14 @@
           @selected={{this.subcaseType}}
           @onChange={{this.selectSubcaseType}}
         />
-      </div>
-      <div class="auk-form-group">
+      </AuFormRow>
+      <AuFormRow>
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <AuInput
           @width="block"
           @value={{mut this.subcaseName}}
         />
-      </div>
+      </AuFormRow>
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>

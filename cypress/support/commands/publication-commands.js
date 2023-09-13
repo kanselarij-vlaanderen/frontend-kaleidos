@@ -153,7 +153,7 @@ function addPublicationDocuments(files) {
         .eq(index)
         .within(() => {
           if (file.newFileName) {
-            cy.get('.auk-form-group').eq(0)
+            cy.get('.au-c-form-row').eq(0)
               .find(appuniversum.input)
               .clear()
               .type(file.newFileName);

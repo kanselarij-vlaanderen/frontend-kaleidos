@@ -7,7 +7,6 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import ENV from 'frontend-kaleidos/config/environment';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -32,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service signatureService;
   @service store;
   @service toaster;
+  @service decisionReportGeneration;
 
   @tracked report;
   @tracked previousReport;
@@ -39,6 +39,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked beslissingPiecePart;
   @tracked nota;
 
+  @tracked isEditingConcern = false;
+  @tracked isEditingTreatment = false;
   @tracked isEditing = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
@@ -106,29 +108,38 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart
     );
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
+    await this.loadReport.perform();
   });
 
   get pieceParts() {
     return !!this.betreftPiecePart || !!this.beslissingPiecePart;
   }
 
+  loadBetreftPiecePart = task(async() => {
+    this.betreftPiecePart = await this.store.queryOne('piece-part', {
+      filter: {
+        report: { ':id:': this.report.id },
+        ':has-no:next-piece-part': true,
+        title: 'Betreft',
+      },
+    });
+  });
+
+  loadBeslissingPiecePart = task(async() => {
+    this.beslissingPiecePart = await this.store.queryOne('piece-part', {
+      filter: {
+        report: { ':id:': this.report.id },
+        ':has-no:next-piece-part': true,
+        title: 'Beslissing',
+      },
+    });
+  });
+
   loadReport = task(async () => {
-    this.report = await this.args.decisionActivity.report;
+    this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
-      this.betreftPiecePart = await this.store.queryOne('piece-part', {
-        filter: {
-          report: { ':id:': this.report.id },
-          ':has-no:next-piece-part': true,
-          title: 'Betreft',
-        },
-      });
-      this.beslissingPiecePart = await this.store.queryOne('piece-part', {
-        filter: {
-          report: { ':id:': this.report.id },
-          ':has-no:next-piece-part': true,
-          title: 'Beslissing',
-        },
-      });
+      await this.loadBetreftPiecePart.perform();
+      await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
     } else {
       this.betreftPiecePart = null;
@@ -201,23 +212,6 @@ export default class AgendaitemDecisionComponent extends Component {
     const documentContainer = await piece.documentContainer;
     await documentContainer.hasMany('pieces').reload();
     await this.loadReport.perform();
-  }
-
-  exportPdf = task(async (report) => {
-    const resp = await fetch(`/generate-decision-report/${report.id}`);
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
-    }
-    return await resp.json();
-  });
-
-  async replaceReportFile(report, fileId) {
-    await deleteFile(report.file);
-    const file = await this.store.findRecord('file', fileId);
-    report.file = file;
-    report.modified = new Date();
-    await report.save();
   }
 
   /**
@@ -321,6 +315,42 @@ export default class AgendaitemDecisionComponent extends Component {
     this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
   }
 
+  onUpdateConcern = task(async () => {
+    const report = this.report;
+    const documentContainer = await this.report.documentContainer;
+    const betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
+      report,
+      this.betreftPiecePart
+    );
+
+    await this.saveReport(
+      documentContainer,
+      report,
+      null,
+      betreftPiecePart,
+    );
+    await this.loadBetreftPiecePart.perform();
+    this.isEditingConcern = false;
+  });
+
+  onUpdateTreatment = task(async () => {
+    const report = this.report;
+    const documentContainer = await this.report.documentContainer;
+    const beslissingPiecePart = this.attachNewBeslissingPiecePartsVersion(
+      report,
+      this.beslissingPiecePart
+    );
+
+    await this.saveReport(
+      documentContainer,
+      report,
+      beslissingPiecePart,
+      null,
+    );
+    await this.loadBeslissingPiecePart.perform();
+    this.isEditingTreatment = false;
+  });
+
   onSaveReport = task(async () => {
     let report;
     let documentContainer;
@@ -339,12 +369,14 @@ export default class AgendaitemDecisionComponent extends Component {
     } else {
       documentContainer = await this.report.documentContainer;
       report = this.report;
-      ({ betreftPiecePart, beslissingPiecePart } =
-        this.attachNewPiecePartsVersion(
-          report,
-          this.betreftPiecePart,
-          this.beslissingPiecePart
-        ));
+      betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
+        report,
+        this.betreftPiecePart,
+      );
+      beslissingPiecePart = this.attachNewBeslissingPiecePartsVersion(
+        report,
+        this.beslissingPiecePart
+      )
     }
 
     await this.saveReport(
@@ -353,7 +385,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart,
       betreftPiecePart
     );
-
+    await this.loadReport.perform();
     this.isEditing = false;
   });
 
@@ -373,10 +405,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
 
     // If this is too slow, we should make a task and do this asynchronously
-    const fileMeta = await this.exportPdf.perform(report);
-    await this.replaceReportFile(report, fileMeta.id);
-
-    await this.loadReport.perform();
+    await this.decisionReportGeneration.generateReplacementReport.perform(report);
   }
 
   createNewDocumentContainer() {
@@ -463,16 +492,12 @@ export default class AgendaitemDecisionComponent extends Component {
     };
   }
 
-  attachNewPiecePartsVersion(
+  attachNewBetreftPiecePartsVersion(
     report,
-    previousBetreftPiecePart,
-    previousBeslissingPiecePart
+    previousBetreftPiecePart
   ) {
     const now = new Date();
-
     let betreftPiecePart = null;
-    let beslissingPiecePart = null;
-
     if (
       editorContentChanged(previousBetreftPiecePart, this.editorInstanceBetreft)
     ) {
@@ -484,7 +509,15 @@ export default class AgendaitemDecisionComponent extends Component {
         created: now,
       });
     }
+    return betreftPiecePart;
+  }
 
+  attachNewBeslissingPiecePartsVersion(
+    report,
+    previousBeslissingPiecePart
+  ) {
+    const now = new Date();
+    let beslissingPiecePart = null;
     if (
       editorContentChanged(
         previousBeslissingPiecePart,
@@ -499,45 +532,78 @@ export default class AgendaitemDecisionComponent extends Component {
         created: now,
       });
     }
-
-    return {
-      betreftPiecePart,
-      beslissingPiecePart,
-    };
+    return beslissingPiecePart;
   }
 
-  get disableSaveButton() {
+  get disableSaveConcernButton() {
     if (this.loadReport.isRunning) {
       return true;
     }
 
-    if (!this.editorInstanceBetreft || !this.editorInstanceBeslissing) {
+    if (!this.editorInstanceBetreft) {
       return true;
     }
 
-    // If any editor is empty, disable
-    if (
-      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length ===
-        0 ||
-      this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0
-    ) {
+    // If editor is empty, disable
+    if(this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0) {
       return true;
     }
 
-    // If there is no change to any of the parts, disable
-    if (
-      this.beslissingPiecePart?.value ===
-        this.editorInstanceBeslissing.htmlContent &&
-      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
-    ) {
+    // If there is no change to the part, disable
+    if (this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent) {
       return true;
     }
 
+    return false;
+
+  }
+
+  get disableSaveTreatmentButton() {
+    if (this.loadReport.isRunning) {
+      return true;
+    }
+
+    if (!this.editorInstanceBeslissing) {
+      return true;
+    }
+
+    // If editor is empty, disable
+    if(this.editorInstanceBeslissing.mainEditorState.doc.textContent.length === 0) {
+      return true;
+    }
+
+    // If there is no change to the part, disable
+    if (this.beslissingPiecePart?.value === this.editorInstanceBeslissing.htmlContent) {
+      return true;
+    }
+
+    return false;
+
+  }
+
+  get disableSaveButton() {
+    if (this.disableSaveConcernButton || this.disableSaveTreatmentButton) {
+      return true;
+    }
     return false;
   }
 
   get enableDigitalAgenda() {
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  @action
+  startEditingConcern() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.isEditingConcern = true;
+  }
+
+  @action
+  startEditingTreatment() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.isEditingTreatment = true;
   }
 
   @action

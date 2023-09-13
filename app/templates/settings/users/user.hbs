@@ -144,7 +144,7 @@
             <AuToolbar class="auk-u-maximize-width" as |Group|>
               <Group>
                 <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
-                  {{t "minister"}}
+                  {{t "mandatee"}}
                 </h4>
               </Group>
               <Group>
@@ -170,11 +170,14 @@
             </AuToolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
-            <Mandatees::MandateePersonSelector
-              @onChange={{fn (mut this.selectedPerson)}}
-              @multiple={{false}}
-              @selectedPerson={{this.model.person}}
-            />
+            <div class="au-c-form">
+              <Mandatees::MandateePersonSelector
+                @onChange={{fn (mut this.selectedPerson)}}
+                @multiple={{false}}
+                @selectedPerson={{this.model.person}}
+                @visibleRoles={{this.visibleRoles}}
+              />
+            </div>
           </Auk::Panel::Body>
         </Auk::Panel>
       </div>

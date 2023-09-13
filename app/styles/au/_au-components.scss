@@ -16,6 +16,8 @@ $au-layout-width-large: 1023px;
 
 $au-button-height: 3.4rem;
 
+$au-label-color: var(--au-gray-700);
+
 
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
@@ -34,6 +36,8 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-help-text';
 @import 'ember-appuniversum/c-hr';
 @import 'ember-appuniversum/c-fieldset';
+@import 'ember-appuniversum/c-form';
+@import 'ember-appuniversum/c-form-row';
 @import 'ember-appuniversum/c-icon';
 @import 'ember-appuniversum/c-input';
 @import "ember-appuniversum/c-label";
@@ -47,6 +51,7 @@ $au-button-height: 3.4rem;
 @import 'ember-appuniversum/c-modal';
 @import "ember-appuniversum/c-sidebar";
 @import 'ember-appuniversum/c-table';
+@import 'ember-appuniversum/c-toaster';
 @import 'ember-appuniversum/c-toolbar';
 @import 'ember-appuniversum/c-toggle-switch';
 
@@ -427,26 +432,6 @@ $au-button-height: 3.4rem;
   }
 }
 
-// Toaster
-
-.auk-alert-stack {
-  .au-c-alert__icon {
-    height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
-    width: $au-unit;
-    margin-right: $au-unit * 0.5;
-  }
-
-  .au-c-icon {
-    height: ($au-alert-small-icon-size + 0.1rem) - 0.1rem; // compensate for visual distortion of perfect circle
-    width: $au-alert-small-icon-size + 0.1rem;
-  }
-
-  .au-c-alert__close {
-    align-self: center;
-    margin-left: 1.5rem;
-  }
-}
-
 // Badge
 
 .auk-empty-state {
@@ -463,6 +448,12 @@ $au-button-height: 3.4rem;
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+// Toaster
+
+.au-c-toaster {
+  width: 420px;
 }
 
 // Additions

@@ -72,6 +72,12 @@ export default {
     KENNISNAME: 'http://themis.vlaanderen.be/id/concept/beslissing-resultaatcodes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://themis.vlaanderen.be/id/concept/beslissing-resultaatcodes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
+  DECISION_RESULT_CODE_IDS: {
+    GOEDGEKEURD: '56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
+    UITGESTELD: 'a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+    KENNISNAME: '9f342a88-9485-4a83-87d9-245ed4b504bf',
+    INGETROKKEN: '453a36e8-6fbd-45d3-b800-ec96e59f273b',
+  },
   AGENDA_STATUSSES: {
     APPROVED: 'http://themis.vlaanderen.be/id/concept/agenda-status/fff6627e-4c96-4be1-b483-8fefcc6523ca',
     DESIGN: 'http://themis.vlaanderen.be/id/concept/agenda-status/b3d8a99b-0a7e-419e-8474-4b508fa7ab91',
@@ -138,6 +144,8 @@ export default {
     VOORZITTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db65', // Voorzitter
     GEMEENSCHAPSMINISTER: 'http://themis.vlaanderen.be/id/bestuursfunctie/60d0dc2ab1838d01fca7db67', // Gemeenschapsminister
     VICEMINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03df', // Viceminister-president
+    SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/9d5ebfb9-3829-4b1f-a2a8-15033f7e2097',
+    WAARNEMEND_SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/cfa6ed74-bb6f-4d4c-b905-9a205be135d7',
   },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {

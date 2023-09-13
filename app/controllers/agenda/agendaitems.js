@@ -106,16 +106,18 @@ export default class AgendaAgendaitemsController extends Controller {
     return agendaitemGroups;
   }
 
-  @task
-  *loadDocuments() {
+  loadDocuments = task(async () => {
     const agendaitems = [...this.model.notas, ...this.model.announcements];
     this.documentLoadCount = 0;
     this.totalCount = agendaitems.length;
-    yield all(agendaitems.map(async(agendaitem) => {
+    await all(agendaitems.map(async(agendaitem) => {
       await this.throttledLoadingService.loadPieces.perform(agendaitem);
-      this.documentLoadCount++;
+      // Negates unreproducible issue (KAS-4219)
+      if (this.documentLoadCount < this.totalCount) {
+        this.documentLoadCount++;
+      }
     }));
-  }
+  });
 
   @action
   toggleShowModifiedOnly() {

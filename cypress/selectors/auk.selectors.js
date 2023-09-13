@@ -16,10 +16,6 @@ const selectors = {
 
   /** Section multiple selector AUK components **/
 
-  alertStack: {
-    container: '.auk-alert-stack',
-  },
-
   modal: {
     container: '.auk-modal',
     body: '.auk-modal__body',
@@ -89,12 +85,15 @@ const selectors = {
   },
 
   formHelpText: '.auk-form-help-text',
-  formGroup: '.auk-form-group',
 
   fileUpload: '.auk-file-upload',
 
   icon: {
     warning: '.auk-icon--warning',
+  },
+
+  alert: {
+    close: '.au-c-alert__close',
   },
 };
 export default selectors;

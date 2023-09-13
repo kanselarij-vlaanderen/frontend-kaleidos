@@ -398,7 +398,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
       'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
     ];
-    const dateRange = '02-10-2019 tot 09-05-2021';
+    const dateRange = '02-10-2019 tot 10-05-2021';
 
     cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -479,10 +479,10 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
     cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
     cy.get(dependency.emberPowerSelect.option).contains('Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn');
-    cy.get(dependency.emberPowerSelect.option).contains('28-09-1998 tot 12-07-1999');
-    cy.get(dependency.emberPowerSelect.option).contains('01-01-1998 tot 27-09-1998');
-    cy.get(dependency.emberPowerSelect.option).contains('22-09-1997 tot 31-12-1997');
-    cy.get(dependency.emberPowerSelect.option).contains('20-06-1995 tot 21-09-1997')
+    cy.get(dependency.emberPowerSelect.option).contains('28-09-1998 tot 13-07-1999');
+    cy.get(dependency.emberPowerSelect.option).contains('01-01-1998 tot 28-09-1998');
+    cy.get(dependency.emberPowerSelect.option).contains('22-09-1997 tot 01-01-1998');
+    cy.get(dependency.emberPowerSelect.option).contains('20-06-1995 tot 22-09-1997')
       .parent()
       .click();
     cy.get(utils.mandateesSelector.add).click();

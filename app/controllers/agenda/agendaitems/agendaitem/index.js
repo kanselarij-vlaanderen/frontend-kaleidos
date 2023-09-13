@@ -5,12 +5,14 @@ import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
+  @service decisionReportGeneration;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -28,6 +30,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
@@ -94,6 +100,22 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       true,
     );
     this.agendaitemsController.groupNotasOnGroupName.perform();
+  }
+
+  @action
+  async saveSecretary(secretary) {
+    this.decisionActivity.secretary = secretary;
+    await this.decisionActivity.save();
+    if (this.enableDigitalAgenda) {
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[decision-activity][:id:]': this.decisionActivity.id,
+      });
+      const pieceParts = await report?.pieceParts;
+      if (pieceParts) {
+        await this.decisionReportGeneration.generateReplacementReport.perform(report);
+      }
+    }
   }
 
   @action

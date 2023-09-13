@@ -21,47 +21,49 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <div class="auk-form-group">
-      <table class="auk-table">
-        <thead>
-          <tr>
-            <th class="auk-table__col--10">
-              {{t "minister"}}
-            </th>
-            <th class="auk-table__col--1">
-              {{t "submitter"}}
-            </th>
-            <th class="auk-table__col--1"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.mandateesBuffer as |mandatee|}}
-            <tr data-test-mandatee-panel-edit-mandatee-row>
-              <td>
-                {{mandatee.person.fullName}}
-              </td>
-              <td data-test-mandatee-panel-edit-row-submitter>
-                <AuToggleSwitch
-                  @checked={{eq mandatee this.submitterBuffer}}
-                  @onChange={{fn this.toggleIsSubmitter mandatee}}
-                />
-              </td>
-              <td class="auk-u-text-align--right auk-o-flex--vertical-center">
-                <AuButton
-                  data-test-mandatee-panel-edit-row-delete
-                  @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
-                  @hideText={{true}}
-                  {{on "click" (fn this.removeMandatee mandatee)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
-              </td>
+    <div class="au-c-form">
+      <AuFormRow>
+        <table class="auk-table">
+          <thead>
+            <tr>
+              <th class="auk-table__col--10">
+                {{t "minister"}}
+              </th>
+              <th class="auk-table__col--1">
+                {{t "submitter"}}
+              </th>
+              <th class="auk-table__col--1"></th>
             </tr>
-          {{/each}}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {{#each this.mandateesBuffer as |mandatee|}}
+              <tr data-test-mandatee-panel-edit-mandatee-row>
+                <td>
+                  {{mandatee.person.fullName}}
+                </td>
+                <td data-test-mandatee-panel-edit-row-submitter>
+                  <AuToggleSwitch
+                    @checked={{eq mandatee this.submitterBuffer}}
+                    @onChange={{fn this.toggleIsSubmitter mandatee}}
+                  />
+                </td>
+                <td class="auk-u-text-align--right auk-o-flex--vertical-center">
+                  <AuButton
+                    data-test-mandatee-panel-edit-row-delete
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn this.removeMandatee mandatee)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </AuFormRow>
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>

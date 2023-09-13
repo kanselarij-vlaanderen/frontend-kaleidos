@@ -1,35 +1,39 @@
-  <div class="auk-o-grid au-o-grid--stretch">
-    <div class="auk-o-grid-col-2">
-      <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
-        <div class="au-c-card au-o-box au-o-box--small">
-          {{#if this.loadSelectedOrganizations.isRunning}}
-            <Auk::Loader />
-          {{else}}
-            <OrganizationFilter
-              @selected={{this.selectedOrganizations}}
-              @onChange={{this.setOrganizations}}
-            />
-          {{/if}}
-        </div>
-        <div class="au-c-card au-o-box au-o-box--small">
-          <Auk::Label>{{t "filter-on-last-seen"}}</Auk::Label>
-          <div data-test-route-settings-user-date-from class="auk-form-group auk-u-position-relative au-u-margin-bottom-small">
+<div class="auk-o-grid au-o-grid--stretch">
+  <div class="auk-o-grid-col-2">
+    <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny au-u-padding-right-none">
+      <div class="au-c-card au-o-box au-o-box--small">
+        {{#if this.loadSelectedOrganizations.isRunning}}
+          <Auk::Loader />
+        {{else}}
+          <OrganizationFilter
+            @selected={{this.selectedOrganizations}}
+            @onChange={{this.setOrganizations}}
+          />
+        {{/if}}
+      </div>
+      <div class="au-c-card au-o-box au-o-box--small">
+        <div class="au-c-form">
+          <Auk::Label class="au-u-padding-bottom-none">{{t "filter-on-last-seen"}}</Auk::Label>
+          <AuFormRow data-test-route-settings-user-date-from class="au-u-margin-top-tiny">
             <Auk::Label>{{t "from"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.dateFromBuffer}}
               @onChange={{set this "dateFromBuffer"}}
               @enableClear={{this.dateFromBuffer}}
               @onClear={{set this "dateFromBuffer" null}}
+              class="auk-u-maximize-width"
             />
-          </div>
-          <div data-test-route-settings-user-date-to class="auk-form-group auk-u-position-relative">
+          </AuFormRow>
+          <AuFormRow data-test-route-settings-user-date-to class="au-u-margin-top-small">
             <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.dateToBuffer}}
               @onChange={{set this "dateToBuffer"}}
               @enableClear={{this.dateToBuffer}}
               @onClear={{set this "dateToBuffer" null}}
+              class="auk-u-maximize-width"
             />
+          </AuFormRow>
         </div>
       </div>
       <div class="au-c-card au-o-box au-o-box--small">

@@ -6,17 +6,17 @@
   @downloadLink={{@piece.file.namedDownloadLink}}
   @onDelete={{@onDelete}}>
   {{#if @allowDocumentContainerEdit}}
-    <div data-test-uploaded-document-container class="metadata-container">
-      <div class="auk-form-group">
+    <div class="au-c-form metadata-container" data-test-uploaded-document-container>
+      <AuFormRow>
         <Auk::Label>{{t "name-document"}}</Auk::Label>
         <AuInput
           data-test-uploaded-document-name-input={{true}}
           @width="block"
           @value={{mut @piece.name}}
         />
-      </div>
+      </AuFormRow>
       {{#unless this.loadData.isRunning}}
-        <div class="auk-form-group" data-test-uploaded-document-types>
+        <AuFormRow data-test-uploaded-document-types>
           <Auk::Label>{{t "document-type"}}</Auk::Label>
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
@@ -25,7 +25,7 @@
             @radioOptionsSize="6"
             @selected={{this.selectedDocumentType}}
           />
-        </div>
+        </AuFormRow>
       {{/unless}}
     </div>
   {{/if}}
