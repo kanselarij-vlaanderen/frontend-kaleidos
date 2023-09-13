@@ -115,7 +115,7 @@ export default class AgendaitemDecisionComponent extends Component {
     return !!this.betreftPiecePart || !!this.beslissingPiecePart;
   }
 
-  loadBetreftPiecePart = task(async() => {
+  loadBetreftPiecePart = task(async () => {
     this.betreftPiecePart = await this.store.queryOne('piece-part', {
       filter: {
         report: { ':id:': this.report.id },
@@ -125,7 +125,7 @@ export default class AgendaitemDecisionComponent extends Component {
     });
   });
 
-  loadBeslissingPiecePart = task(async() => {
+  loadBeslissingPiecePart = task(async () => {
     this.beslissingPiecePart = await this.store.queryOne('piece-part', {
       filter: {
         report: { ':id:': this.report.id },
@@ -174,7 +174,9 @@ export default class AgendaitemDecisionComponent extends Component {
   updatePiecesSignFlows = task(async () => {
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
-    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+    if (
+      decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+    ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
         await this.signatureService.removeSignFlowForPiece(piece);
@@ -229,7 +231,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const subcaseIsConfidential = subcase?.confidential;
 
     const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept', subcaseIsConfidential
+      'concept',
+      subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
     );
@@ -246,7 +249,7 @@ export default class AgendaitemDecisionComponent extends Component {
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title'),
+        this.intl.t('warning-title')
       );
     }
     this.args.decisionActivity.report = piece;
@@ -323,12 +326,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(
-      documentContainer,
-      report,
-      null,
-      betreftPiecePart,
-    );
+    await this.saveReport(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -341,12 +339,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(
-      documentContainer,
-      report,
-      beslissingPiecePart,
-      null,
-    );
+    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -371,12 +364,12 @@ export default class AgendaitemDecisionComponent extends Component {
       report = this.report;
       betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
         report,
-        this.betreftPiecePart,
+        this.betreftPiecePart
       );
       beslissingPiecePart = this.attachNewBeslissingPiecePartsVersion(
         report,
         this.beslissingPiecePart
-      )
+      );
     }
 
     await this.saveReport(
@@ -405,7 +398,9 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
 
     // If this is too slow, we should make a task and do this asynchronously
-    await this.decisionReportGeneration.generateReplacementReport.perform(report);
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      report
+    );
   }
 
   createNewDocumentContainer() {
@@ -492,10 +487,7 @@ export default class AgendaitemDecisionComponent extends Component {
     };
   }
 
-  attachNewBetreftPiecePartsVersion(
-    report,
-    previousBetreftPiecePart
-  ) {
+  attachNewBetreftPiecePartsVersion(report, previousBetreftPiecePart) {
     const now = new Date();
     let betreftPiecePart = null;
     if (
@@ -512,10 +504,7 @@ export default class AgendaitemDecisionComponent extends Component {
     return betreftPiecePart;
   }
 
-  attachNewBeslissingPiecePartsVersion(
-    report,
-    previousBeslissingPiecePart
-  ) {
+  attachNewBeslissingPiecePartsVersion(report, previousBeslissingPiecePart) {
     const now = new Date();
     let beslissingPiecePart = null;
     if (
@@ -545,17 +534,20 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     // If editor is empty, disable
-    if(this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0) {
+    if (
+      this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0
+    ) {
       return true;
     }
 
     // If there is no change to the part, disable
-    if (this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent) {
+    if (
+      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+    ) {
       return true;
     }
 
     return false;
-
   }
 
   get disableSaveTreatmentButton() {
@@ -568,17 +560,21 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     // If editor is empty, disable
-    if(this.editorInstanceBeslissing.mainEditorState.doc.textContent.length === 0) {
+    if (
+      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length === 0
+    ) {
       return true;
     }
 
     // If there is no change to the part, disable
-    if (this.beslissingPiecePart?.value === this.editorInstanceBeslissing.htmlContent) {
+    if (
+      this.beslissingPiecePart?.value ===
+      this.editorInstanceBeslissing.htmlContent
+    ) {
       return true;
     }
 
     return false;
-
   }
 
   get disableSaveButton() {
@@ -589,7 +585,10 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
   }
 
   @action
