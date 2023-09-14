@@ -29,7 +29,7 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De secretaris</td>
-          <td>${secretary}</td>
+          <td id="secretary">${secretary}</td>
         </tr>
       </tbody>
     </table>
@@ -85,9 +85,7 @@ function renderMinutes(data) {
 }
 
 function mandateeName(mandatee) {
-  return mandatee
-    ? `${mandatee.person.get('firstName')} ${mandatee.person.get('lastName')}`
-    : '';
+  return mandatee ? mandatee.person.get('fullName') : '';
 }
 
 export default class AgendaMinutesController extends Controller {

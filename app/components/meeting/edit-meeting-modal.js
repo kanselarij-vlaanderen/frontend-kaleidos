@@ -9,6 +9,11 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
+import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+
+function replaceSecretary(htmlString, newSecretary) {
+  return replaceById(htmlString, 'secretary', newSecretary);
+}
 
 /**
  * @argument {isNew}
@@ -105,7 +110,10 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
   }
 
   @action
@@ -244,9 +252,27 @@ export default class MeetingEditMeetingComponent extends Component {
           });
           const pieceParts = yield report?.pieceParts;
           if (pieceParts) {
-            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+            yield this.decisionReportGeneration.generateReplacementReport.perform(
+              report
+            );
           }
         }
+      }
+
+      // Update secretary in minutes
+      const minutes = yield this.args.meeting.minutes;
+      if (minutes) {
+        const piecePart = yield this.store.queryOne('piece-part', {
+          'filter[:has-no:next-piece-part]': true,
+          'filter[minutes][:id:]': minutes.id,
+        });
+        const newValue = replaceSecretary(piecePart.value, this.secretary.person.get('fullName'));
+        piecePart.value = newValue;
+        yield piecePart.save();
+        yield this.decisionReportGeneration.generateReplacementReport.perform(
+          minutes,
+          'minutes'
+        );
       }
     }
     // update the planned date of the publication activities (not needed for decisions)
