@@ -17,12 +17,19 @@ export default class SignatureService extends Service {
       const signSubcase = await signFlow.signSubcase;
       // Attach signers
       await Promise.all(
-        signers.map((mandatee) => {
-          const record = this.store.createRecord('sign-signing-activity', {
-            signSubcase,
-            mandatee,
-          });
-          return record.save();
+        signers.map(async (mandatee) => {
+          const signSigningActivity = await this.store.queryOne('sign-signing-activity', {
+            'filter[sign-subcase][:id:]': signSubcase.id,
+            'filter[mandatee][:id:]': mandatee.id
+          })
+          if (!signSigningActivity) {
+            const record = this.store.createRecord('sign-signing-activity', {
+              signSubcase,
+              mandatee,
+            });
+            return record.save();
+          }
+          return true;
         })
       );
 
