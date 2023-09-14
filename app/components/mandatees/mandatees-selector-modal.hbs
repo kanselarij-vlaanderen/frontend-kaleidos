@@ -1,5 +1,9 @@
 <Auk::Modal @size="large">
-  <Auk::Modal::Header @closeDisabled={{this.onAdd.isRunning}} @title={{t "add-minister"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header
+    @closeDisabled={{this.onAdd.isRunning}}
+    @title={{t "add-minister"}}
+    @onClose={{@onClose}}
+  />
   <Auk::Modal::Body>
     <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
       <AuCheckbox
@@ -31,7 +35,10 @@
       />
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onClose}} @cancelDisabled={{this.onAdd.isRunning}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onClose}}
+    @cancelDisabled={{this.onAdd.isRunning}}
+  >
     <AuButton
       data-test-mandatees-selector-add
       @skin="primary"

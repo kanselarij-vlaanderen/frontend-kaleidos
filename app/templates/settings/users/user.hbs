@@ -241,6 +241,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.blockMembership.isRunning}}
           {{on "click" (toggle "showBlockMembership" this)}}
         >
           {{t "cancel"}}
@@ -250,6 +251,7 @@
         <AuButton
           data-test-route-settings---user-confirm-block-membership
           @alert={{true}}
+          @loading={{this.blockMembership.isRunning}}
           {{on
             "click"
             (queue
@@ -287,6 +289,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unblockMembership.isRunning}}
           {{on "click" (toggle "showUnblockMembership" this)}}
         >
           {{t "cancel"}}
@@ -296,6 +299,7 @@
         <AuButton
           data-test-route-settings---user-confirm-unblock-membership
           @alert={{true}}
+          @loading={{this.unblockMembership.isRunning}}
           {{on
             "click"
             (queue
@@ -328,7 +332,11 @@
   <:footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton @skin="naked" {{on "click" (toggle "showBlockUser" this)}}>
+        <AuButton
+          @skin="naked"
+          @disabled={{this.blockUser.isRunning}}
+          {{on "click" (toggle "showBlockUser" this)}}
+        >
           {{t "cancel"}}
         </AuButton>
       </Group>
@@ -336,6 +344,7 @@
         <AuButton
           data-test-route-settings---user-confirm-block-user
           @alert={{true}}
+          @loading={{this.blockUser.isRunning}}
           {{on
             "click"
             (queue (perform this.blockUser) (toggle "showBlockUser" this))
@@ -369,7 +378,11 @@
   <:footer>
     <AuToolbar as |Group|>
       <Group>
-        <AuButton @skin="naked" {{on "click" (toggle "showUnblockUser" this)}}>
+        <AuButton
+          @skin="naked"
+          @disabled={{this.unblockUser.isRunning}}
+          {{on "click" (toggle "showUnblockUser" this)}}
+        >
           {{t "cancel"}}
         </AuButton>
       </Group>
@@ -377,6 +390,7 @@
         <AuButton
           data-test-route-settings---user-confirm-unblock-user
           @alert={{true}}
+          @loading={{this.unblockUser.isRunning}}
           {{on
             "click"
             (queue (perform this.unblockUser) (toggle "showUnblockUser" this))

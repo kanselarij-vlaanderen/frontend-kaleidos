@@ -18,7 +18,10 @@
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+  >
     <AuButton
       data-test-translation-activity-edit-save
       @skin="primary"

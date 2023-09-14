@@ -169,6 +169,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.blockOrganization.isRunning}}
           {{on "click" (toggle "showBlockOrganization" this)}}
         >
           {{t "cancel"}}
@@ -178,6 +179,7 @@
         <AuButton
           data-test-route-settings---organization-confirm-block-organization
           @alert={{true}}
+          @loading={{this.blockOrganization.isRunning}}
           {{on
             "click"
             (queue
@@ -215,6 +217,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unblockOrganization.isRunning}}
           {{on "click" (toggle "showUnblockOrganization" this)}}
         >
           {{t "cancel"}}
@@ -224,6 +227,7 @@
         <AuButton
           data-test-route-settings---organization-confirm-unblock-organization
           @alert={{true}}
+          @loading={{this.unblockOrganization.isRunning}}
           {{on
             "click"
             (queue
@@ -258,6 +262,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unlinkMandatee.isRunning}}
           {{on "click" (toggle "showUnlinkMandatee" this)}}
         >
           {{t "cancel"}}

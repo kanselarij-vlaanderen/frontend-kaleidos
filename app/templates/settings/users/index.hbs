@@ -237,11 +237,12 @@
 
 <ConfirmationModal
   @modalOpen={{this.showBlockMembershipsConfirmationModal}}
-  @onConfirm={{queue this.blockMemberships this.toggleShowBlockMembershipsConfirmationModal}}
+  @onConfirm={{queue (perform this.blockMemberships) this.toggleShowBlockMembershipsConfirmationModal}}
   @onCancel={{this.toggleShowBlockMembershipsConfirmationModal}}
   @confirmMessage={{t "block-membership"}}
   @alert={{true}}
   @disabled={{is-empty this.membershipsBeingBlocked}}
+  @loading={{this.blockMemberships.isRunning}}
 >
   <:title>
     {{t "block-membership"}}
@@ -270,10 +271,11 @@
 
 <ConfirmationModal
   @modalOpen={{this.showUnblockMembershipsConfirmationModal}}
-  @onConfirm={{queue this.unblockMemberships this.toggleShowUnblockMembershipsConfirmationModal}}
+  @onConfirm={{queue (perform this.unblockMemberships) this.toggleShowUnblockMembershipsConfirmationModal}}
   @onCancel={{this.toggleShowUnblockMembershipsConfirmationModal}}
   @confirmMessage={{t "unblock-membership"}}
   @disabled={{is-empty this.membershipsBeingBlocked}}
+  @loading={{this.unblockMemberships.isRunning}}
 >
   <:title>
     {{t "unblock-membership"}}
@@ -302,10 +304,11 @@
 
 <ConfirmationModal
   @modalOpen={{this.showBlockUserConfirmationModal}}
-  @onConfirm={{queue this.blockUser (toggle "showBlockUserConfirmationModal" this)}}
+  @onConfirm={{queue (perform this.blockUser) (toggle "showBlockUserConfirmationModal" this)}}
   @onCancel={{toggle "showBlockUserConfirmationModal" this}}
   @confirmMessage={{t "block-user"}}
   @alert={{true}}
+  @loading={{this.blockUser.isRunning}}
 >
   <:title>
     {{t "block-user"}}
@@ -320,9 +323,10 @@
 
 <ConfirmationModal
   @modalOpen={{this.showUnblockUserConfirmationModal}}
-  @onConfirm={{queue this.unblockUser (toggle "showUnblockUserConfirmationModal" this)}}
+  @onConfirm={{queue (perform this.unblockUser) (toggle "showUnblockUserConfirmationModal" this)}}
   @onCancel={{toggle "showUnblockUserConfirmationModal" this}}
   @confirmMessage={{t "unblock-user"}}
+  @loading={{this.unblockUser.isRunning}}
 >
   <:title>
     {{t "unblock-user"}}
