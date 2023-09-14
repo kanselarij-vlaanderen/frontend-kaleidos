@@ -31,7 +31,7 @@
       />
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onClose}} @closeDisabled={{this.onAdd.isRunning}}>
+  <Auk::Modal::Footer @onCancel={{@onClose}} @cancelDisabled={{this.onAdd.isRunning}}>
     <AuButton
       data-test-mandatees-selector-add
       @skin="primary"
