@@ -15,7 +15,7 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
 
 function formatDocuments(pieceRecords) {
   const names = pieceRecords.map((record) => record.name);
-  const regex = new RegExp('VR \\d+ \\d+ DOC.\\d+-\\d+');
+  const regex = new RegExp('VR \\d+ \\d+ DOC.\\d+-\\d+\\S+');
   const simplifiedNames = names.map((name) => {
     const match = name.match(regex);
     return match ? match[0] : name;
