@@ -7,7 +7,10 @@
   <Auk::Modal::Body>
     {{this.confirmationMessage}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.confirmPublish.isRunning}}
+  >
     <AuButton
       @skin="primary"
       @loading={{this.confirmPublish.isRunning}}

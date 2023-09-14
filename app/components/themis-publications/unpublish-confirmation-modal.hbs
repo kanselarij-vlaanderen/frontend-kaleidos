@@ -24,7 +24,7 @@
       </Fieldset.content>
     </AuFieldset>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.confirmUnpublish.isRunning}}>
     <AuButton
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}

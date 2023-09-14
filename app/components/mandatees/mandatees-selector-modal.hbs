@@ -31,33 +31,16 @@
       />
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar @size="large">
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <AuButton
-            @skin="naked"
-            @disabled={{this.onAdd.isRunning}}
-            {{on "click" @onClose}}
-          >
-            {{t "cancel"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-mandatees-selector-add
-            @skin="primary"
-            @icon="plus"
-            @disabled={{not this.canAdd}}
-            @loading={{this.onAdd.isRunning}}
-            {{on "click" (perform this.onAdd)}}
-          >
-            {{t "add"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer @onCancel={{@onClose}} @closeDisabled={{this.onAdd.isRunning}}>
+    <AuButton
+      data-test-mandatees-selector-add
+      @skin="primary"
+      @icon="plus"
+      @disabled={{not this.canAdd}}
+      @loading={{this.onAdd.isRunning}}
+      {{on "click" (perform this.onAdd)}}
+    >
+      {{t "add"}}
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

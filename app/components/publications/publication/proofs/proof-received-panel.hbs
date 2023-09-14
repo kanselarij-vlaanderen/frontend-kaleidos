@@ -91,7 +91,7 @@
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer
-      @cancelDisabled={{this.isCancelDisabled}}
+      @cancelDisabled={{this.save.isRunning}}
       @onCancel={{this.closeEditProofModal}}
     >
       <AuButton

@@ -43,7 +43,7 @@
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.savePublicationStatus.isRunning}}>
     <AuButton
       data-test-publication-status-save
       @skin="primary"
