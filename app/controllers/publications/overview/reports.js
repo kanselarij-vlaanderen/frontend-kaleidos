@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 
 export default class PublicationsOverviewReportsController extends Controller {
   @service store;
@@ -46,20 +47,16 @@ export default class PublicationsOverviewReportsController extends Controller {
     await job.save();
     const thisRouteName = this.router.currentRouteName;
     this.jobMonitor.register(job, async (job) => {
-      this.toaster.clear(generatingToast);
+      this.toaster.close(generatingToast);
       if (job.status === job.SUCCESS) {
         const file = await job.generated;
-        const downloadFileToast = {
+        const downloadFileToastOptions = {
           title: this.intl.t('publication-reports--toast-ready--title'),
           message: this.intl.t('publication-reports--toast-ready--message'),
-          type: 'download-file',
-          options: {
-            timeOut: 10 * 60 * 1000,
-            downloadLink: file.namedDownloadLink,
-            fileName: file.downloadName,
-          },
+          timeOut: 10 * 60 * 1000,
+          downloadLink: file.namedDownloadLink,
         };
-        this.toaster.displayToast.perform(downloadFileToast);
+        this.toaster.show(DownloadFileToast, downloadFileToastOptions);
         if (this.router.isActive(thisRouteName)) {
           this.router.refresh(thisRouteName);
         }

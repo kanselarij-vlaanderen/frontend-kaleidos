@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.4.6",
+  "version": "6.5.1",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "2.12.0",
+    "@appuniversum/ember-appuniversum": "2.12.1",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",
@@ -53,7 +53,7 @@
     "@ember/test-helpers": "^2.9.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "3.11.0",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "3.12.0",
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
