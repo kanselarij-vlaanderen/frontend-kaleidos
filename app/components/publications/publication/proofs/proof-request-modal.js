@@ -50,7 +50,6 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   get isCancelDisabled() {
     return (
-      this.loadTranslationPieces.isRunning ||
       this.cancel.isRunning ||
       this.save.isRunning
     );

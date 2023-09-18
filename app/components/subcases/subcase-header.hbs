@@ -95,12 +95,13 @@
   @modalOpen={{this.isAssigningToOtherCase}}
   @closeModal={{this.cancel}}
   @padding="none"
+  @closable={{this.moveSubcase.isIdle}}
 >
   <:title>
     {{t "move-subcase-to-other-case"}}
   </:title>
   <:body>
-    <Utils::CaseSearch @onSelect={{this.moveSubcase}} />
+    <Utils::CaseSearch @onSelect={{perform this.moveSubcase}} />
   </:body>
 </AuModal>
 
