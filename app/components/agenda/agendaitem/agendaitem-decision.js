@@ -2,12 +2,14 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -15,10 +17,8 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
 
 function formatDocuments(pieceRecords) {
   const names = pieceRecords.map((record) => record.name);
-  const regex = new RegExp('VR \\d+ \\d+ DOC.\\d+-\\d+\\S+');
   const simplifiedNames = names.map((name) => {
-    const match = name.match(regex);
-    return match ? match[0] : name;
+    return new VRDocumentName(name).vrNumberWithSuffix();
   });
   const formatter = new Intl.ListFormat('nl-be');
   return `(${formatter.format(simplifiedNames)})`;
@@ -37,6 +37,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service store;
   @service toaster;
   @service decisionReportGeneration;
+  @service throttledLoadingService;
 
   @tracked report;
   @tracked previousReport;
@@ -86,10 +87,15 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    this.pieces = await this.store.query('piece', {
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
-    });
+    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    pieces = pieces.toArray();
+    let sortedPieces;
+    if (this.args.agendaitem.isApproval) {
+      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+    this.pieces = sortedPieces;
   });
 
   @action
