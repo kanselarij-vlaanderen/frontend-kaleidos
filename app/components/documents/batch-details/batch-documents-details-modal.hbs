@@ -35,6 +35,7 @@
               @selectedRows={{this.selectedRows}}
               @decisionActivity={{@decisionActivity}}
               @isSignaturesEnabled={{this.isSignaturesEnabled}}
+              @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
             />
           {{/if}}
           {{#each this.rows as |row|}}
@@ -43,6 +44,7 @@
               @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
+              @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
             />
           {{/each}}
         </tbody>

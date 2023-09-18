@@ -27,6 +27,10 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     this.loadCanManageSignFlow.perform();
   }
 
+  get agendaitemIsRetracted() {
+    return this.decisionActivity.get('isRetracted');
+  }
+
   loadSignatureRelatedData = task(async () => {
     this.signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
     this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.args.piece);
