@@ -49,6 +49,11 @@ function checkUncheckInNewsletter(index) {
 }
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
+  const staticResponse = {
+    statusCode: 200,
+    ok: true,
+  };
+
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -201,6 +206,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
     cy.intercept('POST', '/newsletter/mail-campaigns').as('postMailCampaigns');
+
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postMailCampaigns')
       .then((responseBody) => {
@@ -208,6 +214,19 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
           cy.get(appuniversum.alert.container).should('not.exist');
         }
       });
+  });
+
+  it.only('should test the post mailchimp stuff', () => {
+    cy.visit('vergadering/64F9AD0070A5523DE5126B7A/kort-bestek');
+    cy.intercept('POST', '/newsletter/mail-campaigns', staticResponse).as('stubUploadMailCampaigns');
+
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@stubUploadMailCampaigns');
+    cy.wait(10000);
   });
 
   // it.only('should test the pre mailchimp checks', () => {

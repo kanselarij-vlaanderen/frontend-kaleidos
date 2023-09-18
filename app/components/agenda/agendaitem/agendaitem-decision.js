@@ -108,6 +108,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart
     );
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
+    await this.loadReport.perform();
   });
 
   get pieceParts() {
@@ -135,7 +136,7 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadReport = task(async () => {
-    this.report = await this.args.decisionActivity.report;
+    this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
@@ -274,7 +275,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   setBetreftEditorContent(content) {
-    this.editorInstanceBetreft.setHtmlContent(content);
+    this.editorInstanceBetreft?.setHtmlContent(content);
   }
 
   @action
@@ -306,7 +307,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   setBeslissingEditorContent(content) {
-    this.editorInstanceBeslissing.setHtmlContent(content);
+    this.editorInstanceBeslissing?.setHtmlContent(content);
   }
 
   @action
