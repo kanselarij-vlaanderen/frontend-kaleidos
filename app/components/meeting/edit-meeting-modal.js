@@ -243,7 +243,7 @@ export default class MeetingEditMeetingComponent extends Component {
             'filter[decision-activity][:id:]': decisionActivity.id,
           });
           const pieceParts = yield report?.pieceParts;
-          if (pieceParts) {
+          if (pieceParts?.length) {
             yield this.decisionReportGeneration.generateReplacementReport.perform(report);
           }
         }
