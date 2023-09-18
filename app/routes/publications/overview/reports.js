@@ -24,7 +24,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
     // configuration order determines order in UI
     const reportTypeEntries = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
-      const reportType = reportTypes.find((type) => type.uri, reportTypeConfig.uri);
+      const reportType = reportTypes.find((type) => type.uri === reportTypeConfig.uri);
       if (!reportType) {
         console.error('report type config uri does not exist');
       }
@@ -41,6 +41,6 @@ export default class PublicationsOverviewReportsRoute extends Route {
       return new ReportTypeEntry(lastJob, reportType, reportTypeConfig);
     });
 
-    return Promise.all(reportTypeEntries);
+    return await Promise.all(reportTypeEntries);
   }
 }
