@@ -5,6 +5,7 @@ import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 export default class DecisionReportGeneration extends Service {
   @service toaster;
   @service store;
+  @service intl;
 
   generateReplacementReport = task(async (report) => {
     const fileMeta = await this.exportPdf.perform(report);
