@@ -112,7 +112,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
         'filter[decision-activity][:id:]': this.decisionActivity.id,
       });
       const pieceParts = await report?.pieceParts;
-      if (pieceParts) {
+      if (pieceParts?.length) {
         await this.decisionReportGeneration.generateReplacementReport.perform(report);
       }
     }

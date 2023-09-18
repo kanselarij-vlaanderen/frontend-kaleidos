@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{t "add-government-domains-government-fields"}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent

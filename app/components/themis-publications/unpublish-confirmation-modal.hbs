@@ -2,10 +2,13 @@
   <Auk::Modal::Header
     @title={{t "unpublish-publication-modal-title"}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.confirmUnpublish.isRunning}}
   />
   <Auk::Modal::Body>
     <AuFieldset as |Fieldset|>
-      <Fieldset.legend>{{t "unpublish-publication-scope-selection"}}</Fieldset.legend>
+      <Fieldset.legend>{{t
+          "unpublish-publication-scope-selection"
+        }}</Fieldset.legend>
       <Fieldset.content>
         <AuRadioGroup
           @selected={{this.selectedOption}}
@@ -13,9 +16,7 @@
           as |Group|
         >
           {{#each this.options as |option|}}
-            <Group.Radio
-              @value={{option}}
-            >
+            <Group.Radio @value={{option}}>
               {{option.label}}
             </Group.Radio>
           {{/each}}
@@ -23,7 +24,10 @@
       </Fieldset.content>
     </AuFieldset>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.confirmUnpublish.isRunning}}
+  >
     <AuButton
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}
