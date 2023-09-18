@@ -13,7 +13,11 @@
       </AuLink>
       <Auk::Toolbar::Item>
         <h4 data-test-settings-header-title class="auk-toolbar-complex__title">
-          {{t "manage-user" firstName=this.model.firstName lastName=this.model.lastName}}
+          {{t
+            "manage-user"
+            firstName=this.model.firstName
+            lastName=this.model.lastName
+          }}
         </h4>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
@@ -31,7 +35,10 @@
           <Auk::Panel::Header>
             <AuToolbar class="auk-u-maximize-width" as |Group|>
               <Group>
-                <h4 data-test-route-settings---user-general-info class="auk-panel__title">
+                <h4
+                  data-test-route-settings---user-general-info
+                  class="auk-panel__title"
+                >
                   {{t "manage-users-general-info"}}
                 </h4>
               </Group>
@@ -58,16 +65,24 @@
           <Auk::Panel::Body>
             <dl>
               <div class="auk-key-value-item auk-key-value-item--horizontal">
-                <div class="auk-key-value-item__label">{{t "manage-users-full-name"}}</div>
-                <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div class="auk-key-value-item__label">{{t
+                    "manage-users-full-name"
+                  }}</div>
+                <div
+                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
+                >
                   {{this.model.fullName}}
                 </div>
               </div>
             </dl>
             <dl>
               <div class="auk-key-value-item auk-key-value-item--horizontal">
-                <div class="auk-key-value-item__label">{{t "manage-users-email"}}</div>
-                <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                <div class="auk-key-value-item__label">{{t
+                    "manage-users-email"
+                  }}</div>
+                <div
+                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
+                >
                   {{this.model.email}}
                 </div>
               </div>
@@ -89,7 +104,10 @@
       <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
         <Auk::Panel>
           <Auk::Panel::Header>
-            <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
+            <h4
+              data-test-route-settings---user-technical-info
+              class="auk-panel__title"
+            >
               {{t "user-rights"}}
             </h4>
           </Auk::Panel::Header>
@@ -105,7 +123,7 @@
               </:header>
               <:body>
                 {{#each this.model.memberships as |membership|}}
-                  <tr class="{{if membership.isBlocked "au-u-muted"}}">
+                  <tr class="{{if membership.isBlocked 'au-u-muted'}}">
                     <td>{{membership.organization.name}}</td>
                     <td>{{membership.organization.identifier}}</td>
                     <td>{{membership.role.label}}</td>
@@ -115,7 +133,13 @@
                           data-test-route-settings---user-unblock-membership
                           @skin="naked"
                           @icon="circle-full"
-                          {{on "click" (queue (toggle "showUnblockMembership" this) (set this "membershipBeingBlocked" membership))}}
+                          {{on
+                            "click"
+                            (queue
+                              (toggle "showUnblockMembership" this)
+                              (set this "membershipBeingBlocked" membership)
+                            )
+                          }}
                         >
                           {{t "unblock-membership"}}
                         </AuButton>
@@ -125,7 +149,13 @@
                           @skin="naked"
                           @icon="circle-x"
                           @alert={{true}}
-                          {{on "click" (queue (toggle "showBlockMembership" this) (set this "membershipBeingBlocked" membership))}}
+                          {{on
+                            "click"
+                            (queue
+                              (toggle "showBlockMembership" this)
+                              (set this "membershipBeingBlocked" membership)
+                            )
+                          }}
                         >
                           {{t "block-membership"}}
                         </AuButton>
@@ -143,7 +173,10 @@
           <Auk::Panel::Header>
             <AuToolbar class="auk-u-maximize-width" as |Group|>
               <Group>
-                <h4 data-test-route-settings---user-technical-info class="auk-panel__title">
+                <h4
+                  data-test-route-settings---user-technical-info
+                  class="auk-panel__title"
+                >
                   {{t "mandatee"}}
                 </h4>
               </Group>
@@ -164,7 +197,7 @@
                     >
                       {{t "connect"}}
                     </AuButton>
-                    {{/if}}
+                  {{/if}}
                 {{/if}}
               </Group>
             </AuToolbar>
@@ -188,6 +221,7 @@
 <AuModal
   @modalOpen={{this.showBlockMembership}}
   @closeModal={{toggle "showBlockMembership" this}}
+  @closable={{this.blockMembership.isIdle}}
 >
   <:title>
     {{t "block-membership"}}
@@ -195,16 +229,19 @@
   <:body>
     <div class="au-o-flow au-o-flow--small">
       <p>{{t "block-membership-explanation"}}</p>
-      <p>{{t "block-membership-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+      <p>{{t
+          "block-membership-are-you-sure"
+          user=@model.fullName
+          htmlSafe=true
+        }}</p>
     </div>
   </:body>
   <:footer>
-    <AuToolbar
-      as |Group|
-    >
+    <AuToolbar as |Group|>
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.blockMembership.isRunning}}
           {{on "click" (toggle "showBlockMembership" this)}}
         >
           {{t "cancel"}}
@@ -214,7 +251,13 @@
         <AuButton
           data-test-route-settings---user-confirm-block-membership
           @alert={{true}}
-          {{on "click" (queue this.blockMembership (toggle "showBlockMembership" this))}}
+          @loading={{this.blockMembership.isRunning}}
+          {{on
+            "click"
+            (queue
+              (perform this.blockMembership) (toggle "showBlockMembership" this)
+            )
+          }}
         >
           {{t "block-membership"}}
         </AuButton>
@@ -226,6 +269,7 @@
 <AuModal
   @modalOpen={{this.showUnblockMembership}}
   @closeModal={{toggle "showUnblockMembership" this}}
+  @closable={{this.unblockMembership.isIdle}}
 >
   <:title>
     {{t "unblock-membership"}}
@@ -233,16 +277,19 @@
   <:body>
     <div class="au-o-flow au-o-flow--small">
       <p>{{t "unblock-membership-explanation"}}</p>
-      <p>{{t "unblock-membership-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+      <p>{{t
+          "unblock-membership-are-you-sure"
+          user=@model.fullName
+          htmlSafe=true
+        }}</p>
     </div>
   </:body>
   <:footer>
-    <AuToolbar
-      as |Group|
-    >
+    <AuToolbar as |Group|>
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unblockMembership.isRunning}}
           {{on "click" (toggle "showUnblockMembership" this)}}
         >
           {{t "cancel"}}
@@ -252,7 +299,14 @@
         <AuButton
           data-test-route-settings---user-confirm-unblock-membership
           @alert={{true}}
-          {{on "click" (queue this.unblockMembership (toggle "showUnblockMembership" this))}}
+          @loading={{this.unblockMembership.isRunning}}
+          {{on
+            "click"
+            (queue
+              (perform this.unblockMembership)
+              (toggle "showUnblockMembership" this)
+            )
+          }}
         >
           {{t "unblock-membership"}}
         </AuButton>
@@ -264,6 +318,7 @@
 <AuModal
   @modalOpen={{this.showBlockUser}}
   @closeModal={{toggle "showBlockUser" this}}
+  @closable={{this.blockUser.isIdle}}
 >
   <:title>
     {{t "block-user"}}
@@ -275,12 +330,11 @@
     </div>
   </:body>
   <:footer>
-    <AuToolbar
-      as |Group|
-    >
+    <AuToolbar as |Group|>
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.blockUser.isRunning}}
           {{on "click" (toggle "showBlockUser" this)}}
         >
           {{t "cancel"}}
@@ -290,7 +344,11 @@
         <AuButton
           data-test-route-settings---user-confirm-block-user
           @alert={{true}}
-          {{on "click" (queue this.blockUser (toggle "showBlockUser" this))}}
+          @loading={{this.blockUser.isRunning}}
+          {{on
+            "click"
+            (queue (perform this.blockUser) (toggle "showBlockUser" this))
+          }}
         >
           {{t "block-user"}}
         </AuButton>
@@ -302,6 +360,7 @@
 <AuModal
   @modalOpen={{this.showUnblockUser}}
   @closeModal={{toggle "showUnblockUser" this}}
+  @closable={{this.unblockUser.isIdle}}
 >
   <:title>
     {{t "unblock-user"}}
@@ -309,16 +368,19 @@
   <:body>
     <div class="au-o-flow au-o-flow--small">
       <p>{{t "unblock-user-explanation"}}</p>
-      <p>{{t "unblock-user-are-you-sure" user=@model.fullName htmlSafe=true}}</p>
+      <p>{{t
+          "unblock-user-are-you-sure"
+          user=@model.fullName
+          htmlSafe=true
+        }}</p>
     </div>
   </:body>
   <:footer>
-    <AuToolbar
-      as |Group|
-    >
+    <AuToolbar as |Group|>
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unblockUser.isRunning}}
           {{on "click" (toggle "showUnblockUser" this)}}
         >
           {{t "cancel"}}
@@ -328,7 +390,11 @@
         <AuButton
           data-test-route-settings---user-confirm-unblock-user
           @alert={{true}}
-          {{on "click" (queue this.unblockUser (toggle "showUnblockUser" this))}}
+          @loading={{this.unblockUser.isRunning}}
+          {{on
+            "click"
+            (queue (perform this.unblockUser) (toggle "showUnblockUser" this))
+          }}
         >
           {{t "unblock-user"}}
         </AuButton>

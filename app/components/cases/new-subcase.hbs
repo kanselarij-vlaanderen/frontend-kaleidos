@@ -1,5 +1,9 @@
 <Auk::Modal>
-  <Auk::Modal::Header @title={{t "create-subcase"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header
+    @closeDisabled={{this.areSavingTasksRunning}}
+    @title={{t "create-subcase"}}
+    @onClose={{@onClose}}
+  />
   <Auk::Modal::Body>
     <Utils::LoadableContent
       @isLoading={{this.areLoadingTasksRunning}}
@@ -35,7 +39,7 @@
               @skin="secondary"
               @icon="copy-paste"
               {{on "click" (perform this.copyFullSubcase)}}
-              @disabled={{this.copyFullSubcase.isRunning}}
+              @disabled={{this.areSavingTasksRunning}}
             >
               {{t "clone-previous-subcase"}}
             </AuButton>
@@ -123,7 +127,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.saveSubcase.isRunning}}
+    @cancelDisabled={{this.areSavingTasksRunning}}
     @onCancel={{@onClose}}
   >
     <AuButton

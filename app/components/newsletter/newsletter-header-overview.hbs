@@ -211,7 +211,7 @@
 
 {{#if (or this.loadNewsletterHTML.isRunning this.newsletterHTML)}}
   <Auk::Modal @size="full-screen-padded">
-    <Auk::Modal::Header @title={{ t "show-newsletter" }} @onClose={{this.clearNewsletterHTML}} />
+    <Auk::Modal::Header @title={{t "show-newsletter"}} @onClose={{this.clearNewsletterHTML}} />
     <Auk::Modal::Body>
       {{#if this.loadNewsletterHTML.isRunning}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
