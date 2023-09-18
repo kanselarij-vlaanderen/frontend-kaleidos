@@ -108,37 +108,39 @@ export default class UsersSettingsController extends Controller {
     }
   }
 
-  @action
-  async blockUser() {
-    const blocked = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.BLOCKED);
+  blockUser = task(async () => {
+    const blocked = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
+    );
     this.userBeingBlocked.status = blocked;
     await this.userBeingBlocked.save();
-  }
+  });
 
-  @action
-  async unblockUser() {
-    const allowed = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.ALLOWED);
+  unblockUser = task(async () => {
+    const allowed = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
+    );
     this.userBeingBlocked.status = allowed;
     await this.userBeingBlocked.save();
-  }
+  });
 
-  @action
-  async blockMemberships() {
+  blockMemberships = task(async () => {
     const blocked = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.BLOCKED);
     for (const membership of this.membershipsBeingBlocked) {
       membership.status = blocked;
     }
     await Promise.all(this.membershipsBeingBlocked.map((membership) => membership.save()));
-  }
+  });
 
-  @action
-  async unblockMemberships() {
+  unblockMemberships = task(async () => {
     const allowed = await this.store.findRecordByUri('concept', CONSTANTS.USER_ACCESS_STATUSES.ALLOWED);
     for (const membership of this.membershipsBeingBlocked) {
       membership.status = allowed;
     }
     await Promise.all(this.membershipsBeingBlocked.map((membership) => membership.save()));
-  }
+  });
 
   /* Takes in a list of memberships (from a user's hasMany relation) and filters
    * them based on the user-set filters on this page, i.e. the roles and blocked

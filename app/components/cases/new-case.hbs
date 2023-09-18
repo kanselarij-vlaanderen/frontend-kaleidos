@@ -13,6 +13,7 @@
         <AuButton
           data-test-new-case-cancel
           @skin="naked"
+          @disabled={{this.createCase.isRunning}}
           {{on "click" @onCancel}}
         >
           {{t "cancel"}}
