@@ -243,7 +243,7 @@ export default class MeetingEditMeetingComponent extends Component {
             'filter[decision-activity][:id:]': decisionActivity.id,
           });
           const pieceParts = yield report?.pieceParts;
-          if (pieceParts) {
+          if (pieceParts?.length) {
             yield this.decisionReportGeneration.generateReplacementReport.perform(report);
           }
         }
@@ -278,7 +278,7 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   @action
-  selectMainMeeting(mainMeeting) {
+  async selectMainMeeting(mainMeeting) {
     this.selectedMainMeeting = mainMeeting;
     this.meetingNumber = mainMeeting.number;
     this.numberRepresentation = `${mainMeeting.numberRepresentation}-${this.meetingKindPostfix}`;
@@ -291,7 +291,10 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    this.secretary = mainMeeting.secretary;
+    const mainMeetingSecretary = await mainMeeting.secretary;
+    if (mainMeetingSecretary) {
+      this.secretary = mainMeetingSecretary;
+    }
   }
 
   @action
