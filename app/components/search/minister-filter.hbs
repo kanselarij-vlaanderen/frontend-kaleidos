@@ -39,4 +39,91 @@
       </AuButton>
     {{/if}}
   {{/if}}
+  {{#each this.selectedCurrentMinisters as |minister|}}
+    <AuHr />
+    <div>
+      <AuLabel>{{minister.fullName}} beleidsdomeinen:</AuLabel>
+      {{#if (eq minister.firstName 'Jan')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.JanJambon as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Hilde')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.HildeCrevits as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Bart')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.BartSomers as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Ben')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.BenWeyts as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Zuhal')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.ZuhalDemir as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Matthias')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.MatthiasDiependaele as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Lydia')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.LydiaPeeters as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Benjamin')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.BenjaminDalle as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+      {{#if (eq minister.firstName 'Jo')}}
+      <AuCheckboxGroup
+          @name="beleidsdomeinen"
+        as |Group|>
+          {{#each this.JoBrouns as |domain|}}
+          <Group.Checkbox @value="Domein1">{{domain}}</Group.Checkbox>
+          {{/each}}
+      </AuCheckboxGroup>
+      {{/if}}
+    </div>
+  {{/each}}
 {{/if}}

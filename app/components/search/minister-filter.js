@@ -38,6 +38,12 @@ export default class SearchMinisterFilterComponent extends Component {
     );
   }
 
+  get selectedCurrentMinistersName() {
+    return this.selectedCurrentMinisterIds.map((ministerLabel) =>
+      this.currentMinisters.find((minister) => minister.fullName === ministerLabel)
+    );
+  }
+
   @action
   onChangeCurrentMinisters(selected) {
     this.selectedCurrentMinisterIds = selected.map((m) => m.id)
@@ -86,4 +92,68 @@ export default class SearchMinisterFilterComponent extends Component {
       .filter((minister) => minister.uri.startsWith('http://themis.vlaanderen.be'));
     this.selectedPastMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.pastMinisters.find((minister) => minister.id === ministerId));
   }
+
+  // Mockup data
+  JanJambon = [
+    'Buitenlandse Zaken',
+    'Cultuur',
+    'Digitalisering',
+    'Facilitair Management'
+  ]
+
+  HildeCrevits = [
+    'Openbare Werken',
+    'Energie',
+    'Leefmilieu',
+    'Natuur'
+  ]
+
+  BartSomers = [
+    'Binnenlands Bestuur',
+    'Bestuurszaken',
+    'Inburgering',
+    'Gelijke kansen'
+  ]
+
+  BenWeyts = [
+    'Mobiliteit',
+    'Openbare Werken',
+    'Vlaamse Rand',
+    'Toerisme',
+    'Dierenwelzijn'
+  ]
+
+  ZuhalDemir = [
+    'Justitie en handhaving',
+    'Omgeving',
+    'Energie',
+    'Toerisme',
+  ]
+
+  MatthiasDiependaele = [
+    'Financiën',
+    'Begroting',
+    'Wonen',
+    'Onroerend Erfgoed',
+  ]
+
+  LydiaPeeters = [
+    'Begroting',
+    'Financiën',
+    'Energie',
+  ]
+
+  BenjaminDalle = [
+    'Brussel',
+    'Jeugd',
+    'Media',
+  ]
+
+  JoBrouns = [
+    'Economie',
+    'Innovatie',
+    'Werk',
+    'Sociale Economie',
+    'Landbouw'
+  ]
 }
