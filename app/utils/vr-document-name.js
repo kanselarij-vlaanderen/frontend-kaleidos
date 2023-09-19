@@ -92,8 +92,12 @@ export default class VRDocumentName {
   }
 
   vrNumberWithSuffix() {
-    const meta = this.parseMeta();
-    return `VR ${meta.dateRaw}${meta.casePrefix} ${meta.docType}.${meta.caseNrRaw}/${meta.index}${meta.versionSuffix || ''}`;
+    try {
+      const meta = this.parseMeta();
+      return `VR ${meta.dateRaw}${meta.casePrefix} ${meta.docType}.${meta.caseNrRaw}/${meta.index}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.name;
+    }
   }
 }
 
