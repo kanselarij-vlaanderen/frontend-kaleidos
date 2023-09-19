@@ -1,0 +1,64 @@
+{{page-title (t "cases")}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+  {{#if (user-may "manage-cases")}}
+    <div data-test-route-search-removed-cases-list class="au-c-card au-o-box au-o-box--small">
+      <Auk::CheckboxTree
+        @label="Status"
+        @items={{this.status}}
+      />
+    </div>
+  {{/if}}
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
+      @searchText={{this.searchText}}
+      @searchType={{t "publications"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      data-test-route-search-cases-data-table
+      @list={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{this.selectSize}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.resultClicked}}
+    >
+      <:body as |row|>
+        <td data-test-route-search-cases-data-table-row>
+          <Search::ResultCards::Publication
+            @date={{row.attributes.sessionDates}}
+            @shortTitle={{row.highlight.shortTitle}}
+            @title={{row.highlight.title}}
+            @caseId={{row.id}}
+            @isArchived={{row.attributes.isArchived}}
+            @subcaseHighlights={{row.subcaseHighlights}}
+          />
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>

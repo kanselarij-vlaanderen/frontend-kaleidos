@@ -1,0 +1,39 @@
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |card|
+>
+  <card.header>
+    <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
+      <AuLink
+        data-test-route-search-result-cards-case-shorttitle
+        class="au-u-padding-none card-link"
+        @route="cases.case.subcases"
+        @model={{@caseId}}
+      >
+        <span class="card-link">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{if @shortTitle @shortTitle @title}}
+          />
+        </span>
+      </AuLink>
+    </AuHeading>
+  </card.header>
+  <card.footer>
+    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+      <p>
+        <Auk::StatusPill>
+          Opgestart
+        </Auk::StatusPill>
+      </p>
+      <p
+        data-test-route-search-result-cards-case-date
+        class="au-u-para-small au-u-muted au-u-medium"
+      >
+        Laatste wijziging: {{date @date}}
+      </p>
+    </div>
+  </card.footer>
+</AuCard>
