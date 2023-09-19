@@ -398,7 +398,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
       'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
     ];
-    const dateRange = '02-10-2019 tot 10-05-2021';
+    // *NOTE: these dates show differently depending on timezone
+    const date02102019 = Cypress.dayjs('2019-10-02').format('DD-MM-YYYY');
+    const date10052021 = Cypress.dayjs('2021-05-10').format('DD-MM-YYYY');
+    // const dateRange = '10-05-2021 tot 16-05-2022';
+    const dateRange = `${date02102019} tot ${date10052021}`;
 
     cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -427,9 +431,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
       'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
     ];
-    // TODO-BUG only in jenkins, this is 15-05-2022. Not sure why.
+    // *NOTE: these dates show differently depending on timezone
+    const date10052021 = Cypress.dayjs('2021-05-10').format('DD-MM-YYYY');
+    const date16052022 = Cypress.dayjs('2022-05-16').format('DD-MM-YYYY');
     // const dateRange = '10-05-2021 tot 16-05-2022';
-    const dateRange = '10-05-2021 tot';
+    const dateRange = `${date10052021} tot ${date16052022}`;
 
     cy.visitAgendaWithLink(agendaitemLink);
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -479,10 +485,16 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
     cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
     cy.get(dependency.emberPowerSelect.option).contains('Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn');
-    cy.get(dependency.emberPowerSelect.option).contains('28-09-1998 tot 13-07-1999');
-    cy.get(dependency.emberPowerSelect.option).contains('01-01-1998 tot 28-09-1998');
-    cy.get(dependency.emberPowerSelect.option).contains('22-09-1997 tot 01-01-1998');
-    cy.get(dependency.emberPowerSelect.option).contains('20-06-1995 tot 22-09-1997')
+    // *NOTE: these dates show differently depending on timezone
+    const date13071999 = Cypress.dayjs('1999-07-13').format('DD-MM-YYYY');
+    const date28091998 = Cypress.dayjs('1998-09-28').format('DD-MM-YYYY');
+    const date01011998 = Cypress.dayjs('1998-01-01').format('DD-MM-YYYY');
+    const date22091997 = Cypress.dayjs('1997-09-22').format('DD-MM-YYYY');
+    const date20061995 = Cypress.dayjs('1995-06-20').format('DD-MM-YYYY');
+    cy.get(dependency.emberPowerSelect.option).contains(`${date28091998} tot ${date13071999}`);
+    cy.get(dependency.emberPowerSelect.option).contains(`${date01011998} tot ${date28091998}`);
+    cy.get(dependency.emberPowerSelect.option).contains(`${date22091997} tot ${date01011998}`);
+    cy.get(dependency.emberPowerSelect.option).contains(`${date20061995} tot ${date22091997}`)
       .parent()
       .click();
     cy.get(utils.mandateesSelector.add).click();
