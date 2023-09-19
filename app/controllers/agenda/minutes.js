@@ -143,7 +143,7 @@ export default class AgendaMinutesController extends Controller {
 
       const defaultAccessLevel = await this.store.findRecordByUri(
         'concept',
-        constants.ACCESS_LEVELS.INTERN_OVERHEID
+        constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
       minutes = this.store.createRecord('minutes', {

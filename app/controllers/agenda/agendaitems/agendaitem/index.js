@@ -1,5 +1,6 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
@@ -13,6 +14,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
   @service decisionReportGeneration;
+  @service toaster;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -104,6 +106,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async saveSecretary(secretary) {
+    const currentSecretary = this.decisionActivity.secretary;
     this.decisionActivity.secretary = secretary;
     await this.decisionActivity.save();
     if (this.enableDigitalAgenda) {
@@ -115,8 +118,33 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       if (pieceParts?.length) {
         await this.decisionReportGeneration.generateReplacementReport.perform(report);
       }
+      const minutes = await this.meeting?.minutes;
+      if (minutes) {
+        const latestMinutesPiecePart = await this.store.queryOne('piece-part', {
+          filter: {
+            minutes: { ':id:': minutes.id },
+            ':has-no:next-piece-part': true,
+          },
+        });
+        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(currentSecretary, secretary);
+        await latestMinutesPiecePart.save();
+
+        const fileMeta = await this.exportPdf.perform(minutes);
+        if (fileMeta) {
+          await this.replaceMinutesFile(minutes, fileMeta.id);
+        }
+      }
     }
   }
+
+  exportPdf = task(async (minutes) => {
+    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    return await resp.json();
+  });
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {

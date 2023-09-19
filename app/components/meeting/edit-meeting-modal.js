@@ -229,6 +229,22 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
     if (this.args.meeting.secretary != this.secretary) {
+      const minutes = yield this.args.meeting.minutes;
+      if (minutes) {
+        const latestMinutesPiecePart = yield this.store.queryOne('piece-part', {
+          filter: {
+            minutes: { ':id:': minutes.id },
+            ':has-no:next-piece-part': true,
+          },
+        });
+        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(this.args.meeting.secretary, this.secretary);
+        yield latestMinutesPiecePart.save();
+
+        const fileMeta = yield this.exportPdf.perform(minutes);
+        if (fileMeta) {
+          yield this.replaceMinutesFile(minutes, fileMeta.id);
+        }
+      }
       this.args.meeting.secretary = this.secretary;
       const decisionActivities = yield this.store.queryAll('decision-activity', {
         'filter[treatment][agendaitems][agenda][created-for][:id:]':
@@ -272,6 +288,15 @@ export default class MeetingEditMeetingComponent extends Component {
       yield this.args.didSave();
     }
   }
+
+  exportPdf = task(async (minutes) => {
+    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
+      return;
+    }
+    return await resp.json();
+  });
 
   filterMainMeetingResults(meeting, results) {
     return results.filter((result) => result.id != meeting.id);
