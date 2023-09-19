@@ -50,6 +50,15 @@ export default class VRNotulenName {
   get isValid() {
     return VRNotulenName.regex.test(this.name);
   }
+
+  vrNumberWithSuffix() {
+    try {
+      const meta = this.parseMeta();
+      return `${meta.context} PV ${meta.year}/${meta.sessionNr}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.name;
+    }
+  }
 }
 
 export const compareFunction = function(parameterA, parameterB) {

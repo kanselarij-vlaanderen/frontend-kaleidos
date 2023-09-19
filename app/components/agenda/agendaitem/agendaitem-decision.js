@@ -15,9 +15,12 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
 }
 
-function formatDocuments(pieceRecords) {
+function formatDocuments(pieceRecords, isApproval) {
   const names = pieceRecords.map((record) => record.name);
   const simplifiedNames = names.map((name) => {
+    if (isApproval) {
+      return new VrNotulenName(name).vrNumberWithSuffix();
+    }
     return new VRDocumentName(name).vrNumberWithSuffix();
   });
   const formatter = new Intl.ListFormat('nl-be');
@@ -294,11 +297,14 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   updateBetreftContent() {
+    // *NOTE: approval decisions have a totally different text block.
+    // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
     this.setBetreftEditorContent(
       `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents)}` : ''
+        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
       }</p>`
     );
   }
