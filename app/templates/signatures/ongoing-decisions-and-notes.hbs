@@ -40,6 +40,7 @@
         <th class="auk-table__col--1">{{t "document-type"}}</th>
         {{!-- <th class="auk-table__col--1">{{t "ministers"}}</th> --}}
         <th class="auk-table__col--2">Datum agenda</th>
+        <th class="auk-table__col--2">Opgestart door</th>
         <th class="auk-table__col--2">{{t "status"}}</th>
         <th class="auk-table__col--1"></th>
         </:header>
@@ -81,6 +82,7 @@
           <td>
             {{date signFlow.decisionActivity.startDate}}
           </td>
+          <td></td>
           <td>
             <SignaturePill
               @piece={{signMarkingActivity.piece}}

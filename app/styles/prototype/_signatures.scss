@@ -44,3 +44,12 @@ $scroll-sidebar-width: 50rem;
   min-height: 5rem;
   padding: .9rem 1.2rem;
 }
+
+.auk-table-row-disabled {
+  opacity: .7 !important;
+  cursor: not-allowed;
+
+  &:hover td {
+    background-color: transparent !important;
+  }
+}

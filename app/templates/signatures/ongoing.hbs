@@ -31,84 +31,95 @@
     </div>
   </m.sidebar>
   <m.content @scroll={{true}}>
-    <KDataTable
-      data-test-route-search-publication-data-table
-      @hoverable={{true}}
-      @striped={{true}}
-      @loading={{this.isLoadingModel}}
-      @content={{@model}}
-      @page={{this.page}}
-      @size={{this.size}}
-      @numberOfItems={{@model.length}}
-      @totalNumberOfItems={{@model.meta.count}}
-      @onChangeSize={{fn (mut this.size)}}
-      @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToSignFlow}}
-      >
-      <:header>
-        <th class="auk-table__col--6">{{t "document-name"}}</th>
+    <table class="auk-table auk-table--hoverable auk-table--striped">
+      <thead>
+        <th class="auk-table__col--4">{{t "document-name"}}</th>
         <th class="auk-table__col--1">{{t "document-type"}}</th>
         <th class="auk-table__col--1">{{t "ministers"}}</th>
         <th class="auk-table__col--2">{{t "date-approved"}}</th>
+        <th class="auk-table__col--2">Opgestart door</th>
         <th class="auk-table__col--2">{{t "status"}}</th>
         <th class="auk-table__col--1"></th>
-        </:header>
-      <:body as |signFlow|>
-        {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
-          {{#let signMarkingActivity.piece as |piece|}}
-            <td>
-              {{#if piece}}
-                {{piece.name}}
-                {{#if (this.isConfidential piece.accessLevel)}}
-                  <AccessLevelPill
-                    @accessLevel={{piece.accessLevel}}
-                    @isEditable={{false}}
-                  />
-                {{/if}}
-              {{/if}}
-            </td>
-            <td>
-              {{#let piece.documentContainer.type as |type|}}
-                {{#if type}}
-                  <AuPill @size="small">
-                    {{type.label}}
-                  </AuPill>
-                {{else}}
-                  -
-                {{/if}}
-              {{/let}}
-            </td>
-          {{/let}}
+        </thead>
+      <tbody>
+        <tr>
           <td>
-            {{#let (await (this.getMandateeNames signFlow)) as |names|}}
-              {{#if names}}
-                {{join ", " names}}
-              {{else}}
-                -
-              {{/if}}
-            {{/let}}
+            VR 2020 2404 DOC.0379-1 Decreet activeringsregie - notaBIS
           </td>
           <td>
-            {{date signFlow.decisionActivity.startDate}}
+            <AuPill @size="small">Nota</AuPill>
           </td>
           <td>
-            <SignaturePill
-              @piece={{signMarkingActivity.piece}}
-              @signMarkingActivity={{signMarkingActivity}}
-              @isClickable={{false}}
-            />
+            Jan Jambon, Hilde Crevits
           </td>
-        {{/let}}
-        <td class="auk-u-text-align--right">
-          <AuButton
-            @skin="naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-          >
-            {{t "open"}}
-          </AuButton>
-        </td>
-      </:body>
-    </KDataTable>
+          <td>
+            22-06-2023
+          </td>
+          <td>Admin</td>
+          <td>
+            <AuPill @size="small" @icon="sign">Voor te bereiden</AuPill>
+          </td>
+          <td class="auk-u-text-align--right">
+            <AuButton
+              @skin="naked"
+              @icon="chevron-right"
+              @hideText={{true}}
+            >
+              {{t "open"}}
+            </AuButton>
+          </td>
+        </tr>
+        <tr class="auk-table-row-disabled">
+          <td>
+            VR 2023 0302 DOC.0089-1 Decreet hybride onderwijs SO - nota
+          </td>
+          <td>
+            <AuPill @size="small">Nota</AuPill>
+          </td>
+          <td>
+            Jan Jambon, Hilde Crevits
+          </td>
+          <td>
+            22-06-2023
+          </td>
+          <td>
+            Ander profiel
+          </td>
+          <td>
+            <AuPill @size="small" @icon="sign">Voor te bereiden</AuPill>
+          </td>
+          <td class="auk-u-text-align--right">
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="au-c-toolbar auk-table__actions--bottom" data-test-number-pagination-container="">
+      <div class="au-c-toolbar__group">
+        <div class="auk-pagination">
+          <ul class="auk-pagination__list">
+            <li class="auk-pagination__element">
+              <p><strong>1-2</strong> van 2</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="au-c-toolbar__group">
+        <div class="auk-toolbar-complex__item">
+          Aantal resultaten per pagina
+        </div>
+        <div class="auk-toolbar-complex__item">
+          <div class="au-c-form-row ">
+            <div class="ember-view ember-basic-dropdown-trigger ember-power-select-trigger  auk-select auk-select--block" role="button" tabindex="0" data-ebd-id="ember57-trigger" aria-owns="" aria-controls="ember-power-select-options-ember57" aria-expanded="false" aria-haspopup="listbox" data-test-number-pagination-size="">
+              <span class="ember-power-select-selected-item">
+                25
+              </span>
+              <span class="ember-power-select-status-icon"></span>
+            </div>
+            <div id="ember-basic-dropdown-content-ember57" class="ember-basic-dropdown-content-placeholder"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </m.content>
 </AuMainContainer>
