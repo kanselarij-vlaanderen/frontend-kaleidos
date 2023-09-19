@@ -21,7 +21,7 @@ export default class SearchController extends Controller {
     },
   ];
 
-  @tracked searchText = '';
+  @tracked searchText = '*';
   @tracked mandatees = [];
   @tracked dateFrom;
   @tracked dateTo;
