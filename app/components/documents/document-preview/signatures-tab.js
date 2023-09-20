@@ -28,7 +28,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
   }
 
   get agendaitemIsRetracted() {
-    return this.decisionActivity.get('isRetracted');
+    return this.decisionActivity?.get('isRetracted');
   }
 
   loadSignatureRelatedData = task(async () => {
@@ -45,6 +45,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     });
     const treatment = await this.agendaitem?.treatment;
     this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.decisionResultCode;
   });
 
   markForSignFlow = task(async (marked) => {
