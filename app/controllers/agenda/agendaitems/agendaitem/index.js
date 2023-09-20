@@ -126,7 +126,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
             ':has-no:next-piece-part': true,
           },
         });
-        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(currentSecretary, secretary);
+
+        const currentSecretaryPerson = await currentSecretary.person;
+        const currentSecretaryPersonFullName = await currentSecretaryPerson.get('fullName');
+        const newSecretaryPerson = await secretary.person;
+        const newSecretaryPersonFullName = await newSecretaryPerson.get('fullName');
+        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(currentSecretaryPersonFullName, newSecretaryPersonFullName);
         await latestMinutesPiecePart.save();
 
         const fileMeta = await this.exportPdf.perform(minutes);

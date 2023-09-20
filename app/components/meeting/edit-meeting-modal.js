@@ -237,7 +237,12 @@ export default class MeetingEditMeetingComponent extends Component {
             ':has-no:next-piece-part': true,
           },
         });
-        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(this.args.meeting.secretary, this.secretary);
+        const currentSecretary = yield this.args.meeting.secretary
+        const currentSecretaryPerson = yield currentSecretary.person;
+        const currentSecretaryPersonFullName = yield currentSecretaryPerson.get('fullName');
+        const newSecretaryPerson = yield this.secretary.person;
+        const newSecretaryPersonFullName = yield newSecretaryPerson.get('fullName');
+        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(currentSecretaryPersonFullName, newSecretaryPersonFullName);
         yield latestMinutesPiecePart.save();
 
         const fileMeta = yield this.exportPdf.perform(minutes);
