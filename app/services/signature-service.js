@@ -15,24 +15,32 @@ export default class SignatureService extends Service {
   async createSignFlow(signFlows, signers, approvers, notified) {
     for (let signFlow of signFlows) {
       const signSubcase = await signFlow.signSubcase;
+
+      // Remove any old signers if they exist
+      const signSigningActivities = await signSubcase
+        ?.hasMany('signSigningActivities')
+        .reload();
+      await signSigningActivities?.map(async (activity) => {
+        await activity.destroyRecord();
+      });
       // Attach signers
       await Promise.all(
-        signers.map(async (mandatee) => {
-          const signSigningActivity = await this.store.queryOne('sign-signing-activity', {
-            'filter[sign-subcase][:id:]': signSubcase.id,
-            'filter[mandatee][:id:]': mandatee.id
-          })
-          if (!signSigningActivity) {
+        signers.map((mandatee) => {
             const record = this.store.createRecord('sign-signing-activity', {
               signSubcase,
               mandatee,
             });
             return record.save();
-          }
-          return true;
         })
       );
 
+      // Remove any old approvers if they exist
+      const signApprovalActivities = await signSubcase
+        ?.hasMany('signApprovalActivities')
+        .reload();
+      await signApprovalActivities?.map(async (activity) => {
+        await activity.destroyRecord();
+      });
       // Attach approvers
       await Promise.all(
         approvers.map((approver) => {
