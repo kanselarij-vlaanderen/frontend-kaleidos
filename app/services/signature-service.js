@@ -26,11 +26,11 @@ export default class SignatureService extends Service {
       // Attach signers
       await Promise.all(
         signers.map((mandatee) => {
-            const record = this.store.createRecord('sign-signing-activity', {
-              signSubcase,
-              mandatee,
-            });
-            return record.save();
+          const record = this.store.createRecord('sign-signing-activity', {
+            signSubcase,
+            mandatee,
+          });
+          return record.save();
         })
       );
 
