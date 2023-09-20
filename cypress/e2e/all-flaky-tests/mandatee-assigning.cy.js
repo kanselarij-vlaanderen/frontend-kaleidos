@@ -443,7 +443,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     let dateRange;
     if (isCI) {
       const date09052021 = Cypress.dayjs('2021-05-09').format('DD-MM-YYYY');
-      const date15052022 = Cypress.dayjs('2022-05-05').format('DD-MM-YYYY');
+      const date15052022 = Cypress.dayjs('2022-05-15').format('DD-MM-YYYY');
       dateRange = `${date09052021} tot ${date15052022}`;
     } else {
       const date10052021 = Cypress.dayjs('2021-05-10').format('DD-MM-YYYY');
