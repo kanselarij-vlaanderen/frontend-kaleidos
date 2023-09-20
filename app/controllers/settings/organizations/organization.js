@@ -15,25 +15,23 @@ export default class SettingsOrganizationsOrganizationController extends Control
   @tracked showSelectMandateeModal = false;
   @tracked linkedMandatees;
 
-  @action
-  async blockOrganization() {
+  blockOrganization = task(async () => {
     const blocked = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
     this.model.status = blocked;
     await this.model.save();
-  }
+  });
 
-  @action
-  async unblockOrganization() {
+  unblockOrganization = task(async () => {
     const allowed = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
     );
     this.model.status = allowed;
     await this.model.save();
-  }
+  });
 
   @action
   async linkMandatee(mandatee) {

@@ -1,5 +1,9 @@
 <Auk::Modal @size="full-screen-padded">
-  <Auk::Modal::Header @title={{t "documents"}} @onClose={{@onCancel}} />
+  <Auk::Modal::Header
+    @closeDisabled={{this.save.isRunning}}
+    @title={{t "documents"}}
+    @onClose={{@onCancel}}
+  />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{this.isLoading}}>
       <table class="auk-table auk-table--styled auk-table--bordered">
@@ -51,7 +55,7 @@
       </table>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
     {{#if (user-may "manage-documents")}}
       <AuButton
         data-test-batch-documents-details-save

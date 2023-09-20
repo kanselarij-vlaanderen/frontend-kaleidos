@@ -1,5 +1,9 @@
 <Auk::Modal>
-  <Auk::Modal::Header @title={{t "edit-case"}} @onClose={{this.close}} />
+  <Auk::Modal::Header
+    @closeDisabled={{this.save.isRunning}}
+    @title={{t "edit-case"}}
+    @onClose={{this.close}}
+  />
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
