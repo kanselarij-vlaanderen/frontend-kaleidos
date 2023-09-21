@@ -2,11 +2,15 @@
   <Auk::Modal::Header
     @title={{or @title (t "publish-publication-modal-title")}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.confirmPublish.isRunning}}
   />
   <Auk::Modal::Body>
     {{this.confirmationMessage}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.confirmPublish.isRunning}}
+  >
     <AuButton
       @skin="primary"
       @loading={{this.confirmPublish.isRunning}}

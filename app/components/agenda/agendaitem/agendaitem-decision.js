@@ -2,21 +2,29 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
 }
 
-function formatDocuments(pieceRecords) {
+function formatDocuments(pieceRecords, isApproval) {
   const names = pieceRecords.map((record) => record.name);
+  const simplifiedNames = names.map((name) => {
+    if (isApproval) {
+      return new VrNotulenName(name).vrNumberWithSuffix();
+    }
+    return new VRDocumentName(name).vrNumberWithSuffix();
+  });
   const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(names)})`;
+  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
@@ -32,6 +40,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service store;
   @service toaster;
   @service decisionReportGeneration;
+  @service throttledLoadingService;
 
   @tracked report;
   @tracked previousReport;
@@ -81,10 +90,15 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    this.pieces = await this.store.query('piece', {
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
-    });
+    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    pieces = pieces.toArray();
+    let sortedPieces;
+    if (this.args.agendaitem.isApproval) {
+      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+    this.pieces = sortedPieces;
   });
 
   @action
@@ -115,7 +129,7 @@ export default class AgendaitemDecisionComponent extends Component {
     return !!this.betreftPiecePart || !!this.beslissingPiecePart;
   }
 
-  loadBetreftPiecePart = task(async() => {
+  loadBetreftPiecePart = task(async () => {
     this.betreftPiecePart = await this.store.queryOne('piece-part', {
       filter: {
         report: { ':id:': this.report.id },
@@ -125,7 +139,7 @@ export default class AgendaitemDecisionComponent extends Component {
     });
   });
 
-  loadBeslissingPiecePart = task(async() => {
+  loadBeslissingPiecePart = task(async () => {
     this.beslissingPiecePart = await this.store.queryOne('piece-part', {
       filter: {
         report: { ':id:': this.report.id },
@@ -174,7 +188,9 @@ export default class AgendaitemDecisionComponent extends Component {
   updatePiecesSignFlows = task(async () => {
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
-    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+    if (
+      decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+    ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
         await this.signatureService.removeSignFlowForPiece(piece);
@@ -229,7 +245,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const subcaseIsConfidential = subcase?.confidential;
 
     const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept', subcaseIsConfidential
+      'concept',
+      subcaseIsConfidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
     );
@@ -246,7 +263,7 @@ export default class AgendaitemDecisionComponent extends Component {
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title'),
+        this.intl.t('warning-title')
       );
     }
     this.args.decisionActivity.report = piece;
@@ -280,11 +297,14 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   updateBetreftContent() {
+    // *NOTE: approval decisions have a totally different text block.
+    // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
     this.setBetreftEditorContent(
       `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents)}` : ''
+        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
       }</p>`
     );
   }
@@ -323,12 +343,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(
-      documentContainer,
-      report,
-      null,
-      betreftPiecePart,
-    );
+    await this.saveReport(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -341,12 +356,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(
-      documentContainer,
-      report,
-      beslissingPiecePart,
-      null,
-    );
+    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -371,12 +381,12 @@ export default class AgendaitemDecisionComponent extends Component {
       report = this.report;
       betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
         report,
-        this.betreftPiecePart,
+        this.betreftPiecePart
       );
       beslissingPiecePart = this.attachNewBeslissingPiecePartsVersion(
         report,
         this.beslissingPiecePart
-      )
+      );
     }
 
     await this.saveReport(
@@ -405,7 +415,9 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
 
     // If this is too slow, we should make a task and do this asynchronously
-    await this.decisionReportGeneration.generateReplacementReport.perform(report);
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      report
+    );
   }
 
   createNewDocumentContainer() {
@@ -492,10 +504,7 @@ export default class AgendaitemDecisionComponent extends Component {
     };
   }
 
-  attachNewBetreftPiecePartsVersion(
-    report,
-    previousBetreftPiecePart
-  ) {
+  attachNewBetreftPiecePartsVersion(report, previousBetreftPiecePart) {
     const now = new Date();
     let betreftPiecePart = null;
     if (
@@ -512,10 +521,7 @@ export default class AgendaitemDecisionComponent extends Component {
     return betreftPiecePart;
   }
 
-  attachNewBeslissingPiecePartsVersion(
-    report,
-    previousBeslissingPiecePart
-  ) {
+  attachNewBeslissingPiecePartsVersion(report, previousBeslissingPiecePart) {
     const now = new Date();
     let beslissingPiecePart = null;
     if (
@@ -545,17 +551,20 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     // If editor is empty, disable
-    if(this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0) {
+    if (
+      this.editorInstanceBetreft.mainEditorState.doc.textContent.length === 0
+    ) {
       return true;
     }
 
     // If there is no change to the part, disable
-    if (this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent) {
+    if (
+      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+    ) {
       return true;
     }
 
     return false;
-
   }
 
   get disableSaveTreatmentButton() {
@@ -568,17 +577,21 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     // If editor is empty, disable
-    if(this.editorInstanceBeslissing.mainEditorState.doc.textContent.length === 0) {
+    if (
+      this.editorInstanceBeslissing.mainEditorState.doc.textContent.length === 0
+    ) {
       return true;
     }
 
     // If there is no change to the part, disable
-    if (this.beslissingPiecePart?.value === this.editorInstanceBeslissing.htmlContent) {
+    if (
+      this.beslissingPiecePart?.value ===
+      this.editorInstanceBeslissing.htmlContent
+    ) {
       return true;
     }
 
     return false;
-
   }
 
   get disableSaveButton() {
@@ -589,7 +602,10 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
   }
 
   @action

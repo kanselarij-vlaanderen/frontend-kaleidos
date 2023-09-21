@@ -111,7 +111,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     // If a piece has pieceParts, remove them
     // Might need to be improved to work for other piece subtypes
     const pieceParts = await this.args.piece.pieceParts;
-    if (pieceParts) {
+    if (pieceParts?.length) {
       for (const piecePart of pieceParts.toArray()) {
         await piecePart.destroyRecord();
       }

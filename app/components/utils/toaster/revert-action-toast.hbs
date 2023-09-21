@@ -1,21 +1,20 @@
 <AuAlert
-  class="vl-alert-relative vl-alert-relative--center-mid"
-  aria-live="assertive"
+  @title={{t "document-delete"}}
   @skin="warning"
   @icon="alert-triangle"
-  @title={{t "document-delete"}}
+  @size="small"
+  @closable={{true}}
+  @onClose={{@close}}
 >
-  <div class="vl-alert__message auk-u-text-capitalize">
-    <p>
-      {{@message}}
-    </p>
-    <AuButton
-      @skin="naked"
-      @icon="undo"
-      @hideText={{true}}
-      {{on "click" @options.onUndo}}
-    >
-      {{t "undo"}}
-    </AuButton>
-  </div>
+  <p class="auk-u-text-capitalize">
+    {{@options.message}}
+  </p>
+  <AuButton
+    @skin="secondary"
+    @icon="undo"
+    {{on "click" this.onUndo}}
+    class="auk-u-mt-4"
+  >
+    {{t "undo"}}
+  </AuButton>
 </AuAlert>

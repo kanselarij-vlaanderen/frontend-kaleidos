@@ -1,9 +1,19 @@
 <Auk::Modal @size="large">
-  <Auk::Modal::Header @title={{t "add-agendaitems"}} @onClose={{@onClose}} />
+  <Auk::Modal::Header
+    @closeDisabled={{this.addSubcasesToAgenda.isRunning}}
+    @title={{t "add-agendaitems"}}
+    @onClose={{@onClose}}
+  />
   <Auk::Modal::Body>
     {{#if this.addSubcasesToAgenda.isRunning}}
       <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-        <Auk::Loader @message={{concat (t "agendaitems-creating-text") " " (t "please-be-patient")}} />
+        <Auk::Loader
+          @message={{concat
+            (t "agendaitems-creating-text")
+            " "
+            (t "please-be-patient")
+          }}
+        />
       </div>
     {{else}}
       <div class="auk-o-grid auk-o-grid--vertical-center">
@@ -99,7 +109,10 @@
       </div>
     {{/if}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onClose}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onClose}}
+    @cancelDisabled={{this.addSubcasesToAgenda.isRunning}}
+  >
     <AuButton
       data-test-create-agendaitem-save
       @skin="primary"
