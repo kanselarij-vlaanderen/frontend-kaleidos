@@ -12,22 +12,5 @@
   <MHeader />
 {{/if}}
 {{outlet}}
-{{#if this.toaster.newToasts.length}}
-  <Auk::AlertStack as |Alert|>
-    {{#each this.toaster.newToasts as |toast|}}
-      <Alert
-        @title={{toast.title}}
-        @skin={{toast.options.type}}
-        @icon={{toast.options.icon}}
-        @closable={{not (eq toast.options.type "success")}}
-        @onClose={{fn this.toaster.clear toast}}
-      >
-        <p>{{toast.message}}</p>
-      </Alert>
-    {{/each}}
-  </Auk::AlertStack>
-{{/if}}
-{{!-- TODO: See services/toaster.js for more info on why we have "newToasts" as well as "oldToasts" --}}
-{{#if this.toaster.oldToasts.length}}
-  <Utils::Toaster @toasts={{this.toaster.oldToasts}} />
-{{/if}}
+
+<AuToaster @position="bottom" />

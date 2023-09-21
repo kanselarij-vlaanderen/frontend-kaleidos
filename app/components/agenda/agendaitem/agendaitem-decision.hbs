@@ -108,6 +108,7 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
+              @loading={{this.loadDocuments.isRunning}}
               {{on "click" this.updateBetreftContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -220,6 +221,7 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
+              @loading={{this.loadDocuments.isRunning}}
               {{on "click" this.updateBetreftContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown

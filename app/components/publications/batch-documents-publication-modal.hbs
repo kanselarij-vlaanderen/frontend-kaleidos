@@ -1,5 +1,5 @@
 <Auk::Modal @size="full-screen-padded">
-  <Auk::Modal::Header @title={{ t "documents" }} @onClose={{@onClose}} />
+  <Auk::Modal::Header @title={{t "documents" }} @onClose={{@onClose}} />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{or
       this.loadPieces.isRunning

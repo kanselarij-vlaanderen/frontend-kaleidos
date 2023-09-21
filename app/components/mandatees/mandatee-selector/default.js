@@ -18,6 +18,16 @@ export default class MandateeSelector extends Component {
     return this.args.referenceDate || startOfDay(new Date());
   }
 
+  get dropdownAlignment() {
+    if (this.args.dropdownAlignment === 'top') {
+      return 'above';
+    } else if (this.args.dropdownAlignment === 'bottom') {
+      return 'below';
+    } else {
+      return 'auto';
+    }
+  }
+
   mandateeOptions = this.loadMandatees();
 
   async loadMandatees() {

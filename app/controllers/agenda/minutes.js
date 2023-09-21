@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
-import { SECRETARIS_NAME } from 'frontend-kaleidos/config/config';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
@@ -12,7 +11,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
 
 function renderAttendees(attendees) {
-  const { primeMinister, viceMinisters, ministers, secretaris } = attendees;
+  const { primeMinister, viceMinisters, ministers, secretary } = attendees;
   return `
     <p><u>AANWEZIG</u></p>
     <table>
@@ -31,7 +30,7 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De secretaris</td>
-          <td>${secretaris}</td>
+          <td>${secretary}</td>
         </tr>
       </tbody>
     </table>
@@ -86,55 +85,10 @@ function renderMinutes(data) {
   `;
 }
 
-function getAttendees(model) {
-  const seen = new Set();
-  const primeMinister = mandateeName(
-    model.mandatees.find(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.MINISTER_PRESIDENT
-    )
-  );
-  seen.add(primeMinister);
-  const viceMinisters = model.mandatees
-    .filter(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.VICEMINISTER_PRESIDENT
-    )
-    .map(mandateeName)
-    .filter((x) => !seen.has(x));
-  viceMinisters.forEach((x) => seen.add(x));
-
-  const ministers = model.mandatees
-    .filter(
-      (mandatee) =>
-        mandatee.mandate.get('role').get('uri') ===
-        constants.MANDATE_ROLES.MINISTER
-    )
-    .map(mandateeName)
-    .filter((x) => !seen.has(x));
-
-  return {
-    primeMinister,
-    viceMinisters,
-    ministers,
-    secretaris: SECRETARIS_NAME,
-  };
-}
-
-function reshapeModelForRender(model) {
-  return {
-    attendees: getAttendees(model),
-    notas: model.notas,
-    announcements: model.announcements,
-  };
-}
-
 function mandateeName(mandatee) {
-  return `${mandatee.person.get('firstName')} ${mandatee.person.get(
+  return mandatee ? `${mandatee.person.get('firstName')} ${mandatee.person.get(
     'lastName'
-  )}`;
+  )}` : '';
 }
 
 export default class AgendaMinutesController extends Controller {
@@ -280,13 +234,13 @@ export default class AgendaMinutesController extends Controller {
   });
 
   @action
-  updateEditorContent() {
+  async updateEditorContent() {
     if (!this.editor) {
       return;
     }
 
     this.editor.setHtmlContent(
-      renderMinutes(reshapeModelForRender(this.model))
+      renderMinutes(await this.reshapeModelForRender())
     );
   }
 
@@ -321,5 +275,58 @@ export default class AgendaMinutesController extends Controller {
   @action
   refresh() {
     this.router.refresh('agenda.minutes');
+  }
+
+
+  async getAttendees() {
+    const attending = new Set();
+    const primeMinister = mandateeName(
+      this.model.mandatees.find(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.MINISTER_PRESIDENT
+      )
+    );
+    attending.add(primeMinister);
+    const viceMinisters = this.model.mandatees
+      .filter(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.VICEMINISTER_PRESIDENT
+      )
+      .map(mandateeName)
+      .filter((x) => !attending.has(x));
+    viceMinisters.forEach((x) => attending.add(x));
+
+    const ministers = this.model.mandatees
+      .filter(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.MINISTER
+      )
+      .map(mandateeName)
+      .filter((x) => !attending.has(x));
+
+    const secretary = mandateeName(
+      await this.store.queryOne('mandatee', {
+        'filter[secretary-for-agendas][:id:]': this.meeting.id,
+        include: 'person',
+      })
+    ) ?? '';
+
+    return {
+      primeMinister,
+      viceMinisters,
+      ministers,
+      secretary,
+    };
+  }
+
+  async reshapeModelForRender() {
+    return {
+      attendees: await this.getAttendees(),
+      notas: this.model.notas,
+      announcements: this.model.announcements,
+    };
   }
 }

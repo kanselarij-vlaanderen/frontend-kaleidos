@@ -1,12 +1,13 @@
 /* global context, it, cy, Cypress, beforeEach, afterEach */
 
 // / <reference types="Cypress" />
-// import dependency from '../../selectors/dependency.selectors';
+import dependency from '../../selectors/dependency.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
+import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import route from '../../selectors/route.selectors';
 import signature from '../../selectors/signature.selectors';
@@ -38,7 +39,7 @@ function createPublicationViaMR(subcaseTitle, fileName, publicationNumber) {
   cy.wait(`@patchPieceForPublication${randomInt}`);
 }
 
-context.skip('signatures shortlist overview tests', () => {
+context('signatures shortlist overview tests', () => {
   const caseTitle1 = `Cypress test: shortlist signatures route case 1- ${currentTimestamp()}`;
   const caseTitle2 = `Cypress test: shortlist signatures route case 2- ${currentTimestamp()}`;
 
@@ -115,8 +116,14 @@ context.skip('signatures shortlist overview tests', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
     cy.addAgendaitemMandatee(3);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).forceClick();
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.addAgendaitemMandatee(4);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).forceClick();
 
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
@@ -153,7 +160,9 @@ context.skip('signatures shortlist overview tests', () => {
   it('should check the signatures overview mandatee filter', () => {
     cy.intercept('GET', '/sign-flows*').as('getShortlist1');
     cy.get(utils.mHeader.signatures).click()
-      .wait('@getShortlist1');
+      .wait('@getShortlist1', {
+        timeout: 60000,
+      });
 
     // no filters (all mandatees)
     cy.get(route.signatures.row.mandatee).contains(mandatee1);
@@ -289,9 +298,158 @@ context.skip('signatures shortlist overview tests', () => {
     cy.get(signature.createSignFlow.notificationAdresses.item).should('not.exist');
 
     // start signflow
-    cy.get(route.signatures.sidebar.startSignflow).click();
-    cy.wait(5000);
-    // TODO where patchcalls?
+    // cy.get(route.signatures.sidebar.startSignflow).click();
+    // cy.wait(5000);
+
+    // no email set
+    cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
+  });
+
+  it('check dossierbeheerder add one minister', () => {
+    // setup: add minister to dossierbeheerder
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
+      .click();
+    cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
+      .click();
+    cy.wait('@patchUserOrganizations');
+
+    cy.logout();
+    cy.login('Kabinetdossierbeheerder');
+
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.get(utils.mHeader.signatures).click()
+      .wait('@getShortlist1');
+
+    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).should('have.length', 1);
+  });
+
+  it('check dossierbeheerder add second minister', () => {
+    // setup: add minister to dossierbeheerder
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(utils.mandateeSelector.container).click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
+      .click();
+    cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
+    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
+      .click();
+    cy.wait('@patchUserOrganizations');
+
+    cy.logout();
+    cy.login('Kabinetdossierbeheerder');
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.get(utils.mHeader.signatures).click()
+      .wait('@getShortlist1');
+
+    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).should('have.length', 2);
+  });
+
+  it('check starting/stopping signflow', () => {
+    const staticResponse = {
+      statusCode: 200,
+      ok: true,
+    };
+
+    cy.visit('ondertekenen/opstarten');
+
+    cy.get(route.signatures.row.name).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
+
+    // ** start signflow **
+
+    // check fail
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+    cy.get(signature.createSignFlow.signers.item); // wait for signers to load
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
+    cy.intercept('POST', '/signing-flows/update-to-signinghub', {
+      forceNetworkError: true,
+    }).as('updateToSigningHubError');
+    cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    // no email set so forcing through disabled button
+    cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
+    cy.wait('@postSigningActivities');
+    cy.wait('@patchSignSubcases');
+    cy.wait('@patchSignFlows');
+    cy.wait('@deleteSigningActivities');
+    cy.get(appuniversum.toaster).find(auk.alert.close)
+      .click();
+
+    // check succes
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+    cy.get(signature.createSignFlow.signers.item); // wait for signers to load
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows2');
+    cy.intercept('POST', '/signing-flows/upload-to-signinghub', staticResponse).as('stubUpload');
+    // no email set so forcing through disabled button
+    cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
+    cy.wait('@postSigningActivities2');
+    cy.wait('@patchSignSubcases2');
+    cy.wait('@patchSignFlows2');
+
+    // this works because signflow-status-sync service is not active.
+    // Normally the status becomes 'Marked' because there is no preparation-activity created.
+    cy.visit('ondertekenen/opvolgen');
+    cy.get(route.ongoing.row.documentName).contains(files1[0].newFileName);
+
+    // ** stop signflow **
+
+    cy.visit('ondertekenen/opstarten');
+    cy.get(route.signatures.row.name).contains(files2[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
+
+    // check succes
+    cy.get('@currentDoc').find(route.signatures.row.openSidebar)
+      .click();
+
+    cy.intercept('DELETE', '/sign-subcases/**').as('deleteSignSubcases3');
+    cy.intercept('DELETE', '/sign-flows/**').as('deleteSignFlows3');
+    cy.intercept('DELETE', '/sign-marking-activities/**').as('deleteSigningActivities3');
+    cy.get(route.signatures.sidebar.stopSignflow).click();
+    cy.wait('@deleteSignSubcases3');
+    cy.wait('@deleteSignFlows3');
+    cy.wait('@deleteSigningActivities3');
+    // table currently empty at this point, but could contain more data in the future
+    // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
+  });
+
+  it('remove mandatees from organisation', () => {
+    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
+    // unlink first mandatee
+    cy.intercept('PATCH', '/user-organizations/**').as('patchorgs');
+    cy.get(settings.organization.technicalInfo.row.unlinkMandatee).eq(0)
+      .click();
+    cy.get(settings.organization.confirm.unlinkMandatee).click()
+      .wait('@patchorgs');
+    // unlink second mandatee
+    cy.get(settings.organization.technicalInfo.row.unlinkMandatee).eq(0)
+      .click();
+    cy.get(settings.organization.confirm.unlinkMandatee).click()
+      .wait('@patchorgs');
+    cy.get(settings.organization.technicalInfo.row.mandatee).should('not.exist');
   });
 });
 
@@ -398,7 +556,7 @@ context('publications shortlist overview tests', () => {
     cy.wait('@getShortlist');
     cy.get(auk.loader).should('not.exist');
     // different table when signature data is enabled.
-    // cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
-    cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
+    cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
+    // cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
   });
 });

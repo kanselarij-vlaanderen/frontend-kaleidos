@@ -11,6 +11,7 @@ import { isPresent, isEmpty } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -80,6 +81,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     return !this.signMarkingActivity
       && this.signaturesEnabled
       && this.currentSession.may('manage-signatures')
+  }
+
+  get agendaitemIsRetracted() {
+    return this.args.decisionActivity?.get('isRetracted');
   }
 
   get mayShowEditDropdown() {
@@ -323,19 +328,14 @@ export default class DocumentsDocumentCardComponent extends Component {
       }
     }
 
-    const verificationToast = {
-      type: 'revert-action',
-      title: this.intl.t('warning-title'),
+    const revertActionToastOptions = {
       message: this.intl.t('document-being-deleted'),
-      options: {
-        timeOut: 15000,
-      },
+      timeOut: 15000,
+      onUndo: () => {
+        this.deleteDocumentContainerWithUndo.cancelAll();
+      }
     };
-    verificationToast.options.onUndo = () => {
-      this.deleteDocumentContainerWithUndo.cancelAll();
-      this.toaster.toasts.removeObject(verificationToast);
-    };
-    this.toaster.displayToast.perform(verificationToast);
+    this.toaster.show(RevertActionToast, revertActionToastOptions);
     this.deleteDocumentContainerWithUndo.perform();
     this.isOpenVerifyDeleteModal = false;
   }
