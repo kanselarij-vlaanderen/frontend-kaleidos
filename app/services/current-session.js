@@ -67,10 +67,6 @@ export default class CurrentSessionService extends Service {
     return this.userGroup.name == 'ADMIN';
   }
 
-  get isSecretarie() {
-    return this.userGroup.name == 'SECRETARIE'
-  }
-
   get isImpersonator() {
     return isPresent(this.impersonation.role);
   }

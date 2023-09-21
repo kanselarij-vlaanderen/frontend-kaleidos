@@ -208,7 +208,8 @@ export default class AgendaMinutesController extends Controller {
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel
+      accessLevel: minutes.accessLevel,
+      isReportOrMinutes: true,
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
