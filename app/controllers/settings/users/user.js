@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -23,45 +24,41 @@ export default class SettingsUsersUserController extends Controller {
     CONSTANTS.MANDATE_ROLES.WAARNEMEND_SECRETARIS,
   ];
 
-  @action
-  async blockUser() {
+  blockUser = task(async () => {
     const blocked = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
     this.model.status = blocked;
     await this.model.save();
-  }
+  });
 
-  @action
-  async unblockUser() {
+  unblockUser = task(async () => {
     const allowed = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
     );
     this.model.status = allowed;
     await this.model.save();
-  }
+  });
 
-  @action
-  async blockMembership() {
+  blockMembership = task(async () => {
     const blocked = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
     this.membershipBeingBlocked.status = blocked;
     await this.membershipBeingBlocked.save();
-  }
+  });
 
-  @action
-  async unblockMembership() {
+  unblockMembership = task(async () => {
     const allowed = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
     );
     this.membershipBeingBlocked.status = allowed;
     await this.membershipBeingBlocked.save();
-  }
+  });
 
   @action
   async linkPerson() {

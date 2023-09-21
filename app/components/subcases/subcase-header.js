@@ -169,8 +169,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  @action
-  async moveSubcase(_newDecisionmakingFlow) {
+  moveSubcase = task(async (_newDecisionmakingFlow) => {
     const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
 
     const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
@@ -193,7 +192,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     }
     this.router.transitionTo('cases.case.subcases');
     this.args.onMoveSubcase();
-  }
+  });
 
   @action
   cancelDeleteCase() {
