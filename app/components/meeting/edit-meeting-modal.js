@@ -96,6 +96,7 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
+      this.loadSecretary.isRunning ||
       this.saveMeeting.isRunning
     );
   }
