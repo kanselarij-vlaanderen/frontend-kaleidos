@@ -12,6 +12,7 @@ export default class AgendasController extends Controller {
 
   @service store;
   @service router;
+  @service mandatees;
 
   defaultPublicationActivityStatus;
   @tracked newMeeting;
@@ -192,11 +193,16 @@ export default class AgendasController extends Controller {
     );
 
     const startDate = newMeeting.plannedStart;
+
+    // default secretary
+    const meetingSecretary = await newMeeting.secretary;
+    const currentApplicationSecretary = await this.mandatees.getCurrentApplicationSecretary();
     const decisionActivity = this.store.createRecord(
       'decision-activity',
       {
         startDate: startDate,
-        decisionResultCode
+        decisionResultCode,
+        secretary: meetingSecretary ? meetingSecretary : currentApplicationSecretary
         // no subcase. Minutes approval aren't part of a (sub)case
       }
     );
