@@ -76,7 +76,7 @@ module.exports = function (defaults) {
     staticHelpers: true,
     staticModifiers: true,
     staticComponents: true,
-    // splitAtRoutes: ['route.name'], // can also be a RegExp
+    splitAtRoutes: ['route.name'], // can also be a RegExp
     extraPublicTrees: [iconAssets, fontAssets],
     packagerOptions: {
       webpackConfig: {
