@@ -16,10 +16,6 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
   @tracked newReceivedDate;
   @tracked newProofPrintCorrector;
 
-  get isCancelDisabled() {
-    return this.save.isRunning;
-  }
-
   get isSaveDisabled() {
     return (
       isEmpty(this.newReceivedDate) ||
