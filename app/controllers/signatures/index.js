@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
 import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 const MANDATORY_SORT_OPTION = 'decision-activity';
 const DEFAULT_SORT_OPTIONS = [
@@ -297,16 +298,15 @@ export default class SignaturesIndexController extends Controller {
     } catch (error) {
       this.closeSidebar();
       await this.router.refresh(this.router.routeName);
-      const digitalSigningErrorToast = {
+      const digitalSigningErrorOptions = {
         title: this.intl.t('warning-title'),
         message: this.intl.t('create-sign-flow-error-message'),
-        type: 'copy-error-to-clipboard',
         errorContent: error.message,
         options: {
           timeOut: 60 * 10 * 1000,
         },
       };
-      this.toaster.displayToast.perform(digitalSigningErrorToast);
+      this.toaster.show(CopyErrorToClipboardToast, digitalSigningErrorOptions);
     }
   });
 
