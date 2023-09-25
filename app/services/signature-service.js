@@ -70,8 +70,14 @@ export default class SignatureService extends Service {
       for (let signFlow of signFlows) {
         await this.removeSignFlow(signFlow, true);
       }
-      const json = await response.json();
-      throw new Error(JSON.stringify(json) ?? response.statusText);
+      console.log('response', response)
+      try {
+        const json = await response?.json();
+        throw new Error(JSON.stringify(json))
+      } catch(error) {
+        // digital-signing might be down in this case
+        throw new Error(response.statusText);
+      }
     }
   }
 
