@@ -60,20 +60,21 @@ export default class PieceAccessLevelService extends Service {
       return false;
     }
 
-    if (previousAccessLevel.uri !== accessLevel.uri) {
-      switch (accessLevel.uri) {
-        case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
-          previousPiece.accessLevel = internSecretarie;
-          break;
-        case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
-          previousPiece.accessLevel = vertrouwelijk;
-          break;
-        default:
-          previousPiece.accessLevel = internRegering;
-      }
-      await previousPiece.save();
+    let accessLevelToSet;
+    switch (accessLevel.uri) {
+      case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
+        accessLevelToSet = internSecretarie;
+        break;
+      case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
+        accessLevelToSet = vertrouwelijk;
+        break;
+      default:
+        accessLevelToSet = internRegering;
     }
-    return true;
+    if (previousAccessLevel.uri !== accessLevelToSet.uri) {
+      previousPiece.accessLevel = accessLevelToSet;
+      await previousPiece.save();
+      }
   }
 
   /** Same as above, but apply to all previous pieces.
