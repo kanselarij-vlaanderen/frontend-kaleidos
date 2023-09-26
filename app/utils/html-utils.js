@@ -8,13 +8,13 @@ export function replaceById(htmlString, id, newValue) {
   const template = document.createElement('template');
   htmlString = htmlString.trim();
   template.innerHTML = htmlString;
-  const secretaryElement = template.content.querySelector(`#${id}`);
-  if (secretaryElement) {
-    secretaryElement.innerHTML = newValue;
+  const element = template.content.querySelector(`#${id}`);
+  if (element) {
+    element.innerHTML = newValue;
     return template.innerHTML;
   } else {
     console.debug(
-      'Could not replace secretary in minutes piecePart. No HTMLElement with id "secretary" found.'
+      `No element with id "${id}" found, could not set innerHTML`
     );
     return htmlString;
   }
