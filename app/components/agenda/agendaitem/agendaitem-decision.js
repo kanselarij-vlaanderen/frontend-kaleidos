@@ -91,7 +91,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   loadDocuments = task(async () => {
     let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
