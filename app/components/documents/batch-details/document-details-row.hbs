@@ -56,6 +56,7 @@
             @skin="primary"
             @checked={{@row.markedForSignature}}
             @onChange={{fn @row.setMarkedForSignature}}
+            @disabled={{@agendaitemIsRetracted}}
           >
             {{t "present-for-signing"}}
           </AuToggleSwitch>

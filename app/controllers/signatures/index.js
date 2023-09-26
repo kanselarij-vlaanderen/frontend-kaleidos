@@ -168,7 +168,7 @@ export default class SignaturesIndexController extends Controller {
     const agendaitem = await this.getAgendaitem(piece);
     if (agendaitem) {
       const agenda = await agendaitem.agenda;
-      const meeting = await agenda.meeting;
+      const meeting = await agenda.createdFor;
       return [meeting, agenda, agendaitem];
     }
     return [];

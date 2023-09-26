@@ -84,6 +84,10 @@ export default class DocumentsDocumentCardComponent extends Component {
       && !!this.args.decisionActivity;
   }
 
+  get agendaitemIsRetracted() {
+    return this.args.decisionActivity?.get('isRetracted');
+  }
+
   get mayShowEditDropdown() {
     return (
       this.args.isEditable

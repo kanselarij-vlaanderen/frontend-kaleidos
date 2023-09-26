@@ -96,6 +96,7 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
+      this.loadSecretary.isRunning ||
       this.saveMeeting.isRunning
     );
   }
@@ -228,7 +229,8 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.args.meeting.secretary != this.secretary) {
+    const currentMeetingSecretary = yield this.args.meeting.secretary;
+    if (currentMeetingSecretary?.uri !== this.secretary.uri) {
       this.args.meeting.secretary = this.secretary;
       const decisionActivities = yield this.store.queryAll('decision-activity', {
         'filter[treatment][agendaitems][agenda][created-for][:id:]':

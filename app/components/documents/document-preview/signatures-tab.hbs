@@ -26,14 +26,20 @@
       <Auk::Loader />
     {{else if this.canManageSignFlow}}
       {{#if this.decisionActivity}}
-        <AuToggleSwitch
-          @skin="primary"
-          @checked={{this.hasMarkedSignFlow}}
-          @onChange={{fn this.markForSignFlow.perform}}
-          @disabled={{this.markForSignFlow.isRunning}}
-        >
-          {{t "present-for-signing"}}
-        </AuToggleSwitch>
+        {{#if (not this.agendaitemIsRetracted)}}
+          <AuToggleSwitch
+            @skin="primary"
+            @checked={{this.hasMarkedSignFlow}}
+            @onChange={{fn this.markForSignFlow.perform}}
+            @disabled={{this.markForSignFlow.isRunning}}
+          >
+            {{t "present-for-signing"}}
+          </AuToggleSwitch>
+        {{else}}
+          <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+          <p>{{t "cannot-sign-because-agendaitem-retracted"}}</p>
+        </AuAlert>
+        {{/if}}
       {{else}}
         <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
           <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
