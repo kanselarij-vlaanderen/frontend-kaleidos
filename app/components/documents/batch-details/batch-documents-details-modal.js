@@ -25,6 +25,10 @@ export default class BatchDocumentsDetailsModal extends Component {
     this.initRows.perform();
   }
 
+  get agendaitemIsRetracted() {
+    return this.args.decisionActivity?.get('isRetracted');
+  }
+
   get isLoading() {
     return this.initRows.isRunning;
   }

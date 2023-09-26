@@ -1240,5 +1240,6 @@
   "secretary-for-meeting": "Secretaris voor de vergadering",
   "secretary": "Secretaris",
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
-  "type-to-search": "Typ om te zoeken"
+  "type-to-search": "Typ om te zoeken",
+  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten."
 }
