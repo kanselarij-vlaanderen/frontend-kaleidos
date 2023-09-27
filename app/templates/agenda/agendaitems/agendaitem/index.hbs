@@ -70,9 +70,11 @@
     @onSave={{this.saveGovernmentAreas}}
   />
 {{/if}}
+{{#if this.enableDigitalAgenda}}
 <Mandatees::SecretaryPanel
   @referenceDate={{this.meeting.plannedStart}}
   @allowEditing={{user-may "manage-agendaitems"}}
   @onSave={{this.saveSecretary}}
   @secretary={{this.decisionActivity.secretary}}
 />
+{{/if}}
