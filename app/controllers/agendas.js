@@ -212,8 +212,9 @@ export default class AgendasController extends Controller {
     // default secretary
     const decisionSecretary = {};
     if (this.enableDigitalAgenda) {
+      const meetingSecretary = await newMeeting.secretary;
       if (meetingSecretary) {
-        decisionSecretary.secretary = await newMeeting.secretary;
+        decisionSecretary.secretary = meetingSecretary;
       } else {
         decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
       }
