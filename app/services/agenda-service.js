@@ -174,7 +174,7 @@ export default class AgendaService extends Service {
     // default secretary
     const decisionSecretary = {};
     if (this.enableDigitalAgenda) {
-      const meetingSecretary = await newMeeting.secretary;
+      const meetingSecretary = await meeting.secretary;
       if (meetingSecretary) {
         decisionSecretary.secretary = meetingSecretary;
       } else {
