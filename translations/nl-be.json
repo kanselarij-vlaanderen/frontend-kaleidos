@@ -1241,5 +1241,13 @@
   "secretary": "Secretaris",
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
   "type-to-search": "Typ om te zoeken",
-  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten."
+  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten.",
+  "decision-report-generation--toast-generating--message": "De beslissingen worden aangepast.",
+  "decision-report-generation--toast-generating--title": "Beslissingen Aanpassen",
+  "decision-report-generation--toast-generating-complete--message": "De beslissingen zijn aangepast.",
+  "decision-report-generation--toast-generating-complete--title": "Beslissingen Aangepast.",
+  "minutes-report-generation--toast-generating--message": "De notulen worden aangepast.",
+  "minutes-report-generation--toast-generating--title": "Notulen Aanpassen",
+  "minutes-report-generation--toast-generating-complete--message": "De notulen zijn aangepast.",
+  "minutes-report-generation--toast-generating-complete--title": "Notulen Aangepast."
 }

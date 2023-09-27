@@ -1,31 +1,39 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class DecisionReportGeneration extends Service {
   @service toaster;
   @service store;
   @service intl;
 
-  generateReplacementReport = task(async (report) => {
-    const fileMeta = await this.exportPdf.perform(report);
-    await this.replaceFile(report, fileMeta.id);
-  });
-
-  exportPdf = task(async (report) => {
-    const resp = await fetch(`/generate-decision-report/${report.id}`);
-    if (!resp.ok) {
+  generateReplacementReports = task(async (reports) => {
+    const generatingPDFToast = this.toaster.loading(
+      this.intl.t('decision-report-generation--toast-generating--message'),
+      this.intl.t('decision-report-generation--toast-generating--title'),
+      {
+        timeOut: 3 * 60 * 1000,
+      }
+    ); 
+    const reportIDs = reports.map((report) => { return report.id });
+    const data = {
+      reportIDs: reportIDs
+    };
+    const url = `/generate-decision-report/generate`;
+    const resp = await fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify(data),
+    });
+    this.toaster.close(generatingPDFToast);
+    if (resp.ok) {
+      this.toaster.success(
+        this.intl.t('decision-report-generation--toast-generating-complete--message'),
+        this.intl.t('decision-report-generation--toast-generating-complete--title')
+      );
+    } else {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
     }
-    return await resp.json();
   });
-
-  async replaceFile(report, fileId) {
-    await deleteFile(report.file);
-    const file = await this.store.findRecord('file', fileId);
-    report.file = file;
-    report.modified = new Date();
-    await report.save();
-  }
 }

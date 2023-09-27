@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function renderAttendees(attendees) {
@@ -119,12 +118,24 @@ export default class AgendaMinutesController extends Controller {
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
 
   exportPdf = task(async (minutes) => {
+    
+    const generatingPDFToast = this.toaster.loading(
+      this.intl.t('minutes-report-generation--toast-generating--message'),
+      this.intl.t('minutes-report-generation--toast-generating--title'),
+      {
+        timeOut: 3 * 60 * 1000,
+      }
+    );
     const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
+    this.toaster.close(generatingPDFToast);
+    if (resp.ok) {
+      this.toaster.success(
+        this.intl.t('minutes-report-generation--toast-generating-complete--message'),
+        this.intl.t('minutes-report-generation--toast-generating-complete--title')
+      );
+    } else {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
     }
-    return await resp.json();
   });
 
   saveMinutes = task(async () => {
@@ -170,25 +181,13 @@ export default class AgendaMinutesController extends Controller {
     await minutes.save();
     await piecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(minutes);
-    if (fileMeta) {
-      await this.replaceMinutesFile(minutes, fileMeta.id);
-    }
+    await this.exportPdf.perform(minutes);
 
-    await minutes.save();
     await this.meeting.belongsTo('minutes').reload();
 
     this.isEditing = false;
     this.refresh();
   });
-
-  async replaceMinutesFile(minutes, fileId) {
-    await deleteFile(minutes.file);
-    const file = await this.store.findRecord('file', fileId);
-    minutes.file = file;
-    minutes.modified = new Date();
-    await minutes.save();
-  }
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
@@ -220,12 +219,8 @@ export default class AgendaMinutesController extends Controller {
     await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(newVersion);
-    if (fileMeta) {
-      await this.replaceMinutesFile(newVersion, fileMeta.id);
-    }
+    await this.exportPdf.perform(newVersion);
 
-    await newVersion.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 

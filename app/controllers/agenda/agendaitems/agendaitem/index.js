@@ -113,7 +113,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       });
       const pieceParts = await report?.pieceParts;
       if (pieceParts?.length) {
-        await this.decisionReportGeneration.generateReplacementReport.perform(report);
+        this.decisionReportGeneration.generateReplacementReports.perform([report]);
       }
     }
   }

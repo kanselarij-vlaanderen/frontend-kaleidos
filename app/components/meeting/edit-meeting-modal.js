@@ -231,6 +231,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
     const currentMeetingSecretary = yield this.args.meeting.secretary;
     if (currentMeetingSecretary?.uri !== this.secretary.uri) {
+      //TODO: create job to re-generate PDFs for all latest decision-activities on agenda
       this.args.meeting.secretary = this.secretary;
       const decisionActivities = yield this.store.queryAll('decision-activity', {
         'filter[treatment][agendaitems][agenda][created-for][:id:]':
@@ -246,7 +247,7 @@ export default class MeetingEditMeetingComponent extends Component {
           });
           const pieceParts = yield report?.pieceParts;
           if (pieceParts?.length) {
-            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+            yield this.decisionReportGeneration.generateReplacementReports.perform([report]);
           }
         }
       }
