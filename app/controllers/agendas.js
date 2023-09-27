@@ -59,21 +59,11 @@ export default class AgendasController extends Controller {
   @action
   openNewSessionModal() {
     const now = new Date();
-    const plannedStart = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      10,
-      0,
-      0
-    );
+    const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.newMeeting = this.store.createRecord('meeting', {
       plannedStart,
     });
-    const nextBusinessDay = setMinutes(
-      setHours(addBusinessDays(plannedStart, 1), 14),
-      0
-    );
+    const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [
       this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
@@ -145,11 +135,7 @@ export default class AgendasController extends Controller {
     // if only 1 field is sorted, the other sort priorities don't work anymore. So append the defaults after the sortField
     let newSortAgendas = sortField || DEFAULT_SORT_OPTIONS.join(',');
     for (const sortOption of DEFAULT_SORT_OPTIONS) {
-      if (
-        newSortAgendas
-          .replace(/-/g, '')
-          .indexOf(sortOption.replace(/-/g, '')) === -1
-      ) {
+      if (newSortAgendas.replace(/-/g, '').indexOf(sortOption.replace(/-/g, '')) === -1) {
         newSortAgendas += ',' + sortOption;
       }
     }
@@ -224,19 +210,19 @@ export default class AgendasController extends Controller {
     const startDate = newMeeting.plannedStart;
 
     // default secretary
-    const meetingSecretary = await newMeeting.secretary;
-    const currentApplicationSecretary =
-      await this.mandatees.getCurrentApplicationSecretary();
+    const decisionSecretary = {};
+    if (this.enableDigitalAgenda) {
+      const meetingSecretary = await newMeeting.secretary;
+      if (meetingSecretary) {
+        decisionSecretary.secretary = meetingSecretary;
+      } else {
+        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
+      }
+    }
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       decisionResultCode,
-      ...(this.enableDigitalAgenda
-        ? {
-            secretary: meetingSecretary
-              ? meetingSecretary
-              : currentApplicationSecretary,
-          }
-        : {}),
+      ...decisionSecretary,
       // no subcase. Minutes approval aren't part of a (sub)case
     });
     await decisionActivity.save();
