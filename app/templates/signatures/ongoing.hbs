@@ -43,31 +43,39 @@
       <thead>
         <th class="auk-table__col--4">{{t "document-name"}}</th>
         <th class="auk-table__col--1">{{t "document-type"}}</th>
-        <th class="auk-table__col--1">{{t "ministers"}}</th>
-        <th class="auk-table__col--2">{{t "date-approved"}}</th>
+        <th class="auk-table__col--2">{{t "ministers"}}</th>
+        <th class="auk-table__col--1">{{t "date-approved"}}</th>
         <th class="auk-table__col--2">Opgestart door</th>
         <th class="auk-table__col--2">{{t "status"}}</th>
         <th class="auk-table__col--1"></th>
         </thead>
       <tbody>
-        <tr>
+        {{# each this.mockupData as |mockup|}}
+        <tr class="{{if (not-eq mockup.admin 'Dorien Ivens') 'auk-table-row-disabled'}}">
           <td>
-            VR 2020 2404 DOC.0379-1 Decreet activeringsregie - notaBIS
+            {{mockup.name}}
           </td>
           <td>
-            <AuPill @size="small">Nota</AuPill>
+            <AuPill @size="small">{{mockup.type}}</AuPill>
           </td>
           <td>
-            Jan Jambon, Hilde Crevits
+            {{mockup.ministers}}
           </td>
           <td>
-            22-06-2023
+            {{mockup.date}}
           </td>
-          <td>Admin</td>
+          <td>{{mockup.admin}}</td>
           <td>
-            <AuPill @size="small" @icon="sign">Voor te bereiden</AuPill>
+            {{#if (eq mockup.status 'Getekend')}}
+            <AuPill @size="small" @icon="sign" @skin="success">{{mockup.status}}</AuPill>
+            {{else if (eq mockup.status 'Te ondertekenen')}}
+            <AuPill @size="small" @icon="sign" @skin="ongoing">{{mockup.status}}</AuPill>
+            {{else}}
+            <AuPill @size="small" @icon="sign">{{mockup.status}}</AuPill>
+            {{/if}}
           </td>
           <td class="auk-u-text-align--right">
+            {{#if (eq mockup.admin 'Dorien Ivens')}}
             <AuButton
               @skin="naked"
               @icon="chevron-right"
@@ -75,31 +83,10 @@
             >
               {{t "open"}}
             </AuButton>
+            {{/if}}
           </td>
         </tr>
-        <tr class="auk-table-row-disabled">
-          <td>
-            VR 2023 0302 DOC.0089-1 Decreet hybride onderwijs SO - nota
-          </td>
-          <td>
-            <AuPill @size="small">Nota</AuPill>
-          </td>
-          <td>
-            Jan Jambon, Hilde Crevits
-          </td>
-          <td>
-            22-06-2023
-          </td>
-          <td>
-            Ander profiel
-          </td>
-          <td>
-            <AuPill @size="small" @icon="sign">Voor te bereiden</AuPill>
-          </td>
-          <td class="auk-u-text-align--right">
-            
-          </td>
-        </tr>
+        {{/each}}
       </tbody>
     </table>
     <div class="au-c-toolbar auk-table__actions--bottom" data-test-number-pagination-container="">
