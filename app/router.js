@@ -125,7 +125,6 @@ Router.map(function() {
     this.route('color-badge');
     this.route('datepicker');
     this.route('empty-state');
-    this.route('form-group');
     this.route('layout-grid');
     this.route('heading');
     this.route('icons');

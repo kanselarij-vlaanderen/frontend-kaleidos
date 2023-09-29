@@ -14,13 +14,21 @@ const selectors = {
     // time
     time: '.open .flatpickr-time',
     hour: '.flatpickr-hour',
+    hourUp: '.open .flatpickr-time > .numInputWrapper:nth-child(1) > .arrowUp',
+    hourDown: '.open .flatpickr-time > .numInputWrapper:nth-child(1) > .arrowDown',
     minute: '.flatpickr-minute',
+    minuteUp: '.open .flatpickr-time > .numInputWrapper:nth-child(3) > .arrowUp',
+    minuteDown: '.open .flatpickr-time > .numInputWrapper:nth-child(3) > .arrowDown',
     // date
     days: '.open .flatpickr-days',
     day: '.flatpickr-day',
     prevMonthDay: '.prevMonthDay',
     nextMonthDay: '.nextMonthDay',
+    prevMonth: '.open .flatpickr-months > .flatpickr-prev-month',
+    nextMonth: '.open .flatpickr-months > .flatpickr-next-month',
     yearInput: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > input',
+    yearUp: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > .arrowUp',
+    yearDown: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > .arrowDown',
     monthSelect: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > select',
   },
 
