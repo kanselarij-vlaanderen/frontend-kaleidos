@@ -124,15 +124,15 @@
 </Auk::Toolbar>
 
 {{#if (eq this.agenda.status.isDesignAgenda false)}}
-{{#if this.vpSent}} 
-  <AuAlert
-    @title="Dit dossier is ingediend bij het Vlaams Parlement op 29/09/2023"
-    @skin="success"
-    @icon="mail"
-    @size="small"
-  >
-  </AuAlert>
-{{/if}}
+  {{#if this.vpSent}} 
+    <AuAlert
+      @title="Dit dossier is ingediend bij het Vlaams Parlement op 29/09/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    >
+    </AuAlert>
+  {{/if}}
 {{/if}}
 
 <Agenda::Agendaitem::AgendaitemCasePanel

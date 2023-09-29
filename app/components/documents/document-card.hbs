@@ -115,6 +115,11 @@
                 26-04-2023 om 16:00
               </p>
               {{/if}}
+              {{#if (eq @agendaContext.agenda.status.isDesignAgenda false)}}
+                {{#if this.vpSent}} 
+                <p>Dit document is ingediend bij het Vlaams Parlement op 29/09/2023</p>
+                {{/if}}
+              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
@@ -255,6 +260,15 @@
                     {{t "present-for-signing"}}
                   </AuButton>
                 {{/if}}
+                {{#if (eq @agendaContext.agenda.status.isDesignAgenda false)}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" this.showVpModal}}
+                    role="menuitem"
+                  >
+                    Indienen bij Vlaams Parlement
+                  </AuButton>
+                {{/if}}
                 {{#if this.hasMarkedSignFlow}}
                   <AuHr />
                   <AuButton
@@ -370,3 +384,37 @@
   @confirmIcon="trash"
   @alert={{true}}
 />
+
+{{#if this.vpModal}}
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header 
+    @title="Document controleren"
+    @onClose={{this.showVpModal}}
+  />
+  <Auk::Modal::Body>
+    <AuContent>
+      <p>Het volgende document wordt doorgestuurd:</p>
+      <p>
+        <a href="#!" target="blank">
+        {{#let
+          (or
+            this.piece.file.derived.extension this.piece.file.extension
+          )
+          as |extension|
+        }}
+          {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
+        {{/let}}
+        </a>
+      </p>
+    </AuContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{this.showVpModal}}>
+    <AuButton
+      @skin="primary"
+      {{on "click" this.submitToVp}}
+    >
+      Indienen bij het Vlaams Parlement
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}

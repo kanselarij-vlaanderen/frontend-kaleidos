@@ -52,6 +52,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
+  @tracked vpModal = false;
+  @tracked vpSent = false;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
@@ -393,5 +396,17 @@ export default class DocumentsDocumentCardComponent extends Component {
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
     this.isEditingPiece = false;
+  }
+
+  @action
+  showVpModal() {
+    this.vpModal = !this.vpModal;
+  }
+
+  @action
+  submitToVp() {
+    this.vpModal = false;
+    this.vpSent = true;
+    this.toaster.success('Dit document is succesvol verstuurd naar het Vlaams Parlement');
   }
 }
