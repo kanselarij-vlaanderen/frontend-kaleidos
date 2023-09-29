@@ -43,6 +43,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isEditingTreatment = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
+  @tracked showInit = true;
+  @tracked showFields = false;
 
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
@@ -575,6 +577,16 @@ export default class AgendaitemDecisionComponent extends Component {
   startEditingTreatment() {
     this.loadDocuments.perform();
     this.loadNota.perform();
+    this.isEditingTreatment = true;
+  }
+
+  @action
+  startEditingAll() {
+    this.loadDocuments.perform();
+    this.loadNota.perform();
+    this.showInit = false;
+    this.showFields = true;
+    this.isEditingConcerns = true;
     this.isEditingTreatment = true;
   }
 }

@@ -35,6 +35,7 @@
   </Auk::Panel::Body>
   {{/if}}
 
+  {{#if this.report}}
   <Auk::Panel::Body>
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
@@ -57,8 +58,24 @@
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Body>
+  {{else}}
+  {{#if this.showInit}}
+  <Auk::Panel::Body>
+    <AuButton
+      data-test-agendaitem-decision-create
+      @skin="naked"
+      @icon="pencil"
+      @iconAlignment="left"
+      @disabled={{this.exportPdf.isRunning}}
+      {{on "click" this.startEditingAll}}
+    >
+      {{t "create"}}
+    </AuButton>
+  </Auk::Panel::Body>
+  {{/if}}
+  {{/if}}
 </Auk::Panel>
-
+{{#if (or this.showFields this.report)}}
 <Auk::Panel class="auk-u-mb-2">
   <Auk::Panel::Header
     @size="auto"
@@ -270,6 +287,7 @@
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>
+{{/if}}
 
 {{#if this.isAddingReport}}
   <Utils::AddDocument
