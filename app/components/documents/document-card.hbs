@@ -396,14 +396,14 @@
       <p>Het volgende document wordt doorgestuurd:</p>
       <p>
         <a href="#!" target="blank">
-        {{#let
-          (or
-            this.piece.file.derived.extension this.piece.file.extension
-          )
-          as |extension|
-        }}
-          {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
-        {{/let}}
+          {{#let
+            (or
+              this.piece.file.derived.extension this.piece.file.extension
+            )
+            as |extension|
+          }}
+            {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
+          {{/let}}
         </a>
       </p>
     </AuContent>

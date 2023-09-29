@@ -99,7 +99,7 @@
           {{/if}}
         </div>
       </div>
-
+      {{#unless @allowReorderItems}}
       {{#if @agendaitem.shortTitle}}
         {{! Avoid rendering the same thing twice if no "shortTitle" exists }}
         <pre
@@ -201,6 +201,7 @@
           </div>
 
         </div>
+      {{/unless}}
       {{/unless}}
     </div>
   </div>
