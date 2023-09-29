@@ -1,142 +1,62 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel class={{if this.isEditing "auk-panel--editing"}}>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
+<Auk::Panel class={{if this.isEditing "auk-panel--editing"}} ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "publication-decisions-info-panel-title"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "publication-decisions-info-panel-title"}}
-            </h4>
+            <AuButton
+              data-test-decisions-info-panel-view-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" this.openEditingPanel}}
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#unless this.isEditing}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-decisions-info-panel-view-edit
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" this.openEditingPanel}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        {{/unless}}
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      {{#if this.isEditing}}
-        <Utils::LoadableContent
-          @isLoading={{this.save.isRunning}}
-          @reserveSpace={{true}}
-        >
-          <div class="au-c-form">
-            <div class="auk-o-grid">
+      {{/unless}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    {{#if this.isEditing}}
+      <Utils::LoadableContent
+        @isLoading={{this.save.isRunning}}
+        @reserveSpace={{true}}
+      >
+        <div class="au-c-form">
+          <div class="auk-o-grid">
 
-              {{! Type regelgeving }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-decisions-info-panel-edit-regulation-type>
-                  <Auk::Label>
-                    {{t "regulation-type"}}
-                  </Auk::Label>
-                  <PowerSelect
-                    @options={{this.sortedRegulationTypes}}
-                    @onChange={{fn (mut @publicationFlow.regulationType)}}
-                    @selected={{@publicationFlow.regulationType}}
-                    @allowClear={{true}}
-                    as |regulationType|
-                  >
-                    {{regulationType.label}}
-                  </PowerSelect>
-                </AuFormRow>
-              </div>
-
-              {{! Datum beslissing }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow>
-                  <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                    <AuLink
-                      @skin="primary"
-                      @icon="chevron-right"
-                      @iconAlignment="right"
-                      @route="agenda.agendaitems.agendaitem"
-                      @models={{this.modelsForAgendaitemRoute}}
-                      target="_blank"
-                    >
-                      {{#if @publicationFlow.decisionActivity.startDate}}
-                        {{date @publicationFlow.decisionActivity.startDate}}
-                      {{else}}
-                        {{t "to-agenda"}}
-                      {{/if}}
-                    </AuLink>
-                  {{else}}
-                    <Auk::Datepicker
-                      @date={{this.decisionActivity.startDate}}
-                      @onChange={{set this.decisionActivity "startDate"}}
-                    />
-                  {{/if}}
-                </AuFormRow>
-              </div>
-
-              {{! Number of pages }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-decisions-info-panel-edit-number-of-pages>
-                  <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
-                  <AuInput
-                    @type="number"
-                    @width="block"
-                    @value={{@publicationFlow.numberOfPages}}
-                  />
-                </AuFormRow>
-              </div>
-
-              {{! Aantal uittreksels }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow>
-                  <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
-                  <AuInput
-                    data-test-decisions-info-panel-edit-number-of-extracts
-                    @type="number"
-                    @width="block"
-                    @value={{@publicationFlow.numberOfExtracts}}
-                  />
-                </AuFormRow>
-              </div>
+            {{! Type regelgeving }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-decisions-info-panel-edit-regulation-type>
+                <Auk::Label>
+                  {{t "regulation-type"}}
+                </Auk::Label>
+                <PowerSelect
+                  @options={{this.sortedRegulationTypes}}
+                  @onChange={{fn (mut @publicationFlow.regulationType)}}
+                  @selected={{@publicationFlow.regulationType}}
+                  @allowClear={{true}}
+                  as |regulationType|
+                >
+                  {{regulationType.label}}
+                </PowerSelect>
+              </AuFormRow>
             </div>
-          </div>
-        </Utils::LoadableContent>
-      {{else}}
-        <div class="auk-o-grid">
-          {{! Type regelgeving }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
-              <p
-                data-test-decisions-info-panel-view-regulation-type
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.regulationType}}
-                  {{@publicationFlow.regulationType.label}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
-            </div>
-          </div>
 
-          {{! Datum beslissing}}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
-              <p
-                data-test-decisions-info-panel-view-decision-date
-                class="auk-u-m-0"
-              >
+            {{! Datum beslissing }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow>
+                <Auk::Label>{{t "decision-date"}}</Auk::Label>
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                   <AuLink
-                    data-test-decisions-info-panel-view-decision-link
                     @skin="primary"
                     @icon="chevron-right"
                     @iconAlignment="right"
@@ -151,88 +71,166 @@
                     {{/if}}
                   </AuLink>
                 {{else}}
-                  {{#if @publicationFlow.decisionActivity.startDate}}
-                    {{date @publicationFlow.decisionActivity.startDate}}
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
+                  <Auk::Datepicker
+                    @date={{this.decisionActivity.startDate}}
+                    @onChange={{set this.decisionActivity "startDate"}}
+                  />
                 {{/if}}
-              </p>
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Number of pages }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
-              <p
-                data-test-decisions-info-panel-view-number-of-pages
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.numberOfPages}}
-                  {{@publicationFlow.numberOfPages}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+            {{! Number of pages }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-decisions-info-panel-edit-number-of-pages>
+                <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
+                <AuInput
+                  @type="number"
+                  @width="block"
+                  @value={{@publicationFlow.numberOfPages}}
+                />
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Aantal uittreksels }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-flow-number-of-extracts"}}</h4>
-              <p
-                data-test-decisions-info-panel-view-number-of-extracts
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.numberOfExtracts}}
-                  {{@publicationFlow.numberOfExtracts}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+            {{! Aantal uittreksels }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow>
+                <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
+                <AuInput
+                  data-test-decisions-info-panel-edit-number-of-extracts
+                  @type="number"
+                  @width="block"
+                  @value={{@publicationFlow.numberOfExtracts}}
+                />
+              </AuFormRow>
             </div>
           </div>
         </div>
-      {{/if}}
-    </Auk::Panel::Body>
-    {{#if this.isEditing}}
-      <Auk::Panel::Footer>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-decisions-info-panel-edit-cancel
-                @skin="naked"
-                @disabled={{or
-                  this.closeEditingPanel.isRunning
-                  this.save.isRunning
-                }}
-                {{on "click" (perform this.closeEditingPanel)}}
-              >
-                {{t "cancel"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-decisions-info-panel-edit-save
-                @skin="primary"
-                @loading={{this.save.isRunning}}
-                @disabled={{or
-                  (not this.isValid)
-                  this.closeEditingPanel.isRunning
-                }}
-                {{on "click" (perform this.save)}}
-              >
-                {{t "save"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
+      </Utils::LoadableContent>
+    {{else}}
+      <div class="auk-o-grid">
+        {{! Type regelgeving }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "regulation-type"}}</h4>
+            <p
+              data-test-decisions-info-panel-view-regulation-type
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.regulationType}}
+                {{@publicationFlow.regulationType.label}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Datum beslissing}}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+            <p
+              data-test-decisions-info-panel-view-decision-date
+              class="auk-u-m-0"
+            >
+              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
+                <AuLink
+                  data-test-decisions-info-panel-view-decision-link
+                  @skin="primary"
+                  @icon="chevron-right"
+                  @iconAlignment="right"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{this.modelsForAgendaitemRoute}}
+                  target="_blank"
+                >
+                  {{#if @publicationFlow.decisionActivity.startDate}}
+                    {{date @publicationFlow.decisionActivity.startDate}}
+                  {{else}}
+                    {{t "to-agenda"}}
+                  {{/if}}
+                </AuLink>
+              {{else}}
+                {{#if @publicationFlow.decisionActivity.startDate}}
+                  {{date @publicationFlow.decisionActivity.startDate}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Number of pages }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "number-of-pages"}}</h4>
+            <p
+              data-test-decisions-info-panel-view-number-of-pages
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.numberOfPages}}
+                {{@publicationFlow.numberOfPages}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Aantal uittreksels }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-number-of-extracts"}}</h4>
+            <p
+              data-test-decisions-info-panel-view-number-of-extracts
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.numberOfExtracts}}
+                {{@publicationFlow.numberOfExtracts}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+      </div>
     {{/if}}
-  </Auk::Panel>
-</div>
+  </Auk::Panel::Body>
+  {{#if this.isEditing}}
+    <Auk::Panel::Footer>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-decisions-info-panel-edit-cancel
+              @skin="naked"
+              @disabled={{or
+                this.closeEditingPanel.isRunning
+                this.save.isRunning
+              }}
+              {{on "click" (perform this.closeEditingPanel)}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-decisions-info-panel-edit-save
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              @disabled={{or
+                (not this.isValid)
+                this.closeEditingPanel.isRunning
+              }}
+              {{on "click" (perform this.save)}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  {{/if}}
+</Auk::Panel>

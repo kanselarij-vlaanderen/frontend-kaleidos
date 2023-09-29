@@ -1,7 +1,80 @@
-<div class="auk-u-mb-3">
-  {{#if this.isEditing}}
-    <Auk::Panel class="auk-panel--editing">
-      <Auk::Panel::Header>
+{{#if this.isEditing}}
+  <Auk::Panel class="auk-panel--editing">
+    <Auk::Panel::Header>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "publication-inscription"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+        <div class="au-c-form">
+          <AuFormRow>
+            <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
+              {{t "short-title"}}
+            </Auk::Label>
+            <Auk::Textarea data-test-inscription-edit-short-title
+              @rows="2"
+              @value={{this.shortTitle}}
+              {{on "focusout" this.enableErrorDisplay}}
+            />
+            {{#if this.showShortTitleError}}
+              <Auk::FormHelpText
+                @text={{t "input-error-message"}}
+                @skin="danger"
+                @icon="alert-triangle"
+              />
+            {{/if}}
+          </AuFormRow>
+          <AuFormRow>
+            <Auk::Label>
+              {{t "long-title"}}
+            </Auk::Label>
+            <Auk::Textarea data-test-inscription-edit-long-title
+              @rows="4"
+              @value={{this.longTitle}}
+            />
+          </AuFormRow>
+        </div>
+      </Utils::LoadableContent>
+    </Auk::Panel::Body>
+    <Auk::Panel::Footer>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-inscription-edit-cancel
+              @skin="naked"
+              @disabled={{this.save.isRunning}}
+              {{on "click" this.closeEditingPanel}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-inscription-edit-save
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              @disabled={{not this.isShortTitleValid}}
+              {{on "click" (perform this.save)}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  </Auk::Panel>
+{{else}}
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
@@ -9,118 +82,43 @@
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body>
-        <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-          <div class="au-c-form">
-            <AuFormRow>
-              <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
-                {{t "short-title"}}
-              </Auk::Label>
-              <Auk::Textarea data-test-inscription-edit-short-title
-                @rows="2"
-                @value={{this.shortTitle}}
-                {{on "focusout" this.enableErrorDisplay}}
-              />
-              {{#if this.showShortTitleError}}
-                <Auk::FormHelpText
-                  @text={{t "input-error-message"}}
-                  @skin="danger"
-                  @icon="alert-triangle"
-                />
-              {{/if}}
-            </AuFormRow>
-            <AuFormRow>
-              <Auk::Label>
-                {{t "long-title"}}
-              </Auk::Label>
-              <Auk::Textarea data-test-inscription-edit-long-title
-                @rows="4"
-                @value={{this.longTitle}}
-              />
-            </AuFormRow>
-          </div>
-        </Utils::LoadableContent>
-      </Auk::Panel::Body>
-      <Auk::Panel::Footer>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Group @position="right">
+          {{#if this.isViaCouncilOfMinisters}}
             <Auk::Toolbar::Item>
-              <AuButton
-                data-test-inscription-edit-cancel
-                @skin="naked"
-                @disabled={{this.save.isRunning}}
-                {{on "click" this.closeEditingPanel}}
+              <AuLink
+                data-test-inscription-view-to-case
+                @skin="button-naked"
+                @icon="chevron-right"
+                @iconAlignment="right"
+                @route="cases.case.subcases"
+                @model={{@publicationFlow.case.decisionmakingFlow.id}}
               >
-                {{t "cancel"}}
-              </AuButton>
+                {{t "to-case"}}
+              </AuLink>
             </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-inscription-edit-save
-                @skin="primary"
-                @loading={{this.save.isRunning}}
-                @disabled={{not this.isShortTitleValid}}
-                {{on "click" (perform this.save)}}
-              >
-                {{t "save"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
-    </Auk::Panel>
-  {{else}}
-    <Auk::Panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <h4 class="auk-panel__title">
-                {{t "publication-inscription"}}
-              </h4>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            {{#if this.isViaCouncilOfMinisters}}
-              <Auk::Toolbar::Item>
-                <AuLink
-                  data-test-inscription-view-to-case
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @iconAlignment="right"
-                  @route="cases.case.subcases"
-                  @model={{@publicationFlow.case.decisionmakingFlow.id}}
-                >
-                  {{t "to-case"}}
-                </AuLink>
-              </Auk::Toolbar::Item>
-            {{/if}}
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-inscription-view-edit
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" this.openEditingPanel}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body>
-        <div class="auk-content">
-          <h4 data-test-inscription-view-short-title>
-            {{@publicationFlow.shortTitle}}
-          </h4>
-          {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
-          {{! prettier-ignore }}
-          <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
-        </div>
-      </Auk::Panel::Body>
-    </Auk::Panel>
-  {{/if}}
-</div>
+          {{/if}}
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-inscription-view-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" this.openEditingPanel}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div class="auk-content">
+        <h4 data-test-inscription-view-short-title>
+          {{@publicationFlow.shortTitle}}
+        </h4>
+        {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+        {{! prettier-ignore }}
+        <p data-test-inscription-view-long-title class="auk-u-text-prewrap">{{@publicationFlow.longTitle}}</p>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+{{/if}}

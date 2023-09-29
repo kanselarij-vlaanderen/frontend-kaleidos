@@ -1,69 +1,67 @@
-<div class="auk-u-m-4">
-  {{#if (or this.loadSignatureRelatedData.isRunning this.markForSignFlow.isRunning)}}
+{{#if (or this.loadSignatureRelatedData.isRunning this.markForSignFlow.isRunning)}}
+  <Auk::Loader />
+{{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
+  <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+    <SignaturePill
+      @piece={{@piece}}
+      @signMarkingActivity={{this.signMarkingActivity}}
+    />
+    {{#if (user-may "remove-signatures")}}
+      <AuButton
+        @skin="naked"
+        @alert={{true}}
+        @icon="trash"
+        {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+      >
+        {{t "delete-all-sign-flow-data"}}
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{t "delete-all-sign-flow-tooltip"}}
+        </EmberTooltip>
+      </AuButton>
+    {{/if}}
+  </div>
+{{else if this.agendaitem}}
+  {{#if this.loadCanManageSignFlow.isRunning}}
     <Auk::Loader />
-  {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
-    <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
-      <SignaturePill
-        @piece={{@piece}}
-        @signMarkingActivity={{this.signMarkingActivity}}
-      />
-      {{#if (user-may "remove-signatures")}}
-        <AuButton
-          @skin="naked"
-          @alert={{true}}
-          @icon="trash"
-          {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
-        >
-          {{t "delete-all-sign-flow-data"}}
-          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-            {{t "delete-all-sign-flow-tooltip"}}
-          </EmberTooltip>
-        </AuButton>
-      {{/if}}
-    </div>
-  {{else if this.agendaitem}}
-    {{#if this.loadCanManageSignFlow.isRunning}}
-      <Auk::Loader />
-    {{else if this.canManageSignFlow}}
-      {{#if this.decisionActivity}}
-        {{#if (not this.agendaitemIsRetracted)}}
-          <AuToggleSwitch
-            @skin="primary"
-            @label={{t "present-for-signing"}}
-            @checked={{this.hasMarkedSignFlow}}
-            @onChange={{fn this.markForSignFlow.perform}}
-            @disabled={{this.markForSignFlow.isRunning}}
-          />
-        {{else}}
-          <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
-          <p>{{t "cannot-sign-because-agendaitem-retracted"}}</p>
-        </AuAlert>
-        {{/if}}
+  {{else if this.canManageSignFlow}}
+    {{#if this.decisionActivity}}
+      {{#if (not this.agendaitemIsRetracted)}}
+        <AuToggleSwitch
+          @skin="primary"
+          @label={{t "present-for-signing"}}
+          @checked={{this.hasMarkedSignFlow}}
+          @onChange={{fn this.markForSignFlow.perform}}
+          @disabled={{this.markForSignFlow.isRunning}}
+        />
       {{else}}
         <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
-          <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
+          <p>{{t "cannot-sign-because-agendaitem-retracted"}}</p>
         </AuAlert>
       {{/if}}
-    {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
-      <SignaturePill 
-        @piece={{@piece}} 
-        @signMarkingActivity={{this.signMarkingActivity}} 
-      />
     {{else}}
-      <AuAlert
-        @skin="warning"
-        @icon="alert-triangle"
-        @title={{t "cannot-sign"}}
-      >
-        <p>{{t "cannot-create-sign-flow-message"}}</p>
+      <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+        <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
       </AuAlert>
     {{/if}}
+  {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
+    <SignaturePill
+      @piece={{@piece}}
+      @signMarkingActivity={{this.signMarkingActivity}}
+    />
   {{else}}
-    <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
-      <p>{{t "cannot-sign-message"}}</p>
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "cannot-sign"}}
+    >
+      <p>{{t "cannot-create-sign-flow-message"}}</p>
     </AuAlert>
   {{/if}}
-</div>
+{{else}}
+  <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+    <p>{{t "cannot-sign-message"}}</p>
+  </AuAlert>
+{{/if}}
 
 {{#if this.isOpenVerifyDeleteSignFlow}}
   {{! TODO: vl-refactor }}

@@ -40,41 +40,50 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-<Agenda::Agendaitem::AgendaitemCasePanel
-  @agendaitem={{this.model}}
-  @subcase={{this.subcase}}
-  @agenda={{this.agenda}}
-  @newsItem={{this.newsItem}}
-  @allowEditing={{user-may "manage-agendaitems"}}
-/>
+<div class="auk-u-mb-8">
+  <Agenda::Agendaitem::AgendaitemCasePanel
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @agenda={{this.agenda}}
+    @newsItem={{this.newsItem}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+  />
+</div>
 {{#if (is-announcement @model.type)}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
+  <div class="auk-u-mb-8">
+    <Mandatees::MandateesPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+  </div>
 {{else if this.subcase}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
+  <div class="auk-u-mb-8">
+    <Mandatees::MandateesPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+  </div>
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
     @governmentAreas={{this.subcase.governmentAreas}}
     @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveGovernmentAreas}}
+    class="auk-u-mb-8"
   />
 {{/if}}
 {{#if this.enableDigitalAgenda}}
-<Mandatees::SecretaryPanel
-  @referenceDate={{this.meeting.plannedStart}}
-  @allowEditing={{user-may "manage-agendaitems"}}
-  @onSave={{this.saveSecretary}}
-  @secretary={{this.decisionActivity.secretary}}
-/>
+  <div class="auk-u-mb-8">
+    <Mandatees::SecretaryPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveSecretary}}
+      @secretary={{this.decisionActivity.secretary}}
+    />
+  </div>
 {{/if}}
