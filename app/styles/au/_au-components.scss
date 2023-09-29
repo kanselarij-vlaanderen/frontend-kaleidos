@@ -79,11 +79,11 @@ $au-button-height: 3.4rem;
 
 
 // Overrides
-
 .au-c-pill {
   line-height: 1; // vertical alignment is a bit off in Kaleidos
   border-radius: .5rem; // default border radius is .5rem in Kaleidos
   padding-top: 0;
+  white-space: nowrap; // Fix text wrapping in pills
 }
 
 .au-c-pill.au-c-pill--link,

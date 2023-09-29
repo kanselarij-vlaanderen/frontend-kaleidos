@@ -11,6 +11,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service currentSession;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
+  @service toaster;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -25,6 +26,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked decisionActivity;
 
   @tracked isEditingAgendaItemTitles = false;
+
+  @tracked vpModal = false;
+  @tracked vpSent = false;
 
   get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));
@@ -105,4 +109,17 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     setNotYetFormallyOk(this.model);
     await this.model.save();
   }
+
+  @action
+  showVpModal() {
+    this.vpModal = !this.vpModal;
+  }
+
+  @action
+  submitToVp() {
+    this.vpModal = false;
+    this.vpSent = true;
+    this.toaster.success('Dossier is succesvol verstuurd naar het Vlaams Parlement');
+  }
 }
+
