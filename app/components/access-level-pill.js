@@ -105,6 +105,7 @@ export default class AccessLevelPillComponent extends Component {
       }
     }
     this.isEditing = false;
+    this.changedAccessLevel = false;
   }
 
   @task
@@ -113,5 +114,6 @@ export default class AccessLevelPillComponent extends Component {
       yield this.args.onCancelChangeAccessLevel();
     }
     this.isEditing = false;
+    this.changedAccessLevel = false;
   }
 }
