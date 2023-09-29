@@ -74,7 +74,8 @@ export default class PieceAccessLevelService extends Service {
     if (previousAccessLevel.uri !== accessLevelToSet.uri) {
       previousPiece.accessLevel = accessLevelToSet;
       await previousPiece.save();
-      }
+    }
+    return true;
   }
 
   /** Same as above, but apply to all previous pieces.
