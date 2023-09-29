@@ -196,7 +196,7 @@
         <div class="auk-form-group">
           <AuLabel for="date">Datum</AuLabel>
           <Auk::Datepicker
-            @date={{date-phrase @piece.created}}
+            @date={{date-format @piece.created 'dd-MM-yyyy' }}
             @onChange={{set this "dateFromBuffer"}}
             @enableClear={{this.dateFromBuffer}}
             @onClear={{set this "dateFromBuffer" undefined}}

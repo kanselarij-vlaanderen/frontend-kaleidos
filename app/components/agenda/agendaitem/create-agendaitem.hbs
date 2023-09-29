@@ -37,6 +37,12 @@
               <tr>
                 <th class="auk-table__col--1"></th>
                 <Utils::ThSortable
+                  @field="created"
+                  @currentSorting={{this.sort}}
+                  @onChange={{this.onSortChange}}
+                  @label="Datum aangemaakt"
+                />
+                <Utils::ThSortable
                   @field="short-title"
                   @currentSorting={{this.sort}}
                   @onChange={{this.onSortChange}}
@@ -54,7 +60,10 @@
                       @onChange={{fn this.selectSubcase subcase}}
                     />
                   </td>
-                  <td class="auk-table__col--11">
+                  <td class="auk-table__col--3">
+                    {{date-format subcase.created 'dd-MM-yyyy'}}
+                  </td>
+                  <td class="auk-table__col--8">
                     {{subcase.shortTitle}}
                     <br />
                     <p

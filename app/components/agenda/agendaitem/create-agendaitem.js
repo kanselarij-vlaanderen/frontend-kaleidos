@@ -25,7 +25,7 @@ export default class CreateAgendaitem extends Component {
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[1];
   @tracked filter = '';
-  @tracked sort = 'short-title';
+  @tracked sort = '-created';
 
   constructor() {
     super(...arguments);
@@ -45,7 +45,7 @@ export default class CreateAgendaitem extends Component {
       }
     };
     if (this.filter) {
-      options.filter['short-title'] = this.filter;
+      options.filter['created'] = this.filter;
     }
     return options;
   }
