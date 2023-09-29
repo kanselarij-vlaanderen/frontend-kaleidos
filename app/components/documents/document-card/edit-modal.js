@@ -28,10 +28,24 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @tracked replacementSourceFile;
   @tracked replacementDerivedFile;
 
+  @service conceptStore;
+  @tracked documentTypes = [];
+  @tracked documentContainer;
+  @tracked selectedDocumentType;
+
   constructor() {
     super(...arguments);
 
     this.name = this.args.piece.name;
+    this.loadData.perform();
+  }
+
+  @task
+  *loadData() {
+    this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+
+    this.documentContainer = yield this.args.piece.documentContainer;
+    this.selectedDocumentType = yield this.documentContainer.type;
   }
 
   get isDisabled() {
@@ -41,6 +55,16 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
         || this.isUploadingReplacementDerivedFile
         || this.isUploadingReplacementSourceFile
     );
+  }
+
+  get sortedDocumentTypes() {
+    return this.documentTypes.sortBy('position');
+  }
+
+  @action
+  selectDocumentType(value) {
+    this.selectedDocumentType = value;
+    this.documentContainer.type = value;
   }
 
   @action
