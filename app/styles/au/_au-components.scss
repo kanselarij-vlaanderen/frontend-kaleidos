@@ -500,3 +500,35 @@ $au-label-color: var(--au-gray-700);
     font-size: 1.8rem;
   }
 }
+
+.au-c-content {
+  ol:not(.au-c-list-horizontal) {
+    list-style: decimal;
+    margin-left: $au-unit;
+
+    &[data-list-style='decimal'] {
+      list-style-type: decimal;
+    }
+
+    &[data-list-style='upper-roman'] {
+      list-style-type: upper-roman;
+    }
+
+    &[data-list-style='lower-alpha'] {
+      list-style-type: lower-alpha;
+    }
+  }
+
+  ol.au-c-list {
+    list-style: none;
+    margin-left: 0;
+  }
+
+  ol:not(.au-c-list-horizontal) li + li {
+    margin-top: 0.1rem;
+  }
+
+  ol.au-c-list li + li {
+    margin-top: 0;
+  }
+}
