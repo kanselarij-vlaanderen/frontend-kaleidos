@@ -1,0 +1,29 @@
+<Auk::CheckboxTree
+  @label='Huidige beleidsdomeinen'
+  @items={{this.currentDomains}}
+  @itemStructure={{hash label="fullName"}}
+/>
+{{#if this.pastDomainsHidden}}
+  <AuButton
+    {{on "click" (toggle "pastDomainsHidden" this)}}
+    @skin="link"
+    class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+    @icon="add"
+  >
+    Toon vorige beleidsdomeinen
+  </AuButton>
+{{else}}
+  <Auk::CheckboxTree
+    @label={{t "past-ministers"}}
+    @items={{this.pastDomains}}
+    @itemStructure={{hash label="fullName"}}
+  />
+  <AuButton
+    {{on "click" (toggle "pastDomainsHidden" this)}}
+    @skin="link"
+    class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+    @icon="remove"
+  >
+    Verberg vorige beleidsdomeinen
+  </AuButton>
+{{/if}}
