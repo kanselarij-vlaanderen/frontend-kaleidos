@@ -24,11 +24,12 @@ import utils from '../../selectors/utils.selectors';
  * @param {string} location The location of the meeting to enter as input
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
+ * @param {string} secretary the secretary to select for this meeting, case sensitive
  * @param {*} plannedRelease The Cypress.dayjs object with the date and time to set for the planned release of the documents
  * @param {string} relatedMainMeeting the agenda to link to the PVV
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, plannedRelease, relatedMainMeeting) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, secretary, plannedRelease, relatedMainMeeting) {
   cy.log('createAgenda');
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
@@ -129,6 +130,23 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     .then((sometext) => {
       meetingNumberRep = sometext;
     });
+
+  // set the secretary
+  if (secretary) {
+    cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains('aan het laden')
+      .should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(secretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.get(dependency.emberPowerSelect.option, {
+      timeout: 15000,
+    }).should('not.exist');
+  }
 
   // Set the location
   if (location) {

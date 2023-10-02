@@ -1,4 +1,4 @@
-<Auk::Panel>
+<Auk::Panel data-test-secretary-panel-view-container>
   <Auk::Panel::Header>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
@@ -29,7 +29,7 @@
             <td class="auk-table__col--10">
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <AuBadge @icon="user" @skin="gray" @size="small" />
-                <span class="auk-u-mx-2">
+                <span data-test-secretary-panel-view-row-name class="auk-u-mx-2">
                   {{@secretary.fullDisplayName}}
                 </span>
               </div>
