@@ -164,56 +164,14 @@ export default class SignatureService extends Service {
 
   async removeSignFlow(signFlow, keepMarkingActivity) {
     if (signFlow) {
-      const signSubcase = await signFlow.signSubcase;
-      const signMarkingActivity = await signSubcase.signMarkingActivity;
-      const piece = await signMarkingActivity.piece;
-      const signedPiece = await piece.signedPiece;
-      const signedFile = await signedPiece?.file;
-      const signPreparationActivity = await signSubcase
-        ?.belongsTo('signPreparationActivity')
-        .reload();
-      const signCompletionActivity = await signSubcase
-        ?.belongsTo('signCompletionActivity')
-        .reload();
-      const signCancellationActivity = await signSubcase
-        ?.belongsTo('signCancellationActivity')
-        .reload();
-      const signApprovalActivities = await signSubcase
-        ?.hasMany('signApprovalActivities')
-        .reload();
-      const signSigningActivities = await signSubcase
-        ?.hasMany('signSigningActivities')
-        .reload();
-      const signRefusalActivities = await signSubcase
-        ?.hasMany('signRefusalActivities')
-        .reload();
-
-      // delete in reverse order of creation
-      await signedFile?.destroyRecord();
-      await signedPiece?.destroyRecord();
-      await signPreparationActivity?.destroyRecord();
-      await signCompletionActivity?.destroyRecord();
-      await signCancellationActivity?.destroyRecord();
-      await signApprovalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      await signSigningActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      await signRefusalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      // destroying signSubcase can throw ember errors. reload fixed that problem.
-      await signSubcase?.reload();
       if (!keepMarkingActivity) {
-        await signSubcase?.destroyRecord();
-        await signFlow?.destroyRecord();
-        await signMarkingActivity.destroyRecord();
+        await fetch(`/signing-flows/${signFlow.id}`, {
+          method: 'DELETE'
+        });
       } else if (signFlow) {
-        const status = await this.store.findRecordByUri('concept', MARKED);
-        signFlow.status = status;
-        signFlow.creator = null;
-        await signFlow.save();
+        await fetch(`/signing-flows/reset-signflow/${signFlow.id}`, {
+          method: 'POST'
+        });
       }
       await piece.belongsTo('signedPiece').reload();
       await piece.belongsTo('signMarkingActivity').reload();
