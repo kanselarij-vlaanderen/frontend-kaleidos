@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaService extends Service {
   @service store;
@@ -19,11 +20,16 @@ export default class AgendaService extends Service {
   /* API: agenda-sort-service */
 
   async agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    const endpoint = new URL('/agenda-comparison/agenda-with-changes', window.location.origin);
-    const queryParams = new URLSearchParams(Object.entries({
-      agendaToCompare: agendaToCompareID,
-      selectedAgenda: currentAgendaID,
-    }));
+    const endpoint = new URL(
+      '/agenda-comparison/agenda-with-changes',
+      window.location.origin
+    );
+    const queryParams = new URLSearchParams(
+      Object.entries({
+        agendaToCompare: agendaToCompareID,
+        selectedAgenda: currentAgendaID,
+      })
+    );
     endpoint.search = queryParams.toString();
     const response = await fetch(endpoint);
     if (response.ok) {
@@ -39,9 +45,15 @@ export default class AgendaService extends Service {
     const payload = await response.json();
     const itemsFromStore = [];
     for (const item of payload.data) {
-      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      let itemFromStore = this.store.peekRecord(
+        singularize(item.type),
+        item.id
+      );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(
+          singularize(item.type),
+          item.id
+        );
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -50,14 +62,22 @@ export default class AgendaService extends Service {
 
   async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
     // scopefields specify which fields to base upon for determining if an item was modified
-    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(',')}`;
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(
+      ','
+    )}`;
     const response = await fetch(url);
     const payload = await response.json();
     const itemsFromStore = [];
     for (const item of payload.data) {
-      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      let itemFromStore = this.store.peekRecord(
+        singularize(item.type),
+        item.id
+      );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(
+          singularize(item.type),
+          item.id
+        );
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -73,9 +93,15 @@ export default class AgendaService extends Service {
     const payload = await response.json();
     const piecesFromStore = [];
     for (const piece of payload.data) {
-      let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
+      let pieceFromStore = this.store.peekRecord(
+        singularize(piece.type),
+        piece.id
+      );
       if (!pieceFromStore) {
-        pieceFromStore = await this.store.queryRecord(singularize(piece.type), piece.id);
+        pieceFromStore = await this.store.queryRecord(
+          singularize(piece.type),
+          piece.id
+        );
       }
       piecesFromStore.push(pieceFromStore);
     }
@@ -96,6 +122,13 @@ export default class AgendaService extends Service {
     return 1;
   }
 
+  get enableDigitalAgenda() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
+  }
+
   /**
    * @argument meeting
    * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
@@ -109,8 +142,12 @@ export default class AgendaService extends Service {
       sort: '-created', // serialnumber
     });
     const agendaItemType = await subcase.agendaItemType;
-    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-    const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
+    const isAnnouncement =
+      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const numberToAssign = await this.computeNextItemNumber(
+      lastAgenda,
+      agendaItemType
+    );
     const mandatees = await subcase.get('mandatees');
     const now = new Date();
 
@@ -126,42 +163,67 @@ export default class AgendaService extends Service {
     }
 
     // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
+    const defaultDecisionResultCodeUri = isAnnouncement
+      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    const decisionResultCode = await this.store.findRecordByUri(
+      'concept',
+      defaultDecisionResultCodeUri
+    );
 
     // default secretary
-    const meetingSecretary = await meeting.secretary;
-    const currentApplicationSecretary = await this.mandatees.getCurrentApplicationSecretary();
-
+    const decisionSecretary = {};
+    if (this.enableDigitalAgenda) {
+      const meetingSecretary = await meeting.secretary;
+      if (meetingSecretary) {
+        decisionSecretary.secretary = meetingSecretary;
+      } else {
+        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
+      }
+    }
     // decision-activity
-    const decisionActivity = await this.store.createRecord('decision-activity', {
-      subcase,
-      startDate: meeting.plannedStart,
-      decisionResultCode,
-      secretary: meetingSecretary ? meetingSecretary : currentApplicationSecretary
-    });
+    const decisionActivity = await this.store.createRecord(
+      'decision-activity',
+      {
+        subcase,
+        startDate: meeting.plannedStart,
+        decisionResultCode,
+        ...decisionSecretary,
+      }
+    );
     await decisionActivity.save();
 
     // Treatment
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: now,
-      modified: now,
-      decisionActivity,
-    });
+    const agendaItemTreatment = await this.store.createRecord(
+      'agenda-item-treatment',
+      {
+        created: now,
+        modified: now,
+        decisionActivity,
+      }
+    );
     await agendaItemTreatment.save();
 
     let submittedPieces = [];
     for (const submissionActivity of submissionActivities) {
-      const submissionActivity2 = await this.store.queryOne('submission-activity', {
-        'filter[:id:]': submissionActivity.id,
-        include: 'pieces', // query with include to avoid pagination issues
-      });
-      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
+      const submissionActivity2 = await this.store.queryOne(
+        'submission-activity',
+        {
+          'filter[:id:]': submissionActivity.id,
+          include: 'pieces', // query with include to avoid pagination issues
+        }
+      );
+      submittedPieces = submittedPieces.concat(
+        (await submissionActivity2.pieces).toArray()
+      );
     }
 
     // signFlows
     for (const piece of submittedPieces) {
-      await this.signatureService.replaceDecisionActivity(piece, decisionActivity);
+      await this.signatureService.replaceDecisionActivity(
+        piece,
+        decisionActivity
+      );
     }
 
     const agendaitem = await this.store.createRecord('agendaitem', {
@@ -187,7 +249,10 @@ export default class AgendaService extends Service {
 
     // Create default newsItem for announcements with inNewsLetter = true
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
+      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(
+        agendaitem,
+        true
+      );
       newsItem.save();
     }
     return agendaitem;
@@ -196,7 +261,7 @@ export default class AgendaService extends Service {
   async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async(agendaitem) => {
+      agendaitems.map(async (agendaitem) => {
         let currentAgendaitemGroupName;
         const mandatees = await agendaitem.mandatees;
         const sortedMandatees = mandatees.sortBy('priority');
@@ -226,9 +291,13 @@ export default class AgendaService extends Service {
   }
 
   async deleteAgendaitem(agendaitem) {
-    const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
-      reload: true,
-    });
+    const agendaitemToDelete = await this.store.findRecord(
+      'agendaitem',
+      agendaitem.get('id'),
+      {
+        reload: true,
+      }
+    );
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.agendaActivity;
     const treatment = await agendaitemToDelete.treatment;
@@ -249,11 +318,13 @@ export default class AgendaService extends Service {
         // TODO DELETE REPORT !
         await treatment.destroyRecord();
       }
-      await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
-        const agenda = await agendaitem.agenda;
-        await agendaitem.destroyRecord();
-        await agenda.hasMany('agendaitems').reload();
-      }));
+      await Promise.all(
+        agendaitemsFromActivity.map(async (agendaitem) => {
+          const agenda = await agendaitem.agenda;
+          await agendaitem.destroyRecord();
+          await agenda.hasMany('agendaitems').reload();
+        })
+      );
       await agendaActivity.destroyRecord();
       await subcase.hasMany('agendaActivities').reload();
       await subcase.hasMany('decisionActivities').reload();
@@ -266,7 +337,10 @@ export default class AgendaService extends Service {
     if (this.currentSession.isAdmin) {
       await this.deleteAgendaitem(agendaitem);
     } else {
-      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('action-not-allowed'),
+        this.intl.t('warning-title')
+      );
     }
   }
 }

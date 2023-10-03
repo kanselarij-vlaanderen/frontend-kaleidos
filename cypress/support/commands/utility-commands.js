@@ -75,7 +75,8 @@ function setDateAndTimeInFlatpickr(date) {
   setDateInFlatpickr(date);
   cy.get(dependency.flatPickr.time).within(() => {
     cy.get(dependency.flatPickr.hour).type(date.hour());
-    cy.get(dependency.flatPickr.minute).type(date.minute());
+    cy.get(dependency.flatPickr.minute).type(date.minute())
+      .type('{enter}');
   });
   cy.log('/setDateAndTimeInFlatpickr');
 }
