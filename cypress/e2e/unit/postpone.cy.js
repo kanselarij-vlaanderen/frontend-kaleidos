@@ -115,7 +115,7 @@ context('Decision postponing tests', () => {
     selectConfidentialityLevel(files[0].newFileName, 'Publiek');
     selectConfidentialityLevel(files[1].newFileName, 'Intern Secretarie');
     selectConfidentialityLevel(files[2].newFileName, 'Vertrouwelijk');
-    selectConfidentialityLevel(files[3].newFileName, 'Intern Regering');
+    // selectConfidentialityLevel(files[3].newFileName, 'Intern Regering'); // done by default
     selectConfidentialityLevel(files[4].newFileName, 'Intern Overheid');
   });
 
