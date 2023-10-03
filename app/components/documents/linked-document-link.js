@@ -54,21 +54,4 @@ export default class LinkedDocumentLink extends Component {
     this.args.onUnlinkDocumentContainer(this.args.documentContainer);
     this.isOpenVerifyDeleteModal = false;
   }
-
-  @action
-  changeAccessLevel(al) {
-    this.accessLevel = this.lastPiece.set('accessLevel', al);
-  }
-
-  @action
-  async saveAccessLevel() {
-    await this.lastPiece.save();
-    await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
-    this.loadData.perform();
-  }
-
-  @action
-  async reloadAccessLevel() {
-    this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
-  }
 }
