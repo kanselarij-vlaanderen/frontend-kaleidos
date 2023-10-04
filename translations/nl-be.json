@@ -1241,5 +1241,7 @@
   "secretary": "Secretaris",
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
   "type-to-search": "Typ om te zoeken",
-  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten."
+  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten.",
+  "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
+  "retracted-item-decision": "Dit punt wordt ingetrokken."
 }
