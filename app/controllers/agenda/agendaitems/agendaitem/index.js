@@ -110,6 +110,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.decisionActivity.secretary = secretary;
     await this.decisionActivity.save();
     if (this.enableDigitalAgenda) {
+      this.decisionActivity.secretary = secretary;
+      await this.decisionActivity.save();
       const report = await this.store.queryOne('report', {
         'filter[:has-no:next-piece]': true,
         'filter[decision-activity][:id:]': this.decisionActivity.id,

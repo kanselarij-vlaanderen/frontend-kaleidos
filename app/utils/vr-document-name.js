@@ -53,10 +53,13 @@ export default class VRDocumentName {
     const date = parse(match.groups.date, 'yyyy ddMM', new Date());
     // TODO throw error when date is invalid (using isNaN(date) check)
     const meta = {
+      dateRaw: match.groups.date,
       date,
       casePrefix: match.groups.casePrefix,
       docType: match.groups.docType,
+      caseNrRaw: match.groups.caseNr,
       caseNr: parseInt(match.groups.caseNr, 10),
+      indexNrRaw: match.groups.index,
       index: parseInt(match.groups.index, 10),
       versionSuffix,
       versionNumber,
@@ -87,6 +90,16 @@ export default class VRDocumentName {
 
   withOtherVersionSuffix(pieceNr) {
     return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
+  }
+
+  vrNumberWithSuffix() {
+    try {
+      const meta = this.parseMeta();
+      const index = meta.indexNrRaw ? `/${meta.index}` : ''; 
+      return `VR ${meta.dateRaw}${meta.casePrefix} ${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.name;
+    }
   }
 }
 

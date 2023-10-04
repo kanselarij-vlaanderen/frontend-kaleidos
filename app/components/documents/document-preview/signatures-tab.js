@@ -27,6 +27,10 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     this.loadCanManageSignFlow.perform();
   }
 
+  get agendaitemIsRetracted() {
+    return this.decisionActivity?.get('isRetracted');
+  }
+
   loadSignatureRelatedData = task(async () => {
     this.signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
     this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.args.piece);
@@ -41,6 +45,7 @@ export default class DocumentsDocumentPreviewDetailsSignaturesTabComponent exten
     });
     const treatment = await this.agendaitem?.treatment;
     this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.decisionResultCode;
   });
 
   markForSignFlow = task(async (marked) => {

@@ -96,6 +96,7 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
+      this.loadSecretary.isRunning ||
       this.saveMeeting.isRunning
     );
   }
@@ -121,13 +122,15 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   loadSecretary = task(async () => {
-    const secretary = await this.args.meeting.secretary;
-    if (isPresent(secretary)) {
-      this.secretary = secretary;
-    } else {
-      const currentApplicationSecretary =
-        await this.mandatees.getCurrentApplicationSecretary();
-      this.secretary = currentApplicationSecretary;
+    if (this.enableDigitalAgenda) {
+      const secretary = await this.args.meeting.secretary;
+      if (isPresent(secretary)) {
+        this.secretary = secretary;
+      } else {
+        const currentApplicationSecretary =
+          await this.mandatees.getCurrentApplicationSecretary();
+        this.secretary = currentApplicationSecretary;
+      }
     }
   });
 
@@ -321,9 +324,11 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    const mainMeetingSecretary = await mainMeeting.secretary;
-    if (mainMeetingSecretary) {
-      this.secretary = mainMeetingSecretary;
+    if (this.enableDigitalAgenda) {
+      const mainMeetingSecretary = await mainMeeting.secretary;
+      if (mainMeetingSecretary) {
+        this.secretary = mainMeetingSecretary;
+      }
     }
   }
 

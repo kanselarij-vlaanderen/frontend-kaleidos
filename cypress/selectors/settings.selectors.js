@@ -111,12 +111,17 @@ const selectors = {
     alerts: '[data-test-route-settings-system-alerts-index-alerts-dropdown]',
     add: '[data-test-route-settings-system-alerts-index-add]',
     remove: '[data-test-route-settings-system-alerts-index-remove]',
+    edit: '[data-test-route-settings-system-alerts-index-edit]',
+    cancel: '[data-test-route-settings-system-alerts-index-cancel]',
   },
 
   // component system-alert-form
   systemAlertForm: {
+    beginDate: '[data-test-system-alert-form-begin-date]',
+    endDate: '[data-test-system-alert-form-end-date]',
     title: '[data-test-system-alert-form-title] input',
     message: '[data-test-system-alert-form-message] textarea',
+    severity: '[data-test-system-alert-form-severity]',
   },
 
   // component system-alert
