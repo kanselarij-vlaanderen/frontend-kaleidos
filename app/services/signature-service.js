@@ -164,11 +164,17 @@ export default class SignatureService extends Service {
 
   async removeSignFlow(signFlow, keepMarkingActivity) {
     if (signFlow) {
+      const signSubcase = await signFlow.signSubcase;
+      const signMarkingActivity = await signSubcase.signMarkingActivity;
+      const piece = await signMarkingActivity.piece;
       if (!keepMarkingActivity) {
         await fetch(`/signing-flows/${signFlow.id}`, {
           method: 'DELETE'
         });
-      } else if (signFlow) {
+        // this.store.pushDeletion('sign-subcase', signSubcase.id);
+        this.store.pushDeletion('sign-marking-activity', signMarkingActivity.id);
+        this.store.pushDeletion('sign-flow', signFlow.id);
+      } else {
         await fetch(`/signing-flows/reset-signflow/${signFlow.id}`, {
           method: 'POST'
         });
