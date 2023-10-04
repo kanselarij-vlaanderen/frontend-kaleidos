@@ -29,6 +29,7 @@ export default class AgendaMinutesRoute extends Route {
     const mandatees = await this.getMandatees();
     const notas = [];
     const announcements = [];
+    const betreftPieceParts = [];
 
     // Could be optimized not to make below query again when only query params changed
     // *NOTE* Do not change this query, this call is pre-cached by cache-warmup-service
@@ -39,6 +40,15 @@ export default class AgendaMinutesRoute extends Route {
       sort: 'type.position,number',
     });
     for (const agendaitem of agendaitems.toArray()) {
+      const betreftPiecePart = await this.store.queryOne('piece-part', {
+        'filter[report][decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+        'filter[title]': 'Betreft',
+        'filter[:has-no:next-piece-part]': true,
+      });
+      if (betreftPiecePart) {
+        betreftPieceParts.push({value: betreftPiecePart.value, agendaitemID: agendaitem.id});
+      }
+
       const type = await agendaitem.type;
       if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);
@@ -47,7 +57,7 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const meetingMinutes = await meeting.minutes;
-    return { minutes: meetingMinutes, mandatees, notas, announcements };
+    return { minutes: meetingMinutes, mandatees, notas, announcements, betreftPieceParts: betreftPieceParts };
   }
 
   setupController(controller) {

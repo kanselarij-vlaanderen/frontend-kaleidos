@@ -36,28 +36,37 @@ function renderAttendees(attendees) {
   `;
 }
 
-function renderNotas(notas) {
-  return renderAgendaitemList(notas);
+function renderNotas(notas, betreftPieceParts) {
+  return renderAgendaitemList(notas, betreftPieceParts);
 }
 
-function renderAnnouncements(announcements) {
+function renderAnnouncements(announcements, betreftPieceParts) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${renderAgendaitemList(announcements)}
+    ${renderAgendaitemList(announcements, betreftPieceParts)}
   `;
 }
 
-function renderAgendaitemList(agendaitems) {
+function renderAgendaitemList(agendaitems, betreftPieceParts) {
   return agendaitems
     .map(
       (agendaitem) => `
         <h4><u>${
           agendaitem.number
-        }. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
+        }. ${getBetreftPiecePart(betreftPieceParts, agendaitem)}</u></h4>
         ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
       `
     )
     .join('');
+}
+
+function getBetreftPiecePart(betreftPieceParts, agendaitem) {
+  const betreftPiecePart = betreftPieceParts.find(piecePart => piecePart.agendaitemID === agendaitem.id);
+  if (betreftPiecePart) {
+    return betreftPiecePart['value'].replace( /(<([^>]+)>)/ig, '').toUpperCase();
+  }
+  return agendaitem.shortTitle.toUpperCase();
+
 }
 
 function renderAbsentees() {
@@ -75,12 +84,12 @@ function renderAbsentees() {
 }
 
 function renderMinutes(data) {
-  const { attendees, notas, announcements } = data;
+  const { attendees, notas, announcements, betreftPieceParts } = data;
   return `
     ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? renderNotas(notas) : ''}
-    ${announcements ? renderAnnouncements(announcements) : ''}
+    ${notas ? renderNotas(notas, betreftPieceParts) : ''}
+    ${announcements ? renderAnnouncements(announcements, betreftPieceParts) : ''}
   `;
 }
 
@@ -326,6 +335,7 @@ export default class AgendaMinutesController extends Controller {
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
+      betreftPieceParts: this.model.betreftPieceParts,
     };
   }
 }
