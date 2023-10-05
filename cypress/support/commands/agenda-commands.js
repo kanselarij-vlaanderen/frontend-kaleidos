@@ -1,4 +1,4 @@
-/* global cy, Cypress */
+/* global cy, Cypress, */
 // / <reference types="Cypress" />
 
 // ***********************************************
@@ -24,12 +24,12 @@ import utils from '../../selectors/utils.selectors';
  * @param {string} location The location of the meeting to enter as input
  * @param {number} meetingNumber The number of the meeting to enter as input
  * @param {string} meetingNumberVisualRepresentation The visual representation of the meetingnumber to enter as input
- * @param {string} secretary the secretary to select for this meeting, case sensitive
  * @param {*} plannedRelease The Cypress.dayjs object with the date and time to set for the planned release of the documents
  * @param {string} relatedMainMeeting the agenda to link to the PVV
+ * @param {string} secretary the secretary to select for this meeting, case sensitive
  * @returns {Promise<String>} the id of the created agenda
  */
-function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, secretary, plannedRelease, relatedMainMeeting) {
+function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation, plannedRelease, relatedMainMeeting, secretary) {
   cy.log('createAgenda');
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
@@ -135,8 +135,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   if (secretary) {
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('aan het laden')
-      .should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(secretary)
       .scrollIntoView()
       .trigger('mouseover')
@@ -146,6 +145,8 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 15000,
     }).should('not.exist');
+    // wait to ensure secretary is changed, cypress can be too fast when setting location or clicking save
+    cy.wait(2000);
   }
 
   // Set the location

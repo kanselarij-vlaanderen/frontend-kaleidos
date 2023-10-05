@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach, afterEach, Cypress */
+/* global context, it, cy,beforeEach, afterEach, Cypress, expect */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -45,7 +45,7 @@ context('Agenda secretary tests', () => {
 
   it('should check default secretary', () => {
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
-      .day(6);
+      .day(2);
     const caseTitle1 = `testId=${currentTimestamp()}: Cypress test default secretary case 1`;
     const caseTitle2 = `testId=${currentTimestamp()}: Cypress test default secretary case 2`;
     const subcaseTitle1 = `${caseTitle1} test nota`;
@@ -59,7 +59,7 @@ context('Agenda secretary tests', () => {
     cy.createCase(caseTitle2);
     cy.addSubcase('Mededeling',
       subcaseTitle2,
-      'Cypress test nota voor het checken van de default secretaris'
+      'Cypress test mededeling voor het checken van de default secretaris'
     );
 
     cy.visit('/overzicht?sizeAgendas=2');
@@ -101,7 +101,7 @@ context('Agenda secretary tests', () => {
 
   it('should create agenda and change secretary', () => {
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
-      .day(6);
+      .day(3);
     const caseTitle1 = `testId=${currentTimestamp()}: Cypress test new secretary case 1`;
     const caseTitle2 = `testId=${currentTimestamp()}: Cypress test new secretary case 2`;
     const subcaseTitle1 = `${caseTitle1} test nota`;
@@ -129,8 +129,7 @@ context('Agenda secretary tests', () => {
     cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
-    cy.get(dependency.emberPowerSelect.option).contains('aan het laden')
-      .should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
       .scrollIntoView()
       .trigger('mouseover')
@@ -139,9 +138,11 @@ context('Agenda secretary tests', () => {
       });
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
     cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchPublicationActivities');
+    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities');
     cy.get(agenda.editMeeting.save).click();
     cy.wait('@patchMeetings');
     cy.wait('@patchPublicationActivities');
+    cy.wait('@patchDecisionActivities');
 
     // check if approval has new secretary
     cy.openDetailOfAgendaitem(approvalTitle, false);
@@ -155,5 +156,86 @@ context('Agenda secretary tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle2);
     cy.openDetailOfAgendaitem(subcaseTitle2);
     cy.get(mandatee.secretaryPanelView.row.name).contains(newSecretary);
+  });
+
+  it('should create agenda with different secretary and check patch calls on changes and no changes', () => {
+    const agendaDate = Cypress.dayjs().add(5, 'weeks')
+      .day(4);
+    const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
+    const newSecretary = 'Dries Verhaeghe';
+    const newApprovalSecretary = 'Raf Suys';
+    const location = 'Test no changes to secretary';
+    const spy = cy.spy();
+
+    cy.createAgenda(null, agendaDate, 'test', null, null, null, null, newSecretary);
+
+    cy.openAgendaForDate(agendaDate);
+    // check the secretary
+    cy.openDetailOfAgendaitem(approvalTitle, false);
+    cy.get(mandatee.secretaryPanelView.row.name).contains(newSecretary);
+
+    // change the secretary
+    cy.get(mandatee.secretaryPanelView.actions.edit).click();
+    cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(newApprovalSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
+    cy.get(mandatee.secretaryPanelEdit.actions.save).click();
+    cy.wait('@patchDecisionActivities1');
+
+    // select different secretary, then go back to previous secretary
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(currentDefaultSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetings1');
+    cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchPublicationActivities1');
+    cy.intercept('PATCH', '/decision-activities/**', spy).as('patchDecisionActivities2');
+    cy.get(agenda.editMeeting.save).click();
+    cy.wait('@patchMeetings1');
+    cy.wait('@patchPublicationActivities1');
+    // decision activities patch should not happen
+    cy.wait(2000).then(() => expect(spy).not.to.have.been.called);
+
+    // change location
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.editMeeting.meetingLocation).click()
+      .type(location);
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetings2');
+    cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchPublicationActivities2');
+    cy.intercept('PATCH', '/decision-activities/**', spy).as('patchDecisionActivities3');
+    cy.wait(5000);
+    cy.get(agenda.editMeeting.save).click();
+    cy.wait('@patchMeetings2');
+    cy.wait('@patchPublicationActivities2');
+    // decision activities patch should not happen
+    cy.wait(2000).then(() => expect(spy).not.to.have.been.called);
   });
 });

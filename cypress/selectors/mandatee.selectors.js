@@ -33,6 +33,16 @@ const selectors = {
     row: {
       name: '[data-test-secretary-panel-view-row-name]',
     },
+    actions: {
+      edit: '[data-test-secretary-panel-view-edit]',
+    },
+  },
+
+  // secretary-panel-edit
+  secretaryPanelEdit: {
+    actions: {
+      save: '[data-test-secretary-panel-edit-save]',
+    },
   },
 };
 export default selectors;
