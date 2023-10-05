@@ -9,6 +9,10 @@ import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 
 context('Decision tests', () => {
+  const accessGovernment = 'Intern Overheid';
+  const accessCabinet = 'Intern Regering';
+  const accessConfidential = 'Vertrouwelijk';
+
   beforeEach(() => {
     cy.login('Admin');
   });
@@ -52,7 +56,7 @@ context('Decision tests', () => {
     cy.get(auk.loader).should('not.exist');
 
     // correct default access rights on non-confidential subcase should be "Intern Overheid"
-    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+    cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     cy.reload();
     cy.addNewPieceToGeneratedDecision('VR PV');
@@ -67,7 +71,7 @@ context('Decision tests', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
+      .contains(accessCabinet);
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
       .should('not.be.disabled')
@@ -90,10 +94,10 @@ context('Decision tests', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
+      .contains(accessCabinet);
     cy.get('@pieces').eq(1)
       .find(document.accessLevelPill.pill)
-      .contains('Intern Regering');
+      .contains(accessCabinet);
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
       .should('not.be.disabled')
@@ -181,9 +185,6 @@ context('Decision tests', () => {
     const agendaDate = Cypress.dayjs('2022-04-19');
     const agendaitemTitle = 'Cypress test: Decision - CRUD of decisions - Nota - 1652789865';
 
-    const accesLevel = 'Intern Overheid';
-    const defaultAccesLevel = 'Intern Regering';
-
     // setup, cant visit directly, url changes
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(agendaitemTitle);
@@ -217,7 +218,7 @@ context('Decision tests', () => {
     cy.generateDecision();
 
     cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
-    cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
+    cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     // set subcase to confidential
     cy.get(cases.subcaseDetailNav.overview).click();
@@ -237,7 +238,7 @@ context('Decision tests', () => {
 
     // check document confidentiality
     cy.get(cases.subcaseDetailNav.decisions).click();
-    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // revert subcase confidentiality
     cy.get(cases.subcaseDetailNav.overview).click();
@@ -257,7 +258,7 @@ context('Decision tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(auk.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // switch decision to intern overheid
     cy.get(auk.loader).should('not.exist');
@@ -265,7 +266,7 @@ context('Decision tests', () => {
       cy.get(document.accessLevelPill.edit).click();
       cy.get(dependency.emberPowerSelect.trigger).click();
     });
-    cy.get(dependency.emberPowerSelect.option).contains(accesLevel)
+    cy.get(dependency.emberPowerSelect.option).contains(accessGovernment)
       .click();
     cy.intercept('PATCH', '/reports/*').as('patchReports2');
     cy.get(document.accessLevelPill.save).click()
@@ -275,7 +276,7 @@ context('Decision tests', () => {
     // add BIS
     cy.addNewPieceToGeneratedDecision('VR PV');
 
-    cy.get(document.accessLevelPill.pill).contains(accesLevel);
+    cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     // check previous version has default acces level (Intern Regering)
     cy.get(document.documentCard.versionHistory)
@@ -284,7 +285,7 @@ context('Decision tests', () => {
       .click();
     cy.get(document.vlDocument.piece)
       .find(document.accessLevelPill.pill)
-      .contains(defaultAccesLevel);
+      .contains(accessCabinet);
 
     // set subcase to confidential again
     cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
@@ -307,7 +308,7 @@ context('Decision tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(auk.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // check previous version has updated level (Vertrouwelijk)
     cy.get(document.documentCard.versionHistory)
@@ -316,7 +317,7 @@ context('Decision tests', () => {
       .click();
     cy.get(document.vlDocument.piece)
       .find(document.accessLevelPill.pill)
-      .contains('Vertrouwelijk');
+      .contains(accessConfidential);
   });
 
   it('should test if adding decision to confidential subcase sets correct default access rights', () => {
@@ -336,12 +337,12 @@ context('Decision tests', () => {
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.generateDecision();
     cy.get(auk.loader).should('not.exist');
-    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // add BIS
     cy.addNewPieceToGeneratedDecision('VR PV');
 
-    cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
+    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // check previous version has correct acces level (Vertrouwelijk)
     cy.get(document.documentCard.versionHistory)
@@ -350,6 +351,6 @@ context('Decision tests', () => {
       .click();
     cy.get(document.vlDocument.piece)
       .find(document.accessLevelPill.pill)
-      .contains('Vertrouwelijk');
+      .contains(accessConfidential);
   });
 });

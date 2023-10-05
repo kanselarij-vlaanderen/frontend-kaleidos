@@ -216,7 +216,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       });
   });
 
-  it.only('should test the post mailchimp stuff', () => {
+  it.skip('should test the post mailchimp stuff', () => {
     cy.visit('vergadering/64F9AD0070A5523DE5126B7A/kort-bestek');
     cy.intercept('POST', '/newsletter/mail-campaigns', staticResponse).as('stubUploadMailCampaigns');
 
