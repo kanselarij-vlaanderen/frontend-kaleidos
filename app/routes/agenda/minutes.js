@@ -46,7 +46,8 @@ export default class AgendaMinutesRoute extends Route {
         'filter[:has-no:next-piece-part]': true,
       });
       if (betreftPiecePart) {
-        betreftPieceParts.push({value: betreftPiecePart.value, agendaitemID: agendaitem.id});
+        const report = await betreftPiecePart.report;
+        betreftPieceParts.push({value: betreftPiecePart.value, agendaitemID: agendaitem.id, reportName: report?.name});
       }
 
       const type = await agendaitem.type;

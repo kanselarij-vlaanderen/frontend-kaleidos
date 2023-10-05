@@ -1241,5 +1241,9 @@
   "secretary": "Secretaris",
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
   "type-to-search": "Typ om te zoeken",
-  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten."
+  "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten.",
+  "minutes-approval": "{mededelingOrNota} wordt goedgekeurd confer beslissingsfiche {reportName}.",
+  "minutes-retracted": "{mededelingOrNota} wordt ingetrokken.",
+  "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
+  "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering."
 }

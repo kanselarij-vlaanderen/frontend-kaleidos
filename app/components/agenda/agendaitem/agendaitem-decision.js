@@ -10,21 +10,10 @@ import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
-}
-
-function formatDocuments(pieceRecords, isApproval) {
-  const names = pieceRecords.map((record) => record.name);
-  const simplifiedNames = names.map((name) => {
-    if (isApproval) {
-      return new VrNotulenName(name).vrNumberWithSuffix();
-    }
-    return new VRDocumentName(name).vrNumberWithSuffix();
-  });
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
@@ -303,9 +292,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
     this.setBetreftEditorContent(
-      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-      }</p>`
+      `<p>${generateBetreft(shortTitle, title, isApproval, documents)}</p>`
     );
   }
 
