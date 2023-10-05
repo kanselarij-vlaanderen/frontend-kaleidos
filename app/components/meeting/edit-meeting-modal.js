@@ -54,7 +54,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
-    this.loadSecretary.perform();
+    this.initializeSecretary.perform();
 
     this.meetingYear =
       this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
@@ -96,7 +96,9 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
-      this.loadSecretary.isRunning ||
+      this.initializeSecretary.isRunning ||
+      this.initializePublicationModels.isRunning ||
+      this.initializeMeetingNumber.isRunning ||
       this.saveMeeting.isRunning
     );
   }
@@ -121,7 +123,7 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  loadSecretary = task(async () => {
+  initializeSecretary = task(async () => {
     if (this.enableDigitalAgenda) {
       const secretary = await this.args.meeting.secretary;
       if (isPresent(secretary)) {
