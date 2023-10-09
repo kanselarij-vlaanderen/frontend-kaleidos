@@ -7,8 +7,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
-import { isPresent, isEmpty } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
@@ -60,7 +59,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.loadFiles.perform();
-    this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
   get label() {
@@ -115,9 +113,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get showSignaturePill() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
+    return hasPermission;
   }
 
   @task
