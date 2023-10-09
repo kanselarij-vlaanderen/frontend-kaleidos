@@ -244,12 +244,16 @@ export default class MeetingEditMeetingComponent extends Component {
     if (this.enableDigitalAgenda) {
       const currentMeetingSecretary = yield this.args.meeting.secretary;
       const currentKind = yield this.args.meeting.kind;
+      const currentPlannedStart = this.args.meeting.plannedStart;
       if (
         currentMeetingSecretary?.uri !== this.secretary.uri ||
-        currentKind?.uri !== this.selectedKind.uri
+        currentKind?.uri !== this.selectedKind.uri ||
+        currentPlannedStart !== this.startDate || 
+        currentPlannedStart !== now 
       ) {
         this.args.meeting.kind = this.selectedKind;
         this.args.meeting.secretary = this.secretary;
+        this.args.meeting.plannedStart = this.startDate || now;
         yield this.args.meeting.save();
         const decisionActivities = yield this.store.queryAll(
           'decision-activity',
