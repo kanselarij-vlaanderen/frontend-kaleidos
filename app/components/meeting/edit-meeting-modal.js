@@ -222,9 +222,49 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
+  regenerateDecisionReport = task(async (decisionActivity) => {
+    if (this.enableDigitalAgenda) {
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[decision-activity][:id:]': decisionActivity.id,
+      });
+      const pieceParts = await report?.pieceParts;
+      if (pieceParts?.length) {
+        await this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
+    }
+  });
+
   @task
   *saveMeeting() {
     const now = new Date();
+
+    if (this.enableDigitalAgenda) {
+      const currentMeetingSecretary = yield this.args.meeting.secretary;
+      const currentKind = yield this.args.meeting.kind;
+      if (
+        currentMeetingSecretary?.uri !== this.secretary.uri ||
+        currentKind?.uri !== this.selectedKind.uri
+      ) {
+        this.args.meeting.kind = this.selectedKind;
+        this.args.meeting.secretary = this.secretary;
+        yield this.args.meeting.save();
+        const decisionActivities = yield this.store.queryAll(
+          'decision-activity',
+          {
+            'filter[treatment][agendaitems][agenda][created-for][:id:]':
+              this.args.meeting.id,
+          }
+        );
+        for (let decisionActivity of decisionActivities.slice()) {
+          decisionActivity.secretary = this.secretary;
+          yield decisionActivity.save();
+          yield this.regenerateDecisionReport.perform(decisionActivity);
+        }
+      }
+    }
 
     this.args.meeting.extraInfo = this.extraInfo;
     this.args.meeting.plannedStart = this.startDate || now;
@@ -233,30 +273,6 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.enableDigitalAgenda) {
-      const currentMeetingSecretary = yield this.args.meeting.secretary;
-      if (currentMeetingSecretary?.uri !== this.secretary.uri) {
-        this.args.meeting.secretary = this.secretary;
-        const decisionActivities = yield this.store.queryAll('decision-activity', {
-          'filter[treatment][agendaitems][agenda][created-for][:id:]':
-            this.args.meeting.id,
-        });
-        for (let decisionActivity of decisionActivities.slice()) {
-          decisionActivity.secretary = this.secretary;
-          yield decisionActivity.save();
-          if (this.enableDigitalAgenda) {
-            const report = yield this.store.queryOne('report', {
-              'filter[:has-no:next-piece]': true,
-              'filter[decision-activity][:id:]': decisionActivity.id,
-            });
-            const pieceParts = yield report?.pieceParts;
-            if (pieceParts?.length) {
-              yield this.decisionReportGeneration.generateReplacementReport.perform(report);
-            }
-          }
-        }
-      }
-    }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
       this.plannedDocumentPublicationDate;
