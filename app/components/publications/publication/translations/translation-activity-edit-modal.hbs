@@ -2,6 +2,7 @@
   <Auk::Modal::Header
     @title={{t "edit-translation-activity"}}
     @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}
   />
   <Auk::Modal::Body>
     <div class="au-c-form">
@@ -17,7 +18,10 @@
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+  >
     <AuButton
       data-test-translation-activity-edit-save
       @skin="primary"

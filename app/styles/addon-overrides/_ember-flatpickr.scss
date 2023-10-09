@@ -9,6 +9,7 @@ $daysWidth: ($daySize * 7) + ($dayMargin * 14) + ($padding * 2) + 2;
 $calendarWidth: $daysWidth;
 
 .flatpickr-calendar {
+  position: fixed;
   width: $calendarWidth;
 
   box-shadow: $auk-shadow-small;

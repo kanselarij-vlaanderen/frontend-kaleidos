@@ -112,7 +112,7 @@
                     <td
                       data-test-route-settings---organization-technical-info-row-mandatee
                     >
-                      <Mandatee::NameWithRange @mandatee={{mandatee}}/>
+                      <Mandatee::NameWithRange @mandatee={{mandatee}} />
                     </td>
                     <td class="au-u-text-right">
                       <AuButton
@@ -149,6 +149,7 @@
 <AuModal
   @modalOpen={{this.showBlockOrganization}}
   @closeModal={{toggle "showBlockOrganization" this}}
+  @closable={{this.blockOrganization.isIdle}}
 >
   <:title>
     {{t "block-organization"}}
@@ -168,6 +169,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.blockOrganization.isRunning}}
           {{on "click" (toggle "showBlockOrganization" this)}}
         >
           {{t "cancel"}}
@@ -177,9 +179,13 @@
         <AuButton
           data-test-route-settings---organization-confirm-block-organization
           @alert={{true}}
+          @loading={{this.blockOrganization.isRunning}}
           {{on
             "click"
-            (queue this.blockOrganization (toggle "showBlockOrganization" this))
+            (queue
+              (perform this.blockOrganization)
+              (toggle "showBlockOrganization" this)
+            )
           }}
         >
           {{t "block-organization"}}
@@ -191,6 +197,7 @@
 <AuModal
   @modalOpen={{this.showUnblockOrganization}}
   @closeModal={{toggle "showUnblockOrganization" this}}
+  @closable={{this.unblockOrganization.isIdle}}
 >
   <:title>
     {{t "unblock-organization"}}
@@ -210,6 +217,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unblockOrganization.isRunning}}
           {{on "click" (toggle "showUnblockOrganization" this)}}
         >
           {{t "cancel"}}
@@ -219,10 +227,12 @@
         <AuButton
           data-test-route-settings---organization-confirm-unblock-organization
           @alert={{true}}
+          @loading={{this.unblockOrganization.isRunning}}
           {{on
             "click"
             (queue
-              this.unblockOrganization (toggle "showUnblockOrganization" this)
+              (perform this.unblockOrganization)
+              (toggle "showUnblockOrganization" this)
             )
           }}
         >
@@ -235,6 +245,7 @@
 <AuModal
   @modalOpen={{this.showUnlinkMandatee}}
   @closeModal={{toggle "showUnlinkMandatee" this}}
+  @closable={{this.unlinkMandatee.isIdle}}
 >
   <:title>
     {{t "unlink-mandatee"}}
@@ -251,6 +262,7 @@
       <Group>
         <AuButton
           @skin="naked"
+          @disabled={{this.unlinkMandatee.isRunning}}
           {{on "click" (toggle "showUnlinkMandatee" this)}}
         >
           {{t "cancel"}}

@@ -24,6 +24,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <AuLink
+            data-test-route-settings-system-alerts-index-cancel
             @skin="button-naked"
             @route="settings"
           >
@@ -35,6 +36,7 @@
         <Auk::Toolbar::Item>
           {{#if this.selectedAlert}}
             <AuLink
+              data-test-route-settings-system-alerts-index-edit
               @skin="button-secondary"
               @icon="pencil"
               @route="settings.system-alerts.edit"

@@ -5,7 +5,7 @@ export default class VRNotulenName {
     return Object.freeze({
       context: '(?<context>(VR)|(VE))',
       year: '(?<year>\\d{4})',
-      sessionNr: '(?<sessionNr>\\d{2})',
+      sessionNr: '(?<sessionNr>\\d{1,2})',
       versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
@@ -49,6 +49,15 @@ export default class VRNotulenName {
 
   get isValid() {
     return VRNotulenName.regex.test(this.name);
+  }
+
+  vrNumberWithSuffix() {
+    try {
+      const meta = this.parseMeta();
+      return `${meta.context} PV ${meta.year}/${meta.sessionNr}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.name;
+    }
   }
 }
 

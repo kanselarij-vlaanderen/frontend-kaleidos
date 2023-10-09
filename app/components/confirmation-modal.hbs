@@ -1,6 +1,7 @@
 <AuModal
   @modalOpen={{@modalOpen}}
   @closeModal={{this.cancel}}
+  @closable={{not @loading}}
 >
   <:title>
     {{#if (has-block "title")}}
