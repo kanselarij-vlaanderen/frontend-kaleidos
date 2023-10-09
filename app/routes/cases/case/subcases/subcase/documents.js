@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
@@ -21,10 +22,10 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
-    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
     // Get the submission from latest meeting if applicable
     const agendaActivities = await this.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities.slice().sort((a1, a2) => a1.startDate - a2.startDate).at(-1);
     if (latestActivity) {
       this.latestMeeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
@@ -36,13 +37,13 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
         'page[size]': PAGE_SIZE.ACTIVITIES,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+      addObjects(submissionActivities, submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

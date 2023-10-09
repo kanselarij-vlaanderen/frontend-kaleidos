@@ -42,7 +42,7 @@
             <AuCheckbox
               data-test-add-existing-piece-checkbox={{true}}
               @checked={{includes row this.selected}}
-              @onChange={{fn this.select row}}
+              {{on "click" this.preventClick}}
             />
           </td>
           <td class="auk-table__col--8">

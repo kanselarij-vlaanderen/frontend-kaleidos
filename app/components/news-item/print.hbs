@@ -73,7 +73,7 @@
       </p>
     {{/if}}
 
-    {{#if @newsItem.themes}}
+    {{#if (await @newsItem.themes)}}
       <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
         {{#each @newsItem.themes as |theme|}}
           <AuPill

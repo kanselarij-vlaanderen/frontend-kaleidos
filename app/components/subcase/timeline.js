@@ -33,7 +33,7 @@ export default class SubcaseTimeline extends Component {
       sort: 'start-date',
     });
 
-    for (const activity of sortedAgendaActivities.toArray()) {
+    for (const activity of sortedAgendaActivities.slice()) {
       // phase 1: When was the subcase proposed
       if (activity.startDate) {
         phases.push({

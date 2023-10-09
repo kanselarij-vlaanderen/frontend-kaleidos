@@ -9,6 +9,6 @@ export default class CasesCaseSubcasesSubcaseDecisionRoute extends Route {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       sort: '-created',
     });
-    return pieces.toArray();
+    return pieces.slice();
   }
 }

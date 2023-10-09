@@ -54,11 +54,12 @@
         {{else}}
           <AuToggleSwitch
             @skin="primary"
-            @label={{t "present-for-signing"}}
             @checked={{@row.markedForSignature}}
             @onChange={{fn @row.setMarkedForSignature}}
             @disabled={{@agendaitemIsRetracted}}
-          />
+          >
+            {{t "present-for-signing"}}
+          </AuToggleSwitch>
       {{/if}}
     </td>
   {{/if}}

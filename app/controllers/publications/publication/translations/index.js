@@ -84,7 +84,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     await this.publicationService.deletePiece(piece);
     const translationActivity = translationReceivedEvent.activity;
     let pieces = await translationActivity.generatedPieces;
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     if (pieces.length === 0) {
       translationActivity.endDate = null;
       await translationActivity.save();
@@ -149,7 +149,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
 
     const [files, outbox, mailSettings] = yield Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
@@ -187,7 +187,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-    for (const piece of pieces.toArray()) {
+    for (const piece of pieces.slice()) {
       yield this.publicationService.deletePiece(piece);
     }
     yield requestActivity.destroyRecord();

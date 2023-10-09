@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @param {Array<Theme>} selectedThemes The themes that are already selected
@@ -25,9 +26,9 @@ export default class ThemesSelector extends Component {
   @action
   toggleTheme(theme, checked) {
     if (checked) {
-      this.args.selectedThemes.addObject(theme);
+      addObject(this.args.selectedThemes, theme);
     } else {
-      this.args.selectedThemes.removeObject(theme);
+      removeObject(this.args.selectedThemes, theme);
     }
   }
 }

@@ -31,7 +31,7 @@ export default class PublicationsOverviewProofreadRoute extends PublicationsOver
     });
     this.filter = {
       status: {
-        ':id:': proofreadStatuses.mapBy('id').join(','),
+        ':id:': proofreadStatuses.map((s) => s.id).join(','),
       },
     };
   }

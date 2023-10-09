@@ -214,7 +214,7 @@ export default class AgendaService extends Service {
         }
       );
       submittedPieces = submittedPieces.concat(
-        (await submissionActivity2.pieces).toArray()
+        (await submissionActivity2.pieces).slice()
       );
     }
 
@@ -264,7 +264,7 @@ export default class AgendaService extends Service {
       agendaitems.map(async (agendaitem) => {
         let currentAgendaitemGroupName;
         const mandatees = await agendaitem.mandatees;
-        const sortedMandatees = mandatees.sortBy('priority');
+        const sortedMandatees = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);

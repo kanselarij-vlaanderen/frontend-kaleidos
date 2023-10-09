@@ -16,7 +16,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
   async model() {
     let reportTypes = await this.store.findAll('publication-report-type');
-    reportTypes = reportTypes.toArray();
+    reportTypes = reportTypes.slice();
 
     if (reportTypes.length !== REPORT_TYPES_CONFIG.length) {
       console.error('incorrect number of report types configured');
@@ -24,7 +24,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
     // configuration order determines order in UI
     const reportTypeEntries = REPORT_TYPES_CONFIG.map(async (reportTypeConfig) => {
-      const reportType = reportTypes.findBy('uri', reportTypeConfig.uri);
+      const reportType = reportTypes.find((type) => type.uri === reportTypeConfig.uri);
       if (!reportType) {
         console.error('report type config uri does not exist');
       }
@@ -41,6 +41,6 @@ export default class PublicationsOverviewReportsRoute extends Route {
       return new ReportTypeEntry(lastJob, reportType, reportTypeConfig);
     });
 
-    return Promise.all(reportTypeEntries);
+    return await Promise.all(reportTypeEntries);
   }
 }

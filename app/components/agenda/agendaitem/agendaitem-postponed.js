@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import subDays from 'date-fns/subDays';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument subcase
@@ -65,9 +66,9 @@ export default class AgendaitemPostponed extends Component {
       },
       sort: '-planned-start',
     });
-    const allRecentMeetings = meetings.toArray();
+    const allRecentMeetings = meetings.slice();
     // filter our own meeting if present
-    allRecentMeetings.removeObject(this.args.meeting);
+    removeObject(allRecentMeetings, this.args.meeting);
     return allRecentMeetings;
   }
 
@@ -87,11 +88,11 @@ export default class AgendaitemPostponed extends Component {
       'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
-    const submissionActivities = [...submissionActivitiesFromAgendaActivity.toArray(), ...newSubmissionActivities.toArray()];
+    const submissionActivities = [...submissionActivitiesFromAgendaActivity.slice(), ...newSubmissionActivities.slice()];
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
     const submissionActivity = this.store.createRecord('submission-activity', {

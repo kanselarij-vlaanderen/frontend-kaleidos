@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 const DEFAULT_VISIBLE_ROLES = [
   CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
@@ -61,7 +62,7 @@ export default class MandateesService extends Service {
           searchText,
           visibleRoles
         );
-        activeMandateesInRange.addObjects(mandatees);
+        addObjects(activeMandateesInRange, mandatees);
       }
 
       return activeMandateesInRange;
@@ -86,9 +87,9 @@ export default class MandateesService extends Service {
       closedInRange,
       activeRange,
     ]);
-    governmentBodies.addObjects(closedBodies);
+    addObjects(governmentBodies, closedBodies);
     if (activeBody) {
-      governmentBodies.addObject(activeBody);
+      addObject(governmentBodies, activeBody);
     }
 
     return governmentBodies;
@@ -138,7 +139,7 @@ export default class MandateesService extends Service {
         }
       });
     }
-    mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    mandatees = mandatees.sort((m1, m2) => m1.priority - m2.priority); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     return mandatees;
   }
 
@@ -165,7 +166,7 @@ export default class MandateesService extends Service {
       this.store.query('mandatee', postOptions),
     ];
     const [preMandatees, postMandatees] = yield Promise.all(requests);
-    const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
+    const mandatees = [...preMandatees.slice(), ...postMandatees.slice()];
     const sortedMandatees = mandatees.sort((a, b) =>
       sortByDeltaToRef(referenceDate)(a.start, b.start)
     );

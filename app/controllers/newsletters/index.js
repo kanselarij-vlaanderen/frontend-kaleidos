@@ -36,7 +36,7 @@ export default class NewslettersIndexController extends Controller {
   @bind
   async latestAgenda(meeting) {
     const agendas = await meeting.agendas;
-    return agendas?.sortBy('serialnumber').reverse().firstObject;
+    return agendas?.slice().sort((a1, a2) => a1.serialNumber.localeCompare(a2.serialNumber)).reverse().at(0);
   }
 
   @action

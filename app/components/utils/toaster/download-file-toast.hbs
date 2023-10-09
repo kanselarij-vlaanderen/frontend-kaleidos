@@ -5,6 +5,7 @@
   @size="small"
   @closable={{true}}
   @onClose={{@close}}
+  {{on-click-outside @onClose}}
 >
   <p class="auk-u-text-capitalize" data-test-download-file-toast-message>
     {{@options.message}}

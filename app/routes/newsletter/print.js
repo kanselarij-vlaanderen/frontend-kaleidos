@@ -9,6 +9,7 @@ import {
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -44,7 +45,7 @@ export default class PrintNewsletterRoute extends Route {
 
     let notas = []
     let announcements = [];
-    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+    for (const agendaitem of agendaitems.slice().sort((a1, a2) => a1.number - a2.number)) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
         notas.push(agendaitem);
@@ -54,8 +55,8 @@ export default class PrintNewsletterRoute extends Route {
     }
 
     if (params.showDraft) {
-      notas = notas.sortBy('number');
-      announcements = announcements.sortBy('number');
+      notas = notas.sort((n1, n2) => n1.number - n2.number);
+      announcements = announcements.sort((a1, a2) => a1.number - a2.number);
     } else { // Items need to be ordered by minister protocol order
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
       await setCalculatedGroupNumbers(notas);
@@ -65,7 +66,7 @@ export default class PrintNewsletterRoute extends Route {
       const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups
       notas = A([]);
       for (const group of itemGroups) {
-        notas.addObjects(group.agendaitems);
+        addObjects(notas, group.agendaitems);
       }
     }
 

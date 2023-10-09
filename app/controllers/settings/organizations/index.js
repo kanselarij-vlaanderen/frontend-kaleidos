@@ -34,7 +34,7 @@ export default class SettingsOrganizationsIndexController extends Controller {
 
   @task
   *loadSelectedOrganizations() {
-    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
   }
 
   @task
@@ -72,7 +72,7 @@ export default class SettingsOrganizationsIndexController extends Controller {
     // in. We don't want to let users block themselves from the system accidentally.
     yield Promise.all(
       memberships
-        .toArray()
+        .slice()
         .filter((membership) => membership.id != this.currentSession.membership.id)
         .map((membership) =>
           this.updateMembershipStatus.perform(membership, status)

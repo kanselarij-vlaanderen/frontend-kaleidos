@@ -101,7 +101,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     await this.publicationService.deletePiece(piece);
     const proofingActivity = proofReceivedEvent.activity;
     let pieces = await proofingActivity.generatedPieces;
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     if (pieces.length === 0) {
       proofingActivity.endDate = null;
       await proofingActivity.save();
@@ -118,7 +118,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     yield mail?.destroyRecord();
 
     const pieces = yield requestActivity.usedPieces;
-    for (const piece of pieces.toArray()) {
+    for (const piece of pieces.slice()) {
       // The pieces that are used in a translationActivity can not be deleted
       const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
         yield Promise.all([

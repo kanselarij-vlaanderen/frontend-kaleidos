@@ -20,7 +20,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get sortedRegulationTypes() {
-    return this.store.peekAll('regulation-type').sortBy('position');
+    return this.store.peekAll('regulation-type').slice().sort((c1, c2) => c1.position - c2.position);
   }
 
   get isValid() {

@@ -52,7 +52,7 @@ export default class NewsItemEditPanelComponent extends Component {
     this.htmlContent = this.newsItem.htmlContent || '';
     this.isFinished = this.newsItem.finished;
     yield this.newsItem.hasMany('themes').reload(); // concurrency in some cases
-    this.selectedThemes = (yield this.newsItem.themes).toArray();
+    this.selectedThemes = (yield this.newsItem.themes).slice();
 
     this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsItem);
   }

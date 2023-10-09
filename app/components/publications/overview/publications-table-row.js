@@ -64,7 +64,7 @@ export default class PublicationsTableRowComponent extends Component {
   async getTranslationRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.translationSubcase;
     const translationActivities = await publicationSubcase.translationActivities;
-    const requestDates = translationActivities.mapBy('startDate').filter(d => d);
+    const requestDates = translationActivities.map((a) => a.startDate).filter(d => d);
     return requestDates.length ? maxDate(requestDates) : null;
   }
 
@@ -72,7 +72,7 @@ export default class PublicationsTableRowComponent extends Component {
   async getProofRequestDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const requestDates = proofingActivities.mapBy('startDate').filter(d => d);
+    const requestDates = proofingActivities.map((a) => a.startDate).filter(d => d);
     return requestDates.length ? maxDate(requestDates) : null;
   }
 
@@ -80,7 +80,7 @@ export default class PublicationsTableRowComponent extends Component {
   async getProofReceivedDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const proofingActivities = await publicationSubcase.proofingActivities;
-    const receivedDates = proofingActivities.mapBy('endDate').filter(d => d);
+    const receivedDates = proofingActivities.map((a) => a.endDate).filter(d => d);
     return receivedDates.length ? maxDate(receivedDates) : null;
   }
 

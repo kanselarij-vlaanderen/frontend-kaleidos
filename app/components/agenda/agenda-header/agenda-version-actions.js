@@ -62,7 +62,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const status = yield this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (status.isDesignAgenda) {
         this.designAgenda = agenda;
@@ -70,7 +70,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
     }
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (!status.isDesignAgenda) {
         this.lastApprovedAgenda = agenda;
@@ -84,7 +84,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   get latestAgenda() {
-    return this.args.reverseSortedAgendas.firstObject;
+    return this.args.reverseSortedAgendas.at(0);
   }
 
   get isMeetingClosable() {
@@ -145,7 +145,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
       .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-      .sortBy('number');
+      .sort((a1, a2) => a1.number - a2.number);
   }
 
   @bind
@@ -156,7 +156,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (!previousVersion) {
-        newAgendaitems.pushObject(agendaitem);
+        newAgendaitems.push(agendaitem);
       }
     }
     return newAgendaitems;
@@ -170,7 +170,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (previousVersion) {
-        approvedAgendaitems.pushObject(agendaitem);
+        approvedAgendaitems.push(agendaitem);
       }
     }
     return approvedAgendaitems;

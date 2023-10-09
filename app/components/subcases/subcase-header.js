@@ -109,7 +109,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:agenda-activity]': true,
     });
-    submissionActivities = submissionActivities.toArray();
+    submissionActivities = submissionActivities.slice();
     if (!submissionActivities.length) {
       const now = new Date();
       const submissionActivity = this.store.createRecord('submission-activity', {

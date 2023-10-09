@@ -164,7 +164,7 @@ export default class NewslettersSearchRoute extends Route {
     const decisions = newsletter.attributes.decisions;
     if (Array.isArray(decisions)) {
       // TODO for now, if there are multiple decisions, we just grab the first one
-      newsletter.attributes.decision = decisions.firstObject;
+      newsletter.attributes.decision = decisions.at(0);
     } else {
       newsletter.attributes.decision = decisions;
     }
@@ -173,7 +173,7 @@ export default class NewslettersSearchRoute extends Route {
   postProcessMandatees(newsletter) {
     const mandatees = newsletter.attributes.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
-      const sortedMandatees = mandatees.sortBy('priority');
+      const sortedMandatees = mandatees.sort((m1, m2) => m1.priority - m2.priority);
       newsletter.attributes.mandatees = sortedMandatees;
     } else {
       newsletter.attributes.mandatees = [mandatees];

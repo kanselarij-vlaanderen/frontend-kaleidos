@@ -11,6 +11,8 @@ export default class ApplicationRoute extends Route {
   @service userAgent;
 
   async beforeModel() {
+    await this.session.setup();
+
     if (!this.isSupportedBrowser) {
       this.router.transitionTo('not-supported');
     }

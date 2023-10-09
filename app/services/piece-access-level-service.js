@@ -145,7 +145,7 @@ export default class PieceAccessLevelService extends Service {
       include: 'access-level',
     });
 
-    await Promise.all(reports.toArray().map(async (report) => {
+    await Promise.all(reports.slice().map(async (report) => {
       await this.strengthenAccessLevelToConfidential(report);
     }));
   }
@@ -163,7 +163,7 @@ export default class PieceAccessLevelService extends Service {
       'page[size]': PAGE_SIZE.PIECES,
     });
     
-    await Promise.all(pieces.toArray().map(async (piece) => {
+    await Promise.all(pieces.slice().map(async (piece) => {
       await this.strengthenAccessLevelToConfidential(piece);
     }));
   }

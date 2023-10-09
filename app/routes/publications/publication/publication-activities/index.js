@@ -79,8 +79,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       ...requestActivities.map((request) => new TimelineActivity(request)),
       ...publicationActivities.map((publication) => new TimelineActivity(publication)),
     ]
-      .sortBy('date')
-      .reverseObjects();
+      .sort((a1, a2) => a1.date - a2.date)
+      .reverse();
   }
 
   afterModel() {
