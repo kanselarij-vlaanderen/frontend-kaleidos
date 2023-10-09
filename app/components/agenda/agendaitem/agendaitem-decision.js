@@ -79,7 +79,10 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[:has-no:next-piece]': true,
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -285,15 +288,24 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  updateBetreftContent() {
+  async updateBetreftContent() {
     // *NOTE: approval decisions have a totally different text block.
     // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
     const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
-    this.setBetreftEditorContent(
-      `<p>${generateBetreft(shortTitle, title, isApproval, documents)}</p>`
-    );
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    if (subcase) {
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase.subcaseName)}</p>`
+      );
+    } else {
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents)}</p>`
+      );
+    }
+
   }
 
   @action
