@@ -64,14 +64,20 @@ export default class SignatureService extends Service {
       signFlow.status = status;
       await signFlow.save();
     }
-
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
     if (!response.ok) {
       for (let signFlow of signFlows) {
         await this.removeSignFlow(signFlow, true);
       }
-      throw new Error('Failed to upload piece to Signing Hub');
+      let stringifiedJson;
+      try {
+        const json = await response?.json();
+        stringifiedJson = JSON.stringify(json);
+      } catch (error) {
+        // cannot stringify could mean digital-signing is down
+      }
+      throw new Error(stringifiedJson ?? response.statusText);
     }
   }
 

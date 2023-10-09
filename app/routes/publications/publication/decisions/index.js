@@ -10,9 +10,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
     const parentParams = this.paramsFor('publications.publication');
     const pieces = await this.store.query('piece', {
       'filter[publication-flow][:id:]': parentParams.publication_id,
-      // TODO: paginatie uitklaren in design
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
-      sort: 'received-date,name',
       include: [
         'file',
         'document-container',
@@ -20,7 +18,7 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
         'access-level'
       ].join(',')
     });
-    return pieces.slice();
+    return pieces.slice().sort((a, b) => (a.receivedDate < b.receivedDate ? -1 : a.receivedDate === b.receivedDate ? 0 : 1));
   }
 
   async afterModel() {

@@ -54,7 +54,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
-    this.loadSecretary.perform();
+    this.initializeSecretary.perform();
 
     this.meetingYear =
       this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
@@ -96,7 +96,9 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
-      this.loadSecretary.isRunning ||
+      this.initializeSecretary.isRunning ||
+      this.initializePublicationModels.isRunning ||
+      this.initializeMeetingNumber.isRunning ||
       this.saveMeeting.isRunning
     );
   }
@@ -121,14 +123,16 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  loadSecretary = task(async () => {
-    const secretary = await this.args.meeting.secretary;
-    if (isPresent(secretary)) {
-      this.secretary = secretary;
-    } else {
-      const currentApplicationSecretary =
-        await this.mandatees.getCurrentApplicationSecretary();
-      this.secretary = currentApplicationSecretary;
+  initializeSecretary = task(async () => {
+    if (this.enableDigitalAgenda) {
+      const secretary = await this.args.meeting.secretary;
+      if (isPresent(secretary)) {
+        this.secretary = secretary;
+      } else {
+        const currentApplicationSecretary =
+          await this.mandatees.getCurrentApplicationSecretary();
+        this.secretary = currentApplicationSecretary;
+      }
     }
   });
 
@@ -229,24 +233,26 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    const currentMeetingSecretary = yield this.args.meeting.secretary;
-    if (currentMeetingSecretary?.uri !== this.secretary.uri) {
-      this.args.meeting.secretary = this.secretary;
-      const decisionActivities = yield this.store.queryAll('decision-activity', {
-        'filter[treatment][agendaitems][agenda][created-for][:id:]':
-          this.args.meeting.id,
-      });
-      for (let decisionActivity of decisionActivities.slice()) {
-        decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save(); 
-        if (this.enableDigitalAgenda) {
-          const report = yield this.store.queryOne('report', {
-            'filter[:has-no:next-piece]': true,
-            'filter[decision-activity][:id:]': decisionActivity.id,
-          });
-          const pieceParts = yield report?.pieceParts;
-          if (pieceParts?.length) {
-            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+    if (this.enableDigitalAgenda) {
+      const currentMeetingSecretary = yield this.args.meeting.secretary;
+      if (currentMeetingSecretary?.uri !== this.secretary.uri) {
+        this.args.meeting.secretary = this.secretary;
+        const decisionActivities = yield this.store.queryAll('decision-activity', {
+          'filter[treatment][agendaitems][agenda][created-for][:id:]':
+            this.args.meeting.id,
+        });
+        for (let decisionActivity of decisionActivities.slice()) {
+          decisionActivity.secretary = this.secretary;
+          yield decisionActivity.save();
+          if (this.enableDigitalAgenda) {
+            const report = yield this.store.queryOne('report', {
+              'filter[:has-no:next-piece]': true,
+              'filter[decision-activity][:id:]': decisionActivity.id,
+            });
+            const pieceParts = yield report?.pieceParts;
+            if (pieceParts?.length) {
+              yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+            }
           }
         }
       }
@@ -293,9 +299,11 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    const mainMeetingSecretary = await mainMeeting.secretary;
-    if (mainMeetingSecretary) {
-      this.secretary = mainMeetingSecretary;
+    if (this.enableDigitalAgenda) {
+      const mainMeetingSecretary = await mainMeeting.secretary;
+      if (mainMeetingSecretary) {
+        this.secretary = mainMeetingSecretary;
+      }
     }
   }
 
