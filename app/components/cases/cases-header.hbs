@@ -1,27 +1,44 @@
 <Auk::Navbar @skin="gray-100">
-    <Auk::Toolbar @auto={{true}} as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
-        <Group.Item>
-          <h1 data-test-cases-header-title class="auk-toolbar__title">
-            {{t "cases"}}
-          </h1>
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          {{#if (user-may "manage-cases")}}
-            <AuButton
-              data-test-cases-header-add-case
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.toggleIsOpenNewCaseModal}}
-            >
-              {{t "add-case"}}
-            </AuButton>
-          {{/if}}
-        </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
+  <Auk::Toolbar @auto={{true}} as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <h1 data-test-cases-header-title class="auk-toolbar__title">
+          {{t "cases"}}
+        </h1>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      {{#if (user-may "manage-cases")}}
+      <Group.Item>
+        <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mr-2">
+          <AuToggleSwitch
+            data-test-route-cases-overview-show-archived
+            @checked={{@showArchivedOnly}}
+            id="show-cases-archived-only"
+          />
+          <Auk::Label
+            class="auk-u-text-nowrap auk-u-ml-2 auk-u-p-0"
+            for="show-cases-archived-only"
+          >
+            {{t "show-archived-only"}}
+          </Auk::Label>
+        </div>
+      </Group.Item>
+      {{/if}}
+      <Group.Item>
+        {{#if (user-may "manage-cases")}}
+          <AuButton
+            data-test-cases-header-add-case
+            @skin="primary"
+            @icon="plus"
+            {{on "click" this.toggleIsOpenNewCaseModal}}
+          >
+            {{t "add-case"}}
+          </AuButton>
+        {{/if}}
+      </Group.Item>
+    </Toolbar.Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 <AuModal
   @modalOpen={{this.isOpenNewCaseModal}}

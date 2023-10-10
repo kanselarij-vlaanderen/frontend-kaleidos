@@ -1,0 +1,326 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group>
+      <Auk::Toolbar::Item>
+        <AuLink
+          @skin="button-naked"
+          @icon="hierarchical-back"
+          @hideText={{true}}
+          {{on "click" this.transitionBack}}
+        >
+          {{t "back"}}
+        </AuLink>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <div data-test-subcase-overview-header-title-container class="auk-u-my">
+          <span class="auk-overline auk-u-block">
+            {{t "case"}}
+          </span>
+          <h4 class="auk-toolbar-complex__title">
+            <Auk::AbbreviatedText
+              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @maxLength={{250}}
+            /> - {{t "create-subcase"}}
+          </h4>
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <AuButton
+          data-test-new-subcase-save
+          @skin="primary"
+          @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
+          {{on "click" (perform this.saveSubcase)}}
+        >
+          {{t "new-subcase"}}
+        </AuButton>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-4">
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Algemene info
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Utils::LoadableContent
+            @isLoading={{this.areLoadingTasksRunning}}
+            @reserveSpace={{true}}
+          >
+            <div class="auk-o-flex auk-o-flex--justify-between">
+              <div class="auk-u-mb-4">
+                <AuFieldset as |Fieldset|>
+                  <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+                  <Fieldset.content>
+                    <AuRadioGroup
+                      data-test-new-subcase-type
+                      @alignment="inline"
+                      @selected={{this.agendaItemType}}
+                      @onChange={{this.onChangeAgendaItemType}}
+                      as |Group|
+                    >
+                      {{#each this.agendaItemTypes as |type|}}
+                        <Group.Radio
+                          @value={{type}}
+                        >
+                          {{type.label}}
+                        </Group.Radio>
+                      {{/each}}
+                    </AuRadioGroup>
+                  </Fieldset.content>
+                </AuFieldset>
+              </div>
+
+              <div class="auk-o-flex auk-o-flex--vertical-center">
+                <Auk::Toolbar>
+                  <Auk::Toolbar::Group @position="right">
+                    <Auk::Toolbar::Item>
+                      <AuButton
+                        data-test-new-subcase-clone-previous-subcase
+                        @skin="secondary"
+                        @icon="copy-paste"
+                        {{on "click" (perform this.copyFullSubcase)}}
+                        @disabled={{this.copyFullSubcase.isRunning}}
+                      >
+                        {{t "clone-previous-subcase"}}
+                      </AuButton>
+                    </Auk::Toolbar::Item>
+                  </Auk::Toolbar::Group>
+                </Auk::Toolbar>
+              </div>
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+              <AuToggleSwitch
+                data-test-new-subcase-confidential
+                @checked={{this.confidential}}
+                id="new-subcase-confidential"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+              <Auk::Textarea
+                data-test-new-subcase-shorttitle
+                @rows="2"
+                @value={{this.shortTitle}}
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+              <Auk::Textarea
+                data-test-new-subcase-longtitle
+                @rows="4"
+                @value={{this.title}}
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+              <Utils::ModelSelector
+                data-test-new-subcase-procedure-step
+                @modelName="subcase-type"
+                @searchField="label"
+                @sortField="label"
+                @selected={{this.type}}
+                @onChange={{this.selectType}}
+              as |model|>
+                {{capitalize model.label}}
+              </Utils::ModelSelector>
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+              <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small">
+                {{#if (not this.isEditing)}}
+                  <Utils::ModelSelector
+                    data-test-new-subcase-procedure-name
+                    class="auk-u-maximize-width"
+                    @modelName="shortcut"
+                    @searchField="label"
+                    @sortField="label"
+                    @filter={{this.filter}}
+                    @selected={{this.selectedShortcut}}
+                    @onChange={{this.selectSubcaseName}}
+                  as |model|>
+                    {{capitalize model.label}}
+                  </Utils::ModelSelector>
+                  <AuButton
+                    @skin="naked"
+                    @icon="pencil"
+                    @hideText={{true}}
+                    {{on "click" this.toggleIsEditing}}
+                  >
+                    {{t "edit"}}
+                  </AuButton>
+                {{else}}
+                  <AuInput
+                    @width="block"
+                    @value={{this.subcaseName}}
+                    id="subcaseNameId"
+                  />
+                  <AuButton
+                    @skin="naked"
+                    @icon="x"
+                    @hideText={{true}}
+                    {{on "click" this.toggleIsEditing}}
+                  >
+                    {{t "cancel"}}
+                  </AuButton>
+                {{/if}}
+              </div>
+            </div>
+          </Utils::LoadableContent>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Ministers
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Auk::CheckboxTree
+            @label='Huidige ministers'
+            @items={{this.currentMinisters}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+        </Auk::Panel::Body>
+      </Auk::Panel>
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Beleidsdomeinen en beleidsvelden
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Auk::CheckboxTree
+            @label='Cultuur, Jeugd, Sport en Media'
+            @items={{this.culture}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Economie, Wetenschap en Innovatie'
+            @items={{this.economy}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Financiën en Begroting'
+            @items={{this.finances}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Kanselarij, Bestuur, Buitenlandse Zaken en Justitie'
+            @items={{this.governance}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Landbouw en Visserij'
+            @items={{this.agriculture}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Mobiliteit en Openbare Werken'
+            @items={{this.mobility}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Omgeving'
+            @items={{this.environment}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Onderwijs en Vorming'
+            @items={{this.education}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Welzijn, Volksgezondheid en Gezin'
+            @items={{this.health}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+          <AuHr />
+          <Auk::CheckboxTree
+            @label='Werk en sociale economie'
+            @items={{this.work}}
+            @itemStructure={{hash label="fullName"}}
+            @layout="grid"
+          />
+        </Auk::Panel::Body>
+      </Auk::Panel>
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Documenten
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Auk::FileUploader
+            @multiple={{true}}
+            @reusable={{true}}
+            @onUpload={{this.uploadPiece}}
+          />
+          <div class="upload-container">
+            {{#each this.newPieces as |piece|}}
+              <Documents::UploadedDocument
+                @piece={{piece}}
+                @allowDocumentContainerEdit={{true}}
+                @onDelete={{perform this.deletePiece piece}} />
+            {{/each}}
+          </div>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+  </div>
+ </div>

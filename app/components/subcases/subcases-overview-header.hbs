@@ -16,10 +16,12 @@
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
-          <Auk::AbbreviatedText
-            @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
-            @maxLength={{250}}
-          />
+          <h4 class="auk-toolbar-complex__title">
+            <Auk::AbbreviatedText
+              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @maxLength={{250}}
+            />
+          </h4>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
@@ -54,7 +56,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <AuButton
-            @skin="primary"
+            @skin="secondary"
             @icon="pencil"
             {{on "click" this.openEditCaseModal}}
           >
@@ -62,14 +64,22 @@
           </AuButton>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <AuButton
+          {{!-- <AuButton
             data-test-subcase-overview-header-create-subcase
             @skin="primary"
             @icon="plus"
             {{on "click" this.openAddSubcaseModal}}
           >
             {{t "create-subcase"}}
-          </AuButton>
+          </AuButton> --}}
+          <AuLink
+            data-test-subcase-overview-header-create-subcase
+            @skin="button"
+            @icon="plus"
+            @route="cases.case.subcases.add-subcase"
+          >
+            {{t "create-subcase"}}
+          </AuLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
