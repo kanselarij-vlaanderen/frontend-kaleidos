@@ -15,6 +15,13 @@
           @value={{mut @piece.name}}
         />
       </div>
+      <div class="auk-form-group">
+        <Auk::Label>Document nummer</Auk::Label>
+        <AuInput
+          @width="block"
+          @value=""
+        />
+      </div>
       {{#unless this.loadData.isRunning}}
         <div class="auk-form-group" data-test-uploaded-document-types>
           <Auk::Label>{{t "document-type"}}</Auk::Label>
