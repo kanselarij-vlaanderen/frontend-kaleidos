@@ -48,7 +48,7 @@
             role="menuitem"
             {{on "click" this.showVpModal}}
           >
-            Indienen bij Vlaams Parlement
+            Doorsturen naar het Vlaams Parlement
           </AuButton>
           {{!-- {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
             <AuButton
@@ -113,7 +113,7 @@
                 @skin="primary"
                 {{on "click" this.submitToVp}}
               >
-                Indienen bij het Vlaams Parlement
+                Doorsturen naar het Vlaams Parlement
               </AuButton>
             </Auk::Modal::Footer>
           </Auk::Modal>
@@ -126,7 +126,7 @@
 {{#if (eq this.agenda.status.isDesignAgenda false)}}
   {{#if this.vpSent}} 
     <AuAlert
-      @title="Dit dossier is ingediend bij het Vlaams Parlement op 29/09/2023"
+      @title="Dit dossier is doorgestuurd naar het Vlaams Parlement op 29/09/2023"
       @skin="success"
       @icon="mail"
       @size="small"
