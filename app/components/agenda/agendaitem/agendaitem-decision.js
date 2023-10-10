@@ -37,10 +37,12 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked previousReport;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
+  @tracked titlePiecePart;
   @tracked nota;
 
   @tracked isEditingConcerns = false;
   @tracked isEditingTreatment = false;
+  @tracked isEditingTitle = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
   @tracked showInit = true;
@@ -323,6 +325,11 @@ export default class AgendaitemDecisionComponent extends Component {
     this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
   }
 
+  @action 
+  saveTitle() {
+    this.isEditingTitle = false;
+  }
+
   onSaveReport = task(async () => {
     let report;
     let documentContainer;
@@ -581,12 +588,33 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  startEditingAll() {
+  startEditingTitle() {
     this.loadDocuments.perform();
     this.loadNota.perform();
+    this.isEditingTitle = true;
+  }
+
+  @action
+  async startEditingAll() {
+    await this.loadDocuments.perform();
+    await this.loadNota.perform();
     this.showInit = false;
     this.showFields = true;
-    this.isEditingConcerns = true;
-    this.isEditingTreatment = true;
+    this.report = true;
+
+    const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const documents = this.pieces;
+
+    this.betreftPiecePart = {
+      'value': `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
+        documents ? `<br/>${formatDocuments(documents)}` : ''
+      }</p>`
+    };
+
+    this.beslissingPiecePart = {
+      'value': 'Beslissing ...'
+    };
+
+    this.titlePiecePart = 'Ondertitel';
   }
 }

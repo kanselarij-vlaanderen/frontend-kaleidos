@@ -79,6 +79,91 @@
 <Auk::Panel class="auk-u-mb-2">
   <Auk::Panel::Header
     @size="auto"
+    class="{{if this.isEditingTitle 'au-u-background-gray-100'}}"
+  >
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left">
+        <h4 class="auk-toolbar__title">
+          Ondertitel
+        </h4>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        {{#if
+          (not this.isEditingTitle)
+        }}
+          <Group.Item>
+            <AuButton
+              data-test-agendaitem-decision-create
+              @skin="naked"
+              @icon="pencil"
+              @iconAlignment="left"
+              @disabled={{this.exportPdf.isRunning}}
+              {{on "click" this.startEditingTitle}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Group.Item>
+        {{/if}}
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if this.loadReport.isIdle}}
+    {{#if this.isEditingTitle}}
+      <Auk::Panel::Body
+        class="au-o-flow {{if this.isEditingTitle 'au-u-background-gray-100'}}"
+      >
+        <AuInput @width="block" @value={{this.titlePiecePart}} />
+      </Auk::Panel::Body>
+      <Auk::Panel::Footer class="au-u-background-gray-100">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                {{on "click" (set this "isEditingTitle" false)}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="primary"
+                @loading={{this.onSaveReport.isRunning}}
+                {{on "click" this.saveTitle}}
+              >
+                {{t "update"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{else}}
+
+      <Auk::Panel::Body
+        class="au-o-flow {{if this.isEditingTitle 'au-u-background-gray-100'}}"
+      >
+        <AuContent @size="small">
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{this.titlePiecePart}}
+          />
+        </AuContent>
+      </Auk::Panel::Body>
+    {{/if}}
+  {{else}}
+    <Auk::Panel::Body
+      class="au-o-flow {{if this.isEditingTitle 'au-u-background-gray-100'}}"
+    >
+      <Auk::Loader />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
+
+<Auk::Panel class="auk-u-mb-2">
+  <Auk::Panel::Header
+    @size="auto"
     class="{{if this.isEditingConcerns 'au-u-background-gray-100'}}"
   >
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
@@ -100,7 +185,7 @@
               @disabled={{this.exportPdf.isRunning}}
               {{on "click" this.startEditingConcerns}}
             >
-              {{t (if this.report "edit" "create")}}
+              {{t "edit"}}
             </AuButton>
           </Group.Item>
         {{/if}}
@@ -206,7 +291,7 @@
               @disabled={{this.exportPdf.isRunning}}
               {{on "click" this.startEditingTreatment}}
             >
-              {{t (if this.report "edit" "create")}}
+              {{t "edit"}}
             </AuButton>
           </Group.Item>
         {{/if}}
