@@ -60,36 +60,4 @@ export default class ExtendedStoreService extends Store {
       'filter[:uri:]': uri,
     });
   }
-
-  /** 
-   * source: https://discuss.emberjs.com/t/how-to-remove-records-in-store-when-they-are-not-in-server-anymore/14442/6
-    notifying the store that a record has been remotely deleted and should be fully removed.
-  */
-  pushDeletion(type, id) {
-    let record = this.peekRecord(type, id);
-
-    if (record !== null) {
-      let relationships = {};
-      let hasRelationships = false;
-
-      record.eachRelationship((name, { kind }) => {
-        hasRelationships = true;
-        relationships[name] = {
-          data: kind === 'hasMany' ? [] : null,
-        };
-      });
-
-      if (hasRelationships) {
-        this.push({
-          data: {
-            type,
-            id,
-            relationships,
-          },
-        });
-      }
-
-      record.unloadRecord();
-    }
-  }
 }

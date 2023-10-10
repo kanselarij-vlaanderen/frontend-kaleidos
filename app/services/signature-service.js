@@ -168,9 +168,6 @@ export default class SignatureService extends Service {
         await fetch(`/signing-flows/${signFlow.id}`, {
           method: 'DELETE'
         });
-        // this.store.pushDeletion('sign-subcase', signSubcase.id);
-        this.store.pushDeletion('sign-marking-activity', signMarkingActivity.id);
-        this.store.pushDeletion('sign-flow', signFlow.id);
       } else {
         await fetch(`/signing-flows/reset-signflow/${signFlow.id}`, {
           method: 'POST'
