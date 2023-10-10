@@ -8,8 +8,10 @@ import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrNotulenName, {
+  compareFunction as compareNotulen,
+} from 'frontend-kaleidos/utils/vr-notulen-name';
+import constants from 'frontend-kaleidos/config/constants';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
@@ -90,7 +92,9 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = await this.throttledLoadingService.loadPieces.perform(
+      this.args.agendaitem
+    );
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -431,12 +435,16 @@ export default class AgendaitemDecisionComponent extends Component {
 
   async createNewReport(documentContainer) {
     const now = new Date();
+    const agendaitemType = await this.args.agendaitem.type;
+    const announcementType = constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+    const agendaitemTypeWord =
+      agendaitemType.uri === announcementType ? 'mededeling' : 'punt';
     const report = this.store.createRecord('report', {
       created: now,
       modified: now,
       name: `${
         this.args.agendaContext.meeting.numberRepresentation
-      } - punt ${addLeadingZeros(
+      } - ${agendaitemTypeWord} ${addLeadingZeros(
         this.args.agendaContext.agendaitem.number,
         4
       )}`,
