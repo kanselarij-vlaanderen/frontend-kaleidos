@@ -84,7 +84,7 @@
         </AuFormRow>
         <AuFormRow>
           <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-          <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small">
+          <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small auk-input-group--w-large">
             {{#if (not this.isEditing)}}
               <Utils::ModelSelector
                 data-test-new-subcase-procedure-name
@@ -103,6 +103,7 @@
                 @icon="pencil"
                 @hideText={{true}}
                 {{on "click" this.toggleIsEditing}}
+                class="auk-o-flex__item--fix"
               >
                 {{t "edit"}}
               </AuButton>
@@ -117,6 +118,7 @@
                 @icon="x"
                 @hideText={{true}}
                 {{on "click" this.toggleIsEditing}}
+                class="auk-o-flex__item--fix"
               >
                 {{t "cancel"}}
               </AuButton>
