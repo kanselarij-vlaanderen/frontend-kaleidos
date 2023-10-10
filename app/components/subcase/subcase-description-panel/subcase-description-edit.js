@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -13,6 +14,7 @@ export default class SubcaseDescriptionEdit extends Component {
    */
   @service store;
   @service conceptStore;
+  @service decisionReportGeneration;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
 
@@ -81,11 +83,47 @@ export default class SubcaseDescriptionEdit extends Component {
 
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
       await this.updateNewsletterAfterRemarkChange();
+      await this.updateDecisionActivities();
     }
 
     this.args.onSave();
 
     this.isSaving = false;
+  }
+
+  get enableDigitalAgenda() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
+  }
+
+  async updateDecisionActivities() {
+    if (this.enableDigitalAgenda) {
+      const decisionActivities = await this.args.subcase.decisionActivities;
+      for (const decisionActivity of decisionActivities) {
+        const report = await this.store.queryOne('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[decision-activity][:id:]': decisionActivity.id,
+        });
+        const pieceParts = await report?.pieceParts;
+        if (pieceParts?.length) {
+          await this.decisionReportGeneration.generateReplacementReport.perform(
+            report
+          );
+          this.updateReportName(report, this.agendaItemType.uri);
+          report.save();
+        }
+      }
+    }
+  }
+
+  updateReportName(report, agendaitemTypeUri) {
+    if (agendaitemTypeUri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      report.name = report.name.replace("punt", "mededeling");
+    } else {
+      report.name = report.name.replace("mededeling", "punt");
+    }
   }
 
   async updateNewsletterAfterRemarkChange() {
