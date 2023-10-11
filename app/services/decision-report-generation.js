@@ -7,18 +7,18 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  generateReplacementReport = task(async (report, type = 'decision') => {
-    const fileMeta = await this.exportPdf.perform(report, type);
+  generateReplacementReport = task(async (report) => {
+    const fileMeta = await this.exportPdf.perform(report, 'generate-decision-report');
     await this.replaceFile(report, fileMeta.id);
   });
 
-  exportPdf = task(async (report, type = 'decision') => {
-    const typeToUrlBase = {
-      decision: 'generate-decision-report',
-      minutes: 'generate-minutes-report',
-    };
-    console.assert(Object.keys(typeToUrlBase).includes(type));
-    const resp = await fetch(`/${typeToUrlBase[type]}/${report.id}`);
+  generateReplacementMinutes = task(async (minutes) => {
+    const fileMeta = await this.exportPdf.perform(report, 'generate-minutes-report');
+    await this.replaceFile(minutes, fileMeta.id);
+  });
+
+  exportPdf = task(async (report, urlBase) => {
+    const resp = await fetch(`/${urlBase}/${report.id}`);
     if (!resp.ok) {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
       return;

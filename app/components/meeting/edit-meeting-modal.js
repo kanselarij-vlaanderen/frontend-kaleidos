@@ -275,9 +275,8 @@ export default class MeetingEditMeetingComponent extends Component {
         const newValue = replaceSecretary(piecePart.value, this.secretary.person.get('fullName'));
         piecePart.value = newValue;
         yield piecePart.save();
-        yield this.decisionReportGeneration.generateReplacementReport.perform(
+        yield this.decisionReportGeneration.generateReplacementMinutes.perform(
           minutes,
-          'minutes'
         );
       }
     }
