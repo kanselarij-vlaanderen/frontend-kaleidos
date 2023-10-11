@@ -38,6 +38,7 @@ const {
 // - manage-users: Block and archive users
 // - manage-alerts: Manage systeem notifications to be shown in the application
 // - manage-minutes: Create and update minutes for a meeting
+// - manage-secretary-signatures: Create and follow-up sign-flows for documents to be signed by secretaries
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally

@@ -4,7 +4,7 @@
     @icon="alert-triangle"
     @title={{t "create-sign-flow-conflicting-signers-title"}}
   >
-    <p>{{t "create-sign-flow-conflicting-signers-message"}}</p>
+    <p>{{t "create-sign-flow-conflicting-secretaries-message"}}</p>
   </AuAlert>
 {{/if}}
 <Auk::Panel class="auk-u-mt-2">
@@ -15,6 +15,18 @@
           <h4 class="auk-h4 auk-u-m-0">
             {{t "to-sign-by"}}
           </h4>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButton
+            @skin="secondary"
+            @icon="pencil"
+            @loading={{this.loadSigners.isPending}}
+            {{on "click" this.startEditSigners}}
+          >
+            {{t "edit-2"}}
+          </AuButton>
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
@@ -32,7 +44,6 @@
         {{#each this.signers as |signer|}}
           <Item
             class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
-            data-test-signatures-create-sign-flow-signers-item
           >
             {{signer.person.fullName}}
           </Item>
@@ -45,3 +56,12 @@
     </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
+
+{{#if this.showSecretaryModal}}
+  <Signatures::SelectSecretaryModal
+    @loading={{this.saveSigners.isRunning}}
+    @selected={{map-by "id" this.signers}}
+    @onConfirm={{this.saveSigners.perform}}
+    @onCancel={{toggle "showSecretaryModal" this}}
+  />
+{{/if}}

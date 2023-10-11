@@ -6,13 +6,11 @@ import { task } from 'ember-concurrency';
 import { TrackedArray } from 'tracked-built-ins';
 import { trackedFunction } from 'ember-resources/util/function';
 
-export default class SignaturesCreateSignFlowReportOrMinuteComponent extends Component {
+export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Component {
   @service store;
 
   @tracked showSecretaryModal = false;
-
   @tracked signers = new TrackedArray([]);
-
   @tracked hasConflictingSigners = false;
 
   constructor() {
@@ -23,13 +21,13 @@ export default class SignaturesCreateSignFlowReportOrMinuteComponent extends Com
     if (!this.args.decisionActivities) {
       return;
     }
-    const decisionActivities = this.args.decisionActivities.toArray();
+    const decisionActivitiesOrMeetings = this.args.decisionActivities.toArray();
 
-    const [head, ...tail] = decisionActivities;
+    const [head, ...tail] = decisionActivitiesOrMeetings;
     const secretary = await head.secretary;
 
-    for (let decisionActivity of tail) {
-      const _secretary = await decisionActivity.secretary;
+    for (let decisionActivityOrMeeting of tail) {
+      const _secretary = await decisionActivityOrMeeting.secretary;
 
       if (secretary?.id !== _secretary?.id) {
         this.hasConflictingSigners = true;
@@ -50,6 +48,7 @@ export default class SignaturesCreateSignFlowReportOrMinuteComponent extends Com
 
   saveSigners = task(async (selected) => {
     this.signers = new TrackedArray([selected]);
+    this.showSecretaryModal = false;
 
     this.args.onChangeSigners?.(this.signers);
   });

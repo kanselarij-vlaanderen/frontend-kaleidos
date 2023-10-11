@@ -63,6 +63,14 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
+  get enableDigitalMinutes() {
+    return ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true;
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
   get label() {
     if (isPresent(this.args.label)) {
       return this.intl.t(this.args.label);
@@ -77,10 +85,21 @@ export default class DocumentsDocumentCardComponent extends Component {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  // getting complex with the temporary feature flags
+  // agendaitem doc can be marked - has decisionActivity and isReportOrMinutes false
+  // decisions can only be marked if flag is active and - has decisionActivity and isReportOrMinutes true
+  // minutes can only be marked if flag is active and - has no decisionActivity and isReportOrMinutes true
   get mayCreateSignMarkingActivity() {
-    return !this.signMarkingActivity
-      && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures')
+    return (
+      !this.signMarkingActivity &&
+      this.signaturesEnabled &&
+      this.currentSession.may('manage-signatures') &&
+      (
+        (!!this.args.decisionActivity && !this.args.piece.isReportOrMinutes) ||
+        (this.enableDigitalAgenda && this.args.piece.isReportOrMinutes && !!this.args.decisionActivity) ||
+        (this.enableDigitalMinutes && this.args.piece.isReportOrMinutes && !this.args.decisionActivity)
+      )
+    );
   }
 
   get agendaitemIsRetracted() {

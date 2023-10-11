@@ -11,7 +11,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class SignaturesCreateSignFlowPieceComponent extends Component {
   @service store;
 
-  @tracked showSecretaryModal = false;
   @tracked showMinisterModal = false;
   @tracked showApproversModal = false;
   @tracked showNotificationAddressesModal = false;
@@ -107,7 +106,7 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
 
   @action
   saveApprover(approver) {
-    this.approvers.addObject(approver);
+    this.approvers.addObject(approver.toLowerCase());
     this.showApproversModal = false;
     this.args.onChangeApprovers?.(this.approvers);
   }
@@ -120,7 +119,7 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
 
   @action
   saveNotificationAddress(address) {
-    this.notificationAddresses.addObject(address);
+    this.notificationAddresses.addObject(address.toLowerCase());
     this.showNotificationAddressesModal = false;
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }

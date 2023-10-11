@@ -21,12 +21,12 @@
     @loading={{this.createSignFlow.isRunning}}
     @asideVisible={{and this.showSidebar (not this.createSignFlow.isRunning)}}
     @content={{@model}}
-    @page={{this.pageSignaturesIndex}}
-    @size={{this.sizeSignaturesIndex}}
+    @page={{this.pageSignaturesDecisions}}
+    @size={{this.sizeSignaturesDecisions}}
     @numberOfItems={{@model.length}}
     @totalNumberOfItems={{@model.meta.count}}
-    @onChangeSize={{fn (mut this.sizeSignaturesIndex)}}
-    @onChangePage={{fn (mut this.pageSignaturesIndex)}}
+    @onChangeSize={{fn (mut this.sizeSignaturesDecisions)}}
+    @onChangePage={{fn (mut this.pageSignaturesDecisions)}}
   >
     <:header>
       <th>
@@ -142,14 +142,14 @@
                 >
                   {{t "consult-agendaitem-decision"}}
                 </AuLink>
-              {{else if this.meeting.id}}
+              {{else if (and this.meeting.id this.agenda.id)}}
                 <AuLink
                   @skin="naked"
                   @icon="document"
-                  @route="meeting"
-                  @models={{array this.meeting.id}}
+                  @route="agenda.minutes"
+                  @models={{array this.meeting.id this.agenda.id}}
                 >
-                  {{t "consult-agendaitem-decision"}}
+                  {{t "consult-minutes"}}
                 </AuLink>
               {{/if}}
             </div>
@@ -162,7 +162,7 @@
             />
           {{else if this.selectedSignFlows.length}}
             <Signatures::CreateSignFlow
-              @decisionActivities={{this.selectedDecisionActivitiesOrMeeting.value}}
+              @decisionActivities={{this.selectedDecisionActivitiesOrMeetings.value}}
               @onChangeSigners={{fn (mut this.signers)}}
               @isReportOrMinute={{true}}
             />

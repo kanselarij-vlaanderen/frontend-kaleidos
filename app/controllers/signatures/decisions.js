@@ -6,6 +6,8 @@ import { task } from 'ember-concurrency';
 import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { warn } from '@ember/debug';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 const MANDATORY_SORT_OPTION = 'decision-activity';
 const DEFAULT_SORT_OPTIONS = [
@@ -47,7 +49,7 @@ export default class SignaturesDecisionsController extends Controller {
 
   selectedDecisionActivitiesOrMeetings = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedSignFlows.map(async (signFlow) => this.getDecisionActivityOrMeeting(signFlow))
+      this.selectedSignFlows.map(async (signFlow) => await this.getDecisionActivityOrMeeting(signFlow))
     );
   });
 
@@ -142,17 +144,29 @@ export default class SignaturesDecisionsController extends Controller {
     return agendaitem;
   }
 
-  async getAgendaitemRouteModels(piece) {
-    const agendaitem = await this.getAgendaitem(piece);
-    if (agendaitem) {
-      const agenda = await agendaitem.agenda;
-      const meeting = await agenda.createdFor;
-      return [meeting, agenda, agendaitem];
+  async getAgendaRouteModels(piece) {
+    const modelName = piece.constructor.modelName;
+    if (modelName === 'report') {
+      const agendaitem = await this.getAgendaitem(piece);
+      if (agendaitem) {
+        const agenda = await agendaitem.agenda;
+        const meeting = await agenda.createdFor;
+        return [meeting, agenda, agendaitem];
+      }
     }
-    const meeting = await this.store.queryOne('meeting', {
-      'filter[minutes][:id:]': piece.id,
-    });
-    return [meeting, null, null];
+    if (modelName === 'minutes') {
+      const meeting = await this.store.queryOne('meeting', {
+        'filter[minutes][:id:]': piece.id,
+      });
+      const agenda = await this.store.queryOne('agenda', {
+        'filter[created-for][:id:]': meeting.id,
+        sort: '-serialnumber',
+        include: 'status',
+      });
+      return [meeting, agenda, null];
+    }
+    warn('found a marked piece that is neither a report nor minutes');
+    return [null, null, null];
   }
 
   clearSidebarContentSingleItem() {
@@ -177,7 +191,7 @@ export default class SignaturesDecisionsController extends Controller {
     this.signFlow = await signFlow;
     this.piece = await piece;
     [this.meeting, this.agenda, this.agendaitem] =
-      await this.getAgendaitemRouteModels(this.piece);
+      await this.getAgendaRouteModels(this.piece);
     this.decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlow);
     this.signers = [];
     this.showSidebar = true;
@@ -226,13 +240,18 @@ export default class SignaturesDecisionsController extends Controller {
           this.intl.t('successfully-started-sign-flow')
         );
       }
-    } catch {
+    } catch (error) {
       this.closeSidebar();
       await this.router.refresh(this.router.routeName);
-      this.toaster.error(
-        this.intl.t('create-sign-flow-error-message'),
-        this.intl.t('warning-title')
-      );
+      const digitalSigningErrorOptions = {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('create-sign-flow-error-message'),
+        errorContent: error.message,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      };
+      this.toaster.show(CopyErrorToClipboardToast, digitalSigningErrorOptions);
     }
   });
 

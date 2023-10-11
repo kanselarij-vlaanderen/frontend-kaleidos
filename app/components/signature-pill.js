@@ -58,12 +58,9 @@ export default class SignaturePillComponent extends Component {
     if (status) {
       if (status.uri === MARKED) {
         const piece = await this.args.piece;
-        const isReportOrMinutes = await piece.isReportOrMinutes;
-        if (isReportOrMinutes) {
-          route = "signatures.decisions";
-        } else {
-          route = "signatures.index";
-        }
+        route = piece?.isReportOrMinutes
+          ? 'signatures.decisions'
+          : 'signatures.index';
       }
       if (status.uri !== REFUSED &&
           status.uri !== CANCELED &&
