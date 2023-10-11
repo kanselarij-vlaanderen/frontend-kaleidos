@@ -13,7 +13,7 @@ export default class DecisionReportGeneration extends Service {
   });
 
   generateReplacementMinutes = task(async (minutes) => {
-    const fileMeta = await this.exportPdf.perform(report, 'generate-minutes-report');
+    const fileMeta = await this.exportPdf.perform(minutes, 'generate-minutes-report');
     await this.replaceFile(minutes, fileMeta.id);
   });
 
