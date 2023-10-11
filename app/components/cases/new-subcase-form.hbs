@@ -25,24 +25,12 @@
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <AuButton
-          data-test-new-subcase-save
-          @skin="primary"
-          @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
-          {{on "click" (perform this.saveSubcase)}}
-        >
-          {{t "new-subcase"}}
-        </AuButton>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-4">
+    <div class="au-c-case-form">
       <Auk::Panel class="auk-u-mb-2">
         <Auk::Panel::Header
           @size="auto"
@@ -184,7 +172,6 @@
           </Utils::LoadableContent>
         </Auk::Panel::Body>
       </Auk::Panel>
-
       <Auk::Panel class="auk-u-mb-2">
         <Auk::Panel::Header
           @size="auto"
@@ -198,11 +185,13 @@
             </Toolbar.Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
-        <Auk::Panel::Body>
+        <Auk::Panel::Body class="au-c-panel-tree">
           <Auk::CheckboxTree
-            @label='Huidige ministers'
+            @label='Alle ministers'
             @items={{this.currentMinisters}}
             @itemStructure={{hash label="fullName"}}
+            @selectedItems={{this.selectedCurrentMinisters}}
+            @didUpdate={{this.onChangeCurrentMinisters}}
             @layout="grid"
           />
         </Auk::Panel::Body>
@@ -220,76 +209,66 @@
             </Toolbar.Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
-        <Auk::Panel::Body>
-          <Auk::CheckboxTree
-            @label='Cultuur, Jeugd, Sport en Media'
-            @items={{this.culture}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Economie, Wetenschap en Innovatie'
-            @items={{this.economy}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Financiën en Begroting'
-            @items={{this.finances}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Kanselarij, Bestuur, Buitenlandse Zaken en Justitie'
-            @items={{this.governance}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Landbouw en Visserij'
-            @items={{this.agriculture}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Mobiliteit en Openbare Werken'
-            @items={{this.mobility}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Omgeving'
-            @items={{this.environment}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Onderwijs en Vorming'
-            @items={{this.education}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Welzijn, Volksgezondheid en Gezin'
-            @items={{this.health}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
-          <AuHr />
-          <Auk::CheckboxTree
-            @label='Werk en sociale economie'
-            @items={{this.work}}
-            @itemStructure={{hash label="fullName"}}
-            @layout="grid"
-          />
+        <Auk::Panel::Body class="au-c-panel-grid">
+          {{#each this.selectedCurrentMinisters as |minister|}}
+            {{#if (eq minister.fullName 'Jan Jambon')}}
+              <Auk::CheckboxTree
+                @label='Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management'
+                @items={{this.JanJambon}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Hilde Crevits')}}
+              <Auk::CheckboxTree
+                @label='Welzijn, Volksgezondheid en Gezin'
+                @items={{this.HildeCrevits}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Bart Somers')}}
+              <Auk::CheckboxTree
+                @label='Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen'
+                @items={{this.BartSomers}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Ben Weyts')}}
+              <Auk::CheckboxTree
+                @label='Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand'
+                @items={{this.BenWeyts}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Zuhal Demir')}}
+              <Auk::CheckboxTree
+                @label='Justitie en Handhaving, Omgeving, Energie en Toerisme'
+                @items={{this.ZuhalDemir}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Matthias Diependaele')}}
+              <Auk::CheckboxTree
+                @label='Financiën en Begroting, Wonen en Onroerend Erfgoed'
+                @items={{this.MatthiasDiepenDaele}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Lydia Peeters')}}
+              <Auk::CheckboxTree
+                @label='Mobiliteit en Openbare Werken'
+                @items={{this.LydiaPeeters}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Benjamin Dalle')}}
+              <Auk::CheckboxTree
+                @label='Brussel, Jeugd, Media en Armoedebestrijding'
+                @items={{this.BenjaminDalle}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{else if (eq minister.fullName 'Jo Brouns')}}
+              <Auk::CheckboxTree
+                @label='Economie, Innovatie, Werk, Sociale Economie en Landbouw'
+                @items={{this.JoBrouns}}
+                @itemStructure={{hash label="fullName"}}
+              />
+            {{/if}}
+          {{else}}
+            <Auk::EmptyState @message={{t "no-ministers-added"}} />
+          {{/each}}
         </Auk::Panel::Body>
       </Auk::Panel>
       <Auk::Panel class="auk-u-mb-2">
@@ -323,4 +302,27 @@
       </Auk::Panel>
     </div>
   </div>
+  <AuToolbar 
+    @reverse={{true}}
+    @size="large"
+    @border="top"
+    as |Group|>
+    <Group>
+      <AuLink
+        data-test-new-subcase-save
+        @skin="button-secondary"
+        @route="cases.case.subcases"
+      >
+        Annuleer
+      </AuLink>
+      <AuButton
+        data-test-new-subcase-save
+        @skin="primary"
+        @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
+        {{on "click" (perform this.saveSubcase)}}
+      >
+        {{t "new-subcase"}}
+      </AuButton>
+    </Group>
+  </AuToolbar>
  </div>

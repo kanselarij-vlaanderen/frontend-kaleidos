@@ -112,4 +112,9 @@ export default class CasesIndexController extends Controller {
   navigateToDecisionmakingFlow(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
   }
+
+  @action
+  navigateAfterCreate(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
+  }
 }

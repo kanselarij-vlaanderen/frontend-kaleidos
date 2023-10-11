@@ -7,12 +7,13 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
-
+import { startOfDay } from 'date-fns';
 
 export default class CasesNewSubcaseForm extends Component {
   @service store;
   @service conceptStore;
   @service router;
+  @service mandatees;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -32,12 +33,61 @@ export default class CasesNewSubcaseForm extends Component {
   @tracked case;
   @tracked publicationFlows;
 
+  @tracked currentMinisters = [];
+  @tracked selectedMinisterIds = [];
+  @tracked selectedCurrentMinisterIds = [];
+
   @tracked newPieces = A([]);
 
   constructor() {
     super(...arguments);
     this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
+    this.prepareMinisters.perform();
+  }
+
+  get selectedMinisterIds() {
+    return this.args.selected === null ? [] : this.args.selected;
+  }
+
+  get selectedCurrentMinisters() {
+    return this.selectedCurrentMinisterIds.map((ministerId) =>
+      this.currentMinisters.find((minister) => minister.id === ministerId)
+    );
+  }
+
+  get selectedCurrentMinistersName() {
+    return this.selectedCurrentMinisterIds.map((ministerLabel) =>
+      this.currentMinisters.find((minister) => minister.fullName === ministerLabel)
+    );
+  }
+
+  @action
+  onChangeCurrentMinisters(selected) {
+    this.selectedCurrentMinisterIds = selected.map((m) => m.id)
+    this.onChangeMinisters();
+  }
+
+  @action
+  onChangeMinisters() {
+    this.args.onChange?.(this.selectedCurrentMinisterIds);
+  }
+
+  @task
+  *prepareMinisters() {
+    yield this.prepareCurrentMinisters.perform();
+  }
+
+  @task
+  *prepareCurrentMinisters() {
+    const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
+    const sortedMandatees = currentMandatees
+          .sort((m1, m2) => m1.priority - m2.priority)
+    const sortedMinisters = yield Promise.all(
+      sortedMandatees.map((m) => m.person)
+    );
+    this.currentMinisters = [...new Set(sortedMinisters)];
+    this.selectedCurrentMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.currentMinisters.find((minister) => minister.id === ministerId));
   }
   
   @task
@@ -223,222 +273,141 @@ export default class CasesNewSubcaseForm extends Component {
     }
   }
 
-  // Mock data
-  currentMinisters = [
-    {
-      fullName: 'Jan Jambon, Minister-president van de Vlaamse Regering'
-    },
-    {
-      fullName: 'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management'
-    },
-    {
-      fullName: 'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin'
-    },
-    {
-      fullName: ' Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen'
-    },
-    {
-      fullName: 'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand'
-    },
-    {
-      fullName: 'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme'
-    },
-    {
-      fullName: 'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed'
-    },
-    {
-      fullName: 'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken'
-    },
-    {
-      fullName: 'Benjamin Dalle, Vlaams minister van Brussel, Jeugd, Media en Armoedebestrijding'
-    },
-    {
-      fullName: 'Jo Brouns, Vlaams minister van Economie, Innovatie, Werk, Sociale Economie en Landbouw'
-    }
-  ];
 
-  culture = [
+  JanJambon = [
     {
-      fullName: 'Cultuur'
+      'fullName': 'Buitenlandse Zaken',
     },
     {
-      fullName: 'Jeugd'
+      'fullName': 'Cultuur',
     },
     {
-      fullName: 'Media'
+      'fullName': 'Digitalisering',
     },
     {
-      fullName: 'Sport'
+      'fullName': 'Facilitair Management',
     }
-  ];
-  economy = [
+  ]
+
+  HildeCrevits = [
     {
-      fullName: 'Economie'
+      'fullName': 'Openbare Werken',
     },
     {
-      fullName: 'Wetenschappelijk onderzoek'
+      'fullName': 'Energie',
     },
     {
-      fullName: 'Innovatie'
+      'fullName': 'Leefmilieu',
     },
     {
-      fullName: 'Wetenschapscommunicatie'
+      'fullName': 'Natuur',
     }
-  ];
-  finances = [
+  ]
+
+  BartSomers = [
     {
-      fullName: 'Budgettair beleid'
+      'fullName': 'Binnenlands Bestuur',
     },
     {
-      fullName: 'Fiscaliteit'
+      'fullName': 'Bestuurszaken',
     },
     {
-      fullName: 'Financiële operaties'
+      'fullName': 'Inburgering',
     },
     {
-      fullName: 'Boekhouding'
+      'fullName': 'Gelijke kansen',
     }
-  ];
-  governance = [
+  ]
+
+  BenWeyts = [
     {
-      fullName: 'Ondersteuning Vlaamse Regering'
+      'fullName': 'Mobiliteit',
     },
     {
-      fullName: 'Buitenlands beleid'
+      'fullName': 'Openbare Werken',
     },
     {
-      fullName: 'Ontwikkelingssamenwerking'
+      'fullName': 'Vlaamse Rand',
     },
     {
-      fullName: 'Gelijke kansen en integratie en inburgering'
+      'fullName': 'Toerisme',
     },
     {
-      fullName: 'Brussel'
-    },
-    {
-      fullName: 'Vlaamse rand'
-    },
-    {
-      fullName: 'Binnenlands bestuur en stedenbeleid'
-    },
-    {
-      fullName: 'Rampenschade'
-    },
-    {
-      fullName: 'Digitalisering'
-    },
-    {
-      fullName: 'Bestuursrechtspraak'
-    },
-    {
-      fullName: 'Justitie en handhaving'
-    },
-    {
-      fullName: 'Interne dienstverlening Vlaamse overheid'
-    },
-    {
-      fullName: 'Toerisme'
-    },
-    {
-      fullName: 'Internationaal ondernemen'
-    },
-    {
-      fullName: 'Interne dienstverlening Vlaamse overheid'
+      'fullName': 'Dierenwelzijn',
     }
-  ];
-  agriculture = [
+  ]
+
+  ZuhalDemir = [
     {
-      fullName: 'Landbouw en zeevisserij'
+      'fullName': 'Justitie en handhaving',
     },
     {
-      fullName: 'Landbouw- en zeevisserijonderzoek'
+      'fullName': 'Omgeving',
     },
     {
-      fullName: 'Promotie landbouw, tuinbouw en zeevisserij'
+      'fullName': 'Energie',
+    },
+    {
+      'fullName': 'Toerisme',
     }
-  ];
-  mobility = [
+  ]
+
+  MatthiasDiepenDaele = [
     {
-      fullName: 'Regionale luchthavens'
+      'fullName': 'Financiën',
     },
     {
-      fullName: 'Gemeenschappelijk vervoer'
+      'fullName': 'Begroting',
     },
     {
-      fullName: 'Algemeen mobiliteitsbeleid'
+      'fullName': 'Wonen',
     },
     {
-      fullName: 'Weginfrastructuur en beleid'
-    },
-    {
-      fullName: 'Waterinfrastructuur en beleid'
+      'fullName': 'Onroerend Erfgoed',
     }
-  ];
-  environment = [
+  ]
+
+  LydiaPeeters = [
     {
-      fullName: 'Onroerend erfgoed'
+      'fullName': 'Begroting',
     },
     {
-      fullName: 'Omgeving en natuur'
+      'fullName': 'Financiën',
     },
     {
-      fullName: 'Klimaat'
-    },
-    {
-      fullName: 'Energie'
-    },
-    {
-      fullName: 'Dierenwelzijn'
-    },
-    {
-      fullName: 'Wonen'
+      'fullName': 'Energie',
     }
-  ];
-  education = [
+  ]
+
+  BenjaminDalle = [
     {
-      fullName: 'Kleuter- en leerplichtonderwijs'
+      'fullName': 'Brussel',
     },
     {
-      fullName: 'Hoger onderwijs'
+      'fullName': 'Jeugd',
     },
     {
-      fullName: 'Deeltijds kunstonderwijs en volwassenenonderwijs'
-    },
-    {
-      fullName: 'Ondersteuning van het onderwijsveld'
+      'fullName': 'Media',
     }
-  ];
-  health = [
+  ]
+
+  JoBrouns = [
     {
-      fullName: 'Welzijn'
+      'fullName': 'Economie',
     },
     {
-      fullName: 'Gezondheids- en woonzorg'
+      'fullName': 'Innovatie',
     },
     {
-      fullName: 'Opgroeien'
+      'fullName': 'Werk',
     },
     {
-      fullName: 'Personen met een beperking'
+      'fullName': 'Sociale Economie',
     },
     {
-      fullName: 'Sociale bescherming'
-    },
-    {
-      fullName: 'Zorginfrastructuur'
+      'fullName': 'Landbouw'
     }
-  ];
-  work = [
-    {
-      fullName: 'Werk'
-    },
-    {
-      fullName: 'Competenties'
-    },
-    {
-      fullName: 'Sociale economie'
-    }
-  ];
+  ]
 
   @action
   uploadPiece(file) {

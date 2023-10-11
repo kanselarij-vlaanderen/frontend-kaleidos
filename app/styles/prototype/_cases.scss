@@ -1,0 +1,31 @@
+.au-c-panel-tree {
+  .au-c-control-group--grid > * {
+    width: calc(50% - 2rem);
+  }
+
+  @include mq(medium) {
+    .au-c-control-group--grid > * {
+      width: calc(20% - 2rem);
+    }
+  }
+}
+
+.au-c-panel-grid {
+  @include mq(medium) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+  > * {
+    width: calc(33% - 2rem);
+  }
+}
+}
+
+.au-c-case-form {
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: $au-unit;
+}
