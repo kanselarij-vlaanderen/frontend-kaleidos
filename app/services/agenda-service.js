@@ -142,8 +142,6 @@ export default class AgendaService extends Service {
       sort: '-created', // serialnumber
     });
     const agendaItemType = await subcase.agendaItemType;
-    const isAnnouncement =
-      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const numberToAssign = await this.computeNextItemNumber(
       lastAgenda,
       agendaItemType
@@ -162,15 +160,6 @@ export default class AgendaService extends Service {
       await submissionActivity.save();
     }
 
-    // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement
-      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      defaultDecisionResultCodeUri
-    );
-
     // default secretary
     const decisionSecretary = {};
     if (this.enableDigitalAgenda) {
@@ -187,7 +176,6 @@ export default class AgendaService extends Service {
       {
         subcase,
         startDate: meeting.plannedStart,
-        decisionResultCode,
         ...decisionSecretary,
       }
     );
