@@ -115,7 +115,7 @@
           </div>
         </AuFormRow>
       {{/if}}
-      {{#if this.enableDigitalAgenda}}
+      {{#if (and this.enableDigitalAgenda (not @meeting.isPreKaleidos))}}
         <AuFormRow>
           <Auk::Label>
             {{t "secretary-for-meeting"}}

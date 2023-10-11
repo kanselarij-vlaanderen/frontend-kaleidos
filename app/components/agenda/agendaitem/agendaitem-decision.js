@@ -376,6 +376,11 @@ export default class AgendaitemDecisionComponent extends Component {
           this.editorInstanceBetreft.htmlContent,
           this.editorInstanceBeslissing.htmlContent
         ));
+        const meeting = await this.args.agendaContext.meeting;
+        const secretary = await meeting.secretary;
+        if (secretary) {
+          this.args.decisionActivity.secretary = secretary;
+        }
     } else {
       documentContainer = await this.report.documentContainer;
       report = this.report;
