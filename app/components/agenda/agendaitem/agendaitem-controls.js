@@ -122,7 +122,7 @@ export default class AgendaitemControls extends Component {
 
   @task
   *updateDecisionPiecePart(message) {
-    const report = yield this.store.query('report', {
+    const report = yield this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
       },

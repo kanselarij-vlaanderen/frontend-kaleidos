@@ -164,6 +164,40 @@ export default class AgendaitemDecisionComponent extends Component {
   onDecisionEdit = task(async () => {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
+    await this.updateDecisionPiecePart.perform();
+  });
+
+  updateDecisionPiecePart = task(async () => {
+    if (!this.report || !this.betreftPiecePart) {
+      return;
+    }
+    let newBeslissingValue = this.beslissingPiecePart.value;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    switch (decisionResultCode.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingValue = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingValue = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        break;
+    }
+    if (newBeslissingValue !== this.beslissingPiecePart.value) {
+      const now = new Date();
+      const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
+        title: 'Beslissing',
+        value: newBeslissingValue,
+        report: this.report,
+        previousPiecePart: this.beslissingPiecePart,
+        created: now,
+      });
+      await newBeslissingPiecePart.save();
+      await this.decisionReportGeneration.generateReplacementReport.perform(
+        this.report
+      );
+    }
+    this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
