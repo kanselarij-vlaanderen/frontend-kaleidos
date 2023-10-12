@@ -17,18 +17,6 @@
           </h4>
         </Group.Item>
       </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          <AuButton
-            @skin="secondary"
-            @icon="pencil"
-            @loading={{this.loadSigners.isPending}}
-            {{on "click" this.startEditSigners}}
-          >
-            {{t "edit-2"}}
-          </AuButton>
-        </Group.Item>
-      </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body class="auk-u-p-0">
@@ -56,12 +44,3 @@
     </AuList>
   </Auk::Panel::Body>
 </Auk::Panel>
-
-{{#if this.showSecretaryModal}}
-  <Signatures::SelectSecretaryModal
-    @loading={{this.saveSigners.isRunning}}
-    @selected={{map-by "id" this.signers}}
-    @onConfirm={{this.saveSigners.perform}}
-    @onCancel={{toggle "showSecretaryModal" this}}
-  />
-{{/if}}

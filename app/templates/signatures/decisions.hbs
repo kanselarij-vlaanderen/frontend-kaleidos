@@ -53,6 +53,7 @@
         @onChange={{this.changeSort}}
         @label={{t "meeting-date"}}
       />
+      <th>{{t "secretary"}}</th>
       <th></th>
     </:header>
     <:body as |signFlow|>
@@ -91,6 +92,15 @@
             </AuPill>
           </td>
           <td>{{date (await (this.getMeetingDate signFlow))}}</td>
+          <td>
+            {{#let (await (this.getSecretaryName signFlow)) as |name|}}
+              {{#if name}}
+                {{name}}
+              {{else}}
+                -
+              {{/if}}
+            {{/let}}
+          </td>
           <td>
             <AuButton
               @skin="naked"

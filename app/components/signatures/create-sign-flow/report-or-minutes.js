@@ -1,15 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency';
 import { TrackedArray } from 'tracked-built-ins';
 import { trackedFunction } from 'ember-resources/util/function';
 
 export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Component {
   @service store;
 
-  @tracked showSecretaryModal = false;
   @tracked signers = new TrackedArray([]);
   @tracked hasConflictingSigners = false;
 
@@ -40,22 +37,4 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     }
     this.args.onChangeSigners?.(this.signers);
   });
-
-  @action
-  startEditSigners() {
-    this.showSecretaryModal = true;
-  }
-
-  saveSigners = task(async (selected) => {
-    this.signers = new TrackedArray([selected]);
-    this.showSecretaryModal = false;
-
-    this.args.onChangeSigners?.(this.signers);
-  });
-
-  @action
-  removeSigner(signer) {
-    this.signers.removeObject(signer);
-    this.args.onChangeSigners?.(this.signers);
-  }
 }

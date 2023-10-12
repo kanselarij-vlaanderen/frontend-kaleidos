@@ -125,14 +125,21 @@ export default class SignaturesDecisionsController extends Controller {
     }
   }
 
-  getMeetingDate = async (signFlowOrPromise) => {
-    const record = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+  getSecretaryName = async (signFlowOrPromise) => {
+    const decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+    const secretary = await decisionActivityOrMeeting.secretary;
+    const person = await secretary.person;
+    return person.fullName;
+  }
 
-    const modelName = record.constructor.modelName;
+  getMeetingDate = async (signFlowOrPromise) => {
+    const decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+
+    const modelName = decisionActivityOrMeeting.constructor.modelName;
     if (modelName === 'decision-activity') {
-      return record.startDate;
+      return decisionActivityOrMeeting.startDate;
     } else {
-      return record.plannedStart;
+      return decisionActivityOrMeeting.plannedStart;
     }
   }
 

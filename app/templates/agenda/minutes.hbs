@@ -118,7 +118,7 @@
               />
             {{/if}}
           </Auk::Panel::Body>
-          {{#if (and this.currentPiecePart.value (user-may "manage-minutes"))}}
+          {{#if (and (user-may "manage-minutes") this.currentPiecePart.value)}}
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
