@@ -1245,5 +1245,9 @@
   "type-to-search": "Typ om te zoeken",
   "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten.",
   "decisions-and-minutes": "Beslissingen en notulen",
-  "decisions-and-minutes-ongoing": "Beslissingen en notulen opvolgen"
+  "decisions-and-minutes-ongoing": "Beslissingen en notulen opvolgen",
+  "minutes-approval": "{mededelingOrNota} wordt goedgekeurd confer beslissingsfiche {reportName}.",
+  "minutes-retracted": "{mededelingOrNota} wordt ingetrokken.",
+  "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
+  "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering."
 }

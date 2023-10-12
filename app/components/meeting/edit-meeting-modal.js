@@ -120,6 +120,13 @@ export default class MeetingEditMeetingComponent extends Component {
     );
   }
 
+  get enableDigitalMinutes() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_MINUTES === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_MINUTES === true
+    );
+  }
+
   @action
   setStartDate(date) {
     this.startDate = date;
@@ -252,20 +259,17 @@ export default class MeetingEditMeetingComponent extends Component {
         });
         for (let decisionActivity of decisionActivities.slice()) {
           decisionActivity.secretary = this.secretary;
-          yield decisionActivity.save();
-          if (this.enableDigitalAgenda) {
-            const report = yield this.store.queryOne('report', {
-              'filter[:has-no:next-piece]': true,
-              'filter[decision-activity][:id:]': decisionActivity.id,
-            });
-            const pieceParts = yield report?.pieceParts;
-            if (pieceParts?.length) {
-              yield this.decisionReportGeneration.generateReplacementReport.perform(report);
-            }
+          yield decisionActivity.save(); 
+          const report = yield this.store.queryOne('report', {
+            'filter[:has-no:next-piece]': true,
+            'filter[decision-activity][:id:]': decisionActivity.id,
+          });
+          const pieceParts = yield report?.pieceParts;
+          if (pieceParts?.length) {
+            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
           }
         }
       }
-
     }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
@@ -275,7 +279,9 @@ export default class MeetingEditMeetingComponent extends Component {
 
     try {
       yield this.args.meeting.save();
-      yield this.updateSecretaryInMinutes();
+      if (this.enableDigitalMinutes) {
+        yield this.updateSecretaryInMinutes();
+      }
       const saveActivities = [
         this.themisPublicationActivity.save(),
         this.documentPublicationActivity.save(),

@@ -10,21 +10,10 @@ import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
-}
-
-function formatDocuments(pieceRecords, isApproval) {
-  const names = pieceRecords.map((record) => record.name);
-  const simplifiedNames = names.map((name) => {
-    if (isApproval) {
-      return new VrNotulenName(name).vrNumberWithSuffix();
-    }
-    return new VRDocumentName(name).vrNumberWithSuffix();
-  });
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
@@ -90,7 +79,10 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[:has-no:next-piece]': true,
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -296,17 +288,24 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  updateBetreftContent() {
+  async updateBetreftContent() {
     // *NOTE: approval decisions have a totally different text block.
     // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
     const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
-    this.setBetreftEditorContent(
-      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-      }</p>`
-    );
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    if (subcase) {
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase.subcaseName)}</p>`
+      );
+    } else {
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents)}</p>`
+      );
+    }
+
   }
 
   @action

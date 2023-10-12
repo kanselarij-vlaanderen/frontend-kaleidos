@@ -7,7 +7,7 @@ import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
@@ -37,29 +37,80 @@ function renderAttendees(attendees) {
   `;
 }
 
-function renderNotas(notas) {
-  return renderAgendaitemList(notas);
+async function renderNotas(notas, betreftPieceParts, intl) {
+  return await renderAgendaitemList(notas, betreftPieceParts, intl);
 }
 
-function renderAnnouncements(announcements) {
+async function renderAnnouncements(announcements, betreftPieceParts, intl) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${renderAgendaitemList(announcements)}
+    ${await renderAgendaitemList(announcements, betreftPieceParts, intl)}
   `;
 }
 
-function renderAgendaitemList(agendaitems) {
-  return agendaitems
-    .map(
-      (agendaitem) => `
-        <h4><u>${
-          agendaitem.number
-        }. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
-        ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
-      `
-    )
-    .join('');
+async function renderAgendaitemList(agendaitems, betreftPieceParts, intl) {
+  let agendaitemList = "";
+  for (const agendaitem of agendaitems) {
+    agendaitemList += await getMinutesListItem(betreftPieceParts, agendaitem, intl);
+  }
+  return agendaitemList;
 }
+async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
+  const betreftPiecePart = betreftPieceParts.find(piecePart => piecePart.agendaitemID === agendaitem.id);
+  const treatment = await agendaitem.treatment;
+  const decisionActivity = await treatment?.decisionActivity;
+  const decisionResultCode = await decisionActivity?.decisionResultCode;
+  let mededelingOrNota = "";
+  if (agendaitem.type?.get('uri') === constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+    mededelingOrNota = "deze mededeling";
+  } else {
+    mededelingOrNota = "dit punt";
+  }
+  let text = "";
+  switch (decisionResultCode?.uri) {
+    case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
+      if (betreftPiecePart) {
+        text = intl.t("minutes-approval", {
+          mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
+          reportName: betreftPiecePart['reportName']
+        })
+      }
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+      text = intl.t("minutes-retracted", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+      })
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
+      text = intl.t("minutes-acknowledged", {
+        mededelingOrNota: mededelingOrNota
+      })
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
+      text = intl.t("minutes-postponed", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+      })
+      break;
+    default:
+      break;
+  }
+  if (betreftPiecePart) {
+    return `<h4><u>${
+      agendaitem.number
+    }. ${betreftPiecePart['value'].replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n').trim().toUpperCase()}</u></h4>
+    <p>${text}</p>
+    `
+  }
+  const documents = await agendaitem.pieces;
+  return `
+  <h4><u>${
+    agendaitem.number
+  }. ${generateBetreft(agendaitem.shortTitle, agendaitem.title, agendaitem.isApproval, documents).toUpperCase()}</u></h4>
+  <p>${text}</p>`
+}
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 function renderAbsentees() {
   return `
@@ -75,13 +126,13 @@ function renderAbsentees() {
   `;
 }
 
-function renderMinutes(data) {
-  const { attendees, notas, announcements } = data;
+async function renderMinutes(data, intl) {
+  const { attendees, notas, announcements, betreftPieceParts } = data;
   return `
     ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? renderNotas(notas) : ''}
-    ${announcements ? renderAnnouncements(announcements) : ''}
+    ${notas ? await renderNotas(notas, betreftPieceParts, intl) : ''}
+    ${announcements ? await renderAnnouncements(announcements, betreftPieceParts, intl) : ''}
   `;
 }
 
@@ -133,8 +184,8 @@ export default class AgendaMinutesController extends Controller {
 
       const defaultAccessLevel = await this.store.findRecordByUri(
         'concept',
-        constants.ACCESS_LEVELS.INTERN_SECRETARIE,
-      ); // Default Intern Secretarie so that the minutes aren't visible to other users by default
+        constants.ACCESS_LEVELS.INTERN_SECRETARIE
+      );
 
       minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
@@ -203,12 +254,9 @@ export default class AgendaMinutesController extends Controller {
     await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.decisionReportGeneration.generateReplacementMinutes.perform(
+    await this.decisionReportGeneration.generateReplacementMinutes.perform(
       newVersion,
     );
-    if (fileMeta) {
-      await this.replaceMinutesFile(newVersion, fileMeta.id);
-    }
 
     await newVersion.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
@@ -224,7 +272,7 @@ export default class AgendaMinutesController extends Controller {
     }
 
     this.editor.setHtmlContent(
-      renderMinutes(await this.reshapeModelForRender())
+      await renderMinutes(await this.reshapeModelForRender(), this.intl)
     );
   }
 
@@ -305,7 +353,8 @@ export default class AgendaMinutesController extends Controller {
     return {
       attendees: await this.getAttendees(),
       notas: this.model.notas,
-      announcements: this.model.announcements
+      announcements: this.model.announcements,
+      betreftPieceParts: this.model.betreftPieceParts
     };
   }
 }
