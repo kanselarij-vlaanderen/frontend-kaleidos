@@ -7,6 +7,7 @@ import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
@@ -132,8 +133,8 @@ export default class AgendaMinutesController extends Controller {
 
       const defaultAccessLevel = await this.store.findRecordByUri(
         'concept',
-        constants.ACCESS_LEVELS.INTERN_OVERHEID
-      );
+        constants.ACCESS_LEVELS.INTERN_SECRETARIE,
+      ); // Default Intern Secretarie so that the minutes aren't visible to other users by default
 
       minutes = this.store.createRecord('minutes', {
         name: `Notulen - P${dateFormat(
@@ -144,6 +145,7 @@ export default class AgendaMinutesController extends Controller {
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
         documentContainer,
+        isReportOrMinutes: true,
       });
       await minutes.save();
     } else {
@@ -188,6 +190,7 @@ export default class AgendaMinutesController extends Controller {
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
       accessLevel: minutes.accessLevel,
+      isReportOrMinutes: true,
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
@@ -200,7 +203,9 @@ export default class AgendaMinutesController extends Controller {
     await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(newVersion);
+    const fileMeta = await this.decisionReportGeneration.generateReplacementMinutes.perform(
+      newVersion,
+    );
     if (fileMeta) {
       await this.replaceMinutesFile(newVersion, fileMeta.id);
     }
