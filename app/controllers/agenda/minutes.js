@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function renderAttendees(attendees) {
