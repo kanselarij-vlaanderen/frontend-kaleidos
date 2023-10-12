@@ -9,6 +9,12 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
+import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+
+function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
+  let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
+  return replaceById(newHtml, 'secretary', newSecretary);
+}
 
 /**
  * @argument {isNew}
@@ -108,7 +114,17 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
+  }
+
+  get enableDigitalMinutes() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_MINUTES === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_MINUTES === true
+    );
   }
 
   @action
@@ -233,37 +249,17 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.args.meeting.secretary != this.secretary) {
-      const minutes = yield this.args.meeting.minutes;
-      if (minutes) {
-        const latestMinutesPiecePart = yield this.store.queryOne('piece-part', {
-          filter: {
-            minutes: { ':id:': minutes.id },
-            ':has-no:next-piece-part': true,
-          },
+    if (this.enableDigitalAgenda) {
+      const currentMeetingSecretary = yield this.args.meeting.secretary;
+      if (currentMeetingSecretary?.uri !== this.secretary.uri) {
+        this.args.meeting.secretary = this.secretary;
+        const decisionActivities = yield this.store.queryAll('decision-activity', {
+          'filter[treatment][agendaitems][agenda][created-for][:id:]':
+            this.args.meeting.id,
         });
-        const currentSecretary = yield this.args.meeting.secretary
-        const currentSecretaryPerson = yield currentSecretary.person;
-        const currentSecretaryPersonFullName = yield currentSecretaryPerson.get('fullName');
-        const newSecretaryPerson = yield this.secretary.person;
-        const newSecretaryPersonFullName = yield newSecretaryPerson.get('fullName');
-        latestMinutesPiecePart.value = latestMinutesPiecePart.value.replace(currentSecretaryPersonFullName, newSecretaryPersonFullName);
-        yield latestMinutesPiecePart.save();
-
-        const fileMeta = yield this.exportPdf.perform(minutes);
-        if (fileMeta) {
-          yield this.replaceMinutesFile(minutes, fileMeta.id);
-        }
-      }
-      this.args.meeting.secretary = this.secretary;
-      const decisionActivities = yield this.store.queryAll('decision-activity', {
-        'filter[treatment][agendaitems][agenda][created-for][:id:]':
-          this.args.meeting.id,
-      });
-      for (let decisionActivity of decisionActivities.slice()) {
-        decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save(); 
-        if (this.enableDigitalAgenda) {
+        for (let decisionActivity of decisionActivities.slice()) {
+          decisionActivity.secretary = this.secretary;
+          yield decisionActivity.save(); 
           const report = yield this.store.queryOne('report', {
             'filter[:has-no:next-piece]': true,
             'filter[decision-activity][:id:]': decisionActivity.id,
@@ -283,6 +279,9 @@ export default class MeetingEditMeetingComponent extends Component {
 
     try {
       yield this.args.meeting.save();
+      if (this.enableDigitalMinutes) {
+        yield this.updateSecretaryInMinutes();
+      }
       const saveActivities = [
         this.themisPublicationActivity.save(),
         this.documentPublicationActivity.save(),
@@ -299,14 +298,23 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  exportPdf = task(async (minutes) => {
-    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
+  async updateSecretaryInMinutes() {
+    const minutes = await this.args.meeting.minutes;
+    if (minutes) {
+      const piecePart = await this.store.queryOne('piece-part', {
+        'filter[:has-no:next-piece-part]': true,
+        'filter[minutes][:id:]': minutes.id,
+      });
+      const newValue = replaceSecretary(piecePart.value,
+        this.secretary.person.get('fullName'),
+        this.secretary.title.toLowerCase());
+      piecePart.value = newValue;
+      await piecePart.save();
+      await this.decisionReportGeneration.generateReplacementMinutes.perform(
+        minutes,
+      );
     }
-    return await resp.json();
-  });
+  }
 
   filterMainMeetingResults(meeting, results) {
     return results.filter((result) => result.id != meeting.id);

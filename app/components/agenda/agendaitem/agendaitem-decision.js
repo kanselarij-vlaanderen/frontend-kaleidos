@@ -104,7 +104,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.beslissingPiecePart.value
       );
 
-    await this.saveReport(
+    await this.saveReport.perform(
       await report.documentContainer,
       report,
       betreftPiecePart,
@@ -330,7 +330,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(documentContainer, report, null, betreftPiecePart);
+    await this.saveReport.perform(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -343,7 +343,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
+    await this.saveReport.perform(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -376,7 +376,7 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
 
-    await this.saveReport(
+    await this.saveReport.perform(
       documentContainer,
       report,
       beslissingPiecePart,
@@ -386,12 +386,12 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isEditing = false;
   });
 
-  async saveReport(
+  saveReport = task(async (
     documentContainer,
     report,
     beslissingPiecePart,
     betreftPiecePart
-  ) {
+  ) => {
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -405,7 +405,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.decisionReportGeneration.generateReplacementReport.perform(
       report
     );
-  }
+  });
 
   createNewDocumentContainer() {
     const documentContainer = this.store.createRecord('document-container', {
