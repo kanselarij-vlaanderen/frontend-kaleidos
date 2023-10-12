@@ -13,11 +13,17 @@ function formatDocuments(pieceRecords, isApproval) {
   return `(${formatter.format(simplifiedNames)})`;
 }
 
-function generateBetreft(shortTitle, title, isApproval, documents) {
-  return `${shortTitle}${title ? `<br/>${title}` : ''}${
-    documents && documents.length ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-  }`;
+function generateBetreft(shortTitle, title = null, isApproval, documents, subcaseName = null) {
+
+  return `${shortTitle}
+  ${title ? `<br/>${title}` : ''}
+  ${subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : ''}
+  ${documents && documents.length ? `<br/>${formatDocuments(documents, isApproval)}` : ''}`;
 }
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 
 export {
