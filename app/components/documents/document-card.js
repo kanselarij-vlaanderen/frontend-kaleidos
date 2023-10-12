@@ -135,12 +135,12 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadReportPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
+    const loadReportPieceParts = (id) =>
+      this.store.query('piece-part', {
         'filter[report][:id:]': id,
       });
-    const loadMinutesPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
+    const loadMinutesPieceParts = (id) =>
+      this.store.query('piece-part', {
         'filter[minutes][:id:]': id,
       });
     if (this.args.piece) {
@@ -151,13 +151,22 @@ export default class DocumentsDocumentCardComponent extends Component {
       // check for alternative label
       const modelName = this.args.piece.constructor.modelName;
       if (!isPresent(this.args.label)) {
-        let piecePart;
+        let pieceParts;
         if (modelName === 'report') {
-          piecePart = yield loadReportPiecePart(this.piece.id);
+          pieceParts = yield loadReportPieceParts(this.piece.id);
         } else if (modelName === 'minutes') {
-          piecePart = yield loadMinutesPiecePart(this.piece.id);
+          pieceParts = yield loadMinutesPieceParts(this.piece.id);
         }
-        this.altLabel = piecePart ? this.intl.t('created-on') : null;
+        
+        if (pieceParts) {
+          if (pieceParts.length === 1) {
+            this.altLabel = this.intl.t('created-on');
+          } else {
+            this.altLabel = this.intl.t('edited-on');
+          }
+        } else {
+          this.altLabel = null;
+        }
       }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
