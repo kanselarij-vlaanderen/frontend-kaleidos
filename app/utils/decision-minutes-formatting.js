@@ -14,11 +14,12 @@ function formatDocuments(pieceRecords, isApproval) {
 }
 
 function generateBetreft(shortTitle, title = null, isApproval, documents, subcaseName = null) {
-
-  return `${shortTitle}
-  ${title ? `<br/>${title}` : ''}
-  ${subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : ''}
-  ${documents && documents.length ? `<br/>${formatDocuments(documents, isApproval)}` : ''}`;
+  let betreft = '';
+  betreft += `${shortTitle}`;
+  betreft += title ? `<br/>${title}` : '';
+  betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  betreft += (documents && documents.length) ? `<br/>${formatDocuments(documents, isApproval)}` : '';
+  return betreft;
 }
 
 function capitalizeFirstLetter(string) {
