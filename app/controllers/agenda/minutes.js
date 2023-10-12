@@ -97,7 +97,7 @@ async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
   if (betreftPiecePart) {
     return `<h4><u>${
       agendaitem.number
-    }. ${betreftPiecePart['value'].replace( /(<([^>]+)>)/ig, '').toUpperCase()}</u></h4>
+    }. ${betreftPiecePart['value'].replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n').trim().toUpperCase()}</u></h4>
     <p>${text}</p>
     `
   }
