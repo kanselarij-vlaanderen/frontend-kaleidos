@@ -9,6 +9,7 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
+import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {isNew}
@@ -109,6 +110,10 @@ export default class MeetingEditMeetingComponent extends Component {
 
   get enableDigitalAgenda() {
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  get isPreKaleidos() {
+    return this.startDate < KALEIDOS_START_DATE;
   }
 
   @action
@@ -233,7 +238,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.enableDigitalAgenda) {
+    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
       const currentMeetingSecretary = yield this.args.meeting.secretary;
       if (currentMeetingSecretary?.uri !== this.secretary.uri) {
         this.args.meeting.secretary = this.secretary;
