@@ -265,21 +265,6 @@ export default class MeetingEditMeetingComponent extends Component {
         }
       }
 
-      // Update secretary in minutes
-      const minutes = yield this.args.meeting.minutes;
-      if (minutes) {
-        const piecePart = yield this.store.queryOne('piece-part', {
-          'filter[:has-no:next-piece-part]': true,
-          'filter[minutes][:id:]': minutes.id,
-        });
-        const newValue = replaceSecretary(piecePart.value, this.secretary.person.get('fullName'));
-        piecePart.value = newValue;
-        yield piecePart.save();
-        yield this.decisionReportGeneration.generateReplacementReport.perform(
-          minutes,
-          'minutes'
-        );
-      }
     }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
@@ -289,6 +274,7 @@ export default class MeetingEditMeetingComponent extends Component {
 
     try {
       yield this.args.meeting.save();
+      yield this.updateSecretaryInMinutes();
       const saveActivities = [
         this.themisPublicationActivity.save(),
         this.documentPublicationActivity.save(),
@@ -302,6 +288,22 @@ export default class MeetingEditMeetingComponent extends Component {
       this.toaster.error();
     } finally {
       yield this.args.didSave();
+    }
+  }
+
+  async updateSecretaryInMinutes() {
+    const minutes = await this.args.meeting.minutes;
+    if (minutes) {
+      const piecePart = await this.store.queryOne('piece-part', {
+        'filter[:has-no:next-piece-part]': true,
+        'filter[minutes][:id:]': minutes.id,
+      });
+      const newValue = replaceSecretary(piecePart.value, this.secretary.person.get('fullName'));
+      piecePart.value = newValue;
+      await piecePart.save();
+      await this.decisionReportGeneration.generateReplacementMinutes.perform(
+        minutes,
+      );
     }
   }
 

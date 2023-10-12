@@ -11,11 +11,7 @@ export function replaceById(htmlString, id, newValue) {
   const element = template.content.querySelector(`#${id}`);
   if (element) {
     element.innerHTML = newValue;
-    return template.innerHTML;
-  } else {
-    console.debug(
-      `No element with id "${id}" found, could not set innerHTML`
-    );
-    return htmlString;
   }
+
+  return template.innerHTML;
 }
