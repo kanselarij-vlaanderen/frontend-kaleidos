@@ -6,12 +6,12 @@ import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
+  let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
     <table>
@@ -29,8 +29,8 @@ function renderAttendees(attendees) {
           <td>${ministers.join('<br/>')}</td>
         </tr>
         <tr>
-          <td>De secretaris</td>
-          <td>${secretary}</td>
+          <td>De <span id="secretary-title">${secretaryTitle}</span></td>
+          <td id="secretary">${mandateeName(secretary)}</td>
         </tr>
       </tbody>
     </table>
@@ -86,17 +86,15 @@ function renderMinutes(data) {
 }
 
 function mandateeName(mandatee) {
-  return mandatee ? `${mandatee.person.get('firstName')} ${mandatee.person.get(
-    'lastName'
-  )}` : '';
+  return mandatee ? mandatee.person.get('fullName') : '';
 }
 
 export default class AgendaMinutesController extends Controller {
   @service store;
-  @service toaster;
   @service router;
   @service intl;
   @service pieceAccessLevelService;
+  @service decisionReportGeneration;
 
   // agenda;
   meeting;
@@ -118,14 +116,6 @@ export default class AgendaMinutesController extends Controller {
   });
 
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
-
-  exportPdf = task(async (minutes) => {
-    try {
-      return await generateMinutes(minutes.id);
-    } catch (error) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-    }
-  });
 
   saveMinutes = task(async () => {
     let minutes = null;
@@ -171,10 +161,9 @@ export default class AgendaMinutesController extends Controller {
     await minutes.save();
     await piecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(minutes);
-    if (fileMeta) {
-      await this.replaceMinutesFile(minutes, fileMeta.id);
-    }
+    this.decisionReportGeneration.generateReplacementMinutes.perform(
+      minutes,
+    );
 
     await minutes.save();
     await this.meeting.belongsTo('minutes').reload();
@@ -182,14 +171,6 @@ export default class AgendaMinutesController extends Controller {
     this.isEditing = false;
     this.refresh();
   });
-
-  async replaceMinutesFile(minutes, fileId) {
-    await deleteFile(minutes.file);
-    const file = await this.store.findRecord('file', fileId);
-    minutes.file = file;
-    minutes.modified = new Date();
-    await minutes.save();
-  }
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
@@ -222,7 +203,9 @@ export default class AgendaMinutesController extends Controller {
     await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(newVersion);
+    const fileMeta = await this.decisionReportGeneration.generateReplacementMinutes.perform(
+      newVersion,
+    );
     if (fileMeta) {
       await this.replaceMinutesFile(newVersion, fileMeta.id);
     }
@@ -278,7 +261,6 @@ export default class AgendaMinutesController extends Controller {
     this.router.refresh('agenda.minutes');
   }
 
-
   async getAttendees() {
     const attending = new Set();
     const primeMinister = mandateeName(
@@ -308,12 +290,8 @@ export default class AgendaMinutesController extends Controller {
       .map(mandateeName)
       .filter((x) => !attending.has(x));
 
-    const secretary = mandateeName(
-      await this.store.queryOne('mandatee', {
-        'filter[secretary-for-agendas][:id:]': this.meeting.id,
-        include: 'person',
-      })
-    ) ?? '';
+    const secretary = await this.meeting.secretary;
+    await secretary?.person;
 
     return {
       primeMinister,
@@ -327,7 +305,7 @@ export default class AgendaMinutesController extends Controller {
     return {
       attendees: await this.getAttendees(),
       notas: this.model.notas,
-      announcements: this.model.announcements,
+      announcements: this.model.announcements
     };
   }
 }

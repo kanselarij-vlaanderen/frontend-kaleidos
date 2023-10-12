@@ -47,7 +47,7 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const meetingMinutes = await meeting.minutes;
-    return { minutes: meetingMinutes, mandatees, notas, announcements };
+    return { minutes: meetingMinutes, mandatees, notas, announcements, meeting };
   }
 
   setupController(controller) {
