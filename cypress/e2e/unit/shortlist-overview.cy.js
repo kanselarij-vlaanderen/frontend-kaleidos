@@ -42,6 +42,7 @@ function createPublicationViaMR(subcaseTitle, fileName, publicationNumber) {
 context('signatures shortlist overview tests', () => {
   const caseTitle1 = `Cypress test: shortlist signatures route case 1- ${currentTimestamp()}`;
   const caseTitle2 = `Cypress test: shortlist signatures route case 2- ${currentTimestamp()}`;
+  const caseTitle3 = `Cypress test: shortlist signatures route case 3- ${currentTimestamp()}`;
 
   const type1 = 'Nota';
   const subcaseTitleShort1 = `Cypress test: subcase shortlist signatures route subcase 1 - ${currentTimestamp()}`;
@@ -55,6 +56,12 @@ context('signatures shortlist overview tests', () => {
   const subcaseType2 = 'Definitieve goedkeuring';
   const subcaseName2 = 'Goedkeuring na adviezen';
 
+  const type3 = 'Mededeling';
+  const subcaseTitleShort3 = `Cypress test: subcase shortlist signatures route subcase 3 - ${currentTimestamp()}`;
+  const subcaseTitleLong3 = 'Cypress test voor shortlist signatures route subcase 3';
+  const subcaseType3 = 'Definitieve goedkeuring';
+  const subcaseName3 = 'Goedkeuring na adviezen';
+
   const files1 = [
     {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2023 0504 DOC.0001-1', fileType: 'BVR',
@@ -67,11 +74,18 @@ context('signatures shortlist overview tests', () => {
     }
   ];
 
+  const files3 = [
+    {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2023 0504 DOC.0001-3', fileType: 'BVR',
+    }
+  ];
+
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
 
   const mandatee1 = 'Bart Somers';
   const mandatee2 = 'Ben Weyts';
+  const mandatee3 = 'Zuhal Demir';
 
   // TODO maintenance heavy, config file?
   const currentMinisters = [
@@ -106,26 +120,57 @@ context('signatures shortlist overview tests', () => {
     cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
     cy.openSubcase(0, subcaseTitleShort2);
     cy.addDocumentsToSubcase(files2);
+    cy.createCase(caseTitle3);
+    cy.addSubcase(type3, subcaseTitleShort3, subcaseTitleLong3, subcaseType3, subcaseName3);
+    cy.openSubcase(0, subcaseTitleShort3);
+    cy.addDocumentsToSubcase(files3);
 
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
-    cy.setAllItemsFormallyOk(3);
+    cy.addAgendaitemToAgenda(subcaseTitleShort3);
+    cy.setAllItemsFormallyOk(4);
     cy.approveDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
     cy.addAgendaitemMandatee(3);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.intercept('POST', '/sign-flows').as('postSigFlows1');
+    cy.intercept('POST', '/sign-subcases').as('postSignSUbcases1');
+    cy.get(document.documentCard.signMarking).click()
+      .wait('@postSigFlows1')
+      .wait('@postSignSUbcases1');
+    cy.get(auk.loader).should('not.exist', {
+      timeout: 60000,
+    });
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.addAgendaitemMandatee(4);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.intercept('POST', '/sign-flows').as('postSigFlows2');
+    cy.intercept('POST', '/sign-subcases').as('postSignSUbcases2');
+    cy.get(document.documentCard.signMarking).click()
+      .wait('@postSigFlows2')
+      .wait('@postSignSUbcases2');
+    cy.get(auk.loader).should('not.exist', {
+      timeout: 60000,
+    });
+    cy.openDetailOfAgendaitem(subcaseTitleShort3);
+    cy.addAgendaitemMandatee(5);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.intercept('POST', '/sign-flows').as('postSigFlows3');
+    cy.intercept('POST', '/sign-subcases').as('postSignSUbcases3');
+    cy.get(document.documentCard.signMarking).click()
+      .wait('@postSigFlows3')
+      .wait('@postSignSUbcases3');
+    cy.get(auk.loader).should('not.exist', {
+      timeout: 60000,
+    });
 
-    cy.setAllItemsFormallyOk(2);
+    cy.setAllItemsFormallyOk(3);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
   });
@@ -167,6 +212,7 @@ context('signatures shortlist overview tests', () => {
     // no filters (all mandatees)
     cy.get(route.signatures.row.mandatee).contains(mandatee1);
     cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee3);
 
     // filter nonexistent
     cy.get(route.signatures.openMinisterFilter).click();
@@ -188,8 +234,9 @@ context('signatures shortlist overview tests', () => {
       .wait('@getShortlist3');
     cy.get(route.signatures.row.mandatee).contains(mandatee1);
     cy.get(route.signatures.row.mandatee).should('not.contain', mandatee2);
+    cy.get(route.signatures.row.mandatee).should('not.contain', mandatee3);
 
-    // filter both
+    // filter two
     cy.get(route.signatures.openMinisterFilter).click();
     cy.get(auk.loader).should('not.exist');
     cy.get(appuniversum.checkbox).contains(mandatee2)
@@ -199,6 +246,19 @@ context('signatures shortlist overview tests', () => {
       .wait('@getShortlist4');
     cy.get(route.signatures.row.mandatee).contains(mandatee1);
     cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).should('not.contain', mandatee3);
+
+    // filter all
+    cy.get(route.signatures.openMinisterFilter).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.checkbox).contains(mandatee3)
+      .click();
+    cy.intercept('GET', '/sign-flows*').as('getShortlist4');
+    cy.get(route.signatures.applyFilter).click()
+      .wait('@getShortlist4');
+    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee3);
   });
 
   it('should check the signatures overview sidebar', () => {
@@ -376,6 +436,12 @@ context('signatures shortlist overview tests', () => {
       .click();
     cy.get(signature.createSignFlow.signers.item); // wait for signers to load
 
+    // add approver
+    cy.get(signature.createSignFlow.approvers.add).click();
+    cy.get(signature.email.input).type(approverEmail);
+    cy.get(signature.email.add).click();
+    cy.get(signature.createSignFlow.approvers.item).contains(approverEmail);
+
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
@@ -383,6 +449,7 @@ context('signatures shortlist overview tests', () => {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
     cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    cy.intercept('DELETE', '/sign-approval-activities/**').as('deleteApprovalActivities');
     // no email set so forcing through disabled button
     cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
       .click();
@@ -390,6 +457,7 @@ context('signatures shortlist overview tests', () => {
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
     cy.wait('@deleteSigningActivities');
+    cy.wait('@deleteApprovalActivities');
     cy.get(appuniversum.toaster).find(auk.alert.close)
       .click();
 
@@ -450,6 +518,42 @@ context('signatures shortlist overview tests', () => {
     cy.get(settings.organization.confirm.unlinkMandatee).click()
       .wait('@patchorgs');
     cy.get(settings.organization.technicalInfo.row.mandatee).should('not.exist');
+  });
+
+  it('retracting subcase removes sign-marking option', () => {
+    // retract subcase (and check delete calls)
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(subcaseTitleShort3);
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(agenda.decisionResultPill.edit).click();
+    cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
+        .click();
+    });
+    cy.get(dependency.emberPowerSelect.option).contains('Ingetrokken')
+      .scrollIntoView()
+      .click();
+    cy.intercept('DELETE', '/sign-subcases/**').as('deleteSignSubcases');
+    cy.intercept('DELETE', '/sign-flows/**').as('deleteSignFlows');
+    cy.intercept('DELETE', '/sign-marking-activities/**').as('deleteSignMarkingActivities');
+    cy.get(agenda.agendaitemDecisionEdit.save).click()
+      .wait('@deleteSignSubcases')
+      .wait('@deleteSignFlows')
+      .wait('@deleteSignMarkingActivities');
+
+    // check that sign-marking is impossible
+    cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).should('be.disabled');
+    cy.get(route.agendaitemDocuments.batchEdit).click();
+    cy.get(document.documentDetailsRow.markedForSignature).should('be.disabled');
+    cy.get(auk.modal.header.close).click();
+    // check that alertmessage contains 'ingetrokken'
+    cy.get(document.documentCard.name.value).contains(files3[0].newFileName)
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.get(document.documentPreviewSidebar.tabs.signatures).click();
+    cy.get(appuniversum.alert.message).contains('ingetrokken');
   });
 });
 

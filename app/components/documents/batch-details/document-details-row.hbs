@@ -53,6 +53,7 @@
           />
         {{else}}
           <AuToggleSwitch
+            data-test-document-details-row-marked-for-signature
             @skin="primary"
             @label={{t "present-for-signing"}}
             @checked={{@row.markedForSignature}}
