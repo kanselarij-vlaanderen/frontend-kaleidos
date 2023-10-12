@@ -11,8 +11,9 @@ import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 
-function replaceSecretary(htmlString, newSecretary) {
-  return replaceById(htmlString, 'secretary', newSecretary);
+function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
+  let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
+  return replaceById(newHtml, 'secretary', newSecretary);
 }
 
 /**
@@ -298,7 +299,9 @@ export default class MeetingEditMeetingComponent extends Component {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newValue = replaceSecretary(piecePart.value, this.secretary.person.get('fullName'));
+      const newValue = replaceSecretary(piecePart.value,
+        this.secretary.person.get('fullName'),
+        this.secretary.title.toLowerCase());
       piecePart.value = newValue;
       await piecePart.save();
       await this.decisionReportGeneration.generateReplacementMinutes.perform(

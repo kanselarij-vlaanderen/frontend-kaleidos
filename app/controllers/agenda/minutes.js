@@ -10,6 +10,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
+  let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
     <table>
@@ -27,8 +28,8 @@ function renderAttendees(attendees) {
           <td>${ministers.join('<br/>')}</td>
         </tr>
         <tr>
-          <td>De secretaris</td>
-          <td id="secretary">${secretary}</td>
+          <td>De <span id="secretary-title">${secretaryTitle}</span></td>
+          <td id="secretary">${mandateeName(secretary)}</td>
         </tr>
       </tbody>
     </table>
@@ -284,13 +285,8 @@ export default class AgendaMinutesController extends Controller {
       .map(mandateeName)
       .filter((x) => !attending.has(x));
 
-    const secretary =
-      mandateeName(
-        await this.store.queryOne('mandatee', {
-          'filter[secretary-for-agendas][:id:]': this.meeting.id,
-          include: 'person',
-        })
-      ) ?? '';
+    const secretary = await this.meeting.secretary;
+    await secretary?.person;
 
     return {
       primeMinister,
@@ -304,7 +300,7 @@ export default class AgendaMinutesController extends Controller {
     return {
       attendees: await this.getAttendees(),
       notas: this.model.notas,
-      announcements: this.model.announcements,
+      announcements: this.model.announcements
     };
   }
 }
