@@ -77,7 +77,6 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get mayCreateSignMarkingActivity() {
     return !this.signMarkingActivity
-      && this.signaturesEnabled
       && this.currentSession.may('manage-signatures')
       && !!this.args.decisionActivity;
   }

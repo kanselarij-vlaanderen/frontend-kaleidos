@@ -86,7 +86,7 @@
                 </p>
               {{/if}}
               {{#if
-                (and this.signaturesEnabled (await (this.canViewSignedPiece)))
+                (await (this.canViewSignedPiece))
               }}
                 {{#if this.piece.signedPiece.file}}
                   <p>
@@ -155,23 +155,21 @@
               />
             {{/unless}}
           </Group.Item>
-          {{#if this.signaturesEnabled}}
-            {{#if this.showSignatureLoader}}
-              <Group.Item>
-                <div
-                  class="auk-loader au-u-margin-left-small"
-                  role="alert"
-                  aria-busy="true"
-                ></div>
-              </Group.Item>
-            {{else if this.signMarkingActivity}}
-              <Group.Item>
-                <SignaturePill
-                  @piece={{this.piece}}
-                  @signMarkingActivity={{this.signMarkingActivity}}
-                />
-              </Group.Item>
-            {{/if}}
+          {{#if this.showSignatureLoader}}
+            <Group.Item>
+              <div
+                class="auk-loader au-u-margin-left-small"
+                role="alert"
+                aria-busy="true"
+              ></div>
+            </Group.Item>
+          {{else if this.signMarkingActivity}}
+            <Group.Item>
+              <SignaturePill
+                @piece={{this.piece}}
+                @signMarkingActivity={{this.signMarkingActivity}}
+              />
+            </Group.Item>
           {{/if}}
           {{#if this.mayShowEditDropdown}}
             <Group.Item>
