@@ -21,12 +21,13 @@
         </AuButton>
       {{/if}}
     </div>
-  {{else if this.agendaitem}}
+  {{else if (or this.agendaitem @piece.isReportOrMinutes)}}
+    {{! TODO KAS-111 this is not feature flag friendly yet}}
     {{#if this.loadCanManageSignFlow.isRunning}}
       <Auk::Loader />
     {{else if this.canManageSignFlow}}
-      {{#if this.decisionActivity}}
-        {{#if (not this.agendaitemIsRetracted)}}
+      {{#if (or this.decisionActivity @piece.isReportOrMinutes)}}
+        {{#if (or @piece.isReportOrMinutes (not this.agendaitemIsRetracted))}}
           <AuToggleSwitch
             @skin="primary"
             @label={{t "present-for-signing"}}

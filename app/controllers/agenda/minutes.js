@@ -9,6 +9,7 @@ import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import { generateMinutes } from 'frontend-kaleidos/utils/generate-pdf';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
@@ -172,12 +173,11 @@ export default class AgendaMinutesController extends Controller {
   currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
 
   exportPdf = task(async (minutes) => {
-    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
+    try {
+      return await generateMinutes(minutes.id);
+    } catch (error) {
       this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
     }
-    return await resp.json();
   });
 
   saveMinutes = task(async () => {
@@ -208,6 +208,7 @@ export default class AgendaMinutesController extends Controller {
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
         documentContainer,
+        isReportOrMinutes: true,
       });
       await minutes.save();
     } else {
@@ -260,7 +261,8 @@ export default class AgendaMinutesController extends Controller {
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel
+      accessLevel: minutes.accessLevel,
+      isReportOrMinutes: true,
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {

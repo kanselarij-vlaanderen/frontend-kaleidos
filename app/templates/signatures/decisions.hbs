@@ -1,0 +1,220 @@
+{{page-title (t "decisions-and-minutes") }}
+
+{{#if this.removeSignFlow.isRunning}}
+  <WebComponents::LoadingPage />
+{{else}}
+  {{#in-element this.customNavbarButtonsElement}}
+    {{#if this.selectedSignFlows.length}}
+      <AuButton
+        @icon="sign"
+        {{on "click" this.openSidebarMultiItem}}
+      >
+        {{t "start-signing-for-n-selected-documents" n=this.selectedSignFlows.length}}
+      </AuButton>
+    {{/if}}
+  {{/in-element}}
+
+  <KDataTable
+    @scrollable={{true}}
+    @stickyHeader={{true}}
+    @clickable={{false}}
+    @loading={{this.createSignFlow.isRunning}}
+    @asideVisible={{and this.showSidebar (not this.createSignFlow.isRunning)}}
+    @content={{@model}}
+    @page={{this.pageSignaturesDecisions}}
+    @size={{this.sizeSignaturesDecisions}}
+    @numberOfItems={{@model.length}}
+    @totalNumberOfItems={{@model.meta.count}}
+    @onChangeSize={{fn (mut this.sizeSignaturesDecisions)}}
+    @onChangePage={{fn (mut this.pageSignaturesDecisions)}}
+  >
+    <:header>
+      <th>
+        <AuCheckbox
+          @checked={{this.isSelectedAllItems}}
+          @indeterminate={{and (not this.isSelectedAllItems) this.isSelectedSomeItems}}
+          @onChange={{this.selectAll}}
+        >
+          <span class="auk-u-sr-only">
+            {{t "select"}}
+          </span>
+        </AuCheckbox>
+      </th>
+      <Utils::ThSortable
+        @currentSorting={{this.sortField}}
+        @field={{"sign-subcase.sign-marking-activity.piece.name"}}
+        @onChange={{this.changeSort}}
+        @label={{t "document-name"}}
+      />
+      <th>{{t "document-type"}}</th>
+      <Utils::ThSortable
+        @currentSorting={{this.sortField}}
+        @field={{"decision-activity.start-date"}}
+        @onChange={{this.changeSort}}
+        @label={{t "meeting-date"}}
+      />
+      <th>{{t "secretary"}}</th>
+      <th></th>
+    </:header>
+    <:body as |signFlow|>
+      {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+        {{#let signMarkingActivity.piece as |piece|}}
+          <td>
+            <AuCheckbox
+              @checked={{includes signFlow this.selectedSignFlows}}
+              @onChange={{fn this.toggleItem signFlow}}
+            >
+              <span class="auk-u-sr-only">
+                {{t "select"}}
+              </span>
+            </AuCheckbox>
+          </td>
+          <td>
+            {{#if piece.id}}
+            <AuLink @route="document" @model={{piece.id}}>
+              {{piece.name}}
+            </AuLink>
+            {{else}}
+            <span>
+              geen piece.id gevonden
+            </span>
+            {{/if}}
+          </td>
+          <td>
+            <AuPill @size="small">
+              {{#let piece.documentContainer.type as |type|}}
+                {{#if type}}
+                  {{type.label}}
+                {{else}}
+                  {{t "no-document-type"}}
+                {{/if}}
+              {{/let}}
+            </AuPill>
+          </td>
+          <td>{{date (await (this.getMeetingDate signFlow))}}</td>
+          <td>
+            {{#let (await (this.getSecretaryName signFlow)) as |name|}}
+              {{#if name}}
+                {{name}}
+              {{else}}
+                -
+              {{/if}}
+            {{/let}}
+          </td>
+          <td>
+            <AuButton
+              @skin="naked"
+              @icon="sign"
+              {{on "click" (fn this.openSidebarSingleItem signFlow piece)}}
+            >
+              {{t "start-signing"}}
+            </AuButton>
+          </td>
+        {{/let}}
+      {{/let}}
+    </:body>
+    <:aside>
+      <div class="auk-sidebar">
+        <div class="auk-sidebar__header">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "start-signing"}}
+          </h4>
+          <Auk::Button
+            @icon="x"
+            @skin="borderless"
+            @layout="icon-only"
+            {{on "click" this.closeSidebar}}
+          />
+        </div>
+        <div class="auk-sidebar__body">
+          {{#unless this.selectedSignFlows.length}}
+            <p class="au-u-muted auk-u-mt-2">
+              {{or this.piece.documentContainer.type.label (t "no-document-type")}}
+              -
+              {{date this.piece.created}}
+            </p>
+            <h5 class="auk-h4">{{this.piece.name}}</h5>
+            <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
+              <AuLink
+                @skin="naked"
+                @icon="book"
+                @route="document"
+                @model={{this.piece.id}}
+              >
+                {{t "preview"}}
+              </AuLink>
+              {{#if (and this.meeting.id this.agenda.id this.agendaitem.id)}}
+                <AuLink
+                  @skin="naked"
+                  @icon="document"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
+                >
+                  {{t "consult-agendaitem-decision"}}
+                </AuLink>
+              {{else if (and this.meeting.id this.agenda.id)}}
+                <AuLink
+                  @skin="naked"
+                  @icon="document"
+                  @route="agenda.minutes"
+                  @models={{array this.meeting.id this.agenda.id}}
+                >
+                  {{t "consult-minutes"}}
+                </AuLink>
+              {{/if}}
+            </div>
+          {{/unless}}
+          {{#if this.decisionActivityOrMeeting}}
+            <Signatures::CreateSignFlow
+              @decisionActivities={{array this.decisionActivityOrMeeting}}
+              @onChangeSigners={{fn (mut this.signers)}}
+              @isReportOrMinute={{true}}
+            />
+          {{else if this.selectedSignFlows.length}}
+            <Signatures::CreateSignFlow
+              @decisionActivities={{this.selectedDecisionActivitiesOrMeetings.value}}
+              @onChangeSigners={{fn (mut this.signers)}}
+              @isReportOrMinute={{true}}
+            />
+          {{/if}}
+        </div>
+        <div class="auk-sidebar__footer">
+          <AuToolbar as |Group|>
+            <Group>
+              <AuButton
+                @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                @disabled={{not this.signers.length}}
+                {{on "click" this.createSignFlow.perform}}
+              >
+                {{t "start-signing"}}
+              </AuButton>
+            </Group>
+            <Group>
+              <AuButton
+                @alert={{true}}
+                @skin="naked"
+                @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                {{on "click" this.removeSignFlow.perform}}
+              >
+                {{t "stop-sign-flow"}}
+              </AuButton>
+            </Group>
+          </AuToolbar>
+        </div>
+      </div>
+    </:aside>
+  </KDataTable>
+
+  {{#if this.createSignFlow.isRunning}}
+    <Auk::Modal @size="medium">
+      <Auk::Modal::Header @title={{t "loading-text"}} @closeable={{false}} />
+      <Auk::Modal::Body>
+        <Auk::Loader @message={{concat
+                                (t "creating-sign-flows-message")
+                                " "
+                                (t "please-be-patient")}}
+        />
+      </Auk::Modal::Body>
+    </Auk::Modal>
+  {{/if}}
+{{/if}}
