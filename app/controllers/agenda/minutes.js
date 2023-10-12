@@ -7,6 +7,9 @@ import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function renderAttendees(attendees) {
@@ -102,15 +105,23 @@ async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
     `
   }
   const documents = await agendaitem.pieces;
+  let sortedPieces;
+  if (agendaitem.isApproval) {
+    sortedPieces = sortPieces(documents, VrNotulenName, compareNotulen);
+  } else {
+    sortedPieces = sortPieces(documents);
+  }
+  const agendaActivity = await agendaitem.agendaActivity;
+  const subcase = await agendaActivity?.subcase;
   return `
   <h4><u>${
     agendaitem.number
-  }. ${generateBetreft(agendaitem.shortTitle, agendaitem.title, agendaitem.isApproval, documents).toUpperCase()}</u></h4>
+  }. ${generateBetreft(agendaitem.shortTitle, agendaitem.title, agendaitem.isApproval, sortedPieces, subcase?.subcaseName).toUpperCase()}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+}
 
 function renderAbsentees() {
   return `

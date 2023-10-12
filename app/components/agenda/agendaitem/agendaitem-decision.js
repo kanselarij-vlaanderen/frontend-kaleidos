@@ -296,16 +296,9 @@ export default class AgendaitemDecisionComponent extends Component {
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    if (subcase) {
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase.subcaseName)}</p>`
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
       );
-    } else {
-      this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, isApproval, documents)}</p>`
-      );
-    }
-
   }
 
   @action
