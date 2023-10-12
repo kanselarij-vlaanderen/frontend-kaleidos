@@ -38,8 +38,7 @@ function renderAttendees(attendees) {
 }
 
 async function renderNotas(notas, betreftPieceParts, intl) {
-  const agendalist = await renderAgendaitemList(notas, betreftPieceParts, intl);
-  return agendalist;
+  return await renderAgendaitemList(notas, betreftPieceParts, intl);
 }
 
 async function renderAnnouncements(announcements, betreftPieceParts, intl) {
@@ -84,7 +83,7 @@ async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
       break;
     case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
       text = intl.t("minutes-acknowledged", {
-        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+        mededelingOrNota: mededelingOrNota
       })
       break;
     case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
@@ -255,12 +254,9 @@ export default class AgendaMinutesController extends Controller {
     await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.decisionReportGeneration.generateReplacementMinutes.perform(
+    await this.decisionReportGeneration.generateReplacementMinutes.perform(
       newVersion,
     );
-    if (fileMeta) {
-      await this.replaceMinutesFile(newVersion, fileMeta.id);
-    }
 
     await newVersion.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
