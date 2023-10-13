@@ -243,9 +243,29 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
+  regenerateDecisionReport = task(async (decisionActivity) => {
+    if (this.enableDigitalAgenda) {
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[decision-activity][:id:]': decisionActivity.id,
+      });
+      const pieceParts = await report?.pieceParts;
+      if (pieceParts?.length) {
+        await this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
+    }
+  });
+
   @task
   *saveMeeting() {
     const now = new Date();
+
+    const currentMeetingSecretary = yield this.args.meeting.secretary;
+    const currentKind = yield this.args.meeting.kind;
+    const currentPlannedStart = this.args.meeting.plannedStart;
+    const currentMeetingNumberRepresentation = this.args.meeting.numberRepresentation;
 
     this.args.meeting.extraInfo = this.extraInfo;
     this.args.meeting.plannedStart = this.startDate || now;
@@ -254,28 +274,6 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
-      const currentMeetingSecretary = yield this.args.meeting.secretary;
-      if (currentMeetingSecretary?.uri !== this.secretary.uri) {
-        this.args.meeting.secretary = this.secretary;
-        const decisionActivities = yield this.store.queryAll('decision-activity', {
-          'filter[treatment][agendaitems][agenda][created-for][:id:]':
-            this.args.meeting.id,
-        });
-        for (let decisionActivity of decisionActivities.slice()) {
-          decisionActivity.secretary = this.secretary;
-          yield decisionActivity.save(); 
-          const report = yield this.store.queryOne('report', {
-            'filter[:has-no:next-piece]': true,
-            'filter[decision-activity][:id:]': decisionActivity.id,
-          });
-          const pieceParts = yield report?.pieceParts;
-          if (pieceParts?.length) {
-            yield this.decisionReportGeneration.generateReplacementReport.perform(report);
-          }
-        }
-      }
-    }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
       this.plannedDocumentPublicationDate;
@@ -294,7 +292,30 @@ export default class MeetingEditMeetingComponent extends Component {
       if (this.decisionPublicationActivity.isNew) {
         saveActivities.push(this.decisionPublicationActivity.save());
       }
+
       yield Promise.all(saveActivities);
+
+      if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+        if (
+          currentMeetingSecretary?.uri !== this.secretary.uri ||
+          currentKind?.uri !== this.selectedKind.uri ||
+          currentPlannedStart !== this.startDate || 
+          currentMeetingNumberRepresentation !== this.numberRepresentation
+        ) {
+          const decisionActivities = yield this.store.queryAll(
+            'decision-activity',
+            {
+              'filter[treatment][agendaitems][agenda][created-for][:id:]':
+                this.args.meeting.id,
+            }
+          );
+          for (let decisionActivity of decisionActivities.slice()) {
+            decisionActivity.secretary = this.secretary;
+            yield decisionActivity.save();
+            yield this.regenerateDecisionReport.perform(decisionActivity);
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
       this.toaster.error();
