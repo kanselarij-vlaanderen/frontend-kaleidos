@@ -45,7 +45,9 @@ export default class SubcaseDescriptionEdit extends Component {
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+      CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
+    );
   }
 
   @action
@@ -78,7 +80,7 @@ export default class SubcaseDescriptionEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk,
+      resetFormallyOk
     );
 
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
@@ -120,9 +122,9 @@ export default class SubcaseDescriptionEdit extends Component {
 
   updateReportName(report, agendaitemTypeUri) {
     if (agendaitemTypeUri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      report.name = report.name.replace("punt", "mededeling");
+      report.name = report.name.replace('punt', 'mededeling');
     } else {
-      report.name = report.name.replace("mededeling", "punt");
+      report.name = report.name.replace('mededeling', 'punt');
     }
   }
 
@@ -139,7 +141,9 @@ export default class SubcaseDescriptionEdit extends Component {
       if (newsItem?.id) {
         await newsItem.destroyRecord();
       }
-      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      if (
+        this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
+      ) {
         const newNewsItem =
           await this.newsletterService.createNewsItemForAgendaitem(
             latestAgendaitem,
