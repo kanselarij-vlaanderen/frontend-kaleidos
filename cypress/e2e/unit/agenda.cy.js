@@ -346,7 +346,6 @@ context('Agenda tests', () => {
     cy.get(agenda.editMeeting.numberRep.view).should('contain', fullmeetingNumberVV);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
     cy.get(agenda.editMeeting.save).click();
-    cy.wait('@patchMeetings'); // We save the meeting twice when changing types, wait for two saves too
     cy.wait('@patchMeetings');
     cy.get(agenda.agendaHeader.title).contains(dateFormatMR);
     cy.get(agenda.agendaHeader.kind).contains(vvKind);
@@ -373,7 +372,6 @@ context('Agenda tests', () => {
     cy.intercept('PATCH', '/meetings/**').as('patchMeetingsPVV');
     cy.intercept('PATCH', 'internal-document-publication-activities/*').as('patchInternalActivity');
     cy.get(agenda.editMeeting.save).click();
-    cy.wait('@patchMeetingsPVV'); // We save the meeting twice when changing types, wait for two saves too
     cy.wait('@patchMeetingsPVV');
     cy.wait('@patchInternalActivity');
     cy.get(agenda.agendaHeader.title).contains(dateFormatPVV);
