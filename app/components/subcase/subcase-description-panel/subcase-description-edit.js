@@ -83,7 +83,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
       await this.updateNewsletterAfterRemarkChange();
-      await this.updateDecisionActivities();
+      await this.updateDecisionReports();
     }
 
     this.args.onSave();
@@ -98,21 +98,21 @@ export default class SubcaseDescriptionEdit extends Component {
     );
   }
 
-  async updateDecisionActivities() {
+  async updateDecisionReports() {
     if (this.enableDigitalAgenda) {
-      const decisionActivities = await this.args.subcase.decisionActivities;
-      for (const decisionActivity of decisionActivities) {
-        const report = await this.store.queryOne('report', {
-          'filter[:has-no:next-piece]': true,
-          'filter[decision-activity][:id:]': decisionActivity.id,
-        });
+      const reports = await this.store.query('report', {
+        'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
+        'filter[:has-no:next-piece]': true,
+        sort: '-created',
+      });
+      for (const report of reports) {
         const pieceParts = await report?.pieceParts;
         if (pieceParts?.length) {
           await this.decisionReportGeneration.generateReplacementReport.perform(
             report
           );
           this.updateReportName(report, this.agendaItemType.uri);
-          report.save();
+          await report.save();
         }
       }
     }
