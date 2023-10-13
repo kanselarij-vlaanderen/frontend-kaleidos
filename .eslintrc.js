@@ -20,7 +20,7 @@ module.exports = {
     browser: true,
   },
   rules: {
-    'prettier/prettier': 'off',
+    'prettier/prettier': 'warn',
   },
   overrides: [
     // node files
