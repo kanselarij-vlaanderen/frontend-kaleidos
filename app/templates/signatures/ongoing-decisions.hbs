@@ -1,11 +1,11 @@
-{{page-title (t "to-follow-up") }}
+{{page-title (t "decisions-and-minutes-ongoing") }}
 
 <AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
   <m.sidebar>
     <div class="au-c-sidebar">
       <div class="au-c-sidebar__content">
         <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
-          <div data-test-route-signatures-ongoing-status-filter class="au-c-card au-o-box au-o-box--small">
+          <div class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "status"}}</Auk::Label>
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
@@ -13,16 +13,6 @@
               @excludedStatuses={{this.excludedStatuses}}
             />
           </div>
-          {{#if (user-may "view-all-ongoing-signatures")}}
-          <div data-test-route-signatures-ongoing-minister-filter class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "submitter"}}</Auk::Label>
-              <Search::MinisterFilter
-                @selected={{this.mandatees}}
-                @onChange={{this.setMandatees}}
-                @label={{t "th-select-all"}}
-              />
-          </div>
-          {{/if}}
         </div>
       </div>
     </div>
@@ -44,15 +34,14 @@
       <:header>
         <th class="auk-table__col--6">{{t "document-name"}}</th>
         <th class="auk-table__col--1">{{t "document-type"}}</th>
-        <th class="auk-table__col--1">{{t "ministers"}}</th>
-        <th class="auk-table__col--2">{{t "date-approved"}}</th>
+        <th class="auk-table__col--2">{{t "meeting-date"}}</th>
         <th class="auk-table__col--2">{{t "status"}}</th>
         <th class="auk-table__col--1"></th>
         </:header>
       <:body as |signFlow|>
         {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
           {{#let signMarkingActivity.piece as |piece|}}
-            <td data-test-route-search-signatures-ongoing-row-document-name>
+            <td>
               {{#if piece}}
                 {{piece.name}}
                 {{#if (this.isConfidential piece.accessLevel)}}
@@ -76,16 +65,7 @@
             </td>
           {{/let}}
           <td>
-            {{#let (await (this.getMandateeNames signFlow)) as |names|}}
-              {{#if names}}
-                {{join ", " names}}
-              {{else}}
-                -
-              {{/if}}
-            {{/let}}
-          </td>
-          <td>
-            {{date signFlow.decisionActivity.startDate}}
+            {{date (await (this.getMeetingDate signFlow))}}
           </td>
           <td>
             <SignaturePill

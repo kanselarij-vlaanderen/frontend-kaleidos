@@ -27,12 +27,18 @@ export default class SignaturesOngoingRoute extends Route {
     statuses: {
       refreshModel: true,
       as: 'statussen',
-    },
+    }
   };
 
   constructor() {
     super(...arguments);
     this.lastParams = new Snapshot();
+  }
+
+  async beforeModel() {
+    if (!this.currentSession.may('manage-secretary-signatures')) {
+      this.router.transitionTo('index');
+    }
   }
 
   async model(params) {
@@ -47,45 +53,25 @@ export default class SignaturesOngoingRoute extends Route {
     }
 
     const filter = {
+      ':has:creator': true,
       'sign-subcase': {
         'sign-marking-activity': {
           piece: {
-            'is-report-or-minutes': false,
+            'is-report-or-minutes': true,
           }
         }
       }
-    };
-    if (this.currentSession.may('view-all-ongoing-signatures')) {
-      filter[':has:creator'] = 't';
-    } else {
-      filter['creator'] = {
-        ':id:': this.currentSession.user.id,
-      };
-    }
-
-    if (params.mandatees?.length > 0) {
-      filter['decision-activity'] = {
-        subcase: {
-          'requested-by': {
-            person: {
-              ':id:': params.mandatees.join(','),
-            },
-          },
-        },
-      };
     }
     if (params.statuses?.length > 0) {
       filter['status'] = {
         ':id:': params.statuses.join(','),
-      };
+      }
     }
     this.lastParams.commit();
 
     return this.store.query('sign-flow', {
-      'filter[sign-subcase][sign-marking-activity][:has:piece]': 'yes',
-      filter: filter,
+      filter,
       include: [
-        'creator',
         'decision-activity',
         'sign-subcase.sign-marking-activity.piece.document-container.type',
         'status',
@@ -121,7 +107,6 @@ export default class SignaturesOngoingRoute extends Route {
     if (controller.page !== this.lastParams.committed.page) {
       controller.page = this.lastParams.committed.page;
     }
-    controller.mandatees = this.lastParams.committed.mandatees;
     controller.statuses = this.lastParams.committed.statuses;
   }
 }

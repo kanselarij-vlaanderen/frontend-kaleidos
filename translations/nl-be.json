@@ -1035,6 +1035,7 @@
   "counselor": "Raadgever",
   "date-approved": "Datum goedgekeurd",
   "consult-agendaitem-decision": "Laatste agendering bekijken",
+  "consult-minutes": "Notulen bekijken",
   "postponed": "Uitgesteld",
   "date-example": "bv. 01-2022",
   "edit-status": "Status aanpassen",
@@ -1215,6 +1216,7 @@
   "start-signing-for-n-selected-documents": "Ondertekenen opstarten voor {n, plural, =1 {1 geselecteerd document} other { # geselecteerde documenten }}",
   "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
   "create-sign-flow-conflicting-signers-message": "De geselecteerde documenten zijn door verschillende ministers ingediend. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.",
+  "create-sign-flow-conflicting-secretaries-message": "De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.",
   "creating-sign-flows-message": "De ondertekenflows worden aangemaakt in het platform Digitaal Ondertekenen. Dit kan even duren.",
   "ongoing": "In verwerking",
   "create-minutes-click-create-button-message": "Klik op \"Aanmaken\" om de notulen aan te maken",
@@ -1242,6 +1244,12 @@
   "no-secretary-assigned": "Er werd nog geen secretaris toegewezen",
   "type-to-search": "Typ om te zoeken",
   "cannot-sign-because-agendaitem-retracted": "Dit agendapunt is ingetrokken. U kan de ondertekenflow niet opstarten.",
+  "decisions-and-minutes": "Beslissingen en notulen",
+  "decisions-and-minutes-ongoing": "Beslissingen en notulen opvolgen",
+  "minutes-approval": "{mededelingOrNota} wordt goedgekeurd confer beslissingsfiche {reportName}.",
+  "minutes-retracted": "{mededelingOrNota} wordt ingetrokken.",
+  "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
+  "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
   "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
   "retracted-item-decision": "Dit punt wordt ingetrokken."
 }

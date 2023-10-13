@@ -10,21 +10,10 @@ import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
-}
-
-function formatDocuments(pieceRecords, isApproval) {
-  const names = pieceRecords.map((record) => record.name);
-  const simplifiedNames = names.map((name) => {
-    if (isApproval) {
-      return new VrNotulenName(name).vrNumberWithSuffix();
-    }
-    return new VRDocumentName(name).vrNumberWithSuffix();
-  });
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
@@ -90,7 +79,10 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[:has-no:next-piece]': true,
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -115,7 +107,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.beslissingPiecePart.value
       );
 
-    await this.saveReport(
+    await this.saveReport.perform(
       await report.documentContainer,
       report,
       betreftPiecePart,
@@ -330,17 +322,17 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  updateBetreftContent() {
+  async updateBetreftContent() {
     // *NOTE: approval decisions have a totally different text block.
     // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
     const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
-    this.setBetreftEditorContent(
-      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-      }</p>`
-    );
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
+      );
   }
 
   @action
@@ -377,7 +369,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(documentContainer, report, null, betreftPiecePart);
+    await this.saveReport.perform(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -390,7 +382,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
+    await this.saveReport.perform(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -423,7 +415,7 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
 
-    await this.saveReport(
+    await this.saveReport.perform(
       documentContainer,
       report,
       beslissingPiecePart,
@@ -433,12 +425,12 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isEditing = false;
   });
 
-  async saveReport(
+  saveReport = task(async (
     documentContainer,
     report,
     beslissingPiecePart,
     betreftPiecePart
-  ) {
+  ) => {
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -452,7 +444,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.decisionReportGeneration.generateReplacementReport.perform(
       report
     );
-  }
+  });
 
   createNewDocumentContainer() {
     const documentContainer = this.store.createRecord('document-container', {
@@ -466,6 +458,7 @@ export default class AgendaitemDecisionComponent extends Component {
   async createNewReport(documentContainer) {
     const now = new Date();
     const report = this.store.createRecord('report', {
+      isReportOrMinutes: true,
       created: now,
       modified: now,
       name: `${
@@ -505,6 +498,7 @@ export default class AgendaitemDecisionComponent extends Component {
       newName = previousReport.name;
     }
     const report = this.store.createRecord('report', {
+      isReportOrMinutes: true,
       name: newName,
       created: now,
       modified: now,
