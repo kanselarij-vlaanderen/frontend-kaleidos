@@ -241,34 +241,10 @@ export default class MeetingEditMeetingComponent extends Component {
   *saveMeeting() {
     const now = new Date();
 
-    if (this.enableDigitalAgenda) {
-      const currentMeetingSecretary = yield this.args.meeting.secretary;
-      const currentKind = yield this.args.meeting.kind;
-      const currentPlannedStart = this.args.meeting.plannedStart;
-      if (
-        currentMeetingSecretary?.uri !== this.secretary.uri ||
-        currentKind?.uri !== this.selectedKind.uri ||
-        currentPlannedStart !== this.startDate || 
-        currentPlannedStart !== now 
-      ) {
-        this.args.meeting.kind = this.selectedKind;
-        this.args.meeting.secretary = this.secretary;
-        this.args.meeting.plannedStart = this.startDate || now;
-        yield this.args.meeting.save();
-        const decisionActivities = yield this.store.queryAll(
-          'decision-activity',
-          {
-            'filter[treatment][agendaitems][agenda][created-for][:id:]':
-              this.args.meeting.id,
-          }
-        );
-        for (let decisionActivity of decisionActivities.slice()) {
-          decisionActivity.secretary = this.secretary;
-          yield decisionActivity.save();
-          yield this.regenerateDecisionReport.perform(decisionActivity);
-        }
-      }
-    }
+    const currentMeetingSecretary = yield this.args.meeting.secretary;
+    const currentKind = yield this.args.meeting.kind;
+    const currentPlannedStart = this.args.meeting.plannedStart;
+    const currentMeetingNumberRepresentation = this.args.meeting.numberRepresentation;
 
     this.args.meeting.extraInfo = this.extraInfo;
     this.args.meeting.plannedStart = this.startDate || now;
@@ -292,7 +268,30 @@ export default class MeetingEditMeetingComponent extends Component {
       if (this.decisionPublicationActivity.isNew) {
         saveActivities.push(this.decisionPublicationActivity.save());
       }
+
       yield Promise.all(saveActivities);
+
+      if (this.enableDigitalAgenda) {
+        if (
+          currentMeetingSecretary?.uri !== this.secretary.uri ||
+          currentKind?.uri !== this.selectedKind.uri ||
+          currentPlannedStart !== this.startDate || 
+          currentMeetingNumberRepresentation !== this.numberRepresentation
+        ) {
+          const decisionActivities = yield this.store.queryAll(
+            'decision-activity',
+            {
+              'filter[treatment][agendaitems][agenda][created-for][:id:]':
+                this.args.meeting.id,
+            }
+          );
+          for (let decisionActivity of decisionActivities.slice()) {
+            decisionActivity.secretary = this.secretary;
+            yield decisionActivity.save();
+            yield this.regenerateDecisionReport.perform(decisionActivity);
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
       this.toaster.error();
