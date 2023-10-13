@@ -25,7 +25,7 @@
               @skin="naked"
               @icon="pencil"
               @iconAlignment="left"
-              @disabled={{this.exportPdf.isRunning}}
+              @disabled={{this.saveReport.isRunning}}
               {{on "click" this.startEditing}}
             >
               {{t "signed-decision-create"}}
@@ -48,6 +48,7 @@
       {{#if this.onCreateNewVersion.isIdle}}
         <Documents::DocumentCard
           @piece={{this.report}}
+          @decisionActivity={{@decisionActivity}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
@@ -176,6 +177,7 @@
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
+            @decisionActivity={{@decisionActivity}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
@@ -278,7 +280,7 @@
                           @skin="naked"
                           @icon="pencil"
                           @iconAlignment="left"
-                          @disabled={{this.exportPdf.isRunning}}
+                          @disabled={{this.saveReport.isRunning}}
                           {{on "click" this.startEditingConcern}}
                         >
                           {{t "edit"}}
@@ -363,7 +365,7 @@
                           @skin="naked"
                           @icon="pencil"
                           @iconAlignment="left"
-                          @disabled={{this.exportPdf.isRunning}}
+                          @disabled={{this.saveReport.isRunning}}
                           {{on "click" this.startEditingTreatment}}
                         >
                           {{t "edit"}}

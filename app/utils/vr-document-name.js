@@ -101,6 +101,25 @@ export default class VRDocumentName {
       return this.name;
     }
   }
+
+  vrDateOnly() {
+    try {
+      const meta = this.parseMeta();
+      return `VR ${meta.dateRaw}${meta.casePrefix}`;
+    } catch(error) {
+      return this.vrNumberWithSuffix();
+    }
+  }
+
+  withoutDate() {
+    try {
+      const meta = this.parseMeta();
+      const index = meta.indexNrRaw ? `/${meta.index}` : ''; 
+      return `${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.vrNumberWithSuffix();
+    }
+  }
 }
 
 export const compareFunction = function(parameterA, parameterB) {

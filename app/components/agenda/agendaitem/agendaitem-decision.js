@@ -12,21 +12,10 @@ import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
 import constants from 'frontend-kaleidos/config/constants';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.value !== piecePartEditor.htmlContent;
-}
-
-function formatDocuments(pieceRecords, isApproval) {
-  const names = pieceRecords.map((record) => record.name);
-  const simplifiedNames = names.map((name) => {
-    if (isApproval) {
-      return new VrNotulenName(name).vrNumberWithSuffix();
-    }
-    return new VRDocumentName(name).vrNumberWithSuffix();
-  });
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
 }
 
 /**
@@ -92,9 +81,10 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(
-      this.args.agendaitem
-    );
+    let pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[:has-no:next-piece]': true,
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -119,7 +109,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.beslissingPiecePart.value
       );
 
-    await this.saveReport(
+    await this.saveReport.perform(
       await report.documentContainer,
       report,
       betreftPiecePart,
@@ -168,6 +158,40 @@ export default class AgendaitemDecisionComponent extends Component {
   onDecisionEdit = task(async () => {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
+    await this.updateDecisionPiecePart.perform();
+  });
+
+  updateDecisionPiecePart = task(async () => {
+    if (!this.report || !this.beslissingPiecePart) {
+      return;
+    }
+    let newBeslissingValue = this.beslissingPiecePart.value;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    switch (decisionResultCode.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingValue = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingValue = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        break;
+    }
+    if (newBeslissingValue !== this.beslissingPiecePart.value) {
+      const now = new Date();
+      const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
+        title: 'Beslissing',
+        value: newBeslissingValue,
+        report: this.report,
+        previousPiecePart: this.beslissingPiecePart,
+        created: now,
+      });
+      await newBeslissingPiecePart.save();
+      await this.decisionReportGeneration.generateReplacementReport.perform(
+        this.report
+      );
+    }
+    this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -300,17 +324,17 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  updateBetreftContent() {
+  async updateBetreftContent() {
     // *NOTE: approval decisions have a totally different text block.
     // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
     const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
-    this.setBetreftEditorContent(
-      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-      }</p>`
-    );
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
+      );
   }
 
   @action
@@ -336,7 +360,20 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBeslissingContent() {
-    this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
+    let newBeslissingValue;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    switch (decisionResultCode.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingValue = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingValue = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        newBeslissingValue = this.nota;
+        break;
+    }
+    this.setBeslissingEditorContent(`<p>${newBeslissingValue}</p>`);
   }
 
   onUpdateConcern = task(async () => {
@@ -347,7 +384,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(documentContainer, report, null, betreftPiecePart);
+    await this.saveReport.perform(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -360,7 +397,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
+    await this.saveReport.perform(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -393,7 +430,7 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
 
-    await this.saveReport(
+    await this.saveReport.perform(
       documentContainer,
       report,
       beslissingPiecePart,
@@ -403,12 +440,12 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isEditing = false;
   });
 
-  async saveReport(
+  saveReport = task(async (
     documentContainer,
     report,
     beslissingPiecePart,
     betreftPiecePart
-  ) {
+  ) => {
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -422,7 +459,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.decisionReportGeneration.generateReplacementReport.perform(
       report
     );
-  }
+  });
 
   createNewDocumentContainer() {
     const documentContainer = this.store.createRecord('document-container', {
@@ -440,6 +477,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const agendaitemTypeWord =
       agendaitemType.uri === announcementType ? 'mededeling' : 'punt';
     const report = this.store.createRecord('report', {
+      isReportOrMinutes: true,
       created: now,
       modified: now,
       name: `${
@@ -479,6 +517,7 @@ export default class AgendaitemDecisionComponent extends Component {
       newName = previousReport.name;
     }
     const report = this.store.createRecord('report', {
+      isReportOrMinutes: true,
       name: newName,
       created: now,
       modified: now,
