@@ -160,7 +160,7 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   updateDecisionPiecePart = task(async () => {
-    if (!this.report || !this.betreftPiecePart) {
+    if (!this.report || !this.beslissingPiecePart) {
       return;
     }
     let newBeslissingValue = this.beslissingPiecePart.value;
@@ -358,7 +358,20 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBeslissingContent() {
-    this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
+    let newBeslissingValue;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    switch (decisionResultCode.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingValue = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingValue = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        newBeslissingValue = this.nota;
+        break;
+    }
+    this.setBeslissingEditorContent(`<p>${newBeslissingValue}</p>`);
   }
 
   onUpdateConcern = task(async () => {

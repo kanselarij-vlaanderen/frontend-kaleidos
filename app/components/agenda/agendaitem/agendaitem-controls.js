@@ -19,6 +19,7 @@ export default class AgendaitemControls extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service decisionReportGeneration;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -135,18 +136,23 @@ export default class AgendaitemControls extends Component {
           title: 'Beslissing',
         },
       });
-      const now = new Date();
-      const newBeslissingPiecePart = yield this.store.createRecord('piece-part', {
-        title: 'Beslissing',
-        value: message,
-        report: report,
-        previousPiecePart: beslissingPiecePart,
-        created: now,
-      });
-      yield newBeslissingPiecePart.save();
-      yield this.decisionReportGeneration.generateReplacementReport.perform(
-        report
-      );    
+      if (beslissingPiecePart) {
+        const now = new Date();
+        const newBeslissingPiecePart = yield this.store.createRecord(
+          'piece-part',
+          {
+            title: 'Beslissing',
+            value: message,
+            report: report,
+            previousPiecePart: beslissingPiecePart,
+            created: now,
+          }
+        );
+        yield newBeslissingPiecePart.save();
+        yield this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
     }
     return;
   }
