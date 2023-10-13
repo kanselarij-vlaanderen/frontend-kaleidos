@@ -170,7 +170,8 @@ export default class AgendaService extends Service {
       defaultDecisionResultCodeUri
     );
 
-    const secretary = await (this.enableDigitalAgenda ? meeting.secretary : null);
+    const meetingSecretary = await meeting.secretary;
+    const secretary = this.enableDigitalAgenda ? meetingSecretary : null;
     // decision-activity
     const decisionActivity = await this.store.createRecord(
       'decision-activity',

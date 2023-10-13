@@ -117,14 +117,16 @@
       {{/if}}
       {{#if (and this.enableDigitalAgenda (not this.isPreKaleidos))}}
         <AuFormRow>
-          <Auk::Label>
-            {{t "secretary-for-meeting"}}
-          </Auk::Label>
-          <Mandatees::MandateeSelector
-            @onSelectMandatee={{fn (mut this.secretary)}}
-            @selectedMandatees={{this.secretary}}
-            @visibleRoles={{this.visibleRoles}}
-          />
+          <div class="auk-input-group--w-large">
+            <Auk::Label>
+              {{t "secretary-for-meeting"}}
+            </Auk::Label>
+            <Mandatees::MandateeSelector
+              @onSelectMandatee={{fn (mut this.secretary)}}
+              @selectedMandatees={{this.secretary}}
+              @visibleRoles={{this.visibleRoles}}
+            />
+          </div>
         </AuFormRow>
       {{/if}}
       {{#unless this.isAnnexMeeting}}
