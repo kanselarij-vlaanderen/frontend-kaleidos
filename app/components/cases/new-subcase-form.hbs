@@ -72,7 +72,6 @@
                   </Fieldset.content>
                 </AuFieldset>
               </div>
-
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Auk::Toolbar>
                   <Auk::Toolbar::Group @position="right">
@@ -91,28 +90,46 @@
                 </Auk::Toolbar>
               </div>
             </div>
-            <div class="auk-form-group">
-              <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
-              <AuToggleSwitch
-                data-test-new-subcase-confidential
-                @checked={{this.confidential}}
-                id="new-subcase-confidential"
-              />
+            <div class="au-u-flex au-u-flex--spaced">
+              <div class="auk-form-group">
+                <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+                <AuToggleSwitch
+                  data-test-new-subcase-confidential
+                  @checked={{this.confidential}}
+                  id="new-subcase-confidential"
+                />
+                </div>
+              <div class="auk-form-group">
+                <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
+                <AuToggleSwitch
+                  id="new-subcase-ok"
+                />
+              </div>
             </div>
             <div class="auk-form-group">
-              <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+              <Auk::Label for="shortTitle">{{t "name-subcase"}}</Auk::Label>
               <Auk::Textarea
                 data-test-new-subcase-shorttitle
                 @rows="2"
                 @value={{this.shortTitle}}
+                id="shortTitle"
               />
             </div>
             <div class="auk-form-group">
-              <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+              <Auk::Label for="longTitle">{{t "title-subcase"}}</Auk::Label>
               <Auk::Textarea
                 data-test-new-subcase-longtitle
                 @rows="4"
                 @value={{this.title}}
+                id="longTitle"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+              <Auk::Textarea
+                @rows="4"
+                @value=""
+                id="remarks"
               />
             </div>
             <div class="auk-form-group">
@@ -194,6 +211,26 @@
             @didUpdate={{this.onChangeCurrentMinisters}}
             @layout="grid"
           />
+          {{#if this.selectedCurrentMinisters}}
+          <AuHr/>
+          {{/if}}
+          <AuList
+            @divider={{true}}
+            as |Item|
+          >
+            {{#each this.selectedCurrentMinisters as |minister index|}}
+              <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
+                <strong>{{minister.fullName}}</strong>
+                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                  <AuToggleSwitch
+                    @checked={{if (eq index 0) true}}
+                    id="first"
+                  />
+                  <Auk::Label for="first" class="au-u-padding-bottom-none">Indiener</Auk::Label>
+                </div>
+              </Item>
+            {{/each}}
+          </AuList>
         </Auk::Panel::Body>
       </Auk::Panel>
       <Auk::Panel class="auk-u-mb-2">
@@ -211,55 +248,63 @@
         </Auk::Panel::Header>
         <Auk::Panel::Body class="au-c-panel-grid">
           {{#each this.selectedCurrentMinisters as |minister|}}
-            {{#if (eq minister.fullName 'Jan Jambon')}}
+            {{#if (or (eq minister.fullName 'Jan Jambon')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management'
                 @items={{this.JanJambon}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Hilde Crevits')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Hilde Crevits')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Welzijn, Volksgezondheid en Gezin'
                 @items={{this.HildeCrevits}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Bart Somers')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Bart Somers')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen'
                 @items={{this.BartSomers}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Ben Weyts')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Ben Weyts')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand'
                 @items={{this.BenWeyts}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Zuhal Demir')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Zuhal Demir')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Justitie en Handhaving, Omgeving, Energie en Toerisme'
                 @items={{this.ZuhalDemir}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Matthias Diependaele')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Matthias Diependaele')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Financiën en Begroting, Wonen en Onroerend Erfgoed'
                 @items={{this.MatthiasDiepenDaele}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Lydia Peeters')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Lydia Peeters')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Mobiliteit en Openbare Werken'
                 @items={{this.LydiaPeeters}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Benjamin Dalle')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Benjamin Dalle')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Brussel, Jeugd, Media en Armoedebestrijding'
                 @items={{this.BenjaminDalle}}
                 @itemStructure={{hash label="fullName"}}
               />
-            {{else if (eq minister.fullName 'Jo Brouns')}}
+            {{/if}}
+            {{#if (or (eq minister.fullName 'Jo Brouns')(eq this.showAllAreas true))}}
               <Auk::CheckboxTree
                 @label='Economie, Innovatie, Werk, Sociale Economie en Landbouw'
                 @items={{this.JoBrouns}}
@@ -269,6 +314,27 @@
           {{else}}
             <Auk::EmptyState @message={{t "no-ministers-added"}} />
           {{/each}}
+          <div class="au-u-1-1">
+            {{#if (eq this.showAllAreas true)}}
+            <AuButton
+              {{on "click" this.toggleAreas}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="remove"
+            >
+              Verberg alle beleidsdomeinen
+            </AuButton>
+            {{else}}
+            <AuButton
+              {{on "click" this.toggleAreas}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="add"
+            >
+              Toon alle beleidsdomeinen
+            </AuButton>
+            {{/if}}
+          </div>
         </Auk::Panel::Body>
       </Auk::Panel>
       <Auk::Panel class="auk-u-mb-2">
@@ -293,6 +359,7 @@
           <div class="upload-container">
             {{#each this.newPieces as |piece|}}
               <Documents::UploadedDocument
+                @limitedFields={{true}}
                 @piece={{piece}}
                 @allowDocumentContainerEdit={{true}}
                 @onDelete={{perform this.deletePiece piece}} />
@@ -309,20 +376,126 @@
     as |Group|>
     <Group>
       <AuLink
-        data-test-new-subcase-save
         @skin="button-secondary"
         @route="cases.case.subcases"
       >
         Annuleer
       </AuLink>
       <AuButton
-        data-test-new-subcase-save
         @skin="primary"
-        @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
-        {{on "click" (perform this.saveSubcase)}}
+        {{on "click" this.toggleAgendaModal}}
       >
         {{t "new-subcase"}}
       </AuButton>
     </Group>
   </AuToolbar>
- </div>
+</div>
+
+{{#if this.showAgendaModal}}
+<Auk::Modal>
+  <Auk::Modal::Header @title="Agendering" @onClose={{this.toggleAgendaModal}} />
+  <Auk::Modal::Body>
+    <div class="auk-o-grid auk-o-grid--vertical-center">
+      <div class="auk-o-grid-col-8">
+        <Auk::Toolbar @auto={{true}}>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item class="auk-u-maximize-width">
+              <AuInput
+                @icon="search"
+                @width="block"
+                @value=""
+                @disabled={{this.showPostponed}}
+                id="searchId"
+                placeholder={{t "search-placeholder"}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+    </div>
+    <div>
+      <table class="auk-table auk-table--striped">
+        <thead>
+          <tr>
+            <th class="auk-table__col--1"></th>
+            <Utils::ThSortable
+              @field="created"
+              @label="Datum aangemaakt"
+            />
+            <Utils::ThSortable
+              @field="short-title"
+              @label="Titel"
+            />
+          </tr>
+        </thead>
+        <tbody class="auk-table--clickable-rows">
+          {{#each this.agendas as |agenda|}}
+            <tr>
+              <td class="auk-table__col--1">
+                <AuCheckbox {{on 'click' this.toggleAgenda }} />
+              </td>
+              <td class="auk-table__col--3">
+                {{agenda.created}}
+              </td>
+              <td class="auk-table__col--8">
+                <strong>{{agenda.title}}</strong>
+                <AuPill @skin="ongoing" @draft={{true}}>{{agenda.letter}}</AuPill>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{!-- <div class="auk-u-mx-4">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <div class="auk-pagination">
+                <ul class="auk-pagination__list">
+                  <li class="auk-pagination__element">
+                    <p><strong>1-10</strong> van 20</p>
+                  </li>
+                  <li class="auk-pagination__element">
+                    <button class="au-c-button au-c-button--link auk-u-text-vertical-align-middle" type="button">
+                      <svg role="img" class="au-c-icon au-c-icon--chevron-left  " aria-hidden="true">
+                        <use xlink:href="/@appuniversum/ember-appuniversum/appuniversum-symbolset.svg#chevron-left"></use>
+                      </svg>
+                        Vorige
+                    </button>
+                  </li>
+                  <li class="auk-pagination__element">
+                    <button class="au-c-button au-c-button--link auk-u-text-vertical-align-middle" type="button">
+                      Volgende
+                      <svg role="img" class="au-c-icon au-c-icon--chevron-right  " aria-hidden="true">
+                      <use xlink:href="/@appuniversum/ember-appuniversum/appuniversum-symbolset.svg#chevron-right"></use>
+                    </svg>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div> --}}
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.saveSubcase.isRunning}}
+    @onCancel={{this.toggleAgendaModal}}
+  >
+    <AuButton
+      @skin="secondary"
+      {{on "click" (perform this.saveSubcase)}}
+    >
+      Later toevoegen
+    </AuButton>
+    <AuButton
+      @skin="primary"
+      @disabled={{if (eq this.hasAgenda false) true}}
+      @loading={{or this.areSavingTasksRunning this.areLoadingTasksRunning}}
+      {{on "click" (perform this.saveSubcase)}}
+    >
+      Plaats op agenda
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}

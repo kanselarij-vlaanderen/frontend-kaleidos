@@ -36,6 +36,9 @@ export default class CasesNewSubcaseForm extends Component {
   @tracked currentMinisters = [];
   @tracked selectedMinisterIds = [];
   @tracked selectedCurrentMinisterIds = [];
+  @tracked showAllAreas = false;
+  @tracked showAgendaModal = false;
+  @tracked hasAgenda = false;
 
   @tracked newPieces = A([]);
 
@@ -235,7 +238,7 @@ export default class CasesNewSubcaseForm extends Component {
   @task
   *saveSubcase() {
     yield this.createSubcase(false);
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases');
     this.args.onCreate();
   }
 
@@ -271,6 +274,21 @@ export default class CasesNewSubcaseForm extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  @action
+  toggleAreas() {
+    this.showAllAreas = !this.showAllAreas;
+  }
+
+  @action
+  toggleAgendaModal() {
+    this.showAgendaModal = !this.showAgendaModal;
+  }
+
+  @action
+  toggleAgenda() {
+    this.hasAgenda = true;
   }
 
 
@@ -408,6 +426,45 @@ export default class CasesNewSubcaseForm extends Component {
       'fullName': 'Landbouw'
     }
   ]
+
+  agendas = [
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '14-07-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '22-06-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '22-06-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'D',
+      'created': '29-05-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'A',
+      'created': '15-05-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'D',
+      'created': '26-04-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'A',
+      'created': '18-01-2023'
+    }
+  ]
+
 
   @action
   uploadPiece(file) {
