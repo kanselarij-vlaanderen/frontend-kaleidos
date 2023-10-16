@@ -99,11 +99,18 @@ const selectors = {
     name: '[data-test-linked-document-link-name]',
   },
 
+  // document-preview-modal
+  documentPreview: {
+    title: '[data-test-document-preview-title]',
+    downloadLink: '[data-test-document-preview-download-link]',
+  },
+
   // document-preview-sidebar
   documentPreviewSidebar: {
     open: '[data-test-document-preview-sidebar-open]',
     tabs: {
       details: '[data-test-document-preview-sidebar-tab-details]',
+      signatures: '[data-test-document-preview-sidebar-tab-signatures]',
       versions: '[data-test-document-preview-sidebar-tab-versions]',
     },
   },
@@ -124,6 +131,13 @@ const selectors = {
       accessLevel: '[data-test-details-tab-edit-access-level]',
       upload: '[data-test-document-details-panel-upload]',
     },
+  },
+
+  // document-preview/signatures-tab
+  previewSignaturesTab: {
+    statusPill: '[data-test-signatures-tab-status-pill]',
+    deleteSignFlow: '[data-test-signatures-tab-delete-signflow]',
+    markForSignflow: '[data-test-signatures-tab-mark-for-signflow]',
   },
 
   // document-preview/version-card

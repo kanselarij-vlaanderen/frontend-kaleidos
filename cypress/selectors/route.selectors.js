@@ -56,6 +56,15 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
+  // agenda/agendaitems/agendaitem/minutes/template
+  agendaitemMinutes: {
+    createEdit: '[data-test-route-agenda---agendaitem-minutes-create-edit]',
+    editor: {
+      updateContent: '[data-test-route-agenda---agendaitem-minutes-editor-update-content]',
+      save: '[data-test-route-agenda---agendaitem-minutes-editor-save]',
+    },
+  },
+
   /**
     ROUTE CASES
   */

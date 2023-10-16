@@ -4,11 +4,13 @@
   {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
       <SignaturePill
+        data-test-signatures-tab-status-pill
         @piece={{@piece}}
         @signMarkingActivity={{this.signMarkingActivity}}
       />
       {{#if (user-may "remove-signatures")}}
         <AuButton
+          data-test-signatures-tab-delete-signflow
           @skin="naked"
           @alert={{true}}
           @icon="trash"
@@ -29,6 +31,7 @@
       {{#if (or this.decisionActivity @piece.isReportOrMinutes)}}
         {{#if (or @piece.isReportOrMinutes (not this.agendaitemIsRetracted))}}
           <AuToggleSwitch
+            data-test-signatures-tab-mark-for-signflow
             @skin="primary"
             @label={{t "present-for-signing"}}
             @checked={{this.hasMarkedSignFlow}}
@@ -46,9 +49,10 @@
         </AuAlert>
       {{/if}}
     {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
-      <SignaturePill 
-        @piece={{@piece}} 
-        @signMarkingActivity={{this.signMarkingActivity}} 
+      <SignaturePill
+        data-test-signatures-tab-status-pill
+        @piece={{@piece}}
+        @signMarkingActivity={{this.signMarkingActivity}}
       />
     {{else}}
       <AuAlert
