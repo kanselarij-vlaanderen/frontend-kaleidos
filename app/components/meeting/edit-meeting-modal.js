@@ -9,6 +9,7 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
+import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
@@ -60,13 +61,15 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
-    this.initializeSecretary.perform();
 
     this.meetingYear =
       this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
+
+    // computation issue with startDate if performed before
+    this.initializeSecretary.perform();
   }
 
   get meetingKindPostfix() {
@@ -127,6 +130,10 @@ export default class MeetingEditMeetingComponent extends Component {
     );
   }
 
+  get isPreKaleidos() {
+    return this.startDate < KALEIDOS_START_DATE;
+  }
+
   @action
   setStartDate(date) {
     this.startDate = date;
@@ -140,11 +147,12 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   initializeSecretary = task(async () => {
-    if (this.enableDigitalAgenda) {
+    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
       const secretary = await this.args.meeting.secretary;
       if (isPresent(secretary)) {
         this.secretary = secretary;
-      } else {
+      } else if (this.isNew) {
+        // if a meeting had no secretary yet we don't set a default one automatically
         const currentApplicationSecretary =
           await this.mandatees.getCurrentApplicationSecretary();
         this.secretary = currentApplicationSecretary;
@@ -269,6 +277,11 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
+    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+      if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
+          this.args.meeting.secretary = this.secretary;
+        }
+      }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
       this.plannedDocumentPublicationDate;
@@ -277,9 +290,6 @@ export default class MeetingEditMeetingComponent extends Component {
 
     try {
       yield this.args.meeting.save();
-      if (this.enableDigitalMinutes) {
-        yield this.updateSecretaryInMinutes();
-      }
       const saveActivities = [
         this.themisPublicationActivity.save(),
         this.documentPublicationActivity.save(),
@@ -290,9 +300,9 @@ export default class MeetingEditMeetingComponent extends Component {
 
       yield Promise.all(saveActivities);
 
-      if (this.enableDigitalAgenda) {
+      if (this.enableDigitalAgenda && !this.isPreKaleidos) {
         if (
-          currentMeetingSecretary?.uri !== this.secretary.uri ||
+          currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
           currentPlannedStart !== this.startDate || 
           currentMeetingNumberRepresentation !== this.numberRepresentation
@@ -308,6 +318,9 @@ export default class MeetingEditMeetingComponent extends Component {
             decisionActivity.secretary = this.secretary;
             yield decisionActivity.save();
             yield this.regenerateDecisionReport.perform(decisionActivity);
+          }
+          if (this.enableDigitalMinutes) {
+            yield this.updateSecretaryInMinutes();
           }
         }
       }
