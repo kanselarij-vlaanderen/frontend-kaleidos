@@ -64,14 +64,20 @@ export default class SignatureService extends Service {
       signFlow.status = status;
       await signFlow.save();
     }
-
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
     if (!response.ok) {
       for (let signFlow of signFlows) {
         await this.removeSignFlow(signFlow, true);
       }
-      throw new Error('Failed to upload piece to Signing Hub');
+      let stringifiedJson;
+      try {
+        const json = await response?.json();
+        stringifiedJson = JSON.stringify(json);
+      } catch (error) {
+        // cannot stringify could mean digital-signing is down
+      }
+      throw new Error(stringifiedJson ?? response.statusText);
     }
   }
 
@@ -88,43 +94,41 @@ export default class SignatureService extends Service {
       };
     }
     const subcase = await decisionActivity?.subcase;
-    if (subcase) {
-      const decisionmakingFlow = await subcase.decisionmakingFlow;
-      const _case = await decisionmakingFlow.case;
-      const now = new Date();
-      const status = await this.store.findRecordByUri('concept', MARKED);
+    const decisionmakingFlow = await subcase?.decisionmakingFlow;
+    const _case = await decisionmakingFlow?.case;
+    const now = new Date();
+    const status = await this.store.findRecordByUri('concept', MARKED);
 
-      // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
-      const signFlow = this.store.createRecord('sign-flow', {
-        openingDate: now,
-        shortTitle: _case.shortTitle,
-        longTitle: _case.title,
-        case: _case,
-        decisionActivity,
-        status: status,
-      });
-      await signFlow.save();
-      const signSubcase = this.store.createRecord('sign-subcase', {
+    // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
+    const signFlow = this.store.createRecord('sign-flow', {
+      openingDate: now,
+      shortTitle: _case?.shortTitle,
+      longTitle: _case?.title,
+      case: _case,
+      decisionActivity,
+      status: status,
+    });
+    await signFlow.save();
+    const signSubcase = this.store.createRecord('sign-subcase', {
+      startDate: now,
+      signFlow: signFlow,
+    });
+    await signSubcase.save();
+    const signMarkingActivity = this.store.createRecord(
+      'sign-marking-activity',
+      {
         startDate: now,
-        signFlow: signFlow,
-      });
-      await signSubcase.save();
-      const signMarkingActivity = this.store.createRecord(
-        'sign-marking-activity',
-        {
-          startDate: now,
-          endDate: now,
-          signSubcase: signSubcase,
-          piece: piece,
-        }
-      );
-      await signMarkingActivity.save();
+        endDate: now,
+        signSubcase: signSubcase,
+        piece: piece,
+      }
+    );
+    await signMarkingActivity.save();
 
-      return {
-        signFlow,
-        signSubcase,
-      };
-    }
+    return {
+      signFlow,
+      signSubcase,
+    };
   }
 
   async canManageSignFlow(piece) {

@@ -83,10 +83,10 @@
             </Auk::Toolbar>
           </Auk::Panel::Footer>
         {{else}}
-          {{#if this.model.minutes}}
-            <Auk::Panel::Body
-              class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
-            >
+          <Auk::Panel::Body
+            class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+          >
+            {{#if this.model.minutes}}
               <Documents::DocumentCard
                 @piece={{this.model.minutes}}
                 @isEditable={{true}}
@@ -100,40 +100,36 @@
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
               />
-            </Auk::Panel::Body>
-          {{/if}}
-          <Auk::Panel::Body
-            class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
-          >
-            {{#if this.currentPiecePart.isRunning}}
-              <Auk::Loader />
-            {{else if this.currentPiecePart.value}}
+            {{else if (user-may "manage-minutes")}}
+              <AuAlert
+                @title={{t "create-minutes-click-create-button-message"}}
+                @icon="circle-info"
+                @skin="info"
+                @size="small"
+                @closable={{false}}
+              />
+            {{else}}
+              <AuAlert
+                @title={{t "no-minutes-for-meeting"}}
+                @icon="circle-info"
+                @skin="info"
+                @size="small"
+                @closable={{false}}
+              />
+            {{/if}}
+          </Auk::Panel::Body>
+          {{#if (and (user-may "manage-minutes") this.currentPiecePart.value)}}
+            <Auk::Panel::Body
+              class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
+            >
               <AuContent>
                 <SanitizeHtml
                   @raw={{true}}
                   @value={{this.currentPiecePart.value.value}}
                 />
               </AuContent>
-            {{else}}
-              {{#if (user-may "manage-minutes")}}
-                <AuAlert
-                  @title={{t "create-minutes-click-create-button-message"}}
-                  @icon="circle-info"
-                  @skin="info"
-                  @size="small"
-                  @closable={{false}}
-                />
-              {{else}}
-                <AuAlert
-                  @title={{t "no-minutes-for-meeting"}}
-                  @icon="circle-info"
-                  @skin="info"
-                  @size="small"
-                  @closable={{false}}
-                />
-              {{/if}}
-            {{/if}}
-          </Auk::Panel::Body>
+            </Auk::Panel::Body>
+          {{/if}}
         {{/if}}
       </Auk::Panel>
     </div>

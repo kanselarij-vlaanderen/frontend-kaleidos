@@ -79,6 +79,8 @@ Router.map(function() {
     this.route('signatures', { path: '/ondertekenen', }, function() {
       this.route('index', { path: '/opstarten' });
       this.route('ongoing', { path: '/opvolgen' });
+      this.route('decisions', { path: '/beslissingen-en-notulen' });
+      this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
     });
   }
 
@@ -125,7 +127,6 @@ Router.map(function() {
     this.route('color-badge');
     this.route('datepicker');
     this.route('empty-state');
-    this.route('form-group');
     this.route('layout-grid');
     this.route('heading');
     this.route('icons');

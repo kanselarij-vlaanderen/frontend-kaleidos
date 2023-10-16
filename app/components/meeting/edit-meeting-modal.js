@@ -9,6 +9,13 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
+import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
+import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+
+function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
+  let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
+  return replaceById(newHtml, 'secretary', newSecretary);
+}
 
 /**
  * @argument {isNew}
@@ -54,13 +61,15 @@ export default class MeetingEditMeetingComponent extends Component {
     this.initializeMeetingNumber.perform();
     this.initializeMainMeeting.perform();
     this.initializePublicationModels.perform();
-    this.loadSecretary.perform();
 
     this.meetingYear =
       this.args.meeting.plannedStart?.getFullYear() || this.currentYear;
     this.startDate = this.args.meeting.plannedStart;
     this.extraInfo = this.args.meeting.extraInfo;
     this.numberRepresentation = this.args.meeting.numberRepresentation;
+
+    // computation issue with startDate if performed before
+    this.initializeSecretary.perform();
   }
 
   get meetingKindPostfix() {
@@ -96,7 +105,9 @@ export default class MeetingEditMeetingComponent extends Component {
       !this.numberRepresentation ||
       this.initializeKind.isRunning ||
       this.initializeMainMeeting.isRunning ||
-      this.loadSecretary.isRunning ||
+      this.initializeSecretary.isRunning ||
+      this.initializePublicationModels.isRunning ||
+      this.initializeMeetingNumber.isRunning ||
       this.saveMeeting.isRunning
     );
   }
@@ -106,7 +117,21 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
+  }
+
+  get enableDigitalMinutes() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_MINUTES === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_MINUTES === true
+    );
+  }
+
+  get isPreKaleidos() {
+    return this.startDate < KALEIDOS_START_DATE;
   }
 
   @action
@@ -121,14 +146,17 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  loadSecretary = task(async () => {
-    const secretary = await this.args.meeting.secretary;
-    if (isPresent(secretary)) {
-      this.secretary = secretary;
-    } else {
-      const currentApplicationSecretary =
-        await this.mandatees.getCurrentApplicationSecretary();
-      this.secretary = currentApplicationSecretary;
+  initializeSecretary = task(async () => {
+    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+      const secretary = await this.args.meeting.secretary;
+      if (isPresent(secretary)) {
+        this.secretary = secretary;
+      } else if (this.isNew) {
+        // if a meeting had no secretary yet we don't set a default one automatically
+        const currentApplicationSecretary =
+          await this.mandatees.getCurrentApplicationSecretary();
+        this.secretary = currentApplicationSecretary;
+      }
     }
   });
 
@@ -218,9 +246,29 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
+  regenerateDecisionReport = task(async (decisionActivity) => {
+    if (this.enableDigitalAgenda) {
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[decision-activity][:id:]': decisionActivity.id,
+      });
+      const pieceParts = await report?.pieceParts;
+      if (pieceParts?.length) {
+        await this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
+    }
+  });
+
   @task
   *saveMeeting() {
     const now = new Date();
+
+    const currentMeetingSecretary = yield this.args.meeting.secretary;
+    const currentKind = yield this.args.meeting.kind;
+    const currentPlannedStart = this.args.meeting.plannedStart;
+    const currentMeetingNumberRepresentation = this.args.meeting.numberRepresentation;
 
     this.args.meeting.extraInfo = this.extraInfo;
     this.args.meeting.plannedStart = this.startDate || now;
@@ -229,27 +277,9 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    const currentMeetingSecretary = yield this.args.meeting.secretary;
-    if (currentMeetingSecretary?.uri !== this.secretary.uri) {
-      //TODO: create job to re-generate PDFs for all latest decision-activities on agenda
-      this.args.meeting.secretary = this.secretary;
-      const decisionActivities = yield this.store.queryAll('decision-activity', {
-        'filter[treatment][agendaitems][agenda][created-for][:id:]':
-          this.args.meeting.id,
-      });
-      for (let decisionActivity of decisionActivities.slice()) {
-        decisionActivity.secretary = this.secretary;
-        yield decisionActivity.save(); 
-        if (this.enableDigitalAgenda) {
-          const report = yield this.store.queryOne('report', {
-            'filter[:has-no:next-piece]': true,
-            'filter[decision-activity][:id:]': decisionActivity.id,
-          });
-          const pieceParts = yield report?.pieceParts;
-          if (pieceParts?.length) {
-            yield this.decisionReportGeneration.generateReplacementReports.perform([report]);
-          }
-        }
+    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+      if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
+        this.args.meeting.secretary = this.secretary;
       }
     }
     // update the planned date of the publication activities (not needed for decisions)
@@ -267,12 +297,56 @@ export default class MeetingEditMeetingComponent extends Component {
       if (this.decisionPublicationActivity.isNew) {
         saveActivities.push(this.decisionPublicationActivity.save());
       }
+
       yield Promise.all(saveActivities);
+
+      if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+        if (
+          currentMeetingSecretary?.uri !== this.secretary?.uri ||
+          currentKind?.uri !== this.selectedKind.uri ||
+          currentPlannedStart !== this.startDate || 
+          currentMeetingNumberRepresentation !== this.numberRepresentation
+        ) {
+          const decisionActivities = yield this.store.queryAll(
+            'decision-activity',
+            {
+              'filter[treatment][agendaitems][agenda][created-for][:id:]':
+                this.args.meeting.id,
+            }
+          );
+          for (let decisionActivity of decisionActivities.slice()) {
+            decisionActivity.secretary = this.secretary;
+            yield decisionActivity.save();
+            yield this.regenerateDecisionReport.perform(decisionActivity);
+          }
+          if (this.enableDigitalMinutes) {
+            yield this.updateSecretaryInMinutes();
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
       this.toaster.error();
     } finally {
       yield this.args.didSave();
+    }
+  }
+
+  async updateSecretaryInMinutes() {
+    const minutes = await this.args.meeting.minutes;
+    if (minutes) {
+      const piecePart = await this.store.queryOne('piece-part', {
+        'filter[:has-no:next-piece-part]': true,
+        'filter[minutes][:id:]': minutes.id,
+      });
+      const newValue = replaceSecretary(piecePart.value,
+        this.secretary.person.get('fullName'),
+        this.secretary.title.toLowerCase());
+      piecePart.value = newValue;
+      await piecePart.save();
+      await this.decisionReportGeneration.generateReplacementMinutes.perform(
+        minutes,
+      );
     }
   }
 
@@ -294,9 +368,11 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    const mainMeetingSecretary = await mainMeeting.secretary;
-    if (mainMeetingSecretary) {
-      this.secretary = mainMeetingSecretary;
+    if (this.enableDigitalAgenda) {
+      const mainMeetingSecretary = await mainMeeting.secretary;
+      if (mainMeetingSecretary) {
+        this.secretary = mainMeetingSecretary;
+      }
     }
   }
 
