@@ -209,20 +209,16 @@ export default class AgendasController extends Controller {
 
     const startDate = newMeeting.plannedStart;
 
-    // default secretary
-    const decisionSecretary = {};
+    // meeting secretary
+    let secretary;
     if (this.enableDigitalAgenda) {
       const meetingSecretary = await newMeeting.secretary;
-      if (meetingSecretary) {
-        decisionSecretary.secretary = meetingSecretary;
-      } else {
-        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
-      }
+      secretary = this.enableDigitalAgenda ? meetingSecretary : null;
     }
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       decisionResultCode,
-      ...decisionSecretary,
+      secretary,
       // no subcase. Minutes approval aren't part of a (sub)case
     });
     await decisionActivity.save();
