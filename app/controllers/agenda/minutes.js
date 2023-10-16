@@ -41,25 +41,25 @@ function renderAttendees(attendees) {
   `;
 }
 
-async function renderNotas(notas, intl) {
-  return await renderAgendaitemList(notas, intl);
+async function renderNotas(meeting, notas, intl) {
+  return await renderAgendaitemList(meeting, notas, intl);
 }
 
-async function renderAnnouncements(announcements, intl) {
+async function renderAnnouncements(meeting, announcements, intl) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${await renderAgendaitemList(announcements, intl)}
+    ${await renderAgendaitemList(meeting, announcements, intl)}
   `;
 }
 
-async function renderAgendaitemList(agendaitems, intl) {
+async function renderAgendaitemList(meeting, agendaitems, intl) {
   let agendaitemList = "";
   for (const agendaitem of agendaitems) {
-    agendaitemList += await getMinutesListItem(agendaitem, intl);
+    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl);
   }
   return agendaitemList;
 }
-async function getMinutesListItem(agendaitem, intl) {
+async function getMinutesListItem(meeting, agendaitem, intl) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
@@ -74,7 +74,7 @@ async function getMinutesListItem(agendaitem, intl) {
     case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
       text = intl.t("minutes-approval", {
         mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
-        reportName: await generateReportName(agendaitem)
+        reportName: await generateReportName(agendaitem, meeting),
       })
       break;
     case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
@@ -129,12 +129,12 @@ function renderAbsentees() {
 }
 
 async function renderMinutes(data, intl) {
-  const { attendees, notas, announcements } = data;
+  const { meeting, attendees, notas, announcements } = data;
   return `
     ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? await renderNotas(notas, intl) : ''}
-    ${announcements ? await renderAnnouncements(announcements, intl) : ''}
+    ${notas ? await renderNotas(meeting, notas, intl) : ''}
+    ${announcements ? await renderAnnouncements(meeting, announcements, intl) : ''}
   `;
 }
 
@@ -353,6 +353,7 @@ export default class AgendaMinutesController extends Controller {
 
   async reshapeModelForRender() {
     return {
+      meeting: this.model.meeting,
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
