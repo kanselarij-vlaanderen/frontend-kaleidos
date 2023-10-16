@@ -53,7 +53,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
-  @tracked altLabel;
+  @tracked dateToShowAltLabel;
 
   constructor() {
     super(...arguments);
@@ -71,14 +71,21 @@ export default class DocumentsDocumentCardComponent extends Component {
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
-  get label() {
-    if (isPresent(this.args.label)) {
-      return this.intl.t(this.args.label);
+  get dateToShowLabel() {
+    if (isPresent(this.args.dateToShowLabel)) {
+      return this.intl.t(this.args.dateToShowLabel);
     }
-    if (isPresent(this.altLabel)) {
-      return this.altLabel;
+    if (isPresent(this.dateToShowAltLabel)) {
+      return this.dateToShowAltLabel;
     }
     return this.intl.t('uploaded-at');
+  }
+
+  get dateToShow() {
+    if (isPresent(this.altDateToShow)) {
+      return this.altDateToShow;
+    }
+    return this.args.piece.created;
   }
 
   get bordered() {
@@ -153,13 +160,16 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadReportPieceParts = (id) =>
-      this.store.query('piece-part', {
+    const loadReportPiecePart = (id) =>
+      this.store.queryOne('piece-part', {
         'filter[report][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
+        sort: '-created', // finds the most recently changed one regardless of type
       });
-    const loadMinutesPieceParts = (id) =>
-      this.store.query('piece-part', {
+    const loadMinutesPiecePart = (id) =>
+      this.store.queryOne('piece-part', {
         'filter[minutes][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
@@ -168,22 +178,19 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       // check for alternative label
       const modelName = this.args.piece.constructor.modelName;
-      if (!isPresent(this.args.label)) {
-        let pieceParts;
+      if (!isPresent(this.args.dateToShowLabel)) {
+        let piecePart;
         if (modelName === 'report') {
-          pieceParts = yield loadReportPieceParts(this.piece.id);
+          piecePart = yield loadReportPiecePart(this.piece.id);
         } else if (modelName === 'minutes') {
-          pieceParts = yield loadMinutesPieceParts(this.piece.id);
+          piecePart = yield loadMinutesPiecePart(this.piece.id);
         }
-        
-        if (pieceParts) {
-          if (pieceParts.length === 1) {
-            this.altLabel = this.intl.t('created-on');
-          } else {
-            this.altLabel = this.intl.t('edited-on');
-          }
+        const previousPart = yield piecePart?.previousPiecePart;
+        if (previousPart) {
+          this.dateToShowAltLabel = this.intl.t('edited-on');
+          this.altDateToShow = piecePart.created;
         } else {
-          this.altLabel = null;
+          this.dateToShowAltLabel = this.intl.t('created-on');
         }
       }
     } else if (this.args.documentContainer) {

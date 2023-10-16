@@ -59,15 +59,15 @@
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
-              {{#if this.piece.created}}
+              {{#if this.dateToShow}}
                 <p
                   data-test-document-card-primary-source-created={{if
                     this.piece.file.derived
                     ""
                   }}
                 >
-                  {{this.label}}
-                  {{datetime-at this.piece.modified}}
+                  {{this.dateToShowLabel}}
+                  {{datetime-at this.dateToShow}}
                   {{#if
                     (and
                       this.piece.file.derived
@@ -287,7 +287,7 @@
                       piece
                     }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                    @label={{this.label}}
+                    @label={{this.dateToShowLabel}}
                   />
                 </div>
               {{/each}}
