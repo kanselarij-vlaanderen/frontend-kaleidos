@@ -11,6 +11,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
@@ -40,26 +41,25 @@ function renderAttendees(attendees) {
   `;
 }
 
-async function renderNotas(notas, betreftPieceParts, intl) {
-  return await renderAgendaitemList(notas, betreftPieceParts, intl);
+async function renderNotas(notas, intl) {
+  return await renderAgendaitemList(notas, intl);
 }
 
-async function renderAnnouncements(announcements, betreftPieceParts, intl) {
+async function renderAnnouncements(announcements, intl) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${await renderAgendaitemList(announcements, betreftPieceParts, intl)}
+    ${await renderAgendaitemList(announcements, intl)}
   `;
 }
 
-async function renderAgendaitemList(agendaitems, betreftPieceParts, intl) {
+async function renderAgendaitemList(agendaitems, intl) {
   let agendaitemList = "";
   for (const agendaitem of agendaitems) {
-    agendaitemList += await getMinutesListItem(betreftPieceParts, agendaitem, intl);
+    agendaitemList += await getMinutesListItem(agendaitem, intl);
   }
   return agendaitemList;
 }
-async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
-  const betreftPiecePart = betreftPieceParts.find(piecePart => piecePart.agendaitemID === agendaitem.id);
+async function getMinutesListItem(agendaitem, intl) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
@@ -72,12 +72,10 @@ async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
   let text = "";
   switch (decisionResultCode?.uri) {
     case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
-      if (betreftPiecePart) {
-        text = intl.t("minutes-approval", {
-          mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
-          reportName: betreftPiecePart['reportName']
-        })
-      }
+      text = intl.t("minutes-approval", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
+        reportName: await generateReportName(agendaitem)
+      })
       break;
     case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
       text = intl.t("minutes-retracted", {
@@ -96,13 +94,6 @@ async function getMinutesListItem(betreftPieceParts, agendaitem, intl) {
       break;
     default:
       break;
-  }
-  if (betreftPiecePart) {
-    return `<h4><u>${
-      agendaitem.number
-    }. ${betreftPiecePart['value'].replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n').trim().toUpperCase()}</u></h4>
-    <p>${text}</p>
-    `
   }
   const documents = await agendaitem.pieces;
   let sortedPieces;
@@ -138,12 +129,12 @@ function renderAbsentees() {
 }
 
 async function renderMinutes(data, intl) {
-  const { attendees, notas, announcements, betreftPieceParts } = data;
+  const { attendees, notas, announcements } = data;
   return `
     ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? await renderNotas(notas, betreftPieceParts, intl) : ''}
-    ${announcements ? await renderAnnouncements(announcements, betreftPieceParts, intl) : ''}
+    ${notas ? await renderNotas(notas, intl) : ''}
+    ${announcements ? await renderAnnouncements(announcements, intl) : ''}
   `;
 }
 
@@ -365,7 +356,6 @@ export default class AgendaMinutesController extends Controller {
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
-      betreftPieceParts: this.model.betreftPieceParts
     };
   }
 }
