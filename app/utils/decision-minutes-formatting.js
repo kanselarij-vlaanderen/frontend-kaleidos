@@ -33,18 +33,27 @@ function generateBetreft(
   subcaseName = null
 ) {
   let betreft = '';
-  betreft += `${shortTitle}`;
-  betreft += title ? `<br/>${title}` : '';
-  betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  if (isApproval) {
+    betreft += 'De Vlaamse Regering hecht haar ';
+    betreft += title? `${lowercaseFirstLetter(title)}` : `${lowercaseFirstLetter(shortTitle)}`;
+  } else {
+    betreft += `${shortTitle}`;
+    betreft += title ? `<br/>${title}` : '';
+    betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  }
   betreft +=
-    documents && documents.length
-      ? `<br/>${formatDocuments(documents, isApproval)}`
-      : '';
+  documents && documents.length
+  ? `<br/>${formatDocuments(documents, isApproval)}`
+  : '';
   return betreft;
 }
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function lowercaseFirstLetter(string) {
+  return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
 export { formatDocuments, generateBetreft };
