@@ -54,6 +54,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasMarkedSignFlow = false;
 
   @tracked dateToShowAltLabel;
+  @tracked altDateToShow;
+
 
   constructor() {
     super(...arguments);
