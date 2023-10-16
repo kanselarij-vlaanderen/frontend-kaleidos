@@ -18,7 +18,6 @@ module.exports = function (environment) {
     },
     APP: {
       // eslint-disable-next-line quotes
-      ENABLE_DECISION_GOEDGEKEURD:'{{ENABLE_DECISION_GOEDGEKEURD}}',
       ENABLE_SIGNATURES: '{{ENABLE_SIGNATURES}}',
       ENABLE_IMPERSONATION: '{{ENABLE_IMPERSONATION}}',
       ENABLE_DEBUG: '{{ENABLE_DEBUG}}',

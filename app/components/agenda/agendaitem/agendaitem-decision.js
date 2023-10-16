@@ -406,7 +406,7 @@ export default class AgendaitemDecisionComponent extends Component {
     betreftPiecePart
   ) {
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    if (decisionResultCode) {
+    if (!decisionResultCode) {
       const agendaitemType = await this.args.agendaitem.type;
       const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
       const decisionresultCodeUri = isNota

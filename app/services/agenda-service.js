@@ -166,8 +166,8 @@ export default class AgendaService extends Service {
     let defaultDecisionResultCodeUri;
     if (isAnnouncement) {
       defaultDecisionResultCodeUri = CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
-    } else if (ENV.APP.ENABLE_DECISION_GOEDGEKEURD) {
-      defaultDecisionResultCodeUri = CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    } else {
+      defaultDecisionResultCodeUri = this.enableDigitalAgenda ? null : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     }
 
     let decisionResultCode;
