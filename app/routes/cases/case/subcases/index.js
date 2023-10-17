@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesCaseSubcasesIndexRoute extends Route {
   @service store;
+  @service router;
 
   queryParams = {
     page: {
@@ -36,5 +37,9 @@ export default class CasesCaseSubcasesIndexRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.decisionmakingFlow = this.decisionmakingFlow;
+  }
+
+  redirect(model) {
+    this.router.transitionTo('cases.case.subcases.subcase', model[0]);
   }
 }

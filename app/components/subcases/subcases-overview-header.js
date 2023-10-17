@@ -17,7 +17,7 @@ export default class SubCasesOverviewHeader extends Component {
 
   @task
   *loadData() {
-    this.case = yield this.args.decisionmakingFlow.case;
+    this.case = yield this.args.decisionmakingFlow.case.id;
     this.publicationFlows = yield this.case.publicationFlows;
   }
 
