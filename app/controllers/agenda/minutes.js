@@ -216,7 +216,7 @@ export default class AgendaMinutesController extends Controller {
     const piecePart = this.store.createRecord('piece-part', {
       value: this.editor.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePart.htmlContent,
       minutes,
     });
 
@@ -256,9 +256,9 @@ export default class AgendaMinutesController extends Controller {
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
-      value: this.currentPiecePart.value.value,
+      value: this.currentPiecePart.value.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePart.htmlContent,
       minutes: newVersion,
     });
 
@@ -290,8 +290,8 @@ export default class AgendaMinutesController extends Controller {
   @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
-    if (this.currentPiecePart.value) {
-      this.editor.setHtmlContent(this.currentPiecePart.value.value);
+    if (this.currentPiecePart.htmlContent) {
+      this.editor.setHtmlContent(this.currentPiecePart.value.htmlContent);
     }
   }
 

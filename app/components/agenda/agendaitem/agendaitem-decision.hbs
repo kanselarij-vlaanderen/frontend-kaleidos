@@ -291,7 +291,7 @@
               </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
-              @value={{this.betreftPiecePart.value}}
+              @value={{this.betreftPiecePart.htmlContent}}
             />
             {{/if}}
              {{#if (and this.isEditingTreatment this.enableDigitalAgenda)}}
@@ -376,7 +376,7 @@
               </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
-              @value={{this.beslissingPiecePart.value}}
+              @value={{this.beslissingPiecePart.htmlContent}}
             />
             {{/if}}
           </AuContent>

@@ -105,8 +105,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const { betreftPiecePart, beslissingPiecePart } =
       this.createAndAttachPieceParts(
         report,
-        this.betreftPiecePart.value,
-        this.beslissingPiecePart.value
+        this.betreftPiecePart.htmlContent,
+        this.beslissingPiecePart.htmlContent
       );
 
     await this.saveReport.perform(
@@ -165,23 +165,23 @@ export default class AgendaitemDecisionComponent extends Component {
     if (!this.report || !this.beslissingPiecePart) {
       return;
     }
-    let newBeslissingValue = this.beslissingPiecePart.value;
+    let newBeslissingHtmlContent = this.beslissingPiecePart.htmlContent;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     switch (decisionResultCode.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
-        newBeslissingValue = this.intl.t('postponed-item-decision');
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
         break;
       case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
-        newBeslissingValue = this.intl.t('retracted-item-decision');
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
         break;
     }
-    if (newBeslissingValue !== this.beslissingPiecePart.value) {
+    if (newBeslissingHtmlContent !== this.beslissingPiecePart.htmlContent) {
       const now = new Date();
       const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: newBeslissingValue,
+        value: newBeslissingHtmlContent,
         report: this.report,
         previousPiecePart: this.beslissingPiecePart,
         created: now,
@@ -303,7 +303,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
-      editorInterface.setHtmlContent(this.betreftPiecePart.value);
+      editorInterface.setHtmlContent(this.betreftPiecePart.htmlContent);
 
       // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
@@ -315,7 +315,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBetreftVersion(betreftPiecePart) {
-    this.setBetreftEditorContent(betreftPiecePart.value);
+    this.setBetreftEditorContent(betreftPiecePart.htmlContent);
   }
 
   @action
@@ -340,7 +340,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     if (this.beslissingPiecePart) {
-      editorInterface.setHtmlContent(this.beslissingPiecePart.value);
+      editorInterface.setHtmlContent(this.beslissingPiecePart.htmlContent);
     } else if (this.editorInstanceBeslissing) {
       editorInterface.setHtmlContent(this.editorInstanceBeslissing.htmlContent);
     }
@@ -350,7 +350,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBeslissingVersion(beslissingPiecePart) {
-    this.setBeslissingEditorContent(beslissingPiecePart.value);
+    this.setBeslissingEditorContent(beslissingPiecePart.htmlContent);
   }
 
   @action
@@ -360,20 +360,20 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBeslissingContent() {
-    let newBeslissingValue;
+    let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     switch (decisionResultCode.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
-        newBeslissingValue = this.intl.t('postponed-item-decision');
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
         break;
       case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
-        newBeslissingValue = this.intl.t('retracted-item-decision');
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        newBeslissingValue = this.nota;
+        newBeslissingHtmlContent = this.nota;
         break;
     }
-    this.setBeslissingEditorContent(`<p>${newBeslissingValue}</p>`);
+    this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
   }
 
   onUpdateConcern = task(async () => {

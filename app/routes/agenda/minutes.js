@@ -47,7 +47,7 @@ export default class AgendaMinutesRoute extends Route {
       });
       if (betreftPiecePart) {
         const report = await betreftPiecePart.report;
-        betreftPieceParts.push({value: betreftPiecePart.value, agendaitemID: agendaitem.id, reportName: report?.name});
+        betreftPieceParts.push({value: betreftPiecePart.htmlContent, agendaitemID: agendaitem.id, reportName: report?.name});
       }
 
       const type = await agendaitem.type;

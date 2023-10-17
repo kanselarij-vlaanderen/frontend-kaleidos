@@ -339,10 +339,10 @@ export default class MeetingEditMeetingComponent extends Component {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newValue = replaceSecretary(piecePart.value,
+      const newValue = replaceSecretary(piecePart.htmlContent,
         this.secretary.person.get('fullName'),
         this.secretary.title.toLowerCase());
-      piecePart.value = newValue;
+      piecePart.htmlContent = newValue;
       await piecePart.save();
       await this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
