@@ -13,7 +13,7 @@ export default class EditCase extends Component {
   constructor() {
     super(...arguments);
 
-    // this.shortTitle = this.args.case.shortTitle;
+    this.shortTitle = this.args.case.shortTitle;
   }
 
   get isSaveDisabled() {
@@ -25,8 +25,8 @@ export default class EditCase extends Component {
 
   @task
   *save() {
-    // this.args.case.shortTitle = this.shortTitle;
-    // yield this.args.onSave(this.args.case);
+    this.args.case.shortTitle = this.shortTitle;
+    yield this.args.onSave(this.args.case);
   }
 
   @action

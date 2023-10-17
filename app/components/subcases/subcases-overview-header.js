@@ -1,13 +1,19 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class SubCasesOverviewHeader extends Component {
+  @service store;
+  @service router;
   @tracked case;
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
+  @tracked isArchivingCase = false;
+  @tracked selectedCase = null;
+  @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
 
   constructor() {
@@ -17,7 +23,8 @@ export default class SubCasesOverviewHeader extends Component {
 
   @task
   *loadData() {
-    this.case = yield this.args.decisionmakingFlow.case.id;
+    this.case = yield this.args.decisionmakingFlow.case;
+    this.selectedCase = this.case;
     this.publicationFlows = yield this.case.publicationFlows;
   }
 
@@ -68,5 +75,33 @@ export default class SubCasesOverviewHeader extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  @action
+  async archiveCase() {
+    const caseModel = await this.store.findRecord('case', this.selectedCase.get('id')); // this.selectedCase is a proxy
+    caseModel.isArchived = true;
+    const decisionmakingFlow = await caseModel.decisionmakingFlow;
+    const subcases = await decisionmakingFlow.subcases;
+    await Promise.all(subcases.map(async(subcase) => {
+      subcase.isArchived = true;
+      return await subcase.save();
+    }));
+    await caseModel.save();
+    this.selectedCase = null;
+    this.router.transitionTo('cases');
+    this.isArchivingCase = false;
+  }
+
+  @action
+  requestArchiveCase(_case) {
+    this.selectedCase = this.case;
+    this.isArchivingCase = true;
+  }
+
+  @action
+  cancelArchiveCase() {
+    this.isArchivingCase = false;
+    this.selectedCase = null;
   }
 }

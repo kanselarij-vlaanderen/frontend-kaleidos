@@ -7,7 +7,7 @@
 {{/if}}
 
 <Subcases::SubcasesOverviewHeader
-  @decisionmakingFlow={{this.model.decisionmakingFlow}}
+  @decisionmakingFlow={{this.decisionmakingFlow}}
   @onCreateSubcase={{this.refreshSubcases}}
   @onSaveCase={{perform this.saveCase}}
 />
@@ -48,11 +48,13 @@
             </div>
           </LinkTo>
         </li>
+        {{else}}
         {{/each}}
       </ul>
     </Subcases::SideNav>
   </div>
   <div class="auk-panel-layout__main-content auk-scroll-wrapper__body">
+    {{#if this.model.decisionmakingFlow.subcases}}
     <Subcases::SubcaseHeader
       @subcase={{this.model}}
       @onMoveSubcase={{this.refreshSubcases}}
@@ -61,5 +63,10 @@
     <div class="auk-u-m-4">
       {{outlet}}
     </div>
+    {{else}}
+    <div class="auk-u-m-4">
+      <Auk::EmptyState @message={{t "no-subcases"}} />
+    </div>
+    {{/if}}
   </div>
 </div>
