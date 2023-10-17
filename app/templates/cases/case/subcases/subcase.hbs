@@ -19,7 +19,7 @@
       @onOpen={{this.openSideNav}}
     >
       <ul>
-        {{#each this.subcases as |subcase|}}
+        {{#each this.model.decisionmakingFlow.subcases as |subcase|}}
         <li class="auk-sidebar__item auk-sidebar__item--styled {{if (eq this.model.id subcase.id) "auk-sidebar__item--active"}}">
           <LinkTo 
             @route="cases.case.subcases.subcase.index"

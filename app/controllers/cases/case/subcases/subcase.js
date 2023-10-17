@@ -9,7 +9,6 @@ export default class CasesCaseSubcasesSubcaseController extends Controller {
   @service router;
   @tracked decisionmakingFlow;
   @tracked siblingSubcasesCount;
-  @tracked subcases = this.decisionmakingFlow.subcases;
 
   @action
   refreshSubcases() {
