@@ -633,7 +633,7 @@
   "manage-user": "Gebruiker: {firstName} {lastName}",
   "manage-organization": "Organisatie: {name}",
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
-  "changes-could-not-be-saved-message": "{modelName} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "changes-could-not-be-saved-message": "{modelName} werd {time} geleden aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "action-could-not-be-executed-title": "Je actie kon niet worden uitgevoerd.",
   "nota-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
   "select-minister": "Selecteer een minister",
