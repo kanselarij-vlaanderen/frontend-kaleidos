@@ -102,6 +102,7 @@ context('Subcase tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('exist');
+    cy.generateDecision();
   });
 
   it('should add a subcase and then delete it', () => {

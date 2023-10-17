@@ -167,7 +167,7 @@ export default class AgendaitemDecisionComponent extends Component {
     }
     let newBeslissingValue = this.beslissingPiecePart.value;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    switch (decisionResultCode.uri) {
+    switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingValue = this.intl.t('postponed-item-decision');
         break;
@@ -201,7 +201,7 @@ export default class AgendaitemDecisionComponent extends Component {
       [
         CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCode.uri)
+      ].includes(decisionResultCode?.uri)
     ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
@@ -362,7 +362,7 @@ export default class AgendaitemDecisionComponent extends Component {
   async updateBeslissingContent() {
     let newBeslissingValue;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    switch (decisionResultCode.uri) {
+    switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingValue = this.intl.t('postponed-item-decision');
         break;
@@ -447,7 +447,7 @@ export default class AgendaitemDecisionComponent extends Component {
     betreftPiecePart
   ) => {
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    if (!decisionResultCode) {
+    if (!decisionResultCode?.uri) {
       const agendaitemType = await this.args.agendaitem.type;
       const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
       const decisionresultCodeUri = isNota

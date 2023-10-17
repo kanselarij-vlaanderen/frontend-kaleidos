@@ -110,7 +110,9 @@ context('signatures shortlist overview tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.generateDecision();
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
+    cy.generateDecision();
     cy.setAllItemsFormallyOk(3);
     cy.approveDesignAgenda();
 
@@ -513,7 +515,9 @@ context('publications shortlist overview tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.generateDecision();
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
+    cy.generateDecision();
     cy.get(auk.loader).should('not.exist');
   });
 

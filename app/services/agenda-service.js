@@ -142,7 +142,7 @@ export default class AgendaService extends Service {
     });
     const agendaItemType = await subcase.agendaItemType;
     const isAnnouncement =
-    agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
+      agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const numberToAssign = await this.computeNextItemNumber(
       lastAgenda,
       agendaItemType
@@ -164,9 +164,12 @@ export default class AgendaService extends Service {
     // load code-list item
     let defaultDecisionResultCodeUri;
     if (isAnnouncement) {
-      defaultDecisionResultCodeUri = CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      defaultDecisionResultCodeUri =
+        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
     } else {
-      defaultDecisionResultCodeUri = this.enableDigitalAgenda ? null : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+      defaultDecisionResultCodeUri = this.enableDigitalAgenda
+        ? null
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     }
 
     let decisionResultCode;
