@@ -1,0 +1,14 @@
+{{#if this.approved}}
+  <AuBadge
+    @size="small"
+    data-test-subcase-item-approved
+    @icon="check"
+    @skin="success"
+  />
+{{else}}
+  <AuBadge
+    @size="small"
+    @icon="sitemap"
+    @skin="warning"
+  />
+{{/if}}

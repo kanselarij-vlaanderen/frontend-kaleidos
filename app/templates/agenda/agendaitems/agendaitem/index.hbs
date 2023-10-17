@@ -18,9 +18,14 @@
 <Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
   <Toolbar.Group @position="left" as |Group|>
     <Group.Item>
-      <h3 class="auk-toolbar__title">
-        {{t "agendaitem-case"}}
-      </h3>
+      <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+        <Agenda::Agendaitem::Approved
+          @subcase={{this.subcase}}
+        />
+        <h3 class="auk-toolbar__title">
+          {{t "agendaitem-case"}}
+        </h3>
+      </div>
     </Group.Item>
   </Toolbar.Group>
   <Toolbar.Group @position="right" as |Group|>
