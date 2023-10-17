@@ -27,6 +27,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked isEditingAgendaItemTitles = false;
 
+  @tracked isComplete = false;
   @tracked vpModal = false;
   @tracked vpSent = false;
 

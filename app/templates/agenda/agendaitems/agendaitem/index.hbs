@@ -125,13 +125,21 @@
 
 {{#if (eq this.agenda.status.isDesignAgenda false)}}
   {{#if this.vpSent}} 
+    {{#if this.isComplete}}
     <AuAlert
-      @title="Dit dossier is doorgestuurd naar het Vlaams Parlement op 29/09/2023"
+      @title="Dit dossier is volledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
       @skin="success"
       @icon="mail"
       @size="small"
-    >
-    </AuAlert>
+    />
+    {{else}}
+    <AuAlert
+      @title="Dit dossier is onvolledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    />
+    {{/if}}
   {{/if}}
 {{/if}}
 
