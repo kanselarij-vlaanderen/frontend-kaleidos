@@ -103,6 +103,7 @@ const selectors = {
     input: '[data-test-route-search-input]',
     from: '[data-test-route-search-date-from]',
     to: '[data-test-route-search-date-to]',
+    ministerFilterContainer: '[data-test-route-search-minister-filter-container]',
     trigger: '[data-test-route-search-trigger]',
     mandatee: '[data-test-route-search-mandatee-input]',
   },
@@ -150,6 +151,7 @@ const selectors = {
 
   // search/decisions
   searchDecisions: {
+    filterContainer: '[data-test-route-search-decision-filter-container]',
     row: '[data-test-route-search-decisions-data-table-row]',
   },
 

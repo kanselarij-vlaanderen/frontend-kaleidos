@@ -166,6 +166,7 @@
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-details-panel-source-file-download
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
@@ -192,8 +193,8 @@
               >
                 {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
               </AuLinkExternal>
-              <AccessLevelPill 
-                @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              <AccessLevelPill
+                @accessLevel={{await @piece.signedPiece.accessLevel}}
                 @isEditable={{false}}
               />
               {{#if (user-may "remove-signatures")}}
