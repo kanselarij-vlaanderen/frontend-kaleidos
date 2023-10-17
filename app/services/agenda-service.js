@@ -11,7 +11,6 @@ export default class AgendaService extends Service {
   @service intl;
   @service currentSession;
   @service newsletterService;
-  @service mandatees;
   @service signatureService;
 
   @tracked addedPieces = null;
@@ -178,16 +177,8 @@ export default class AgendaService extends Service {
       );
     }
 
-    // default secretary
-    const decisionSecretary = {};
-    if (this.enableDigitalAgenda) {
-      const meetingSecretary = await meeting.secretary;
-      if (meetingSecretary) {
-        decisionSecretary.secretary = meetingSecretary;
-      } else {
-        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
-      }
-    }
+    const meetingSecretary = await meeting.secretary;
+    const secretary = this.enableDigitalAgenda ? meetingSecretary : null;
     // decision-activity
     const decisionActivity = await this.store.createRecord(
       'decision-activity',
@@ -195,7 +186,7 @@ export default class AgendaService extends Service {
         subcase,
         startDate: meeting.plannedStart,
         decisionResultCode,
-        ...decisionSecretary,
+        secretary,
       }
     );
     await decisionActivity.save();
