@@ -17,7 +17,7 @@
     @onChangePage={{fn (mut this.page)}}
   >
     <:header>
-      <th class="auk-table__col--9">
+      <th class="auk-table__col--8">
         {{t "case-name"}}
       </th>
       <Utils::ThSortable
@@ -25,6 +25,13 @@
         @currentSorting={{this.sort}}
         @field="opened"
         @label={{t "created-on"}}
+        @onChange={{fn (mut this.sort)}}
+      />
+      <Utils::ThSortable
+        class="auk-table__col--1"
+        @currentSorting={{this.sort}}
+        @field="opened"
+        @label="Status"
         @onChange={{fn (mut this.sort)}}
       />
       <th class="auk-table__col--1"></th>
@@ -44,8 +51,15 @@
       <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
         {{datetime row.opened}}
       </td>
+      <td>
+        {{#if row.case.isArchived}}
+        <AuPill @size="small">Afgesloten</AuPill>
+        {{else}}
+        <AuPill @size="small" @skin="ongoing">Open</AuPill>
+        {{/if}}
+      </td>
       <td class="auk-u-text-align--right">
-        {{#if (user-may "manage-cases")}}
+        {{!-- {{#if (user-may "manage-cases")}}
           <AuDropdown
             data-test-route-cases-overview-row-actions-dropdown
             @icon="three-dots"
@@ -81,7 +95,7 @@
               {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
             </AuButton>
           </AuDropdown>
-        {{/if}}
+        {{/if}} --}}
         <AuLink
           @skin="button-naked"
           @icon="chevron-right"

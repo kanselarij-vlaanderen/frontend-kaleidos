@@ -10,7 +10,7 @@
     <Toolbar.Group @position="right" as |Group|>
       {{#if (user-may "manage-cases")}}
       <Group.Item>
-        <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mr-2">
+        {{!-- <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mr-2">
           <AuToggleSwitch
             data-test-route-cases-overview-show-archived
             @checked={{@showArchivedOnly}}
@@ -22,7 +22,14 @@
           >
             {{t "show-archived-only"}}
           </Auk::Label>
-        </div>
+        </div> --}}
+        <AuInput
+          @width="block"
+          @icon="search"
+          @value=""
+          placeholder={{t "date-example"}}
+          autocomplete="off"
+        />
       </Group.Item>
       {{/if}}
       <Group.Item>

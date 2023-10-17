@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesCaseSubcasesSubcaseRoute extends Route {
   @service store;
+  @service router;
 
   model(params) {
     return this.store.findRecord('subcase', params.subcase_id, {

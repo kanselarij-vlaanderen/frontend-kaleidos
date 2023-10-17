@@ -5,11 +5,62 @@
 {{else}}
   {{page-title (capitalize this.model.subcaseName)}}
 {{/if}}
-<div class="auk-u-bg-alt">
-  <Subcases::SubcaseHeader
-    @subcase={{this.model}}
-    @onMoveSubcase={{this.refreshSubcases}}
-    @onProposedForAgenda={{this.refreshSubcases}}
-  />
+
+<Subcases::SubcasesOverviewHeader
+  @decisionmakingFlow={{this.model.decisionmakingFlow}}
+  @onCreateSubcase={{this.refreshSubcases}}
+  @onSaveCase={{perform this.saveCase}}
+/>
+
+<div class="auk-panel-layout">
+  <div class="auk-panel-layout__sidebar auk-panel-layout__cases">
+    <Subcases::SideNav
+      @isOpen={{this.isOpenSideNav}}
+      @onCollapse={{this.collapseSideNav}}
+      @onOpen={{this.openSideNav}}
+    >
+      <ul>
+        {{#each this.model.decisionmakingFlow.subcases as |subcase|}}
+        <li class="auk-sidebar__item auk-sidebar__item--styled {{if (eq this.model.id subcase.id) "auk-sidebar__item--active"}}">
+          <LinkTo 
+            @route="cases.case.subcases.subcase.index"
+            @models={{array this.model.decisionmakingFlow.id subcase}}
+          >
+            <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+              {{#if subcase.approved}}
+              <AuBadge
+                @size="small"
+                @icon="check"
+                @skin="success"
+              />
+              {{else}}
+                <AuBadge
+                  @size="small"
+                  @icon="sitemap"
+                  @skin="warning"
+                />
+              {{/if}}
+              <strong>
+                {{subcase.shortTitle}}
+              </strong>
+            </div>
+            <div class="auk-sidebar__sublabel">
+              {{datetime subcase.modified}}
+            </div>
+          </LinkTo>
+        </li>
+        {{/each}}
+      </ul>
+    </Subcases::SideNav>
+  </div>
+  <div class="auk-panel-layout__main-content auk-scroll-wrapper__body">
+    <Subcases::SubcaseHeader
+      @subcase={{this.model}}
+      @onMoveSubcase={{this.refreshSubcases}}
+      @onProposedForAgenda={{this.refreshSubcases}}
+    />
+    <div class="auk-u-m-4">
+      {{outlet}}
+    </div>
+  </div>
 </div>
-{{outlet}}

@@ -55,13 +55,37 @@
     {{#if (user-may "manage-cases")}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <AuButton
+          {{!-- <AuButton
             @skin="secondary"
             @icon="pencil"
             {{on "click" this.openEditCaseModal}}
           >
             {{t "edit-case"}}
-          </AuButton>
+          </AuButton> --}}
+          <AuDropdown
+            data-test-route-cases-overview-row-actions-dropdown
+            @title="Dossier acties"
+            @alignment="right"
+            @skin="secondary"
+          >
+            <AuButton
+              data-test-route-cases-overview-row-actions-edit
+              @skin="link"
+              {{on "click" this.openEditCaseModal}}
+              role="menuitem"
+            >
+              {{t "edit-case"}}
+            </AuButton>
+            <AuButton
+              data-test-route-cases-overview-row-actions-archive
+              @skin="link"
+              @alert={{true}}
+              role="menuitem"
+              {{on "click" this.openArchiveCaseModal}}
+            >
+              {{t (if this.isArchived "unarchive-case" "archive-case")}}
+            </AuButton>
+          </AuDropdown>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           {{!-- <AuButton
@@ -101,3 +125,13 @@
     @case={{this.case}}
   />
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isArchivingCase}}
+  @title={{t "archive-case"}}
+  @message={{t "archive-case-message"}}
+  @onConfirm={{this.closeArchiveCaseModal}}
+  @onCancel={{this.closeArchiveCaseModal}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+/>

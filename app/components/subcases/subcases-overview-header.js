@@ -8,6 +8,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
+  @tracked isArchivingCase = false;
 
   constructor() {
     super(...arguments);
@@ -38,6 +39,16 @@ export default class SubCasesOverviewHeader extends Component {
   @action
   closeEditCaseModal() {
     this.showEditCaseModal = false;
+  }
+
+  @action
+  openArchiveCaseModal() {
+    this.isArchivingCase = true;
+  }
+
+  @action
+  closeArchiveCaseModal() {
+    this.isArchivingCase = false;
   }
 
   @action
