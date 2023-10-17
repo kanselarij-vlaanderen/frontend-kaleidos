@@ -76,7 +76,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
@@ -113,7 +112,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
@@ -158,7 +156,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
@@ -195,7 +192,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
@@ -232,7 +228,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
@@ -280,7 +275,6 @@ context('Publications reports tests', () => {
     cy.get(utils.downloadFileToast.link).eq(0)
       .click();
 
-    // TODO extra setup?
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
       .invoke('text')
       .invoke('replaceAll', '\n', '')
