@@ -260,15 +260,6 @@
                     {{t "present-for-signing"}}
                   </AuButton>
                 {{/if}}
-                {{#if (eq @agendaContext.agenda.status.isDesignAgenda false)}}
-                  <AuButton
-                    @skin="link"
-                    {{on "click" this.showVpModal}}
-                    role="menuitem"
-                  >
-                    Doorsturen naar het Vlaams Parlement
-                  </AuButton>
-                {{/if}}
                 {{#if this.hasMarkedSignFlow}}
                   <AuHr />
                   <AuButton
