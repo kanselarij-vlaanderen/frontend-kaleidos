@@ -4,14 +4,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
-import constants from 'frontend-kaleidos/config/constants';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -472,20 +471,14 @@ export default class AgendaitemDecisionComponent extends Component {
 
   async createNewReport(documentContainer) {
     const now = new Date();
-    const agendaitemType = await this.args.agendaitem.type;
-    const announcementType = constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-    const agendaitemTypeWord =
-      agendaitemType.uri === announcementType ? 'mededeling' : 'punt';
     const report = this.store.createRecord('report', {
       isReportOrMinutes: true,
       created: now,
       modified: now,
-      name: `${
-        this.args.agendaContext.meeting.numberRepresentation
-      } - ${agendaitemTypeWord} ${addLeadingZeros(
-        this.args.agendaContext.agendaitem.number,
-        4
-      )}`,
+      name: await generateReportName(
+        this.args.agendaContext.agendaitem,
+        this.args.agendaContext.meeting,
+      ),
     });
 
     const subcase = await this.args.decisionActivity.subcase;
