@@ -90,21 +90,13 @@
                 </Auk::Toolbar>
               </div>
             </div>
-            <div class="au-u-flex au-u-flex--spaced">
-              <div class="auk-form-group">
-                <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
-                <AuToggleSwitch
-                  data-test-new-subcase-confidential
-                  @checked={{this.confidential}}
-                  id="new-subcase-confidential"
-                />
-                </div>
-              <div class="auk-form-group">
-                <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
-                <AuToggleSwitch
-                  id="new-subcase-ok"
-                />
-              </div>
+            <div class="auk-form-group">
+              <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+              <AuToggleSwitch
+                data-test-new-subcase-confidential
+                @checked={{this.confidential}}
+                id="new-subcase-confidential"
+              />
             </div>
             <div class="auk-form-group">
               <Auk::Label for="shortTitle">{{t "name-subcase"}}</Auk::Label>
@@ -122,14 +114,6 @@
                 @rows="4"
                 @value={{this.title}}
                 id="longTitle"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label for="remarks">Opmerkingen</Auk::Label>
-              <Auk::Textarea
-                @rows="4"
-                @value=""
-                id="remarks"
               />
             </div>
             <div class="auk-form-group">
@@ -185,6 +169,20 @@
                   </AuButton>
                 {{/if}}
               </div>
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
+              <AuToggleSwitch
+                id="new-subcase-ok"
+              />
+            </div>
+            <div class="auk-form-group">
+              <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+              <Auk::Textarea
+                @rows="4"
+                @value=""
+                id="remarks"
+              />
             </div>
           </Utils::LoadableContent>
         </Auk::Panel::Body>
