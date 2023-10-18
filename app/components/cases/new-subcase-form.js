@@ -276,8 +276,6 @@ export default class CasesNewSubcaseForm extends Component {
     }
   }
 
-  @tracked test = false;
-
   @action
   scrollIntoView(element) {
     element.scrollIntoView({
