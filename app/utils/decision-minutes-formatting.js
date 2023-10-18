@@ -35,7 +35,9 @@ function generateBetreft(
   let betreft = '';
   if (isApproval) {
     betreft += 'De Vlaamse Regering hecht haar ';
-    betreft += title? `${lowercaseFirstLetter(title)}` : `${lowercaseFirstLetter(shortTitle)}`;
+    let betreftTitle = title || shortTitle || '';
+    betreftTitle = betreftTitle.replace(/Goedkeuring van/i, 'goedkeuring aan');
+    betreft += betreftTitle;
   } else {
     betreft += `${shortTitle}`;
     betreft += title ? `<br/>${title}` : '';
@@ -50,10 +52,6 @@ function generateBetreft(
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function lowercaseFirstLetter(string) {
-  return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
 export { formatDocuments, generateBetreft };
