@@ -74,6 +74,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', nameToCheck);
+
+    cy.changeDecisionResult('Goedgekeurd');
   });
 
   it('should add mandatees to a subcase after assigning to agenda, agendaitem should have the same mandatees', () => {
@@ -112,6 +114,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', nameToCheck);
+
+    cy.changeDecisionResult('Goedgekeurd');
   });
 
   it('should add mandatees to an agendaitem on designagenda, subcase should have the same mandatees', () => {
@@ -151,6 +155,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', nameToCheck);
+
+    cy.changeDecisionResult('Goedgekeurd');
 
     // Check if subcase has the same amount of mandatees
     cy.intercept('GET', '/subcases?filter**').as('getSubcase');
