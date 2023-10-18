@@ -443,7 +443,9 @@
                 @limitedFields={{true}}
                 @piece={{piece}}
                 @allowDocumentContainerEdit={{true}}
-                @onDelete={{perform this.deletePiece piece}} />
+                @onDelete={{perform this.deletePiece piece}} 
+                {{did-insert this.scrollIntoView}}
+              />
             {{/each}}
           </div>
         </Auk::Panel::Body>

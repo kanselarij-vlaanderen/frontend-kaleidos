@@ -276,6 +276,15 @@ export default class CasesNewSubcaseForm extends Component {
     }
   }
 
+  @tracked test = false;
+
+  @action
+  scrollIntoView(element) {
+    element.scrollIntoView({
+      behavior: 'smooth', block: 'start',
+    });
+  }
+
   @action
   toggleAreas() {
     this.showAllAreas = !this.showAllAreas;

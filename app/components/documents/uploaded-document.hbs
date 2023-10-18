@@ -4,7 +4,9 @@
   @size={{@piece.file.size}}
   @downloadName={{@piece.file.filename}}
   @downloadLink={{@piece.file.namedDownloadLink}}
-  @onDelete={{@onDelete}}>
+  @onDelete={{@onDelete}}
+  ...attributes
+>
   {{#if @allowDocumentContainerEdit}}
     <div data-test-uploaded-document-container class="metadata-container">
       <div class="auk-form-group">
