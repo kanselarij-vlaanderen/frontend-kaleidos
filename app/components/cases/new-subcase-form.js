@@ -291,6 +291,68 @@ export default class CasesNewSubcaseForm extends Component {
     this.hasAgenda = true;
   }
 
+  @tracked isJanJambon = false;
+
+  @action
+  toggleJanJambon() {
+    this.isJanJambon = !this.isJanJambon;
+  }
+
+  @tracked isHildeCrevits = false;
+
+  @action
+  toggleHildeCrevits() {
+    this.isHildeCrevits = !this.isHildeCrevits;
+  }
+
+  @tracked isBartSomers = false;
+
+  @action
+  toggleBartSomers() {
+    this.isBartSomers = !this.isBartSomers;
+  }
+
+  @tracked isBenWeyts = false;
+
+  @action
+  toggleBenWeyts() {
+    this.isBenWeyts = !this.isBenWeyts;
+  }
+
+  @tracked isZuhalDemir = false;
+
+  @action
+  toggleZuhalDemir() {
+    this.isZuhalDemir = !this.isZuhalDemir;
+  }
+
+  @tracked isMatthiasDiepenDaele = false;
+
+  @action
+  toggleMatthiasDiepenDaele() {
+    this.isMatthiasDiepenDaele = !this.isMatthiasDiepenDaele;
+  }
+
+  @tracked isLydiaPeeters = false;
+
+  @action
+  toggleLydiaPeeters() {
+    this.isLydiaPeeters = !this.isLydiaPeeters;
+  }
+
+  @tracked isBenjaminDalle = false;
+
+  @action
+  toggleBenjaminDalle() {
+    this.isBenjaminDalle = !this.isBenjaminDalle;
+  }
+
+  @tracked isJoBrouns = false;
+
+  @action
+  toggleJoBrouns() {
+    this.isJoBrouns = !this.isJoBrouns;
+  }
 
   JanJambon = [
     {
