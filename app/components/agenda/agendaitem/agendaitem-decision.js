@@ -324,15 +324,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBetreftContent() {
-    // *NOTE: approval decisions have a totally different text block.
-    // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
-    const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
+        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
       );
   }
 
