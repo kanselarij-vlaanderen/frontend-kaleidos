@@ -325,23 +325,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBetreftContent() {
-    const meetingKind = await this.args.agendaContext.meeting.kind;
-    const isMinisterraad = meetingKind.uri === CONSTANTS.MEETING_KINDS.MINISTERRAAD;
-    const { shortTitle, title, number } = this.args.agendaContext.agendaitem;
+    const { shortTitle, title } = this.args.agendaContext.agendaitem;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const titleStartsWithApproval = 
-    this.args.agendaitem.shortTitle.startsWith("Goedkeuring") 
-    || this.args.agendaitem.title.startsWith("Goedkeuring");
-    const isApproval = 
-    this.args.agendaitem.isApproval 
-    && number === 1 
-    && isMinisterraad 
-    && !subcase 
-    && titleStartsWithApproval
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
+        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
       );
   }
 
