@@ -205,11 +205,12 @@ export default class AgendaMinutesController extends Controller {
       minutes = this.model.minutes;
     }
     const piecePart = this.store.createRecord('piece-part', {
-      value: this.editor.htmlContent,
+      htmlContent: this.editor.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.htmlContent,
+      previousPiecePart: this.currentPiecePart.value,
       minutes,
     });
+    debugger;
 
     await minutes.save();
     await piecePart.save();
@@ -247,9 +248,9 @@ export default class AgendaMinutesController extends Controller {
     });
 
     const newPiecePart = this.store.createRecord('piece-part', {
-      value: this.currentPiecePart.value.htmlContent,
+      htmlContent: this.currentPiecePart.value.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.htmlContent,
+      previousPiecePart: this.currentPiecePart.value,
       minutes: newVersion,
     });
 
@@ -288,11 +289,11 @@ export default class AgendaMinutesController extends Controller {
 
   @action
   revertToVersion(record) {
-    this.editor.setHtmlContent(record.value);
+    this.editor.setHtmlContent(record.htmlContent);
   }
 
   get saveDisabled() {
-    if (this.currentPiecePart?.value?.value === this.editor?.htmlContent) {
+    if (this.currentPiecePart?.value?.htmlContent === this.editor?.htmlContent) {
       return true;
     }
 

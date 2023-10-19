@@ -39,19 +39,6 @@ export default class AgendaMinutesRoute extends Route {
       sort: 'type.position,number',
     });
     for (const agendaitem of agendaitems.toArray()) {
-<<<<<<< HEAD
-      const betreftPiecePart = await this.store.queryOne('piece-part', {
-        'filter[report][decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
-        'filter[title]': 'Betreft',
-        'filter[:has-no:next-piece-part]': true,
-      });
-      if (betreftPiecePart) {
-        const report = await betreftPiecePart.report;
-        betreftPieceParts.push({value: betreftPiecePart.htmlContent, agendaitemID: agendaitem.id, reportName: report?.name});
-      }
-
-=======
->>>>>>> 80c0c8c40b46b5817fbf0034c7de7a0fa1df4777
       const type = await agendaitem.type;
       if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);
