@@ -33,13 +33,20 @@ function generateBetreft(
   subcaseName = null
 ) {
   let betreft = '';
-  betreft += `${shortTitle}`;
-  betreft += title ? `<br/>${title}` : '';
-  betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  if (isApproval) {
+    betreft += 'De Vlaamse Regering hecht haar ';
+    let betreftTitle = title || shortTitle || '';
+    betreftTitle = betreftTitle.replace(/Goedkeuring van/i, 'goedkeuring aan');
+    betreft += betreftTitle;
+  } else {
+    betreft += `${shortTitle}`;
+    betreft += title ? `<br/>${title}` : '';
+    betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  }
   betreft +=
-    documents && documents.length
-      ? `<br/>${formatDocuments(documents, isApproval)}`
-      : '';
+  documents && documents.length
+  ? `<br/>${formatDocuments(documents, isApproval)}`
+  : '';
   return betreft;
 }
 
