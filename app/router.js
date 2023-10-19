@@ -91,6 +91,7 @@ Router.map(function() {
     this.route('decisions', { path: '/beslissingen' });
     this.route('news-items', { path: '/kort-bestek', });
     this.route('all-types', { path: '/alle-types' });
+    this.route('publication-flows', { path: '/publicaties' });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {
