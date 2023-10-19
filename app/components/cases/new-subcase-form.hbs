@@ -170,20 +170,6 @@
                 {{/if}}
               </div>
             </div>
-            <div class="auk-form-group">
-              <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
-              <AuToggleSwitch
-                id="new-subcase-ok"
-              />
-            </div>
-            <div class="auk-form-group">
-              <Auk::Label for="remarks">Opmerkingen</Auk::Label>
-              <Auk::Textarea
-                @rows="4"
-                @value=""
-                id="remarks"
-              />
-            </div>
           </Utils::LoadableContent>
         </Auk::Panel::Body>
       </Auk::Panel>
@@ -220,9 +206,9 @@
               <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
                 <strong>{{minister.fullName}}</strong>
                 <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-                  <AuToggleSwitch
-                    @checked={{if (eq index 0) true}}
-                    id="first"
+                  <AuRadio 
+                    @name="submitter" 
+                    @checked={{if (eq index 0) true}} 
                   />
                   <Auk::Label for="first" class="au-u-padding-bottom-none">Indiener</Auk::Label>
                 </div>
@@ -478,25 +464,22 @@
 <Auk::Modal>
   <Auk::Modal::Header @title="Agendering" @onClose={{this.toggleAgendaModal}} />
   <Auk::Modal::Body>
-    <div class="auk-o-grid auk-o-grid--vertical-center">
-      <div class="auk-o-grid-col-8">
-        <Auk::Toolbar @auto={{true}}>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item class="auk-u-maximize-width">
-              <AuInput
-                @icon="search"
-                @width="block"
-                @value=""
-                @disabled={{this.showPostponed}}
-                id="searchId"
-                placeholder={{t "search-placeholder"}}
-              />
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </div>
-    </div>
     <div>
+      <div class="auk-form-group">
+        <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
+        <AuToggleSwitch
+          id="new-subcase-ok"
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="remarks">Interne opmerkingen</Auk::Label>
+        <Auk::Textarea
+          @rows="4"
+          @value=""
+          id="remarks"
+        />
+      </div>
+      <AuHr />
       <table class="auk-table auk-table--striped">
         <thead>
           <tr>
@@ -515,7 +498,7 @@
           {{#each this.agendas as |agenda|}}
             <tr>
               <td class="auk-table__col--1">
-                <AuCheckbox {{on 'click' this.toggleAgenda }} />
+                <AuRadio @name="agendas" {{on 'click' this.toggleAgenda }} />
               </td>
               <td class="auk-table__col--3">
                 {{agenda.created}}
@@ -528,49 +511,12 @@
           {{/each}}
         </tbody>
       </table>
-      {{!-- <div class="auk-u-mx-4">
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <div class="auk-pagination">
-                <ul class="auk-pagination__list">
-                  <li class="auk-pagination__element">
-                    <p><strong>1-10</strong> van 20</p>
-                  </li>
-                  <li class="auk-pagination__element">
-                    <button class="au-c-button au-c-button--link auk-u-text-vertical-align-middle" type="button">
-                      <svg role="img" class="au-c-icon au-c-icon--chevron-left  " aria-hidden="true">
-                        <use xlink:href="/@appuniversum/ember-appuniversum/appuniversum-symbolset.svg#chevron-left"></use>
-                      </svg>
-                        Vorige
-                    </button>
-                  </li>
-                  <li class="auk-pagination__element">
-                    <button class="au-c-button au-c-button--link auk-u-text-vertical-align-middle" type="button">
-                      Volgende
-                      <svg role="img" class="au-c-icon au-c-icon--chevron-right  " aria-hidden="true">
-                      <use xlink:href="/@appuniversum/ember-appuniversum/appuniversum-symbolset.svg#chevron-right"></use>
-                    </svg>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </div> --}}
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @cancelDisabled={{this.saveSubcase.isRunning}}
     @onCancel={{this.toggleAgendaModal}}
   >
-    <AuButton
-      @skin="secondary"
-      {{on "click" (perform this.saveSubcase)}}
-    >
-      Later toevoegen
-    </AuButton>
     <AuButton
       @skin="primary"
       @disabled={{if (eq this.hasAgenda false) true}}
