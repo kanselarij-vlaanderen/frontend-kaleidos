@@ -210,7 +210,6 @@ export default class AgendaMinutesController extends Controller {
       previousPiecePart: this.currentPiecePart.value,
       minutes,
     });
-    debugger;
 
     await minutes.save();
     await piecePart.save();
