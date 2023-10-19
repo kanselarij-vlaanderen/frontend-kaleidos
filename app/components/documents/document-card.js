@@ -53,7 +53,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
-  @tracked altLabel;
+  @tracked dateToShowAltLabel;
+  @tracked altDateToShow;
+
 
   constructor() {
     super(...arguments);
@@ -63,25 +65,50 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
-  get label() {
-    if (isPresent(this.args.label)) {
-      return this.intl.t(this.args.label);
+  get enableDigitalMinutes() {
+    return ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true;
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  get dateToShowLabel() {
+    if (isPresent(this.args.dateToShowLabel)) {
+      return this.intl.t(this.args.dateToShowLabel);
     }
-    if (isPresent(this.altLabel)) {
-      return this.altLabel;
+    if (isPresent(this.dateToShowAltLabel)) {
+      return this.dateToShowAltLabel;
     }
     return this.intl.t('uploaded-at');
+  }
+
+  get dateToShow() {
+    if (isPresent(this.altDateToShow)) {
+      return this.altDateToShow;
+    }
+    return this.args.piece.created;
   }
 
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  // getting complex with the temporary feature flags
+  // agendaitem doc can be marked - has decisionActivity and isReportOrMinutes false
+  // decisions can only be marked if flag is active and - has decisionActivity and isReportOrMinutes true
+  // minutes can only be marked if flag is active and - has no decisionActivity and isReportOrMinutes true
   get mayCreateSignMarkingActivity() {
-    return !this.signMarkingActivity
-      && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures')
-      && !!this.args.decisionActivity;
+    return (
+      !this.signMarkingActivity &&
+      this.signaturesEnabled &&
+      this.currentSession.may('manage-signatures') &&
+      (
+        (!!this.args.decisionActivity && !this.args.piece.isReportOrMinutes) ||
+        (this.enableDigitalAgenda && this.args.piece.isReportOrMinutes && !!this.args.decisionActivity) ||
+        (this.enableDigitalMinutes && this.args.piece.isReportOrMinutes && !this.args.decisionActivity)
+      )
+    );
   }
 
   get agendaitemIsRetracted() {
@@ -138,10 +165,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     const loadReportPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[report][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
+        sort: '-created', // finds the most recently changed one regardless of type
       });
     const loadMinutesPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[minutes][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
@@ -150,14 +180,20 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       // check for alternative label
       const modelName = this.args.piece.constructor.modelName;
-      if (!isPresent(this.args.label)) {
+      if (!isPresent(this.args.dateToShowLabel)) {
         let piecePart;
         if (modelName === 'report') {
           piecePart = yield loadReportPiecePart(this.piece.id);
         } else if (modelName === 'minutes') {
           piecePart = yield loadMinutesPiecePart(this.piece.id);
         }
-        this.altLabel = piecePart ? this.intl.t('created-on') : null;
+        const previousPart = yield piecePart?.previousPiecePart;
+        if (previousPart) {
+          this.dateToShowAltLabel = this.intl.t('edited-on');
+          this.altDateToShow = piecePart.created;
+        } else {
+          this.dateToShowAltLabel = this.intl.t('created-on');
+        }
       }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)

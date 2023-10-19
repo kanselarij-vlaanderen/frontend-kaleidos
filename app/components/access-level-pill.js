@@ -19,6 +19,7 @@ export default class AccessLevelPillComponent extends Component {
   @service('current-session') session;
 
   @tracked isEditing = false;
+  @tracked changedAccessLevel = false;
 
   get isLoading() {
     return this.confirmChangeAccessLevel.isRunning
@@ -93,14 +94,18 @@ export default class AccessLevelPillComponent extends Component {
     if (this.args.onChangeAccessLevel) {
       this.args.onChangeAccessLevel(accessLevel);
     }
+    this.changedAccessLevel = true;
   }
 
   @task
   *confirmChangeAccessLevel(accessLevel) {
     if (this.args.onConfirmChangeAccessLevel) {
-      yield this.args.onConfirmChangeAccessLevel(accessLevel);
+      if (this.changedAccessLevel) {
+        yield this.args.onConfirmChangeAccessLevel(accessLevel);
+      }
     }
     this.isEditing = false;
+    this.changedAccessLevel = false;
   }
 
   @task
@@ -109,5 +114,6 @@ export default class AccessLevelPillComponent extends Component {
       yield this.args.onCancelChangeAccessLevel();
     }
     this.isEditing = false;
+    this.changedAccessLevel = false;
   }
 }

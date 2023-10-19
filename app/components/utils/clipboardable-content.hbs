@@ -1,0 +1,12 @@
+{{@content}}
+<AuButton
+  @skin="naked"
+  @icon="copy"
+  @hideText={{true}}
+  {{on "click" this.copyContent}}
+>
+  {{t "copy"}}
+</AuButton>
+{{#if this.showCopiedMessage}}
+    <p class="au-u-success">{{or @copiedMessage (t "text-copied")}}</p>
+{{/if}}

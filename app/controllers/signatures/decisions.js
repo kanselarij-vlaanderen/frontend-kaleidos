@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
 import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { warn } from '@ember/debug';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 const MANDATORY_SORT_OPTION = 'decision-activity';
@@ -15,49 +16,40 @@ const DEFAULT_SORT_OPTIONS = [
   'sign-subcase.sign-marking-activity.piece.name',
 ];
 
-export default class SignaturesIndexController extends Controller {
+export default class SignaturesDecisionsController extends Controller {
   @service intl;
   @service router;
+  @service store;
   @service signatureService;
   @service toaster;
 
   @tracked signFlow = null;
   @tracked piece = null;
-  @tracked decisionActivity = null;
+  @tracked decisionActivityOrMeeting = null;
   @tracked agendaitem = null;
   @tracked agenda = null;
   @tracked meeting = null;
 
   @tracked showSidebar = false;
-  @tracked showFilterModal = false;
-  @tracked selectedMinisters = [];
-  @tracked filteredMinisters = [];
 
   @tracked selectedSignFlows = new TrackedArray([]);
 
-  @tracked sizeSignaturesIndex = PAGINATION_SIZES[5];
-  @tracked pageSignaturesIndex = 0;
-  @tracked sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+  @tracked sizeSignaturesDecisions = PAGINATION_SIZES[5];
+  @tracked pageSignaturesDecisions = 0;
+  @tracked sortSignaturesDecisions = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortField;
 
-  @tracked signers = new TrackedArray([]);
-
-  approvers = [];
-  notificationAddresses = [];
+  signers = [];
 
   queryParams = [
-    { sizeSignaturesIndex: { type: 'number' } },
-    { pageSignaturesIndex: { type: 'number' } },
-    { sortSignaturesIndex: { type: 'string' } },
+    { sizeSignaturesDecisions: { type: 'number' } },
+    { pageSignaturesDecisions: { type: 'number' } },
+    { sortSignaturesDecisions: { type: 'string' } },
   ];
 
-  localStorageKey = 'signatures.shortlist.minister-filter';
-
-  selectedDecisionActivities = trackedFunction(this, async () => {
+  selectedDecisionActivitiesOrMeetings = trackedFunction(this, async () => {
     return await Promise.all(
-      this.selectedSignFlows.map(
-        async (signFlow) => await signFlow.decisionActivity
-      )
+      this.selectedSignFlows.map(async (signFlow) => await this.getDecisionActivityOrMeeting(signFlow))
     );
   });
 
@@ -66,28 +58,12 @@ export default class SignaturesIndexController extends Controller {
   }
 
   get isSelectedAllItems() {
-    return this.model.every(
-      (signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0
-    );
+    return this.model.every((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
 
   get isSelectedSomeItems() {
-    return this.model.some(
-      (signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0
-    );
+    return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
-
-  allSignersHaveEmail = trackedFunction(this, async () => {
-    for (const signer of this.signers) {
-      const person = await signer.person;
-      const user = await person.user;
-      if (!user?.email) {
-        return false;
-      }
-    }
-
-    return true;
-  });
 
   @action
   selectAll() {
@@ -124,61 +100,80 @@ export default class SignaturesIndexController extends Controller {
     if (this.sortField) {
       let newSortOptions = [...DEFAULT_SORT_OPTIONS];
       const index = newSortOptions
-        .map((option) => option.replace(/-/g, ''))
-        .indexOf(this.sortField.replace(/-/g, ''));
+            .map((option) => option.replace(/-/g, ''))
+            .indexOf(this.sortField.replace(/-/g, ''));
       if (index >= 0) {
         newSortOptions[index] = this.sortField;
       } else {
         newSortOptions = [this.sortField, ...DEFAULT_SORT_OPTIONS];
       }
-      this.sortSignaturesIndex = newSortOptions.join(',');
+      this.sortSignaturesDecisions = newSortOptions.join(',');
     } else {
-      this.sortSignaturesIndex = DEFAULT_SORT_OPTIONS.join(',');
+      this.sortSignaturesDecisions = DEFAULT_SORT_OPTIONS.join(',');
     }
   }
 
-  getMandateeNames = async (signFlow) => {
+  getDecisionActivityOrMeeting = async (signFlowOrPromise) => {
+    const signFlow = await signFlowOrPromise;
     const decisionActivity = await signFlow.decisionActivity;
-    const subcase = await decisionActivity.subcase;
-    const mandatees = await subcase.mandatees;
-    const persons = await Promise.all(
-      mandatees
-        .toArray()
-        .sort((m1, m2) => m1.priority - m2.priority)
-        .map((mandatee) => mandatee.person)
-    );
-    return persons.map((person) => person.fullName);
-  };
+    if (decisionActivity) {
+      return decisionActivity;
+    } else {
+      return await this.store.queryOne('meeting', {
+        'filter[minutes][sign-marking-activity][sign-subcase][sign-flow][:id:]': signFlow.id,
+      });
+    }
+  }
 
-  getDecisionActivity = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const treatment = await agendaitem.treatment;
-    return treatment.decisionActivity;
-  };
+  getSecretaryName = async (signFlowOrPromise) => {
+    const decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+    const secretary = await decisionActivityOrMeeting.secretary;
+    const person = await secretary.person;
+    return person.fullName;
+  }
+
+  getMeetingDate = async (signFlowOrPromise) => {
+    const decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
+
+    const modelName = decisionActivityOrMeeting.constructor.modelName;
+    if (modelName === 'decision-activity') {
+      return decisionActivityOrMeeting.startDate;
+    } else {
+      return decisionActivityOrMeeting.plannedStart;
+    }
+  }
 
   getAgendaitem = async (pieceOrPromise) => {
     const piece = await pieceOrPromise;
-    const agendaitems = await piece.agendaitems;
-    let agendaitem;
-    for (let maybeAgendaitem of agendaitems) {
-      const agenda = await maybeAgendaitem.agenda;
-      const nextVersion = await agenda.nextVersion;
-      if (!nextVersion) {
-        agendaitem = maybeAgendaitem;
-        break;
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[treatment][decision-activity][report][:id:]' : piece.id,
+    });
+    return agendaitem;
+  }
+
+  async getAgendaRouteModels(piece) {
+    const modelName = piece.constructor.modelName;
+    if (modelName === 'report') {
+      const agendaitem = await this.getAgendaitem(piece);
+      if (agendaitem) {
+        const agenda = await agendaitem.agenda;
+        const meeting = await agenda.createdFor;
+        return [meeting, agenda, agendaitem];
       }
     }
-    return agendaitem;
-  };
-
-  async getAgendaitemRouteModels(piece) {
-    const agendaitem = await this.getAgendaitem(piece);
-    if (agendaitem) {
-      const agenda = await agendaitem.agenda;
-      const meeting = await agenda.createdFor;
-      return [meeting, agenda, agendaitem];
+    if (modelName === 'minutes') {
+      const meeting = await this.store.queryOne('meeting', {
+        'filter[minutes][:id:]': piece.id,
+      });
+      const agenda = await this.store.queryOne('agenda', {
+        'filter[created-for][:id:]': meeting.id,
+        sort: '-serialnumber',
+        include: 'status',
+      });
+      return [meeting, agenda, null];
     }
-    return [];
+    warn('found a marked piece that is neither a report nor minutes');
+    return [null, null, null];
   }
 
   clearSidebarContentSingleItem() {
@@ -186,39 +181,32 @@ export default class SignaturesIndexController extends Controller {
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
-    this.agendaitem = null;
-    this.decisionActivity = null;
+    this.agnedaitem = null;
+    this.decisionActivityOrMeeting = null;
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
   }
 
   clearSidebarContentMultiItem() {
     this.selectedSignFlows = new TrackedArray([]);
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
   }
 
   @action
   async openSidebarSingleItem(signFlow, piece) {
+
     this.clearSidebarContentMultiItem();
-    this.signFlow = signFlow;
-    this.piece = piece;
+    this.signFlow = await signFlow;
+    this.piece = await piece;
     [this.meeting, this.agenda, this.agendaitem] =
-      await this.getAgendaitemRouteModels(piece);
-    this.decisionActivity = await this.getDecisionActivity(piece);
+      await this.getAgendaRouteModels(this.piece);
+    this.decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlow);
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
     this.showSidebar = true;
   }
 
   @action
   async openSidebarMultiItem() {
     this.signers = [];
-    this.approvers = [];
-    this.notificationAddresses = [];
     this.showSidebar = true;
   }
 
@@ -228,58 +216,22 @@ export default class SignaturesIndexController extends Controller {
     this.clearSidebarContentMultiItem();
     this.clearSidebarContentSingleItem();
   }
-
-  @action
-  openFilterModal() {
-    this.selectedMinisters = this.filteredMinisters;
-    this.showFilterModal = true;
-  }
-
-  @action
-  closeFilterModal() {
-    this.showFilterModal = false;
-    this.selectedMinisters = this.filteredMinisters;
-  }
-
-  @action
-  clearFilter() {
-    this.showFilterModal = false;
-    this.selectedMinisters = [];
-    this.filteredMinisters = [];
-    this.saveSelectedToLocalStorage();
-    this.router.refresh(this.router.routeName);
-  }
-
-  @action
-  applyFilter() {
-    this.filteredMinisters = this.selectedMinisters;
-    this.saveSelectedToLocalStorage();
-    this.router.refresh(this.router.routeName);
-    this.showFilterModal = false;
-  }
-
-  saveSelectedToLocalStorage() {
-    localStorage.setItem(
-      this.localStorageKey,
-      JSON.stringify(this.filteredMinisters)
-    );
-  }
-
+  
   createSignFlow = task(async () => {
     try {
       if (this.selectedSignFlows.length) {
         await this.signatureService.createSignFlow(
           this.selectedSignFlows,
           this.signers,
-          this.approvers,
-          this.notificationAddresses
+          [],
+          [],
         );
       } else if (this.signFlow) {
         await this.signatureService.createSignFlow(
           [this.signFlow],
           this.signers,
-          this.approvers,
-          this.notificationAddresses
+          [],
+          [],
         );
       }
       this.closeSidebar();
