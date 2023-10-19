@@ -70,15 +70,9 @@
             </AuCheckbox>
           </td>
           <td>
-            {{#if piece.id}}
             <AuLink @route="document" @model={{piece.id}}>
               {{piece.name}}
             </AuLink>
-            {{else}}
-            <span>
-              geen piece.id gevonden
-            </span>
-            {{/if}}
           </td>
           <td>
             <AuPill @size="small">
