@@ -304,7 +304,7 @@ export default class MeetingEditMeetingComponent extends Component {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
-          currentPlannedStart !== this.startDate || 
+          currentPlannedStart !== this.startDate ||
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
           const decisionActivities = yield this.store.queryAll(
@@ -339,10 +339,10 @@ export default class MeetingEditMeetingComponent extends Component {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newValue = replaceSecretary(piecePart.value,
+      const newHtmlContent = replaceSecretary(piecePart.htmlContent,
         this.secretary.person.get('fullName'),
         this.secretary.title.toLowerCase());
-      piecePart.value = newValue;
+      piecePart.htmlContent = newHtmlContent;
       await piecePart.save();
       await this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,

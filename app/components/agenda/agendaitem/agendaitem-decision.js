@@ -14,7 +14,7 @@ import VrNotulenName, {
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
-  return piecePartRecord.value !== piecePartEditor.htmlContent;
+  return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
 }
 
 /**
@@ -104,8 +104,8 @@ export default class AgendaitemDecisionComponent extends Component {
     const { betreftPiecePart, beslissingPiecePart } =
       this.createAndAttachPieceParts(
         report,
-        this.betreftPiecePart.value,
-        this.beslissingPiecePart.value
+        this.betreftPiecePart.htmlContent,
+        this.beslissingPiecePart.htmlContent
       );
 
     await this.saveReport.perform(
@@ -164,23 +164,23 @@ export default class AgendaitemDecisionComponent extends Component {
     if (!this.report || !this.beslissingPiecePart) {
       return;
     }
-    let newBeslissingValue = this.beslissingPiecePart.value;
+    let newBeslissingHtmlContent = this.beslissingPiecePart.htmlContent;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
-        newBeslissingValue = this.intl.t('postponed-item-decision');
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
         break;
       case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
-        newBeslissingValue = this.intl.t('retracted-item-decision');
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
         break;
     }
-    if (newBeslissingValue !== this.beslissingPiecePart.value) {
+    if (newBeslissingHtmlContent !== this.beslissingPiecePart.htmlContent) {
       const now = new Date();
       const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: newBeslissingValue,
+        htmlContent: newBeslissingHtmlContent,
         report: this.report,
         previousPiecePart: this.beslissingPiecePart,
         created: now,
@@ -302,7 +302,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
-      editorInterface.setHtmlContent(this.betreftPiecePart.value);
+      editorInterface.setHtmlContent(this.betreftPiecePart.htmlContent);
 
       // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
@@ -314,12 +314,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBetreftVersion(betreftPiecePart) {
-    this.setBetreftEditorContent(betreftPiecePart.value);
+    this.setBetreftEditorContent(betreftPiecePart.htmlContent);
   }
 
   @action
   setBetreftEditorContent(content) {
-    this.editorInstanceBetreft.setHtmlContent(content);
+    this.editorInstanceBetreft?.setHtmlContent(content);
   }
 
   @action
@@ -336,7 +336,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     if (this.beslissingPiecePart) {
-      editorInterface.setHtmlContent(this.beslissingPiecePart.value);
+      editorInterface.setHtmlContent(this.beslissingPiecePart.htmlContent);
     } else if (this.editorInstanceBeslissing) {
       editorInterface.setHtmlContent(this.editorInstanceBeslissing.htmlContent);
     }
@@ -346,30 +346,30 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBeslissingVersion(beslissingPiecePart) {
-    this.setBeslissingEditorContent(beslissingPiecePart.value);
+    this.setBeslissingEditorContent(beslissingPiecePart.htmlContent);
   }
 
   @action
   setBeslissingEditorContent(content) {
-    this.editorInstanceBeslissing.setHtmlContent(content);
+    this.editorInstanceBeslissing?.setHtmlContent(content);
   }
 
   @action
   async updateBeslissingContent() {
-    let newBeslissingValue;
+    let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
-        newBeslissingValue = this.intl.t('postponed-item-decision');
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
         break;
       case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
-        newBeslissingValue = this.intl.t('retracted-item-decision');
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        newBeslissingValue = this.nota;
+        newBeslissingHtmlContent = this.nota;
         break;
     }
-    this.setBeslissingEditorContent(`<p>${newBeslissingValue}</p>`);
+    this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
   }
 
   onUpdateConcern = task(async () => {
@@ -455,7 +455,7 @@ export default class AgendaitemDecisionComponent extends Component {
       );
       this.args.decisionActivity.decisionResultCode = decisionResultCode;
     }
-    
+
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -537,14 +537,14 @@ export default class AgendaitemDecisionComponent extends Component {
     const now = new Date();
     const betreftPiecePart = this.store.createRecord('piece-part', {
       title: 'Betreft',
-      value: betreftContent,
+      htmlContent: betreftContent,
       report: report,
       created: now,
     });
 
     const beslissingPiecePart = this.store.createRecord('piece-part', {
       title: 'Beslissing',
-      value: beslissingContent,
+      htmlContent: beslissingContent,
       report: report,
       created: now,
     });
@@ -563,7 +563,7 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       betreftPiecePart = this.store.createRecord('piece-part', {
         title: 'Betreft',
-        value: this.editorInstanceBetreft.htmlContent,
+        htmlContent: this.editorInstanceBetreft.htmlContent,
         report: report,
         previousPiecePart: previousBetreftPiecePart,
         created: now,
@@ -583,7 +583,7 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       beslissingPiecePart = this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: this.editorInstanceBeslissing.htmlContent,
+        htmlContent: this.editorInstanceBeslissing.htmlContent,
         report: report,
         previousPiecePart: previousBeslissingPiecePart,
         created: now,
@@ -610,7 +610,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+      this.betreftPiecePart?.htmlContent === this.editorInstanceBetreft.htmlContent
     ) {
       return true;
     }
@@ -636,7 +636,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.beslissingPiecePart?.value ===
+      this.beslissingPiecePart?.htmlContent ===
       this.editorInstanceBeslissing.htmlContent
     ) {
       return true;
