@@ -5,6 +5,6 @@ export default class PrintOverviewsRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 }

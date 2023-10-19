@@ -162,13 +162,23 @@ export default class AgendaService extends Service {
     }
 
     // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement
-      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      defaultDecisionResultCodeUri
-    );
+    let defaultDecisionResultCodeUri;
+    if (isAnnouncement) {
+      defaultDecisionResultCodeUri =
+        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+    } else {
+      defaultDecisionResultCodeUri = this.enableDigitalAgenda
+        ? null
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    }
+
+    let decisionResultCode;
+    if (defaultDecisionResultCodeUri) {
+      decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        defaultDecisionResultCodeUri
+      );
+    }
 
     const meetingSecretary = await meeting.secretary;
     const secretary = this.enableDigitalAgenda ? meetingSecretary : null;

@@ -4,14 +4,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
-import constants from 'frontend-kaleidos/config/constants';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -167,7 +166,7 @@ export default class AgendaitemDecisionComponent extends Component {
     }
     let newBeslissingValue = this.beslissingPiecePart.value;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    switch (decisionResultCode.uri) {
+    switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingValue = this.intl.t('postponed-item-decision');
         break;
@@ -201,7 +200,7 @@ export default class AgendaitemDecisionComponent extends Component {
       [
         CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCode.uri)
+      ].includes(decisionResultCode?.uri)
     ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
@@ -325,15 +324,12 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   async updateBetreftContent() {
-    // *NOTE: approval decisions have a totally different text block.
-    // possible future work, for now we make sure the documents names are correct
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
-    const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, isApproval, documents, subcase?.subcaseName)}</p>`
+        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
       );
   }
 
@@ -362,7 +358,7 @@ export default class AgendaitemDecisionComponent extends Component {
   async updateBeslissingContent() {
     let newBeslissingValue;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    switch (decisionResultCode.uri) {
+    switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingValue = this.intl.t('postponed-item-decision');
         break;
@@ -446,6 +442,20 @@ export default class AgendaitemDecisionComponent extends Component {
     beslissingPiecePart,
     betreftPiecePart
   ) => {
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if (!decisionResultCode?.uri) {
+      const agendaitemType = await this.args.agendaitem.type;
+      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      const decisionresultCodeUri = isNota
+        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      const decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        decisionresultCodeUri
+      );
+      this.args.decisionActivity.decisionResultCode = decisionResultCode;
+    }
+    
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
@@ -472,20 +482,14 @@ export default class AgendaitemDecisionComponent extends Component {
 
   async createNewReport(documentContainer) {
     const now = new Date();
-    const agendaitemType = await this.args.agendaitem.type;
-    const announcementType = constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-    const agendaitemTypeWord =
-      agendaitemType.uri === announcementType ? 'mededeling' : 'punt';
     const report = this.store.createRecord('report', {
       isReportOrMinutes: true,
       created: now,
       modified: now,
-      name: `${
-        this.args.agendaContext.meeting.numberRepresentation
-      } - ${agendaitemTypeWord} ${addLeadingZeros(
-        this.args.agendaContext.agendaitem.number,
-        4
-      )}`,
+      name: await generateReportName(
+        this.args.agendaContext.agendaitem,
+        this.args.agendaContext.meeting,
+      ),
     });
 
     const subcase = await this.args.decisionActivity.subcase;
