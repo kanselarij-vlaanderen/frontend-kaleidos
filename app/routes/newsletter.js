@@ -6,7 +6,7 @@ export default class NewsletterRoute extends Route {
   @service store;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   async model(params) {

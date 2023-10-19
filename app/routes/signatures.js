@@ -7,7 +7,7 @@ export default class SignaturesRoute extends Route {
   @service router;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
     if (!this.currentSession.may('manage-signatures')) {
       this.router.transitionTo('index');
