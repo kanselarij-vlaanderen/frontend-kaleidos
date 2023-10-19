@@ -49,7 +49,7 @@
                   {{on "click" this.updateEditorContent}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
-                  @record={{this.currentPiecePart.htmlContent}}
+                  @record={{this.currentPiecePartTask.value}}
                   @previousVersionKey="previousPiecePart"
                   @onVersionClicked={{this.revertToVersion}}
                 />
@@ -98,6 +98,7 @@
                 @showCreateNewVersion={{true}}
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
+                @didDeleteContainer={{this.didDeleteMinutes}}
               />
             {{else if (user-may "manage-minutes")}}
               <AuAlert
@@ -117,14 +118,14 @@
               />
             {{/if}}
           </Auk::Panel::Body>
-          {{#if (and (user-may "manage-minutes") this.currentPiecePart.htmlContent)}}
+          {{#if (and (user-may "manage-minutes") this.currentPiecePartTask.value)}}
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
               <AuContent>
                 <SanitizeHtml
                   @raw={{true}}
-                  @value={{this.currentPiecePart.value.htmlContent}}
+                  @value={{this.currentPiecePartTask.value.htmlContent}}
                 />
               </AuContent>
             </Auk::Panel::Body>

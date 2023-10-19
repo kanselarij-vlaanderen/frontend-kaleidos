@@ -319,7 +319,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   setBetreftEditorContent(content) {
-    this.editorInstanceBetreft.setHtmlContent(content);
+    this.editorInstanceBetreft?.setHtmlContent(content);
   }
 
   @action
@@ -351,7 +351,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   setBeslissingEditorContent(content) {
-    this.editorInstanceBeslissing.setHtmlContent(content);
+    this.editorInstanceBeslissing?.setHtmlContent(content);
   }
 
   @action
@@ -455,7 +455,7 @@ export default class AgendaitemDecisionComponent extends Component {
       );
       this.args.decisionActivity.decisionResultCode = decisionResultCode;
     }
-    
+
     await documentContainer.save();
     await report.save();
     await betreftPiecePart?.save();
