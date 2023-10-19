@@ -16,6 +16,7 @@
   {{/if}}
   {{#if @isShowingAccessLevel}}
     <AccessLevelPill
+      @size="small"
       @accessLevel={{@doc.accessLevel}}
       @isDraft={{this.isDraftAccessLevel}}
     />

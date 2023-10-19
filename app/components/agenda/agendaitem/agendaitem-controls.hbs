@@ -43,6 +43,13 @@
           </AuButton>
         {{/if}}
       {{/if}}
+      <AuButton
+        @skin="link"
+        role="menuitem"
+        {{on "click" @submitToVp}}
+      >
+        Doorsturen naar het Vlaams Parlement
+      </AuButton>
       {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
         <AuButton
           data-test-agendaitem-controls-action-delete
