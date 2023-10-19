@@ -15,7 +15,7 @@ import constants from 'frontend-kaleidos/config/constants';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
-  return piecePartRecord.value !== piecePartEditor.htmlContent;
+  return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
 }
 
 /**
@@ -181,7 +181,7 @@ export default class AgendaitemDecisionComponent extends Component {
       const now = new Date();
       const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: newBeslissingHtmlContent,
+        htmlContent: newBeslissingHtmlContent,
         report: this.report,
         previousPiecePart: this.beslissingPiecePart,
         created: now,
@@ -533,14 +533,14 @@ export default class AgendaitemDecisionComponent extends Component {
     const now = new Date();
     const betreftPiecePart = this.store.createRecord('piece-part', {
       title: 'Betreft',
-      value: betreftContent,
+      htmlContent: betreftContent,
       report: report,
       created: now,
     });
 
     const beslissingPiecePart = this.store.createRecord('piece-part', {
       title: 'Beslissing',
-      value: beslissingContent,
+      htmlContent: beslissingContent,
       report: report,
       created: now,
     });
@@ -559,7 +559,7 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       betreftPiecePart = this.store.createRecord('piece-part', {
         title: 'Betreft',
-        value: this.editorInstanceBetreft.htmlContent,
+        htmlContent: this.editorInstanceBetreft.htmlContent,
         report: report,
         previousPiecePart: previousBetreftPiecePart,
         created: now,
@@ -579,7 +579,7 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       beslissingPiecePart = this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: this.editorInstanceBeslissing.htmlContent,
+        htmlContent: this.editorInstanceBeslissing.htmlContent,
         report: report,
         previousPiecePart: previousBeslissingPiecePart,
         created: now,
@@ -606,7 +606,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+      this.betreftPiecePart?.htmlContent === this.editorInstanceBetreft.htmlContent
     ) {
       return true;
     }
@@ -632,7 +632,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.beslissingPiecePart?.value ===
+      this.beslissingPiecePart?.htmlContent ===
       this.editorInstanceBeslissing.htmlContent
     ) {
       return true;
