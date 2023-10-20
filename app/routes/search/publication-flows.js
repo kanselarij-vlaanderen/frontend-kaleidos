@@ -8,8 +8,9 @@ import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 
 export default class SearchPublicationFlowsRoute extends Route {
   queryParams = {
-    status: {
+    statuses: {
       refreshModel: true,
+      as: 'statussen',
     },
     page: {
       refreshModel: true,
@@ -86,8 +87,8 @@ export default class SearchPublicationFlowsRoute extends Route {
       filter[':lte:sessionDate'] = date.toISOString();
     }
 
-    if (params.status) {
-      filter.statusId = params.status;
+    if (!isEmpty(params.statuses)) {
+      filter[':terms:statusId'] = params.statuses;
     }
 
     return filter;

@@ -12,8 +12,8 @@ export default class SearchPublicationFlowsController extends Controller {
 
   queryParams = [
     {
-      status: {
-        type: 'string',
+      statuses: {
+        type: 'array',
       },
       page: {
         type: 'number',
@@ -35,7 +35,7 @@ export default class SearchPublicationFlowsController extends Controller {
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[2];
   @tracked sort = this.sortOptions[1].value;
-  @tracked status;
+  @tracked statuses = [];
   @tracked searchText;
 
   constructor() {
