@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isPresent } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -24,12 +26,35 @@ export default class AgendaitemControls extends Component {
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
+  @tracked showVPModal = false;
+  @tracked hasDecreet = false;
+  @tracked subcase;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
+  }
+
+  get hasDropdownOptions() {
+    return this.isDesignAgenda || this.canSendToVP;
+  }
+
+  get enableVlaamsParlement() {
+    return (
+      ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
+      ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
+    );
+  }
+
+  get canSendToVP() {
+    return (
+      this.enableVlaamsParlement &&
+      this.hasDecreet &&
+      this.decisionActivity.isApproved &&
+      this.subcase.isDefinitieveGoedkeuring
+    );
   }
 
   get areDecisionActionsEnabled() {
@@ -67,6 +92,10 @@ export default class AgendaitemControls extends Component {
     return null;
   }
 
+  sendToVP = task(async () => {
+    return;
+  });
+
   @task
   *loadAgendaData() {
     const status = yield this.args.currentAgenda.status;
@@ -78,6 +107,13 @@ export default class AgendaitemControls extends Component {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     yield this.decisionActivity?.decisionResultCode;
+    this.subcase = yield this.decisionActivity.subcase;
+    const decreetDocument = yield this.store.queryOne('piece', {
+      'filter[document-container][type][:uri:]':
+        CONSTANTS.DOCUMENT_TYPES.DECREET,
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+    });
+    this.hasDecreet = isPresent(decreetDocument);
   }
 
   async deleteItem(agendaitem) {

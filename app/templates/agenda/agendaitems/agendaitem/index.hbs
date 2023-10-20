@@ -26,15 +26,13 @@
   <Toolbar.Group @position="right" as |Group|>
     <Group.Item>
       {{#if (user-may "manage-agendaitems")}}
-        {{#unless this.isClosedMeeting}}
-          <Agenda::Agendaitem::AgendaitemControls
-            @agendaitem={{this.model}}
-            @agendaActivity={{this.agendaActivity}}
-            @currentAgenda={{this.agenda}}
-            @reverseSortedAgendas={{this.reverseSortedAgendas}}
-            @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
-          />
-        {{/unless}}
+        <Agenda::Agendaitem::AgendaitemControls
+          @agendaitem={{this.model}}
+          @agendaActivity={{this.agendaActivity}}
+          @currentAgenda={{this.agenda}}
+          @reverseSortedAgendas={{this.reverseSortedAgendas}}
+          @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+        />
       {{/if}}
     </Group.Item>
   </Toolbar.Group>
