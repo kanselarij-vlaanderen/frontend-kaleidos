@@ -97,7 +97,11 @@ export default class DecisionReportGeneration extends Service {
         ),
         this.intl.t(
           'minutes-report-generation--toast-generating-complete--title'
-        )
+        ),
+        {
+          closable: true,
+          timeOut: 1 * 30 * 1000,
+        }
       );
     } catch (error) {
       this.toaster.error(

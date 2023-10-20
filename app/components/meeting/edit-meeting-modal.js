@@ -348,7 +348,7 @@ export default class MeetingEditMeetingComponent extends Component {
         this.secretary.title.toLowerCase());
       piecePart.value = newValue;
       await piecePart.save();
-      await this.decisionReportGeneration.generateReplacementMinutes.perform(
+      this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
       );
     }
