@@ -1252,5 +1252,6 @@
   "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
   "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
   "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
-  "retracted-item-decision": "Dit punt wordt ingetrokken."
+  "retracted-item-decision": "Dit punt wordt ingetrokken.",
+  "last-edited": "Laatste wijziging"
 }

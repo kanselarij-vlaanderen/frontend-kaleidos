@@ -1,2 +1,55 @@
 {{page-title (t "publications")}}
-{{outlet}}
+{{#in-element this.customFiltersElement insertBefore=null}}
+{{/in-element}}
+<div class="au-o-box au-o-box--small">
+  {{#if this.model.length}}
+    <Search::ResultsHeader
+      @pageSize={{this.size}}
+      @pageIdx={{this.page}}
+      @nbOfItems={{this.model.length}}
+      @totalNbOfItems={{this.model.meta.count}}
+      @searchText={{this.searchText}}
+      @searchType={{t "publications"}}
+      @onSortChange={{this.selectSort}}
+      @sortOptions={{this.sortOptions}}
+      @sort={{this.sort}}
+    />
+    <KDataTable
+      @list={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{this.model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.model.length}}
+      @totalNumberOfItems={{this.model.meta.count}}
+      @onChangeSize={{this.selectSize}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToCase}}
+    >
+      <:body as |row|>
+        <td>
+          <Search::ResultCards::PublicationFlow
+            @sessionDate={{row.sessionDate}}
+            @modifiedDate={{row.modified}}
+            @shortTitle={{row.shortTitle}}
+            @title={{row.title}}
+            @status={{row.status}}
+            @decisionmakingFlowId={{row.decisionmakingFlowId}}
+          />
+        </td>
+      </:body>
+    </KDataTable>
+  {{else}}
+    {{#if this.emptySearch}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "fill-in-search-term"}}
+      />
+    {{else}}
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found-modify-term"}}
+      />
+    {{/if}}
+  {{/if}}
+</div>
