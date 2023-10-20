@@ -92,6 +92,16 @@
               @agendaItemId={{row.data.latestAgendaitem.id}}
             />
           {{/if}}
+          {{#if (eq row.name "publication-flows")}}
+            <Search::ResultCards::PublicationFlow
+              @sessionDate={{row.data.sessionDate}}
+              @modifiedDate={{row.data.modified}}
+              @shortTitle={{row.data.shortTitle}}
+              @title={{row.data.title}}
+              @status={{row.data.status}}
+              @decisionmakingFlowId={{row.data.decisionmakingFlowId}}
+            />
+          {{/if}}
         </td>
       </:body>
     </KDataTable>
