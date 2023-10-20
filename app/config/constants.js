@@ -51,6 +51,13 @@ export default {
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
     NOTULEN: 'http://themis.vlaanderen.be/id/concept/document-type/d638e0dc-c879-4a75-9485-9e6970a83d67',
+    BESLISSINGSFICHE: 'http://themis.vlaanderen.be/id/concept/document-type/e807feec-1958-46cf-a558-3379b5add49e',
+    ONTWERPDECREET: 'http://themis.vlaanderen.be/id/concept/document-type/8a1e048a-4b55-4a19-b1c0-c85dba09a15c',
+    MEMORIE: 'http://themis.vlaanderen.be/id/concept/document-type/f036e016-268e-4611-8fee-77d2047b51d8',
+    ADVIES_RVS: "http://themis.vlaanderen.be/id/concept/document-type/73d69df5-c3f3-43b2-aeae-5a24b56b376e",
+    ADVIES_IF: "http://themis.vlaanderen.be/id/concept/document-type/351ba62d-eeff-4b08-b1e3-0a56d38116c4",
+    ADVIES: "http://themis.vlaanderen.be/id/concept/document-type/fb931eff-38f2-4743-802b-4240c35b8b0c",
+    ADVIES_AGO: "http://themis.vlaanderen.be/id/concept/document-type/9c043848-6a9f-4448-9794-600e40dee6d2",
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
