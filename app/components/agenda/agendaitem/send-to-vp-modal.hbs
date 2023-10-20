@@ -1,0 +1,70 @@
+<AuModal @modalOpen={{true}} @closeModal={{@onClose}}>
+  <:title>{{t "check-case"}}</:title>
+  <:body>
+    {{#if this.loadData.isRunning}}
+      <AuLoader />
+    {{else}}
+      <AuContent>
+        <p>{{t "the-following-things-will-be-sent"}}</p>
+        <ul class="au-u-margin-top">
+          <li>
+            {{t "principal-approval"}}
+            <ul>
+              {{#each this.principieleGoedkeuringPieces as |piece|}}
+                <li>
+                  <LinkTo @route="document" @model={{piece.id}}>
+                    {{#let piece.file.extension as |extension|}}
+                      {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                    {{/let}}
+                  </LinkTo>
+                </li>
+              {{/each}}
+            </ul>
+          </li>
+          <li>
+            {{t "definitive-approval"}}:
+            <ul>
+              {{#each this.definitieveGoedkeuringPieces as |piece|}}
+                <li>
+                  <LinkTo @route="document" @model={{piece.id}}>
+                    {{#let piece.file.extension as |extension|}}
+                      {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                    {{/let}}
+                  </LinkTo>
+                </li>
+              {{/each}}
+            </ul>
+          </li>
+        </ul>
+        {{! <div class="auk-form-group au-u-margin-top">
+        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+        <Auk::Textarea @rows="4" @value="" id="remarks" />
+      </div> }}
+      </AuContent>
+      {{#let this.missingDocs as |missingDocs|}}
+        {{#if missingDocs}}
+          <AuAlert
+            @title="{{t 'this-case-is-missing'}}:"
+            @skin="warning"
+            @icon="alert-triangle"
+            @size="small"
+            class="au-u-margin-bottom-none au-u-margin-top"
+          >
+            <AuContent>
+              <ul>
+                {{#each missingDocs as |doc|}}
+                  <li>{{doc}}</li>
+                {{/each}}
+              </ul>
+            </AuContent>
+          </AuAlert>
+        {{/if}}
+      {{/let}}
+    {{/if}}
+  </:body>
+  <:footer>
+    <AuButton @skin="primary">
+      {{t "send-to-VP"}}
+    </AuButton>
+  </:footer>
+</AuModal>
