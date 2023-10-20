@@ -1249,5 +1249,11 @@
   "minutes-approval": "{mededelingOrNota} wordt goedgekeurd confer beslissingsfiche {reportName}.",
   "minutes-retracted": "{mededelingOrNota} wordt ingetrokken.",
   "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
-  "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering."
+  "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
+  "send-to-VP": "Doorsturen naar het Vlaams Parlement",
+  "check-case": "Dossier controleren",
+  "the-following-things-will-be-sent": "De volgende zaken worden doorgestuurd",
+  "this-case-is-missing": "Dit dossier mist nog",
+  "definitive-approval": "Definitieve goedkeuring",
+  "principal-approval": "Principiële goedkeuring"
 }
