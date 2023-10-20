@@ -96,7 +96,14 @@
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
-        <h4 class="auk-h4">{{t "concerns"}}</h4>
+        <h4 class="auk-h4">{{t "annotation"}}</h4>
+        <AuInput
+          @width="block"
+          @value={{mut this.editorValueAnnotatie}}
+          id="decisionAnnotation"
+        />
+
+        <h4 class="auk-h4 au-u-padding-top">{{t "concerns"}}</h4>
         <SayEditor
           @size="small"
           @allowFullscreen={{true}}
@@ -209,6 +216,73 @@
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
           <AuContent @size="small">
+        {{#if (and this.isEditingAnnotation this.enableDigitalAgenda)}}
+           <h4 class="auk-h4">{{t "annotation"}}</h4>
+           <AuInput
+             @width="block"
+             @value={{mut this.editorValueAnnotatie}}
+             id="decisionAnnotation"
+           />
+           <Auk::Toolbar>
+             <Auk::Toolbar::Group @position="left">
+               <Auk::Toolbar::Item>
+                 <AuButton
+                   @skin="naked"
+                   {{on "click" (set this "isEditingAnnotation" false)}}
+                 >
+                   {{t "cancel"}}
+                 </AuButton>
+               </Auk::Toolbar::Item>
+             </Auk::Toolbar::Group>
+             <Auk::Toolbar::Group @position="right">
+               <Auk::Toolbar::Item>
+                 <AuButton
+                   @disabled={{this.disableSaveAnnotationButton}}
+                   @skin="primary"
+                   @loading={{this.onUpdateAnnotation.isRunning}}
+                   {{on "click" (perform this.onUpdateAnnotation)}}
+                 >
+                   {{t "update"}}
+                 </AuButton>
+               </Auk::Toolbar::Item>
+             </Auk::Toolbar::Group>
+           </Auk::Toolbar>
+           {{else}}
+           <Auk::Toolbar @auto={{true}} as |Toolbar|>
+             <Toolbar.Group @position="left">
+               <h4 class="auk-toolbar__title">
+                   {{t "annotation"}}:
+               </h4>
+             </Toolbar.Group>
+             <Toolbar.Group @position="right" as |Group|>
+               {{#if
+                   (and
+                     this.loadReport.isIdle
+                     (user-may "manage-decisions")
+                     (not this.isEditingAnnotation)
+                     (or this.pieceParts (not this.report))
+                     this.enableDigitalAgenda
+                   )
+                 }}
+                   <Group.Item>
+                     <AuButton
+                       @skin="naked"
+                       @icon="pencil"
+                       @iconAlignment="left"
+                       @disabled={{this.saveReport.isRunning}}
+                       {{on "click" this.startEditingAnnotation}}
+                     >
+                       {{t "edit"}}
+                     </AuButton>
+                   </Group.Item>
+                 {{/if}}
+             </Toolbar.Group>
+           </Auk::Toolbar>
+         <SanitizeHtml
+           @raw={{true}}
+           @value={{this.annotatiePiecePart.htmlContent}}
+         />
+        {{/if}}
         {{#if (and this.isEditingConcern this.enableDigitalAgenda)}}
            <h4 class="auk-h4">{{t "concerns"}}</h4>
         <SayEditor

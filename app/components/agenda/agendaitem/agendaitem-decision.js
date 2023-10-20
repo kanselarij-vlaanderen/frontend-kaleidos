@@ -34,16 +34,19 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @tracked report;
   @tracked previousReport;
+  @tracked annotatiePiecePart;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
   @tracked nota;
 
+  @tracked isEditingAnnotation = false;
   @tracked isEditingConcern = false;
   @tracked isEditingTreatment = false;
   @tracked isEditing = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
 
+  @tracked editorValueAnnotatie = null;
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
   @tracked decisionViewerElement = null;
@@ -101,26 +104,43 @@ export default class AgendaitemDecisionComponent extends Component {
 
   onCreateNewVersion = task(async () => {
     const report = await this.attachNewReportVersion(this.report);
-    const { betreftPiecePart, beslissingPiecePart } =
+    const { betreftPiecePart, beslissingPiecePart, annotatiePiecePart } =
       this.createAndAttachPieceParts(
         report,
         this.betreftPiecePart.htmlContent,
-        this.beslissingPiecePart.htmlContent
+        this.beslissingPiecePart.htmlContent,
+        this.annotatiePiecePart.htmlContent
       );
 
     await this.saveReport.perform(
       await report.documentContainer,
       report,
       betreftPiecePart,
-      beslissingPiecePart
+      beslissingPiecePart,
+      annotatiePiecePart
     );
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
     await this.loadReport.perform();
   });
 
   get pieceParts() {
-    return !!this.betreftPiecePart || !!this.beslissingPiecePart;
+    return !!this.betreftPiecePart
+        || !!this.beslissingPiecePart
+        || !!this.annotatiePiecePart;
   }
+
+  loadAnnotatiePiecePart = task(async () => {
+    this.annotatiePiecePart = await this.store.queryOne('piece-part', {
+      filter: {
+        report: { ':id:': this.report.id },
+        ':has-no:next-piece-part': true,
+        title: 'Annotatie',
+      },
+    });
+    if (this.annotatiePiecePart) {
+      this.editorValueAnnotatie = this.annotatiePiecePart.htmlContent;
+    }
+  });
 
   loadBetreftPiecePart = task(async () => {
     this.betreftPiecePart = await this.store.queryOne('piece-part', {
@@ -145,10 +165,12 @@ export default class AgendaitemDecisionComponent extends Component {
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
+      await this.loadAnnotatiePiecePart.perform();
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
     } else {
+      this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
       this.beslissingPiecePart = null;
     }
@@ -228,6 +250,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async didDeleteReport() {
     await this.loadReport.perform();
+    this.editorValueAnnotatie = '';
     this.setBetreftEditorContent('');
     this.setBeslissingEditorContent('');
   }
@@ -372,6 +395,18 @@ export default class AgendaitemDecisionComponent extends Component {
     this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
   }
 
+  onUpdateAnnotation = task(async () => {
+    const report = this.report;
+    const documentContainer = await this.report.documentContainer;
+    const annotatiePiecePart = this.attachNewAnnotatiePiecePartsVersion(
+      report,
+      this.annotatiePiecePart
+    );
+    await this.saveReport.perform(documentContainer, report, null, annotatiePiecePart);
+    await this.loadAnnotatiePiecePart.perform();
+    this.isEditingAnnotation = false;
+  });
+
   onUpdateConcern = task(async () => {
     const report = this.report;
     const documentContainer = await this.report.documentContainer;
@@ -401,21 +436,27 @@ export default class AgendaitemDecisionComponent extends Component {
   onSaveReport = task(async () => {
     let report;
     let documentContainer;
+    let annotatiePiecePart;
     let betreftPiecePart;
     let beslissingPiecePart;
 
     if (!this.report) {
       documentContainer = this.createNewDocumentContainer();
       report = await this.createNewReport(documentContainer);
-      ({ betreftPiecePart, beslissingPiecePart } =
+      ({ betreftPiecePart, beslissingPiecePart, annotatiePiecePart } =
         this.createAndAttachPieceParts(
           report,
           this.editorInstanceBetreft.htmlContent,
-          this.editorInstanceBeslissing.htmlContent
+          this.editorInstanceBeslissing.htmlContent,
+          this.editorValueAnnotatie
         ));
     } else {
       documentContainer = await this.report.documentContainer;
       report = this.report;
+      annotatiePiecePart = this.attachNewAnnotatiePiecePartsVersion(
+        report,
+        this.annotatiePiecePart
+      )
       betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
         report,
         this.betreftPiecePart
@@ -430,7 +471,8 @@ export default class AgendaitemDecisionComponent extends Component {
       documentContainer,
       report,
       beslissingPiecePart,
-      betreftPiecePart
+      betreftPiecePart,
+      annotatiePiecePart
     );
     await this.loadReport.perform();
     this.isEditing = false;
@@ -440,7 +482,8 @@ export default class AgendaitemDecisionComponent extends Component {
     documentContainer,
     report,
     beslissingPiecePart,
-    betreftPiecePart
+    betreftPiecePart,
+    annotatiePiecePart
   ) => {
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     if (!decisionResultCode?.uri) {
@@ -458,6 +501,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     await documentContainer.save();
     await report.save();
+    await annotatiePiecePart?.save();
     await betreftPiecePart?.save();
     await beslissingPiecePart?.save();
 
@@ -533,8 +577,15 @@ export default class AgendaitemDecisionComponent extends Component {
     return report;
   }
 
-  createAndAttachPieceParts(report, betreftContent, beslissingContent) {
+  createAndAttachPieceParts(report, betreftContent, beslissingContent, annotatieContent) {
     const now = new Date();
+    const annotatiePiecePart = this.store.createRecord('piece-part', {
+      title: 'Annotatie',
+      htmlContent: annotatieContent,
+      report: report,
+      created: now,
+    });
+
     const betreftPiecePart = this.store.createRecord('piece-part', {
       title: 'Betreft',
       htmlContent: betreftContent,
@@ -550,9 +601,27 @@ export default class AgendaitemDecisionComponent extends Component {
     });
 
     return {
+      annotatiePiecePart,
       betreftPiecePart,
       beslissingPiecePart,
     };
+  }
+
+  attachNewAnnotatiePiecePartsVersion(report, previousAnnotatiePiecePart) {
+    const now = new Date();
+    let annotatiePiecePart = null;
+    if (
+      previousAnnotatiePiecePart?.htmlContent !== this.editorValueAnnotatie
+    ) {
+      annotatiePiecePart = this.store.createRecord('piece-part', {
+        title: 'Annotatie',
+        htmlContent: this.editorValueAnnotatie,
+        report: report,
+        previousPiecePart: previousAnnotatiePiecePart,
+        created: now,
+      });
+    }
+    return annotatiePiecePart;
   }
 
   attachNewBetreftPiecePartsVersion(report, previousBetreftPiecePart) {
@@ -590,6 +659,25 @@ export default class AgendaitemDecisionComponent extends Component {
       });
     }
     return beslissingPiecePart;
+  }
+
+  get disableSaveAnnotationButton() {
+    if (this.loadReport.isRunning) {
+      return true;
+    }
+
+    if (!this.editorValueAnnotatie && this.editorValueAnnotatie !== '') {
+      return true;
+    }
+
+    // If there is no change to the part, disable
+    if (
+      this.annotatiePiecePart?.htmlContent === this.editorValueAnnotatie
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   get disableSaveConcernButton() {
@@ -646,7 +734,9 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get disableSaveButton() {
-    if (this.disableSaveConcernButton || this.disableSaveTreatmentButton) {
+    if (this.disableSaveConcernButton
+      || this.disableSaveTreatmentButton
+      || this.disableSaveAnnotationButton) {
       return true;
     }
     return false;
@@ -657,6 +747,11 @@ export default class AgendaitemDecisionComponent extends Component {
       ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
       ENV.APP.ENABLE_DIGITAL_AGENDA === true
     );
+  }
+
+  @action
+  startEditingAnnotation() {
+    this.isEditingAnnotation = true;
   }
 
   @action
@@ -677,6 +772,7 @@ export default class AgendaitemDecisionComponent extends Component {
   startEditing() {
     this.loadDocuments.perform();
     this.loadNota.perform();
+    this.editorValueAnnotatie = '';
     this.isEditing = true;
   }
 }
