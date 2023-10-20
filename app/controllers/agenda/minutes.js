@@ -168,7 +168,7 @@ export default class AgendaMinutesController extends Controller {
     });
   });
 
-  currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
+  currentPiecePartTask = trackedTask(this, this.loadCurrentPiecePart);
 
   saveMinutes = task(async () => {
     let minutes = null;
@@ -204,14 +204,15 @@ export default class AgendaMinutesController extends Controller {
     } else {
       minutes = this.model.minutes;
     }
+    await minutes.save();
+
     const piecePart = this.store.createRecord('piece-part', {
-      value: this.editor.htmlContent,
+      htmlContent: this.editor.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePartTask?.value,
       minutes,
     });
 
-    await minutes.save();
     await piecePart.save();
 
     this.decisionReportGeneration.generateReplacementMinutes.perform(
@@ -245,14 +246,15 @@ export default class AgendaMinutesController extends Controller {
       isReportOrMinutes: true,
     });
 
+    await newVersion.save();
+
     const newPiecePart = this.store.createRecord('piece-part', {
-      value: this.currentPiecePart.value.value,
+      htmlContent: this.currentPiecePartTask.value.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePartTask.value,
       minutes: newVersion,
     });
 
-    await newVersion.save();
     await newPiecePart.save();
 
     await this.decisionReportGeneration.generateReplacementMinutes.perform(
@@ -279,18 +281,23 @@ export default class AgendaMinutesController extends Controller {
   @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
-    if (this.currentPiecePart.value) {
-      this.editor.setHtmlContent(this.currentPiecePart.value.value);
+    if (this.currentPiecePartTask?.value) {
+      this.editor.setHtmlContent(this.currentPiecePartTask.value.htmlContent);
     }
   }
 
   @action
   revertToVersion(record) {
-    this.editor.setHtmlContent(record.value);
+    this.editor.setHtmlContent(record.htmlContent);
+  }
+
+  @action
+  async didDeleteMinutes() {
+    this.refresh();
   }
 
   get saveDisabled() {
-    if (this.currentPiecePart?.value?.value === this.editor?.htmlContent) {
+    if (this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent) {
       return true;
     }
 
