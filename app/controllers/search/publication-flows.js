@@ -57,6 +57,11 @@ export default class SearchPublicationFlowsController extends Controller {
   }
 
   @action
+  setStatuses(statuses) {
+    this.statuses = statuses;
+  }
+
+  @action
   navigateToCase(publicationFlow, clickEvent) {
     const decisionmakingFlowId = publicationFlow.decisionmakingFlowId;
     // Check if we clicked an emphasis inside a linkTo or a linkTo

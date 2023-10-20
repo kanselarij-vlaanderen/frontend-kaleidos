@@ -1,5 +1,11 @@
 {{page-title (t "publications")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <Search::PublicationStatusesFilter
+      @selected={{this.statuses}}
+      @onChange={{this.setStatuses}}
+    />
+  </div>
 {{/in-element}}
 <div class="au-o-box au-o-box--small">
   {{#if this.model.length}}
