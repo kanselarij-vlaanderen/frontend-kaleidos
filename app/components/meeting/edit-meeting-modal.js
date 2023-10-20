@@ -246,18 +246,15 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  regenerateDecisionReport = task(async (decisionActivity) => {
-    if (this.enableDigitalAgenda) {
-      const report = await this.store.queryOne('report', {
-        'filter[:has-no:next-piece]': true,
-        'filter[decision-activity][:id:]': decisionActivity.id,
-      });
-      const pieceParts = await report?.pieceParts;
-      if (pieceParts?.length) {
-        await this.decisionReportGeneration.generateReplacementReport.perform(
-          report
-        );
-      }
+  regenerateDecisionReports = task(async () => {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    if (reports.length) {
+      this.decisionReportGeneration.generateReplacementReports.perform(reports);
     }
   });
 
@@ -299,7 +296,6 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-
       if (this.enableDigitalAgenda && !this.isPreKaleidos) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
@@ -307,18 +303,26 @@ export default class MeetingEditMeetingComponent extends Component {
           currentPlannedStart !== this.startDate || 
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
-          const decisionActivities = yield this.store.queryAll(
-            'decision-activity',
-            {
-              'filter[treatment][agendaitems][agenda][created-for][:id:]':
-                this.args.meeting.id,
-            }
-          );
-          for (let decisionActivity of decisionActivities.slice()) {
-            decisionActivity.secretary = this.secretary;
-            yield decisionActivity.save();
-            yield this.regenerateDecisionReport.perform(decisionActivity);
+          if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
+            const decisionActivities = yield this.store.queryAll(
+              'decision-activity',
+              {
+                'filter[treatment][agendaitems][agenda][created-for][:id:]':
+                  this.args.meeting.id,
+              }
+            );
+            // TODO KAS-4293 secretary only needs to be updated if that changes
+            // if so, all decisionActivities have to be saved before we generate the reports again.
+            // any chance we can set the secretary in backend and reload in frontend?
+            // we might have some concurrency issues here with every save of decisionActivity
+            yield Promise.all(
+              decisionActivities.map(async (decisionActivity) => {
+                decisionActivity.secretary = this.secretary;
+                await decisionActivity.save();
+              })
+            );
           }
+          yield this.regenerateDecisionReports.perform();
           if (this.enableDigitalMinutes) {
             yield this.updateSecretaryInMinutes();
           }

@@ -1184,6 +1184,8 @@
   "point": "punt",
   "pdf": "PDF",
   "error-while-exporting-pdf": "Er ging iets mis tijdens het exporteren naar PDF",
+  "error-while-generating-report-name-pdf": "Er ging iets mis tijdens het aanmaken van de beslissingsfiche {name}. Reden: {error}",
+  "error-while-generating-minutes-pdf": "Er ging iets mis tijdens het aanmaken van de notulen",
   "version-of-date-at-time": "Versie van {date} om {time}",
   "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
   "no-ministers-submitted-on-this-agenda": "Er zijn geen ministers die een document hebben ingediend op deze agenda.",
@@ -1253,12 +1255,12 @@
   "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
   "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
   "retracted-item-decision": "Dit punt wordt ingetrokken.",
-  "decision-report-generation--toast-generating--message": "De beslissingen worden aangepast.",
-  "decision-report-generation--toast-generating--title": "Beslissingen Aanpassen",
-  "decision-report-generation--toast-generating-complete--message": "De beslissingen zijn aangepast.",
-  "decision-report-generation--toast-generating-complete--title": "Beslissingen Aangepast.",
+  "decision-report-generation--toast-generating--message": "{total} beslissingen zullen worden aangepast.",
+  "decision-report-generation--toast-generating--title": "Beslissingen aanpassen",
+  "decision-report-generation--toast-generating-complete--message": "{total} beslissingen zijn aangepast.",
+  "decision-report-generation--toast-generating-complete--title": "Beslissingen aangepast",
   "minutes-report-generation--toast-generating--message": "De notulen worden aangepast.",
-  "minutes-report-generation--toast-generating--title": "Notulen Aanpassen",
+  "minutes-report-generation--toast-generating--title": "Notulen aanpassen",
   "minutes-report-generation--toast-generating-complete--message": "De notulen zijn aangepast.",
-  "minutes-report-generation--toast-generating-complete--title": "Notulen Aangepast."
+  "minutes-report-generation--toast-generating-complete--title": "Notulen aangepast"
 }

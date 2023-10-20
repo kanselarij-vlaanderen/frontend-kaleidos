@@ -466,8 +466,8 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.args.decisionActivity.save();
 
     // If this is too slow, we should make a task and do this asynchronously
-    await this.decisionReportGeneration.generateReplacementReports.perform(
-      [report]
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      report
     );
   });
 
