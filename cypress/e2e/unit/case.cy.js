@@ -41,7 +41,7 @@ context('Create case as Admin user', () => {
     const shorttitle = 'Gibberish';
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
     // check if data is cleared after cancel
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
@@ -81,9 +81,9 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(cases.newCase.save).should('be.disabled');
+    cy.get(auk.confirmationModal.footer.confirm).should('be.disabled');
     cy.get(cases.newCase.shorttitle).type('Dossier X');
-    cy.get(cases.newCase.save).should('not.be.disabled');
+    cy.get(auk.confirmationModal.footer.confirm).should('not.be.disabled');
   });
 
   it('Archive and restore case', () => {

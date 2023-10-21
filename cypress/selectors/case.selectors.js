@@ -9,8 +9,6 @@ const selectors = {
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
     form: '[data-test-new-case-form]',
-    cancel: '[data-test-new-case-cancel]',
-    save: '[data-test-new-case-save]',
   },
 
   // subcase-detail-nav

@@ -26,7 +26,7 @@ function createCase(shortTitle) {
 
   cy.get(cases.casesHeader.addCase).click();
   cy.get(cases.newCase.shorttitle).type(shortTitle);
-  cy.get(cases.newCase.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
 
   let caseId;
   cy.log('/createCase');
