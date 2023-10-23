@@ -11,7 +11,6 @@ function findPieceOfType(pieces, type, mimeType) {
 
     if (mimeType) {
       const pieceMimeType = piece.belongsTo('file').value().format;
-      debugger;
       return pieceType === type && pieceMimeType === mimeType;
     } else {
       return pieceType === type;
@@ -32,6 +31,7 @@ function hasSignedPieceOfType(pieces, type, mimeType) {
 export default class SendToVpModalComponent extends Component {
   @service store;
   @service conceptStore;
+  @service intl;
 
   @tracked principieleGoedkeuringPieces;
   @tracked definitieveGoedkeuringPieces;
@@ -53,10 +53,10 @@ export default class SendToVpModalComponent extends Component {
     this.principieleGoedkeuringPieces = (async () => [])();
 
     // Get principiele goedkeuring subcase
-    const decisionmakingFlow = await this.args.definitieveGoedkeuringSubcase
+    this.decisionmakingFlow = await this.args.definitieveGoedkeuringSubcase
       .decisionmakingFlow;
     const pgSubcase = await this.store.queryOne('subcase', {
-      'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
+      'filter[decisionmaking-flow][:id:]': this.decisionmakingFlow.id,
       'filter[type][:uri:]': CONSTANTS.SUBCASE_TYPES.PRINCIPIELE_GOEDKEURING,
     });
 
@@ -85,34 +85,36 @@ export default class SendToVpModalComponent extends Component {
       ]);
   }
 
+  sendToVP = task(async () => {
+    await fetch(
+      `/vlaams-parlement-sync/?uri=http://themis.vlaanderen.be/id/besluitvormingsaangelegenheid/${this.decisionmakingFlow.id}`,
+      { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
+    );
+    this.args?.onClose();
+  });
+
   async loadDocumentTypes() {
     this.documentTypes = await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
     );
-  }
 
-  get missingDocs() {
     const BESLISSINGSFICHE = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
     );
-
     const ONTWERPDECREET = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ONTWERPDECREET
     );
-
     const MEMORIE = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.MEMORIE
     );
-
     const NOTA = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.NOTA
     );
-
     const ADVIES = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ADVIES
     );
 
-    const pgkSpec = [
+    this.pgkSpec = [
       { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
       { type: ONTWERPDECREET, wordRequired: true, signed: false },
       { type: MEMORIE, wordRequired: true, signed: false },
@@ -120,26 +122,29 @@ export default class SendToVpModalComponent extends Component {
       { type: ADVIES, wordRequired: false, signed: false },
     ];
 
-    const dgkSpec = [
+    this.dgkSpec = [
       { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
       { type: ONTWERPDECREET, wordRequired: true, signed: true },
       { type: MEMORIE, wordRequired: true, signed: true },
       { type: NOTA, wordRequired: false, signed: false },
       { type: ADVIES, wordRequired: false, signed: false },
     ];
+  }
 
+  get missingDocs() {
     const formattedMissingFiles = [];
-
     for (const subcase of [
       {
         pieces: this.principieleGoedkeuringPieces,
-        name: ' principiele',
-        spec: pgkSpec,
+        // question: maybe we want to use the subcase-type concept instead?
+        name: this.intl.t('principal-approval').toLowerCase(),
+        spec: this.pgkSpec,
       },
       {
         pieces: this.definitieveGoedkeuringPieces,
-        name: ' definitieve',
-        spec: dgkSpec,
+        // question: maybe we want to use the subcase-type concept instead?
+        name: this.intl.t('definitive-approval').toLowerCase(),
+        spec: this.dgkSpec,
       },
     ]) {
       for (const docSpec of subcase.spec) {
@@ -148,7 +153,7 @@ export default class SendToVpModalComponent extends Component {
           !hasSignedPieceOfType(subcase.pieces, docSpec.type)
         ) {
           formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} goedkeuring (ondertekend)`
+            `${docSpec.type.altLabel} van ${subcase.name} (ondertekend)`
           );
         } else if (
           !hasPieceOfType(
@@ -158,7 +163,7 @@ export default class SendToVpModalComponent extends Component {
           )
         ) {
           formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} goedkeuring`
+            `${docSpec.type.altLabel} van ${subcase.name}`
           );
         }
 
@@ -167,6 +172,8 @@ export default class SendToVpModalComponent extends Component {
           !hasPieceOfType(
             subcase.pieces,
             docSpec.type,
+            // question: is this enough for all Word documents?
+            // or do we need to check more mimeTypes?
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary'
           )
         ) {

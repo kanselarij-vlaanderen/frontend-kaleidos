@@ -1,4 +1,8 @@
-<AuModal @modalOpen={{true}} @closeModal={{@onClose}}>
+<AuModal
+  @modalOpen={{true}}
+  @closeModal={{@onClose}}
+  @closable={{this.sendToVP.isIdle}}
+>
   <:title>{{t "check-case"}}</:title>
   <:body>
     {{#if this.loadData.isRunning}}
@@ -63,7 +67,12 @@
     {{/if}}
   </:body>
   <:footer>
-    <AuButton @skin="primary">
+    <AuButton
+      @skin="primary"
+      {{on "click" (perform this.sendToVP)}}
+      @loading={{this.sendToVP.isRunning}}
+      @disabled={{this.loadData.isRunning}}
+    >
       {{t "send-to-VP"}}
     </AuButton>
   </:footer>
