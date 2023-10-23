@@ -92,10 +92,6 @@ export default class AgendaitemControls extends Component {
     return null;
   }
 
-  sendToVP = task(async () => {
-    return;
-  });
-
   @task
   *loadAgendaData() {
     const status = yield this.args.currentAgenda.status;
