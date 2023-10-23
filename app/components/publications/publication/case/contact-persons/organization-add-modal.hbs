@@ -37,34 +37,16 @@
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar @size="large">
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-organization-add-cancel
-            @skin="naked"
-            @disabled={{this.save.isRunning}}
-            {{on "click" @onCancel}}
-          >
-            {{t "cancel"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-organization-add-submit
-            @skin="primary"
-            @icon="plus"
-            @disabled={{not this.validators.areValid}}
-            @loading={{this.save.isRunning}}
-            {{on "click" (perform this.save)}}
-          >
-            {{t "add"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
+    <AuButton
+      data-test-organization-add-submit
+      @skin="primary"
+      @icon="plus"
+      @disabled={{not this.validators.areValid}}
+      @loading={{this.save.isRunning}}
+     {{on "click" (perform this.save)}}
+    >
+      {{t "add"}}
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>
