@@ -41,25 +41,25 @@ function renderAttendees(attendees) {
   `;
 }
 
-async function renderNotas(meeting, notas, intl) {
-  return await renderAgendaitemList(meeting, notas, intl);
+async function renderNotas(meeting, notas, intl, store) {
+  return await renderAgendaitemList(meeting, notas, intl, store);
 }
 
-async function renderAnnouncements(meeting, announcements, intl) {
+async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${await renderAgendaitemList(meeting, announcements, intl)}
+    ${await renderAgendaitemList(meeting, announcements, intl, store)}
   `;
 }
 
-async function renderAgendaitemList(meeting, agendaitems, intl) {
+async function renderAgendaitemList(meeting, agendaitems, intl, store) {
   let agendaitemList = "";
   for (const agendaitem of agendaitems) {
-    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl);
+    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl, store);
   }
   return agendaitemList;
 }
-async function getMinutesListItem(meeting, agendaitem, intl) {
+async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
@@ -95,12 +95,15 @@ async function getMinutesListItem(meeting, agendaitem, intl) {
     default:
       break;
   }
-  const documents = await agendaitem.pieces;
+  let pieces = await store.query('piece', {
+    'filter[agendaitems][:id:]': agendaitem.id,
+    'filter[:has-no:next-piece]': true,
+  });
   let sortedPieces;
   if (agendaitem.isApproval) {
-    sortedPieces = sortPieces(documents, VrNotulenName, compareNotulen);
+    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
   } else {
-    sortedPieces = sortPieces(documents);
+    sortedPieces = sortPieces(pieces);
   }
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
@@ -128,13 +131,13 @@ function renderAbsentees() {
   `;
 }
 
-async function renderMinutes(data, intl) {
+async function renderMinutes(data, intl, store) {
   const { meeting, attendees, notas, announcements } = data;
   return `
     ${renderAttendees(attendees)}
     ${renderAbsentees()}
-    ${notas ? await renderNotas(meeting, notas, intl) : ''}
-    ${announcements ? await renderAnnouncements(meeting, announcements, intl) : ''}
+    ${notas ? await renderNotas(meeting, notas, intl, store) : ''}
+    ${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
   `;
 }
 
@@ -149,11 +152,10 @@ export default class AgendaMinutesController extends Controller {
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
 
-  // agenda;
   meeting;
-  // defaultAccessLevel;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
+  @tracked isUpdatingMinutesContent = false;
 
   @tracked editor = null;
 
@@ -189,11 +191,14 @@ export default class AgendaMinutesController extends Controller {
         constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
+      // *note: any changes made here should also be made in the minutes-report-generation service
+      const name = `Notulen - P${dateFormat(
+        this.meeting.plannedStart,
+        'yyyy-MM-dd'
+      )}`;
+
       minutes = this.store.createRecord('minutes', {
-        name: `Notulen - P${dateFormat(
-          this.meeting.plannedStart,
-          'yyyy-MM-dd'
-        )}`,
+        name,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
@@ -272,10 +277,11 @@ export default class AgendaMinutesController extends Controller {
     if (!this.editor) {
       return;
     }
-
+    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
-      await renderMinutes(await this.reshapeModelForRender(), this.intl)
+      await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
+    this.isUpdatingMinutesContent = false;
   }
 
   @action
