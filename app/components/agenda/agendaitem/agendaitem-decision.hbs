@@ -137,7 +137,7 @@
               @icon="renew"
               class="au-u-padding-left-none"
               @loading={{this.loadNota.isRunning}}
-              @disabled={{not this.nota}}
+              @disabled={{not (or this.nota @agendaitem.isApproval)}}
               {{on "click" this.updateBeslissingContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -381,7 +381,7 @@
                     @icon="renew"
                     class="au-u-padding-left-none"
                     @loading={{this.loadNota.isRunning}}
-                    @disabled={{not this.nota}}
+                    @disabled={{not (or this.nota @agendaitem.isApproval)}}
                     {{on "click" this.updateBeslissingContent}}
                   >{{t "update-thing" thing=(t "content")}}</AuButton>
                   <VersionsDropdown

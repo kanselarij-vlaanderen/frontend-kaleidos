@@ -380,7 +380,8 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async updateBeslissingContent() {
     let newBeslissingHtmlContent;
-    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    const decisionResultCode = await this.args.decisionActivity
+      .decisionResultCode;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
@@ -389,7 +390,18 @@ export default class AgendaitemDecisionComponent extends Component {
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        newBeslissingHtmlContent = this.nota;
+        if (this.args.agendaitem.isApproval) {
+          const { shortTitle, title } = this.args.agendaContext.agendaitem;
+          let beslissing = title || shortTitle || '';
+          beslissing = beslissing.replace(
+            /Goedkeuring van/i,
+            'goedkeuring aan'
+          );
+          newBeslissingHtmlContent = `De Vlaamse Regering hecht haar ${beslissing}`;
+          // newBeslissingHtmlContent += beslissing;
+        } else {
+          newBeslissingHtmlContent = this.nota || '';
+        }
         break;
     }
     this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
