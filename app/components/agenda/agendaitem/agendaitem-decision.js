@@ -744,8 +744,9 @@ export default class AgendaitemDecisionComponent extends Component {
 
   get enableDigitalAgenda() {
     return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+      (ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+        ENV.APP.ENABLE_DIGITAL_AGENDA === true) &&
+      !this.args.agendaContext.meeting.isPreDigitalDecisions
     );
   }
 
