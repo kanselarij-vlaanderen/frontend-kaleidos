@@ -5,6 +5,7 @@ import { set } from '@ember/object';
 export default class AgendaRoute extends Route {
   @service('session') simpleAuthSession;
   @service agendaService;
+  @service router;
   @service store;
 
   beforeModel(transition) {
@@ -35,6 +36,12 @@ export default class AgendaRoute extends Route {
 
   async afterModel(model) {
     await this.loadChangesToAgenda(model.agenda);
+  }
+
+  redirect(_model, transition) {
+    if (transition.to.name === 'agenda.index') {
+      this.router.transitionTo('agenda.agendaitems')
+    }
   }
 
   async loadChangesToAgenda(agenda) {
