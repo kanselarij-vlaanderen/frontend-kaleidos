@@ -189,11 +189,14 @@ export default class AgendaMinutesController extends Controller {
         constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
+      // *note: any changes made here should also be made in the minutes-report-generation service
+      const name = `Notulen - P${dateFormat(
+        this.meeting.plannedStart,
+        'yyyy-MM-dd'
+      )}`;
+
       minutes = this.store.createRecord('minutes', {
-        name: `Notulen - P${dateFormat(
-          this.meeting.plannedStart,
-          'yyyy-MM-dd'
-        )}`,
+        name,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
