@@ -135,3 +135,15 @@
     </div>
   </div>
 </div>
+
+{{#if this.isUpdatingMinutesContent}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "loading-minutes"}}
+      @closeable={{false}}
+    />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "loading-minutes"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

@@ -149,11 +149,10 @@ export default class AgendaMinutesController extends Controller {
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
 
-  // agenda;
   meeting;
-  // defaultAccessLevel;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
+  @tracked isUpdatingMinutesContent = false;
 
   @tracked editor = null;
 
@@ -275,10 +274,11 @@ export default class AgendaMinutesController extends Controller {
     if (!this.editor) {
       return;
     }
-
+    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
-      await renderMinutes(await this.reshapeModelForRender(), this.intl)
+      await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
+    this.isUpdatingMinutesContent = false;
   }
 
   @action
