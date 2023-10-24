@@ -219,7 +219,6 @@ export default class AgendaMinutesController extends Controller {
       minutes,
     );
 
-    await minutes.save();
     await this.meeting.belongsTo('minutes').reload();
 
     this.isEditing = false;
@@ -262,7 +261,6 @@ export default class AgendaMinutesController extends Controller {
       newVersion,
     );
 
-    await newVersion.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 
