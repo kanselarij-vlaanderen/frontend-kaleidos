@@ -14,7 +14,7 @@ import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
   let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
-  return replaceById(newHtml, 'secretary', newSecretary);
+  return replaceById(newHtml, 'secretary', `<p>${newSecretary}</p>`);
 }
 
 /**
