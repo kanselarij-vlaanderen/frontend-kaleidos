@@ -109,7 +109,6 @@ const selectors = {
     longTitle: '[data-test-new-publication-long-title]',
     alertInfo: '[data-test-new-publication-alert-info]',
     create: '[data-test-new-publication-create]',
-    cancel: '[data-test-new-publication-cancel]',
   },
 
   // contact-persons-panel
@@ -137,7 +136,6 @@ const selectors = {
   // organization-add-modal
   organizationAdd: {
     name: '[data-test-organization-add-name]',
-    cancel: '[data-test-organization-add-cancel]',
     submit: '[data-test-organization-add-submit]',
   },
 

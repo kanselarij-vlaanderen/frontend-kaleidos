@@ -308,7 +308,7 @@ context('Publications tests', () => {
     cy.get(publication.contactPersonAdd.addOrganization).click();
     cy.get(publication.organizationAdd.name).click()
       .type(contactperson.org);
-    cy.get(publication.organizationAdd.cancel).click();
+    cy.get(auk.modal.footer.cancel).click();
     cy.get(publication.contactPersonAdd.selectOrganization).click();
     cy.get(dependency.emberPowerSelect.option).contains(contactperson.org)
       .should('not.exist');
@@ -393,7 +393,7 @@ context('Publications tests', () => {
     cy.get(publication.newPublication.create).should('not.be.disabled');
     // new number is showing (negative asserting because new number is current highest pubnumber + 1)
     cy.get(publication.newPublication.number).should('not.have.value', existingPubNumber);
-    cy.get(publication.newPublication.cancel).click();
+    cy.get(auk.modal.footer.cancel).click();
     // check that only one publication has the number we wanted to duplicate
     // TODO-bug cypress is going faster then updates to store/cache? new publication is not in the list yet
     // cy.get(publication.publicationTableRow.row.publicationNumber).contains(`${existingPubNumber} ${suffix}`)
