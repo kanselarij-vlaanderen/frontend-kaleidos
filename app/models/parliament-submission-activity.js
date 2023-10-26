@@ -1,6 +1,6 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
-export default class ParliamentFlow extends Model {
+export default class ParliamentSubmissionActivity extends Model {
   @attr('date') startDate;
   @attr('date') endDate;
 
