@@ -49,6 +49,7 @@
         <Documents::DocumentCard
           @piece={{this.report}}
           @decisionActivity={{@decisionActivity}}
+          @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
@@ -184,6 +185,7 @@
           <Documents::DocumentCard
             @piece={{this.report}}
             @decisionActivity={{@decisionActivity}}
+            @meeting={{@agendaContent.meeting}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
