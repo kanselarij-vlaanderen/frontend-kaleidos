@@ -143,6 +143,8 @@ export default class SendToVpModalComponent extends Component {
   }
 
   get missingDocs() {
+    // We want to move this logic to the backend so it will always be
+    // consistent with the actual data being sent.
     const formattedMissingFiles = [];
     const subcaseSpecs = [
       {
