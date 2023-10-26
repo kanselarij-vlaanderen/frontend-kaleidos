@@ -136,6 +136,7 @@ const selectors = {
   // organization-add-modal
   organizationAdd: {
     name: '[data-test-organization-add-name]',
+    cancel: '[data-test-organization-add-cance]',
     submit: '[data-test-organization-add-submit]',
   },
 

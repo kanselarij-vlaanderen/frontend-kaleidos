@@ -308,7 +308,7 @@ context('Publications tests', () => {
     cy.get(publication.contactPersonAdd.addOrganization).click();
     cy.get(publication.organizationAdd.name).click()
       .type(contactperson.org);
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(publication.organizationAdd.cancel).click();
     cy.get(publication.contactPersonAdd.selectOrganization).click();
     cy.get(dependency.emberPowerSelect.option).contains(contactperson.org)
       .should('not.exist');

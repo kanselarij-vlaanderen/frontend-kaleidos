@@ -37,7 +37,11 @@
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+    data-test-organization-add-cancel
+  >
     <AuButton
       data-test-organization-add-submit
       @skin="primary"
