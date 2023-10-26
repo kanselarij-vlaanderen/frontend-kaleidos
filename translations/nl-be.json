@@ -1255,5 +1255,8 @@
   "the-following-things-will-be-sent": "De volgende zaken worden doorgestuurd",
   "this-case-is-missing": "Dit dossier mist nog",
   "definitive-approval": "Definitieve goedkeuring",
-  "principal-approval": "Principiële goedkeuring"
+  "principal-approval": "Principiële goedkeuring",
+  "this-case-was-submitted-to-VP-on": "Dit document is ingediend bij het Vlaams Parlement op",
+  "error-while-sending-to-VP": "Er ging iets fout tijdens het indienen bij het Vlaams Parlement",
+  "case-was-send-to-VP": "Dossier is succesvol verstuurd naar het Vlaams Parlement"
 }
