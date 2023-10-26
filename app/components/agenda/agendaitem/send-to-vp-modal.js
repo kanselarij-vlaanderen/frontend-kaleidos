@@ -32,6 +32,7 @@ export default class SendToVpModalComponent extends Component {
   @service store;
   @service conceptStore;
   @service intl;
+  @service toaster;
 
   @tracked principieleGoedkeuringPieces;
   @tracked definitieveGoedkeuringPieces;
@@ -86,10 +87,18 @@ export default class SendToVpModalComponent extends Component {
   }
 
   sendToVP = task(async () => {
-    await fetch(
+    const resp = await fetch(
       `/vlaams-parlement-sync/?uri=http://themis.vlaanderen.be/id/besluitvormingsaangelegenheid/${this.decisionmakingFlow.id}`,
       { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
     );
+    
+    if (!resp.ok) {
+      this.toaster.error(this.intl.t('error-while-sending-to-VP'));
+      return;
+    } else {
+      this.toaster.success(this.intl.t('case-was-send-to-VP'))
+    }
+
     this.args?.onClose();
   });
 
@@ -114,6 +123,7 @@ export default class SendToVpModalComponent extends Component {
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ADVIES
     );
 
+    // Principiele goedkeuring
     this.pgkSpec = [
       { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
       { type: ONTWERPDECREET, wordRequired: true, signed: false },
@@ -122,6 +132,7 @@ export default class SendToVpModalComponent extends Component {
       { type: ADVIES, wordRequired: false, signed: false },
     ];
 
+    // Definitieve goedkeuring
     this.dgkSpec = [
       { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
       { type: ONTWERPDECREET, wordRequired: true, signed: true },
@@ -133,7 +144,7 @@ export default class SendToVpModalComponent extends Component {
 
   get missingDocs() {
     const formattedMissingFiles = [];
-    for (const subcase of [
+    const subcaseSpecs = [
       {
         pieces: this.principieleGoedkeuringPieces,
         // question: maybe we want to use the subcase-type concept instead?
@@ -146,7 +157,8 @@ export default class SendToVpModalComponent extends Component {
         name: this.intl.t('definitive-approval').toLowerCase(),
         spec: this.dgkSpec,
       },
-    ]) {
+    ];
+    for (const subcase of subcaseSpecs) {
       for (const docSpec of subcase.spec) {
         if (
           docSpec.signed &&
