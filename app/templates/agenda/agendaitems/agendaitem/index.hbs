@@ -38,6 +38,15 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
+{{#if (and this.subcase.decisionmakingFlow.case.parliamentFlow this.enableVlaamsParlement)}}
+  <AuAlert
+    @size="small"
+    @skin="success"
+    @icon="mail"
+    @title="{{t "this-case-was-submitted-to-VP-on"}} {{date this.subcase.decisionmakingFlow.case.parliamentFlow.openingDate}}">
+  </AuAlert>
+{{/if}}
+
 <Agenda::Agendaitem::AgendaitemCasePanel
   @agendaitem={{this.model}}
   @subcase={{this.subcase}}
