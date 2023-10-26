@@ -539,7 +539,6 @@ export default class AgendaitemDecisionComponent extends Component {
   async createNewReport(documentContainer) {
     const now = new Date();
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       created: now,
       modified: now,
       name: await generateReportName(
@@ -577,7 +576,6 @@ export default class AgendaitemDecisionComponent extends Component {
       newName = previousReport.name;
     }
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       name: newName,
       created: now,
       modified: now,
