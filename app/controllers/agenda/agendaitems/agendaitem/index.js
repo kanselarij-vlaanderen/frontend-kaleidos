@@ -37,6 +37,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
+  get enableVlaamsParlement() {
+    return ENV.APP.ENABLE_VLAAMS_PARLEMENT === "true" || ENV.APP.ENABLE_VLAAMS_PARLEMENT === true;
+  }
+
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
     // try transitioning to previous or next item, called on the delete of an agendaitem
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
