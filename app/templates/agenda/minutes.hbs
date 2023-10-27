@@ -12,7 +12,7 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              {{#if (user-may "manage-minutes")}}
+              {{#if this.mayEditMinutes}}
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
