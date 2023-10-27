@@ -53,8 +53,20 @@ export default class AgendaitemControls extends Component {
       this.enableVlaamsParlement &&
       this.hasDecreet &&
       this.decisionActivity.isApproved &&
-      this.subcase.isDefinitieveGoedkeuring
+      this.subcase.isDefinitieveGoedkeuring && 
+      !this.subcase.isBekrachtiging
     );
+  }
+
+  @action
+  async onSendToVp () {
+    // TODO: this does not update the UI correctly
+    const case_ = await this.store.queryOne('case', {
+      'filter[decisionmaking-flow][subcases][:id:]': this.subcase.id
+    });
+    await case_.parliamentFlow.reload();
+    await case_.reload();
+    this.showVPModal = false;
   }
 
   get areDecisionActionsEnabled() {
