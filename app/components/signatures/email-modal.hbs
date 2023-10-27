@@ -18,7 +18,7 @@
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
       <AuButton
         data-test-signatures-create-email-add
         @disabled={{not this.isValid}}
