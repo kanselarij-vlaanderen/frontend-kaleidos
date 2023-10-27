@@ -11,6 +11,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  * used to generate the report name.
  */
 export default async function generateReportName(agendaitem, meeting) {
+  // *note: any changes made here should also be made in the decision-report-generation service
   const meetingNumber = meeting.numberRepresentation;
   const type = await agendaitem.type;
   const agendaitemType = type.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
