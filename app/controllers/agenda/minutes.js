@@ -19,7 +19,7 @@ function renderAttendees(attendees) {
   let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
-    <table>
+    <table id="attendees">
       <tbody>
         <tr>
           <td>De minister-president</td>
@@ -121,7 +121,7 @@ function capitalizeFirstLetter(string) {
 function renderAbsentees() {
   return `
     <p><u>AFWEZIG MET KENNISGEVING</u></p>
-    <table>
+    <table id="absentees">
       <tbody>
         <tr>
           <td></td>
@@ -155,6 +155,16 @@ ${renderNextMeeting(meeting, intl)}`;
 
     const newContentElement = document.createElement('template');
     newContentElement.innerHTML = newMinutesContent;
+
+    const attendeesText = contentElement.content.querySelector('#attendees')?.innerHTML;
+    if (attendeesText) {
+      newContentElement.content.querySelector('#attendees').innerHTML = attendeesText;
+    }
+
+    const absenteesText = contentElement.content.querySelector('#absentees')?.innerHTML;
+    if (absenteesText) {
+      newContentElement.content.querySelector('#absentees').innerHTML = absenteesText;
+    }
 
     const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
     if (nextMeetingText) {
