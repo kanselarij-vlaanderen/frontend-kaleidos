@@ -102,10 +102,6 @@ export default class SearchNewsItemsRoute extends Route {
 
     const filter = SearchNewsItemsRoute.createFilter(params);
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
     const results = await search(
       'news-items',
       params.page,
