@@ -96,7 +96,7 @@ export default class SendToVpModalComponent extends Component {
       this.toaster.error(this.intl.t('error-while-sending-to-VP'));
       return;
     } else {
-      this.toaster.success(this.intl.t('case-was-send-to-VP'))
+      this.toaster.success(this.intl.t('case-was-sent-to-VP'))
     }
 
     this.args?.onClose();
