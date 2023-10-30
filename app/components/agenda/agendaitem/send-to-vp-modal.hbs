@@ -11,10 +11,13 @@
       <AuContent>
         <p>{{t "the-following-things-will-be-sent"}}</p>
         <ul class="au-u-margin-top">
+          {{#each this.pgSubcasesWithPieces as |subcaseWithPieces|}}
           <li>
-            {{t "principal-approval"}}
+            {{or 
+              (capitalize subcaseWithPieces.subcase.subcaseName) 
+              (t "principal-approval")}}:
             <ul>
-              {{#each this.principieleGoedkeuringPieces as |piece|}}
+              {{#each subcaseWithPieces.pieces as |piece|}}
                 <li>
                   <LinkTo @route="document" @model={{piece.id}}>
                     {{#let piece.file.extension as |extension|}}
@@ -25,10 +28,13 @@
               {{/each}}
             </ul>
           </li>
+          {{/each}}
           <li>
-            {{t "definitive-approval"}}:
+            {{or 
+              (this.dgSubcaseWithPieces.subcase.subcaseName) 
+              (t "definitive-approval")}}:
             <ul>
-              {{#each this.definitieveGoedkeuringPieces as |piece|}}
+              {{#each this.dgSubcaseWithPieces.pieces as |piece|}}
                 <li>
                   <LinkTo @route="document" @model={{piece.id}}>
                     {{#let piece.file.extension as |extension|}}
