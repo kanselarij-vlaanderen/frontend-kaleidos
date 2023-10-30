@@ -23,6 +23,7 @@ export default class SendToVpModalComponent extends Component {
   });
 
   loadPiecesForSubcase = async (subcase) => {
+    const subcaseTypePromise = subcase.type;
     const latestAgendaActivity = await this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': subcase.id,
       sort: '-start-date',
@@ -39,9 +40,11 @@ export default class SendToVpModalComponent extends Component {
         'filter[agendaitems][:id:]': latestAgendaitem.id,
         include: 'document-container.type,signed-piece,file',
       });
+      const subcaseType = await subcaseTypePromise;
       return {
         subcase,
         pieces,
+        subcaseTypeUri: subcaseType.uri,
       };
     }
   };
@@ -106,150 +109,68 @@ export default class SendToVpModalComponent extends Component {
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ADVIES
     );
 
-    // Principiele goedkeuring
-    this.subcaseSpecs = [
-      { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-      { type: ONTWERPDECREET, wordRequired: true, signed: false },
-      { type: MEMORIE, wordRequired: true, signed: false },
-      { type: NOTA, wordRequired: false, signed: false },
-      { type: ADVIES, wordRequired: false, signed: false },
-    ];
+    const { PRINCIPIELE_GOEDKEURING, DEFINITIEVE_GOEDKEURING } =
+      CONSTANTS.SUBCASE_TYPES;
 
-    // Definitieve goedkeuring
-    this.dgkSpec = [
-      { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-      { type: ONTWERPDECREET, wordRequired: true, signed: true },
-      { type: MEMORIE, wordRequired: true, signed: true },
-      { type: NOTA, wordRequired: false, signed: false },
-      { type: ADVIES, wordRequired: false, signed: false },
-    ];
+    this.subcaseRequirements = {
+      [PRINCIPIELE_GOEDKEURING]: [
+        { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
+        { type: ONTWERPDECREET, wordRequired: true, signed: false },
+        { type: MEMORIE, wordRequired: true, signed: false },
+        { type: NOTA, wordRequired: false, signed: false },
+        { type: ADVIES, wordRequired: false, signed: false },
+      ],
+      [DEFINITIEVE_GOEDKEURING]: [
+        { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
+        { type: ONTWERPDECREET, wordRequired: true, signed: true },
+        { type: MEMORIE, wordRequired: true, signed: true },
+        { type: NOTA, wordRequired: false, signed: false },
+        { type: ADVIES, wordRequired: false, signed: false },
+      ],
+    };
   }
 
   missingDocsForSubcase = (subcaseWithPieces) => {
     // We want to move this logic to the backend so it will always be
     // consistent with the actual data being sent.
     const formattedMissingFiles = [];
-    const subcaseSpecs = [
-      ...this.pgSubcasesWithPieces.map((subcaseWithPieces) => ({
-        pieces: subcaseWithPieces.pieces,
-        name:
-          subcaseWithPieces.subcase.subcaseName ??
-          // question: maybe we want to use the subcase-type concept instead?
-          this.intl.t('principal-approval').toLowerCase(),
-        spec: this.pgkSpec,
-      })),
-      {
-        pieces: this.dgSubcaseWithPieces.pieces,
-        name:
-          this.dgSubcaseWithPieces.subcase.subcaseName ??
-          // question: maybe we want to use the subcase-type concept instead?
-          this.intl.t('definitive-approval').toLowerCase(),
-        spec: this.dgkSpec,
-      },
-    ];
-    for (const subcase of subcaseSpecs) {
-      for (const docSpec of subcase.spec) {
-        if (
-          docSpec.signed &&
-          !hasSignedPieceOfType(subcase.pieces, docSpec.type)
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} (ondertekend)`
-          );
-        } else if (
-          !hasPieceOfType(
-            subcase.pieces,
-            docSpec.type,
-            'application/pdf; charset=binary'
-          )
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name}`
-          );
-        }
+    const subcaseRequirements =
+      this.subcaseRequirements[subcaseWithPieces.subcaseTypeUri];
 
-        if (
-          docSpec.wordRequired &&
-          !hasPieceOfType(
-            subcase.pieces,
-            docSpec.type,
-            // question: is this enough for all Word documents?
-            // or do we need to check more mimeTypes?
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary'
-          )
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} goedkeuring (in Word)`
-          );
-        }
+    for (const requirement of subcaseRequirements) {
+      if (
+        requirement.signed &&
+        !hasSignedPieceOfType(subcaseWithPieces.pieces, requirement.type)
+      ) {
+        formattedMissingFiles.push(
+          `${requirement.type.altLabel} (ondertekend)`
+        );
+      } else if (
+        !hasPieceOfType(
+          subcaseWithPieces.pieces,
+          requirement.type,
+          'application/pdf; charset=binary'
+        )
+      ) {
+        formattedMissingFiles.push(`${requirement.type.altLabel}`);
+      }
+
+      if (
+        requirement.wordRequired &&
+        !hasPieceOfType(
+          subcaseWithPieces.pieces,
+          requirement.type,
+          // question: is this enough for all Word documents?
+          // or do we need to check more mimeTypes?
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary'
+        )
+      ) {
+        formattedMissingFiles.push(`${requirement.type.altLabel} (in Word)`);
       }
     }
 
     return formattedMissingFiles;
   };
-
-  get missingDocs() {
-    // We want to move this logic to the backend so it will always be
-    // consistent with the actual data being sent.
-    const formattedMissingFiles = [];
-    const subcaseSpecs = [
-      ...this.pgSubcasesWithPieces.map((subcaseWithPieces) => ({
-        pieces: subcaseWithPieces.pieces,
-        name:
-          subcaseWithPieces.subcase.subcaseName ??
-          // question: maybe we want to use the subcase-type concept instead?
-          this.intl.t('principal-approval').toLowerCase(),
-        spec: this.pgkSpec,
-      })),
-      {
-        pieces: this.dgSubcaseWithPieces.pieces,
-        name:
-          this.dgSubcaseWithPieces.subcase.subcaseName ??
-          // question: maybe we want to use the subcase-type concept instead?
-          this.intl.t('definitive-approval').toLowerCase(),
-        spec: this.dgkSpec,
-      },
-    ];
-    for (const subcase of subcaseSpecs) {
-      for (const docSpec of subcase.spec) {
-        if (
-          docSpec.signed &&
-          !hasSignedPieceOfType(subcase.pieces, docSpec.type)
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} (ondertekend)`
-          );
-        } else if (
-          !hasPieceOfType(
-            subcase.pieces,
-            docSpec.type,
-            'application/pdf; charset=binary'
-          )
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name}`
-          );
-        }
-
-        if (
-          docSpec.wordRequired &&
-          !hasPieceOfType(
-            subcase.pieces,
-            docSpec.type,
-            // question: is this enough for all Word documents?
-            // or do we need to check more mimeTypes?
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary'
-          )
-        ) {
-          formattedMissingFiles.push(
-            `${docSpec.type.altLabel} van ${subcase.name} goedkeuring (in Word)`
-          );
-        }
-      }
-    }
-
-    return formattedMissingFiles;
-  }
 }
 
 function findPieceOfType(pieces, type, mimeType) {
