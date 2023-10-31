@@ -297,7 +297,7 @@ const selectors = {
   // signatures/ongoing-decisisons
   ongoingDecisions: {
     row: {
-      pieceName: '[data-test-route-signatures-ongoing-decisions-row-piece-name]'
+      pieceName: '[data-test-route-signatures-ongoing-decisions-row-piece-name]',
     },
   },
 
