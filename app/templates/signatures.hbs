@@ -24,7 +24,7 @@
           {{#if (user-may "manage-secretary-signatures")}}
             <Auk::Tab @route="signatures.decisions">
               {{t "decisions-and-minutes"}}
-            </Auk::Tab>  
+            </Auk::Tab>
             <Auk::Tab @route="signatures.ongoing-decisions">
               {{t "decisions-and-minutes-ongoing"}}
             </Auk::Tab>
@@ -34,7 +34,7 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
-        <div id="signatures-navbar-buttons-area">
+        <div data-test-route-signatures-start-multiple-signflows id="signatures-navbar-buttons-area">
         </div>
       </Group.Item>
     </Toolbar.Group>

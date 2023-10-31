@@ -16,6 +16,7 @@
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
+                      data-test-agenda-minutes-create
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
@@ -43,6 +44,7 @@
             >
               <:header>
                 <AuButton
+                  data-test-agenda-minutes-update-content
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
@@ -71,6 +73,7 @@
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-agenda-minutes-save
                     @skin="primary"
                     @loading={{this.saveMinutes.isRunning}}
                     @disabled={{this.saveDisabled}}

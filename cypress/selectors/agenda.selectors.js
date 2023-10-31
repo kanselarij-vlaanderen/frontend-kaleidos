@@ -246,5 +246,11 @@ const selectors = {
     repropose: '[data-test-agendaitem-postponed-repropose]',
     proposableMeeting: '[data-test-agendaitem-postponed-proposable-meeting]',
   },
+
+  agendaMinutes: {
+    create: '[data-test-agenda-minutes-create]',
+    updateContent: '[data-test-agenda-minutes-update-content]',
+    save: '[data-test-agenda-minutes-save]',
+  },
 };
 export default selectors;

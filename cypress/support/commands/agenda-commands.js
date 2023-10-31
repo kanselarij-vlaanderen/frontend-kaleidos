@@ -805,6 +805,28 @@ function generateDecision(concerns, decision) {
   cy.log('/generateDecision');
 }
 
+/**
+ * @description Generate the minutes report
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function generateMinutes() {
+  cy.log('generateMinutes');
+  cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+    .click();
+  cy.get(agenda.agendaMinutes.create).click();
+  cy.get(agenda.agendaMinutes.updateContent).click();
+
+  cy.intercept('POST', '/minutes*').as('createNewMinutes');
+  cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
+  cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
+  cy.get(agenda.agendaMinutes.save).click();
+  cy.wait('@createNewMinutes');
+  cy.wait('@patchMinutes');
+  cy.wait('@createNewPiecePart');
+  cy.log('/generateMinutes');
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -826,3 +848,4 @@ Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda)
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
 Cypress.Commands.add('generateDecision', generateDecision);
+Cypress.Commands.add('generateMinutes', generateMinutes);
