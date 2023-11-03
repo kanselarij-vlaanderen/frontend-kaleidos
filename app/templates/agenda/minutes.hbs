@@ -51,7 +51,7 @@
                   {{on "click" this.updateEditorContent}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
-                  @record={{this.currentPiecePart.value}}
+                  @record={{this.currentPiecePartTask.value}}
                   @previousVersionKey="previousPiecePart"
                   @onVersionClicked={{this.revertToVersion}}
                 />
@@ -101,6 +101,7 @@
                 @showCreateNewVersion={{true}}
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
+                @didDeleteContainer={{this.didDeleteMinutes}}
               />
             {{else if (user-may "manage-minutes")}}
               <AuAlert
@@ -120,14 +121,14 @@
               />
             {{/if}}
           </Auk::Panel::Body>
-          {{#if (and (user-may "manage-minutes") this.currentPiecePart.value)}}
+          {{#if (and (user-may "manage-minutes") this.currentPiecePartTask.value)}}
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
               <AuContent>
                 <SanitizeHtml
                   @raw={{true}}
-                  @value={{this.currentPiecePart.value.value}}
+                  @value={{this.currentPiecePartTask.value.htmlContent}}
                 />
               </AuContent>
             </Auk::Panel::Body>
@@ -137,3 +138,15 @@
     </div>
   </div>
 </div>
+
+{{#if this.isUpdatingMinutesContent}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "loading-minutes"}}
+      @closeable={{false}}
+    />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "loading-minutes"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
