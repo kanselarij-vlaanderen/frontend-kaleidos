@@ -89,10 +89,12 @@ $au-label-color: var(--au-gray-700);
   line-height: 1; // vertical alignment is a bit off in Kaleidos
   border-radius: .5rem; // default border radius is .5rem in Kaleidos
   padding-top: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .au-c-pill--link {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .au-c-link,
