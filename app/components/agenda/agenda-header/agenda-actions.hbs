@@ -74,6 +74,16 @@
       {{t "edit-meeting"}}
     </AuButton>
   {{/if}}
+  {{#if (user-may "manage-decisions")}}
+    <AuHr />
+    <AuButton
+      @skin="link"
+      {{on "click" this.markDecisionsForSigning}}
+      role="menuitem"
+    >
+      {{t "sign-decisions"}}
+    </AuButton>
+  {{/if}}
   {{#if this.canEditDesignAgenda}}
     <AuButton
       data-test-agenda-actions-approve-all-agendaitems
