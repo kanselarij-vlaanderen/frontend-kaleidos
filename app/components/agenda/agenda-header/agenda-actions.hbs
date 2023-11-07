@@ -284,29 +284,33 @@
     >
       <p>{{t "download-agenda-decisions-info"}}</p>
     </AuAlert>
-    <Mandatees::CheckboxSelect
-      @selected={{this.selectedMandatees}}
-      @referenceAgenda={{@currentAgenda}}
-      @onChange={{set this "selectedMandatees"}}
-    />
-    <AuFieldset as |Fieldset|>
-      <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
-      <Fieldset.content>
-        <AuRadioGroup
-          @alignment="inline"
-          @selected={{this.selectedDownloadOption}}
-          @onChange={{this.onChangeDownloadOption}}
-          as |Group|
-        >
-          {{#each this.downloadOptions as |option|}}
-          <Group.Radio
-            @value={{option.value}}
-            >
-            {{option.label}}
-          </Group.Radio>
-          {{/each}}
-        </AuRadioGroup>
-      </Fieldset.content>
-    </AuFieldset>
+    <div class="au-c-form">
+      <AuFormRow>
+        <Mandatees::CheckboxSelect
+          @selected={{this.selectedMandatees}}
+          @referenceAgenda={{@currentAgenda}}
+          @onChange={{set this "selectedMandatees"}}
+        />
+      </AuFormRow>
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            @alignment="inline"
+            @selected={{this.selectedDownloadOption}}
+            @onChange={{this.onChangeDownloadOption}}
+            as |Group|
+          >
+            {{#each this.downloadOptions as |option|}}
+            <Group.Radio
+              @value={{option.value}}
+              >
+              {{option.label}}
+            </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+    </div>
   </:body>
 </ConfirmationModal>
