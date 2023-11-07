@@ -334,6 +334,42 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
+  async markDecisionsForSigning() {
+    const agenda = this.args.currentAgenda;
+    const agendaitems = await agenda.agendaitems;
+    const reports = await this.store.queryAll('report', {
+      'filter[decision-activity][treatment][agendaitems][:id:]': agendaitems
+        .map((x) => x.id)
+        .join(','),
+    });
+    const loadingToast = this.toaster.loading(
+      this.intl.t('decision-reports-are-being-marked-for-signing'),
+      null,
+      {
+        timeOut: 10 * 60 * 1000,
+      }
+    );
+    const resp = await fetch(`/signing-flows/mark-pieces-for-signing`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        data: reports.map((report) => ({ type: 'reports', id: report.id })),
+      }),
+    });
+    this.toaster.close(loadingToast);
+    if (!resp.ok) {
+      this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
+      return;
+    } else {
+      this.toaster.success(
+        this.intl.t('decision-reports-are-marked-for-signing')
+      );
+    }
+  }
+
+  @action
   print() {
     window.print();
   }
