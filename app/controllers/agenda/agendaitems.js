@@ -15,7 +15,6 @@ import {
   all,
   animationFrame
 } from 'ember-concurrency';
-import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 export default class AgendaAgendaitemsController extends Controller {
   queryParams = [
@@ -78,7 +77,6 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @task
   *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
-    const draggedAgendaItemNumber = draggedAgendaItem.number;
     const draggedAgendaItemType = yield draggedAgendaItem.type;
     // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
     const reorderedAgendaitemsOfCategory =  [];
@@ -88,27 +86,14 @@ export default class AgendaAgendaitemsController extends Controller {
         reorderedAgendaitemsOfCategory.push(agendaitem);
       }
     }
-    yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
-    const newDraggedAgendaItemNumber = draggedAgendaItem.number;
-
-    const needNewReports = reorderedAgendaitemsOfCategory.slice(
-      Math.min(draggedAgendaItemNumber, newDraggedAgendaItemNumber) - 1, // number is 1-indexed
-      Math.max(draggedAgendaItemNumber, newDraggedAgendaItemNumber), // slice does not include end index
-    );
-    if (needNewReports) {
-      const reports = [];
-      yield Promise.all(needNewReports.map(async (agendaitem) => {
-        const report = await this.store.queryOne('report', {
-          'filter[:has-no:next-piece]': true,
-          'filter[:has:piece-parts]': true,
-          'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
-        });
-        reports.push(report);
-        report.name = await generateReportName(agendaitem, this.meeting);
-        return report.save();
-      }));
-      this.decisionReportGeneration.generateReplacementReports.perform(reports);
-    }
+    yield setAgendaitemsNumber(
+      reorderedAgendaitemsOfCategory,
+      this.meeting,
+      this.store,
+      this.decisionReportGeneration,
+      true,
+      true,
+    ); // permissions guarded in template (and backend)
     this.router.refresh('agenda.agendaitems');
   }
 
