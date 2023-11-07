@@ -455,7 +455,15 @@ $au-label-color: var(--au-gray-700);
 // Toaster
 
 .au-c-toaster {
-  width: 420px;
+  width: auto;
+  align-items: flex-end;
+}
+
+.au-c-toaster {
+  .au-c-alert {
+    min-width: 420px;
+    max-width: 580px;
+  }
 }
 
 // Additions
