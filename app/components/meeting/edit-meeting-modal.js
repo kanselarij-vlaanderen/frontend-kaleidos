@@ -15,7 +15,7 @@ import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
   let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
-  return replaceById(newHtml, 'secretary', `<p>${newSecretary}</p>`);
+  return replaceById(newHtml, 'secretary', newSecretary);
 }
 
 /**
