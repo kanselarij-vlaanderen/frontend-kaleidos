@@ -35,7 +35,7 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De <span id="secretary-title">${secretaryTitle}</span></td>
-          <td id="secretary">${mandateeName(secretary)}</td>
+          <td><span id="secretary">${mandateeName(secretary)}</span></td>
         </tr>
       </tbody>
     </table>
