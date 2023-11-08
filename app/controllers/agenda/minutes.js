@@ -186,12 +186,15 @@ export default class AgendaMinutesController extends Controller {
   @service intl;
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
+  @service currentSession;
 
   meeting;
+  @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
   @tracked isUpdatingMinutesContent = false;
-
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
 
   loadCurrentPiecePart = task(async () => {
@@ -393,6 +396,12 @@ export default class AgendaMinutesController extends Controller {
       ministers,
       secretary,
     };
+  }
+
+  get mayEditMinutes() {
+    return !this.isLoading &&
+      this.currentSession.may('manage-minutes') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
   }
 
   async reshapeModelForRender() {
