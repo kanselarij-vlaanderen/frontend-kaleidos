@@ -238,7 +238,6 @@ export default class AgendaMinutesController extends Controller {
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
         documentContainer,
-        isReportOrMinutes: true,
       });
       await minutes.save();
     } else {
@@ -283,7 +282,6 @@ export default class AgendaMinutesController extends Controller {
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
       accessLevel: minutes.accessLevel,
-      isReportOrMinutes: true,
     });
 
     await newVersion.save();

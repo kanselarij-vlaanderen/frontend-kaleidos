@@ -49,12 +49,12 @@
         <Documents::DocumentCard
           @piece={{this.report}}
           @decisionActivity={{@decisionActivity}}
+          @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
-          @hideSign={{true}}
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
@@ -185,6 +185,7 @@
           <Documents::DocumentCard
             @piece={{this.report}}
             @decisionActivity={{@decisionActivity}}
+            @meeting={{@agendaContent.meeting}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
