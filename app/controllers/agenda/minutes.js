@@ -48,7 +48,7 @@ async function renderNotas(meeting, notas, intl, store) {
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-    <h4><u>MEDEDELINGEN</u></h4>
+    <h4 id="announcements"><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
   `;
 }
@@ -112,8 +112,9 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   }
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
+  const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
   return `
-  <h4><u>${
+  <h4 ${pagebreak}><u>${
     agendaitem.number
   }. ${generateBetreft(
     agendaitem.shortTitle,
