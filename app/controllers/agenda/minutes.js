@@ -12,13 +12,14 @@ import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { addWeeks } from 'date-fns';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
   let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
-    <table>
+    <table id="attendees">
       <tbody>
         <tr>
           <td>De minister-president</td>
@@ -120,7 +121,7 @@ function capitalizeFirstLetter(string) {
 function renderAbsentees() {
   return `
     <p><u>AFWEZIG MET KENNISGEVING</u></p>
-    <table>
+    <table id="absentees">
       <tbody>
         <tr>
           <td></td>
@@ -131,14 +132,48 @@ function renderAbsentees() {
   `;
 }
 
+function renderNextMeeting(meeting, intl) {
+  const currentPlannedStart = meeting.plannedStart;
+  const nextPlannedStart = addWeeks(currentPlannedStart, 1);
+  const date = dateFormat(nextPlannedStart, 'EEEE d MMMM yyyy');
+  const time = dateFormat(nextPlannedStart, 'HH:mm');
+  return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
+}
+
 async function renderMinutes(data, intl, store) {
-  const { meeting, attendees, notas, announcements } = data;
-  return `
-    ${renderAttendees(attendees)}
-    ${renderAbsentees()}
-    ${notas ? await renderNotas(meeting, notas, intl, store) : ''}
-    ${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
-  `;
+  const { meeting, attendees, notas, announcements, editorContent } = data;
+
+  let newMinutesContent = `${renderAttendees(attendees)}
+${renderAbsentees()}
+${notas ? await renderNotas(meeting, notas, intl, store) : ''}
+${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
+${renderNextMeeting(meeting, intl)}`;
+
+  if (editorContent) {
+    const contentElement = document.createElement('template');
+    contentElement.innerHTML = editorContent;
+
+    const newContentElement = document.createElement('template');
+    newContentElement.innerHTML = newMinutesContent;
+
+    const attendeesText = contentElement.content.querySelector('#attendees')?.innerHTML;
+    if (attendeesText) {
+      newContentElement.content.querySelector('#attendees').innerHTML = attendeesText;
+    }
+
+    const absenteesText = contentElement.content.querySelector('#absentees')?.innerHTML;
+    if (absenteesText) {
+      newContentElement.content.querySelector('#absentees').innerHTML = absenteesText;
+    }
+
+    const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
+    if (nextMeetingText) {
+      newContentElement.content.querySelector('#next-meeting').innerHTML = nextMeetingText;
+    }
+
+    newMinutesContent = newContentElement.innerHTML;
+  }
+  return newMinutesContent;
 }
 
 function mandateeName(mandatee) {
@@ -151,12 +186,15 @@ export default class AgendaMinutesController extends Controller {
   @service intl;
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
+  @service currentSession;
 
   meeting;
+  @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
   @tracked isUpdatingMinutesContent = false;
-
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
 
   loadCurrentPiecePart = task(async () => {
@@ -203,7 +241,6 @@ export default class AgendaMinutesController extends Controller {
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
         documentContainer,
-        isReportOrMinutes: true,
       });
       await minutes.save();
     } else {
@@ -248,7 +285,6 @@ export default class AgendaMinutesController extends Controller {
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
       accessLevel: minutes.accessLevel,
-      isReportOrMinutes: true,
     });
 
     await newVersion.save();
@@ -362,12 +398,19 @@ export default class AgendaMinutesController extends Controller {
     };
   }
 
+  get mayEditMinutes() {
+    return !this.isLoading &&
+      this.currentSession.may('manage-minutes') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
+  }
+
   async reshapeModelForRender() {
     return {
       meeting: this.model.meeting,
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
+      editorContent: this.editor.htmlContent,
     };
   }
 }

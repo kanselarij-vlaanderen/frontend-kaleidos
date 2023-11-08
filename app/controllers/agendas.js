@@ -201,13 +201,16 @@ export default class AgendasController extends Controller {
 
   async createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting) {
     const now = new Date();
-
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-    );
-
     const startDate = newMeeting.plannedStart;
+
+    // default decision result when flag is turned off
+    let decisionResultCode = null;
+    if (!this.enableDigitalAgenda) {
+      decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+      );
+    }
 
     // meeting secretary
     let secretary;

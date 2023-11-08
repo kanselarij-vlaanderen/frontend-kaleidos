@@ -31,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service toaster;
   @service decisionReportGeneration;
   @service throttledLoadingService;
+  @service currentSession;
 
   @tracked report;
   @tracked previousReport;
@@ -38,6 +39,9 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
   @tracked nota;
+
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
 
   @tracked isEditingAnnotation = false;
   @tracked isEditingConcern = false;
@@ -169,10 +173,18 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
+      this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
       this.beslissingPiecePart = null;
+    }
+  });
+
+  loadSignatureRelatedData = task(async () => {
+    if (this.report) {
+      this.hasSignFlow = await this.signatureService.hasSignFlow(this.report);
+      this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.report);
     }
   });
 
@@ -539,7 +551,6 @@ export default class AgendaitemDecisionComponent extends Component {
   async createNewReport(documentContainer) {
     const now = new Date();
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       created: now,
       modified: now,
       name: await generateReportName(
@@ -577,7 +588,6 @@ export default class AgendaitemDecisionComponent extends Component {
       newName = previousReport.name;
     }
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       name: newName,
       created: now,
       modified: now,
@@ -759,6 +769,12 @@ export default class AgendaitemDecisionComponent extends Component {
       ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
       ENV.APP.ENABLE_DIGITAL_AGENDA === true
     );
+  }
+
+  get mayEditDecisionReport() {
+    return this.enableDigitalAgenda &&
+      this.currentSession.may('manage-decisions') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
   }
 
   @action
