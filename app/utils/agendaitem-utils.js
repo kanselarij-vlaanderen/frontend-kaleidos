@@ -107,7 +107,9 @@ export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionR
         });
         if (report) {
           reports.push(report);
-          report.name = await generateReportName(agendaitem, meeting);
+          const documentContainer = await report.documentContainer;
+          const pieces = await documentContainer.pieces;
+          report.name = await generateReportName(agendaitem, meeting, pieces.length);
           await report.save();
         }
         return agendaitemSave;
