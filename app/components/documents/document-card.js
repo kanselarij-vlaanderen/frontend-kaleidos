@@ -26,7 +26,12 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
-   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
+   *
+   * @argument [agendaitem]: if an agendaitem is linked to the current piece
+   * @argument [decisionActivity]: if a decision-activity is linked to the
+   *   current piece, either via agenda-item-treatment (for regular pieces) or
+   *   directly (for reports)
+   * @argument [meeting]: if a meeting is linked to the current piece
    */
   @service store;
   @service currentSession;
@@ -95,24 +100,33 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   // getting complex with the temporary feature flags
-  // agendaitem doc can be marked - has decisionActivity and isReportOrMinutes false
-  // decisions can only be marked if flag is active and - has decisionActivity and isReportOrMinutes true
-  // minutes can only be marked if flag is active and - has no decisionActivity and isReportOrMinutes true
+  // agendaitem doc can be marked - has agendaitem and has decisionActivity
+  // decisions can only be marked if flag is active and - has no agendaitem and has decisionActivity
+  // minutes can only be marked if flag is active and - has no agendaitem and has no decisionActivity and has meeting
   get mayCreateSignMarkingActivity() {
     return (
       !this.signMarkingActivity &&
       this.signaturesEnabled &&
       this.currentSession.may('manage-signatures') &&
       (
-        (!!this.args.decisionActivity && !this.args.piece.isReportOrMinutes) ||
-        (this.enableDigitalAgenda && this.args.piece.isReportOrMinutes && !!this.args.decisionActivity) ||
-        (this.enableDigitalMinutes && this.args.piece.isReportOrMinutes && !this.args.decisionActivity)
+        (this.args.agendaitem && this.args.decisionActivity) ||
+        (this.enableDigitalAgenda && !this.args.agendaitem && this.args.decisionActivity) ||
+        (this.enableDigitalMinutes && !this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
       )
     );
   }
 
-  get agendaitemIsRetracted() {
-    return this.args.decisionActivity?.get('isRetracted');
+  get markingForSigningIsDisabled() {
+    if (this.args.agendaitem) {
+      return this.args.decisionActivity?.get('isRetracted');
+    } else if (this.args.decisionActivity) {
+      return false;
+    } else if (this.args.meeting) {
+      return false;
+    } else {
+      // Not a handled case, disable the button
+      return true;
+    }
   }
 
   get mayShowEditDropdown() {
@@ -404,7 +418,11 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *markDocumentForSigning() {
-    yield this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    yield this.signatureService.markDocumentForSignature(
+      this.piece,
+      this.args.decisionActivity,
+      this.args.meeting,
+    );
     yield this.loadPieceRelatedData.perform();
   }
 

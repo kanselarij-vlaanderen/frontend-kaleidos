@@ -3,7 +3,6 @@ import sanitize from 'sanitize-filename';
 
 export default class Piece extends Model {
   @attr('string') name;
-  @attr('boolean') isReportOrMinutes;
   @attr('number') numberOfPages;
   @attr('number') numberOfWords;
   @attr('datetime') created;

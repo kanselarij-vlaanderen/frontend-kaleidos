@@ -227,7 +227,7 @@
                   <AuButton
                     data-test-document-card-sign-marking
                     @skin="link"
-                    @disabled={{this.agendaitemIsRetracted}}
+                    @disabled={{this.markingForSigningIsDisabled}}
                     {{on "click" this.markDocumentForSigning.perform}}
                     role="menuitem"
                   >

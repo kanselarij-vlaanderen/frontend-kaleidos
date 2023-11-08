@@ -95,11 +95,11 @@
                 @hideNewerVersions={{true}}
                 @hideEdit={{true}}
                 @hideUpload={{true}}
-                @hideSign={{true}}
                 @showCreateNewVersion={{true}}
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
                 @didDeleteContainer={{this.didDeleteMinutes}}
+                @meeting={{this.meeting}}
               />
             {{else if (user-may "manage-minutes")}}
               <AuAlert
