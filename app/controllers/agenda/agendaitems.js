@@ -31,8 +31,10 @@ export default class AgendaAgendaitemsController extends Controller {
     },
   ];
   
+  @service store;
   @service router;
   @service intl;
+  @service decisionReportGeneration;
   @service throttledLoadingService;
 
   @lastValue('groupNotasOnGroupName') notaGroups = [];
@@ -84,7 +86,14 @@ export default class AgendaAgendaitemsController extends Controller {
         reorderedAgendaitemsOfCategory.push(agendaitem);
       }
     }
-    yield setAgendaitemsNumber(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
+    yield setAgendaitemsNumber(
+      reorderedAgendaitemsOfCategory,
+      this.meeting,
+      this.store,
+      this.decisionReportGeneration,
+      true,
+      true,
+    ); // permissions guarded in template (and backend)
     this.router.refresh('agenda.agendaitems');
   }
 

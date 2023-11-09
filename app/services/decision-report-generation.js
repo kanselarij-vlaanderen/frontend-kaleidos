@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DecisionReportGeneration extends Service {
   @service toaster;
@@ -7,7 +8,7 @@ export default class DecisionReportGeneration extends Service {
   @service intl;
 
   generateReplacementReports = task(async (reports) => {
-    const generatingPDFToast = this.toaster.loading(
+    const generatingPDFsToast = this.toaster.loading(
       this.intl.t('decision-report-generation--toast-generating--message', {
         total: reports.length,
       }),
@@ -16,52 +17,54 @@ export default class DecisionReportGeneration extends Service {
         timeOut: 10 * 60 * 1000,
       }
     );
-    const batchedReports = this.batch(reports, 10);
-    let updatedReports = [];
-    let failedReports = [];
-    for (const batch of batchedReports) {
-      await Promise.all(
-        batch.map(async (report) => {
-          try {
-            await this.generateSinglePdf.perform(
-              report,
-              'generate-decision-report'
-            );
-            await this.reloadFile(report);
-            updatedReports.push(report);
-          } catch (error) {
-            failedReports.push({ report, error });
-          }
+    try {
+      const job = await this.generateMultiplePdfs.perform(
+        reports,
+        'generate-decision-report'
+      );
+      this.pollReplacementReports.perform(job, reports, generatingPDFsToast);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-while-generating-report-pdfs', {
+          error: error.message,
         })
       );
     }
-    this.toaster.close(generatingPDFToast);
-    if (failedReports.length) {
-      for (const failure of failedReports) {
-        this.toaster.error(
-          this.intl.t('error-while-generating-report-name-pdf', {
-            name: failure.report.name,
-            error: failure.error.message,
-          })
-        );
-      }
-    }
-    if (updatedReports.length) {
-      this.toaster.success(
-        this.intl.t(
-          'decision-report-generation--toast-generating-complete--message',
-          {
-            total: updatedReports.length,
-          }
-        ),
-        this.intl.t(
-          'decision-report-generation--toast-generating-complete--title'
-        ),
-        {
-          closable: true,
-          timeOut: 10 * 60 * 1000,
-        }
+  });
+
+  pollReplacementReports = task(async (job, reports, generatingPDFsToast) => {
+      const jobResult = await this.getJob.perform(
+        job,
+        'generate-decision-report'
       );
+      if (jobResult) {
+        if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS) {
+          await this.reloadFiles(reports);
+          this.toaster.close(generatingPDFsToast);
+          this.toaster.success(
+            this.intl.t(
+              'decision-report-generation--toast-generating-complete--message',
+              {
+                total: reports.length,
+              }
+            ),
+            this.intl.t(
+              'decision-report-generation--toast-generating-complete--title'
+            ),
+            {
+              closable: true,
+              timeOut: 10 * 60 * 1000,
+            }
+          );
+      } else if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE) {
+        this.toaster.error(
+          this.intl.t('error-while-generating-report-pdfs')
+        );
+      } else {
+        setTimeout(() => {
+          this.pollReplacementReports.perform(job, reports, generatingPDFsToast);
+        }, 2000);
+      }
     }
   });
 
@@ -139,6 +142,84 @@ export default class DecisionReportGeneration extends Service {
       }
     }
   });
+
+  generateMultiplePdfs = task(async (reports, urlBase) => {
+    let response;
+    try {
+      response = await fetch(`/${urlBase}/generate-reports`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+        },
+        body: JSON.stringify({
+          reports: reports.map((report) => report.uri)
+        }),
+      });
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw new Error(
+          `Backend response contained an error (status: ${
+            response.status
+          }): ${JSON.stringify(data)}`
+        );
+      }
+      return data;
+    } catch (error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down. If so,
+      // throw a nice error that only contains the
+      // response status.
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  getJob = task(async (job, urlBase) => {
+    let response;
+    try {
+      response = await fetch(`/${urlBase}/job/${job.id}?date=${Date.now()}`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `Backend response contained an error (status: ${
+            response.status
+          }): ${JSON.stringify(data)}`
+        );
+      }
+      return data;
+    } catch (error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down. If so,
+      // throw a nice error that only contains the
+      // response status.
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  async reloadFiles(reports) {
+    const batchedReports = this.batch(reports, 10);
+    for (const batch of batchedReports) {
+      await Promise.all(
+        batch.map(async (report) => {
+          await this.reloadFile(report);
+        })
+      );
+    }
+  }
 
   async reloadFile(reportOrMinutes) {
     await reportOrMinutes.belongsTo('file').reload();
