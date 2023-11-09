@@ -61,6 +61,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
 
+  oldAccessLevels = new Map();
+
 
   constructor() {
     super(...arguments);
@@ -427,27 +429,45 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  changeAccessLevel(accessLevel) {
+  async changeAccessLevel(accessLevel) {
+    if (!this.oldAccessLevels.get(this.piece)) {
+      // If there's already an entry it contains the original access level and
+      // we don't want to overwrite it
+      this.oldAccessLevels.set(this.piece, await this.piece.accessLevel);
+    }
     this.piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevel() {
+    const oldAccessLevel = this.oldAccessLevels.get(this.piece);
+    const newAccessLevel = await this.piece.accessLevel;
     // TODO make sure not to overwrite things
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     await this.loadPieceRelatedData.perform();
+    await this.args.didSaveAccessLevel?.(this.piece, oldAccessLevel, newAccessLevel);
+    this.oldAccessLevels.delete(this.piece);
   }
 
   @action
-  changeAccessLevelOfPiece(piece, accessLevel) {
+  async changeAccessLevelOfPiece(piece, accessLevel) {
+    if (!this.oldAccessLevels.get(piece)) {
+      // If there's already an entry it contains the original access level and
+      // we don't want to overwrite it
+      this.oldAccessLevels.set(piece, await piece.accessLevel);
+    }
     piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevelOfPiece(piece) {
+    const oldAccessLevel = this.oldAccessLevels.get(piece);
+    const newAccessLevel = await piece.accessLevel;
     await piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+    await this.args.didSaveAccessLevel?.(piece, oldAccessLevel, newAccessLevel);
+    this.oldAccessLevels.delete(piece);
   }
 
   @action
