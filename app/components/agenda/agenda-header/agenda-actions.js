@@ -362,6 +362,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
       return;
     } else {
+      if (this.router.currentRouteName === 'agenda.agendaitems.agendaitem.decisions') {
+        this.router.refresh(this.router.currentRouteName);
+      }
       this.toaster.success(
         this.intl.t('decision-reports-are-marked-for-signing')
       );
