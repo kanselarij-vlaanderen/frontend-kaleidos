@@ -81,8 +81,20 @@ export default class SignatureService extends Service {
     }
   }
 
-  // return results are currently not used by any caller
-  async markDocumentForSignature(piece, decisionActivity) {
+  /**
+   * Marks a piece for signature by creating a sign flow, sign subcase and sign
+   * marking activity. The sign subcase and sign flow are returned.
+   *
+   * Note: The return values are currently unused by any caller.
+   *
+   * @param {Piece} piece The piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes
+   */
+  async markDocumentForSignature(piece, decisionActivity, meeting) {
     const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
     if (existingSignMarking) {
       // someone else may have made a signflow, returning that one instead
@@ -106,6 +118,7 @@ export default class SignatureService extends Service {
       longTitle: _case?.title,
       case: _case,
       decisionActivity,
+      meeting,
       status: status,
     });
     await signFlow.save();

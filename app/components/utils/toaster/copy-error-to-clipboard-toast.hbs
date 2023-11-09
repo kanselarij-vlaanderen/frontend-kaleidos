@@ -2,11 +2,12 @@
   @title={{@options.title}}
   @skin="error"
   @icon="alert-triangle"
+  @size="small"
   @closable={{true}}
 >
   <div class="auk-u-text-capitalize">
     <p>{{@options.message}}</p>
-    <div class="au-u-margin-top-small au-o-box--small au-u-background-gray-100">
+    <div class="au-u-margin-top-small au-o-box--small au-u-background-gray-100 au-u-word-break">
       <Utils::ClipboardableContent @content={{@options.errorContent}} />
     </div>
   </div>
