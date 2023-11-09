@@ -335,12 +335,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   async markDecisionsForSigning() {
-    const agenda = this.args.currentAgenda;
-    const agendaitems = await agenda.agendaitems;
     const reports = await this.store.queryAll('report', {
-      'filter[decision-activity][treatment][agendaitems][:id:]': agendaitems
-        .map((x) => x.id)
-        .join(','),
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
     });
     const loadingToast = this.toaster.loading(
       this.intl.t('decision-reports-are-being-marked-for-signing'),
