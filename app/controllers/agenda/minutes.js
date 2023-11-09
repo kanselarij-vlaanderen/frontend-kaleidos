@@ -237,10 +237,13 @@ export default class AgendaMinutesController extends Controller {
       );
 
       // *note: any changes made here should also be made in the minutes-report-generation service
-      const name = `VR PV ${dateFormat(
+      let name = `VR PV ${dateFormat(
         this.meeting.plannedStart,
         'yyyy'
       )}/${this.meeting.number}`;
+      if (this.meeting.kind.get('uri') === constants.MEETING_KINDS.PVV) {
+        name += '-VV';
+      }
 
       minutes = this.store.createRecord('minutes', {
         name,
