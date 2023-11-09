@@ -35,7 +35,7 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De <span id="secretary-title">${secretaryTitle}</span></td>
-          <td id="secretary">${mandateeName(secretary)}</td>
+          <td><span id="secretary">${mandateeName(secretary)}</span></td>
         </tr>
       </tbody>
     </table>
@@ -196,12 +196,15 @@ export default class AgendaMinutesController extends Controller {
   @service intl;
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
+  @service currentSession;
 
   meeting;
+  @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
   @tracked isUpdatingMinutesContent = false;
-
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
 
   loadCurrentPiecePart = task(async () => {
@@ -397,6 +400,12 @@ export default class AgendaMinutesController extends Controller {
       ministers,
       secretary,
     };
+  }
+
+  get mayEditMinutes() {
+    return !this.isLoading &&
+      this.currentSession.may('manage-minutes') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
   }
 
   async reshapeModelForRender() {

@@ -1186,6 +1186,7 @@
   "pdf": "PDF",
   "error-while-exporting-pdf": "Er ging iets mis tijdens het exporteren naar PDF",
   "error-while-generating-report-name-pdf": "Er ging iets mis tijdens het aanmaken van de beslissingsfiche {name}. Reden: {error}",
+  "error-while-generating-report-pdfs": "Er ging iets mis tijdens het aanmaken van de beslissingsfiches. Reden: {error}",
   "error-while-generating-minutes-pdf": "Er ging iets mis tijdens het aanmaken van de notulen",
   "version-of-date-at-time": "Versie van {date} om {time}",
   "download-agenda-documents-info": "Deze functie brengt standaard alle documenten van deze vergadering samen in een zip bestand dat je dan kan downloaden. Ben je enkel geïnteresseerd in de documenten ingediend door of met één of meerdere ministers, vink dan de betreffende minister(s) aan.",
