@@ -236,17 +236,8 @@ export default class AgendaMinutesController extends Controller {
         constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
-      // *note: any changes made here should also be made in the minutes-report-generation service
-      let name = `VR PV ${dateFormat(
-        this.meeting.plannedStart,
-        'yyyy'
-      )}/${this.meeting.number}`;
-      if (this.meeting.kind.get('uri') === constants.MEETING_KINDS.PVV) {
-        name += '-VV';
-      }
-
       minutes = this.store.createRecord('minutes', {
-        name,
+        name: this.meeting.numberRepresentation,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
