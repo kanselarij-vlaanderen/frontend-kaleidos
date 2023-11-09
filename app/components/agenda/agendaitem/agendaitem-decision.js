@@ -268,6 +268,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  async generateNewReport() {
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      this.report
+    );
+  }
+
+  @action
   async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
