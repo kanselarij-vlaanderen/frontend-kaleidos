@@ -366,10 +366,12 @@ export default class MeetingEditMeetingComponent extends Component {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newHtmlContent = replaceSecretary(piecePart.htmlContent,
-        this.secretary.person.get('fullName'),
-        this.secretary.title.toLowerCase());
-      piecePart.htmlContent = newHtmlContent;
+      if (this.secretary) {
+        const newHtmlContent = replaceSecretary(piecePart.htmlContent,
+          this.secretary.person.get('fullName'),
+          this.secretary.title.toLowerCase());
+        piecePart.htmlContent = newHtmlContent;
+      }
       await piecePart.save();
       this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
