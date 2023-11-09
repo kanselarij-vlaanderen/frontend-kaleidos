@@ -49,13 +49,14 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const minutes = await meeting.minutes;
-    return { minutes, mandatees, notas, announcements, meeting };
+    return { minutes, mandatees, notas, announcements, meeting, agenda };
   }
 
   async afterModel(model, _transition) {
     const meeting = model.meeting;
+    const agenda = model.agenda;
     if (meeting?.isPreDigitalMinutes) {
-      await this.router.transitionTo('route-not-found', 404);
+      this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
     }
   }
 
