@@ -46,10 +46,10 @@ export default class SignaturesDecisionsRoute extends Route {
     }
 
     const filter = {
+      ':has:meeting': true,
       'sign-subcase': {
         'sign-marking-activity': {
           piece: {
-            'is-report-or-minutes': true,
             ':has-no:next-piece': true
           }
         },

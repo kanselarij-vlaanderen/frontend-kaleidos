@@ -167,13 +167,13 @@
             <Signatures::CreateSignFlow
               @decisionActivities={{array this.decisionActivityOrMeeting}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isReportOrMinute={{true}}
+              @isReportOrMinutes={{true}}
             />
           {{else if this.selectedSignFlows.length}}
             <Signatures::CreateSignFlow
               @decisionActivities={{this.selectedDecisionActivitiesOrMeetings.value}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isReportOrMinute={{true}}
+              @isReportOrMinutes={{true}}
             />
           {{/if}}
         </div>
