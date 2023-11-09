@@ -29,6 +29,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service intl;
   @service jobMonitor;
   @service toaster;
+  @service signatureService;
 
   downloadOptions = [
     {
@@ -335,40 +336,17 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   async markDecisionsForSigning() {
+    // TODO filter already marked reports ?
     const reports = await this.store.queryAll('report', {
       'filter[:has-no:next-piece]': true,
       'filter[:has:piece-parts]': true,
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
-    const loadingToast = this.toaster.loading(
-      this.intl.t('decision-reports-are-being-marked-for-signing'),
-      null,
-      {
-        timeOut: 10 * 60 * 1000,
-      }
-    );
-    const resp = await fetch(`/signing-flows/mark-pieces-for-signing`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify({
-        data: reports.map((report) => ({ type: 'reports', id: report.id })),
-      }),
-    });
-    this.toaster.close(loadingToast);
-    if (!resp.ok) {
-      this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
-      return;
-    } else {
-      if (this.router.currentRouteName === 'agenda.agendaitems.agendaitem.decisions') {
-        this.router.refresh(this.router.currentRouteName);
-      }
-      this.toaster.success(
-        this.intl.t('decision-reports-are-marked-for-signing')
-      );
-    }
+    // TODO are we waiting for completion or allowing the user to browse?
+    await this.signatureService.markReportsForSignature(reports);
+    // TODO when to refresh?
+    this.router.refresh(this.router.currentRouteName);
   }
 
   @action

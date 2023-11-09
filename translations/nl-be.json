@@ -1270,5 +1270,6 @@
   "sign-decisions": "Beslissingen aanbieden voor ondertekenen",
   "decision-reports-are-being-marked-for-signing": "De beslissingen worden aangeboden voor ondertekenen",
   "decision-reports-are-marked-for-signing": "De beslissingsfiches zijn succesvol aangeboden voor ondertekenen",
-  "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen"
+  "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
+  "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen"
 }
