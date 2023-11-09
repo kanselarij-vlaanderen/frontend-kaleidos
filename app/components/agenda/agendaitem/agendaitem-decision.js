@@ -268,17 +268,9 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  async didSaveAccessLevel(report, oldAccessLevel, newAccessLevel) {
-    if (
-      ![oldAccessLevel?.uri, newAccessLevel?.uri].includes(
-        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-      ) ||
-      report.id !== this.report.id
-    ) {
-      return;
-    }
+  async generateNewReport() {
     await this.decisionReportGeneration.generateReplacementReport.perform(
-      report
+      this.report
     );
   }
 

@@ -59,7 +59,7 @@
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
           @didDeleteContainer={{this.didDeleteReport}}
-          @didSaveAccessLevel={{this.didSaveAccessLevel}}
+          @onChangeConfidentiality={{this.generateNewReport}}
         />
       {{else}}
         <Auk::Loader />

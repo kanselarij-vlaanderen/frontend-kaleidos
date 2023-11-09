@@ -26,6 +26,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
+   * @argument onChangeConfidentiality: action triggered when a subtype 'report' has an accessLevel change
    *
    * @argument [agendaitem]: if an agendaitem is linked to the current piece
    * @argument [decisionActivity]: if a decision-activity is linked to the
@@ -61,8 +62,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
 
-  oldAccessLevels = new Map();
-
+  // model "report" only
+  @tracked hasConfidentialityChanged = false;
+  @tracked oldAccessLevelUri = null;
 
   constructor() {
     super(...arguments);
@@ -430,48 +432,51 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async changeAccessLevel(accessLevel) {
-    if (!this.oldAccessLevels.get(this.piece)) {
-      // If there's already an entry it contains the original access level and
-      // we don't want to overwrite it
-      this.oldAccessLevels.set(this.piece, await this.piece.accessLevel);
+    const modelName = this.args.piece.constructor.modelName;
+    if (modelName === 'report' && this.args.onChangeConfidentiality) {
+      // multiple unsaved changes are possible, save the original accessLevel the first time
+      this.oldAccessLevelUri =
+        this.oldAccessLevelUri || this.piece.accessLevel?.get('uri');
+      const newAccessLevelUri = accessLevel?.get('uri');
+      if (
+        [this.oldAccessLevelUri, newAccessLevelUri].includes(
+          CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        )
+      ) {
+        this.hasConfidentialityChanged = true;
+      } else {
+        this.hasConfidentialityChanged = false;
+      }
     }
     this.piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevel() {
-    const oldAccessLevel = this.oldAccessLevels.get(this.piece);
-    const newAccessLevel = await this.piece.accessLevel;
-    // TODO make sure not to overwrite things
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
+    if (this.hasConfidentialityChanged && this.args.onChangeConfidentiality) {
+      await this.args?.onChangeConfidentiality();
+      this.oldAccessLevelUri = null;
+      this.hasConfidentialityChanged = false;
+    }
     await this.loadPieceRelatedData.perform();
-    await this.args.didSaveAccessLevel?.(this.piece, oldAccessLevel, newAccessLevel);
-    this.oldAccessLevels.delete(this.piece);
   }
 
   @action
   async changeAccessLevelOfPiece(piece, accessLevel) {
-    if (!this.oldAccessLevels.get(piece)) {
-      // If there's already an entry it contains the original access level and
-      // we don't want to overwrite it
-      this.oldAccessLevels.set(piece, await piece.accessLevel);
-    }
     piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevelOfPiece(piece) {
-    const oldAccessLevel = this.oldAccessLevels.get(piece);
-    const newAccessLevel = await piece.accessLevel;
     await piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
-    await this.args.didSaveAccessLevel?.(piece, oldAccessLevel, newAccessLevel);
-    this.oldAccessLevels.delete(piece);
   }
 
   @action
   async reloadAccessLevel() {
+    this.hasConfidentialityChanged = false;
     await this.loadPieceRelatedData.perform();
   }
 
