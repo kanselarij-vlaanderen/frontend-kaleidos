@@ -115,18 +115,22 @@
             )
           }}
             {{#if this.piece.publicationFlow}}
-              <AuPill
-                @size="small"
-                @route="publications.publication"
-                @model={{this.piece.publicationFlow.id}}
-                data-test-document-card-publication-link
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
               >
-                {{this.piece.publicationFlow.identification.idName}}
-              </AuPill>
+                <AuPill
+                  @size="small"
+                  @route="publications.publication"
+                  @model={{this.piece.publicationFlow.id}}
+                  data-test-document-card-publication-link
+                >
+                  {{this.piece.publicationFlow.identification.idName}}
+                </AuPill>
+              </Group.Item>
             {{/if}}
           {{/if}}
           <Group.Item
-            class="auk-o-flex"
+            class="auk-o-flex auk-o-flex--vertical-center"
             {{did-update
               (perform this.loadAccessLevelRelatedData)
               @agendaContext.meeting.internalDecisionPublicationActivity.status
@@ -157,7 +161,9 @@
           </Group.Item>
           {{#if this.signaturesEnabled}}
             {{#if this.showSignatureLoader}}
-              <Group.Item>
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
+              >
                 <div
                   class="auk-loader au-u-margin-left-small"
                   role="alert"
@@ -165,7 +171,9 @@
                 ></div>
               </Group.Item>
             {{else if this.signMarkingActivity}}
-              <Group.Item>
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
+              >
                 <SignaturePill
                   @piece={{this.piece}}
                   @signMarkingActivity={{this.signMarkingActivity}}
@@ -174,7 +182,9 @@
             {{/if}}
           {{/if}}
           {{#if this.mayShowEditDropdown}}
-            <Group.Item>
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
               <AuDropdown
                 data-test-document-card-actions={{true}}
                 @icon="three-dots"
@@ -217,7 +227,7 @@
                   <AuButton
                     data-test-document-card-sign-marking
                     @skin="link"
-                    @disabled={{this.agendaitemIsRetracted}}
+                    @disabled={{this.markingForSigningIsDisabled}}
                     {{on "click" this.markDocumentForSigning.perform}}
                     role="menuitem"
                   >

@@ -50,6 +50,8 @@ export default class Meeting extends Model {
   @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
   @hasMany('piece', { inverse: 'meeting', async: true, polymorphic: true })
   pieces;
+  @hasMany('sign-flow', { inverse: 'meeting', async: true })
+  signFlows;
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;

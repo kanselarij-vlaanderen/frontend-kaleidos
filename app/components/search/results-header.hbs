@@ -7,8 +7,12 @@
     >{{this.fromResultIndex}}-{{this.toResultIndex}}</strong>
     {{t "of"}}
     {{@totalNbOfItems}}
-    {{t "results-for"}}
-    <strong class="au-u-medium">"{{@searchText}}"</strong>
+    {{#if @searchText}}
+      {{t "results-for"}}
+      <strong class="au-u-medium">"{{@searchText}}"</strong>
+    {{else}}
+      {{t "results"}}
+    {{/if}}
     {{#if @searchType}}
       {{t "in"}}
       <strong>{{@searchType}}</strong>
