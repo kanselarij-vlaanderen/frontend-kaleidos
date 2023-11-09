@@ -260,7 +260,8 @@ export default class AgendaitemDecisionComponent extends Component {
     if (
       ![oldAccessLevel?.uri, newAccessLevel?.uri].includes(
         CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-      )
+      ) ||
+      report.id !== this.report.id
     ) {
       return;
     }
