@@ -153,13 +153,6 @@ $say-editor-border-radius: $au-input-border-radius;
 
   ol[data-list-style='decimal-extended'] {
     @include decimal-extended-styling(5, 1);
-
-    ol[data-list-style='decimal-extended'] {
-      &,
-      ol {
-        padding: 0 0 0 3.8rem !important;
-      }
-    }
   }
 }
 
