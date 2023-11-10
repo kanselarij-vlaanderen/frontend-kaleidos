@@ -775,15 +775,36 @@ function generateDecision(concerns, decision) {
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
   cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-  cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
+  // cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
   cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
     .click();
   cy.wait('@createNewDocumentContainer');
   cy.wait('@createNewReport');
   cy.wait('@createNewPiecePart');
   cy.wait('@patchDecisionActivities');
-  cy.wait('@patchReport');
+  // cy.wait('@patchReport');
   cy.log('/generateDecision');
+}
+
+/**
+ * @description Change the decision result of an agendaitem
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function changeDecisionResult(result) {
+  cy.log('changeDecisionResult');
+
+  cy.get(agenda.agendaitemNav.decisionTab).click();
+  cy.get(agenda.decisionResultPill.edit)
+    .click();
+  cy.get(dependency.emberPowerSelect.trigger).click();
+  cy.get(dependency.emberPowerSelect.option).contains(result)
+    .click();
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt}`);
+  cy.get(agenda.agendaitemDecisionEdit.save).click();
+  cy.wait(`@patchDecisionActivities_${randomInt}`);
+  cy.get(agenda.decisionResultPill.pill).contains(result);
 }
 
 Cypress.Commands.add('createAgenda', createAgenda);
@@ -807,3 +828,4 @@ Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda)
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
 Cypress.Commands.add('generateDecision', generateDecision);
+Cypress.Commands.add('changeDecisionResult', changeDecisionResult);

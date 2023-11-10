@@ -31,7 +31,7 @@ export default class File extends Model {
   }
 
   get inlineViewLink() {
-    return `/files/${this.id}/download?content-disposition=inline`;
+    return `${this.namedDownloadLink}&content-disposition=inline`;
   }
 
   get namedDownloadLink() {

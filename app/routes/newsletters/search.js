@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { isEmpty, isPresent } from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from '../../utils/parse-date-search-param';
@@ -102,9 +102,6 @@ export default class NewslettersSearchRoute extends Route {
     filter[':has:agendaitems'] = 't';
 
     this.lastParams.commit();
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
     return search(
       'news-items',
       params.page,

@@ -121,10 +121,6 @@ export default class SearchDocumentsRoute extends Route {
 
     this.lastParams.commit();
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
     // agendaitems.meetingDate can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;

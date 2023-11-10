@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -13,6 +14,7 @@ export default class SubcaseDescriptionEdit extends Component {
    */
   @service store;
   @service conceptStore;
+  @service decisionReportGeneration;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
 
@@ -43,7 +45,9 @@ export default class SubcaseDescriptionEdit extends Component {
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
+    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+      CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
+    );
   }
 
   @action
@@ -76,16 +80,52 @@ export default class SubcaseDescriptionEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk,
+      resetFormallyOk
     );
 
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
       await this.updateNewsletterAfterRemarkChange();
+      await this.updateDecisionReports();
     }
 
     this.args.onSave();
 
     this.isSaving = false;
+  }
+
+  get enableDigitalAgenda() {
+    return (
+      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+    );
+  }
+
+  async updateDecisionReports() {
+    if (this.enableDigitalAgenda) {
+      const reports = await this.store.query('report', {
+        'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
+        'filter[:has-no:next-piece]': true,
+        sort: '-created',
+      });
+      for (const report of reports) {
+        const pieceParts = await report?.pieceParts;
+        if (pieceParts?.length) {
+          await this.decisionReportGeneration.generateReplacementReport.perform(
+            report
+          );
+          this.updateReportName(report, this.agendaItemType.uri);
+          await report.save();
+        }
+      }
+    }
+  }
+
+  updateReportName(report, agendaitemTypeUri) {
+    if (agendaitemTypeUri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      report.name = report.name.replace('punt', 'mededeling');
+    } else {
+      report.name = report.name.replace('mededeling', 'punt');
+    }
   }
 
   async updateNewsletterAfterRemarkChange() {
@@ -101,7 +141,9 @@ export default class SubcaseDescriptionEdit extends Component {
       if (newsItem?.id) {
         await newsItem.destroyRecord();
       }
-      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      if (
+        this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
+      ) {
         const newNewsItem =
           await this.newsletterService.createNewsItemForAgendaitem(
             latestAgendaitem,

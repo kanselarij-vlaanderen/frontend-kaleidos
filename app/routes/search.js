@@ -26,7 +26,7 @@ export default class SearchRoute extends Route {
   };
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   /* There is no reset of query parameters here by means of "resetController".

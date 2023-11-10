@@ -70,9 +70,11 @@
     @onSave={{this.saveGovernmentAreas}}
   />
 {{/if}}
+{{#if (and this.enableDigitalAgenda (not this.meeting.isPreKaleidos))}}
 <Mandatees::SecretaryPanel
   @referenceDate={{this.meeting.plannedStart}}
   @allowEditing={{user-may "manage-agendaitems"}}
   @onSave={{this.saveSecretary}}
   @secretary={{this.decisionActivity.secretary}}
 />
+{{/if}}

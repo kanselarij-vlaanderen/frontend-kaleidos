@@ -4,10 +4,7 @@
   <m.sidebar>
     <div class="au-c-sidebar">
       <div class="au-c-sidebar__content">
-        <div
-          id="search-subroute-filters-area"
-          class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
-        >
+        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
           <div data-test-route-signatures-ongoing-status-filter class="au-c-card au-o-box au-o-box--small">
             <Auk::Label>{{t "status"}}</Auk::Label>
             <Signatures::StatusFilter
@@ -32,7 +29,6 @@
   </m.sidebar>
   <m.content @scroll={{true}}>
     <KDataTable
-      data-test-route-search-publication-data-table
       @hoverable={{true}}
       @striped={{true}}
       @loading={{this.isLoadingModel}}

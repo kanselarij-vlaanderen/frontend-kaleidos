@@ -123,7 +123,36 @@ $say-editor-border-radius: $au-input-border-radius;
 
   ul,
   ol {
-    margin-left: 2.8rem;
+    padding-left: 5.8rem; // `margin-left: 2.8rem;` replaced by 3rem (default padding-left) + 2.8rem (default margin-left)
+
+    ul,
+    ol {
+      padding-left: 3.8rem;
+    }
+  }
+
+  @mixin decimal-extended-styling($levels, $current-level: 1) {
+    padding-left: 0;
+
+    > li {
+      &:before {
+        @if $current-level == 1 {
+          min-width: 5.8rem;
+        } @else {
+          min-width: 3.8rem;
+        }
+      }
+
+      @if $current-level < $levels {
+        > ol:not([data-list-style]) {
+          @include decimal-extended-styling($levels, $current-level + 1);
+        }
+      }
+    }
+  }
+
+  ol[data-list-style='decimal-extended'] {
+    @include decimal-extended-styling(5, 1);
   }
 }
 
