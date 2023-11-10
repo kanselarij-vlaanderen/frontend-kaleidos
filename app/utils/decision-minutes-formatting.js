@@ -7,10 +7,20 @@ function formatDocuments(pieceRecords, isApproval) {
   const vrNumbersFound = [];
   for (const pieceName of names) {
     if (isApproval) {
-      simplifiedNames.push(new VrNotulenName(pieceName).vrNumberWithSuffix());
+      try {
+        simplifiedNames.push(new VrNotulenName(pieceName).vrNumberWithSuffix());
+      } catch {
+        simplifiedNames.push(pieceName);
+      }
       continue;
     }
-    const vrModel = new VRDocumentName(pieceName);
+    let vrModel;
+    try {
+      vrModel = new VRDocumentName(pieceName);
+    } catch {
+      simplifiedNames.push(pieceName);
+      continue;
+    }
     const vrDateOnly = vrModel.vrDateOnly();
     // if the first part of the VR number is the same we don't repeat it
     if (!vrNumbersFound.includes(vrDateOnly)) {
