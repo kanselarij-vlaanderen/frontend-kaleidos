@@ -46,7 +46,7 @@ export default class SignaturesOngoingRoute extends Route {
       params.page = 0;
     }
 
-    const filter = {};
+    const filter = { ':has-no:meeting': true };
     if (this.currentSession.may('view-all-ongoing-signatures')) {
       filter[':has:creator'] = 't';
     } else {

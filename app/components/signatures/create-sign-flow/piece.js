@@ -3,15 +3,12 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { trackedFunction } from 'ember-resources/util/function';
 import { TrackedArray } from 'tracked-built-ins';
+import { trackedFunction } from 'ember-resources/util/function';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-/**
- */
-export default class SignaturesCreateSignFlowComponent extends Component {
-  @service mandatees;
+export default class SignaturesCreateSignFlowPieceComponent extends Component {
   @service store;
 
   @tracked showMinisterModal = false;
@@ -34,7 +31,8 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       return;
     }
     const decisionActivities = this.args.decisionActivities.toArray();
-    let hasConflictingSigners = false;
+
+    const [head, ...tail] = decisionActivities;
 
     this.primeMinister = await this.store.queryOne('mandatee', {
       'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
@@ -45,47 +43,40 @@ export default class SignaturesCreateSignFlowComponent extends Component {
 
     const getSubmitterAndCosigners = async (decisionActivity) => {
       const subcase = await decisionActivity.subcase;
-      const submitter = await subcase.requestedBy;
-      const cosigners = await subcase.mandatees;
+      const submitter = await subcase?.requestedBy;
+      const cosigners = await subcase?.mandatees ?? [];
       return { submitter, cosigners };
-    }
+    };
 
-    const [head, ...tail] = decisionActivities;
-    const {
-      submitter,
-      cosigners,
-    } = await getSubmitterAndCosigners(head);
+    const { submitter, cosigners } = await getSubmitterAndCosigners(head);
 
-    for (let decisionActivity of tail)  {
-      const {
-        submitter: _submitter,
-        cosigners: _cosigners,
-      } = await getSubmitterAndCosigners(decisionActivity);
+    for (let decisionActivity of tail) {
+      const { submitter: _submitter, cosigners: _cosigners } =
+        await getSubmitterAndCosigners(decisionActivity);
 
       if (submitter?.id !== _submitter?.id) {
-        hasConflictingSigners = true;
+        this.hasConflictingSigners = true;
         break;
       }
       if (_cosigners.length !== cosigners.length) {
-        hasConflictingSigners = true;
+        this.hasConflictingSigners = true;
         break;
       }
-      const _cosignersIds = _cosigners.map((signer => signer.id));
-      const cosignersIds = cosigners.map((signer => signer.id));
+      const _cosignersIds = _cosigners.map((signer) => signer.id);
+      const cosignersIds = cosigners.map((signer) => signer.id);
       for (const mandateeId of _cosignersIds) {
         if (!cosignersIds.includes(mandateeId)) {
-          hasConflictingSigners = true;
+          this.hasConflictingSigners = true;
           break;
         }
       }
-      if (hasConflictingSigners) break;
+      if (this.hasConflictingSigners) break;
     }
-
-    this.hasConflictingSigners = hasConflictingSigners;
-    if (hasConflictingSigners) {
+    if (this.hasConflictingSigners) {
       this.signers = new TrackedArray([]);
     } else {
-      const signersSet = new Set([this.primeMinister]);
+    const signersSet = new Set();
+      signersSet.add(this.primeMinister);
       const primeMinisterPerson = await this.primeMinister.person;
 
       if (submitter) {
@@ -103,11 +94,15 @@ export default class SignaturesCreateSignFlowComponent extends Component {
           }
         }
       }
-
       this.signers = new TrackedArray([...signersSet]);
     }
     this.args.onChangeSigners?.(this.signers);
   });
+
+  @action
+  startEditSigners() {
+    this.showMinisterModal = true;
+  }
 
   @action
   saveApprover(approver) {
@@ -138,10 +133,9 @@ export default class SignaturesCreateSignFlowComponent extends Component {
   saveSigners = task(async (selected) => {
     const records = await this.mandateeIdsToRecords(selected);
     const filtered = await this.filterSelectedSigners(records);
-    this.signers = filtered.sort(
-      (m1, m2) => m1.priority - m2.priority
-    );
+    this.signers = filtered.sort((m1, m2) => m1.priority - m2.priority);
     this.showMinisterModal = false;
+
     this.args.onChangeSigners?.(this.signers);
   });
 
@@ -177,6 +171,6 @@ export default class SignaturesCreateSignFlowComponent extends Component {
       }
       filtered.add(mandatee);
     }
-    return [...filtered];
+    return new TrackedArray([...filtered]);
   }
 }

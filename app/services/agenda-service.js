@@ -11,7 +11,6 @@ export default class AgendaService extends Service {
   @service intl;
   @service currentSession;
   @service newsletterService;
-  @service mandatees;
   @service signatureService;
 
   @tracked addedPieces = null;
@@ -163,24 +162,26 @@ export default class AgendaService extends Service {
     }
 
     // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement
-      ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-      : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      defaultDecisionResultCodeUri
-    );
-
-    // default secretary
-    const decisionSecretary = {};
-    if (this.enableDigitalAgenda) {
-      const meetingSecretary = await meeting.secretary;
-      if (meetingSecretary) {
-        decisionSecretary.secretary = meetingSecretary;
-      } else {
-        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
-      }
+    let defaultDecisionResultCodeUri;
+    if (isAnnouncement) {
+      defaultDecisionResultCodeUri =
+        CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+    } else {
+      defaultDecisionResultCodeUri = this.enableDigitalAgenda
+        ? null
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     }
+
+    let decisionResultCode;
+    if (defaultDecisionResultCodeUri) {
+      decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        defaultDecisionResultCodeUri
+      );
+    }
+
+    const meetingSecretary = await meeting.secretary;
+    const secretary = this.enableDigitalAgenda ? meetingSecretary : null;
     // decision-activity
     const decisionActivity = await this.store.createRecord(
       'decision-activity',
@@ -188,7 +189,7 @@ export default class AgendaService extends Service {
         subcase,
         startDate: meeting.plannedStart,
         decisionResultCode,
-        ...decisionSecretary,
+        secretary,
       }
     );
     await decisionActivity.save();

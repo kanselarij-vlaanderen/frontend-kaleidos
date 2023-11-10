@@ -57,6 +57,12 @@ export default {
     SUCCESS: 'http://vocab.deri.ie/cogs#Success',
     FAILED: 'http://vocab.deri.ie/cogs#Fail',
   },
+  DECISION_REPORT_JOB_STATUSSES: {
+      SCHEDULED: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/scheduled',
+      ONGOING: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/ongoing',
+      SUCCESS: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/success',
+      FAILURE: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/failure',
+  },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://example.com/step/bdba2bbc-7af6-490b-98a8-433955cfe869',
   },

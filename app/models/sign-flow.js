@@ -12,6 +12,8 @@ export default class SignFlowModel extends Model {
   @belongsTo('case', { inverse: 'signFlows', async: true }) case;
   @belongsTo('decision-activity', { inverse: 'signFlows', async: true })
   decisionActivity;
+  @belongsTo('meeting', { inverse: 'signFlows', async: true })
+  meeting;
   @belongsTo('user', { inverse: null, async: true }) creator;
   @belongsTo('concept', { inverse: null, async: true }) status;
 }

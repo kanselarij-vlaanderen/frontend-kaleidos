@@ -1,6 +1,11 @@
-{{#if (or this.loadSignatureRelatedData.isRunning this.markForSignFlow.isRunning)}}
+{{#if (or
+     this.loadSignatureRelatedData.isRunning
+     this.loadCanManageSignFlow.isRunning
+     this.markForSignFlow.isRunning)
+}}
   <Auk::Loader />
 {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
+  {{! There's an ongoing sign flow and it's further along than being marked }}
   <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
     <SignaturePill
       @piece={{@piece}}
@@ -20,47 +25,37 @@
       </AuButton>
     {{/if}}
   </div>
-{{else if this.agendaitem}}
-  {{#if this.loadCanManageSignFlow.isRunning}}
-    <Auk::Loader />
-  {{else if this.canManageSignFlow}}
-    {{#if this.decisionActivity}}
-      {{#if (not this.agendaitemIsRetracted)}}
-        <AuToggleSwitch
-          @skin="primary"
-          @label={{t "present-for-signing"}}
-          @checked={{this.hasMarkedSignFlow}}
-          @onChange={{fn this.markForSignFlow.perform}}
-          @disabled={{this.markForSignFlow.isRunning}}
-        />
-      {{else}}
-        <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
-          <p>{{t "cannot-sign-because-agendaitem-retracted"}}</p>
-        </AuAlert>
-      {{/if}}
-    {{else}}
-      <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
-        <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
-      </AuAlert>
-    {{/if}}
-  {{else if (and this.signMarkingActivity (not this.hasMarkedSignFlow))}}
-    <SignaturePill
-      @piece={{@piece}}
-      @signMarkingActivity={{this.signMarkingActivity}}
-    />
-  {{else}}
-    <AuAlert
-      @skin="warning"
-      @icon="alert-triangle"
-      @title={{t "cannot-sign"}}
-    >
-      <p>{{t "cannot-create-sign-flow-message"}}</p>
-    </AuAlert>
-  {{/if}}
-{{else}}
+{{! TODO KAS-111 this is not feature flag friendly yet}}
+{{else if (not this.agendaitem this.decisionActivity this.meeting)}}
+  {{! The piece is not linked to an agendaitem/meeting and cannot be signed }}
   <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
     <p>{{t "cannot-sign-message"}}</p>
   </AuAlert>
+{{else if (not this.canManageSignFlow)}}
+  {{! A kabinetsmedewerker is trying to sign someone else's document }}
+  <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+    <p>{{t "cannot-create-sign-flow-message"}}</p>
+  </AuAlert>
+{{else if (and this.agendaitem (not this.decisionActivity))}}
+  {{! The piece is not linked to a decision activty (possibly due to
+      propagation) and cannot be signed }}
+  <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+    <p>{{t "cannot-sign-because-no-decision-activity"}}</p>
+  </AuAlert>
+{{else if (and this.agendaitem this.agendaitemIsRetracted)}}
+  <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>
+    <p>{{t "cannot-sign-because-agendaitem-retracted"}}</p>
+  </AuAlert>
+{{else}}
+  {{! All the necessary data to create a sign flow is available and valid and
+      the current user can create/manage a sign flow for the current piece }}
+  <AuToggleSwitch
+    @skin="primary"
+    @label={{t "present-for-signing"}}
+    @checked={{this.hasMarkedSignFlow}}
+    @onChange={{fn this.markForSignFlow.perform}}
+    @disabled={{this.markForSignFlow.isRunning}}
+  />
 {{/if}}
 
 {{#if this.isOpenVerifyDeleteSignFlow}}

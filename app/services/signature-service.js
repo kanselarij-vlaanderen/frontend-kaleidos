@@ -81,8 +81,20 @@ export default class SignatureService extends Service {
     }
   }
 
-  // return results are currently not used by any caller
-  async markDocumentForSignature(piece, decisionActivity) {
+  /**
+   * Marks a piece for signature by creating a sign flow, sign subcase and sign
+   * marking activity. The sign subcase and sign flow are returned.
+   *
+   * Note: The return values are currently unused by any caller.
+   *
+   * @param {Piece} piece The piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes
+   */
+  async markDocumentForSignature(piece, decisionActivity, meeting) {
     const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
     if (existingSignMarking) {
       // someone else may have made a signflow, returning that one instead
@@ -94,43 +106,42 @@ export default class SignatureService extends Service {
       };
     }
     const subcase = await decisionActivity?.subcase;
-    if (subcase) {
-      const decisionmakingFlow = await subcase.decisionmakingFlow;
-      const _case = await decisionmakingFlow.case;
-      const now = new Date();
-      const status = await this.store.findRecordByUri('concept', MARKED);
+    const decisionmakingFlow = await subcase?.decisionmakingFlow;
+    const _case = await decisionmakingFlow?.case;
+    const now = new Date();
+    const status = await this.store.findRecordByUri('concept', MARKED);
 
-      // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
-      const signFlow = this.store.createRecord('sign-flow', {
-        openingDate: now,
-        shortTitle: _case.shortTitle,
-        longTitle: _case.title,
-        case: _case,
-        decisionActivity,
-        status: status,
-      });
-      await signFlow.save();
-      const signSubcase = this.store.createRecord('sign-subcase', {
+    // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
+    const signFlow = this.store.createRecord('sign-flow', {
+      openingDate: now,
+      shortTitle: _case?.shortTitle,
+      longTitle: _case?.title,
+      case: _case,
+      decisionActivity,
+      meeting,
+      status: status,
+    });
+    await signFlow.save();
+    const signSubcase = this.store.createRecord('sign-subcase', {
+      startDate: now,
+      signFlow: signFlow,
+    });
+    await signSubcase.save();
+    const signMarkingActivity = this.store.createRecord(
+      'sign-marking-activity',
+      {
         startDate: now,
-        signFlow: signFlow,
-      });
-      await signSubcase.save();
-      const signMarkingActivity = this.store.createRecord(
-        'sign-marking-activity',
-        {
-          startDate: now,
-          endDate: now,
-          signSubcase: signSubcase,
-          piece: piece,
-        }
-      );
-      await signMarkingActivity.save();
+        endDate: now,
+        signSubcase: signSubcase,
+        piece: piece,
+      }
+    );
+    await signMarkingActivity.save();
 
-      return {
-        signFlow,
-        signSubcase,
-      };
-    }
+    return {
+      signFlow,
+      signSubcase,
+    };
   }
 
   async canManageSignFlow(piece) {

@@ -201,28 +201,27 @@ export default class AgendasController extends Controller {
 
   async createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting) {
     const now = new Date();
-
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-    );
-
     const startDate = newMeeting.plannedStart;
 
-    // default secretary
-    const decisionSecretary = {};
+    // default decision result when flag is turned off
+    let decisionResultCode = null;
+    if (!this.enableDigitalAgenda) {
+      decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+      );
+    }
+
+    // meeting secretary
+    let secretary;
     if (this.enableDigitalAgenda) {
       const meetingSecretary = await newMeeting.secretary;
-      if (meetingSecretary) {
-        decisionSecretary.secretary = meetingSecretary;
-      } else {
-        decisionSecretary.secretary = await this.mandatees.getCurrentApplicationSecretary();
-      }
+      secretary = this.enableDigitalAgenda ? meetingSecretary : null;
     }
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       decisionResultCode,
-      ...decisionSecretary,
+      secretary,
       // no subcase. Minutes approval aren't part of a (sub)case
     });
     await decisionActivity.save();
