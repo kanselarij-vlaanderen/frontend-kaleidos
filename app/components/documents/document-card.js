@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
@@ -25,7 +26,12 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
-   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
+   *
+   * @argument [agendaitem]: if an agendaitem is linked to the current piece
+   * @argument [decisionActivity]: if a decision-activity is linked to the
+   *   current piece, either via agenda-item-treatment (for regular pieces) or
+   *   directly (for reports)
+   * @argument [meeting]: if a meeting is linked to the current piece
    */
   @service store;
   @service currentSession;
@@ -52,7 +58,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
-  @tracked altLabel;
+  @tracked dateToShowAltLabel;
+  @tracked altDateToShow;
+
 
   constructor() {
     super(...arguments);
@@ -61,28 +69,62 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadFiles.perform();
   }
 
-  get label() {
-    if (isPresent(this.args.label)) {
-      return this.intl.t(this.args.label);
+  get enableDigitalMinutes() {
+    return ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true;
+  }
+
+  get enableDigitalAgenda() {
+    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  get dateToShowLabel() {
+    if (isPresent(this.args.dateToShowLabel)) {
+      return this.intl.t(this.args.dateToShowLabel);
     }
-    if (isPresent(this.altLabel)) {
-      return this.altLabel;
+    if (isPresent(this.dateToShowAltLabel)) {
+      return this.dateToShowAltLabel;
     }
     return this.intl.t('uploaded-at');
+  }
+
+  get dateToShow() {
+    if (isPresent(this.altDateToShow)) {
+      return this.altDateToShow;
+    }
+    return this.args.piece.created;
   }
 
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  // getting complex with the temporary feature flags
+  // agendaitem doc can be marked - has agendaitem and has decisionActivity
+  // decisions can only be marked if flag is active and - has no agendaitem and has decisionActivity
+  // minutes can only be marked if flag is active and - has no agendaitem and has no decisionActivity and has meeting
   get mayCreateSignMarkingActivity() {
-    return !this.signMarkingActivity
-      && this.currentSession.may('manage-signatures')
-      && !!this.args.decisionActivity;
+    return (
+      !this.signMarkingActivity &&
+      this.currentSession.may('manage-signatures') &&
+      (
+        (this.args.agendaitem && this.args.decisionActivity) ||
+        (this.enableDigitalAgenda && !this.args.agendaitem && this.args.decisionActivity) ||
+        (this.enableDigitalMinutes && !this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
+      )
+    );
   }
 
-  get agendaitemIsRetracted() {
-    return this.args.decisionActivity?.get('isRetracted');
+  get markingForSigningIsDisabled() {
+    if (this.args.agendaitem) {
+      return this.args.decisionActivity?.get('isRetracted');
+    } else if (this.args.decisionActivity) {
+      return false;
+    } else if (this.args.meeting) {
+      return false;
+    } else {
+      // Not a handled case, disable the button
+      return true;
+    }
   }
 
   get mayShowEditDropdown() {
@@ -134,10 +176,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     const loadReportPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[report][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
+        sort: '-created', // finds the most recently changed one regardless of type
       });
     const loadMinutesPiecePart = (id) =>
       this.store.queryOne('piece-part', {
         'filter[minutes][:id:]': id,
+        'filter[:has-no:next-piece-part]': true,
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
@@ -146,14 +191,20 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       // check for alternative label
       const modelName = this.args.piece.constructor.modelName;
-      if (!isPresent(this.args.label)) {
+      if (!isPresent(this.args.dateToShowLabel)) {
         let piecePart;
         if (modelName === 'report') {
           piecePart = yield loadReportPiecePart(this.piece.id);
         } else if (modelName === 'minutes') {
           piecePart = yield loadMinutesPiecePart(this.piece.id);
         }
-        this.altLabel = piecePart ? this.intl.t('created-on') : null;
+        const previousPart = yield piecePart?.previousPiecePart;
+        if (previousPart) {
+          this.dateToShowAltLabel = this.intl.t('edited-on');
+          this.altDateToShow = piecePart.created;
+        } else {
+          this.dateToShowAltLabel = this.intl.t('created-on');
+        }
       }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
@@ -364,7 +415,11 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *markDocumentForSigning() {
-    yield this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    yield this.signatureService.markDocumentForSignature(
+      this.piece,
+      this.args.decisionActivity,
+      this.args.meeting,
+    );
     yield this.loadPieceRelatedData.perform();
   }
 

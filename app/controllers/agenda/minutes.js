@@ -6,14 +6,20 @@ import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-import { deleteFile } from 'frontend-kaleidos/utils/document-delete-helpers';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { addWeeks } from 'date-fns';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
+  let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
-    <table>
+    <table id="attendees">
       <tbody>
         <tr>
           <td>De minister-president</td>
@@ -28,42 +34,94 @@ function renderAttendees(attendees) {
           <td>${ministers.join('<br/>')}</td>
         </tr>
         <tr>
-          <td>De secretaris</td>
-          <td>${secretary}</td>
+          <td>De <span id="secretary-title">${secretaryTitle}</span></td>
+          <td><span id="secretary">${mandateeName(secretary)}</span></td>
         </tr>
       </tbody>
     </table>
   `;
 }
 
-function renderNotas(notas) {
-  return renderAgendaitemList(notas);
+async function renderNotas(meeting, notas, intl, store) {
+  return await renderAgendaitemList(meeting, notas, intl, store);
 }
 
-function renderAnnouncements(announcements) {
+async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${renderAgendaitemList(announcements)}
+    ${await renderAgendaitemList(meeting, announcements, intl, store)}
   `;
 }
 
-function renderAgendaitemList(agendaitems) {
-  return agendaitems
-    .map(
-      (agendaitem) => `
-        <h4><u>${
-          agendaitem.number
-        }. ${agendaitem.shortTitle.toUpperCase()}</u></h4>
-        ${agendaitem.title ? `<p>${agendaitem.title}</p>` : ''}
-      `
-    )
-    .join('');
+async function renderAgendaitemList(meeting, agendaitems, intl, store) {
+  let agendaitemList = "";
+  for (const agendaitem of agendaitems) {
+    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl, store);
+  }
+  return agendaitemList;
+}
+async function getMinutesListItem(meeting, agendaitem, intl, store) {
+  const treatment = await agendaitem.treatment;
+  const decisionActivity = await treatment?.decisionActivity;
+  const decisionResultCode = await decisionActivity?.decisionResultCode;
+  let mededelingOrNota = "";
+  if (agendaitem.type?.get('uri') === constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+    mededelingOrNota = "deze mededeling";
+  } else {
+    mededelingOrNota = "dit punt";
+  }
+  let text = "";
+  switch (decisionResultCode?.uri) {
+    case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
+      text = intl.t("minutes-approval", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
+        reportName: await generateReportName(agendaitem, meeting),
+      })
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+      text = intl.t("minutes-retracted", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+      })
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
+      text = intl.t("minutes-acknowledged", {
+        mededelingOrNota: mededelingOrNota
+      })
+      break;
+    case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
+      text = intl.t("minutes-postponed", {
+        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+      })
+      break;
+    default:
+      break;
+  }
+  let pieces = await store.query('piece', {
+    'filter[agendaitems][:id:]': agendaitem.id,
+    'filter[:has-no:next-piece]': true,
+  });
+  let sortedPieces;
+  if (agendaitem.isApproval) {
+    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+  } else {
+    sortedPieces = sortPieces(pieces);
+  }
+  const agendaActivity = await agendaitem.agendaActivity;
+  const subcase = await agendaActivity?.subcase;
+  return `
+  <h4><u>${
+    agendaitem.number
+  }. ${generateBetreft(agendaitem.shortTitle, agendaitem.title, agendaitem.isApproval, sortedPieces, subcase?.subcaseName).toUpperCase()}</u></h4>
+  <p>${text}</p>`
+}
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function renderAbsentees() {
   return `
     <p><u>AFWEZIG MET KENNISGEVING</u></p>
-    <table>
+    <table id="absentees">
       <tbody>
         <tr>
           <td></td>
@@ -74,35 +132,69 @@ function renderAbsentees() {
   `;
 }
 
-function renderMinutes(data) {
-  const { attendees, notas, announcements } = data;
-  return `
-    ${renderAttendees(attendees)}
-    ${renderAbsentees()}
-    ${notas ? renderNotas(notas) : ''}
-    ${announcements ? renderAnnouncements(announcements) : ''}
-  `;
+function renderNextMeeting(meeting, intl) {
+  const currentPlannedStart = meeting.plannedStart;
+  const nextPlannedStart = addWeeks(currentPlannedStart, 1);
+  const date = dateFormat(nextPlannedStart, 'EEEE d MMMM yyyy');
+  const time = dateFormat(nextPlannedStart, 'HH:mm');
+  return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
+}
+
+async function renderMinutes(data, intl, store) {
+  const { meeting, attendees, notas, announcements, editorContent } = data;
+
+  let newMinutesContent = `${renderAttendees(attendees)}
+${renderAbsentees()}
+${notas ? await renderNotas(meeting, notas, intl, store) : ''}
+${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
+${renderNextMeeting(meeting, intl)}`;
+
+  if (editorContent) {
+    const contentElement = document.createElement('template');
+    contentElement.innerHTML = editorContent;
+
+    const newContentElement = document.createElement('template');
+    newContentElement.innerHTML = newMinutesContent;
+
+    const attendeesText = contentElement.content.querySelector('#attendees')?.innerHTML;
+    if (attendeesText) {
+      newContentElement.content.querySelector('#attendees').innerHTML = attendeesText;
+    }
+
+    const absenteesText = contentElement.content.querySelector('#absentees')?.innerHTML;
+    if (absenteesText) {
+      newContentElement.content.querySelector('#absentees').innerHTML = absenteesText;
+    }
+
+    const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
+    if (nextMeetingText) {
+      newContentElement.content.querySelector('#next-meeting').innerHTML = nextMeetingText;
+    }
+
+    newMinutesContent = newContentElement.innerHTML;
+  }
+  return newMinutesContent;
 }
 
 function mandateeName(mandatee) {
-  return mandatee ? `${mandatee.person.get('firstName')} ${mandatee.person.get(
-    'lastName'
-  )}` : '';
+  return mandatee ? mandatee.person.get('fullName') : '';
 }
 
 export default class AgendaMinutesController extends Controller {
   @service store;
-  @service toaster;
   @service router;
   @service intl;
   @service pieceAccessLevelService;
+  @service decisionReportGeneration;
+  @service currentSession;
 
-  // agenda;
   meeting;
-  // defaultAccessLevel;
+  @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
-
+  @tracked isUpdatingMinutesContent = false;
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
 
   loadCurrentPiecePart = task(async () => {
@@ -116,16 +208,7 @@ export default class AgendaMinutesController extends Controller {
     });
   });
 
-  currentPiecePart = trackedTask(this, this.loadCurrentPiecePart);
-
-  exportPdf = task(async (minutes) => {
-    const resp = await fetch(`/generate-minutes-report/${minutes.id}`);
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-exporting-pdf'));
-      return;
-    }
-    return await resp.json();
-  });
+  currentPiecePartTask = trackedTask(this, this.loadCurrentPiecePart);
 
   saveMinutes = task(async () => {
     let minutes = null;
@@ -143,14 +226,17 @@ export default class AgendaMinutesController extends Controller {
 
       const defaultAccessLevel = await this.store.findRecordByUri(
         'concept',
-        constants.ACCESS_LEVELS.INTERN_OVERHEID
+        constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
+      // *note: any changes made here should also be made in the minutes-report-generation service
+      const name = `Notulen - P${dateFormat(
+        this.meeting.plannedStart,
+        'yyyy-MM-dd'
+      )}`;
+
       minutes = this.store.createRecord('minutes', {
-        name: `Notulen - P${dateFormat(
-          this.meeting.plannedStart,
-          'yyyy-MM-dd'
-        )}`,
+        name,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
@@ -160,35 +246,26 @@ export default class AgendaMinutesController extends Controller {
     } else {
       minutes = this.model.minutes;
     }
+    await minutes.save();
+
     const piecePart = this.store.createRecord('piece-part', {
-      value: this.editor.htmlContent,
+      htmlContent: this.editor.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePartTask?.value,
       minutes,
     });
 
-    await minutes.save();
     await piecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(minutes);
-    if (fileMeta) {
-      await this.replaceMinutesFile(minutes, fileMeta.id);
-    }
+    this.decisionReportGeneration.generateReplacementMinutes.perform(
+      minutes,
+    );
 
-    await minutes.save();
     await this.meeting.belongsTo('minutes').reload();
 
     this.isEditing = false;
     this.refresh();
   });
-
-  async replaceMinutesFile(minutes, fileId) {
-    await deleteFile(minutes.file);
-    const file = await this.store.findRecord('file', fileId);
-    minutes.file = file;
-    minutes.modified = new Date();
-    await minutes.save();
-  }
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
@@ -207,25 +284,24 @@ export default class AgendaMinutesController extends Controller {
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel
+      accessLevel: minutes.accessLevel,
     });
 
+    await newVersion.save();
+
     const newPiecePart = this.store.createRecord('piece-part', {
-      value: this.currentPiecePart.value.value,
+      htmlContent: this.currentPiecePartTask.value.htmlContent,
       created: new Date(),
-      previousPiecePart: this.currentPiecePart.value,
+      previousPiecePart: this.currentPiecePartTask.value,
       minutes: newVersion,
     });
 
-    await newVersion.save();
     await newPiecePart.save();
 
-    const fileMeta = await this.exportPdf.perform(newVersion);
-    if (fileMeta) {
-      await this.replaceMinutesFile(newVersion, fileMeta.id);
-    }
+    await this.decisionReportGeneration.generateReplacementMinutes.perform(
+      newVersion,
+    );
 
-    await newVersion.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 
@@ -237,27 +313,33 @@ export default class AgendaMinutesController extends Controller {
     if (!this.editor) {
       return;
     }
-
+    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
-      renderMinutes(await this.reshapeModelForRender())
+      await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
+    this.isUpdatingMinutesContent = false;
   }
 
   @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
-    if (this.currentPiecePart.value) {
-      this.editor.setHtmlContent(this.currentPiecePart.value.value);
+    if (this.currentPiecePartTask?.value) {
+      this.editor.setHtmlContent(this.currentPiecePartTask.value.htmlContent);
     }
   }
 
   @action
   revertToVersion(record) {
-    this.editor.setHtmlContent(record.value);
+    this.editor.setHtmlContent(record.htmlContent);
+  }
+
+  @action
+  async didDeleteMinutes() {
+    this.refresh();
   }
 
   get saveDisabled() {
-    if (this.currentPiecePart?.value?.value === this.editor?.htmlContent) {
+    if (this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent) {
       return true;
     }
 
@@ -275,7 +357,6 @@ export default class AgendaMinutesController extends Controller {
   refresh() {
     this.router.refresh('agenda.minutes');
   }
-
 
   async getAttendees() {
     const attending = new Set();
@@ -306,12 +387,8 @@ export default class AgendaMinutesController extends Controller {
       .map(mandateeName)
       .filter((x) => !attending.has(x));
 
-    const secretary = mandateeName(
-      await this.store.queryOne('mandatee', {
-        'filter[secretary-for-agendas][:id:]': this.meeting.id,
-        include: 'person',
-      })
-    ) ?? '';
+    const secretary = await this.meeting.secretary;
+    await secretary?.person;
 
     return {
       primeMinister,
@@ -321,11 +398,19 @@ export default class AgendaMinutesController extends Controller {
     };
   }
 
+  get mayEditMinutes() {
+    return !this.isLoading &&
+      this.currentSession.may('manage-minutes') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
+  }
+
   async reshapeModelForRender() {
     return {
+      meeting: this.model.meeting,
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
+      editorContent: this.editor.htmlContent,
     };
   }
 }

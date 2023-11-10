@@ -4,27 +4,17 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrNotulenName, {
+  compareFunction as compareNotulen,
+} from 'frontend-kaleidos/utils/vr-notulen-name';
+import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
-  return piecePartRecord.value !== piecePartEditor.htmlContent;
-}
-
-function formatDocuments(pieceRecords, isApproval) {
-  const names = pieceRecords.map((record) => record.name);
-  const simplifiedNames = names.map((name) => {
-    if (isApproval) {
-      return new VrNotulenName(name).vrNumberWithSuffix();
-    }
-    return new VRDocumentName(name).vrNumberWithSuffix();
-  });
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
+  return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
 }
 
 /**
@@ -41,19 +31,26 @@ export default class AgendaitemDecisionComponent extends Component {
   @service toaster;
   @service decisionReportGeneration;
   @service throttledLoadingService;
+  @service currentSession;
 
   @tracked report;
   @tracked previousReport;
+  @tracked annotatiePiecePart;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
   @tracked nota;
 
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
+
+  @tracked isEditingAnnotation = false;
   @tracked isEditingConcern = false;
   @tracked isEditingTreatment = false;
   @tracked isEditing = false;
   @tracked isEditingPill = false;
   @tracked isAddingReport = false;
 
+  @tracked editorValueAnnotatie = null;
   @tracked editorInstanceBeslissing = null;
   @tracked editorInstanceBetreft = null;
   @tracked decisionViewerElement = null;
@@ -90,7 +87,10 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = await this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'filter[:has-no:next-piece]': true,
+    });
     pieces = pieces.toArray();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
@@ -108,26 +108,43 @@ export default class AgendaitemDecisionComponent extends Component {
 
   onCreateNewVersion = task(async () => {
     const report = await this.attachNewReportVersion(this.report);
-    const { betreftPiecePart, beslissingPiecePart } =
+    const { betreftPiecePart, beslissingPiecePart, annotatiePiecePart } =
       this.createAndAttachPieceParts(
         report,
-        this.betreftPiecePart.value,
-        this.beslissingPiecePart.value
+        this.betreftPiecePart.htmlContent,
+        this.beslissingPiecePart.htmlContent,
+        this.annotatiePiecePart.htmlContent
       );
 
-    await this.saveReport(
+    await this.saveReport.perform(
       await report.documentContainer,
       report,
       betreftPiecePart,
-      beslissingPiecePart
+      beslissingPiecePart,
+      annotatiePiecePart
     );
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
     await this.loadReport.perform();
   });
 
   get pieceParts() {
-    return !!this.betreftPiecePart || !!this.beslissingPiecePart;
+    return !!this.betreftPiecePart
+        || !!this.beslissingPiecePart
+        || !!this.annotatiePiecePart;
   }
+
+  loadAnnotatiePiecePart = task(async () => {
+    this.annotatiePiecePart = await this.store.queryOne('piece-part', {
+      filter: {
+        report: { ':id:': this.report.id },
+        ':has-no:next-piece-part': true,
+        title: 'Annotatie',
+      },
+    });
+    if (this.annotatiePiecePart) {
+      this.editorValueAnnotatie = this.annotatiePiecePart.htmlContent;
+    }
+  });
 
   loadBetreftPiecePart = task(async () => {
     this.betreftPiecePart = await this.store.queryOne('piece-part', {
@@ -152,18 +169,62 @@ export default class AgendaitemDecisionComponent extends Component {
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
+      await this.loadAnnotatiePiecePart.perform();
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
+      this.loadSignatureRelatedData.perform();
     } else {
+      this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
       this.beslissingPiecePart = null;
+    }
+  });
+
+  loadSignatureRelatedData = task(async () => {
+    if (this.report) {
+      this.hasSignFlow = await this.signatureService.hasSignFlow(this.report);
+      this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.report);
     }
   });
 
   onDecisionEdit = task(async () => {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
+    await this.updateDecisionPiecePart.perform();
+  });
+
+  updateDecisionPiecePart = task(async () => {
+    if (!this.report || !this.beslissingPiecePart) {
+      return;
+    }
+    let newBeslissingHtmlContent = this.beslissingPiecePart.htmlContent;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    switch (decisionResultCode?.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        break;
+    }
+    if (newBeslissingHtmlContent !== this.beslissingPiecePart.htmlContent) {
+      const now = new Date();
+      const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
+        title: 'Beslissing',
+        htmlContent: newBeslissingHtmlContent,
+        report: this.report,
+        previousPiecePart: this.beslissingPiecePart,
+        created: now,
+      });
+      await newBeslissingPiecePart.save();
+      await this.decisionReportGeneration.generateReplacementReport.perform(
+        this.report
+      );
+    }
+    this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -173,7 +234,7 @@ export default class AgendaitemDecisionComponent extends Component {
       [
         CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCode.uri)
+      ].includes(decisionResultCode?.uri)
     ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
@@ -201,6 +262,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   async didDeleteReport() {
     await this.loadReport.perform();
+    this.editorValueAnnotatie = '';
     this.setBetreftEditorContent('');
     this.setBeslissingEditorContent('');
   }
@@ -275,7 +337,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   handleRdfaEditorInitBetreft(editorInterface) {
     if (this.betreftPiecePart) {
-      editorInterface.setHtmlContent(this.betreftPiecePart.value);
+      editorInterface.setHtmlContent(this.betreftPiecePart.htmlContent);
 
       // Weird rerendering behaviour, see: https://chat.semte.ch/channel/say-editor?msg=q9gF5BfAHFWiyGv84
     } else if (this.editorInstanceBetreft) {
@@ -287,32 +349,29 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBetreftVersion(betreftPiecePart) {
-    this.setBetreftEditorContent(betreftPiecePart.value);
+    this.setBetreftEditorContent(betreftPiecePart.htmlContent);
   }
 
   @action
   setBetreftEditorContent(content) {
-    this.editorInstanceBetreft.setHtmlContent(content);
+    this.editorInstanceBetreft?.setHtmlContent(content);
   }
 
   @action
-  updateBetreftContent() {
-    // *NOTE: approval decisions have a totally different text block.
-    // possible future work, for now we make sure the documents names are correct
+  async updateBetreftContent() {
     const { shortTitle, title } = this.args.agendaContext.agendaitem;
-    const isApproval = this.args.agendaitem.isApproval;
     const documents = this.pieces;
-    this.setBetreftEditorContent(
-      `<p>${shortTitle}${title ? `<br/>${title}` : ''}${
-        documents ? `<br/>${formatDocuments(documents, isApproval)}` : ''
-      }</p>`
-    );
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+      this.setBetreftEditorContent(
+        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
+      );
   }
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
     if (this.beslissingPiecePart) {
-      editorInterface.setHtmlContent(this.beslissingPiecePart.value);
+      editorInterface.setHtmlContent(this.beslissingPiecePart.htmlContent);
     } else if (this.editorInstanceBeslissing) {
       editorInterface.setHtmlContent(this.editorInstanceBeslissing.htmlContent);
     }
@@ -322,18 +381,55 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @action
   onRevertBeslissingVersion(beslissingPiecePart) {
-    this.setBeslissingEditorContent(beslissingPiecePart.value);
+    this.setBeslissingEditorContent(beslissingPiecePart.htmlContent);
   }
 
   @action
   setBeslissingEditorContent(content) {
-    this.editorInstanceBeslissing.setHtmlContent(content);
+    this.editorInstanceBeslissing?.setHtmlContent(content);
   }
 
   @action
   async updateBeslissingContent() {
-    this.setBeslissingEditorContent(`<p>${this.nota}</p>`);
+    let newBeslissingHtmlContent;
+    const decisionResultCode = await this.args.decisionActivity
+      .decisionResultCode;
+    switch (decisionResultCode?.uri) {
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
+        break;
+      case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
+        break;
+      default:
+        if (this.args.agendaitem.isApproval) {
+          const { shortTitle, title } = this.args.agendaContext.agendaitem;
+          let beslissing = title || shortTitle || '';
+          beslissing = beslissing.replace(
+            /Goedkeuring van/i,
+            'goedkeuring aan'
+          );
+          newBeslissingHtmlContent = `De Vlaamse Regering hecht haar ${beslissing}`;
+          // newBeslissingHtmlContent += beslissing;
+        } else {
+          newBeslissingHtmlContent = this.nota || '';
+        }
+        break;
+    }
+    this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
   }
+
+  onUpdateAnnotation = task(async () => {
+    const report = this.report;
+    const documentContainer = await this.report.documentContainer;
+    const annotatiePiecePart = this.attachNewAnnotatiePiecePartsVersion(
+      report,
+      this.annotatiePiecePart
+    );
+    await this.saveReport.perform(documentContainer, report, null, annotatiePiecePart);
+    await this.loadAnnotatiePiecePart.perform();
+    this.isEditingAnnotation = false;
+  });
 
   onUpdateConcern = task(async () => {
     const report = this.report;
@@ -343,7 +439,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.betreftPiecePart
     );
 
-    await this.saveReport(documentContainer, report, null, betreftPiecePart);
+    await this.saveReport.perform(documentContainer, report, null, betreftPiecePart);
     await this.loadBetreftPiecePart.perform();
     this.isEditingConcern = false;
   });
@@ -356,7 +452,7 @@ export default class AgendaitemDecisionComponent extends Component {
       this.beslissingPiecePart
     );
 
-    await this.saveReport(documentContainer, report, beslissingPiecePart, null);
+    await this.saveReport.perform(documentContainer, report, beslissingPiecePart, null);
     await this.loadBeslissingPiecePart.perform();
     this.isEditingTreatment = false;
   });
@@ -364,21 +460,27 @@ export default class AgendaitemDecisionComponent extends Component {
   onSaveReport = task(async () => {
     let report;
     let documentContainer;
+    let annotatiePiecePart;
     let betreftPiecePart;
     let beslissingPiecePart;
 
     if (!this.report) {
       documentContainer = this.createNewDocumentContainer();
       report = await this.createNewReport(documentContainer);
-      ({ betreftPiecePart, beslissingPiecePart } =
+      ({ betreftPiecePart, beslissingPiecePart, annotatiePiecePart } =
         this.createAndAttachPieceParts(
           report,
           this.editorInstanceBetreft.htmlContent,
-          this.editorInstanceBeslissing.htmlContent
+          this.editorInstanceBeslissing.htmlContent,
+          this.editorValueAnnotatie
         ));
     } else {
       documentContainer = await this.report.documentContainer;
       report = this.report;
+      annotatiePiecePart = this.attachNewAnnotatiePiecePartsVersion(
+        report,
+        this.annotatiePiecePart
+      )
       betreftPiecePart = this.attachNewBetreftPiecePartsVersion(
         report,
         this.betreftPiecePart
@@ -389,24 +491,41 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
 
-    await this.saveReport(
+    await this.saveReport.perform(
       documentContainer,
       report,
       beslissingPiecePart,
-      betreftPiecePart
+      betreftPiecePart,
+      annotatiePiecePart
     );
     await this.loadReport.perform();
     this.isEditing = false;
   });
 
-  async saveReport(
+  saveReport = task(async (
     documentContainer,
     report,
     beslissingPiecePart,
-    betreftPiecePart
-  ) {
+    betreftPiecePart,
+    annotatiePiecePart
+  ) => {
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if (!decisionResultCode?.uri) {
+      const agendaitemType = await this.args.agendaitem.type;
+      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      const decisionresultCodeUri = isNota
+        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      const decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        decisionresultCodeUri
+      );
+      this.args.decisionActivity.decisionResultCode = decisionResultCode;
+    }
+
     await documentContainer.save();
     await report.save();
+    await annotatiePiecePart?.save();
     await betreftPiecePart?.save();
     await beslissingPiecePart?.save();
 
@@ -418,7 +537,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.decisionReportGeneration.generateReplacementReport.perform(
       report
     );
-  }
+  });
 
   createNewDocumentContainer() {
     const documentContainer = this.store.createRecord('document-container', {
@@ -434,12 +553,10 @@ export default class AgendaitemDecisionComponent extends Component {
     const report = this.store.createRecord('report', {
       created: now,
       modified: now,
-      name: `${
-        this.args.agendaContext.meeting.numberRepresentation
-      } - punt ${addLeadingZeros(
-        this.args.agendaContext.agendaitem.number,
-        4
-      )}`,
+      name: await generateReportName(
+        this.args.agendaContext.agendaitem,
+        this.args.agendaContext.meeting,
+      ),
     });
 
     const subcase = await this.args.decisionActivity.subcase;
@@ -482,26 +599,51 @@ export default class AgendaitemDecisionComponent extends Component {
     return report;
   }
 
-  createAndAttachPieceParts(report, betreftContent, beslissingContent) {
+  createAndAttachPieceParts(report, betreftContent, beslissingContent, annotatieContent) {
     const now = new Date();
+    const annotatiePiecePart = this.store.createRecord('piece-part', {
+      title: 'Annotatie',
+      htmlContent: annotatieContent,
+      report: report,
+      created: now,
+    });
+
     const betreftPiecePart = this.store.createRecord('piece-part', {
       title: 'Betreft',
-      value: betreftContent,
+      htmlContent: betreftContent,
       report: report,
       created: now,
     });
 
     const beslissingPiecePart = this.store.createRecord('piece-part', {
       title: 'Beslissing',
-      value: beslissingContent,
+      htmlContent: beslissingContent,
       report: report,
       created: now,
     });
 
     return {
+      annotatiePiecePart,
       betreftPiecePart,
       beslissingPiecePart,
     };
+  }
+
+  attachNewAnnotatiePiecePartsVersion(report, previousAnnotatiePiecePart) {
+    const now = new Date();
+    let annotatiePiecePart = null;
+    if (
+      previousAnnotatiePiecePart?.htmlContent !== this.editorValueAnnotatie
+    ) {
+      annotatiePiecePart = this.store.createRecord('piece-part', {
+        title: 'Annotatie',
+        htmlContent: this.editorValueAnnotatie,
+        report: report,
+        previousPiecePart: previousAnnotatiePiecePart,
+        created: now,
+      });
+    }
+    return annotatiePiecePart;
   }
 
   attachNewBetreftPiecePartsVersion(report, previousBetreftPiecePart) {
@@ -512,7 +654,7 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       betreftPiecePart = this.store.createRecord('piece-part', {
         title: 'Betreft',
-        value: this.editorInstanceBetreft.htmlContent,
+        htmlContent: this.editorInstanceBetreft.htmlContent,
         report: report,
         previousPiecePart: previousBetreftPiecePart,
         created: now,
@@ -532,13 +674,32 @@ export default class AgendaitemDecisionComponent extends Component {
     ) {
       beslissingPiecePart = this.store.createRecord('piece-part', {
         title: 'Beslissing',
-        value: this.editorInstanceBeslissing.htmlContent,
+        htmlContent: this.editorInstanceBeslissing.htmlContent,
         report: report,
         previousPiecePart: previousBeslissingPiecePart,
         created: now,
       });
     }
     return beslissingPiecePart;
+  }
+
+  get disableSaveAnnotationButton() {
+    if (this.loadReport.isRunning) {
+      return true;
+    }
+
+    if (!this.editorValueAnnotatie && this.editorValueAnnotatie !== '') {
+      return true;
+    }
+
+    // If there is no change to the part, disable
+    if (
+      this.annotatiePiecePart?.htmlContent === this.editorValueAnnotatie
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   get disableSaveConcernButton() {
@@ -559,7 +720,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.betreftPiecePart?.value === this.editorInstanceBetreft.htmlContent
+      this.betreftPiecePart?.htmlContent === this.editorInstanceBetreft.htmlContent
     ) {
       return true;
     }
@@ -585,7 +746,7 @@ export default class AgendaitemDecisionComponent extends Component {
 
     // If there is no change to the part, disable
     if (
-      this.beslissingPiecePart?.value ===
+      this.beslissingPiecePart?.htmlContent ===
       this.editorInstanceBeslissing.htmlContent
     ) {
       return true;
@@ -595,7 +756,9 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get disableSaveButton() {
-    if (this.disableSaveConcernButton || this.disableSaveTreatmentButton) {
+    if (this.disableSaveConcernButton
+      || this.disableSaveTreatmentButton
+      || this.disableSaveAnnotationButton) {
       return true;
     }
     return false;
@@ -606,6 +769,17 @@ export default class AgendaitemDecisionComponent extends Component {
       ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
       ENV.APP.ENABLE_DIGITAL_AGENDA === true
     );
+  }
+
+  get mayEditDecisionReport() {
+    return this.enableDigitalAgenda &&
+      this.currentSession.may('manage-decisions') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
+  }
+
+  @action
+  startEditingAnnotation() {
+    this.isEditingAnnotation = true;
   }
 
   @action
@@ -626,6 +800,7 @@ export default class AgendaitemDecisionComponent extends Component {
   startEditing() {
     this.loadDocuments.perform();
     this.loadNota.perform();
+    this.editorValueAnnotatie = '';
     this.isEditing = true;
   }
 }

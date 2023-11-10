@@ -175,10 +175,6 @@ export default class AgendaitemSearchRoute extends Route {
 
     this.lastParams.commit();
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
     const results = await search(
       'agendaitems',
       params.page,
