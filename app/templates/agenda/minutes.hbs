@@ -12,13 +12,14 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              {{#if (user-may "manage-minutes")}}
+              {{#if this.mayEditMinutes}}
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
+                      @disabled={{this.currentPiecePartTask.isRunning}}
                       {{on "click" (fn (set this "isEditing" true))}}
                     >
                       {{t (if @model.minutes "edit" "create")}}
@@ -94,11 +95,11 @@
                 @hideNewerVersions={{true}}
                 @hideEdit={{true}}
                 @hideUpload={{true}}
-                @hideSign={{true}}
                 @showCreateNewVersion={{true}}
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
                 @didDeleteContainer={{this.didDeleteMinutes}}
+                @meeting={{this.meeting}}
               />
             {{else if (user-may "manage-minutes")}}
               <AuAlert
@@ -135,3 +136,15 @@
     </div>
   </div>
 </div>
+
+{{#if this.isUpdatingMinutesContent}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "loading-minutes"}}
+      @closeable={{false}}
+    />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "loading-minutes"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

@@ -7,10 +7,20 @@ function formatDocuments(pieceRecords, isApproval) {
   const vrNumbersFound = [];
   for (const pieceName of names) {
     if (isApproval) {
-      simplifiedNames.push(new VrNotulenName(pieceName).vrNumberWithSuffix());
+      try {
+        simplifiedNames.push(new VrNotulenName(pieceName).vrNumberWithSuffix());
+      } catch {
+        simplifiedNames.push(pieceName);
+      }
       continue;
     }
-    const vrModel = new VRDocumentName(pieceName);
+    let vrModel;
+    try {
+      vrModel = new VRDocumentName(pieceName);
+    } catch {
+      simplifiedNames.push(pieceName);
+      continue;
+    }
     const vrDateOnly = vrModel.vrDateOnly();
     // if the first part of the VR number is the same we don't repeat it
     if (!vrNumbersFound.includes(vrDateOnly)) {
@@ -24,7 +34,6 @@ function formatDocuments(pieceRecords, isApproval) {
   return `(${formatter.format(simplifiedNames)})`;
 }
 
-// TODO approval betreft should look completely different than agendaitem/announcement
 function generateBetreft(
   shortTitle,
   title = null,
@@ -33,20 +42,13 @@ function generateBetreft(
   subcaseName = null
 ) {
   let betreft = '';
-  if (isApproval) {
-    betreft += 'De Vlaamse Regering hecht haar ';
-    let betreftTitle = title || shortTitle || '';
-    betreftTitle = betreftTitle.replace(/Goedkeuring van/i, 'goedkeuring aan');
-    betreft += betreftTitle;
-  } else {
-    betreft += `${shortTitle}`;
-    betreft += title ? `<br/>${title}` : '';
-    betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
-  }
+  betreft += `${shortTitle}`;
+  betreft += title ? `<br/>${title}` : '';
+  betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
   betreft +=
-  documents && documents.length
-  ? `<br/>${formatDocuments(documents, isApproval)}`
-  : '';
+    documents && documents.length
+      ? `<br/>${formatDocuments(documents, isApproval)}`
+      : '';
   return betreft;
 }
 

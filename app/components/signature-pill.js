@@ -57,8 +57,8 @@ export default class SignaturePillComponent extends Component {
     let route = null;
     if (status) {
       if (status.uri === MARKED) {
-        const piece = await this.args.piece;
-        route = piece?.isReportOrMinutes
+        const meeting = await signFlow.meeting;
+        route = meeting
           ? 'signatures.decisions'
           : 'signatures.index';
       }

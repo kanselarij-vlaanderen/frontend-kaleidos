@@ -49,12 +49,12 @@
         <Documents::DocumentCard
           @piece={{this.report}}
           @decisionActivity={{@decisionActivity}}
+          @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
-          @hideSign={{true}}
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
@@ -137,7 +137,7 @@
               @icon="renew"
               class="au-u-padding-left-none"
               @loading={{this.loadNota.isRunning}}
-              @disabled={{not this.nota}}
+              @disabled={{not (or this.nota @agendaitem.isApproval)}}
               {{on "click" this.updateBeslissingContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -185,6 +185,7 @@
           <Documents::DocumentCard
             @piece={{this.report}}
             @decisionActivity={{@decisionActivity}}
+            @meeting={{@agendaContent.meeting}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
@@ -216,7 +217,7 @@
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
           <AuContent @size="small">
-        {{#if (and this.isEditingAnnotation this.enableDigitalAgenda)}}
+        {{#if (and this.isEditingAnnotation this.mayEditDecisionReport)}}
            <h4 class="auk-h4">{{t "annotation"}}</h4>
            <AuInput
              @width="block"
@@ -261,7 +262,7 @@
                      (user-may "manage-decisions")
                      (not this.isEditingAnnotation)
                      (or this.pieceParts (not this.report))
-                     this.enableDigitalAgenda
+                     this.mayEditDecisionReport
                    )
                  }}
                    <Group.Item>
@@ -283,7 +284,7 @@
            @value={{this.annotatiePiecePart.htmlContent}}
          />
         {{/if}}
-        {{#if (and this.isEditingConcern this.enableDigitalAgenda)}}
+        {{#if (and this.isEditingConcern this.mayEditDecisionReport)}}
            <h4 class="auk-h4">{{t "concerns"}}</h4>
         <SayEditor
           @size="small"
@@ -345,7 +346,7 @@
                         (user-may "manage-decisions")
                         (not this.isEditingConcern)
                         (or this.pieceParts (not this.report))
-                        this.enableDigitalAgenda
+                        this.mayEditDecisionReport
                       )
                     }}
                       <Group.Item>
@@ -368,7 +369,7 @@
               @value={{this.betreftPiecePart.htmlContent}}
             />
             {{/if}}
-             {{#if (and this.isEditingTreatment this.enableDigitalAgenda)}}
+             {{#if (and this.isEditingTreatment this.mayEditDecisionReport)}}
               <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
               <SayEditor
                 @allowFullscreen={{true}}
@@ -381,7 +382,7 @@
                     @icon="renew"
                     class="au-u-padding-left-none"
                     @loading={{this.loadNota.isRunning}}
-                    @disabled={{not this.nota}}
+                    @disabled={{not (or this.nota @agendaitem.isApproval)}}
                     {{on "click" this.updateBeslissingContent}}
                   >{{t "update-thing" thing=(t "content")}}</AuButton>
                   <VersionsDropdown
@@ -430,7 +431,7 @@
                         (user-may "manage-decisions")
                         (not this.isEditingTreatment)
                         (or this.pieceParts (not this.report))
-                        this.enableDigitalAgenda
+                        this.mayEditDecisionReport
                       )
                     }}
                       <Group.Item>

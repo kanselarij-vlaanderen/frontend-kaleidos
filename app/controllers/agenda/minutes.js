@@ -12,13 +12,14 @@ import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { addWeeks } from 'date-fns';
 
 function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
   let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
     <p><u>AANWEZIG</u></p>
-    <table>
+    <table id="attendees">
       <tbody>
         <tr>
           <td>De minister-president</td>
@@ -34,32 +35,32 @@ function renderAttendees(attendees) {
         </tr>
         <tr>
           <td>De <span id="secretary-title">${secretaryTitle}</span></td>
-          <td id="secretary">${mandateeName(secretary)}</td>
+          <td><span id="secretary">${mandateeName(secretary)}</span></td>
         </tr>
       </tbody>
     </table>
   `;
 }
 
-async function renderNotas(meeting, notas, intl) {
-  return await renderAgendaitemList(meeting, notas, intl);
+async function renderNotas(meeting, notas, intl, store) {
+  return await renderAgendaitemList(meeting, notas, intl, store);
 }
 
-async function renderAnnouncements(meeting, announcements, intl) {
+async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
     <h4><u>MEDEDELINGEN</u></h4>
-    ${await renderAgendaitemList(meeting, announcements, intl)}
+    ${await renderAgendaitemList(meeting, announcements, intl, store)}
   `;
 }
 
-async function renderAgendaitemList(meeting, agendaitems, intl) {
+async function renderAgendaitemList(meeting, agendaitems, intl, store) {
   let agendaitemList = "";
   for (const agendaitem of agendaitems) {
-    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl);
+    agendaitemList += await getMinutesListItem(meeting, agendaitem, intl, store);
   }
   return agendaitemList;
 }
-async function getMinutesListItem(meeting, agendaitem, intl) {
+async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
@@ -95,12 +96,15 @@ async function getMinutesListItem(meeting, agendaitem, intl) {
     default:
       break;
   }
-  const documents = await agendaitem.pieces;
+  let pieces = await store.query('piece', {
+    'filter[agendaitems][:id:]': agendaitem.id,
+    'filter[:has-no:next-piece]': true,
+  });
   let sortedPieces;
   if (agendaitem.isApproval) {
-    sortedPieces = sortPieces(documents, VrNotulenName, compareNotulen);
+    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
   } else {
-    sortedPieces = sortPieces(documents);
+    sortedPieces = sortPieces(pieces);
   }
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
@@ -117,7 +121,7 @@ function capitalizeFirstLetter(string) {
 function renderAbsentees() {
   return `
     <p><u>AFWEZIG MET KENNISGEVING</u></p>
-    <table>
+    <table id="absentees">
       <tbody>
         <tr>
           <td></td>
@@ -128,14 +132,48 @@ function renderAbsentees() {
   `;
 }
 
-async function renderMinutes(data, intl) {
-  const { meeting, attendees, notas, announcements } = data;
-  return `
-    ${renderAttendees(attendees)}
-    ${renderAbsentees()}
-    ${notas ? await renderNotas(meeting, notas, intl) : ''}
-    ${announcements ? await renderAnnouncements(meeting, announcements, intl) : ''}
-  `;
+function renderNextMeeting(meeting, intl) {
+  const currentPlannedStart = meeting.plannedStart;
+  const nextPlannedStart = addWeeks(currentPlannedStart, 1);
+  const date = dateFormat(nextPlannedStart, 'EEEE d MMMM yyyy');
+  const time = dateFormat(nextPlannedStart, 'HH:mm');
+  return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
+}
+
+async function renderMinutes(data, intl, store) {
+  const { meeting, attendees, notas, announcements, editorContent } = data;
+
+  let newMinutesContent = `${renderAttendees(attendees)}
+${renderAbsentees()}
+${notas ? await renderNotas(meeting, notas, intl, store) : ''}
+${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
+${renderNextMeeting(meeting, intl)}`;
+
+  if (editorContent) {
+    const contentElement = document.createElement('template');
+    contentElement.innerHTML = editorContent;
+
+    const newContentElement = document.createElement('template');
+    newContentElement.innerHTML = newMinutesContent;
+
+    const attendeesText = contentElement.content.querySelector('#attendees')?.innerHTML;
+    if (attendeesText) {
+      newContentElement.content.querySelector('#attendees').innerHTML = attendeesText;
+    }
+
+    const absenteesText = contentElement.content.querySelector('#absentees')?.innerHTML;
+    if (absenteesText) {
+      newContentElement.content.querySelector('#absentees').innerHTML = absenteesText;
+    }
+
+    const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
+    if (nextMeetingText) {
+      newContentElement.content.querySelector('#next-meeting').innerHTML = nextMeetingText;
+    }
+
+    newMinutesContent = newContentElement.innerHTML;
+  }
+  return newMinutesContent;
 }
 
 function mandateeName(mandatee) {
@@ -148,13 +186,15 @@ export default class AgendaMinutesController extends Controller {
   @service intl;
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
+  @service currentSession;
 
-  // agenda;
   meeting;
-  // defaultAccessLevel;
+  @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
-
+  @tracked isUpdatingMinutesContent = false;
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
 
   loadCurrentPiecePart = task(async () => {
@@ -189,16 +229,18 @@ export default class AgendaMinutesController extends Controller {
         constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
+      // *note: any changes made here should also be made in the minutes-report-generation service
+      const name = `Notulen - P${dateFormat(
+        this.meeting.plannedStart,
+        'yyyy-MM-dd'
+      )}`;
+
       minutes = this.store.createRecord('minutes', {
-        name: `Notulen - P${dateFormat(
-          this.meeting.plannedStart,
-          'yyyy-MM-dd'
-        )}`,
+        name,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
         documentContainer,
-        isReportOrMinutes: true,
       });
       await minutes.save();
     } else {
@@ -243,7 +285,6 @@ export default class AgendaMinutesController extends Controller {
       previousPiece: minutes,
       documentContainer: minutes.documentContainer,
       accessLevel: minutes.accessLevel,
-      isReportOrMinutes: true,
     });
 
     await newVersion.save();
@@ -272,10 +313,11 @@ export default class AgendaMinutesController extends Controller {
     if (!this.editor) {
       return;
     }
-
+    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
-      await renderMinutes(await this.reshapeModelForRender(), this.intl)
+      await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
+    this.isUpdatingMinutesContent = false;
   }
 
   @action
@@ -356,12 +398,19 @@ export default class AgendaMinutesController extends Controller {
     };
   }
 
+  get mayEditMinutes() {
+    return !this.isLoading &&
+      this.currentSession.may('manage-minutes') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
+  }
+
   async reshapeModelForRender() {
     return {
       meeting: this.model.meeting,
       attendees: await this.getAttendees(),
       notas: this.model.notas,
       announcements: this.model.announcements,
+      editorContent: this.editor.htmlContent,
     };
   }
 }
