@@ -70,14 +70,14 @@ context('signatures shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
 
-  const mandatee1 = 'Bart Somers';
+  const mandatee1 = 'Gwendolyn Rutten';
   const mandatee2 = 'Ben Weyts';
 
   // TODO maintenance heavy, config file?
   const currentMinisters = [
     'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
     'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
-    'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+    'Gwendolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
     'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
     'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
     'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
@@ -574,7 +574,7 @@ context('decisions and minutes shortlist overview tests', () => {
     .day(5);
   const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
   const decisionDate = Cypress.dayjs();
-  const decisionTitle = 'VR PV 2023/1 - punt 0001';
+  let decisionTitle;
   const pieceTypeDecision = 'BF';
   const pieceTypeMinutes = 'Notulen';
   const minutesTitle = `Notulen - P${agendaDate.format('YYYY-MM-DD')}`;
@@ -600,6 +600,15 @@ context('decisions and minutes shortlist overview tests', () => {
 
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.generateDecision();
+    cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        cy.log(generatedDocTitle);
+        decisionTitle = generatedDocTitle.replace('.pdf', '').trim();
+        cy.log(decisionTitle);
+      });
     cy.intercept('POST', '/sign-flows*').as('postSignFlows1');
     cy.intercept('POST', '/sign-subcases*').as('postSignSubcases1');
     cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities1');
