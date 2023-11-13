@@ -141,6 +141,8 @@ $say-editor-border-radius: $au-input-border-radius;
         } @else {
           min-width: 3.8rem;
         }
+
+        font-variant-numeric: tabular-nums;
       }
 
       @if $current-level < $levels {

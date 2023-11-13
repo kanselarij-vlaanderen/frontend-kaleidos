@@ -564,6 +564,7 @@ $au-label-color: var(--au-gray-700);
         padding-right: .5ch;
         text-align: end;
         white-space: nowrap;
+        font-variant-numeric: tabular-nums;
         content: counters(item, ".") ". ";
       }
 
