@@ -186,6 +186,8 @@ export default class SignatureService extends Service {
       const piece = await signMarkingActivity.piece;
       const signedPiece = await piece.signedPiece;
       const signedFile = await signedPiece?.file;
+      const signedPieceCopy = await piece.signedPieceCopy;
+      const signedPieceCopyFile = await signedPieceCopy?.file;
       const signPreparationActivity = await signSubcase
         ?.belongsTo('signPreparationActivity')
         .reload();
@@ -208,6 +210,8 @@ export default class SignatureService extends Service {
       // delete in reverse order of creation
       await signedFile?.destroyRecord();
       await signedPiece?.destroyRecord();
+      await signedPieceCopyFile?.destroyRecord();
+      await signedPieceCopy?.destroyRecord();
       await signPreparationActivity?.destroyRecord();
       await signCompletionActivity?.destroyRecord();
       await signCancellationActivity?.destroyRecord();
