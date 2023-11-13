@@ -58,7 +58,7 @@ export default class DecisionReportGeneration extends Service {
           );
       } else if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE) {
         this.toaster.error(
-          this.intl.t('error-while-generating-report-pdfs')
+          this.intl.t('error-while-generating-report-pdfs-no-reaseon')
         );
       } else {
         setTimeout(() => {
