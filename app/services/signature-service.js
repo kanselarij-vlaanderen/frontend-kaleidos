@@ -92,7 +92,7 @@ export default class SignatureService extends Service {
    *   related to the piece being marked for signing, this should only be passed
    * for regular pieces and reports, not minutes
    * @param {Meeting} meeting The meeting related to the piece being
-   *   marked for signing, this should only be be passed for minutes
+   *   marked for signing, this should only be be passed for minutes and reports
    */
   async markDocumentForSignature(piece, decisionActivity, meeting) {
     const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
@@ -142,6 +142,29 @@ export default class SignatureService extends Service {
       signFlow,
       signSubcase,
     };
+  }
+
+
+  /**
+   * Marks a new version of a marked piece for signature by recreating the sign flow, sign subcase
+   * and sign marking activity.
+   * @param {Piece} oldPiece The old piece that should no longer be marked for signing
+   * @param {Piece} newPiece The new piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes and reports
+   */
+  async markNewPieceForSignature(oldPiece, newPiece, decisionActivity, meeting) {
+    if (!oldPiece) {
+      oldPiece = await newPiece.previousPiece;
+    }
+    const hasMarkedSignFlow = await this.hasMarkedSignFlow(oldPiece);
+    if (hasMarkedSignFlow) {
+      await this.removeSignFlowForPiece(oldPiece);
+      await this.markDocumentForSignature(newPiece, decisionActivity, meeting);
+    }
   }
 
   async canManageSignFlow(piece) {
