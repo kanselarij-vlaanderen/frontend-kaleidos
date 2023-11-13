@@ -217,6 +217,26 @@
           </div>
         {{/if}}
       {{/if}}
+      {{#if (and this.isSignaturesEnabled @piece.signedPieceCopy.file)}}
+        <div class="auk-key-value-item">
+          <div class="auk-key-value-item__label">{{t "signed-document-copy"}}</div>
+          <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+            <AuLinkExternal
+              href={{await @piece.signedPieceCopy.namedDownloadLinkPromise}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{@piece.signedPieceCopy.name}}.{{@piece.signedPieceCopy.file.extension}}
+            </AuLinkExternal>
+            <AccessLevelPill
+              @accessLevel={{await @piece.signedPieceCopy.accessLevel}}
+              @isEditable={{false}}
+            />
+          </div>
+        </div>
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 {{/if}}

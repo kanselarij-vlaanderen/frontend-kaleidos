@@ -1218,6 +1218,7 @@
   "cannot-create-sign-flow-message": "Dit document is niet ingediend door uw minister. U kunt de ondertekenflow niet opstarten.",
   "cannot-sign-because-no-decision-activity": "De beslissing gekoppeld aan dit document is nog niet vrijgegeven. Het is niet mogelijk om de ondertekenflow op te starten.",
   "signed-document": "Ondertekend document",
+  "signed-document-copy": "Ondertekend document (kopie)",
   "on": "op",
   "start-signing-for-n-selected-documents": "Ondertekenen opstarten voor {n, plural, =1 {1 geselecteerd document} other { # geselecteerde documenten }}",
   "create-sign-flow-conflicting-signers-title": "Ondertekenaars zijn niet automatisch ingevuld",
