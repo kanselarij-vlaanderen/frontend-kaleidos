@@ -1,6 +1,10 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
+import {
+  KALEIDOS_START_DATE,
+  DIGITAL_MINUTES_IN_KALEIDOS_START_DATE,
+  DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE,
+} from 'frontend-kaleidos/config/config';
 
 export default class Meeting extends Model {
   @service intl;
@@ -51,5 +55,13 @@ export default class Meeting extends Model {
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
+  }
+
+  get isPreDigitalMinutes() {
+    return this.plannedStart < DIGITAL_MINUTES_IN_KALEIDOS_START_DATE;
+  }
+
+  get isPreDigitalDecisions() {
+    return this.plannedStart < DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE;
   }
 }

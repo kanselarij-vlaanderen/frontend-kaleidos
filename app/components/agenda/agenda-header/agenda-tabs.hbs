@@ -22,7 +22,7 @@
   <Auk::Tab @route="agenda.documents">
     {{t "documents"}}
   </Auk::Tab>
-  {{#if this.enableDigitalMinutes}}
+  {{#if (and (not @currentMeeting.isPreDigitalMinutes) this.enableDigitalMinutes)}}
     <Auk::Tab @route="agenda.minutes">
       {{t "minutes"}}
     </Auk::Tab>
