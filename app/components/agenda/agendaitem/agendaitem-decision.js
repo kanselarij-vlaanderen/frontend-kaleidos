@@ -123,6 +123,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart,
       annotatiePiecePart
     );
+    await this.signatureService.markNewPieceForSignature(this.report, report, this.args.decisionActivity, this.args.agendaContext.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
     await this.loadReport.perform();
   });

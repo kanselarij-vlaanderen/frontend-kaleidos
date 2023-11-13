@@ -197,6 +197,7 @@ export default class AgendaMinutesController extends Controller {
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
   @service currentSession;
+  @service signatureService;
 
   meeting;
   @tracked isLoading = false;
@@ -305,7 +306,7 @@ export default class AgendaMinutesController extends Controller {
     await this.decisionReportGeneration.generateReplacementMinutes.perform(
       newVersion,
     );
-
+    await this.signatureService.markNewPieceForSignature(minutes, newVersion, null, this.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 

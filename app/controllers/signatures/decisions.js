@@ -9,9 +9,8 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
-const MANDATORY_SORT_OPTION = 'decision-activity';
+const MANDATORY_SORT_OPTION = '-meeting.planned-start';
 const DEFAULT_SORT_OPTIONS = [
-  '-decision-activity.start-date',
   MANDATORY_SORT_OPTION,
   'sign-subcase.sign-marking-activity.piece.name',
 ];
