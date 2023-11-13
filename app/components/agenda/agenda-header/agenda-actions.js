@@ -336,16 +336,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   async markDecisionsForSigning() {
-    // TODO filter already marked reports ?
     const reports = await this.store.queryAll('report', {
       'filter[:has-no:next-piece]': true,
       'filter[:has:piece-parts]': true,
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
-    // TODO are we waiting for completion or allowing the user to browse?
     await this.signatureService.markReportsForSignature(reports);
-    // TODO when to refresh?
     this.router.refresh(this.router.currentRouteName);
   }
 

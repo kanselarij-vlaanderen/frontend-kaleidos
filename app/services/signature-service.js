@@ -322,7 +322,7 @@ export default class SignatureService extends Service {
       return this.toaster.warning(this.intl.t('no-decision-reports-to-mark-for-signing'));
     }
     const loadingToast = this.toaster.loading(
-      this.intl.t('decision-reports-are-being-marked-for-signing'),
+      this.intl.t('decision-reports-are-being-marked-for-signing', {aantal: reports.length}),
       null,
       {
         timeOut: 10 * 60 * 1000,
@@ -343,7 +343,7 @@ export default class SignatureService extends Service {
       this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
     } else {
       this.toaster.success(
-        this.intl.t('decision-reports-are-marked-for-signing')
+        this.intl.t('decision-reports-are-marked-for-signing', {aantal: reports.length}),
       );
     }
   }
