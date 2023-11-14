@@ -134,7 +134,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   verifyDeleteSignFlow = task(async () => {
-    await this.signatureService.removeSignFlow(this.args.piece);
+    await this.signatureService.removeSignFlowForPiece(this.args.piece, true);
     this.isOpenVerifyDeleteSignFlow = false;
   });
 
@@ -160,7 +160,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     this.isOpenVerifyDeleteModal = false;
   }
-  
+
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }

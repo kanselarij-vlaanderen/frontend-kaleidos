@@ -260,12 +260,12 @@ export default class SignatureService extends Service {
     }
   }
 
-  async removeSignFlowForPiece(piece) {
+  async removeSignFlowForPiece(piece, ignoreStatus=false) {
     const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
     const signSubcase = await signMarkingActivity?.signSubcase;
     const signFlow = await signSubcase?.signFlow;
     const status = await signFlow?.status;
-    if (signFlow && status.uri === MARKED) {
+    if (signFlow && (ignoreStatus || status.uri === MARKED)) {
       await this.removeSignFlow(signFlow);
     }
   }
@@ -347,5 +347,5 @@ export default class SignatureService extends Service {
       );
     }
   }
-  
+
 }
