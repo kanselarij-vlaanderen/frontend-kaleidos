@@ -1269,7 +1269,7 @@
   "minutes-report-generation--toast-generating-complete--title": "Notulen aangepast",
   "loading-minutes": "De notulen worden opgesteld.",
   "sign-decisions": "Beslissingen aanbieden voor ondertekenen",
-  "decision-reports-are-being-marked-for-signing": "De {aantal, plural, =1 {beslissing} other {# beslissingen}} worden aangeboden voor ondertekenen",
+  "decision-reports-are-being-marked-for-signing": "De {aantal, plural, =1 {beslissing wordt} other {# beslissingen worden}} aangeboden voor ondertekenen",
   "decision-reports-are-marked-for-signing": "De {aantal, plural, =1 {beslissing is} other {# beslissingen zijn}} succesvol aangeboden voor ondertekenen",
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
   "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen"

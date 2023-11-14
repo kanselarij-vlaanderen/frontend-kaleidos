@@ -118,9 +118,7 @@ export default class SignaturesDecisionsController extends Controller {
     if (decisionActivity) {
       return decisionActivity;
     } else {
-      return await this.store.queryOne('meeting', {
-        'filter[minutes][sign-marking-activity][sign-subcase][sign-flow][:id:]': signFlow.id,
-      });
+      return await signFlow.meeting;
     }
   }
 
@@ -132,14 +130,9 @@ export default class SignaturesDecisionsController extends Controller {
   }
 
   getMeetingDate = async (signFlowOrPromise) => {
-    const decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlowOrPromise);
-
-    const modelName = decisionActivityOrMeeting.constructor.modelName;
-    if (modelName === 'decision-activity') {
-      return decisionActivityOrMeeting.startDate;
-    } else {
-      return decisionActivityOrMeeting.plannedStart;
-    }
+    const signFlow = await signFlowOrPromise;
+    const meeting = await signFlow.meeting;
+    return meeting.plannedStart;
   }
 
   getAgendaitem = async (pieceOrPromise) => {
