@@ -46,8 +46,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   get isSignaturesEnabled() {
     const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
+    return isEnabled;
   }
 
   @task
