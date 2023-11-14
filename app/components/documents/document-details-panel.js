@@ -134,12 +134,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   verifyDeleteSignFlow = task(async () => {
-    const signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
-    if (signMarkingActivity) {
-      const signSubcase = await signMarkingActivity?.signSubcase;
-      const signFlow = await signSubcase?.signFlow;
-      await this.signatureService.removeSignFlow(signFlow);
-    }
+    await this.signatureService.removeSignFlowForPiece(this.args.piece, true);
     this.isOpenVerifyDeleteSignFlow = false;
   });
 
@@ -165,7 +160,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     this.isOpenVerifyDeleteModal = false;
   }
-  
+
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
