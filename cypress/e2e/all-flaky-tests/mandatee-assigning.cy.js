@@ -208,7 +208,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@mandateeNames').eq(1)
       .should('contain', 'Hilde Crevits');
     cy.get('@mandateeNames').eq(2)
-      .should('contain', 'Bart Somers');
+      .should('contain', 'Gwendolyn Rutten');
     cy.get('@mandateeNames').eq(3)
       .should('contain', 'Ben Weyts');
     cy.get('@mandateeNames').eq(4)
@@ -366,7 +366,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwedolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
@@ -386,7 +386,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(1)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwedolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
   });
 
   it('check list of mandatees in 2020 agenda', () => {
@@ -397,7 +397,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       'Jan Jambon, Minister-president van de Vlaamse Regering',
       'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
       'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
-      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Gwendolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
       'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
       'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
       'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
@@ -437,7 +437,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       'Jan Jambon, Minister-president van de Vlaamse Regering',
       'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
       'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
-      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Gwendolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
       'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
       'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
       'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',

@@ -70,14 +70,14 @@ context('signatures shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
 
-  const mandatee1 = 'Bart Somers';
+  const mandatee1 = 'Gwedolyn Rutten';
   const mandatee2 = 'Ben Weyts';
 
   // TODO maintenance heavy, config file?
   const currentMinisters = [
     'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
     'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
-    'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+    'Gwedolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
     'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
     'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
     'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
