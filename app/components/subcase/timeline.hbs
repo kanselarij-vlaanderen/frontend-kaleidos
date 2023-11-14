@@ -1,4 +1,5 @@
 {{#unless this.loadSubcasePhases.isRunning}}
+  {{#if this.phases}}
   <ul class="vlc-status-timeline">
     {{#each this.phases as |phase|}}
       <li
@@ -12,4 +13,7 @@
       </li>
     {{/each}}
   </ul>
+  {{else}}
+  <Auk::EmptyState @message="Nog geen versies" />
+  {{/if}}
 {{/unless}}

@@ -1,0 +1,18 @@
+<div {{did-update (perform this.loadAgendaData)}}>
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              Vorige versies
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <Subcase::Timeline @subcase={{@subcase}}/>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

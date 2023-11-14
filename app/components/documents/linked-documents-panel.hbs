@@ -1,0 +1,54 @@
+<div class="auk-u-mb-4" {{did-update (perform this.loadData) @agendaitemOrSubcase}}>
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                {{t "linked-documents"}}
+              </h4>
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      {{#unless this.loadData.isRunning}}
+        <Documents::LinkedDocumentList
+          @linkedPieces={{this.linkedPieces}}
+          @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
+      {{/unless}}
+    </Auk::Panel::Body>
+    {{#if (user-may "manage-documents")}}
+    <Auk::Panel::Footer>
+      <AuButton
+        data-test-linked-documents-add
+        @skin="naked"
+        @icon="plus"
+        class="au-u-padding-left-none"
+        {{on "click" this.openLinkedPieceModal}}
+      >
+        {{t "document-link-old"}}
+      </AuButton>
+    </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
+</div>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenLinkedPieceModal}}
+  @title={{t "document-link-old"}}
+  @onConfirm={{perform this.saveLinkedPieces}}
+  @onCancel={{this.cancelLinkPieces}}
+  @confirmMessage={{t "document-link-old"}}
+  @disabled={{eq this.newLinkedPieces.length 0}}
+  @loading={{this.saveLinkedPieces.isRunning}}
+>
+  <:body>
+    <Utils::AddExistingPiece
+      @onLink={{this.linkPiece}}
+      @onUnlink={{this.unlinkPiece}}
+    />
+  </:body>
+</ConfirmationModal>

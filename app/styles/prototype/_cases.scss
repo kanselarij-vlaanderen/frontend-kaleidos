@@ -30,3 +30,26 @@
   margin-right: auto;
   padding: $au-unit;
 }
+
+.au-c-anchor-nav {
+  display: flex;
+  gap: $au-unit-small;
+
+  > li + li {
+    border-left: 1px solid var(--au-gray-300);
+    padding-left: $au-unit-small;
+  }
+
+  a {
+    font-weight: var(--au-medium);
+    text-decoration: none;
+  }
+
+  a.active {
+    color: var(--au-gray-900);
+  }
+}
+
+:target {
+  scroll-margin-block: $au-unit-small;
+}

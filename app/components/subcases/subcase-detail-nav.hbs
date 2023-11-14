@@ -1,14 +1,19 @@
-<Auk::Tabs>
-  {{!-- <Auk::Tab
-    @isHierarchicalBack={{true}}
-  /> --}}
+{{!-- <Auk::Tabs>
   <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.index">
     {{t "overview"}}
   </Auk::Tab>
   <Auk::Tab data-test-subcase-detail-nav-documents @route="cases.case.subcases.subcase.documents">
     {{t "documents"}}
   </Auk::Tab>
-  {{!-- <Auk::Tab data-test-subcase-detail-nav-decisions @route="cases.case.subcases.subcase.decision">
-    {{capitalize (t "decision")}}
-  </Auk::Tab> --}}
-</Auk::Tabs>
+</Auk::Tabs> --}}
+<ul class="au-c-anchor-nav">
+  <li>
+    <a href="#case">Dossier</a>
+  </li>
+  <li>
+    <a href="#documents">Documenten</a>
+  </li>
+  <li>
+    <a href="#agenda">Agendering</a>
+  </li>
+</ul>

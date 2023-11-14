@@ -31,7 +31,7 @@ export default class CasesIndexController extends Controller {
       },
     }
   ];
-  page = 0;
+  @tracked page = 0;
   size = PAGINATION_SIZES[2];
 
   sort = '-opened';
@@ -116,5 +116,17 @@ export default class CasesIndexController extends Controller {
   @action
   navigateAfterCreate(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
   }
 }

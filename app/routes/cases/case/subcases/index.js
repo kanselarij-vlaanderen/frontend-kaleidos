@@ -40,6 +40,8 @@ export default class CasesCaseSubcasesIndexRoute extends Route {
   }
 
   redirect(model) {
-    this.router.transitionTo('cases.case.subcases.subcase', model[0]);
+    if (model && model.length > 0) {
+      this.router.transitionTo('cases.case.subcases.subcase', model[0]);
+    }
   }
 }
