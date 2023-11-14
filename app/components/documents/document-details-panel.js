@@ -134,7 +134,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   verifyDeleteSignFlow = task(async () => {
-    await this.signatureService.removeSignFlow(this.args.piece);
+    const signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
+    if (signMarkingActivity) {
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      await this.signatureService.removeSignFlow(signFlow);
+    }
     this.isOpenVerifyDeleteSignFlow = false;
   });
 
