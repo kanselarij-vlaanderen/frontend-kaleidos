@@ -192,8 +192,8 @@
               >
                 {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
               </AuLinkExternal>
-              <AccessLevelPill 
-                @accessLevel={{await @piece.signedPiece.accessLevel}} 
+              <AccessLevelPill
+                @accessLevel={{await @piece.signedPiece.accessLevel}}
                 @isEditable={{false}}
               />
               {{#if (user-may "remove-signatures")}}
@@ -217,22 +217,25 @@
           </div>
         {{/if}}
       {{/if}}
-      {{#if (and this.isSignaturesEnabled @piece.signedPieceCopy.file)}}
+      {{#if (and this.isSignaturesEnabled (and this.loadSignedPieces.isIdle this.signedPieceCopy.file))}}
         <div class="auk-key-value-item">
           <div class="auk-key-value-item__label">{{t "signed-document-copy"}}</div>
           <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
             <AuLinkExternal
-              href={{await @piece.signedPieceCopy.namedDownloadLinkPromise}}
+              href={{await this.signedPieceCopy.namedDownloadLinkPromise}}
               @skin="primary"
               @icon="download"
               @iconAlignment="left"
               download
             >
-              {{@piece.signedPieceCopy.name}}.{{@piece.signedPieceCopy.file.extension}}
+              {{this.signedPieceCopy.name}}.{{this.signedPieceCopy.file.extension}}
             </AuLinkExternal>
             <AccessLevelPill
-              @accessLevel={{await @piece.signedPieceCopy.accessLevel}}
-              @isEditable={{false}}
+              @accessLevel={{this.signedPieceCopy.accessLevel}}
+              @isEditable={{true}}
+              @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
+              @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
+              @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}
             />
           </div>
         </div>

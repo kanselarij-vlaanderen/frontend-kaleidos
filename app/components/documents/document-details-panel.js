@@ -27,6 +27,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked documentType;
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
+  @tracked signedPieceCopy;
 
   @tracked canEditPieceWithSignFlow = false;
 
@@ -34,6 +35,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     super(...arguments);
     this.loadDetailsData.perform();
     this.loadSignatureRelatedData.perform();
+    this.loadSignedPieces.perform();
   }
 
   get isProcessing() {
@@ -54,6 +56,13 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
     const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
     return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
+  }
+
+  @task
+  *loadSignedPieces() {
+    this.signedPieceCopy = yield this.args.piece?.signedPieceCopy;
+    yield this.signedPieceCopy.belongsTo('accessLevel').reload();
+    yield this.signedPieceCopy.belongsTo('file').reload();
   }
 
   @task
@@ -159,7 +168,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     this.isOpenVerifyDeleteModal = false;
   }
-  
+
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
@@ -169,5 +178,21 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       return await this.signatureService.canManageSignFlow(this.args.piece);
     }
     return false;
+  }
+
+  @action
+  async changeAccessLevelOfSignedPiece(pieceOrPromise, accessLevel) {
+    const piece = await pieceOrPromise;
+    if (piece) {
+      piece.accessLevel = accessLevel;
+    }
+  }
+
+  @action
+  async saveAccessLevelOfSignedPiece(pieceOrPromise) {
+    const piece = await pieceOrPromise;
+    if (piece) {
+      await piece.save();
+    }
   }
 }
