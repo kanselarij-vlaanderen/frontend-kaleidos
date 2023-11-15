@@ -53,3 +53,15 @@
 :target {
   scroll-margin-block: $au-unit-small;
 }
+
+.au-c-alert {
+  margin-bottom: 0;
+}
+
+.au-c-alert + * {
+  margin-bottom: $au-unit;
+}
+
+.vlc-status-timeline__text {
+  @include au-font-size($au-base);
+}

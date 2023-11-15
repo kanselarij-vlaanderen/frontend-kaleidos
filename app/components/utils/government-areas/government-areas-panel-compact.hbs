@@ -1,0 +1,30 @@
+<div class="auk-u-mt-4">
+  {{#if @governmentAreas.length}}
+    <p class="au-u-flex au-u-flex--spaced-tiny au-u-flex--wrap au-u-flex--vertical-center au-u-margin-bottom-none">
+      <strong>Beleidsdomeinen:</strong>
+      <span>
+        {{#each this.rows as |row|}}
+          {{row.governmentDomain.label}}
+          {{#if row.governmentFields}}
+            {{join ", " (map-by "label" row.sortedGovernmentFields)}}
+          {{else}}
+            {{t "dash"}}
+          {{/if}}
+        {{/each}}
+      </span>
+    </p>
+  {{else}}
+    <p class="au-u-muted au-u-margin-bottom-none">
+      <span class="au-u-flex">
+        <AuBadge
+          @icon="circle-info"
+          @skin="gray"
+          @size="small"
+        />
+        <span class="auk-u-mx-2">
+          {{t "no-added-government-fields"}}
+        </span>
+      </span>
+    </p>
+  {{/if}}
+</div>

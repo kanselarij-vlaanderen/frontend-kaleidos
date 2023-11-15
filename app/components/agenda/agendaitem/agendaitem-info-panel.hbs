@@ -1,5 +1,5 @@
 {{#if this.isEditing}}
-  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelEdit
+  <Agenda::Agendaitem::AgendaitemInfoPanel::AgendaitemInfoPanelEdit
     @agendaitem={{@agendaitem}}
     @subcase={{@subcase}}
     @newsItem={{@newsItem}}
@@ -7,14 +7,12 @@
     @onSave={{this.stopEditing}}
   />
 {{else}}
-  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
+  <Agenda::Agendaitem::AgendaitemInfoPanel::AgendaitemInfoPanelView
     @agendaitem={{@agendaitem}}
     @subcase={{@subcase}}
     @agenda={{@agenda}}
     @newsItem={{@newsItem}}
     @onClickEdit={{this.startEditing}}
     @allowEditing={{@allowEditing}}
-  >
-    {{yield}}
-  </Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView>
+  />
 {{/if}}

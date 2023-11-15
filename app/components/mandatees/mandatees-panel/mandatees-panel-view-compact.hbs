@@ -1,0 +1,33 @@
+{{#if @mandatees.length}}
+  <p class="au-u-flex au-u-flex--spaced-small au-u-flex--wrap au-u-flex--vertical-center">
+    {{#each @mandatees as |mandatee|}}
+      <span class="au-u-flex">
+        <AuBadge
+          @icon="user"
+          @skin="gray"
+          @size="small"
+        />
+        <span class="auk-u-mx-2">
+          {{mandatee.person.fullName}}
+        </span>
+        {{#if (eq mandatee @submitter)}}
+          <AuPill @size="small" @icon="check" @skin="success">Indiener</AuPill>
+        {{else}}
+        {{/if}}
+      </span>
+    {{/each}}
+  </p>
+{{else}}
+  <p class="au-u-muted au-u-margin-bottom-none">
+    <span class="au-u-flex">
+      <AuBadge
+        @icon="circle-info"
+        @skin="gray"
+        @size="small"
+      />
+      <span class="auk-u-mx-2">
+        {{or @emptyStateMessage (t "no-ministers-added")}}
+      </span>
+    </span>
+  </p>
+{{/if}}

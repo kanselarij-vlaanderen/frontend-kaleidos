@@ -5,14 +5,14 @@
         @route="agenda.agendaitems.agendaitem.index"
         data-test-agendaitem-nav-case-tab
       >
-        {{capitalize (t "case")}}
+        {{capitalize (t 'case')}}
       </Auk::Tab>
-      <Auk::Tab
+      {{!-- <Auk::Tab
         @route="agenda.agendaitems.agendaitem.documents"
         data-test-agendaitem-nav-documents-tab
       >
         {{capitalize (t "documents")}}
-      </Auk::Tab>
+      </Auk::Tab> --}}
       {{#if this.canShowDecisionTab}}
         <Auk::Tab
           @route="agenda.agendaitems.agendaitem.decisions"

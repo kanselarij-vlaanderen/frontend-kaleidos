@@ -1,0 +1,87 @@
+{{#if
+  (and
+    @agenda.status.isDesignAgenda
+    (and @allowEditing @agendaitem.formallyOkToShow)
+  )
+}}
+<div class="auk-u-mb-4">
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                Agendering
+              </h4>
+            </div>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            <AuButtonGroup>
+              {{#if @allowEditing}}
+                <AuButton
+                  data-test-agendaitem-titles-edit
+                  @skin="naked"
+                  @icon="pencil"
+                  {{on "click" @onClickEdit}}
+                >
+                  {{t "edit"}}
+                </AuButton>
+              {{/if}}
+            </AuButtonGroup>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div class="auk-content">
+        <p
+          class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex
+            {{if
+              (eq @agendaitem.formallyOkToShow.svg.color 'success')
+              'vlc-agenda-items__status--positive'
+            }}"
+        >
+          <Auk::Icon
+            @name={{@agendaitem.formallyOkToShow.svg.icon}}
+            class="formally-ok-icon"
+          />
+          {{@agendaitem.formallyOkToShow.label}}
+        </p>
+        {{#if @agendaitem.comment}}
+        <div class="auk-u-mt-4">
+          <p
+            class=" au-u-margin-bottom-none"
+            data-test-agendaitem-titles-comment
+          >
+            {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+            {{! prettier-ignore }}
+            <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
+          </p>
+        </div>
+        {{/if}}
+      </div>
+    </Auk::Panel::Body>
+    {{#if @agendaitem.privateComment}}
+      <Auk::Panel::Footer class="auk-u-maximize-height auk-u-bg-alt">
+        <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <pre
+                class="auk-u-text-pre-line auk-u-text-muted"
+                data-test-agendaitem-titles-private-comment
+              >
+                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+                {{! prettier-ignore }}
+                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" class="au-u-margin-right-tiny" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+              </pre>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
+</div>
+{{/if}}

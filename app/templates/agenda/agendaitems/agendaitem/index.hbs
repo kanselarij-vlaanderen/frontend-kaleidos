@@ -19,11 +19,8 @@
   <Toolbar.Group @position="left" as |Group|>
     <Group.Item>
       <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-        <Agenda::Agendaitem::Approved
-          @subcase={{this.subcase}}
-        />
         <h3 class="auk-toolbar__title">
-          {{t "agendaitem-case"}}
+          {{capitalize (t 'case')}}
         </h3>
       </div>
     </Group.Item>
@@ -80,35 +77,44 @@
 {{/if}}
 
 <Agenda::Agendaitem::AgendaitemCasePanel
-  @agendaitem={{this.model}}
+  @agendaitem={{this.model.agendaitem}}
+  @subcase={{this.subcase}}
+  @agenda={{this.agenda}}
+  @newsItem={{this.newsItem}}
+  @allowEditing={{user-may "manage-agendaitems"}}
+>
+  {{#if (is-announcement @model.type)}}
+    <Mandatees::MandateesPanelCompact
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+  {{else if this.subcase}}
+    <Mandatees::MandateesPanelCompact
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+    <Utils::GovernmentAreas::GovernmentAreasPanelCompact
+      @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
+      @governmentAreas={{this.subcase.governmentAreas}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
+  {{/if}}
+</Agenda::Agendaitem::AgendaitemCasePanel>
+
+<Agenda::Agendaitem::AgendaitemInfoPanel
+  @agendaitem={{this.model.agendaitem}}
   @subcase={{this.subcase}}
   @agenda={{this.agenda}}
   @newsItem={{this.newsItem}}
   @allowEditing={{user-may "manage-agendaitems"}}
 />
-{{#if (is-announcement @model.type)}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
-{{else if this.subcase}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
-  <Utils::GovernmentAreas::GovernmentAreasPanel
-    @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
-    @governmentAreas={{this.subcase.governmentAreas}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveGovernmentAreas}}
-  />
-{{/if}}
 
 {{#if this.vpModal}}
 <Auk::Modal @size="medium">
@@ -175,4 +181,152 @@
 </Auk::Modal>
 {{/if}}
 
+<div class="auk-u-mb-4">
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar  as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <h4 class="auk-panel__title">
+              {{t "documents"}}
+            </h4>
+          </Group.Item>
+        </Toolbar.Group>
+        <Toolbar.Group @position="right" as |Group|>
+          {{#if this.model.pieces.length}}
+            <Group.Item>
+              {{#if (user-may "manage-documents")}}
+                <AuButton
+                  data-test-route-agenda---agendaitem-documents-batch-edit
+                  @icon="pencil"
+                  @skin="naked"
+                  @loading={{this.ensureFreshData.isRunning}}
+                  {{on "click" this.openBatchDetails}}
+                >
+                  {{t "batch-edit"}}
+                </AuButton>
+              {{/if}}
+            </Group.Item>
+          {{/if}}
+          {{#if this.isShownOpenPublicationModal}}
+            <Group.Item>
+              <AuButton
+                data-test-route-agenda---agendaitem-documents-open-publication
+                @icon="copy"
+                @skin="naked"
+                {{on "click" this.openPublicationModal}}
+              >
+                {{t "agendaitem-documents-documents-for-publication"}}
+              </AuButton>
+            </Group.Item>
+          {{/if}}
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      {{#unless this.loadData.isRunning}}
+        {{#if this.documentsAreVisible}}
+          <Documents::DocumentCardList
+            @pieces={{this.model.pieces}}
+            @highlightedPieces={{this.newAgendaitemPieces}}
+            @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
+            @onOpenUploadModal={{this.openUploadModalForNewPiece}}
+            @onAddPiece={{perform this.addPiece}}
+            @didDeleteContainer={{this.refresh}}
+            @isEditable={{true}}
+            @decisionActivity={{this.decisionActivity}}
+          />
+        {{else}}
+          <AuAlert
+            @skin="info"
+            @icon="info-circle"
+          >
+            {{t "no-documents-yet"}}
+          </AuAlert>
+        {{/if}}
+      {{/unless}}
+    </Auk::Panel::Body>
+    {{#if (user-may "manage-documents")}}
+    <Auk::Panel::Footer>
+      <AuButton
+        data-test-route-agenda---agendaitem-documents-add
+        @skin="naked"
+        @icon="plus"
+        class="au-u-padding-left-none"
+        {{on "click" this.openPieceUploadModal}}
+      >
+        {{t "documents-add"}}
+      </AuButton>
+    </Auk::Panel::Footer>
+    {{/if}}
+  </Auk::Panel>
+</div>
+
+<Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.agendaitem}} />
+
 <Agenda::Agendaitem::DecisionsSigneePanel />
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model.pieces}}
+    @decisionActivity={{this.decisionActivity}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @agendaitem={{this.agendaitem}}
+    @onClose={{this.closePublicationModal}}
+  />
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenWarnDocEditOnApproved}}
+  @title={{t "documents-on-approved-agenda-title"}}
+  @onConfirm={{this.confirmDocEditOnApproved}}
+  @onCancel={{this.closeWarnDocEditOnApproved}}
+>
+  <:body>
+      {{#if this.currentAgenda.nextVersion}}
+        <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
+      {{/if}}
+      <p>{{t "documents-on-approved-agenda-message"}}</p>
+  </:body>
+</ConfirmationModal>
+
+

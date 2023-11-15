@@ -1,18 +1,7 @@
-<div class="auk-u-mb-8">
+<div class="auk-u-mb-4">
   <Auk::Panel class="auk-panel--editing">
     <Auk::Panel::Body>
       <div class="auk-u-mb-4">
-        {{#if @subcase}}
-          <div class="auk-form-group">
-            <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
-            <AuToggleSwitch
-              data-test-agendaitem-titles-edit-confidential={{true}}
-              @checked={{@subcase.confidential}}
-              id="subcase-confidential"
-              @onChange={{set this "confidentialChanged" true}}
-            />
-          </div>
-        {{/if}}
         <div class="auk-form-group">
           <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
           <Textarea
@@ -24,7 +13,7 @@
           />
         </div>
       </div>
-      <div class="auk-u-mb-4">
+      <div>
         <div class="auk-form-group">
           <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
           <Textarea
@@ -36,51 +25,6 @@
           />
         </div>
       </div>
-      <div class="auk-u-mb-4">
-        <div class="auk-form-group">
-          <Auk::Label id="comment-title">{{t "comment-title"}}</Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-comment={{true}}
-            rows="2"
-            aria-labelledby="comment-title"
-            class="auk-textarea"
-            @value={{@agendaitem.comment}}
-          />
-        </div>
-      </div>
-      <div class="auk-u-mb-4">
-        <div class="auk-form-group">
-          <Auk::Label id="private-comment-title">
-            <Auk::Icon @name="lock-closed" @size="small" />
-            {{t "private-comment-title"}}
-          </Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-private-comment={{true}}
-            rows="2"
-            aria-labelledby="private-comment-title"
-            class="auk-textarea"
-            @value={{@agendaitem.privateComment}}
-          />
-        </div>
-      </div>
-      {{#if (is-announcement @agendaitem.type)}}
-        <div class="auk-u-mb-4">
-          <div class="auk-form-group">
-            <Auk::Label for="item-show-in-newsletter">
-              {{t "on-the-website"}}
-            </Auk::Label>
-            {{#if this.newsItem}}
-              <AuToggleSwitch
-                data-test-agendaitem-titles-edit-showInNewsletter
-                @checked={{this.newsItem.inNewsletter}}
-                id="item-show-in-newsletter"
-              />
-            {{else}}
-              {{t "no-news-item"}}
-            {{/if}}
-          </div>
-        </div>
-      {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
