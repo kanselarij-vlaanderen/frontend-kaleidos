@@ -4,6 +4,7 @@ const SKIP_SERIALIZED = [
   'agendaitems',
   'submissionActivity',
   'signedPiece',
+  'signedPieceCopy',
   'signMarkingActivity',
   'signCompletionActivity',
 ];

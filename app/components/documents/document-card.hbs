@@ -85,24 +85,6 @@
                   {{/if}}
                 </p>
               {{/if}}
-              {{#if
-                (and this.signaturesEnabled (await (this.canViewSignedPiece)))
-              }}
-                {{#if this.piece.signedPiece.file}}
-                  <p>
-                    <AuLinkExternal
-                      href={{await
-                        this.piece.signedPiece.namedDownloadLinkPromise
-                      }}
-                      download
-                    >
-                      {{t "signed-document"}}
-                    </AuLinkExternal>
-                    {{t "on"}}
-                    {{datetime-at this.piece.signedPiece.created}}
-                  </p>
-                {{/if}}
-              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
