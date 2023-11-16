@@ -8,7 +8,21 @@
       >
         <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            {{this.subcaseTimelineItemText phase}}
+            {{this.subcaseTimelineItemLabel phase}}
+            {{#if phase.meeting}}
+            <AuLink
+              @route="agenda.agendaitems.agendaitem"
+              @models={{array
+                phase.meeting.id
+                phase.agenda.id
+                phase.agendaitem.id
+              }}
+            >
+               {{this.subcaseTimelineItemDate phase}}
+            </AuLink>
+            {{else}}
+            {{this.subcaseTimelineItemDate phase}}
+            {{/if}}
           </div>
       </li>
     {{/each}}

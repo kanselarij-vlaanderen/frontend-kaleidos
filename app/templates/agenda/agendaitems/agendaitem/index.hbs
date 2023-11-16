@@ -60,19 +60,23 @@
 
 {{#if this.vpSent}} 
   {{#if this.isComplete}}
-  <AuAlert
-    @title="Dit dossier is volledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
-    @skin="success"
-    @icon="mail"
-    @size="small"
-  />
+  <div class="auk-u-my-4">
+    <AuAlert
+      @title="Dit dossier is volledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    />
+  </div>
   {{else}}
-  <AuAlert
-    @title="Dit dossier is onvolledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
-    @skin="success"
-    @icon="mail"
-    @size="small"
-  />
+  <div class="auk-u-my-4">
+    <AuAlert
+      @title="Dit dossier is onvolledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    />
+  </div>
   {{/if}}
 {{/if}}
 
@@ -107,14 +111,6 @@
     />
   {{/if}}
 </Agenda::Agendaitem::AgendaitemCasePanel>
-
-<Agenda::Agendaitem::AgendaitemInfoPanel
-  @agendaitem={{this.model.agendaitem}}
-  @subcase={{this.subcase}}
-  @agenda={{this.agenda}}
-  @newsItem={{this.newsItem}}
-  @allowEditing={{user-may "manage-agendaitems"}}
-/>
 
 {{#if this.vpModal}}
 <Auk::Modal @size="medium">
@@ -263,6 +259,14 @@
 </div>
 
 <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.agendaitem}} />
+
+<Agenda::Agendaitem::AgendaitemInfoPanel
+  @agendaitem={{this.model.agendaitem}}
+  @subcase={{this.subcase}}
+  @agenda={{this.agenda}}
+  @newsItem={{this.newsItem}}
+  @allowEditing={{user-may "manage-agendaitems"}}
+/>
 
 <Agenda::Agendaitem::DecisionsSigneePanel />
 

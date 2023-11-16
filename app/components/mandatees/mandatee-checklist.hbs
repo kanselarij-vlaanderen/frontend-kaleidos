@@ -1,0 +1,54 @@
+<div
+  data-test-mandatee-selector-container
+  {{did-update (perform this.loadMandatees) @openSearch}}
+>
+  {{#if this.loadMandatees.isRunning}}
+    <AuLoader />
+  {{else}}
+    {{#if @checklist}}
+      <Auk::CheckboxTree
+        @label='Alle ministers'
+        @items={{this.mandateeOptions}}
+        @itemStructure={{hash label="fullDisplayName"}}
+        @selectedItems={{@buffer}}
+        @didUpdate={{@onSelectMandatee}}
+        @layout="grid"
+      />
+    {{else if @multiple}}
+      <PowerSelectMultiple
+        @options={{this.mandateeOptions}}
+        @selected={{await @selectedMandatees}}
+        @disabled={{@disabled}}
+        @closeOnSelect={{false}}
+        @searchEnabled={{true}}
+        @search={{if
+          @openSearch
+          (perform this.searchMandatee)
+          (perform this.filterMandatees)
+        }}
+        @oninput={{this.resetMandateeOptionsIfEmpty}}
+        @onChange={{@onSelectMandatee}}
+        as |mandatee|
+      >
+        <Mandatee::NameWithRange @mandatee={{mandatee}} />
+      </PowerSelectMultiple>
+    {{else}}
+      <PowerSelect
+        @options={{this.mandateeOptions}}
+        @selected={{await @selectedMandatees}}
+        @disabled={{@disabled}}
+        @searchEnabled={{true}}
+        @search={{if
+          @openSearch
+          (perform this.searchMandatee)
+          (perform this.filterMandatees)
+        }}
+        @oninput={{this.resetMandateeOptionsIfEmpty}}
+        @onChange={{@onSelectMandatee}}
+        as |mandatee|
+      >
+        <Mandatee::NameWithRange @mandatee={{mandatee}} />
+      </PowerSelect>
+    {{/if}}
+  {{/if}}
+</div>

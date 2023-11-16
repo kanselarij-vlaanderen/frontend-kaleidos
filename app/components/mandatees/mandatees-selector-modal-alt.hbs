@@ -1,0 +1,63 @@
+<Auk::Modal @size="large">
+  <Auk::Modal::Header @title={{t "add-minister"}} @onClose={{@onClose}} />
+  <Auk::Modal::Body>
+    {{!-- <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
+      <AuCheckbox
+        data-test-mandatees-selector-open-search
+        @checked={{this.openSearch}}
+        @onChange={{this.setOpenSearch}}
+      >
+        {{t "open-search-for-mandatee"}}
+      </AuCheckbox>
+      <Auk::Icon @skin="muted" @name="circle-info" class="auk-u-ml">
+        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+          <p>
+            {{t "open-search-for-mandatee-tooltip"}}
+          </p>
+        </EmberTooltip>
+      </Auk::Icon>
+    </div> --}}
+    <Utils::LoadableContent
+      @isLoading={{this.onAdd.isRunning}}
+      @reserveSpace={{true}}
+    >
+      <Mandatees::MandateeChecklist
+        @referenceDate={{@referenceDate}}
+        @openSearch={{this.openSearch}}
+        @onSelectMandatee={{fn (mut this.selectedMandatee)}}
+        @selectedMandatees={{this.selectedMandatee}}
+        @checklist={{true}}
+        @buffer={{@buffer}}
+      />
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            @disabled={{this.onAdd.isRunning}}
+            {{on "click" @onClose}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-mandatees-selector-add
+            @skin="primary"
+            @icon="plus"
+            @disabled={{not this.canAdd}}
+            @loading={{this.onAdd.isRunning}}
+            {{on "click" (perform this.onAdd)}}
+          >
+            {{t "add"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

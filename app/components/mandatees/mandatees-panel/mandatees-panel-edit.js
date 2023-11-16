@@ -12,7 +12,7 @@ export default class MandateesMandateesPanelEditComponent extends Component {
    * @argument {Date} referenceDate: Date to get active Mandatees for
    */
 
-  @tracked mandateesBuffer;
+  @tracked mandateesBuffer = [];
   @tracked submitterBuffer;
 
   @tracked showSelectMandateeModal = false;

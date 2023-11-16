@@ -20,7 +20,7 @@
     >
       <ul>
         {{#if this.model.decisionmakingFlow.subcases}}
-          {{#each this.model.decisionmakingFlow.subcases as |subcase|}}
+          {{#each (reverse this.model.decisionmakingFlow.subcases) as |subcase|}}
           <li class="auk-sidebar__item auk-sidebar__item--styled {{if (eq this.model.id subcase.id) "auk-sidebar__item--active"}}">
             <LinkTo 
               @route="cases.case.subcases.subcase.index"

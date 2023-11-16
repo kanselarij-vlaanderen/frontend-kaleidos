@@ -20,10 +20,10 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  <Auk::Panel::Body>
-    <div class="auk-form-group">
+  <Auk::Panel::Body @noPadding={{true}}>
+    <div class="auk-form-group auk-u-mx-2">
       <table class="auk-table">
-        <thead>
+        <thead class="au-u-hidden-visually">
           <tr>
             <th class="auk-table__col--10">
               {{t "minister"}}
@@ -37,16 +37,24 @@
         <tbody>
           {{#each this.mandateesBuffer as |mandatee|}}
             <tr data-test-mandatee-panel-edit-mandatee-row>
-              <td>
+              <td class="auk-table__col--10">
                 {{mandatee.person.fullName}}
               </td>
-              <td data-test-mandatee-panel-edit-row-submitter>
-                <AuToggleSwitch
+              <td class="auk-table__col--1" data-test-mandatee-panel-edit-row-submitter>
+                {{!-- <AuToggleSwitch
                   @checked={{eq mandatee this.submitterBuffer}}
                   @onChange={{fn this.toggleIsSubmitter mandatee}}
-                />
+                /> --}}
+                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                  <AuRadio 
+                    @name="submitter" 
+                    @checked={{eq mandatee this.submitterBuffer}}
+                    @onChange={{fn this.toggleIsSubmitter mandatee}}
+                  />
+                  <Auk::Label for="first" class="au-u-padding-bottom-none">Indiener</Auk::Label>
+                </div>
               </td>
-              <td class="auk-u-text-align--right auk-o-flex--vertical-center">
+              <td class="auk-table__col--1 auk-u-text-align--right auk-o-flex--vertical-center">
                 <AuButton
                   data-test-mandatee-panel-edit-row-delete
                   @skin="naked"
@@ -93,9 +101,10 @@
   </Auk::Panel::Footer>
 </Auk::Panel>
 {{#if this.showSelectMandateeModal}}
-  <Mandatees::MandateesSelectorModal
+  <Mandatees::MandateesSelectorModalAlt
     @referenceDate={{@referenceDate}}
     @onClose={{this.closeSelectMandatee}}
     @onAdd={{this.addMandatee}}
+    @buffer={{this.mandateesBuffer}}
   />
 {{/if}}

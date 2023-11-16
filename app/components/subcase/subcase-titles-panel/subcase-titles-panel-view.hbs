@@ -43,6 +43,7 @@
         <p class="au-u-medium">{{capitalize @subcase.title}}</p>
         {{/if}}
       </div>
+      {{@subcase.status}}
       {{#if (is-nota @subcase.agendaItemType)}}
         <div class="auk-u-mb-2">
           {{#if @subcase.subcaseName}}

@@ -2,14 +2,14 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group>
       <Auk::Toolbar::Item>
-        <AuLink
-          @skin="button-naked"
+        <AuButton
+          @skin="naked"
           @icon="hierarchical-back"
           @hideText={{true}}
           {{on "click" this.transitionBack}}
         >
           {{t "back"}}
-        </AuLink>
+        </AuButton>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div data-test-subcase-overview-header-title-container class="auk-u-my">

@@ -385,10 +385,10 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     this.observer = new IntersectionObserver(this.handleIntersect.bind(this), { root: scrollableDiv, threshold: 0.1 });
 
     // Add click event listener to anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a.js-anchor[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (event) => {
         // Remove 'active' class from all anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        document.querySelectorAll('a.js-anchor[href^="#"]').forEach(anchor => {
           anchor.classList.remove('active');
         });
 
@@ -402,7 +402,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   handleIntersect(entries) {
     entries.forEach(entry => {
       const id = entry.target.getAttribute('id');
-      const correspondingAnchor = document.querySelector(`a[href="#${id}"]`);
+      const correspondingAnchor = document.querySelector(`a.js-anchor[href="#${id}"]`);
 
       if (entry.isIntersecting) {
         correspondingAnchor.classList.add('active');
@@ -417,3 +417,4 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     this.observer.observe(element);
   }
 }
+

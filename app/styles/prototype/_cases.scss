@@ -62,6 +62,41 @@
   margin-bottom: $au-unit;
 }
 
+
+
+.vlc-status-timeline {
+
+}
+
+.vlc-status-timeline__item.vlc-status-timeline__item--neutral {
+
+}
+
+.vlc-status-timeline__item + .vlc-status-timeline__item {
+  margin-top: $au-unit-tiny;
+  padding-top: $au-unit-tiny;
+}
+
+.vlc-status-timeline__item + .vlc-status-timeline__item .vlc-status-timeline__dot {
+  position: relative;
+
+  &:after {
+    content: '';
+    border-left: 2px solid var(--au-gray-300);
+    width: 1px;
+    height: 2.6rem;
+    position: absolute;
+    left: calc(50% - 1px);
+    bottom: 100%;
+  }
+}
+
+.vlc-status-timeline__dot {
+  border: 2px solid var(--au-gray-300);
+  background-color: #fff !important;
+  margin-right: $au-unit-tiny * 1.2;
+}
+
 .vlc-status-timeline__text {
   @include au-font-size($au-base);
 }

@@ -25,6 +25,21 @@ export default class SubcaseTimeline extends Component {
     return textToShow;
   }
 
+  subcaseTimelineItemLabel = (timelineItem) => {
+    const label = timelineItem.label || '';
+    let textToShow = `${label}`;
+    return textToShow;
+  }
+
+  subcaseTimelineItemDate = (timelineItem) => {
+    const date = timelineItem.date;
+    let textToShow = ``;
+    if (date) {
+      textToShow += ` ${dateFormat(date, 'dd MMMM yyyy')}`;
+    }
+    return textToShow;
+  }
+
   @dropTask
   *loadSubcasePhases() {
     const phases = [];
@@ -38,8 +53,7 @@ export default class SubcaseTimeline extends Component {
       if (activity.startDate) {
         phases.push({
           label: this.intl.t('activity-phase-proposed-for-agenda'),
-          date: activity.startDate,
-        });
+          date: activity.startDate,        });
       }
       // phase 2: Is the subcase on an approved agenda
       const firstAgendaitemOfActivity = yield this.store.queryOne('agendaitem', {
@@ -49,11 +63,15 @@ export default class SubcaseTimeline extends Component {
       });
       const agenda = yield firstAgendaitemOfActivity.agenda;
       const agendaStatus = yield agenda.belongsTo('status').reload();
+      const agendaitem = yield firstAgendaitemOfActivity;
       if (!agendaStatus.isDesignAgenda) {
         const meeting = yield agenda.createdFor;
         phases.push({
           label: this.intl.t('activity-phase-approved-on-agenda'),
           date: meeting.plannedStart,
+          agenda: agenda,
+          meeting: meeting,
+          agendaitem: agendaitem
         });
         // phase 3: if on approved, what is the decision
         const treatment = yield firstAgendaitemOfActivity.treatment;
@@ -68,6 +86,9 @@ export default class SubcaseTimeline extends Component {
                 'decision-activity-result'
               )}`,
               date: meeting.plannedStart,
+              agenda: agenda,
+              meeting: meeting,
+              agendaitem: agendaitem
             });
           }
         }

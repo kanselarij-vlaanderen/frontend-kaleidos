@@ -25,7 +25,7 @@
   {{#if @mandatees.length}}
     <Auk::Panel::Body @noPadding={{true}}>
       <table class="auk-table">
-        <thead>
+        <thead class="au-u-hidden-visually">
           <tr>
             <th>{{t "minister"}}</th>
             <th>{{t "submitter"}}</th>
@@ -50,13 +50,11 @@
                 </div>
               </td>
               <td
-                class="auk-table__col--2"
+                class="auk-u-text-align--right"
                 data-test-mandatee-panel-view-row-submitter
               >
                 {{#if (eq mandatee @submitter)}}
-                  <Auk::Icon @name="circle-check" @skin="success" />
-                {{else}}
-                  {{t "dash"}}
+                  <AuPill @size="small" @icon="check" @skin="success">Indiener</AuPill>
                 {{/if}}
               </td>
             </tr>
