@@ -379,7 +379,7 @@ context('Search tests', () => {
     const generalTerm = '"Besluitvorming Vlaamse Regering hoed"';
     const urgent = 'Dringend';
     const mandatee2 = 'Hilde Crevits';
-    const mandatee3 = 'Bart Somers';
+    const mandatee3 = 'Gwendolyn Rutten';
 
     visitPublicationSearch();
 
@@ -424,7 +424,7 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
-    // add Bart Somers
+    // add Gwendolyn Rutten
     triggerSearchPublication(mandatee3);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')

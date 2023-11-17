@@ -5,6 +5,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class AgendaMinutesRoute extends Route {
+  @service router;
   @service store;
   @service mandatees;
   @service signatureService;
@@ -48,7 +49,15 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const minutes = await meeting.minutes;
-    return { minutes, mandatees, notas, announcements, meeting };
+    return { minutes, mandatees, notas, announcements, meeting, agenda };
+  }
+
+  async afterModel(model, _transition) {
+    const meeting = model.meeting;
+    const agenda = model.agenda;
+    if (meeting?.isPreDigitalMinutes) {
+      this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+    }
   }
 
   async setupController(controller) {
