@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { isPresent } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from '../../utils/parse-date-search-param';
@@ -73,9 +73,10 @@ export default class NewslettersSearchRoute extends Route {
 
     const filter = {};
 
-    if (isPresent(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : (params.searchText);
+
     if (isPresent(params.mandatees)) {
       filter[
         'agendaitems.mandatees.firstName,agendaitems.mandatees.familyName'
