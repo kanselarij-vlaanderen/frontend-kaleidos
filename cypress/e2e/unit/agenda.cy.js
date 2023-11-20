@@ -493,71 +493,84 @@ context('Agenda tests', () => {
       .should('contain', file.newFileName);
   });
 
-  it('Setup for downloading all decisions', () => {
-    const concerns = 'Cypress test for downloading decisions';
-    const decision = 'Goedgekeurd';
+  context('download decisions', () => {
+    const fileName2 = 'test'; // `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002` if generated
+    const fileName3 = 'replace'; // `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003` if generated
 
-    const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
-    const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
+    it('Setup for downloading all decisions', () => {
+      // const concerns = 'Cypress test for downloading decisions';
+      // const decision = 'Goedgekeurd';
+      const filePunt2 = {
+        folder: 'files', fileName: fileName2, fileExtension: 'pdf',
+      };
+      const filePunt3 = {
+        folder: 'files', fileName: fileName3, fileExtension: 'pdf',
+      };
 
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
+      const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
 
-    cy.openDetailOfAgendaitem(shortSubcaseTitle1);
-    cy.addAgendaitemMandatee(1, null, null, false);
-    cy.get(agenda.agendaitemNav.decisionTab)
-      .should('be.visible')
-      .click();
-    cy.generateDecision(concerns, decision);
-    cy.openDetailOfAgendaitem(shortSubcaseTitle2);
-    cy.addAgendaitemMandatee(2, null, null, false);
-    cy.get(agenda.agendaitemNav.decisionTab)
-      .should('be.visible')
-      .click();
-    cy.generateDecision(concerns, decision);
-  });
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
 
-  it('Should download all decisions for Jambon', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    cy.get(appuniversum.checkbox)
-      .contains('Jambon')
-      .click();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
-      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
-  });
+      cy.openDetailOfAgendaitem(shortSubcaseTitle1);
+      cy.addAgendaitemMandatee(1, null, null, false);
+      cy.get(agenda.agendaitemNav.decisionTab)
+        .should('be.visible')
+        .click();
+      cy.addDocumentToTreatment(filePunt2);
+      // cy.generateDecision(concerns, decision);
+      cy.openDetailOfAgendaitem(shortSubcaseTitle2);
+      cy.addAgendaitemMandatee(2, null, null, false);
+      cy.get(agenda.agendaitemNav.decisionTab)
+        .should('be.visible')
+        .click();
+      // cy.generateDecision(concerns, decision);
+      cy.addDocumentToTreatment(filePunt3);
+    });
 
-  it('Should download all decisions for Crevits', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    cy.get(appuniversum.checkbox)
-      .contains('Crevits')
-      .click();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`)
-      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`);
-  });
+    it('Should download all decisions for Jambon', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      cy.get(appuniversum.checkbox)
+        .contains('Jambon')
+        .click();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName2)
+        .should('not.contain', fileName3);
+    });
 
-  it('Should download all decisions', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
-      .should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
+    it('Should download all decisions for Crevits', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      cy.get(appuniversum.checkbox)
+        .contains('Crevits')
+        .click();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName3)
+        .should('not.contain', fileName2);
+    });
+
+    it('Should download all decisions', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName2)
+        .should('contain', fileName3);
+    });
   });
 });

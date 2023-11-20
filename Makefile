@@ -14,8 +14,8 @@ reset-cache:
 	- sleep 5
 
 reset-elastic-and-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report
-	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation
+	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}

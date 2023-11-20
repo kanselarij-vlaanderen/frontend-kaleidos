@@ -167,6 +167,7 @@ export default class AgendaService extends Service {
       defaultDecisionResultCodeUri =
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
     } else {
+      // pre digital agenda upload of decision report changes decision result code 
       defaultDecisionResultCodeUri = this.enableDigitalAgenda
         ? null
         : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;

@@ -134,33 +134,15 @@
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar @size="large">
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-new-publication-cancel
-            @skin="naked"
-            @disabled={{this.save.isRunning}}
-            {{on "click" @onCancel}}
-          >
-            {{t "cancel"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-new-publication-create
-            @skin="primary"
-            @loading={{this.save.isRunning}}
-            @disabled={{not this.isValid}}
-            {{on "click" (perform this.save)}}
-          >
-            {{t "publications-new-button-text"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
+    <AuButton
+      data-test-new-publication-create
+      @skin="primary"
+      @loading={{this.save.isRunning}}
+      @disabled={{not this.isValid}}
+      {{on "click" (perform this.save)}}
+    >
+      {{t "publications-new-button-text"}}
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>
