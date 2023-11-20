@@ -1,7 +1,11 @@
-<AuModal
+<ConfirmationModal
   @modalOpen={{true}}
-  @closeModal={{@onClose}}
   @closable={{this.sendToVP.isIdle}}
+  @confirmMessage={{t "send-to-VP"}}
+  @onConfirm={{perform this.sendToVP}}
+  @onCancel={{@onCancel}}
+  @loading={{this.sendToVP.isRunning}}
+  @disabled={{this.loadData.isRunning}}
 >
   <:title>{{t "check-case"}}</:title>
   <:body>
@@ -113,14 +117,4 @@
       {{/let}}
     {{/if}}
   </:body>
-  <:footer>
-    <AuButton
-      @skin="primary"
-      {{on "click" (perform this.sendToVP)}}
-      @loading={{this.sendToVP.isRunning}}
-      @disabled={{this.loadData.isRunning}}
-    >
-      {{t "send-to-VP"}}
-    </AuButton>
-  </:footer>
-</AuModal>
+</ConfirmationModal>

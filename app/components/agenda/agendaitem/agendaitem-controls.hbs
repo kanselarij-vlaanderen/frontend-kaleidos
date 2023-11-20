@@ -86,6 +86,7 @@
 {{#if this.showVPModal}}
   <Agenda::Agendaitem::SendToVpModal
     @onClose={{this.onSendToVp}}
+    @onCancel={{set this "showVPModal" false}}
     @agendaitem={{@agendaitem}}
     @definitieveGoedkeuringSubcase={{this.subcase}}
   />
