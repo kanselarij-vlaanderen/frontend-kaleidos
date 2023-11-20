@@ -83,7 +83,7 @@ context('signatures shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
 
-  const mandatee1 = 'Bart Somers';
+  const mandatee1 = 'Gwendolyn Rutten';
   const mandatee2 = 'Ben Weyts';
   const mandatee3 = 'Zuhal Demir';
 
@@ -91,7 +91,7 @@ context('signatures shortlist overview tests', () => {
   const currentMinisters = [
     'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
     'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
-    'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+    'Gwendolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
     'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
     'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
     'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
@@ -128,9 +128,12 @@ context('signatures shortlist overview tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.openDetailOfAgendaitem(subcaseTitleShort1);
+    cy.changeDecisionResult('Goedgekeurd');
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
-    cy.addAgendaitemToAgenda(subcaseTitleShort3);
-    cy.setAllItemsFormallyOk(4);
+    cy.openDetailOfAgendaitem(subcaseTitleShort2);
+    cy.changeDecisionResult('Goedgekeurd');
+    cy.setAllItemsFormallyOk(3);
     cy.approveDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
@@ -617,7 +620,11 @@ context('publications shortlist overview tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.openDetailOfAgendaitem(subcaseTitleShort1);
+    cy.changeDecisionResult('Goedgekeurd');
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
+    cy.openDetailOfAgendaitem(subcaseTitleShort2);
+    cy.changeDecisionResult('Goedgekeurd');
     cy.get(auk.loader).should('not.exist');
   });
 

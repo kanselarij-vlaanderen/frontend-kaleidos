@@ -55,9 +55,10 @@ export default class SearchNewsItemsRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
+
     if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
     }
@@ -101,10 +102,6 @@ export default class SearchNewsItemsRoute extends Route {
     }
 
     const filter = SearchNewsItemsRoute.createFilter(params);
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
 
     const results = await search(
       'news-items',

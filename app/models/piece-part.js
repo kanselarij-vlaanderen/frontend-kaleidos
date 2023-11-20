@@ -2,7 +2,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class PiecePart extends Model {
   @attr title;
-  @attr value;
+  @attr htmlContent;
   @attr('datetime') created;
 
   @belongsTo('report', { inverse: 'pieceParts', async: true }) report;

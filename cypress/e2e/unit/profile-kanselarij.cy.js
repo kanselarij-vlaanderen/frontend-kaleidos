@@ -194,12 +194,14 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.create);
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort2);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -207,7 +209,7 @@ context('Testing the application as Kanselarij user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -344,12 +346,14 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.create);
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -357,7 +361,7 @@ context('Testing the application as Kanselarij user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')

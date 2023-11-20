@@ -8,7 +8,7 @@ export default class AgendaRoute extends Route {
   @service store;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   async model(params) {

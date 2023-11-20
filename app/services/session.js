@@ -6,6 +6,14 @@ export default class ExtendedSessionService extends SessionService {
   @service currentSession;
   @service router;
 
+  get unauthenticatedRouteName() {
+    if (ENV.environment === 'development') {
+      return 'mock-login';
+    } else {
+      return 'login';
+    }
+  }
+
   async handleAuthentication() {
     try {
       await this.currentSession.load();
@@ -22,7 +30,7 @@ export default class ExtendedSessionService extends SessionService {
       const url = new URL(logoutUrl);
       window.location.replace(url.toString());
     } catch (error) { // eslint-disable-line no-unused-vars
-      this.router.transitionTo('login');
+      this.router.transitionTo(this.unauthenticatedRouteName);
     }
   }
 

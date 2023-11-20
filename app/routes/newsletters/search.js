@@ -73,9 +73,10 @@ export default class NewslettersSearchRoute extends Route {
 
     const filter = {};
 
-    if (isPresent(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = params.searchText;
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : (params.searchText);
+
     if (isPresent(params.mandatees)) {
       filter[
         'agendaitems.mandatees.firstName,agendaitems.mandatees.familyName'
@@ -102,9 +103,6 @@ export default class NewslettersSearchRoute extends Route {
     filter[':has:agendaitems'] = 't';
 
     this.lastParams.commit();
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
     return search(
       'news-items',
       params.page,

@@ -25,7 +25,7 @@
               @skin="naked"
               @icon="pencil"
               @iconAlignment="left"
-              @disabled={{this.exportPdf.isRunning}}
+              @disabled={{this.saveReport.isRunning}}
               {{on "click" this.startEditing}}
             >
               {{t "signed-decision-create"}}
@@ -48,16 +48,18 @@
       {{#if this.onCreateNewVersion.isIdle}}
         <Documents::DocumentCard
           @piece={{this.report}}
+          @decisionActivity={{@decisionActivity}}
+          @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
           @hideNewerVersions={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
-          @hideSign={{true}}
           @showCreateNewVersion={{true}}
           @onCreateNewVersion={{perform this.onCreateNewVersion}}
           @bordered={{true}}
           @didDeleteContainer={{this.didDeleteReport}}
+          @onChangeConfidentiality={{this.generateNewReport}}
         />
       {{else}}
         <Auk::Loader />
@@ -95,7 +97,14 @@
       <Auk::Panel::Body
         class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
       >
-        <h4 class="auk-h4">{{t "concerns"}}</h4>
+        <h4 class="auk-h4">{{t "annotation"}}</h4>
+        <AuInput
+          @width="block"
+          @value={{mut this.editorValueAnnotatie}}
+          id="decisionAnnotation"
+        />
+
+        <h4 class="auk-h4 au-u-padding-top">{{t "concerns"}}</h4>
         <SayEditor
           @size="small"
           @allowFullscreen={{true}}
@@ -129,7 +138,7 @@
               @icon="renew"
               class="au-u-padding-left-none"
               @loading={{this.loadNota.isRunning}}
-              @disabled={{not this.nota}}
+              @disabled={{not (or this.nota @agendaitem.isApproval)}}
               {{on "click" this.updateBeslissingContent}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -176,6 +185,8 @@
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
           <Documents::DocumentCard
             @piece={{this.report}}
+            @decisionActivity={{@decisionActivity}}
+            @meeting={{@agendaContent.meeting}}
             @isEditable={{true}}
             @agendaContext={{@agendaContext}}
             @hideNewerVersions={{true}}
@@ -207,7 +218,74 @@
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
           <AuContent @size="small">
-        {{#if (and this.isEditingConcern this.enableDigitalAgenda)}}
+        {{#if (and this.isEditingAnnotation this.mayEditDecisionReport)}}
+           <h4 class="auk-h4">{{t "annotation"}}</h4>
+           <AuInput
+             @width="block"
+             @value={{mut this.editorValueAnnotatie}}
+             id="decisionAnnotation"
+           />
+           <Auk::Toolbar>
+             <Auk::Toolbar::Group @position="left">
+               <Auk::Toolbar::Item>
+                 <AuButton
+                   @skin="naked"
+                   {{on "click" (set this "isEditingAnnotation" false)}}
+                 >
+                   {{t "cancel"}}
+                 </AuButton>
+               </Auk::Toolbar::Item>
+             </Auk::Toolbar::Group>
+             <Auk::Toolbar::Group @position="right">
+               <Auk::Toolbar::Item>
+                 <AuButton
+                   @disabled={{this.disableSaveAnnotationButton}}
+                   @skin="primary"
+                   @loading={{this.onUpdateAnnotation.isRunning}}
+                   {{on "click" (perform this.onUpdateAnnotation)}}
+                 >
+                   {{t "update"}}
+                 </AuButton>
+               </Auk::Toolbar::Item>
+             </Auk::Toolbar::Group>
+           </Auk::Toolbar>
+           {{else}}
+           <Auk::Toolbar @auto={{true}} as |Toolbar|>
+             <Toolbar.Group @position="left">
+               <h4 class="auk-toolbar__title">
+                   {{t "annotation"}}:
+               </h4>
+             </Toolbar.Group>
+             <Toolbar.Group @position="right" as |Group|>
+               {{#if
+                   (and
+                     this.loadReport.isIdle
+                     (user-may "manage-decisions")
+                     (not this.isEditingAnnotation)
+                     (or this.pieceParts (not this.report))
+                     this.mayEditDecisionReport
+                   )
+                 }}
+                   <Group.Item>
+                     <AuButton
+                       @skin="naked"
+                       @icon="pencil"
+                       @iconAlignment="left"
+                       @disabled={{this.saveReport.isRunning}}
+                       {{on "click" this.startEditingAnnotation}}
+                     >
+                       {{t "edit"}}
+                     </AuButton>
+                   </Group.Item>
+                 {{/if}}
+             </Toolbar.Group>
+           </Auk::Toolbar>
+         <SanitizeHtml
+           @raw={{true}}
+           @value={{this.annotatiePiecePart.htmlContent}}
+         />
+        {{/if}}
+        {{#if (and this.isEditingConcern this.mayEditDecisionReport)}}
            <h4 class="auk-h4">{{t "concerns"}}</h4>
         <SayEditor
           @size="small"
@@ -269,7 +347,7 @@
                         (user-may "manage-decisions")
                         (not this.isEditingConcern)
                         (or this.pieceParts (not this.report))
-                        this.enableDigitalAgenda
+                        this.mayEditDecisionReport
                       )
                     }}
                       <Group.Item>
@@ -278,7 +356,7 @@
                           @skin="naked"
                           @icon="pencil"
                           @iconAlignment="left"
-                          @disabled={{this.exportPdf.isRunning}}
+                          @disabled={{this.saveReport.isRunning}}
                           {{on "click" this.startEditingConcern}}
                         >
                           {{t "edit"}}
@@ -289,10 +367,10 @@
               </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
-              @value={{this.betreftPiecePart.value}}
+              @value={{this.betreftPiecePart.htmlContent}}
             />
             {{/if}}
-             {{#if (and this.isEditingTreatment this.enableDigitalAgenda)}}
+             {{#if (and this.isEditingTreatment this.mayEditDecisionReport)}}
               <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
               <SayEditor
                 @allowFullscreen={{true}}
@@ -305,7 +383,7 @@
                     @icon="renew"
                     class="au-u-padding-left-none"
                     @loading={{this.loadNota.isRunning}}
-                    @disabled={{not this.nota}}
+                    @disabled={{not (or this.nota @agendaitem.isApproval)}}
                     {{on "click" this.updateBeslissingContent}}
                   >{{t "update-thing" thing=(t "content")}}</AuButton>
                   <VersionsDropdown
@@ -354,7 +432,7 @@
                         (user-may "manage-decisions")
                         (not this.isEditingTreatment)
                         (or this.pieceParts (not this.report))
-                        this.enableDigitalAgenda
+                        this.mayEditDecisionReport
                       )
                     }}
                       <Group.Item>
@@ -363,7 +441,7 @@
                           @skin="naked"
                           @icon="pencil"
                           @iconAlignment="left"
-                          @disabled={{this.exportPdf.isRunning}}
+                          @disabled={{this.saveReport.isRunning}}
                           {{on "click" this.startEditingTreatment}}
                         >
                           {{t "edit"}}
@@ -374,7 +452,7 @@
               </Auk::Toolbar>
             <SanitizeHtml
               @raw={{true}}
-              @value={{this.beslissingPiecePart.value}}
+              @value={{this.beslissingPiecePart.htmlContent}}
             />
             {{/if}}
           </AuContent>

@@ -20,7 +20,7 @@ export default class DocumentRoute extends Route {
   isSigning = false;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   async model(params) {
