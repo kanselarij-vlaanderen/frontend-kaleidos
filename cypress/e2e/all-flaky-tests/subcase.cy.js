@@ -102,6 +102,7 @@ context('Subcase tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('exist');
+    cy.changeDecisionResult('Goedgekeurd');
   });
 
   it('should add a subcase and then delete it', () => {
@@ -132,6 +133,9 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.deleteSubcase)
       .should('not.exist');
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(auk.loader).should('not.exist');
+    cy.changeDecisionResult('Goedgekeurd');
   });
 
   it('Clickable link should go to the agenda right after proposing to agenda', () => {
@@ -163,6 +167,7 @@ context('Subcase tests', () => {
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossiers/');
+    cy.changeDecisionResult('Goedgekeurd');
   });
 
   it('Changes to agendaitem should propagate to subcase', () => {

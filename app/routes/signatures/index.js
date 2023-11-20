@@ -58,6 +58,7 @@ export default class SignaturesIndexRoute extends Route {
     }
 
     const filter = {
+      ':has-no:meeting': true,
       'sign-subcase': {
         'sign-marking-activity': {
           piece: {

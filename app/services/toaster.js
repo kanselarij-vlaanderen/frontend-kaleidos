@@ -19,7 +19,7 @@ export default class ToasterService extends AuToasterService {
 
   success(message, title, options = {}) {
     options.icon = 'check';
-    options.closable = false;
+    options.closable = options.closable || false;
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 3200;
     }

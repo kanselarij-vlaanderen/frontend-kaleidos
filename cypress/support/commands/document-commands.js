@@ -212,7 +212,7 @@ function addDocumentsToSubcase(files) {
  * @function
  * @param {} file
  */
-function addDocumentToTreatment(file) {
+function addDocumentToTreatment(file, shouldConfirm = true) {
   cy.log('addDocumentsToTreatment');
   cy.get(agenda.agendaitemNav.decisionTab).click();
   // 1 default item treatment exists
@@ -221,6 +221,13 @@ function addDocumentToTreatment(file) {
   cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });
+
+  if (shouldConfirm) {
+    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.wait('@patchDecisionActivities');
+  }
+  cy.log('/addDocumentsToTreatment');
 }
 
 /**

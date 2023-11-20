@@ -125,7 +125,7 @@
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
               -
-              {{date this.piece.created}}
+              {{date this.meeting.plannedStart}}
             </p>
             <h5 class="auk-h4">{{this.piece.name}}</h5>
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
@@ -162,13 +162,13 @@
             <Signatures::CreateSignFlow
               @decisionActivities={{array this.decisionActivityOrMeeting}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isReportOrMinute={{true}}
+              @isReportOrMinutes={{true}}
             />
           {{else if this.selectedSignFlows.length}}
             <Signatures::CreateSignFlow
               @decisionActivities={{this.selectedDecisionActivitiesOrMeetings.value}}
               @onChangeSigners={{fn (mut this.signers)}}
-              @isReportOrMinute={{true}}
+              @isReportOrMinutes={{true}}
             />
           {{/if}}
         </div>
