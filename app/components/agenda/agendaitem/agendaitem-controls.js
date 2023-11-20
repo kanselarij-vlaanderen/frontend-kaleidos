@@ -30,13 +30,29 @@ export default class AgendaitemControls extends Component {
   @tracked showVPModal = false;
   @tracked hasDecreet = false;
   @tracked subcase;
+  @tracked canSendToVP = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
+    this.loadCanSendToVP.perform();
   }
+
+  loadCanSendToVP = task(async () => {
+    const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+    const resp = await fetch(
+      `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
+      { headers: { Accept: 'application/vnd.api+json' } }
+    );
+    if (!resp.ok) {
+      this.canSendToVP = false;
+    } else {
+      const body = await resp.json();
+      this.canSendToVP = body.isReady && this.enableVlaamsParlement;
+    }
+  });
 
   get hasDropdownOptions() {
     return this.isDesignAgenda || this.canSendToVP;
@@ -46,16 +62,6 @@ export default class AgendaitemControls extends Component {
     return (
       ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
       ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
-    );
-  }
-
-  get canSendToVP() {
-    return (
-      this.enableVlaamsParlement &&
-      this.hasDecreet &&
-      this.decisionActivity.isApproved &&
-      this.subcase.isDefinitieveGoedkeuring && 
-      !this.subcase.isBekrachtiging
     );
   }
 

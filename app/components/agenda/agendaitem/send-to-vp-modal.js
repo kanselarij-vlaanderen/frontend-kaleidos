@@ -74,7 +74,7 @@ export default class SendToVpModalComponent extends Component {
 
   sendToVP = task(async () => {
     const resp = await fetch(
-      `/vlaams-parlement-sync/?uri=http://themis.vlaanderen.be/id/besluitvormingsaangelegenheid/${this.decisionmakingFlow.id}`,
+      `/vlaams-parlement-sync/?uri=${this.decisionmakingFlow.uri}`,
       { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
     );
 
