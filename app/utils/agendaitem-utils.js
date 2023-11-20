@@ -1,6 +1,7 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
 import { A } from '@ember/array';
+import generateReportName from './generate-report-name';
 
 /**
  * @description Zet een agendaitem of subcase naar nog niet formeel ok
@@ -84,22 +85,44 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
 /**
  * Given a set of agendaitems, set their number
  * @name setAgendaitemsNumber
- * @param  {Array<agendaitem>}   agendaitems  Array of agendaitem objects to set number on.
- * @param  {Boolean} isEditor     When true, the user is allowed to edit the trigger a recalculation of the number.
- * @param {Boolean} isDesignAgenda  When true, the agenda is a designagenda.
+ * @param  {Array<Agendaitem>} agendaitems  Array of agendaitem objects to set number on.
+ * @param {Meeting} meeting The meeting the agendaitems belong to
+ * @param {Store} store The store service
+ * @param {DecisionReportGeneration} decisionReportGeneration The decisionReportGeneration service
+ * @param {Boolean} isEditor When true, the user is allowed to edit the trigger a recalculation of the number.
+ * @param {Boolean} isDesignAgenda When true, the agenda is a designagenda.
  */
-export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda) => {
+export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionReportGeneration, isEditor, isDesignAgenda) => {
   if (isEditor && isDesignAgenda) {
-    return await Promise.all(agendaitems.map(async(agendaitem, index) => {
+    const reports = [];
+    const promises = await Promise.all(agendaitems.map(async(agendaitem, index) => {
       if (agendaitem.number !== index + 1) {
-        agendaitem.set('number', index + 1);
-        return agendaitem.save();
+        agendaitem.number = index + 1;
+        const agendaitemSave = await agendaitem.save();
+
+        const report = await store.queryOne('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[:has:piece-parts]': true,
+          'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+        });
+        if (report) {
+          reports.push(report);
+          const documentContainer = await report.documentContainer;
+          const pieces = await documentContainer.pieces;
+          report.name = await generateReportName(agendaitem, meeting, pieces.length);
+          await report.save();
+        }
+        return agendaitemSave;
       }
     }));
+    if (reports.length) {
+      await decisionReportGeneration.generateReplacementReports.perform(reports);
+    }
+    return promises;
   }
 };
 
-export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
+export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGeneration, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = [];
@@ -114,8 +137,9 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
       }
     }
   }
-  await setAgendaitemsNumber(actualAgendaitems, isEditor, true);
-  await setAgendaitemsNumber(actualAnnouncements, isEditor, true);
+  const meeting = await agenda.createdFor;
+  await setAgendaitemsNumber(actualAgendaitems, meeting, store, decisionReportGeneration, isEditor, true);
+  await setAgendaitemsNumber(actualAnnouncements, meeting, store, decisionReportGeneration, isEditor, true);
 };
 
 /**

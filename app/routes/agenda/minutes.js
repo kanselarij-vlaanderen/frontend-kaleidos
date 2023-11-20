@@ -5,8 +5,10 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class AgendaMinutesRoute extends Route {
+  @service router;
   @service store;
   @service mandatees;
+  @service signatureService;
 
   async getMandatees() {
     const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
@@ -29,7 +31,6 @@ export default class AgendaMinutesRoute extends Route {
     const mandatees = await this.getMandatees();
     const notas = [];
     const announcements = [];
-    const betreftPieceParts = [];
 
     // Could be optimized not to make below query again when only query params changed
     // *NOTE* Do not change this query, this call is pre-cached by cache-warmup-service
@@ -40,16 +41,6 @@ export default class AgendaMinutesRoute extends Route {
       sort: 'type.position,number',
     });
     for (const agendaitem of agendaitems.toArray()) {
-      const betreftPiecePart = await this.store.queryOne('piece-part', {
-        'filter[report][decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
-        'filter[title]': 'Betreft',
-        'filter[:has-no:next-piece-part]': true,
-      });
-      if (betreftPiecePart) {
-        const report = await betreftPiecePart.report;
-        betreftPieceParts.push({value: betreftPiecePart.value, agendaitemID: agendaitem.id, reportName: report?.name});
-      }
-
       const type = await agendaitem.type;
       if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);
@@ -58,11 +49,20 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const minutes = await meeting.minutes;
-    return { minutes, mandatees, notas, announcements, betreftPieceParts, meeting };
+    return { minutes, mandatees, notas, announcements, meeting, agenda };
   }
 
-  setupController(controller) {
+  async afterModel(model, _transition) {
+    const meeting = model.meeting;
+    const agenda = model.agenda;
+    if (meeting?.isPreDigitalMinutes) {
+      this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+    }
+  }
+
+  async setupController(controller) {
     super.setupController(...arguments);
+    controller.isLoading = true;
     const meeting = this.modelFor('agenda').meeting;
     controller.meeting = meeting;
     const agenda = this.modelFor('agenda').agenda;
@@ -70,5 +70,11 @@ export default class AgendaMinutesRoute extends Route {
     controller.isEditing = false;
     controller.isFullscreen = false;
     controller.editor = null;
+    const minutes = await meeting.minutes;
+    if (minutes) {
+      controller.hasSignFlow = await this.signatureService.hasSignFlow(minutes);
+      controller.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(minutes);
+    }
+    controller.isLoading = false;
   }
 }

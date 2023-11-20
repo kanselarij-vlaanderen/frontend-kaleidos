@@ -90,7 +90,11 @@
     @definitieveGoedkeuringSubcase={{this.subcase}}
   />
 {{/if}}
-{{#if this.setDecisionResultCode.isRunning}}
+{{#if
+  (or
+    this.setDecisionResultCode.isRunning this.updateDecisionPiecePart.isRunning
+  )
+}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header
       @title={{t "saving-decision-result-title"}}

@@ -10,6 +10,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
+  @service decisionReportGeneration;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
   @service decisionReportGeneration;
@@ -70,7 +71,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   async reassignNumbersForAgendaitems() {
-    await reorderAgendaitemsOnAgenda(this.agenda, this.currentSession.may('manage-agendaitems'));
+    await reorderAgendaitemsOnAgenda(
+      this.agenda,
+      this.store,
+      this.decisionReportGeneration,
+      this.currentSession.may('manage-agendaitems'),
+    );
   }
 
   @action
@@ -110,6 +116,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async saveSecretary(secretary) {
     if (this.enableDigitalAgenda) {
+      await this.decisionActivity.secretary;
       this.decisionActivity.secretary = secretary;
       await this.decisionActivity.save();
       const report = await this.store.queryOne('report', {

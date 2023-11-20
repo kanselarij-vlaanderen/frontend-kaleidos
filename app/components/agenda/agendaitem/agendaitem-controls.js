@@ -21,6 +21,7 @@ export default class AgendaitemControls extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service decisionReportGeneration;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -154,12 +155,13 @@ export default class AgendaitemControls extends Component {
   @task
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
+    yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
   }
-
 
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
+    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
   }
 
   @action
@@ -170,6 +172,42 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @task
+  *updateDecisionPiecePart(message) {
+    const report = yield this.store.queryOne('report', {
+      filter: {
+        'decision-activity': { ':id:': this.decisionActivity.id },
+      },
+    });
+    if (report) {
+      const beslissingPiecePart = yield this.store.queryOne('piece-part', {
+        filter: {
+          report: { ':id:': report.id },
+          ':has-no:next-piece-part': true,
+          title: 'Beslissing',
+        },
+      });
+      if (beslissingPiecePart) {
+        const now = new Date();
+        const newBeslissingPiecePart = yield this.store.createRecord(
+          'piece-part',
+          {
+            title: 'Beslissing',
+            htmlContent: message,
+            report: report,
+            previousPiecePart: beslissingPiecePart,
+            created: now,
+          }
+        );
+        yield newBeslissingPiecePart.save();
+        yield this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
+    }
+    return;
   }
 
   @task
@@ -191,11 +229,21 @@ export default class AgendaitemControls extends Component {
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
     yield this.decisionActivity.save();
-    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
+    if (
+      [
+        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+      ].includes(decisionResultCodeUri)
+    ) {
       const pieces = yield this.args.agendaitem.pieces;
       for (const piece of pieces.toArray()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
-        if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+          piece
+        );
+        if (
+          decisionResultCodeUri ===
+          CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+        ) {
           yield this.signatureService.removeSignFlowForPiece(piece);
         }
       }

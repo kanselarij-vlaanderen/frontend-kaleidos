@@ -29,6 +29,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service intl;
   @service jobMonitor;
   @service toaster;
+  @service signatureService;
 
   downloadOptions = [
     {
@@ -331,6 +332,18 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     await all(savePromises);
     this.args.onStopLoading();
     this.args.didApproveAgendaitems();
+  }
+
+  @action
+  async markDecisionsForSigning() {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    await this.signatureService.markReportsForSignature(reports);
+    this.router.refresh(this.router.currentRouteName);
   }
 
   @action
