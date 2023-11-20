@@ -36,7 +36,7 @@ context('Search tests', () => {
     cy.get(route.searchNewsletters.row.decisionResult).contains('Goedgekeurd');
     cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits');
     cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Matthias Diependaele');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Bart Somers, Ben Weyts, Zuhal Demir');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Gwendolyn Rutten, Ben Weyts, Zuhal Demir');
     cy.get(route.searchNewsletters.row.goToAgendaitem).eq(0)
       .click();
     cy.url().should('contain', '/vergadering/');

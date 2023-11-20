@@ -6,32 +6,14 @@
     </AuFormRow>
   </div>
 </Auk::Modal::Body>
-<Auk::Modal::Footer @custom={{true}}>
-  <Auk::Toolbar @size="large" as |Toolbar|>
-    <Toolbar.Group @position="left" as |Group|>
-      <Group.Item>
-        <AuButton
-          data-test-new-case-cancel
-          @skin="naked"
-          @disabled={{this.createCase.isRunning}}
-          {{on "click" @onCancel}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group.Item>
-    </Toolbar.Group>
-    <Toolbar.Group @position="right" as |Group|>
-      <Group.Item>
-        <AuButton
-          data-test-new-case-save={{true}}
-          @skin="primary"
-          @disabled={{this.isCreateDisabled}}
-          @loading={{this.createCase.isRunning}}
-          {{on "click" (perform this.createCase)}}
-        >
-          {{t "create-case"}}
-        </AuButton>
-      </Group.Item>
-    </Toolbar.Group>
-  </Auk::Toolbar>
+<Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.createCase.isRunning}}>
+  <AuButton
+    data-test-new-case-save={{true}}
+    @skin="primary"
+    @disabled={{this.isCreateDisabled}}
+    @loading={{this.createCase.isRunning}}
+    {{on "click" (perform this.createCase)}}
+  >
+    {{t "create-case"}}
+  </AuButton>
 </Auk::Modal::Footer>

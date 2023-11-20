@@ -55,14 +55,17 @@ export default class SignaturePillComponent extends Component {
     let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
     let route = null;
+    let models = null;
     if (status) {
       if (status.uri === MARKED) {
-        route = "signatures.index";
-      }
-      if (status.uri !== REFUSED &&
-          status.uri !== CANCELED &&
-          status.uri !== SIGNED &&
-          status.uri !== MARKED) {
+        const meeting = await signFlow.meeting;
+        route = meeting
+          ? 'signatures.decisions'
+          : 'signatures.index';
+      } else if (status.uri === SIGNED) {
+        route = 'document';
+        models = [this.args.piece];
+      } else if (status.uri !== REFUSED && status.uri !== CANCELED) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
@@ -84,7 +87,8 @@ export default class SignaturePillComponent extends Component {
     return {
       signingHubUrl,
       status,
-      route
+      route,
+      models,
     };
   });
 
@@ -96,10 +100,10 @@ export default class SignaturePillComponent extends Component {
     const route = this.data?.value?.route;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (signingHubUrl || route) {
-      return 'link';
     } else if (statusUri === SIGNED) {
       return 'success';
+    } else if (signingHubUrl || route) {
+      return 'link';
     }
     return 'default';
   }
