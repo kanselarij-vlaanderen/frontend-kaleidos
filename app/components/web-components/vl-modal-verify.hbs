@@ -36,37 +36,19 @@
         <p>{{@message}}</p>
       </Auk::Modal::Body>
       {{#if this.showActions}}
-        <Auk::Modal::Footer @custom={{true}}>
-          <Auk::Toolbar @size="large">
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <AuButton
-                  data-test-vl-modal-verify-cancel
-                  @skin="naked"
-                  @disabled={{@isLoading}}
-                  {{on "click" @onCancel}}
-                >
-                  {{t "cancel"}}
-                </AuButton>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
+        <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{@isLoading}}>
             {{#if this.showVerify}}
-              <Auk::Toolbar::Group @position="right">
-                <Auk::Toolbar::Item>
-                  <AuButton
-                    data-test-vl-modal-verify-save
-                    @skin="primary"
-                    @alert={{this.isAlertButton}}
-                    @icon={{if this.showDestructiveIcon "trash"}}
-                    @loading={{@isLoading}}
-                    {{on "click" @onVerify}}
-                  >
-                    {{this.verifyButtonText}}
-                  </AuButton>
-                </Auk::Toolbar::Item>
-              </Auk::Toolbar::Group>
+              <AuButton
+                data-test-vl-modal-verify-save
+                @skin="primary"
+                @alert={{this.isAlertButton}}
+                @icon={{if this.showDestructiveIcon "trash"}}
+                @loading={{@isLoading}}
+                {{on "click" @onVerify}}
+              >
+                {{this.verifyButtonText}}
+              </AuButton>
             {{/if}}
-          </Auk::Toolbar>
         </Auk::Modal::Footer>
       {{/if}}
     </div>

@@ -112,9 +112,9 @@ export default class CasesSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
 
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
@@ -174,11 +174,7 @@ export default class CasesSearchRoute extends Route {
     const filter = CasesSearchRoute.createFilter(params);
 
     this.lastParams.commit();
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
+    
     // session-dates can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;

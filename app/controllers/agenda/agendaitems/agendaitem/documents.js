@@ -172,15 +172,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
    * Add new piece to an existing document container
    */
   @task
-  *addPiece(piece, signFlow) {
-    const shouldReplaceSignFlow = !!signFlow;
-    if (shouldReplaceSignFlow) {
-      yield this.signatureService.removeSignFlow(signFlow);
-    }
+  *addPiece(piece) {
     yield piece.save();
-    if (shouldReplaceSignFlow) {
-      yield this.signatureService.markDocumentForSignature(piece, this.decisionActivity);
-    }
+    yield this.signatureService.markNewPieceForSignature(null, piece, this.decisionActivity);
     yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
       const sourceFile = yield piece.file;

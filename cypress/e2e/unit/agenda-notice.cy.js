@@ -92,7 +92,7 @@ context('agenda notice test', () => {
     cy.get('@listItems').eq(1)
       .should('contain', 'Hilde Crevits');
     cy.get('@listItems').eq(2)
-      .should('contain', 'Bart Somers');
+      .should('contain', 'Gwendolyn Rutten');
     cy.get('@listItems').eq(3)
       .should('contain', 'Ben Weyts');
     cy.get('@listItems').eq(4)

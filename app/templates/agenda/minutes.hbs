@@ -12,7 +12,7 @@
               </h4>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
-              {{#if (user-may "manage-minutes")}}
+              {{#if this.mayEditMinutes}}
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
@@ -20,6 +20,7 @@
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
+                      @disabled={{this.currentPiecePartTask.isRunning}}
                       {{on "click" (fn (set this "isEditing" true))}}
                     >
                       {{t (if @model.minutes "edit" "create")}}
@@ -51,7 +52,7 @@
                   {{on "click" this.updateEditorContent}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
-                  @record={{this.currentPiecePart.value}}
+                  @record={{this.currentPiecePartTask.value}}
                   @previousVersionKey="previousPiecePart"
                   @onVersionClicked={{this.revertToVersion}}
                 />
@@ -95,13 +96,13 @@
                 @isEditable={{true}}
                 @agendaContext={{this.agendaContext}}
                 @hideNewerVersions={{true}}
-                @hideDelete={{true}}
                 @hideEdit={{true}}
                 @hideUpload={{true}}
-                @hideSign={{true}}
                 @showCreateNewVersion={{true}}
                 @onCreateNewVersion={{perform this.onCreateNewVersion}}
                 @bordered={{true}}
+                @didDeleteContainer={{this.didDeleteMinutes}}
+                @meeting={{this.meeting}}
               />
             {{else if (user-may "manage-minutes")}}
               <AuAlert
@@ -121,14 +122,14 @@
               />
             {{/if}}
           </Auk::Panel::Body>
-          {{#if (and (user-may "manage-minutes") this.currentPiecePart.value)}}
+          {{#if (and (user-may "manage-minutes") this.currentPiecePartTask.value)}}
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
               <AuContent>
                 <SanitizeHtml
                   @raw={{true}}
-                  @value={{this.currentPiecePart.value.value}}
+                  @value={{this.currentPiecePartTask.value.htmlContent}}
                 />
               </AuContent>
             </Auk::Panel::Body>
@@ -138,3 +139,15 @@
     </div>
   </div>
 </div>
+
+{{#if this.isUpdatingMinutesContent}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "loading-minutes"}}
+      @closeable={{false}}
+    />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "loading-minutes"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
