@@ -43,8 +43,8 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
 
     const getSubmitterAndCosigners = async (decisionActivity) => {
       const subcase = await decisionActivity.subcase;
-      const submitter = await subcase.requestedBy;
-      const cosigners = await subcase.mandatees;
+      const submitter = await subcase?.requestedBy;
+      const cosigners = await subcase?.mandatees ?? [];
       return { submitter, cosigners };
     };
 

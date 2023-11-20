@@ -11,6 +11,8 @@ import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
   let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
@@ -246,18 +248,34 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  regenerateDecisionReport = task(async (decisionActivity) => {
-    if (this.enableDigitalAgenda) {
-      const report = await this.store.queryOne('report', {
-        'filter[:has-no:next-piece]': true,
-        'filter[decision-activity][:id:]': decisionActivity.id,
+  regenerateDecisionReportNames = task(async () => {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    await Promise.all(reports.map(async (report) => {
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[:has-no:next-version]': true,
+        'filter[treatment][decision-activity][report][:id:]': report.id,
       });
-      const pieceParts = await report?.pieceParts;
-      if (pieceParts?.length) {
-        await this.decisionReportGeneration.generateReplacementReport.perform(
-          report
-        );
-      }
+      const documentContainer = await report.documentContainer;
+      const pieces = await documentContainer.pieces;
+      report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+      await report.save();
+    }));
+  });
+
+  regenerateDecisionReports = task(async () => {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    if (reports.length) {
+      this.decisionReportGeneration.generateReplacementReports.perform(reports);
     }
   });
 
@@ -279,9 +297,9 @@ export default class MeetingEditMeetingComponent extends Component {
 
     if (this.enableDigitalAgenda && !this.isPreKaleidos) {
       if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
-          this.args.meeting.secretary = this.secretary;
-        }
+        this.args.meeting.secretary = this.secretary;
       }
+    }
     // update the planned date of the publication activities (not needed for decisions)
     this.themisPublicationActivity.plannedDate =
       this.plannedDocumentPublicationDate;
@@ -299,28 +317,38 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-
       if (this.enableDigitalAgenda && !this.isPreKaleidos) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
-          currentPlannedStart !== this.startDate || 
+          currentPlannedStart !== this.startDate ||
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
-          const decisionActivities = yield this.store.queryAll(
-            'decision-activity',
-            {
-              'filter[treatment][agendaitems][agenda][created-for][:id:]':
-                this.args.meeting.id,
-            }
-          );
-          for (let decisionActivity of decisionActivities.slice()) {
-            decisionActivity.secretary = this.secretary;
-            yield decisionActivity.save();
-            yield this.regenerateDecisionReport.perform(decisionActivity);
+          if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
+            const decisionActivities = yield this.store.queryAll(
+              'decision-activity',
+              {
+                'filter[treatment][agendaitems][agenda][created-for][:id:]':
+                  this.args.meeting.id,
+              }
+            );
+            // TODO KAS-4293 secretary only needs to be updated if that changes
+            // if so, all decisionActivities have to be saved before we generate the reports again.
+            // any chance we can set the secretary in backend and reload in frontend?
+            // we might have some concurrency issues here with every save of decisionActivity
+            yield Promise.all(
+              decisionActivities.map(async (decisionActivity) => {
+                decisionActivity.secretary = this.secretary;
+                await decisionActivity.save();
+              })
+            );
           }
+          if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
+            yield this.regenerateDecisionReportNames.perform();
+          }
+          yield this.regenerateDecisionReports.perform();
           if (this.enableDigitalMinutes) {
-            yield this.updateSecretaryInMinutes();
+            yield this.regenerateMinutes();
           }
         }
       }
@@ -332,19 +360,32 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  async updateSecretaryInMinutes() {
+  async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
     if (minutes) {
+      // new name
+      const documentContainer = await minutes.documentContainer;
+      const pieces = await documentContainer.pieces;
+      let versionSuffix = '';
+      if (pieces >= 1 && pieces < Object.keys(CONFIG.latinAdverbialNumberals).length) {
+        versionSuffix = CONFIG.latinAdverbialNumberals[pieces].toUpperCase();
+      }
+      minutes.name = `${this.args.meeting.numberRepresentation}${versionSuffix}`;
+      await minutes.save();
+      // replace secretary
       const piecePart = await this.store.queryOne('piece-part', {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newValue = replaceSecretary(piecePart.value,
-        this.secretary.person.get('fullName'),
-        this.secretary.title.toLowerCase());
-      piecePart.value = newValue;
+      if (this.secretary) {
+        const newHtmlContent = replaceSecretary(piecePart.htmlContent,
+          this.secretary.person.get('fullName'),
+          this.secretary.title.toLowerCase());
+        piecePart.htmlContent = newHtmlContent;
+      }
       await piecePart.save();
-      await this.decisionReportGeneration.generateReplacementMinutes.perform(
+      // new file
+      this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
       );
     }

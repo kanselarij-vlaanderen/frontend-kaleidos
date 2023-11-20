@@ -20,8 +20,9 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
       const previousPiece = await latestPiece.previousPiece;
       if (latestPiece.constructor.modelName === 'piece') {
         await deletePiece(latestPiece);
-      } else if (latestPiece.constructor.modelName === 'report') {
-        await deleteReport(latestPiece);
+      } else if (latestPiece.constructor.modelName === 'report'
+                || latestPiece.constructor.modelName === 'minutes') {
+        await deletePieceWithPieceParts(latestPiece);
       } else {
         console.debug(
           'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
@@ -56,19 +57,19 @@ export async function deletePiece(pieceOrPromise) {
 }
 
 /**
- * Deletes the provided report and its file(s), and its document container if the
+ * Deletes the provided piece, its pieceParts and its file(s), and its document container if the
  * container would otherwise be orphaned.
  *
- * @param reportOrPromise {Report | Promise<Report>}
+ * @param pieceOrPromise {Report | Promise<Report>}
  * @returns {Promise}
  */
-export async function deleteReport(reportOrPromise) {
-  const report = await reportOrPromise;
-  const pieceParts = await report.pieceParts;
+export async function deletePieceWithPieceParts(pieceOrPromise) {
+  const piece = await pieceOrPromise;
+  const pieceParts = await piece.pieceParts;
   for (const piecePart of pieceParts.toArray()) {
     await piecePart.destroyRecord();
   }
-  await deletePiece(report);
+  await deletePiece(piece);
 }
 
 /**

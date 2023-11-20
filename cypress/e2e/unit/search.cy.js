@@ -154,16 +154,16 @@ context('Search tests', () => {
     const case2TitleShort = 'testId=1653051342: Cypress search dossier 2';
     const newSubcase2TitleShort = 'testId=1653051342: korte titel for batterij';
     const subcase2TitleLong = 'testId=1653051342: lange titel for peerd';
-    // const fileAgendaitem2 = {
-    //   // unieke woorden: Walkman stereo
-    //   folder: 'files', fileName: 'search-agendaitem-piece_2', fileExtension: 'pdf', newFileName: 'piece 2 pdf', fileType: 'Nota',
-    // };
-    const treatmentWords2 = 'codez krokkettenmaker';
-    // const fileTreatment2 = {
-    //   words: 'codez krokkettenmaker',
-    //   // unieke woorden: codez krokkettenmaker
-    //   folder: 'files', fileName: 'search-agendaitem-treatment_2', fileExtension: 'pdf', newFileName: 'treatment 2 pdf',
-    // };
+    const fileAgendaitem2 = {
+      // unieke woorden: Walkman stereo
+      folder: 'files', fileName: 'search-agendaitem-piece_2', fileExtension: 'pdf', newFileName: 'piece 2 pdf', fileType: 'Nota',
+    };
+    // const treatmentWords2 = 'codez krokkettenmaker'; // if generated
+    const fileTreatment2 = {
+      words: 'codez krokkettenmaker',
+      // unieke woorden: codez krokkettenmaker
+      folder: 'files', fileName: 'search-agendaitem-treatment_2', fileExtension: 'pdf', newFileName: 'treatment 2 pdf',
+    };
 
     it('Add content for funky searchterms', () => {
       // *Existing data test: add this to setup, check ownership of files before zipping!
@@ -181,12 +181,10 @@ context('Search tests', () => {
       cy.wait('@patchAgendaitem');
 
       cy.visitAgendaWithLink('/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D/documenten');
-      // cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
-      // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-      cy.generateDecision(null, treatmentWords2);
-      // cy.addDocumentToTreatment(fileTreatment2);
-      // cy.get(auk.confirmationModal.footer.confirm).click();
-      // cy.wait('@patchDecisionActivities');
+      cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
+      cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+      // cy.generateDecision(null, treatmentWords2); // if generated
+      cy.addDocumentToTreatment(fileTreatment2);
     });
 
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
@@ -413,7 +411,7 @@ context('Search tests', () => {
   context('Search all fields', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-    const agendaDate = Cypress.dayjs('2023-06-06');
+    const agendaDate = Cypress.dayjs('2023-11-21');
     const caseShortTitle = `Cypress test - ${randomInt}: uniek precair interstellair, maar niet verstoken van enige flair`;
     const subcaseShortTitle = `Cypress test - ${randomInt}: uniek terracotta scherven die wij van ons moeder erven`;
     const subcaseLongTitle = `Cypress test - ${randomInt}: uniek dramatiek op de dansvloer zonder muziek`;

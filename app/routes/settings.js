@@ -7,7 +7,7 @@ export default class SettingsRoute extends Route {
   @service router;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
     if (!this.currentSession.may('manage-settings')) {
       this.router.transitionTo('index');
