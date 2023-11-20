@@ -122,12 +122,12 @@ context('signatures shortlist overview tests', () => {
     cy.addAgendaitemMandatee(3);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.get(document.documentCard.signMarking).click();
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.addAgendaitemMandatee(4);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.get(document.documentCard.signMarking).click();
 
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
@@ -318,7 +318,9 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
-      .click();
+      .click({
+        force: true,
+      });
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
@@ -344,7 +346,9 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
-      .click();
+      .click({
+        force: true,
+      });
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
@@ -573,11 +577,10 @@ context('decisions and minutes shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
   const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
-  const decisionDate = Cypress.dayjs();
   let decisionTitle;
   const pieceTypeDecision = 'BF';
   const pieceTypeMinutes = 'Notulen';
-  const minutesTitle = `Notulen - P${agendaDate.format('YYYY-MM-DD')}`;
+  let minutesTitle;
 
   const defaultSecretary = 'Jeroen Overmeer';
   const newSecretary = 'Joachim Pohlmann';
@@ -605,9 +608,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
     cy.get(document.documentCard.name.value).invoke('text')
       .then((generatedDocTitle) => {
-        cy.log(generatedDocTitle);
         decisionTitle = generatedDocTitle.replace('.pdf', '').trim();
-        cy.log(decisionTitle);
       });
     cy.intercept('POST', '/sign-flows*').as('postSignFlows1');
     cy.intercept('POST', '/sign-subcases*').as('postSignSubcases1');
@@ -620,6 +621,12 @@ context('decisions and minutes shortlist overview tests', () => {
 
     cy.generateMinutes();
     cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        minutesTitle = generatedDocTitle.replace('.pdf', '').trim();
+      });
     cy.intercept('POST', '/sign-flows*').as('postSignFlows2');
     cy.intercept('POST', '/sign-subcases*').as('postSignSubcases2');
     cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities2');
@@ -700,7 +707,7 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // check info
     cy.get(route.decisions.sidebar.info).contains(pieceTypeDecision);
-    cy.get(route.decisions.sidebar.info).contains(decisionDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
     cy.get(route.decisions.sidebar.info).contains(decisionTitle);
 
     // check preview
@@ -738,7 +745,7 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // check info
     cy.get(route.decisions.sidebar.info).contains(pieceTypeMinutes);
-    cy.get(route.decisions.sidebar.info).contains(decisionDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
     cy.get(route.decisions.sidebar.info).contains(minutesTitle);
 
     // check preview
