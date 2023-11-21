@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -78,10 +77,6 @@ export default class AllTypes extends Route {
 
     this.lastParams.stageLive(params);
     this.lastParams.commit();
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
 
     const results = await Promise.all(
       Object.entries(this.CONTENT_TYPES).map(async (entry) => {

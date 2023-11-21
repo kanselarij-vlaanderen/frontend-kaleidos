@@ -53,9 +53,10 @@ export default class SearchDecisionsRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
+
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
     }
@@ -129,9 +130,6 @@ export default class SearchDecisionsRoute extends Route {
 
     this.lastParams.commit();
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
     // Since we want to show the decisions in their agendaitem, we query for
     // agendaitems here while only filtering on decision data, so that we can
     // easily link to the agendaitem route

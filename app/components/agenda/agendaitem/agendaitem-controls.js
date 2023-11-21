@@ -142,7 +142,7 @@ export default class AgendaitemControls extends Component {
           'piece-part',
           {
             title: 'Beslissing',
-            value: message,
+            htmlContent: message,
             report: report,
             previousPiecePart: beslissingPiecePart,
             created: now,

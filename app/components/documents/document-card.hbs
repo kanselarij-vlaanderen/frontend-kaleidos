@@ -86,20 +86,20 @@
                 </p>
               {{/if}}
               {{#if
-                (and this.signaturesEnabled (await (this.canViewSignedPiece)))
+                (and this.signaturesEnabled (await (this.canViewConfidentialPiece)))
               }}
-                {{#if this.piece.signedPiece.file}}
+                {{#if this.piece.signedPieceCopy.file}}
                   <p>
                     <AuLinkExternal
                       href={{await
-                        this.piece.signedPiece.namedDownloadLinkPromise
+                        this.piece.signedPieceCopy.namedDownloadLinkPromise
                       }}
                       download
                     >
                       {{t "signed-document"}}
                     </AuLinkExternal>
                     {{t "on"}}
-                    {{datetime-at this.piece.signedPiece.created}}
+                    {{datetime-at this.piece.signedPieceCopy.created}}
                   </p>
                 {{/if}}
               {{/if}}
@@ -114,26 +114,30 @@
             )
           }}
             {{#if this.piece.publicationFlow}}
-              {{#if (user-may "manage-publication-flows")}}
-                <AuPill
-                  @size="small"
-                  @route="publications.publication"
-                  @model={{this.piece.publicationFlow.id}}
-                  data-test-document-card-publication-link
-                >
-                  {{this.piece.publicationFlow.identification.idName}}
-                </AuPill>
-              {{else}}
-                <AuPill
-                  @size="small"
-                >
-                  {{this.piece.publicationFlow.identification.idName}}
-                </AuPill>
-              {{/if}}
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
+              >
+                {{#if (user-may "manage-publication-flows")}}
+                  <AuPill
+                    @size="small"
+                    @route="publications.publication"
+                    @model={{this.piece.publicationFlow.id}}
+                    data-test-document-card-publication-link
+                  >
+                    {{this.piece.publicationFlow.identification.idName}}
+                  </AuPill>
+                {{else}}
+                  <AuPill
+                    @size="small"
+                  >
+                    {{this.piece.publicationFlow.identification.idName}}
+                  </AuPill>
+                {{/if}}
+              </Group.Item>
             {{/if}}
           {{/if}}
           <Group.Item
-            class="auk-o-flex"
+            class="auk-o-flex auk-o-flex--vertical-center"
             {{did-update
               (perform this.loadAccessLevelRelatedData)
               @agendaContext.meeting.internalDecisionPublicationActivity.status
@@ -164,7 +168,9 @@
           </Group.Item>
           {{#if this.signaturesEnabled}}
             {{#if this.showSignatureLoader}}
-              <Group.Item>
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
+              >
                 <div
                   class="auk-loader au-u-margin-left-small"
                   role="alert"
@@ -172,7 +178,9 @@
                 ></div>
               </Group.Item>
             {{else if this.signMarkingActivity}}
-              <Group.Item>
+              <Group.Item
+                class="auk-o-flex auk-o-flex--vertical-center"
+              >
                 <SignaturePill
                   @piece={{this.piece}}
                   @signMarkingActivity={{this.signMarkingActivity}}
@@ -181,7 +189,9 @@
             {{/if}}
           {{/if}}
           {{#if this.mayShowEditDropdown}}
-            <Group.Item>
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
               <AuDropdown
                 data-test-document-card-actions={{true}}
                 @icon="three-dots"
@@ -224,7 +234,7 @@
                   <AuButton
                     data-test-document-card-sign-marking
                     @skin="link"
-                    @disabled={{this.agendaitemIsRetracted}}
+                    @disabled={{this.markingForSigningIsDisabled}}
                     {{on "click" this.markDocumentForSigning.perform}}
                     role="menuitem"
                   >

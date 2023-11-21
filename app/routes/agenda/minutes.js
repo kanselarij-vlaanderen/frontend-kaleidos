@@ -5,8 +5,10 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class AgendaMinutesRoute extends Route {
+  @service router;
   @service store;
   @service mandatees;
+  @service signatureService;
 
   async getMandatees() {
     const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
@@ -47,11 +49,20 @@ export default class AgendaMinutesRoute extends Route {
       }
     }
     const minutes = await meeting.minutes;
-    return { minutes, mandatees, notas, announcements, meeting };
+    return { minutes, mandatees, notas, announcements, meeting, agenda };
   }
 
-  setupController(controller) {
+  async afterModel(model, _transition) {
+    const meeting = model.meeting;
+    const agenda = model.agenda;
+    if (meeting?.isPreDigitalMinutes) {
+      this.router.transitionTo('agenda.agendaitems', meeting.id, agenda.id);
+    }
+  }
+
+  async setupController(controller) {
     super.setupController(...arguments);
+    controller.isLoading = true;
     const meeting = this.modelFor('agenda').meeting;
     controller.meeting = meeting;
     const agenda = this.modelFor('agenda').agenda;
@@ -59,5 +70,11 @@ export default class AgendaMinutesRoute extends Route {
     controller.isEditing = false;
     controller.isFullscreen = false;
     controller.editor = null;
+    const minutes = await meeting.minutes;
+    if (minutes) {
+      controller.hasSignFlow = await this.signatureService.hasSignFlow(minutes);
+      controller.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(minutes);
+    }
+    controller.isLoading = false;
   }
 }
