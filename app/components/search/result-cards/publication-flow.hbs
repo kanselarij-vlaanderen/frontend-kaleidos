@@ -20,14 +20,14 @@
           <span class="card-link">
             <SanitizeHtml
               @raw={{true}}
-              @value={{if @shortTitle @shortTitle @title}}
+              @value={{or @shortTitle @title}}
             />
           </span>
         </AuLink>
       {{else}}
         <SanitizeHtml
           @raw={{true}}
-          @value={{if @shortTitle @shortTitle @title}}
+          @value={{or @shortTitle @title}}
         />
       {{/if}}
     </AuHeading>
