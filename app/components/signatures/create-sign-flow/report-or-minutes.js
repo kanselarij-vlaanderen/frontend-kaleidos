@@ -1,17 +1,20 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { TrackedArray } from 'tracked-built-ins';
 import { trackedFunction } from 'ember-resources/util/function';
 
 export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Component {
   @service store;
 
-  @tracked signers = new TrackedArray([]);
-  @tracked hasConflictingSigners = false;
-
   constructor() {
     super(...arguments);
+  }
+
+  get hasConflictingSigners() {
+    return this.loadSigners.value?.hasConflictingSigners ?? false;
+  }
+
+  get signers() {
+    return this.loadSigners.value?.signers ?? [];
   }
 
   loadSigners = trackedFunction(this, async () => {
@@ -20,6 +23,9 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     }
     const decisionActivitiesOrMeetings = this.args.decisionActivities.toArray();
 
+    let hasConflictingSigners = false;
+    let signers = [];
+
     const [head, ...tail] = decisionActivitiesOrMeetings;
     const secretary = await head.secretary;
 
@@ -27,14 +33,17 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
       const _secretary = await decisionActivityOrMeeting.secretary;
 
       if (secretary?.id !== _secretary?.id) {
-        this.hasConflictingSigners = true;
+        hasConflictingSigners = true;
         break;
       }
     }
-    this.signers = new TrackedArray([]);
-    if (!this.hasConflictingSigners && secretary) {
-      this.signers = new TrackedArray([secretary]);
+    signers = [];
+    if (!hasConflictingSigners && secretary) {
+      signers = [secretary];
     }
-    this.args.onChangeSigners?.(this.signers);
+    return {
+      signers,
+      hasConflictingSigners,
+    };
   });
 }
