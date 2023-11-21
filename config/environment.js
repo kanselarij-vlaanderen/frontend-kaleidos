@@ -23,6 +23,7 @@ module.exports = function (environment) {
       ENABLE_DEBUG: '{{ENABLE_DEBUG}}',
       ENABLE_DIGITAL_AGENDA: '{{ENABLE_DIGITAL_AGENDA}}',
       ENABLE_DIGITAL_MINUTES: '{{ENABLE_DIGITAL_MINUTES}}',
+      ENABLE_VLAAMS_PARLEMENT: '{{ENABLE_VLAAMS_PARLEMENT}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
