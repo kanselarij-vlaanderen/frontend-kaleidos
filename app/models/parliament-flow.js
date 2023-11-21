@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class ParliamentFlow extends Model {
   @attr parliamentId;
@@ -6,5 +6,6 @@ export default class ParliamentFlow extends Model {
   @attr('datetime') closingDate;
 
   @belongsTo('parliament-subcase', { async: true }) parliamentSubcase;
+  @belongsTo('case', { inverse: 'parliament-flow', async: true }) case;
   @belongsTo('concept', { inverse: null, async: true }) status;
 }

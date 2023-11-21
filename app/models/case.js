@@ -9,7 +9,7 @@ export default class CaseModel extends Model {
 
   @belongsTo('decisionmaking-flow', { inverse: 'case', async: true })
   decisionmakingFlow;
-  @belongsTo('parliament-flow', { async: true }) parliamentFlow;
+  @belongsTo('parliament-flow', { inverse: 'case', async: true }) parliamentFlow;
 
   @hasMany('piece', { inverse: 'cases', async: true, polymorphic: true })
   pieces;
