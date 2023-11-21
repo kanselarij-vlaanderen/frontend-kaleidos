@@ -24,8 +24,8 @@ export default class SearchPublicationStatusesFilterComponent extends Component 
     )).toArray();
 
     if (this.selectedStatusIds.length) {
-      this.selectedStatuses = this.statuses.filter(decisionResultCode =>
-        this.selectedStatusIds.includes(decisionResultCode.id)
+      this.selectedStatuses = this.statuses.filter(status =>
+        this.selectedStatusIds.includes(status.id)
       );
     }
   });
