@@ -349,7 +349,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(auk.loader).should('not.exist', {
+    timeout: 60000,
+  }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');

@@ -318,9 +318,8 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
-      .click({
-        force: true,
-      });
+      .scrollIntoView()
+      .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
@@ -346,9 +345,8 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
-      .click({
-        force: true,
-      });
+      .scrollIntoView()
+      .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
@@ -656,6 +654,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(route.decisions.sidebar.close);
@@ -702,6 +701,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
@@ -715,6 +715,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
     cy.url().should('include', 'document');
     cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     // check last agendaitem
@@ -727,6 +728,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .invoke('attr', 'class')
       .should('include', 'auk-sidebar__item--active');
     cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
@@ -853,6 +855,7 @@ context('decisions and minutes shortlist overview tests', () => {
     // *start signflow*
 
     // check fail
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer); // wait for signers to load
@@ -875,6 +878,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
 
     // check succes
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
