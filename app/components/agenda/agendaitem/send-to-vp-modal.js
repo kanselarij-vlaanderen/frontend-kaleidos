@@ -36,10 +36,18 @@ export default class SendToVpModalComponent extends Component {
         sort: '-created',
       });
 
-      const pieces = await this.store.query('piece', {
-        'filter[agendaitems][:id:]': latestAgendaitem.id,
-        include: 'document-container.type,signed-piece,file',
-      });
+      const treatment = await latestAgendaitem?.treatment;
+      const decisionActivity = await treatment?.decisionActivity;
+      const report = await decisionActivity?.report;
+
+      const agendaitemPieces = await latestAgendaitem.pieces;
+      let pieces = report ? [report, ...agendaitemPieces] : agendaitemPieces;
+      for (const piece of pieces) {
+        const documentContainer = await piece.documentContainer;
+        await documentContainer?.type;
+        await piece.signedPiece;
+        await piece.file;
+      }
       const subcaseType = await subcaseTypePromise;
       return {
         subcase,
@@ -146,6 +154,7 @@ export default class SendToVpModalComponent extends Component {
           `${requirement.type.altLabel} (ondertekend)`
         );
       } else if (
+        !requirement.signed &&
         !hasPieceOfType(
           subcaseWithPieces.pieces,
           requirement.type,
@@ -193,6 +202,5 @@ function hasPieceOfType(pieces, type, mimeType) {
 
 function hasSignedPieceOfType(pieces, type, mimeType) {
   const foundPiece = findPieceOfType(pieces, type, mimeType);
-
   return !!foundPiece?.belongsTo('signedPiece').value();
 }
