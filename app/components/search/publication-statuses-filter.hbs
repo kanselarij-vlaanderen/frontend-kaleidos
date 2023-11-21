@@ -3,7 +3,7 @@
   <Auk::Loader />
 {{else}}
   <Auk::CheckboxTree
-    @label={{capitalize (t "all-results")}}
+    @label={{t "all-statuses"}}
     @items={{this.statuses}}
     @selectedItems={{this.selectedStatuses}}
     @didUpdate={{this.onChangeStatuses}}

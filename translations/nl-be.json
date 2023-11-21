@@ -1254,5 +1254,6 @@
   "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
   "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
   "retracted-item-decision": "Dit punt wordt ingetrokken.",
-  "last-edited": "Laatste wijziging"
+  "last-edited": "Laatste wijziging",
+  "all-statuses": "Alle statussen"
 }
