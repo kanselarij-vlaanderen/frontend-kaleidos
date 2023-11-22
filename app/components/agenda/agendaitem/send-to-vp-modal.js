@@ -183,7 +183,7 @@ export default class SendToVpModalComponent extends Component {
   };
 }
 
-function findPieceOfType(pieces, type, mimeType) {
+function findPieceOfType(pieces, type, mimeType=null) {
   return pieces.find((piece) => {
     const documentContainer = piece.belongsTo('documentContainer').value();
     const pieceType = documentContainer.belongsTo('type').value();
@@ -205,7 +205,7 @@ function hasPieceOfType(pieces, type, mimeType) {
   return !!findPieceOfType(pieces, type, mimeType);
 }
 
-function hasSignedPieceOfType(pieces, type, mimeType) {
+function hasSignedPieceOfType(pieces, type, mimeType=null) {
   const foundPiece = findPieceOfType(pieces, type, mimeType);
   return !!foundPiece?.belongsTo('signedPiece').value();
 }
