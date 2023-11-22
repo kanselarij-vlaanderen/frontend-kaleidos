@@ -4,6 +4,11 @@ import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
+const PDF_MIME_TYPE = 'application/pdf; charset=binary';
+// question: is this enough for all Word documents?
+// or do we need to check more mimeTypes?
+const WORD_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary';
+
 export default class SendToVpModalComponent extends Component {
   @service store;
   @service conceptStore;
@@ -148,34 +153,20 @@ export default class SendToVpModalComponent extends Component {
       this.subcaseRequirements[subcaseWithPieces.subcaseTypeUri];
 
     for (const requirement of subcaseRequirements) {
-      if (
-        requirement.signed &&
-        !hasSignedPieceOfType(subcaseWithPieces.pieces, requirement.type)
-      ) {
-        formattedMissingFiles.push(
-          `${requirement.type.altLabel} (ondertekend)`
-        );
-      } else if (
-        !requirement.signed &&
-        !hasPieceOfType(
-          subcaseWithPieces.pieces,
-          requirement.type,
-          'application/pdf; charset=binary'
-        )
-      ) {
-        formattedMissingFiles.push(`${requirement.type.altLabel}`);
-      }
+      const pieces = subcaseWithPieces.pieces;
+      const type = requirement.type;
 
-      if (
-        requirement.wordRequired &&
-        !hasPieceOfType(
-          subcaseWithPieces.pieces,
-          requirement.type,
-          // question: is this enough for all Word documents?
-          // or do we need to check more mimeTypes?
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset=binary'
-        )
-      ) {
+      const hasSigned = hasSignedPieceOfType(pieces, type);
+      const hasPdf = hasPieceOfType(pieces, type, PDF_MIME_TYPE);
+      const hasWord = hasPieceOfType(pieces, type, WORD_MIME_TYPE);
+
+      if (!hasPdf) {
+        formattedMissingFiles.push(`${requirement.type.altLabel}`);
+      } else if (requirement.signed && !hasSigned && requirement.wordRequired && !hasWord) {
+        formattedMissingFiles.push(`${requirement.type.altLabel} (ondertekend en in Word)`);
+      } else if (requirement.signed && !hasSigned) {
+        formattedMissingFiles.push(`${requirement.type.altLabel} (ondertekend)`);
+      } else if (requirement.wordRequired && !hasWord) {
         formattedMissingFiles.push(`${requirement.type.altLabel} (in Word)`);
       }
     }
