@@ -104,8 +104,8 @@ export default class SendToVpModalComponent extends Component {
     const BESLISSINGSFICHE = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
     );
-    const ONTWERPDECREET = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ONTWERPDECREET
+    const DECREET = this.documentTypes.find(
+      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.DECREET
     );
     const MEMORIE = this.documentTypes.find(
       (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.MEMORIE
@@ -123,14 +123,14 @@ export default class SendToVpModalComponent extends Component {
     this.subcaseRequirements = {
       [PRINCIPIELE_GOEDKEURING]: [
         { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-        { type: ONTWERPDECREET, wordRequired: true, signed: false },
+        { type: DECREET, wordRequired: true, signed: false },
         { type: MEMORIE, wordRequired: true, signed: false },
         { type: NOTA, wordRequired: false, signed: false },
         { type: ADVIES, wordRequired: false, signed: false },
       ],
       [DEFINITIEVE_GOEDKEURING]: [
         { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-        { type: ONTWERPDECREET, wordRequired: true, signed: true },
+        { type: DECREET, wordRequired: true, signed: true },
         { type: MEMORIE, wordRequired: true, signed: true },
         { type: NOTA, wordRequired: false, signed: false },
         { type: ADVIES, wordRequired: false, signed: false },
