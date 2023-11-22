@@ -46,7 +46,8 @@ export default class SendToVpModalComponent extends Component {
         const documentContainer = await piece.documentContainer;
         await documentContainer?.type;
         await piece.signedPiece;
-        await piece.file;
+        const file = await piece.file;
+        await file.derived;
       }
       const subcaseType = await subcaseTypePromise;
       return {
@@ -186,10 +187,14 @@ function findPieceOfType(pieces, type, mimeType) {
   return pieces.find((piece) => {
     const documentContainer = piece.belongsTo('documentContainer').value();
     const pieceType = documentContainer.belongsTo('type').value();
+    const sourceFile = piece.belongsTo('file').value();
+    const derivedFile = sourceFile.belongsTo('derived').value();
 
     if (mimeType) {
-      const pieceMimeType = piece.belongsTo('file').value().format;
-      return pieceType === type && pieceMimeType === mimeType;
+      const sourceMimeType = sourceFile.format;
+      const derivedMimeType = derivedFile?.format;
+      return pieceType === type
+        && (mimeType.includes(derivedMimeType) || mimeType.includes(sourceMimeType))
     } else {
       return pieceType === type;
     }
