@@ -98,24 +98,25 @@ export default class SendToVpModalComponent extends Component {
   });
 
   async loadDocumentTypes() {
-    this.documentTypes = await this.conceptStore.queryAllByConceptScheme(
-      CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES
+    const BESLISSINGSFICHE = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
     );
-
-    const BESLISSINGSFICHE = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
+    const DECREET = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.DECREET
     );
-    const DECREET = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.DECREET
+    const MEMORIE = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.MEMORIE
     );
-    const MEMORIE = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.MEMORIE
+    const NOTA = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.NOTA
     );
-    const NOTA = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.NOTA
-    );
-    const ADVIES = this.documentTypes.find(
-      (type) => type.uri === CONSTANTS.DOCUMENT_TYPES.ADVIES
+    const ADVIES = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.ADVIES
     );
 
     const { PRINCIPIELE_GOEDKEURING, DEFINITIEVE_GOEDKEURING } =
