@@ -257,15 +257,7 @@
                </h4>
              </Toolbar.Group>
              <Toolbar.Group @position="right" as |Group|>
-               {{#if
-                   (and
-                     this.loadReport.isIdle
-                     (user-may "manage-decisions")
-                     (not this.isEditingAnnotation)
-                     (or this.pieceParts (not this.report))
-                     this.mayEditDecisionReport
-                   )
-                 }}
+               {{#if this.mayBeEdited}}
                    <Group.Item>
                      <AuButton
                        @skin="naked"
@@ -277,6 +269,8 @@
                        {{t "edit"}}
                      </AuButton>
                    </Group.Item>
+                  {{else}}
+                    <Auk::Loader />
                  {{/if}}
              </Toolbar.Group>
            </Auk::Toolbar>
@@ -341,15 +335,7 @@
                   </h4>
                 </Toolbar.Group>
                 <Toolbar.Group @position="right" as |Group|>
-                  {{#if
-                      (and
-                        this.loadReport.isIdle
-                        (user-may "manage-decisions")
-                        (not this.isEditingConcern)
-                        (or this.pieceParts (not this.report))
-                        this.mayEditDecisionReport
-                      )
-                    }}
+                  {{#if this.mayBeEdited}}
                       <Group.Item>
                         <AuButton
                           data-test-agendaitem-decision-create
@@ -428,15 +414,7 @@
                     </h4>
                   </Toolbar.Group>
                   <Toolbar.Group @position="right" as |Group|>
-                     {{#if
-                      (and
-                        this.loadReport.isIdle
-                        (user-may "manage-decisions")
-                        (not this.isEditingTreatment)
-                        (or this.pieceParts (not this.report))
-                        this.mayEditDecisionReport
-                      )
-                    }}
+                     {{#if this.mayBeEdited}}
                       <Group.Item>
                         <AuButton
                           data-test-agendaitem-decision-create
@@ -449,6 +427,8 @@
                           {{t "edit"}}
                         </AuButton>
                       </Group.Item>
+                    {{else}}
+                      <Auk::Loader />
                     {{/if}}
                   </Toolbar.Group>
               </Auk::Toolbar>
