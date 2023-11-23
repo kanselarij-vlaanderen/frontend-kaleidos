@@ -4,7 +4,7 @@ export default class ParliamentSubmissionActivity extends Model {
   @attr('date') startDate;
   @attr('date') endDate;
 
-  @belongsTo('user', { async: true }) submitter;
+  @belongsTo('user', { inverse: null, async: true }) submitter;
 
   @hasMany('submitted-piece', { inverse: null, async: true }) submittedPieces;
 }

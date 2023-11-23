@@ -5,7 +5,7 @@ export default class ParliamentFlow extends Model {
   @attr('datetime') openingDate;
   @attr('datetime') closingDate;
 
-  @belongsTo('parliament-subcase', { async: true }) parliamentSubcase;
+  @belongsTo('parliament-subcase', { inverse: null, async: true }) parliamentSubcase;
   @belongsTo('case', { inverse: 'parliament-flow', async: true }) case;
   @belongsTo('concept', { inverse: null, async: true }) status;
 }
