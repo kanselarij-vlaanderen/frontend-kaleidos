@@ -6,5 +6,5 @@ export default class ParliamentSubmissionActivity extends Model {
 
   @belongsTo('user', { async: true }) submitter;
 
-  @hasMany('piece', { async: true }) pieces;
+  @hasMany('submitted-piece', { inverse: null, async: true }) submittedPieces;
 }
