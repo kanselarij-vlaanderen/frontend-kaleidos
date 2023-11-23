@@ -224,6 +224,7 @@ const selectors = {
       input: '[data-test-edit-meeting-number-representation-input]',
       save: '[data-test-edit-meeting-number-representation-save]',
     },
+    secretary: '[data-test-edit-meeting-secretary]',
     save: '[data-test-edit-meeting-save]',
   },
 
@@ -244,6 +245,12 @@ const selectors = {
     latestMeeting: '[data-test-agendaitem-postponed-latest-meeting]',
     repropose: '[data-test-agendaitem-postponed-repropose]',
     proposableMeeting: '[data-test-agendaitem-postponed-proposable-meeting]',
+  },
+
+  agendaMinutes: {
+    create: '[data-test-agenda-minutes-create]',
+    updateContent: '[data-test-agenda-minutes-update-content]',
+    save: '[data-test-agenda-minutes-save]',
   },
 };
 export default selectors;

@@ -377,6 +377,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
+      .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -403,6 +404,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
+      .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -669,5 +671,361 @@ context('publications shortlist overview tests', () => {
     // different table when signature data is enabled.
     cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
     // cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');
+  });
+});
+
+context('decisions and minutes shortlist overview tests', () => {
+  const agendaDate = Cypress.dayjs().add(15, 'weeks')
+    .day(5);
+  const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
+  let decisionTitle;
+  const pieceTypeDecision = 'BF';
+  const pieceTypeMinutes = 'Notulen';
+  let minutesTitle;
+
+  const defaultSecretary = 'Jeroen Overmeer';
+  const newSecretary = 'Joachim Pohlmann';
+
+  const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
+
+  beforeEach(() => {
+    cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
+  });
+
+  it('setup', () => {
+    cy.createAgenda('Ministerraad', agendaDate);
+    cy.openAgendaForDate(agendaDate);
+    cy.setAllItemsFormallyOk(1);
+    cy.approveDesignAgenda();
+
+    cy.openDetailOfAgendaitem(approvalTitle, false);
+    cy.generateDecision();
+    cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        decisionTitle = generatedDocTitle.replace('.pdf', '').trim();
+      });
+    cy.intercept('POST', '/sign-flows*').as('postSignFlows1');
+    cy.intercept('POST', '/sign-subcases*').as('postSignSubcases1');
+    cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities1');
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).click();
+    cy.wait('@postSignFlows1');
+    cy.wait('@postSignSubcases1');
+    cy.wait('@postSignMarkingActivities1');
+
+    cy.generateMinutes();
+    cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        minutesTitle = generatedDocTitle.replace('.pdf', '').trim();
+      });
+    cy.intercept('POST', '/sign-flows*').as('postSignFlows2');
+    cy.intercept('POST', '/sign-subcases*').as('postSignSubcases2');
+    cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities2');
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.signMarking).forceClick();
+    cy.wait('@postSignFlows2');
+    cy.wait('@postSignSubcases2');
+    cy.wait('@postSignMarkingActivities2');
+  });
+
+  it('should check the signatures/decisions overview', () => {
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist1');
+
+    // ** decision **
+
+    cy.get(route.decisions.row.pieceName).contains(decisionTitle)
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'document');
+    cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
+      .contains(decisionTitle);
+    cy.go('back');
+
+    cy.get(route.decisions.row.pieceName).contains(decisionTitle)
+      .parents('tr')
+      .as('currentDecision');
+
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+    cy.get(route.decisions.sidebar.close);
+    // clicking it again should not close the sidebar (so close button should still be visible and clickable)
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+    cy.wait(1000); // TODO flakey without wait, but why? Waiting for agendaitem doesn't help
+    cy.get(route.decisions.sidebar.close).click();
+    cy.get(route.decisions.sidebar.close).should('not.exist');
+
+    // ** minutes **
+
+    cy.get(route.decisions.row.pieceName).contains(minutesTitle)
+      .invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'document');
+    cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
+      .contains(minutesTitle);
+    cy.go('back');
+
+    cy.get(route.decisions.row.pieceName).contains(minutesTitle)
+      .parents('tr')
+      .as('currentMinutes');
+
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+    cy.get(route.decisions.sidebar.close);
+    // clicking it again should not close the sidebar (so close button should still be visible and clickable)
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+    cy.wait(1000); // TODO flakey without wait, but why? Waiting for agendaitem doesn't help
+    cy.get(route.decisions.sidebar.close).click();
+    cy.get(route.decisions.sidebar.close).should('not.exist');
+  });
+
+  it('should check the signatures/decisions overview sidebar', () => {
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist1');
+
+    // ** decision **
+
+    cy.get(route.decisions.row.pieceName).contains(decisionTitle)
+      .parents('tr')
+      .as('currentDecision');
+
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+
+    // check info
+    cy.get(route.decisions.sidebar.info).contains(pieceTypeDecision);
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(decisionTitle);
+
+    // check preview
+    cy.get(route.decisions.sidebar.preview).invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'document');
+    cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+    // check last agendaitem
+    cy.get(route.decisions.sidebar.consultDecision).invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'agendapunten');
+    cy.url().should('include', 'beslissingen');
+    cy.get(agenda.agendaSideNav.agendaName).contains('B')
+      .parents('li')
+      .invoke('attr', 'class')
+      .should('include', 'auk-sidebar__item--active');
+    cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+
+    // check default signer
+    cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
+      .contains(defaultSecretary);
+
+    // ** minutes **
+
+    cy.get(route.decisions.row.pieceName).contains(minutesTitle)
+      .parents('tr')
+      .as('currentMinutes');
+
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+
+    // check info
+    cy.get(route.decisions.sidebar.info).contains(pieceTypeMinutes);
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(minutesTitle);
+
+    // check preview
+    cy.wait(1000); // TODO  next go('back') is flakey without wait here, but why? Waiting for agendaitem doesn't help
+    cy.get(route.decisions.sidebar.preview).invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'document');
+    cy.get(auk.loader).should('not.exist');
+    cy.go('back');
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+    // check last agendaitem
+    cy.get(route.decisions.sidebar.consultMinutes).invoke('removeAttr', 'target')
+      .click();
+    cy.url().should('include', 'agenda');
+    cy.url().should('include', 'notulen');
+    cy.get(agenda.agendaSideNav.agendaName).contains('B')
+      .parents('li')
+      .invoke('attr', 'class')
+      .should('include', 'auk-sidebar__item--active');
+    cy.go('back');
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+
+    // check default signer
+    cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
+      .contains(defaultSecretary);
+  });
+
+  it('check starting multiple signflows with same/different secretary', () => {
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist1');
+
+    cy.get(route.decisions.row.pieceName).contains(decisionTitle)
+      .parents('tr')
+      .as('currentDecision');
+    cy.get(route.decisions.row.pieceName).contains(minutesTitle)
+      .parents('tr')
+      .as('currentMinutes');
+
+    // select two pieces with same secretary
+    cy.get('@currentDecision').find(route.decisions.row.selectSignflow)
+      .children()
+      .click();
+    cy.get('@currentMinutes').find(route.decisions.row.selectSignflow)
+      .children()
+      .click();
+
+    // check that signflow can be started
+    cy.get(route.signatures.navbar.startMultipleSignflows).click();
+    cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
+
+    // change secretary
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(approvalTitle, false);
+    cy.get(mandatee.secretaryPanelView.actions.edit).click();
+    cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
+    cy.get(mandatee.secretaryPanelEdit.actions.save).click();
+    cy.wait('@patchDecisionActivities1');
+
+    // go back
+    cy.intercept('GET', '/sign-flows*').as('getShortlist2');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist2');
+
+    // select two pieces with different secretary
+    cy.get('@currentDecision').find(route.decisions.row.selectSignflow)
+      .children()
+      .click();
+    cy.get('@currentMinutes').find(route.decisions.row.selectSignflow)
+      .children()
+      .click();
+
+    // check that signflow can't be started
+    cy.get(route.signatures.navbar.startMultipleSignflows).click();
+    cy.get(route.decisions.sidebar.startSignflow).should('be.disabled');
+    cy.get(appuniversum.alert.message).contains(alertMessage);
+  });
+
+  it('check starting/stopping signflow', () => {
+    const staticResponse = {
+      statusCode: 200,
+      ok: true,
+    };
+
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist1');
+
+    cy.get(route.decisions.row.pieceName).contains(decisionTitle)
+      .parents('tr')
+      .as('currentDecision');
+
+    // ** decision **
+
+    // *start signflow*
+
+    // check fail
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+    cy.get(signature.createSignFlow.reportOrMinutes.signer); // wait for signers to load
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
+    cy.intercept('POST', '/signing-flows/update-to-signinghub', {
+      forceNetworkError: true,
+    }).as('updateToSigningHubError');
+    cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    // no email set so forcing through disabled button
+    cy.get(route.decisions.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
+    cy.wait('@postSigningActivities');
+    cy.wait('@patchSignSubcases');
+    cy.wait('@patchSignFlows');
+    cy.wait('@deleteSigningActivities');
+    cy.get(appuniversum.toaster).find(auk.alert.close)
+      .click();
+
+    // check succes
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.get('@currentDecision').find(route.decisions.row.openSidebar)
+      .click();
+    cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
+      .contains(newSecretary); // wait for signers to load
+
+    cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
+    cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
+    cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows2');
+    cy.intercept('POST', '/signing-flows/upload-to-signinghub', staticResponse).as('stubUpload');
+    // no email set so forcing through disabled button
+    cy.get(route.decisions.sidebar.startSignflow).invoke('removeAttr', 'disabled')
+      .click();
+    cy.wait('@postSigningActivities2');
+    cy.wait('@patchSignSubcases2');
+    cy.wait('@patchSignFlows2');
+
+    // this works because signflow-status-sync service is not active.
+    // Normally the status becomes 'Marked' because there is no preparation-activity created.
+    cy.visit('ondertekenen/beslissingen-en-notulen%20opvolgen');
+    cy.get(route.ongoingDecisions.row.pieceName).contains(decisionTitle);
+
+    // ** minutes **
+
+    // * stop signflow *
+
+    cy.intercept('GET', '/sign-flows*').as('getShortlist1');
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.wait('@getShortlist1');
+    cy.get(route.decisions.row.pieceName).contains(minutesTitle)
+      .parents('tr')
+      .as('currentMinutes');
+
+    // check succes
+    cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
+      .click();
+
+    cy.intercept('DELETE', '/sign-subcases/**').as('deleteSignSubcases3');
+    cy.intercept('DELETE', '/sign-flows/**').as('deleteSignFlows3');
+    cy.intercept('DELETE', '/sign-marking-activities/**').as('deleteSigningActivities3');
+    cy.get(route.decisions.sidebar.stopSignflow).click();
+    cy.wait('@deleteSignSubcases3');
+    cy.wait('@deleteSignFlows3');
+    cy.wait('@deleteSigningActivities3');
+    // table currently empty at this point, but could contain more data in the future
+    // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
   });
 });

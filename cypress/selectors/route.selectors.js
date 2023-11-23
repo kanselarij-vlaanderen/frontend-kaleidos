@@ -243,8 +243,11 @@ const selectors = {
     ROUTE SIGNATURES
   */
 
-  // signatures/template
+  // signatures/index
   signatures: {
+    navbar: {
+      startMultipleSignflows: '[data-test-route-signatures-start-multiple-signflows]',
+    },
     openMinisterFilter: '[data-test-route-signatures-open-minister-filter]',
     applyFilter: '[data-test-route-signatures-apply-filter]',
     dataTable: '[data-test-route-signatures-data-table]',
@@ -265,12 +268,36 @@ const selectors = {
   },
 
   // signatures/ongoing
-
   ongoing: {
     statusFilter: '[data-test-route-signatures-ongoing-status-filter]',
     ministerFilter: '[data-test-route-signatures-ongoing-minister-filter]',
     row: {
       documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
+    },
+  },
+
+  // signatures/decisions
+  decisions: {
+    row: {
+      selectSignflow: '[data-test-route-signatures-decisions-row-select-signflow]',
+      pieceName: '[data-test-route-signatures-decisions-row-piece-name]',
+      openSidebar: '[data-test-route-signatures-decisions-row-open-sidebar]',
+    },
+    sidebar: {
+      close: '[data-test-route-signatures-decisions-sidebar-close]',
+      info: '[data-test-route-signatures-decisions-sidebar-info]',
+      preview: '[data-test-route-signatures-decisions-sidebar-preview]',
+      consultDecision: '[data-test-route-signatures-decisions-sidebar-consult-decision]',
+      consultMinutes: '[data-test-route-signatures-decisions-sidebar-consult-minutes]',
+      startSignflow: '[data-test-route-signatures-decisions-sidebar-start-signflow]',
+      stopSignflow: '[data-test-route-signatures-decisions-sidebar-stop-signflow]',
+    },
+  },
+
+  // signatures/ongoing-decisisons
+  ongoingDecisions: {
+    row: {
+      pieceName: '[data-test-route-signatures-ongoing-decisions-row-piece-name]',
     },
   },
 

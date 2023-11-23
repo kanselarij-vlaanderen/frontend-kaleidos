@@ -41,7 +41,7 @@
       <:body as |signFlow|>
         {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
           {{#let signMarkingActivity.piece as |piece|}}
-            <td>
+            <td data-test-route-signatures-ongoing-decisions-row-piece-name>
               {{#if piece}}
                 {{piece.name}}
                 {{#if (this.isConfidential piece.accessLevel)}}

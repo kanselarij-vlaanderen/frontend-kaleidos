@@ -26,5 +26,23 @@ const selectors = {
 
   // mandatees-checkbox-list
   mandateeCheckboxList: '[data-test-mandatee-checkbox-list]',
+
+  // secretary-panel-view
+  secretaryPanelView: {
+    container: '[data-test-secretary-panel-view-container]',
+    row: {
+      name: '[data-test-secretary-panel-view-row-name]',
+    },
+    actions: {
+      edit: '[data-test-secretary-panel-view-edit]',
+    },
+  },
+
+  // secretary-panel-edit
+  secretaryPanelEdit: {
+    actions: {
+      save: '[data-test-secretary-panel-edit-save]',
+    },
+  },
 };
 export default selectors;
