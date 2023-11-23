@@ -42,16 +42,18 @@ export default class AgendaitemControls extends Component {
 
   loadCanSendToVP = task(async () => {
     if (this.enableVlaamsParlement) {
-      const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-      const resp = await fetch(
-        `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
-        { headers: { Accept: 'application/vnd.api+json' } }
-      );
-      if (!resp.ok) {
-        this.canSendToVP = false;
-      } else {
-        const body = await resp.json();
-        this.canSendToVP = body.isReady && this.enableVlaamsParlement;
+      if (this.args.subcase) {
+        const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+        const resp = await fetch(
+          `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
+          { headers: { Accept: 'application/vnd.api+json' } }
+        );
+        if (!resp.ok) {
+          this.canSendToVP = false;
+        } else {
+          const body = await resp.json();
+          this.canSendToVP = body.isReady && this.enableVlaamsParlement;
+        }
       }
     }
   });

@@ -39,7 +39,7 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if (and this.subcase.decisionmakingFlow.case.parliamentFlow this.enableVlaamsParlement)}}
+{{#if (and this.enableVlaamsParlement this.subcase.decisionmakingFlow.case.parliamentFlow)}}
   <AuAlert
     @size="small"
     @skin="success"
