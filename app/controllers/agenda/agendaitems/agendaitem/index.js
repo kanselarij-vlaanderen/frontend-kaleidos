@@ -10,6 +10,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
   @service currentSession;
+  @service decisionReportGeneration;
   @service router;
   @service agendaitemAndSubcasePropertiesSync;
   @service decisionReportGeneration;
@@ -35,6 +36,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   get enableDigitalAgenda() {
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  get enableVlaamsParlement() {
+    return ENV.APP.ENABLE_VLAAMS_PARLEMENT === "true" || ENV.APP.ENABLE_VLAAMS_PARLEMENT === true;
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
@@ -66,7 +71,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   async reassignNumbersForAgendaitems() {
-    await reorderAgendaitemsOnAgenda(this.agenda, this.currentSession.may('manage-agendaitems'));
+    await reorderAgendaitemsOnAgenda(
+      this.agenda,
+      this.store,
+      this.decisionReportGeneration,
+      this.currentSession.may('manage-agendaitems'),
+    );
   }
 
   @action

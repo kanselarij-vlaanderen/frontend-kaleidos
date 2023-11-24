@@ -54,14 +54,8 @@ export default class SignaturesOngoingRoute extends Route {
 
     const filter = {
       ':has:creator': true,
-      'sign-subcase': {
-        'sign-marking-activity': {
-          piece: {
-            'is-report-or-minutes': true,
-          }
-        }
-      }
-    }
+      ':has:meeting': true,
+    };
     if (params.statuses?.length > 0) {
       filter['status'] = {
         ':id:': params.statuses.join(','),

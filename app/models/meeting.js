@@ -1,6 +1,10 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
+import {
+  KALEIDOS_START_DATE,
+  DIGITAL_MINUTES_IN_KALEIDOS_START_DATE,
+  DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE,
+} from 'frontend-kaleidos/config/config';
 
 export default class Meeting extends Model {
   @service intl;
@@ -46,8 +50,18 @@ export default class Meeting extends Model {
   @hasMany('agenda', { inverse: 'createdFor', async: true }) agendas; // All agendas for this meeting, includes the final agenda
   @hasMany('piece', { inverse: 'meeting', async: true, polymorphic: true })
   pieces;
+  @hasMany('sign-flow', { inverse: 'meeting', async: true })
+  signFlows;
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
+  }
+
+  get isPreDigitalMinutes() {
+    return this.plannedStart < DIGITAL_MINUTES_IN_KALEIDOS_START_DATE;
+  }
+
+  get isPreDigitalDecisions() {
+    return this.plannedStart < DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE;
   }
 }

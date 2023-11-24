@@ -9,7 +9,9 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
+        <Group.Item
+          class="auk-o-flex auk-o-flex--vertical-center"
+        >
           {{#if @newsItem.inNewsletter}}
             <AuPill @skin="default" @icon="visible">
               {{t "on-the-website"}}
@@ -20,7 +22,9 @@
             </AuPill>
           {{/if}}
         </Group.Item>
-        <Group.Item>
+        <Group.Item
+          class="auk-o-flex auk-o-flex--vertical-center"
+        >
           {{#if @newsItem.finished}}
             <AuPill @skin="success">
               {{t "finished"}}

@@ -11,6 +11,8 @@ import setMinutes from 'date-fns/setMinutes';
 import ENV from 'frontend-kaleidos/config/environment';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
   let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
@@ -246,6 +248,25 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
+  regenerateDecisionReportNames = task(async () => {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    await Promise.all(reports.map(async (report) => {
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[:has-no:next-version]': true,
+        'filter[treatment][decision-activity][report][:id:]': report.id,
+      });
+      const documentContainer = await report.documentContainer;
+      const pieces = await documentContainer.pieces;
+      report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+      await report.save();
+    }));
+  });
+
   regenerateDecisionReports = task(async () => {
     const reports = await this.store.queryAll('report', {
       'filter[:has-no:next-piece]': true,
@@ -322,9 +343,12 @@ export default class MeetingEditMeetingComponent extends Component {
               })
             );
           }
+          if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
+            yield this.regenerateDecisionReportNames.perform();
+          }
           yield this.regenerateDecisionReports.perform();
           if (this.enableDigitalMinutes) {
-            yield this.updateSecretaryInMinutes();
+            yield this.regenerateMinutes();
           }
         }
       }
@@ -336,18 +360,31 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  async updateSecretaryInMinutes() {
+  async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
     if (minutes) {
+      // new name
+      const documentContainer = await minutes.documentContainer;
+      const pieces = await documentContainer.pieces;
+      let versionSuffix = '';
+      if (pieces >= 1 && pieces < Object.keys(CONFIG.latinAdverbialNumberals).length) {
+        versionSuffix = CONFIG.latinAdverbialNumberals[pieces].toUpperCase();
+      }
+      minutes.name = `${this.args.meeting.numberRepresentation}${versionSuffix}`;
+      await minutes.save();
+      // replace secretary
       const piecePart = await this.store.queryOne('piece-part', {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
       });
-      const newHtmlContent = replaceSecretary(piecePart.htmlContent,
-        this.secretary.person.get('fullName'),
-        this.secretary.title.toLowerCase());
-      piecePart.htmlContent = newHtmlContent;
+      if (this.secretary) {
+        const newHtmlContent = replaceSecretary(piecePart.htmlContent,
+          this.secretary.person.get('fullName'),
+          this.secretary.title.toLowerCase());
+        piecePart.htmlContent = newHtmlContent;
+      }
       await piecePart.save();
+      // new file
       this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
       );

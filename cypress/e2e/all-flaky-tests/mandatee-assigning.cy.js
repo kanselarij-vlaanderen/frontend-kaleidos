@@ -208,7 +208,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@mandateeNames').eq(1)
       .should('contain', 'Hilde Crevits');
     cy.get('@mandateeNames').eq(2)
-      .should('contain', 'Bart Somers');
+      .should('contain', 'Gwendolyn Rutten');
     cy.get('@mandateeNames').eq(3)
       .should('contain', 'Ben Weyts');
     cy.get('@mandateeNames').eq(4)
@@ -366,7 +366,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwendolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
     cy.get('@proposals').eq(2)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.clickReverseTab('Klad');
@@ -386,7 +386,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@proposals').eq(1)
       .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Bart Somers, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwendolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
   });
 
   it('check list of mandatees in 2020 agenda', () => {

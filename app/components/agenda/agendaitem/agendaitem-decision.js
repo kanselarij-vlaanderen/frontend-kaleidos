@@ -31,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service toaster;
   @service decisionReportGeneration;
   @service throttledLoadingService;
+  @service currentSession;
 
   @tracked report;
   @tracked previousReport;
@@ -38,6 +39,9 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
   @tracked nota;
+
+  @tracked hasSignFlow = false;
+  @tracked hasMarkedSignFlow = false;
 
   @tracked isEditingAnnotation = false;
   @tracked isEditingConcern = false;
@@ -119,6 +123,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart,
       annotatiePiecePart
     );
+    await this.signatureService.markNewPieceForSignature(this.report, report, this.args.decisionActivity, this.args.agendaContext.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
     await this.loadReport.perform();
   });
@@ -169,10 +174,18 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
+      this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
       this.beslissingPiecePart = null;
+    }
+  });
+
+  loadSignatureRelatedData = task(async () => {
+    if (this.report) {
+      this.hasSignFlow = await this.signatureService.hasSignFlow(this.report);
+      this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.report);
     }
   });
 
@@ -256,6 +269,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  async generateNewReport() {
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      this.report
+    );
+  }
+
+  @action
   async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
@@ -317,6 +337,19 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
     this.args.decisionActivity.report = piece;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if (!decisionResultCode?.uri) {
+      const agendaitemType = await this.args.agendaitem.type;
+      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      const decisionresultCodeUri = isNota
+        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      const decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        decisionresultCodeUri
+      );
+      this.args.decisionActivity.decisionResultCode = decisionResultCode;
+    }
     await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
@@ -351,9 +384,19 @@ export default class AgendaitemDecisionComponent extends Component {
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    const newBetreftContent = generateBetreft(shortTitle,
+      title,
+      this.args.agendaitem.isApproval,
+      documents,
+      subcase?.subcaseName
+    );
+    if (newBetreftContent) {
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
+        `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
       );
+    } else {
+      this.setBetreftEditorContent('');
+    }
   }
 
   @action
@@ -539,7 +582,6 @@ export default class AgendaitemDecisionComponent extends Component {
   async createNewReport(documentContainer) {
     const now = new Date();
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       created: now,
       modified: now,
       name: await generateReportName(
@@ -577,7 +619,6 @@ export default class AgendaitemDecisionComponent extends Component {
       newName = previousReport.name;
     }
     const report = this.store.createRecord('report', {
-      isReportOrMinutes: true,
       name: newName,
       created: now,
       modified: now,
@@ -756,9 +797,16 @@ export default class AgendaitemDecisionComponent extends Component {
 
   get enableDigitalAgenda() {
     return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+      (ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+        ENV.APP.ENABLE_DIGITAL_AGENDA === true) &&
+      !this.args.agendaContext.meeting.isPreDigitalDecisions
     );
+  }
+
+  get mayEditDecisionReport() {
+    return this.enableDigitalAgenda &&
+      this.currentSession.may('manage-decisions') &&
+      (!this.hasSignFlow || this.hasMarkedSignFlow);
   }
 
   @action
