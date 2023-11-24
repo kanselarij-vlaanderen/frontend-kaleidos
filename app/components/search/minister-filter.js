@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { startOfDay } from 'date-fns';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SearchMinisterFilterComponent extends Component {
   @service mandatees;
@@ -15,6 +16,15 @@ export default class SearchMinisterFilterComponent extends Component {
 
   @tracked selectedCurrentMinisterIds = [];
   @tracked selectedPastMinisterIds = [];
+
+  visibleRoleUris = [
+    // first 2 are not really needed here, they should also be a minister
+    // CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
+    // CONSTANTS.MANDATE_ROLES.VICEMINISTER_PRESIDENT,
+    CONSTANTS.MANDATE_ROLES.MINISTER,
+    CONSTANTS.MANDATE_ROLES.VOORZITTER,
+    CONSTANTS.MANDATE_ROLES.GEMEENSCHAPSMINISTER,
+  ];
 
   constructor() {
     super(...arguments);
@@ -77,8 +87,14 @@ export default class SearchMinisterFilterComponent extends Component {
 
   @task
   *preparePastMinisters() {
+    const visibleRoles = yield Promise.all(
+      this.visibleRoleUris.map((role) => this.store.findRecordByUri('role', role))
+    );
     const allMinisters = yield this.store.queryAll('person', {
       'filter[:has:mandatees]': true,
+      'filter[mandatees][mandate][role][:id:]': visibleRoles
+      .map((role) => role.id)
+      .join(','),
       sort: 'last-name'
     });
     this.pastMinisters = allMinisters

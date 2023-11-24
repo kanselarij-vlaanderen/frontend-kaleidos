@@ -1,0 +1,120 @@
+<ConfirmationModal
+  @modalOpen={{true}}
+  @closable={{this.sendToVP.isIdle}}
+  @confirmMessage={{t "send-to-VP"}}
+  @onConfirm={{perform this.sendToVP}}
+  @onCancel={{@onCancel}}
+  @loading={{this.sendToVP.isRunning}}
+  @disabled={{this.loadData.isRunning}}
+>
+  <:title>{{t "check-case"}}</:title>
+  <:body>
+    {{#if this.loadData.isRunning}}
+      <AuLoader />
+    {{else}}
+      <AuContent>
+        <p>{{t "the-following-things-will-be-sent"}}</p>
+        <ul class="au-u-margin-top">
+          {{#each this.pgSubcasesWithPieces as |subcaseWithPieces|}}
+            <li>
+              {{or
+                (capitalize subcaseWithPieces.subcase.subcaseName)
+                (t "principal-approval")
+              }}:
+              <ul>
+                {{#each subcaseWithPieces.pieces as |piece|}}
+                  <li>
+                    <LinkTo @route="document" @model={{piece.id}}>
+                      {{#let piece.file.extension as |extension|}}
+                        {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                      {{/let}}
+                    </LinkTo>
+                  </li>
+                {{/each}}
+              </ul>
+            </li>
+          {{/each}}
+          <li>
+            {{or
+              (capitalize this.dgSubcaseWithPieces.subcase.subcaseName)
+              (t "definitive-approval")
+            }}:
+            <ul>
+              {{#each this.dgSubcaseWithPieces.pieces as |piece|}}
+                <li>
+                  <LinkTo @route="document" @model={{piece.id}}>
+                    {{#let piece.file.extension as |extension|}}
+                      {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                    {{/let}}
+                  </LinkTo>
+                </li>
+              {{/each}}
+            </ul>
+          </li>
+        </ul>
+        {{! <div class="auk-form-group au-u-margin-top">
+        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+        <Auk::Textarea @rows="4" @value="" id="remarks" />
+      </div> }}
+      </AuContent>
+      {{#let
+        (map this.missingDocsForSubcase this.pgSubcasesWithPieces)
+        as |pgSubcasesMissingDocs|
+      }}
+        {{#let
+          (this.missingDocsForSubcase this.dgSubcaseWithPieces)
+          as |dgSubcaseMissingDocs|
+        }}
+          {{#if (or pgSubcasesMissingDocs dgSubcaseMissingDocs)}}
+            <AuAlert
+              @title="{{t 'this-case-is-missing'}}:"
+              @skin="warning"
+              @icon="alert-triangle"
+              @size="small"
+              class="au-u-margin-bottom-none au-u-margin-top"
+            >
+              <AuContent>
+                <ul>
+                  {{#each pgSubcasesMissingDocs as |missingDocs index|}}
+                    <li>
+                      {{t "for"}}
+                      {{or
+                        (get
+                          (get
+                            (object-at index this.pgSubcasesWithPieces)
+                            "subcase"
+                          )
+                          "subcaseName"
+                        )
+                        (t "principal-approval")
+                      }}:
+                      <ul>
+                        {{#each missingDocs as |missingDoc|}}
+                          <li>{{missingDoc}}</li>
+                        {{/each}}
+                      </ul>
+                    </li>
+                  {{/each}}
+                  {{#if dgSubcaseMissingDocs}}
+                    <li>
+                      {{t "for"}}
+                      {{or
+                        this.dgSubcaseWithPieces.subcase.subcaseName
+                        (t "definitive-approval")
+                      }}:
+                      <ul>
+                        {{#each dgSubcaseMissingDocs as |missingDoc|}}
+                          <li>{{missingDoc}}</li>
+                        {{/each}}
+                      </ul>
+                    </li>
+                  {{/if}}
+                </ul>
+              </AuContent>
+            </AuAlert>
+          {{/if}}
+        {{/let}}
+      {{/let}}
+    {{/if}}
+  </:body>
+</ConfirmationModal>
