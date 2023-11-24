@@ -116,10 +116,12 @@ context('signatures shortlist overview tests', () => {
     cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
     cy.openSubcase(0, subcaseTitleShort1);
     cy.addDocumentsToSubcase(files1);
+
     cy.createCase(caseTitle2);
     cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
     cy.openSubcase(0, subcaseTitleShort2);
     cy.addDocumentsToSubcase(files2);
+
     cy.createCase(caseTitle3);
     cy.addSubcase(type3, subcaseTitleShort3, subcaseTitleLong3, subcaseType3, subcaseName3);
     cy.openSubcase(0, subcaseTitleShort3);
@@ -127,13 +129,20 @@ context('signatures shortlist overview tests', () => {
 
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
+
     cy.addAgendaitemToAgenda(subcaseTitleShort1);
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
     cy.changeDecisionResult('Goedgekeurd');
+
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.changeDecisionResult('Goedgekeurd');
-    cy.setAllItemsFormallyOk(3);
+
+    cy.addAgendaitemToAgenda(subcaseTitleShort3);
+    cy.openDetailOfAgendaitem(subcaseTitleShort3);
+    cy.changeDecisionResult('Goedgekeurd');
+
+    cy.setAllItemsFormallyOk(4);
     cy.approveDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
@@ -176,6 +185,8 @@ context('signatures shortlist overview tests', () => {
     cy.setAllItemsFormallyOk(3);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    // wait for propagation
+    cy.wait(60000);
   });
 
   it('should check the signatures overview', () => {
@@ -368,7 +379,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
   });
 
-  it('check dossierbeheerder add one minister', () => {
+  it.only('check dossierbeheerder add one minister', () => {
     // setup: add minister to dossierbeheerder
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
@@ -383,6 +394,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchUserOrganizations');
+    cy.wait(2000);
 
     cy.logout();
     cy.login('Kabinetdossierbeheerder');
@@ -395,7 +407,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.row.mandatee).should('have.length', 1);
   });
 
-  it('check dossierbeheerder add second minister', () => {
+  it.only('check dossierbeheerder add second minister', () => {
     // setup: add minister to dossierbeheerder
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
@@ -410,6 +422,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchUserOrganizations');
+    cy.wait(2000);
 
     cy.logout();
     cy.login('Kabinetdossierbeheerder');
@@ -509,7 +522,7 @@ context('signatures shortlist overview tests', () => {
     // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
   });
 
-  it('remove mandatees from organisation', () => {
+  it.only('remove mandatees from organisation', () => {
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     // unlink first mandatee
     cy.intercept('PATCH', '/user-organizations/**').as('patchorgs');

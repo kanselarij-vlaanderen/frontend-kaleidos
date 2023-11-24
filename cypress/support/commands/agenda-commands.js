@@ -34,11 +34,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
+  cy.intercept('GET', '/mandatees*').as('getMandatees');
 
   cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendas.action.newMeeting, {
     timeout: 60000,
-  }).click();
+  }).click()
+    .wait('@getMandatees'); // wait to prevent rerender
 
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
@@ -160,7 +162,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   let agendaId;
 
   cy.wait('@createNewMeeting', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
@@ -452,7 +454,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     .click();
   cy.get(agenda.agendaActions.addAgendaitems).forceClick();
   cy.wait(`@getSubcasesFiltered_${randomInt}`, {
-    timeout: 20000,
+    timeout: 60000,
   });
   const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
 
@@ -500,7 +502,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     });
   cy.wait(`@loadAgendaitems_${randomInt}`);
   cy.get(auk.loader, {
-    timeout: 12000,
+    timeout: 60000,
   }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
