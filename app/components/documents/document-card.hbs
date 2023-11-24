@@ -85,6 +85,24 @@
                   {{/if}}
                 </p>
               {{/if}}
+              {{#if
+                (and this.signaturesEnabled (await (this.canViewConfidentialPiece)))
+              }}
+                {{#if this.piece.signedPieceCopy.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await
+                        this.piece.signedPieceCopy.namedDownloadLinkPromise
+                      }}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at this.piece.signedPieceCopy.created}}
+                  </p>
+                {{/if}}
+              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>

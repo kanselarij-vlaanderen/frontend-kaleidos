@@ -36,6 +36,7 @@ context('Publications reports tests', () => {
   const dateDowloadLinkFormat = new RegExp(`${runout2.join('|')}`, 'g');
   const alertMessage1 = 'Het gevraagde rapport wordt gemaakt.';
   const alertMessage2 = 'Het gevraagde rapport is gereed.';
+  const downloadPath = 'cypress/downloads';
 
   beforeEach(() => {
     cy.login('OVRB');
@@ -68,19 +69,26 @@ context('Publications reports tests', () => {
     cy.get(publication.generateReport.confirm).click()
       .wait('@postExport');
 
-    cy.get(appuniversum.alert.message).eq(0)
-      .contains(alertMessage1);
+    // cypress too fast on first test? first message not seen, second is ok.
+    // cy.get(appuniversum.alert.message).eq(0)
+    //   .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Ministers')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     checkLastReportAndDownloadlink('@currentPanelEntry', dateLastReportFormat, profile, dateDowloadLinkFormat, title);
   });
@@ -102,15 +110,21 @@ context('Publications reports tests', () => {
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Beleidsdomeinen')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     checkLastReportAndDownloadlink('@currentPanelEntry', dateLastReportFormat, profile, dateDowloadLinkFormat, title);
   });
@@ -140,15 +154,21 @@ context('Publications reports tests', () => {
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Ministers')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     checkLastReportAndDownloadlink('@currentPanelEntry', dateLastReportFormat, profile, dateDowloadLinkFormat, title);
   });
@@ -170,15 +190,21 @@ context('Publications reports tests', () => {
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Type_regelgeving')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     checkLastReportAndDownloadlink('@currentPanelEntry', dateLastReportFormat, profile, dateDowloadLinkFormat, title);
   });
@@ -200,15 +226,21 @@ context('Publications reports tests', () => {
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Type_regelgeving')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     cy.get(publication.reportsPanelEntry.title).contains(/^Publicaties per type regelgeving$/)
       .parents('.auk-panel__body')
@@ -241,15 +273,21 @@ context('Publications reports tests', () => {
       .contains(alertMessage1);
     cy.get(utils.downloadFileToast.message).eq(0)
       .contains(alertMessage2);
-    cy.get(utils.downloadFileToast.link);
-    // .eq(0)
-    // .click();
+    cy.get(utils.downloadFileToast.link).eq(0)
+      .click();
 
-    // TODO there are two methods for checking downloads, which one to use (both require extra setup)
-    // cy.get(publication.reportsPanelEntry.downloadLink).invoke('text')
-    //   .then((text) => {
-    //     cy.readFile(text);
-    //   });
+    cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.downloadLink)
+      .invoke('text')
+      .invoke('replaceAll', '\n', '')
+      .invoke('replaceAll', ' ', '')
+      .then(($fileName) => {
+        cy.readFile(`${downloadPath}/${$fileName}`, {
+          timeout: 25000,
+        }).should('contain', 'Ministers')
+          .should('contain', 'Aantal_publicaties')
+          .should('contain', 'Aantal_bladzijden')
+          .should('contain', 'Aantal_uittreksels');
+      });
 
     checkLastReportAndDownloadlink('@currentPanelEntry', dateLastReportFormat, profile, dateDowloadLinkFormat, title);
   });

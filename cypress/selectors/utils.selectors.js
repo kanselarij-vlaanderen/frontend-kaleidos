@@ -89,7 +89,6 @@ const selectors = {
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
-    cancel: '[data-test-vl-modal-verify-cancel]',
     save: '[data-test-vl-modal-verify-save]',
   },
 

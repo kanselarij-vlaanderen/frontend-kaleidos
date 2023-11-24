@@ -61,8 +61,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @task
   *loadSignedPieces() {
     this.signedPieceCopy = yield this.args.piece?.signedPieceCopy;
-    yield this.signedPieceCopy.belongsTo('accessLevel').reload();
-    yield this.signedPieceCopy.belongsTo('file').reload();
+    yield this.signedPieceCopy?.belongsTo('accessLevel').reload();
+    yield this.signedPieceCopy?.belongsTo('file').reload();
   }
 
   @task
