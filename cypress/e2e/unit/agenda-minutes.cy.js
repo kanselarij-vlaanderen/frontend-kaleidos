@@ -8,9 +8,9 @@ import document from '../../selectors/document.selectors';
 // import mandatee from '../../selectors/mandatee.selectors';
 // import utils from '../../selectors/utils.selectors';
 
-// function currentTimestamp() {
-//   return Cypress.dayjs().unix();
-// }
+function currentTimestamp() {
+  return Cypress.dayjs().unix();
+}
 
 context('agenda minutes test', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
@@ -26,9 +26,31 @@ context('agenda minutes test', () => {
   });
 
   it('Setup', () => {
+    const caseTitle1 = `Cypress test: shortlist publications route case 1- ${currentTimestamp()}`;
+
+    const type1 = 'Nota';
+    const subcaseTitleShort1 = `Cypress test: subcase shortlist publications route subcase 1 - ${currentTimestamp()}`;
+    const subcaseTitleLong1 = 'Cypress test voor shortlist publications route subcase 1';
+    const subcaseType1 = 'Definitieve goedkeuring';
+    const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
+
+    const files1 = [
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2024 0101 DOC.0001-1', fileType: 'BVR',
+      }
+    ];
+
+    cy.createCase(caseTitle1);
+    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
+    cy.openSubcase(0, subcaseTitleShort1);
+    cy.addDocumentsToSubcase(files1);
+
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
-    cy.setAllItemsFormallyOk(1);
+    cy.addAgendaitemToAgenda(subcaseTitleShort1);
+    cy.openDetailOfAgendaitem(subcaseTitleShort1);
+    cy.generateDecision();
+    cy.setAllItemsFormallyOk(2);
     cy.approveDesignAgenda();
 
     cy.openDetailOfAgendaitem(approvalTitle, false);
@@ -48,6 +70,7 @@ context('agenda minutes test', () => {
     const extraVicePresident = 'Richie Valens';
     const extraMinister = 'The Big Bopper';
     const extraSecretaris = 'Don Mclean';
+    const extraGoedkeuring = 'the chevy';
     const extrabeslissing = 'The day the music died';
     const extraMededeling = 'Covered by Madonna';
     const newSecretary = 'Dries Verhaeghe';
@@ -62,7 +85,7 @@ context('agenda minutes test', () => {
     cy.get(agenda.agendaMinutes.updateContent).click();
 
     // make a change to present
-    cy.wait(5000);
+    cy.wait(6000);
     cy.get(dependency.rdfa.editorInner).find('p')
       .contains('Jan Jambon')
       .as('deMinistersPresidentParagraph');
@@ -76,6 +99,9 @@ context('agenda minutes test', () => {
       .contains('Jeroen Overmeer')
       .as('deSecretarisParagraph');
     cy.get(dependency.rdfa.editorInner).find('p')
+      .contains('De Vlaamse Regering hecht haar goedkeuring aan het verslag')
+      .as('goedkeuringParagraph');
+    cy.get(dependency.rdfa.editorInner).find('p')
       .contains('Dit punt wordt')
       .as('beslissingParagraph');
     cy.get(dependency.rdfa.editorInner).find('p')
@@ -86,6 +112,7 @@ context('agenda minutes test', () => {
     cy.get('@deViceministerPresidentenParagraph').type(`{home}${extraVicePresident}{shift+enter}`);
     cy.get('@deVlaamseMinistersParagraph').type(`{home}${extraMinister}{shift+enter}`);
     cy.get('@deSecretarisParagraph').type(`{home}${extraSecretaris}{shift+enter}`);
+    cy.get('@goedkeuringParagraph').type(`{home}${extraGoedkeuring}{shift+enter}`);
     cy.get('@beslissingParagraph').type(`{home}${extrabeslissing}{shift+enter}`);
     cy.get('@mededelingParagraph').type(`{home}${extraMededeling}{shift+enter}`);
     cy.wait(5000);
@@ -94,6 +121,7 @@ context('agenda minutes test', () => {
     cy.get('@deViceministerPresidentenParagraph').contains(extraVicePresident);
     cy.get('@deVlaamseMinistersParagraph').contains(extraMinister);
     cy.get('@deSecretarisParagraph').contains(extraSecretaris);
+    cy.get('@goedkeuringParagraph').should('not.contain', extraGoedkeuring);
     cy.get('@beslissingParagraph').should('not.contain', extrabeslissing);
     cy.get('@mededelingParagraph').contains(extraMededeling);
 
