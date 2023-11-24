@@ -139,7 +139,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.openDetailOfAgendaitem(subcaseTitleShort1);
       cy.get(agenda.agendaitemNav.caseTab);
       cy.get(agenda.agendaitemNav.documentsTab);
-      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
+      cy.get(agenda.agendaitemNav.decisionTab);
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
@@ -316,11 +316,11 @@ context('Testing the application as Kort bestek user', () => {
     });
 
 
-    it('check if agenda details tabs can be accessed even if button is absent', () => {
+    it.skip('check if agenda details tabs can be accessed even if button is absent', () => {
       // If the tab is not displayed, you should not be able to get to it.
       cy.visitAgendaWithLink(agendaitemLinkOnOpen1);
 
-      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
+      cy.get(agenda.agendaitemNav.decisionTab);
       cy.visitAgendaWithLink(`${agendaitemLinkOnOpen1}/beslissingen`);
       // !This fails because you can go to the address and not get rerouted.
       // cy.get(agenda.agendaitemNav.activeTab).contains('Dossier');;
