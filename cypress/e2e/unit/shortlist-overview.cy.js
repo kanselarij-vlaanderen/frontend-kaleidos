@@ -379,7 +379,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
   });
 
-  it.only('check dossierbeheerder add one minister', () => {
+  it('check dossierbeheerder add one minister', () => {
     // setup: add minister to dossierbeheerder
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
@@ -407,7 +407,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(route.signatures.row.mandatee).should('have.length', 1);
   });
 
-  it.only('check dossierbeheerder add second minister', () => {
+  it('check dossierbeheerder add second minister', () => {
     // setup: add minister to dossierbeheerder
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
@@ -522,7 +522,7 @@ context('signatures shortlist overview tests', () => {
     // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
   });
 
-  it.only('remove mandatees from organisation', () => {
+  it('remove mandatees from organisation', () => {
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
     // unlink first mandatee
     cy.intercept('PATCH', '/user-organizations/**').as('patchorgs');
