@@ -7,8 +7,9 @@
         <Auk::Toolbar::Item>
           <AuButton
             @skin="naked"
-            disabled={{@cancelDisabled}}
+            @disabled={{@cancelDisabled}}
             {{on "click" @onCancel}}
+            ...attributes
           >
             {{t "cancel"}}
           </AuButton>

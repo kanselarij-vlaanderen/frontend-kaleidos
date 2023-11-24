@@ -10,7 +10,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
-import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { addWeeks } from 'date-fns';
 
@@ -48,7 +48,7 @@ async function renderNotas(meeting, notas, intl, store) {
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-    <h4><u>MEDEDELINGEN</u></h4>
+    <h4 id="announcements"><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
   `;
 }
@@ -64,37 +64,41 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
-  let mededelingOrNota = "";
-  if (agendaitem.type?.get('uri') === constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-    mededelingOrNota = "deze mededeling";
-  } else {
-    mededelingOrNota = "dit punt";
-  }
   let text = "";
-  switch (decisionResultCode?.uri) {
-    case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
-      text = intl.t("minutes-approval", {
-        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
-        reportName: await generateReportName(agendaitem, meeting),
-      })
-      break;
-    case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
-      text = intl.t("minutes-retracted", {
-        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
-      })
-      break;
-    case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
-      text = intl.t("minutes-acknowledged", {
-        mededelingOrNota: mededelingOrNota
-      })
-      break;
-    case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
-      text = intl.t("minutes-postponed", {
-        mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
-      })
-      break;
-    default:
-      break;
+  if (agendaitem.isApproval) {
+    text = generateApprovalText(agendaitem.shortTitle, agendaitem.title);
+  } else {
+    let mededelingOrNota = "";
+    if (agendaitem.type?.get('uri') === constants.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      mededelingOrNota = "deze mededeling";
+    } else {
+      mededelingOrNota = "dit punt";
+    }
+    switch (decisionResultCode?.uri) {
+      case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
+        text = intl.t("minutes-approval", {
+          mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
+          reportName: await generateReportName(agendaitem, meeting),
+        })
+        break;
+      case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
+        text = intl.t("minutes-retracted", {
+          mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+        })
+        break;
+      case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
+        text = intl.t("minutes-acknowledged", {
+          mededelingOrNota: mededelingOrNota
+        })
+        break;
+      case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
+        text = intl.t("minutes-postponed", {
+          mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
+        })
+        break;
+      default:
+        break;
+    }
   }
   let pieces = await store.query('piece', {
     'filter[agendaitems][:id:]': agendaitem.id,
@@ -108,10 +112,16 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   }
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
+  const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
   return `
-  <h4><u>${
+  <h4 ${pagebreak}><u>${
     agendaitem.number
-  }. ${generateBetreft(agendaitem.shortTitle, agendaitem.title, agendaitem.isApproval, sortedPieces, subcase?.subcaseName).toUpperCase()}</u></h4>
+  }. ${generateBetreft(
+    agendaitem.shortTitle,
+    agendaitem.title,
+    agendaitem.isApproval,
+    sortedPieces,
+    subcase?.subcaseName).toUpperCase()}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {
@@ -187,6 +197,7 @@ export default class AgendaMinutesController extends Controller {
   @service pieceAccessLevelService;
   @service decisionReportGeneration;
   @service currentSession;
+  @service signatureService;
 
   meeting;
   @tracked isLoading = false;
@@ -229,14 +240,8 @@ export default class AgendaMinutesController extends Controller {
         constants.ACCESS_LEVELS.INTERN_SECRETARIE
       );
 
-      // *note: any changes made here should also be made in the minutes-report-generation service
-      const name = `Notulen - P${dateFormat(
-        this.meeting.plannedStart,
-        'yyyy-MM-dd'
-      )}`;
-
       minutes = this.store.createRecord('minutes', {
-        name,
+        name: this.meeting.numberRepresentation,
         created: new Date(),
         minutesForMeeting: this.meeting,
         accessLevel: defaultAccessLevel,
@@ -301,7 +306,7 @@ export default class AgendaMinutesController extends Controller {
     await this.decisionReportGeneration.generateReplacementMinutes.perform(
       newVersion,
     );
-
+    await this.signatureService.markNewPieceForSignature(minutes, newVersion, null, this.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 

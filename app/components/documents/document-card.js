@@ -8,7 +8,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
@@ -26,6 +25,7 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
+   * @argument onChangeConfidentiality: action triggered when a subtype 'report' has an accessLevel change
    *
    * @argument [agendaitem]: if an agendaitem is linked to the current piece
    * @argument [decisionActivity]: if a decision-activity is linked to the
@@ -61,20 +61,15 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
 
+  // model "report" only
+  @tracked hasConfidentialityChanged = false;
+  @tracked oldAccessLevelUri = null;
 
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.loadFiles.perform();
-  }
-
-  get enableDigitalMinutes() {
-    return ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true;
-  }
-
-  get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
   }
 
   get dateToShowLabel() {
@@ -108,8 +103,8 @@ export default class DocumentsDocumentCardComponent extends Component {
       this.currentSession.may('manage-signatures') &&
       (
         (this.args.agendaitem && this.args.decisionActivity) ||
-        (this.enableDigitalAgenda && !this.args.agendaitem && this.args.decisionActivity) ||
-        (this.enableDigitalMinutes && !this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
+        (!this.args.agendaitem && this.args.decisionActivity) ||
+        (!this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
       )
     );
   }
@@ -324,7 +319,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
     try {
       this.newPiece.name = this.newPiece.name.trim();
-      yield this.args.onAddPiece(this.newPiece, this.signFlow);
+      yield this.args.onAddPiece(this.newPiece);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
@@ -424,20 +419,40 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   @action
-  changeAccessLevel(accessLevel) {
+  async changeAccessLevel(accessLevel) {
+    const modelName = this.args.piece.constructor.modelName;
+    if (modelName === 'report' && this.args.onChangeConfidentiality) {
+      // multiple unsaved changes are possible, save the original accessLevel the first time
+      this.oldAccessLevelUri =
+        this.oldAccessLevelUri || this.piece.accessLevel?.get('uri');
+      const newAccessLevelUri = accessLevel?.get('uri');
+      if (
+        [this.oldAccessLevelUri, newAccessLevelUri].includes(
+          CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        )
+      ) {
+        this.hasConfidentialityChanged = true;
+      } else {
+        this.hasConfidentialityChanged = false;
+      }
+    }
     this.piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevel() {
-    // TODO make sure not to overwrite things
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
+    if (this.hasConfidentialityChanged && this.args.onChangeConfidentiality) {
+      await this.args?.onChangeConfidentiality();
+      this.oldAccessLevelUri = null;
+      this.hasConfidentialityChanged = false;
+    }
     await this.loadPieceRelatedData.perform();
   }
 
   @action
-  changeAccessLevelOfPiece(piece, accessLevel) {
+  async changeAccessLevelOfPiece(piece, accessLevel) {
     piece.accessLevel = accessLevel;
   }
 
@@ -449,6 +464,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async reloadAccessLevel() {
+    this.hasConfidentialityChanged = false;
     await this.loadPieceRelatedData.perform();
   }
 

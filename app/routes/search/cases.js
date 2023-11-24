@@ -112,9 +112,9 @@ export default class CasesSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
 
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;

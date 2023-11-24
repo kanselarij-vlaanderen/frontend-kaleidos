@@ -52,8 +52,17 @@ function generateBetreft(
   return betreft;
 }
 
+function generateApprovalText(shortTitle, title) {
+  let approvalText = title || shortTitle || '';
+  approvalText = approvalText.replace(
+    /Goedkeuring van/i,
+    'goedkeuring aan'
+  );
+  return `De Vlaamse Regering hecht haar ${approvalText}.`;
+}
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { formatDocuments, generateBetreft };
+export { formatDocuments, generateBetreft, generateApprovalText };

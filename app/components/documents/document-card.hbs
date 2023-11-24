@@ -88,18 +88,18 @@
               {{#if
                 (await (this.canViewSignedPiece))
               }}
-                {{#if this.piece.signedPiece.file}}
+                {{#if this.piece.signedPieceCopy.file}}
                   <p>
                     <AuLinkExternal
                       href={{await
-                        this.piece.signedPiece.namedDownloadLinkPromise
+                        this.piece.signedPieceCopy.namedDownloadLinkPromise
                       }}
                       download
                     >
                       {{t "signed-document"}}
                     </AuLinkExternal>
                     {{t "on"}}
-                    {{datetime-at this.piece.signedPiece.created}}
+                    {{datetime-at this.piece.signedPieceCopy.created}}
                   </p>
                 {{/if}}
               {{/if}}

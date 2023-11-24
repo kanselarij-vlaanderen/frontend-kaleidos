@@ -123,6 +123,7 @@ export default class AgendaitemDecisionComponent extends Component {
       beslissingPiecePart,
       annotatiePiecePart
     );
+    await this.signatureService.markNewPieceForSignature(this.report, report, this.args.decisionActivity, this.args.agendaContext.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(report);
     await this.loadReport.perform();
   });
@@ -268,6 +269,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
+  async generateNewReport() {
+    await this.decisionReportGeneration.generateReplacementReport.perform(
+      this.report
+    );
+  }
+
+  @action
   async attachNewReportVersionAsPiece(piece) {
     await piece.save();
     try {
@@ -329,6 +337,19 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
     this.args.decisionActivity.report = piece;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if (!decisionResultCode?.uri) {
+      const agendaitemType = await this.args.agendaitem.type;
+      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      const decisionresultCodeUri = isNota
+        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      const decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        decisionresultCodeUri
+      );
+      this.args.decisionActivity.decisionResultCode = decisionResultCode;
+    }
     await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
@@ -363,9 +384,19 @@ export default class AgendaitemDecisionComponent extends Component {
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    const newBetreftContent = generateBetreft(shortTitle,
+      title,
+      this.args.agendaitem.isApproval,
+      documents,
+      subcase?.subcaseName
+    );
+    if (newBetreftContent) {
       this.setBetreftEditorContent(
-        `<p>${generateBetreft(shortTitle, title, this.args.agendaitem.isApproval, documents, subcase?.subcaseName)}</p>`
+        `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
       );
+    } else {
+      this.setBetreftEditorContent('');
+    }
   }
 
   @action
@@ -766,8 +797,9 @@ export default class AgendaitemDecisionComponent extends Component {
 
   get enableDigitalAgenda() {
     return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
+      (ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
+        ENV.APP.ENABLE_DIGITAL_AGENDA === true) &&
+      !this.args.agendaContext.meeting.isPreDigitalDecisions
     );
   }
 
