@@ -947,7 +947,6 @@
   "reset": "Reset",
   "publication-case-info-panel-title": "Publicatie dossier info",
   "publication-urgent": "Dringend",
-  "publication-remark": "Opmerkingen",
   "publication-remark-empty": "Er zijn nog geen opmerkingen toegevoegd.",
   "publication-remark-help": "Dit is een interne opmerking voor het OVRB-team.",
   "reset-display": "Reset weergave",
@@ -1283,5 +1282,6 @@
   "decision-reports-are-being-marked-for-signing": "De {aantal, plural, =1 {beslissing wordt} other {# beslissingen worden}} aangeboden voor ondertekenen",
   "decision-reports-are-marked-for-signing": "De {aantal, plural, =1 {beslissing is} other {# beslissingen zijn}} succesvol aangeboden voor ondertekenen",
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
-  "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen"
+  "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen",
+  "remarks": "Opmerkingen"
 }
