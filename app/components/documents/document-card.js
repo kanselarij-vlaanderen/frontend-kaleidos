@@ -331,7 +331,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
     try {
       this.newPiece.name = this.newPiece.name.trim();
-      yield this.args.onAddPiece(this.newPiece, this.signFlow);
+      yield this.args.onAddPiece(this.newPiece);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;

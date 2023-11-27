@@ -36,6 +36,12 @@ export default class Piece extends Model {
     polymorphic: true,
   })
   unsignedPiece;
+  @belongsTo('piece', {
+    inverse: null,
+    async: true,
+    polymorphic: true,
+  })
+  signedPieceCopy;
 
   // resources with pieces linked:
 

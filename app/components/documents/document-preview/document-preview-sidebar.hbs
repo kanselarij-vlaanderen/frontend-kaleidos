@@ -21,6 +21,7 @@
               </Auk::Tab>
               {{#if this.isShownSignatureTab}}
                 <Auk::Tab
+                  data-test-document-preview-sidebar-tab-signatures
                   {{on "click" (fn this.setTab (t "signatures"))}}
                   @active={{eq this.tab (t "signatures")}}
                 >

@@ -12,6 +12,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
   let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
@@ -347,7 +348,7 @@ export default class MeetingEditMeetingComponent extends Component {
           }
           yield this.regenerateDecisionReports.perform();
           if (this.enableDigitalMinutes) {
-            yield this.updateSecretaryInMinutes();
+            yield this.regenerateMinutes();
           }
         }
       }
@@ -359,9 +360,19 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   }
 
-  async updateSecretaryInMinutes() {
+  async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
     if (minutes) {
+      // new name
+      const documentContainer = await minutes.documentContainer;
+      const pieces = await documentContainer.pieces;
+      let versionSuffix = '';
+      if (pieces >= 1 && pieces < Object.keys(CONFIG.latinAdverbialNumberals).length) {
+        versionSuffix = CONFIG.latinAdverbialNumberals[pieces].toUpperCase();
+      }
+      minutes.name = `${this.args.meeting.numberRepresentation}${versionSuffix}`;
+      await minutes.save();
+      // replace secretary
       const piecePart = await this.store.queryOne('piece-part', {
         'filter[:has-no:next-piece-part]': true,
         'filter[minutes][:id:]': minutes.id,
@@ -373,6 +384,7 @@ export default class MeetingEditMeetingComponent extends Component {
         piecePart.htmlContent = newHtmlContent;
       }
       await piecePart.save();
+      // new file
       this.decisionReportGeneration.generateReplacementMinutes.perform(
         minutes,
       );

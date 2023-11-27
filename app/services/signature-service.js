@@ -92,7 +92,7 @@ export default class SignatureService extends Service {
    *   related to the piece being marked for signing, this should only be passed
    * for regular pieces and reports, not minutes
    * @param {Meeting} meeting The meeting related to the piece being
-   *   marked for signing, this should only be be passed for minutes
+   *   marked for signing, this should only be be passed for minutes and reports
    */
   async markDocumentForSignature(piece, decisionActivity, meeting) {
     const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
@@ -144,6 +144,29 @@ export default class SignatureService extends Service {
     };
   }
 
+
+  /**
+   * Marks a new version of a marked piece for signature by recreating the sign flow, sign subcase
+   * and sign marking activity.
+   * @param {Piece} oldPiece The old piece that should no longer be marked for signing
+   * @param {Piece} newPiece The new piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes and reports
+   */
+  async markNewPieceForSignature(oldPiece, newPiece, decisionActivity, meeting) {
+    if (!oldPiece) {
+      oldPiece = await newPiece.previousPiece;
+    }
+    const hasMarkedSignFlow = await this.hasMarkedSignFlow(oldPiece);
+    if (hasMarkedSignFlow) {
+      await this.removeSignFlowForPiece(oldPiece);
+      await this.markDocumentForSignature(newPiece, decisionActivity, meeting);
+    }
+  }
+
   async canManageSignFlow(piece) {
     // the base permission 'manage-signatures' does not cover cabinet specific requirements
     if (this.currentSession.may('manage-only-specific-signatures')) {
@@ -157,7 +180,7 @@ export default class SignatureService extends Service {
           },
         }
       );
-      const subcase = await submissionActivity.subcase;
+      const subcase = await submissionActivity?.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {
@@ -186,6 +209,8 @@ export default class SignatureService extends Service {
       const piece = await signMarkingActivity.piece;
       const signedPiece = await piece.signedPiece;
       const signedFile = await signedPiece?.file;
+      const signedPieceCopy = await piece.signedPieceCopy;
+      const signedPieceCopyFile = await signedPieceCopy?.file;
       const signPreparationActivity = await signSubcase
         ?.belongsTo('signPreparationActivity')
         .reload();
@@ -208,6 +233,8 @@ export default class SignatureService extends Service {
       // delete in reverse order of creation
       await signedFile?.destroyRecord();
       await signedPiece?.destroyRecord();
+      await signedPieceCopyFile?.destroyRecord();
+      await signedPieceCopy?.destroyRecord();
       await signPreparationActivity?.destroyRecord();
       await signCompletionActivity?.destroyRecord();
       await signCancellationActivity?.destroyRecord();
@@ -237,12 +264,12 @@ export default class SignatureService extends Service {
     }
   }
 
-  async removeSignFlowForPiece(piece) {
+  async removeSignFlowForPiece(piece, ignoreStatus=false) {
     const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
     const signSubcase = await signMarkingActivity?.signSubcase;
     const signFlow = await signSubcase?.signFlow;
     const status = await signFlow?.status;
-    if (signFlow && status.uri === MARKED) {
+    if (signFlow && (ignoreStatus || status.uri === MARKED)) {
       await this.removeSignFlow(signFlow);
     }
   }
@@ -293,4 +320,36 @@ export default class SignatureService extends Service {
       return result.url;
     }
   }
+
+  async markReportsForSignature(reports) {
+    if (!reports?.length) {
+      return this.toaster.warning(this.intl.t('no-decision-reports-to-mark-for-signing'));
+    }
+    const loadingToast = this.toaster.loading(
+      this.intl.t('decision-reports-are-being-marked-for-signing', {aantal: reports.length}),
+      null,
+      {
+        timeOut: 10 * 60 * 1000,
+      }
+    );
+    const resp = await fetch(`/signing-flows/mark-pieces-for-signing`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        data: reports.map((report) => ({ type: 'reports', id: report.id })),
+      }),
+    });
+    this.toaster.close(loadingToast);
+    if (!resp.ok) {
+      // TODO error from service? did all fail? maybe only 1 failed?
+      this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
+    } else {
+      this.toaster.success(
+        this.intl.t('decision-reports-are-marked-for-signing', {aantal: reports.length}),
+      );
+    }
+  }
+
 }

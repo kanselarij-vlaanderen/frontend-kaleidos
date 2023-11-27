@@ -24,8 +24,8 @@ export const PUBLICATION_EMAIL = {
 
 export const KALEIDOS_START_DATE = new Date(2019, 9 /* October */, 1);
 export const PUBLICATIONS_IN_KALEIDOS_START_DATE = new Date(2022, 2 /* March */, 2);
-export const DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE = new Date(2023, 10 /* November */, 1);
-export const DIGITAL_MINUTES_IN_KALEIDOS_START_DATE = new Date(2023, 10 /* November */, 1);
+export const DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE = new Date(2023, 10 /* November */, 20);
+export const DIGITAL_MINUTES_IN_KALEIDOS_START_DATE = new Date(2023, 10 /* November */, 20);
 
 // Number of milliseconds it takes to release a publication via Yggdrasil/Themis
 export const ESTIMATED_PUBLICATION_DURATION = 30 * 60 * 1000;

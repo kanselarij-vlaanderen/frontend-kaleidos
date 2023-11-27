@@ -8,11 +8,13 @@
   {{! There's an ongoing sign flow and it's further along than being marked }}
   <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
     <SignaturePill
+      data-test-signatures-tab-status-pill
       @piece={{@piece}}
       @signMarkingActivity={{this.signMarkingActivity}}
     />
     {{#if (user-may "remove-signatures")}}
       <AuButton
+        data-test-signatures-tab-delete-signflow
         @skin="naked"
         @alert={{true}}
         @icon="trash"
@@ -50,6 +52,7 @@
   {{! All the necessary data to create a sign flow is available and valid and
       the current user can create/manage a sign flow for the current piece }}
   <AuToggleSwitch
+    data-test-signatures-tab-mark-for-signflow
     @skin="primary"
     @label={{t "present-for-signing"}}
     @checked={{this.hasMarkedSignFlow}}

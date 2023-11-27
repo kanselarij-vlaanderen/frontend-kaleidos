@@ -1,4 +1,5 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 export default class Subcase extends ModelWithModifier {
@@ -30,4 +31,20 @@ export default class Subcase extends ModelWithModifier {
   @hasMany('decision-activity', { inverse: 'subcase', async: true })
   decisionActivities;
   @hasMany('concept', { inverse: null, async: true }) governmentAreas;
+
+  get isBekrachtiging() {
+    return this.type?.get('uri') === CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING;
+  }
+
+  get isDefinitieveGoedkeuring() {
+    return (
+      this.type?.get('uri') === CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+    );
+  }
+
+  get isPrincipieleGoedkeuring() {
+    return (
+      this.type?.get('uri') === CONSTANTS.SUBCASE_TYPES.PRINCIPIELE_GOEDKEURING
+    );
+  }
 }
