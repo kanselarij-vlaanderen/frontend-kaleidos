@@ -188,26 +188,29 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
-  // override child (and heading) spacing to match the one in Kaleidos a bit more
-  > * + * {
-    margin-top: 1.5rem;
-  }
+  &,
+  > div:not([class]) {
+    // override child (and heading) spacing to match the one in Kaleidos a bit more
+    > * + * {
+      margin-top: 1.5rem;
+    }
 
-  > p + ul,
-  > p + ol {
-    margin-top: 0.2rem;
-  }
+    > p + ul,
+    > p + ol {
+      margin-top: 0.2rem;
+    }
 
-  > * + h1,
-  > * + h2,
-  > * + h3 {
-    margin-top: 3rem;
-  }
+    > * + h1,
+    > * + h2,
+    > * + h3 {
+      margin-top: 3rem;
+    }
 
-  > * + h4,
-  > * + h5,
-  > * + h6 {
-    margin-top: 1.5rem;
+    > * + h4,
+    > * + h5,
+    > * + h6 {
+      margin-top: 1.5rem;
+    }
   }
 
   em { // default text color in Kaleidos
