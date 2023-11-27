@@ -41,6 +41,7 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     if (!hasConflictingSigners && secretary) {
       signers = [secretary];
     }
+    this.args.onChangeSigners?.(signers);
     return {
       signers,
       hasConflictingSigners,
