@@ -1,8 +1,9 @@
 import Component from '@glimmer/component';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const PDF_MIME_TYPE = 'application/pdf; charset=binary';
 // question: is this enough for all Word documents?
@@ -17,6 +18,7 @@ export default class SendToVpModalComponent extends Component {
 
   @tracked pgSubcasesWithPieces;
   @tracked dgSubcaseWithPieces;
+  @tracked comment;
 
   constructor() {
     super(...arguments);
@@ -87,8 +89,12 @@ export default class SendToVpModalComponent extends Component {
   }
 
   sendToVP = task(async () => {
+    const params = new URLSearchParams({
+      uri: this.decisionmakingFlow.uri,
+      ...(this.comment ? { comment: this.comment} : null),
+    });
     const resp = await fetch(
-      `/vlaams-parlement-sync/?uri=${this.decisionmakingFlow.uri}`,
+      `/vlaams-parlement-sync/?${params}`,
       { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
     );
 
@@ -101,6 +107,11 @@ export default class SendToVpModalComponent extends Component {
 
     this.args?.onClose();
   });
+
+  @action
+  onChangeComment(event) {
+    this.comment = event.target.value;
+  }
 
   async loadDocumentTypes() {
     const BESLISSINGSFICHE = await this.store.findRecordByUri(

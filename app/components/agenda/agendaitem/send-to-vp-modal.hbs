@@ -52,10 +52,15 @@
             </ul>
           </li>
         </ul>
-        {{! <div class="auk-form-group au-u-margin-top">
-        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
-        <Auk::Textarea @rows="4" @value="" id="remarks" />
-      </div> }}
+        <div class="auk-form-group au-u-margin-top">
+          <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+          <Auk::Textarea
+            @rows="4"
+            id="remarks"
+            value={{this.comment}}
+            {{on "change" this.onChangeComment}}
+          />
+        </div>
       </AuContent>
       {{#let
         (map this.missingDocsForSubcase this.pgSubcasesWithPieces)
