@@ -40,7 +40,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked beslissingPiecePart;
   @tracked nota;
 
-  @tracked hasSignFlow = false;
+  @tracked hasSignFlow = null;
   @tracked hasMarkedSignFlow = false;
 
   @tracked isEditingAnnotation = false;
@@ -56,13 +56,11 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked decisionViewerElement = null;
 
   @tracked decisionDocType;
-  @tracked mayBeEdited = false;
 
   constructor() {
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
-    this.loadMayBeEdited.perform();
   }
 
   loadNota = task(async () => {
@@ -181,15 +179,6 @@ export default class AgendaitemDecisionComponent extends Component {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
       this.beslissingPiecePart = null;
-    }
-  });
-
-  loadMayBeEdited = task(async () => {
-    if (this.currentSession.may('manage-decisions') && 
-    !this.isEditingAnnotation && 
-    (this.pieceParts || !this.report) 
-    && this.mayEditDecisionReport) {
-      this.mayBeEdited = true;
     }
   });
 
@@ -804,7 +793,8 @@ export default class AgendaitemDecisionComponent extends Component {
   get mayEditDecisionReport() {
     return this.enableDigitalAgenda &&
       this.currentSession.may('manage-decisions') &&
-      (!this.hasSignFlow || this.hasMarkedSignFlow);
+      (this.pieceParts || !this.report) &&
+      (this.hasSignFlow === false || this.hasMarkedSignFlow);
   }
 
   @action
