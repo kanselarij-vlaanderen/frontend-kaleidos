@@ -135,15 +135,15 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // set the secretary
   if (secretary) {
+    cy.wait(2000); // are they loaded?
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(secretary)
       .scrollIntoView()
       .trigger('mouseover')
-      .click({
-        force: true,
-      });
+      .click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 15000,
     }).should('not.exist');
@@ -839,13 +839,13 @@ function generateMinutes() {
   cy.log('generateMinutes');
   cy.get(agenda.agendaTabs.tabs).contains('Notulen')
     .click();
-  cy.get(agenda.agendaMinutes.create).click();
-  cy.get(agenda.agendaMinutes.updateContent).click();
+  cy.get(route.agendaMinutes.create).click();
+  cy.get(route.agendaMinutes.updateContent).click();
 
   cy.intercept('POST', '/minutes*').as('createNewMinutes');
   cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
-  cy.get(agenda.agendaMinutes.save).click();
+  cy.get(route.agendaMinutes.save).click();
   cy.wait('@createNewMinutes');
   cy.wait('@patchMinutes');
   cy.wait('@createNewPiecePart');
