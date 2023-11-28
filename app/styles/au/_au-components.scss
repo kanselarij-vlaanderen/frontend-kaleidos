@@ -22,38 +22,38 @@ $au-label-color: var(--au-gray-700);
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
-@import 'ember-appuniversum/c-alert';
-@import 'ember-appuniversum/c-badge';
-@import "ember-appuniversum/c-body-container";
-@import 'ember-appuniversum/c-button';
-@import 'ember-appuniversum/c-button-group';
-@import 'ember-appuniversum/c-card';
-@import 'ember-appuniversum/c-content';
-@import 'ember-appuniversum/c-control';
-@import 'ember-appuniversum/c-control-group';
-@import 'ember-appuniversum/c-dropdown';
-@import 'ember-appuniversum/c-heading';
-@import 'ember-appuniversum/c-help-text';
-@import 'ember-appuniversum/c-hr';
-@import 'ember-appuniversum/c-fieldset';
-@import 'ember-appuniversum/c-form';
-@import 'ember-appuniversum/c-form-row';
-@import 'ember-appuniversum/c-icon';
-@import 'ember-appuniversum/c-input';
-@import "ember-appuniversum/c-label";
-@import 'ember-appuniversum/c-link';
-@import 'ember-appuniversum/c-list';
-@import 'ember-appuniversum/c-list-horizontal';
-@import "ember-appuniversum/c-list-navigation";
-@import 'ember-appuniversum/c-loader';
-@import 'ember-appuniversum/c-pill';
-@import "ember-appuniversum/c-main-container";
-@import 'ember-appuniversum/c-modal';
-@import "ember-appuniversum/c-sidebar";
-@import 'ember-appuniversum/c-table';
-@import 'ember-appuniversum/c-toaster';
-@import 'ember-appuniversum/c-toolbar';
-@import 'ember-appuniversum/c-toggle-switch';
+@import '@appuniversum/ember-appuniversum/styles/components/c-alert';
+@import '@appuniversum/ember-appuniversum/styles/components/c-badge';
+@import '@appuniversum/ember-appuniversum/styles/components/c-body-container';
+@import '@appuniversum/ember-appuniversum/styles/components/c-button';
+@import '@appuniversum/ember-appuniversum/styles/components/c-button-group';
+@import '@appuniversum/ember-appuniversum/styles/components/c-card';
+@import '@appuniversum/ember-appuniversum/styles/components/c-content';
+@import '@appuniversum/ember-appuniversum/styles/components/c-control';
+@import '@appuniversum/ember-appuniversum/styles/components/c-control-group';
+@import '@appuniversum/ember-appuniversum/styles/components/c-dropdown';
+@import '@appuniversum/ember-appuniversum/styles/components/c-heading';
+@import '@appuniversum/ember-appuniversum/styles/components/c-help-text';
+@import '@appuniversum/ember-appuniversum/styles/components/c-hr';
+@import '@appuniversum/ember-appuniversum/styles/components/c-fieldset';
+@import '@appuniversum/ember-appuniversum/styles/components/c-form';
+@import '@appuniversum/ember-appuniversum/styles/components/c-form-row';
+@import '@appuniversum/ember-appuniversum/styles/components/c-icon';
+@import '@appuniversum/ember-appuniversum/styles/components/c-input';
+@import '@appuniversum/ember-appuniversum/styles/components/c-label';
+@import '@appuniversum/ember-appuniversum/styles/components/c-link';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list-horizontal';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list-navigation';
+@import '@appuniversum/ember-appuniversum/styles/components/c-loader';
+@import '@appuniversum/ember-appuniversum/styles/components/c-pill';
+@import '@appuniversum/ember-appuniversum/styles/components/c-main-container';
+@import '@appuniversum/ember-appuniversum/styles/components/c-modal';
+@import '@appuniversum/ember-appuniversum/styles/components/c-sidebar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-table';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
 
 
 // CSS variables (to override)
@@ -188,26 +188,29 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
-  // override child (and heading) spacing to match the one in Kaleidos a bit more
-  > * + * {
-    margin-top: 1.5rem;
-  }
+  &,
+  > div:not([class]) {
+    // override child (and heading) spacing to match the one in Kaleidos a bit more
+    > * + * {
+      margin-top: 1.5rem;
+    }
 
-  > p + ul,
-  > p + ol {
-    margin-top: 0.2rem;
-  }
+    > p + ul,
+    > p + ol {
+      margin-top: 0.2rem;
+    }
 
-  > * + h1,
-  > * + h2,
-  > * + h3 {
-    margin-top: 3rem;
-  }
+    > * + h1,
+    > * + h2,
+    > * + h3 {
+      margin-top: 3rem;
+    }
 
-  > * + h4,
-  > * + h5,
-  > * + h6 {
-    margin-top: 1.5rem;
+    > * + h4,
+    > * + h5,
+    > * + h6 {
+      margin-top: 1.5rem;
+    }
   }
 
   em { // default text color in Kaleidos
@@ -588,5 +591,13 @@ $au-label-color: var(--au-gray-700);
 
   ol[data-list-style='decimal-extended'] {
     @include decimal-extended-styling(5, 1);
+  }
+}
+
+// TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed
+.au-c-content {
+  #attendees,
+  #absentees {
+    table-layout: fixed;
   }
 }

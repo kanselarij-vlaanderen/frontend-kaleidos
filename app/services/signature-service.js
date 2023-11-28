@@ -180,7 +180,7 @@ export default class SignatureService extends Service {
           },
         }
       );
-      const subcase = await submissionActivity.subcase;
+      const subcase = await submissionActivity?.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {

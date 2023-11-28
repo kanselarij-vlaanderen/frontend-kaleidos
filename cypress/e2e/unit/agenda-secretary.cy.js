@@ -40,7 +40,7 @@ context('Agenda secretary tests', () => {
 
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.get(mandatee.secretaryPanelView.row.name).contains(currentDefaultSecretary);
+    cy.get(utils.governmentAreasPanel.emptyState);
   });
 
   it('should check default secretary', () => {
