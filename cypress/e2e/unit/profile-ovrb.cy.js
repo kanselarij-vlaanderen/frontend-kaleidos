@@ -149,6 +149,31 @@ context('Testing the application as OVRB', () => {
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.edit)
         .should('not.exist');
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShort2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
     });
 
     it('check agenda route on closed agenda', () => {
@@ -896,10 +921,10 @@ context('Testing the application as OVRB', () => {
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
-      // cy.get(route.agendaitemMinutes.createEdit).click();
-      // cy.get(route.agendaitemMinutes.editor.updateContent).click();
+      // cy.get(route.agendaMinutes.createEdit).click();
+      // cy.get(route.agendaMinutes.editor.updateContent).click();
       // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
-      // cy.get(route.agendaitemMinutes.editor.save).click()
+      // cy.get(route.agendaMinutes.editor.save).click()
       //   .wait('@patchMinutes');
       // cy.get(document.documentCard.name.value)
       //   .invoke('removeAttr', 'target')

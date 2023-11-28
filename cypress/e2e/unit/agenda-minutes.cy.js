@@ -6,6 +6,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 // import mandatee from '../../selectors/mandatee.selectors';
+import route from '../../selectors/route.selectors';
 // import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -81,8 +82,8 @@ context('agenda minutes test', () => {
       .click();
     // document card still loading
     cy.wait(2000);
-    cy.get(agenda.agendaMinutes.create).click();
-    cy.get(agenda.agendaMinutes.updateContent).click();
+    cy.get(route.agendaMinutes.create).click();
+    cy.get(route.agendaMinutes.updateContent).click();
 
     // make a change to present
     cy.wait(6000);
@@ -116,7 +117,7 @@ context('agenda minutes test', () => {
     cy.get('@beslissingParagraph').type(`{home}${extrabeslissing}{shift+enter}`);
     cy.get('@mededelingParagraph').type(`{home}${extraMededeling}{shift+enter}`);
     cy.wait(5000);
-    cy.get(agenda.agendaMinutes.updateContent).click();
+    cy.get(route.agendaMinutes.updateContent).click();
     cy.get('@deMinistersPresidentParagraph').contains(extraPresident);
     cy.get('@deViceministerPresidentenParagraph').contains(extraVicePresident);
     cy.get('@deVlaamseMinistersParagraph').contains(extraMinister);
@@ -127,7 +128,7 @@ context('agenda minutes test', () => {
 
     cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
     cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
-    cy.get(agenda.agendaMinutes.save).click();
+    cy.get(route.agendaMinutes.save).click();
     cy.wait('@patchMinutes');
     cy.wait('@createNewPiecePart');
 
@@ -155,12 +156,12 @@ context('agenda minutes test', () => {
     cy.wait('@patchPublicationActivities');
     cy.wait('@patchDecisionActivities');
 
-    cy.get(agenda.agendaMinutes.currentPieceView).contains(extraPresident);
-    cy.get(agenda.agendaMinutes.currentPieceView).contains(extraVicePresident);
-    cy.get(agenda.agendaMinutes.currentPieceView).contains(extraMinister);
-    cy.get(agenda.agendaMinutes.currentPieceView).should('not.contain', extraSecretaris);
-    cy.get(agenda.agendaMinutes.currentPieceView).contains(newSecretary);
-    cy.get(agenda.agendaMinutes.currentPieceView).should('not.contain', extrabeslissing);
-    cy.get(agenda.agendaMinutes.currentPieceView).contains(extraMededeling);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraPresident);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraVicePresident);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraMinister);
+    cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extraSecretaris);
+    cy.get(route.agendaMinutes.currentPieceView).contains(newSecretary);
+    cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extrabeslissing);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraMededeling);
   });
 });

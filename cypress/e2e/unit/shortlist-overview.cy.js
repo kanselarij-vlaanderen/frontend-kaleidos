@@ -122,12 +122,12 @@ context('signatures shortlist overview tests', () => {
     cy.addAgendaitemMandatee(3);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.get(document.documentCard.signMarking).click();
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.addAgendaitemMandatee(4);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
-    cy.get(document.documentCard.signMarking).forceClick();
+    cy.get(document.documentCard.signMarking).click();
 
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
@@ -318,6 +318,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
+      .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -344,6 +345,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
+      .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -573,11 +575,10 @@ context('decisions and minutes shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
   const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
-  const decisionDate = Cypress.dayjs();
-  const decisionTitle = 'VR PV 2023/1 - punt 0001';
+  let decisionTitle;
   const pieceTypeDecision = 'BF';
   const pieceTypeMinutes = 'Notulen';
-  const minutesTitle = `Notulen - P${agendaDate.format('YYYY-MM-DD')}`;
+  let minutesTitle;
 
   const defaultSecretary = 'Jeroen Overmeer';
   const newSecretary = 'Joachim Pohlmann';
@@ -600,6 +601,13 @@ context('decisions and minutes shortlist overview tests', () => {
 
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.generateDecision();
+    cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        decisionTitle = generatedDocTitle.replace('.pdf', '').trim();
+      });
     cy.intercept('POST', '/sign-flows*').as('postSignFlows1');
     cy.intercept('POST', '/sign-subcases*').as('postSignSubcases1');
     cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities1');
@@ -611,6 +619,12 @@ context('decisions and minutes shortlist overview tests', () => {
 
     cy.generateMinutes();
     cy.wait(5000); // TODO-waits better wait
+    cy.get(auk.loader).should('not.exist');
+    cy.get(document.documentCard.name.value).should('not.contain', 'Aan het laden');
+    cy.get(document.documentCard.name.value).invoke('text')
+      .then((generatedDocTitle) => {
+        minutesTitle = generatedDocTitle.replace('.pdf', '').trim();
+      });
     cy.intercept('POST', '/sign-flows*').as('postSignFlows2');
     cy.intercept('POST', '/sign-subcases*').as('postSignSubcases2');
     cy.intercept('POST', '/sign-marking-activities*').as('postSignMarkingActivities2');
@@ -640,6 +654,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(route.decisions.sidebar.close);
@@ -686,12 +701,13 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
     // check info
     cy.get(route.decisions.sidebar.info).contains(pieceTypeDecision);
-    cy.get(route.decisions.sidebar.info).contains(decisionDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
     cy.get(route.decisions.sidebar.info).contains(decisionTitle);
 
     // check preview
@@ -699,6 +715,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
     cy.url().should('include', 'document');
     cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     // check last agendaitem
@@ -711,6 +728,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .invoke('attr', 'class')
       .should('include', 'auk-sidebar__item--active');
     cy.go('back');
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
@@ -729,7 +747,7 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // check info
     cy.get(route.decisions.sidebar.info).contains(pieceTypeMinutes);
-    cy.get(route.decisions.sidebar.info).contains(decisionDate.format('DD-MM-YYYY'));
+    cy.get(route.decisions.sidebar.info).contains(agendaDate.format('DD-MM-YYYY'));
     cy.get(route.decisions.sidebar.info).contains(minutesTitle);
 
     // check preview
@@ -837,6 +855,7 @@ context('decisions and minutes shortlist overview tests', () => {
     // *start signflow*
 
     // check fail
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer); // wait for signers to load
@@ -859,6 +878,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
 
     // check succes
+    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)

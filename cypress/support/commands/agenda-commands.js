@@ -133,15 +133,15 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // set the secretary
   if (secretary) {
+    cy.wait(2000); // are they loaded?
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.option).contains(secretary)
       .scrollIntoView()
       .trigger('mouseover')
-      .click({
-        force: true,
-      });
+      .click();
     cy.get(dependency.emberPowerSelect.option, {
       timeout: 15000,
     }).should('not.exist');
@@ -349,7 +349,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(auk.loader).should('not.exist', {
+    timeout: 60000,
+  }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
@@ -532,7 +534,7 @@ function agendaitemExists(agendaitemName) {
   cy.wait(200);
   // Check which reverse tab is active
   cy.get(auk.loader, {
-    timeout: 20000,
+    timeout: 60000,
   }).should('not.exist');
   // Detail tab is only shown after loading data (first or anchor item), but no loader is showing during the process
   // We need to ensure Detail tab exists before looking through the child components
@@ -835,13 +837,13 @@ function generateMinutes() {
   cy.log('generateMinutes');
   cy.get(agenda.agendaTabs.tabs).contains('Notulen')
     .click();
-  cy.get(agenda.agendaMinutes.create).click();
-  cy.get(agenda.agendaMinutes.updateContent).click();
+  cy.get(route.agendaMinutes.create).click();
+  cy.get(route.agendaMinutes.updateContent).click();
 
   cy.intercept('POST', '/minutes*').as('createNewMinutes');
   cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
-  cy.get(agenda.agendaMinutes.save).click();
+  cy.get(route.agendaMinutes.save).click();
   cy.wait('@createNewMinutes');
   cy.wait('@patchMinutes');
   cy.wait('@createNewPiecePart');
