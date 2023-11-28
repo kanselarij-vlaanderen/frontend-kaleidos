@@ -82,8 +82,8 @@ context('agenda minutes test', () => {
       .click();
     // document card still loading
     cy.wait(2000);
-    cy.get(route.agendaMinutes.create).click();
-    cy.get(route.agendaMinutes.updateContent).click();
+    cy.get(route.agendaMinutes.createEdit).click();
+    cy.get(route.agendaMinutes.editor.updateContent).click();
 
     // make a change to present
     cy.wait(6000);
@@ -117,7 +117,7 @@ context('agenda minutes test', () => {
     cy.get('@beslissingParagraph').type(`{home}${extrabeslissing}{shift+enter}`);
     cy.get('@mededelingParagraph').type(`{home}${extraMededeling}{shift+enter}`);
     cy.wait(5000);
-    cy.get(route.agendaMinutes.updateContent).click();
+    cy.get(route.agendaMinutes.editor.updateContent).click();
     cy.get('@deMinistersPresidentParagraph').contains(extraPresident);
     cy.get('@deViceministerPresidentenParagraph').contains(extraVicePresident);
     cy.get('@deVlaamseMinistersParagraph').contains(extraMinister);
@@ -128,7 +128,7 @@ context('agenda minutes test', () => {
 
     cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
     cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
-    cy.get(route.agendaMinutes.save).click();
+    cy.get(route.agendaMinutes.editor.save).click();
     cy.wait('@patchMinutes');
     cy.wait('@createNewPiecePart');
 
