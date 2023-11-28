@@ -837,13 +837,13 @@ function generateMinutes() {
   cy.log('generateMinutes');
   cy.get(agenda.agendaTabs.tabs).contains('Notulen')
     .click();
-  cy.get(route.agendaMinutes.create).click();
-  cy.get(route.agendaMinutes.updateContent).click();
+  cy.get(route.agendaMinutes.createEdit).click();
+  cy.get(route.agendaMinutes.editor.updateContent).click();
 
   cy.intercept('POST', '/minutes*').as('createNewMinutes');
   cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
-  cy.get(route.agendaMinutes.save).click();
+  cy.get(route.agendaMinutes.editor.save).click();
   cy.wait('@createNewMinutes');
   cy.wait('@patchMinutes');
   cy.wait('@createNewPiecePart');
