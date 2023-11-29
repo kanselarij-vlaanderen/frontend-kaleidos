@@ -1283,5 +1283,6 @@
   "decision-reports-are-marked-for-signing": "De {aantal, plural, =1 {beslissing is} other {# beslissingen zijn}} succesvol aangeboden voor ondertekenen",
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
   "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen",
-  "remarks": "Opmerkingen"
+  "remarks": "Opmerkingen",
+  "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd"
 }

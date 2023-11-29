@@ -45,11 +45,51 @@ export default class SendToVpModalComponent extends Component {
 
       const treatment = await latestAgendaitem?.treatment;
       const decisionActivity = await treatment?.decisionActivity;
+
       const report = await decisionActivity?.report;
 
-      const agendaitemPieces = await latestAgendaitem.pieces;
-      let pieces = report ? [report, ...agendaitemPieces] : agendaitemPieces;
-      for (const piece of pieces) {
+      const DECREET = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DOCUMENT_TYPES.DECREET
+      );
+      const MEMORIE = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DOCUMENT_TYPES.MEMORIE
+      );
+      const NOTA = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DOCUMENT_TYPES.NOTA
+      );
+      const ADVIES = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.DOCUMENT_TYPES.ADVIES
+      );
+      const INTERN_OVERHEID = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
+      );
+      const PUBLIEK = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.PUBLIEK
+      );
+      const subcasePieces = (await this.store.queryAll('piece', {
+        'filter[document-container][type][:id:]': [
+          DECREET.id,
+          MEMORIE.id,
+          NOTA.id,
+          ADVIES.id,
+        ].join(','),
+        'filter[access-level][:id:]': [
+          INTERN_OVERHEID.id,
+          PUBLIEK.id,
+        ].join(','),
+        'filter[submission-activity][subcase][:id:]': subcase.id,
+      })).slice();
+
+      const allPieces = report ? [report, ...subcasePieces] : subcasePieces;
+      const piecesReadyToBeSent = [];
+
+      for (const piece of allPieces) {
         const documentContainer = await piece.documentContainer;
         await documentContainer?.type;
         await piece.signedPiece;
@@ -57,9 +97,16 @@ export default class SendToVpModalComponent extends Component {
         await file.derived;
       }
       const subcaseType = await subcaseTypePromise;
+
+      for (const piece of allPieces) {
+        const submittedPiece = await piece.submittedPiece;
+        if (!submittedPiece) piecesReadyToBeSent.push(piece);
+      }
+
       return {
         subcase,
-        pieces,
+        allPieces,
+        piecesReadyToBeSent,
         subcaseTypeUri: subcaseType.uri,
       };
     }
@@ -164,7 +211,7 @@ export default class SendToVpModalComponent extends Component {
       this.subcaseRequirements[subcaseWithPieces.subcaseTypeUri];
 
     for (const requirement of subcaseRequirements) {
-      const pieces = subcaseWithPieces.pieces;
+      const pieces = subcaseWithPieces.allPieces;
       const type = requirement.type;
 
       const hasSigned = hasSignedPieceOfType(pieces, type);

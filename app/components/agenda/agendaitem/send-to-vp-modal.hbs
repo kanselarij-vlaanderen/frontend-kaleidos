@@ -22,13 +22,17 @@
                 (t "principal-approval")
               }}:
               <ul>
-                {{#each subcaseWithPieces.pieces as |piece|}}
+                {{#each subcaseWithPieces.piecesReadyToBeSent as |piece|}}
                   <li>
                     <LinkTo @route="document" @model={{piece.id}}>
                       {{#let piece.file.extension as |extension|}}
                         {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
                       {{/let}}
                     </LinkTo>
+                  </li>
+                {{else}}
+                  <li>
+                    {{t "no-new-files-will-be-sent"}}
                   </li>
                 {{/each}}
               </ul>
@@ -40,13 +44,17 @@
               (t "definitive-approval")
             }}:
             <ul>
-              {{#each this.dgSubcaseWithPieces.pieces as |piece|}}
+              {{#each this.dgSubcaseWithPieces.piecesReadyToBeSent as |piece|}}
                 <li>
                   <LinkTo @route="document" @model={{piece.id}}>
                     {{#let piece.file.extension as |extension|}}
                       {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
                     {{/let}}
                   </LinkTo>
+                </li>
+              {{else}}
+                <li>
+                  {{t "no-new-files-will-be-sent"}}
                 </li>
               {{/each}}
             </ul>
