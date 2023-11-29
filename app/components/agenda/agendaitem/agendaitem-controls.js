@@ -36,12 +36,23 @@ export default class AgendaitemControls extends Component {
     super(...arguments);
 
     this.loadAgendaData.perform();
-    this.loadDecisionActivity.perform();
-    this.loadCanSendToVP.perform();
+    this.loadDecisionActivity.perform()
+        .then(() => {
+          this.loadCanSendToVP.perform();
+        });
   }
 
   loadCanSendToVP = task(async () => {
     if (this.enableVlaamsParlement) {
+      // is-ready-for-vp covers this, but we might be in a postponed
+      // and resubmitted subcase, in which case the whole flow is still
+      // ready but the current agenda item isn't
+      const decisionResultCode = await this.decisionActivity.decisionResultCode;
+      if (decisionResultCode.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD) {
+        this.canSendToVP = false;
+        return;
+      }
+
       const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
       const resp = await fetch(
         `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
