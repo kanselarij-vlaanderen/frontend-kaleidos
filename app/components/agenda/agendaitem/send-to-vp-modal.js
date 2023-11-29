@@ -84,6 +84,7 @@ export default class SendToVpModalComponent extends Component {
           PUBLIEK.id,
         ].join(','),
         'filter[submission-activity][subcase][:id:]': subcase.id,
+        sort: 'name',
       })).slice();
 
       const allPieces = report ? [report, ...subcasePieces] : subcasePieces;
