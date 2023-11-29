@@ -65,6 +65,11 @@ export default class Piece extends Model {
     async: true,
   })
   signCompletionActivity;
+  @belongsTo('submitted-piece', {
+    inverse: 'piece',
+    async: true
+  })
+  submittedPiece;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
   requestActivitiesUsedBy;

@@ -8,5 +8,10 @@ export default class SubmittedPiece extends Model {
   @attr signedFileParliamentId;
   @attr wordFileParliamentId;
 
-  @belongsTo('piece', { inverse: null, async: true }) piece;
+  @belongsTo('piece', {
+    inverse: 'submittedPiece',
+    async: true,
+    polymorphic: true
+  })
+  piece;
 }
