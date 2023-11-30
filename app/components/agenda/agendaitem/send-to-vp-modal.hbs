@@ -5,7 +5,7 @@
   @onConfirm={{perform this.sendToVP}}
   @onCancel={{@onCancel}}
   @loading={{this.sendToVP.isRunning}}
-  @disabled={{this.loadData.isRunning}}
+  @disabled={{this.isModalDisabled}}
 >
   <:title>{{t "check-case"}}</:title>
   <:body>

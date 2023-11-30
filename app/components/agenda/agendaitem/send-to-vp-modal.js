@@ -26,6 +26,11 @@ export default class SendToVpModalComponent extends Component {
     this.loadData.perform();
   }
 
+  get isModalDisabled() {
+    return this.loadData.isRunning
+      || !this.dgSubcaseWithPieces.piecesReadyToBeSent?.length;
+  }
+
   loadData = task(async () => {
     await Promise.all([this.loadSubcaseWithPieces(), this.loadDocumentTypes()]);
   });
