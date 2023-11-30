@@ -106,8 +106,43 @@ export default class SendToVpModalComponent extends Component {
       const subcaseType = await subcaseTypePromise;
 
       for (const piece of allPieces) {
-        const submittedPiece = await piece.submittedPiece;
-        if (!submittedPiece) piecesReadyToBeSent.push(piece);
+        const submittedPieces = (await piece.submittedPieces).slice();
+        if (submittedPieces.length === 0) {
+          piecesReadyToBeSent.push(piece);
+          continue;
+        }
+
+        let hasSentPdf = false;
+        let hasSentWord = false;
+        let hasSentSigned = false;
+        for (const submittedPiece of submittedPieces)  {
+          const file = await piece.file;
+          const derived = await file.derived;
+          let pdf;
+          let word;
+          let signed;
+          if (derived) {
+            pdf = derived;
+            word = file;
+          } else {
+            pdf = file;
+          }
+          const signedPieceCopy = await piece.signedPieceCopy;
+          signed = await signedPieceCopy?.file;
+
+          if (submittedPiece.unsignedFile === pdf.uri) {
+            hasSentPdf = true;
+          }
+          if (submittedPiece.wordFile === word?.uri) {
+            hasSentWord = true;
+          }
+          if (submittedPiece.signedFile === signed?.uri) {
+            hasSentSigned = true;
+          }
+        }
+        if (!hasSentPdf || !hasSentWord || !hasSentSigned) {
+          piecesReadyToBeSent.push(piece);
+        }
       }
 
       return {

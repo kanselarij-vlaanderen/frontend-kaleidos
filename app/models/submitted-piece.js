@@ -9,7 +9,7 @@ export default class SubmittedPiece extends Model {
   @attr wordFileParliamentId;
 
   @belongsTo('piece', {
-    inverse: 'submittedPiece',
+    inverse: 'submittedPieces',
     async: true,
     polymorphic: true
   })

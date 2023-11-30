@@ -65,11 +65,6 @@ export default class Piece extends Model {
     async: true,
   })
   signCompletionActivity;
-  @belongsTo('submitted-piece', {
-    inverse: 'piece',
-    async: true
-  })
-  submittedPiece;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true })
   requestActivitiesUsedBy;
@@ -84,6 +79,12 @@ export default class Piece extends Model {
   @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
   @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
   linkedAgendaitems;
+
+  @hasMany('submitted-piece', {
+    inverse: 'piece',
+    async: true
+  })
+  submittedPieces;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;
