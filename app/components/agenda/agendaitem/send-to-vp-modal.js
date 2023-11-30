@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 const PDF_MIME_TYPE = 'application/pdf; charset=binary';
 // question: is this enough for all Word documents?
@@ -141,13 +142,31 @@ export default class SendToVpModalComponent extends Component {
       uri: this.decisionmakingFlow.uri,
       ...(this.comment ? { comment: this.comment} : null),
     });
-    const resp = await fetch(
+    const response = await fetch(
       `/vlaams-parlement-sync/?${params}`,
       { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
     );
 
-    if (!resp.ok) {
-      this.toaster.error(this.intl.t('error-while-sending-to-VP'));
+    if (!response.ok) {
+      let errorMessage = '';
+      try {
+        const data = await response.json();
+        errorMessage = JSON.stringify(data);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          errorMessage = response.status;
+        } else {
+          errorMessage = `Something went wrong while reading response: ${error}`;
+        }
+      }
+      this.toaster.show(CopyErrorToClipboardToast, {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-while-sending-to-VP-message'),
+        errorContent: errorMessage,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        }
+      });
       return;
     } else {
       this.toaster.success(this.intl.t('case-was-sent-to-VP'));
