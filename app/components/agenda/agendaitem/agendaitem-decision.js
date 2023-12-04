@@ -174,7 +174,7 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
-      this.loadSignatureRelatedData.perform();
+      await this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
@@ -806,7 +806,8 @@ export default class AgendaitemDecisionComponent extends Component {
   get mayEditDecisionReport() {
     return this.enableDigitalAgenda &&
       this.currentSession.may('manage-decisions') &&
-      (!this.hasSignFlow || this.hasMarkedSignFlow);
+      (this.pieceParts || !this.report) &&
+      (this.hasSignFlow === false || this.hasMarkedSignFlow);
   }
 
   @action
