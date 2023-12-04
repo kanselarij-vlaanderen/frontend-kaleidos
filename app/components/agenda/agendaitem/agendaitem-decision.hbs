@@ -259,10 +259,7 @@
              <Toolbar.Group @position="right" as |Group|>
                {{#if 
                   (and
-                     this.loadReport.isIdle
-                     (user-may "manage-decisions")
                      (not this.isEditingAnnotation)
-                     (or this.pieceParts (not this.report))
                      this.mayEditDecisionReport
                    )
                  }}
@@ -343,10 +340,7 @@
                 <Toolbar.Group @position="right" as |Group|>
                   {{#if 
                       (and
-                        this.loadReport.isIdle
-                        (user-may "manage-decisions")
                         (not this.isEditingConcern)
-                        (or this.pieceParts (not this.report))
                         this.mayEditDecisionReport
                       )
                   }}
