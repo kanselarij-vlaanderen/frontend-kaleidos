@@ -338,7 +338,7 @@
                   </h4>
                 </Toolbar.Group>
                 <Toolbar.Group @position="right" as |Group|>
-                  {{#if 
+                  {{#if
                       (and
                         (not this.isEditingConcern)
                         this.mayEditDecisionReport
@@ -420,24 +420,24 @@
                     </h4>
                   </Toolbar.Group>
                   <Toolbar.Group @position="right" as |Group|>
-                       {{#if
+                    {{#if
                       (and
                         (not this.isEditingTreatment)
                         this.mayEditDecisionReport
                       )
                     }}
-                        <Group.Item>
-                          <AuButton
-                            data-test-agendaitem-decision-create
-                            @skin="naked"
-                            @icon="pencil"
-                            @iconAlignment="left"
-                            @disabled={{this.saveReport.isRunning}}
-                            {{on "click" this.startEditingTreatment}}
-                          >
-                            {{t "edit"}}
-                          </AuButton>
-                        </Group.Item>
+                      <Group.Item>
+                        <AuButton
+                          data-test-agendaitem-decision-create
+                          @skin="naked"
+                          @icon="pencil"
+                          @iconAlignment="left"
+                          @disabled={{this.saveReport.isRunning}}
+                          {{on "click" this.startEditingTreatment}}
+                        >
+                          {{t "edit"}}
+                        </AuButton>
+                      </Group.Item>
                     {{/if}}
                   </Toolbar.Group>
               </Auk::Toolbar>
