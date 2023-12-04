@@ -145,6 +145,9 @@ export default class DecisionReportGeneration extends Service {
   });
 
   generateReplacementMinutes = task(async (minutes) => {
+    if (! (await this._canReplaceMinutes(minutes))) {
+      return;
+    }
     try {
       const generatingPDFToast = this.toaster.loading(
         this.intl.t('minutes-report-generation--toast-generating--message'),
@@ -175,6 +178,47 @@ export default class DecisionReportGeneration extends Service {
       );
     }
   });
+
+  async _canReplaceMinutes(minutes) {
+    const latestAgenda = await this.store.queryOne('agenda', {
+      'filter[created-for][minutes][:id:]': minutes.id,
+      'filter[:has-no:next-version]': true,
+      include: 'status',
+    });
+
+    if (
+      latestAgenda.belongsTo('status').value().uri ===
+      CONSTANTS.AGENDA_STATUSSES.APPROVED
+    ) {
+      return false;
+    }
+
+    const decisionInternallyPublished = !!(await this.store.queryOne(
+      'internal-decision-publication-activity',
+      {
+        'filter[meeting][agendas][:id:]': latestAgenda.id,
+        'filter[:has:start-date]': true,
+        'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      }
+    ));
+
+    if (decisionInternallyPublished) {
+      return false;
+    }
+
+    const hasPreparationActivity = !!(await this.store.queryOne(
+      'sign-preparation-activity',
+      {
+        'filter[sign-marking-activity][piece][:id:]': minutes.id
+      }
+    ));
+
+    if (hasPreparationActivity) {
+      return false;
+    }
+
+    return true;
+  }
 
   generateSinglePdf = task(async (report, urlBase) => {
     let response;
