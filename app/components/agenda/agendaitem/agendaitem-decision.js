@@ -40,7 +40,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked beslissingPiecePart;
   @tracked nota;
 
-  @tracked hasSignFlow = null;
+  @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
   @tracked isEditingAnnotation = false;
@@ -174,7 +174,7 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
-      this.loadSignatureRelatedData.perform();
+      await this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;

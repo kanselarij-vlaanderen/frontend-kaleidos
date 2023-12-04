@@ -257,13 +257,15 @@
                </h4>
              </Toolbar.Group>
              <Toolbar.Group @position="right" as |Group|>
-               {{#unless 
-                    (and
-                      (not this.isEditingAnnotation)
-                      this.mayEditDecisionReport
-                    )}}
-                  <Auk::Loader />
-                {{else}}
+               {{#if 
+                  (and
+                     this.loadReport.isIdle
+                     (user-may "manage-decisions")
+                     (not this.isEditingAnnotation)
+                     (or this.pieceParts (not this.report))
+                     this.mayEditDecisionReport
+                   )
+                 }}
                    <Group.Item>
                      <AuButton
                        @skin="naked"
@@ -275,7 +277,7 @@
                        {{t "edit"}}
                      </AuButton>
                    </Group.Item>
-                 {{/unless}}
+                 {{/if}}
              </Toolbar.Group>
            </Auk::Toolbar>
          <SanitizeHtml
@@ -339,13 +341,15 @@
                   </h4>
                 </Toolbar.Group>
                 <Toolbar.Group @position="right" as |Group|>
-                  {{#unless 
-                      (and 
-                      (not this.isEditingConcern)
-                      this.mayEditDecisionReport
-                      )}}
-                      <Auk::Loader />
-                  {{else}}
+                  {{#if 
+                      (and
+                        this.loadReport.isIdle
+                        (user-may "manage-decisions")
+                        (not this.isEditingConcern)
+                        (or this.pieceParts (not this.report))
+                        this.mayEditDecisionReport
+                      )
+                  }}
                       <Group.Item>
                         <AuButton
                           data-test-agendaitem-decision-create
@@ -358,7 +362,7 @@
                           {{t "edit"}}
                         </AuButton>
                       </Group.Item>
-                    {{/unless}}
+                    {{/if}}
                 </Toolbar.Group>
               </Auk::Toolbar>
             <SanitizeHtml
@@ -422,13 +426,12 @@
                     </h4>
                   </Toolbar.Group>
                   <Toolbar.Group @position="right" as |Group|>
-                     {{#unless 
-                          (and
-                            (not this.isEditingTreatment)
-                            this.mayEditDecisionReport
-                            )}}
-                        <Auk::Loader />
-                      {{else}}
+                       {{#if
+                      (and
+                        (not this.isEditingTreatment)
+                        this.mayEditDecisionReport
+                      )
+                    }}
                         <Group.Item>
                           <AuButton
                             data-test-agendaitem-decision-create
@@ -441,7 +444,7 @@
                             {{t "edit"}}
                           </AuButton>
                         </Group.Item>
-                    {{/unless}}
+                    {{/if}}
                   </Toolbar.Group>
               </Auk::Toolbar>
             <SanitizeHtml
