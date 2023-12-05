@@ -93,10 +93,9 @@
                     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                   </div>
                   <div class="vlc-document-card-item__meta au-u-muted">
-                    {{!-- no piece.created in legacy data --}}
-                    {{#if piece.created}}
+                    {{#if piece.file.created}}
                       {{t "uploaded-at"}}
-                      {{datetime-at piece.created}}
+                      {{or (datetime-at piece.file.created) (datetime-at piece.created)}}
                     {{/if}}
                   </div>
                   <div class="vlc-document-card-item__icon">

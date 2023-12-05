@@ -172,6 +172,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.isDeletingDerivedFile = false;
 
     this.args.onSave?.();
-    this.router.refresh();
+    this.router.refresh('agenda.agendaitems.agendaitem.documents');
   });
 }
