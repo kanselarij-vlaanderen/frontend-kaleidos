@@ -96,6 +96,9 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (isPresent(this.altDateToShow)) {
       return this.altDateToShow;
     }
+    if(this.args.piece.file){
+      return this.args.piece.file.get("created");
+    }
     return this.args.piece.created;
   }
 
@@ -206,10 +209,15 @@ export default class DocumentsDocumentCardComponent extends Component {
           piecePart = yield loadMinutesPiecePart(this.piece.id);
         }
         const previousPart = yield piecePart?.previousPiecePart;
+        const hasBeenEdited = this.piece.created.getTime() !== this.piece.modified.getTime();
         if (previousPart) {
           this.dateToShowAltLabel = this.intl.t('edited-on');
           this.altDateToShow = piecePart.created;
-        } else {
+        } else if (hasBeenEdited) {
+          this.dateToShowAltLabel = this.intl.t('edited-on');
+          this.altDateToShow = this.piece.modified
+        }
+         else {
           this.dateToShowAltLabel = this.intl.t('created-on');
         }
       }

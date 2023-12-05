@@ -14,6 +14,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @service intl;
   @service toaster;
   @service fileConversionService;
+  @service router;
 
   @tracked isReplacingSourceFile = false;
   @tracked isReplacingDerivedFile = false;
@@ -157,7 +158,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       await file.save();
       await derivedFile.destroyRecord();
     }
-    this.args.piece.created = now;
     await this.args.piece.save();
 
     this.name = null;
@@ -172,5 +172,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.isDeletingDerivedFile = false;
 
     this.args.onSave?.();
+    this.router.refresh();
   });
 }

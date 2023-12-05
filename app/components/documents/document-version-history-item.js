@@ -6,6 +6,8 @@ import { keepLatestTask } from 'ember-concurrency';
 
 export default class DocumentsDocumentVersionHistoryItemComponent extends Component {
   @service pieceAccessLevelService;
+  
+  @service intl;
 
   @tracked isDraftAccessLevel;
 
@@ -13,6 +15,14 @@ export default class DocumentsDocumentVersionHistoryItemComponent extends Compon
     super(...arguments);
     this.loadData.perform();
     this.loadFiles.perform();
+  }
+
+  get labelToShow() {
+    if (this.args.piece.created.getTime() == this.args.piece.modified.getTime()) {
+      return this.intl.t("uploaded-at")
+    }
+    return this.intl.t("edited-on")
+
   }
 
   @keepLatestTask
