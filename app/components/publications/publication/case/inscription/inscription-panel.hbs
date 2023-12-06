@@ -1,5 +1,5 @@
 {{#if this.isEditing}}
-  <Auk::Panel class="auk-panel--editing">
+  <Auk::Panel class="auk-panel--editing" ...attributes>
     <Auk::Panel::Header>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
@@ -72,7 +72,7 @@
     </Auk::Panel::Footer>
   </Auk::Panel>
 {{else}}
-  <Auk::Panel>
+  <Auk::Panel ...attributes>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
