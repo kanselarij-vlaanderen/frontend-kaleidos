@@ -258,12 +258,9 @@
                </h4>
              </Toolbar.Group>
              <Toolbar.Group @position="right" as |Group|>
-               {{#if
-                   (and
-                     this.loadReport.isIdle
-                     (user-may "manage-decisions")
+               {{#if 
+                  (and
                      (not this.isEditingAnnotation)
-                     (or this.pieceParts (not this.report))
                      this.mayEditDecisionReport
                    )
                  }}
@@ -344,13 +341,10 @@
                 <Toolbar.Group @position="right" as |Group|>
                   {{#if
                       (and
-                        this.loadReport.isIdle
-                        (user-may "manage-decisions")
                         (not this.isEditingConcern)
-                        (or this.pieceParts (not this.report))
                         this.mayEditDecisionReport
                       )
-                    }}
+                  }}
                       <Group.Item>
                         <AuButton
                           data-test-agendaitem-decision-create
@@ -427,12 +421,9 @@
                     </h4>
                   </Toolbar.Group>
                   <Toolbar.Group @position="right" as |Group|>
-                     {{#if
+                    {{#if
                       (and
-                        this.loadReport.isIdle
-                        (user-may "manage-decisions")
                         (not this.isEditingTreatment)
-                        (or this.pieceParts (not this.report))
                         this.mayEditDecisionReport
                       )
                     }}

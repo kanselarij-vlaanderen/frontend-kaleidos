@@ -19,11 +19,14 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
   @tracked approvers = new TrackedArray([]);
   @tracked notificationAddresses = new TrackedArray([]);
 
-  @tracked hasConflictingSigners = false;
   primeMinister = null;
 
   constructor() {
     super(...arguments);
+  }
+
+  get hasConflictingSigners() {
+    return this.loadSigners.value?.hasConflictingSigners ?? false;
   }
 
   loadSigners = trackedFunction(this, async () => {
@@ -31,6 +34,8 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
       return;
     }
     const decisionActivities = this.args.decisionActivities.toArray();
+
+    let hasConflictingSigners = false;
 
     const [head, ...tail] = decisionActivities;
 
@@ -55,24 +60,24 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
         await getSubmitterAndCosigners(decisionActivity);
 
       if (submitter?.id !== _submitter?.id) {
-        this.hasConflictingSigners = true;
+        hasConflictingSigners = true;
         break;
       }
       if (_cosigners.length !== cosigners.length) {
-        this.hasConflictingSigners = true;
+        hasConflictingSigners = true;
         break;
       }
       const _cosignersIds = _cosigners.map((signer) => signer.id);
       const cosignersIds = cosigners.map((signer) => signer.id);
       for (const mandateeId of _cosignersIds) {
         if (!cosignersIds.includes(mandateeId)) {
-          this.hasConflictingSigners = true;
+          hasConflictingSigners = true;
           break;
         }
       }
-      if (this.hasConflictingSigners) break;
+      if (hasConflictingSigners) break;
     }
-    if (this.hasConflictingSigners) {
+    if (hasConflictingSigners) {
       this.signers = new TrackedArray([]);
     } else {
     const signersSet = new Set();
@@ -97,6 +102,9 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
       this.signers = new TrackedArray([...signersSet]);
     }
     this.args.onChangeSigners?.(this.signers);
+    return {
+      hasConflictingSigners,
+    };
   });
 
   @action
