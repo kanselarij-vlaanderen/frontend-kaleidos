@@ -56,7 +56,7 @@ export default class DecisionReportGeneration extends Service {
           }
         );
         if (this.router.currentRouteName === 'agenda.documents') {
-          this.router.refresh(this.router.currentRouteName);
+          this.router.refresh('agenda');
         }
     } else if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE) {
       this.toaster.close(generatingBundleToast);
