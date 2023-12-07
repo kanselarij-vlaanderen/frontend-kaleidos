@@ -30,6 +30,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service jobMonitor;
   @service toaster;
   @service signatureService;
+  @service decisionReportGeneration;
 
   downloadOptions = [
     {
@@ -191,6 +192,27 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.decisionPublicationActivity.startDate = new Date();
     this.decisionPublicationActivity.status = status;
     await this.decisionPublicationActivity.save();
+  }
+
+  @action
+  async generateDecisionsBundle() {
+    const INTERN_OVERHEID = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID,
+    );
+    const PUBLIEK = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.PUBLIEK,
+    );
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[access-level][:id:]': [INTERN_OVERHEID.id, PUBLIEK.id].join(','),
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+      sort: 'name',
+    });
+    this.decisionReportGeneration.generateReportBundle.perform(reports);
   }
 
   @task
