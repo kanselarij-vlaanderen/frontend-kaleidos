@@ -219,7 +219,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   async generateDecisionsBundle() {
     await this.loadReports.perform();
-    if (this.reports) {
+    if (this.reports.length) {
       this.decisionReportGeneration.generateReportBundle.perform(this.reports);
     }
   }
