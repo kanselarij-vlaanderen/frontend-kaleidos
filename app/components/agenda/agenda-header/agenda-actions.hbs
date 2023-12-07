@@ -62,13 +62,15 @@
   >
     {{t "download-decisions"}}
   </AuButton>
-  <AuButton
-    @skin="link"
-    {{on "click" this.generateDecisionsBundle}}
-    role="menuitem"
-  >
-    {{t "generate-decisions-bundle"}}
-  </AuButton>
+  {{#if this.reports.length}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.generateDecisionsBundle}}
+      role="menuitem"
+    >
+      {{t "generate-decisions-bundle"}}
+    </AuButton>
+  {{/if}}
 
   {{#if (user-may "manage-meetings")}}
     <AuHr />
