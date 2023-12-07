@@ -1,82 +1,80 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "contacts"}}
-            </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-contact-persons-view-add
-              @skin="naked"
-              @icon="plus"
-              {{on "click" this.openAddModal}}
-            >
-              {{t "add-contact"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    {{#if this.contactPersons}}
-      <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th>{{t "name"}}</th>
-              <th>{{t "email"}}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each this.contactPersons as |contactPerson|}}
-              <tr data-test-contact-persons-row>
-                <td>
-                  <Auk::Avatar @icon="user">
-                    <div data-test-contact-persons-row-full-name>{{contactPerson.person.fullName}}</div>
-                    {{#if contactPerson.person.organization}}
-                      <div data-test-contact-persons-row-organization-name class="auk-u-text-muted auk-u-text-size--small">
-                        {{contactPerson.person.organization.name}}
-                      </div>
-                    {{/if}}
-                  </Auk::Avatar>
-                </td>
-                <td data-test-contact-persons-row-email>
-                  {{#if contactPerson.email}}
-                    <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
-                  {{else}}
-                    {{t "dash"}}
+<Auk::Panel ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "contacts"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-contact-persons-view-add
+            @skin="naked"
+            @icon="plus"
+            {{on "click" this.openAddModal}}
+          >
+            {{t "add-contact"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if this.contactPersons}}
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "name"}}</th>
+            <th>{{t "email"}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.contactPersons as |contactPerson|}}
+            <tr data-test-contact-persons-row>
+              <td>
+                <Auk::Avatar @icon="user">
+                  <div data-test-contact-persons-row-full-name>{{contactPerson.person.fullName}}</div>
+                  {{#if contactPerson.person.organization}}
+                    <div data-test-contact-persons-row-organization-name class="auk-u-text-muted auk-u-text-size--small">
+                      {{contactPerson.person.organization.name}}
+                    </div>
                   {{/if}}
-                </td>
-                <td class="auk-u-text-align--right">
-                  <AuButton
-                    data-test-contact-persons-row-delete
-                    @skin="naked"
-                    @alert={{true}}
-                    @icon="trash"
-                    @hideText={{true}}
-                    {{on "click" (fn this.delete contactPerson)}}
-                  >
-                    {{t "delete"}}
-                  </AuButton>
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </Auk::Panel::Body>
-    {{else}}
-      <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
-      </Auk::Panel::Body>
-    {{/if}}
-  </Auk::Panel>
-</div>
+                </Auk::Avatar>
+              </td>
+              <td data-test-contact-persons-row-email>
+                {{#if contactPerson.email}}
+                  <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
+              <td class="auk-u-text-align--right">
+                <AuButton
+                  data-test-contact-persons-row-delete
+                  @skin="naked"
+                  @alert={{true}}
+                  @icon="trash"
+                  @hideText={{true}}
+                  {{on "click" (fn this.delete contactPerson)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
 
 {{#if this.isOpenAddModal}}
   <Publications::Publication::Case::ContactPersons::ContactPersonAddModal

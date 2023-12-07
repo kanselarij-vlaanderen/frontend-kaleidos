@@ -1,62 +1,60 @@
-<div class="auk-u-mb-2">
-  <Auk::Toolbar @auto={{true}}>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item class="auk-u-maximize-width auk-u-overflow-hidden">
-        <AuInput
-          data-test-add-existing-piece-search-input={{true}}
-          @icon="search"
-          @width="block"
-          @value={{this.filter}}
-          {{on "input" (perform this.searchTask)}}
-          id="searchId"
-          placeholder={{t "search-placeholder"}}
-        />
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-  <div>
-    {{#if this.searchTask.isRunning}}
-      <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-        <Auk::Loader @message={{t "loading"}} />
-      </div>
-    {{else}}
-      <KDataTable
-        @hoverable={{true}}
-        @loading={{this.findAll.isRunning}}
-        @content={{this.pieces}}
-        @page={{this.page}}
-        @size={{this.size}}
-        @numberOfItems={{this.pieces.length}}
-        @totalNumberOfItems={{this.pieces.meta.count}}
-        @onChangeSize={{this.setSize}}
-        @onChangePage={{this.setPage}}
-        @onClickRow={{this.select}}
-      >
-        <:header>
-          <th></th>
-          <th><span class="">{{t "title-document"}}</span></th>
-          <th><span class="">{{t "created-on"}}</span></th>
-        </:header>
-        <:body as |row|>
-          <td class="auk-table__col--1">
-            <AuCheckbox
-              data-test-add-existing-piece-checkbox={{true}}
-              @checked={{includes row this.selected}}
-              @onChange={{fn this.select row}}
-            />
-          </td>
-          <td class="auk-table__col--8">
-            {{row.name}}
-          </td>
-          <td class="auk-table__col--3">
-            {{#if row.created}}
-              {{date-format row.created "EEEEEE dd-MM-yyyy HH:mm"}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          </td>
-        </:body>
-      </KDataTable>
-    {{/if}}
-  </div>
+<Auk::Toolbar @auto={{true}}>
+  <Auk::Toolbar::Group @position="left">
+    <Auk::Toolbar::Item class="auk-u-maximize-width auk-u-overflow-hidden">
+      <AuInput
+        data-test-add-existing-piece-search-input={{true}}
+        @icon="search"
+        @width="block"
+        @value={{this.filter}}
+        {{on "input" (perform this.searchTask)}}
+        id="searchId"
+        placeholder={{t "search-placeholder"}}
+      />
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+</Auk::Toolbar>
+<div>
+  {{#if this.searchTask.isRunning}}
+    <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+      <Auk::Loader @message={{t "loading"}} />
+    </div>
+  {{else}}
+    <KDataTable
+      @hoverable={{true}}
+      @loading={{this.findAll.isRunning}}
+      @content={{this.pieces}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{this.pieces.length}}
+      @totalNumberOfItems={{this.pieces.meta.count}}
+      @onChangeSize={{this.setSize}}
+      @onChangePage={{this.setPage}}
+      @onClickRow={{this.select}}
+    >
+      <:header>
+        <th></th>
+        <th><span class="">{{t "title-document"}}</span></th>
+        <th><span class="">{{t "created-on"}}</span></th>
+      </:header>
+      <:body as |row|>
+        <td class="auk-table__col--1">
+          <AuCheckbox
+            data-test-add-existing-piece-checkbox={{true}}
+            @checked={{includes row this.selected}}
+            @onChange={{fn this.select row}}
+          />
+        </td>
+        <td class="auk-table__col--8">
+          {{row.name}}
+        </td>
+        <td class="auk-table__col--3">
+          {{#if row.created}}
+            {{date-format row.created "EEEEEE dd-MM-yyyy HH:mm"}}
+          {{else}}
+            {{t "dash"}}
+          {{/if}}
+        </td>
+      </:body>
+    </KDataTable>
+  {{/if}}
 </div>
