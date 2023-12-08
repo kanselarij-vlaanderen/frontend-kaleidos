@@ -1,0 +1,24 @@
+<AuAlert
+  @size="small"
+  @skin="success"
+  @icon="mail"
+  @title=" {{date @case.parliamentFlow.openingDate}}"
+><p class="au-u-medium">{{t "this-case-was-submitted-to-VP-on"}}
+    {{#each @submissionActivities as |submissionActivity|}}
+      {{! TODO: fix styling (too much padding on the sides) }}
+      <AuButton
+        @skin="link"
+        {{on "click" (fn this.showModalFor submissionActivity)}}
+      >
+        {{date submissionActivity.startDate}}
+      </AuButton>
+    {{/each}}
+  </p>
+</AuAlert>
+{{#if this.showActivity}}
+  <Vp::SentToVpModal
+    @submissionActivity={{this.showActivity}}
+    @closeModal={{this.closeModal}}
+    @closable={{true}}
+  />
+{{/if}}

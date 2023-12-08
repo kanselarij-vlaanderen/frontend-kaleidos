@@ -37,6 +37,15 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     await model.hasMany('mandatees').reload();
     await model.hasMany('pieces').reload();
     this.mandatees = (await model.mandatees).sortBy('priority');
+    this.parliamentSubmissionActivities = await this.store.queryAll(
+      'parliament-submission-activity',
+      {
+        'filter[parliament-subcase][parliament-flow][case][decisionmaking-flow][subcases][:id:]':
+          this.subcase.id,
+          sort: 'start-date',
+          include: 'submitted-pieces'
+      }
+    );
   }
 
   async setupController(controller) {

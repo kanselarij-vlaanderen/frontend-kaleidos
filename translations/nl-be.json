@@ -1284,5 +1284,7 @@
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
   "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen",
   "remarks": "Opmerkingen",
-  "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd"
+  "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd",
+  "documents-sent-on": "Documenten doorgestuurd op",
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
 }

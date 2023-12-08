@@ -1,0 +1,16 @@
+<AuModal @modalOpen={{true}} @closable={{true}} ...attributes>
+  <:title>{{t "documents-sent-on"}}
+    {{date @submissionActivity.startDate}}</:title>
+  <:body>
+    <AuContent>
+      <p>{{t "the-following-things-were-sent"}}:</p>
+      <ul class="au-u-margin-top">
+        {{#each @submissionActivity.submittedPieces as |piece|}}
+          <li>
+            {{piece.unsignedFile}}
+          </li>
+        {{/each}}
+      </ul>
+    </AuContent>
+  </:body>
+</AuModal>

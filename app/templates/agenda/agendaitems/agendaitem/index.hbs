@@ -40,12 +40,7 @@
 </Auk::Toolbar>
 
 {{#if (and this.subcase.decisionmakingFlow.case.parliamentFlow this.enableVlaamsParlement)}}
-  <AuAlert
-    @size="small"
-    @skin="success"
-    @icon="mail"
-    @title="{{t "this-case-was-submitted-to-VP-on"}} {{date this.subcase.decisionmakingFlow.case.parliamentFlow.openingDate}}">
-  </AuAlert>
+  <Vp::SubmissionsAlert @submissionActivities={{this.subcase.decisionmakingFlow.case.parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}/>
 {{/if}}
 
 <Agenda::Agendaitem::AgendaitemCasePanel
