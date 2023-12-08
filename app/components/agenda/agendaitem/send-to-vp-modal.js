@@ -21,6 +21,8 @@ export default class SendToVpModalComponent extends Component {
   @tracked dgSubcaseWithPieces;
   @tracked comment;
 
+  isComplete = true;
+
   constructor() {
     super(...arguments);
     this.loadData.perform();
@@ -180,6 +182,7 @@ export default class SendToVpModalComponent extends Component {
   sendToVP = task(async () => {
     const params = new URLSearchParams({
       uri: this.decisionmakingFlow.uri,
+      isComplete: this.isComplete,
       ...(this.comment ? { comment: this.comment} : null),
     });
     const response = await fetch(
@@ -280,12 +283,16 @@ export default class SendToVpModalComponent extends Component {
 
       if (!hasPdf) {
         formattedMissingFiles.push(`${requirement.type.altLabel}`);
+        this.isComplete = false;
       } else if (requirement.signed && !hasSigned && requirement.wordRequired && !hasWord) {
         formattedMissingFiles.push(`${requirement.type.altLabel} (ondertekend en in Word)`);
+        this.isComplete = false;
       } else if (requirement.signed && !hasSigned) {
         formattedMissingFiles.push(`${requirement.type.altLabel} (ondertekend)`);
+        this.isComplete = false;
       } else if (requirement.wordRequired && !hasWord) {
         formattedMissingFiles.push(`${requirement.type.altLabel} (in Word)`);
+        this.isComplete = false;
       }
     }
 
