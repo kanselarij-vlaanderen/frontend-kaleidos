@@ -43,27 +43,48 @@ export default class AgendaitemControls extends Component {
   }
 
   loadCanSendToVP = task(async () => {
-    if (this.enableVlaamsParlement) {
-      // is-ready-for-vp covers this, but we might be in a postponed
-      // and resubmitted subcase, in which case the whole flow is still
-      // ready but the current agenda item isn't
-      const decisionResultCode = await this.decisionActivity.decisionResultCode;
-      if (decisionResultCode.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD) {
-        this.canSendToVP = false;
-        return;
-      }
+    if (!this.enableVlaamsParlement) {
+      this.canSendToVP = false;
+      return
+    }
 
+    // /is-ready-for-vp covers this, but we might be in a postponed
+    // and resubmitted subcase, in which case the whole flow is still
+    // ready but the current agenda item isn't
+    const decisionResultCode = await this.decisionActivity?.decisionResultCode;
+    if (decisionResultCode?.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD) {
+      this.canSendToVP = false;
+      return;
+    }
+
+    const fetchIsReadyForVp = async () => {
       const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
       const resp = await fetch(
         `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
         { headers: { Accept: 'application/vnd.api+json' } }
       );
       if (!resp.ok) {
-        this.canSendToVP = false;
+        return false;
       } else {
         const body = await resp.json();
-        this.canSendToVP = body.isReady && this.enableVlaamsParlement;
+        return body.isReady;
       }
+    };
+
+    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+      const submitter = await this.subcase.requestedBy;
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+        this.canSendToVP = await fetchIsReadyForVp();
+      } else {
+        this.canSendToVP = false;
+      }
+    } else if (this.currentSession.may('send-cases-to-vp')) {
+      this.canSendToVP = await fetchIsReadyForVp();
+    } else {
+      this.canSendToVP = false;
     }
   });
 
@@ -144,13 +165,16 @@ export default class AgendaitemControls extends Component {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.decisionResultCode;
-    this.subcase = yield this.decisionActivity.subcase;
-    const decreetDocument = yield this.store.queryOne('piece', {
-      'filter[document-container][type][:uri:]':
-        CONSTANTS.DOCUMENT_TYPES.DECREET,
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-    });
+    let decreetDocument;
+    if (this.decisionActivity) {
+      yield this.decisionActivity.decisionResultCode;
+      this.subcase = yield this.decisionActivity.subcase;
+      decreetDocument = yield this.store.queryOne('piece', {
+        'filter[document-container][type][:uri:]':
+          CONSTANTS.DOCUMENT_TYPES.DECREET,
+        'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      });
+    }
     this.hasDecreet = isPresent(decreetDocument);
   }
 
