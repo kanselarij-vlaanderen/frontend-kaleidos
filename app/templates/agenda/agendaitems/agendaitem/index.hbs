@@ -39,8 +39,14 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if (and this.subcase.decisionmakingFlow.case.parliamentFlow this.enableVlaamsParlement)}}
-  <Vp::SubmissionsAlert @submissionActivities={{this.subcase.decisionmakingFlow.case.parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}/>
+{{#if this.enableVlaamsParlement}}
+  {{#let (await this.subcase.decisionmakingFlow.case.parliamentFlow) as |parliamentFlow|}}
+    {{#if parliamentFlow}}
+      <Vp::SubmissionsAlert
+        @parliamentFlow={{parliamentFlow}}
+      />
+    {{/if}}
+  {{/let}}
 {{/if}}
 
 <Agenda::Agendaitem::AgendaitemCasePanel

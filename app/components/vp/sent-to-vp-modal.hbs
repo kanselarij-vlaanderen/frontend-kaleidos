@@ -1,4 +1,9 @@
-<AuModal @modalOpen={{true}} @closable={{true}} ...attributes>
+<AuModal
+  @modalOpen={{true}}
+  @closable={{true}}
+  @closeModal={{@closeModal}}
+  ...attributes
+>
   <:title>{{t "documents-sent-on"}}
     {{date @submissionActivity.startDate}}</:title>
   <:body>

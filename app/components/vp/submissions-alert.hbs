@@ -1,24 +1,27 @@
-<AuAlert
-  @size="small"
-  @skin="success"
-  @icon="mail"
-  @title=" {{date @case.parliamentFlow.openingDate}}"
-><p class="au-u-medium">{{t "this-case-was-submitted-to-VP-on"}}
-    {{#each @submissionActivities as |submissionActivity|}}
-      {{! TODO: fix styling (too much padding on the sides) }}
-      <AuButton
-        @skin="link"
-        {{on "click" (fn this.showModalFor submissionActivity)}}
-      >
-        {{date submissionActivity.startDate}}
-      </AuButton>
-    {{/each}}
-  </p>
-</AuAlert>
+{{#if @parliamentFlow.status}}
+  <AuAlert
+    @size="small"
+    @skin={{this.skin}}
+    @icon="mail"
+    @title=" {{date @case.parliamentFlow.openingDate}}"
+  >
+    <p class="au-u-medium">
+      {{t "this-case-was-submitted-to-VP-on"}}
+      {{#each @parliamentFlow.parliamentSubcase.submissionActivities as |submissionActivity|}}
+        {{! TODO: fix styling (too much padding on the sides) }}
+        <AuLink
+          @skin="primary"
+          {{on "click" (fn this.showModalFor submissionActivity)}}
+        >
+          {{datetime-at submissionActivity.startDate}}
+        </AuLink>
+      {{/each}}
+    </p>
+  </AuAlert>
+{{/if}}
 {{#if this.showActivity}}
   <Vp::SentToVpModal
     @submissionActivity={{this.showActivity}}
     @closeModal={{this.closeModal}}
-    @closable={{true}}
   />
 {{/if}}
