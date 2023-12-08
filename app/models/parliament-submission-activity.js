@@ -5,6 +5,11 @@ export default class ParliamentSubmissionActivity extends Model {
   @attr('date') endDate;
 
   @belongsTo('user', { inverse: null, async: true }) submitter;
+  @belongsTo('parliament-subcase', {
+    inverse: 'parliamentSubmissionActivities',
+    async: true
+  })
+  parliamentSubcase;
 
   @hasMany('submitted-piece', { inverse: null, async: true }) submittedPieces;
 }
