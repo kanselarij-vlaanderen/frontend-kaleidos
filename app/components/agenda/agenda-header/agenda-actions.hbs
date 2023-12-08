@@ -62,13 +62,22 @@
   >
     {{t "download-decisions"}}
   </AuButton>
-  {{#if this.reports.length}}
+  {{#if this.allReports.length}}
     <AuButton
       @skin="link"
-      {{on "click" this.generateDecisionsBundle}}
+      {{on "click" this.generateAllDecisionsBundle}}
       role="menuitem"
     >
-      {{t "generate-decisions-bundle"}}
+      {{t "generate-all-decisions-bundle"}}
+    </AuButton>
+  {{/if}}
+  {{#if this.signedReports.length}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.generateSignedDecisionsBundle}}
+      role="menuitem"
+    >
+      {{t "generate-signed-decisions-bundle"}}
     </AuButton>
   {{/if}}
 

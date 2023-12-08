@@ -8,7 +8,7 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  generateReportBundle = task(async (reports) => {
+  generateReportBundle = task(async (reports, signedOnly = false) => {
     const generatingBundleToast = this.toaster.loading(
       this.intl.t('decision-report-bundle-generation--toast-generating--message', {
         total: reports.length,
@@ -21,6 +21,7 @@ export default class DecisionReportGeneration extends Service {
     try {
       const job = await this._generateReportBundle.perform(
         reports,
+        signedOnly,
       );
       this.pollReportBundle.perform(job, reports, generatingBundleToast);
     } catch (error) {
@@ -246,7 +247,7 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  _generateReportBundle = task(async (reports) => {
+  _generateReportBundle = task(async (reports, signedOnly) => {
     let response;
     try {
       response = await fetch(`/generate-decision-report/generate-reports-bundle`, {
@@ -256,7 +257,8 @@ export default class DecisionReportGeneration extends Service {
           'Content-Type': 'application/vnd.api+json',
         },
         body: JSON.stringify({
-          reports: reports.map((report) => report.uri)
+          reports: reports.map((report) => report.uri),
+          signedOnly,
         }),
       });
       const data = await response.json();

@@ -61,7 +61,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @tracked downloadOption = this.downloadOptions[0].value;
 
-  reports = [];
+  allReports = [];
+  signedReports = [];
 
   constructor() {
     super(...arguments);
@@ -162,25 +163,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     });
   }
 
-  loadReports = task(async () => {
-    const INTERN_OVERHEID = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID,
-    );
-    const PUBLIEK = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.ACCESS_LEVELS.PUBLIEK,
-    );
-    this.reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[access-level][:id:]': [INTERN_OVERHEID.id, PUBLIEK.id].join(','),
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-      sort: 'name',
-    });
-  });
-
   /**
    * This task will reload the agendaitems of the current agenda
    * Any new agendaitem or changed formality is picked up by this, to avoid stale data created by concurrent edits of agendaitem
@@ -216,11 +198,45 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     await this.decisionPublicationActivity.save();
   }
 
+  loadReports = task(async () => {
+    const INTERN_OVERHEID = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID,
+    );
+    const PUBLIEK = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.PUBLIEK,
+    );
+    this.allReports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+      sort: 'name',
+    });
+    this.signedReports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:signed-piece-copy]': true,
+      'filter[access-level][:id:]': [INTERN_OVERHEID.id, PUBLIEK.id].join(','),
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+      sort: 'name',
+    });
+  });
+
+
   @action
-  async generateDecisionsBundle() {
+  async generateAllDecisionsBundle() {
     await this.loadReports.perform();
-    if (this.reports.length) {
-      this.decisionReportGeneration.generateReportBundle.perform(this.reports);
+    if (this.allReports.length) {
+      this.decisionReportGeneration.generateReportBundle.perform(this.allReports);
+    }
+  }
+
+  @action
+  async generateSignedDecisionsBundle() {
+    await this.loadReports.perform();
+    if (this.signedReports.length) {
+      this.decisionReportGeneration.generateReportBundle.perform(this.signedReports, true);
     }
   }
 
