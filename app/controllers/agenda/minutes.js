@@ -43,13 +43,19 @@ function renderAttendees(attendees) {
 }
 
 async function renderNotas(meeting, notas, intl, store) {
-  return await renderAgendaitemList(meeting, notas, intl, store);
+  return `
+  <div id="agendaitems">
+  ${await renderAgendaitemList(meeting, notas, intl, store)}
+  </div>
+  `;
 }
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-    <h4 id="announcements"><u>MEDEDELINGEN</u></h4>
+  <div id="announcements">
+    <h4><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
+  </div>
   `;
 }
 
@@ -150,6 +156,30 @@ function renderNextMeeting(meeting, intl) {
   return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
 }
 
+async function updateMinutesNotas(data, intl, store) {
+  const { meeting, notas, editorContent } = data;
+  let newNotas = await renderNotas(meeting, notas, intl, store);
+
+  const contentElement = document.createElement('template');
+  contentElement.innerHTML = editorContent;
+
+  contentElement.content.querySelector('#agendaitems').innerHTML = newNotas;
+  
+  return contentElement.innerHTML;
+}
+
+async function updateMinutesAnnouncements(data, intl, store) {
+  const { meeting, announcements, editorContent } = data;
+  let newAnnouncements = await renderAnnouncements(meeting, announcements, intl, store);
+
+  const contentElement = document.createElement('template');
+  contentElement.innerHTML = editorContent;
+
+  contentElement.content.querySelector('#announcements').innerHTML = newAnnouncements;
+
+  return contentElement.innerHTML;
+}
+
 async function renderMinutes(data, intl, store) {
   const { meeting, attendees, notas, announcements, editorContent } = data;
 
@@ -207,6 +237,7 @@ export default class AgendaMinutesController extends Controller {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
+  @tracked editorShowContentUpdateButton = true;
 
   loadCurrentPiecePart = task(async () => {
     if (!this.model.minutes) return null;
@@ -326,10 +357,42 @@ export default class AgendaMinutesController extends Controller {
   }
 
   @action
+  async updateEditorNotas() {
+    if (!this.editor) {
+      return;
+    }
+    this.isUpdatingMinutesContent = true;
+    this.editor.setHtmlContent(
+      await updateMinutesNotas(await this.reshapeModelForRender(), this.intl, this.store)
+    );
+    this.isUpdatingMinutesContent = false;
+  }
+
+  @action
+  async updateEditorAnnouncements() {
+    if (!this.editor) {
+      return;
+    }
+    this.isUpdatingMinutesContent = true;
+    this.editor.setHtmlContent(
+      await updateMinutesAnnouncements(await this.reshapeModelForRender(), this.intl, this.store)
+    );
+    this.isUpdatingMinutesContent = false;
+  }
+
+  @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
     if (this.currentPiecePartTask?.value) {
       this.editor.setHtmlContent(this.currentPiecePartTask.value.htmlContent);
+      const htmlContentIncludesAgendaitems = 
+        this.currentPiecePartTask.value.htmlContent.toString().includes("id=\"agendaitems\"");
+      const htmlContentIncludesAnnouncements = 
+        this.currentPiecePartTask.value.htmlContent.toString().includes("id=\"announcements\"");
+
+      if (htmlContentIncludesAgendaitems && htmlContentIncludesAnnouncements) {
+        this.editorShowContentUpdateButton = false;
+      }
     }
   }
 
