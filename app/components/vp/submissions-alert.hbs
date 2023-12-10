@@ -7,14 +7,18 @@
   >
     <p class="au-u-medium">
       {{this.message}}
-      {{#each @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities as |submissionActivity|}}
+      <FormatList
+        @list={{@parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
+        @locale="nl-be"
+        as |submissionActivity|
+      >
         <AuLink
           @skin="primary"
           {{on "click" (fn this.showModalFor submissionActivity)}}
         >
           {{datetime-at submissionActivity.startDate}}
         </AuLink>
-      {{/each}}
+      </FormatList>
     </p>
   </AuAlert>
 {{/if}}

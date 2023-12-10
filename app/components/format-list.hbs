@@ -1,0 +1,7 @@
+{{#each this.parts as |part|}}
+  {{#if (eq part.type "literal")}}
+    {{trim part.value}}
+  {{else if (eq part.type "element")}}
+    {{yield part.value}}
+  {{/if}}
+{{/each}}
