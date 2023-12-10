@@ -25,9 +25,8 @@
                 {{#each subcaseWithPieces.piecesReadyToBeSent as |piece|}}
                   <li>
                     <LinkTo @route="document" @model={{piece.id}}>
-                      {{#let piece.file.extension as |extension|}}
-                        {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                      {{/let}}
+                      {{piece.name}}
+                      {{await (this.pieceFileTypes piece)}}
                     </LinkTo>
                   </li>
                 {{else}}
@@ -47,9 +46,8 @@
               {{#each this.dgSubcaseWithPieces.piecesReadyToBeSent as |piece|}}
                 <li>
                   <LinkTo @route="document" @model={{piece.id}}>
-                    {{#let piece.file.extension as |extension|}}
-                      {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                    {{/let}}
+                    {{piece.name}}
+                    {{await (this.pieceFileTypes piece)}}
                   </LinkTo>
                 </li>
               {{else}}

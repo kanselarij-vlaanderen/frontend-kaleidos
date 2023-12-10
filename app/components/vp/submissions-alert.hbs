@@ -6,9 +6,8 @@
     @title=" {{date @case.parliamentFlow.openingDate}}"
   >
     <p class="au-u-medium">
-      {{t "this-case-was-submitted-to-VP-on"}}
-      {{#each @parliamentFlow.parliamentSubcase.submissionActivities as |submissionActivity|}}
-        {{! TODO: fix styling (too much padding on the sides) }}
+      {{this.message}}
+      {{#each @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities as |submissionActivity|}}
         <AuLink
           @skin="primary"
           {{on "click" (fn this.showModalFor submissionActivity)}}

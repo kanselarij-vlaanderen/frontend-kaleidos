@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
+import { get } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class ParliamentFlow extends Model {
@@ -11,14 +12,17 @@ export default class ParliamentFlow extends Model {
   @belongsTo('concept', { inverse: null, async: true }) status;
 
   get isIncomplete() {
-    return this.concept?.uri === CONSTANTS.PARLIAMENT_FLOW_STATUSES.INCOMPLETE;
+    // eslint-disable-next-line ember/no-get
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.INCOMPLETE;
   }
 
   get isComplete() {
-    return this.concept?.uri === CONSTANTS.PARLIAMENT_FLOW_STATUSES.COMPLETE;
+    // eslint-disable-next-line ember/no-get
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
   }
 
   get isBeingHandledByFP() {
-    return this.concept?.uri === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
+    // eslint-disable-next-line ember/no-get
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
   }
 }

@@ -298,6 +298,39 @@ export default class SendToVpModalComponent extends Component {
 
     return formattedMissingFiles;
   };
+
+  pieceFileTypes = async (piece) => {
+    const file = await piece.file;
+    const derived = await file.derived;
+    let pdf;
+    let word;
+    let signed;
+    if (derived) {
+      pdf = derived;
+      word = file;
+    } else {
+      pdf = file;
+    }
+    const signedPieceCopy = await piece.signedPieceCopy;
+    signed = await signedPieceCopy?.file;
+
+    const formatter = new Intl.ListFormat('nl-be');
+    const list = [];
+    if (pdf) {
+      list.push('PDF');
+    }
+    if (word) {
+      list.push('Word');
+    }
+    if (signed) {
+      list.push('ondertekend');
+    }
+
+    if (list.length) {
+      return `(${formatter.format(list)})`;
+    }
+    return '';
+  }
 }
 
 function findPieceOfType(pieces, type, mimeType=null) {
