@@ -24,8 +24,6 @@ export default class SubmissionsAlertComponent extends Component {
     }
   }
 
-  g
-
   @action
   showModalFor(submissionActivity) {
     this.showActivity = submissionActivity;
