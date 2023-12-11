@@ -8,7 +8,7 @@
     <p class="au-u-medium">
       {{this.message}}
       <FormatList
-        @list={{@parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
+        @list={{sort-by "startDate" @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
         @locale="nl-be"
         as |submissionActivity|
       >
