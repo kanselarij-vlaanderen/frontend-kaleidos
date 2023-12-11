@@ -354,3 +354,32 @@ table tr.lt-expanded-row {
     text-transform: lowercase !important;
   }
 }
+
+// Select
+
+.auk-select {
+  border: 0.1rem solid $au-input-border-color;
+  color: $au-input-color;
+  font-size: $au-input-font-size;
+  font-weight: var(--au-regular);
+  font-family: var(--au-font);
+  height: $au-input-height;
+  max-width: 100%;
+  padding: 0 $au-unit-small 0.1ex;
+  border-radius: $au-input-border-radius;
+
+  &[disabled],
+  &:disabled {
+    background-color: $au-input-disabled-background-color;
+    border-color: $au-input-disabled-border-color;
+    color: $au-input-disabled-color;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: var(--au-outline);
+    outline-offset: var(--au-outline-offset);
+    border-color: $au-input-border-color;
+    box-shadow: none;
+  }
+}
