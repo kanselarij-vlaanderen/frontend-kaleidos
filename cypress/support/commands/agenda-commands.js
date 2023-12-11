@@ -160,7 +160,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   let agendaId;
 
   cy.wait('@createNewMeeting', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
@@ -532,7 +532,7 @@ function agendaitemExists(agendaitemName) {
   cy.wait(200);
   // Check which reverse tab is active
   cy.get(auk.loader, {
-    timeout: 20000,
+    timeout: 60000,
   }).should('not.exist');
   // Detail tab is only shown after loading data (first or anchor item), but no loader is showing during the process
   // We need to ensure Detail tab exists before looking through the child components

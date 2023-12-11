@@ -18,6 +18,7 @@ const selectors = {
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     create: '[data-test-agendaitem-decision-create]',
+    view: '.auk-panel__body',
     save: '[data-test-agendaitem-decision-save]',
   },
 
