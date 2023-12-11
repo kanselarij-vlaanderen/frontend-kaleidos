@@ -8,7 +8,7 @@ export default class DecisionReportGeneration extends Service {
   @service intl;
 
   generateReplacementReports = task(async (reports) => {
-    if (!(await this._canReplaceAllReports(reports))) {
+    if (!(await this.canReplaceAllReports(reports))) {
       return;
     }
 
@@ -74,10 +74,10 @@ export default class DecisionReportGeneration extends Service {
   });
 
   async _canReplaceReport(report) {
-    return await this._canReplaceAllReports([report]);
+    return await this.canReplaceAllReports([report]);
   }
 
-  async _canReplaceAllReports(reports) {
+  async canReplaceAllReports(reports) {
     const latestAgendas = await this.store.queryAll('agenda', {
       'filter[agendaitems][treatment][decision-activity][report][:id:]': reports
         .map((r) => r.id)
