@@ -113,7 +113,6 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
-      'send-cases-to-vp',
     ]
   },
   {
@@ -142,7 +141,6 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidentnial-documents',
-      'send-cases-to-vp',
     ]
   },
   {
@@ -173,7 +171,6 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
-      'send-cases-to-vp',
     ],
   },
   {
