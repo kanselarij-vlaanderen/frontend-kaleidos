@@ -1,22 +1,33 @@
-{{!-- <Auk::Tabs>
-  <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.index">
-    {{t "overview"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-documents @route="cases.case.subcases.subcase.documents">
-    {{t "documents"}}
-  </Auk::Tab>
-</Auk::Tabs> --}}
-<div class="c-anchor-nav-holder">
-  <p>Op deze pagina:</p>
-  <ul class="au-c-anchor-nav">
-    <li>
-      <a href="#case" class="js-anchor">Dossier</a>
-    </li>
-    <li>
-      <a href="#documents" class="js-anchor">Documenten</a>
-    </li>
-    <li>
-      <a href="#agenda" class="js-anchor">Historiek</a>
-    </li>
-  </ul>
+<div>
+  {{#if (eq this.currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
+  <div class="c-anchor-nav-holder">
+    <p>Op deze pagina:</p>
+    <ul class="au-c-anchor-nav">
+      <li>
+        <a href="#case" class="js-anchor">Publicatie dossier</a>
+      </li>
+      <li>
+        <a href="#documents" class="js-anchor">Besluit(en) info</a>
+      </li>
+      <li>
+        <a href="#agenda" class="js-anchor">Statussen</a>
+      </li>
+    </ul>
+  </div>
+  {{else}}
+  <div class="c-anchor-nav-holder">
+    <p>Op deze pagina:</p>
+    <ul class="au-c-anchor-nav">
+      <li>
+        <a href="#case" class="js-anchor">Dossier</a>
+      </li>
+      <li>
+        <a href="#documents" class="js-anchor">Documenten</a>
+      </li>
+      <li>
+        <a href="#agenda" class="js-anchor">Historiek</a>
+      </li>
+    </ul>
+  </div>
+  {{/if}}
 </div>

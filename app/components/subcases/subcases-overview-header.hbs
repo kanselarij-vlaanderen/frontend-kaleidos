@@ -87,6 +87,7 @@
             </AuButton>
           </AuDropdown>
         </Auk::Toolbar::Item>
+        {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
         <Auk::Toolbar::Item>
           {{!-- <AuButton
             data-test-subcase-overview-header-create-subcase
@@ -105,6 +106,7 @@
             {{t "create-subcase"}}
           </AuLink>
         </Auk::Toolbar::Item>
+        {{/if}}
       </Auk::Toolbar::Group>
     {{/if}}
   </Auk::Toolbar>

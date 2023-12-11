@@ -10,6 +10,7 @@
   @decisionmakingFlow={{this.decisionmakingFlow}}
   @onCreateSubcase={{this.refreshSubcases}}
   @onSaveCase={{perform this.saveCase}}
+  @currentRoute={{this.currentRoute}}
 />
 <div class="auk-panel-layout">
   <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
@@ -19,6 +20,7 @@
       @onOpen={{this.openSideNav}}
     >
       <ul>
+        
         {{#if this.model.decisionmakingFlow.subcases}}
           {{#each (reverse this.model.decisionmakingFlow.subcases) as |subcase index|}}
             {{#if (eq index 0)}}
@@ -143,6 +145,7 @@
         @subcase={{this.model}}
         @onMoveSubcase={{this.refreshSubcases}}
         @onProposedForAgenda={{this.refreshSubcases}}
+        @currentRoute={{this.currentRoute}}
       />
       <AuBodyContainer @scroll={{true}}>
         <div class="auk-u-m-4 js-subcase-nav-observer">

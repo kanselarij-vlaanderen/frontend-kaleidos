@@ -26,11 +26,16 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canPropose = false;
   @tracked canDelete = false;
   @tracked meetings;
+  @tracked currentRoute;
 
   constructor() {
     super(...arguments);
 
     this.loadData.perform();
+  }
+
+  get currentRoute() {
+    return this.args.currentRoute;
   }
 
   @task

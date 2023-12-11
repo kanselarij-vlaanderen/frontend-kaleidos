@@ -5,11 +5,12 @@
           {{!-- <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{@subcase.shortTitle}}</h4>
           </div> --}}
-        <Subcases::SubcaseDetailNav/>
+        <Subcases::SubcaseDetailNav @currentRoute={{@currentRoute}} />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       {{#if (user-may "manage-agendaitems")}}
+        {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
         <Auk::Toolbar::Item>
           {{#if (or this.loadData.isRunning this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
@@ -45,6 +46,7 @@
             </AuDropdown>
           {{/if}}
         </Auk::Toolbar::Item>
+        {{/if}}
         <Auk::Toolbar::Item>
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}

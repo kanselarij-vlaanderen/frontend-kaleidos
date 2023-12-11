@@ -15,10 +15,15 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked selectedCase = null;
   @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
+  @tracked currentRoute;
 
   constructor() {
     super(...arguments);
     this.loadData.perform();
+  }
+
+  get currentRoute() {
+    return this.args.currentRoute;
   }
 
   @task

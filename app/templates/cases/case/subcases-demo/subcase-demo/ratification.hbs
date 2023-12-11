@@ -1,5 +1,5 @@
 {{#if this.model}}
-  <div id="case" {{did-insert this.observeElement}}>
+  <div id="case">
     <Subcase::SubcaseTitlesPanel
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
@@ -26,7 +26,7 @@
   />
 
   {{!-- Documents --}}
-  <div id="documents" class="auk-u-mb-4" {{did-insert this.observeElement}}>
+  <div id="documents" class="auk-u-mb-4">
     <Auk::Panel data-test-subcase-description-panel>
       <Auk::Panel::Header>
         <Auk::Toolbar>
@@ -80,7 +80,7 @@
 
   <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}/>
 
-  <div id="agenda" {{did-insert this.observeElement}}>
+  <div id="agenda">
     {{!-- <Subcase::SubcaseAgendaPanel @subcase={{@model.subcase}} /> --}}
      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} />
   </div>

@@ -1,6 +1,6 @@
 {{#if this.model}}
-  <div id="case" {{did-insert this.observeElement}}>
-    <Subcase::SubcaseTitlesPanel
+  <div id="case">
+    <SubcaseDemo::PublicationTitle
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
       @allowEditing={{user-may "manage-cases"}}
@@ -15,76 +15,27 @@
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{false}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
     @governmentAreas={{@model.subcase.governmentAreas}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{false}}
     @onSave={{this.saveGovernmentAreas}}
   />
 
-  {{!-- Documents --}}
-  <div id="documents" class="auk-u-mb-4" {{did-insert this.observeElement}}>
-    <Auk::Panel data-test-subcase-description-panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <div class="au-u-flex au-u-flex--spaced-small">
-                <h4 class="auk-panel__title">
-                  {{t "documents"}}
-                </h4>
-              </div>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body>
-        {{#if this.documentsAreVisible}}
-          <Documents::DocumentCardList
-            @pieces={{this.model.pieces}}
-            @onAddPiece={{perform this.addPiece}}
-            @didDeleteContainer={{this.refresh}}
-            @isEditable={{true}}
-          />
-        {{else}}
-          <div>
-            <AuAlert
-              @skin="info"
-              @icon="info-circle"
-              class="au-u-margin-bottom-none"
-            >
-              {{t "no-documents-yet"}}
-            </AuAlert>
-          </div>
-        {{/if}}
-      </Auk::Panel::Body>
-      {{#if (user-may "manage-documents")}}
-
-      <Auk::Panel::Footer>
-        <AuButton
-          data-test-route-cases---subcase-documents-add
-          @skin="naked"
-          @icon="plus"
-          class="au-u-padding-left-none"
-          {{on "click" this.openPieceUploadModal}}
-        >
-          {{t "documents-add"}}
-        </AuButton>
-      </Auk::Panel::Footer>
-      {{/if}}
-    </Auk::Panel>
+  <div>
+     <SubcaseDemo::Contactpersons/>
   </div>
 
-  <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}/>
-
-  <div id="agenda" {{did-insert this.observeElement}}>
-     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} />
+  <div id="documents" class="auk-u-mb-4">
+    <SubcaseDemo::Decisioninfo/>
   </div>
 
- 
+  <div id="agenda">
+     <SubcaseDemo::PublicationStatus/>
+  </div>
 {{/if}}
 
 <ConfirmationModal

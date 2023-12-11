@@ -1,0 +1,62 @@
+<div  id="case" class="auk-u-mb-4">
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                Publicatie dossier info
+              </h4>
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuPill @skin="success">Gepubliceerd</AuPill>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <p class="auk-overline">Publicatie - via ministerraad - 6171</p>
+      <AuHeading @level="4" @skin="4">{{capitalize @subcase.shortTitle}}</AuHeading>
+      {{#if @subcase.title}}
+      <p class="auk-u-mb-0">{{capitalize @subcase.title}}</p>
+      {{/if}}
+    </Auk::Panel::Body>
+    <Auk::Panel::Body>
+      <div class="au-o-grid au-u-1-1">
+        <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+          <AuHeading @level="4" @skin="6">Numa nummer</AuHeading>
+          <p>2022031830</p>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-3@medium">
+          <AuHeading @level="4" @skin="6">Datum ontvangst</AuHeading>
+          <p>01-04-2023</p>
+        </div>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>
+
+<div  id="case" class="auk-u-mb-4">
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                Opschrift
+              </h4>
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <p>Ontslag en Besluit van de Vlaamse Regering tot erkenning van NOOZO vzw als Vlaamse advies- en beleidsparticipatieraad van personen met een handicap en tot het sluiten van een samenwerkingsovereenkomst met de raad</p>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>
