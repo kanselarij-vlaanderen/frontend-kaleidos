@@ -13,13 +13,16 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <AuPill @skin="success">Gepubliceerd</AuPill>
+            <AuLinkExternal @icon="external" @iconAlignment="right" @href="!#">Naar staatsblad</AuLinkExternal>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      <p class="auk-overline">Publicatie - via ministerraad - 6171</p>
+      <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small auk-u-mb-1">
+        <AuPill @skin="success" @size="small">Gepubliceerd</AuPill>
+        <p class="auk-overline">Publicatie - via ministerraad - 6171</p>
+      </div>
       <AuHeading @level="4" @skin="4">{{capitalize @subcase.shortTitle}}</AuHeading>
       {{#if @subcase.title}}
       <p class="auk-u-mb-0">{{capitalize @subcase.title}}</p>
