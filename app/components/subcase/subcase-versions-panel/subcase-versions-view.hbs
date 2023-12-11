@@ -5,13 +5,46 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Vorige versies
+              Historiek
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
+      <div class="auk-u-mb-2">
+        {{#if this.loadAgendaData.isRunning}}
+          <div class="auk-loader" role="alert" aria-busy="true"></div>
+        {{else if this.modelsOfMeetings}}
+          <div class="au-u-flex au-u-flex--spaced-tiny">
+            <p class="au-u-medium">
+              {{t "is-on-agenda"}}
+
+              {{#each this.modelsOfMeetings as |models index| }}
+                {{#if (eq index 0)}}
+                {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                  <AuLink
+                    data-test-subcase-description-agenda-link
+                    @route="agenda.agendaitems.agendaitem"
+                    @models={{array
+                      meeting.id
+                      agenda.id
+                      agendaitem.id
+                    }}
+                  >
+                    {{! prettier-ignore}}
+                    {{date-phrase meeting.plannedStart}}
+                    {{!-- {{if (has-next models this.modelsOfMeetings) ", "}} --}}
+                  </AuLink>
+                {{/let}}
+                {{/if}}
+              {{/each}}
+            </p>
+          </div>
+        {{else}}
+          <Auk::EmptyState @message={{t "not-yet-on-agenda"}} />
+        {{/if}}
+      </div>
       <Subcase::Timeline @subcase={{@subcase}}/>
     </Auk::Panel::Body>
   </Auk::Panel>

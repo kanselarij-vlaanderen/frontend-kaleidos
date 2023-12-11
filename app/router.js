@@ -43,6 +43,16 @@ Router.map(function() {
         });
         this.route('add-subcase', { path: '/procedurestap-toevoegen', });
       });
+      this.route('subcases-demo', { path: '/deeldossiers-demo', }, function() {
+        this.route('subcase-demo', { path: ':subcase_id', }, function() {
+          this.route('publication', { path: '/publicatie', });
+          this.route('ratification', { path: '/bekrachtiging', });
+          this.route('vp', { path: '/vlaamsparlement', });
+          this.route('first-approval', { path: '/eerste-principiele-goedkeuring', });
+          this.route('second-approval', { path: '/tweede-principiele-goedkeuring', });
+          this.route('final-approval', { path: '/definitieve-goedkeuring', });
+        });
+      });
     });
   });
 

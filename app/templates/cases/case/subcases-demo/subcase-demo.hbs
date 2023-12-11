@@ -1,0 +1,159 @@
+{{#if this.model.shortTitle}}
+  {{page-title this.model.shortTitle}}
+{{else if this.model.title}}
+  {{page-title this.model.title}}
+{{else}}
+  {{page-title (capitalize this.model.subcaseName)}}
+{{/if}}
+
+<Subcases::SubcasesOverviewHeader
+  @decisionmakingFlow={{this.decisionmakingFlow}}
+  @onCreateSubcase={{this.refreshSubcases}}
+  @onSaveCase={{perform this.saveCase}}
+/>
+<div class="auk-panel-layout">
+  <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
+    <Subcases::SideNav
+      @isOpen={{this.isOpenSideNav}}
+      @onCollapse={{this.collapseSideNav}}
+      @onOpen={{this.openSideNav}}
+    >
+      <ul>
+        {{#if this.model.decisionmakingFlow.subcases}}
+          {{#each (reverse this.model.decisionmakingFlow.subcases) as |subcase index|}}
+            {{#if (eq index 0)}}
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.publication"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Publicatie
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Gepubliceerd</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.ratification"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Bekrachtiging
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Akte genomen</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.vp"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Vlaams Parlement
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Aangenomen</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.final-approval"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Definitieve goedkeuring
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Goedgekeurd</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.second-approval"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Tweede principiële goedkeuring
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Goedgekeurd</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo 
+                @route="cases.case.subcases-demo.subcase-demo.first-approval"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Eerste principiële goedkeuring
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 16-11-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="success">Goedgekeurd</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            {{/if}}
+          {{/each}}
+          {{/if}}
+      </ul>
+    </Subcases::SideNav>
+  </div>
+  <div class="auk-panel-layout__main-content">
+    <AuBodyContainer>
+      {{#if this.model.decisionmakingFlow.subcases}}
+      <Subcases::SubcaseHeader
+        @subcase={{this.model}}
+        @onMoveSubcase={{this.refreshSubcases}}
+        @onProposedForAgenda={{this.refreshSubcases}}
+      />
+      <AuBodyContainer @scroll={{true}}>
+        <div class="auk-u-m-4 js-subcase-nav-observer">
+          {{outlet}}
+        </div>
+      </AuBodyContainer>
+      {{else}}
+      <div class="auk-u-m-4">
+        <Auk::EmptyState @message={{t "no-subcases"}} />
+      </div>
+      {{/if}}
+    </AuBodyContainer>
+  </div>
+</div>

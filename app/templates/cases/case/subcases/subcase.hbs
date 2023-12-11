@@ -12,7 +12,7 @@
   @onSaveCase={{perform this.saveCase}}
 />
 <div class="auk-panel-layout">
-  <div class="auk-panel-layout__sidebar auk-panel-layout__cases">
+  <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
     <Subcases::SideNav
       @isOpen={{this.isOpenSideNav}}
       @onCollapse={{this.collapseSideNav}}
@@ -37,7 +37,11 @@
   
                 {{/if}}
                 <strong>
+                  {{#if subcase.type}}
+                  {{capitalize subcase.type.label}}
+                  {{else}}
                   {{capitalize subcase.shortTitle}}
+                  {{/if}}
                 </strong>
               </div>
               <div class="auk-sidebar__sublabel au-u-margin-top-none">
@@ -45,7 +49,9 @@
               </div>
               {{#if subcase.type}}
               <div class="au-u-margin-top-tiny">
-                <AuPill @size="small" @skin="ongoing">{{capitalize subcase.type.label}}</AuPill>
+                {{#if subcase.type}}
+                  <AuPill @size="small" @skin="success">Aangenomen</AuPill>
+                {{/if}}
               </div>
               {{/if}}
             </LinkTo>

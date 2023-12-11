@@ -45,7 +45,82 @@
               </td>
             </tr>
           {{else}}
-            {{#each @model as |row|}}
+            {{#each @model as |row index|}}
+              {{#if (eq index 0)}}
+              <tr
+                role="button"
+                class="auk-u-text-align--center auk-table--clickable-rows"
+                {{on "click" (fn this.navigateToDemo row)}}
+              >
+                <td>
+                  <p data-test-route-cases-overview-row-case-title>
+                    {{#if row.case.shortTitle}}
+                      {{row.case.shortTitle}}
+                    {{else}}
+                      {{row.case.title}}
+                    {{/if}}
+                  </p>
+                </td>
+                <td>
+                  {{datetime row.opened}}
+                </td>
+                <td>
+                  {{#if row.case.isArchived}}
+                  <AuPill @size="small">Afgesloten</AuPill>
+                  {{else}}
+                  <AuPill @size="small" @skin="ongoing">Open</AuPill>
+                  {{/if}}
+                </td>
+                <td class="auk-u-text-align--right">
+                  {{!-- {{#if (user-may "manage-cases")}}
+                    <AuDropdown
+                      data-test-route-cases-overview-row-actions-dropdown
+                      @icon="three-dots"
+                      @title={{t "more"}}
+                      @hideText={{true}}
+                      @alignment="right"
+                    >
+                      <AuButton
+                        data-test-route-cases-overview-row-actions-edit
+                        @skin="link"
+                        {{on "click" (fn this.openEditCaseModal row.case)}}
+                        role="menuitem"
+                      >
+                        {{t "edit-case"}}
+                      </AuButton>
+                      <AuButton
+                        data-test-route-cases-overview-row-actions-archive
+                        @skin="link"
+                        @alert={{true}}
+                        {{on
+                          "click"
+                          (fn
+                            (if
+                              row.case.isArchived
+                              this.unarchiveCase
+                              this.requestArchiveCase
+                            )
+                            row.case
+                          )
+                        }}
+                        role="menuitem"
+                      >
+                        {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
+                      </AuButton>
+                    </AuDropdown>
+                  {{/if}} --}}
+                  <AuLink
+                    @skin="button-naked"
+                    @icon="chevron-right"
+                    @hideText={{true}}
+                    @route="cases.case.subcases"
+                    @model={{row.id}}
+                  >
+                    {{t "open"}}
+                  </AuLink>
+                </td>
+              </tr>
+              {{else}}
               <tr
                 role="button"
                 class="auk-u-text-align--center auk-table--clickable-rows"
@@ -119,6 +194,7 @@
                   </AuLink>
                 </td>
               </tr>
+              {{/if}}
             {{/each}}
           {{/if}}
         </tbody>
