@@ -43,7 +43,7 @@ export default class AgendaitemControls extends Component {
   }
 
   loadCanSendToVP = task(async () => {
-    if (!this.enableVlaamsParlement) {
+    if (!this.enableVlaamsParlement || !this.subcase) {
       this.canSendToVP = false;
       return
     }
@@ -58,7 +58,7 @@ export default class AgendaitemControls extends Component {
     }
 
     const fetchIsReadyForVp = async () => {
-      const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+      const decisionmakingFlow = await this.subcase.decisionmakingFlow;
       const resp = await fetch(
         `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
         { headers: { Accept: 'application/vnd.api+json' } }
