@@ -145,7 +145,7 @@ export default class DecisionReportGeneration extends Service {
   });
 
   generateReplacementMinutes = task(async (minutes) => {
-    if (! (await this._canReplaceMinutes(minutes))) {
+    if (! (await this.canReplaceMinutes(minutes))) {
       return;
     }
     try {
@@ -179,7 +179,7 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  async _canReplaceMinutes(minutes) {
+  async canReplaceMinutes(minutes) {
     const latestAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][minutes][:id:]': minutes.id,
       'filter[:has-no:next-version]': true,
