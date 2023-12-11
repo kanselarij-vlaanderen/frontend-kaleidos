@@ -87,7 +87,7 @@ export default class AgendaitemDecisionComponent extends Component {
   });
 
   loadDocuments = task(async () => {
-    let pieces = await this.store.query('piece', {
+    let pieces = await this.store.queryAll('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'filter[:has-no:next-piece]': true,
     });
