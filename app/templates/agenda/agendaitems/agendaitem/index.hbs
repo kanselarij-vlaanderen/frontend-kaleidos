@@ -37,13 +37,14 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if (and this.enableVlaamsParlement this.subcase.decisionmakingFlow.case.parliamentFlow)}}
-  <AuAlert
-    @size="small"
-    @skin="success"
-    @icon="mail"
-    @title="{{t "this-case-was-submitted-to-VP-on"}} {{date this.subcase.decisionmakingFlow.case.parliamentFlow.openingDate}}">
-  </AuAlert>
+{{#if this.enableVlaamsParlement}}
+  {{#let (await this.subcase.decisionmakingFlow.case.parliamentFlow) as |parliamentFlow|}}
+    {{#if parliamentFlow}}
+      <Vp::SubmissionsAlert
+        @parliamentFlow={{parliamentFlow}}
+      />
+    {{/if}}
+  {{/let}}
 {{/if}}
 
 <div class="auk-u-mb-8">

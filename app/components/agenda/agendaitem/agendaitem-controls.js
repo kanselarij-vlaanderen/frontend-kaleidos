@@ -37,9 +37,6 @@ export default class AgendaitemControls extends Component {
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform()
-        .then(() => {
-          this.loadCanSendToVP.perform();
-        });
   }
 
   loadCanSendToVP = task(async () => {
@@ -176,6 +173,7 @@ export default class AgendaitemControls extends Component {
       });
     }
     this.hasDecreet = isPresent(decreetDocument);
+    this.loadCanSendToVP.perform();
   }
 
   async deleteItem(agendaitem) {

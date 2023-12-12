@@ -1262,7 +1262,8 @@
   "this-case-is-missing": "Dit dossier mist nog",
   "definitive-approval": "Definitieve goedkeuring",
   "principal-approval": "Principiële goedkeuring",
-  "this-case-was-submitted-to-VP-on": "Dit dossier is ingediend bij het Vlaams Parlement op",
+  "this-case-was-incompletely-submitted-to-VP-on": "Dit dossier is onvolledig en doorgestuurd naar het Vlaams Parlement op",
+  "this-case-was-completely-submitted-to-VP-on": "Dit dossier is volledig en doorgestuurd naar het Vlaams Parlement op",
   "error-while-sending-to-VP-message": "Er ging iets fout tijdens het indienen bij het Vlaams Parlement. Probeer het opnieuw. Als het probleem niet opgelost is, neem dan contact op met kaleidos.servicedesk@vlaanderen.be. Gelieve volgende boodschap te vermelden:",
   "case-was-sent-to-VP": "Dossier is succesvol verstuurd naar het Vlaams Parlement",
   "for": "Voor",
@@ -1284,5 +1285,7 @@
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
   "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen",
   "remarks": "Opmerkingen",
-  "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd"
+  "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd",
+  "documents-sent-on": "Documenten doorgestuurd op",
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
 }

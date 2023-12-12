@@ -1,9 +1,12 @@
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class ParliamentSubcase extends Model {
   @attr('date') startDate;
   @attr('date') endDate;
 
-  @hasMany('parliament-submission-activity', { inverse: null, async: true })
+  @belongsTo('parliament-flow', { inverse: 'parliamentSubcase', async: true })
+  parliamentFlow;
+
+  @hasMany('parliament-submission-activity', { inverse: 'parliamentSubcase', async: true })
   parliamentSubmissionActivities;
 }
