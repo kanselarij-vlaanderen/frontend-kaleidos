@@ -80,6 +80,12 @@ export default class Piece extends Model {
   @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
   linkedAgendaitems;
 
+  @hasMany('submitted-piece', {
+    inverse: 'piece',
+    async: true
+  })
+  submittedPieces;
+
   get viewDocumentURL() {
     return `/document/${this.id}`;
   }
