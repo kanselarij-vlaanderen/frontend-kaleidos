@@ -224,6 +224,7 @@ const selectors = {
       input: '[data-test-edit-meeting-number-representation-input]',
       save: '[data-test-edit-meeting-number-representation-save]',
     },
+    secretary: '[data-test-edit-meeting-secretary]',
     save: '[data-test-edit-meeting-save]',
   },
 

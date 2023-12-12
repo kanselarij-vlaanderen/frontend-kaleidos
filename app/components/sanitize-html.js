@@ -4,7 +4,15 @@ import merge from 'lodash/merge';
 import { isPresent } from '@ember/utils';
 
 const additionalAllowedTags = ['del'];
-const additionalAllowedAttributes = {'ol': ['data-list-style']};
+const additionalAllowedAttributes = {
+  'ol': ['data-list-style'],
+  'table': [
+    {
+      name: 'id',
+      values: ['attendees', 'absentees'],
+    },
+  ],
+};
 
 export default class SanitizeHtmlComponent extends Component {
   constructor() {

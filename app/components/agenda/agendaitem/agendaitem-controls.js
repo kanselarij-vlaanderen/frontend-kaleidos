@@ -45,7 +45,7 @@ export default class AgendaitemControls extends Component {
   loadCanSendToVP = task(async () => {
     if (!this.enableVlaamsParlement || !this.subcase) {
       this.canSendToVP = false;
-      return
+      return;
     }
 
     // /is-ready-for-vp covers this, but we might be in a postponed

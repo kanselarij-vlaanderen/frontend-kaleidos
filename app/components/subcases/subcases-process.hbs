@@ -1,24 +1,22 @@
-<div class="auk-u-m-8">
-  {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @decisionmakingFlow={{@decisionmakingFlow}} @subcase={{subcase}}>
-      <div class="auk-hr">
-        <hr />
+{{#each @subcases as |subcase|}}
+  <Subcases::SubcaseItem @decisionmakingFlow={{@decisionmakingFlow}} @subcase={{subcase}}>
+    <div class="auk-hr">
+      <hr />
+    </div>
+    <div class="auk-u-mb-2">
+      <p class="auk-overline">
+        {{if (is-announcement subcase.agendaItemType) (t "announcement") (t "note")}}
+      </p>
+    </div>
+    <div class="auk-u-mb-2">
+      <div data-test-subcases-process-shorttitle class="auk-h4">
+        {{subcase.shortTitle}}
       </div>
-      <div class="auk-u-mb-2">
-        <p class="auk-overline">
-          {{if (is-announcement subcase.agendaItemType) (t "announcement") (t "note")}}
-        </p>
-      </div>
-      <div class="auk-u-mb-2">
-        <div data-test-subcases-process-shorttitle class="auk-h4">
-          {{subcase.shortTitle}}
-        </div>
-      </div>
-      <div class="auk-u-mb-4">
-        <pre class="auk-u-text-pre-line">
-          {{subcase.title}}
-        </pre>
-      </div>
-    </Subcases::SubcaseItem>
-  {{/each}}
-</div>
+    </div>
+    <div class="auk-u-mb-4">
+      <pre class="auk-u-text-pre-line">
+        {{subcase.title}}
+      </pre>
+    </div>
+  </Subcases::SubcaseItem>
+{{/each}}
