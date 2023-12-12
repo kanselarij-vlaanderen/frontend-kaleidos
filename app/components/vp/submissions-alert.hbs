@@ -3,10 +3,9 @@
     @size="small"
     @skin={{this.skin}}
     @icon="mail"
-    @title=" {{date @case.parliamentFlow.openingDate}}"
   >
     <p class="au-u-medium">
-      {{this.message}}
+      {{ this.message }}
       <FormatList
         @list={{sort-by "startDate" @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
         @locale="nl-be"
@@ -19,6 +18,10 @@
           {{datetime-at submissionActivity.startDate}}
         </AuLink>
       </FormatList>
+      {{#if @parliamentFlow.isBeingHandledByFP}}
+        {{ this.parliamentLinkMessage }}
+        <a href="{{this.parliamentLink}}" target="_blank">{{ t "flemish-parliament" }}</a>
+      {{/if}}
     </p>
   </AuAlert>
 {{/if}}

@@ -1,7 +1,8 @@
-import Component from '@glimmer/component'; 
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubmissionsAlertComponent extends Component {
   @service intl;
@@ -11,9 +12,24 @@ export default class SubmissionsAlertComponent extends Component {
   get message() {
     if (this.args.parliamentFlow.isIncomplete) {
       return this.intl.t('this-case-was-incompletely-submitted-to-VP-on');
-    } else {
+    } else if (this.args.parliamentFlow.isBeingHandledByFP) {
+      return this.intl.t('this-case-was-completely-submitted-on');
+    } else if (this.args.parliamentFlow.isComplete) {
       return this.intl.t('this-case-was-completely-submitted-to-VP-on');
+    } else {
+      return this.intl.t('this-case-was-submitted-to-VP-on');
     }
+  }
+
+  get parliamentLinkMessage() {
+    if (this.args.parliamentFlow.isBeingHandledByFP) {
+      return this.intl.t('this-case-is-being-handled-by-VP');
+    }
+    return '';
+  }
+
+  get parliamentLink() {
+    return CONSTANTS.PARLIAMENT_CASE_URL_BASE + this.args.parliamentFlow.parliamentId;
   }
 
   get skin() {
