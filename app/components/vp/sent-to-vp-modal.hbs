@@ -29,8 +29,10 @@
             </li>
           {{/each}}
         </ul>
-      {{else}}
-
+      {{/if}}
+      {{#if @submissionActivity.comment}}
+        <h5>{{t "remarks"}}</h5>
+        <p>{{@submissionActivity.comment}}</p>
       {{/if}}
     </AuContent>
   </:body>
