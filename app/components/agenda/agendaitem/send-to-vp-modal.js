@@ -22,6 +22,11 @@ export default class SendToVpModalComponent extends Component {
   @tracked comment;
 
   isComplete = true;
+  BESLISSINGSFICHE;
+  DECREET;
+  MEMORIE;
+  NOTA;
+  ADVIES;
 
   constructor() {
     super(...arguments);
@@ -34,8 +39,52 @@ export default class SendToVpModalComponent extends Component {
   }
 
   loadData = task(async () => {
-    await Promise.all([this.loadSubcaseWithPieces(), this.loadDocumentTypes()]);
+    await this.loadDocumentTypes();
+    await this.loadSubcaseWithPieces();
   });
+
+  async loadDocumentTypes() {
+    this.BESLISSINGSFICHE = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
+    );
+    this.DECREET = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.DECREET
+    );
+    this.MEMORIE = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.MEMORIE
+    );
+    this.NOTA = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.NOTA
+    );
+    this.ADVIES = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.ADVIES
+    );
+
+    const { PRINCIPIELE_GOEDKEURING, DEFINITIEVE_GOEDKEURING } =
+      CONSTANTS.SUBCASE_TYPES;
+
+    this.subcaseRequirements = {
+      [PRINCIPIELE_GOEDKEURING]: [
+        { type: this.BESLISSINGSFICHE, wordRequired: false, signed: true },
+        { type: this.DECREET, wordRequired: true, signed: false },
+        { type: this.MEMORIE, wordRequired: true, signed: false },
+        { type: this.NOTA, wordRequired: false, signed: false },
+        { type: this.ADVIES, wordRequired: false, signed: false },
+      ],
+      [DEFINITIEVE_GOEDKEURING]: [
+        { type: this.BESLISSINGSFICHE, wordRequired: false, signed: true },
+        { type: this.DECREET, wordRequired: true, signed: true },
+        { type: this.MEMORIE, wordRequired: true, signed: true },
+        { type: this.NOTA, wordRequired: false, signed: false },
+        { type: this.ADVIES, wordRequired: false, signed: false },
+      ],
+    };
+  }
 
   loadPiecesForSubcase = async (subcase) => {
     const subcaseTypePromise = subcase.type;
@@ -56,22 +105,6 @@ export default class SendToVpModalComponent extends Component {
 
       const report = await decisionActivity?.report;
 
-      const DECREET = await this.store.findRecordByUri(
-        'concept',
-        CONSTANTS.DOCUMENT_TYPES.DECREET
-      );
-      const MEMORIE = await this.store.findRecordByUri(
-        'concept',
-        CONSTANTS.DOCUMENT_TYPES.MEMORIE
-      );
-      const NOTA = await this.store.findRecordByUri(
-        'concept',
-        CONSTANTS.DOCUMENT_TYPES.NOTA
-      );
-      const ADVIES = await this.store.findRecordByUri(
-        'concept',
-        CONSTANTS.DOCUMENT_TYPES.ADVIES
-      );
       const INTERN_OVERHEID = await this.store.findRecordByUri(
         'concept',
         CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
@@ -82,10 +115,10 @@ export default class SendToVpModalComponent extends Component {
       );
       const subcasePieces = (await this.store.queryAll('piece', {
         'filter[document-container][type][:id:]': [
-          DECREET.id,
-          MEMORIE.id,
-          NOTA.id,
-          ADVIES.id,
+          this.DECREET.id,
+          this.MEMORIE.id,
+          this.NOTA.id,
+          this.ADVIES.id,
         ].join(','),
         'filter[access-level][:id:]': [
           INTERN_OVERHEID.id,
@@ -221,49 +254,6 @@ export default class SendToVpModalComponent extends Component {
   @action
   onChangeComment(event) {
     this.comment = event.target.value;
-  }
-
-  async loadDocumentTypes() {
-    const BESLISSINGSFICHE = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
-    );
-    const DECREET = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.DECREET
-    );
-    const MEMORIE = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.MEMORIE
-    );
-    const NOTA = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.NOTA
-    );
-    const ADVIES = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.ADVIES
-    );
-
-    const { PRINCIPIELE_GOEDKEURING, DEFINITIEVE_GOEDKEURING } =
-      CONSTANTS.SUBCASE_TYPES;
-
-    this.subcaseRequirements = {
-      [PRINCIPIELE_GOEDKEURING]: [
-        { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-        { type: DECREET, wordRequired: true, signed: false },
-        { type: MEMORIE, wordRequired: true, signed: false },
-        { type: NOTA, wordRequired: false, signed: false },
-        { type: ADVIES, wordRequired: false, signed: false },
-      ],
-      [DEFINITIEVE_GOEDKEURING]: [
-        { type: BESLISSINGSFICHE, wordRequired: false, signed: true },
-        { type: DECREET, wordRequired: true, signed: true },
-        { type: MEMORIE, wordRequired: true, signed: true },
-        { type: NOTA, wordRequired: false, signed: false },
-        { type: ADVIES, wordRequired: false, signed: false },
-      ],
-    };
   }
 
   missingDocsForSubcase = (subcaseWithPieces) => {

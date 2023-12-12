@@ -6,8 +6,7 @@ import { Row } from './document-details-row';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
-import { isPresent, isEmpty } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isPresent} from '@ember/utils';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -38,9 +37,8 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get isSignaturesEnabled() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
+    return hasPermission;
   }
 
   @task

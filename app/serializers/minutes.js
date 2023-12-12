@@ -2,7 +2,6 @@ import ApplicationSerializer from './application';
 
 // does not pass the piece serializer so we need to skip the same relations here aswell
 const SKIP_SERIALIZED = [
-  'decisionActivity',
   'signedPiece',
   'signedPieceCopy',
   'signMarkingActivity',

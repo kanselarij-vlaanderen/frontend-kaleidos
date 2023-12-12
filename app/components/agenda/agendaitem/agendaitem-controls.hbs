@@ -7,7 +7,7 @@
       @alignment="right"
       class="auk-u-hidden@print"
     >
-      {{#if (and this.areDecisionActionsEnabled this.isDesignAgenda)}}
+      {{#if (and this.areDecisionActionsEnabled this.isDesignAgenda (user-may "manage-agendaitems"))}}
         {{#if this.decisionActivity.isPostponed}}
           <AuButton
             data-test-agendaitem-controls-action-postpone-revert
@@ -56,6 +56,7 @@
         (and
           (or this.currentSession.isAdmin (await this.isDeletable))
           this.isDesignAgenda
+          (user-may "manage-agendaitems")
         )
       }}
         <AuButton

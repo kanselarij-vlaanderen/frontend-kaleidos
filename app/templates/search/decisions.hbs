@@ -1,6 +1,6 @@
 {{page-title (t "decisions")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
-  <div class="au-c-card au-o-box au-o-box--small">
+  <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-decision-filter-container>
     <Search::DecisionResultFilter
       @selected={{this.decisionResults}}
       @onChange={{this.setDecisionResults}}
