@@ -18,7 +18,7 @@ export default class ParliamentFlow extends Model {
 
   get isComplete() {
     // eslint-disable-next-line ember/no-get
-    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.COMPLETE;
   }
 
   get isBeingHandledByFP() {
