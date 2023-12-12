@@ -14,18 +14,33 @@
       </li>
     </ul>
   </div>
+  {{else if (eq this.currentRoute 'cases.case.subcases-demo.subcase-demo.vp')}}
+  <div class="c-anchor-nav-holder">
+    <p>Op deze pagina:</p>
+    <ul class="au-c-anchor-nav">
+      <li>
+        <a href="#case" class="js-anchor">Decreet info</a>
+      </li>
+      <li>
+        <a href="#documents" class="js-anchor">Nieuwste documenten</a>
+      </li>
+      <li>
+        <a href="#agenda" class="js-anchor">Document versies</a>
+      </li>
+    </ul>
+  </div>
   {{else}}
   <div class="c-anchor-nav-holder">
     <p>Op deze pagina:</p>
     <ul class="au-c-anchor-nav">
       <li>
-        <a href="#case" class="js-anchor">Dossier</a>
+        <a href="#case" class="js-anchor">Overzicht</a>
       </li>
       <li>
         <a href="#documents" class="js-anchor">Documenten</a>
       </li>
       <li>
-        <a href="#agenda" class="js-anchor">Historiek</a>
+        <a href="#agenda" class="js-anchor">Agendaversies</a>
       </li>
     </ul>
   </div>

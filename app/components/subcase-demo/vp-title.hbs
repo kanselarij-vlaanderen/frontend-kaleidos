@@ -1,0 +1,70 @@
+<div  id="case" class="auk-u-mb-4">
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                Decreet info
+              </h4>
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuLinkExternal @icon="external" @iconAlignment="right" @href="!#">Naar Vlaams Parlement</AuLinkExternal>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <AuHeading @level="4" @skin="4">Ontwerp van {{@subcase.shortTitle}}</AuHeading>
+    </Auk::Panel::Body>
+    <Auk::Panel::Body>
+      <div class="au-o-grid au-o-grid--small au-u-1-1">
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">Status</AuHeading>
+          <AuPill @skin="success" @size="small">Aangenomen</AuPill>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">Nummer</AuHeading>
+          <p class="auk-u-mt-1">1446 (2022-2023) nr. 1</p>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-2-4@medium">
+          <AuHeading @level="4" @skin="6">Stand van zaken</AuHeading>
+          <p class="auk-u-mt-1">Bekendgemaakt in Belgisch Staatsblad</p>
+        </div>
+      </div>
+    </Auk::Panel::Body>
+    <Auk::Panel::Body class="auk-u-bg-alt">
+      <AuHeading @level="4" @skin="6">Laatste statussen</AuHeading>
+      <ul class="vlc-status-timeline">
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Aangenomen in plenaire vergadering op 14 oktober 2023
+          </div>
+        </li>
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Bekrachtigd en afgekondigd op 14 oktober 2023
+          </div>
+        </li>
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Bekendgemaakt in het Belgisch Staatsblad op 14 oktober 2023
+          </div>
+        </li>
+      </ul>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

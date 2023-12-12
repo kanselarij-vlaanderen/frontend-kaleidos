@@ -1,0 +1,20 @@
+<div id="case" class="auk-u-mb-4">
+  {{#if this.isEditing}}
+    <SubcaseDemo::SubcaseTitlesPanel::SubcaseTitlesPanelEdit
+      @subcase={{@subcase}}
+      @onCancel={{this.cancelEditing}}
+      @onSave={{this.stopEditing}}
+      @step={{@step}}
+      @status={{@status}}
+    />
+  {{else}}
+    <SubcaseDemo::SubcaseTitlesPanel::SubcaseTitlesPanelView
+      @subcase={{@subcase}}
+      @meeting={{@meeting}}
+      @allowEditing={{@allowEditing}}
+      @onClickEdit={{this.startEditing}}
+      @step={{@step}}
+      @status={{@status}}
+    />
+  {{/if}}
+</div>

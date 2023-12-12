@@ -134,3 +134,52 @@
 .vlc-status-timeline__text {
   @include au-font-size($au-base);
 }
+
+.c-document-panel {
+  padding: 0;
+  .auk-u-mb-2 {
+    margin-bottom: 0 !important;
+  }
+  .vlc-document-card {
+    background-color: white;
+    border: 0;
+  }
+
+  .vlc-document-card + .vlc-document-card { 
+    margin-top: $au-unit-small;
+    padding-top: $au-unit-small;
+    border-top: 1px solid var(--au-gray-300);
+  }
+
+  .au-c-alert  {
+    border: 0;
+    border-radius: 0;
+    margin: -2rem;
+  }
+}
+
+.c-linked-documents {
+  .auk-u-mb-2 {
+    margin-bottom: 0 !important;
+  }
+  .vlc-document-card {
+    background-color: white;
+    border: 0;
+  }
+
+  .vlc-document-card + .vlc-document-card { 
+    margin-top: $au-unit-small;
+    padding-top: $au-unit-small;
+    border-top: 1px solid var(--au-gray-300);
+  }
+  
+  .auk-u-mt-2 {
+    margin-top: 0 !important;
+  }
+
+  .au-c-alert  {
+    border: 0;
+    border-radius: 0;
+    margin: -2rem;
+  }
+}

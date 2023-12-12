@@ -1,0 +1,122 @@
+<Auk::Panel class="auk-panel--editing auk-u-mb-8">
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{#if (is-nota @subcase.agendaItemType)}}
+                {{t "note"}}
+              {{else}}
+                {{t "text"}}
+              {{/if}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+        <AuToggleSwitch
+          data-test-subcase-titles-edit-confidential={{true}}
+          @checked={{@subcase.confidential}}
+          id="subcase-confidential"
+          @onChange={{set this "confidentialChanged" true}}
+        />
+      </div>
+    </div>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-subcase-titles-edit-shorttitle={{true}}
+          aria-labelledby="name-subcase"
+          rows="2"
+          class="auk-textarea"
+          @value={{@subcase.shortTitle}}
+        />
+      </div>
+    </div>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-subcase-titles-edit-title={{true}}
+          aria-labelledby="name-subcase"
+          rows="4"
+          class="auk-textarea"
+          @value={{@subcase.title}}
+        />
+      </div>
+    </div>
+    {{!-- <div class="auk-form-group">
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            data-test-subcase-description-edit-type
+            @alignment="inline"
+            @selected={{this.agendaItemType}}
+            @onChange={{this.onChangeAgendaItemType}}
+            as |Group|
+          >
+            {{#each this.agendaItemTypes as |type|}}
+              <Group.Radio
+                @value={{type}}
+              >
+                {{type.label}}
+              </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+    </div> --}}
+    <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+      <Utils::ModelSelector
+        @modelName="subcase-type"
+        @searchField="label"
+        @sortField="label"
+        @displayField="label"
+        @selected={{this.subcaseType}}
+        @onChange={{this.selectSubcaseType}}
+      />
+    </div>
+    {{!-- <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+      <AuInput
+        @width="block"
+        @value={{mut this.subcaseName}}
+      />
+    </div> --}}
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="naked"
+            {{on "click" this.cancelEditing}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-subcase-titles-edit-save={{true}}
+            @skin="primary"
+            @loading={{this.isSaving}}
+            {{on "click" (perform this.saveChanges)}}
+          >
+            {{t "save"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>

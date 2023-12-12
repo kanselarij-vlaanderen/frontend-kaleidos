@@ -10,7 +10,8 @@ import { isPresent } from '@ember/utils';
  * @argument allowEditing
  * @argument onClickEdit
  */
-export default class PublicationTitle extends Component {
+export default class VpTitle
+ extends Component {
   @service subcaseIsApproved;
   @service currentSession;
 

@@ -1,9 +1,11 @@
 {{#if this.model}}
   <div id="case">
-    <Subcase::SubcaseTitlesPanel
+    <SubcaseDemo::SubcaseTitlesPanel
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
       @allowEditing={{user-may "manage-cases"}}
+      @step="Bekrachtiging"
+      @status="Akte genomen"
     />
   </div>
   <Mandatees::MandateesPanel
@@ -41,7 +43,7 @@
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
-      <Auk::Panel::Body>
+      <Auk::Panel::Body class="c-document-panel">
         {{#if this.documentsAreVisible}}
           <Documents::DocumentCardList
             @pieces={{this.model.pieces}}
@@ -78,11 +80,10 @@
     </Auk::Panel>
   </div>
 
-  <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}/>
+  <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}} class="c-linked-documents" />
 
   <div id="agenda">
-    {{!-- <Subcase::SubcaseAgendaPanel @subcase={{@model.subcase}} /> --}}
-     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} />
+     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} />
   </div>
 
  

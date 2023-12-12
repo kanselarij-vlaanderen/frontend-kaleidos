@@ -1,9 +1,11 @@
 {{#if this.model}}
-  <div id="case" {{did-insert this.observeElement}}>
-    <Subcase::SubcaseTitlesPanel
+  <div id="case">
+    <SubcaseDemo::ApprovalTitlesPanel
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
       @allowEditing={{user-may "manage-cases"}}
+      @step="Eerste principiële goedkeuring"
+      @status="Goedgekeurd"
     />
   </div>
   <Mandatees::MandateesPanel
@@ -26,7 +28,7 @@
   />
 
   {{!-- Documents --}}
-  <div id="documents" class="auk-u-mb-4" {{did-insert this.observeElement}}>
+  <div id="documents" class="auk-u-mb-4">
     <Auk::Panel data-test-subcase-description-panel>
       <Auk::Panel::Header>
         <Auk::Toolbar>
@@ -41,7 +43,7 @@
           </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Panel::Header>
-      <Auk::Panel::Body>
+      <Auk::Panel::Body class="c-document-panel">
         {{#if this.documentsAreVisible}}
           <Documents::DocumentCardList
             @pieces={{this.model.pieces}}
@@ -78,11 +80,10 @@
     </Auk::Panel>
   </div>
 
-  <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}/>
+  <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}  class="c-linked-documents"/>
 
-  <div id="agenda" {{did-insert this.observeElement}}>
-    {{!-- <Subcase::SubcaseAgendaPanel @subcase={{@model.subcase}} /> --}}
-     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} />
+  <div id="agenda">
+     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} />
   </div>
 
  
