@@ -219,7 +219,7 @@
         </Toolbar.Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    <Auk::Panel::Body>
+    <Auk::Panel::Body class="c-document-panel">
       {{#unless this.loadData.isRunning}}
         {{#if this.documentsAreVisible}}
           <Documents::DocumentCardList
@@ -258,7 +258,7 @@
   </Auk::Panel>
 </div>
 
-<Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.agendaitem}} />
+<Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.agendaitem}} class="c-linked-documents" />
 
 <Agenda::Agendaitem::AgendaitemInfoPanel
   @agendaitem={{this.model.agendaitem}}
