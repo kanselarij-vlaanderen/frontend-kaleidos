@@ -115,7 +115,8 @@ export default class VRDocumentName {
     try {
       const meta = this.parseMeta();
       const index = meta.indexNrRaw ? `/${meta.index}` : ''; 
-      return `${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
+      const casePrefix = meta.casePrefix ? `${meta.casePrefix} ` : '';
+      return `${casePrefix}${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
     } catch(error) {
       return this.vrNumberWithSuffix();
     }
