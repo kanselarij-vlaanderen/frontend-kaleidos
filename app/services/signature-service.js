@@ -68,7 +68,7 @@ export default class SignatureService extends Service {
     const response = await uploadPiecesToSigninghub(signFlows);
     if (response.ok) {
       const job = await response.json();
-      await this.pollPrepareSignFlow.perform(job);
+      await this.pollPrepareSignFlow(job);
     } else {
       let stringifiedJson;
       try {
@@ -81,20 +81,26 @@ export default class SignatureService extends Service {
     }
   }
 
-  pollPrepareSignFlow = task(async (job) => {
-    const jobResult = await this.getJob.perform(job);
+  async pollPrepareSignFlow(job) {
+    let jobResult = await this.getJob.perform(job);
     if (jobResult) {
+      // Use a loop here instead of a setTimeout like we do elsewhere because
+      // we need to throw an error here if the job fails. In a setTimeout that
+      // doesn't work.
+      while ([
+        constants.SIGN_FLOW_JOB_STATUSSES.BUSY,
+        constants.SIGN_FLOW_JOB_STATUSSES.SCHEDULED
+      ].includes(jobResult.status)) {
+        await new Promise(r => setTimeout(r, 2000));
+        jobResult = await this.getJob.perform(job);
+      }
       if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.SUCCESS) {
         // We're done polling :)
       } else if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.FAILED) {
-        throw new Error(jobResult.error);
-      } else {
-        setTimeout(() => {
-          this.pollPrepareSignFlow.perform(job);
-        }, 2000);
+        throw new Error(jobResult.error_message);
       }
     }
-  });
+  };
 
   getJob = task(async (job) => {
     let response;
