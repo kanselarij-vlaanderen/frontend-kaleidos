@@ -101,6 +101,45 @@
             </div>
           </li>
         </ul>
+        <AuHeading @level="4" @skin="6" class="auk-u-mt-4">Definitieve goedkeuring</AuHeading>
+        <ul>
+          <li class="vlc-document-list__item">
+            <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+              <a href="#!" rel="noreferrer noopener" data-test-document-badge-link="">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-document"></i>
+                </div>
+                <span>
+                  VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf(getekend)
+                </span>
+              </a>
+            </div>
+          </li>
+          <li class="vlc-document-list__item">
+            <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+              <a href="#!" rel="noreferrer noopener" data-test-document-badge-link="">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-document"></i>
+                </div>
+                <span>
+                  VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx
+                </span>
+              </a>
+            </div>
+          </li>
+          <li class="vlc-document-list__item">
+            <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+              <a href="#!" rel="noreferrer noopener" data-test-document-badge-link="">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-document"></i>
+                </div>
+                <span>
+                  VR 2022 2212 DOC.0357-3BIS Parkendecreet -Nota.pfd
+                </span>
+              </a>
+            </div>
+          </li>
+        </ul>
       </Auk::Panel::Body>
     </Auk::Panel>
   </div>
@@ -127,24 +166,24 @@
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
           >
             <div class="vlc-status-timeline__dot"></div>
-            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-small au-u-1-1">
-              Verzonden op 22 november 2023 <AuLinkExternal @icon="chevron-right" @iconAlignment="right" @href="!#">Bekijk documenten</AuLinkExternal>
+            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
+              Verzonden op 22 november 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
             </div>
           </li>
           <li
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
           >
             <div class="vlc-status-timeline__dot"></div>
-            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-small au-u-1-1">
-              Upgedate op 22 november 2023 <AuLinkExternal @icon="chevron-right" @iconAlignment="right" @href="!#">Bekijk documenten</AuLinkExternal>
+            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
+              Upgedate op 22 november 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
             </div>
           </li>
           <li
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
           >
             <div class="vlc-status-timeline__dot"></div>
-            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-small au-u-1-1">
-               Dringend op 15 november 2023 <AuLinkExternal @icon="chevron-right" @iconAlignment="right" @href="!#">Bekijk documenten</AuLinkExternal>
+            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
+               Dringend op 15 november 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
             </div>
           </li>
         </ul>
@@ -152,6 +191,40 @@
     </Auk::Panel>
   </div>
 
+{{/if}}
+
+{{#if this.vpModal}}
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header 
+    @title="Verzonden op 22 november 2023"
+    @onClose={{this.showVpModal}}
+  />
+  <Auk::Modal::Body>
+    <AuContent>
+      <ul>
+        <li>
+          Eerste principiële goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -adviesnota.pdf</a></li>
+          </ul>
+        </li>
+        <li>
+          Definitieve goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+          </ul>
+        </li>
+      </ul>
+    </AuContent>
+  </Auk::Modal::Body>
+</Auk::Modal>
 {{/if}}
 
 <ConfirmationModal

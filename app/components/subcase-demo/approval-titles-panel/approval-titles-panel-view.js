@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
+import { action } from '@ember/object';
 
 /**
  * @argument subcase
@@ -15,6 +16,9 @@ export default class SubcaseTitlesPanelView extends Component {
   @service currentSession;
 
   @tracked approved; // or acknowledged
+
+  @tracked vpModal = false;
+  @tracked vpSent = false;
 
   constructor() {
     super(...arguments);
@@ -45,4 +49,17 @@ export default class SubcaseTitlesPanelView extends Component {
   get pillSkin() {
     return this.approved ? 'success' : 'default';
   }
+
+  @action
+  showVpModal() {
+    this.vpModal = !this.vpModal;
+  }
+
+  @action
+  submitToVp() {
+    this.vpModal = false;
+    this.vpSent = true;
+    this.toaster.success('Dossier is succesvol verstuurd naar het Vlaams Parlement');
+  }
+
 }

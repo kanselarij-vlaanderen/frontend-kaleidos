@@ -1,3 +1,25 @@
+{{#if this.vpSent}} 
+  {{#if this.isComplete}}
+  <div class="auk-u-mb-4 auk-u-mt-0">
+    <AuAlert
+      @title="Dit dossier is volledig en doorgestuurd naar het Vlaams parlement op 29/12/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    />
+  </div>
+  {{else}}
+  <div class="auk-u-mb-4 auk-u-mt-0">
+    <AuAlert
+      @title="Dit dossier is onvolledig en doorgestuurd naar het Vlaams parlement op 29/12/2023"
+      @skin="success"
+      @icon="mail"
+      @size="small"
+    />
+  </div>
+  {{/if}}
+{{/if}}
+
 <div {{did-update (perform this.loadAgendaData)}}>
   <Auk::Panel data-test-subcase-description-panel>
     <Auk::Panel::Header>
@@ -30,6 +52,7 @@
                 data-test-subcase-description-edit
                 @skin="naked"
                 @icon="export"
+                {{on 'click' this.showVpModal}}
               >
                 Verstuur naar Vlaams Parlement
               </AuButton>
@@ -42,7 +65,7 @@
     <Auk::Panel::Body>
       <AuHeading @level="4" @skin="4">Ontwerp van decreet over {{@subcase.shortTitle}}</AuHeading>
     </Auk::Panel::Body>
-    <Auk::Panel::Body class="auk-u-bg-alt">
+    {{!-- <Auk::Panel::Body class="auk-u-bg-alt">
       <AuHeading @level="4" @skin="6">{{@step}} m.h.o. op adviesaanvragen</AuHeading>
       <ul class="vlc-status-timeline">
         <li
@@ -50,7 +73,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            Ingediend voor agendering op <AuLinkExternal>30 november 2023</AuLinkExternal>
+            Ingediend voor agendering op <AuLinkExternal>28 augustus 2023</AuLinkExternal>
           </div>
         </li>
         <li
@@ -62,12 +85,18 @@
           </div>
         </li>
       </ul>
-    </Auk::Panel::Body>
+    </Auk::Panel::Body> --}}
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Geagendeerd op</AuHeading>
-          <p class="auk-u-mt-1">30 november 2023</p>
+          {{#if (eq @step 'Definitieve goedkeuring')}}
+          <p class="auk-u-mt-1">28 augustus 2023</p>
+          {{else if (eq @step 'Tweede principiële goedkeuring')}}
+          <p class="auk-u-mt-1">13 juni 2023</p>
+          {{else if (eq @step 'Eerste principiële goedkeuring')}}
+          <p class="auk-u-mt-1">01 april 2023</p>
+          {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Nummer vergadering</AuHeading>
@@ -79,7 +108,13 @@
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Aangevraagd voor Bijzondere ministerraad</AuHeading>
-          <p class="auk-u-mt-1">30 november 2023</p>
+          {{#if (eq @step 'Definitieve goedkeuring')}}
+          <p class="auk-u-mt-1">28 augustus 2023</p>
+          {{else if (eq @step 'Tweede principiële goedkeuring')}}
+          <p class="auk-u-mt-1">13 juni 2023</p>
+          {{else if (eq @step 'Eerste principiële goedkeuring')}}
+          <p class="auk-u-mt-1">01 april 2023</p>
+          {{/if}}
         </div>
       </div>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
@@ -93,7 +128,80 @@
 </div>
 
 
-
+{{#if this.vpModal}}
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header 
+    @title="Dossier controleren"
+    @onClose={{this.showVpModal}}
+  />
+  <Auk::Modal::Body>
+    <AuContent>
+      <p>De volgende zaken worden doorgestuurd:</p>
+      <ul class="au-u-margin-top">
+        <li>
+          Eerste principiële goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -adviesnota.pdf</a></li>
+          </ul>
+        </li>
+        <li>
+          Tweede principiële goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -adviesnota.pdf</a></li>
+          </ul>
+        </li>
+        <li>
+          Definitieve goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="auk-form-group au-u-margin-top">
+        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+        <Auk::Textarea
+          @rows="4"
+          @value=""
+          id="remarks"
+        />
+      </div>
+    </AuContent>
+    <AuAlert
+      @title="Dit dossier mist nog:"
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+      class="au-u-margin-bottom-none au-u-margin-top"
+    >
+      <AuContent>
+        <ul>
+          <li>Memorie van definitieve goedkeuring (in Word)</li>
+          <li>Ontwerpdecreet definitieve goedkeuring (ondertekend)</li>
+        </ul>
+      </AuContent>
+    </AuAlert>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{this.showVpModal}}>
+    <AuButton
+      @skin="primary"
+      {{on "click" this.submitToVp}}
+    >
+      Doorsturen naar het Vlaams Parlement
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}
   
 
   

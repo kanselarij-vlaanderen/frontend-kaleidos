@@ -375,5 +375,10 @@ export default class CasesCaseSubcasesDemoSubcaseDemoVpController extends Contro
   refresh() {
     this.router.refresh('cases.case.subcases.subcase.documents');
   }
+  @tracked vpModal = false;
+  @action
+  showVpModal() {
+    this.vpModal = !this.vpModal;
+  }
 }
 

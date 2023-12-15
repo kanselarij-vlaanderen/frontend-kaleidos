@@ -5,7 +5,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              Agendaversies
+              Agenderingen
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -16,7 +16,7 @@
       <div class="auk-u-mb-2">
         <div class="au-u-flex au-u-flex--spaced-tiny">  
           <p class="au-u-medium">
-            Laatst gewijzigd op 02-02-2023
+            Laatst gewijzigd op {{#if (eq @step 'Definitieve goedkeuring')}}28-08-2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13-06-2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01-04-2023{{else}}11-10-2023{{/if}}
           </p>
         </div>
       </div>
@@ -26,7 +26,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            Op te starten op <AuLinkExternal @href="#!">22 november 2023</AuLinkExternal>
+            Op te starten op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
         <li
@@ -34,7 +34,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            Dringend op <AuLinkExternal @href="#!">22 november 2023</AuLinkExternal>
+            Dringend op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
         <li
@@ -42,7 +42,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            In vertaling op <AuLinkExternal @href="#!">02 februari 2023</AuLinkExternal>
+            In vertaling op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
         <li
@@ -50,7 +50,7 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            Aanvraag drukproef op <AuLinkExternal @href="#!">02 februari 2023</AuLinkExternal>
+            Aanvraag drukproef op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
       </ul>
