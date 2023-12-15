@@ -1,6 +1,7 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class SignFlowModel extends Model {
+  @attr uri;
   @attr shortTitle;
   @attr longTitle;
   @attr('date') openingDate;
