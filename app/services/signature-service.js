@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
+import { task } from 'ember-concurrency';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
@@ -65,7 +66,10 @@ export default class SignatureService extends Service {
     }
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
-    if (!response.ok) {
+    if (response.ok) {
+      const job = await response.json();
+      await this.pollPrepareSignFlow.perform(job);
+    } else {
       let stringifiedJson;
       try {
         const json = await response?.json();
@@ -76,6 +80,50 @@ export default class SignatureService extends Service {
       throw new Error(stringifiedJson ?? response.statusText);
     }
   }
+
+  pollPrepareSignFlow = task(async (job) => {
+    const jobResult = await this.getJob.perform(job);
+    if (jobResult) {
+      if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.SUCCESS) {
+        // We're done polling :)
+      } else if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.FAILED) {
+        throw new Error(jobResult.error);
+      } else {
+        setTimeout(() => {
+          this.pollPrepareSignFlow.perform(job);
+        }, 2000);
+      }
+    }
+  });
+
+  getJob = task(async (job) => {
+    let response;
+    try {
+      response = await fetch(`/signing-flows/job/${job.id}`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `Backend response contained an error (status: ${
+            response.status
+          }): ${JSON.stringify(data)}`
+        );
+      }
+      return data;
+    } catch (error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down. If so,
+      // throw a nice error that only contains the
+      // response status.
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+  });
 
   /**
    * Marks a piece for signature by creating a sign flow, sign subcase and sign
