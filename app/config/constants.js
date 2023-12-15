@@ -70,6 +70,12 @@ export default {
       SUCCESS: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/success',
       FAILURE: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/failure',
   },
+  SIGN_FLOW_JOB_STATUSSES: {
+      SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
+      BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
+      SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
+      FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
+  },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/bdba2bbc-7af6-490b-98a8-433955cfe869',
     DEFINITIEVE_GOEDKEURING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/6f7d1086-7c02-4a80-8c60-5690894f70fc',
