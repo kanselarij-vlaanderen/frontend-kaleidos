@@ -143,7 +143,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      cy.get(agenda.agendaitemControls.actions).should('not.exist'); // TODO-profile should KB see any actions?
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
