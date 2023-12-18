@@ -5,7 +5,7 @@
   @onConfirm={{perform this.sendToVP}}
   @onCancel={{@onCancel}}
   @loading={{this.sendToVP.isRunning}}
-  @disabled={{this.loadData.isRunning}}
+  @disabled={{this.isModalDisabled}}
 >
   <:title>{{t "check-case"}}</:title>
   <:body>
@@ -22,13 +22,16 @@
                 (t "principal-approval")
               }}:
               <ul>
-                {{#each subcaseWithPieces.pieces as |piece|}}
+                {{#each subcaseWithPieces.piecesReadyToBeSent as |piece|}}
                   <li>
                     <LinkTo @route="document" @model={{piece.id}}>
-                      {{#let piece.file.extension as |extension|}}
-                        {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                      {{/let}}
+                      {{piece.name}}
+                      {{await (this.pieceFileTypes piece)}}
                     </LinkTo>
+                  </li>
+                {{else}}
+                  <li>
+                    {{t "no-new-files-will-be-sent"}}
                   </li>
                 {{/each}}
               </ul>
@@ -40,22 +43,30 @@
               (t "definitive-approval")
             }}:
             <ul>
-              {{#each this.dgSubcaseWithPieces.pieces as |piece|}}
+              {{#each this.dgSubcaseWithPieces.piecesReadyToBeSent as |piece|}}
                 <li>
                   <LinkTo @route="document" @model={{piece.id}}>
-                    {{#let piece.file.extension as |extension|}}
-                      {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                    {{/let}}
+                    {{piece.name}}
+                    {{await (this.pieceFileTypes piece)}}
                   </LinkTo>
+                </li>
+              {{else}}
+                <li>
+                  {{t "no-new-files-will-be-sent"}}
                 </li>
               {{/each}}
             </ul>
           </li>
         </ul>
-        {{! <div class="auk-form-group au-u-margin-top">
-        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
-        <Auk::Textarea @rows="4" @value="" id="remarks" />
-      </div> }}
+        <div class="auk-form-group au-u-margin-top">
+          <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+          <Auk::Textarea
+            @rows="4"
+            id="remarks"
+            value={{this.comment}}
+            {{on "change" this.onChangeComment}}
+          />
+        </div>
       </AuContent>
       {{#let
         (map this.missingDocsForSubcase this.pgSubcasesWithPieces)

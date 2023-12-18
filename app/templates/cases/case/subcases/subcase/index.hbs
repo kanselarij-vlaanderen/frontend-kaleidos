@@ -1,7 +1,9 @@
 {{#if this.model}}
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8">
-      <Subcase::SubcaseDescriptionPanel @subcase={{@model.subcase}} />
+      <div class="auk-u-mb-8">
+        <Subcase::SubcaseDescriptionPanel @subcase={{@model.subcase}} />
+      </div>
       <div class="auk-u-mb-8">
         <div class="auk-hr">
           <hr />
@@ -16,11 +18,13 @@
           {{t "limited-access"}}
         </AuCheckbox>
       {{/if}}
-      <Subcase::SubcaseTitlesPanel
-        @subcase={{@model.subcase}}
-        @meeting={{this.meeting}}
-        @allowEditing={{user-may "manage-cases"}}
-      />
+      <div class="auk-u-mb-8">
+        <Subcase::SubcaseTitlesPanel
+          @subcase={{@model.subcase}}
+          @meeting={{this.meeting}}
+          @allowEditing={{user-may "manage-cases"}}
+        />
+      </div>
       <Mandatees::MandateesPanel
         @referenceDate={{if
           this.meeting
@@ -38,6 +42,7 @@
         @governmentAreas={{@model.subcase.governmentAreas}}
         @allowEditing={{user-may "manage-cases"}}
         @onSave={{this.saveGovernmentAreas}}
+        class="auk-u-mb-8"
       />
       <Subcases::SubcasesHistory
         @decisionmakingFlow={{this.decisionmakingFlow}}
