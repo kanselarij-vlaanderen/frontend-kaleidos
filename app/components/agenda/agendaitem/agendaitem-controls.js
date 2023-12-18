@@ -86,7 +86,10 @@ export default class AgendaitemControls extends Component {
   });
 
   get hasDropdownOptions() {
-    return this.isDesignAgenda || this.canSendToVP;
+    return (
+      (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
+      this.canSendToVP
+    );
   }
 
   get enableVlaamsParlement() {
