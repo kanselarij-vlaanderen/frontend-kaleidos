@@ -1,0 +1,39 @@
+{{#if this.prepareGovernmentAreas.isRunning}}
+  <Auk::Loader />
+{{else}}
+  <Auk::CheckboxTree
+    @label={{or @label (t "current-government-areas")}}
+    @items={{this.currentGovernmentAreas}}
+    @selectedItems={{this.selectedCurrentGovernmentAreas}}
+    @didUpdate={{this.onChangeCurrentGovernmentAreas}}
+  />
+    {{#if this.showPastGovernmentAreas}}
+      {{#if this.deprecatedGovernmentAreasHidden}}
+        <AuButton
+          {{on "click" (toggle "deprecatedGovernmentAreasHidden" this)}}
+          @skin="link"
+          class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+          @icon="add"
+          >
+          {{t "show-past-government-areas"}}
+        </AuButton>
+      {{else if this.prepareDeprecatedGovernmentAreas.isRunning}}
+        <Auk::Loader />
+      {{else}}
+        <Auk::CheckboxTree
+          @label={{t "past-government-areas"}}
+          @items={{this.deprecatedGovernmentAreas}}
+          @selectedItems={{this.selectedDeprecatedGovernmentAreas}}
+          @didUpdate={{this.onChangeDeprecatedGovernmentAreas}}
+        />
+        <AuButton
+          {{on "click" (toggle "deprecatedGovernmentAreasHidden" this)}}
+          @skin="link"
+          class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+          @icon="remove"
+        >
+          {{t "hide-past-government-areas"}}
+        </AuButton>
+    {{/if}}
+   {{/if}}
+{{/if}}

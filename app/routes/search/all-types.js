@@ -157,6 +157,7 @@ export default class AllTypes extends Route {
       params.searchText,
       flatResults.length,
       params.mandatees || [],
+      params.governmentAreas || [],
       params.dateFrom,
       params.dateTo,
     );
@@ -175,16 +176,23 @@ export default class AllTypes extends Route {
     controller.searchText = searchText;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to) {
+  async trackSearch(searchTerm, resultCount, mandatees, governmentAreas, from, to) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Aantal resultaten': resultCount,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Van': from,
       'Tot en met': to,
     }, true);
