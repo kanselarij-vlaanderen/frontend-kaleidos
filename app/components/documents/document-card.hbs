@@ -109,7 +109,6 @@
         <Toolbar.Group @position="right" as |Group|>
           {{#if
             (and
-              (user-may "manage-publication-flows")
               (not this.loadPieceRelatedData.isRunning)
               (not this.loadPublicationFlowRelatedData.isRunning)
             )
@@ -118,14 +117,22 @@
               <Group.Item
                 class="auk-o-flex auk-o-flex--vertical-center"
               >
-                <AuPill
-                  @size="small"
-                  @route="publications.publication"
-                  @model={{this.piece.publicationFlow.id}}
-                  data-test-document-card-publication-link
-                >
-                  {{this.piece.publicationFlow.identification.idName}}
-                </AuPill>
+                {{#if (user-may "manage-publication-flows")}}
+                  <AuPill
+                    @size="small"
+                    @route="publications.publication"
+                    @model={{this.piece.publicationFlow.id}}
+                    data-test-document-card-publication-link
+                  >
+                    {{this.piece.publicationFlow.identification.idName}}
+                  </AuPill>
+                {{else}}
+                  <AuPill
+                    @size="small"
+                  >
+                    {{this.piece.publicationFlow.identification.idName}}
+                  </AuPill>
+                {{/if}}
               </Group.Item>
             {{/if}}
           {{/if}}

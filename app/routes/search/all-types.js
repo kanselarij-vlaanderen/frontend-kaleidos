@@ -8,6 +8,7 @@ import CasesSearchRoute from './cases';
 import SearchDocumentsRoute from './documents';
 import SearchNewsItemsRoute from './news-items';
 import SearchDecisionsRoute from './decisions';
+import SearchPublicationFlowsRoute from './publication-flows';
 
 export default class AllTypes extends Route {
   @service store;
@@ -54,6 +55,14 @@ export default class AllTypes extends Route {
       dataMapping: SearchNewsItemsRoute.postProcessData,
       createFilter: SearchNewsItemsRoute.createFilter,
       retrieveDate: (newsItem) => newsItem.latestAgendaitem.meetingDate,
+    },
+    'publication-flows': {
+      searchType: 'publication-flows',
+      searchFields: SearchPublicationFlowsRoute.textSearchFields,
+      highlightFields: SearchPublicationFlowsRoute.highlightFields,
+      dataMapping: SearchPublicationFlowsRoute.postProcessData,
+      createFilter: SearchPublicationFlowsRoute.createFilter,
+      retrieveDate: (publicationFlow) => publicationFlow.sessionDate,
     },
   };
 
@@ -146,6 +155,11 @@ export default class AllTypes extends Route {
           name = this.intl.t('news-items');
           route = 'search.news-items';
           tab = 'Kort bestek';
+          break;
+        case 'publication-flows':
+          name = this.intl.t('publications');
+          route = 'search.publication-flows';
+          tab = 'Publicaties';
           break;
         default:
           break;
