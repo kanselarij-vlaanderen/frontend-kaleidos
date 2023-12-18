@@ -121,9 +121,9 @@ export default class SearchPublicationFlowsRoute extends Route {
 
     this.lastParams.commit();
 
-    // if (isEmpty(params.searchText)) {
-    //   return [];
-    // }
+    if (isEmpty(params.searchText)) {
+      return [];
+    }
 
     const results = await search(
       'publication-flows',
