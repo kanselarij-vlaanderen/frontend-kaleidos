@@ -2,9 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { isPresent, isEmpty } from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
-import ENV from 'frontend-kaleidos/config/environment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
@@ -47,8 +46,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   get isSignaturesEnabled() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
-    return isEnabled;
+    const hasPermission = this.currentSession.may('manage-signatures');
+    return hasPermission;
   }
 
   @task
@@ -61,8 +60,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @task
   *loadSignedPieces() {
     this.signedPieceCopy = yield this.args.piece?.signedPieceCopy;
-    yield this.signedPieceCopy.belongsTo('accessLevel').reload();
-    yield this.signedPieceCopy.belongsTo('file').reload();
+    yield this.signedPieceCopy?.belongsTo('accessLevel').reload();
+    yield this.signedPieceCopy?.belongsTo('file').reload();
   }
 
   @task

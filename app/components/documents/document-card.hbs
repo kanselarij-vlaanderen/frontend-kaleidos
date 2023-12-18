@@ -85,6 +85,24 @@
                   {{/if}}
                 </p>
               {{/if}}
+              {{#if
+                (await (this.canViewSignedPiece))
+              }}
+                {{#if this.piece.signedPieceCopy.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await
+                        this.piece.signedPieceCopy.namedDownloadLinkPromise
+                      }}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at this.piece.signedPieceCopy.created}}
+                  </p>
+                {{/if}}
+              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
@@ -141,27 +159,25 @@
               />
             {{/unless}}
           </Group.Item>
-          {{#if this.signaturesEnabled}}
-            {{#if this.showSignatureLoader}}
-              <Group.Item
-                class="auk-o-flex auk-o-flex--vertical-center"
-              >
-                <div
-                  class="auk-loader au-u-margin-left-small"
-                  role="alert"
-                  aria-busy="true"
-                ></div>
-              </Group.Item>
-            {{else if this.signMarkingActivity}}
-              <Group.Item
-                class="auk-o-flex auk-o-flex--vertical-center"
-              >
-                <SignaturePill
-                  @piece={{this.piece}}
-                  @signMarkingActivity={{this.signMarkingActivity}}
-                />
-              </Group.Item>
-            {{/if}}
+          {{#if this.showSignatureLoader}}
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
+              <div
+                class="auk-loader au-u-margin-left-small"
+                role="alert"
+                aria-busy="true"
+              ></div>
+            </Group.Item>
+          {{else if this.signMarkingActivity}}
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
+              <SignaturePill
+                @piece={{this.piece}}
+                @signMarkingActivity={{this.signMarkingActivity}}
+              />
+            </Group.Item>
           {{/if}}
           {{#if this.mayShowEditDropdown}}
             <Group.Item

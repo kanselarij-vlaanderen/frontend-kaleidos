@@ -5,11 +5,12 @@
   @padding="none"
 >
   <:title>
-    <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+    <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       {{this.selectedVersion.name}}
       {{#unless this.loadFile.isRunning}}
         {{#if (and this.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-preview-download-link
             {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
             @iconAlignment="left"

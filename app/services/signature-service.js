@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
-import ENV from 'frontend-kaleidos/config/environment';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
@@ -180,7 +179,7 @@ export default class SignatureService extends Service {
           },
         }
       );
-      const subcase = await submissionActivity.subcase;
+      const subcase = await submissionActivity?.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {
@@ -286,29 +285,22 @@ export default class SignatureService extends Service {
   }
 
   async hasSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      if (await piece.signMarkingActivity) {
-        return true;
-      } else if (await piece.signCompletionActivity) {
-        return true;
-      } else if (await piece.signedPiece) {
-        return true;
-      }
+    if (await piece.signMarkingActivity) {
+      return true;
+    } else if (await piece.signCompletionActivity) {
+      return true;
+    } else if (await piece.signedPiece) {
+      return true;
     }
     return false;
   }
 
   async hasMarkedSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
-      const signSubcase = await signMarkingActivity?.signSubcase;
-      const signFlow = await signSubcase?.signFlow;
-      const status = await signFlow?.belongsTo('status').reload();
-      return status?.uri === MARKED;
-    }
-    return false;
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.belongsTo('status').reload();
+    return status?.uri === MARKED;
   }
 
   async getSigningHubUrl(signFlow, piece) {

@@ -166,6 +166,7 @@
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-details-panel-source-file-download
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
@@ -181,7 +182,7 @@
       {{#if (and this.isSignaturesEnabled (user-may "manage-signatures") (await (this.canViewSignedPiece)))}}
         {{#if @piece.signedPiece.file}}
           <div class="auk-key-value-item">
-            <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+            <div class="auk-key-value-item__label auk-u-max-width-medium">{{t "signed-document-certified"}}</div>
             <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
               <AuLinkExternal
                 href={{await @piece.signedPiece.namedDownloadLinkPromise}}
@@ -217,9 +218,16 @@
           </div>
         {{/if}}
       {{/if}}
-      {{#if (and this.isSignaturesEnabled (and this.loadSignedPieces.isIdle this.signedPieceCopy.file))}}
+      {{#if
+        (and
+          this.isSignaturesEnabled
+          this.loadSignedPieces.isIdle
+          this.signedPieceCopy.file
+          (await (this.canViewConfidentialPiece))
+        )
+      }}
         <div class="auk-key-value-item">
-          <div class="auk-key-value-item__label">{{t "signed-document-copy"}}</div>
+          <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
           <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
             <AuLinkExternal
               href={{await this.signedPieceCopy.namedDownloadLinkPromise}}

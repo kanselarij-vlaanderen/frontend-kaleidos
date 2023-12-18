@@ -39,6 +39,7 @@
     <Documents::DocumentCardList
       @pieces={{this.model.pieces}}
       @highlightedPieces={{this.newAgendaitemPieces}}
+      @agendaitem={{this.agendaitem}}
       @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
       @onOpenUploadModal={{this.openUploadModalForNewPiece}}
       @onAddPiece={{perform this.addPiece}}
