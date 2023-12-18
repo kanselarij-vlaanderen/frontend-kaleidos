@@ -63,6 +63,7 @@ const selectors = {
       updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
       save: '[data-test-route-agenda-minutes-editor-save]',
     },
+    currentPieceView: '[data-test-route-agenda-minutes-current-piece-view]',
   },
 
   /**
