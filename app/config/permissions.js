@@ -45,6 +45,8 @@ const {
 // - view-only-specific-confidential-documents: allow the viewing of a restricted selection of confidential documents.
 // - search-confidential-cases: allow searching of cases that have at least 1 confidential subcase
 // - search-confidential-documents: allow searching of documents that have vertrouwelijk access level
+// - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
+// - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 
 const groups = [
@@ -79,6 +81,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'send-cases-to-vp',
       'impersonate-users',
     ]
   },
@@ -189,7 +192,8 @@ const groups = [
       'manage-only-specific-signatures',
       'view-document-version-info',
       'view-documents-before-release',
-      'view-only-specific-confidential-documents'
+      'view-only-specific-confidential-documents',
+      'send-only-specific-cases-to-vp',
     ],
   },
   {
