@@ -68,6 +68,10 @@ export default class SearchPublicationFlowsRoute extends Route {
       filter[':terms:mandateeIds'] = params.mandatees;
     }
 
+    if (!isEmpty(params.governmentAreas)) {
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
+    }
+
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
@@ -117,9 +121,9 @@ export default class SearchPublicationFlowsRoute extends Route {
 
     this.lastParams.commit();
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
+    // if (isEmpty(params.searchText)) {
+    //   return [];
+    // }
 
     const results = await search(
       'publication-flows',
