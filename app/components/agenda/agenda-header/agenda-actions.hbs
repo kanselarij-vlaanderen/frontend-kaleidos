@@ -62,16 +62,7 @@
   >
     {{t "download-decisions"}}
   </AuButton>
-  {{#if this.allReports.length}}
-    <AuButton
-      @skin="link"
-      {{on "click" this.generateAllDecisionsBundle}}
-      role="menuitem"
-    >
-      {{t "generate-all-decisions-bundle"}}
-    </AuButton>
-  {{/if}}
-  {{#if this.signedReports.length}}
+  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-documents"))}}
     <AuButton
       @skin="link"
       {{on "click" this.generateSignedDecisionsBundle}}

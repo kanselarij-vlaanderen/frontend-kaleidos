@@ -8,22 +8,19 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  generateReportBundle = task(async (reports, signedOnly = false) => {
+  generateReportBundle = task(async (meeting) => {
     const generatingBundleToast = this.toaster.loading(
-      this.intl.t('decision-report-bundle-generation--toast-generating--message', {
-        total: reports.length,
-      }),
+      this.intl.t(
+        'decision-report-bundle-generation--toast-generating--message'
+      ),
       this.intl.t('decision-report-bundle-generation--toast-generating--title'),
       {
         timeOut: 10 * 60 * 1000,
       }
     );
     try {
-      const job = await this._generateReportBundle.perform(
-        reports,
-        signedOnly,
-      );
-      this.pollReportBundle.perform(job, reports, generatingBundleToast);
+      const job = await this._generateReportBundle.perform(meeting);
+      this.pollReportBundle.perform(job, generatingBundleToast);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-while-generating-report-bundle', {
@@ -33,20 +30,19 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  pollReportBundle = task(async (job, reports, generatingBundleToast) => {
+  pollReportBundle = task(async (job, generatingBundleToast) => {
     const jobResult = await this.getJob.perform(
       job,
       'generate-decision-report'
     );
     if (jobResult) {
-      if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS) {
+      if (
+        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
+      ) {
         this.toaster.close(generatingBundleToast);
         this.toaster.success(
           this.intl.t(
-            'decision-report-bundle-generation--toast-generating-complete--message',
-            {
-              total: reports.length,
-            }
+            'decision-report-bundle-generation--toast-generating-complete--message'
           ),
           this.intl.t(
             'decision-report-bundle-generation--toast-generating-complete--title'
@@ -59,17 +55,19 @@ export default class DecisionReportGeneration extends Service {
         if (this.router.currentRouteName === 'agenda.documents') {
           this.router.refresh('agenda');
         }
-    } else if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE) {
-      this.toaster.close(generatingBundleToast);
-      this.toaster.error(
-        this.intl.t('error-while-generating-report-bundle-no-reason')
-      );
-    } else {
-      setTimeout(() => {
-        this.pollReportBundle.perform(job, reports, generatingBundleToast);
-      }, 2000);
+      } else if (
+        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
+      ) {
+        this.toaster.close(generatingBundleToast);
+        this.toaster.error(
+          this.intl.t('error-while-generating-report-bundle-no-reason')
+        );
+      } else {
+        setTimeout(() => {
+          this.pollReportBundle.perform(job, generatingBundleToast);
+        }, 2000);
+      }
     }
-  }
   });
 
   generateReplacementReports = task(async (reports) => {
@@ -98,37 +96,45 @@ export default class DecisionReportGeneration extends Service {
   });
 
   pollReplacementReports = task(async (job, reports, generatingPDFsToast) => {
-      const jobResult = await this.getJob.perform(
-        job,
-        'generate-decision-report'
-      );
-      if (jobResult) {
-        if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS) {
-          await this.reloadFiles(reports);
-          this.toaster.close(generatingPDFsToast);
-          this.toaster.success(
-            this.intl.t(
-              'decision-report-generation--toast-generating-complete--message',
-              {
-                total: reports.length,
-              }
-            ),
-            this.intl.t(
-              'decision-report-generation--toast-generating-complete--title'
-            ),
+    const jobResult = await this.getJob.perform(
+      job,
+      'generate-decision-report'
+    );
+    if (jobResult) {
+      if (
+        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
+      ) {
+        await this.reloadFiles(reports);
+        this.toaster.close(generatingPDFsToast);
+        this.toaster.success(
+          this.intl.t(
+            'decision-report-generation--toast-generating-complete--message',
             {
-              closable: true,
-              timeOut: 10 * 60 * 1000,
+              total: reports.length,
             }
-          );
-      } else if (jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE) {
+          ),
+          this.intl.t(
+            'decision-report-generation--toast-generating-complete--title'
+          ),
+          {
+            closable: true,
+            timeOut: 10 * 60 * 1000,
+          }
+        );
+      } else if (
+        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
+      ) {
         this.toaster.close(generatingPDFsToast);
         this.toaster.error(
           this.intl.t('error-while-generating-report-pdfs-no-reason')
         );
       } else {
         setTimeout(() => {
-          this.pollReplacementReports.perform(job, reports, generatingPDFsToast);
+          this.pollReplacementReports.perform(
+            job,
+            reports,
+            generatingPDFsToast
+          );
         }, 2000);
       }
     }
@@ -215,11 +221,11 @@ export default class DecisionReportGeneration extends Service {
       response = await fetch(`/${urlBase}/generate-reports`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/vnd.api+json',
+          Accept: 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
         },
         body: JSON.stringify({
-          reports: reports.map((report) => report.uri)
+          reports: reports.map((report) => report.uri),
         }),
       });
       const data = await response.json();
@@ -247,20 +253,22 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  _generateReportBundle = task(async (reports, signedOnly) => {
+  _generateReportBundle = task(async (meeting) => {
     let response;
     try {
-      response = await fetch(`/generate-decision-report/generate-reports-bundle`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.api+json',
-          'Content-Type': 'application/vnd.api+json',
-        },
-        body: JSON.stringify({
-          reports: reports.map((report) => report.uri),
-          signedOnly,
-        }),
-      });
+      response = await fetch(
+        `/generate-decision-report/generate-reports-bundle`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/vnd.api+json',
+            'Content-Type': 'application/vnd.api+json',
+          },
+          body: JSON.stringify({
+            meetingId : meeting.id,
+          }),
+        }
+      );
       const data = await response.json();
       if (response.status !== 200) {
         throw new Error(
