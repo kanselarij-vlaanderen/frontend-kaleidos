@@ -99,7 +99,7 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  requestArchiveCase(_case) {
+  requestArchiveCase() {
     this.selectedCase = this.case;
     this.isArchivingCase = true;
   }
