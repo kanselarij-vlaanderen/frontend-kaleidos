@@ -99,7 +99,7 @@
                       {{t "signed-document"}}
                     </AuLinkExternal>
                     {{t "on"}}
-                    {{or (datetime-at this.piece.signedPieceCopy.file.created) (datetime-at this.piece.signedPieceCopy.created)}}
+                    {{datetime-at (or this.piece.signedPieceCopy.file.created this.piece.signedPieceCopy.created)}}
                   </p>
                 {{/if}}
               {{/if}}

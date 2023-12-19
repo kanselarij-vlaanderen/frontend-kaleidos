@@ -17,7 +17,7 @@
       <p>
         {{#if @piece.created}}
           {{t "uploaded-at"}}
-          {{or (datetime-at @piece.file.created) (datetime-at @piece.created) "-"}}
+          {{datetime-at (or @piece.file.created @piece.created "-")}}
         {{/if}}
       </p>
       {{#if @piece.accessLevelLastModified}}
