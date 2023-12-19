@@ -73,25 +73,31 @@
       <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
         {{! DETAILS }}
         {{#if (eq this.tab "details")}}
-          <Documents::DocumentPreview::DetailsTab
-            @piece={{@piece}}
-            @documentContainer={{this.documentContainer}}
-            @didDeletePiece={{@didDeletePiece}}
-            @onChangeFile={{@onChangeFile}}
-          />
-          {{! SIGNATURES }}
+          <div class="auk-u-m-4">
+            <Documents::DocumentPreview::DetailsTab
+              @piece={{@piece}}
+              @documentContainer={{this.documentContainer}}
+              @didDeletePiece={{@didDeletePiece}}
+              @onChangeFile={{@onChangeFile}}
+            />
+            {{! SIGNATURES }}
+          </div>
         {{else if (eq this.tab (t "signatures"))}}
-          <Documents::DocumentPreview::SignaturesTab
-            @piece={{@piece}}
-            @documentContainer={{this.documentContainer}}
-          />
-          {{! VERSIONS }}
+          <div class="auk-u-m-4">
+            <Documents::DocumentPreview::SignaturesTab
+              @piece={{@piece}}
+              @documentContainer={{this.documentContainer}}
+            />
+            {{! VERSIONS }}
+          </div>
         {{else if (eq this.tab (t "versions"))}}
-          <Documents::DocumentPreview::VersionsTab
-            @documentContainer={{this.documentContainer}}
-            @currentVersion={{@piece}}
-            @onSelectVersion={{@onSelectVersion}}
-          />
+          <div class="auk-u-m-4">
+            <Documents::DocumentPreview::VersionsTab
+              @documentContainer={{this.documentContainer}}
+              @currentVersion={{@piece}}
+              @onSelectVersion={{@onSelectVersion}}
+            />
+          </div>
         {{/if}}
       </Utils::LoadableContent>
     </div>
