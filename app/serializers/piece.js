@@ -3,8 +3,8 @@ import ApplicationSerializer from './application';
 const SKIP_SERIALIZED = [
   'agendaitems',
   'submissionActivity',
-  // 'signedPiece',
-  // 'signedPieceCopy',
+  'signedPiece',
+  'signedPieceCopy',
   'signMarkingActivity',
   'signCompletionActivity',
 ];
