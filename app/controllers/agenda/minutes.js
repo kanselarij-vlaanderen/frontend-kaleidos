@@ -104,6 +104,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[agendaitems][:id:]': agendaitem.id,
     'filter[:has-no:next-piece]': true,
   });
+  pieces = pieces.toArray();
   let sortedPieces;
   if (agendaitem.isApproval) {
     sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
