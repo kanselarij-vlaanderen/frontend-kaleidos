@@ -1,0 +1,39 @@
+<AuModal
+  @modalOpen={{true}}
+  @closable={{true}}
+  @closeModal={{@closeModal}}
+  ...attributes
+>
+  <:title>{{t "documents-sent-on"}}
+    {{date @submissionActivity.startDate}}</:title>
+  <:body>
+    <AuContent>
+      {{#if this.subcaseWithPieces.isLoading}}
+        <AuLoader />
+      {{else if this.subcaseWithPieces.value}}
+        <p>{{t "the-following-things-were-sent"}}:</p>
+        <ul class="au-u-margin-top">
+          {{#each this.subcaseWithPieces.value as |subcaseWithPieces|}}
+            <li>
+              {{capitalize subcaseWithPieces.subcase.subcaseName}}:
+              <ul>
+                {{#each subcaseWithPieces.pieces as |o|}}
+                  <li>
+                    <LinkTo @route="document" @model={{o.piece.id}}>
+                      {{o.piece.name}}
+                      {{this.submittedPieceList o.submittedPiece}}
+                    </LinkTo>
+                  </li>
+                {{/each}}
+              </ul>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if @submissionActivity.comment}}
+        <h5>{{t "remarks"}}</h5>
+        <p>{{@submissionActivity.comment}}</p>
+      {{/if}}
+    </AuContent>
+  </:body>
+</AuModal>
