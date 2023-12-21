@@ -61,6 +61,7 @@
       </Auk::KeyValue>
       {{#if this.isReplacingSourceFile}}
         <Auk::FileUploader
+          @multiple={{false}}
           @onUpload={{set this "replacementSourceFile"}}
           @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
         />

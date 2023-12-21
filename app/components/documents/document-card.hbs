@@ -340,7 +340,7 @@
         @onDelete={{perform this.deleteUploadedPiece}}
       />
     {{else}}
-      <Auk::FileUploader @onUpload={{perform this.uploadPiece}} />
+      <Auk::FileUploader @multiple={{false}} @onUpload={{perform this.uploadPiece}} />
     {{/if}}
   </:body>
 </ConfirmationModal>
