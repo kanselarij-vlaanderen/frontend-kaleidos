@@ -1,14 +1,12 @@
-<div class="auk-u-mb-8">
-  {{#if this.isEditing}}
-    <Subcase::SubcaseDescriptionPanel::SubcaseDescriptionEdit
-      @subcase={{@subcase}}
-      @onCancel={{this.cancelEditing}}
-      @onSave={{this.stopEditing}}
-    />
-  {{else}}
-    <Subcase::SubcaseDescriptionPanel::SubcaseDescriptionView
-      @subcase={{@subcase}}
-      @onClickEdit={{this.startEditing}}
-    />
-  {{/if}}
-</div>
+{{#if this.isEditing}}
+  <Subcase::SubcaseDescriptionPanel::SubcaseDescriptionEdit
+    @subcase={{@subcase}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.stopEditing}}
+  />
+{{else}}
+  <Subcase::SubcaseDescriptionPanel::SubcaseDescriptionView
+    @subcase={{@subcase}}
+    @onClickEdit={{this.startEditing}}
+  />
+{{/if}}

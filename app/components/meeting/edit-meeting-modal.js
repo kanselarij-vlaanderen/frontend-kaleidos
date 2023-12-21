@@ -255,6 +255,9 @@ export default class MeetingEditMeetingComponent extends Component {
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
+    if (!(await this.decisionReportGeneration.canReplaceAllReports(reports))) {
+      return;
+    }
     await Promise.all(reports.map(async (report) => {
       const agendaitem = await this.store.queryOne('agendaitem', {
         'filter[:has-no:next-version]': true,
@@ -363,6 +366,9 @@ export default class MeetingEditMeetingComponent extends Component {
   async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
     if (minutes) {
+      if (! (await this.decisionReportGeneration.canReplaceMinutes(minutes))) {
+        return;
+      }
       // new name
       const documentContainer = await minutes.documentContainer;
       const pieces = await documentContainer.pieces;

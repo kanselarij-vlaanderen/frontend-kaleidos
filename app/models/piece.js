@@ -37,11 +37,17 @@ export default class Piece extends Model {
   })
   unsignedPiece;
   @belongsTo('piece', {
-    inverse: null,
+    inverse: 'signedPieceCopyOf',
     async: true,
     polymorphic: true,
   })
   signedPieceCopy;
+  @belongsTo('piece', {
+    inverse: 'signedPieceCopy',
+    async: true,
+    polymorphic: true,
+  })
+  signedPieceCopyOf;
 
   // resources with pieces linked:
 
@@ -79,6 +85,12 @@ export default class Piece extends Model {
   @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
   @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
   linkedAgendaitems;
+
+  @hasMany('submitted-piece', {
+    inverse: 'piece',
+    async: true
+  })
+  submittedPieces;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

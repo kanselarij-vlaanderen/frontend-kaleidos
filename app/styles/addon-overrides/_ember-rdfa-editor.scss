@@ -141,8 +141,6 @@ $say-editor-border-radius: $au-input-border-radius;
         } @else {
           min-width: 3.8rem;
         }
-
-        font-variant-numeric: tabular-nums;
       }
 
       @if $current-level < $levels {
@@ -170,7 +168,7 @@ $say-editor-border-radius: $au-input-border-radius;
 // Full screen
 
 .auk-rdfa-holder {
-  //
+  width: 100%;
 }
 
 .auk-rdfa-holder__header {

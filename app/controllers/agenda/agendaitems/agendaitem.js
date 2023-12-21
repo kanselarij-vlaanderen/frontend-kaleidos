@@ -23,6 +23,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
 
   get canShowDecisionTab() {
     return this.currentSession.may('manage-decisions')
+      || this.currentSession.may('view-decisions-before-release')
       || (this.isFinalAgenda && this.hasDecision);
   }
 

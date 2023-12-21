@@ -4,7 +4,9 @@ import ApplicationSerializer from './application';
 const SKIP_SERIALIZED = [
   'decisionActivity',
   'signedPiece',
+  'signedPieceCopy',
   'signMarkingActivity',
+  'signCompletionActivity',
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {

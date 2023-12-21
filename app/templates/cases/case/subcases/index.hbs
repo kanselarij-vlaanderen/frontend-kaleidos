@@ -6,13 +6,13 @@
   @onSaveCase={{perform this.saveCase}}
 />
 <div class="auk-scroll-wrapper__body">
-  {{#if @model}}
-    <Subcases::SubcasesProcess @decisionmakingFlow={{this.decisionmakingFlow}} @subcases={{@model}} />
-  {{else}}
-    <div class="auk-u-m-8">
+  <div class="auk-u-m-8">
+    {{#if @model}}
+      <Subcases::SubcasesProcess @decisionmakingFlow={{this.decisionmakingFlow}} @subcases={{@model}} />
+    {{else}}
       <Auk::EmptyState @message={{t "no-subcases"}} />
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
 </div>
 {{#if @model}}
   <hr/>
