@@ -78,7 +78,11 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       this.currentSession.may('manage-agendaitems'),
     );
   }
-
+  @action 
+  refresh() {
+    this.router.refresh(this.router.currentRouteName);
+  }
+  
   @action
   async reassignNumbersAndNavigateToNeighbouringAgendaitem(agendaItemType, previousNumber) {
     await this.reassignNumbersForAgendaitems();

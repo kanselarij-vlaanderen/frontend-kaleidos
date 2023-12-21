@@ -113,11 +113,13 @@ export default class AgendaitemControls extends Component {
       if (parliamentFlow) {
         const subcase = await parliamentFlow?.parliamentSubcase.reload();
         await subcase?.parliamentSubmissionActivities.reload();
+        await parliamentFlow.status.reload();
         break;
       }
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
     this.showVPModal = false;
+    this.args.onSendToVp?.();
   }
 
   get areDecisionActionsEnabled() {
