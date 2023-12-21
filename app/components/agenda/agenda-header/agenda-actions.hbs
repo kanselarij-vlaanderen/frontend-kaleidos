@@ -54,7 +54,7 @@
   >
     {{t "download-documents"}}
   </AuButton>
-    <AuButton
+  <AuButton
     data-test-agenda-actions-download-decisions
     @skin="link"
     {{on "click" this.openDownloadDecisions}}
@@ -62,6 +62,15 @@
   >
     {{t "download-decisions"}}
   </AuButton>
+  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-documents"))}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.generateSignedDecisionsBundle}}
+      role="menuitem"
+    >
+      {{t "generate-signed-decisions-bundle"}}
+    </AuButton>
+  {{/if}}
 
   {{#if (user-may "manage-meetings")}}
     <AuHr />
