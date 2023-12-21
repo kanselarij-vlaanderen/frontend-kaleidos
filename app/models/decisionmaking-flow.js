@@ -1,6 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class DecisionmakingFlow extends Model {
+  @attr('string') uri;
   // @attr('string') title;
   // @attr('string') shortTitle;
   @attr('datetime') opened;

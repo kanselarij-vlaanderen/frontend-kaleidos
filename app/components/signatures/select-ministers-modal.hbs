@@ -11,30 +11,13 @@
       @allowPartialMatch={{true}}
     />
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar @size="large" as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
-        <Group.Item>
-          <AuButton
-            @skin="naked"
-            @disabled={{@loading}}
-            {{on "click" @onCancel}}
-          >
-            {{t "cancel"}}
-          </AuButton>
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          <AuButton
-            data-test-signatures-select-ministers-apply
-            @loading={{@loading}}
-            {{on "click" (fn @onConfirm this.selectedMinisters)}}
-          >
-            {{t "apply"}}
-          </AuButton>
-        </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{@loading}}>
+    <AuButton
+      data-test-signatures-select-ministers-apply
+      @loading={{@loading}}
+      {{on "click" (fn @onConfirm this.selectedMinisters)}}
+    >
+      {{t "apply"}}
+    </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

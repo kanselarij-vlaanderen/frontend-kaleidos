@@ -425,7 +425,8 @@ context('Search tests', () => {
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
     // add Bart Somers
-    triggerSearchPublication(mandatee3);
+    cy.get(utils.ministerFilter.pastMinisters).click();
+    triggerSearchPublication(mandatee3); // this one
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)

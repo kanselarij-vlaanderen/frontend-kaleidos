@@ -174,7 +174,7 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
       this.previousReport = await this.report.previousPiece;
-      this.loadSignatureRelatedData.perform();
+      await this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
       this.betreftPiecePart = null;
@@ -337,6 +337,19 @@ export default class AgendaitemDecisionComponent extends Component {
       );
     }
     this.args.decisionActivity.report = piece;
+    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
+    if (!decisionResultCode?.uri) {
+      const agendaitemType = await this.args.agendaitem.type;
+      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      const decisionresultCodeUri = isNota
+        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
+      const decisionResultCode = await this.store.findRecordByUri(
+        'concept',
+        decisionresultCodeUri
+      );
+      this.args.decisionActivity.decisionResultCode = decisionResultCode;
+    }
     await this.args.decisionActivity.save();
     this.isAddingReport = false;
     await this.loadReport.perform();
@@ -793,7 +806,8 @@ export default class AgendaitemDecisionComponent extends Component {
   get mayEditDecisionReport() {
     return this.enableDigitalAgenda &&
       this.currentSession.may('manage-decisions') &&
-      (!this.hasSignFlow || this.hasMarkedSignFlow);
+      (this.pieceParts || !this.report) &&
+      (this.hasSignFlow === false || this.hasMarkedSignFlow);
   }
 
   @action

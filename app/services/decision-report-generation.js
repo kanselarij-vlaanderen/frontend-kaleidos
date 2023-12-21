@@ -71,6 +71,10 @@ export default class DecisionReportGeneration extends Service {
   });
 
   generateReplacementReports = task(async (reports) => {
+    if (!(await this.canReplaceAllReports(reports))) {
+      return;
+    }
+
     const generatingPDFsToast = this.toaster.loading(
       this.intl.t('decision-report-generation--toast-generating--message', {
         total: reports.length,
@@ -140,7 +144,64 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
+  async _canReplaceReport(report) {
+    return await this.canReplaceAllReports([report]);
+  }
+
+  async canReplaceAllReports(reports) {
+    const latestAgendas = await this.store.queryAll('agenda', {
+      'filter[agendaitems][treatment][decision-activity][report][:id:]': reports
+        .map((r) => r.id)
+        .join(','),
+      'filter[:has-no:next-version]': true,
+      include: 'status',
+    });
+
+    const agendaIsClosed = latestAgendas.toArray().some(
+      (agenda) =>
+        agenda.belongsTo('status').value().uri ===
+        CONSTANTS.AGENDA_STATUSSES.APPROVED
+    );
+
+    if (agendaIsClosed) {
+      return false;
+    }
+
+    const decisionInternallyPublished = !!(await this.store.queryOne(
+      'internal-decision-publication-activity',
+      {
+        'filter[meeting][agendas][:id:]': latestAgendas
+          .map((a) => a.id)
+          .join(','),
+        'filter[:has:start-date]': true,
+        'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      }
+    ));
+
+    if (decisionInternallyPublished) {
+      return false;
+    }
+
+    const hasPreparationActivity = !!(await this.store.queryOne(
+      'sign-preparation-activity',
+      {
+        'filter[sign-marking-activity][piece][:id:]': reports
+          .map((r) => r.id)
+          .join(','),
+      }
+    ));
+
+    if (hasPreparationActivity) {
+      return false;
+    }
+
+    return true;
+  }
+
   generateReplacementReport = task(async (report) => {
+    if (!await this._canReplaceReport(report)) {
+      return;
+    }
     try {
       await this._generateSinglePdf.perform(report, 'generate-decision-report');
       await this.reloadFile(report);
@@ -155,6 +216,9 @@ export default class DecisionReportGeneration extends Service {
   });
 
   generateReplacementMinutes = task(async (minutes) => {
+    if (! (await this.canReplaceMinutes(minutes))) {
+      return;
+    }
     try {
       const generatingPDFToast = this.toaster.loading(
         this.intl.t('minutes-report-generation--toast-generating--message'),
@@ -185,6 +249,47 @@ export default class DecisionReportGeneration extends Service {
       );
     }
   });
+
+  async canReplaceMinutes(minutes) {
+    const latestAgenda = await this.store.queryOne('agenda', {
+      'filter[created-for][minutes][:id:]': minutes.id,
+      'filter[:has-no:next-version]': true,
+      include: 'status',
+    });
+
+    if (
+      latestAgenda.belongsTo('status').value().uri ===
+      CONSTANTS.AGENDA_STATUSSES.APPROVED
+    ) {
+      return false;
+    }
+
+    const decisionInternallyPublished = !!(await this.store.queryOne(
+      'internal-decision-publication-activity',
+      {
+        'filter[meeting][agendas][:id:]': latestAgenda.id,
+        'filter[:has:start-date]': true,
+        'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
+      }
+    ));
+
+    if (decisionInternallyPublished) {
+      return false;
+    }
+
+    const hasPreparationActivity = !!(await this.store.queryOne(
+      'sign-preparation-activity',
+      {
+        'filter[sign-marking-activity][piece][:id:]': minutes.id
+      }
+    ));
+
+    if (hasPreparationActivity) {
+      return false;
+    }
+
+    return true;
+  }
 
   _generateSinglePdf = task(async (report, urlBase) => {
     let response;
