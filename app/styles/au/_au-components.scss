@@ -534,6 +534,10 @@ $au-label-color: var(--au-gray-700);
     &[data-list-style='lower-alpha'] {
       list-style-type: lower-alpha;
     }
+
+    &[data-list-style='upper-alpha'] {
+      list-style-type: upper-alpha;
+    }
   }
 
   ol.au-c-list {

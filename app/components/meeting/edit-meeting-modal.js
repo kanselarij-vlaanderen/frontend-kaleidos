@@ -365,10 +365,10 @@ export default class MeetingEditMeetingComponent extends Component {
 
   async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
-    if (! (await this.decisionReportGeneration.canReplaceMinutes(minutes))) {
-      return;
-    }
     if (minutes) {
+      if (! (await this.decisionReportGeneration.canReplaceMinutes(minutes))) {
+        return;
+      }
       // new name
       const documentContainer = await minutes.documentContainer;
       const pieces = await documentContainer.pieces;
