@@ -30,7 +30,7 @@
       @totalNumberOfItems={{this.model.meta.count}}
       @onChangeSize={{this.selectSize}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToCase}}
+      @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
         <td>
@@ -39,6 +39,8 @@
             @modifiedDate={{row.modified}}
             @shortTitle={{row.shortTitle}}
             @title={{row.title}}
+            @statusPillStep={{row.statusPillStep}}
+            @statusPillKey={{row.statusPillKey}}
             @status={{row.status}}
             @decisionmakingFlowId={{row.decisionmakingFlowId}}
           />
