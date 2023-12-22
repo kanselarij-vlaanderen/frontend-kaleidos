@@ -57,6 +57,12 @@ export default class SearchPublicationFlowsController extends Controller {
   }
 
   @action
+  resultClicked(searchEntry, clickEvent) {
+    this.plausible.trackEventWithRole('Zoekresultaat klik', { Pagina: this.page + 1 });
+    this.navigateToCase(searchEntry, clickEvent);
+  }
+
+  @action
   setStatuses(statuses) {
     this.statuses = statuses;
   }

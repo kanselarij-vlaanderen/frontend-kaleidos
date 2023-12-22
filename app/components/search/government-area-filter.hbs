@@ -7,7 +7,7 @@
     @selectedItems={{this.selectedCurrentGovernmentAreas}}
     @didUpdate={{this.onChangeCurrentGovernmentAreas}}
   />
-    {{#if this.showPastGovernmentAreas}}
+    {{#if @showPastGovernmentAreas}}
       {{#if this.deprecatedGovernmentAreasHidden}}
         <AuButton
           {{on "click" (toggle "deprecatedGovernmentAreasHidden" this)}}

@@ -64,8 +64,7 @@ export default class SearchNewsItemsRoute extends Route {
     }
 
     if (!isEmpty(params.governmentAreas)) {
-      // filter[':or:terms:agendaitems.governmentFieldIds'] = params.governmentAreas;
-      filter[':terms:agendaitems.governmentAreaIds'] = params.governmentAreas;
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
     }
 
     /* A closed range is treated as something different than 2 open ranges because

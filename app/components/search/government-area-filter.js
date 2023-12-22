@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked }  from '@glimmer/tracking';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SearchGovernmentAreaFilterComponent extends Component {
   @service store;
@@ -18,10 +19,6 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
     super(...arguments);
 
     this.prepareGovernmentAreas.perform();
-  }
-
-  get showPastGovernmentAreas() {
-    return this.args.showPastGovernmentAreas === null ? true : this.args.showPastGovernmentAreas;
   }
 
   get selectedGovernmentAreasIds() {
@@ -63,20 +60,24 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
 
   @task
   *prepareCurrentGovernmentAreas() {
-    this.currentGovernmentAreas = yield this.store.query('concept', {
-      'filter[concept-schemes][:id:]': 'f4981a92-8639-4da4-b1e3-0e1371feaa81',
-      'filter[deprecated]': false
+    const currentGovernmentAreas = yield this.store.queryAll('concept', {
+      'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      'filter[deprecated]': false,
+      sort: 'label',
     });
-    
+    this.currentGovernmentAreas = currentGovernmentAreas.toArray();
+  
     this.selectedCurrentGovernmentAreasIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.currentGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
   }
 
   @task
   *prepareDeprecatedGovernmentAreas() {
-    this.deprecatedGovernmentAreas = yield this.store.query('concept', {
-      'filter[concept-schemes][:id:]': 'f4981a92-8639-4da4-b1e3-0e1371feaa81',
-      'filter[deprecated]': true
+    const deprecatedGovernmentAreas = yield this.store.queryAll('concept', {
+      'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
+      'filter[deprecated]': true,
+      sort: 'label',
     });
+    this.deprecatedGovernmentAreas = deprecatedGovernmentAreas.toArray();
 
     this.selectedDeprecatedGovernmentAreaIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.deprecatedGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
   }

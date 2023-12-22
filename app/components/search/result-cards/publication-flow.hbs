@@ -36,8 +36,11 @@
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       {{#if @status}}
         <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
-          <Auk::StatusPill>
-            {{@status}}
+          <Auk::StatusPill
+            @step={{@statusPillStep}}
+            @status={{@statusPillKey}}
+          >
+            {{@status.label}}
           </Auk::StatusPill>
         </div>
       {{/if}}
