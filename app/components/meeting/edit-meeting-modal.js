@@ -256,7 +256,7 @@ export default class MeetingEditMeetingComponent extends Component {
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
-    let { alterableReports, unalterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
+    let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
     if (alterableReports.length === 0) {
       this.toaster.error(
         this.intl.t('reports-cannot-be-altered')
