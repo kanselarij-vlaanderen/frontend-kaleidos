@@ -239,6 +239,7 @@ export default class SendToVpModalComponent extends Component {
         title: this.intl.t('warning-title'),
         message: this.intl.t('error-while-sending-to-VP-message'),
         errorContent: errorMessage,
+        showDatetime: true,
         options: {
           timeOut: 60 * 10 * 1000,
         }
