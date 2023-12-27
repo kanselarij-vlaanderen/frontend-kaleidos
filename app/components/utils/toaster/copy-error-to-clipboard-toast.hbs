@@ -11,7 +11,9 @@
       <Utils::ClipboardableContent @content={{@options.errorContent}} />
     </div>
     {{#if @options.showDatetime}}
-      <p class="toast-timestamp">{{datetime-at-phrase-weekday (current-datetime)}}</p>
+      <p
+        class="au-u-muted au-u-padding-top-tiny au-u-para-tiny"
+      >{{datetime-at-phrase-weekday (current-datetime)}}</p>
     {{/if}}
   </div>
 </AuAlert>
