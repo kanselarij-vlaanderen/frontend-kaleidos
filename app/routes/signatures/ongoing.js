@@ -50,8 +50,17 @@ export default class SignaturesOngoingRoute extends Route {
     if (this.currentSession.may('view-all-ongoing-signatures')) {
       filter[':has:creator'] = 't';
     } else {
+      // User has a common organisation with the creator of the flow
       filter['creator'] = {
-        ':id:': this.currentSession.user.id,
+        memberships: {
+          organization: {
+            memberships: {
+              user: {
+                ':id:': this.currentSession.user.id,
+              },
+            },
+          },
+        },
       };
     }
 
