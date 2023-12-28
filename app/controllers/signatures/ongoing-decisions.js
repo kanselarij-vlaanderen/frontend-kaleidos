@@ -4,6 +4,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class SignaturesOngoingDecisionsController extends Controller {
   @service store;
@@ -29,7 +30,13 @@ export default class SignaturesOngoingDecisionsController extends Controller {
       },
       statuses: {
         type: 'array',
-      }
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
     },
   ];
 
@@ -39,6 +46,8 @@ export default class SignaturesOngoingDecisionsController extends Controller {
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
+  @tracked dateFrom;
+  @tracked dateTo;
   @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED]
 
 
@@ -76,6 +85,16 @@ export default class SignaturesOngoingDecisionsController extends Controller {
   @action
   onChangeStatus(statuses) {
     this.statuses = statuses;
+  }
+
+  @action
+  setDateFrom(date) {
+    this.dateFrom = formatDate(date);
+  }
+
+  @action
+  setDateTo(date) {
+    this.dateTo = formatDate(date);
   }
 
   getMeetingDate = async (signFlowOrPromise) => {
