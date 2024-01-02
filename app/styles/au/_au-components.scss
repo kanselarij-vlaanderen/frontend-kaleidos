@@ -118,6 +118,10 @@ $au-label-color: var(--au-gray-700);
   text-decoration: none;
 }
 
+.au-c-modal:not(.au-c-modal--large, .au-c-modal--fullscreen) {
+  max-width: 800px;
+}
+
 .au-c-modal__header {
   padding: .7rem 2rem;
 
