@@ -62,7 +62,8 @@ export default class FileUploader extends Component {
     try {
       this.args.onQueueUpdate?.(this.queueInfo);
       const response = yield file.upload('/files');
-      const fileFromStore = yield this.store.findRecord('file', response.body.data.id);
+      const body = yield response.json();
+      const fileFromStore = yield this.store.findRecord('file', body.data.id);
       if (this.args.onUpload) {
         this.args.onUpload(fileFromStore);
       }

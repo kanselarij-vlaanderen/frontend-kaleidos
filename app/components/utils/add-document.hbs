@@ -22,6 +22,7 @@
       </div>
     {{else}}
       <Auk::FileUploader
+        @multiple={{false}}
         @onUpload={{this.createNewPiece}}
       />
     {{/if}}
