@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import dependency from '../../selectors/dependency.selectors';
-import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 import settings from '../../selectors/settings.selectors';
 import agenda from '../../selectors/agenda.selectors';
