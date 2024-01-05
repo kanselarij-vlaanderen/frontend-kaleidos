@@ -23,6 +23,9 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
   async afterModel(model) {
     this.agendaActivity = await model.agendaActivity;
     this.subcase = await this.agendaActivity?.subcase;
+    this.decisionmakingFlow = await this.subcase?.decisionmakingFlow;
+    this.case = await this.decisionmakingFlow?.case;
+    this.parliamentFlow = await this.case?.parliamentFlow;
     this.submitter = undefined;
     if (this.subcase) {
       this.submitter = await this.subcase.requestedBy;
@@ -47,6 +50,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.reverseSortedAgendas = this.modelFor('agenda').reverseSortedAgendas;
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
+    controller.parliamentFlow = this.parliamentFlow;
     controller.newsItem = this.newsItem;
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;

@@ -27,6 +27,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked newsItem;
   @tracked mandatees;
   @tracked decisionActivity;
+  @tracked parliamentFlow;
 
   @tracked isEditingAgendaItemTitles = false;
 
@@ -78,11 +79,17 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       this.currentSession.may('manage-agendaitems'),
     );
   }
-  @action 
-  refresh() {
-    this.router.refresh(this.router.currentRouteName);
+
+  @action
+  async reloadParliamentFlow() {
+    this.decisionmakingFlow = await this.subcase?.decisionmakingFlow.reload();
+    this.case = await this.decisionmakingFlow?.case.reload();
+    this.parliamentFlow = await this.case?.parliamentFlow.reload();
+    let parliamentSubcase = await this.parliamentFlow?.parliamentSubcase.reload();
+    await parliamentSubcase?.parliamentSubmissionActivities.reload();
+    await this.parliamentFlow?.status.reload();
   }
-  
+
   @action
   async reassignNumbersAndNavigateToNeighbouringAgendaitem(agendaItemType, previousNumber) {
     await this.reassignNumbersForAgendaitems();
