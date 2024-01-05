@@ -227,7 +227,11 @@ export default class SendToVpModalComponent extends Component {
       let errorMessage = '';
       try {
         const data = await response.json();
-        errorMessage = JSON.stringify(data);
+        if (data.message) {
+          errorMessage = data.message;
+        } else {
+          errorMessage = JSON.stringify(data);
+        }
       } catch (error) {
         if (error instanceof SyntaxError) {
           errorMessage = response.status;
