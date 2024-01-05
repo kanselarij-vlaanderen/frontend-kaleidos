@@ -101,23 +101,10 @@ export default class AgendaitemControls extends Component {
 
   @action
   async onSendToVp() {
-    // This is a hack to solve the issue where services
-    // send a response before the cache is updated.
-    const MAX_RETRIES = 10;
-    const case_ = await this.store.queryOne('case', {
-      'filter[decisionmaking-flow][subcases][:id:]': this.subcase.id,
-    });
-    let parliamentFlow = null;
-    for (let i = 0; i < MAX_RETRIES && !parliamentFlow; i++) {
-      parliamentFlow = await case_.parliamentFlow.reload();
-      if (parliamentFlow) {
-        const subcase = await parliamentFlow?.parliamentSubcase.reload();
-        await subcase?.parliamentSubmissionActivities.reload();
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
     this.showVPModal = false;
+    if (this.args.onSendToVp) {
+      this.args.onSendToVp();
+    }
   }
 
   get areDecisionActionsEnabled() {
