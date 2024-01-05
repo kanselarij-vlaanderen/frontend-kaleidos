@@ -119,7 +119,9 @@ export default class AgendaitemControls extends Component {
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
     this.showVPModal = false;
-    this.args.onSendToVp?.();
+    if (this.args.onSendToVp) {
+      this.args.onSendToVp();
+    }
   }
 
   get areDecisionActionsEnabled() {
