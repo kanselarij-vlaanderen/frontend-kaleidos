@@ -256,23 +256,25 @@ export default class MeetingEditMeetingComponent extends Component {
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
-    let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
-    if (alterableReports.length === 0) {
-      this.toaster.error(
-        this.intl.t('reports-cannot-be-altered')
-      );
-      return;
+    if (reports?.length > 0) {
+      let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
+      if (alterableReports.length === 0) {
+        this.toaster.error(
+          this.intl.t('reports-cannot-be-altered')
+        );
+        return;
+      }
+      await Promise.all(alterableReports.map(async (report) => {
+        const agendaitem = await this.store.queryOne('agendaitem', {
+          'filter[:has-no:next-version]': true,
+          'filter[treatment][decision-activity][report][:id:]': report.id,
+        });
+        const documentContainer = await report.documentContainer;
+        const pieces = await documentContainer.pieces;
+        report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+        await report.save();
+      }));
     }
-    await Promise.all(alterableReports.map(async (report) => {
-      const agendaitem = await this.store.queryOne('agendaitem', {
-        'filter[:has-no:next-version]': true,
-        'filter[treatment][decision-activity][report][:id:]': report.id,
-      });
-      const documentContainer = await report.documentContainer;
-      const pieces = await documentContainer.pieces;
-      report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
-      await report.save();
-    }));
   });
 
   regenerateDecisionReports = task(async () => {

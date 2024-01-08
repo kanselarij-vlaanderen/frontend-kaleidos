@@ -227,7 +227,11 @@ export default class SendToVpModalComponent extends Component {
       let errorMessage = '';
       try {
         const data = await response.json();
-        errorMessage = JSON.stringify(data);
+        if (data.message) {
+          errorMessage = data.message;
+        } else {
+          errorMessage = JSON.stringify(data);
+        }
       } catch (error) {
         if (error instanceof SyntaxError) {
           errorMessage = response.status;
@@ -239,6 +243,7 @@ export default class SendToVpModalComponent extends Component {
         title: this.intl.t('warning-title'),
         message: this.intl.t('error-while-sending-to-VP-message'),
         errorContent: errorMessage,
+        showDatetime: true,
         options: {
           timeOut: 60 * 10 * 1000,
         }
