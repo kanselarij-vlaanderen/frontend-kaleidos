@@ -32,19 +32,18 @@
         @subcase={{this.subcase}}
         @reverseSortedAgendas={{this.reverseSortedAgendas}}
         @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+        @onSendToVp={{this.reloadParliamentFlow}}
       />
     </Group.Item>
   </Toolbar.Group>
 </Auk::Toolbar>
 
 {{#if this.enableVlaamsParlement}}
-  {{#let (await this.subcase.decisionmakingFlow.case.parliamentFlow) as |parliamentFlow|}}
-    {{#if parliamentFlow}}
-      <Vp::SubmissionsAlert
-        @parliamentFlow={{parliamentFlow}}
-      />
-    {{/if}}
-  {{/let}}
+  {{#if this.parliamentFlow}}
+    <Vp::SubmissionsAlert
+      @parliamentFlow={{this.parliamentFlow}}
+    />
+  {{/if}}
 {{/if}}
 
 <div class="auk-u-mb-8">
