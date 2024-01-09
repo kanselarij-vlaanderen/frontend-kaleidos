@@ -302,6 +302,7 @@ export default class SignaturesIndexController extends Controller {
         title: this.intl.t('warning-title'),
         message: this.intl.t('create-sign-flow-error-message'),
         errorContent: error.message,
+        showDatetime: true,
         options: {
           timeOut: 60 * 10 * 1000,
         },

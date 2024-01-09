@@ -30,6 +30,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service jobMonitor;
   @service toaster;
   @service signatureService;
+  @service decisionReportGeneration;
 
   downloadOptions = [
     {
@@ -191,6 +192,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.decisionPublicationActivity.startDate = new Date();
     this.decisionPublicationActivity.status = status;
     await this.decisionPublicationActivity.save();
+  }
+
+  @action
+  async generateSignedDecisionsBundle() {
+    this.decisionReportGeneration.generateReportBundle.perform(this.args.meeting);
   }
 
   @task

@@ -49,11 +49,18 @@
             @onDateFromClear={{set this "dateFrom" undefined}}
             @onDateToClear={{set this "dateTo" undefined}}
           />
-          <div class="au-c-card au-o-box au-o-box--small">
+          <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-minister-filter-container>
             <Search::MinisterFilter
               @selected={{this.mandatees}}
               @onChange={{this.setMandatees}}
               @showPastMinisters={{true}}
+            />
+          </div>
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Search::GovernmentAreaFilter
+              @selected={{this.governmentAreas}}
+              @onChange={{this.setGovernmentAreas}}
+              @showPastGovernmentAreas={{true}}
             />
           </div>
         </div>

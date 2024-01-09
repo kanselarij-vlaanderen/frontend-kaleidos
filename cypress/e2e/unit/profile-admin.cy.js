@@ -1135,4 +1135,149 @@ context('Testing the application as Admin user', () => {
         .should('not.exist');
     });
   });
+
+  context('Profile rights checks for document route', () => {
+    it('check document view', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+      cy.get(document.documentPreview.title).contains('VR 2022 2204 DOC.0001-1BIS');
+      cy.get(document.documentPreview.downloadLink);
+      // cy.get(document.documentView.pdfView);
+    });
+
+    it('check switching to all tabs', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+      cy.get(document.documentPreviewSidebar.tabs.signatures).click();
+      cy.url().should('include', '?tab=Ondertekenen');
+
+      cy.get(document.documentPreviewSidebar.tabs.versions).click();
+      cy.url().should('include', '?tab=Versies');
+
+      cy.get(document.documentPreviewSidebar.tabs.details).click();
+      cy.url().should('not.include', '?tab=Versies');
+      cy.url().should('not.include', '?tab=Ondertekenen');
+    });
+
+    it('check details tab', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+
+      cy.get(document.previewDetailsTab.delete); // BIS version
+      cy.get(document.previewDetailsTab.edit);
+      cy.get(document.previewDetailsTab.sourceFile);
+      // switch version
+      cy.intercept('GET', '/pieces/*/file').as('getFileType');
+      cy.get(document.documentPreviewSidebar.tabs.versions).click()
+        .wait('@getFileType');
+      cy.get(document.previewVersionCard.name).contains('VR 2022 2204 DOC.0001-1.docx')
+        .parents(document.previewVersionCard.container)
+        .click();
+      // check again
+      cy.get(document.documentPreviewSidebar.tabs.details).click();
+      cy.get(document.previewDetailsTab.delete).should('not.exist'); // previous version
+      cy.get(document.previewDetailsTab.edit);
+      // * remove signed piece not tested yet
+
+      // confidential file
+      cy.visit('document/6374F2FBD9A98BD0A2288552');
+      cy.get(document.documentPreview.downloadLink);
+      cy.get(document.previewDetailsTab.delete);
+      cy.get(document.previewDetailsTab.edit);
+      cy.get(auk.alert.message).should('not.exist');
+      cy.get(document.previewDetailsTab.sourceFileDownload);
+    });
+
+    it('check signatures tab', () => {
+      // agendaitem document
+      cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Ondertekenen');
+      cy.get(document.previewSignaturesTab.markForSignflow);
+
+      // decision document
+      cy.visit('document/6374F736D9A98BD0A2288574?tab=Ondertekenen');
+      cy.get(document.previewSignaturesTab.markForSignflow);
+
+      // TODO-setup for notulen
+      // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
+      // cy.get(route.agendaitemMinutes.createEdit).click();
+      // cy.get(route.agendaitemMinutes.editor.updateContent).click();
+      // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
+      // cy.get(route.agendaitemMinutes.editor.save).click()
+      //   .wait('@patchMinutes');
+      // cy.get(document.documentCard.name.value)
+      //   .invoke('removeAttr', 'target')
+      //   .parent()
+      //   .click();
+      // // check notulen document
+      // cy.get(document.documentPreviewSidebar.tabs.signatures).click();
+      // cy.get(document.previewSignaturesTab.markForSignflow);
+    });
+
+    it('check version tab', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Versies');
+      cy.get(document.previewVersionCard.container).contains('VR 2022 2204 DOC.0001');
+      cy.get(document.previewVersionCard.container).contains('Geüpload op');
+      cy.get(document.previewVersionCard.container).contains('Rechten gewijzigd op');
+    });
+  });
+
+  context('Profile rights checks for search routes', () => {
+    it('check search/all-types route', () => {
+      cy.visit('zoeken/alle-types');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+    });
+
+    it('check search/cases route', () => {
+      cy.visit('zoeken/dossiers');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchCases.removedCasesList);
+      cy.get(route.searchConfidentialOnly.checkbox);
+    });
+
+    it('check search/agendaitems route', () => {
+      cy.visit('zoeken/agendapunten');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchAgendaitems.filter.type);
+      cy.get(route.searchAgendaitems.filter.finalAgenda);
+    });
+
+    it('check search/documents route', () => {
+      cy.visit('zoeken/documenten');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchConfidentialOnly.checkbox);
+      cy.get(route.searchDocumentTypeFilter.list);
+    });
+
+    it('check search/decisions route', () => {
+      cy.visit('zoeken/beslissingen');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchDecisions.filterContainer);
+    });
+
+    it('check search/newsletters route', () => {
+      cy.visit('zoeken/kort-bestek');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+    });
+  });
 });

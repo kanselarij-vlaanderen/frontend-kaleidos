@@ -61,6 +61,7 @@
       </Auk::KeyValue>
       {{#if this.isReplacingSourceFile}}
         <Auk::FileUploader
+          @multiple={{false}}
           @onUpload={{set this "replacementSourceFile"}}
           @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
         />
@@ -166,6 +167,7 @@
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-details-panel-source-file-download
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"

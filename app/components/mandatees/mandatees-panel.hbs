@@ -1,21 +1,17 @@
-<div class="auk-u-mb-8">
-  {{#if this.isEditing}}
-    <Mandatees::MandateesPanel::MandateesPanelEdit
-      @referenceDate={{@referenceDate}}
-      @mandatees={{@mandatees}}
-      @submitter={{@submitter}}
-      @onCancel={{this.cancelEditing}}
-      @onSave={{perform this.save}}
-    />
-  {{else}}
-    <div class="auk-u-mb-3">
-      <Mandatees::MandateesPanel::MandateesPanelView
-        @mandatees={{@mandatees}}
-        @submitter={{@submitter}}
-        @showEditButton={{@allowEditing}}
-        @onClickEdit={{this.startEditing}}
-        @emptyStateMessage={{@emptyStateMessage}}
-      />
-    </div>
-  {{/if}}
-</div>
+{{#if this.isEditing}}
+  <Mandatees::MandateesPanel::MandateesPanelEdit
+    @referenceDate={{@referenceDate}}
+    @mandatees={{@mandatees}}
+    @submitter={{@submitter}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{perform this.save}}
+  />
+{{else}}
+  <Mandatees::MandateesPanel::MandateesPanelView
+    @mandatees={{@mandatees}}
+    @submitter={{@submitter}}
+    @showEditButton={{@allowEditing}}
+    @onClickEdit={{this.startEditing}}
+    @emptyStateMessage={{@emptyStateMessage}}
+  />
+{{/if}}
