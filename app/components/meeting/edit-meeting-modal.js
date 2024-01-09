@@ -331,7 +331,10 @@ export default class MeetingEditMeetingComponent extends Component {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
-          currentPlannedStart !== this.startDate ||
+          (currentPlannedStart.getDate() !== this.startDate.getDate() ||
+          currentPlannedStart.getMonth() !== this.startDate.getMonth() ||
+          currentPlannedStart.getFullYear() !== this.startDate.getFullYear()) ||
+
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
           if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
