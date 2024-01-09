@@ -602,6 +602,14 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+.au-u-flex-item--shrink {
+  flex: 0 1 0 !important;
+}
+
+.au-u-flex-item--fixed {
+  flex: 0 0 auto !important;
+}
+
 // TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed
 .au-c-content {
   #attendees,
