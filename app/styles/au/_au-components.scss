@@ -602,6 +602,12 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+.au-c-link {
+  .au-c-icon {
+    flex: 0 0 auto;
+  }
+}
+
 .au-u-flex-item--shrink {
   flex: 0 1 0 !important;
 }
