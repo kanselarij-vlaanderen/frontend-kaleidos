@@ -42,7 +42,10 @@ export default class SignaturesOngoingDecisionsController extends Controller {
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[3];
-  @tracked sort = '-decision-activity.start-date';
+  @tracked sort = [
+    '-meeting.planned-start',
+    'sign-subcase.sign-marking-activity.piece.name',
+  ].join(',');
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
