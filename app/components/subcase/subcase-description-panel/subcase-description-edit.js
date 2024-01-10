@@ -4,7 +4,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -93,15 +92,7 @@ export default class SubcaseDescriptionEdit extends Component {
     this.isSaving = false;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
   async updateDecisionReports() {
-    if (this.enableDigitalAgenda) {
       const reports = await this.store.query('report', {
         'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
         'filter[:has-no:next-piece]': true,
@@ -117,7 +108,6 @@ export default class SubcaseDescriptionEdit extends Component {
           await report.save();
         }
       }
-    }
   }
 
   updateReportName(report, agendaitemTypeUri) {

@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isPresent } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { enableVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -40,7 +40,7 @@ export default class AgendaitemControls extends Component {
   }
 
   loadCanSendToVP = task(async () => {
-    if (!this.enableVlaamsParlement || !this.subcase) {
+    if (enableVlaamsParlement() || !this.subcase) {
       this.canSendToVP = false;
       return;
     }
@@ -89,13 +89,6 @@ export default class AgendaitemControls extends Component {
     return (
       (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
       this.canSendToVP
-    );
-  }
-
-  get enableVlaamsParlement() {
-    return (
-      ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
-      ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
     );
   }
 
