@@ -1309,5 +1309,6 @@
   "remarks": "Opmerkingen",
   "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd",
   "documents-sent-on": "Documenten doorgestuurd op",
-  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd",
+  "started-by": "Opgestart door"
 }

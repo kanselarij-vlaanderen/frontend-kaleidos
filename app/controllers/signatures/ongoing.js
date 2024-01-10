@@ -4,6 +4,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class SignaturesOngoingController extends Controller {
   @service router;
@@ -28,18 +29,29 @@ export default class SignaturesOngoingController extends Controller {
       },
       statuses: {
         type: 'array',
-      }
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
     },
   ];
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[3];
-  @tracked sort = '-decision-activity.start-date';
+  @tracked sort = [
+    '-decision-activity.start-date',
+    'decision-activity',
+    'sign-subcase.sign-marking-activity.piece.name',
+  ].join(',');
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
-  @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED]
-
+  @tracked dateFrom;
+  @tracked dateTo;
+  @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED];
 
   isConfidential = (accessLevel) => {
     return [
@@ -82,6 +94,16 @@ export default class SignaturesOngoingController extends Controller {
     this.mandatees = mandatees;
   }
 
+  @action
+  setDateFrom(date) {
+    this.dateFrom = formatDate(date);
+  }
+
+  @action
+  setDateTo(date) {
+    this.dateTo = formatDate(date);
+  }
+
   getMandateeNames = async (signFlow) => {
     const signSubcase = await signFlow.signSubcase;
     const signSigningActivities = await signSubcase.signSigningActivities;
@@ -95,5 +117,5 @@ export default class SignaturesOngoingController extends Controller {
         .map((mandatee) => mandatee.person)
     );
     return persons.map((person) => person.fullName);
-  }
+  };
 }
