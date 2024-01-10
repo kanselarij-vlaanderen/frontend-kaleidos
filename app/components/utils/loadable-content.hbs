@@ -12,8 +12,8 @@
     </div>
   {{/if}}
   {{#if @isLoading}}
-    <div class="auk-loader-wrapper auk-loader-wrapper--small">
-      <Auk::Loader />
+    <div class="au-u-flex au-u-flex--column au-u-flex--center au-u-flex--vertical-center au-u-text-center">
+      <AuLoader @padding="small" @disableMessage={{true}} />
     </div>
   {{/if}}
 </div>

@@ -473,6 +473,20 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+// Loader
+
+.au-c-loader__animation {
+  height: 1.6rem + $au-unit;
+
+  .au-c-loader--small & {
+    height: 1.6rem;
+  }
+
+  .au-c-loader--large & {
+    height: 1.6rem + $au-unit-large;
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {
@@ -614,6 +628,14 @@ $au-label-color: var(--au-gray-700);
 
 .au-u-flex-item--fixed {
   flex: 0 0 auto !important;
+}
+
+.au-u-maximize-width {
+  width: 100% !important;
+}
+
+.au-u-maximize-height {
+  height: 100% !important;
 }
 
 // TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed
