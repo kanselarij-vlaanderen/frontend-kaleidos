@@ -12,6 +12,12 @@ const additionalAllowedAttributes = {
       values: ['attendees', 'absentees'],
     },
   ],
+  'section': [
+    {
+      name: 'id',
+      values: ['agendaitems', 'announcements'],
+    },
+  ],
 };
 
 export default class SanitizeHtmlComponent extends Component {

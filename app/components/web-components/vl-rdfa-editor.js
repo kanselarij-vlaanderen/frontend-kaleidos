@@ -6,6 +6,28 @@ import { isPresent } from '@ember/utils';
 
 import { Schema } from '@lblod/ember-rdfa-editor';
 
+export const section_rdfa = {
+  content: 'block+',
+  group: 'block',
+  attrs: {
+    id: { default: null },
+    class: { default: null }
+  },
+  defining: true,
+  parseDOM: [
+    {
+      tag: `section`,
+      getAttrs(node) {
+        console.log(node)
+        return {id: node.getAttribute("id"), class: node.getAttribute("class")}
+      },
+    },
+  ],
+  toDOM(node) {
+    return ['section', node.attrs, 0];
+  },
+}
+
 import {
   block_rdfa,
   doc,
@@ -75,6 +97,7 @@ export default class WebComponentsVlRdfaEditor extends Component {
       nodes: {
         doc,
         paragraph,
+        section_rdfa,
         repaired_block,
         list_item,
         ordered_list,

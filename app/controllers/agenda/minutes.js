@@ -44,18 +44,18 @@ function renderAttendees(attendees) {
 
 async function renderNotas(meeting, notas, intl, store) {
   return `
-  <div id="agendaitems">
+  <section id="agendaitems">
   ${await renderAgendaitemList(meeting, notas, intl, store)}
-  </div>
+  </section>
   `;
 }
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-  <div id="announcements">
+  <section id="announcements">
     <h4><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
-  </div>
+  </section>
   `;
 }
 
@@ -164,7 +164,11 @@ async function updateMinutesNotas(data, intl, store) {
   const contentElement = document.createElement('template');
   contentElement.innerHTML = editorContent;
 
-  contentElement.content.querySelector('#agendaitems').innerHTML = newNotas;
+  const notasText = contentElement.content.querySelector('#agendaitems')?.outerHTML;
+  if (notasText) {
+    contentElement.content.querySelector('#agendaitems').outerHTML = newNotas;
+  }
+  // error? block should be found.
   
   return contentElement.innerHTML;
 }
@@ -176,7 +180,11 @@ async function updateMinutesAnnouncements(data, intl, store) {
   const contentElement = document.createElement('template');
   contentElement.innerHTML = editorContent;
 
-  contentElement.content.querySelector('#announcements').innerHTML = newAnnouncements;
+  const announcementsText = contentElement.content.querySelector('#announcements')?.outerHTML;
+  if (announcementsText) {
+    contentElement.content.querySelector('#announcements').outerHTML = newAnnouncements;
+  }
+  // error? block should be found.
 
   return contentElement.innerHTML;
 }
