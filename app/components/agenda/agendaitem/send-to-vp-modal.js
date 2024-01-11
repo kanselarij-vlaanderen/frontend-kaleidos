@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { groupBySubcaseName } from 'frontend-kaleidos/utils/vp';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SendToVpModalComponent extends Component {
@@ -72,41 +73,14 @@ export default class SendToVpModalComponent extends Component {
     );
   }
 
-  groupBySubcaseName (pieces) {
-    let subcasesWithPieces = [];
-    let subcasesObject = {};
-    for (const pieceDescription of pieces) {
-      if (pieceDescription.subcaseName) {
-        if (!subcasesObject[pieceDescription.subcaseName]) {
-          subcasesObject[pieceDescription.subcaseName] = [];
-        }
-        subcasesObject[pieceDescription.subcaseName].push(pieceDescription);
-      } else {
-        if (!subcasesObject.default) {
-          subcasesObject.default = [];
-        }
-        subcasesObject.default.push(pieceDescription);
-      }
-    }
-    for (const subcaseName in subcasesObject) {
-      if (Object.prototype.hasOwnProperty.call(subcasesObject, subcaseName)) {
-        subcasesWithPieces.push({
-          subcaseName: subcaseName !== 'default' ? subcaseName : undefined,
-          pieces: subcasesObject[subcaseName]
-        })
-      }
-    }
-    return subcasesWithPieces;
-  }
-
   async loadPiecesToBeSent () {
     this.piecesToBeSent = await this.parliamentService.getPiecesReadyToBeSent(this.args.agendaitem);
     if (this.piecesToBeSent) {
       if (this.piecesToBeSent.ready) {
-        this.subcasesWithPieces = this.groupBySubcaseName(this.piecesToBeSent.ready);
+        this.subcasesWithPieces = groupBySubcaseName(this.piecesToBeSent.ready);
       }
       if (this.piecesToBeSent.missing && this.piecesToBeSent.missing.length > 0) {
-        this.subcasesWithMissingPieces = this.groupBySubcaseName(this.piecesToBeSent.missing);
+        this.subcasesWithMissingPieces = groupBySubcaseName(this.piecesToBeSent.missing);
         this.isComplete = false;
       } else {
         this.isComplete = !!this.internalDecisionPublicationActivity?.startDate;

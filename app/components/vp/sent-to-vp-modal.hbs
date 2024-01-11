@@ -15,14 +15,14 @@
         <ul class="au-u-margin-top">
           {{#each this.subcaseWithPieces.value as |subcaseWithPieces|}}
             <li>
-              {{#if subcaseWithPieces.subcase.subcaseName}}
-                {{capitalize subcaseWithPieces.subcase.subcaseName}}:
+              {{#if subcaseWithPieces.subcaseName}}
+                {{capitalize subcaseWithPieces.subcaseName}}:
                 <ul>
                   {{#each subcaseWithPieces.pieces as |o|}}
                     <li>
-                      <LinkTo @route="document" @model={{o.piece.id}}>
-                        {{o.piece.name}}
-                        {{this.submittedPieceList o.submittedPiece}}
+                      <LinkTo @route="document" @model={{o.id}}>
+                        {{o.name}}
+                        {{this.submittedPieceList o}}
                       </LinkTo>
                     </li>
                   {{/each}}
@@ -30,9 +30,9 @@
               {{else}}
                 {{#each subcaseWithPieces.pieces as |o|}}
                   <li>
-                    <LinkTo @route="document" @model={{o.piece.id}}>
-                      {{o.piece.name}}
-                      {{this.submittedPieceList o.submittedPiece}}
+                    <LinkTo @route="document" @model={{o.id}}>
+                      {{o.name}}
+                      {{this.submittedPieceList o}}
                     </LinkTo>
                   </li>
                 {{/each}}
