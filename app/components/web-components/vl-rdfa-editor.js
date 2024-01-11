@@ -10,16 +10,16 @@ export const section_rdfa = {
   content: 'block+',
   group: 'block',
   attrs: {
-    id: { default: null },
-    class: { default: null }
+    "data-section": { default: null },
   },
   defining: true,
+  isolating: true, // to ensure these blocks can't be joined into 1
   parseDOM: [
     {
       tag: `section`,
       getAttrs(node) {
         console.log(node)
-        return {id: node.getAttribute("id"), class: node.getAttribute("class")}
+        return {"data-section": node.getAttribute("data-section")}
       },
     },
   ],

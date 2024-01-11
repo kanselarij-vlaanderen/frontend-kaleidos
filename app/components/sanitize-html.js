@@ -14,7 +14,7 @@ const additionalAllowedAttributes = {
   ],
   'section': [
     {
-      name: 'id',
+      name: 'data-section',
       values: ['agendaitems', 'announcements'],
     },
   ],

@@ -44,7 +44,7 @@ function renderAttendees(attendees) {
 
 async function renderNotas(meeting, notas, intl, store) {
   return `
-  <section id="agendaitems">
+  <section data-section="agendaitems">
   ${await renderAgendaitemList(meeting, notas, intl, store)}
   </section>
   `;
@@ -52,7 +52,7 @@ async function renderNotas(meeting, notas, intl, store) {
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-  <section id="announcements">
+  <section data-section="announcements">
     <h4><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
   </section>
@@ -164,11 +164,11 @@ async function updateMinutesNotas(data, intl, store) {
   const contentElement = document.createElement('template');
   contentElement.innerHTML = editorContent;
 
-  const notasText = contentElement.content.querySelector('#agendaitems')?.outerHTML;
+  const notasText = contentElement.content.querySelector('[data-section="agendaitems"]')?.outerHTML;
   if (notasText) {
-    contentElement.content.querySelector('#agendaitems').outerHTML = newNotas;
+    contentElement.content.querySelector('[data-section="agendaitems"]').outerHTML = newNotas;
   }
-  // error? block should be found.
+  // error? block should be found or button should not have been shown
   
   return contentElement.innerHTML;
 }
@@ -180,11 +180,11 @@ async function updateMinutesAnnouncements(data, intl, store) {
   const contentElement = document.createElement('template');
   contentElement.innerHTML = editorContent;
 
-  const announcementsText = contentElement.content.querySelector('#announcements')?.outerHTML;
+  const announcementsText = contentElement.content.querySelector('[data-section="announcements"]')?.outerHTML;
   if (announcementsText) {
-    contentElement.content.querySelector('#announcements').outerHTML = newAnnouncements;
+    contentElement.content.querySelector('[data-section="announcements"]').outerHTML = newAnnouncements;
   }
-  // error? block should be found.
+  // else error? block should be found or button should not have been shown (manually deleted maybe (PVV / EP / BM))
 
   return contentElement.innerHTML;
 }
@@ -194,8 +194,8 @@ async function renderMinutes(data, intl, store) {
 
   let newMinutesContent = `${renderAttendees(attendees)}
 ${renderAbsentees()}
-${notas ? await renderNotas(meeting, notas, intl, store) : ''}
-${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
+${notas.length ? await renderNotas(meeting, notas, intl, store) : ''}
+${announcements.length ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
 ${renderNextMeeting(meeting, intl)}`;
 
   if (editorContent) {
@@ -246,7 +246,6 @@ export default class AgendaMinutesController extends Controller {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
-  @tracked editorShowContentUpdateButton = true;
 
   loadCurrentPiecePart = task(async () => {
     if (!this.model.minutes) return null;
@@ -394,14 +393,6 @@ export default class AgendaMinutesController extends Controller {
     this.editor = editor;
     if (this.currentPiecePartTask?.value) {
       this.editor.setHtmlContent(this.currentPiecePartTask.value.htmlContent);
-      const htmlContentIncludesAgendaitems = 
-        this.currentPiecePartTask.value.htmlContent.toString().includes("id=\"agendaitems\"");
-      const htmlContentIncludesAnnouncements = 
-        this.currentPiecePartTask.value.htmlContent.toString().includes("id=\"announcements\"");
-
-      if (htmlContentIncludesAgendaitems && htmlContentIncludesAnnouncements) {
-        this.editorShowContentUpdateButton = false;
-      }
     }
   }
 
@@ -428,6 +419,24 @@ export default class AgendaMinutesController extends Controller {
       agenda: this.agenda,
       meeting: this.meeting,
     };
+  }
+
+  get editorShowContentNotasButton() {
+    if (this.currentPiecePartTask?.value) {
+      return this.currentPiecePartTask.value.htmlContent.toString().includes("data-section=\"agendaitems\"");
+    }
+    return false;
+  }
+
+  get editorShowContentAnnouncementsButton() {
+    if (this.currentPiecePartTask?.value) {
+      return this.currentPiecePartTask.value.htmlContent.toString().includes("data-section=\"announcements\"");
+    }
+    return false;
+  }
+
+  get editorShowContentUpdateButton() {
+    return !(this.editorShowContentNotasButton && this.editorShowContentAnnouncementsButton);
   }
 
   @action
