@@ -20,6 +20,7 @@ export default class IndexSearchRoute extends Route {
     const queryParams = {
       searchText: null,
       mandatees: null,
+      governmentAreas: null,
       dateFrom: null,
       dateTo: null,
       page: 0,
