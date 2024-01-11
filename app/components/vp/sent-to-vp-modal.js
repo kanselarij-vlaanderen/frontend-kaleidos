@@ -23,7 +23,7 @@ export default class SentToVpModalComponent extends Component {
       } else {
         // Might be a report, get the subcase via the decision activity
         const decisionActivity = await piece.decisionActivity;
-        subcase = await decisionActivity.subcase;
+        subcase = await decisionActivity?.subcase;
       }
 
       if (!subcase) {
