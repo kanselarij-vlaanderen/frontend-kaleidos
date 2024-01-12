@@ -18,7 +18,6 @@ export const section_rdfa = {
     {
       tag: `section`,
       getAttrs(node) {
-        console.log(node)
         return {"data-section": node.getAttribute("data-section")}
       },
     },
