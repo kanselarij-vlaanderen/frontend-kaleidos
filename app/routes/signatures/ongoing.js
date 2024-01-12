@@ -96,11 +96,11 @@ export default class SignaturesOngoingRoute extends Route {
     filter['decision-activity'] = {};
     if (isPresent(params.dateFrom)) {
       const date = startOfDay(parseDate(params.dateFrom));
-      filter['decision-activity'][':gte:start-date'] = date.toISOString()
+      filter['decision-activity'][':gte:start-date'] = date.toISOString().slice(0, 10);
     }
     if (isPresent(params.dateTo)) {
       const date = endOfDay(parseDate(params.dateTo));
-      filter['decision-activity'][':lte:start-date'] = date.toISOString();
+      filter['decision-activity'][':lte:start-date'] = date.toISOString().slice(0, 10);
     }
 
     this.lastParams.commit();
