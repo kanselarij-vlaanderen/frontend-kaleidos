@@ -4,7 +4,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { groupBySubcaseName } from 'frontend-kaleidos/utils/vp';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SendToVpModalComponent extends Component {
   /**
@@ -28,11 +27,6 @@ export default class SendToVpModalComponent extends Component {
   @tracked internalDecisionPublicationActivity;
 
   isComplete = false;
-  BESLISSINGSFICHE;
-  DECREET;
-  MEMORIE;
-  NOTA;
-  ADVIES;
 
   constructor() {
     super(...arguments);
@@ -45,33 +39,9 @@ export default class SendToVpModalComponent extends Component {
   }
 
   loadData = task(async () => {
-    await this.loadDocumentTypes();
     await this.loadInternalDecisionPublicationActivity();
     await this.loadPiecesToBeSent();
   });
-
-  async loadDocumentTypes() {
-    this.BESLISSINGSFICHE = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE
-    );
-    this.DECREET = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.DECREET
-    );
-    this.MEMORIE = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.MEMORIE
-    );
-    this.NOTA = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.NOTA
-    );
-    this.ADVIES = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DOCUMENT_TYPES.ADVIES
-    );
-  }
 
   async loadPiecesToBeSent () {
     this.piecesToBeSent = await this.parliamentService.getPiecesReadyToBeSent(this.args.agendaitem);

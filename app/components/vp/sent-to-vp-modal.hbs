@@ -20,7 +20,7 @@
                 <ul>
                   {{#each subcaseWithPieces.pieces as |o|}}
                     <li>
-                      <LinkTo @route="document" @model={{o.id}}>
+                      <LinkTo @route="document" @model={{o.piece.id}}>
                         {{o.name}}
                         {{this.submittedPieceList o}}
                       </LinkTo>
@@ -30,7 +30,7 @@
               {{else}}
                 {{#each subcaseWithPieces.pieces as |o|}}
                   <li>
-                    <LinkTo @route="document" @model={{o.id}}>
+                    <LinkTo @route="document" @model={{o.piece.id}}>
                       {{o.name}}
                       {{this.submittedPieceList o}}
                     </LinkTo>

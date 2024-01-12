@@ -33,15 +33,22 @@ export default class ParliamentService extends Service {
   };
 
   async sendToVP(agendaitem, pieces, comment, isComplete) {
-    const params = new URLSearchParams({
+    const params = {
       agendaitem: agendaitem.uri,
       pieces: pieces.map(piece => piece.uri),
       isComplete: isComplete,
       ...(comment ? { comment: comment } : null),
-    });
+    };
     const response = await fetch(
-      `/vlaams-parlement-sync/?${params}`,
-      { headers: { Accept: 'application/vnd.api+json' }, method: 'POST' }
+      `/vlaams-parlement-sync/`,
+      {
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+          Accept: 'application/vnd.api+json'
+        },
+        method: 'POST',
+        body: JSON.stringify(params)
+      }
     );
 
     if (!response.ok) {
