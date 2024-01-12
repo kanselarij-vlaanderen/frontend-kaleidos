@@ -423,14 +423,14 @@ export default class AgendaMinutesController extends Controller {
 
   get editorShowContentNotasButton() {
     if (this.currentPiecePartTask?.value) {
-      return this.currentPiecePartTask.value.htmlContent.toString().includes("data-section=\"agendaitems\"");
+      return this.editor?.htmlContent.toString().includes("data-section=\"agendaitems\"");
     }
     return false;
   }
 
   get editorShowContentAnnouncementsButton() {
     if (this.currentPiecePartTask?.value) {
-      return this.currentPiecePartTask.value.htmlContent.toString().includes("data-section=\"announcements\"");
+      return this.editor?.htmlContent.toString().includes("data-section=\"announcements\"");
     }
     return false;
   }
