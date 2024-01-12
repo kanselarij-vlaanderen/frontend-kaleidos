@@ -84,6 +84,14 @@ export default class SignaturesOngoingDecisionsController extends Controller {
       }
     }
   }
+  
+  @action
+  async onClickRow (signFlow) {
+    if (await this.isRowDisabled(signFlow)) {
+      return;
+    }
+    await this.navigateToSignFlow(signFlow);
+  }
 
   @action
   onChangeStatus(statuses) {
@@ -98,6 +106,16 @@ export default class SignaturesOngoingDecisionsController extends Controller {
   @action
   setDateTo(date) {
     this.dateTo = formatDate(date);
+  }
+
+  @action
+  async isRowDisabled(row) {
+    if (this.currentSession.may('view-all-ongoing-signatures')) {
+      return false;
+    }
+
+    const creator = await row.creator;
+    return creator.id !== this.currentSession.user.id;
   }
 
   getMeetingDate = async (signFlowOrPromise) => {

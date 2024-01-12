@@ -47,7 +47,8 @@
       @totalNumberOfItems={{@model.meta.count}}
       @onChangeSize={{fn (mut this.size)}}
       @onChangePage={{fn (mut this.page)}}
-      @onClickRow={{this.navigateToSignFlow}}
+      @onClickRow={{this.onClickRow}}
+      @shouldDisableRow={{this.isRowDisabled}}
       >
       <:header>
         <th class="auk-table__col--4">{{t "document-name"}}</th>
@@ -103,7 +104,11 @@
             <SignaturePill
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
-              @isClickable={{false}}
+              @isClickable={{
+                or 
+                  (not (await (this.isRowDisabled signFlow))) 
+                  signFlow.isSigned
+              }}
             />
           </td>
         {{/let}}

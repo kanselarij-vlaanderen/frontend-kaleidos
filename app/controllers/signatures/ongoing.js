@@ -85,6 +85,14 @@ export default class SignaturesOngoingController extends Controller {
   }
 
   @action
+  async onClickRow (signFlow) {
+    if (await this.isRowDisabled(signFlow)) {
+      return;
+    }
+    await this.navigateToSignFlow(signFlow);
+  }
+
+  @action
   onChangeStatus(statuses) {
     this.statuses = statuses;
   }
@@ -102,6 +110,16 @@ export default class SignaturesOngoingController extends Controller {
   @action
   setDateTo(date) {
     this.dateTo = formatDate(date);
+  }
+
+  @action
+  async isRowDisabled(row) {
+    if (this.currentSession.may('view-all-ongoing-signatures')) {
+      return false;
+    }
+
+    const creator = await row.creator;
+    return creator.id !== this.currentSession.user.id;
   }
 
   getMandateeNames = async (signFlow) => {
