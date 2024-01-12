@@ -6,7 +6,6 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addBusinessDays, setHours, setMinutes } from 'date-fns';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-import ENV from 'frontend-kaleidos/config/environment';
 const DEFAULT_SORT_OPTIONS = [
   '-created-for.agenda.status.label',
   '-created-for.planned-start',
@@ -142,13 +141,6 @@ export default class AgendasController extends Controller {
     this.sortAgendas = newSortAgendas;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
   @action
   setSizeOption(size) {
     this.sizeAgendas = size;
@@ -205,19 +197,16 @@ export default class AgendasController extends Controller {
 
     // default decision result when flag is turned off
     let decisionResultCode = null;
-    if (!this.enableDigitalAgenda) {
-      decisionResultCode = await this.store.findRecordByUri(
-        'concept',
-        CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-      );
-    }
+    decisionResultCode = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+    );
 
     // meeting secretary
     let secretary;
-    if (this.enableDigitalAgenda) {
-      const meetingSecretary = await newMeeting.secretary;
-      secretary = this.enableDigitalAgenda ? meetingSecretary : null;
-    }
+    const meetingSecretary = await newMeeting.secretary;
+    secretary =  meetingSecretary;
+    
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       decisionResultCode,

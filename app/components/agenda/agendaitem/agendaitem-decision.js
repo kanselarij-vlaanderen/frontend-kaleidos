@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
@@ -796,11 +795,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   get enableDigitalAgenda() {
-    return (
-      (ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-        ENV.APP.ENABLE_DIGITAL_AGENDA === true) &&
-      !this.args.agendaContext.meeting.isPreDigitalDecisions
-    );
+    return !this.args.agendaContext.meeting.isPreDigitalDecisions;
   }
 
   get mayEditDecisionReport() {
