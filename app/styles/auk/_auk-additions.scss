@@ -193,6 +193,15 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-table-row-disabled {
+  opacity: .7 !important;
+  cursor: not-allowed;
+
+  &:hover td {
+    background-color: transparent !important;
+  }
+}
+
 // Button
 
 .auk-button {
