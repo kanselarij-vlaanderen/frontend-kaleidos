@@ -1,10 +1,11 @@
-<WebComponents::VlAlert
+<AuAlert
   data-test-system-alert
-  class="vl-alert-relative vl-alert-relative--center"
   aria-live="assertive"
+  class="auk-system-alert"
   @title={{@title}}
-  @message={{@message}}
-  @type={{this.type}}
-  @closeable={{true}}
+  @skin={{this.type}}
+  @closable={{true}}
   @onClose={{@onClose}}
-/>
+>
+  <p>{{@message}}</p>
+</AuAlert>
