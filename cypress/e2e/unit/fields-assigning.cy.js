@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();

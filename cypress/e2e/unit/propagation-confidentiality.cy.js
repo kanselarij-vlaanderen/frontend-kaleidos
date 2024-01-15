@@ -1,8 +1,8 @@
 /* global context, it, cy, afterEach */
 // / <reference types="Cypress" />
 
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function checkAccess(docName, hasAccess = true) {
   cy.get(document.documentCard.name.value).contains(docName)

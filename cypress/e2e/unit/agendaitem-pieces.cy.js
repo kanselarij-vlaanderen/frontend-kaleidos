@@ -2,10 +2,10 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Tests of pieces on agendaitems', () => {
   beforeEach(() => {

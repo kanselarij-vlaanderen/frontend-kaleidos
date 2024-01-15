@@ -4,6 +4,7 @@
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 // import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Publications proofs tests', () => {
   beforeEach(() => {

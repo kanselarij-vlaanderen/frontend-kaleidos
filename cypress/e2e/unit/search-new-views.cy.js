@@ -5,6 +5,7 @@ import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {

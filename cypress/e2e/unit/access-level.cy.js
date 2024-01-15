@@ -5,6 +5,7 @@ import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 const accessPublic = 'Publiek';
 const accessGovernment = 'Intern Overheid';
