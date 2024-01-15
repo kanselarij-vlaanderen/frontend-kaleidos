@@ -67,6 +67,7 @@ export default class SignatureService extends Service {
     const response = await uploadPiecesToSigninghub(signFlows);
     if (!response.ok) {
       for (let signFlow of signFlows) {
+        await signFlow.reload();
         await signFlow.belongsTo('status').reload();
         await signFlow.belongsTo('creator').reload();
       }
