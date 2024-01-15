@@ -62,19 +62,19 @@ context('Agenda reopen previous tests', () => {
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(designAgendaC);
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(approvedagendaB);
     cy.get(agenda.agendaVersionActions.reopenModal.warning).should('exist');
     cy.get(agenda.agendaVersionActions.reopenModal.piece).should('have.length', 1);
     cy.get(agenda.agendaVersionActions.reopenModal.pieceName).contains(`${file.fileName}.${file.fileExtension}`);
-    cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
+    cy.get(appuniversum.loader).should('not.exist'); // data loading task might be running, disabling the next button
     cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).contains(reopenPreviousVersionWithDocuments)
       .click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // reopen agenda A, no documents
     cy.get(agenda.agendaVersionActions.optionsDropdown)
@@ -83,19 +83,19 @@ context('Agenda reopen previous tests', () => {
     cy.get(agenda.agendaVersionActions.actions.reopenPreviousVersion).forceClick();
     // Check the message in the confirm modal
     cy.get(auk.modal.header.title).contains(reopenPreviousVersion);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(appuniversum.alert.message).contains(designAgendaB);
     cy.get(appuniversum.alert.message).contains(approvedagendaA);
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(designAgendaB);
     cy.get(agenda.agendaVersionActions.reopenModal.error).contains(approvedagendaA);
     cy.get(agenda.agendaVersionActions.reopenModal.warning).should('not.exist');
-    cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
+    cy.get(appuniversum.loader).should('not.exist'); // data loading task might be running, disabling the next button
     cy.get(agenda.agendaVersionActions.confirm.reopenPreviousVersion).contains(reopenPreviousVersion)
       .click();
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A');
   });

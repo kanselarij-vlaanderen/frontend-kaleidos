@@ -60,7 +60,7 @@ context('Delete BIS tests', () => {
 
     // cy.openAgendaForDate(agendaDate);
     // cy.openAgendaitemDocumentTab(subcaseTitle1, false);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.versionHistory).should('have.length', 2)
       .find(auk.accordion.header.button)
       .should('not.be.disabled');
@@ -84,12 +84,12 @@ context('Delete BIS tests', () => {
       .wait('@deletePiece')
       .wait('@restoreFile')
       .wait('@piecesFilter');
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
     // TODO-BUG closing the page with the button goes back to previews doc view (with id of deleted BIS and fails)
     // cy.get(auk.auModal.header.close).click(); // closing modal equals a cy.go('back')
-    // cy.get(auk.loader);
-    // cy.get(auk.loader, {
+    // cy.get(appuniversum.loader);
+    // cy.get(appuniversum.loader, {
     //   timeout: 60000,
     // }).should('not.exist');
     cy.openAgendaForDate(agendaDate);
@@ -98,8 +98,8 @@ context('Delete BIS tests', () => {
     cy.get('@documentCard1').should('not.contain', /BIS/);
 
     cy.reload();
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       .should('not.be.disabled');
 
@@ -122,12 +122,12 @@ context('Delete BIS tests', () => {
       .wait('@deleteFile')
       .wait('@deletePiece')
       .wait('@piecesFilter');
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
     // TODO-BUG closing the page with the button goes back to previews doc view (with id of deleted BIS and fails)
     // cy.get(auk.auModal.header.close).click(); // closing modal equals a cy.go('back')
-    // cy.get(auk.loader);
-    // cy.get(auk.loader, {
+    // cy.get(appuniversum.loader);
+    // cy.get(appuniversum.loader, {
     //   timeout: 60000,
     // }).should('not.exist');
     cy.openAgendaForDate(agendaDate);

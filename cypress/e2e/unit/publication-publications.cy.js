@@ -53,7 +53,7 @@ context('Publications proofs tests', () => {
     cy.get(auk.formHelpText).contains('Datum verstreken');
     // check if requestmessage contains the targetEndDate
     cy.get(publication.publicationActivities.request).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(publication.publicationRequest.message).invoke('val')
       .as('value');
     cy.get('@value').should(($p) => {

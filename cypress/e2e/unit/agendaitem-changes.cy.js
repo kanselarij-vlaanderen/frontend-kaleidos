@@ -235,7 +235,7 @@ context('Agendaitem changes tests', () => {
     // After a page reload (or going to the address), the anchor still exists and is used for scrolling
     cy.reload();
     cy.get(agenda.agendaOverview.notesSectionTitle);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
     cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
@@ -276,7 +276,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .click()
       .wait('@patchAgendaitems');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -286,7 +286,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .click()
       .wait('@patchAgendaitems2');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('not.be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -296,7 +296,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .click()
       .wait('@patchAgendaitems3');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -306,7 +306,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .click()
       .wait('@patchAgendaitems4');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('not.be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)

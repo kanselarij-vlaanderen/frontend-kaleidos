@@ -48,7 +48,7 @@ context.skip('Decision tests', () => {
 
     cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 1);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // correct default access rights on non-confidential subcase should be "Intern Overheid"
     cy.get(document.accessLevelPill.pill).contains('Intern Overheid');
@@ -171,7 +171,7 @@ context.skip('Decision tests', () => {
     // cy.wait('@createNewPiece');
     // cy.wait('@patchDecisionActivities');
     // cy.wait('@getPreviousPiece');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     decisionTypes.forEach((type) => {
       cy.get(agenda.decisionResultPill.edit)
@@ -233,7 +233,7 @@ context.skip('Decision tests', () => {
 
     // decision should stay confidential
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
 
@@ -281,7 +281,7 @@ context.skip('Decision tests', () => {
 
     // check decision acceslevel
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
 
@@ -325,7 +325,7 @@ context.skip('Decision tests', () => {
     // cy.get(auk.confirmationModal.footer.confirm).click()
     //   .wait('@postPieces')
     //   .wait('@patchDecisionActivity');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.wait('@getAccessLevel');
     cy.get(document.accessLevelPill.pill).contains('Vertrouwelijk');
 

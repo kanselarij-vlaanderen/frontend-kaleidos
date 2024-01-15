@@ -21,7 +21,7 @@ function visitPublications() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
   cy.visit('/publicaties');
   cy.wait('@getRegulationTypes');
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');
 }

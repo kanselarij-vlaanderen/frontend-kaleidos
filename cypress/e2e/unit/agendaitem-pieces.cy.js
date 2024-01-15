@@ -59,7 +59,7 @@ context('Tests of pieces on agendaitems', () => {
     cy.intercept('GET', '/pieces/62823C417471A1FC25E6DB61/next-piece').as('getNextPiece');
     cy.visit('/document/62823C417471A1FC25E6DB61');
     cy.wait('@getNextPiece');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     // can't delete previous version
     cy.get(document.previewDetailsTab.delete).should('not.exist');
     cy.get(document.documentPreviewSidebar.tabs.versions).click();
@@ -81,7 +81,7 @@ context('Tests of pieces on agendaitems', () => {
       .wait('@deleteFile')
       .wait('@deletePiece')
       .wait('@restoreFile');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
     cy.get(document.documentCard.name.value).eq(1)
       .contains('VR 2020 1212 DOC.0001-2.pdf');
