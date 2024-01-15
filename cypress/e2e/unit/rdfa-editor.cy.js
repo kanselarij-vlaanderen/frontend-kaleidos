@@ -150,13 +150,13 @@ context('rdfa editor tests', () => {
     cy.get(dependency.rdfa.editorInner).type('Ongeordende lijst');
     cy.wait(200);
     cy.get(dependency.rdfa.editorInner).type('{enter}');
-    pressRdfaButton('Lijstniveau lager');
-    cy.get(dependency.rdfa.editorInner).type('Lijstniveau lager');
+    pressRdfaButton('Indentatie vergroten');
+    cy.get(dependency.rdfa.editorInner).type('Indentatie vergroten');
     cy.wait(200);
 
     cy.get(dependency.rdfa.editorInner).type('{enter}');
-    pressRdfaButton('Lijstniveau hoger');
-    cy.get('button').contains('Lijstniveau lager');
+    pressRdfaButton('Indentatie verkleinen');
+    cy.get('button').contains('Indentatie vergroten');
 
     cy.get('del').contains('Strikethrough');
     cy.get('u').contains('Underline');
@@ -165,7 +165,7 @@ context('rdfa editor tests', () => {
     cy.get('sub').contains('Subscript');
     cy.get('sup').contains('Superscript');
     cy.get('ul').contains('Ongeordende lijst');
-    cy.get('li').contains('Lijstniveau lager');
+    cy.get('li').contains('Indentatie vergroten');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click()

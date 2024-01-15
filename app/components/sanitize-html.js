@@ -5,11 +5,18 @@ import { isPresent } from '@ember/utils';
 
 const additionalAllowedTags = ['del'];
 const additionalAllowedAttributes = {
+  '*': ['data-indentation-level'],
   'ol': ['data-list-style'],
   'table': [
     {
       name: 'id',
       values: ['attendees', 'absentees'],
+    },
+  ],
+  'section': [
+    {
+      name: 'data-section',
+      values: ['agendaitems', 'announcements'],
     },
   ],
 };
