@@ -18,6 +18,16 @@
             >
               {{t "add-case"}}
             </AuButton>
+            {{#if this.enableNewCaseCreation}}
+              <AuButton
+                data-test-cases-header-add-case
+                @skin="primary"
+                @icon="plus"
+                {{on "click" this.toggleNewIsOpenNewCaseModal}}
+              >
+                {{t "add-case-new"}}
+              </AuButton>
+            {{/if}}
           {{/if}}
         </Group.Item>
       </Toolbar.Group>

@@ -5,6 +5,7 @@
   "add-attachments": "Documenten opladen",
   "add-attachment": "Document opladen",
   "add-case": "Nieuw dossier aanmaken",
+  "add-case-new": "Nieuw dossier aanmaken (Nieuw)",
   "case-name": "Naam dossier",
   "case-name-concat": "Dossiernaam",
   "add-comment": "Opmerking toevoegen",
@@ -95,6 +96,7 @@
   "create-mandatee": "Minister toevoegen",
   "create-single-newsletter": "Losstaand kort bestek aanmaken",
   "create-subcase": "Procedurestap toevoegen",
+  "create-subcase-new": "Procedurestap toevoegen (nieuw)",
   "created-on": "Aangemaakt op",
   "edited-on": "Bijgewerkt op",
   "current-subcase": "Huidige procedurestap",
@@ -1309,5 +1311,6 @@
   "remarks": "Opmerkingen",
   "no-new-files-will-be-sent": "Er worden geen nieuwe bestanden doorgestuurd",
   "documents-sent-on": "Documenten doorgestuurd op",
-  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd",
+  "general-information": "Algemene info"
 }

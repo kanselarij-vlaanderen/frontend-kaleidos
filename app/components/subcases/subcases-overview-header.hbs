@@ -72,6 +72,18 @@
             {{t "create-subcase"}}
           </AuButton>
         </Auk::Toolbar::Item>
+        {{#if this.isNewCaseCreationEnabled}}
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-subcase-overview-header-create-subcase
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.navigateToAddSubcase}}
+            >
+              {{t "create-subcase-new"}}
+            </AuButton>
+          </Auk::Toolbar::Item>         
+        {{/if}}       
       </Auk::Toolbar::Group>
     {{/if}}
   </Auk::Toolbar>

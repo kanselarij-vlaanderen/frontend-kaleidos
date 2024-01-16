@@ -7,4 +7,11 @@ function enableVlaamsParlement() {
   );
 }
 
-export { enableVlaamsParlement };
+function enableNewCaseCreation() {
+  return (
+    ENV.APP.ENABLE_CASE_CREATION === 'true' ||
+    ENV.APP.ENABLE_CASE_CREATION === true
+  )
+}
+
+export { enableVlaamsParlement, enableNewCaseCreation };
