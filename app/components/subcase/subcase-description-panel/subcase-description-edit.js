@@ -102,7 +102,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
   async updateDecisionReports() {
     if (this.enableDigitalAgenda) {
-      const reports = await this.store.query('report', {
+      const reports = await this.store.queryAll('report', {
         'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
         'filter[:has-no:next-piece]': true,
         sort: '-created',

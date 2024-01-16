@@ -7,7 +7,6 @@ import {
   groupAgendaitemsByGroupname,
   sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PrintNewsletterRoute extends Route {
@@ -35,7 +34,6 @@ export default class PrintNewsletterRoute extends Route {
       },
       include: 'treatment.news-item',
       sort: 'number',
-      'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
 
     // The approval items should not be shown on newsletter views

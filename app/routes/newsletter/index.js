@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class IndexNewsletterRoute extends Route {
@@ -30,7 +29,6 @@ export default class IndexNewsletterRoute extends Route {
       },
       include: 'treatment.news-item',
       sort: params.sort,
-      'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
 
     // The approval items should not be shown on newsletter views
