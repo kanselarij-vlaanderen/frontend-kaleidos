@@ -179,6 +179,7 @@
       </AuLink>
       <AuButton
         @skin="primary"
+        @disabled={{this.saveCase.isRunning}}
         {{on "click" this.saveCase}}
       >
         {{t "new-subcase"}}
