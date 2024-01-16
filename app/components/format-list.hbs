@@ -2,6 +2,6 @@
   {{#if (eq part.type "literal")}}
     {{part.value}}
   {{else if (eq part.type "element")}}
-    {{yield part.value}}
+    {{yield part}}
   {{/if}}
 {{/each}}

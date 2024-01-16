@@ -206,3 +206,10 @@ $say-editor-border-radius: $au-input-border-radius;
     padding: 3rem 4rem;
   }
 }
+
+// selecting block nodes in rdfa-editor are more visual
+.ProseMirror-selectednode {
+  background-color: var(--au-blue-200);
+  outline: 2px solid var(--au-blue-500);
+  color: var(--au-black);
+}

@@ -22,6 +22,7 @@ export default class AgendaitemControls extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service decisionReportGeneration;
+  @service parliamentService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -45,41 +46,18 @@ export default class AgendaitemControls extends Component {
       return;
     }
 
-    // /is-ready-for-vp covers this, but we might be in a postponed
-    // and resubmitted subcase, in which case the whole flow is still
-    // ready but the current agenda item isn't
-    const decisionResultCode = await this.decisionActivity?.decisionResultCode;
-    if (decisionResultCode?.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD) {
-      this.canSendToVP = false;
-      return;
-    }
-
-    const fetchIsReadyForVp = async () => {
-      const decisionmakingFlow = await this.subcase.decisionmakingFlow;
-      const resp = await fetch(
-        `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
-        { headers: { Accept: 'application/vnd.api+json' } }
-      );
-      if (!resp.ok) {
-        return false;
-      } else {
-        const body = await resp.json();
-        return body.isReady;
-      }
-    };
-
     if (this.currentSession.may('send-only-specific-cases-to-vp')) {
       const submitter = await this.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
       if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-        this.canSendToVP = await fetchIsReadyForVp();
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
       } else {
         this.canSendToVP = false;
       }
     } else if (this.currentSession.may('send-cases-to-vp')) {
-      this.canSendToVP = await fetchIsReadyForVp();
+      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
     } else {
       this.canSendToVP = false;
     }
