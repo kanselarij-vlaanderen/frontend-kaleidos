@@ -96,7 +96,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (isPresent(this.altDateToShow)) {
       return this.altDateToShow;
     }
-    if(this.args.piece.file){
+    if (this.args.piece.file) {
       return this.args.piece.file.get("created");
     }
     return this.args.piece.created;
