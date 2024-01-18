@@ -35,7 +35,7 @@
     {{!-- no piece.created in legacy data --}}
     {{#if @piece.created}}
       {{this.labelToShow}}
-      {{datetime-at @piece.modified}}
+      {{datetime-at this.dateToShow}}
     {{/if}}
   </div>
   <div class="vlc-document-card-item__icon">
