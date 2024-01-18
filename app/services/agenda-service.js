@@ -158,9 +158,7 @@ export default class AgendaService extends Service {
     if (isAnnouncement) {
       defaultDecisionResultCodeUri =
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
-    } else {
-      defaultDecisionResultCodeUri = CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    }
+    } // no decision result for nota
 
     let decisionResultCode;
     if (defaultDecisionResultCodeUri) {

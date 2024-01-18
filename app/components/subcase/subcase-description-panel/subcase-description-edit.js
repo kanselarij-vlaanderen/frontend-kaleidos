@@ -93,21 +93,21 @@ export default class SubcaseDescriptionEdit extends Component {
   }
 
   async updateDecisionReports() {
-      const reports = await this.store.query('report', {
-        'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
-        'filter[:has-no:next-piece]': true,
-        sort: '-created',
-      });
-      for (const report of reports) {
-        const pieceParts = await report?.pieceParts;
-        if (pieceParts?.length) {
-          await this.decisionReportGeneration.generateReplacementReport.perform(
-            report
-          );
-          this.updateReportName(report, this.agendaItemType.uri);
-          await report.save();
-        }
+    const reports = await this.store.query('report', {
+      'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-piece]': true,
+      sort: '-created',
+    });
+    for (const report of reports) {
+      const pieceParts = await report?.pieceParts;
+      if (pieceParts?.length) {
+        await this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+        this.updateReportName(report, this.agendaItemType.uri);
+        await report.save();
       }
+    }
   }
 
   updateReportName(report, agendaitemTypeUri) {

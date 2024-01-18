@@ -794,12 +794,12 @@ export default class AgendaitemDecisionComponent extends Component {
     return false;
   }
 
-  get enableDigitalAgenda() {
+  get isMeetingPostDigitalDecisions() {
     return !this.args.agendaContext.meeting.isPreDigitalDecisions;
   }
 
   get mayEditDecisionReport() {
-    return this.enableDigitalAgenda &&
+    return this.isMeetingPostDigitalDecisions &&
       this.currentSession.may('manage-decisions') &&
       (this.pieceParts || !this.report) &&
       (this.hasSignFlow === false || this.hasMarkedSignFlow);
