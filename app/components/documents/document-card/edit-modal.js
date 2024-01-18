@@ -14,7 +14,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @service intl;
   @service toaster;
   @service fileConversionService;
-  @service router;
 
   @tracked isReplacingSourceFile = false;
   @tracked isReplacingDerivedFile = false;
