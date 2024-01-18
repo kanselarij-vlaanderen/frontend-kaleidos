@@ -89,7 +89,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (isPresent(this.dateToShowAltLabel)) {
       return this.dateToShowAltLabel;
     }
-    return this.intl.t('uploaded-at');
+    return this.intl.t('created-on');
   }
 
   get dateToShow() {
