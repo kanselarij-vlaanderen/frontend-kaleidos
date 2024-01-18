@@ -170,7 +170,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     this.uploadedDerivedFile = null;
     this.isDeletingDerivedFile = false;
 
-    this.args.piece.reload();
     this.args.onSave?.();
   });
 }
