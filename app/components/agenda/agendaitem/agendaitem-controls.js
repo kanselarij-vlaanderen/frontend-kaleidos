@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaitemControls extends Component {
@@ -29,25 +28,24 @@ export default class AgendaitemControls extends Component {
   @tracked isDesignAgenda;
   @tracked decisionActivity;
   @tracked showVPModal = false;
-  @tracked hasDecreet = false;
-  @tracked subcase;
   @tracked canSendToVP = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
-    this.loadDecisionActivity.perform()
+    this.loadDecisionActivity.perform();
+    this.loadCanSendToVP.perform();
   }
 
   loadCanSendToVP = task(async () => {
-    if (!this.enableVlaamsParlement || !this.subcase) {
+    if (!this.enableVlaamsParlement || !this.args.subcase) {
       this.canSendToVP = false;
       return;
     }
 
     if (this.currentSession.may('send-only-specific-cases-to-vp')) {
-      const submitter = await this.subcase.requestedBy;
+      const submitter = await this.args.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
@@ -130,18 +128,7 @@ export default class AgendaitemControls extends Component {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    let decreetDocument;
-    if (this.decisionActivity) {
-      yield this.decisionActivity.decisionResultCode;
-      this.subcase = yield this.decisionActivity.subcase;
-      decreetDocument = yield this.store.queryOne('piece', {
-        'filter[document-container][type][:uri:]':
-          CONSTANTS.DOCUMENT_TYPES.DECREET,
-        'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      });
-    }
-    this.hasDecreet = isPresent(decreetDocument);
-    this.loadCanSendToVP.perform();
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   async deleteItem(agendaitem) {
