@@ -107,7 +107,7 @@ export default class SubcaseDescriptionEdit extends Component {
         'filter[:has-no:next-piece]': true,
         sort: '-created',
       });
-      for (const report of reports) {
+      for (const report of reports.slice()) {
         const pieceParts = await report?.pieceParts;
         if (pieceParts?.length) {
           await this.decisionReportGeneration.generateReplacementReport.perform(
