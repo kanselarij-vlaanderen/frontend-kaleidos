@@ -4,6 +4,7 @@ import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class Agendaitem extends ModelWithModifier {
+  @attr('string') uri;
   @attr('number') number;
   @attr('datetime') created;
   @attr('datetime') modified;

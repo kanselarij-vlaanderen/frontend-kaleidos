@@ -8,6 +8,7 @@ import auk from '../../selectors/auk.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
+    cy.wait(500);
     cy.get(route.search.input).clear()
       .type('test');
     cy.get(route.search.trigger).click();

@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 export default class SubmissionsAlertComponent extends Component {
   @service intl;
@@ -38,6 +39,14 @@ export default class SubmissionsAlertComponent extends Component {
     } else {
       return "success";
     }
+  }
+
+  formatDate (date, isLast, at = "om") {
+    let formattedDate = dateFormat(date, `dd-MM-yyyy '${at}' HH:mm`);
+    if (isLast) {
+      formattedDate += '.';
+    }
+    return formattedDate;
   }
 
   @action

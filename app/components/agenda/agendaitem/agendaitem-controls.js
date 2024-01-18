@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isPresent } from '@ember/utils';
 import { enableVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
@@ -22,64 +21,41 @@ export default class AgendaitemControls extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service decisionReportGeneration;
+  @service parliamentService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
   @tracked showVPModal = false;
-  @tracked hasDecreet = false;
-  @tracked subcase;
   @tracked canSendToVP = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
-    this.loadDecisionActivity.perform()
+    this.loadDecisionActivity.perform();
+    this.loadCanSendToVP.perform();
   }
 
   loadCanSendToVP = task(async () => {
-    if (enableVlaamsParlement() || !this.subcase) {
+    if (!enableVlaamsParlement() || !this.args.subcase) {
       this.canSendToVP = false;
       return;
     }
-
-    // /is-ready-for-vp covers this, but we might be in a postponed
-    // and resubmitted subcase, in which case the whole flow is still
-    // ready but the current agenda item isn't
-    const decisionResultCode = await this.decisionActivity?.decisionResultCode;
-    if (decisionResultCode?.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD) {
-      this.canSendToVP = false;
-      return;
-    }
-
-    const fetchIsReadyForVp = async () => {
-      const decisionmakingFlow = await this.subcase.decisionmakingFlow;
-      const resp = await fetch(
-        `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
-        { headers: { Accept: 'application/vnd.api+json' } }
-      );
-      if (!resp.ok) {
-        return false;
-      } else {
-        const body = await resp.json();
-        return body.isReady;
-      }
-    };
 
     if (this.currentSession.may('send-only-specific-cases-to-vp')) {
-      const submitter = await this.subcase.requestedBy;
+      const submitter = await this.args.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
       if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-        this.canSendToVP = await fetchIsReadyForVp();
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
       } else {
         this.canSendToVP = false;
       }
     } else if (this.currentSession.may('send-cases-to-vp')) {
-      this.canSendToVP = await fetchIsReadyForVp();
+      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
     } else {
       this.canSendToVP = false;
     }
@@ -145,18 +121,7 @@ export default class AgendaitemControls extends Component {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    let decreetDocument;
-    if (this.decisionActivity) {
-      yield this.decisionActivity.decisionResultCode;
-      this.subcase = yield this.decisionActivity.subcase;
-      decreetDocument = yield this.store.queryOne('piece', {
-        'filter[document-container][type][:uri:]':
-          CONSTANTS.DOCUMENT_TYPES.DECREET,
-        'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      });
-    }
-    this.hasDecreet = isPresent(decreetDocument);
-    this.loadCanSendToVP.perform();
+    yield this.decisionActivity?.decisionResultCode;
   }
 
   async deleteItem(agendaitem) {
