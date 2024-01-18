@@ -106,7 +106,9 @@ export default class Piece extends Model {
       const now = new Date();
       this.modified = now;
       this.accessLevelLastModified = now;
-      if(dirtyType == 'created') {
+      if (dirtyType == 'created') {
+        // When saving a newly created record force the creation date to equal
+        // the modified date.
         this.created = now;
       }
     }
