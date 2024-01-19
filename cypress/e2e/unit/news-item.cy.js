@@ -91,13 +91,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
     // there is no changes alert before we add the BIS
     cy.get(newsletter.agendaitemNewsItem.themes); // when themes component is loaded, we can check the changes Alert
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
 
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(utils.changesAlert.alert).should('be.visible');
+    cy.get(utils.changesAlert.container).should('be.visible');
     cy.get(utils.changesAlert.close).click();
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
@@ -108,7 +108,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@patchNewsItems');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     cy.get(route.notaUpdates.dataTable).find('tbody')
       .children('tr')

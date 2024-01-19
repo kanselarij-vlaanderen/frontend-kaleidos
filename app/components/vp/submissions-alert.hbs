@@ -9,18 +9,20 @@
       <FormatList
         @list={{sort-by "startDate" @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
         @locale="nl-be"
-        as |submissionActivity|
+        as |formattedPart|
       >
+        {{#let formattedPart.value as |submissionActivity|}}
         <AuLink
           @skin="primary"
           {{on "click" (fn this.showModalFor submissionActivity)}}
         >
-          {{datetime-at submissionActivity.startDate}}
+          {{this.formatDate submissionActivity.startDate formattedPart.isLast}}
         </AuLink>
+        {{/let}}
       </FormatList>
       {{#if @parliamentFlow.isBeingHandledByFP}}
         {{ this.parliamentLinkMessage }}
-        <a href="{{this.parliamentLink}}" target="_blank">{{ t "flemish-parliament" }}</a>
+        <a href="{{this.parliamentLink}}" target="_blank">{{ t "flemish-parliament" }}</a>.
       {{/if}}
     </p>
   </AuAlert>
