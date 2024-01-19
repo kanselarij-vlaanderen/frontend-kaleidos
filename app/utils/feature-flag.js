@@ -7,7 +7,7 @@ function isEnabledImpersonation() {
   );
 }
 
-function enableVlaamsParlement() {
+function isEnabledVlaamsParlement() {
   return (
     ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
     ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
@@ -15,6 +15,6 @@ function enableVlaamsParlement() {
 }
 
 export {
-  enableVlaamsParlement,
+  isEnabledVlaamsParlement,
   isEnabledImpersonation,
 }
