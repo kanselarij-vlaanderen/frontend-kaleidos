@@ -110,6 +110,7 @@ export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionR
           const documentContainer = await report.documentContainer;
           const pieces = await documentContainer.pieces;
           report.name = await generateReportName(agendaitem, meeting, pieces.length);
+          await report.belongsTo('file').reload();
           await report.save();
         }
         return agendaitemSave;

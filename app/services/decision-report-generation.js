@@ -185,6 +185,11 @@ export default class DecisionReportGeneration extends Service {
     try {
       await this._generateSinglePdf.perform(report, 'generate-decision-report');
       await this.reloadFile(report);
+      this.toaster.success(
+        this.intl.t(
+          'decision-report-generation--toast-generating-single-complete--message'
+        )
+      );
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-while-generating-report-name-pdf', {
