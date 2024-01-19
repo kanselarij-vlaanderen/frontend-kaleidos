@@ -76,8 +76,8 @@
                 <AuButton
                   @skin="secondary"
                   @icon="copy-paste"
-                  {{on "click" (fn this.saveCase true)}}
-                  @disabled={{this.saveCase.isRunning}}
+                  {{on "click" (fn this.saveSubcase true)}}
+                  @disabled={{this.saveDisabled}}
                 >
                   {{t "clone-previous-subcase"}}
                 </AuButton>
@@ -163,6 +163,19 @@
           </Utils::LoadableContent>
         </Auk::Panel::Body>
       </Auk::Panel>
+      <Cases::MandateeSelectorPanel
+        @submitter={{this.submitter}}
+        @setSubmitter={{this.setSubmitter}}
+        @setMandatees={{this.setMandatees}}
+        />
+      <Cases::GovernmentAreasPanel
+        @selectedFields={{this.selectedGovernmentFields}}
+        @onSelectFields={{this.selectField}}
+        @onDeselectFields={{this.deselectField}}
+        @selectedDomains={{this.selectedGovernmentDomains}}
+        @onSelectDomains={{this.selectDomain}}
+        @onDeselectDomains={{this.deselectDomain}}
+      />
     </div>
   </div>
   <AuToolbar 
@@ -174,13 +187,14 @@
       <AuLink
         @skin="button-secondary"
         @route="cases.case.subcases"
+        @disabled={{this.saveDisabled}}
       >
         {{t "cancel"}}
       </AuLink>
       <AuButton
         @skin="primary"
-        @disabled={{this.saveCase.isRunning}}
-        {{on "click" this.saveCase}}
+        @disabled={{this.saveDisabled}}
+        {{on "click" this.saveSubcase}}
       >
         {{t "new-subcase"}}
       </AuButton>

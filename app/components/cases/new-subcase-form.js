@@ -11,10 +11,13 @@ export default class NewSubcaseForm extends Component {
   @service store;
   @service conceptStore;
   @service router;
+  @service mandatees;
+  @service agendaitemAndSubcasePropertiesSync;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
+  @tracked saveDisabled = false;
   @tracked confidential = false;
   @tracked shortTitle;
   @tracked title;
@@ -22,10 +25,15 @@ export default class NewSubcaseForm extends Component {
   @tracked agendaItemTypes;
   @tracked agendaItemType;
   @tracked subcaseType;
-
   @tracked selectedShortcut;
   @tracked latestSubcase = null;
   @tracked isEditing = false;
+
+  @tracked submitter;
+  @tracked mandatees = [];
+
+  @tracked selectedGovernmentFields = [];
+  @tracked selectedGovernmentDomains = [];
 
   constructor() {
     super(...arguments);
@@ -98,9 +106,10 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
-  async saveCase(fullCopy) {
+  async saveSubcase(fullCopy) {
+    this.saveDisabled = true;
     const now = new Date();
-    const subcase = this.store.createRecord('subcase', {
+    let subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
@@ -132,6 +141,29 @@ export default class NewSubcaseForm extends Component {
     if (this.latestSubcase && fullCopy) {
       await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
     }
+
+    const propertiesToSetOnAgendaitem = {
+      mandatees: this.mandatees,
+    };
+    const propertiesToSetOnSubcase = {
+      mandatees: this.mandatees,
+      requestedBy: this.submitter,
+    };
+
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
+      subcase,
+      propertiesToSetOnAgendaitem,
+      propertiesToSetOnSubcase,
+      true,
+    );
+
+    let newGovernmentAreas = this.selectedGovernmentDomains.concat(this.selectedGovernmentFields);
+    const governmentAreas = await subcase.governmentAreas;
+    governmentAreas.clear();
+    governmentAreas.pushObjects(newGovernmentAreas);
+    await subcase.save();
+
+    this.saveDisabled = false;
     this.router.transitionTo('cases.case.subcases.subcase', this.args.decisionmakingFlow.id, subcase.id);
   }
 
@@ -191,5 +223,39 @@ export default class NewSubcaseForm extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  /** mandatee selector */
+
+  @action
+  setSubmitter(submitter) {
+    this.submitter = submitter;
+  }  
+  
+  @action
+  setMandatees(mandatees) {
+    this.mandatees = mandatees;
+  }
+
+  /** government areas */
+
+  @action
+  selectField(selectedField) {
+    this.selectedGovernmentFields.pushObjects(selectedField);
+  }
+
+  @action
+  deselectField(selectedField) {
+    this.selectedGovernmentFields.removeObjects(selectedField);
+  }
+
+  @action
+  selectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.pushObjects(selectedDomain);
+  }
+
+  @action
+  deselectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.removeObjects(selectedDomain);
   }
 }
