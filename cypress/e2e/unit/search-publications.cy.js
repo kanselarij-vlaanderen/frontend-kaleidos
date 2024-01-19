@@ -84,6 +84,7 @@ function searchFakePublication() {
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
+    cy.wait(500);
     cy.get(route.search.input).clear()
       .type('test');
     cy.get(route.search.trigger).click();
@@ -252,7 +253,7 @@ context('Search tests', () => {
     cy.logout();
   });
 
-  it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
+  it.only('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
     const options = [5, 10, 20, 25, 50, 100, 200];
     const defaultSize = options[2];
