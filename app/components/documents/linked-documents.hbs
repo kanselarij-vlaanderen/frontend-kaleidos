@@ -35,9 +35,11 @@
   @loading={{this.saveLinkedPieces.isRunning}}
 >
   <:body>
-    <Utils::AddExistingPiece
-      @onLink={{this.linkPiece}}
-      @onUnlink={{this.unlinkPiece}}
-    />
+    <div class="auk-u-mb-2">
+      <Utils::AddExistingPiece
+        @onLink={{this.linkPiece}}
+        @onUnlink={{this.unlinkPiece}}
+      />
+    </div>
   </:body>
 </ConfirmationModal>

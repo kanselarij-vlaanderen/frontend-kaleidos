@@ -104,6 +104,10 @@ export default class AgendaitemSearchRoute extends Route {
       filter[':terms:mandateeIds'] = params.mandatees;
     }
 
+    if (!isEmpty(params.governmentAreas)) {
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
+    }
+
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
@@ -192,6 +196,7 @@ export default class AgendaitemSearchRoute extends Route {
       params.searchText,
       results.length,
       params.mandatees,
+      params.governmentAreas,
       params.dateFrom,
       params.dateTo,
       params.sort,
@@ -202,15 +207,22 @@ export default class AgendaitemSearchRoute extends Route {
     return results;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, latestOnly) {
+  async trackSearch(searchTerm, resultCount, mandatees, governmentAreas, from, to, sort, types, latestOnly) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Van': from,
       'Tot en met': to,
       'Sorteringsoptie': sort,

@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaitemControls extends Component {
@@ -22,14 +21,13 @@ export default class AgendaitemControls extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service decisionReportGeneration;
+  @service parliamentService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
   @tracked showVPModal = false;
-  @tracked hasDecreet = false;
-  @tracked subcase;
   @tracked canSendToVP = false;
 
   constructor() {
@@ -41,25 +39,33 @@ export default class AgendaitemControls extends Component {
   }
 
   loadCanSendToVP = task(async () => {
-    if (this.enableVlaamsParlement) {
-      if (this.args.subcase) {
-        const decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-        const resp = await fetch(
-          `/vlaams-parlement-sync/is-ready-for-vp/?uri=${decisionmakingFlow.uri}`,
-          { headers: { Accept: 'application/vnd.api+json' } }
-        );
-        if (!resp.ok) {
-          this.canSendToVP = false;
-        } else {
-          const body = await resp.json();
-          this.canSendToVP = body.isReady && this.enableVlaamsParlement;
-        }
+    if (!this.enableVlaamsParlement || !this.args.subcase) {
+      this.canSendToVP = false;
+      return;
+    }
+
+    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+      const submitter = await this.args.subcase.requestedBy;
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      } else {
+        this.canSendToVP = false;
       }
+    } else if (this.currentSession.may('send-cases-to-vp')) {
+      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+    } else {
+      this.canSendToVP = false;
     }
   });
 
   get hasDropdownOptions() {
-    return this.isDesignAgenda || this.canSendToVP;
+    return (
+      (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
+      this.canSendToVP
+    );
   }
 
   get enableVlaamsParlement() {
@@ -71,23 +77,10 @@ export default class AgendaitemControls extends Component {
 
   @action
   async onSendToVp() {
-    // This is a hack to solve the issue where services
-    // send a response before the cache is updated.
-    const MAX_RETRIES = 10;
-    const case_ = await this.store.queryOne('case', {
-      'filter[decisionmaking-flow][subcases][:id:]': this.subcase.id,
-    });
-    let parliamentFlow = null;
-    for (let i = 0; i < MAX_RETRIES && !parliamentFlow; i++) {
-      parliamentFlow = await case_.parliamentFlow.reload();
-      if (parliamentFlow) {
-        const subcase = await parliamentFlow?.parliamentSubcase.reload();
-        await subcase?.parliamentSubmissionActivities.reload();
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
     this.showVPModal = false;
+    if (this.args.onSendToVp) {
+      this.args.onSendToVp();
+    }
   }
 
   get areDecisionActionsEnabled() {
@@ -136,13 +129,6 @@ export default class AgendaitemControls extends Component {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     yield this.decisionActivity?.decisionResultCode;
-    this.subcase = yield this.decisionActivity.subcase;
-    const decreetDocument = yield this.store.queryOne('piece', {
-      'filter[document-container][type][:uri:]':
-        CONSTANTS.DOCUMENT_TYPES.DECREET,
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-    });
-    this.hasDecreet = isPresent(decreetDocument);
   }
 
   async deleteItem(agendaitem) {

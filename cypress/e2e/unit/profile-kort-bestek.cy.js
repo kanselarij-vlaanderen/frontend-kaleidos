@@ -143,7 +143,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      cy.get(agenda.agendaitemControls.actions).should('not.exist'); // TODO-profile should KB see any actions?
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
@@ -173,6 +173,31 @@ context('Testing the application as Kort bestek user', () => {
         .should('not.be.disabled')
         .click();
       // Detail Tab - Document tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShort2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
