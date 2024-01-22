@@ -62,14 +62,14 @@ export default class PublicationsPublicationProofsRoute extends Route {
   async model() {
     this.publicationSubcase = this.modelFor('publications.publication.proofs');
 
-    let requestActivities = this.store.query('request-activity', {
+    let requestActivities = this.store.queryAll('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
       'filter[:has:proofing-activity]': true,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
-    let proofingActivities = this.store.query('proofing-activity', {
+    let proofingActivities = this.store.queryAll('proofing-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
       include: [
         'used-pieces',

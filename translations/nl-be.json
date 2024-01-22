@@ -1289,6 +1289,7 @@
   "decision-report-generation--toast-generating--message": "{total, plural, =1 {1 beslissing zal} other {# beslissingen zullen}} worden aangepast.",
   "decision-report-generation--toast-generating--title": "Beslissingen aanpassen",
   "decision-report-generation--toast-generating-complete--message": "{total, plural, =1 {1 beslissing is} other {# beslissingen zijn}} aangepast.",
+  "decision-report-generation--toast-generating-single-complete--message": "De beslissing is aangepast.",
   "decision-report-generation--toast-generating-complete--title": "Beslissingen aangepast",
   "decision-report-bundle-generation--toast-generating--message": "Alle beslissingen PDF wordt aangemaakt.",
   "decision-report-bundle-generation--toast-generating--title": "Alle beslissingen PDF aanmaken",

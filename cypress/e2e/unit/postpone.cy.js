@@ -201,6 +201,9 @@ context('Decision postponing tests', () => {
     cy.setAllItemsFormallyOk(1);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).contains('Beslissingen zijn vrijgegeven op');
+    });
 
     // add new doc (6) on subcase
     cy.visit('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');

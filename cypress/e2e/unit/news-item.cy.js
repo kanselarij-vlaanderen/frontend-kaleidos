@@ -1,4 +1,4 @@
-/* global context, beforeEach, afterEach, it, cy */
+/* global Cypress, context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -39,6 +39,7 @@ function changeSubcaseType(subcaseLink, type) {
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   const theme = 'Justitie en Handhaving';
   const theme2 = 'Landbouw en Visserij';
+  const isCI = Cypress.env('CI');
 
   beforeEach(() => {
     cy.login('Admin');
@@ -611,7 +612,12 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
     // actual time is 14:00, but server time is being used as "local time" in the test it seems
-    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
+    if (isCI) {
+      cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
+    } else {
+      cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 14:00');
+    }
+
     cy.get(newsletter.newsletterPrint.container).should('have.length', 1);
     cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');
