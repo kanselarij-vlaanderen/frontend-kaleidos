@@ -73,16 +73,19 @@
                       </Fieldset.content>
                     </AuFieldset>
                   </AuFormRow>
-                  <AuFormRow>
-                  <AuButton
-                    @skin="secondary"
-                    @icon="copy-paste"
-                    {{on "click" (fn this.saveCase true)}}
-                    @disabled={{this.saveCase.isRunning}}
-                  >
-                    {{t "clone-previous-subcase"}}
-                  </AuButton>
-                  </AuFormRow>
+                  {{#if this.latestSubcase}}
+                    <AuFormRow>
+                      <AuButton
+                        @skin="secondary"
+                        @icon="copy-paste"
+                         {{on "click" (perform this.saveCase true)}}
+                        {{!-- {{on "click" (fn this.saveCase true)}} --}}
+                        @disabled={{this.saveCase.isRunning}}
+                      >
+                        {{t "clone-previous-subcase"}}
+                      </AuButton>
+                    </AuFormRow>
+                  {{/if}}
                 </div>
                 <AuFormRow>
                   <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
@@ -182,7 +185,7 @@
       <AuButton
         @skin="primary"
         @disabled={{this.saveCase.isRunning}}
-        {{on "click" this.saveCase}}
+        {{on "click" (perform this.saveCase false)}}
       >
         {{t "new-subcase"}}
       </AuButton>

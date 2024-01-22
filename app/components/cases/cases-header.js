@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { enableNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
 import { inject as service } from '@ember/service';
 
 /**
@@ -11,10 +11,10 @@ export default class CasesHeader extends Component {
   @service router;
 
   @tracked isOpenNewCaseModal = false;
-  @tracked shouldRedirectToSubcase = false;
+  @tracked IsOpenExperimentalNewCaseModal = false;
 
-  get enableNewCaseCreation() {
-    return enableNewCaseCreation();
+  get isEnabledNewCaseCreation() {
+    return isEnabledNewCaseCreation();
   }
 
   @action
@@ -23,18 +23,18 @@ export default class CasesHeader extends Component {
   } 
 
   @action
-  toggleNewIsOpenNewCaseModal() {
-    this.isOpenNewCaseModal = !this.isOpenNewCaseModal;
-    this.shouldRedirectToSubcase = true;
+  toggleIsOpenExperimentalNewCaseModal() {
+    this.IsOpenExperimentalNewCaseModal = !this.IsOpenExperimentalNewCaseModal;
   }
 
   @action
-  saveNewCase(decisionmakingFlow) {
+  saveNewCase() {
     this.toggleIsOpenNewCaseModal();
-    if(this.shouldRedirectToSubcase) {
-      this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
-    } else {
-      this.args.didCreateNewCase(decisionmakingFlow);
-    }
+    this.args.didCreateNewCase(...arguments);
+  }
+
+  @action
+  saveExperimentalNewCase(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }
 }

@@ -54,6 +54,7 @@ export default class NewSubcaseForm extends Component {
     this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
+    this.agendaItemType = this.agendaItemTypes.find((type) => type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @action
@@ -97,8 +98,8 @@ export default class NewSubcaseForm extends Component {
       });
   }
 
-  @action
-  async saveCase(fullCopy) {
+  @task
+  *saveCase(fullCopy) {
     const now = new Date();
     const subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
@@ -116,8 +117,8 @@ export default class NewSubcaseForm extends Component {
     let piecesFromSubmissions;
     if (this.latestSubcase) {
       // Previous "versions" of this subcase exist
-      piecesFromSubmissions = await this.loadSubcasePieces(this.latestSubcase);
-      await this.copySubcaseProperties(
+      piecesFromSubmissions = yield this.loadSubcasePieces(this.latestSubcase);
+      yield this.copySubcaseProperties(
         subcase,
         this.latestSubcase,
         fullCopy,
@@ -125,12 +126,12 @@ export default class NewSubcaseForm extends Component {
       );
     }
     // We save here in order to set the belongsTo relation between submission-activity and subcase
-    await subcase.save();
+    yield subcase.save();
     // reload the list of subcases on case, list is not updated automatically
-    await this.args.decisionmakingFlow?.hasMany('subcases').reload();
+    yield this.args.decisionmakingFlow?.hasMany('subcases').reload();
 
     if (this.latestSubcase && fullCopy) {
-      await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
+      yield this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
     }
     this.router.transitionTo('cases.case.subcases.subcase', this.args.decisionmakingFlow.id, subcase.id);
   }

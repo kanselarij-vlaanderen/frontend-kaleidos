@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { enableNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
 import { inject as service } from '@ember/service';
 
 export default class SubCasesOverviewHeader extends Component {
@@ -18,8 +18,8 @@ export default class SubCasesOverviewHeader extends Component {
     this.loadData.perform();
   }
 
-  get isNewCaseCreationEnabled() {
-    return enableNewCaseCreation();
+  get isEnabledNewCaseCreation() {
+    return isEnabledNewCaseCreation();
   }
 
   @task
