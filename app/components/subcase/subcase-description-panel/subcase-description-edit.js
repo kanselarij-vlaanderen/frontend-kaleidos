@@ -101,11 +101,12 @@ export default class SubcaseDescriptionEdit extends Component {
     for (const report of reports) {
       const pieceParts = await report?.pieceParts;
       if (pieceParts?.length) {
+        this.updateReportName(report, this.agendaItemType.uri);
+        await report.belongsTo('file').reload();
+        await report.save();
         await this.decisionReportGeneration.generateReplacementReport.perform(
           report
         );
-        this.updateReportName(report, this.agendaItemType.uri);
-        await report.save();
       }
     }
   }
