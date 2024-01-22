@@ -9,7 +9,7 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if (user-may "manage-cases")}}
+          {{#if (and (user-may "manage-cases") this.isEnabledNewCaseCreation)}}
             <AuButton
               data-test-cases-header-add-case
               @skin="primary"
@@ -18,12 +18,11 @@
             >
               {{t "add-case"}}
             </AuButton>
-            {{#if this.enableNewCaseCreation}}
+            {{#if (user-may "manage-cases")}}
               <AuButton
-                data-test-cases-header-add-case
                 @skin="primary"
                 @icon="plus"
-                {{on "click" this.toggleNewIsOpenNewCaseModal}}
+                {{on "click" this.toggleIsOpenExperimentalNewCaseModal}}
               >
                 {{t "add-case-new"}}
               </AuButton>
@@ -43,6 +42,20 @@
     <Cases::NewCase
       @didSave={{this.saveNewCase}}
       @onCancel={{this.toggleIsOpenNewCaseModal}}
+    />
+  </:body>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.IsOpenExperimentalNewCaseModal}}
+  @closeModal={{this.toggleIsOpenExperimentalNewCaseModal}}
+  @title={{t "new-case"}}
+  @padding="none"
+>
+  <:body>
+    <Cases::NewCase
+      @didSave={{this.saveExperimentalNewCase}}
+      @onCancel={{this.toggleIsOpenExperimentalNewCaseModal}}
     />
   </:body>
 </AuModal>

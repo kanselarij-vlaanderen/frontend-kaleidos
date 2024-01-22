@@ -17,7 +17,6 @@ export default class NewSubcaseForm extends Component {
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
-  @tracked saveDisabled = false;
   @tracked confidential = false;
   @tracked shortTitle;
   @tracked title;
@@ -62,6 +61,7 @@ export default class NewSubcaseForm extends Component {
     this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
+    this.agendaItemType = this.agendaItemTypes.find((type) => type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
   }
 
   @action
@@ -105,9 +105,8 @@ export default class NewSubcaseForm extends Component {
       });
   }
 
-  @action
-  async saveSubcase(fullCopy) {
-    this.saveDisabled = true;
+  @task
+  *saveCase(fullCopy) {
     const now = new Date();
     let subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
@@ -125,8 +124,8 @@ export default class NewSubcaseForm extends Component {
     let piecesFromSubmissions;
     if (this.latestSubcase) {
       // Previous "versions" of this subcase exist
-      piecesFromSubmissions = await this.loadSubcasePieces(this.latestSubcase);
-      await this.copySubcaseProperties(
+      piecesFromSubmissions = yield this.loadSubcasePieces(this.latestSubcase);
+      yield this.copySubcaseProperties(
         subcase,
         this.latestSubcase,
         fullCopy,
@@ -134,12 +133,12 @@ export default class NewSubcaseForm extends Component {
       );
     }
     // We save here in order to set the belongsTo relation between submission-activity and subcase
-    await subcase.save();
+    yield subcase.save();
     // reload the list of subcases on case, list is not updated automatically
-    await this.args.decisionmakingFlow?.hasMany('subcases').reload();
+    yield this.args.decisionmakingFlow?.hasMany('subcases').reload();
 
     if (this.latestSubcase && fullCopy) {
-      await this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
+      yield this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
     }
 
     const propertiesToSetOnAgendaitem = {
@@ -150,7 +149,7 @@ export default class NewSubcaseForm extends Component {
       requestedBy: this.submitter,
     };
 
-    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
+    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
       subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
@@ -158,12 +157,11 @@ export default class NewSubcaseForm extends Component {
     );
 
     let newGovernmentAreas = this.selectedGovernmentDomains.concat(this.selectedGovernmentFields);
-    const governmentAreas = await subcase.governmentAreas;
+    const governmentAreas = yield subcase.governmentAreas;
     governmentAreas.clear();
     governmentAreas.pushObjects(newGovernmentAreas);
-    await subcase.save();
+    yield subcase.save();
 
-    this.saveDisabled = false;
     this.router.transitionTo('cases.case.subcases.subcase', this.args.decisionmakingFlow.id, subcase.id);
   }
 

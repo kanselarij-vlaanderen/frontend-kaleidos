@@ -173,7 +173,7 @@ export default class SignaturesDecisionsController extends Controller {
     this.piece = null;
     this.meeting = null;
     this.agenda = null;
-    this.agnedaitem = null;
+    this.agendaitem = null;
     this.decisionActivityOrMeeting = null;
     this.signers = [];
   }

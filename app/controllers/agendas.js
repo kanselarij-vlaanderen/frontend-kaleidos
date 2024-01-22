@@ -195,13 +195,6 @@ export default class AgendasController extends Controller {
     const now = new Date();
     const startDate = newMeeting.plannedStart;
 
-    // default decision result when flag is turned off
-    let decisionResultCode = null;
-    decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-    );
-
     // meeting secretary
     let secretary;
     const meetingSecretary = await newMeeting.secretary;
@@ -209,9 +202,9 @@ export default class AgendasController extends Controller {
     
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
-      decisionResultCode,
       secretary,
       // no subcase. Minutes approval aren't part of a (sub)case
+      // no decision result for nota
     });
     await decisionActivity.save();
 
