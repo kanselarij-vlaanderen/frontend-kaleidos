@@ -24,6 +24,13 @@ export default class GovernmentAreasPanel extends Component {
     this.loadGovernmentAreas.perform();
   }
 
+  get areLoadingTasksRunning() {
+    return (
+      this.loadGovernmentAreas.isRunning ||
+      this.calculateDomainSelections.isRunning
+    );
+  }
+
   @task
   *loadGovernmentAreas() {
     const concepts = yield this.conceptStore.queryAllGovernmentFields();

@@ -79,7 +79,6 @@
                         @skin="secondary"
                         @icon="copy-paste"
                          {{on "click" (perform this.saveCase true)}}
-                        {{!-- {{on "click" (fn this.saveCase true)}} --}}
                         @disabled={{this.saveCase.isRunning}}
                       >
                         {{t "clone-previous-subcase"}}
@@ -163,23 +162,25 @@
                     {{/if}}
                   </div>
               </AuFormRow>
-            </div>
-          </Utils::LoadableContent>
-        </Auk::Panel::Body>
-      </Auk::Panel>
-      <Cases::MandateeSelectorPanel
-        @submitter={{this.submitter}}
-        @setSubmitter={{this.setSubmitter}}
-        @setMandatees={{this.setMandatees}}
+              </div>
+            </Utils::LoadableContent>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+        <Cases::MandateeSelectorPanel
+          @submitter={{this.submitter}}
+          @setSubmitter={{this.setSubmitter}}
+          @setMandatees={{this.setMandatees}}
+          @disabled={{this.saveCase.isRunning}}
+          />
+        <Cases::GovernmentAreasPanel
+          @selectedFields={{this.selectedGovernmentFields}}
+          @onSelectFields={{this.selectField}}
+          @onDeselectFields={{this.deselectField}}
+          @selectedDomains={{this.selectedGovernmentDomains}}
+          @onSelectDomains={{this.selectDomain}}
+          @onDeselectDomains={{this.deselectDomain}}
+          @disabled={{this.saveCase.isRunning}}
         />
-      <Cases::GovernmentAreasPanel
-        @selectedFields={{this.selectedGovernmentFields}}
-        @onSelectFields={{this.selectField}}
-        @onDeselectFields={{this.deselectField}}
-        @selectedDomains={{this.selectedGovernmentDomains}}
-        @onSelectDomains={{this.selectDomain}}
-        @onDeselectDomains={{this.deselectDomain}}
-      />
       </div>
     </div>
   </div>
