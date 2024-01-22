@@ -28,12 +28,15 @@ export default class AgendaitemPostponed extends Component {
   *loadProposedStatus() {
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
-    const latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:gt:start-date]':
-        this.args.agendaActivity.startDate.toISOString(),
-      sort: 'start-date',
-    });
+    let latestAagendaActivity;
+    if (this.args.subcase) {
+      latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
+        'filter[subcase][:id:]': this.args.subcase.id,
+        'filter[:gt:start-date]':
+          this.args.agendaActivity.startDate.toISOString(),
+        sort: 'start-date',
+      });
+    }
 
     if (latestAagendaActivity) {
       // we have to generate a link to the latest meeting

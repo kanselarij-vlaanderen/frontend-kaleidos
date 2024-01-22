@@ -3,8 +3,14 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 export default class ParliamentSubmissionActivity extends Model {
   @attr('date') startDate;
   @attr('date') endDate;
+  @attr('string') comment;
 
-  @belongsTo('user', { async: true }) submitter;
+  @belongsTo('user', { inverse: null, async: true }) submitter;
+  @belongsTo('parliament-subcase', {
+    inverse: 'parliamentSubmissionActivities',
+    async: true
+  })
+  parliamentSubcase;
 
-  @hasMany('piece', { async: true }) pieces;
+  @hasMany('submitted-piece', { inverse: null, async: true }) submittedPieces;
 }

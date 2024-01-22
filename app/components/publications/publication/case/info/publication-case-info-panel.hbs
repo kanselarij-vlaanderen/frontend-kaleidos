@@ -1,309 +1,150 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel class={{if this.isEditing "auk-panel--editing"}}>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "publication-case-info-panel-title"}}
-            </h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        {{#unless this.initFields.isRunning}}
-          {{#unless this.isEditing}}
-            <Auk::Toolbar::Group @position="right">
-              <Auk::Toolbar::Item>
-                <AuButton
-                  data-test-publication-case-info-panel-edit
-                  @skin="naked"
-                  @icon="pencil"
-                  {{on "click" this.openEditingPanel}}
-                >
-                  {{t "edit"}}
-                </AuButton>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          {{/unless}}
+<Auk::Panel class={{if this.isEditing "auk-panel--editing"}} ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "publication-case-info-panel-title"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#unless this.initFields.isRunning}}
+        {{#unless this.isEditing}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-publication-case-info-panel-edit
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" this.openEditingPanel}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
         {{/unless}}
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      {{#if this.isEditing}}
-        <Utils::LoadableContent
-          @isLoading={{or this.closeEditingPanel.isRunning this.save.isRunning}}
-          @reserveSpace={{true}}
-        >
-          <div class="au-c-form">
-            <div class="auk-o-grid">
-              {{! Dringend }}
-              <div class="auk-o-grid-col-3">
-                <AuFieldset as |Fieldset|>
-                  <Fieldset.legend>{{t "publication-urgent"}}</Fieldset.legend>
-                  <Fieldset.content>
-                    <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
-                      <AuCheckbox
-                        data-test-urgency-level-checkbox
-                        @checked={{@publicationFlow.urgencyLevel.isUrgent}}
-                        @onChange={{this.changeIsUrgent}}
-                      >
-                        {{t "priority-procedure"}}
-                      </AuCheckbox>
-                    </AuCheckboxGroup>
-                  </Fieldset.content>
-                </AuFieldset>
-              </div>
-
-              {{! Publicatienummer }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow>
-                  <Auk::Label
-                    @required={{true}}
-                    @error={{this.publicationNumberErrorTranslationKey}}
-                  >
-                    {{t "publication-number"}}
-                  </Auk::Label>
-                  <div class="auk-u-mb">
-                    <AuInput
-                      data-test-publication-case-info-panel-edit-publication-number
-                      @type="number"
-                      @value={{this.publicationNumber}}
-                      @error={{this.publicationNumberErrorTranslationKey}}
-                      {{on "input" (perform this.setPublicationNumber)}}
-                    />
-                    <AuInput
-                      data-test-publication-case-info-panel-edit-publication-number-suffix
-                      @value={{this.publicationNumberSuffix}}
-                      @error={{this.publicationNumberErrorTranslationKey}}
-                      {{on "input" (perform this.setPublicationNumberSuffix)}}
-                      class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
-                    />
-                    <Utils::Generic::TooltipHelp class="auk-u-mx">
-                      {{t "publication-flow-publication-number-help"}}
-                    </Utils::Generic::TooltipHelp>
-                  </div>
-                  {{#if this.publicationNumberErrorTranslationKey}}
-                    <Auk::FormHelpText
-                      @text={{t this.publicationNumberErrorTranslationKey}}
-                      @skin="danger"
-                      @icon="alert-triangle"
-                    />
-                  {{/if}}
-                </AuFormRow>
-              </div>
-
-              {{! Numac-nummers }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-publication-case-info-panel-edit-numac-number>
-                  <Auk::Label>
-                    {{t "publication-flow-numac-number"}}
-                  </Auk::Label>
-                  {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
-                  <Auk::InputPills
-                    @items={{this.numacNumbers}}
-                    @onCreate={{this.addNumacNumber}}
-                    @onRemove={{this.deleteNumacNumber}}
-                    as |numac|
-                  >
-                    {{numac.idName}}
-                  </Auk::InputPills>
-                </AuFormRow>
-              </div>
-
-              {{! BS Thread ID}}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow>
-                  <Auk::Label>
-                    {{t "publication-flow-thread-id"}}
-                  </Auk::Label>
-                  <AuInput
-                    data-test-publication-case-info-panel-edit-thread-id
-                    @value={{mut this.threadId}}
-                  />
-                </AuFormRow>
-              </div>
-
-
-              {{! wijze van publicatie }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-publication-case-info-panel-edit-publication-mode>
-                  <Auk::Label>
-                    {{t "kind-of-publication"}}
-                  </Auk::Label>
-                  <PowerSelect
-                    @options={{this.publicationModes}}
-                    @onChange={{this.setPublicationMode}}
-                    @selected={{@publicationFlow.mode}}
-                    as |mode|
-                  >
-                    {{mode.label}}
-                  </PowerSelect>
-                </AuFormRow>
-              </div>
-
-              {{! Datum beslissing }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-publication-case-info-panel-edit-decision-date>
-                  <Auk::Label>{{t "decision-date"}}</Auk::Label>
-                  {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-                    <AuLink
-                      @skin="primary"
-                      @icon="chevron-right"
-                      @iconAlignment="right"
-                      @route="agenda.agendaitems.agendaitem"
-                      @models={{this.modelsForAgendaitemRoute}}
-                      target="_blank"
+      {{/unless}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    {{#if this.isEditing}}
+      <Utils::LoadableContent
+        @isLoading={{or this.closeEditingPanel.isRunning this.save.isRunning}}
+        @reserveSpace={{true}}
+      >
+        <div class="au-c-form">
+          <div class="auk-o-grid">
+            {{! Dringend }}
+            <div class="auk-o-grid-col-3">
+              <AuFieldset as |Fieldset|>
+                <Fieldset.legend>{{t "publication-urgent"}}</Fieldset.legend>
+                <Fieldset.content>
+                  <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+                    <AuCheckbox
+                      data-test-urgency-level-checkbox
+                      @checked={{@publicationFlow.urgencyLevel.isUrgent}}
+                      @onChange={{this.changeIsUrgent}}
                     >
-                      {{#if @publicationFlow.decisionActivity.startDate}}
-                        {{date  @publicationFlow.decisionActivity.startDate}}
-                      {{else}}
-                        {{t "to-agenda"}}
-                      {{/if}}
-                    </AuLink>
-                  {{else}}
-                    <Auk::Datepicker
-                      @date={{this.decisionActivity.startDate}}
-                      @onChange={{set this.decisionActivity "startDate"}}
-                    />
-                  {{/if}}
-                </AuFormRow>
-              </div>
+                      {{t "priority-procedure"}}
+                    </AuCheckbox>
+                  </AuCheckboxGroup>
+                </Fieldset.content>
+              </AuFieldset>
+            </div>
 
-              {{! Datum ontvangst }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-publication-case-info-panel-edit-opening-date>
-                  <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
-                  <Auk::Datepicker
-                    @date={{@publicationFlow.openingDate}}
-                    @onChange={{set @publicationFlow "openingDate"}}
+            {{! Publicatienummer }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow>
+                <Auk::Label
+                  @required={{true}}
+                  @error={{this.publicationNumberErrorTranslationKey}}
+                >
+                  {{t "publication-number"}}
+                </Auk::Label>
+                <div class="auk-u-mb">
+                  <AuInput
+                    data-test-publication-case-info-panel-edit-publication-number
+                    @type="number"
+                    @value={{this.publicationNumber}}
+                    @error={{this.publicationNumberErrorTranslationKey}}
+                    {{on "input" (perform this.setPublicationNumber)}}
                   />
-                </AuFormRow>
-              </div>
-
-              {{! Limiet publicatie }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow data-test-publication-case-info-panel-edit-publication-due-date>
-                  <Auk::Label>
-                    {{t "publication-flow-publication-due-date"}}
-                  </Auk::Label>
-                  <Auk::Datepicker
-                    @date={{this.publicationSubcase.dueDate}}
-                    @onChange={{set this.publicationSubcase "dueDate"}}
+                  <AuInput
+                    data-test-publication-case-info-panel-edit-publication-number-suffix
+                    @value={{this.publicationNumberSuffix}}
+                    @error={{this.publicationNumberErrorTranslationKey}}
+                    {{on "input" (perform this.setPublicationNumberSuffix)}}
+                    class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
                   />
-                </AuFormRow>
-              </div>
-
-              {{! Dossier aangemaakt }}
-              <div class="auk-o-grid-col-3">
-                <AuFormRow>
-                  <Auk::Label>
-                    {{t "case-created"}}
-                  </Auk::Label>
-                  {{#if @publicationFlow.created}}
-                    {{date @publicationFlow.created}}
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </AuFormRow>
-              </div>
-
-            </div>
-          </div>
-        </Utils::LoadableContent>
-      {{else}}
-        <div class="auk-o-grid">
-          {{! Dringend }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
-              <p
-                data-test-publication-case-info-panel-urgency-level
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.urgencyLevel.isUrgent}}
-                  <Auk::Icon @name="alert-triangle" @skin="warning" />
-                {{else}}
-                  {{t "dash"}}
+                  <Utils::Generic::TooltipHelp class="auk-u-mx">
+                    {{t "publication-flow-publication-number-help"}}
+                  </Utils::Generic::TooltipHelp>
+                </div>
+                {{#if this.publicationNumberErrorTranslationKey}}
+                  <Auk::FormHelpText
+                    @text={{t this.publicationNumberErrorTranslationKey}}
+                    @skin="danger"
+                    @icon="alert-triangle"
+                  />
                 {{/if}}
-              </p>
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Publicatienummer }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
-              <p
-                data-test-publication-case-info-panel-publication-number
-                class="auk-u-m-0"
-              >
-                {{@publicationFlow.identification.idName}}
-              </p>
+            {{! Numac-nummers }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-publication-case-info-panel-edit-numac-number>
+                <Auk::Label>
+                  {{t "publication-flow-numac-number"}}
+                </Auk::Label>
+                {{! TODO: disable modifying numac-number once (staatsblad-)decision exists? }}
+                <Auk::InputPills
+                  @items={{this.numacNumbers}}
+                  @onCreate={{this.addNumacNumber}}
+                  @onRemove={{this.deleteNumacNumber}}
+                  as |numac|
+                >
+                  {{numac.idName}}
+                </Auk::InputPills>
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Numac-nummers }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
-              <p
-                data-test-publication-case-info-panel-numac-number
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.numacNumbers}}
-                  {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+            {{! BS Thread ID}}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow>
+                <Auk::Label>
+                  {{t "publication-flow-thread-id"}}
+                </Auk::Label>
+                <AuInput
+                  data-test-publication-case-info-panel-edit-thread-id
+                  @value={{mut this.threadId}}
+                />
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! BS Thread Id}}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-flow-thread-id"}}</h4>
-              <p
-                data-test-publication-case-info-panel-thread-id
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.threadId.idName}}
-                  <p class="auk-u-text-uncapitalize">thread::{{@publicationFlow.threadId.idName}}::</p>
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+
+            {{! wijze van publicatie }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-publication-case-info-panel-edit-publication-mode>
+                <Auk::Label>
+                  {{t "kind-of-publication"}}
+                </Auk::Label>
+                <PowerSelect
+                  @options={{this.publicationModes}}
+                  @onChange={{this.setPublicationMode}}
+                  @selected={{@publicationFlow.mode}}
+                  as |mode|
+                >
+                  {{mode.label}}
+                </PowerSelect>
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Wijze publicatie }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
-              <p
-                data-test-publication-case-info-panel-publication-mode
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.mode}}
-                  {{@publicationFlow.mode.label}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
-            </div>
-          </div>
-
-          {{! Datum beslissing }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
-              <p
-                data-test-publication-case-info-panel-decision-date
-                class="auk-u-m-0"
-              >
+            {{! Datum beslissing }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-publication-case-info-panel-edit-decision-date>
+                <Auk::Label>{{t "decision-date"}}</Auk::Label>
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
-
                   <AuLink
-                    data-test-publication-case-info-panel-start-date
                     @skin="primary"
                     @icon="chevron-right"
                     @iconAlignment="right"
@@ -312,105 +153,262 @@
                     target="_blank"
                   >
                     {{#if @publicationFlow.decisionActivity.startDate}}
-                      {{date @publicationFlow.decisionActivity.startDate}}
+                      {{date  @publicationFlow.decisionActivity.startDate}}
                     {{else}}
                       {{t "to-agenda"}}
                     {{/if}}
                   </AuLink>
                 {{else}}
-                  {{#if @publicationFlow.decisionActivity.startDate}}
-                    {{date @publicationFlow.decisionActivity.startDate}}
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
+                  <Auk::Datepicker
+                    @date={{this.decisionActivity.startDate}}
+                    @onChange={{set this.decisionActivity "startDate"}}
+                  />
                 {{/if}}
-              </p>
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Datum ontvangst }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
-              <p
-                data-test-publication-case-info-panel-opening-date
-                class="auk-u-m-0"
-              >
-                {{#if @publicationFlow.openingDate}}
-                  {{date @publicationFlow.openingDate}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+            {{! Datum ontvangst }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-publication-case-info-panel-edit-opening-date>
+                <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
+                <Auk::Datepicker
+                  @date={{@publicationFlow.openingDate}}
+                  @onChange={{set @publicationFlow "openingDate"}}
+                />
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Limiet publicatie }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">
-                {{t "publication-flow-publication-due-date"}}
-              </h4>
-              <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
-                {{#if @publicationFlow.publicationSubcase.dueDate}}
-                  {{date @publicationFlow.publicationSubcase.dueDate}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </p>
+            {{! Limiet publicatie }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow data-test-publication-case-info-panel-edit-publication-due-date>
+                <Auk::Label>
+                  {{t "publication-flow-publication-due-date"}}
+                </Auk::Label>
+                <Auk::Datepicker
+                  @date={{this.publicationSubcase.dueDate}}
+                  @onChange={{set this.publicationSubcase "dueDate"}}
+                />
+              </AuFormRow>
             </div>
-          </div>
 
-          {{! Dossier aangemaakt op }}
-          <div class="auk-o-grid-col-3">
-            <div class="auk-content">
-              <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
-              <p class="auk-u-m-0">
+            {{! Dossier aangemaakt }}
+            <div class="auk-o-grid-col-3">
+              <AuFormRow>
+                <Auk::Label>
+                  {{t "case-created"}}
+                </Auk::Label>
                 {{#if @publicationFlow.created}}
                   {{date @publicationFlow.created}}
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
-              </p>
+              </AuFormRow>
             </div>
+
           </div>
         </div>
-      {{/if}}
-    </Auk::Panel::Body>
-    {{#if this.isEditing}}
-      <Auk::Panel::Footer>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-publication-case-info-panel-cancel
-                @skin="naked"
-                @loading={{this.closeEditingPanel.isRunning}}
-                @disabled={{this.save.isRunning}}
-                {{on "click" (perform this.closeEditingPanel)}}
-              >
-                {{t "cancel"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-publication-case-info-panel-save
-                @skin="primary"
-                @loading={{this.save.isRunning}}
-                @disabled={{or
-                  (not this.isValid)
-                  this.closeEditingPanel.isRunning
-                }}
-                {{on "click" (perform this.save)}}
-              >
-                {{t "save"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
+      </Utils::LoadableContent>
+    {{else}}
+      <div class="auk-o-grid">
+        {{! Dringend }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-urgent"}}</h4>
+            <p
+              data-test-publication-case-info-panel-urgency-level
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.urgencyLevel.isUrgent}}
+                <Auk::Icon @name="alert-triangle" @skin="warning" />
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Publicatienummer }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-number"}}</h4>
+            <p
+              data-test-publication-case-info-panel-publication-number
+              class="auk-u-m-0"
+            >
+              {{@publicationFlow.identification.idName}}
+            </p>
+          </div>
+        </div>
+
+        {{! Numac-nummers }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-numac-number"}}</h4>
+            <p
+              data-test-publication-case-info-panel-numac-number
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.numacNumbers}}
+                {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! BS Thread Id}}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-thread-id"}}</h4>
+            <p
+              data-test-publication-case-info-panel-thread-id
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.threadId.idName}}
+                <p class="auk-u-text-uncapitalize">thread::{{@publicationFlow.threadId.idName}}::</p>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Wijze publicatie }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "kind-of-publication"}}</h4>
+            <p
+              data-test-publication-case-info-panel-publication-mode
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.mode}}
+                {{@publicationFlow.mode.label}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Datum beslissing }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "decision-date"}}</h4>
+            <p
+              data-test-publication-case-info-panel-decision-date
+              class="auk-u-m-0"
+            >
+              {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
+
+                <AuLink
+                  data-test-publication-case-info-panel-start-date
+                  @skin="primary"
+                  @icon="chevron-right"
+                  @iconAlignment="right"
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{this.modelsForAgendaitemRoute}}
+                  target="_blank"
+                >
+                  {{#if @publicationFlow.decisionActivity.startDate}}
+                    {{date @publicationFlow.decisionActivity.startDate}}
+                  {{else}}
+                    {{t "to-agenda"}}
+                  {{/if}}
+                </AuLink>
+              {{else}}
+                {{#if @publicationFlow.decisionActivity.startDate}}
+                  {{date @publicationFlow.decisionActivity.startDate}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Datum ontvangst }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "publication-flow-opening-date"}}</h4>
+            <p
+              data-test-publication-case-info-panel-opening-date
+              class="auk-u-m-0"
+            >
+              {{#if @publicationFlow.openingDate}}
+                {{date @publicationFlow.openingDate}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Limiet publicatie }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">
+              {{t "publication-flow-publication-due-date"}}
+            </h4>
+            <p data-test-publication-case-info-panel-due-date class="auk-u-m-0">
+              {{#if @publicationFlow.publicationSubcase.dueDate}}
+                {{date @publicationFlow.publicationSubcase.dueDate}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+
+        {{! Dossier aangemaakt op }}
+        <div class="auk-o-grid-col-3">
+          <div class="auk-content">
+            <h4 class="auk-u-m-0">{{t "case-created"}}</h4>
+            <p class="auk-u-m-0">
+              {{#if @publicationFlow.created}}
+                {{date @publicationFlow.created}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </p>
+          </div>
+        </div>
+      </div>
     {{/if}}
-  </Auk::Panel>
-</div>
+  </Auk::Panel::Body>
+  {{#if this.isEditing}}
+    <Auk::Panel::Footer>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-publication-case-info-panel-cancel
+              @skin="naked"
+              @loading={{this.closeEditingPanel.isRunning}}
+              @disabled={{this.save.isRunning}}
+              {{on "click" (perform this.closeEditingPanel)}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-publication-case-info-panel-save
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              @disabled={{or
+                (not this.isValid)
+                this.closeEditingPanel.isRunning
+              }}
+              {{on "click" (perform this.save)}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  {{/if}}
+</Auk::Panel>

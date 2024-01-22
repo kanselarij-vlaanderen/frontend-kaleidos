@@ -4,7 +4,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 function formatDocuments(pieceRecords, isApproval) {
   const names = pieceRecords.map((record) => record.name);
   const simplifiedNames = [];
-  const vrNumbersFound = [];
+  let previousVrModel;
   for (const pieceName of names) {
     if (isApproval) {
       try {
@@ -17,18 +17,20 @@ function formatDocuments(pieceRecords, isApproval) {
     let vrModel;
     try {
       vrModel = new VRDocumentName(pieceName);
+      const vrDateOnly = vrModel.vrDateOnly();
+      // if the date part of the previous VR number is the same we don't repeat it
+      const previousVrDate = previousVrModel?.vrDateOnly();
+      if (previousVrDate === vrDateOnly) {
+        simplifiedNames.push(vrModel.withoutDate());
+      } else {
+        simplifiedNames.push(vrModel.vrNumberWithSuffix());
+      }
+      previousVrModel = vrModel;
     } catch {
       simplifiedNames.push(pieceName);
+      previousVrModel = null;
       continue;
     }
-    const vrDateOnly = vrModel.vrDateOnly();
-    // if the first part of the VR number is the same we don't repeat it
-    if (!vrNumbersFound.includes(vrDateOnly)) {
-      vrNumbersFound.push(vrDateOnly);
-      simplifiedNames.push(vrModel.vrNumberWithSuffix());
-      continue;
-    }
-    simplifiedNames.push(vrModel.withoutDate());
   }
   const formatter = new Intl.ListFormat('nl-be');
   return `(${formatter.format(simplifiedNames)})`;

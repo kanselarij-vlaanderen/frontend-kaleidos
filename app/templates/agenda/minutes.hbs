@@ -16,6 +16,7 @@
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
+                      data-test-route-agenda---agendaitem-minutes-create-edit
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
@@ -43,12 +44,31 @@
               @title={{t "minutes"}}
             >
               <:header>
+                {{#if this.editorShowContentUpdateButton}}
                 <AuButton
+                  data-test-route-agenda---agendaitem-minutes-editor-update-content
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
                   {{on "click" this.updateEditorContent}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
+                {{/if}}
+                {{#if this.editorShowContentNotasButton}}
+                  <AuButton
+                    @skin="link"
+                    @icon="renew"
+                    class="au-u-padding-left-none"
+                    {{on "click" this.updateEditorNotas}}
+                  >{{t "update-thing" thing=(t "agendaitems-subtitle")}}</AuButton>
+                {{/if}}
+                {{#if this.editorShowContentAnnouncementsButton}}
+                  <AuButton
+                    @skin="link"
+                    @icon="renew"
+                    class="au-u-padding-left-none"
+                    {{on "click" this.updateEditorAnnouncements}}
+                  >{{t "update-thing" thing=(t "announcements-subtitle")}}</AuButton>
+                {{/if}}
                 <VersionsDropdown
                   @record={{this.currentPiecePartTask.value}}
                   @previousVersionKey="previousPiecePart"
@@ -72,6 +92,7 @@
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-route-agenda---agendaitem-minutes-editor-save
                     @skin="primary"
                     @loading={{this.saveMinutes.isRunning}}
                     @disabled={{this.saveDisabled}}

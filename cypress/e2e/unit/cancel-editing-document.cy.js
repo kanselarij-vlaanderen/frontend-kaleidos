@@ -387,7 +387,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const accesLevelOption4 = 'Vertrouwelijk';
     const typeOption = 'Advies Inspectie Financiën';
     const typeOption2 = 'Besluit Vlaamse Regering';
-    const typeOption3 = 'Voorontwerp van decreet';
+    const typeOption3 = 'Groenboek';
     const typeSearchOption = 'Advies agentschap overheidspersoneel';
 
     // *Setup of this test:

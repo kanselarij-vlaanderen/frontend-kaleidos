@@ -1,64 +1,62 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
+<Auk::Panel ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "government-domains-government-fields"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "government-domains-government-fields"}}
-            </h4>
+            <AuButton
+              data-test-government-areas-panel-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" this.showEditModal}}
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-government-areas-panel-edit
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" this.showEditModal}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          {{/if}}
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    {{#if @governmentAreas.length}}
-      <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th>{{t "government-domain"}}</th>
-              <th>{{t "government-fields"}}</th>
-            </tr>
-          </thead>
-          <tbody>
-          {{#each this.rows as |row|}}
-            <tr data-test-government-areas-panel-row>
-              <td data-test-government-areas-panel-row-label>
-                {{row.governmentDomain.label}}
-              </td>
-              <td data-test-government-areas-panel-row-fields>
-                {{#if row.governmentFields}}
-                  {{join ", " (map-by "label" row.sortedGovernmentFields)}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </td>
-            </tr>
-          {{/each}}
-          </tbody>
-        </table>
-      </Auk::Panel::Body>
-    {{else}}
-      <Auk::Panel::Body>
-        <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
-      </Auk::Panel::Body>
-    {{/if}}
-  </Auk::Panel>
-</div>
+        {{/if}}
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if @governmentAreas.length}}
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "government-domain"}}</th>
+            <th>{{t "government-fields"}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        {{#each this.rows as |row|}}
+          <tr data-test-government-areas-panel-row>
+            <td data-test-government-areas-panel-row-label>
+              {{row.governmentDomain.label}}
+            </td>
+            <td data-test-government-areas-panel-row-fields>
+              {{#if row.governmentFields}}
+                {{join ", " (map-by "label" row.sortedGovernmentFields)}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
 
 {{#if this.isOpenEditModal}}
   <Utils::GovernmentAreas::EditGovernmentAreasModal

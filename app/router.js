@@ -1,7 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
-import { isEmpty } from '@ember/utils';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -75,14 +74,12 @@ Router.map(function() {
     });
   });
 
-  if (!isEmpty(ENV.APP.ENABLE_SIGNATURES)) {
-    this.route('signatures', { path: '/ondertekenen', }, function() {
-      this.route('index', { path: '/opstarten' });
-      this.route('ongoing', { path: '/opvolgen' });
-      this.route('decisions', { path: '/beslissingen-en-notulen' });
-      this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
-    });
-  }
+  this.route('signatures', { path: '/ondertekenen', }, function() {
+    this.route('index', { path: '/opstarten' });
+    this.route('ongoing', { path: '/opvolgen' });
+    this.route('decisions', { path: '/beslissingen-en-notulen' });
+    this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
+  });
 
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
@@ -91,6 +88,7 @@ Router.map(function() {
     this.route('decisions', { path: '/beslissingen' });
     this.route('news-items', { path: '/kort-bestek', });
     this.route('all-types', { path: '/alle-types' });
+    this.route('publication-flows', { path: '/publicaties' });
   });
 
   this.route('settings', { path: '/instellingen', }, function() {

@@ -1,3 +1,4 @@
+{{! multiple defaults to true, false means 1 file will be sliced if multiple files are dropped}}
 <FileDropzone
   @queue={{this.fileQueue}}
   @multiple={{@multiple}}
@@ -5,7 +6,6 @@
   class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
   as |dropzone|
 >
-  {{!-- Note that "@multiple" has been deprecated, but still works in v 5.x.x beta --}}
   {{!-- template-lint-disable require-input-label --}}
   <input
     type="file"

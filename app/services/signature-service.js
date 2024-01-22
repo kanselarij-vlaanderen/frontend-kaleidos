@@ -70,6 +70,11 @@ export default class SignatureService extends Service {
       const job = await response.json();
       await this.pollPrepareSignFlow(job);
     } else {
+      for (let signFlow of signFlows) {
+        await signFlow.reload();
+        await signFlow.belongsTo('status').reload();
+        await signFlow.belongsTo('creator').reload();
+      }
       let stringifiedJson;
       try {
         const json = await response?.json();
@@ -252,21 +257,20 @@ export default class SignatureService extends Service {
     return false;
   }
 
-  async removeSignFlow(signFlow, keepMarkingActivity) {
+  async removeSignFlow(signFlow) {
     if (signFlow) {
       const signSubcase = await signFlow.signSubcase;
       const signMarkingActivity = await signSubcase.signMarkingActivity;
       const piece = await signMarkingActivity.piece;
-      if (!keepMarkingActivity) {
-        await fetch(`/signing-flows/${signFlow.id}`, {
-          method: 'DELETE'
-        });
-      } else {
-        await fetch(`/signing-flows/reset-signflow/${signFlow.id}`, {
-          method: 'POST'
-        });
-      }
+      await fetch(`/signing-flows/${signFlow.id}`, {
+        method: 'DELETE'
+      });
+      // unload deleted records from store
+      await signFlow.unloadRecord();
+      await signSubcase.unloadRecord();
+      await signMarkingActivity.unloadRecord();
       await piece.belongsTo('signedPiece').reload();
+      await piece.belongsTo('signedPieceCopy').reload();
       await piece.belongsTo('signMarkingActivity').reload();
     }
   }

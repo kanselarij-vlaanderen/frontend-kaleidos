@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.7.8",
+  "version": "6.9.3",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "2.12.1",
+    "@appuniversum/ember-appuniversum": "2.18.0",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",
@@ -57,7 +57,7 @@
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#c1c75d59a4049db260ec55941559b36748f3a2d4",
+    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#aed7406f3b8ca1f373fa504b029417ff03c27bf4",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
     "@typescript-eslint/parser": "^5.48.2",
@@ -93,7 +93,7 @@
     "ember-data-storefront": "0.18.2-ember4.0",
     "ember-element-helper": "^0.6.1",
     "ember-fetch": "^8.1.2",
-    "ember-file-upload": "5.0.0-beta.8",
+    "ember-file-upload": "7.4.0",
     "ember-flatpickr": "^3.2.3",
     "ember-functions-as-helper-polyfill": "^2.1.1",
     "ember-in-viewport": "4.1.0",
