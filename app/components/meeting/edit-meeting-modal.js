@@ -278,6 +278,7 @@ export default class MeetingEditMeetingComponent extends Component {
         const documentContainer = await report.documentContainer;
         const pieces = await documentContainer.pieces;
         report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+        await report.belongsTo('file').reload();
         await report.save();
       }));
     }

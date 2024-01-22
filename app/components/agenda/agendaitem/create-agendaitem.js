@@ -82,7 +82,7 @@ export default class CreateAgendaitem extends Component {
     const subcasesToAdd = new Set([...this.selectedSubcases]);
     const agendaItems = [];
     for (const subcase of subcasesToAdd) {
-      let submissionActivities = yield this.store.query('submission-activity', {
+      let submissionActivities = yield this.store.queryAll('submission-activity', {
         'filter[subcase][:id:]': subcase.id,
         'filter[:has-no:agenda-activity]': true,
       });

@@ -24,7 +24,7 @@ export default class SignaturesStatusFilterComponent extends Component {
 
   @task
   *loadStatuses() {
-    const statuses = yield this.store.query('concept', {
+    const statuses = yield this.store.queryAll('concept', {
       filter: {
         'concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.SIGNFLOW_STATUSES,
@@ -35,7 +35,7 @@ export default class SignaturesStatusFilterComponent extends Component {
     if (statuses) {
       this.statusFilterItems = [];
       this.selectedStatuses = [];
-      for (const status of statuses) {
+      for (const status of statuses.slice()) {
         const statusItem = {
           label: status.label,
           value: status.id

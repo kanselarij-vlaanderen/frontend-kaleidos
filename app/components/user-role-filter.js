@@ -37,7 +37,7 @@ export default class UserRoleFilterComponent extends Component {
 
   @task
   *loadData() {
-    this.roles = yield this.store.query('role', {
+    this.roles = yield this.store.queryAll('role', {
       filter: {
         'concept-scheme': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
