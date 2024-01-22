@@ -8,6 +8,7 @@ import {
   sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -34,6 +35,7 @@ export default class PrintNewsletterRoute extends Route {
       },
       include: 'treatment.news-item',
       sort: 'number',
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
 
     // The approval items should not be shown on newsletter views
