@@ -72,9 +72,9 @@
   <div class="auk-u-my-4">
     <AuAlert
       @title="Dit dossier is onvolledig en doorgestuurd naar het Vlaams parlement op 29/09/2023"
-      @skin="success"
       @icon="mail"
       @size="small"
+      class="au-c-alert--neutral"
     />
   </div>
   {{/if}}
@@ -152,11 +152,10 @@
       </div>
     </AuContent>
     <AuAlert
-      @title="Dit dossier mist nog:"
-      @skin="warning"
-      @icon="alert-triangle"
+      @title="We vonden deze niet terug:"
+      @skin="neutral"
       @size="small"
-      class="au-u-margin-bottom-none au-u-margin-top"
+      class="au-u-margin-bottom-none au-u-margin-top au-c-alert--neutral"
     >
       <AuContent>
         <ul>
