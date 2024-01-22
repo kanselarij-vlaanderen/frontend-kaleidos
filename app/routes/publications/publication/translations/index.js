@@ -66,13 +66,13 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'publications.publication.translations'
     );
 
-    const requestActivities = await this.store.query('request-activity', {
+    const requestActivities = await this.store.queryAll('request-activity', {
       'filter[translation-subcase][:id:]': this.translationSubcase.id,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
-    const translationActivities = await this.store.query(
+    const translationActivities = await this.store.queryAll(
       'translation-activity',
       {
         'filter[subcase][:id:]': this.translationSubcase.id,
