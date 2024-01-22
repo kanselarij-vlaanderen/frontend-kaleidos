@@ -1312,5 +1312,7 @@
   "remarks": "Opmerkingen",
   "no-new-files-will-be-sent": "Er zijn geen nieuwe bestanden om door te sturen.",
   "documents-sent-on": "Documenten doorgestuurd op",
-  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd",
+  "the-files-are-being-sent-to-parliament": "De bestanden worden doorgestuurd naar het Vlaams Parlement",
+  "the-files-are-sent-to-parliament": "De bestanden werden succesvol doorgestuurd naar het Vlaams Parlement"
 }
