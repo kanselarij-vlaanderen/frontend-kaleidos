@@ -824,7 +824,7 @@ context('Testing the application as Minister user', () => {
       cy.get(document.documentPreview.downloadLink).should('not.exist');
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(auk.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
       cy.get(document.previewDetailsTab.sourceFile);
       cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
     });
@@ -834,7 +834,7 @@ context('Testing the application as Minister user', () => {
 
       // agendaitem document on open agenda
       cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Ondertekenen');
-      cy.get(auk.alert.message).contains(alertMessage);
+      cy.get(appuniversum.alert.message).contains(alertMessage);
       // agendaitem document on released agenda
       cy.visit('document/6374F2FBD9A98BD0A2288550?tab=Ondertekenen');
       cy.get(document.previewSignaturesTab.markForSignflow);

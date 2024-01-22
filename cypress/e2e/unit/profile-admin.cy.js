@@ -1181,7 +1181,7 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentPreview.downloadLink);
       cy.get(document.previewDetailsTab.delete);
       cy.get(document.previewDetailsTab.edit);
-      cy.get(auk.alert.message).should('not.exist');
+      cy.get(appuniversum.alert.message).should('not.exist');
       cy.get(document.previewDetailsTab.sourceFileDownload);
     });
 

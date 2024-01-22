@@ -394,7 +394,7 @@ context('signatures shortlist overview tests', () => {
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
     cy.wait('@deleteSigningActivities');
-    cy.get(appuniversum.toaster).find(auk.alert.close)
+    cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
     // check succes

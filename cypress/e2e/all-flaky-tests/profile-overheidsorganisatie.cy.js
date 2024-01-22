@@ -778,7 +778,7 @@ context('Testing the application as Overheid user', () => {
       cy.get(document.documentPreview.downloadLink).should('not.exist');
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(auk.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
       cy.get(document.previewDetailsTab.sourceFile);
       cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
     });
