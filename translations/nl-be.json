@@ -1193,7 +1193,7 @@
   "error-while-generating-report-name-pdf": "Er ging iets mis tijdens het aanmaken van de beslissingsfiche {name}. Reden: {error}",
   "error-while-generating-report-pdfs": "Er ging iets mis tijdens het aanmaken van de beslissingsfiches. Reden: {error}",
   "error-while-generating-report-pdfs-no-reason": "Er ging iets mis tijdens het aanmaken van de beslissingsfiches.",
-  "error-while-generating-report-bundle": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF. Reden: {error}",
+  "error-while-generating-report-bundle": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF.",
   "error-while-generating-report-bundle-no-reason": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF.",
   "error-while-generating-minutes-pdf": "Er ging iets mis tijdens het aanmaken van de notulen",
   "version-of-date-at-time": "Versie van {date} om {time}",
