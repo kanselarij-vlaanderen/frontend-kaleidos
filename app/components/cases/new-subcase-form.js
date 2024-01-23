@@ -11,6 +11,7 @@ export default class NewSubcaseForm extends Component {
   @service store;
   @service conceptStore;
   @service router;
+  @service mandatees;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -22,10 +23,15 @@ export default class NewSubcaseForm extends Component {
   @tracked agendaItemTypes;
   @tracked agendaItemType;
   @tracked subcaseType;
-
   @tracked selectedShortcut;
   @tracked latestSubcase = null;
   @tracked isEditing = false;
+
+  @tracked submitter;
+  @tracked mandatees = [];
+
+  @tracked selectedGovernmentFields = [];
+  @tracked selectedGovernmentDomains = [];
 
   constructor() {
     super(...arguments);
@@ -101,7 +107,7 @@ export default class NewSubcaseForm extends Component {
   @task
   *saveCase(fullCopy) {
     const now = new Date();
-    const subcase = this.store.createRecord('subcase', {
+    let subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.title),
@@ -133,6 +139,18 @@ export default class NewSubcaseForm extends Component {
     if (this.latestSubcase && fullCopy) {
       yield this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
     }
+
+    const mandatees = yield subcase.mandatees;
+    mandatees.clear();
+    mandatees.pushObjects(this.mandatees);
+    subcase.requestedBy = this.submitter;
+
+    let newGovernmentAreas = this.selectedGovernmentDomains.concat(this.selectedGovernmentFields);
+    const governmentAreas = yield subcase.governmentAreas;
+    governmentAreas.clear();
+    governmentAreas.pushObjects(newGovernmentAreas);
+    yield subcase.save();
+
     this.router.transitionTo('cases.case.subcases.subcase', this.args.decisionmakingFlow.id, subcase.id);
   }
 
@@ -192,5 +210,39 @@ export default class NewSubcaseForm extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  /** mandatee selector */
+
+  @action
+  setSubmitter(submitter) {
+    this.submitter = submitter;
+  }  
+  
+  @action
+  setMandatees(mandatees) {
+    this.mandatees = mandatees;
+  }
+
+  /** government areas */
+
+  @action
+  selectField(selectedField) {
+    this.selectedGovernmentFields.pushObjects(selectedField);
+  }
+
+  @action
+  deselectField(selectedField) {
+    this.selectedGovernmentFields.removeObjects(selectedField);
+  }
+
+  @action
+  selectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.pushObjects(selectedDomain);
+  }
+
+  @action
+  deselectDomain(selectedDomain) {
+    this.selectedGovernmentDomains.removeObjects(selectedDomain);
   }
 }
