@@ -9,7 +9,7 @@
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
-          {{#if (and (user-may "manage-cases") this.isEnabledNewCaseCreation)}}
+          {{#if (user-may "manage-cases")}}
             <AuButton
               data-test-cases-header-add-case
               @skin="primary"
@@ -18,15 +18,15 @@
             >
               {{t "add-case"}}
             </AuButton>
-            {{#if (user-may "manage-cases")}}
-              <AuButton
-                @skin="primary"
-                @icon="plus"
-                {{on "click" this.toggleIsOpenExperimentalNewCaseModal}}
-              >
-                {{t "add-case-new"}}
-              </AuButton>
-            {{/if}}
+          {{/if}}
+          {{#if (and this.isEnabledNewCaseCreation (user-may "manage-cases"))}}
+            <AuButton
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.toggleIsOpenExperimentalNewCaseModal}}
+            >
+              {{t "add-case-new"}}
+            </AuButton>
           {{/if}}
         </Group.Item>
       </Toolbar.Group>

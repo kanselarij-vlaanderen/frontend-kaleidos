@@ -151,7 +151,7 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *loadGovernmentDomains() {
-    let governmentDomains = yield this.store.query('concept', {
+    let governmentDomains = yield this.store.queryAll('concept', {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
@@ -159,7 +159,6 @@ export default class GenerateReportModalComponent extends Component {
         CONFIG.PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
         'filter[deprecated]': false,
       }), // Exclude deprecated government domains when generating modern reports
-      'page[size]': 100,
     });
     this.governmentDomains = governmentDomains.toArray().sortBy('label');
     // everything selected by default

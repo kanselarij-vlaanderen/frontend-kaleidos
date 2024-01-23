@@ -193,7 +193,7 @@
       <AuLink
         @skin="button-secondary"
         @route="cases.case.subcases"
-        @disabled={{this.saveDisabled}}
+        @disabled={{this.saveCase.isRunning}}
       >
         {{t "cancel"}}
       </AuLink>

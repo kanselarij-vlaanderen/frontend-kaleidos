@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
-import { enableVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -36,7 +36,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   get enableVlaamsParlement() {
-    return enableVlaamsParlement();
+    return isEnabledVlaamsParlement();
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {

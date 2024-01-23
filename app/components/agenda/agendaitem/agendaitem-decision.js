@@ -554,6 +554,7 @@ export default class AgendaitemDecisionComponent extends Component {
     }
 
     await documentContainer.save();
+    await report.belongsTo('file').reload();
     await report.save();
     await annotatiePiecePart?.save();
     await betreftPiecePart?.save();
@@ -563,7 +564,6 @@ export default class AgendaitemDecisionComponent extends Component {
 
     await this.args.decisionActivity.save();
 
-    // If this is too slow, we should make a task and do this asynchronously
     await this.decisionReportGeneration.generateReplacementReport.perform(
       report
     );

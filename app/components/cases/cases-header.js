@@ -35,6 +35,7 @@ export default class CasesHeader extends Component {
 
   @action
   saveExperimentalNewCase(decisionmakingFlow) {
+    this.IsOpenExperimentalNewCaseModal = false;
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }
 }

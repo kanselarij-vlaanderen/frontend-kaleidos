@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { enableVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -39,7 +39,7 @@ export default class AgendaitemControls extends Component {
   }
 
   loadCanSendToVP = task(async () => {
-    if (!enableVlaamsParlement() || !this.args.subcase) {
+    if (!isEnabledVlaamsParlement() || !this.args.subcase) {
       this.canSendToVP = false;
       return;
     }

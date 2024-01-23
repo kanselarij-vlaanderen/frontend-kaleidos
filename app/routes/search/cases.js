@@ -58,9 +58,9 @@ export default class CasesSearchRoute extends Route {
     'subcaseSubTitle',
   ];
 
-  static postProcessData = (searchData) => {
+  static postProcessData = (searchData, _unused, params) => {
     CasesSearchRoute.postProcessHighlight(searchData);
-    CasesSearchRoute.postProcessDates(searchData);
+    CasesSearchRoute.postProcessDates(searchData, params);
     CasesSearchRoute.setSubcaseHighlights(searchData);
 
     searchData.highlight = {
@@ -71,11 +71,15 @@ export default class CasesSearchRoute extends Route {
     return searchData;
   };
 
-  static postProcessDates(_case) {
+  static postProcessDates(_case, params) {
     const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
+        let sorted = sessionDates.sort();
+        if (!isEmpty(params.dateTo)) {
+          const maxDate = parse(params.dateTo, 'dd-MM-yyyy', new Date());
+          sorted = sorted.filter((date) => new Date(date) <= maxDate);
+        }
         _case.attributes.sessionDates = sorted[sorted.length - 1];
       } else {
         _case.attributes.sessionDates = sessionDates;
@@ -193,7 +197,7 @@ export default class CasesSearchRoute extends Route {
       params.size,
       sort,
       filter,
-      CasesSearchRoute.postProcessData,
+      (searchData) => CasesSearchRoute.postProcessData(searchData, null, params),
       {
         fields: CasesSearchRoute.highlightFields,
       }
