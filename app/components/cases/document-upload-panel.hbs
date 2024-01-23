@@ -1,0 +1,32 @@
+<Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                {{t "documents"}}
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Auk::FileUploader
+            @multiple={{true}}
+            @reusable={{true}}
+            @onUpload={{this.uploadPiece}}
+          />
+          <div class="upload-container">
+            {{#each @newPieces as |piece|}}
+              <Documents::UploadedDocument
+                @limitedFields={{true}}
+                @piece={{piece}}
+                @allowDocumentContainerEdit={{true}}
+                @onDelete={{perform this.deletePiece piece}} 
+                {{did-insert this.scrollIntoView}}
+              />
+            {{/each}}
+          </div>
+        </Auk::Panel::Body>
+      </Auk::Panel>

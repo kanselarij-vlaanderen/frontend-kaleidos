@@ -181,6 +181,11 @@
           @onDeselectDomains={{this.deselectDomain}}
           @disabled={{this.saveCase.isRunning}}
         />
+        <Cases::DocumentUploadPanel
+          @newPieces={{this.newPieces}}
+          @addPieceToNewPieces={{this.addPieceToNewPieces}}
+          @deletePiece={{this.deletePiece}}
+        />
       </div>
     </div>
   </div>
