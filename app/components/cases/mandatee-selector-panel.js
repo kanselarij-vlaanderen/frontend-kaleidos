@@ -10,7 +10,7 @@ export default class MandateeSelectorPanel extends Component {
 
   @tracked currentMinisters = [];
   @tracked selectedCurrentMinisters = [];
-  @tracked tempMandatees = [];
+  @tracked currentMandatees = [];
 
   constructor() {
     super(...arguments);
@@ -19,30 +19,36 @@ export default class MandateeSelectorPanel extends Component {
 
   @action
   async onChangeSelectedMinisters(selected) {
-    this.selectedCurrentMinisters = selected;
-    const selectedMandatees = [];
+    let selectedMandatees = [];
     selected.forEach(selectedMinister => {
-      const mandatee = this.tempMandatees.find((tempMandatee) => tempMandatee.person.get('id') === selectedMinister.id);
+      const mandatee = this.currentMandatees.find((currentMandatee) => currentMandatee.person.get('id') === selectedMinister.id);
       selectedMandatees.push(mandatee);
     });
+    selectedMandatees = selectedMandatees.sort(
+      (m1, m2) => m1.priority - m2.priority
+    );
+    const sortedMinisters = await Promise.all(
+      selectedMandatees.map((m) => m.person)
+    );
+    this.selectedCurrentMinisters = [...new Set(sortedMinisters)];
     this.args.setMandatees(selectedMandatees);
 
     // if there is a submitter but this submitter can't be found in the selected mandatees, then set the submitter
     // to be the first selected minister. 
     // When there is no submitter but the list of selected ministers isn't empty, set submitter to first minister in the list
-    if((this.args.submitter && !this.tempMandatees.find((tempMandatee) => tempMandatee.person.get('id') === this.args.submitter.id)) 
-    || (!this.args.submitter && this.selectedCurrentMinisters.length > 0)) {
-      this.args.setSubmitter(this.tempMandatees.find((tempMandatee) => tempMandatee.person.get('id') === this.selectedCurrentMinisters[0]?.get("id")));
+    if((this.args.submitter && !selectedMandatees.find((selectedMandatee) => selectedMandatee.person.get('id') === this.args.submitter.person.get('id'))) 
+    || (!this.args.submitter && this.selectedCurrentMinisters.length)) {
+      this.args.setSubmitter(selectedMandatees.find((selectedMandatee) => selectedMandatee.person.get('id') === this.selectedCurrentMinisters[0]?.get("id")));
     }
   }
 
   @task
   *prepareCurrentMinisters() {
     const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
-    this.tempMandatees = currentMandatees
+    this.currentMandatees = currentMandatees
           .sort((m1, m2) => m1.priority - m2.priority)
     const sortedMinisters = yield Promise.all(
-      this.tempMandatees.map((m) => m.person)
+      this.currentMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
   }
@@ -55,7 +61,7 @@ export default class MandateeSelectorPanel extends Component {
 
   @action
   onChangeSubmitter(submitterMinister) {
-    const submitterMandatee = this.tempMandatees.find((tempMandatee) => tempMandatee.person.get('id') === submitterMinister.id);
+    const submitterMandatee = this.currentMandatees.find((currentMandatee) => currentMandatee.person.get('id') === submitterMinister.id);
     this.args.setSubmitter(submitterMandatee);
   }  
 }

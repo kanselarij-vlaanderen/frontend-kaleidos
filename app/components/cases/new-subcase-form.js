@@ -12,7 +12,6 @@ export default class NewSubcaseForm extends Component {
   @service conceptStore;
   @service router;
   @service mandatees;
-  @service agendaitemAndSubcasePropertiesSync;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -141,20 +140,10 @@ export default class NewSubcaseForm extends Component {
       yield this.copySubcaseSubmissions(subcase, piecesFromSubmissions);
     }
 
-    const propertiesToSetOnAgendaitem = {
-      mandatees: this.mandatees,
-    };
-    const propertiesToSetOnSubcase = {
-      mandatees: this.mandatees,
-      requestedBy: this.submitter,
-    };
-
-    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
-      subcase,
-      propertiesToSetOnAgendaitem,
-      propertiesToSetOnSubcase,
-      true,
-    );
+    const mandatees = yield subcase.mandatees;
+    mandatees.clear();
+    mandatees.pushObjects(this.mandatees);
+    subcase.requestedBy = this.submitter;
 
     let newGovernmentAreas = this.selectedGovernmentDomains.concat(this.selectedGovernmentFields);
     const governmentAreas = yield subcase.governmentAreas;
