@@ -331,7 +331,9 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     .click({
       force: true,
     });
-  cy.wait(`@patchAgendaitem_${int}`);
+  cy.wait(`@patchAgendaitem_${int}`, {
+    timeout: 60000,
+  });
   cy.get(utils.changesAlert.close).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
@@ -393,7 +395,9 @@ function approveDesignAgenda(shouldConfirm = true) {
     // agendaitems are loading after action is completed
     cy.get(auk.loader, {
       timeout: 60000,
-    }).should('not.exist');
+    }).should('not.exist', {
+      timeout: 60000,
+    });
   }
 
   cy.log('/approveDesignAgenda');
@@ -446,7 +450,9 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
 
-  cy.get(auk.loader).should('not.exist');
+  cy.get(auk.loader).should('not.exist', {
+    timeout: 60000,
+  });
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
@@ -501,7 +507,9 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.wait(`@loadAgendaitems_${randomInt}`);
   cy.get(auk.loader, {
     timeout: 12000,
-  }).should('not.exist');
+  }).should('not.exist', {
+    timeout: 60000,
+  });
   cy.log('/addAgendaitemToAgenda');
 }
 

@@ -94,7 +94,7 @@ function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
   cy.setDateInFlatpickr(dateTo);
   cy.wait(`@searchCall${randomInt}5`);
   cy.get(dependency.emberDataTable.isLoading).should('not.exist');
-  cy.get(resultRow).should('not.exist');
+  cy.get(auk.emptyState.message).contains('Gelieve een zoekterm in te vullen.');
 
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}6`);
   cy.get(route.search.from).find(auk.datepicker.clear)
@@ -518,7 +518,7 @@ context('Search tests', () => {
     //   folder: 'files', fileName: fileNameTreatment, fileExtension: 'pdf',
     // };
 
-    it.only('Search all fields setup', () => {
+    it('Search all fields setup', () => {
       cy.visit('/dossiers');
       cy.createCase(caseShortTitle);
       cy.addSubcase('Nota',
@@ -691,7 +691,7 @@ context('Search tests', () => {
     });
   });
 
-  context.only('Search tests without searchterms', () => {
+  context('Search tests without searchterms', () => {
     // const noResult = 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.';
     const dateFrom = Cypress.dayjs().add(-1, 'years');
     const dateTo = Cypress.dayjs().add(1, 'years');
