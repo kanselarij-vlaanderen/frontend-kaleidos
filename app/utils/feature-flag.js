@@ -1,6 +1,13 @@
 import ENV from 'frontend-kaleidos/config/environment';
 
-function enableVlaamsParlement() {
+function isEnabledImpersonation() {
+  return (
+    ENV.APP.ENABLE_IMPERSONATION === 'true' ||
+    ENV.APP.ENABLE_IMPERSONATION === true
+  );
+}
+
+function isEnabledVlaamsParlement() {
   return (
     ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
     ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
@@ -14,4 +21,8 @@ function isEnabledNewCaseCreation() {
   )
 }
 
-export { enableVlaamsParlement, isEnabledNewCaseCreation };
+export {
+  isEnabledVlaamsParlement,
+  isEnabledImpersonation,
+  isEnabledNewCaseCreation,
+}
