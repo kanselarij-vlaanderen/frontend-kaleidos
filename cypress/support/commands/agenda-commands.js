@@ -147,6 +147,8 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     }).should('not.exist');
     // wait to ensure secretary is changed, cypress can be too fast when setting location or clicking save
     cy.wait(2000);
+  } else {
+    cy.wait(4000);
   }
 
   // Set the location
