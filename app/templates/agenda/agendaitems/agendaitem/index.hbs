@@ -25,27 +25,26 @@
   </Toolbar.Group>
   <Toolbar.Group @position="right" as |Group|>
     <Group.Item>
-      {{#if (user-may "manage-agendaitems")}}
-        <Agenda::Agendaitem::AgendaitemControls
-          @agendaitem={{this.model}}
-          @agendaActivity={{this.agendaActivity}}
-          @currentAgenda={{this.agenda}}
-          @subcase={{this.subcase}}
-          @reverseSortedAgendas={{this.reverseSortedAgendas}}
-          @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
-        />
-      {{/if}}
+      <Agenda::Agendaitem::AgendaitemControls
+        @agendaitem={{this.model}}
+        @agendaActivity={{this.agendaActivity}}
+        @currentAgenda={{this.agenda}}
+        @subcase={{this.subcase}}
+        @meeting={{this.meeting}}
+        @reverseSortedAgendas={{this.reverseSortedAgendas}}
+        @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+        @onSendToVp={{this.reloadParliamentFlow}}
+      />
     </Group.Item>
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if (and this.enableVlaamsParlement this.subcase.decisionmakingFlow.case.parliamentFlow)}}
-  <AuAlert
-    @size="small"
-    @skin="success"
-    @icon="mail"
-    @title="{{t "this-case-was-submitted-to-VP-on"}} {{date this.subcase.decisionmakingFlow.case.parliamentFlow.openingDate}}">
-  </AuAlert>
+{{#if this.enableVlaamsParlement}}
+  {{#if this.parliamentFlow}}
+    <Vp::SubmissionsAlert
+      @parliamentFlow={{this.parliamentFlow}}
+    />
+  {{/if}}
 {{/if}}
 
 <div class="auk-u-mb-8">

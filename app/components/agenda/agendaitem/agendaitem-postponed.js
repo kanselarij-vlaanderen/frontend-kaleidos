@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import subDays from 'date-fns/subDays';
 
@@ -28,12 +27,15 @@ export default class AgendaitemPostponed extends Component {
   *loadProposedStatus() {
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
-    const latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:gt:start-date]':
-        this.args.agendaActivity.startDate.toISOString(),
-      sort: 'start-date',
-    });
+    let latestAagendaActivity;
+    if (this.args.subcase) {
+      latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
+        'filter[subcase][:id:]': this.args.subcase.id,
+        'filter[:gt:start-date]':
+          this.args.agendaActivity.startDate.toISOString(),
+        sort: 'start-date',
+      });
+    }
 
     if (latestAagendaActivity) {
       // we have to generate a link to the latest meeting
@@ -74,17 +76,15 @@ export default class AgendaitemPostponed extends Component {
   @task
   *reProposeForMeeting(meeting) {
     this.closeProposingForOtherMeetingModal();
-    const submissionActivitiesFromAgendaActivity = yield this.store.query('submission-activity', {
+    const submissionActivitiesFromAgendaActivity = yield this.store.queryAll('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
-      'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     // there could be new submission-activities after finalizing agenda
-    const newSubmissionActivities = yield this.store.query('submission-activity', {
+    const newSubmissionActivities = yield this.store.queryAll('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:agenda-activity]': true,
-      'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     const submissionActivities = [...submissionActivitiesFromAgendaActivity.toArray(), ...newSubmissionActivities.toArray()];
