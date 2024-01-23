@@ -71,16 +71,7 @@ export default class ParliamentService extends Service {
           errorMessage = `Something went wrong while reading response: ${error}`;
         }
       }
-      this.toaster.close(sendingToast);
-      this.toaster.show(CopyErrorToClipboardToast, {
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('error-while-sending-to-VP-message'),
-        errorContent: errorMessage,
-        showDatetime: true,
-        options: {
-          timeOut: 60 * 10 * 1000,
-        },
-      });
+      this.closeToastAndError(sendingToast, errorMessage)
     } else {
       const job = await response.json();
       this.delayedPoll(job, sendingToast);
@@ -90,14 +81,19 @@ export default class ParliamentService extends Service {
   async delayedPoll(job, toast) {
     // Many files will only take about half a second to send
     // This avoids having to wait 2 seconds until the next poll
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 600));
     this.pollSendToVpJob(job, toast);
   }
 
   async pollSendToVpJob(job, toast) {
-    const {
-      data: { attributes: jobResult },
-    } = await this.getJob(job, 'send-to-vp-job');
+    let jobResult;
+    try {
+      jobResult = await this.getJob(job, 'send-to-vp-job');
+    } catch (error) {
+      this.closeToastAndError(toast, error);
+      return;
+    }
+
     if (!jobResult) {
       return;
     }
@@ -113,10 +109,7 @@ export default class ParliamentService extends Service {
         }
       );
     } else if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.FAILED) {
-      this.toaster.close(toast);
-      this.toaster.error(
-        this.intl.t('error-while-sending-to-VP-message')
-      );
+      this.closeToastAndError(toast, jobResult.errorMessage);
     } else {
       setTimeout(() => {
         this.pollSendToVpJob(job, toast);
@@ -127,7 +120,9 @@ export default class ParliamentService extends Service {
   async getJob(job) {
     let response;
     try {
-      response = await fetch(`/vlaams-parlement-sync/send-to-vp-jobs/${job.id}`);
+      response = await fetch(
+        `/vlaams-parlement-sync/send-to-vp-jobs/${job.id}`
+      );
       const data = await response.json();
       if (!response.ok) {
         throw new Error(
@@ -136,7 +131,7 @@ export default class ParliamentService extends Service {
           }): ${JSON.stringify(data)}`
         );
       }
-      return data;
+      return data.data.attributes;
     } catch (error) {
       // Errors returned from services *should* still
       // be valid JSON(:API), but we could encounter
@@ -151,5 +146,18 @@ export default class ParliamentService extends Service {
         throw error;
       }
     }
+  }
+
+  closeToastAndError(toast, errorMessage) {
+    this.toaster.close(toast);
+    this.toaster.show(CopyErrorToClipboardToast, {
+      title: this.intl.t('warning-title'),
+      message: this.intl.t('error-while-sending-to-VP-message'),
+      errorContent: errorMessage,
+      showDatetime: true,
+      options: {
+        timeOut: 60 * 10 * 1000,
+      },
+    });
   }
 }
