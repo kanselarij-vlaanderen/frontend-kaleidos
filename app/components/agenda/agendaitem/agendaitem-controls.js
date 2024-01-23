@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -20,17 +21,66 @@ export default class AgendaitemControls extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service decisionReportGeneration;
+  @service parliamentService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
+  @tracked showVPModal = false;
+  @tracked canSendToVP = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
+    this.loadCanSendToVP.perform();
+  }
+
+  loadCanSendToVP = task(async () => {
+    if (!this.enableVlaamsParlement || !this.args.subcase) {
+      this.canSendToVP = false;
+      return;
+    }
+
+    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+      const submitter = await this.args.subcase.requestedBy;
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      } else {
+        this.canSendToVP = false;
+      }
+    } else if (this.currentSession.may('send-cases-to-vp')) {
+      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+    } else {
+      this.canSendToVP = false;
+    }
+  });
+
+  get hasDropdownOptions() {
+    return (
+      (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
+      this.canSendToVP
+    );
+  }
+
+  get enableVlaamsParlement() {
+    return (
+      ENV.APP.ENABLE_VLAAMS_PARLEMENT === 'true' ||
+      ENV.APP.ENABLE_VLAAMS_PARLEMENT === true
+    );
+  }
+
+  @action
+  async onSendToVp() {
+    this.showVPModal = false;
+    if (this.args.onSendToVp) {
+      this.args.onSendToVp();
+    }
   }
 
   get areDecisionActionsEnabled() {
@@ -85,9 +135,8 @@ export default class AgendaitemControls extends Component {
     this.isVerifying = false;
     this.showLoader = true;
     const agendaItemType = await agendaitem.type;
-    const previousNumber =
-      agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
-    if (await this.isDeletable) {
+    const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
+    if (this.isDeletable) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);

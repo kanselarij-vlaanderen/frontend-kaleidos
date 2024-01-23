@@ -2,6 +2,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
 
 export default class File extends Model {
+  @attr uri;
   @attr('string') filename;
   @attr('string') format;
   @attr('number') size;

@@ -1,94 +1,92 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel class={{if this.isEditing "auk-panel--editing"}}>
-    <Auk::Panel::Header>
+<Auk::Panel class={{if this.isEditing "auk-panel--editing"}} ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "remarks"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#unless this.isEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-remark-panel-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" this.openEditingPanel}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/unless}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    {{#if this.isEditing}}
+      <Utils::LoadableContent
+        @isLoading={{this.save.isRunning}}
+        @reserveSpace={{true}}
+      >
+        <div class="au-c-form">
+          <AuFormRow>
+            <Auk::Label>
+              <span>{{t "remarks"}}</span>
+              {{!(i) inside label to maintain Auk:Label's layout}}
+              <Utils::Generic::TooltipHelp>
+                {{t "publication-remark-help"}}
+              </Utils::Generic::TooltipHelp>
+            </Auk::Label>
+            <Auk::Textarea
+              data-test-remark-panel-textarea
+              @rows="12"
+              @value={{this.remark}}
+            />
+          </AuFormRow>
+        </div>
+      </Utils::LoadableContent>
+    {{else}}
+      {{#if @publicationFlow.remark}}
+        {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
+        <div
+          data-test-remark-panel-view
+          class="auk-u-text-prewrap"
+        >{{@publicationFlow.remark}}</div>
+      {{else}}
+        <Auk::EmptyState @message={{t "publication-remark-empty"}} />
+      {{/if}}
+    {{/if}}
+  </Auk::Panel::Body>
+  {{#if this.isEditing}}
+    <Auk::Panel::Footer>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "publication-remark"}}
-            </h4>
+            <AuButton
+              data-test-remark-panel-edit-cancel
+              @skin="naked"
+              @disabled={{this.save.isRunning}}
+              {{on "click" this.closeEditingPanel}}
+            >
+              {{t "cancel"}}
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-        {{#unless this.isEditing}}
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-remark-panel-edit
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" this.openEditingPanel}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        {{/unless}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-remark-panel-save
+              @skin="primary"
+              @loading={{this.save.isRunning}}
+              {{on "click" (perform this.save)}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      {{#if this.isEditing}}
-        <Utils::LoadableContent
-          @isLoading={{this.save.isRunning}}
-          @reserveSpace={{true}}
-        >
-          <div class="au-c-form">
-            <AuFormRow>
-              <Auk::Label>
-                <span>{{t "publication-remark"}}</span>
-                {{!(i) inside label to maintain Auk:Label's layout}}
-                <Utils::Generic::TooltipHelp>
-                  {{t "publication-remark-help"}}
-                </Utils::Generic::TooltipHelp>
-              </Auk::Label>
-              <Auk::Textarea
-                data-test-remark-panel-textarea
-                @rows="12"
-                @value={{this.remark}}
-              />
-            </AuFormRow>
-          </div>
-        </Utils::LoadableContent>
-      {{else}}
-        {{#if @publicationFlow.remark}}
-          {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-wrap` }}
-          <div
-            data-test-remark-panel-view
-            class="auk-u-text-prewrap"
-          >{{@publicationFlow.remark}}</div>
-        {{else}}
-          <Auk::EmptyState @message={{t "publication-remark-empty"}} />
-        {{/if}}
-      {{/if}}
-    </Auk::Panel::Body>
-    {{#if this.isEditing}}
-      <Auk::Panel::Footer>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-remark-panel-edit-cancel
-                @skin="naked"
-                @disabled={{this.save.isRunning}}
-                {{on "click" this.closeEditingPanel}}
-              >
-                {{t "cancel"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-          <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-remark-panel-save
-                @skin="primary"
-                @loading={{this.save.isRunning}}
-                {{on "click" (perform this.save)}}
-              >
-                {{t "save"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
-    {{/if}}
-  </Auk::Panel>
-</div>
+    </Auk::Panel::Footer>
+  {{/if}}
+</Auk::Panel>

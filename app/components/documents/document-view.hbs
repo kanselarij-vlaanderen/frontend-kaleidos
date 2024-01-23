@@ -1,6 +1,7 @@
 {{#if (and @file (await (this.canViewConfidentialPiece)))}}
   {{#if this.isPdfDocument}}
     <object
+      data-test-document-view-file
       type="application/pdf"
       data={{@file.inlineViewLink}}
       class="pdf-view"

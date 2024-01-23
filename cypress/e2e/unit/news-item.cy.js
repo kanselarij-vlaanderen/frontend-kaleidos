@@ -1,4 +1,4 @@
-/* global context, beforeEach, afterEach, it, cy */
+/* global Cypress, context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -39,6 +39,7 @@ function changeSubcaseType(subcaseLink, type) {
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
   const theme = 'Justitie en Handhaving';
   const theme2 = 'Landbouw en Visserij';
+  const isCI = Cypress.env('CI');
 
   beforeEach(() => {
     cy.login('Admin');
@@ -91,13 +92,13 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
     // there is no changes alert before we add the BIS
     cy.get(newsletter.agendaitemNewsItem.themes); // when themes component is loaded, we can check the changes Alert
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
 
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(utils.changesAlert.alert).should('be.visible');
+    cy.get(utils.changesAlert.container).should('be.visible');
     cy.get(utils.changesAlert.close).click();
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
@@ -108,7 +109,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.wait('@patchNewsItems');
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(utils.changesAlert.alert).should('not.exist');
+    cy.get(utils.changesAlert.container).should('not.exist');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     cy.get(route.notaUpdates.dataTable).find('tbody')
       .children('tr')
@@ -611,7 +612,12 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.visit(newsletterLink);
     cy.clickReverseTab('Definitief');
     // actual time is 14:00, but server time is being used as "local time" in the test it seems
-    cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
+    if (isCI) {
+      cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 12:00');
+    } else {
+      cy.get(newsletter.newsletterPrintHeader.publicationPlannedDate).contains('11 april 2022 - 14:00');
+    }
+
     cy.get(newsletter.newsletterPrint.container).should('have.length', 1);
     cy.get(newsletter.newsletterPrint.title).contains(subcaseTitleMededeling);
     cy.get(newsletter.newsletterPrint.printItemProposal).should('not.exist');

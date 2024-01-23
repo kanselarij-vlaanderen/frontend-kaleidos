@@ -13,7 +13,8 @@ module.exports = defineConfig({
   viewportHeight: 720,
   viewportWidth: 1280,
   video: false,
-  numTestsKeptInMemory: 25,
+  experimentalMemoryManagement: true,
+  numTestsKeptInMemory: 10,
   pageLoadTimeout: 1200000,
   e2e: {
     // We've imported your old cypress plugins here.

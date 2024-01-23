@@ -1,0 +1,11 @@
+<Auk::Label>{{t "publication-status"}}</Auk::Label>
+{{#if this.loadPublicationStatuses.isRunning}}
+  <Auk::Loader />
+{{else}}
+  <Auk::CheckboxTree
+    @label={{t "all-statuses"}}
+    @items={{this.statuses}}
+    @selectedItems={{this.selectedStatuses}}
+    @didUpdate={{this.onChangeStatuses}}
+  />
+{{/if}}

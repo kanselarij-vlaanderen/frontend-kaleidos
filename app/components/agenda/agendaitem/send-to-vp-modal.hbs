@@ -1,0 +1,111 @@
+<ConfirmationModal
+  @modalOpen={{true}}
+  @closable={{this.sendToVP.isIdle}}
+  @confirmMessage={{t "send-to-VP"}}
+  @onConfirm={{perform this.sendToVP}}
+  @onCancel={{@onCancel}}
+  @loading={{this.sendToVP.isRunning}}
+  @disabled={{this.isModalDisabled}}
+>
+  <:title>{{t "check-case"}}</:title>
+  <:body>
+    {{#if this.loadData.isRunning}}
+      <AuLoader />
+    {{else}}
+      <AuContent>
+        {{#if this.showPieces}}
+          <p>{{t "the-following-things-will-be-sent"}}</p>
+          <ul class="au-u-margin-top">
+            {{#each this.subcasesWithPieces as |subcaseWithPieces|}}
+              <li>
+                {{#if subcaseWithPieces.subcaseName}}
+                  {{capitalize subcaseWithPieces.subcaseName}}:
+                  <ul>
+                    {{#each subcaseWithPieces.pieces as |piece|}}
+                      <li>
+                        <LinkTo @route="document" @model={{piece.id}}>
+                          {{piece.name}}
+                          {{await (this.pieceFileTypes piece)}}
+                        </LinkTo>
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  {{#each subcaseWithPieces.pieces as |piece|}}
+                    <li>
+                      <LinkTo @route="document" @model={{piece.id}}>
+                        {{piece.name}}
+                        {{await (this.pieceFileTypes piece)}}
+                      </LinkTo>
+                    </li>
+                  {{/each}}
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+          <div class="auk-form-group au-u-margin-top">
+            <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+            <Auk::Textarea
+              @rows="4"
+              id="remarks"
+              value={{this.comment}}
+              {{on "change" this.onChangeComment}}
+            />
+          </div>
+        {{else}}
+          <p>{{t "no-new-files-will-be-sent"}}</p>
+        {{/if}}
+      </AuContent>
+      {{#if (not this.decisionsReleased)}}
+        <AuAlert
+          @title="{{t 'decision-not-published-yet'}}:"
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+          class="au-u-margin-bottom-none au-u-margin-top"
+        >
+          <AuContent>
+            {{t 'decision-not-published-yet-may-be-altered'}}
+          </AuContent>
+        </AuAlert>
+      {{/if}}
+      {{#if this.showMissingPieces}}
+        <AuAlert
+          @title="{{t 'this-case-is-missing'}}:"
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+          class="au-u-margin-bottom-none au-u-margin-top"
+        >
+          <AuContent>
+            <ul>
+              {{#each this.subcasesWithMissingPieces as |subcaseWithMissingPieces|}}
+                <li>
+                  {{#if subcaseWithMissingPieces.subcaseName}}
+                    {{t "for"}}
+                    {{subcaseWithMissingPieces.subcaseName}}:
+                    <ul>
+                      {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                        <li>
+                            {{piece.type.label}}
+                            {{await (this.pieceFileTypes piece)}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                      <li>
+                          {{piece.type.label}}
+                          {{await (this.pieceFileTypes piece)}}
+                      </li>
+                    {{/each}}
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+          </AuContent>
+        </AuAlert>
+      {{/if}}
+    {{/if}}
+  </:body>
+</ConfirmationModal>

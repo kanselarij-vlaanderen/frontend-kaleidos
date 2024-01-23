@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
-import ENV from 'frontend-kaleidos/config/environment';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
@@ -68,7 +67,9 @@ export default class SignatureService extends Service {
     const response = await uploadPiecesToSigninghub(signFlows);
     if (!response.ok) {
       for (let signFlow of signFlows) {
-        await this.removeSignFlow(signFlow, true);
+        await signFlow.reload();
+        await signFlow.belongsTo('status').reload();
+        await signFlow.belongsTo('creator').reload();
       }
       let stringifiedJson;
       try {
@@ -180,7 +181,7 @@ export default class SignatureService extends Service {
           },
         }
       );
-      const subcase = await submissionActivity.subcase;
+      const subcase = await submissionActivity?.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {
@@ -202,64 +203,20 @@ export default class SignatureService extends Service {
     return false;
   }
 
-  async removeSignFlow(signFlow, keepMarkingActivity) {
+  async removeSignFlow(signFlow) {
     if (signFlow) {
       const signSubcase = await signFlow.signSubcase;
       const signMarkingActivity = await signSubcase.signMarkingActivity;
       const piece = await signMarkingActivity.piece;
-      const signedPiece = await piece.signedPiece;
-      const signedFile = await signedPiece?.file;
-      const signedPieceCopy = await piece.signedPieceCopy;
-      const signedPieceCopyFile = await signedPieceCopy?.file;
-      const signPreparationActivity = await signSubcase
-        ?.belongsTo('signPreparationActivity')
-        .reload();
-      const signCompletionActivity = await signSubcase
-        ?.belongsTo('signCompletionActivity')
-        .reload();
-      const signCancellationActivity = await signSubcase
-        ?.belongsTo('signCancellationActivity')
-        .reload();
-      const signApprovalActivities = await signSubcase
-        ?.hasMany('signApprovalActivities')
-        .reload();
-      const signSigningActivities = await signSubcase
-        ?.hasMany('signSigningActivities')
-        .reload();
-      const signRefusalActivities = await signSubcase
-        ?.hasMany('signRefusalActivities')
-        .reload();
-
-      // delete in reverse order of creation
-      await signedFile?.destroyRecord();
-      await signedPiece?.destroyRecord();
-      await signedPieceCopyFile?.destroyRecord();
-      await signedPieceCopy?.destroyRecord();
-      await signPreparationActivity?.destroyRecord();
-      await signCompletionActivity?.destroyRecord();
-      await signCancellationActivity?.destroyRecord();
-      await signApprovalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
+      await fetch(`/signing-flows/${signFlow.id}`, {
+        method: 'DELETE'
       });
-      await signSigningActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      await signRefusalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      // destroying signSubcase can throw ember errors. reload fixed that problem.
-      await signSubcase?.reload();
-      if (!keepMarkingActivity) {
-        await signSubcase?.destroyRecord();
-        await signFlow?.destroyRecord();
-        await signMarkingActivity.destroyRecord();
-      } else if (signFlow) {
-        const status = await this.store.findRecordByUri('concept', MARKED);
-        signFlow.status = status;
-        signFlow.creator = null;
-        await signFlow.save();
-      }
+      // unload deleted records from store
+      await signFlow.unloadRecord();
+      await signSubcase.unloadRecord();
+      await signMarkingActivity.unloadRecord();
       await piece.belongsTo('signedPiece').reload();
+      await piece.belongsTo('signedPieceCopy').reload();
       await piece.belongsTo('signMarkingActivity').reload();
     }
   }
@@ -286,29 +243,22 @@ export default class SignatureService extends Service {
   }
 
   async hasSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      if (await piece.signMarkingActivity) {
-        return true;
-      } else if (await piece.signCompletionActivity) {
-        return true;
-      } else if (await piece.signedPiece) {
-        return true;
-      }
+    if (await piece.signMarkingActivity) {
+      return true;
+    } else if (await piece.signCompletionActivity) {
+      return true;
+    } else if (await piece.signedPiece) {
+      return true;
     }
     return false;
   }
 
   async hasMarkedSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
-      const signSubcase = await signMarkingActivity?.signSubcase;
-      const signFlow = await signSubcase?.signFlow;
-      const status = await signFlow?.belongsTo('status').reload();
-      return status?.uri === MARKED;
-    }
-    return false;
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.belongsTo('status').reload();
+    return status?.uri === MARKED;
   }
 
   async getSigningHubUrl(signFlow, piece) {

@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterService extends Service {
@@ -171,12 +170,9 @@ export default class NewsletterService extends Service {
       sort: '-agendaitems.agenda-activity.start-date',
     });
     if (treatment) {
-      let mandatees = await this.store.query('mandatee', {
+      let mandatees = await this.store.queryAll('mandatee', {
         'filter[subcases][decision-activities][treatment][:id:]': treatment.id,
         sort: 'priority',
-        page: {
-          size: PAGE_SIZE.MANDATEES_IN_GOV_BODY,
-        },
       });
 
       if (!mandatees.length) {

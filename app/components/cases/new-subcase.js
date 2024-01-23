@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -80,9 +79,8 @@ export default class CasesNewSubcase extends Component {
   async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
-    const submissionActivities = await this.store.query('submission-activity', {
+    const submissionActivities = await this.store.queryAll('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': PAGE_SIZE.CASES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     const pieces = [];

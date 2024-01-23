@@ -75,6 +75,11 @@ const selectors = {
     title: '[data-test-modal-header-title]',
   },
 
+  alert: {
+    message: '.au-c-alert__message',
+    close: '.au-c-alert__close',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',
@@ -90,10 +95,6 @@ const selectors = {
 
   icon: {
     warning: '.auk-icon--warning',
-  },
-
-  alert: {
-    close: '.au-c-alert__close',
   },
 };
 export default selectors;

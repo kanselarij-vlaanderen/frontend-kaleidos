@@ -11,6 +11,7 @@ import auk from '../../selectors/auk.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
+    cy.wait(500);
     cy.get(route.search.input).clear()
       .type('test');
     cy.get(route.search.trigger).click();
@@ -420,7 +421,8 @@ context('Search tests', () => {
     const newsItemContent = `Cypress test - ${randomInt}: uniek voor wie het ondermaanse wat ondermaats vindt`;
     const fileNameAgendaitem = 'search-agendaitem-piece_1'; // unieke woorden: computer, telefoon
     // const fileNameTreatment = 'search-agendaitem-treatment_2'; // unieke woorden: codez krokkettenmaker
-    const fileNameTreatment = 'VR PV 2023'; // unieke woorden: codez krokkettenmaker
+    // TODO-BUG creating agenda's for other years does not update the number representation (PR in progress)
+    const fileNameTreatment = 'VR PV 2024'; // unieke woorden: codez krokkettenmaker
     const fileNameSubcase = 'search-agendaitem-piece_2'; // unieke woorden: walkman, stereo
     const newFileNameNota = `Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
     const newFileNameBvr = `Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;

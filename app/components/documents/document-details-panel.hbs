@@ -61,6 +61,7 @@
       </Auk::KeyValue>
       {{#if this.isReplacingSourceFile}}
         <Auk::FileUploader
+          @multiple={{false}}
           @onUpload={{set this "replacementSourceFile"}}
           @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
         />
@@ -166,6 +167,7 @@
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-details-panel-source-file-download
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
@@ -192,10 +194,12 @@
               >
                 {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
               </AuLinkExternal>
-              <AccessLevelPill
-                @accessLevel={{await @piece.signedPiece.accessLevel}}
-                @isEditable={{false}}
-              />
+              <div class="auk-o-flex__item--fix">
+                <AccessLevelPill
+                  @accessLevel={{await @piece.signedPiece.accessLevel}}
+                  @isEditable={{false}}
+                />
+              </div>
               {{#if (user-may "remove-signatures")}}
                 <AuDropdown
                   @icon="three-dots"
@@ -237,13 +241,15 @@
             >
               {{this.signedPieceCopy.name}}.{{this.signedPieceCopy.file.extension}}
             </AuLinkExternal>
-            <AccessLevelPill
-              @accessLevel={{this.signedPieceCopy.accessLevel}}
-              @isEditable={{true}}
-              @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
-              @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
-              @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}
-            />
+            <div class="auk-o-flex__item--fix">
+              <AccessLevelPill
+                @accessLevel={{this.signedPieceCopy.accessLevel}}
+                @isEditable={{true}}
+                @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
+                @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
+                @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}
+              />
+            </div>
           </div>
         </div>
       {{/if}}

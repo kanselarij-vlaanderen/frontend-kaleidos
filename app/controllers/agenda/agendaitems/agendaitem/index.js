@@ -27,6 +27,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked newsItem;
   @tracked mandatees;
   @tracked decisionActivity;
+  @tracked parliamentFlow;
 
   @tracked isEditingAgendaItemTitles = false;
 
@@ -36,6 +37,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   get enableDigitalAgenda() {
     return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
+  }
+
+  get enableVlaamsParlement() {
+    return ENV.APP.ENABLE_VLAAMS_PARLEMENT === "true" || ENV.APP.ENABLE_VLAAMS_PARLEMENT === true;
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
@@ -73,6 +78,16 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       this.decisionReportGeneration,
       this.currentSession.may('manage-agendaitems'),
     );
+  }
+
+  @action
+  async reloadParliamentFlow() {
+    this.decisionmakingFlow = await this.subcase?.decisionmakingFlow.reload();
+    this.case = await this.decisionmakingFlow?.case.reload();
+    this.parliamentFlow = await this.case?.parliamentFlow.reload();
+    let parliamentSubcase = await this.parliamentFlow?.parliamentSubcase.reload();
+    await parliamentSubcase?.parliamentSubmissionActivities.reload();
+    await this.parliamentFlow?.status.reload();
   }
 
   @action
