@@ -14,7 +14,15 @@ function isEnabledVlaamsParlement() {
   );
 }
 
+function isEnabledNewCaseCreation() {
+  return (
+    ENV.APP.ENABLE_CASE_CREATION === 'true' ||
+    ENV.APP.ENABLE_CASE_CREATION === true
+  )
+}
+
 export {
   isEnabledVlaamsParlement,
   isEnabledImpersonation,
+  isEnabledNewCaseCreation,
 }

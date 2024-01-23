@@ -1,0 +1,195 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group>
+      <Auk::Toolbar::Item>
+        <AuLink
+          @skin="button-naked"
+          @icon="hierarchical-back"
+          @hideText={{true}}
+          {{on "click" this.transitionBack}}
+        >
+          {{t "back"}}
+        </AuLink>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <div class="auk-u-my">
+          <span class="auk-overline auk-u-block">
+            {{t "case"}}
+          </span>
+          <h4 class="auk-toolbar-complex__title">
+            <Auk::AbbreviatedText
+              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @maxLength={{250}}
+            /> - {{t "create-subcase"}}
+          </h4>
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <div class="au-o-region">
+      <div class="au-o-layout">
+        <Auk::Panel class="auk-u-mb-2">
+          <Auk::Panel::Header
+            @size="auto"
+            class="au-u-background-gray-100"
+          >
+            <Auk::Toolbar @auto={{true}} as |Toolbar|>
+              <Toolbar.Group @position="left">
+                <h4 class="auk-toolbar__title">
+                  {{t "general-information"}}
+                </h4>
+              </Toolbar.Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body>
+            <Utils::LoadableContent
+              @isLoading={{this.areLoadingTasksRunning}}
+              @reserveSpace={{true}}
+            >
+              <div class="au-c-form">
+                <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                  <AuFormRow>
+                    <AuFieldset as |Fieldset|>
+                      <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+                      <Fieldset.content>
+                        <AuRadioGroup
+                          @alignment="inline"
+                          @selected={{this.agendaItemType}}
+                          @onChange={{this.onChangeAgendaItemType}}
+                          as |Group|
+                        >
+                          {{#each this.agendaItemTypes as |type|}}
+                            <Group.Radio
+                              @value={{type}}
+                            >
+                              {{type.label}}
+                            </Group.Radio>
+                          {{/each}}
+                        </AuRadioGroup>
+                      </Fieldset.content>
+                    </AuFieldset>
+                  </AuFormRow>
+                  {{#if this.latestSubcase}}
+                    <AuFormRow>
+                      <AuButton
+                        @skin="secondary"
+                        @icon="copy-paste"
+                         {{on "click" (perform this.saveCase true)}}
+                        {{!-- {{on "click" (fn this.saveCase true)}} --}}
+                        @disabled={{this.saveCase.isRunning}}
+                      >
+                        {{t "clone-previous-subcase"}}
+                      </AuButton>
+                    </AuFormRow>
+                  {{/if}}
+                </div>
+                <AuFormRow>
+                  <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+                  <AuToggleSwitch
+                    id="subcase-confidential"
+                    @onChange={{fn (mut this.confidential)}}
+                  />
+                </AuFormRow>
+                <AuFormRow>
+                  <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+                  <Textarea
+                    aria-labelledby="name-subcase"
+                    rows="2"
+                    class="auk-textarea"
+                    @value={{mut this.shortTitle}}
+                  />
+                </AuFormRow>
+                <AuFormRow>
+                  <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+                  <Textarea
+                    aria-labelledby="name-subcase"
+                    rows="4"
+                    class="auk-textarea"
+                    @value={{mut this.title}}
+                  />
+                </AuFormRow>
+                <AuFormRow>
+                  <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+                  <Utils::ModelSelector
+                    @modelName="subcase-type"
+                    @searchField="label"
+                    @sortField="label"
+                    @displayField="label"
+                    @selected={{this.subcaseType}}
+                    @onChange={{this.selectSubcaseType}}
+                  />
+                </AuFormRow>
+                <AuFormRow>
+                  <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+                  <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width">
+                    {{#if (not this.isEditing)}}
+                      <Utils::ModelSelector
+                        class="auk-u-maximize-width"
+                        @modelName="shortcut"
+                        @searchField="label"
+                        @sortField="label"
+                        @filter={{this.filter}}
+                        @selected={{this.selectedShortcut}}
+                        @onChange={{this.selectSubcaseName}}
+                      as |model|>
+                        {{capitalize model.label}}
+                      </Utils::ModelSelector>
+                      <AuButton
+                        @skin="naked"
+                        @icon="pencil"
+                        @hideText={{true}}
+                        {{on "click" this.toggleIsEditing}}
+                      >
+                        {{t "edit"}}
+                      </AuButton>
+                    {{else}}
+                      <AuInput
+                        @width="block"
+                        @value={{this.subcaseName}}
+                        id="subcaseNameId"
+                      />
+                      <AuButton
+                        @skin="naked"
+                        @icon="x"
+                        @hideText={{true}}
+                        {{on "click" this.toggleIsEditing}}
+                      >
+                        {{t "cancel"}}
+                      </AuButton>
+                    {{/if}}
+                  </div>
+                </AuFormRow>
+              </div>
+            </Utils::LoadableContent>
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      </div>
+    </div>
+  </div>
+  <AuToolbar
+    @reverse={{true}}
+    @size="large"
+    @border="top"
+    as |Group|>
+    <Group>
+      <AuLink
+        @skin="button-secondary"
+        @route="cases.case.subcases"
+        @disabled={{this.saveCase.isRunning}}
+      >
+        {{t "cancel"}}
+      </AuLink>
+      <AuButton
+        @skin="primary"
+        @disabled={{this.saveCase.isRunning}}
+        {{on "click" (perform this.saveCase false)}}
+      >
+        {{t "new-subcase"}}
+      </AuButton>
+    </Group>
+  </AuToolbar>
+</div>
