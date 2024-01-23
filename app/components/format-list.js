@@ -19,6 +19,9 @@ export default class FormatListComponent extends Component {
         if (formattedPart.type === 'literal') continue;
 
         formattedPart.value = parts[index];
+        formattedPart.index = index;
+        formattedPart.isFirst = index === 0;
+        formattedPart.isLast = index === parts.length - 1;
         index++;
       }
       return formattedParts;

@@ -720,6 +720,7 @@ function releaseDecisions() {
   cy.wait('@patchDecisionPubActivity', {
     timeout: 20000,
   });
+  cy.wait(2000);
   cy.log('/releaseDecisions');
 }
 
