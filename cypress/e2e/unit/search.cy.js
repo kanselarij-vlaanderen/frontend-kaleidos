@@ -61,7 +61,7 @@ function setDocNameInViewer(docName, newName) {
     .wait('@patchDocuments');
 
   cy.go('back');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
 }
 
 context('Search tests', () => {

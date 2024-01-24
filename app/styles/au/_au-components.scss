@@ -471,6 +471,20 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+// Loader
+
+.au-c-loader__animation {
+  height: 1.6rem + $au-unit;
+
+  .au-c-loader--small & {
+    height: 1.6rem;
+  }
+
+  .au-c-loader--large & {
+    height: 1.6rem + $au-unit-large;
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {

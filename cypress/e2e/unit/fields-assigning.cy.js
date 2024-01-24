@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -105,7 +106,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.addAgendaitemToAgenda(SubcaseTitleShort);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // Dependency: We should already have 2 domains that we inherit from previous subcase, now we add 1 more
 
@@ -202,7 +203,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.clickReverseTab('Detail');
@@ -211,26 +212,26 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(utils.governmentAreasPanel.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(utils.governmentAreasPanel.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(utils.governmentAreasPanel.rows).should('have.length', 5);
     // check if subcase from different case doesn't retain domains and fields
     cy.get('@agendaitems').eq(4)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(utils.governmentAreasPanel.rows).should('have.length', 1);
@@ -239,7 +240,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(utils.governmentAreasPanel.row.label).as('domainLabel');

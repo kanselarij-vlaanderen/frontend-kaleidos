@@ -41,7 +41,7 @@ function getTranslatedMonth(month) {
 function downloadDocs(postAgenda = true) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
   cy.intercept('GET', '/file-bundling-jobs/**').as(`fileBundlingJobs${randomInt}`);
   cy.get(auk.confirmationModal.footer.confirm).click();
@@ -80,7 +80,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
@@ -103,7 +103,7 @@ context('Agenda tests', () => {
     // alert message exists after agendaitem that is not formally ok
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container);
@@ -114,7 +114,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)

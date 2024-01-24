@@ -107,13 +107,13 @@ context('Create case as Admin user', () => {
     cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchDecisionFlow');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
 
     cy.get(route.casesOverview.showArchived)
       .parent()
       .click();
-    cy.get(auk.loader).should('exist'); // page load
+    cy.get(appuniversum.loader).should('exist'); // page load
     cy.url().should('contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
 
@@ -129,7 +129,7 @@ context('Create case as Admin user', () => {
     cy.get(route.casesOverview.showArchived)
       .parent()
       .click();
-    cy.get(auk.loader).should('exist'); // page load
+    cy.get(appuniversum.loader).should('exist'); // page load
     cy.url().should('not.contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
   });
