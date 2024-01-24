@@ -31,6 +31,7 @@
       {{else}}
         {{#each this.signers as |signer|}}
           <Item
+            data-test-signatures-create-signflow-report-or-minutes-signer
             class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
           >
             {{signer.person.fullName}}
