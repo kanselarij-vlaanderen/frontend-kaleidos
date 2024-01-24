@@ -8,7 +8,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import ENV from 'frontend-kaleidos/config/environment';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
@@ -119,20 +118,6 @@ export default class MeetingEditMeetingComponent extends Component {
     return this.saveMeeting.isRunning;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
-  get enableDigitalMinutes() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_MINUTES === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_MINUTES === true
-    );
-  }
-
   get isPreKaleidos() {
     return this.startDate < KALEIDOS_START_DATE;
   }
@@ -150,7 +135,7 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   initializeSecretary = task(async () => {
-    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+    if (!this.isPreKaleidos) {
       const secretary = await this.args.meeting.secretary;
       if (isPresent(secretary)) {
         this.secretary = secretary;
@@ -306,7 +291,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+    if (!this.isPreKaleidos) {
       if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
         this.args.meeting.secretary = this.secretary;
       }
@@ -328,7 +313,7 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-      if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+      if (!this.isPreKaleidos) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
@@ -361,9 +346,7 @@ export default class MeetingEditMeetingComponent extends Component {
             yield this.regenerateDecisionReportNames.perform();
           }
           yield this.regenerateDecisionReports.perform();
-          if (this.enableDigitalMinutes) {
-            yield this.regenerateMinutes();
-          }
+          yield this.regenerateMinutes();
         }
       }
     } catch (err) {
@@ -429,11 +412,9 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    if (this.enableDigitalAgenda) {
-      const mainMeetingSecretary = await mainMeeting.secretary;
-      if (mainMeetingSecretary) {
-        this.secretary = mainMeetingSecretary;
-      }
+    const mainMeetingSecretary = await mainMeeting.secretary;
+    if (mainMeetingSecretary) {
+      this.secretary = mainMeetingSecretary;
     }
   }
 
