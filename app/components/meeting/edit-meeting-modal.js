@@ -132,6 +132,7 @@ export default class MeetingEditMeetingComponent extends Component {
       );
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
+    this.initializeMeetingNumber.perform(true);
   }
 
   initializeSecretary = task(async () => {
@@ -165,15 +166,20 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   @dropTask
-  *initializeMeetingNumber() {
+  *initializeMeetingNumber(startDateChanged) {
     if (this.args.meeting.number) {
       this.meetingNumber = this.args.meeting.number;
     } else {
+      let selectedYear = this.currentYear;
+      if (startDateChanged) {
+        selectedYear = this.startDate?.getFullYear() || this.currentYear;
+        this.meetingYear = selectedYear; // only numberRepresentation getter uses meetingYear
+      }
       const meeting = yield this.store.queryOne('meeting', {
         filter: {
-          ':gte:planned-start': new Date(this.currentYear, 0, 1).toISOString(),
+          ':gte:planned-start': new Date(selectedYear, 0, 1).toISOString(),
           ':lt:planned-start': new Date(
-            this.currentYear + 1,
+            selectedYear + 1,
             0,
             1
           ).toISOString(),
