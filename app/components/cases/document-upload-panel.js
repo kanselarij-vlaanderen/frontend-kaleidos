@@ -7,13 +7,6 @@ export default class DocumentUploadPlanel extends Component {
   @service store;
 
   @action
-  scrollIntoView(element) {
-    element.scrollIntoView({
-      behavior: 'smooth', block: 'start',
-    });
-  }
-
-  @action
   uploadPiece(file) {
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
@@ -26,7 +19,7 @@ export default class DocumentUploadPlanel extends Component {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.args.addPieceToNewPieces(piece);
+    this.args.addPiece(piece);
   }
 
   @task

@@ -18,7 +18,10 @@
           </span>
           <h4 class="auk-toolbar-complex__title">
             <Auk::AbbreviatedText
-              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @text={{or
+                @decisionmakingFlow.case.shortTitle
+                @decisionmakingFlow.case.title
+              }}
               @maxLength={{250}}
             /> - {{t "create-subcase"}}
           </h4>
@@ -33,10 +36,7 @@
     <div class="au-o-region">
       <div class="au-o-layout">
         <Auk::Panel class="auk-u-mb-2">
-          <Auk::Panel::Header
-            @size="auto"
-            class="au-u-background-gray-100"
-          >
+          <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
             <Auk::Toolbar @auto={{true}} as |Toolbar|>
               <Toolbar.Group @position="left">
                 <h4 class="auk-toolbar__title">
@@ -51,7 +51,9 @@
               @reserveSpace={{true}}
             >
               <div class="au-c-form">
-                <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+                <div
+                  class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+                >
                   <AuFormRow>
                     <AuFieldset as |Fieldset|>
                       <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
@@ -63,9 +65,7 @@
                           as |Group|
                         >
                           {{#each this.agendaItemTypes as |type|}}
-                            <Group.Radio
-                              @value={{type}}
-                            >
+                            <Group.Radio @value={{type}}>
                               {{type.label}}
                             </Group.Radio>
                           {{/each}}
@@ -73,12 +73,12 @@
                       </Fieldset.content>
                     </AuFieldset>
                   </AuFormRow>
-                  {{#if this.latestSubcase}}
+                  {{#if @latestSubcase}}
                     <AuFormRow>
                       <AuButton
                         @skin="secondary"
                         @icon="copy-paste"
-                         {{on "click" (perform this.saveCase true)}}
+                        {{on "click" (perform this.saveCase true)}}
                         @disabled={{this.saveCase.isRunning}}
                       >
                         {{t "clone-previous-subcase"}}
@@ -87,14 +87,17 @@
                   {{/if}}
                 </div>
                 <AuFormRow>
-                  <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+                  <Auk::Label for="subcase-confidential">
+                    {{t "limited-access"}}</Auk::Label>
                   <AuToggleSwitch
                     id="subcase-confidential"
+                    @checked={{this.confidential}}
                     @onChange={{fn (mut this.confidential)}}
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+                  <Auk::Label id="name-subcase">
+                    {{t "name-subcase"}}</Auk::Label>
                   <Textarea
                     aria-labelledby="name-subcase"
                     rows="2"
@@ -103,7 +106,8 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+                  <Auk::Label id="title-subcase">
+                    {{t "title-subcase"}}</Auk::Label>
                   <Textarea
                     aria-labelledby="name-subcase"
                     rows="4"
@@ -124,7 +128,9 @@
                 </AuFormRow>
                 <AuFormRow>
                   <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-                  <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width">
+                  <div
+                    class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width"
+                  >
                     {{#if (not this.isEditing)}}
                       <Utils::ModelSelector
                         class="auk-u-maximize-width"
@@ -134,7 +140,8 @@
                         @filter={{this.filter}}
                         @selected={{this.selectedShortcut}}
                         @onChange={{this.selectSubcaseName}}
-                      as |model|>
+                        as |model|
+                      >
                         {{capitalize model.label}}
                       </Utils::ModelSelector>
                       <AuButton
@@ -161,39 +168,38 @@
                       </AuButton>
                     {{/if}}
                   </div>
-              </AuFormRow>
+                </AuFormRow>
               </div>
             </Utils::LoadableContent>
           </Auk::Panel::Body>
         </Auk::Panel>
-        <Cases::MandateeSelectorPanel
-          @submitter={{this.submitter}}
-          @setSubmitter={{this.setSubmitter}}
-          @setMandatees={{this.setMandatees}}
-          @disabled={{this.saveCase.isRunning}}
+        {{#unless this.areLoadingTasksRunning}}
+          <Cases::MandateeSelectorPanel
+            @mandatees={{this.mandatees}}
+            @submitter={{this.submitter}}
+            @setSubmitter={{this.setSubmitter}}
+            @setMandatees={{this.setMandatees}}
+            @disabled={{this.saveCase.isRunning}}
           />
-        <Cases::GovernmentAreasPanel
-          @selectedFields={{this.selectedGovernmentFields}}
-          @onSelectFields={{this.selectField}}
-          @onDeselectFields={{this.deselectField}}
-          @selectedDomains={{this.selectedGovernmentDomains}}
-          @onSelectDomains={{this.selectDomain}}
-          @onDeselectDomains={{this.deselectDomain}}
-          @disabled={{this.saveCase.isRunning}}
-        />
-        <Cases::DocumentUploadPanel
-          @newPieces={{this.newPieces}}
-          @addPieceToNewPieces={{this.addPieceToNewPieces}}
-          @deletePiece={{this.deletePiece}}
-        />
+          <Cases::GovernmentAreasPanel
+            @selectedFields={{this.selectedGovernmentFields}}
+            @onSelectFields={{this.selectField}}
+            @onDeselectFields={{this.deselectField}}
+            @selectedDomains={{this.selectedGovernmentDomains}}
+            @onSelectDomains={{this.selectDomain}}
+            @onDeselectDomains={{this.deselectDomain}}
+            @disabled={{this.saveCase.isRunning}}
+          />
+          <Cases::DocumentUploadPanel
+            @pieces={{this.pieces}}
+            @addPiece={{this.addPiece}}
+            @deletePiece={{this.deletePiece}}
+          />
+        {{/unless}}
       </div>
     </div>
   </div>
-  <AuToolbar
-    @reverse={{true}}
-    @size="large"
-    @border="top"
-    as |Group|>
+  <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
       <AuLink
         @skin="button-secondary"
