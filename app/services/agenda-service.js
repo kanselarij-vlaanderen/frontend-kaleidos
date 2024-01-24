@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaService extends Service {
   @service store;
@@ -121,13 +120,6 @@ export default class AgendaService extends Service {
     return 1;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
   /**
    * @argument meeting
    * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
@@ -166,12 +158,7 @@ export default class AgendaService extends Service {
     if (isAnnouncement) {
       defaultDecisionResultCodeUri =
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
-    } else {
-      // pre digital agenda upload of decision report changes decision result code 
-      defaultDecisionResultCodeUri = this.enableDigitalAgenda
-        ? null
-        : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    }
+    } // no decision result for nota
 
     let decisionResultCode;
     if (defaultDecisionResultCodeUri) {
@@ -182,7 +169,7 @@ export default class AgendaService extends Service {
     }
 
     const meetingSecretary = await meeting.secretary;
-    const secretary = this.enableDigitalAgenda ? meetingSecretary : null;
+    const secretary = meetingSecretary;
     // decision-activity
     const decisionActivity = await this.store.createRecord(
       'decision-activity',

@@ -8,7 +8,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import ENV from 'frontend-kaleidos/config/environment';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
@@ -30,6 +29,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @service toaster;
   @service mandatees;
   @service decisionReportGeneration;
+  @service intl;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -118,20 +118,6 @@ export default class MeetingEditMeetingComponent extends Component {
     return this.saveMeeting.isRunning;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
-  get enableDigitalMinutes() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_MINUTES === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_MINUTES === true
-    );
-  }
-
   get isPreKaleidos() {
     return this.startDate < KALEIDOS_START_DATE;
   }
@@ -149,7 +135,7 @@ export default class MeetingEditMeetingComponent extends Component {
   }
 
   initializeSecretary = task(async () => {
-    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+    if (!this.isPreKaleidos) {
       const secretary = await this.args.meeting.secretary;
       if (isPresent(secretary)) {
         this.secretary = secretary;
@@ -255,16 +241,26 @@ export default class MeetingEditMeetingComponent extends Component {
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
         this.args.meeting.id,
     });
-    await Promise.all(reports.map(async (report) => {
-      const agendaitem = await this.store.queryOne('agendaitem', {
-        'filter[:has-no:next-version]': true,
-        'filter[treatment][decision-activity][report][:id:]': report.id,
-      });
-      const documentContainer = await report.documentContainer;
-      const pieces = await documentContainer.pieces;
-      report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
-      await report.save();
-    }));
+    if (reports?.length > 0) {
+      let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
+      if (alterableReports.length === 0) {
+        this.toaster.error(
+          this.intl.t('reports-cannot-be-altered')
+        );
+        return;
+      }
+      await Promise.all(alterableReports.map(async (report) => {
+        const agendaitem = await this.store.queryOne('agendaitem', {
+          'filter[:has-no:next-version]': true,
+          'filter[treatment][decision-activity][report][:id:]': report.id,
+        });
+        const documentContainer = await report.documentContainer;
+        const pieces = await documentContainer.pieces;
+        report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+        await report.belongsTo('file').reload();
+        await report.save();
+      }));
+    }
   });
 
   regenerateDecisionReports = task(async () => {
@@ -295,7 +291,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.args.meeting.numberRepresentation = this.numberRepresentation;
     this.args.meeting.mainMeeting = this.selectedMainMeeting;
 
-    if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+    if (!this.isPreKaleidos) {
       if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
         this.args.meeting.secretary = this.secretary;
       }
@@ -317,11 +313,14 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-      if (this.enableDigitalAgenda && !this.isPreKaleidos) {
+      if (!this.isPreKaleidos) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
-          currentPlannedStart !== this.startDate ||
+          (currentPlannedStart.getDate() !== this.startDate.getDate() ||
+          currentPlannedStart.getMonth() !== this.startDate.getMonth() ||
+          currentPlannedStart.getFullYear() !== this.startDate.getFullYear()) ||
+
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
           if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
@@ -347,9 +346,7 @@ export default class MeetingEditMeetingComponent extends Component {
             yield this.regenerateDecisionReportNames.perform();
           }
           yield this.regenerateDecisionReports.perform();
-          if (this.enableDigitalMinutes) {
-            yield this.regenerateMinutes();
-          }
+          yield this.regenerateMinutes();
         }
       }
     } catch (err) {
@@ -363,6 +360,12 @@ export default class MeetingEditMeetingComponent extends Component {
   async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;
     if (minutes) {
+      if (! (await this.decisionReportGeneration.canReplaceMinutes(minutes))) {
+        this.toaster.error(
+          this.intl.t('minutes-cannot-be-altered')
+        );
+        return;
+      }
       // new name
       const documentContainer = await minutes.documentContainer;
       const pieces = await documentContainer.pieces;
@@ -409,11 +412,9 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.extraInfo = mainMeeting.extraInfo;
-    if (this.enableDigitalAgenda) {
-      const mainMeetingSecretary = await mainMeeting.secretary;
-      if (mainMeetingSecretary) {
-        this.secretary = mainMeetingSecretary;
-      }
+    const mainMeetingSecretary = await mainMeeting.secretary;
+    if (mainMeetingSecretary) {
+      this.secretary = mainMeetingSecretary;
     }
   }
 

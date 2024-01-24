@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import dependency from '../../selectors/dependency.selectors';
-import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 import settings from '../../selectors/settings.selectors';
 import agenda from '../../selectors/agenda.selectors';
@@ -54,8 +53,9 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
   it('Should edit, close and stay closed', () => {
     //  check if default severity is grey
-    cy.get(utils.vlAlert.container).should('not.have.class', 'vl-alert--warning')
-      .should('not.have.class', 'vl-alert--error');
+    cy.get(appuniversum.alert.container)
+      .should('not.have.class', 'au-c-alert--warning')
+      .should('not.have.class', 'au-c-alert--error');
     // open editmodal
     cy.get(settings.systemAlertsIndex.alerts).find(dependency.emberPowerSelect.trigger)
       .click();
@@ -69,21 +69,21 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(dependency.emberPowerSelect.option).contains('Dringend')
       .scrollIntoView()
       .click();
-    cy.get(utils.vlAlert.container).should('have.class', 'vl-alert--error');
+    cy.get(appuniversum.alert.container).should('have.class', 'au-c-alert--error');
     // switch severity to warning and check if it is yellow
     cy.get(settings.systemAlertForm.severity).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains('Waarschuwing')
       .scrollIntoView()
       .click();
-    cy.get(utils.vlAlert.container).should('have.class', 'vl-alert--warning');
+    cy.get(appuniversum.alert.container).should('have.class', 'au-c-alert--warning');
     // change title and message
     cy.get(settings.systemAlertForm.title).clear()
       .type('Edited system alert title');
     cy.get(settings.systemAlertForm.message).clear()
       .type('Edited system alert message');
-    cy.get(utils.vlAlert.container).contains('Edited system alert title');
-    cy.get(utils.vlAlert.message).contains('Edited system alert message');
+    cy.get(appuniversum.alert.container).contains('Edited system alert title');
+    cy.get(appuniversum.alert.message).contains('Edited system alert message');
     // close edit modal because otherwise alert can't be closed
     cy.get(auk.confirmationModal.footer.cancel).click();
 
@@ -94,7 +94,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
 
-    cy.get(utils.vlAlert.close).each((button) => {
+    cy.get(appuniversum.alert.close).each((button) => {
       cy.get(button).click();
     });
     cy.get(settings.systemAlert).should('not.exist');

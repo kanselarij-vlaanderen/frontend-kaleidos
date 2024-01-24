@@ -20,9 +20,8 @@ module.exports = function (environment) {
       // eslint-disable-next-line quotes
       ENABLE_IMPERSONATION: '{{ENABLE_IMPERSONATION}}',
       ENABLE_DEBUG: '{{ENABLE_DEBUG}}',
-      ENABLE_DIGITAL_AGENDA: '{{ENABLE_DIGITAL_AGENDA}}',
-      ENABLE_DIGITAL_MINUTES: '{{ENABLE_DIGITAL_MINUTES}}',
       ENABLE_VLAAMS_PARLEMENT: '{{ENABLE_VLAAMS_PARLEMENT}}',
+      ENABLE_CASE_CREATION: '{{ENABLE_CASE_CREATION}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -55,9 +54,8 @@ module.exports = function (environment) {
   if (environment === 'development') {
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_DEBUG = true;
-    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
-    ENV.APP.ENABLE_DIGITAL_MINUTES = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
+    ENV.APP.ENABLE_CASE_CREATION = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -71,9 +69,8 @@ module.exports = function (environment) {
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
-    ENV.APP.ENABLE_DIGITAL_MINUTES = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
+    ENV.APP.ENABLE_CASE_CREATION = true;
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.rootElement = '#ember-testing';
@@ -84,9 +81,8 @@ module.exports = function (environment) {
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-    ENV.APP.ENABLE_DIGITAL_AGENDA = true;
-    ENV.APP.ENABLE_DIGITAL_MINUTES = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
+    ENV.APP.ENABLE_CASE_CREATION = true;
     ENV.APP.ENABLE_DEBUG = false;
   }
 

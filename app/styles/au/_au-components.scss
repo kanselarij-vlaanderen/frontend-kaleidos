@@ -3,19 +3,7 @@
 
 // SCSS variables (to override)
 
-$mq-breakpoints: (
-  xsmall: 300px,
-  small: 500px,
-  medium: 767px,
-  large: 1023px,
-);
-
-$au-layout-width: 767px;
-$au-layout-width-small: 500px;
-$au-layout-width-large: 1023px;
-
-$au-button-height: 3.4rem;
-
+$au-button-height: 3.6rem;
 $au-label-color: var(--au-gray-700);
 
 
@@ -116,6 +104,10 @@ $au-label-color: var(--au-gray-700);
 .au-c-list-navigation__link {
   font-weight: 500;
   text-decoration: none;
+}
+
+.au-c-modal:not(.au-c-modal--large, .au-c-modal--fullscreen) {
+  max-width: 800px;
 }
 
 .au-c-modal__header {
@@ -354,6 +346,16 @@ $au-label-color: var(--au-gray-700);
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
+.au-o-layout {
+  padding-right: $au-unit-small;
+  padding-left: $au-unit-small;
+
+  @include mq($au-layout-breakpoint) {
+    padding-right: $au-unit;
+    padding-left: $au-unit;
+  }
+}
+
 // Modal fixes
 .au-c-modal--fullscreen {
   max-width: 100%;
@@ -534,6 +536,10 @@ $au-label-color: var(--au-gray-700);
     &[data-list-style='lower-alpha'] {
       list-style-type: lower-alpha;
     }
+
+    &[data-list-style='upper-alpha'] {
+      list-style-type: upper-alpha;
+    }
   }
 
   ol.au-c-list {
@@ -592,6 +598,44 @@ $au-label-color: var(--au-gray-700);
   ol[data-list-style='decimal-extended'] {
     @include decimal-extended-styling(5, 1);
   }
+
+  [data-indentation-level='1'] {
+    margin-left: 2.4rem;
+  }
+
+  [data-indentation-level='2'] {
+    margin-left: 4.8rem;
+  }
+
+  [data-indentation-level='3'] {
+    margin-left: 7.2rem;
+  }
+
+  [data-indentation-level='4'] {
+    margin-left: 9.6rem;
+  }
+}
+
+.au-c-link {
+  .au-c-icon {
+    flex: 0 0 auto;
+  }
+}
+
+.au-u-flex-item--shrink {
+  flex: 0 1 0 !important;
+}
+
+.au-u-flex-item--fixed {
+  flex: 0 0 auto !important;
+}
+
+.au-u-maximize-width {
+  width: 100% !important;
+}
+
+.au-u-maximize-height {
+  height: 100% !important;
 }
 
 // TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed

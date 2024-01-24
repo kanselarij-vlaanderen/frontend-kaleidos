@@ -43,13 +43,19 @@ function renderAttendees(attendees) {
 }
 
 async function renderNotas(meeting, notas, intl, store) {
-  return await renderAgendaitemList(meeting, notas, intl, store);
+  return `
+  <section data-section="agendaitems">
+  ${await renderAgendaitemList(meeting, notas, intl, store)}
+  </section>
+  `;
 }
 
 async function renderAnnouncements(meeting, announcements, intl, store) {
   return `
-    <h4 id="announcements"><u>MEDEDELINGEN</u></h4>
+  <section data-section="announcements">
+    <h4><u>MEDEDELINGEN</u></h4>
     ${await renderAgendaitemList(meeting, announcements, intl, store)}
+  </section>
   `;
 }
 
@@ -104,6 +110,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[agendaitems][:id:]': agendaitem.id,
     'filter[:has-no:next-piece]': true,
   });
+  pieces = pieces.toArray();
   let sortedPieces;
   if (agendaitem.isApproval) {
     sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
@@ -150,13 +157,45 @@ function renderNextMeeting(meeting, intl) {
   return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
 }
 
+async function updateMinutesNotas(data, intl, store) {
+  const { meeting, notas, editorContent } = data;
+  let newNotas = await renderNotas(meeting, notas, intl, store);
+
+  const contentElement = document.createElement('template');
+  contentElement.innerHTML = editorContent;
+
+  const notasText = contentElement.content.querySelector('[data-section="agendaitems"]')?.outerHTML;
+  if (notasText) {
+    contentElement.content.querySelector('[data-section="agendaitems"]').outerHTML = newNotas;
+  }
+  // error? block should be found or button should not have been shown
+  
+  return contentElement.innerHTML;
+}
+
+async function updateMinutesAnnouncements(data, intl, store) {
+  const { meeting, announcements, editorContent } = data;
+  let newAnnouncements = await renderAnnouncements(meeting, announcements, intl, store);
+
+  const contentElement = document.createElement('template');
+  contentElement.innerHTML = editorContent;
+
+  const announcementsText = contentElement.content.querySelector('[data-section="announcements"]')?.outerHTML;
+  if (announcementsText) {
+    contentElement.content.querySelector('[data-section="announcements"]').outerHTML = newAnnouncements;
+  }
+  // else error? block should be found or button should not have been shown (manually deleted maybe (PVV / EP / BM))
+
+  return contentElement.innerHTML;
+}
+
 async function renderMinutes(data, intl, store) {
   const { meeting, attendees, notas, announcements, editorContent } = data;
 
   let newMinutesContent = `${renderAttendees(attendees)}
 ${renderAbsentees()}
-${notas ? await renderNotas(meeting, notas, intl, store) : ''}
-${announcements ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
+${notas.length ? await renderNotas(meeting, notas, intl, store) : ''}
+${announcements.length ? await renderAnnouncements(meeting, announcements, intl, store) : ''}
 ${renderNextMeeting(meeting, intl)}`;
 
   if (editorContent) {
@@ -326,6 +365,30 @@ export default class AgendaMinutesController extends Controller {
   }
 
   @action
+  async updateEditorNotas() {
+    if (!this.editor) {
+      return;
+    }
+    this.isUpdatingMinutesContent = true;
+    this.editor.setHtmlContent(
+      await updateMinutesNotas(await this.reshapeModelForRender(), this.intl, this.store)
+    );
+    this.isUpdatingMinutesContent = false;
+  }
+
+  @action
+  async updateEditorAnnouncements() {
+    if (!this.editor) {
+      return;
+    }
+    this.isUpdatingMinutesContent = true;
+    this.editor.setHtmlContent(
+      await updateMinutesAnnouncements(await this.reshapeModelForRender(), this.intl, this.store)
+    );
+    this.isUpdatingMinutesContent = false;
+  }
+
+  @action
   handleRdfaEditorInit(editor) {
     this.editor = editor;
     if (this.currentPiecePartTask?.value) {
@@ -356,6 +419,24 @@ export default class AgendaMinutesController extends Controller {
       agenda: this.agenda,
       meeting: this.meeting,
     };
+  }
+
+  get editorShowContentNotasButton() {
+    if (this.currentPiecePartTask?.value) {
+      return this.editor?.htmlContent.toString().includes("data-section=\"agendaitems\"");
+    }
+    return false;
+  }
+
+  get editorShowContentAnnouncementsButton() {
+    if (this.currentPiecePartTask?.value) {
+      return this.editor?.htmlContent.toString().includes("data-section=\"announcements\"");
+    }
+    return false;
+  }
+
+  get editorShowContentUpdateButton() {
+    return !(this.editorShowContentNotasButton && this.editorShowContentAnnouncementsButton);
   }
 
   @action

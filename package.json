@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.8.2",
+  "version": "6.9.4",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -57,7 +57,7 @@
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#8e0b6f4f16f626f71671c6e23f6a3e5baf65da56",
+    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#aed7406f3b8ca1f373fa504b029417ff03c27bf4",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
     "@typescript-eslint/parser": "^5.48.2",
@@ -93,7 +93,7 @@
     "ember-data-storefront": "0.18.2-ember4.0",
     "ember-element-helper": "^0.6.1",
     "ember-fetch": "^8.1.2",
-    "ember-file-upload": "5.0.0-beta.8",
+    "ember-file-upload": "7.4.0",
     "ember-flatpickr": "^3.2.3",
     "ember-functions-as-helper-polyfill": "^2.1.1",
     "ember-in-viewport": "4.1.0",

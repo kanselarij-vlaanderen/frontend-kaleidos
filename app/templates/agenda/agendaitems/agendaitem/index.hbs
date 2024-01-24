@@ -30,21 +30,21 @@
         @agendaActivity={{this.agendaActivity}}
         @currentAgenda={{this.agenda}}
         @subcase={{this.subcase}}
+        @meeting={{this.meeting}}
         @reverseSortedAgendas={{this.reverseSortedAgendas}}
         @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+        @onSendToVp={{this.reloadParliamentFlow}}
       />
     </Group.Item>
   </Toolbar.Group>
 </Auk::Toolbar>
 
 {{#if this.enableVlaamsParlement}}
-  {{#let (await this.subcase.decisionmakingFlow.case.parliamentFlow) as |parliamentFlow|}}
-    {{#if parliamentFlow}}
-      <Vp::SubmissionsAlert
-        @parliamentFlow={{parliamentFlow}}
-      />
-    {{/if}}
-  {{/let}}
+  {{#if this.parliamentFlow}}
+    <Vp::SubmissionsAlert
+      @parliamentFlow={{this.parliamentFlow}}
+    />
+  {{/if}}
 {{/if}}
 
 <div class="auk-u-mb-8">
@@ -84,7 +84,7 @@
     class="auk-u-mb-8"
   />
 {{/if}}
-{{#if (and this.enableDigitalAgenda (not this.meeting.isPreKaleidos))}}
+{{#if (not this.meeting.isPreKaleidos)}}
   <div class="auk-u-mb-8">
     <Mandatees::SecretaryPanel
       @referenceDate={{this.meeting.plannedStart}}

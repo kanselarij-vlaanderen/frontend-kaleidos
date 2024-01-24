@@ -1,6 +1,9 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class SubmittedPiece extends Model {
+  @attr name;
+  @attr subcaseName;
+  @attr('datetime') subcaseCreated;
   @attr unsignedFile;
   @attr signedFile;
   @attr wordFile;

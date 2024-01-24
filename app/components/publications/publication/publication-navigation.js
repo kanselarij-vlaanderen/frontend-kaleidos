@@ -19,11 +19,9 @@ export default class PublicationNavigation extends Component {
   *loadData() {
     const { publicationFlow } = this.args;
 
-    const pieces = yield this.store.query('piece', {
+    this.numberOfDocuments = yield this.store.count('piece', {
       'filter[publication-flow][:id:]': publicationFlow.id,
-      'page[size]': 1,
     });
-    this.numberOfDocuments = pieces.meta.count;
 
     this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
   }
