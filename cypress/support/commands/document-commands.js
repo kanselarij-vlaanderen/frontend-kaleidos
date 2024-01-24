@@ -404,7 +404,7 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 
   cy.wait(`@createNewFile${randomInt}`);
   cy.wait(`@getNewFile${randomInt}`);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/uploadFile');
 }
 
@@ -447,7 +447,7 @@ function addNewPieceToDecision(oldFileName, file) {
   cy.wait(`@patchDecisionActivity_${randomInt}`);
   cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
 
@@ -480,7 +480,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   cy.wait(`@patchReport_${randomInt}`);
   // cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPieceToGeneratedDecision');
 }
 
@@ -563,8 +563,8 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
   cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.get(editSelector).click();
-  cy.get(auk.loader);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader);
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(document.documentDetailsRow.row).as('documentRows');
   cy.get('@documentRows').eq(indexToDelete)
     .find(document.documentDetailsRow.input)

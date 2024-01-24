@@ -2,9 +2,7 @@ import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
-import ENV from 'frontend-kaleidos/config/environment';
-
-const IMPERSONATION_ENABLED = ENV.APP.ENABLE_IMPERSONATION;
+import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class ImpersonationService extends Service {
   @service store;
@@ -12,7 +10,7 @@ export default class ImpersonationService extends Service {
   @tracked role;
 
   async load() {
-    if (IMPERSONATION_ENABLED) {
+    if (isEnabledImpersonation()) {
       const response = await fetch('/impersonations/current', {
         method: 'GET',
         headers: {
@@ -32,7 +30,7 @@ export default class ImpersonationService extends Service {
   }
 
   async impersonate(role) {
-    if (IMPERSONATION_ENABLED) {
+    if (isEnabledImpersonation()) {
       const response = await fetch('/impersonations', {
         method: 'POST',
         headers: {
@@ -63,7 +61,7 @@ export default class ImpersonationService extends Service {
   }
 
   async stopImpersonation() {
-    if (IMPERSONATION_ENABLED) {
+    if (isEnabledImpersonation()) {
       const response = await fetch('/impersonations/current', {
         method: 'DELETE',
       });

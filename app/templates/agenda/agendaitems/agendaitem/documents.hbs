@@ -100,7 +100,7 @@
 >
   <:body>
     {{#if this.savePieces.isRunning}}
-      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      <Auk::Loader @message={{t "documents-loading-text"}} />
     {{else}}
       <Auk::FileUploader
         @multiple={{true}}

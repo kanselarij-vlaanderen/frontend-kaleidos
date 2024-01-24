@@ -1,19 +1,18 @@
-<Auk::Modal::Body>
-  <div class="au-c-form">
-    <AuFormRow data-test-new-case-shorttitle>
-      <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
-      <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
-    </AuFormRow>
-  </div>
-</Auk::Modal::Body>
-<Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.createCase.isRunning}}>
-  <AuButton
-    data-test-new-case-save={{true}}
-    @skin="primary"
-    @disabled={{this.isCreateDisabled}}
-    @loading={{this.createCase.isRunning}}
-    {{on "click" (perform this.createCase)}}
-  >
-    {{t "create-case"}}
-  </AuButton>
-</Auk::Modal::Footer>
+<ConfirmationModal
+  @modalOpen={{true}}
+  @title={{t "new-case"}}
+  @onConfirm={{perform this.createCase}}
+  @onCancel={{@onCancel}}
+  @confirmMessage={{t "create-case"}}
+  @disabled={{this.isCreateDisabled}}
+  @loading={{this.createCase.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow data-test-new-case-shorttitle>
+        <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
+        <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>

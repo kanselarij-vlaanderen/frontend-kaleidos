@@ -174,7 +174,7 @@ context('signatures shortlist overview tests', () => {
 
     // filter nonexistent
     cy.get(route.signatures.openMinisterFilter).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(appuniversum.checkbox).contains('Jan Jambon')
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist2');
@@ -184,7 +184,7 @@ context('signatures shortlist overview tests', () => {
 
     // filter one
     cy.get(route.signatures.openMinisterFilter).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(appuniversum.checkbox).contains(mandatee1)
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist3');
@@ -195,7 +195,7 @@ context('signatures shortlist overview tests', () => {
 
     // filter both
     cy.get(route.signatures.openMinisterFilter).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(appuniversum.checkbox).contains(mandatee2)
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist4');
@@ -253,7 +253,7 @@ context('signatures shortlist overview tests', () => {
       .should('not.exist');
     // add signer
     cy.get(signature.createSignFlow.signers.edit).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     // TODO can't add selector to container, only to checkboxlist, which isn't specific enough?
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
       .contains(mandatee1)
@@ -264,7 +264,7 @@ context('signatures shortlist overview tests', () => {
       .contains(mandatee1);
     // remove signer with edit
     cy.get(signature.createSignFlow.signers.edit).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
       .contains(mandatee1)
       .scrollIntoView()
@@ -275,7 +275,7 @@ context('signatures shortlist overview tests', () => {
 
     // check that there's only current ministers
     cy.get(signature.createSignFlow.signers.edit).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
       .should('have.length', 9);
     currentMinisters.forEach((minister) => {
@@ -522,14 +522,14 @@ context('publications shortlist overview tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitleShort2);
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.changeDecisionResult('Goedgekeurd');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
   });
 
   it('should check the shortlist overview', () => {
     // check if both docs show correctly
     cy.get(utils.mHeader.publications).click();
     cy.get(publication.publicationsIndex.tabs.shortlist).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(publication.shortlist.row.documentName).contains(files1[0].newFileName)
       .parents('tr')
       .as('doc1');
@@ -545,11 +545,11 @@ context('publications shortlist overview tests', () => {
     createPublicationViaMR(subcaseTitleShort1, files1[0].newFileName, publicationNumber1);
 
     // check if doc1 is no longer visible and create publication for doc2
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.header.close).click();
     cy.get(utils.mHeader.publications).click();
     cy.get(publication.publicationsIndex.tabs.shortlist).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(publication.shortlist.row.documentName).should('not.contain', files1[0].newFileName);
     cy.get('@doc2').find(publication.shortlist.row.openNewPublication)
       .click();
@@ -562,7 +562,7 @@ context('publications shortlist overview tests', () => {
       .wait('@createNewPublicationFlow');
     // check if doc2 is no longer visible
     cy.wait('@getShortlist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     // different table when signature data is enabled.
     cy.get(publication.shortlist.row.documentName).should('not.contain', files2[0].newFileName);
     // cy.get(publication.shortlist.table).contains('Geen resultaten gevonden');

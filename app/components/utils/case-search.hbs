@@ -11,7 +11,7 @@
   </div>
 
   {{#if this.isLoading}}
-    <WebComponents::VlLoader @text={{t "please-be-patient"}} />
+    <Auk::Loader @message={{t "please-be-patient"}} />
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>

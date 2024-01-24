@@ -1,0 +1,50 @@
+<Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                {{t "government-areas-and-fields"}}
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Utils::LoadableContent
+              @isLoading={{this.areLoadingTasksRunning}}
+              @reserveSpace={{true}}
+        >
+          <Auk::Panel::Body class="au-c-panel-grid">
+            {{#each this.domainSelections as |domainSelection|}}
+            <AuCheckboxGroup class="au-c-control-group--grid">
+              <AuCheckboxGroup class="auk-u-maximize-width"
+              > 
+                <AuCheckbox
+                  @checked={{domainSelection.isSelected}}
+                  @onChange={{fn this.toggleDomainSelection domainSelection}}
+                  @disabled={{@disabled}}
+                >
+                  <span class="au-u-medium">{{domainSelection.domain.label}}</span>
+                </AuCheckbox>
+                <AuCheckboxGroup
+                  @selected={{domainSelection.selectedFields}}
+                  @onChange={{this.toggleItem}}
+                  @disabled={{@disabled}}
+                  as |Group|
+                >
+                  {{#each domainSelection.availableFields as |field|}}
+                    <Group.Checkbox
+                      @value={{field}}
+                      @onChange={{fn this.toggleFieldSelection field}}
+                    >
+                      {{field.label}}
+                    </Group.Checkbox>
+                  {{/each}}
+                </AuCheckboxGroup>
+              </AuCheckboxGroup>
+            </AuCheckboxGroup>
+            {{/each}}
+          </Auk::Panel::Body>
+        </Utils::LoadableContent>
+      </Auk::Panel>

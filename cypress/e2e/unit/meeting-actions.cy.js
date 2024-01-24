@@ -73,7 +73,7 @@ context('meeting actions tests', () => {
     cy.wait('@deleteDecisionActivity');
     cy.wait('@deleteAgendaItemTreatment');
     cy.get(auk.modal.container).should('not.exist');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist'); // route is loading data after this action
 

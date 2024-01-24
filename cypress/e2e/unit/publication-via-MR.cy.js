@@ -80,7 +80,7 @@ context('Publications via MR tests', () => {
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
@@ -106,7 +106,7 @@ context('Publications via MR tests', () => {
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
@@ -149,7 +149,7 @@ context('Publications via MR tests', () => {
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(publicationNumber1)
@@ -298,7 +298,7 @@ context('Publications via MR tests', () => {
     cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
     cy.visit('/publicaties');
     cy.wait('@getRegulationTypes');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
 
