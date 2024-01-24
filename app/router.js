@@ -1,6 +1,5 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -27,15 +26,13 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
-    if (ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true) {
-      this.route('minutes', { path: '/notulen', });
-    }
-
+    this.route('minutes', { path: '/notulen', }); 
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
       this.route('subcases', { path: '/deeldossiers', }, function() {
+        this.route('add-subcase', { path: '/procedurestap-toevoegen',});
         this.route('subcase', { path: ':subcase_id', }, function() {
           this.route('documents', { path: '/documenten', });
           this.route('decision', { path: '/beslissing', });
