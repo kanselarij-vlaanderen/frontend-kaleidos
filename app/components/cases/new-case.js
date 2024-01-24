@@ -20,19 +20,18 @@ export default class NewCase extends Component {
     );
   }
 
-  @task
-  *createCase() {
+  createCase = task(async () => {
     const now = new Date();
     const _case = this.store.createRecord('case', {
       shortTitle: this.shortTitle,
       created: now,
     });
-    yield _case.save();
+    await _case.save();
     const decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
       case: _case,
       opened: now,
     });
-    yield decisionmakingFlow.save();
+    await decisionmakingFlow.save();
     return this.args.didSave(decisionmakingFlow);
-  }
+  });
 }

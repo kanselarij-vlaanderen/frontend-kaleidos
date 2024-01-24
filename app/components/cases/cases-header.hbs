@@ -32,30 +32,17 @@
       </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-<AuModal
-  @modalOpen={{this.isOpenNewCaseModal}}
-  @closeModal={{this.toggleIsOpenNewCaseModal}}
-  @title={{t "new-case"}}
-  @padding="none"
->
-  <:body>
-    <Cases::NewCase
-      @didSave={{this.saveNewCase}}
-      @onCancel={{this.toggleIsOpenNewCaseModal}}
-    />
-  </:body>
-</AuModal>
 
-<AuModal
-  @modalOpen={{this.IsOpenExperimentalNewCaseModal}}
-  @closeModal={{this.toggleIsOpenExperimentalNewCaseModal}}
-  @title={{t "new-case"}}
-  @padding="none"
->
-  <:body>
-    <Cases::NewCase
-      @didSave={{this.saveExperimentalNewCase}}
-      @onCancel={{this.toggleIsOpenExperimentalNewCaseModal}}
-    />
-  </:body>
-</AuModal>
+{{#if this.isOpenNewCaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveNewCase}}
+    @onCancel={{this.toggleIsOpenNewCaseModal}}
+  />
+{{/if}}
+
+{{#if this.IsOpenExperimentalNewCaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveExperimentalNewCase}}
+    @onCancel={{this.toggleIsOpenExperimentalNewCaseModal}}
+  />
+{{/if}}

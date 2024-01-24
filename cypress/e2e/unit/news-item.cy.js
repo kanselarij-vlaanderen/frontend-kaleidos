@@ -491,40 +491,40 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
       // test sort inNewsletter
       cy.get(route.newsletter.header.inNewsletter).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.inNewsletter).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
       // test sort number
       cy.get(route.newsletter.header.number).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.number).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 
       // test sort latestModified
       cy.get(route.newsletter.header.latestModified).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.latestModified).click();
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 

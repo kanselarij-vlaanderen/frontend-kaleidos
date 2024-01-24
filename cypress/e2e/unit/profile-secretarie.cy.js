@@ -154,14 +154,14 @@ context('Testing the application as Secretarie user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
@@ -315,14 +315,14 @@ context('Testing the application as Secretarie user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
@@ -468,7 +468,7 @@ context('Testing the application as Secretarie user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -567,7 +567,7 @@ context('Testing the application as Secretarie user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -717,13 +717,13 @@ context('Testing the application as Secretarie user', () => {
   context('Profile rights checks for signatures routes', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.signatures.openMinisterFilter);
     });
 
     it('check signatures/ongoing route', () => {
       cy.visit('ondertekenen/opvolgen');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.ongoing.statusFilter).find(appuniversum.checkbox);
       cy.get(route.ongoing.ministerFilter).find(appuniversum.checkbox);
     });

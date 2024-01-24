@@ -110,14 +110,14 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs, but not propagated internally yet)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -204,14 +204,14 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -302,7 +302,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -386,7 +386,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -468,7 +468,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       it('check zebra view', () => {
         cy.visit(zebraViewClosedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -576,7 +576,7 @@ context('Testing the application as Vlaams Parlement', () => {
       // actions on open agenda no decisions
       cy.visit('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -589,7 +589,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(appuniversum.alert.message).contains('Er zijn nog geen documenten toegevoegd.');
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -607,7 +607,7 @@ context('Testing the application as Vlaams Parlement', () => {
       // actions on released agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -620,7 +620,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -658,7 +658,7 @@ context('Testing the application as Vlaams Parlement', () => {
       // actions on closed agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -671,7 +671,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');

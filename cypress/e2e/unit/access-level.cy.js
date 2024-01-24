@@ -5,6 +5,7 @@ import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 const accessPublic = 'Publiek';
 const accessGovernment = 'Intern Overheid';
@@ -35,7 +36,7 @@ function setCurrentVersionAccesLevel(docName, accesLevel, hasPreviousVersion = f
   if (hasPreviousVersion) {
     cy.wait(2000); // arbitrary wait for more piece patches to pieces
   }
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
 }
 
 function setPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, openSidebar = false) {
@@ -69,7 +70,7 @@ function setPreviousVersionAccesLevel(docName, previousVersionName, accesLevel, 
     .wait('@patchDocuments');
 
   cy.go('back');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
 }
 
 function checkPreviousVersionAccesLevel(docName, previousVersionName, accesLevel) {

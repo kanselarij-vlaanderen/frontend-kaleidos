@@ -5,7 +5,6 @@ import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
-import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 
@@ -175,7 +174,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
     cy.openAgendaForDate(agendaDate);
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.clickReverseTab('Detail');
@@ -184,19 +183,19 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
@@ -297,20 +296,20 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
     cy.intercept('PATCH', '/news-items/*').as(`patchNewsItem${randomInt}`);
     cy.openAgendaForDate(agendaDate);
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.clickReverseTab('Detail');
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
@@ -319,7 +318,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(newsletter.editItem.cancel).click();
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
@@ -328,7 +327,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(newsletter.editItem.cancel).click();
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(newsletter.newsItem.create).should('be.visible')
