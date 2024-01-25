@@ -480,7 +480,10 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   // cy.wait(`@patchReport_${randomInt}`);
   // cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(auk.loader).should('not.exist',
+    {
+      timeout: 60000,
+    });
   cy.log('/addNewPieceToGeneratedDecision');
 }
 
