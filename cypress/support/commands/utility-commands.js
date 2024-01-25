@@ -122,7 +122,9 @@ function addDomainsAndFields(domains) {
   cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
-    cy.get(utils.governmentAreaSelectorForm.container)
+    cy.get(utils.governmentAreaSelectorForm.container, {
+      timeout: 60000,
+    })
       .contains(domain.name)
       .as('domain');
     if (domain.selected) {

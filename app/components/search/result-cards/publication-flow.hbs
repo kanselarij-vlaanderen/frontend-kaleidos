@@ -6,7 +6,10 @@
 >
   <card.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-      <p class="au-u-para-small au-u-muted au-u-medium">
+      <p
+        class="au-u-para-small au-u-muted au-u-medium"
+        data-test-route-search-result-cards-publication-flow-date
+      >
         {{date @sessionDate}}
       </p>
     </div>
@@ -17,7 +20,10 @@
           @route="cases.case.subcases"
           @model={{@decisionmakingFlowId}}
         >
-          <span class="card-link">
+          <span
+            class="card-link"
+            data-test-route-search-result-cards-publication-flow-shorttitle
+          >
             <SanitizeHtml
               @raw={{true}}
               @value={{or @shortTitle @title}}
@@ -35,7 +41,10 @@
   <card.footer>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       {{#if @status}}
-        <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+        <div
+          class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center"
+          data-test-route-search-result-cards-publication-flow-status
+        >
           <Auk::StatusPill
             @step={{@statusPillStep}}
             @status={{@statusPillKey}}
