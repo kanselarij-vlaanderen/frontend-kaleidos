@@ -94,6 +94,8 @@ function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
   cy.setDateInFlatpickr(dateTo);
   cy.wait(`@searchCall${randomInt}5`);
   cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+  // TODO-bug this should say there are no results
+  // cy.get(auk.emptyState.message).contains('Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
   cy.get(auk.emptyState.message).contains('Gelieve een zoekterm in te vullen.');
 
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}6`);
@@ -698,6 +700,7 @@ context('Search tests', () => {
     const checkbox1 = 'Ben Weyts';
     const checkbox2 = 'Cultuur, Jeugd, Sport en Media';
 
+    // TODO-setup: remove a case
     it('setup', () => {
       const shortTitle = 'test dossier om te verwijderen';
 
@@ -767,7 +770,6 @@ context('Search tests', () => {
       triggerSearch(searchFlow, checkbox2);
 
       // filter mandatee removed case
-      // TODO-setup: remove a case
       triggerSearchRadio(searchFlow, checkbox3);
       cy.get(dependency.emberDataTable.isLoading).should('not.exist');
       cy.get(route.caseResultCard.shortTitleLink);
@@ -876,7 +878,6 @@ context('Search tests', () => {
       triggerSearch(searchFlow, checkbox2);
 
       // filter decision result
-      // TODO: test combined filters
       triggerSearch(searchFlow, checkbox3);
       cy.get(route.decisionResultCard.shortTitleLink);
     });
@@ -928,7 +929,6 @@ context('Search tests', () => {
       cy.get(route.publicationFlowResultCard.shortTitleLink);
       triggerSearch(searchFlow, checkbox2);
 
-      // TODO: test every status
       // filter status
       triggerSearch(searchFlow, checkbox4);
       cy.get(route.publicationFlowResultCard.shortTitleLink);
