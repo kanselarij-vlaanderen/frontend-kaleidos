@@ -115,7 +115,7 @@
           </div>
         </AuFormRow>
       {{/if}}
-      {{#if (and this.enableDigitalAgenda (not this.isPreKaleidos))}}
+      {{#if (not this.isPreKaleidos)}}
         <AuFormRow data-test-edit-meeting-secretary>
           <div class="auk-input-group--w-large">
             <Auk::Label>

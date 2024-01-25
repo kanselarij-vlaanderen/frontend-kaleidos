@@ -84,7 +84,7 @@
     class="auk-u-mb-8"
   />
 {{/if}}
-{{#if (and this.enableDigitalAgenda (not this.meeting.isPreKaleidos))}}
+{{#if (not this.meeting.isPreKaleidos)}}
   <div class="auk-u-mb-8">
     <Mandatees::SecretaryPanel
       @referenceDate={{this.meeting.plannedStart}}

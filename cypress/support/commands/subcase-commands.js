@@ -239,7 +239,7 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   // refresh happens
   cy.wait(`@loadAgendaData_${randomInt}`);
   cy.wait(`@loadSubcase_${randomInt}`);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
   cy.log('/proposeSubcaseForAgenda');
 }

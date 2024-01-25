@@ -41,8 +41,8 @@ context('Publications reports tests', () => {
   beforeEach(() => {
     cy.login('OVRB');
     cy.visit('/publicaties/overzicht/rapporten');
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
   });
 
   afterEach(() => {

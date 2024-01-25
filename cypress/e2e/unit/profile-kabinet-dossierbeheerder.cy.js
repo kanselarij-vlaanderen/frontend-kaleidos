@@ -111,14 +111,14 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -213,14 +213,14 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -330,7 +330,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -420,7 +420,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -502,7 +502,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       it('check zebra view', () => {
         cy.visit(zebraViewClosedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -571,14 +571,14 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
   context('Profile rights checks for signatures routes', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       // TODO-signatures no positive assert possible?
       cy.get(route.signatures.openMinisterFilter).should('not.exist');
     });
 
     it('check signatures/ongoing route', () => {
       cy.visit('ondertekenen/opvolgen');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.ongoing.statusFilter).find(appuniversum.checkbox);
       cy.get(route.ongoing.ministerFilter).should('not.exist');
     });
@@ -627,7 +627,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       // actions on open agenda no decisions
       cy.visit('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -640,7 +640,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -677,7 +677,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       // actions on released agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -690,7 +690,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -728,7 +728,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       // actions on closed agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -741,7 +741,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');

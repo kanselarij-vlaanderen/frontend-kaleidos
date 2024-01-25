@@ -3,6 +3,7 @@
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 // ***********************************************
 
@@ -39,7 +40,7 @@ function clickReverseTab(tabName) {
   cy.get(auk.tabs.reversed).find(auk.tab.tab)
     .contains(tabName)
     .click();
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/clickReverseTab');
 }
 
