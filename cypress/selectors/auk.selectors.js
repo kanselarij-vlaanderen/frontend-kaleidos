@@ -80,6 +80,10 @@ const selectors = {
     close: '.au-c-alert__close',
   },
 
+  panel: {
+    body: '.auk-panel__body',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',

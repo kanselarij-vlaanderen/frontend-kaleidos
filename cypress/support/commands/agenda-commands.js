@@ -795,14 +795,17 @@ function generateDecision(concerns, decision) {
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
   cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-  // cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
+  cy.intercept('GET', '/generate-decision-report/*').as('generateReport');
   cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
     .click();
   cy.wait('@createNewDocumentContainer');
   cy.wait('@createNewReport');
   cy.wait('@createNewPiecePart');
   cy.wait('@patchDecisionActivities');
-  // cy.wait('@patchReport');
+  cy.wait('@generateReport');
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 80000,
+  });
   cy.log('/generateDecision');
 }
 
