@@ -35,7 +35,7 @@
             </AuButton>
           </AuButtonGroup>
         </div>
-        {{#if (or @piece.file.created @piece.created)}}
+        {{#if @piece.created}}
           <AuHelpText @skin="secondary">
             {{t "uploaded-at"}}
             {{datetime-at (or @piece.file.created @piece.created)}}
