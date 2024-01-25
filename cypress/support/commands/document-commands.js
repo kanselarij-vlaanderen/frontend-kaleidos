@@ -419,9 +419,9 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', '/reports').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/reports/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -463,6 +463,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
+  cy.intercept('PATCH', '/reports/*').as(`patchReport_${randomInt}`);
   // cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
@@ -476,6 +477,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
     });
 
   cy.wait(`@patchDecisionActivity_${randomInt}`);
+  cy.wait(`@patchReport_${randomInt}`);
   // cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
   cy.get(appuniversum.loader).should('not.exist');
