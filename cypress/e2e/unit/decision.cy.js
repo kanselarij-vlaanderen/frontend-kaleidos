@@ -13,7 +13,7 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
-context('Decision tests', () => {
+context('Decision tests post digital agenda', () => {
   const agendaDate = Cypress.dayjs('2023-12-16');
 
   const accessGovernment = 'Intern Overheid';
@@ -83,7 +83,7 @@ context('Decision tests', () => {
 
     cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 1);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // correct default access rights on non-confidential subcase should be "Intern Overheid"
     cy.get(document.accessLevelPill.pill).contains(accessGovernment);
@@ -191,8 +191,17 @@ context('Decision tests', () => {
     // CRUD of decisions
     // add report ("beslissingsfiche") to existing pre-generated decision-activity of note
     cy.generateDecision();
-
-    cy.get(auk.loader).should('not.exist');
+    // cy.get(agenda.agendaitemDecision.uploadFile).eq(0)
+    //   .click();
+    // cy.uploadFile(file.folder, file.fileName, file.fileExtension, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    // cy.intercept('POST', 'pieces').as('createNewPiece');
+    // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+    // cy.intercept('GET', 'pieces/*/previous-piece').as('getPreviousPiece');
+    // cy.get(auk.confirmationModal.footer.confirm).click();
+    // cy.wait('@createNewPiece');
+    // cy.wait('@patchDecisionActivities');
+    // cy.wait('@getPreviousPiece');
+    cy.get(appuniversum.loader).should('not.exist');
 
     decisionTypes.forEach((type) => {
       cy.get(agenda.decisionResultPill.edit)
@@ -234,15 +243,15 @@ context('Decision tests', () => {
     cy.wait('@deleteFile');
     cy.wait('@deleteReport');
     cy.wait('@deleteDocumentContainer');
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
     // reset result to goedgekeurd
     cy.get(agenda.decisionResultPill.edit)
       .click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Goedgekeurd')
       .click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.generateDecision();
 
     // cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
@@ -288,12 +297,12 @@ context('Decision tests', () => {
 
     // decision should stay confidential
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // switch decision to intern overheid
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.card).within(() => {
       cy.get(document.accessLevelPill.edit).click();
       cy.get(dependency.emberPowerSelect.trigger).click();
@@ -305,7 +314,7 @@ context('Decision tests', () => {
     cy.intercept('PATCH', '/reports/*').as('patchReports2');
     cy.get(document.accessLevelPill.save).click()
       .wait('@patchReports2');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // add BIS
     cy.addNewPieceToGeneratedDecision('VR PV');
@@ -342,7 +351,7 @@ context('Decision tests', () => {
 
     // check decision acceslevel
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
@@ -374,7 +383,7 @@ context('Decision tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.generateDecision();
-    cy.get(auk.loader).should('not.exist', {
+    cy.get(appuniversum.loader).should('not.exist', {
       timeout: 80000,
     });
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);

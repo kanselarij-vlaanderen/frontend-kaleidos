@@ -45,7 +45,7 @@
               data-test-document-card-name-value
             >
               {{#if this.loadFiles.isRunning}}
-                <AuLoader @padding="small" />
+                <Auk::Loader />
               {{else}}
                 {{#let
                   (or
@@ -170,11 +170,9 @@
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
-              <div
-                class="auk-loader au-u-margin-left-small"
-                role="alert"
-                aria-busy="true"
-              ></div>
+              <div class="au-u-margin-left-small">
+                <Auk::Loader />
+              </div>
             </Group.Item>
           {{else if this.signMarkingActivity}}
             <Group.Item

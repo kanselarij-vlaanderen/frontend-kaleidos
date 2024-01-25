@@ -210,8 +210,8 @@ function visitAgendaWithLink(link) {
   // cy.wait('@loadAgendaitems');
   // When opening an agenda, you should always get a loading screen.
   // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
-  cy.get(auk.loader).should('exist');
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader).should('exist');
+  cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');
   cy.log('/visitAgendaWithLink');
@@ -294,7 +294,7 @@ function deleteAgenda(lastAgenda) {
     cy.wait('@loadAgendaitems');
   }
   // loading page is no longer visible
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/deleteAgenda');
@@ -313,7 +313,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   }
   cy.get(agenda.agendaOverview.formallyOkEdit).click();
   // Data loading occurs here
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 20000,
   }).should('not.exist');
 
@@ -349,7 +349,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
@@ -357,8 +357,8 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
-  cy.get(auk.loader); // loader should be shown briefly
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader); // loader should be shown briefly
+  cy.get(appuniversum.loader, {
     timeout: amountOfFormallyOks * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
@@ -380,7 +380,7 @@ function approveDesignAgenda(shouldConfirm = true) {
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
-  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
@@ -389,7 +389,7 @@ function approveDesignAgenda(shouldConfirm = true) {
       timeout: 60000,
     }).should('not.exist');
     // agendaitems are loading after action is completed
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -413,7 +413,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
-  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();
@@ -422,7 +422,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
       timeout: 60000,
     }).should('not.exist');
   }
-  cy.get(auk.loader).should('not.exist'); // loader when refreshing data
+  cy.get(appuniversum.loader).should('not.exist'); // loader when refreshing data
   cy.log('/approveAndCloseDesignAgenda');
 }
 
@@ -444,7 +444,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
 
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
     .click();
@@ -455,7 +455,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
 
   cy.get(auk.modal.container).within(() => {
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 12000,
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
@@ -468,7 +468,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     cy.wait('@getSubcasesFiltered', {
       timeout: 12000,
     });
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 12000,
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
@@ -497,7 +497,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
       timeout: 20000,
     });
   cy.wait(`@loadAgendaitems_${randomInt}`);
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 12000,
   }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
@@ -512,10 +512,10 @@ function addAgendaitemToAgenda(subcaseTitle) {
 function toggleShowChanges() {
   cy.log('toggleShowChanges');
   // cy.clickReverseTab('Overzicht');
-  cy.get(auk.loader).should('not.exist'); // data is not loading
+  cy.get(appuniversum.loader).should('not.exist'); // data is not loading
   cy.get(agenda.agendaOverview.showChanges).click();
   // data loading is triggered so we check for the loader
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/toggleShowChanges');
 }
 
@@ -531,7 +531,7 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');
   // Detail tab is only shown after loading data (first or anchor item), but no loader is showing during the process
@@ -555,7 +555,7 @@ function agendaitemExists(agendaitemName) {
           cy.get(agenda.agendaOverviewItem.subitem);
           // data loading could be awaited  '/agendaitem?filter**' or next get() fails, solved bij checking loading modal
           cy.log('data needs to be loaded now, waiting a few seconds');
-          cy.get(auk.loader, {
+          cy.get(appuniversum.loader, {
             timeout: 20000,
           }).should('not.exist');
         }
@@ -590,7 +590,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
   cy.agendaitemExists(agendaitemName)
     .scrollIntoView()
     .click();
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');
   cy.url().should('include', 'agendapunten');
@@ -602,7 +602,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
       if (selectedTab !== 'Dossier') {
         cy.get(agenda.agendaitemNav.caseTab).click();
         // after changing the tab, we have to wait for data to load
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
       }
 
       if (isAdmin) {
@@ -624,7 +624,7 @@ function changeSelectedAgenda(agendaName) {
   cy.get(agenda.agendaSideNav.agendaName).contains(agendaName)
     .click();
   // await calls after switch covered by checking for loader
-  cy.get(auk.loader, {
+  cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');
 }
@@ -649,7 +649,7 @@ function closeAgenda() {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   // TODO-bug current-when should mark overzicht tab as active, but we enter a state where none of the tabs are active
   cy.clickReverseTab('Overzicht');
   cy.log('/closeAgenda');
@@ -672,7 +672,7 @@ function reopenAgenda() {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/reopenAgenda');
 }
 
@@ -696,7 +696,7 @@ function reopenPreviousAgenda() {
   cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/reopenPreviousAgenda');
 }
 

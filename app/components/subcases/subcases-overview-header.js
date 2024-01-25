@@ -2,8 +2,12 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
+import { inject as service } from '@ember/service';
 
 export default class SubCasesOverviewHeader extends Component {
+  @service router;
+
   @tracked case;
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
@@ -12,6 +16,10 @@ export default class SubCasesOverviewHeader extends Component {
   constructor() {
     super(...arguments);
     this.loadData.perform();
+  }
+
+  get isEnabledNewCaseCreation() {
+    return isEnabledNewCaseCreation();
   }
 
   @task
@@ -57,5 +65,10 @@ export default class SubCasesOverviewHeader extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  @action
+  navigateToAddSubcase() {
+    this.router.transitionTo('cases.case.subcases.add-subcase', this.args.decisionmakingFlow.id);
   }
 }

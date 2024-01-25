@@ -16,7 +16,7 @@
             (user-may "manage-decisions")
             (not this.isEditing)
             (not this.pieceParts this.report)
-            this.enableDigitalAgenda
+            this.isMeetingPostDigitalDecisions
           )
         }}
           <Group.Item>
@@ -41,7 +41,7 @@
       this.loadReport.isIdle
       (not this.isEditing)
       this.pieceParts
-      this.enableDigitalAgenda
+      this.isMeetingPostDigitalDecisions
     )
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
@@ -180,7 +180,7 @@
     {{else}}
       {{#if
         (and
-          this.report (or (not this.pieceParts) (not this.enableDigitalAgenda))
+          this.report (or (not this.pieceParts) (not this.isMeetingPostDigitalDecisions))
         )
       }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
@@ -199,7 +199,7 @@
           />
         </Auk::Panel::Body>
       {{else if
-        (and (user-may "manage-decisions") (not this.enableDigitalAgenda))
+        (and (user-may "manage-decisions") (not this.isMeetingPostDigitalDecisions))
       }}
         <Auk::Panel::Body @noPadding={{true}}>
           <div class="auk-u-p-2">
@@ -214,7 +214,7 @@
           </div>
         </Auk::Panel::Body>
       {{/if}}
-      {{#if (and this.pieceParts this.enableDigitalAgenda)}}
+      {{#if (and this.pieceParts this.isMeetingPostDigitalDecisions)}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >

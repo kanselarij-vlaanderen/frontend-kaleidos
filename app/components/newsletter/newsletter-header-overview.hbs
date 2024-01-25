@@ -214,7 +214,7 @@
     <Auk::Modal::Header @title={{t "show-newsletter"}} @onClose={{this.clearNewsletterHTML}} />
     <Auk::Modal::Body>
       {{#if this.loadNewsletterHTML.isRunning}}
-        <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
+        <Auk::Loader @message={{t "preview-loading-text"}} />
       {{else}}
         <AuContent>
           <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />

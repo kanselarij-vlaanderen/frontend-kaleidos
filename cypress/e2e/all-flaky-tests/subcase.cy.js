@@ -134,7 +134,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseHeader.actions.deleteSubcase)
       .should('not.exist');
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.changeDecisionResult('Goedgekeurd');
   });
 
@@ -475,7 +475,7 @@ context('Subcase tests', () => {
     cy.wait('@getSubcasesFiltered', {
       timeout: 12000,
     });
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 12000,
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
