@@ -553,6 +553,10 @@ $au-label-color: var(--au-gray-700);
 
     &[data-list-style='upper-alpha'] {
       list-style-type: upper-alpha;
+      margin-left: 2rem;
+      ol {
+        margin-left: 2rem;
+      }
     }
   }
 

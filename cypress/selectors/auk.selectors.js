@@ -75,11 +75,6 @@ const selectors = {
     title: '[data-test-modal-header-title]',
   },
 
-  alert: {
-    message: '.au-c-alert__message',
-    close: '.au-c-alert__close',
-  },
-
   panel: {
     body: '.auk-panel__body',
   },

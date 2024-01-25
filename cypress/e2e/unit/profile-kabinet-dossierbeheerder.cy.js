@@ -829,7 +829,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(document.documentPreview.downloadLink).should('not.exist');
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(auk.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
       cy.get(document.previewDetailsTab.sourceFile);
       cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
     });
@@ -839,12 +839,12 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // agendaitem document
       cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Ondertekenen');
-      cy.get(auk.alert.message).contains(alertMessage);
+      cy.get(appuniversum.alert.message).contains(alertMessage);
 
       // decision document
       // TODO flakey
       cy.visit('document/6374FAD1D9A98BD0A2288589?tab=Ondertekenen');
-      cy.get(auk.alert.message).contains(alertMessage);
+      cy.get(appuniversum.alert.message).contains(alertMessage);
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');

@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
@@ -778,7 +777,7 @@ context('Testing the application as Overheid user', () => {
       cy.get(document.documentPreview.downloadLink).should('not.exist');
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(auk.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
       cy.get(document.previewDetailsTab.sourceFile);
       cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
     });
