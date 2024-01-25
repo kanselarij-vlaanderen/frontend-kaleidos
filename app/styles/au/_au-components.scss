@@ -204,6 +204,11 @@ $au-label-color: var(--au-gray-700);
       margin-top: 0.2rem;
     }
 
+    > ul[data-list-style='upper-alpha'] + p,
+    > ol[data-list-style='upper-alpha'] + p {
+      margin-top: 0;
+    }
+
     > * + h1,
     > * + h2,
     > * + h3 {
