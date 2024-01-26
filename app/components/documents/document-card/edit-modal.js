@@ -105,8 +105,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       }
     }
 
-    const now = new Date();
-    this.args.piece.modified = now;
     this.args.piece.name = this.name?.trim();
     // If a piece has pieceParts, remove them
     // Might need to be improved to work for other piece subtypes

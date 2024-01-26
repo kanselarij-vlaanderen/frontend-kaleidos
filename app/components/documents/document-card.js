@@ -86,10 +86,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (isPresent(this.altDateToShow)) {
       return this.altDateToShow;
     }
-    if (this.args.piece.file) {
-      return this.args.piece.file.get("created");
-    }
-    return this.args.piece.created;
+    return this.args.piece.file?.get("created") || this.args.piece.created;
   }
 
   get bordered() {
@@ -171,42 +168,26 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadReportPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
-        'filter[report][:id:]': id,
-        'filter[:has-no:next-piece-part]': true,
-        sort: '-created', // finds the most recently changed one regardless of type
-      });
-    const loadMinutesPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
-        'filter[minutes][:id:]': id,
-        'filter[:has-no:next-piece-part]': true,
-      });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
       // check for alternative label
-      const modelName = this.args.piece.constructor.modelName;
       if (!isPresent(this.args.dateToShowLabel)) {
-        let piecePart;
-        if (modelName === 'report') {
-          piecePart = yield loadReportPiecePart(this.piece.id);
-        } else if (modelName === 'minutes') {
-          piecePart = yield loadMinutesPiecePart(this.piece.id);
-        }
-        const previousPart = yield piecePart?.previousPiecePart;
-        const hasBeenEdited = this.piece.created.getTime() !== this.piece.modified.getTime();
-        if (previousPart) {
+        const fileCreated = yield this.args.piece.file?.get('created');
+        const hasPieceBeenEdited = this.piece.created?.getTime() !== this.piece.modified?.getTime();
+        // file is always create first, if file.created is larger it has been edited
+        const hasFileBeenReplaced = this.piece.created?.getTime() < fileCreated?.getTime();
+        if (hasPieceBeenEdited || hasFileBeenReplaced) {
           this.dateToShowAltLabel = this.intl.t('edited-on');
-          this.altDateToShow = piecePart.created;
-        } else if (hasBeenEdited) {
-          this.dateToShowAltLabel = this.intl.t('edited-on');
-          this.altDateToShow = this.piece.modified
+          // get the most recent date
+          this.altDateToShow = this.piece.modified?.getTime() > fileCreated?.getTime() ? this.piece.modified : fileCreated;
         }
          else {
           this.dateToShowAltLabel = this.intl.t('created-on');
+          // fallback to default DateToShow
+          // also if created, modifed and file.created are undefined in legacy
         }
       }
     } else if (this.args.documentContainer) {
