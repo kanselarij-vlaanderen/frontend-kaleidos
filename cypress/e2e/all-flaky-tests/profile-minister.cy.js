@@ -266,7 +266,7 @@ context('Testing the application as Minister user', () => {
       cy.get(document.documentCard.actions).should('not.exist');
 
       // TODO-bug
-      // ! doc history viewing is allowed for this profile, but only latest version is visible
+      // ! doc history viewing is allowed for this profile, but only latest version is visible (yggie has no path to the others)
       // cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       //   .should('not.be.disabled')
       //   .click();
