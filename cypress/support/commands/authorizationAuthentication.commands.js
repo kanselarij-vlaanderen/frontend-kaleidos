@@ -62,12 +62,20 @@ function login(name, retries = 0) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function logout() {
+function logout(retries = 0) {
   cy.log('logout');
   cy.request({
     method: 'DELETE',
     url: '/mock/sessions/current',
-  }).then(() => {
+  }).then((responseBody) => {
+    if (responseBody.error || responseBody.response?.statusCode === 500) {
+      if (retries < 5) {
+        cy.log('logout failed, trying again');
+        cy.logout(retries + 1);
+      } else {
+        cy.log('logout failed after 5 attempts');
+      }
+    }
     cy.visit('/overzicht?sizeAgendas=2');
   });
   cy.wait(1000);
