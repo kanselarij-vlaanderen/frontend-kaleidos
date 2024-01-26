@@ -92,8 +92,12 @@
               </span>
             </AuCheckbox>
           </td>
-          <td data-test-route-signatures-row-name>
-            <AuLink @route="document" @model={{piece.id}}>
+          <td>
+            <AuLink
+              data-test-route-signatures-row-name
+              @route="document"
+              @model={{piece.id}}
+            >
               {{piece.name}}
             </AuLink>
           </td>
