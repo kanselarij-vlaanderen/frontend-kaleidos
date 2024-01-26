@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -35,12 +35,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     return isPresent(this.meeting.agenda.get('id'));
   }
 
-  get enableDigitalAgenda() {
-    return ENV.APP.ENABLE_DIGITAL_AGENDA === "true" || ENV.APP.ENABLE_DIGITAL_AGENDA === true;
-  }
-
   get enableVlaamsParlement() {
-    return ENV.APP.ENABLE_VLAAMS_PARLEMENT === "true" || ENV.APP.ENABLE_VLAAMS_PARLEMENT === true;
+    return isEnabledVlaamsParlement();
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
@@ -126,18 +122,16 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async saveSecretary(secretary) {
-    if (this.enableDigitalAgenda) {
-      await this.decisionActivity.secretary;
-      this.decisionActivity.secretary = secretary;
-      await this.decisionActivity.save();
-      const report = await this.store.queryOne('report', {
-        'filter[:has-no:next-piece]': true,
-        'filter[decision-activity][:id:]': this.decisionActivity.id,
-      });
-      const pieceParts = await report?.pieceParts;
-      if (pieceParts?.length) {
-        await this.decisionReportGeneration.generateReplacementReport.perform(report);
-      }
+    await this.decisionActivity.secretary;
+    this.decisionActivity.secretary = secretary;
+    await this.decisionActivity.save();
+    const report = await this.store.queryOne('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[decision-activity][:id:]': this.decisionActivity.id,
+    });
+    const pieceParts = await report?.pieceParts;
+    if (pieceParts?.length) {
+      await this.decisionReportGeneration.generateReplacementReport.perform(report);
     }
   }
 

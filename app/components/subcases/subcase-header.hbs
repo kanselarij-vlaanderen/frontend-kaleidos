@@ -14,7 +14,7 @@
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if (or this.loadData.isRunning this.isLoading)}}
-            <div class="auk-loader" role="alert" aria-busy="true"></div>
+            <Auk::Loader />
           {{else if this.canPropose}}
             <AuDropdown
               data-test-subcase-header-show-proposed-agendas={{true}}

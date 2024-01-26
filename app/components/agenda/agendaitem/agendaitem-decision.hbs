@@ -16,7 +16,7 @@
             (user-may "manage-decisions")
             (not this.isEditing)
             (not this.pieceParts this.report)
-            this.enableDigitalAgenda
+            this.isMeetingPostDigitalDecisions
           )
         }}
           <Group.Item>
@@ -41,7 +41,7 @@
       this.loadReport.isIdle
       (not this.isEditing)
       this.pieceParts
-      this.enableDigitalAgenda
+      this.isMeetingPostDigitalDecisions
     )
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
@@ -180,7 +180,7 @@
     {{else}}
       {{#if
         (and
-          this.report (or (not this.pieceParts) (not this.enableDigitalAgenda))
+          this.report (or (not this.pieceParts) (not this.isMeetingPostDigitalDecisions))
         )
       }}
         <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
@@ -199,7 +199,7 @@
           />
         </Auk::Panel::Body>
       {{else if
-        (and (user-may "manage-decisions") (not this.enableDigitalAgenda))
+        (and (user-may "manage-decisions") (not this.isMeetingPostDigitalDecisions))
       }}
         <Auk::Panel::Body @noPadding={{true}}>
           <div class="auk-u-p-2">
@@ -214,11 +214,10 @@
           </div>
         </Auk::Panel::Body>
       {{/if}}
-      {{#if (and this.pieceParts this.enableDigitalAgenda)}}
+      {{#if (and this.pieceParts this.isMeetingPostDigitalDecisions)}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
-          <AuContent @size="small">
         {{#if (and this.isEditingAnnotation this.mayEditDecisionReport)}}
            <h4 class="auk-h4">{{t "annotation"}}</h4>
            <AuInput
@@ -251,37 +250,39 @@
              </Auk::Toolbar::Group>
            </Auk::Toolbar>
            {{else}}
-           <Auk::Toolbar @auto={{true}} as |Toolbar|>
-             <Toolbar.Group @position="left">
-               <h4 class="auk-toolbar__title">
-                   {{t "annotation"}}:
-               </h4>
-             </Toolbar.Group>
-             <Toolbar.Group @position="right" as |Group|>
-               {{#if 
-                  (and
-                     (not this.isEditingAnnotation)
-                     this.mayEditDecisionReport
-                   )
-                 }}
-                   <Group.Item>
-                     <AuButton
-                       @skin="naked"
-                       @icon="pencil"
-                       @iconAlignment="left"
-                       @disabled={{this.saveReport.isRunning}}
-                       {{on "click" this.startEditingAnnotation}}
-                     >
-                       {{t "edit"}}
-                     </AuButton>
-                   </Group.Item>
-                 {{/if}}
-             </Toolbar.Group>
-           </Auk::Toolbar>
-         <SanitizeHtml
-           @raw={{true}}
-           @value={{this.annotatiePiecePart.htmlContent}}
-         />
+             <Auk::Toolbar @auto={{true}} as |Toolbar|>
+               <Toolbar.Group @position="left">
+                 <h4 class="auk-toolbar__title">
+                     {{t "annotation"}}:
+                 </h4>
+               </Toolbar.Group>
+               <Toolbar.Group @position="right" as |Group|>
+                 {{#if
+                    (and
+                       (not this.isEditingAnnotation)
+                       this.mayEditDecisionReport
+                     )
+                   }}
+                     <Group.Item>
+                       <AuButton
+                         @skin="naked"
+                         @icon="pencil"
+                         @iconAlignment="left"
+                         @disabled={{this.saveReport.isRunning}}
+                         {{on "click" this.startEditingAnnotation}}
+                       >
+                         {{t "edit"}}
+                       </AuButton>
+                     </Group.Item>
+                   {{/if}}
+               </Toolbar.Group>
+             </Auk::Toolbar>
+             <AuContent @size="small">
+               <SanitizeHtml
+                 @raw={{true}}
+                 @value={{this.annotatiePiecePart.htmlContent}}
+               />
+             </AuContent>
         {{/if}}
         {{#if (and this.isEditingConcern this.mayEditDecisionReport)}}
            <h4 class="auk-h4">{{t "concerns"}}</h4>
@@ -360,10 +361,12 @@
                     {{/if}}
                 </Toolbar.Group>
               </Auk::Toolbar>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{this.betreftPiecePart.htmlContent}}
-            />
+              <AuContent @size="small">
+                <SanitizeHtml
+                  @raw={{true}}
+                  @value={{this.betreftPiecePart.htmlContent}}
+                />
+              </AuContent>
             {{/if}}
              {{#if (and this.isEditingTreatment this.mayEditDecisionReport)}}
               <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
@@ -442,12 +445,13 @@
                     {{/if}}
                   </Toolbar.Group>
               </Auk::Toolbar>
-            <SanitizeHtml
-              @raw={{true}}
-              @value={{this.beslissingPiecePart.htmlContent}}
-            />
+              <AuContent @size="small">
+                <SanitizeHtml
+                  @raw={{true}}
+                  @value={{this.beslissingPiecePart.htmlContent}}
+                />
+              </AuContent>
             {{/if}}
-          </AuContent>
         </Auk::Panel::Body>
       {{/if}}
     {{/if}}

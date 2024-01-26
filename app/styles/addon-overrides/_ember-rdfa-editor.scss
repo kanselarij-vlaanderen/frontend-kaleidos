@@ -129,6 +129,14 @@ $say-editor-border-radius: $au-input-border-radius;
     ol {
       padding-left: 3.8rem;
     }
+
+    &[data-list-style='upper-alpha'] {
+      padding-left: 2.9rem;
+
+      ol {
+        padding-left: 1.9rem;
+      }
+    }
   }
 
   @mixin decimal-extended-styling($levels, $current-level: 1) {

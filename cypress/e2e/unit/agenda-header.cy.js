@@ -123,7 +123,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     // the new agendaitem was deleted by the backend service
@@ -175,7 +175,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 3);

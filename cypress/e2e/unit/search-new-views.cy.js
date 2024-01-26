@@ -5,6 +5,7 @@ import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
@@ -40,7 +41,7 @@ context('New search views tests', () => {
     // cy.wait('@getMandatees', {
     //   timeout: 100000,
     // });
-    // cy.get(auk.loader).should('not.exist');
+    // cy.get(appuniversum.loader).should('not.exist');
   });
 
   afterEach(() => {
@@ -50,8 +51,8 @@ context('New search views tests', () => {
   context('Test zoeken/dossiers', () => {
     beforeEach(() => {
       cy.visit('/zoeken/dossiers');
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in cases search view', () => {
@@ -107,8 +108,8 @@ context('New search views tests', () => {
   context('Test zoeken/agendapunten', () => {
     beforeEach(() => {
       cy.visit('/zoeken/agendapunten');
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in agendaitems search view', () => {
@@ -118,7 +119,7 @@ context('New search views tests', () => {
     it('Should check all filters', () => {
       cy.get(route.search.to);
       cy.get(route.search.from);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
 
       // cy.get(route.searchMinisterFilter.list);
 
@@ -166,8 +167,8 @@ context('New search views tests', () => {
   context('Test zoeken/documenten', () => {
     beforeEach(() => {
       cy.visit('/zoeken/documenten');
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in pieces search view', () => {
@@ -219,8 +220,8 @@ context('New search views tests', () => {
   context('Test zoeken/beslissingen', () => {
     beforeEach(() => {
       cy.visit('/zoeken/beslissingen');
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in decisions search view', () => {
@@ -269,8 +270,8 @@ context('New search views tests', () => {
   context('Test zoeken/kort-bestek', () => {
     beforeEach(() => {
       cy.visit('/zoeken/kort-bestek');
-      cy.get(auk.loader);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
     });
 
     it('Should change the amount of elements to every value in selectbox in news-items search view', () => {

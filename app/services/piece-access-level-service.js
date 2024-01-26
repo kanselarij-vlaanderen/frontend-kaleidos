@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 /*
  * This service is used to make necessary changes to access levels of certain pieces when an access level
@@ -140,7 +139,7 @@ export default class PieceAccessLevelService extends Service {
    * "Vertrouwelijk" access level.
    */
   async updateDecisionsAccessLevelOfSubcase(subcase) {
-    const reports = await this.store.query('report', {
+    const reports = await this.store.queryAll('report', {
       'filter[decision-activity][subcase][:id:]': subcase.id,
       include: 'access-level',
     });
@@ -157,10 +156,9 @@ export default class PieceAccessLevelService extends Service {
    */
 
   async updateSubmissionAccessLevelOfSubcase(subcase) {
-    const pieces = await this.store.query('piece', {
+    const pieces = await this.store.queryAll('piece', {
       'filter[submission-activity][subcase][:id:]': subcase.id,
       'filter[:has-no:next-piece]': true,
-      'page[size]': PAGE_SIZE.PIECES,
     });
     
     await Promise.all(pieces.toArray().map(async (piece) => {

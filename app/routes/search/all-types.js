@@ -92,7 +92,7 @@ export default class AllTypes extends Route {
             10,
             null,
             filter,
-            (searchData) => type.dataMapping(searchData, this.store),
+            (searchData) => type.dataMapping(searchData, this.store, params),
             {
               fields: type.highlightFields,
             }

@@ -155,7 +155,9 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
     cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
       .click();
   }
-  cy.get(dependency.emberPowerSelect.option).should('not.exist');
+  cy.get(dependency.emberPowerSelect.option).should('not.exist', {
+    timeout: 60000,
+  });
   cy.get(utils.mandateesSelector.add).click();
   cy.get(mandatee.mandateePanelEdit.actions.save).click();
   cy.wait(`@patchSubcase${randomInt}`, {
@@ -237,7 +239,7 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   // refresh happens
   cy.wait(`@loadAgendaData_${randomInt}`);
   cy.wait(`@loadSubcase_${randomInt}`);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
   cy.log('/proposeSubcaseForAgenda');
 }

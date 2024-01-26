@@ -1,10 +1,10 @@
-import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';
 
 const environmentNames = {
   localhost: 'LOCAL',
@@ -38,9 +38,8 @@ export default class MHeader extends Component {
   }
 
   get canImpersonate() {
-    const isEnabled = ENV.APP.ENABLE_IMPERSONATION;
     const hasPermission = this.currentSession.may('impersonate-users', true);
-    return isEnabled && hasPermission;
+    return isEnabledImpersonation() && hasPermission;
   }
 
   get isShownSignatureFolder() {

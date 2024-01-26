@@ -19,20 +19,30 @@
               {{t "add-case"}}
             </AuButton>
           {{/if}}
+          {{#if (and this.isEnabledNewCaseCreation (user-may "manage-cases"))}}
+            <AuButton
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.toggleIsOpenExperimentalNewCaseModal}}
+            >
+              {{t "add-case-new"}}
+            </AuButton>
+          {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-<AuModal
-  @modalOpen={{this.isOpenNewCaseModal}}
-  @closeModal={{this.toggleIsOpenNewCaseModal}}
-  @title={{t "new-case"}}
-  @padding="none"
->
-  <:body>
-    <Cases::NewCase
-      @didSave={{this.saveNewCase}}
-      @onCancel={{this.toggleIsOpenNewCaseModal}}
-    />
-  </:body>
-</AuModal>
+
+{{#if this.isOpenNewCaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveNewCase}}
+    @onCancel={{this.toggleIsOpenNewCaseModal}}
+  />
+{{/if}}
+
+{{#if this.IsOpenExperimentalNewCaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveExperimentalNewCase}}
+    @onCancel={{this.toggleIsOpenExperimentalNewCaseModal}}
+  />
+{{/if}}

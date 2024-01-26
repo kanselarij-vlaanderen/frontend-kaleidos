@@ -5,6 +5,7 @@
   "add-attachments": "Documenten opladen",
   "add-attachment": "Document opladen",
   "add-case": "Nieuw dossier aanmaken",
+  "add-case-new": "Nieuw dossier aanmaken (nieuw)",
   "case-name": "Naam dossier",
   "case-name-concat": "Dossiernaam",
   "add-comment": "Opmerking toevoegen",
@@ -95,6 +96,7 @@
   "create-mandatee": "Minister toevoegen",
   "create-single-newsletter": "Losstaand kort bestek aanmaken",
   "create-subcase": "Procedurestap toevoegen",
+  "create-subcase-new": "Procedurestap toevoegen (nieuw)",
   "created-on": "Aangemaakt op",
   "edited-on": "Bijgewerkt op",
   "current-subcase": "Huidige procedurestap",
@@ -1193,7 +1195,7 @@
   "error-while-generating-report-name-pdf": "Er ging iets mis tijdens het aanmaken van de beslissingsfiche {name}. Reden: {error}",
   "error-while-generating-report-pdfs": "Er ging iets mis tijdens het aanmaken van de beslissingsfiches. Reden: {error}",
   "error-while-generating-report-pdfs-no-reason": "Er ging iets mis tijdens het aanmaken van de beslissingsfiches.",
-  "error-while-generating-report-bundle": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF. Reden: {error}",
+  "error-while-generating-report-bundle": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF.",
   "error-while-generating-report-bundle-no-reason": "Er ging iets mis tijdens het aanmaken van alle beslissingen PDF.",
   "error-while-generating-minutes-pdf": "Er ging iets mis tijdens het aanmaken van de notulen",
   "version-of-date-at-time": "Versie van {date} om {time}",
@@ -1289,6 +1291,7 @@
   "decision-report-generation--toast-generating--message": "{total, plural, =1 {1 beslissing zal} other {# beslissingen zullen}} worden aangepast.",
   "decision-report-generation--toast-generating--title": "Beslissingen aanpassen",
   "decision-report-generation--toast-generating-complete--message": "{total, plural, =1 {1 beslissing is} other {# beslissingen zijn}} aangepast.",
+  "decision-report-generation--toast-generating-single-complete--message": "De beslissing is aangepast.",
   "decision-report-generation--toast-generating-complete--title": "Beslissingen aangepast",
   "decision-report-bundle-generation--toast-generating--message": "Alle beslissingen PDF wordt aangemaakt.",
   "decision-report-bundle-generation--toast-generating--title": "Alle beslissingen PDF aanmaken",
@@ -1311,5 +1314,7 @@
   "remarks": "Opmerkingen",
   "no-new-files-will-be-sent": "Er zijn geen nieuwe bestanden om door te sturen.",
   "documents-sent-on": "Documenten doorgestuurd op",
-  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd"
+  "the-following-things-were-sent": "De volgende zaken werden doorgestuurd",
+  "general-information": "Algemene info",
+  "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden"
 }
