@@ -53,7 +53,17 @@
             />
           </div>
         {{else}}
-          <p>{{t "no-new-files-will-be-sent"}}</p>
+          <p>
+            {{t "no-new-files-will-be-sent"}}
+            <br />
+            {{t "for-questions-contact"}}
+            <AuLinkExternal
+              href="mailto:kaleidos.servicedesk@vlaanderen.be"
+              target="_blank"
+            >
+              {{t "email-servicedesk"}}
+            </AuLinkExternal>
+          </p>
         {{/if}}
       </AuContent>
       {{#if (not this.decisionsReleased)}}
@@ -72,8 +82,7 @@
       {{#if this.showMissingPieces}}
         <AuAlert
           @title="{{t 'this-case-is-missing'}}:"
-          @skin="warning"
-          @icon="alert-triangle"
+          @skin="info"
           @size="small"
           class="au-u-margin-bottom-none au-u-margin-top"
         >
