@@ -157,14 +157,14 @@ context('Testing the application as Kanselarij user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
       cy.get(route.agendaitemDocuments.add);
@@ -318,14 +318,14 @@ context('Testing the application as Kanselarij user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
       cy.get(route.agendaitemDocuments.add);
@@ -471,7 +471,7 @@ context('Testing the application as Kanselarij user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -570,7 +570,7 @@ context('Testing the application as Kanselarij user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -732,11 +732,11 @@ context('Testing the application as Kanselarij user', () => {
       // cy.get(publication.publicationsIndex.tabs.search);
 
       cy.get(publication.publicationsIndex.tabs.reports).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(publication.reportsPanelEntry.create).should('not.be.disabled');
 
       cy.get(publication.publicationsIndex.tabs.search).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.search.input);
       cy.get(route.search.trigger);
     });
@@ -784,13 +784,13 @@ context('Testing the application as Kanselarij user', () => {
   context('Profile rights checks for signatures routes', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.signatures.openMinisterFilter);
     });
 
     it('check signatures/ongoing route', () => {
       cy.visit('ondertekenen/opvolgen');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.ongoing.statusFilter).find(appuniversum.checkbox);
       cy.get(route.ongoing.ministerFilter).find(appuniversum.checkbox);
     });
@@ -1070,7 +1070,7 @@ context('Testing the application as Kanselarij user', () => {
       cy.get(document.documentPreview.downloadLink);
       cy.get(document.previewDetailsTab.delete);
       cy.get(document.previewDetailsTab.edit);
-      cy.get(auk.alert.message).should('not.exist');
+      cy.get(appuniversum.alert.message).should('not.exist');
       cy.get(document.previewDetailsTab.sourceFileDownload);
     });
 

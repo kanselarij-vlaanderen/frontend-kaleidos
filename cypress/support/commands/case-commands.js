@@ -7,6 +7,7 @@ import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 
 /**
@@ -21,12 +22,12 @@ function createCase(shortTitle) {
   cy.log('createCase');
   cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
   cy.visit('/dossiers?aantal=10');
-  cy.get(auk.loader);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader);
+  cy.get(appuniversum.loader).should('not.exist');
 
   cy.get(cases.casesHeader.addCase).click();
   cy.get(cases.newCase.shorttitle).type(shortTitle);
-  cy.get(cases.newCase.save).click();
+  cy.get(auk.confirmationModal.footer.confirm).click();
 
   let caseId;
   cy.log('/createCase');
@@ -105,7 +106,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.exist');
   }
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(cases.newSubcase.save).click();
 
   let subcaseId;
@@ -157,7 +158,7 @@ function searchCase(caseTitle) {
   cy.get(route.search.trigger)
     .click()
     .wait('@decisionmakingSearchResult');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
   cy.get(route.searchCases.dataTable).contains(caseTitle)
     .parents('tr')

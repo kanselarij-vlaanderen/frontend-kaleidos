@@ -36,7 +36,7 @@ export default class MandateesCheckboxSelect extends Component {
 
   loadMinisters = task(async () => {
     if (this.args.referenceAgenda) {
-      const mandatees = await this.store.query('mandatee', {
+      const mandatees = await this.store.queryAll('mandatee', {
         'filter[agendaitems][agenda][:id:]': this.args.referenceAgenda.id,
         include: 'person',
         sort: 'priority',

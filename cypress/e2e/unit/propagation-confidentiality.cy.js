@@ -1,14 +1,14 @@
 /* global context, it, cy, afterEach */
 // / <reference types="Cypress" />
 
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 function checkAccess(docName, hasAccess = true) {
   cy.get(document.documentCard.name.value).contains(docName)
     .parents(document.documentCard.card)
     .as('currentDoc');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get('@currentDoc').find(document.accessLevelPill.pill);
   if (hasAccess) {
     cy.get('@currentDoc').find(document.documentCard.name.value)

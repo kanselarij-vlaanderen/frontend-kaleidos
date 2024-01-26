@@ -5,6 +5,7 @@
   "add-attachments": "Documenten opladen",
   "add-attachment": "Document opladen",
   "add-case": "Nieuw dossier aanmaken",
+  "add-case-new": "Nieuw dossier aanmaken (nieuw)",
   "case-name": "Naam dossier",
   "case-name-concat": "Dossiernaam",
   "add-comment": "Opmerking toevoegen",
@@ -95,6 +96,7 @@
   "create-mandatee": "Minister toevoegen",
   "create-single-newsletter": "Losstaand kort bestek aanmaken",
   "create-subcase": "Procedurestap toevoegen",
+  "create-subcase-new": "Procedurestap toevoegen (nieuw)",
   "created-on": "Aangemaakt op",
   "edited-on": "Bijgewerkt op",
   "current-subcase": "Huidige procedurestap",
@@ -1311,5 +1313,7 @@
   "no-new-files-will-be-sent": "Alle beschikbare documenten van dit dossier werden naar het Vlaams Parlement doorgestuurd.",
   "for-questions-contact": "Bij vragen contacteer:",
   "documents-sent-on": "Documenten doorgestuurd op",
-  "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd"
+  "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
+  "general-information": "Algemene info",
+  "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden"
 }

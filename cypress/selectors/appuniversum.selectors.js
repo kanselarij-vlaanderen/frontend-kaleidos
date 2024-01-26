@@ -7,6 +7,7 @@ const selectors = {
   pill: '.au-c-pill',
   input: '.au-c-input',
   checkbox: '.au-c-control--checkbox',
+  radio: '.au-c-control--radio',
   button: '.au-c-button',
   loader: '.au-c-loader',
   alert: {

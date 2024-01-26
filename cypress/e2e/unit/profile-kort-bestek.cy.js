@@ -151,14 +151,14 @@ context('Testing the application as Kort bestek user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -293,14 +293,14 @@ context('Testing the application as Kort bestek user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add).should('not.exist');
@@ -377,7 +377,15 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.documentCard.versionHistory).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Documents Tab - Document Card - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
     });
   });
 
@@ -404,7 +412,7 @@ context('Testing the application as Kort bestek user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -503,7 +511,7 @@ context('Testing the application as Kort bestek user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -693,7 +701,7 @@ context('Testing the application as Kort bestek user', () => {
       // actions on open agenda no decisions
       cy.visit('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -706,7 +714,7 @@ context('Testing the application as Kort bestek user', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -744,7 +752,7 @@ context('Testing the application as Kort bestek user', () => {
       // actions on released agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -757,7 +765,7 @@ context('Testing the application as Kort bestek user', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -796,7 +804,7 @@ context('Testing the application as Kort bestek user', () => {
       // actions on closed agenda no decisions
       cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(cases.subcaseDescription.panel);
       cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
 
@@ -809,7 +817,7 @@ context('Testing the application as Kort bestek user', () => {
 
       // documents tab
       cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(document.documentCard.card);
 
       cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
@@ -897,7 +905,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(document.documentPreview.downloadLink).should('not.exist');
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(auk.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
       cy.get(document.previewDetailsTab.sourceFile);
       cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
     });
