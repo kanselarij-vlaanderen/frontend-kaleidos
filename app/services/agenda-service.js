@@ -144,18 +144,6 @@ export default class AgendaService extends Service {
 
   /* No API */
 
-  async computeNextItemNumber(agenda, agendaItemType) {
-    const lastItem = await this.store.queryOne('agendaitem', {
-      'filter[agenda][:id:]': agenda.id,
-      'filter[type][:id:]': agendaItemType.get('id'),
-      sort: '-number',
-    });
-    if (lastItem) {
-      return lastItem.number + 1;
-    }
-    return 1;
-  }
-
   async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
