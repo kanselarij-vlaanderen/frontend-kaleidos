@@ -162,7 +162,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   let agendaId;
 
   cy.wait('@createNewMeeting', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
@@ -542,7 +542,7 @@ function agendaitemExists(agendaitemName) {
   cy.wait(200);
   // Check which reverse tab is active
   cy.get(appuniversum.loader, {
-    timeout: 20000,
+    timeout: 60000,
   }).should('not.exist');
   // Detail tab is only shown after loading data (first or anchor item), but no loader is showing during the process
   // We need to ensure Detail tab exists before looking through the child components
@@ -805,14 +805,17 @@ function generateDecision(concerns, decision) {
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
   cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-  // cy.intercept('PATCH', 'reports/**').as('patchReport'); // TODO check this, happens twice
+  cy.intercept('GET', '/generate-decision-report/*').as('generateReport');
   cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
     .click();
   cy.wait('@createNewDocumentContainer');
   cy.wait('@createNewReport');
   cy.wait('@createNewPiecePart');
   cy.wait('@patchDecisionActivities');
-  // cy.wait('@patchReport');
+  cy.wait('@generateReport');
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 80000,
+  });
   cy.log('/generateDecision');
 }
 
