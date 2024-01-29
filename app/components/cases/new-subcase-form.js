@@ -25,6 +25,7 @@ export default class NewSubcaseForm extends Component {
   @service mandatees;
   @service fileConversionService;
   @service toaster;
+  @service agendaService;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -48,10 +49,19 @@ export default class NewSubcaseForm extends Component {
 
   @tracked pieces = new TrackedArray([]);
 
+  @tracked showAgendaModal = false;
+
+  @tracked testConfirmModal = false;
+
   constructor() {
     super(...arguments);
     this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
+  }
+
+  @action
+  toggleTestConfirmModal() {
+    this.testConfirmModal = !this.testConfirmModal;
   }
 
   @action
@@ -108,7 +118,8 @@ export default class NewSubcaseForm extends Component {
   }
 
   @task
-  *saveCase(fullCopy) {
+  *saveCase(fullCopy, meeting = null, isFormallyOk = false, privateComment = null) {
+    this.showAgendaModal = false;
     const now = new Date();
     this.subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
@@ -159,6 +170,13 @@ export default class NewSubcaseForm extends Component {
     yield this.subcase.save();
 
     yield this.savePieces.perform();
+
+    if(meeting) {
+      const submissionActivities = yield this.subcase.submissionActivities;
+      const formallyOk = isFormallyOk ? CONSTANTS.ACCEPTANCE_STATUSSES.OK : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
+  
+      yield this.agendaService.putSubmissionOnAgenda(meeting,submissionActivities, formallyOk, privateComment);
+    }
 
     this.router.transitionTo(
       'cases.case.subcases.subcase',
@@ -325,5 +343,12 @@ export default class NewSubcaseForm extends Component {
     const documentContainer = await piece.documentContainer;
     await documentContainer.destroyRecord();
     await piece.destroyRecord();
+  }
+
+  /** agenda */
+
+  @action
+  toggleAgendaModal() {
+    this.showAgendaModal = !this.showAgendaModal;
   }
 }

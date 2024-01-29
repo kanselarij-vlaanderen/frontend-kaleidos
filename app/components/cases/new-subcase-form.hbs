@@ -211,10 +211,34 @@
       <AuButton
         @skin="primary"
         @disabled={{this.saveCase.isRunning}}
-        {{on "click" (perform this.saveCase false)}}
+        {{on "click" this.toggleAgendaModal}}
       >
         {{t "new-subcase"}}
       </AuButton>
     </Group>
   </AuToolbar>
 </div>
+
+{{#if this.showAgendaModal}} 
+<Cases::ProposeAgendaModal
+  @toggleAgendaModal={{this.toggleAgendaModal}}
+  @disabled={{this.saveCase.isRunning}}
+  @onConfirm={{this.saveCase}}
+/>
+{{/if}}
+
+{{#if this.saveCase.isRunning}}
+<Auk::Modal>
+  <Auk::Modal::Header @title={{t "save"}} @onClose={{this.toggleTestConfirmModal}}/>
+  <Auk::Modal::Body>
+    <Auk::Loader 
+      @message={{t "save-in-progress"}}
+    />
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+   @cancelDisabled="true"
+   @onCancel={{this.toggleTestConfirmModal}}
+  >
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}

@@ -45,7 +45,6 @@
   "agendaitem-case": "Dossier",
   "agendaitem-decision": "Beslissing",
   "agendaitem-title": "Type dossiers & titels",
-  "agendaitem-type": "Type agendapunt",
   "agendaitem-field-label": "Agendapunt",
   "agendaitem-table-header": "Agendapunt",
   "agendaitems": "Agendapunten",
@@ -315,6 +314,7 @@
   "priority": "Prioriteit",
   "process": "Verloop",
   "propose-for-agenda": "Indienen voor agendering",
+  "place-on-agenda": "Plaats op agenda",
   "public": "Publiek",
   "publicity": "Openbaarheid",
   "related-cases": "Gerelateerde dossiers",
@@ -330,6 +330,7 @@
   "row": "Rij",
   "save": "Opslaan",
   "save-resignation": "Mandataris wijzigen",
+  "save-without-agenda": "Opslaan zonder agendering",
   "search": "Zoeken",
   "search-placeholder": "Vul uw zoekterm in...",
   "case-search-placeholder": "Dossier zoeken...",
@@ -449,6 +450,7 @@
   "remark": "opmerking",
   "comment-title": "Opmerking",
   "private-comment-title": "Interne opmerking",
+  "private-comments-title": "Interne opmerkingen",
   "decision": "beslissing",
   "agenda-item-treatment": "Beslissing",
   "decision-result-code": "Beslissing resultaatcode",
@@ -1316,5 +1318,6 @@
   "documents-sent-on": "Documenten doorgestuurd op",
   "the-following-things-were-sent": "De volgende zaken werden doorgestuurd",
   "general-information": "Algemene info",
-  "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden"
+  "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
+  "save-in-progress": "Bezig met opslaan."
 }

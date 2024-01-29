@@ -123,9 +123,11 @@ export default class AgendaService extends Service {
   /**
    * @argument meeting
    * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
+   * @argument formallyOk
+   * @argument privateComment
    * In the case where an agenda-item was deleted after multiple submissions occurred, one can put on agenda again with multiple submissions
    */
-  async putSubmissionOnAgenda(meeting, submissionActivities) {
+  async putSubmissionOnAgenda(meeting, submissionActivities, formallyOk = CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK, privateComment = null) {
     const subcase = await submissionActivities[0].get('subcase');
     const lastAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
@@ -221,13 +223,14 @@ export default class AgendaService extends Service {
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,
-      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
+      formallyOk: formallyOk,
       type: agendaItemType,
       mandatees,
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
       agendaActivity,
       treatment: agendaItemTreatment,
+      privateComment: privateComment,
     });
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();

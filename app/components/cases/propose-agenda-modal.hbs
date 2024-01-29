@@ -1,0 +1,81 @@
+<Auk::Modal>
+  <Auk::Modal::Header @title={{t "agenda-activity"}} @onClose={{@toggleAgendaModal}} />
+  <Auk::Modal::Body>
+    <div>
+      <div class="auk-form-group">
+        <Auk::Label for="new-subcase-ok">{{t "formal-ok"}}</Auk::Label>
+        <AuToggleSwitch
+          id="new-subcase-ok"
+          @checked={{this.isFormallyOk}}
+          @onChange={{fn (mut this.isFormallyOk)}}
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="remarks">{{t "private-comments-title"}}</Auk::Label>
+        <Auk::Textarea
+          @rows="4"
+          @value={{this.privateComment}}
+          id="remarks"
+        />
+      </div>
+      <AuHr />
+      <table class="auk-table auk-table--striped">
+        <thead>
+          <tr>
+            <th class="auk-table__col--1"></th>
+            <th class="auk-table__col--3">{{t "meeting-date"}}</th>
+            <th class="auk-table__col--3">{{t "title"}}</th>
+            <th class="auk-table__col--5">{{t "kind"}}</th>
+          </tr>
+        </thead>
+        <tbody class="auk-table--clickable-rows">
+          {{#if this.loadAgendas.isRunning}} 
+            <Auk::Loader />
+          {{else}}
+            {{#each this.agendas as |agenda|}}
+              <tr>
+                <td class="auk-table__col--1">
+                  <AuRadio 
+                    @checked={{this.isSelectedAgenda agenda}}
+                    {{on "click" (fn this.toggleAgenda agenda)}}
+                  />
+                </td>
+                <td class="auk-table__col--3">
+                  {{date agenda.createdFor.plannedStart}}
+                </td>
+                <td class="auk-table__col--3">
+                  <strong>{{t "design-agenda"}}</strong>
+                  <AuPill @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
+                </td>
+                <td class="auk-table__col--5">
+                  {{agenda.createdFor.kind.label}}
+                </td>
+              </tr>
+            {{/each}}
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{or this.saveSubcase.isRunning}}
+    @onCancel={{@toggleAgendaModal}}
+  >
+      <AuButton
+      @skin="secondary"
+      @disabled={{if (eq this.hasAgenda false) true}}
+      {{on "click" (perform this.saveSubcase)}}
+    >
+      {{t "save-without-agenda"}}
+    </AuButton>
+
+    <AuButton
+      @skin="primary"
+      @disabled={{if (eq this.hasAgenda false) true}}
+      @loading={{this.loadAgendas.isRunning}}
+      {{on "click" (perform this.saveSubcase)}}
+    >
+      {{t "place-on-agenda"}}
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
