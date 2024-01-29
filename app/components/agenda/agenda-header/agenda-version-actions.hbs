@@ -242,7 +242,7 @@
                   </div>
                   <div class="vlc-document-card-item__meta au-u-muted">
                     {{t "uploaded-at"}}
-                    {{datetime-at piece.created}}
+                    {{datetime-at (or piece.file.created piece.created)}}
                   </div>
                   <div class="vlc-document-card-item__icon">
                     <Auk::Icon @name="clock-rewind" @size="small" />

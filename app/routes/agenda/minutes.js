@@ -11,8 +11,9 @@ export default class AgendaMinutesRoute extends Route {
   @service signatureService;
 
   async getMandatees() {
+    const { meeting } = this.modelFor('agenda');
     const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
-      startOfDay(new Date()),
+      startOfDay(meeting.plannedStart),
       null,
       null,
       [

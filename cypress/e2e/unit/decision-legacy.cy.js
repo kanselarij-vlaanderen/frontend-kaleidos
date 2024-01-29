@@ -66,7 +66,7 @@ context('Decision tests pre digital agenda', () => {
     cy.get(document.documentCard.name.value).eq(0)
       .contains(/BIS/);
 
-    // check version history acceslevel
+    // check version history accesslevel
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
       .should('not.be.disabled')
@@ -81,6 +81,7 @@ context('Decision tests pre digital agenda', () => {
       .click();
 
     // Delete the TER piece, the BIS should then become the report
+    // TODO, TER is not deleted anymore?
     cy.addNewPieceToDecision('test', file);
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
@@ -313,17 +314,7 @@ context('Decision tests pre digital agenda', () => {
       .wait('@patchAgenda');
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.addDocumentToTreatment(file);
-    // cy.get(agenda.agendaitemNav.decisionTab).click();
-    // cy.get(agenda.agendaitemDecision.uploadFile).click();
-    // cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    // cy.intercept('POST', '/pieces').as('postPieces');
-    // cy.intercept('PATCH', '/decision-activities/*').as('patchDecisionActivity');
-    // cy.intercept('GET', '/pieces/*/access-level').as('getAccessLevel');
-    // cy.get(auk.confirmationModal.footer.confirm).click()
-    //   .wait('@postPieces')
-    //   .wait('@patchDecisionActivity');
     cy.get(appuniversum.loader).should('not.exist');
-    // cy.wait('@getAccessLevel');
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // add BIS

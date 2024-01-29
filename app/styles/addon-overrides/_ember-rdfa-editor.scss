@@ -121,6 +121,11 @@ $say-editor-border-radius: $au-input-border-radius;
     margin-top: 0;
   }
 
+  > ul[data-list-style='upper-alpha'] + p,
+  > ol[data-list-style='upper-alpha'] + p {
+    margin-top: 0;
+  }
+
   ul,
   ol {
     padding-left: 5.8rem; // `margin-left: 2.8rem;` replaced by 3rem (default padding-left) + 2.8rem (default margin-left)

@@ -38,7 +38,7 @@
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
             {{t "uploaded-at"}}
-            {{datetime-at @piece.created}}
+            {{datetime-at (or @piece.file.created @piece.created)}}
           </AuHelpText>
         {{/if}}
       </c.header>
