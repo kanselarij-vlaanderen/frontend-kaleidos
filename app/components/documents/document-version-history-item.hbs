@@ -34,8 +34,8 @@
   <div class="vlc-document-card-item__meta au-u-muted">
     {{!-- no piece.created in legacy data --}}
     {{#if @piece.created}}
-      {{@label}}
-      {{datetime-at @piece.created}}
+      {{this.labelToShow}}
+      {{datetime-at this.dateToShow}}
     {{/if}}
   </div>
   <div class="vlc-document-card-item__icon">

@@ -463,8 +463,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  cy.intercept('PATCH', '/reports/*').as(`patchReport_${randomInt}`);
-  // cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -477,10 +476,11 @@ function addNewPieceToGeneratedDecision(oldFileName) {
     });
 
   cy.wait(`@patchDecisionActivity_${randomInt}`);
-  cy.wait(`@patchReport_${randomInt}`);
-  // cy.wait(`@getPreviousPiece_${randomInt}`);
-  cy.get(auk.auModal.container).should('not.exist');
-  cy.get(appuniversum.loader).should('not.exist');
+  cy.wait(`@generateReport_${randomInt}`);
+  cy.get(appuniversum.loader).should('not.exist',
+    {
+      timeout: 60000,
+    });
   cy.log('/addNewPieceToGeneratedDecision');
 }
 

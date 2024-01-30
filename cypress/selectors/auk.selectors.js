@@ -75,6 +75,10 @@ const selectors = {
     title: '[data-test-modal-header-title]',
   },
 
+  panel: {
+    body: '.auk-panel__body',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',
