@@ -159,5 +159,10 @@ const selectors = {
     isNew: '[data-test-document-badge-isNew]',
   },
 
+  // signature-pill
+  signaturePill: {
+    pill: '[data-test-signature-pill]',
+  },
+
 };
 export default selectors;
