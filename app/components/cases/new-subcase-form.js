@@ -50,8 +50,7 @@ export default class NewSubcaseForm extends Component {
   @tracked pieces = new TrackedArray([]);
 
   @tracked showAgendaModal = false;
-
-  @tracked testConfirmModal = false;
+  @tracked showSaveConfirmModal = false;
 
   constructor() {
     super(...arguments);
@@ -60,8 +59,8 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
-  toggleTestConfirmModal() {
-    this.testConfirmModal = !this.testConfirmModal;
+  toggleShowSaveConfirmModal() {
+    this.showSaveConfirmModal = !this.showSaveConfirmModal;
   }
 
   @action

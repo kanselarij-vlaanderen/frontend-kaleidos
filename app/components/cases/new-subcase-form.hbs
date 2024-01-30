@@ -229,7 +229,7 @@
 
 {{#if this.saveCase.isRunning}}
 <Auk::Modal>
-  <Auk::Modal::Header @title={{t "save"}} @onClose={{this.toggleTestConfirmModal}}/>
+  <Auk::Modal::Header @title={{t "save"}} @onClose={{this.toggleShowSaveConfirmModal}}/>
   <Auk::Modal::Body>
     <Auk::Loader 
       @message={{t "save-in-progress"}}
@@ -237,7 +237,7 @@
   </Auk::Modal::Body>
   <Auk::Modal::Footer
    @cancelDisabled="true"
-   @onCancel={{this.toggleTestConfirmModal}}
+   @onCancel={{this.toggleShowSaveConfirmModal}}
   >
   </Auk::Modal::Footer>
 </Auk::Modal>
