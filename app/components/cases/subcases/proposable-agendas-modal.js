@@ -6,17 +6,20 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class ProposeAgendaModal extends Component {
+/**
+ * @argument onConfirm
+ * @argument onCancel
+ */
+export default class ProposableAgendasModal extends Component {
   @service store;
 
   @tracked agendas;
   @tracked selectedAgenda;
   @tracked privateComment;
-  @tracked isFormallyOk
+  @tracked isFormallyOk;
 
   constructor() {
     super(...arguments);
-
     this.loadAgendas.perform();
   }
 
@@ -45,14 +48,14 @@ export default class ProposeAgendaModal extends Component {
   *saveSubcase() {
     if (this.selectedAgenda) {
       const meeting = yield this.selectedAgenda.createdFor;
-      this.args.onConfirm.perform(false, meeting, this.isFormallyOk, this.privateComment);
+      this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
     } else {
-      this.args.onConfirm.perform(false);
+      this.args.onConfirm(false);
     }
   }
 
   @action
-  toggleAgenda(agenda) {
+  selectAgenda(agenda) {
     this.selectedAgenda = agenda;
   }
 

@@ -49,8 +49,7 @@ export default class NewSubcaseForm extends Component {
 
   @tracked pieces = new TrackedArray([]);
 
-  @tracked showAgendaModal = false;
-  @tracked showSaveConfirmModal = false;
+  @tracked showProposableAgendaModal = false;
 
   constructor() {
     super(...arguments);
@@ -58,14 +57,8 @@ export default class NewSubcaseForm extends Component {
     this.loadTitleData.perform();
   }
 
-  @action
-  toggleShowSaveConfirmModal() {
-    this.showSaveConfirmModal = !this.showSaveConfirmModal;
-  }
-
-  @action
-  toggleIsEditing() {
-    this.isEditing = !this.isEditing;
+  get areLoadingTasksRunning() {
+    return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
   }
 
   @action
@@ -95,10 +88,6 @@ export default class NewSubcaseForm extends Component {
     this.subcaseName = shortcut.label;
   }
 
-  get areLoadingTasksRunning() {
-    return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
-  }
-
   @task
   *loadTitleData() {
     if (this.args.latestSubcase) {
@@ -117,8 +106,8 @@ export default class NewSubcaseForm extends Component {
   }
 
   @task
-  *saveCase(fullCopy, meeting = null, isFormallyOk = false, privateComment = null) {
-    this.showAgendaModal = false;
+  *createSubcase(fullCopy = false, meeting = null, isFormallyOk = false, privateComment = null) {
+    this.showProposableAgendaModal = false;
     const now = new Date();
     this.subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
@@ -204,6 +193,7 @@ export default class NewSubcaseForm extends Component {
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
     const type = await subcase.type;
+    // TODO do we need to clear mandatees if they have been selected with this type of subcase?
     const subcaseTypeWithoutMandatees = [
       CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
     ].includes(type?.uri);
@@ -220,11 +210,11 @@ export default class NewSubcaseForm extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
+    // TODO are we pre-loading these? 
     subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
 
-  @action
   async copySubcaseSubmissions(subcase, pieces) {
     const submissionActivity = this.store.createRecord('submission-activity', {
       startDate: new Date(),
@@ -278,6 +268,7 @@ export default class NewSubcaseForm extends Component {
 
   /** document upload */
 
+  @action
   addPiece(piece) {
     addObject(this.pieces, piece);
   }
@@ -335,6 +326,15 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
+  async deletePieces() {
+    const savePromises = this.pieces.map(async (piece) => {
+      await this.deletePiece(piece);
+    });
+    await all(savePromises);
+    this.pieces = new TrackedArray([]);
+  }
+
+  @action
   async deletePiece(piece) {
     const file = await piece.file;
     await file.destroyRecord();
@@ -344,10 +344,4 @@ export default class NewSubcaseForm extends Component {
     await piece.destroyRecord();
   }
 
-  /** agenda */
-
-  @action
-  toggleAgendaModal() {
-    this.showAgendaModal = !this.showAgendaModal;
-  }
 }
