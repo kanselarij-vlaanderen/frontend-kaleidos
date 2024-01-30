@@ -74,7 +74,7 @@
                       <AuButton
                         @skin="secondary"
                         @icon="copy-paste"
-                        {{on "click" (perform this.createSubcase true)}}
+                        {{on "click" this.copySubcase}}
                         @disabled={{this.createSubcase.isRunning}}
                       >
                         {{t "clone-previous-subcase"}}
@@ -217,7 +217,7 @@
 </div>
 
 {{#if this.showProposableAgendaModal}}
-  <Cases::ProposableAgendasModal
+  <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
     @onConfirm={{perform this.createSubcase}}
   />
@@ -227,6 +227,7 @@
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
     <Auk::Modal::Body>
+      {{! TODO Do we want to show the progress > documents can take a while + propose}}
       <Auk::Loader @message={{t "save-in-progress"}} />
     </Auk::Modal::Body>
   </Auk::Modal>

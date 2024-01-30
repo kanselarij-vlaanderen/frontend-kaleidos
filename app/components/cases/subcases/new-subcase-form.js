@@ -88,6 +88,11 @@ export default class NewSubcaseForm extends Component {
     this.subcaseName = shortcut.label;
   }
 
+  @action
+  copySubcase() {
+    this.createSubcase.perform(true);
+  }
+
   @task
   *loadTitleData() {
     if (this.args.latestSubcase) {
@@ -106,7 +111,12 @@ export default class NewSubcaseForm extends Component {
   }
 
   @task
-  *createSubcase(fullCopy = false, meeting = null, isFormallyOk = false, privateComment = null) {
+  *createSubcase(
+    fullCopy = false,
+    meeting = null,
+    isFormallyOk = false,
+    privateComment = null
+  ) {
     this.showProposableAgendaModal = false;
     const now = new Date();
     this.subcase = this.store.createRecord('subcase', {
@@ -159,11 +169,18 @@ export default class NewSubcaseForm extends Component {
 
     yield this.savePieces.perform();
 
-    if(meeting) {
+    if (meeting) {
       const submissionActivities = yield this.subcase.submissionActivities;
-      const formallyOk = isFormallyOk ? CONSTANTS.ACCEPTANCE_STATUSSES.OK : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
-  
-      yield this.agendaService.putSubmissionOnAgenda(meeting,submissionActivities, formallyOk, privateComment);
+      const formallyOk = isFormallyOk
+        ? CONSTANTS.ACCEPTANCE_STATUSSES.OK
+        : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
+
+      yield this.agendaService.putSubmissionOnAgenda(
+        meeting,
+        submissionActivities,
+        formallyOk,
+        privateComment
+      );
     }
 
     this.router.transitionTo(
@@ -210,7 +227,7 @@ export default class NewSubcaseForm extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
-    // TODO are we pre-loading these? 
+    // TODO are we pre-loading these?
     subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
@@ -343,5 +360,4 @@ export default class NewSubcaseForm extends Component {
     await documentContainer.destroyRecord();
     await piece.destroyRecord();
   }
-
 }
