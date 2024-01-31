@@ -25,6 +25,7 @@ export default class NewSubcaseForm extends Component {
   @service mandatees;
   @service fileConversionService;
   @service toaster;
+  @service agendaService;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -48,15 +49,16 @@ export default class NewSubcaseForm extends Component {
 
   @tracked pieces = new TrackedArray([]);
 
+  @tracked showProposableAgendaModal = false;
+
   constructor() {
     super(...arguments);
     this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
   }
 
-  @action
-  toggleIsEditing() {
-    this.isEditing = !this.isEditing;
+  get areLoadingTasksRunning() {
+    return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
   }
 
   @action
@@ -86,8 +88,9 @@ export default class NewSubcaseForm extends Component {
     this.subcaseName = shortcut.label;
   }
 
-  get areLoadingTasksRunning() {
-    return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
+  @action
+  copySubcase() {
+    this.createSubcase.perform(true);
   }
 
   @task
@@ -108,7 +111,13 @@ export default class NewSubcaseForm extends Component {
   }
 
   @task
-  *saveCase(fullCopy) {
+  *createSubcase(
+    fullCopy = false,
+    meeting = null,
+    isFormallyOk = false,
+    privateComment = null
+  ) {
+    this.showProposableAgendaModal = false;
     const now = new Date();
     this.subcase = this.store.createRecord('subcase', {
       type: this.subcaseType,
@@ -160,6 +169,20 @@ export default class NewSubcaseForm extends Component {
 
     yield this.savePieces.perform();
 
+    if (meeting) {
+      const submissionActivities = yield this.subcase.submissionActivities;
+      const formallyOk = isFormallyOk
+        ? CONSTANTS.ACCEPTANCE_STATUSSES.OK
+        : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
+
+      yield this.agendaService.putSubmissionOnAgenda(
+        meeting,
+        submissionActivities,
+        formallyOk,
+        privateComment
+      );
+    }
+
     this.router.transitionTo(
       'cases.case.subcases.subcase',
       this.args.decisionmakingFlow.id,
@@ -187,6 +210,7 @@ export default class NewSubcaseForm extends Component {
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
     const type = await subcase.type;
+    // TODO do we need to clear mandatees if they have been selected with this type of subcase?
     const subcaseTypeWithoutMandatees = [
       CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
     ].includes(type?.uri);
@@ -203,11 +227,11 @@ export default class NewSubcaseForm extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
+    // TODO are we pre-loading these?
     subcase.governmentAreas = await latestSubcase.governmentAreas;
     return subcase;
   }
 
-  @action
   async copySubcaseSubmissions(subcase, pieces) {
     const submissionActivity = this.store.createRecord('submission-activity', {
       startDate: new Date(),
@@ -261,6 +285,7 @@ export default class NewSubcaseForm extends Component {
 
   /** document upload */
 
+  @action
   addPiece(piece) {
     addObject(this.pieces, piece);
   }
@@ -315,6 +340,15 @@ export default class NewSubcaseForm extends Component {
 
     submissionActivity = yield submissionActivity.save();
     return submissionActivity;
+  }
+
+  @action
+  async deletePieces() {
+    const savePromises = this.pieces.map(async (piece) => {
+      await this.deletePiece(piece);
+    });
+    await all(savePromises);
+    this.pieces = new TrackedArray([]);
   }
 
   @action
