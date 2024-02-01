@@ -45,7 +45,11 @@
                     @size="small"
                   />
                   <span class="auk-u-mx-2">
-                    {{mandatee.person.fullName}}
+                    {{#if this.isAdminOrSecretarie}}
+                      <Mandatee::NameWithRange @mandatee={{mandatee}} />
+                    {{else}}
+                      {{mandatee.person.fullName}}
+                    {{/if}}
                   </span>
                 </div>
               </td>
