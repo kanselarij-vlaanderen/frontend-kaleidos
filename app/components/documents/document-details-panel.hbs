@@ -42,7 +42,7 @@
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-document-details-panel-source-file
-        @key={{t "source-file"}}
+        @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
       >
         <div class="au-u-flex au-u-flex--between">
           <p>
@@ -66,6 +66,29 @@
           @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
         />
       {{/if}}
+      {{#unless @piece.file.derived}}
+        <Auk::KeyValue
+          @key={{t "source-file"}}
+        >
+          <div class="au-u-flex au-u-flex--between">
+            <AuButton
+              @icon="upload"
+              @iconAlignment="left"
+              @skin="secondary"
+              {{on "click" (toggle "isAddingSourceFile" this)}}
+            >
+              {{t "upload"}}
+            </AuButton>
+          </div>
+        </Auk::KeyValue>
+        {{#if this.isAddingSourceFile}}
+          <Auk::FileUploader
+            @multiple={{false}}
+            @onUpload={{set this "uploadedSourceFile"}}
+            @onQueueUpdate={{this.handleSourceFileUploadQueue}}
+          />
+        {{/if}}
+      {{/unless}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
@@ -163,7 +186,7 @@
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-document-details-panel-source-file
-        @key={{t "source-file"}}
+        @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal

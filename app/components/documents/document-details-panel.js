@@ -21,8 +21,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isReplacingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
+  @tracked isAddingSourceFile = false;
+  @tracked isUploadingSourceFile = false;
   @tracked isOpenVerifyDeleteSignFlow = false;
+
   @tracked replacementSourceFile;
+  @tracked uploadedSourceFile;
   @tracked documentType;
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
@@ -41,7 +45,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     return (
       this.saveDetails.isRunning ||
       this.cancelEditDetails.isRunning ||
-      this.isUploadingReplacementSourceFile
+      this.isUploadingReplacementSourceFile ||
+      this.isUploadingSourceFile
     );
   }
 
@@ -76,13 +81,21 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isUploadingReplacementSourceFile = uploadIsRunning && !uploadIsCompleted;
   }
 
+  @action
+  handleSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingSourceFile = uploadIsRunning && !uploadIsCompleted;
+  }
+
   @task
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
     yield this.loadDetailsData.perform();
     yield this.replacementSourceFile?.destroyRecord();
+    yield this.addedSourceFile?.destroyRecord();
     this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
+    this.isAddingSourceFile = false;
+    this.uploadedSourceFile = null;
     this.isEditingDetails = false;
   }
 
@@ -102,6 +115,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
         );
         return;
       }
+    }
+    if (this.uploadedSourceFile) {
+      // use-case: we have a pdf and we want to add docx but keep our pdf
+      // derived file does not exist yet in this case
+      const oldFile = yield this.args.piece.file;
+      this.uploadedSourceFile.derived = oldFile;
+      this.args.piece.file = this.uploadedSourceFile;
+      yield Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
     }
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
@@ -137,7 +158,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     yield this.args.documentContainer.save();
     this.isEditingDetails = false;
     this.replacementSourceFile = null;
-    this.isReplacingSourceFile = !this.isReplacingSourceFile;
+    this.isReplacingSourceFile = false;
+    this.uploadedSourceFile = null;
+    this.isUploadingSourceFile = false;
   }
 
   verifyDeleteSignFlow = task(async () => {
