@@ -11,6 +11,7 @@ export default class FileConversionService extends Service {
     if (DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
       const oldDerivedFile = await sourceFile.derived;
       if (oldDerivedFile) {
+        // if derived file exists we keep it. Generated PDF is not yet correct for users
         return;
       }
       const response = await fetch(`/files/${sourceFile.id}/convert`, {

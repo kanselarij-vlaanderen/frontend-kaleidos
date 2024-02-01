@@ -21,7 +21,6 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @tracked isUploadingDerivedFile = false;
   @tracked isDeletingDerivedFile = false;
 
-  @tracked isUploadingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
 
@@ -129,21 +128,13 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
         await piecePart.destroyRecord();
       }
     }
-    if(this.uploadedSourceFile) {
+    if (this.uploadedSourceFile) {
+      // use-case: we have a pdf and we want to add docx but keep our pdf
+      // derived file does not exist yet in this case
       const oldFile = await this.args.piece.file;
       this.uploadedSourceFile.derived = oldFile;
       this.args.piece.file = this.uploadedSourceFile;
       await Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
-      try {
-        await this.fileConversionService.convertSourceFile(
-          this.uploadedSourceFile
-        );
-      } catch (error) {
-        this.toaster.error(
-          this.intl.t('error-convert-file', { message: error.message }),
-          this.intl.t('warning-title')
-        );
-      }
     }
     if (this.replacementSourceFile) {
       const oldFile = await this.args.piece.file;
@@ -190,6 +181,11 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
 
     this.name = null;
 
+    this.args.onSave?.();
+
+    this.isUploadingSourceFile = false;
+    this.uploadedSourceFile = null;
+
     this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
 
@@ -198,7 +194,5 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
 
     this.uploadedDerivedFile = null;
     this.isDeletingDerivedFile = false;
-
-    this.args.onSave?.();
   });
 }

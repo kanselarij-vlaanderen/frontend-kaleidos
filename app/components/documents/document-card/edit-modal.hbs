@@ -106,27 +106,57 @@
         {{/if}}
       </AuCard>
     {{else}}
-      <AuCard
-        @flex={{true}}
-        @size="small"
-        class="au-u-margin-top-small"
-        as |c|
-      >
-        <c.header
-          @badgeIcon="document"
+      {{#unless this.uploadedDerivedFile}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small"
+          as |c|
         >
-          <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">{{t "upload-source-proof-document"}}</AuHeading>
-          </div>
-        </c.header>
-        <c.content>
-          <Auk::FileUploader
-            @multiple={{false}}
-            @onUpload={{set this "uploadedSourceFile"}}
-            @onQueueUpdate={{this.handleSourceFileUploadQueue}}
-          />
-        </c.content>
-      </AuCard>
+          <c.header
+            @badgeIcon="document"
+          >
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <AuHeading @skin="5" @level="3">{{t "upload-source-document"}}</AuHeading>
+            </div>
+          </c.header>
+          <c.content>
+            <Auk::FileUploader
+              @multiple={{false}}
+              @onUpload={{set this "uploadedSourceFile"}}
+              @onQueueUpdate={{this.handleSourceFileUploadQueue}}
+            />
+          </c.content>
+        </AuCard>
+      {{/unless}}
+      {{#unless (or this.uploadedDerivedFile this.uploadedSourceFile)}}
+        <div class="auk-u-mt-2 auk-u-text-align--center">
+          <p>{{t "or"}}</p>
+        </div>
+      {{/unless}}
+      {{#unless this.uploadedSourceFile}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small"
+          as |c|
+        >
+          <c.header
+            @badgeIcon="document"
+          >
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
+            </div>
+          </c.header>
+          <c.content data-test-document-edit-derived-file-uploader>
+            <Auk::FileUploader
+              @multiple={{false}}
+              @onUpload={{set this "uploadedDerivedFile"}}
+              @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
+            />
+          </c.content>
+        </AuCard>
+      {{/unless}}
     {{/if}}
   </:body>
 </ConfirmationModal>
