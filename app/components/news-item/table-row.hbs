@@ -82,7 +82,8 @@
         </AuButton>
       {{/if}}
       {{#if this.loadNotaOrVisienota.isRunning}}
-        <div class="auk-loader" role="alert" aria-busy="true">
+        <div class="au-c-loader au-c-loader--small">
+          <div class="au-c-loader__animation" aria-hidden="true"></div>
           <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
             {{t "nota-loading-text"}}
           </EmberTooltip>

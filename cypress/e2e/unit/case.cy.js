@@ -41,7 +41,7 @@ context('Create case as Admin user', () => {
     const shorttitle = 'Gibberish';
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.confirmationModal.footer.cancel).click();
     // check if data is cleared after cancel
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
@@ -81,9 +81,9 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(cases.newCase.save).should('be.disabled');
+    cy.get(auk.confirmationModal.footer.confirm).should('be.disabled');
     cy.get(cases.newCase.shorttitle).type('Dossier X');
-    cy.get(cases.newCase.save).should('not.be.disabled');
+    cy.get(auk.confirmationModal.footer.confirm).should('not.be.disabled');
   });
 
   it('Archive and restore case', () => {
@@ -107,13 +107,13 @@ context('Create case as Admin user', () => {
     cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchDecisionFlow');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(route.casesOverview.row.caseTitle).should('not.contain', caseTitle);
 
     cy.get(route.casesOverview.showArchived)
       .parent()
       .click();
-    cy.get(auk.loader).should('exist'); // page load
+    cy.get(appuniversum.loader).should('exist'); // page load
     cy.url().should('contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
 
@@ -129,7 +129,7 @@ context('Create case as Admin user', () => {
     cy.get(route.casesOverview.showArchived)
       .parent()
       .click();
-    cy.get(auk.loader).should('exist'); // page load
+    cy.get(appuniversum.loader).should('exist'); // page load
     cy.url().should('not.contain', '?toon_enkel_gearchiveerd=true');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitle);
   });

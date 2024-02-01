@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 export default class DecisionReportGeneration extends Service {
   @service toaster;
@@ -22,11 +23,16 @@ export default class DecisionReportGeneration extends Service {
       const job = await this._generateReportBundle.perform(meeting);
       this.pollReportBundle.perform(job, generatingBundleToast);
     } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-while-generating-report-bundle', {
-          error: error.message,
-        })
-      );
+      this.toaster.close(generatingBundleToast);
+      this.toaster.show(CopyErrorToClipboardToast, {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-while-generating-report-bundle'),
+        errorContent: error.message,
+        showDatetime: true,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      });
     }
   });
 
@@ -89,6 +95,7 @@ export default class DecisionReportGeneration extends Service {
         );
         this.pollReplacementReports.perform(job, alterableReports, generatingPDFsToast);
       } catch (error) {
+        this.toaster.close(generatingPDFsToast);
         this.toaster.error(
           this.intl.t('error-while-generating-report-pdfs', {
             error: error.message,
@@ -185,6 +192,11 @@ export default class DecisionReportGeneration extends Service {
     try {
       await this._generateSinglePdf.perform(report, 'generate-decision-report');
       await this.reloadFile(report);
+      this.toaster.success(
+        this.intl.t(
+          'decision-report-generation--toast-generating-single-complete--message'
+        )
+      );
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-while-generating-report-name-pdf', {
@@ -202,14 +214,14 @@ export default class DecisionReportGeneration extends Service {
       );
       return;
     }
+    const generatingPDFToast = this.toaster.loading(
+      this.intl.t('minutes-report-generation--toast-generating--message'),
+      this.intl.t('minutes-report-generation--toast-generating--title'),
+      {
+        timeOut: 3 * 60 * 1000,
+      }
+    );
     try {
-      const generatingPDFToast = this.toaster.loading(
-        this.intl.t('minutes-report-generation--toast-generating--message'),
-        this.intl.t('minutes-report-generation--toast-generating--title'),
-        {
-          timeOut: 3 * 60 * 1000,
-        }
-      );
       await this._generateSinglePdf.perform(minutes, 'generate-minutes-report');
       await this.reloadFile(minutes);
       this.toaster.close(generatingPDFToast);
@@ -226,6 +238,7 @@ export default class DecisionReportGeneration extends Service {
         }
       );
     } catch (error) {
+      this.toaster.close(generatingPDFToast);
       this.toaster.error(
         error.message,
         this.toaster.error(this.intl.t('error-while-generating-minutes-pdf'))
@@ -322,7 +335,7 @@ export default class DecisionReportGeneration extends Service {
             'Content-Type': 'application/vnd.api+json',
           },
           body: JSON.stringify({
-            meetingId : meeting.id,
+            meetingId: meeting.id,
           }),
         }
       );

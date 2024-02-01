@@ -35,7 +35,8 @@ const selectors = {
 
   // changes-alert
   changesAlert: {
-    alert: '[data-test-changes-alert]',
+    container: '[data-test-changes-alert]',
+    message: '[data-test-changes-alert-message]',
     close: '[data-test-changes-alert-close]',
   },
 
@@ -90,13 +91,6 @@ const selectors = {
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
     save: '[data-test-vl-modal-verify-save]',
-  },
-
-  // vl-alert
-  vlAlert: {
-    close: '[data-test-vl-alert-close]',
-    container: '[data-test-vl-alert]',
-    message: '[data-test-vl-alert-message]',
   },
 
   // case-search

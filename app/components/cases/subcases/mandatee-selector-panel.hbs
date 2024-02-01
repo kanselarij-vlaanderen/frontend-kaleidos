@@ -1,0 +1,41 @@
+<Auk::Panel class="auk-u-mb-2">
+  <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
+    <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}}>
+      <Auk::CheckboxTree
+        @label={{t "current-ministers"}}
+        @items={{this.currentMinisters}}
+        @itemStructure={{hash label="fullName"}}
+        @selectedItems={{this.selectedCurrentMinisters}}
+        @didUpdate={{this.onChangeSelectedMinisters}}
+        @layout="grid"
+        @disabled={{@disabled}}
+      />
+      {{#if this.selectedCurrentMinisters}}
+        <AuHr />
+      {{/if}}
+      <AuList @divider={{true}} as |Item|>
+        {{#each this.selectedCurrentMinisters as |minister|}}
+          <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
+            <strong>{{minister.fullName}}</strong>
+            <div
+              class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
+            >
+              <AuRadio
+                @name="submitter"
+                @checked={{await (this.checkIfSubmitter minister)}}
+                @disabled={{@disabled}}
+                {{on "click" (fn this.onChangeSubmitter minister)}}
+              />
+              <Auk::Label class="au-u-padding-bottom-none">
+                {{t "submitter"}}
+              </Auk::Label>
+            </div>
+          </Item>
+        {{/each}}
+      </AuList>
+    </Utils::LoadableContent>
+  </Auk::Panel::Body>
+</Auk::Panel>

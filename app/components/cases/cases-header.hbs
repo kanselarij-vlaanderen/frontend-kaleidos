@@ -14,25 +14,35 @@
               data-test-cases-header-add-case
               @skin="primary"
               @icon="plus"
-              {{on "click" this.toggleIsOpenNewCaseModal}}
+              {{on "click" (toggle "isOpenNewCaseModal" this)}}
             >
               {{t "add-case"}}
+            </AuButton>
+          {{/if}}
+          {{#if (and this.isEnabledNewCaseCreation (user-may "manage-cases"))}}
+            <AuButton
+              @skin="primary"
+              @icon="plus"
+              {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
+            >
+              {{t "add-case-new"}}
             </AuButton>
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-<AuModal
-  @modalOpen={{this.isOpenNewCaseModal}}
-  @closeModal={{this.toggleIsOpenNewCaseModal}}
-  @title={{t "new-case"}}
-  @padding="none"
->
-  <:body>
-    <Cases::NewCase
-      @didSave={{this.saveNewCase}}
-      @onCancel={{this.toggleIsOpenNewCaseModal}}
-    />
-  </:body>
-</AuModal>
+
+{{#if this.isOpenNewCaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveNewCase}}
+    @onCancel={{toggle "isOpenNewCaseModal" this}}
+  />
+{{/if}}
+
+{{#if this.isOpenNewCaseAddSubcaseModal}}
+  <Cases::NewCase
+    @didSave={{this.saveNewCaseAddSubcase}}
+    @onCancel={{toggle "isOpenNewCaseAddSubcaseModal" this}}
+  />
+{{/if}}

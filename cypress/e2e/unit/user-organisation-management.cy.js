@@ -31,7 +31,7 @@ context('testing user and organization management', () => {
       cy.get(utils.mHeader.settings).click();
       cy.intercept('GET', '/roles/*').as('getRoles');
       cy.get(settings.settings.manageUsers).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.wait('@getRoles');
     });
 
@@ -352,7 +352,7 @@ context('testing user and organization management', () => {
       cy.get(utils.mHeader.settings).click();
       cy.intercept('GET', '/roles/*').as('getRoles');
       cy.get(settings.settings.manageOrganizations).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       // cy.wait('@getRoles');
     });
 
@@ -428,7 +428,7 @@ context('testing user and organization management', () => {
       cy.login('Admin');
       cy.get(utils.mHeader.settings).click();
       cy.get(settings.settings.manageOrganizations).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
 
       // check blocking
       // cy.get(settings.organizationsIndex.filterBlocked).click();
@@ -454,7 +454,7 @@ context('testing user and organization management', () => {
       // cy.login('Admin');
       // cy.get(utils.mHeader.settings).click();
       // cy.get(settings.settings.manageOrganizations).click();
-      // cy.get(auk.loader).should('not.exist');
+      // cy.get(appuniversum.loader).should('not.exist');
 
       // check sort by organization
       cy.get(settings.organizationsIndex.row.name).eq(0)

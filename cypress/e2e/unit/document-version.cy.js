@@ -23,7 +23,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     const amountOfDocs = 25;
 
     // verify more than 20 docs are showing on agendaitem (default page-size is capped at 20, needed to artificially increase)
-    cy.intercept('GET', '/pieces?filter**agendaitems**page**size**500').as('getPiecesOfAgendaitem');
+    cy.intercept('GET', '/pieces?filter**agendaitems**').as('getPiecesOfAgendaitem');
     cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/documenten');
     cy.wait('@getPiecesOfAgendaitem', {
       timeout: 60000,
@@ -32,7 +32,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // verify more than 20 docs are showing from 1 submission-activity on subcase
     // (default page size submissActivity.pieces is not increased, but all pieces are included in a query)
-    cy.intercept('GET', '/submission-activities?filter**subcase**include**pieces**page**size**500').as('getPiecesOfSubcase');
+    cy.intercept('GET', '/submission-activities?filter**subcase**include**pieces**').as('getPiecesOfSubcase');
     cy.visit('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA94F7751CF70008000007/documenten');
     cy.wait('@getPiecesOfSubcase', {
       timeout: 60000,

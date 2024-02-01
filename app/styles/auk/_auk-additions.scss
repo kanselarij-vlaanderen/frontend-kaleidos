@@ -392,3 +392,13 @@ table tr.lt-expanded-row {
     box-shadow: none;
   }
 }
+
+// System alert
+
+.auk-system-alert {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}

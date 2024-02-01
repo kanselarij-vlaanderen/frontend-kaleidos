@@ -7,8 +7,8 @@ import {
   groupAgendaitemsByGroupname,
   sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {

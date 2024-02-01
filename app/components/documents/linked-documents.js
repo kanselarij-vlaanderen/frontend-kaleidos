@@ -52,11 +52,8 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
   *saveLinkedPieces() {
     let allPiecesToLink = [];
     for (const linkedPiece of this.newLinkedPieces) {
-      const linkedPieces = yield this.store.query('piece', {
+      const linkedPieces = yield this.store.queryAll('piece', {
         'filter[document-container][pieces][:id:]': linkedPiece.get('id'),
-        page: {
-          size: 300,
-        },
       });
       allPiecesToLink = [...allPiecesToLink, ...linkedPieces.toArray()];
     }

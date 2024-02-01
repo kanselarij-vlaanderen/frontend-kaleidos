@@ -404,7 +404,7 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 
   cy.wait(`@createNewFile${randomInt}`);
   cy.wait(`@getNewFile${randomInt}`);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/uploadFile');
 }
 
@@ -419,9 +419,9 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', '/reports').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/reports/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -447,7 +447,7 @@ function addNewPieceToDecision(oldFileName, file) {
   cy.wait(`@patchDecisionActivity_${randomInt}`);
   cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
 
@@ -463,7 +463,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  // cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -476,9 +476,11 @@ function addNewPieceToGeneratedDecision(oldFileName) {
     });
 
   cy.wait(`@patchDecisionActivity_${randomInt}`);
-  // cy.wait(`@getPreviousPiece_${randomInt}`);
-  cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.wait(`@generateReport_${randomInt}`);
+  cy.get(appuniversum.loader).should('not.exist',
+    {
+      timeout: 60000,
+    });
   cy.log('/addNewPieceToGeneratedDecision');
 }
 
@@ -561,8 +563,8 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
   cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.get(editSelector).click();
-  cy.get(auk.loader);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader);
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(document.documentDetailsRow.row).as('documentRows');
   cy.get('@documentRows').eq(indexToDelete)
     .find(document.documentDetailsRow.input)

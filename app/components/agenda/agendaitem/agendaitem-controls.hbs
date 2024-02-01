@@ -71,7 +71,7 @@
       {{/if}}
     </AuDropdown>
   {{else}}
-    <div class="auk-loader" role="alert" aria-busy="true"></div>
+    <Auk::Loader />
   {{/if}}
 {{/if}}
 <ConfirmationModal
@@ -89,7 +89,7 @@
     @onClose={{this.onSendToVp}}
     @onCancel={{set this "showVPModal" false}}
     @agendaitem={{@agendaitem}}
-    @definitieveGoedkeuringSubcase={{this.subcase}}
+    @meeting={{@meeting}}
   />
 {{/if}}
 {{#if

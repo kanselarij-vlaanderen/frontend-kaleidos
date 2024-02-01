@@ -45,7 +45,7 @@
               data-test-document-card-name-value
             >
               {{#if this.loadFiles.isRunning}}
-                <AuLoader @padding="small" />
+                <Auk::Loader />
               {{else}}
                 {{#let
                   (or
@@ -99,7 +99,7 @@
                       {{t "signed-document"}}
                     </AuLinkExternal>
                     {{t "on"}}
-                    {{datetime-at this.piece.signedPieceCopy.created}}
+                    {{datetime-at (or this.piece.signedPieceCopy.file.created this.piece.signedPieceCopy.created)}}
                   </p>
                 {{/if}}
               {{/if}}
@@ -170,11 +170,9 @@
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
-              <div
-                class="auk-loader au-u-margin-left-small"
-                role="alert"
-                aria-busy="true"
-              ></div>
+              <div class="au-u-margin-left-small">
+                <Auk::Loader />
+              </div>
             </Group.Item>
           {{else if this.signMarkingActivity}}
             <Group.Item
@@ -302,7 +300,6 @@
                       piece
                     }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                    @label={{this.dateToShowLabel}}
                   />
                 </div>
               {{/each}}
@@ -318,7 +315,7 @@
     @piece={{this.piece}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
-    @onSave={{toggle "isEditingPiece" this}}
+    @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
   />
 {{/if}}
 

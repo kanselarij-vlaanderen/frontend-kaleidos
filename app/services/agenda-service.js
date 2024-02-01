@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class AgendaService extends Service {
   @service store;
@@ -121,19 +120,14 @@ export default class AgendaService extends Service {
     return 1;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-      ENV.APP.ENABLE_DIGITAL_AGENDA === true
-    );
-  }
-
   /**
    * @argument meeting
    * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
+   * @argument formallyOk
+   * @argument privateComment
    * In the case where an agenda-item was deleted after multiple submissions occurred, one can put on agenda again with multiple submissions
    */
-  async putSubmissionOnAgenda(meeting, submissionActivities) {
+  async putSubmissionOnAgenda(meeting, submissionActivities, formallyOk = CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK, privateComment = null) {
     const subcase = await submissionActivities[0].get('subcase');
     const lastAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
@@ -166,12 +160,7 @@ export default class AgendaService extends Service {
     if (isAnnouncement) {
       defaultDecisionResultCodeUri =
         CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
-    } else {
-      // pre digital agenda upload of decision report changes decision result code 
-      defaultDecisionResultCodeUri = this.enableDigitalAgenda
-        ? null
-        : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    }
+    } // no decision result for nota
 
     let decisionResultCode;
     if (defaultDecisionResultCodeUri) {
@@ -182,7 +171,7 @@ export default class AgendaService extends Service {
     }
 
     const meetingSecretary = await meeting.secretary;
-    const secretary = this.enableDigitalAgenda ? meetingSecretary : null;
+    const secretary = meetingSecretary;
     // decision-activity
     const decisionActivity = await this.store.createRecord(
       'decision-activity',
@@ -234,13 +223,14 @@ export default class AgendaService extends Service {
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,
-      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
+      formallyOk: formallyOk,
       type: agendaItemType,
       mandatees,
       pieces: submittedPieces,
       linkedPieces: await subcase.linkedPieces,
       agendaActivity,
       treatment: agendaItemTreatment,
+      privateComment: privateComment,
     });
     await agendaitem.save();
     await lastAgenda.hasMany('agendaitems').reload();

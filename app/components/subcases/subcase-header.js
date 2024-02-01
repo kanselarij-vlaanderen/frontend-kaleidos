@@ -105,7 +105,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   *proposeForAgenda(meeting) {
     this.isAssigningToOtherAgenda = false;
     this.isLoading = true;
-    let submissionActivities = yield this.store.query('submission-activity', {
+    let submissionActivities = yield this.store.queryAll('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:agenda-activity]': true,
     });
