@@ -11,21 +11,32 @@
       {{#if this.subcaseWithPieces.isLoading}}
         <AuLoader />
       {{else if this.subcaseWithPieces.value}}
-        <p>{{t "the-following-things-were-sent"}}:</p>
+        <p>{{t "the-following-documents-were-sent"}}:</p>
         <ul class="au-u-margin-top">
           {{#each this.subcaseWithPieces.value as |subcaseWithPieces|}}
             <li>
-              {{capitalize subcaseWithPieces.subcase.subcaseName}}:
-              <ul>
+              {{#if subcaseWithPieces.subcaseName}}
+                {{capitalize subcaseWithPieces.subcaseName}}:
+                <ul>
+                  {{#each subcaseWithPieces.pieces as |o|}}
+                    <li>
+                      <LinkTo @route="document" @model={{o.piece.id}}>
+                        {{o.name}}
+                        {{this.submittedPieceList o}}
+                      </LinkTo>
+                    </li>
+                  {{/each}}
+                </ul>
+              {{else}}
                 {{#each subcaseWithPieces.pieces as |o|}}
                   <li>
                     <LinkTo @route="document" @model={{o.piece.id}}>
-                      {{o.piece.name}}
-                      {{this.submittedPieceList o.submittedPiece}}
+                      {{o.name}}
+                      {{this.submittedPieceList o}}
                     </LinkTo>
                   </li>
                 {{/each}}
-              </ul>
+              {{/if}}
             </li>
           {{/each}}
         </ul>

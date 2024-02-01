@@ -35,7 +35,8 @@ const selectors = {
 
   // changes-alert
   changesAlert: {
-    alert: '[data-test-changes-alert]',
+    container: '[data-test-changes-alert]',
+    message: '[data-test-changes-alert-message]',
     close: '[data-test-changes-alert-close]',
   },
 

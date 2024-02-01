@@ -121,6 +121,11 @@ $say-editor-border-radius: $au-input-border-radius;
     margin-top: 0;
   }
 
+  > ul[data-list-style='upper-alpha'] + p,
+  > ol[data-list-style='upper-alpha'] + p {
+    margin-top: 0;
+  }
+
   ul,
   ol {
     padding-left: 5.8rem; // `margin-left: 2.8rem;` replaced by 3rem (default padding-left) + 2.8rem (default margin-left)
@@ -128,6 +133,14 @@ $say-editor-border-radius: $au-input-border-radius;
     ul,
     ol {
       padding-left: 3.8rem;
+    }
+
+    &[data-list-style='upper-alpha'] {
+      padding-left: 2.9rem;
+
+      ol {
+        padding-left: 1.9rem;
+      }
     }
   }
 
@@ -205,4 +218,11 @@ $say-editor-border-radius: $au-input-border-radius;
   .say-editor {
     padding: 3rem 4rem;
   }
+}
+
+// selecting block nodes in rdfa-editor are more visual
+.ProseMirror-selectednode {
+  background-color: var(--au-blue-200);
+  outline: 2px solid var(--au-blue-500);
+  color: var(--au-black);
 }

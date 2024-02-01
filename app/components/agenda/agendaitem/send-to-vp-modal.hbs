@@ -13,119 +13,108 @@
       <AuLoader />
     {{else}}
       <AuContent>
-        <p>{{t "the-following-things-will-be-sent"}}</p>
-        <ul class="au-u-margin-top">
-          {{#each this.pgSubcasesWithPieces as |subcaseWithPieces|}}
-            <li>
-              {{or
-                (capitalize subcaseWithPieces.subcase.subcaseName)
-                (t "principal-approval")
-              }}:
-              <ul>
-                {{#each subcaseWithPieces.piecesReadyToBeSent as |piece|}}
-                  <li>
-                    <LinkTo @route="document" @model={{piece.id}}>
-                      {{piece.name}}
-                      {{await (this.pieceFileTypes piece)}}
-                    </LinkTo>
-                  </li>
+        {{#if this.showPieces}}
+          <p>{{t "the-following-things-will-be-sent"}}</p>
+          <ul class="au-u-margin-top">
+            {{#each this.subcasesWithPieces as |subcaseWithPieces|}}
+              <li>
+                {{#if subcaseWithPieces.subcaseName}}
+                  {{capitalize subcaseWithPieces.subcaseName}}:
+                  <ul>
+                    {{#each subcaseWithPieces.pieces as |piece|}}
+                      <li>
+                        <LinkTo @route="document" @model={{piece.id}}>
+                          {{piece.name}}
+                          {{await (this.pieceFileTypes piece)}}
+                        </LinkTo>
+                      </li>
+                    {{/each}}
+                  </ul>
                 {{else}}
-                  <li>
-                    {{t "no-new-files-will-be-sent"}}
-                  </li>
-                {{/each}}
-              </ul>
-            </li>
-          {{/each}}
-          <li>
-            {{or
-              (capitalize this.dgSubcaseWithPieces.subcase.subcaseName)
-              (t "definitive-approval")
-            }}:
+                  {{#each subcaseWithPieces.pieces as |piece|}}
+                    <li>
+                      <LinkTo @route="document" @model={{piece.id}}>
+                        {{piece.name}}
+                        {{await (this.pieceFileTypes piece)}}
+                      </LinkTo>
+                    </li>
+                  {{/each}}
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+          <div class="auk-form-group au-u-margin-top">
+            <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+            <Auk::Textarea
+              @rows="4"
+              id="remarks"
+              value={{this.comment}}
+              {{on "change" this.onChangeComment}}
+            />
+          </div>
+        {{else}}
+          <p>
+            {{t "no-new-files-will-be-sent"}}
+            <br />
+            {{t "for-questions-contact"}}
+            <AuLinkExternal
+              href="mailto:kaleidos.servicedesk@vlaanderen.be"
+              target="_blank"
+            >
+              {{t "email-servicedesk"}}
+            </AuLinkExternal>
+          </p>
+        {{/if}}
+      </AuContent>
+      {{#if (not this.decisionsReleased)}}
+        <AuAlert
+          @title="{{t 'decision-not-published-yet'}}:"
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+          class="au-u-margin-bottom-none au-u-margin-top"
+        >
+          <AuContent>
+            {{t 'decision-not-published-yet-may-be-altered'}}
+          </AuContent>
+        </AuAlert>
+      {{/if}}
+      {{#if this.showMissingPieces}}
+        <AuAlert
+          @title="{{t 'this-case-is-missing'}}:"
+          @skin="info"
+          @size="small"
+          class="au-u-margin-bottom-none au-u-margin-top"
+        >
+          <AuContent>
             <ul>
-              {{#each this.dgSubcaseWithPieces.piecesReadyToBeSent as |piece|}}
+              {{#each this.subcasesWithMissingPieces as |subcaseWithMissingPieces|}}
                 <li>
-                  <LinkTo @route="document" @model={{piece.id}}>
-                    {{piece.name}}
-                    {{await (this.pieceFileTypes piece)}}
-                  </LinkTo>
-                </li>
-              {{else}}
-                <li>
-                  {{t "no-new-files-will-be-sent"}}
+                  {{#if subcaseWithMissingPieces.subcaseName}}
+                    {{t "for"}}
+                    {{subcaseWithMissingPieces.subcaseName}}:
+                    <ul>
+                      {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                        <li>
+                            {{piece.type.label}}
+                            {{await (this.pieceFileTypes piece)}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                      <li>
+                          {{piece.type.label}}
+                          {{await (this.pieceFileTypes piece)}}
+                      </li>
+                    {{/each}}
+                  {{/if}}
                 </li>
               {{/each}}
             </ul>
-          </li>
-        </ul>
-        <div class="auk-form-group au-u-margin-top">
-          <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
-          <Auk::Textarea
-            @rows="4"
-            id="remarks"
-            value={{this.comment}}
-            {{on "change" this.onChangeComment}}
-          />
-        </div>
-      </AuContent>
-      {{#let
-        (map this.missingDocsForSubcase this.pgSubcasesWithPieces)
-        as |pgSubcasesMissingDocs|
-      }}
-        {{#let
-          (this.missingDocsForSubcase this.dgSubcaseWithPieces)
-          as |dgSubcaseMissingDocs|
-        }}
-          {{#if (or pgSubcasesMissingDocs dgSubcaseMissingDocs)}}
-            <AuAlert
-              @title="{{t 'this-case-is-missing'}}:"
-              @skin="warning"
-              @icon="alert-triangle"
-              @size="small"
-              class="au-u-margin-bottom-none au-u-margin-top"
-            >
-              <AuContent>
-                <ul>
-                  {{#each pgSubcasesMissingDocs as |missingDocs index|}}
-                    <li>
-                      {{t "for"}}
-                      {{or
-                        (get
-                          (get
-                            (object-at index this.pgSubcasesWithPieces)
-                            "subcase"
-                          )
-                          "subcaseName"
-                        )
-                        (t "principal-approval")
-                      }}:
-                      <ul>
-                        {{#each missingDocs as |missingDoc|}}
-                          <li>{{missingDoc}}</li>
-                        {{/each}}
-                      </ul>
-                    </li>
-                  {{/each}}
-                  {{#if dgSubcaseMissingDocs}}
-                    <li>
-                      {{t "for"}}
-                      {{or
-                        this.dgSubcaseWithPieces.subcase.subcaseName
-                        (t "definitive-approval")
-                      }}:
-                      <ul>
-                        {{#each dgSubcaseMissingDocs as |missingDoc|}}
-                          <li>{{missingDoc}}</li>
-                        {{/each}}
-                      </ul>
-                    </li>
-                  {{/if}}
-                </ul>
-              </AuContent>
-            </AuAlert>
-          {{/if}}
-        {{/let}}
-      {{/let}}
+          </AuContent>
+        </AuAlert>
+      {{/if}}
     {{/if}}
   </:body>
 </ConfirmationModal>

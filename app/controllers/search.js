@@ -12,6 +12,9 @@ export default class SearchController extends Controller {
       mandatees: {
         type: 'array',
       },
+      governmentAreas: {
+        type: 'array',
+      },
       dateFrom: {
         type: 'string',
       },
@@ -25,6 +28,8 @@ export default class SearchController extends Controller {
   @tracked mandatees = [];
   @tracked dateFrom;
   @tracked dateTo;
+
+  @tracked governmentAreas = [];
 
   @tracked searchTextBuffer = '';
 
@@ -47,5 +52,10 @@ export default class SearchController extends Controller {
   @action
   setMandatees(mandatees) {
     this.mandatees = mandatees;
+  }
+
+  @action
+  setGovernmentAreas(governmentAreas) {
+    this.governmentAreas = governmentAreas;
   }
 }
