@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SignFlowModel extends Model {
   @attr shortTitle;
@@ -16,4 +17,53 @@ export default class SignFlowModel extends Model {
   meeting;
   @belongsTo('user', { inverse: null, async: true }) creator;
   @belongsTo('concept', { inverse: null, async: true }) status;
+
+  get isMarked() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.MARKED
+    );
+  }
+
+  get isPrepared() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.PREPARED
+    );
+  }
+
+  get isToBeApproved() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.TO_BE_APPROVED
+    );
+  }
+
+  get isToBeSigned() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.TO_BE_SIGNED
+    );
+  }
+
+  get isSigned() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.SIGNED
+    );
+  }
+
+  get isRefused() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.REFUSED
+    );
+  }
+
+  get isCanceled() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SIGNFLOW_STATUSES.CANCELED
+    );
+  }
 }
