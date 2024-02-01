@@ -66,12 +66,8 @@ export default class SignaturesOngoingRoute extends Route {
       filter['creator'] = {
         memberships: {
           organization: {
-            memberships: {
-              user: {
-                ':id:': this.currentSession.user.id,
-              },
-            },
-          },
+            ':id:': this.currentSession.organization.id,
+          }
         },
       };
     }
