@@ -116,14 +116,14 @@
           @badgeIcon="document"
         >
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
+            <AuHeading @skin="5" @level="3">{{t "upload-source-proof-document"}}</AuHeading>
           </div>
         </c.header>
-        <c.content data-test-document-edit-derived-file-uploader>
+        <c.content>
           <Auk::FileUploader
             @multiple={{false}}
-            @onUpload={{set this "uploadedDerivedFile"}}
-            @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
+            @onUpload={{set this "uploadedSourceFile"}}
+            @onQueueUpdate={{this.handleSourceFileUploadQueue}}
           />
         </c.content>
       </AuCard>

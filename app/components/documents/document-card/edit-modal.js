@@ -15,15 +15,18 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @service toaster;
   @service fileConversionService;
 
+  @tracked isUploadingSourceFile = false;
   @tracked isReplacingSourceFile = false;
   @tracked isReplacingDerivedFile = false;
   @tracked isUploadingDerivedFile = false;
   @tracked isDeletingDerivedFile = false;
 
+  @tracked isUploadingSourceFile = false;
   @tracked isUploadingReplacementSourceFile = false;
   @tracked isUploadingReplacementDerivedFile = false;
 
   @tracked name;
+  @tracked uploadedSourceFile;
   @tracked uploadedDerivedFile;
   @tracked replacementSourceFile;
   @tracked replacementDerivedFile;
@@ -37,10 +40,16 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   get isDisabled() {
     return (
       this.saveEdit.isRunning
+        || this.isUploadingSourceFile
         || this.isUploadingDerivedFile
         || this.isUploadingReplacementDerivedFile
         || this.isUploadingReplacementSourceFile
     );
+  }
+
+  @action
+  handleSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingSourceFile = uploadIsRunning && !uploadIsCompleted;
   }
 
   @action
@@ -75,6 +84,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @action
   async cancelEdit() {
     this.name = null;
+
+    await this.uploadedSourceFile?.destroyRecord();
+    this.isUploadingSourceFile = false;
+    this.uploadedSourceFile = null;
 
     await this.replacementSourceFile?.destroyRecord();
     this.isReplacingSourceFile = false;
@@ -116,7 +129,22 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
         await piecePart.destroyRecord();
       }
     }
-
+    if(this.uploadedSourceFile) {
+      const oldFile = await this.args.piece.file;
+      this.uploadedSourceFile.derived = oldFile;
+      this.args.piece.file = this.uploadedSourceFile;
+      await Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
+      try {
+        await this.fileConversionService.convertSourceFile(
+          this.uploadedSourceFile
+        );
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-convert-file', { message: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
+    }
     if (this.replacementSourceFile) {
       const oldFile = await this.args.piece.file;
       const derivedFile = await oldFile.derived;

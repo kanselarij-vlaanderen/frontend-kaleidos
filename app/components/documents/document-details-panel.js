@@ -105,14 +105,16 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
-      const derivedFile = yield oldFile.derived;
-      if (derivedFile) {
-        oldFile.derived = null;
-        this.replacementSourceFile.derived = derivedFile;
-        yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
-      }
-      yield oldFile.destroyRecord();
+      this.replacementSourceFile.derived = oldFile
       this.args.piece.file = this.replacementSourceFile;
+      yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+      // if (derivedFile) {
+      //   oldFile.derived = null;
+      //   this.replacementSourceFile.derived = derivedFile;
+      //   yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+      // }
+      // yield oldFile.destroyRecord();
+      // this.args.piece.file = this.replacementSourceFile;
       const now = new Date();
       this.args.piece.created = now;
       yield this.args.piece.save();

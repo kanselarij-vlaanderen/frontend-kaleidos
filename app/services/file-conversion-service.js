@@ -10,6 +10,9 @@ export default class FileConversionService extends Service {
   async convertSourceFile(sourceFile) {
     if (DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
       const oldDerivedFile = await sourceFile.derived;
+      if (oldDerivedFile) {
+        return;
+      }
       const response = await fetch(`/files/${sourceFile.id}/convert`, {
         method: 'POST',
         headers: {
