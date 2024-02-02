@@ -111,12 +111,16 @@ export default class AgendaService extends Service {
    * @argument meeting
    * @argument subcase
    */
-  async putSubmissionOnAgenda(meeting, subcase) {
+  async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
-      body: JSON.stringify({ subcase: subcase.uri })
+      body: JSON.stringify({
+        subcase: subcase.uri,
+        formallyOk: formallyOk,
+        privateComment: privateComment,
+      })
     });
     let json;
     try {

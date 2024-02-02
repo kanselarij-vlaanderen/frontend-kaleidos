@@ -529,7 +529,6 @@ context('Subcase tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.reload();
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.addNewPiece('VR 2020 1212 DOC.0001-1', file, 'agendaitems');
     cy.get(agenda.agendaitemNav.caseTab).click();

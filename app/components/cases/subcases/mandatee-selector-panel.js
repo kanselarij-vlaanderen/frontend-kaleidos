@@ -15,27 +15,12 @@ export default class MandateeSelectorPanel extends Component {
   constructor() {
     super(...arguments);
     this.prepareCurrentMinisters.perform();
-    this.loadArgsMinister.perform();
   }
 
   get areLoadingTasksRunning() {
     return (
       this.prepareCurrentMinisters.isRunning || this.loadArgsMinister.isRunning
     );
-  }
-
-  @task // run once
-  *loadArgsMinister() {
-    let selectedMandatees = [];
-    if (this.args.mandatees) {
-      selectedMandatees = this.args.mandatees.sort(
-        (m1, m2) => m1.priority - m2.priority
-      );
-      const sortedMinisters = yield Promise.all(
-        selectedMandatees.map((m) => m.person)
-      );
-      this.selectedCurrentMinisters = [...new Set(sortedMinisters)];
-    }
   }
 
   @action
@@ -91,6 +76,30 @@ export default class MandateeSelectorPanel extends Component {
       this.currentMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
+    this.loadArgsMinister.perform();
+  }
+
+  @task // run once
+  *loadArgsMinister() {
+    if (this.args.mandatees?.length) {
+      let selectedMandatees = [];
+      // Only select args mandatees if they are still active
+      this.args.mandatees.forEach((oldMandatee) => {
+        const mandatee = this.currentMandatees.find(
+          (currentMandatee) =>
+            currentMandatee.get('id') === oldMandatee.id
+        );
+        if (mandatee) {
+          selectedMandatees.push(mandatee);
+        }
+      });
+      const ministersToSelect = yield Promise.all(
+        selectedMandatees?.map((m) => m.person)
+      );
+      if (ministersToSelect?.length) {
+        yield this.onChangeSelectedMinisters(ministersToSelect);
+      }
+    }
   }
 
   @action

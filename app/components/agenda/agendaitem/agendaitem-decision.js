@@ -224,7 +224,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.report
       );
     }
-    this.loadBeslissingPiecePart.perform();
+    await this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {

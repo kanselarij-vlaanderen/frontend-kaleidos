@@ -1,17 +1,9 @@
 <Auk::Panel class="auk-u-mb-2">
   <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
-    <Auk::Toolbar @auto={{true}} as |Toolbar|>
-      <Toolbar.Group @position="left">
-        <h4 class="auk-toolbar__title">
-          {{t "ministers"}}
-        </h4>
-      </Toolbar.Group>
-    </Auk::Toolbar>
+    <h4 class="auk-panel__title">{{t "ministers"}}</h4>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    {{#if this.areLoadingTasksRunning}}
-      <Auk::Loader />
-    {{else}}
+    <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}} @reserveSpace={{false}}>
       <Auk::CheckboxTree
         @label={{t "current-ministers"}}
         @items={{this.currentMinisters}}
@@ -44,6 +36,6 @@
           </Item>
         {{/each}}
       </AuList>
-    {{/if}}
+    </Utils::LoadableContent>
   </Auk::Panel::Body>
 </Auk::Panel>

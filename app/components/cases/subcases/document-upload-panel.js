@@ -19,11 +19,11 @@ export default class DocumentUploadPlanel extends Component {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.args.addPiece(piece);
+    this.args.onAddPiece(piece);
   }
 
   @task
   *deletePiece(piece) {
-    yield this.args.deletePiece(piece);
+    yield this.args.onDeletePiece(piece);
   }
 }
