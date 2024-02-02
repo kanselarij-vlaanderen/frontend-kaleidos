@@ -170,18 +170,28 @@
           </Auk::Panel::Body>
         </Auk::Panel>
         {{#unless this.areLoadingTasksRunning}}
-          <Cases::Subcases::MandateeSelectorPanel
-            @mandatees={{this.mandatees}}
-            @submitter={{this.submitter}}
-            @setSubmitter={{this.setSubmitter}}
-            @setMandatees={{this.setMandatees}}
-            @disabled={{this.createSubcase.isRunning}}
-          />
+          {{#if this.isSubcaseTypeWithoutMandatees}}
+            <Auk::Panel class="auk-u-mb-2">
+              <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
+                <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+              </Auk::Panel::Header>
+              <Auk::Panel::Body>
+                <Auk::EmptyState @message={{t "not-applicable"}} />
+              </Auk::Panel::Body>
+            </Auk::Panel>
+          {{else}}
+            <Cases::Subcases::MandateeSelectorPanel
+              @mandatees={{this.mandatees}}
+              @submitter={{this.submitter}}
+              @setSubmitter={{this.setSubmitter}}
+              @setMandatees={{this.setMandatees}}
+              @disabled={{this.createSubcase.isRunning}}
+            />
+          {{/if}}
           <Cases::Subcases::GovernmentAreasPanel
-            @selectedFields={{this.selectedGovernmentFields}}
+            @governmentAreas={{this.governmentAreas}}
             @onSelectFields={{this.selectField}}
             @onDeselectFields={{this.deselectField}}
-            @selectedDomains={{this.selectedGovernmentDomains}}
             @onSelectDomains={{this.selectDomain}}
             @onDeselectDomains={{this.deselectDomain}}
             @disabled={{this.createSubcase.isRunning}}

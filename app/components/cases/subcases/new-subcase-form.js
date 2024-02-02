@@ -6,7 +6,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, all } from 'ember-concurrency';
+import { dropTask, task, all } from 'ember-concurrency';
 import {
   addObject,
   addObjects,
@@ -40,10 +40,12 @@ export default class NewSubcaseForm extends Component {
   @tracked subcaseType;
   @tracked selectedShortcut;
   @tracked isEditing = false;
+  @tracked isSubcaseTypeWithoutMandatees = false;
 
   @tracked submitter;
-  @tracked mandatees = [];
+  @tracked mandatees = new TrackedArray([]);
 
+  @tracked governmentAreas = new TrackedArray([]);
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked selectedGovernmentDomains = new TrackedArray([]);
 
@@ -65,6 +67,19 @@ export default class NewSubcaseForm extends Component {
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
     this.subcaseName = subcaseType.label;
+    this.checkSubcaseType();
+  }
+  
+  @action
+  checkSubcaseType() {
+    // We need to clear mandatees if they have been selected with this type of subcase
+    this.isSubcaseTypeWithoutMandatees = [
+      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
+    ].includes(this.subcaseType?.uri);
+    if (this.isSubcaseTypeWithoutMandatees) {
+      this.mandatees.clear();
+      this.submitter = null;
+    }
   }
 
   @action
@@ -101,7 +116,7 @@ export default class NewSubcaseForm extends Component {
       this.confidential = this.args.latestSubcase.confidential;
       addObjects(this.mandatees, yield this.args.latestSubcase.mandatees);
       this.submitter = yield this.args.latestSubcase.requestedBy;
-      // this.governmentAreas = yield this.args.latestSubcase.governmentAreas;
+      addObjects(this.governmentAreas, yield this.args.latestSubcase.governmentAreas);
     } else {
       const _case = yield this.args.decisionmakingFlow.case;
       this.title = _case.title;
@@ -110,7 +125,7 @@ export default class NewSubcaseForm extends Component {
     }
   }
 
-  @task
+  @dropTask
   *createSubcase(
     fullCopy = false,
     meeting = null,
@@ -159,9 +174,7 @@ export default class NewSubcaseForm extends Component {
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
-    let newGovernmentAreas = this.selectedGovernmentDomains.concat(
-      this.selectedGovernmentFields
-    );
+    const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
     const governmentAreas = yield this.subcase.governmentAreas;
     governmentAreas.clear();
     addObjects(governmentAreas, newGovernmentAreas);
@@ -209,16 +222,8 @@ export default class NewSubcaseForm extends Component {
 
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
-    const type = await subcase.type;
-    // TODO do we need to clear mandatees if they have been selected with this type of subcase?
-    const subcaseTypeWithoutMandatees = [
-      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
-    ].includes(type?.uri);
     // Everything to copy from latest subcase
-    if (!subcaseTypeWithoutMandatees) {
-      subcase.mandatees = await latestSubcase.mandatees;
-      subcase.requestedBy = await latestSubcase.requestedBy;
-    }
+    // we have preloaded some data already in local variables, less properties to copy
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
@@ -227,9 +232,7 @@ export default class NewSubcaseForm extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
-    // TODO are we pre-loading these?
-    subcase.governmentAreas = await latestSubcase.governmentAreas;
-    return subcase;
+    return;
   }
 
   async copySubcaseSubmissions(subcase, pieces) {

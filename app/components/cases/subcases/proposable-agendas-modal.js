@@ -45,13 +45,14 @@ export default class ProposableAgendasModal extends Component {
   }
 
   @task
-  *saveSubcase() {
-    if (this.selectedAgenda) {
-      const meeting = yield this.selectedAgenda.createdFor;
-      this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
-    } else {
-      this.args.onConfirm(false);
-    }
+  *saveSubcaseAndSubmitToAgenda() {
+    const meeting = yield this.selectedAgenda.createdFor;
+    this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
+  }
+
+@action
+  saveSubcase() {
+    this.args.onConfirm(false);
   }
 
   @action

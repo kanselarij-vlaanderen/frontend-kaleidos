@@ -1,7 +1,7 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t "agenda-activity"}}
-    @closeDisabled={{this.saveSubcase.isRunning}}
+    @closeDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
@@ -57,20 +57,18 @@
             </tbody>
           </table>
         {{else}}
-          <Auk::EmptyState @message={{or @emptyStateMessage (t "no-meetings")}} />
+          <Auk::EmptyState @message={{t "no-meetings"}} />
         {{/if}}
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.saveSubcase.isRunning}}
+    @cancelDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
     @onCancel={{@onCancel}}
   >
     <AuButton
       @skin="secondary"
-      @disabled={{this.selectedAgenda}}
-      @loading={{and this.saveSubcase.isRunning (not this.selectedAgenda)}}
-      {{on "click" (perform this.saveSubcase)}}
+      {{on "click" this.saveSubcase}}
     >
       {{t "save-without-agenda"}}
     </AuButton>
@@ -80,9 +78,9 @@
       @disabled={{not this.selectedAgenda}}
       @loading={{or
         this.loadAgendas.isRunning
-        (and this.saveSubcase.isRunning this.selectedAgenda)
+        (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
       }}
-      {{on "click" (perform this.saveSubcase)}}
+      {{on "click" (perform this.saveSubcaseAndSubmitToAgenda)}}
     >
       {{t "place-on-agenda"}}
     </AuButton>
