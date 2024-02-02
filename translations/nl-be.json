@@ -1321,5 +1321,6 @@
   "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
   "general-information": "Algemene info",
   "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
-  "save-in-progress": "Bezig met opslaan."
+  "save-in-progress": "Bezig met opslaan.",
+  "documents-creating-progress-message": "{count} van {total} documenten aangemaakt."
 }

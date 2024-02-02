@@ -26,6 +26,7 @@ export default class NewSubcaseForm extends Component {
   @service fileConversionService;
   @service toaster;
   @service agendaService;
+  @service plausible;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -49,7 +50,9 @@ export default class NewSubcaseForm extends Component {
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked selectedGovernmentDomains = new TrackedArray([]);
 
+  @tracked isUploadingFiles;
   @tracked pieces = new TrackedArray([]);
+  @tracked piecesCreatedCounter = 0;
 
   @tracked showProposableAgendaModal = false;
 
@@ -105,7 +108,14 @@ export default class NewSubcaseForm extends Component {
 
   @action
   copySubcase() {
+    this.plausible.trackEventWithRole('Kopieer voorgaande procedurestap');
     this.createSubcase.perform(true);
+  }
+
+  @task
+  *cancelForm() {
+    yield this.deletePieces();
+    this.router.transitionTo('cases.case.subcases');
   }
 
   @task
@@ -289,12 +299,18 @@ export default class NewSubcaseForm extends Component {
   /** document upload */
 
   @action
+  handleFileUploadQueueUpdates({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingFiles = uploadIsRunning && !uploadIsCompleted;
+  }
+
+  @action
   addPiece(piece) {
     addObject(this.pieces, piece);
   }
 
   @task
   *savePieces() {
+    this.piecesCreatedCounter = 0;
     const savePromises = this.pieces.map(async (piece) => {
       try {
         await this.savePiece.perform(piece);
@@ -308,7 +324,7 @@ export default class NewSubcaseForm extends Component {
     this.pieces = new TrackedArray([]);
   }
 
-  @task
+  @task({ maxConcurrency: 5, enqueue: true })
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
@@ -331,6 +347,7 @@ export default class NewSubcaseForm extends Component {
         this.intl.t('warning-title')
       );
     }
+    this.piecesCreatedCounter++;
   }
 
   @task
@@ -357,10 +374,10 @@ export default class NewSubcaseForm extends Component {
   @action
   async deletePiece(piece) {
     const file = await piece.file;
-    await file.destroyRecord();
+    await file?.destroyRecord();
     removeObject(this.pieces, piece);
-    const documentContainer = await piece.documentContainer;
-    await documentContainer.destroyRecord();
-    await piece.destroyRecord();
+    const documentContainer = await piece?.documentContainer;
+    await documentContainer?.destroyRecord();
+    await piece?.destroyRecord();
   }
 }

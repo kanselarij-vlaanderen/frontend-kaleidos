@@ -198,8 +198,9 @@
           />
           <Cases::Subcases::DocumentUploadPanel
             @pieces={{this.pieces}}
-            @addPiece={{this.addPiece}}
-            @deletePiece={{this.deletePiece}}
+            @onAddPiece={{this.addPiece}}
+            @onDeletePiece={{this.deletePiece}}
+            @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
           />
         {{/unless}}
       </div>
@@ -207,17 +208,16 @@
   </div>
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
-      <AuLink
-        @skin="button-secondary"
-        @route="cases.case.subcases"
-        @disabled={{this.createSubcase.isRunning}}
-        {{on "click" this.deletePieces}}
+      <AuButton
+        @skin="naked"
+        @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
+        {{on "click" (perform this.cancelForm)}}
       >
         {{t "cancel"}}
-      </AuLink>
+      </AuButton>
       <AuButton
         @skin="primary"
-        @disabled={{this.createSubcase.isRunning}}
+        @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
         {{on "click" (toggle "showProposableAgendaModal" this)}}
       >
         {{t "new-subcase"}}
@@ -237,8 +237,11 @@
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
     <Auk::Modal::Body>
-      {{! TODO Do we want to show the progress > documents can take a while + propose}}
-      <Auk::Loader @message={{t "save-in-progress"}} />
+      {{#if this.pieces.length}}
+        <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesCreatedCounter total=this.pieces.length)}} />
+      {{else}}
+        <Auk::Loader @message={{t "save-in-progress"}} />
+      {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>
 {{/if}}
