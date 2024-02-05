@@ -193,15 +193,10 @@ export default class NewSubcaseForm extends Component {
     yield this.savePieces.perform();
 
     if (meeting) {
-      const submissionActivities = yield this.subcase.submissionActivities;
-      const formallyOk = isFormallyOk
-        ? CONSTANTS.ACCEPTANCE_STATUSSES.OK
-        : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
-
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
-        submissionActivities,
-        formallyOk,
+        this.subcase,
+        isFormallyOk,
         privateComment
       );
     }
