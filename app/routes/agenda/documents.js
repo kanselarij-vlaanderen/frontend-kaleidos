@@ -12,7 +12,7 @@ export default class AgendaDocumentsRoute extends Route {
       'filter[meeting][:id:]': meeting.id,
       include: 'document-container',
     });
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     return sortPieces(pieces);
   }
 

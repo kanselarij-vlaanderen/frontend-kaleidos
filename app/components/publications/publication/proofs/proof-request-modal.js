@@ -95,8 +95,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.generatedPieces,
       ]);
       this.transferredPieces = [
-        ...usedPieces.toArray(),
-        ...generatedPieces.toArray(),
+        ...usedPieces.slice(),
+        ...generatedPieces.slice(),
       ].sortBy('name', 'created');
     } else {
       this.transferredPieces = [];

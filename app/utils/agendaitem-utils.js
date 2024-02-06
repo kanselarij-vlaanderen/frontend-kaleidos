@@ -128,7 +128,7 @@ export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGen
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = [];
   const actualAnnouncements = [];
-  for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+  for (const agendaitem of agendaitems.sortBy('number').slice()) {
     if (!agendaitem.isDeleted) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
@@ -164,7 +164,7 @@ export class AgendaitemGroup {
 
   static sortedMandatees(mandatees) {
     // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.toArray());
+    const copiedMandatees = A(mandatees.slice());
     return copiedMandatees.sortBy('priority');
   }
 

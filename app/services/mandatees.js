@@ -136,7 +136,7 @@ export default class MandateesService extends Service {
         }
       });
     }
-    mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    mandatees = mandatees.sortBy('priority').slice(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     return mandatees;
   }
 
@@ -163,7 +163,7 @@ export default class MandateesService extends Service {
       this.store.query('mandatee', postOptions),
     ];
     const [preMandatees, postMandatees] = yield Promise.all(requests);
-    const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
+    const mandatees = [...preMandatees.slice(), ...postMandatees.slice()];
     const sortedMandatees = mandatees.sort((a, b) =>
       sortByDeltaToRef(referenceDate)(a.start, b.start)
     );

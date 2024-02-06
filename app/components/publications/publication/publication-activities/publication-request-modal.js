@@ -69,7 +69,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     let proofingActivity = this.args.proofingActivity;
     if (proofingActivity) {
       let generatedPieces = yield proofingActivity.generatedPieces;
-      generatedPieces = generatedPieces.toArray();
+      generatedPieces = generatedPieces.slice();
       generatedPieces = generatedPieces.sortBy('name', 'receivedDate');
       this.transferredPieces = generatedPieces;
     } else {

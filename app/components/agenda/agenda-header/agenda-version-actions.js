@@ -62,7 +62,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const status = yield this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (status.isDesignAgenda) {
         this.designAgenda = agenda;
@@ -70,7 +70,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
     }
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (!status.isDesignAgenda) {
         this.lastApprovedAgenda = agenda;

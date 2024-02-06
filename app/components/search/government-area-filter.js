@@ -65,7 +65,7 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
       'filter[deprecated]': false,
       sort: 'label',
     });
-    this.currentGovernmentAreas = currentGovernmentAreas.toArray();
+    this.currentGovernmentAreas = currentGovernmentAreas.slice();
   
     this.selectedCurrentGovernmentAreasIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.currentGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
   }
@@ -77,7 +77,7 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
       'filter[deprecated]': true,
       sort: 'label',
     });
-    this.deprecatedGovernmentAreas = deprecatedGovernmentAreas.toArray();
+    this.deprecatedGovernmentAreas = deprecatedGovernmentAreas.slice();
 
     this.selectedDeprecatedGovernmentAreaIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.deprecatedGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
   }

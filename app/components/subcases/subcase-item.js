@@ -118,9 +118,9 @@ export default class SubcaseItemSubcasesComponent extends Component {
     const submissionActivities = yield this.store.queryAll('submission-activity', queryParams);
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

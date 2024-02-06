@@ -19,7 +19,7 @@ export default class AgendaPrintRoute extends Route {
     });
     const notas = [];
     const announcements = [];
-    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+    for (const agendaitem of agendaitems.sortBy('number').slice()) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
         notas.push(agendaitem);

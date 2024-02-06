@@ -225,7 +225,7 @@ export default class AgendaitemControls extends Component {
       ].includes(decisionResultCodeUri)
     ) {
       const pieces = yield this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );

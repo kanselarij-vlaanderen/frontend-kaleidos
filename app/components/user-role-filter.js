@@ -46,7 +46,7 @@ export default class UserRoleFilterComponent extends Component {
       sort: 'position',
     });
     if (this.args.defaultEnableAllRoles) {
-      this.selected = this.roles.toArray();
+      this.selected = this.roles.slice();
       this.args.onChange?.(this.selected);
     }
   }

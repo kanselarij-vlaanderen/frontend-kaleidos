@@ -72,7 +72,7 @@ export default class LinkedDocumentList extends Component {
     const containerPieces = yield documentContainer.pieces;
 
     const heads = [];
-    for (const piece of containerPieces.toArray()) {
+    for (const piece of containerPieces.slice()) {
       const previousPiece = yield piece.previousPiece;
       if (!previousPiece) {
         heads.push(piece);

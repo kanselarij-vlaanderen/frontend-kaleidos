@@ -6,13 +6,13 @@ export const sortDocumentContainers = (pieces, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
-  const sortedPieces = A(pieces.toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
+  const sortedPieces = A(pieces.slice()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   /*
     Code below for compatibility towards mixin consumers.
     Since names are now on each piece
     we can sort on the pieces themselves instead of on containers
   */
-  return A(containers.toArray()).sort((containerA, containerB) => {
+  return A(containers.slice()).sort((containerA, containerB) => {
     let matchingPieceA = null;
     let matchingPieceB = null;
     for (let index = 0; index < containerA.get('pieces.length'); index++) {
@@ -45,7 +45,7 @@ export const sortPieces = (pieces, NameClass = VRDocumentName, sortingFunc = com
     }
   }
   validNamedPieces.sort((docA, docB) => sortingFunc(new NameClass(docA.name), new NameClass(docB.name)));
-  invalidNamedPieces = invalidNamedPieces.sortBy('created').toArray();
+  invalidNamedPieces = invalidNamedPieces.sortBy('created').slice();
   invalidNamedPieces.reverse();
 
   return [...validNamedPieces, ...invalidNamedPieces];

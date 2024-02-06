@@ -160,7 +160,7 @@ export default class GenerateReportModalComponent extends Component {
         'filter[deprecated]': false,
       }), // Exclude deprecated government domains when generating modern reports
     });
-    this.governmentDomains = governmentDomains.toArray().sortBy('label');
+    this.governmentDomains = governmentDomains.slice().sortBy('label');
     // everything selected by default
     this.selectedGovernmentDomains = this.governmentDomains.slice(0);
   }
@@ -173,7 +173,7 @@ export default class GenerateReportModalComponent extends Component {
   @task // @task: for consistency with other loadData tasks
   *loadRegulationTypes() {
     let regulationTypes = this.store.peekAll('regulation-type');
-    regulationTypes = regulationTypes.toArray();
+    regulationTypes = regulationTypes.slice();
     regulationTypes = regulationTypes.sortBy('position');
     this.regulationTypes = regulationTypes;
     yield; // for linter
