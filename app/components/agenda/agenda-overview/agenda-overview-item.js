@@ -76,8 +76,16 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
+    const decisionActivityResultCode = yield this.decisionActivity
+      ?.decisionResultCode;
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
     if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode)
+    ) {
+      this.documentsAreVisible = false;
     } else {
       const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
       const documentPublicationStatus = yield documentPublicationActivity?.status;
