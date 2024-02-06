@@ -46,6 +46,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.subcase = await this.agendaActivity?.subcase;
     this.treatment = await this.agendaitem.treatment;
     this.decisionActivity = await this.treatment?.decisionActivity;
+    const decisionActivityResultCode = await this.decisionActivity
+      ?.decisionResultCode;
     await this.decisionActivity?.decisionResultCode;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
@@ -57,8 +59,14 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
     if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode)
+    ) {
+      this.documentsAreVisible = false;
     } else {
       const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
       const documentPublicationStatus = await documentPublicationActivity?.status;

@@ -1322,5 +1322,7 @@
   "general-information": "Algemene info",
   "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
   "save-in-progress": "Bezig met opslaan.",
-  "documents-creating-progress-message": "{count} van {total} documenten aangemaakt."
+  "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
+  "agendaitem-is-status-no-documents-available": "Dit agendapunt is {status}. Er zijn geen documenten beschikbaar",
+  "agendaitem-document-postponed-or-retracted--message": "De documenten van een {status} agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een {status} punt niet van toepassing."
 }
