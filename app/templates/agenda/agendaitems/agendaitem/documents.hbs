@@ -36,7 +36,6 @@
 </Auk::Toolbar>
 {{#unless this.loadData.isRunning}}
   {{#if this.documentsAreVisible}}
-    {{log "got here"}}
     {{#if (and (user-may "view-documents-postponed-and-retracted") this.decisionActivity.isPostponed)}}
         <AuAlert
           @skin="warning"
