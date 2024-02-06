@@ -7,9 +7,9 @@
 export async function deleteDocumentContainer(documentContainerOrPromise) {
   const documentContainer = await documentContainerOrPromise;
   if (documentContainer) {
-    const pieces = await documentContainer.pieces.slice();
+    const pieces = await documentContainer.pieces;
     let latestPiece = null;
-    for (let piece of pieces) {
+    for (let piece of pieces.slice()) {
       const next = await piece.nextPiece;
       if (!next) {
         latestPiece = piece;
