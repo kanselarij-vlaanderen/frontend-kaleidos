@@ -7,6 +7,7 @@
       @multiple={{true}}
       @reusable={{true}}
       @onUpload={{this.uploadPiece}}
+      @onQueueUpdate={{@onFileQueueUpdate}}
     />
     <div class="upload-container">
       {{#each @pieces as |piece|}}

@@ -105,21 +105,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   *proposeForAgenda(meeting) {
     this.isAssigningToOtherAgenda = false;
     this.isLoading = true;
-    let submissionActivities = yield this.store.queryAll('submission-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:agenda-activity]': true,
-    });
-    submissionActivities = submissionActivities.toArray();
-    if (!submissionActivities.length) {
-      const now = new Date();
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: now,
-        subcase: this.args.subcase,
-      });
-      yield submissionActivity.save();
-      submissionActivities = [submissionActivity];
-    }
-    yield this.agendaService.putSubmissionOnAgenda(meeting, submissionActivities);
+    yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
     this.toggleAllPropertiesBackToDefault();
     yield this.loadData.perform();
     this.args.onProposedForAgenda();

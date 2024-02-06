@@ -175,26 +175,37 @@
           </Auk::Panel::Body>
         </Auk::Panel>
         {{#unless this.areLoadingTasksRunning}}
-          <Cases::Subcases::MandateeSelectorPanel
-            @mandatees={{this.mandatees}}
-            @submitter={{this.submitter}}
-            @setSubmitter={{this.setSubmitter}}
-            @setMandatees={{this.setMandatees}}
-            @disabled={{this.createSubcase.isRunning}}
-          />
+          {{#if this.isSubcaseTypeWithoutMandatees}}
+            <Auk::Panel class="auk-u-mb-2">
+              <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
+                <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+              </Auk::Panel::Header>
+              <Auk::Panel::Body>
+                <Auk::EmptyState @message={{t "not-applicable"}} />
+              </Auk::Panel::Body>
+            </Auk::Panel>
+          {{else}}
+            <Cases::Subcases::MandateeSelectorPanel
+              @mandatees={{this.mandatees}}
+              @submitter={{this.submitter}}
+              @setSubmitter={{this.setSubmitter}}
+              @setMandatees={{this.setMandatees}}
+              @disabled={{this.createSubcase.isRunning}}
+            />
+          {{/if}}
           <Cases::Subcases::GovernmentAreasPanel
-            @selectedFields={{this.selectedGovernmentFields}}
+            @governmentAreas={{this.governmentAreas}}
             @onSelectFields={{this.selectField}}
             @onDeselectFields={{this.deselectField}}
-            @selectedDomains={{this.selectedGovernmentDomains}}
             @onSelectDomains={{this.selectDomain}}
             @onDeselectDomains={{this.deselectDomain}}
             @disabled={{this.createSubcase.isRunning}}
           />
           <Cases::Subcases::DocumentUploadPanel
             @pieces={{this.pieces}}
-            @addPiece={{this.addPiece}}
-            @deletePiece={{this.deletePiece}}
+            @onAddPiece={{this.addPiece}}
+            @onDeletePiece={{this.deletePiece}}
+            @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
           />
         {{/unless}}
       </div>
@@ -202,18 +213,17 @@
   </div>
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
-      <AuLink
-        @skin="button-secondary"
-        @route="cases.case.subcases"
-        @disabled={{this.createSubcase.isRunning}}
-        {{on "click" this.deletePieces}}
+      <AuButton
+        @skin="naked"
+        @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
+        {{on "click" (perform this.cancelForm)}}
       >
         {{t "cancel"}}
-      </AuLink>
+      </AuButton>
       <AuButton
         data-test-new-subcase-form-save
         @skin="primary"
-        @disabled={{this.createSubcase.isRunning}}
+        @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
         {{on "click" (toggle "showProposableAgendaModal" this)}}
       >
         {{t "new-subcase"}}
@@ -233,8 +243,11 @@
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
     <Auk::Modal::Body>
-      {{! TODO Do we want to show the progress > documents can take a while + propose}}
-      <Auk::Loader @message={{t "save-in-progress"}} />
+      {{#if this.pieces.length}}
+        <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesCreatedCounter total=this.pieces.length)}} />
+      {{else}}
+        <Auk::Loader @message={{t "save-in-progress"}} />
+      {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>
 {{/if}}

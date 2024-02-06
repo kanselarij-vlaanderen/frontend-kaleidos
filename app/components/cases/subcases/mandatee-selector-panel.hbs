@@ -3,7 +3,7 @@
     <h4 class="auk-panel__title">{{t "ministers"}}</h4>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}}>
+    <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}} @reserveSpace={{false}}>
       <Auk::CheckboxTree
         @label={{t "current-ministers"}}
         @items={{this.currentMinisters}}
