@@ -11,7 +11,7 @@ export class TimelineActivity {
     if (row.isProofingActivity) {
       let pieces = await row.activity.generatedPieces;
       pieces = pieces.toArray();
-      let publicationActivities = pieces.mapBy('publicationActivitiesUsedBy');
+      let publicationActivities = pieces.map((a) => a.publicationActivitiesUsedBy);
       publicationActivities = await Promise.all(publicationActivities);
       publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.toArray());
       publicationActivities = publicationActivities.flat();

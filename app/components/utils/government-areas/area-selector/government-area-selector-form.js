@@ -27,7 +27,7 @@ export default class GovernmentAreaSelectorForm extends Component {
     // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
     const availableFields = this.args.availableFields ?? [];
     let domainsFromAvailableFields = yield Promise.all(
-      availableFields.mapBy('broader')
+      availableFields.map((c) => c.broader)
     );
 
     let uniqueDomains = domainsFromAvailableFields
@@ -36,7 +36,7 @@ export default class GovernmentAreaSelectorForm extends Component {
 
     const selectedFields = this.args.selectedFields ?? [];
     const domainsFromSelectedFields = yield Promise.all(
-      selectedFields.mapBy('broader')
+      selectedFields.map((c) => c.broader)
     );
 
     const selectedDomains = this.args.selectedDomains ?? [];

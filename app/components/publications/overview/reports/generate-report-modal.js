@@ -244,7 +244,7 @@ export default class GenerateReportModalComponent extends Component {
 
     if (this.args.userInputFields.mandateePersons) {
       if (this.selectedMandateePersons.length) {
-        const mandateePersons = this.selectedMandateePersons.mapBy('uri');
+        const mandateePersons = this.selectedMandateePersons.map((p) => p.uri);
         filterParams.mandateePersons = mandateePersons;
       }
     }

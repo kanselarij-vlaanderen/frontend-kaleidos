@@ -62,7 +62,7 @@ export default class SystemAlertService extends Service {
       },
     });
     // Ensure that the client-local "confirmed" mark doesn't get erased when refreshing
-    const confirmedAlertIds = this.alerts.filterBy('confirmed').mapBy('id');
+    const confirmedAlertIds = this.alerts.filterBy('confirmed').map((a) => a.id);
     const prevConfirmedAlerts = alerts.filter((alert) => confirmedAlertIds.includes(alert.id));
     prevConfirmedAlerts.setEach('confirmed', true);
 
