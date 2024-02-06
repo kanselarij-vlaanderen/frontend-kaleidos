@@ -177,7 +177,7 @@ function searchCase(caseTitle) {
  * @param {String} longTitle The long title of the subcase
  * @param {String} step The step to be selected from the list, case sensitive
  * @param {String} stepName The step name to be selected from the list, case sensitive
- * @param {String[]} mandatees The inames of the mandatees
+ * @param {String[]} mandatees The names of the mandatees
  * @param {string[name, selected, fields]} domains The name of the domain, wether it is selected as petitioner and fields, if any
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
  * @param {boolean} formallyOk optional boolean to toggle formally ok
@@ -188,8 +188,8 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.log('addSubcaseViaModal');
-  cy.intercept('POST', '/subcases').as(`addSubcase-createNewSubcase${randomInt}`);
-  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as(`addSubcase-reloadDecisionmakingFlow${randomInt}`);
+  cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
+  cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
@@ -310,12 +310,14 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
 
   let subcaseId;
   cy.log('/addSubcaseViaModal');
-  cy.wait(`@addSubcase-createNewSubcase${randomInt}`)
+  cy.wait(`@createNewSubcase${randomInt}`)
     .its('response.body')
     .then((responseBody) => {
       subcaseId = responseBody.data.id;
     });
-  cy.wait(`@addSubcase-reloadDecisionmakingFlow${randomInt}`)
+  cy.wait(`@submitToMeeting${randomInt}`, {
+    timeout: 60000,
+  })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         subcaseId,

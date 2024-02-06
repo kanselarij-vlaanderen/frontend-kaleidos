@@ -19,7 +19,8 @@ context('testing new add subcase command', () => {
   });
 
   it('should test the new add subcase command', () => {
-    const agendaDate = Cypress.dayjs().add(1, 'weeks');
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
+      .day(5);
     const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
     const agendaType = 'Nota';
     const newShortTitle = 'Test ShortTitle';
@@ -55,7 +56,7 @@ context('testing new add subcase command', () => {
       }
     ];
 
-    // cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
+    cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
 
     cy.visit('dossiers/655B933CD500B784623C3EAA/deeldossiers');
 
