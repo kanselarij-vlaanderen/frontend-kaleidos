@@ -224,7 +224,7 @@ export default class AgendaService extends Service {
   }
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       await this.deleteAgendaitem(agendaitem);
     } else {
       this.toaster.error(

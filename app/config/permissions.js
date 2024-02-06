@@ -17,6 +17,11 @@ const {
 // "Users of the <insert group>-group are allowed to <...>"
 
 // Available permissions are:
+// ADMIN-only (emergency actions that will remove data that was already spread to other profiles):
+// - remove-approved-agendaitems: Remove an approved agendaitem that are already spread to other profiles.
+// - reopen-approved-agenda-version: Remove the current design agenda and restore the last approved agenda to designagenda.
+// - remove-approved-agenda: Remove an approved agenda.
+// Other permissions
 // - manage-signatures: currently everything related to digital signing. Will be detailed later
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
 // - manage-only-specific-signatures: allow the profile to only create signing flows for their own mandatee.
@@ -55,6 +60,9 @@ const groups = [
     roles: [ADMIN],
     defaultRoute: 'agendas',
     permissions: [
+      'remove-approved-agendaitems',
+      'reopen-approved-agenda-version',
+      'remove-approved-agenda',
       'manage-signatures',
       'view-all-ongoing-signatures',
       'remove-signatures',

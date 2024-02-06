@@ -116,7 +116,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return (
       !this.isFinalMeeting &&
       this.isMeetingClosable &&
-      this.currentSession.isAdmin &&
+      (this.currentSession.may('reopen-approved-agenda-version')) &&
       this.currentAgendaIsLatest &&
       this.isDesignAgenda
     )
@@ -130,7 +130,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   get canDeleteSelectedAgenda() {
     return (
       this.isDesignAgenda ||
-      (this.currentSession.isAdmin && this.currentAgendaIsLatest)
+      ((this.currentSession.may('remove-approved-agenda')) && this.currentAgendaIsLatest)
     );
   }
 
