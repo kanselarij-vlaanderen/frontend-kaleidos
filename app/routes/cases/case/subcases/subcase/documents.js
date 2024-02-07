@@ -19,7 +19,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       'filter[:has-no:agenda-activity]': true,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
-    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
     // Get the submission from latest meeting if applicable
     const agendaActivities = await this.subcase.agendaActivities;
     const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
@@ -33,13 +33,13 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
         'filter[agenda-activity][:id:]': latestActivity.id,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

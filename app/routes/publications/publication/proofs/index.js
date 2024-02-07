@@ -10,10 +10,10 @@ export class TimelineActivity {
 
     if (row.isProofingActivity) {
       let pieces = await row.activity.generatedPieces;
-      pieces = pieces.toArray();
+      pieces = pieces.slice();
       let publicationActivities = pieces.map((a) => a.publicationActivitiesUsedBy);
       publicationActivities = await Promise.all(publicationActivities);
-      publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.toArray());
+      publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.slice());
       publicationActivities = publicationActivities.flat();
       row.canDeletePieces = publicationActivities.length === 0;
     }

@@ -7,9 +7,9 @@
 export async function deleteDocumentContainer(documentContainerOrPromise) {
   const documentContainer = await documentContainerOrPromise;
   if (documentContainer) {
-    const pieces = await documentContainer.pieces.toArray();
+    const pieces = await documentContainer.pieces;
     let latestPiece = null;
-    for (let piece of pieces) {
+    for (let piece of pieces.slice()) {
       const next = await piece.nextPiece;
       if (!next) {
         latestPiece = piece;
@@ -66,7 +66,7 @@ export async function deletePiece(pieceOrPromise) {
 export async function deletePieceWithPieceParts(pieceOrPromise) {
   const piece = await pieceOrPromise;
   const pieceParts = await piece.pieceParts;
-  for (const piecePart of pieceParts.toArray()) {
+  for (const piecePart of pieceParts.slice()) {
     await piecePart.destroyRecord();
   }
   await deletePiece(piece);

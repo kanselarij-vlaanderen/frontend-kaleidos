@@ -37,7 +37,7 @@ export default class GovernmentAreasPanel extends Component {
     const concepts = yield this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
     const referenceDate = new Date();
-    for (const concept of concepts.toArray()) {
+    for (const concept of concepts.slice()) {
       const isInDateRange =
         concept.startDate <= referenceDate &&
         (referenceDate <= concept.endDate ||

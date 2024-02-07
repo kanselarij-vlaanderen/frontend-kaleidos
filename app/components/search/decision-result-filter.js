@@ -21,7 +21,7 @@ export default class SearchDecisionResultFilterComponent extends Component {
   loadDecisionResultCodes = task(async () => {
     this.decisionResultCodes = (await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.DECISION_RESULT_CODES
-    )).toArray();
+    )).slice();
     if (this.selectedDecisionResultCodesIds.length) {
       this.selectedDecisionResultCodes = this.decisionResultCodes.filter(decisionResultCode =>
         this.selectedDecisionResultCodesIds.includes(decisionResultCode.id)

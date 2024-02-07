@@ -50,7 +50,7 @@ export default class SubcaseDescriptionView extends Component {
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
 
     this.modelsOfMeetings = [];
-    for (const [index, agendaActivity] of sortedAgendaActivities.toArray().entries()) {
+    for (const [index, agendaActivity] of sortedAgendaActivities.slice().entries()) {
       // load models for linkTo and other uses
       const agendaitem = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': agendaActivity.id,

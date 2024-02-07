@@ -225,7 +225,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(numacNumber.destroyRecord());
     }
 
-    for (const numacNumber of this.numacNumbers.toArray()) {
+    for (const numacNumber of this.numacNumbers.slice()) {
       if (numacNumber.isNew) {
         saves.push(numacNumber.save());
       }

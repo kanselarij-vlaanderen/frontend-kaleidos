@@ -67,7 +67,7 @@ export default class AgendaitemPostponed extends Component {
       },
       sort: '-planned-start',
     });
-    const allRecentMeetings = meetings.toArray();
+    const allRecentMeetings = meetings.slice();
     // filter our own meeting if present
     allRecentMeetings.removeObject(this.args.meeting);
     return allRecentMeetings;

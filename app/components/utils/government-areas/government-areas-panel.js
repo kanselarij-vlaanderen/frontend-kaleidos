@@ -37,7 +37,7 @@ export default class GovernmentAreasPanel extends Component {
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentAreas = this.args.governmentAreas?.toArray();
+    const governmentAreas = this.args.governmentAreas?.slice();
     if (!governmentAreas) {
       return;
     }
@@ -52,7 +52,7 @@ export default class GovernmentAreasPanel extends Component {
       }
     }
 
-    const fieldsByDomain = yield groupBy(fields.toArray(), 'broader', domains.toArray());
+    const fieldsByDomain = yield groupBy(fields.slice(), 'broader', domains.slice());
     this.rows = [...fieldsByDomain.entries()]
       .map(([domain, fields]) => new Row({
         governmentDomain: domain,

@@ -122,7 +122,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     // Might need to be improved to work for other piece subtypes
     const pieceParts = await this.args.piece.pieceParts;
     if (pieceParts?.length) {
-      for (const piecePart of pieceParts.toArray()) {
+      for (const piecePart of pieceParts.slice()) {
         await piecePart.destroyRecord();
       }
     }

@@ -256,7 +256,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
     // agendaitems can only have more than 1 item
     // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.toArray()) {
+    for (const agendaitem of agendaitems.slice()) {
       setNotYetFormallyOk(agendaitem);
       // save prior to adding pieces, micro-service does all the changes with docs
       yield agendaitem.save();

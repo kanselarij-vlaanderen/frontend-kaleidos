@@ -16,7 +16,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
   @task
   *loadData() {
     const decisions = yield this.args.publicationActivity.decisions;
-    this.decisions = decisions.toArray();
+    this.decisions = decisions.slice();
   }
 
   get latestDecision() {

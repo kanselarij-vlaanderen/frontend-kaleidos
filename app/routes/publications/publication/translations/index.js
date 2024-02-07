@@ -13,11 +13,11 @@ export class TimelineActivity {
         row.activity.usedPieces,
         row.activity.generatedPieces,
       ]);
-      pieces = pieces.map((pieces) => pieces.toArray());
+      pieces = pieces.map((pieces) => pieces.slice());
       pieces = pieces.flat();
       let proofingActivities = pieces.map((a) => a.proofingActivitiesUsedBy);
       proofingActivities = await Promise.all(proofingActivities);
-      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.toArray());
+      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.slice());
       proofingActivities = proofingActivities.flat();
       row.canDeletePieces = proofingActivities.length === 0;
     }
