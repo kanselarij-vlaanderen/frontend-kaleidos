@@ -84,7 +84,9 @@ export default class LinkedDocumentList extends Component {
       warn('More than 1 possible head found for linked list of pieces. Falling back to sort by document creation date', {
         id: 'multiple-possible-linked-list-heads',
       });
-      sortedContainerPieces = containerPieces.sortBy('created');
+      sortedContainerPieces = containerPieces
+        .slice()
+        .sort((p1, p2) => p1.created - p2.created);
     } else {
       let next = heads[0];
       while (next) {

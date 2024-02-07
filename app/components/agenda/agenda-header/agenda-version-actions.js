@@ -145,7 +145,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
       .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-      .sortBy('number');
+      .sort((a1, a2) => a1.number - a2.number);
   }
 
   @bind
