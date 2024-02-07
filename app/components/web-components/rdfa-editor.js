@@ -62,13 +62,14 @@ import {
 
 import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
 
-export default class WebComponentsVlRdfaEditor extends Component {
+export default class WebComponentsRdfaEditor extends Component {
   @service userAgent;
 
   @tracked controller;
 
   get sizeClass() {
-    if (this.args.size == 'small') return 'vl-rdfa-editor--small';
+    if (this.args.size == 'small') return 'wc-rdfa-editor--small';
+    else if (this.args.size == 'fullscreen') return 'wc-rdfa-editor--fullscreen';
     else return '';
   }
 

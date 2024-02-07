@@ -378,7 +378,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check and fill in all fields
     cy.get(newsletter.editItem.noNota).should('be.disabled');
     cy.get(newsletter.editItem.mandateeProposal).contains('Niet van toepassing');
-    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(dependency.rdfaEditor.inner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type('rollbackTest');
     cy.get(newsletter.editItem.remark).should('be.empty')
       .type('rollbackTestRemark');
@@ -393,7 +393,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes2');
-    cy.get(dependency.rdfa.editorInner).find('p')
+    cy.get(dependency.rdfaEditor.inner).find('p')
       .should('have.length', 1); // 1 trailing space inside a paragraph by default
     cy.get(newsletter.editItem.remark).should('be.empty');
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
@@ -557,7 +557,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItem');
-    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(dependency.rdfaEditor.inner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContent);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
@@ -652,7 +652,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/news-items').as('postNewsItems');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItems');
-    cy.get(dependency.rdfa.editorInner).clear({
+    cy.get(dependency.rdfaEditor.inner).clear({
       force: true,
     });
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContentNota);

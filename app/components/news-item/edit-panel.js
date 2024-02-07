@@ -30,6 +30,10 @@ export default class NewsItemEditPanelComponent extends Component {
     this.loadNotaOrVisienota.perform();
   }
 
+  get size() {
+    return this.isFullscreen ? 'fullscreen' : this.args.size;
+  }
+
   @task
   *ensureNewsItem() {
     this.newsItem = this.args.newsItem;
