@@ -335,7 +335,7 @@ export default class PublicationService extends Service {
     await proofingActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
@@ -396,7 +396,7 @@ export default class PublicationService extends Service {
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);

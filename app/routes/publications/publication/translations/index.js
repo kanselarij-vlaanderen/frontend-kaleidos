@@ -15,7 +15,7 @@ export class TimelineActivity {
       ]);
       pieces = pieces.map((pieces) => pieces.slice());
       pieces = pieces.flat();
-      let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
+      let proofingActivities = pieces.map((a) => a.proofingActivitiesUsedBy);
       proofingActivities = await Promise.all(proofingActivities);
       proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.slice());
       proofingActivities = proofingActivities.flat();

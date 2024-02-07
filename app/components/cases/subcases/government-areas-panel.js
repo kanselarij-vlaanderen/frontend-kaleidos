@@ -54,7 +54,7 @@ export default class GovernmentAreasPanel extends Component {
   @task
   *calculateDomainSelections() {
     let domainsFromAvailableFields = yield Promise.all(
-      this.governmentFields.mapBy('broader')
+      this.governmentFields.map((c) => c.broader)
     );
 
     let uniqueDomains = domainsFromAvailableFields
@@ -77,7 +77,7 @@ export default class GovernmentAreasPanel extends Component {
     }
 
     const domainsFromSelectedFields = yield Promise.all(
-      selectedFields.mapBy('broader')
+      selectedFields.map((c) => c.broader)
     );
 
     // construct a DomainSelection for each active domain with its fields
