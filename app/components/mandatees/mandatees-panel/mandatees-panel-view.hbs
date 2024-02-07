@@ -45,7 +45,7 @@
                     @size="small"
                   />
                   <span class="auk-u-mx-2">
-                    {{#if this.isAdminOrSecretarie}}
+                    {{#if (user-may "view-mandatees-with-range")}}
                       <Mandatee::NameWithRange @mandatee={{mandatee}} />
                     {{else}}
                       {{mandatee.person.fullName}}

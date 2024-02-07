@@ -83,6 +83,7 @@ const groups = [
       'search-confidential-documents',
       'send-cases-to-vp',
       'impersonate-users',
+      'view-mandatees-with-range',
     ]
   },
   {
@@ -113,6 +114,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-mandatees-with-range',
     ]
   },
   {
@@ -141,6 +143,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidentnial-documents',
+      'view-mandatees-with-range',
     ]
   },
   {
