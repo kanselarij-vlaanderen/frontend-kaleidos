@@ -136,7 +136,8 @@ export default class MandateesService extends Service {
         }
       });
     }
-    mandatees = mandatees.sortBy('priority').slice(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    // sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    mandatees = mandatees.sort((m1, m2) => m1.priority - m2.priority);
     return mandatees;
   }
 

@@ -31,8 +31,8 @@ export default class GovernmentAreaSelectorForm extends Component {
     );
 
     let uniqueDomains = domainsFromAvailableFields
-      .uniq()
-      .sortBy('label');
+      .filter((value, index, array) => array.indexOf(value) === index) // like .uniq()
+      .sort((d1, d2) => d1.label.localeCompare(d2.label));
 
     const selectedFields = this.args.selectedFields ?? [];
     const domainsFromSelectedFields = yield Promise.all(
@@ -42,9 +42,9 @@ export default class GovernmentAreaSelectorForm extends Component {
     const selectedDomains = this.args.selectedDomains ?? [];
 
     this.domainSelections = uniqueDomains.map((domain) => {
-      const availableFieldsForDomain = availableFields.filter(
-        (_, index) => domainsFromAvailableFields[index] === domain
-      ).sortBy('position');
+      const availableFieldsForDomain = availableFields
+        .filter((_, index) => domainsFromAvailableFields[index] === domain)
+        .sort((f1, f2) => f1.position - f2.position);
       const selectedFieldsForDomain = selectedFields.filter(
         (_, index) => domainsFromSelectedFields[index] === domain
       );

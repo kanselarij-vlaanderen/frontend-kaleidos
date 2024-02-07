@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { all, task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
+import { resource, use } from 'ember-resources';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { sortDocumentContainers } from 'frontend-kaleidos/utils/documents';
@@ -29,17 +31,21 @@ export default class LinkedDocumentList extends Component {
     this.loadData.perform();
   }
 
-  get sortedDocumentHistories() {
-    const containers = this.documentHistories.map((history) => history.documentContainer);
-    const pieces = this.documentHistories.map((history) => history.lastPiece);
-    const sortedContainers = sortDocumentContainers(pieces, containers);
-    const sortedHistories = A([]);
-    for (const container of sortedContainers) {
-      const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
-      sortedHistories.pushObject(history);
-    }
+  @use sortedDocumentHistories = resource(() => {
+    const sortedHistories = new TrackedArray([]);
+    const calculateSortedDocumentHistories = async () => {
+      sortedHistories.length = 0;
+      const containers = await Promise.all(this.documentHistories.map((history) => history.documentContainer));
+      const pieces = await Promise.all(this.documentHistories.map((history) => history.lastPiece));
+      const sortedContainers = await sortDocumentContainers(pieces, containers);
+      for (const container of sortedContainers) {
+        const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
+        sortedHistories.push(history);
+      }
+    };
+    calculateSortedDocumentHistories();
     return sortedHistories;
-  }
+  });
 
   @task
   *loadData() {

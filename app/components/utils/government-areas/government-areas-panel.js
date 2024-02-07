@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -14,7 +14,9 @@ class Row {
   }
 
   get sortedGovernmentFields() {
-    return this.governmentFields.sortBy('label');
+    return this.governmentFields.slice().sort((g1, g2) =>
+      g1.label.localeCompare(g2.label)
+    );
   }
 }
 
@@ -58,7 +60,8 @@ export default class GovernmentAreasPanel extends Component {
         governmentDomain: domain,
         governmentFields: fields,
       }))
-      .sortBy('governmentDomain.label');
+      // eslint-disable-next-line ember/no-get
+      .sort((r1, r2) => get(r1, 'governmentDomain.label').localeCompare(get(r2, 'governmentDomain.label')));
     this.governmentFields = fields;
     this.governmentDomains = domains;
   }
