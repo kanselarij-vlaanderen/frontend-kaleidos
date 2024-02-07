@@ -53,6 +53,7 @@ const {
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
 // - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
+// - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 
 const groups = [
   {
@@ -91,6 +92,7 @@ const groups = [
       'search-confidential-documents',
       'send-cases-to-vp',
       'impersonate-users',
+      'view-mandatees-with-range',
     ]
   },
   {
@@ -121,6 +123,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-mandatees-with-range',
     ]
   },
   {
@@ -149,6 +152,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidentnial-documents',
+      'view-mandatees-with-range',
     ]
   },
   {
