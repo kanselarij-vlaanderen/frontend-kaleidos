@@ -102,9 +102,17 @@ export default class SidebarItem extends Component {
   @action
   conditionallyScrollIntoView(element) {
     if (this.args.isActive) {
-      element.scrollIntoView({
-        behavior: 'smooth', block: 'center',
-      });
+      const container = document.getElementById('agendadetail-sidebar-container');
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const offset = elementRect.top - containerRect.top - (containerRect.height / 2) + (elementRect.height / 2);
+
+      if (offset >= 0) { // only try to scroll downwards as the container is already scrolled to the top
+        container.scrollTo({
+          top: offset,
+          behavior: 'smooth'
+        });
+      }
     }
   }
 }
