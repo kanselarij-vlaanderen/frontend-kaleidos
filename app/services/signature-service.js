@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
+import { task } from 'ember-concurrency';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
@@ -65,7 +66,10 @@ export default class SignatureService extends Service {
     }
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
-    if (!response.ok) {
+    if (response.ok) {
+      const job = await response.json();
+      await this.pollPrepareSignFlow(job);
+    } else {
       for (let signFlow of signFlows) {
         await signFlow.reload();
         await signFlow.belongsTo('status').reload();
@@ -81,6 +85,56 @@ export default class SignatureService extends Service {
       throw new Error(stringifiedJson ?? response.statusText);
     }
   }
+
+  async pollPrepareSignFlow(job) {
+    let jobResult = await this.getJob.perform(job);
+    if (jobResult) {
+      // Use a loop here instead of a setTimeout like we do elsewhere because
+      // we need to throw an error here if the job fails. In a setTimeout that
+      // doesn't work.
+      while ([
+        constants.SIGN_FLOW_JOB_STATUSSES.BUSY,
+        constants.SIGN_FLOW_JOB_STATUSSES.SCHEDULED
+      ].includes(jobResult.status)) {
+        await new Promise(r => setTimeout(r, 2000));
+        jobResult = await this.getJob.perform(job);
+      }
+      if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.SUCCESS) {
+        // We're done polling :)
+      } else if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.FAILED) {
+        throw new Error(jobResult.error_message);
+      }
+    }
+  };
+
+  getJob = task(async (job) => {
+    let response;
+    try {
+      response = await fetch(`/signing-flows/job/${job.id}`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `Backend response contained an error (status: ${
+            response.status
+          }): ${JSON.stringify(data)}`
+        );
+      }
+      return data;
+    } catch (error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down. If so,
+      // throw a nice error that only contains the
+      // response status.
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+  });
 
   /**
    * Marks a piece for signature by creating a sign flow, sign subcase and sign
@@ -250,7 +304,6 @@ export default class SignatureService extends Service {
     } else if (await piece.signedPiece) {
       return true;
     }
-    return false;
   }
 
   async hasMarkedSignFlow(piece) {

@@ -2,6 +2,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SignFlowModel extends Model {
+  @attr uri;
   @attr shortTitle;
   @attr longTitle;
   @attr('date') openingDate;
