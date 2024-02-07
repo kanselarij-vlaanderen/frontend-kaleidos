@@ -170,7 +170,7 @@ export class AgendaitemGroup {
 
   static generateMandateeGroupId(sortedMandatees) {
     // Assumes mandatees to be sorted
-    return sortedMandatees.mapBy('id').join();
+    return sortedMandatees.map((m) => m.id).join();
   }
 
   /**

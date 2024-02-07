@@ -149,7 +149,7 @@ export default class PublicationsPublicationTranslationsIndexController extends 
     }
 
     const [files, outbox, mailSettings] = yield Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);

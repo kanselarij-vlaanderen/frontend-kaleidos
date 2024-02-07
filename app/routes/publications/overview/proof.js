@@ -30,7 +30,7 @@ export default class PublicationsOverviewProofRoute extends PublicationsOverview
     });
     this.filter = {
       status: {
-        ':id:': proofStatuses.mapBy('id').join(','),
+        ':id:': proofStatuses.map((s) => s.id).join(','),
       },
     };
   }
