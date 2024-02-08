@@ -14,17 +14,31 @@
           />
         </AuFormRow>
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item class="auk-u-m-0">
-        <AuButton
-          @skin="primary"
-          @icon="search"
-          @hideText={{@hideButtonText}}
-          @loading={{this.search.isRunning}}
-          {{on "click" (perform this.search)}}
-        >
-          {{t "search"}}
-        </AuButton>
-      </Auk::Toolbar::Item>
+      {{#if (and @showReorderButton this.canEdit)}}
+        <Auk::Toolbar::Item class="auk-u-m-0">
+          <AuButton
+            @skin="secondary"
+            @hideText={{@hideButtonText}}
+            @loading={{this.search.isRunning}}
+            @disabled={{@isEditingOverview}}
+            {{on "click" @toggleIsEditingOverview}}
+          >
+            {{t "change-order"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      {{else}}
+        <Auk::Toolbar::Item class="auk-u-m-0">
+          <AuButton
+            @skin="primary"
+            @icon="search"
+            @hideText={{@hideButtonText}}
+            @loading={{this.search.isRunning}}
+            {{on "click" (perform this.search)}}
+          >
+            {{t "search"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

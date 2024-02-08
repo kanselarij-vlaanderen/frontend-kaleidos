@@ -1,9 +1,11 @@
 <div class="vlc-agenda-items" ...attributes>
-  {{#if @isEditingOverview}}
+  {{#if (and @isEditingOverview this.canMoveAgendaitems)}}
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
-      @buttonText={{t "end-editing-overview"}}
-      @onClear={{@toggleIsEditingOverview}}
+      @buttonText={{t "apply-order"}}
+      @onClear={{this.save}}
+      @cancellable="true"
+      @onCancel={{this.onCancel}}
     />
   {{/if}}
   <Auk::Toolbar @auto={{true}} class="auk-u-mb-3">
@@ -17,6 +19,7 @@
         </h3>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{#unless @isEditingOverview}}
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <AuButtonGroup>
@@ -27,39 +30,17 @@
           >
             {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
           </AuButton>
-          {{#if this.canEdit}}
-            {{#unless @isEditingOverview}}
-              <AuButton
-                data-test-agenda-overview-formally-ok-edit={{true}}
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" @toggleIsEditingOverview}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            {{/unless}}
-          {{/if}}
         </AuButtonGroup>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{/unless}}
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div class="auk-u-mb-8">
-        <ul {{sortable-group onChange=@onReorderAgendaitems}}>
-          {{#each @notaGroups as |agendaitemGroup index|}}
-            {{! template-lint-disable simple-unless }}
-            {{#unless
-              (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))
-            }}
-              <div class="auk-u-mt-3">
-                <Agenda::AgendaOverview::AgendaitemGroupHeader
-                  @mandatees={{agendaitemGroup.sortedMandatees}}
-                />
-              </div>
-            {{/unless}}
-            {{! template-lint-enable simple-unless }}
-            {{#each agendaitemGroup.agendaitems as |agendaitem indexItems|}}
+        <ul {{sortable-group onChange=this.setNotas}}>
+          {{#if (and this.notas.length @isEditingOverview)}}
+            {{#each this.notas as |agendaitem indexItems|}}
               <li
                 class="vlc-agenda-items__sub-item"
                 {{sortable-item
@@ -78,12 +59,51 @@
                   @isEditingFormallyOkStatus={{@isEditingOverview}}
                   @allowReorderItems={{this.canMoveAgendaitems}}
                   @onMove={{this.move}}
-                  @isFirst={{and (eq index 0) (eq indexItems 0)}}
-                  @isLast={{and (not (has-next agendaitemGroup @notaGroups)) (not (has-next agendaitem agendaitemGroup.agendaitems))}}
+                  @isFirst={{eq indexItems 0}}
+                  @isLast={{not (has-next agendaitem this.notas)}}
+                  @agendaitemIndex={{sum indexItems 1}}
                 />
               </li>
             {{/each}}
-          {{/each}}
+          {{else}}
+            {{#each @notaGroups as |agendaitemGroup index|}}
+              {{! template-lint-disable simple-unless }}
+              {{#unless
+                (or (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees)) @isEditingOverview)
+              }}
+                <div class="auk-u-mt-3">
+                  <Agenda::AgendaOverview::AgendaitemGroupHeader
+                    @mandatees={{agendaitemGroup.sortedMandatees}}
+                  />
+                </div>
+              {{/unless}}
+              {{! template-lint-enable simple-unless }}
+              {{#each agendaitemGroup.agendaitems as |agendaitem indexItems|}}
+                <li
+                  class="vlc-agenda-items__sub-item"
+                  {{sortable-item
+                    model=agendaitem
+                    distance="30"
+                    disabled=(not this.canMoveAgendaitems)
+                  }}
+                >
+                  <Agenda::AgendaOverview::AgendaOverviewItem
+                    @agendaitem={{agendaitem}}
+                    @meeting={{@meeting}}
+                    @currentAgenda={{@currentAgenda}}
+                    @previousAgenda={{@previousAgenda}}
+                    @isNew={{includes agendaitem @newItems}}
+                    @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
+                    @isEditingFormallyOkStatus={{@isEditingOverview}}
+                    @allowReorderItems={{this.canMoveAgendaitems}}
+                    @onMove={{this.move}}
+                    @isFirst={{and (eq index 0) (eq indexItems 0)}}
+                    @isLast={{and (not (has-next agendaitemGroup @notaGroups)) (not (has-next agendaitem agendaitemGroup.agendaitems))}}
+                  />
+                </li>
+              {{/each}}
+            {{/each}}
+          {{/if}}
         </ul>
       </div>
     {{else}}
@@ -105,9 +125,9 @@
     </h3>
   </div>
   <div class="auk-u-mb-4">
-    {{#if @announcements.length}}
+    {{#if this.announcements.length}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}}>
-        {{#each @announcements as |announcement indexitems|}}
+        {{#each this.announcements as |announcement indexitems|}}
           <li
             class="vlc-agenda-items__sub-item"
             {{sortable-item
@@ -127,7 +147,8 @@
               @allowReorderItems={{this.canMoveAgendaitems}}
               @onMove={{this.move}}
               @isFirst={{eq indexitems 0}}
-              @isLast={{not (has-next announcement @announcements)}}
+              @isLast={{not (has-next announcement this.announcements)}}
+              @agendaitemIndex={{sum indexItems 1}}
             />
           </li>
         {{/each}}

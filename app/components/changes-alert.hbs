@@ -2,14 +2,25 @@
   <div class="au-c-alert__content">
     <div class="au-c-alert__message au-u-flex au-u-flex--between au-u-flex--spaced-small" data-test-changes-alert-message>
       <p>{{@message}}</p>
-      <AuButton
-        class="au-u-flex-item--fixed"
-        data-test-changes-alert-close
-        @skin="secondary"
-        {{on "click" @onClear}}
-      >
-        {{@buttonText}}
-      </AuButton>
+      <AuButtonGroup>
+        {{#if @cancellable}}
+          <AuButton
+          class="au-u-flex-item--fixed"
+          @skin="secondary"
+          {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        {{/if}}
+        <AuButton
+          class="au-u-flex-item--fixed"
+          data-test-changes-alert-close
+          @skin="secondary"
+          {{on "click" @onClear}}
+        >
+          {{@buttonText}}
+        </AuButton>
+      </AuButtonGroup>
     </div>
   </div>
 </div>

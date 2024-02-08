@@ -50,6 +50,29 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked filter;
   // @tracked showModifiedOnly;
   // @tracked anchor;
+  @tracked notasHasChanged = false;
+  @tracked announcementsHasChanged = false;
+
+  constructor() {
+    super(...arguments);
+
+    this.router.on('routeWillChange', (transition) => {
+      if ((this.notasHasChanged || this.announcementsHasChanged)) {
+        if(!transition.isAborted) {
+          if(confirm(this.intl.t('leave-unsaved-changed'))) {
+            this.isEditingOverview = false;
+            this.notasHasChanged = false;
+            this.announcementsHasChanged = false;
+          } else {
+            transition.abort();
+            if(transition.to.name !== 'agenda.agendaitems.index') {
+              history.forward();
+            }
+          }
+        }
+      }
+    });
+  }
 
   get id() {
     return guidFor(this);
@@ -70,30 +93,28 @@ export default class AgendaAgendaitemsController extends Controller {
     });
   }
 
+  @action 
+  startEditingOverview() {
+    this.isEditingOverview = true;
+  }
+
   @action
   searchAgendaitems(value) {
     this.filter = value;
   }
 
   @task
-  *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
-    const draggedAgendaItemType = yield draggedAgendaItem.type;
-    // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
-    const reorderedAgendaitemsOfCategory =  [];
-    for (const agendaitem of reorderedAgendaitems.toArray()) {
-      const agendaItemType = yield agendaitem.type;
-      if (agendaItemType.uri === draggedAgendaItemType.uri) {
-        reorderedAgendaitemsOfCategory.push(agendaitem);
-      }
-    }
+  *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsNumber(
-      reorderedAgendaitemsOfCategory,
+      reorderedAgendaitems,
       this.meeting,
       this.store,
       this.decisionReportGeneration,
       true,
       true,
     ); // permissions guarded in template (and backend)
+    this.notasHasChanged = false;
+    this.announcementsHasChanged = false;
     this.router.refresh('agenda.agendaitems');
   }
 

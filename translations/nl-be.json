@@ -584,8 +584,8 @@
   "clone-previous-subcase": "Kopieer voorgaande stap",
   "action-not-allowed": "Deze actie is niet toegestaan, Contacteer de administrator of probeer het opnieuw.",
   "filtered-agendas": "Deze data is gefilterd.",
-  "editing-agenda-overview": "U bent nu aan het bewerken. U kan de status van de mededelingen en nota's aanpassen. Volgorde aanpassen kan enkel indien alle punten getoond worden. Wijzigingen worden onmiddellijk opgeslagen.",
-  "end-editing-overview": "Bewerken afsluiten",
+  "editing-agenda-overview": "U bent nu aan het bewerken.",
+  "apply-order": "Volgorde Toepassen",
   "clear-filter": "Reset filter",
   "clear-filter-plural": "Reset filters",
   "agenda-delete-message": "De agenda wordt verwijderd. Dit kan even duren.",
@@ -1318,5 +1318,7 @@
   "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
   "general-information": "Algemene info",
   "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
-  "save-in-progress": "Bezig met opslaan."
+  "save-in-progress": "Bezig met opslaan.",
+  "change-order": "Volgorde aanpassen",
+  "leave-unsaved-changed": "Wil je de wijzigingen laten verloren gaan?"
 }
