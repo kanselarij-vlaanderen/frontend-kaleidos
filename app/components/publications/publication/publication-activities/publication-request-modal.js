@@ -69,8 +69,12 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     let proofingActivity = this.args.proofingActivity;
     if (proofingActivity) {
       let generatedPieces = yield proofingActivity.generatedPieces;
-      generatedPieces = generatedPieces.slice();
-      generatedPieces = generatedPieces.sortBy('name', 'receivedDate');
+      generatedPieces = generatedPieces
+        .slice()
+        .sort(
+          (p1, p2) =>
+            p1.name.localeCompare(p2.name) || p1.receivedDate - p2.receivedDate
+        );
       this.transferredPieces = generatedPieces;
     } else {
       this.transferredPieces = [];

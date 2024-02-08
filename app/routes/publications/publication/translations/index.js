@@ -91,7 +91,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       ...requestActivities.map((request) => TimelineActivity.create(request)),
       ...translationActivities.map((translation) => TimelineActivity.create(translation)),
     ]);
-    rows = rows.sortBy('date').reverseObjects();
+    rows = rows.sort((a1, a2) => a1.date - a2.date).reverse();
     return rows;
   }
 
