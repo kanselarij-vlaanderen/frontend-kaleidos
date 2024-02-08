@@ -24,10 +24,9 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   @action
-  onChangeConfidentiality() {
+  onChangeConfidentiality(event) {
     this.confidentialChanged = true;
-    this.args.subcase.confidential = !this.args.subcase.confidential;
-    this.newsItem.inNewsletter = this.args.subcase.confidential ? false : this.newsItem.inNewsletter;
+    this.newsItem.inNewsletter = event ? false : this.newsItem.inNewsletter;
   }
 
   @action
