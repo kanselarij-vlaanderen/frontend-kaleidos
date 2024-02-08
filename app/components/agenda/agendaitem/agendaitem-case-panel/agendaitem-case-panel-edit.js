@@ -24,6 +24,13 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   @action
+  onChangeConfidentiality() {
+    this.confidentialChanged = true;
+    this.args.subcase.confidential = !this.args.subcase.confidential;
+    this.newsItem.inNewsletter = this.args.subcase.confidential ? false : this.newsItem.inNewsletter;
+  }
+
+  @action
   cancelEditing() {
     if (this.args.agendaitem.hasDirtyAttributes) {
       this.args.agendaitem.rollbackAttributes();

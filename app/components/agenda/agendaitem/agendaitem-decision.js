@@ -105,6 +105,19 @@ export default class AgendaitemDecisionComponent extends Component {
     this.isEditingPill = !this.isEditingPill;
   }
 
+  @task
+  *onPostponedOrRetracted() {
+    const agendaitemType = yield this.args.agendaitem.type;
+    if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      const treatment = yield this.args.agendaitem.treatment;
+      const newsItem = yield treatment?.newsItem;
+      if (newsItem) {
+        newsItem.inNewsletter = false;
+        yield newsItem.save();
+      }
+    }
+  }
+
   onCreateNewVersion = task(async () => {
     const report = await this.attachNewReportVersion(this.report);
     const { betreftPiecePart, beslissingPiecePart, annotatiePiecePart } =

@@ -145,12 +145,26 @@ export default class AgendaitemControls extends Component {
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
     yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    yield this.removeFromNewsletter.perform();
   }
 
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
     yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.removeFromNewsletter.perform();
+  }
+
+  @task
+  *removeFromNewsletter() {
+    const agendaitemType = yield this.args.agendaitem.type;
+    if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      const treatment = yield this.args.agendaitem.treatment;
+      const newsItem = yield treatment?.newsItem;
+      if (newsItem) {
+        newsItem.inNewsletter = false;
+      }
+    }
   }
 
   @action
