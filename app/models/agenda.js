@@ -1,10 +1,7 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-// LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
-// eslint-disable-next-line ember/no-mixins
-import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 
-export default class Agenda extends Model.extend(LoadableModel) {
+export default class Agenda extends Model {
   @service intl;
 
   @attr title;
