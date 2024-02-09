@@ -304,6 +304,7 @@ export default class SignatureService extends Service {
     } else if (await piece.signedPiece) {
       return true;
     }
+    return false;
   }
 
   async hasMarkedSignFlow(piece) {
