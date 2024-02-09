@@ -85,7 +85,5 @@ services:
     user: ${HOST_UID_GID}
   minutes-report-generation:
     user: ${HOST_UID_GID}
-  chrome-browser:
-    user: ${HOST_UID_GID}
   file-bundling:
     user: ${HOST_UID_GID}

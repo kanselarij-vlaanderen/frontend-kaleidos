@@ -13,6 +13,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
   @service router;
+  @service toaster;
+  @service intl;
 
   @tracked isAssigningToOtherAgenda = false;
   @tracked isAssigningToOtherCase = false;
@@ -105,7 +107,15 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   *proposeForAgenda(meeting) {
     this.isAssigningToOtherAgenda = false;
     this.isLoading = true;
-    yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+    try {
+      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+    } catch (error) {
+      this.router.refresh();
+      this.toaster.error(
+        this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+        this.intl.t('warning-title')
+      );
+    }
     this.toggleAllPropertiesBackToDefault();
     yield this.loadData.perform();
     this.args.onProposedForAgenda();

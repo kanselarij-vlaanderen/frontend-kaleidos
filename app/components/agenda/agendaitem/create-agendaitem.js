@@ -17,6 +17,8 @@ export default class CreateAgendaitem extends Component {
   @service store;
   @service subcasesService;
   @service agendaService;
+  @service toaster;
+  @service intl;
 
   @tracked selectedSubcases = [];
   @tracked subcases = [];
@@ -82,8 +84,15 @@ export default class CreateAgendaitem extends Component {
     const subcasesToAdd = new Set([...this.selectedSubcases]);
     const agendaItems = [];
     for (const subcase of subcasesToAdd) {
-      const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, subcase);
-      agendaItems.push(newItem);
+      try {
+        const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, subcase);
+        agendaItems.push(newItem);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
     }
 
     this.args.onCreate(agendaItems);
