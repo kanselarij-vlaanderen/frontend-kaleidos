@@ -156,7 +156,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (!previousVersion) {
-        newAgendaitems.pushObject(agendaitem);
+        newAgendaitems.push(agendaitem);
       }
     }
     return newAgendaitems;
@@ -170,7 +170,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     for (const agendaitem of allAgendaitemsNotOk) {
       const previousVersion = await agendaitem.previousVersion;
       if (previousVersion) {
-        approvedAgendaitems.pushObject(agendaitem);
+        approvedAgendaitems.push(agendaitem);
       }
     }
     return approvedAgendaitems;

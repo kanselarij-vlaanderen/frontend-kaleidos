@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import subDays from 'date-fns/subDays';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument subcase
@@ -69,7 +70,7 @@ export default class AgendaitemPostponed extends Component {
     });
     const allRecentMeetings = meetings.slice();
     // filter our own meeting if present
-    allRecentMeetings.removeObject(this.args.meeting);
+    removeObject(allRecentMeetings, this.args.meeting);
     return allRecentMeetings;
   }
 

@@ -2,7 +2,9 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {PublicationFlow} publicationFlow *
@@ -12,7 +14,7 @@ import { task, dropTask } from 'ember-concurrency';
 export default class PublicationsDocumentsReferenceDocumentUploadModalComponent extends Component {
   @service publicationService;
 
-  @tracked uploadedPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
 
   get isCancelDisabled() {
     return this.cancel.isRunning || this.save.isRunning;
@@ -25,7 +27,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
   }
 
   @dropTask
@@ -41,7 +43,7 @@ export default class PublicationsDocumentsReferenceDocumentUploadModalComponent 
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
   }
 
   @task

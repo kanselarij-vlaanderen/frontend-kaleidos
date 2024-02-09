@@ -68,11 +68,11 @@ export default class GovernmentAreasPanel extends Component {
     for (let governmentArea of this.args.governmentAreas.slice()) {
       const topConceptSchemes = yield governmentArea.topConceptSchemes;
       if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
-        selectedDomains.pushObject(governmentArea);
+        selectedDomains.push(governmentArea);
       } else if (topConceptSchemes.any(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
         // only select the field if its active
         if (this.governmentFields.includes(governmentArea)) {
-          selectedFields.pushObject(governmentArea);
+          selectedFields.push(governmentArea);
         }
       }
     }

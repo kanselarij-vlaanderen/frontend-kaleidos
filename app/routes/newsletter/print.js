@@ -9,6 +9,7 @@ import {
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -68,7 +69,7 @@ export default class PrintNewsletterRoute extends Route {
       const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups
       notas = A([]);
       for (const group of itemGroups) {
-        notas.addObjects(group.agendaitems);
+        addObjects(notas, group.agendaitems);
       }
     }
 

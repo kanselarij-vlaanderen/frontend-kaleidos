@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   @service store;
@@ -36,7 +37,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
         'filter[agenda-activity][:id:]': latestActivity.id,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.slice());
+      addObjects(submissionActivities, submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];

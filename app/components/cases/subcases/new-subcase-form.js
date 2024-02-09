@@ -80,7 +80,7 @@ export default class NewSubcaseForm extends Component {
       CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
     ].includes(this.subcaseType?.uri);
     if (this.isSubcaseTypeWithoutMandatees) {
-      this.mandatees.clear();
+      this.mandatees.length = 0;
       this.submitter = null;
     }
   }
@@ -180,13 +180,13 @@ export default class NewSubcaseForm extends Component {
     }
 
     const mandatees = yield this.subcase.mandatees;
-    mandatees.clear();
+    mandatees.length = 0;
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
     const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
     const governmentAreas = yield this.subcase.governmentAreas;
-    governmentAreas.clear();
+    governmentAreas.length = 0;
     addObjects(governmentAreas, newGovernmentAreas);
     yield this.subcase.save();
 

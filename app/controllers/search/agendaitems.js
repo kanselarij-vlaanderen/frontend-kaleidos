@@ -6,6 +6,7 @@ import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class AgendaitemsSearchController extends Controller {
   @service router;
@@ -63,11 +64,9 @@ export default class AgendaitemsSearchController extends Controller {
 
   set includeNotas(value) {
     if (value === true) {
-      if (!this.types.includes('nota')) {
-        this.types.addObject('nota');
-      }
+      addObject(this.type, 'nota');
     } else {
-      this.types.removeObject('nota');
+      removeObject(this.types, 'nota');
     }
   }
 
@@ -77,11 +76,9 @@ export default class AgendaitemsSearchController extends Controller {
 
   set includeMededelingen(value) {
     if (value === true) {
-      if (!this.types.includes('mededeling')) {
-        this.types.addObject('mededeling');
-      }
+      addObject(this.types, 'mededeling');
     } else {
-      this.types.removeObject('mededeling');
+      removeObject(this.types, 'mededeling');
     }
   }
 

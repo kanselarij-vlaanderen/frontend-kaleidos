@@ -2,11 +2,13 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { inject as service } from '@ember/service';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {PublicationFlow} publicationFlow includes: identification
@@ -20,8 +22,8 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   @tracked subject;
   @tracked message;
-  @tracked uploadedPieces = [];
-  @tracked transferredPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
+  @tracked transferredPieces = new TrackedArray([]);
   @tracked mustUpdatePublicationStatus = true;
 
   validators;
@@ -94,14 +96,14 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.usedPieces,
         translationActivity.generatedPieces,
       ]);
-      this.transferredPieces = [
+      this.transferredPieces = new TrackedArray([
         ...usedPieces.slice(),
         ...generatedPieces.slice(),
-      ].sort(
+      ]).sort(
         (p1, p2) => p1.name.localeCompare(p2.name) || p1.created - p2.created
       );
     } else {
-      this.transferredPieces = [];
+      this.transferredPieces = new TrackedArray([]);
     }
   }
 
@@ -158,18 +160,18 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
   }
 
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
   }
 
   @action
   unlinkTransferredPiece(piece) {
-    this.transferredPieces.removeObject(piece);
+    removeObject(this.transferredPieces, piece);
   }
 
   @action

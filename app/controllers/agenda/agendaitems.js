@@ -105,7 +105,7 @@ export default class AgendaAgendaitemsController extends Controller {
     for (const agendaitem of agendaitemsArray) {
       yield animationFrame(); // Computationally heavy task. This keeps the interface alive
       if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
-        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
+        currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
         currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);

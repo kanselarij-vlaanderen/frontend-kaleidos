@@ -7,6 +7,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent} from '@ember/utils';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -92,9 +93,9 @@ export default class BatchDocumentsDetailsModal extends Component {
   toggleSelection(row) {
     const isSelected = this.selectedRows.includes(row);
     if (isSelected) {
-      this.selectedRows.removeObject(row);
+      removeObject(this.selectedRows, row);
     } else {
-      this.selectedRows.pushObject(row);
+      this.selectedRows.push(row);
     }
   }
 

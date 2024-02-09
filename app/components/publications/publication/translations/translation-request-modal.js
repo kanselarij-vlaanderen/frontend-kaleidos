@@ -2,11 +2,13 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { translationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { Validator, ValidatorSet } from 'frontend-kaleidos/utils/validators';
 import { isPresent } from '@ember/utils';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PublicationsTranslationRequestModalComponent extends Component {
   /**
@@ -17,7 +19,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
    */
   @service publicationService;
 
-  @tracked uploadedPieces = [];
+  @tracked uploadedPieces = new TrackedArray([]);
   @tracked numberOfPages;
   @tracked numberOfWords;
   @tracked translationDueDate = this.args.dueDate;
@@ -108,7 +110,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @action
   async uploadPiece(file) {
     const piece = await this.publicationService.createPiece(file);
-    this.uploadedPieces.pushObject(piece);
+    this.uploadedPieces.push(piece);
     this.setEmailFields.perform();
   }
 
@@ -120,7 +122,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   @task
   *deleteUploadedPiece(piece) {
     yield this.publicationService.deletePiece(piece);
-    this.uploadedPieces.removeObject(piece);
+    removeObject(this.uploadedPieces, piece);
     this.setEmailFields.perform();
   }
 
