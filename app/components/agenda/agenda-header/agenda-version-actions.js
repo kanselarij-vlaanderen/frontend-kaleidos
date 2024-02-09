@@ -84,7 +84,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   get latestAgenda() {
-    return this.args.reverseSortedAgendas.at(0);
+    return this.args.reverseSortedAgendas.slice().at(0);
   }
 
   get isMeetingClosable() {
