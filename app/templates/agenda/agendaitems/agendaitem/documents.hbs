@@ -37,21 +37,21 @@
 {{#unless this.loadData.isRunning}}
   {{#if this.documentsAreVisible}}
     {{#if (and (user-may "view-documents-postponed-and-retracted") this.decisionActivity.isPostponed)}}
-        <AuAlert
-          @skin="warning"
-          @icon="alert-triangle"
-          @title={{t "postponed-item"}}
-        >
-          {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "postponed"))}}
-        </AuAlert>
+      <AuAlert
+        @skin="warning"
+        @icon="alert-triangle"
+        @title={{t "postponed-item"}}
+      >
+        {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "postponed"))}}
+      </AuAlert>
     {{else if (and (user-may "view-documents-postponed-and-retracted") this.decisionActivity.isRetracted)}}
-        <AuAlert
-          @skin="warning"
-          @icon="alert-triangle"
-          @title={{t "retracted-item"}}
-        >
-          {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "retracted"))}}
-        </AuAlert>
+      <AuAlert
+        @skin="warning"
+        @icon="alert-triangle"
+        @title={{t "retracted-item"}}
+      >
+        {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "retracted"))}}
+      </AuAlert>
     {{/if}}
     <Documents::DocumentCardList
       @pieces={{this.model.pieces}}
