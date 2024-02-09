@@ -69,7 +69,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get publicationModes() {
-    return this.store.peekAll('publication-mode').sortBy('position');
+    return this.store.peekAll('publication-mode')
+      .slice()
+      .sort((p1, p2) => p1.position - p2.position);
   }
 
   get isValid() {
@@ -225,7 +227,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
       saves.push(numacNumber.destroyRecord());
     }
 
-    for (const numacNumber of this.numacNumbers.toArray()) {
+    for (const numacNumber of this.numacNumbers.slice()) {
       if (numacNumber.isNew) {
         saves.push(numacNumber.save());
       }

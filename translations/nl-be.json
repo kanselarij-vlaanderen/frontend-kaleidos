@@ -295,6 +295,7 @@
   "notifications": "Meldingen",
   "number-session": "Nummer vergadering: ",
   "of": "van",
+  "or": "of",
   "on-agenda-for-meeting": "Geagendeerd voor de zitting van",
   "on-agenda-of": "Op agenda van",
   "on-agenda-for": "Geagendeerd voor:",
@@ -1084,6 +1085,7 @@
   "newsletters-tabs-overview": "Alle berichten",
   "source-file-lowercase": "bronbestand",
   "upload-derived-document": "Afgeleid document opladen",
+  "upload-source-document": "Bron document opladen",
   "word-document": "Word document",
   "as": "als",
   "limited-access": "Beperkte toegang",
@@ -1315,10 +1317,13 @@
   "no-new-files-will-be-sent": "Alle beschikbare documenten van dit dossier werden naar het Vlaams Parlement doorgestuurd.",
   "for-questions-contact": "Bij vragen contacteer:",
   "documents-sent-on": "Documenten doorgestuurd op",
+  "started-by": "Opgestart door",
   "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
   "general-information": "Algemene info",
   "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
   "save-in-progress": "Bezig met opslaan.",
   "change-order": "Volgorde aanpassen",
-  "leave-unsaved-changed": "Wil je de wijzigingen laten verloren gaan?"
+  "leave-unsaved-changed": "Wil je de wijzigingen laten verloren gaan?",
+  "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
+  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}"
 }

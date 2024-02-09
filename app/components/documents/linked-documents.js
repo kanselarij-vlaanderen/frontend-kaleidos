@@ -55,7 +55,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
       const linkedPieces = yield this.store.queryAll('piece', {
         'filter[document-container][pieces][:id:]': linkedPiece.get('id'),
       });
-      allPiecesToLink = [...allPiecesToLink, ...linkedPieces.toArray()];
+      allPiecesToLink = [...allPiecesToLink, ...linkedPieces.slice()];
     }
 
     if (allPiecesToLink.length) {
@@ -99,7 +99,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
 
   @task
   *unlinkDocumentContainer(documentContainer) {
-    const linkedPiecesToRemove = (yield documentContainer.pieces).toArray();
+    const linkedPiecesToRemove = (yield documentContainer.pieces).slice();
 
     if (this.itemType === 'agendaitem') {
       // Unlink pieces from subcase related to the agendaitem

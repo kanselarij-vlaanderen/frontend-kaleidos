@@ -6,7 +6,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, all } from 'ember-concurrency';
+import { dropTask, task, all } from 'ember-concurrency';
 import {
   addObject,
   addObjects,
@@ -26,6 +26,8 @@ export default class NewSubcaseForm extends Component {
   @service fileConversionService;
   @service toaster;
   @service agendaService;
+  @service plausible;
+  @service intl;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -40,14 +42,18 @@ export default class NewSubcaseForm extends Component {
   @tracked subcaseType;
   @tracked selectedShortcut;
   @tracked isEditing = false;
+  @tracked isSubcaseTypeWithoutMandatees = false;
 
   @tracked submitter;
-  @tracked mandatees = [];
+  @tracked mandatees = new TrackedArray([]);
 
+  @tracked governmentAreas = new TrackedArray([]);
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked selectedGovernmentDomains = new TrackedArray([]);
 
+  @tracked isUploadingFiles;
   @tracked pieces = new TrackedArray([]);
+  @tracked piecesCreatedCounter = 0;
 
   @tracked showProposableAgendaModal = false;
 
@@ -65,6 +71,19 @@ export default class NewSubcaseForm extends Component {
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
     this.subcaseName = subcaseType.label;
+    this.checkSubcaseType();
+  }
+  
+  @action
+  checkSubcaseType() {
+    // We need to clear mandatees if they have been selected with this type of subcase
+    this.isSubcaseTypeWithoutMandatees = [
+      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
+    ].includes(this.subcaseType?.uri);
+    if (this.isSubcaseTypeWithoutMandatees) {
+      this.mandatees.clear();
+      this.submitter = null;
+    }
   }
 
   @action
@@ -90,7 +109,14 @@ export default class NewSubcaseForm extends Component {
 
   @action
   copySubcase() {
+    this.plausible.trackEventWithRole('Kopieer voorgaande procedurestap');
     this.createSubcase.perform(true);
+  }
+
+  @task
+  *cancelForm() {
+    yield this.deletePieces();
+    this.router.transitionTo('cases.case.subcases');
   }
 
   @task
@@ -101,7 +127,7 @@ export default class NewSubcaseForm extends Component {
       this.confidential = this.args.latestSubcase.confidential;
       addObjects(this.mandatees, yield this.args.latestSubcase.mandatees);
       this.submitter = yield this.args.latestSubcase.requestedBy;
-      // this.governmentAreas = yield this.args.latestSubcase.governmentAreas;
+      addObjects(this.governmentAreas, yield this.args.latestSubcase.governmentAreas);
     } else {
       const _case = yield this.args.decisionmakingFlow.case;
       this.title = _case.title;
@@ -110,7 +136,7 @@ export default class NewSubcaseForm extends Component {
     }
   }
 
-  @task
+  @dropTask
   *createSubcase(
     fullCopy = false,
     meeting = null,
@@ -159,9 +185,7 @@ export default class NewSubcaseForm extends Component {
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
-    let newGovernmentAreas = this.selectedGovernmentDomains.concat(
-      this.selectedGovernmentFields
-    );
+    const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
     const governmentAreas = yield this.subcase.governmentAreas;
     governmentAreas.clear();
     addObjects(governmentAreas, newGovernmentAreas);
@@ -170,17 +194,19 @@ export default class NewSubcaseForm extends Component {
     yield this.savePieces.perform();
 
     if (meeting) {
-      const submissionActivities = yield this.subcase.submissionActivities;
-      const formallyOk = isFormallyOk
-        ? CONSTANTS.ACCEPTANCE_STATUSSES.OK
-        : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
-
-      yield this.agendaService.putSubmissionOnAgenda(
-        meeting,
-        submissionActivities,
-        formallyOk,
-        privateComment
-      );
+      try {
+        yield this.agendaService.putSubmissionOnAgenda(
+          meeting,
+          this.subcase,
+          isFormallyOk,
+          privateComment
+        );
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
     }
 
     this.router.transitionTo(
@@ -209,16 +235,8 @@ export default class NewSubcaseForm extends Component {
 
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
-    const type = await subcase.type;
-    // TODO do we need to clear mandatees if they have been selected with this type of subcase?
-    const subcaseTypeWithoutMandatees = [
-      CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
-    ].includes(type?.uri);
     // Everything to copy from latest subcase
-    if (!subcaseTypeWithoutMandatees) {
-      subcase.mandatees = await latestSubcase.mandatees;
-      subcase.requestedBy = await latestSubcase.requestedBy;
-    }
+    // we have preloaded some data already in local variables, less properties to copy
     if (fullCopy) {
       subcase.linkedPieces = await latestSubcase.linkedPieces;
       subcase.subcaseName = latestSubcase.subcaseName;
@@ -227,9 +245,7 @@ export default class NewSubcaseForm extends Component {
     } else {
       subcase.linkedPieces = pieces;
     }
-    // TODO are we pre-loading these?
-    subcase.governmentAreas = await latestSubcase.governmentAreas;
-    return subcase;
+    return;
   }
 
   async copySubcaseSubmissions(subcase, pieces) {
@@ -286,12 +302,18 @@ export default class NewSubcaseForm extends Component {
   /** document upload */
 
   @action
+  handleFileUploadQueueUpdates({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingFiles = uploadIsRunning && !uploadIsCompleted;
+  }
+
+  @action
   addPiece(piece) {
     addObject(this.pieces, piece);
   }
 
   @task
   *savePieces() {
+    this.piecesCreatedCounter = 0;
     const savePromises = this.pieces.map(async (piece) => {
       try {
         await this.savePiece.perform(piece);
@@ -305,7 +327,7 @@ export default class NewSubcaseForm extends Component {
     this.pieces = new TrackedArray([]);
   }
 
-  @task
+  @task({ maxConcurrency: 5, enqueue: true })
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
@@ -328,6 +350,7 @@ export default class NewSubcaseForm extends Component {
         this.intl.t('warning-title')
       );
     }
+    this.piecesCreatedCounter++;
   }
 
   @task
@@ -354,10 +377,10 @@ export default class NewSubcaseForm extends Component {
   @action
   async deletePiece(piece) {
     const file = await piece.file;
-    await file.destroyRecord();
+    await file?.destroyRecord();
     removeObject(this.pieces, piece);
-    const documentContainer = await piece.documentContainer;
-    await documentContainer.destroyRecord();
-    await piece.destroyRecord();
+    const documentContainer = await piece?.documentContainer;
+    await documentContainer?.destroyRecord();
+    await piece?.destroyRecord();
   }
 }

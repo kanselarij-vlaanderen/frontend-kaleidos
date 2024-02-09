@@ -16,7 +16,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
 
   async model() {
     let reportTypes = await this.store.findAll('publication-report-type');
-    reportTypes = reportTypes.toArray();
+    reportTypes = reportTypes.slice();
 
     if (reportTypes.length !== REPORT_TYPES_CONFIG.length) {
       console.error('incorrect number of report types configured');

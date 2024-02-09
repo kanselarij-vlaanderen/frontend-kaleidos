@@ -190,14 +190,14 @@ export default class PublicationService extends Service {
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const publicationActivities = (
       await publicationSubcase.publicationActivities
-    ).sortBy('startDate');
+    ).sort((a1, a2) => a1.startDate - a2.startDate);
     if (publicationActivities.length) {
       for (let publicationActivity of publicationActivities) {
-        const publishedDecisions = (await publicationActivity.decisions).sortBy(
-          'publicationDate'
+        const publishedDecisions = (await publicationActivity.decisions).sort(
+          (d1, d2) => d1.publicationDate - d2.publicationDate
         );
         if (publishedDecisions.length) {
-          return publishedDecisions.firstObject.publicationDate;
+          return publishedDecisions.at(0).publicationDate;
         }
       }
     }
@@ -335,7 +335,7 @@ export default class PublicationService extends Service {
     await proofingActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
@@ -396,7 +396,7 @@ export default class PublicationService extends Service {
     await publicationActivity.save();
 
     const [files, outbox, mailSettings] = await Promise.all([
-      Promise.all(pieces.mapBy('file')),
+      Promise.all(pieces.map((p) => p.file)),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
       this.store.queryOne('email-notification-setting'),
     ]);
@@ -490,7 +490,9 @@ export default class PublicationService extends Service {
 
     if (!decision) {
       const publicationActivities = await publicationSubcase.publicationActivities;
-      let publicationActivity = publicationActivities.sortBy('-startDate')?.[0];
+      let publicationActivity = publicationActivities
+        ?.slice()
+        ?.sort((a1, a2) => a2.startDate - a1.startDate)?.[0];
 
       if (!publicationActivity) {
         publicationActivity = this.store.createRecord(

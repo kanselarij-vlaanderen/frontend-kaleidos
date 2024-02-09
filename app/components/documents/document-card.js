@@ -241,13 +241,13 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
-    for (const piece of this.pieces.toArray()) {
+    for (const piece of this.pieces.slice()) {
       yield piece.belongsTo('accessLevel').reload();
     }
   }
 
   get sortedPieces() {
-    return A(sortPieces(this.pieces.toArray()).reverse());
+    return A(sortPieces(this.pieces.slice()).reverse());
   }
 
   get reverseSortedPieces() {

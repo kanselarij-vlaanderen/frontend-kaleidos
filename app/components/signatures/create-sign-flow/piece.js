@@ -33,7 +33,7 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
     if (!this.args.decisionActivities) {
       return;
     }
-    const decisionActivities = this.args.decisionActivities.toArray();
+    const decisionActivities = this.args.decisionActivities.slice();
 
     let hasConflictingSigners = false;
 

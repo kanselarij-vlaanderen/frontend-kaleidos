@@ -71,7 +71,7 @@ export default class SignaturesDecisionsController extends Controller {
       this.closeSidebar();
       this.selectedSignFlows = new TrackedArray([]);
     } else {
-      this.selectedSignFlows = new TrackedArray(this.model.toArray());
+      this.selectedSignFlows = new TrackedArray(this.model.slice());
     }
   }
 

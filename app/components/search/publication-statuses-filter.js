@@ -21,7 +21,7 @@ export default class SearchPublicationStatusesFilterComponent extends Component 
     this.statuses = (await this.store.queryAll(
       'publication-status',
       { sort: 'position' },
-    )).toArray();
+    )).slice();
 
     if (this.selectedStatusIds.length) {
       this.selectedStatuses = this.statuses.filter(status =>
