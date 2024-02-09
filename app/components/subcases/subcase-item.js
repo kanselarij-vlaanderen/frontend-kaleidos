@@ -67,25 +67,34 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *updateHasDocumentsToShow() {
-    const doc = yield this.store.queryOne('submission-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:has:pieces]': 'true',
-    });
-    this.hasDocumentsToShow = doc !== null;
-    yield this.loadRelatedMeeting.perform();
     // Additional failsafe check on document visibility. Strictly speaking this check
     // should not be necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
     // There is however a different situation when a subcase has been postponed.
     // In that case no documents should be showing (as the subcase in still progress)
-    // but those from the first meeting are already propagated and are visible. 
+    // but those from the first meeting are already propagated and are visible.
+    yield this.loadRelatedMeeting.perform();
+    this.decisionActivity = yield this.loadRelatedDecisionActivity.perform();
+    const decisionActivityResultCode = yield this.decisionActivity?.decisionResultCode;
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
     if (!this.currentSession.may('view-documents-before-release')) {
       const documentPublicationActivity = yield this.latestMeeting?.internalDocumentPublicationActivity;
       const documentPublicationStatus = yield documentPublicationActivity?.status;
       if (documentPublicationStatus?.uri !== CONSTANTS.RELEASE_STATUSES.RELEASED) {
         this.hasDocumentsToShow = false;
       }
-    };
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode)
+    ) {
+      this.hasDocumentsToShow = false;
+    } else {
+      const doc = yield this.store.queryOne('submission-activity', {
+        'filter[subcase][:id:]': this.args.subcase.id,
+        'filter[:has:pieces]': 'true',
+      });
+      this.hasDocumentsToShow = doc !== null;
+    }
   }
 
   @task
@@ -99,6 +108,19 @@ export default class SubcaseItemSubcasesComponent extends Component {
     this.latestMeeting = yield agenda?.createdFor;
     yield this.latestMeeting?.belongsTo('agenda').reload();
   }
+
+  loadRelatedDecisionActivity = task(async () => {
+    const latestDecisionActivity = await this.store.queryOne(
+      'decision-activity',
+      {
+        'filter[treatment][agendaitems][agenda-activity][subcase][:id:]':
+          this.args.subcase.id,
+        sort: '-treatment.agendaitems.agenda-activity.start-date',
+      }
+    );
+    
+    return await latestDecisionActivity;
+  });
 
   @task
   *loadSubcaseDocuments() {
