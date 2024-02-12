@@ -14,6 +14,8 @@ import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 export default class AgendaitemPostponed extends Component {
   @service store;
   @service agendaService;
+  @service toaster;
+  @service intl;
 
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;
@@ -77,7 +79,15 @@ export default class AgendaitemPostponed extends Component {
   @task
   *reProposeForMeeting(meeting) {
     this.closeProposingForOtherMeetingModal();
-    yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+    try {
+      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+    } catch (error) {
+      this.router.refresh();
+      this.toaster.error(
+        this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+        this.intl.t('warning-title')
+      );
+    }
     yield this.loadProposedStatus.perform();
   }
 
