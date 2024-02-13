@@ -85,5 +85,6 @@ export default class AgendaitemCasePanelEdit extends Component {
       }
     }
     this.args.onSave();
+    this.router.refresh();
   }
 }
