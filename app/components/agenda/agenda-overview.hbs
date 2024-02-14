@@ -1,5 +1,5 @@
 <div class="vlc-agenda-items" ...attributes>
-  {{#if (and @isEditingOverview this.canMoveAgendaitems)}}
+  {{#if this.canMoveAgendaitems}}
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "apply-order"}}
@@ -38,12 +38,13 @@
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div class="auk-u-mb-8">
-        <ul {{sortable-group onChange=this.setNotas}}>
+        <ul {{sortable-group groupName="notas" onChange=this.setNotas}}>
           {{#if (and this.notas.length @isEditingOverview)}}
             {{#each this.notas as |agendaitem indexItems|}}
               <li
                 class="vlc-agenda-items__sub-item"
                 {{sortable-item
+                  groupName="notas"
                   model=agendaitem
                   distance="30"
                   disabled=(not this.canMoveAgendaitems)
@@ -82,6 +83,7 @@
                 <li
                   class="vlc-agenda-items__sub-item"
                   {{sortable-item
+                    groupName="notas"
                     model=agendaitem
                     distance="30"
                     disabled=(not this.canMoveAgendaitems)
@@ -126,11 +128,12 @@
   </div>
   <div class="auk-u-mb-4">
     {{#if this.announcements.length}}
-      <ul {{sortable-group onChange=@onReorderAgendaitems}}>
-        {{#each this.announcements as |announcement indexitems|}}
+      <ul {{sortable-group groupName="announcements" onChange=@onReorderAgendaitems}}>
+        {{#each this.announcements as |announcement indexItems|}}
           <li
             class="vlc-agenda-items__sub-item"
             {{sortable-item
+              groupName="announcements"
               model=announcement
               distance="30"
               disabled=(not this.canMoveAgendaitems)
@@ -146,7 +149,7 @@
               @isEditingFormallyOkStatus={{@isEditingOverview}}
               @allowReorderItems={{this.canMoveAgendaitems}}
               @onMove={{this.move}}
-              @isFirst={{eq indexitems 0}}
+              @isFirst={{eq indexItems 0}}
               @isLast={{not (has-next announcement this.announcements)}}
               @agendaitemIndex={{sum indexItems 1}}
             />
