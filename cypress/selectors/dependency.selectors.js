@@ -33,8 +33,8 @@ const selectors = {
   },
 
   // RDFA editor
-  rdfa: {
-    editorInner: '.say-editor__inner',
+  rdfaEditor: {
+    inner: '.say-editor__inner',
   },
 
   // ember-tag-input

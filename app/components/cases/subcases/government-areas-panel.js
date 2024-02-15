@@ -37,7 +37,7 @@ export default class GovernmentAreasPanel extends Component {
     const concepts = yield this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
     const referenceDate = new Date();
-    for (const concept of concepts.toArray()) {
+    for (const concept of concepts.slice()) {
       const isInDateRange =
         concept.startDate <= referenceDate &&
         (referenceDate <= concept.endDate ||
@@ -54,12 +54,13 @@ export default class GovernmentAreasPanel extends Component {
   @task
   *calculateDomainSelections() {
     let domainsFromAvailableFields = yield Promise.all(
-      this.governmentFields.mapBy('broader')
+      this.governmentFields.map((c) => c.broader)
     );
 
     let uniqueDomains = domainsFromAvailableFields
       .uniq()
-      .sortBy('label');
+      .slice()
+      .sort((d1, d2) => d1.label - d2.label);
 
     // process args.governmentAreas into domains and fields
     const selectedDomains = [];
@@ -77,14 +78,14 @@ export default class GovernmentAreasPanel extends Component {
     }
 
     const domainsFromSelectedFields = yield Promise.all(
-      selectedFields.mapBy('broader')
+      selectedFields.map((c) => c.broader)
     );
 
     // construct a DomainSelection for each active domain with its fields
     this.domainSelections = uniqueDomains.map((domain) => {
       const availableFieldsForDomain = this.governmentFields.filter(
         (_, index) => domainsFromAvailableFields[index] === domain
-      ).sortBy('position');
+      ).sort((d1, d2) => d1.position - d2.position);
       const selectedFieldsForDomain = selectedFields.filter(
         (_, index) => domainsFromSelectedFields[index] === domain
       );

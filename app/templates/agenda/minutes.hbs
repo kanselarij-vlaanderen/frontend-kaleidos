@@ -36,12 +36,13 @@
           <Auk::Panel::Body
             class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
           >
-            <SayEditor
+            <Auk::Editor
               @allowFullscreen={{true}}
               @showSave={{true}}
               @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
               @onSaveTask={{this.saveMinutes}}
               @title={{t "minutes"}}
+              @fullScreenSaveDisabled={{this.saveDisabled}}
             >
               <:header>
                 {{#if this.editorShowContentUpdateButton}}
@@ -75,7 +76,7 @@
                   @onVersionClicked={{this.revertToVersion}}
                 />
               </:header>
-            </SayEditor>
+            </Auk::Editor>
           </Auk::Panel::Body>
           <Auk::Panel::Footer class="au-u-background-gray-100">
             <Auk::Toolbar>

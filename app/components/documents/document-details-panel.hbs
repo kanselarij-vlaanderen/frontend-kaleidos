@@ -44,12 +44,13 @@
         data-test-document-details-panel-source-file
         @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
       >
-        <div class="au-u-flex au-u-flex--between">
-          <p>
+        <div class="au-u-flex au-u-flex--between au-u-flex--spaced-tiny">
+          <span>
             {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
-          </p>
+          </span>
           <AuButton
             data-test-document-details-panel-upload
+            class="au-u-flex-item--fixed"
             @icon="upload"
             @iconAlignment="left"
             @skin="secondary"

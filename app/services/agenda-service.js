@@ -154,7 +154,9 @@ export default class AgendaService extends Service {
       agendaitems.map(async (agendaitem) => {
         let currentAgendaitemGroupName;
         const mandatees = await agendaitem.mandatees;
-        const sortedMandatees = mandatees.sortBy('priority');
+        const sortedMandatees = mandatees
+          .slice()
+          .sort((m1, m2) => m1.priority - m2.priority);
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);
@@ -224,7 +226,7 @@ export default class AgendaService extends Service {
   }
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       await this.deleteAgendaitem(agendaitem);
     } else {
       this.toaster.error(

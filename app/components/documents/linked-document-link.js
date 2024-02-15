@@ -21,7 +21,9 @@ export default class LinkedDocumentLink extends Component {
   @task
   *loadData() {
     const containerPieces = yield this.args.documentContainer.pieces;
-    const sortedContainerPieces = containerPieces.sortBy('created');
+    const sortedContainerPieces = containerPieces
+      .slice()
+      .sort((p1, p2) => p1.created - p2.created);
     if (this.args.lastPiece) {
       const idx = sortedContainerPieces.indexOf(this.args.lastPiece);
       this.sortedPieces = A(sortedContainerPieces.slice(0, idx + 1));

@@ -11,7 +11,7 @@ export default class SettingsOrganizationsOrganizationRoute extends Route {
   }
 
   async afterModel(model) {
-    this.linkedMandatees = (await model.mandatees)?.toArray();
+    this.linkedMandatees = (await model.mandatees)?.slice();
   }
 
   setupController(controller) {

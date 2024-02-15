@@ -163,7 +163,10 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       // only continue if there is a piece left in the container (a container could have 0 pieces left)
       if (lastPiece) {
         const agendaActivities = await this.subcase.agendaActivities;
-        const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+        const latestActivity = agendaActivities
+          .slice()
+          .sort((a1, a2) => a1.startDate - a2.startDate)
+          .at(-1);
         if (latestActivity) {
           const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
           const latestMeeting = await this.store.queryOne('meeting', {
@@ -171,10 +174,13 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
             sort: '-planned-start',
           });
           const agendas = await latestMeeting.agendas;
-          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
-          const latestAgenda = sortedAgendas.firstObject;
+          const sortedAgendas = agendas
+            .slice()
+            .sort((a1, a2) => a1.serialnumber.localeCompare(a2.serialnumber))
+            .reverse();
+          const latestAgenda = sortedAgendas.at(0);
           for (let index = 0; index < agendaitems.length; index++) {
-            const agendaitem = agendaitems.objectAt(index);
+            const agendaitem = agendaitems.at(index);
             const agenda = await agendaitem.agenda;
 
             if (agenda.id === latestAgenda.id) {
@@ -256,7 +262,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
     // agendaitems can only have more than 1 item
     // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.toArray()) {
+    for (const agendaitem of agendaitems.slice()) {
       setNotYetFormallyOk(agendaitem);
       // save prior to adding pieces, micro-service does all the changes with docs
       yield agendaitem.save();

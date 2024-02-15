@@ -88,7 +88,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @task
   *loadDocuments() {
     let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);

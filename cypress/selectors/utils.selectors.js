@@ -127,8 +127,6 @@ const selectors = {
     pastMinisters: '[data-test-search-minister-filter-past-ministers]',
   },
 
-  sayEditor: {
-    rdfa: '[data-test-say-editor-rdfa]',
-  },
+  rdfaEditor: '[data-test-rdfa-editor]',
 };
 export default selectors;

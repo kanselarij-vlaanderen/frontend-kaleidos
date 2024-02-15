@@ -80,8 +80,8 @@
             </p>
           </AuFormRow>
           <AuFormRow>
-            <div class="auk-rdfa-holder {{if this.isFullscreen "auk-rdfa-fullscreen"}}">
-              <div class="auk-rdfa-holder__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
+            <div class="auk-editor {{if this.isFullscreen "auk-editor--fullscreen"}}">
+              <div class="auk-editor__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                 <Auk::Label class="auk-u-p-0">
                   {{t "decision-in-newsletter"}}
                   <span class={{unless this.isFullscreen "au-u-hidden-visually"}}> voor {{this.title}}</span>
@@ -115,9 +115,10 @@
                   </AuButton>
                 {{/if}}
               </div>
-              <WebComponents::VlRdfaEditor
+              <WebComponents::RdfaEditor
                 data-test-news-item-edit-item-rdfa-editor
                 @richtext={{this.htmlContent}}
+                @size={{this.size}}
                 @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
               />
             </div>

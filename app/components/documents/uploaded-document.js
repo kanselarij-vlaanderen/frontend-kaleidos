@@ -27,7 +27,9 @@ export default class UploadedDocument extends Component {
   }
 
   get sortedDocumentTypes() {
-    return this.documentTypes.sortBy('position');
+    return this.documentTypes
+      .slice()
+      .sort((d1, d2) => d1.position - d2.position);
   }
 
   @action
