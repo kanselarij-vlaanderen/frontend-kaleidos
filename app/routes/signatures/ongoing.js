@@ -72,6 +72,7 @@ export default class SignaturesOngoingRoute extends Route {
       };
     }
 
+    filter['decision-activity'] = {};
     if (params.mandatees?.length > 0) {
       filter['decision-activity'] = {
         subcase: {
@@ -89,7 +90,6 @@ export default class SignaturesOngoingRoute extends Route {
       };
     }
 
-    filter['decision-activity'] = {};
     if (isPresent(params.dateFrom)) {
       const date = startOfDay(parseDate(params.dateFrom));
       filter['decision-activity'][':gte:start-date'] = date.toISOString().slice(0, 10);
