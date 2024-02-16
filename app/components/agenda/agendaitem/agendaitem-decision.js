@@ -205,7 +205,14 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
     await this.updateDecisionPiecePart.perform();
-    await this.onPostponedOrRetracted.perform();
+
+    const resultCode = await this.args.decisionActivity.decisionResultCode;
+    if ([
+      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+    ].includes(resultCode.uri)) {
+      await this.onPostponedOrRetracted.perform();
+    }
   });
 
   updateDecisionPiecePart = task(async () => {
