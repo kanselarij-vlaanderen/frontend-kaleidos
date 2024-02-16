@@ -15,6 +15,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
+  @service router;
 
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
