@@ -89,7 +89,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
       ...requestActivities.map((request) => TimelineActivity.create(request)),
       ...proofingActivities.map((proofing) => TimelineActivity.create(proofing)),
     ]);
-    rows = rows.sortBy('date').reverseObjects();
+    rows = rows.sort((r1, r2) => r1.date - r2.date).reverse();
     return rows;
   }
 

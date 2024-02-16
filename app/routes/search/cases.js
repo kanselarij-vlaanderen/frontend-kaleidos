@@ -77,7 +77,7 @@ export default class CasesSearchRoute extends Route {
       if (Array.isArray(sessionDates)) {
         let sorted = sessionDates.sort();
         if (!isEmpty(params.dateTo)) {
-          const maxDate = parse(params.dateTo, 'dd-MM-yyyy', new Date());
+          const maxDate = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date()));
           sorted = sorted.filter((date) => new Date(date) <= maxDate);
         }
         _case.attributes.sessionDates = sorted[sorted.length - 1];
