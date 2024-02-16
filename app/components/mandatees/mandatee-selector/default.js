@@ -31,15 +31,17 @@ export default class MandateeSelector extends Component {
   mandateeOptions = this.loadMandatees();
 
   async loadMandatees() {
-    const mandateeOptions = await this.mandatees.getMandateesActiveOn.perform(
+    //FILTER DOESNT WORK PROPERLY
+    let mandateeOptions = await this.mandatees.getMandateesActiveOn.perform(
       this.referenceDate,
       undefined,
       undefined,
       this.args.visibleRoles
     );
-    mandateeOptions.filter(
+    mandateeOptions = mandateeOptions.filter(
       (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
     );
+    console.log(mandateeOptions);
 
     return mandateeOptions;
   }
