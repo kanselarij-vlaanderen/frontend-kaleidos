@@ -62,7 +62,7 @@
                   @onMove={{this.move}}
                   @isFirst={{eq indexItems 0}}
                   @isLast={{not (has-next agendaitem this.notas)}}
-                  @agendaitemIndex={{sum indexItems 1}}
+                  @agendaitemIndex={{add indexItems 1}}
                 />
               </li>
             {{/each}}
@@ -151,7 +151,7 @@
               @onMove={{this.move}}
               @isFirst={{eq indexItems 0}}
               @isLast={{not (has-next announcement this.announcements)}}
-              @agendaitemIndex={{sum indexItems 1}}
+              @agendaitemIndex={{add indexItems 1}}
             />
           </li>
         {{/each}}
