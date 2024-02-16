@@ -32,16 +32,17 @@ export default class SubcaseTitlesPanelEdit extends Component {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
     });
 
-    const agendaitemType = yield agendaitem.type;
-    if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      const treatment = yield agendaitem.treatment;
-      const newsItem = yield treatment?.newsItem;
-      if (newsItem) {
-        newsItem.inNewsletter = false;
-        yield newsItem.save();
+    if (agendaitem) {
+      const agendaitemType = yield agendaitem.type;
+      if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+        const treatment = yield agendaitem.treatment;
+        const newsItem = yield treatment?.newsItem;
+        if (newsItem) {
+          newsItem.inNewsletter = false;
+          yield newsItem.save();
+        }
       }
     }
-
   }
 
   @task
