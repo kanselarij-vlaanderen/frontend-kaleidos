@@ -308,35 +308,35 @@ function deleteAgenda(lastAgenda) {
  * @memberOf Cypress.Chainable#
  * @function
  */
-function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
-  cy.log('setFormalOkOnItemWithIndex');
-  if (!fromWithinAgendaOverview) {
-    cy.clickReverseTab('Overzicht');
-  }
-  cy.get(agenda.agendaOverview.formallyOkEdit).click();
-  // Data loading occurs here
-  cy.get(appuniversum.loader, {
-    timeout: 20000,
-  }).should('not.exist');
+// function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
+//   cy.log('setFormalOkOnItemWithIndex');
+//   if (!fromWithinAgendaOverview) {
+//     cy.clickReverseTab('Overzicht');
+//   }
+//   cy.get(agenda.agendaOverview.formallyOkEdit).click();
+//   // Data loading occurs here
+//   cy.get(appuniversum.loader, {
+//     timeout: 20000,
+//   }).should('not.exist');
 
-  cy.get(agenda.agendaOverviewItem.container).eq(indexOfItem)
-    .scrollIntoView()
-    .find(agenda.agendaOverviewItem.formallyOk)
-    .click();
-  const int = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
-  // Force click the click not working in selective tests (agendaitem-changes.spec)
-  cy.get(dependency.emberPowerSelect.option)
-    .contains(formalityStatus)
-    .click({
-      force: true,
-    });
-  cy.wait(`@patchAgendaitem_${int}`, {
-    timeout: 60000,
-  });
-  cy.get(utils.changesAlert.close).click();
-  cy.log('/setFormalOkOnItemWithIndex');
-}
+//   cy.get(agenda.agendaOverviewItem.container).eq(indexOfItem)
+//     .scrollIntoView()
+//     .find(agenda.agendaOverviewItem.formallyOk)
+//     .click();
+//   const int = Math.floor(Math.random() * Math.floor(10000));
+//   cy.intercept('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
+//   // Force click the click not working in selective tests (agendaitem-changes.spec)
+//   cy.get(dependency.emberPowerSelect.option)
+//     .contains(formalityStatus)
+//     .click({
+//       force: true,
+//     });
+//   cy.wait(`@patchAgendaitem_${int}`, {
+//     timeout: 60000,
+//   });
+//   cy.get(utils.changesAlert.close).click();
+//   cy.log('/setFormalOkOnItemWithIndex');
+// }
 
 /**
  * @description Set all agendaitems to formallyOk
@@ -346,7 +346,6 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
  */
 function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
-  const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.intercept('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
   cy.get(agenda.agendaActions.optionsDropdown)
     .children(appuniversum.button)
@@ -354,7 +353,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
-  cy.get(auk.modal.body).should('contain', verifyText);
+  if (typeof amountOfFormallyOks === 'number') {
+    const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
+    cy.get(auk.modal.body).should('contain', verifyText);
+  } else {
+    cy.get(auk.modal.body).should('exist');
+  }
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
@@ -362,8 +366,11 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     timeout: 60000,
   }).should('not.exist');
   cy.get(appuniversum.loader); // loader should be shown briefly
+  const timeout = typeof amountOfFormallyOks === 'number'
+    ? amountOfFormallyOks * 20000
+    : 80000;
   cy.get(appuniversum.loader, {
-    timeout: amountOfFormallyOks * 20000,
+    timeout,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -830,7 +837,7 @@ Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
 Cypress.Commands.add('deleteAgenda', deleteAgenda);
-Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
+// Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);

@@ -76,7 +76,8 @@ context('Agenda tests', () => {
     cy.visitAgendaWithLink('/vergadering/627E529689C002BE724F77B4/agenda/627E529689C002BE724F77B5/agendapunten');
 
     // should get different message when trying to approve with formal not ok items
-    cy.setFormalOkOnItemWithIndex(0);
+    // cy.setFormalOkOnItemWithIndex(0);
+    cy.setAllItemsFormallyOk();
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');

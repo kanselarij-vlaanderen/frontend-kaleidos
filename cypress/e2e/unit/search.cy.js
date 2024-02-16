@@ -566,8 +566,9 @@ context('Search tests', () => {
       cy.get(auk.confirmationModal.footer.confirm).click();
       cy.wait('@patchNewsItem');
 
-      cy.setFormalOkOnItemWithIndex(0);
-      cy.setFormalOkOnItemWithIndex(1);
+      // cy.setFormalOkOnItemWithIndex(0);
+      // cy.setFormalOkOnItemWithIndex(1);
+      cy.setAllItemsFormallyOk();
       cy.approveDesignAgenda();
 
       // *agendaItem titles and subcase titles are the same unless we change the agendaitem once on approved agenda

@@ -22,7 +22,8 @@ context('Testing internal and themis document release pills', () => {
 
     cy.openAgendaForDate(newAgendaDate);
 
-    cy.setFormalOkOnItemWithIndex(0);
+    // cy.setFormalOkOnItemWithIndex(0);
+    cy.setAllItemsFormallyOk();
     cy.approveAndCloseDesignAgenda();
 
     // check if planned release date is the changed value

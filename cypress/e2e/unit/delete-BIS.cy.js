@@ -51,8 +51,9 @@ context('Delete BIS tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
-    cy.setFormalOkOnItemWithIndex(0);
-    cy.setFormalOkOnItemWithIndex(1);
+    // cy.setFormalOkOnItemWithIndex(0);
+    // cy.setFormalOkOnItemWithIndex(1);
+    cy.setAllItemsFormallyOk();
     cy.approveDesignAgenda();
 
     cy.openAgendaitemDocumentTab(subcaseTitle1);

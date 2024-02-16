@@ -80,8 +80,9 @@ context('Propagation to other graphs', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
 
-    cy.setFormalOkOnItemWithIndex(0);
-    cy.setFormalOkOnItemWithIndex(1);
+    // cy.setFormalOkOnItemWithIndex(0);
+    // cy.setFormalOkOnItemWithIndex(1);
+    cy.setAllItemsFormallyOk();
     cy.approveDesignAgenda();
     cy.wait(80000);
   });
@@ -125,7 +126,8 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).should('not.exist');
     });
 
-    cy.setFormalOkOnItemWithIndex(1);
+    // cy.setFormalOkOnItemWithIndex(1);
+    cy.setAllItemsFormallyOk();
     cy.approveAndCloseDesignAgenda();
     cy.agendaNameExists('A', false);
     cy.agendaNameExists('B', false);
