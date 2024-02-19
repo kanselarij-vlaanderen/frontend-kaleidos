@@ -271,40 +271,32 @@ context('Agendaitem changes tests', () => {
 
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
       .contains(2);
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
-      .click()
-      .wait('@patchAgendaitems');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
       .contains(1);
 
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems2');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
-      .click()
-      .wait('@patchAgendaitems2');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('not.be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
       .contains(2);
 
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems3');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
-      .click()
-      .wait('@patchAgendaitems3');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
       .contains(3);
 
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems4');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
-      .click()
-      .wait('@patchAgendaitems4');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('not.be.disabled');
