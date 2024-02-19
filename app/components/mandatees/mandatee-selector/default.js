@@ -31,7 +31,6 @@ export default class MandateeSelector extends Component {
   mandateeOptions = this.loadMandatees();
 
   async loadMandatees() {
-    //FILTER DOESNT WORK PROPERLY
     let mandateeOptions = await this.mandatees.getMandateesActiveOn.perform(
       this.referenceDate,
       undefined,
@@ -41,7 +40,6 @@ export default class MandateeSelector extends Component {
     mandateeOptions = mandateeOptions.filter(
       (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
     );
-    console.log(mandateeOptions);
 
     return mandateeOptions;
   }
