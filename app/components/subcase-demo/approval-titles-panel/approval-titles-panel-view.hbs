@@ -1,4 +1,4 @@
-{{#if this.vpSent}} 
+{{#if this.vpSent}}
   {{#if this.isComplete}}
   <div class="auk-u-mb-4 auk-u-mt-0">
     <AuAlert
@@ -30,7 +30,6 @@
               <h4 class="auk-panel__title">
                 Overzicht
               </h4>
-              
             </div>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -63,7 +62,25 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      <AuHeading @level="4" @skin="4">Ontwerp van decreet over {{@subcase.shortTitle}}</AuHeading>
+      <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
+        <AuHeading @level="4" @skin="4">Ontwerp van decreet over {{@subcase.shortTitle}}</AuHeading>
+        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+          {{#if (is-nota @subcase.agendaItemType)}}
+            <AuPill @size="small">{{t "note"}}</AuPill>
+          {{else}}
+            <AuPill @size="small">{{t "text"}}</AuPill>
+          {{/if}}
+          {{#if @allowEditing}}
+            {{#if @subcase.confidential}}
+              <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t "limited-access"}}</AuPill>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+      {{#if @subcase.title}}
+      <p>{{capitalize @subcase.title}}</p>
+      {{/if}}
+
     </Auk::Panel::Body>
     {{!-- <Auk::Panel::Body class="auk-u-bg-alt">
       <AuHeading @level="4" @skin="6">{{@step}} m.h.o. op adviesaanvragen</AuHeading>
@@ -89,6 +106,10 @@
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">Procedurestap</AuHeading>
+          <p class="auk-u-mt-1">{{@step}}</p>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Geagendeerd op</AuHeading>
           {{#if (eq @step 'Definitieve goedkeuring')}}
           <p class="auk-u-mt-1">28 augustus 2023</p>
@@ -102,11 +123,11 @@
           <AuHeading @level="4" @skin="6">Nummer vergadering</AuHeading>
           <p class="auk-u-mt-1">1446 (2022-2023) nr. 1</p>
         </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        {{!-- <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Ingediend door</AuHeading>
           <p class="auk-u-mt-1">Bart Somers</p>
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        </div> --}}
+        {{!-- <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Aangevraagd voor Bijzondere ministerraad</AuHeading>
           {{#if (eq @step 'Definitieve goedkeuring')}}
           <p class="auk-u-mt-1">28 augustus 2023</p>
@@ -115,13 +136,11 @@
           {{else if (eq @step 'Eerste principiële goedkeuring')}}
           <p class="auk-u-mt-1">01 april 2023</p>
           {{/if}}
-        </div>
-      </div>
-      <div class="au-o-grid au-o-grid--small au-u-1-1">
+        </div> --}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Status</AuHeading>
           <AuPill @skin="success" @size="small">{{@status}}</AuPill>
-        </div> 
+        </div>
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
@@ -130,7 +149,7 @@
 
 {{#if this.vpModal}}
 <Auk::Modal @size="medium">
-  <Auk::Modal::Header 
+  <Auk::Modal::Header
     @title="Dossier controleren"
     @onClose={{this.showVpModal}}
   />
@@ -201,6 +220,6 @@
   </Auk::Modal::Footer>
 </Auk::Modal>
 {{/if}}
-  
 
-  
+
+

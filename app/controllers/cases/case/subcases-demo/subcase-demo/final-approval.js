@@ -139,7 +139,7 @@ export default class CasesCaseSubcasesDemoSubcaseDemoFinalApprovalController ext
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
-    this.router.refresh('cases.case.subcases.subcase');
+    this.router.refresh('cases.case.subcases.subcase-demo');
   }
 
   /**
