@@ -97,7 +97,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
       this.transferredPieces = [
         ...usedPieces.slice(),
         ...generatedPieces.slice(),
-      ].sortBy('name', 'created');
+      ].sort(
+        (p1, p2) => p1.name.localeCompare(p2.name) || p1.created - p2.created
+      );
     } else {
       this.transferredPieces = [];
     }

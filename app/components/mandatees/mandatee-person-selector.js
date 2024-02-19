@@ -69,6 +69,6 @@ export default class MandateePersonSelector extends Component {
       persons.addObject(person);
     }
 
-    return persons.sortBy('lastName');
+    return persons.sort((p1, p2) => p1.lastName.localeCompare(p2.lastName));
   }
 }

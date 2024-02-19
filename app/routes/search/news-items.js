@@ -188,7 +188,9 @@ export default class SearchNewsItemsRoute extends Route {
   static postProcessMandatees(newsletter) {
     const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
-      const sortedMandatees = mandatees.sortBy('priority');
+      const sortedMandatees = mandatees
+        .slice()
+        .sort((m1, m2) => m1.priority - m2.priority);
       newsletter.mandatees = sortedMandatees;
     } else {
       newsletter.mandatees = [mandatees];

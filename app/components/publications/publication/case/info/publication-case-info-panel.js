@@ -69,7 +69,9 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
   }
 
   get publicationModes() {
-    return this.store.peekAll('publication-mode').sortBy('position');
+    return this.store.peekAll('publication-mode')
+      .slice()
+      .sort((p1, p2) => p1.position - p2.position);
   }
 
   get isValid() {
