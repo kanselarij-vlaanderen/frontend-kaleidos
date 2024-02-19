@@ -79,6 +79,10 @@ $au-label-color: var(--au-gray-700);
   padding-top: 0;
   white-space: nowrap;
   overflow: hidden;
+
+  &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
+    cursor: pointer;
+  }
 }
 
 .au-c-pill--link {
