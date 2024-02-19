@@ -31,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service decisionReportGeneration;
   @service throttledLoadingService;
   @service currentSession;
+  @service newsletterService;
 
   @tracked report;
   @tracked previousReport;
@@ -106,15 +107,13 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @task
-  *onPostponedOrRetracted() {
-    const agendaitemType = yield this.args.agendaitem.type;
-    if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      const treatment = yield this.args.agendaitem.treatment;
-      const newsItem = yield treatment?.newsItem;
-      if (newsItem) {
-        newsItem.inNewsletter = false;
-        yield newsItem.save();
-      }
+  *updateNewsItem() {
+    const resultCode = yield this.args.decisionActivity.decisionResultCode;
+    if ([
+      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+    ].includes(resultCode.uri)) {
+      yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
     }
   }
 
@@ -205,14 +204,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
     await this.updateDecisionPiecePart.perform();
-
-    const resultCode = await this.args.decisionActivity.decisionResultCode;
-    if ([
-      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
-      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-    ].includes(resultCode.uri)) {
-      await this.onPostponedOrRetracted.perform();
-    }
+    await this.updateNewsItem.perform();
   });
 
   updateDecisionPiecePart = task(async () => {

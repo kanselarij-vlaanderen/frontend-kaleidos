@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument subcase
@@ -14,6 +13,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
   @service store;
+  @service newsletterService;
 
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
@@ -27,22 +27,14 @@ export default class SubcaseTitlesPanelEdit extends Component {
   }
 
   @task
-  *removeFromNewsletter() {
-    const agendaitem = yield this.store.queryOne('agendaitem', {
+  *updateNewsItem() {
+    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
     });
 
-    if (agendaitem) {
-      const agendaitemType = yield agendaitem.type;
-      if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-        const treatment = yield agendaitem.treatment;
-        const newsItem = yield treatment?.newsItem;
-        if (newsItem) {
-          newsItem.inNewsletter = false;
-          yield newsItem.save();
-        }
-      }
-    }
+    yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
   }
 
   @task
@@ -70,7 +62,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
     if (this.confidentialChanged && this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
-      yield this.removeFromNewsletter.perform();
+      yield this.updateNewsItem.perform();
     }
     this.args.onSave();
   }

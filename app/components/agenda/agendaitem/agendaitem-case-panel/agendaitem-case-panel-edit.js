@@ -15,7 +15,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
-  @service router;
 
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
@@ -86,6 +85,5 @@ export default class AgendaitemCasePanelEdit extends Component {
       }
     }
     this.args.onSave();
-    this.router.refresh();
   }
 }
