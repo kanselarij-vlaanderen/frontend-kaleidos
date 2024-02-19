@@ -33,8 +33,9 @@ export default class SubcaseTitlesPanelEdit extends Component {
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
-
-    yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+    if (latestAgendaitem) {
+      yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+    }
   }
 
   @task

@@ -175,7 +175,7 @@ export default class NewsletterService extends Service {
  * The decision result is changed to "postponed" or "retracted"
  * The subcase has been made confidential
  * Agendaitems with type note could be updated here, but profile "kort-bestek" prefers to keep manual control
- * @param {*} agendaitem agendaitem to update
+ * @param {Agendaitem} agendaitem: agendaitem to update
  */
 async updateNewsItemVisibility(agendaitem) {
   const agendaitemType = await agendaitem.type;
