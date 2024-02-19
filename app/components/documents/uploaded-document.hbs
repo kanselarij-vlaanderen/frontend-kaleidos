@@ -17,78 +17,15 @@
           @value={{mut @piece.name}}
         />
       </div>
-      {{#unless (eq @limitedFields true)}}
-      <div class="auk-form-group">
-        <Auk::Label>Document nummer</Auk::Label>
-        <AuInput
-          @width="block"
-          @value=""
-        />
-      </div>
-      {{/unless}}
       {{#unless this.loadData.isRunning}}
         <div class="auk-form-group" data-test-uploaded-document-types>
           <Auk::Label>{{t "document-type"}}</Auk::Label>
-          <Utils::RadioDropdownComboSelect
-            @options={{this.sortedDocumentTypes}}
-            @onSelect={{this.selectDocumentType}}
-            @dropdownLabelKey="altLabel"
-            @radioOptionsSize="6"
-            @selected={{this.selectedDocumentType}}
+          <Utils::DocumentTypeSelector
+            data-test-batch-editing-row-type
+            @selectedDocumentType={{this.documentType}}
+            @onChange={{this.selectDocumentType}}
           />
         </div>
-        {{#unless (eq @limitedFields true)}}
-        <div class="auk-form-group" data-test-uploaded-document-types>
-          <Auk::Label>Versie</Auk::Label>
-          <div class="auk-radio-list auk-radio-list--inline">
-            <label class="auk-radio" data-children-count="1" for="geen">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="geen"
-                name="type"
-                checked={{true}}
-                value="geen"
-              />
-              Eerste
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="BIS">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="BIS"
-                name="type"
-                value="BIS"
-              />
-              BIS
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="TER">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="TER"
-                name="type"
-                value="TER"
-              />
-              TER
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="QUATER">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="QUATER"
-                name="type"
-                value="QUATER"
-              />
-              QUATER
-              <span class="auk-radio__box"></span>
-            </label>
-          </div>
-        </div>
-        {{/unless}}
       {{/unless}}
     </div>
   {{/if}}

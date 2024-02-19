@@ -13,43 +13,45 @@
       @size="small"
       as |c|
     >
-      <c.header
-        @badgeIcon={{document-icon @piece.file.extension}}
-      >
-        <p data-test-document-card-type class="vlc-subline au-u-medium au-u-muted">
-          {{uppercase @piece.file.extension}}
-        </p>
-        <div class="au-u-flex au-u-flex--spaced-small">
-          <AuInput
-            data-test-document-edit-name-input
-            @width="block"
-            @value={{this.name}}
-          />
-          <AuButtonGroup class="au-u-flex--no-wrap">
-            <AuButton
-              data-test-document-edit-source-file-replace
-              @skin="secondary"
-              {{on "click" this.toggleUploadReplacementSourceFile}}
-            >
-              {{t "replace"}}
-            </AuButton>
-          </AuButtonGroup>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="name">Naam document</AuLabel>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <AuInput
+              data-test-document-edit-name-input
+              id="name"
+              @width="block"
+              @value={{this.name}}
+            />
+          </div>
+          {{#if @piece.created}}
+            <AuHelpText @skin="secondary">
+              {{t "uploaded-at"}}
+              {{datetime-at @piece.created}}
+            </AuHelpText>
+          {{/if}}
         </div>
-        {{#if @piece.created}}
-          <AuHelpText @skin="secondary">
-            {{t "uploaded-at"}}
-            {{datetime-at @piece.created}}
-          </AuHelpText>
-        {{/if}}
-      </c.header>
-      {{#if this.isReplacingSourceFile}}
+      </c.content>
+    </AuCard>
+    <AuCard
+      @flex={{true}}
+      @size="small"
+      class="au-u-margin-top-small"
+      as |c|
+    >
+      <c.header
+          @badgeIcon={{document-icon @piece.file.extension}}
+        >
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <AuHeading @skin="5" @level="3">Vervang document (pdf)</AuHeading>
+          </div>
+        </c.header>
         <c.content data-test-document-edit-source-file-replacer>
           <Auk::FileUploader
             @onUpload={{set this "replacementSourceFile"}}
             @onQueueUpdate={{this.handleReplacementSourceFileUploadQueue}}
           />
         </c.content>
-      {{/if}}
     </AuCard>
     {{#if @piece.file.derived}}
       <AuCard
@@ -114,7 +116,7 @@
           @badgeIcon="document"
         >
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
+            <AuHeading @skin="5" @level="3">Vervang bron (word)</AuHeading>
           </div>
         </c.header>
         <c.content data-test-document-edit-derived-file-uploader>
@@ -128,19 +130,11 @@
     <AuCard @size="small" class="au-u-margin-top-small" as |c|>
       <c.content>
         <div class="auk-form-group">
-          <AuLabel for="type">Document nummer</AuLabel>
-          <AuInput @width="block" />
-        </div>
-      </c.content>
-    </AuCard>
-    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
-      <c.content>
-        <div class="auk-form-group">
           <AuLabel for="type">{{t "document-type"}}</AuLabel>
-          <Utils::RadioDropdownComboSelect
-            @options={{this.sortedDocumentTypes}}
-            @onSelect={{this.selectDocumentType}}
-            @selected="Nota"
+          <Utils::DocumentTypeSelector
+            data-test-batch-editing-row-type
+            @selectedDocumentType={{this.documentType}}
+            @onChange={{this.selectDocumentType}}
           />
         </div>
       </c.content>
@@ -149,66 +143,33 @@
       <c.content>
         <div class="auk-form-group">
           <AuLabel for="version">Versie</AuLabel>
-          <div class="auk-radio-list auk-radio-list--inline">
-            <label class="auk-radio" data-children-count="1" for="geen">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="geen"
-                name="type"
-                checked={{true}}
-                value="geen"
-              />
+          <select
+            name="signee"
+            id="signee"
+            class="auk-select auk-select--block"
+          >
+            <option
+              value="Eerste"
+              selected="selected"
+            >
               Eerste
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="BIS">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="BIS"
-                name="type"
-                value="BIS"
-              />
+            </option>
+            <option
+              value="BIS"
+            >
               BIS
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="TER">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="TER"
-                name="type"
-                value="TER"
-              />
+            </option>
+            <option
+              value="TER"
+            >
               TER
-              <span class="auk-radio__box"></span>
-            </label>
-            <label class="auk-radio" data-children-count="1" for="QUATER">
-              <input
-                type="radio"
-                class="auk-radio__toggle"
-                id="QUATER"
-                name="type"
-                value="QUATER"
-              />
+            </option>
+            <option
+              value="QUATER"
+            >
               QUATER
-              <span class="auk-radio__box"></span>
-            </label>
-          </div>
-        </div>
-      </c.content>
-    </AuCard>
-    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
-      <c.content>
-        <div class="auk-form-group">
-          <AuLabel for="date">Datum</AuLabel>
-          <Auk::Datepicker
-            @date={{date-format @piece.created 'dd-MM-yyyy' }}
-            @onChange={{set this "dateFromBuffer"}}
-            @enableClear={{this.dateFromBuffer}}
-            @onClear={{set this "dateFromBuffer" undefined}}
-          />
+            </option>
+          </select>
         </div>
       </c.content>
     </AuCard>

@@ -20,12 +20,12 @@
       @onOpen={{this.openSideNav}}
     >
       <ul>
-        
+
         {{#if this.model.decisionmakingFlow.subcases}}
           {{#each (reverse this.model.decisionmakingFlow.subcases) as |subcase index|}}
             {{#if (eq index 0)}}
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.publication"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >
@@ -43,7 +43,7 @@
               </LinkTo>
             </li>
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.ratification"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >
@@ -53,7 +53,7 @@
                   </strong>
                 </div>
                 <div class="auk-sidebar__sublabel au-u-margin-top-none">
-                  Laatste wijziging op 11-10-2023 17:02
+                  Laatste wijziging op 2-12-2023 17:02
                 </div>
                 <div class="au-u-margin-top-tiny">
                   <AuPill @size="small" @skin="warning">Act in afwachting</AuPill>
@@ -61,7 +61,7 @@
               </LinkTo>
             </li>
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.vp"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >
@@ -79,7 +79,7 @@
               </LinkTo>
             </li>
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.final-approval"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >
@@ -97,7 +97,7 @@
               </LinkTo>
             </li>
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.second-approval"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >
@@ -115,7 +115,7 @@
               </LinkTo>
             </li>
             <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
-              <LinkTo 
+              <LinkTo
                 @route="cases.case.subcases-demo.subcase-demo.first-approval"
                 @models={{array this.model.decisionmakingFlow.id subcase}}
               >

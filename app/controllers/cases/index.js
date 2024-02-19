@@ -134,4 +134,52 @@ export default class CasesIndexController extends Controller {
       this.page = this.page - 1;
     }
   }
+
+  @tracked mandatees = [];
+  @tracked dateFrom;
+  @tracked dateTo;
+
+  @tracked searchTextBuffer = '';
+
+  @action
+  search(e) {
+    e.preventDefault();
+    this.searchText = this.searchTextBuffer;
+  }
+
+  @action
+  setDateFrom(date) {
+    this.dateFrom = formatDate(date);
+  }
+
+  @action
+  setDateTo(date) {
+    this.dateTo = formatDate(date);
+  }
+
+  @action
+  setMandatees(mandatees) {
+    this.mandatees = mandatees;
+  }
+
+  @tracked status = [
+    {
+      "step": "Eerste principiële goedkeuring"
+    },
+    {
+      "step": "Tweede principiële goedkeuring"
+    },
+    {
+      "step": "Definitieve goedkeuring"
+    },
+    {
+      "step": "Vlaams Parlement"
+    },
+    {
+      "step": "Bekrachtiging"
+    },
+    {
+      "step": "Publicatie"
+    }
+  ]
 }

@@ -85,6 +85,19 @@
         @onChange={{this.selectSubcaseType}}
       />
     </div>
+    {{#if (eq @step "Bekrachtiging")}}
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label id="remark-subcase">Opmerking</Auk::Label>
+        <Textarea
+          aria-labelledby="remark-subcase"
+          rows="4"
+          class="auk-textarea"
+          @value="Voor inhoudelijke vragen mail karen@vlaamsparlement.be"
+        />
+      </div>
+    </div>
+    {{/if}}
     {{!-- <div class="auk-form-group">
       <Auk::Label>{{t "subcase-name"}}</Auk::Label>
       <AuInput

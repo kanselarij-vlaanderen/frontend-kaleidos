@@ -38,7 +38,7 @@
           {{#each this.mandateesBuffer as |mandatee|}}
             <tr data-test-mandatee-panel-edit-mandatee-row>
               <td class="auk-table__col--10">
-                {{mandatee.person.fullName}}
+                {{mandatee.person.fullName}}, {{mandatee.title}}
               </td>
               <td class="auk-table__col--1" data-test-mandatee-panel-edit-row-submitter>
                 {{!-- <AuToggleSwitch
@@ -46,8 +46,8 @@
                   @onChange={{fn this.toggleIsSubmitter mandatee}}
                 /> --}}
                 <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-                  <AuRadio 
-                    @name="submitter" 
+                  <AuRadio
+                    @name="submitter"
                     @checked={{eq mandatee this.submitterBuffer}}
                     @onChange={{fn this.toggleIsSubmitter mandatee}}
                   />

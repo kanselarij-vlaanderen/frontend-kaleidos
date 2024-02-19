@@ -35,21 +35,12 @@
     <Auk::Panel::Body>
       <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center">
         <AuHeading @level="4" @skin="4">{{capitalize @subcase.shortTitle}}</AuHeading>
-        {{#if (eq @step 'Bekrachtiging')}}
-          <div class="auk-u-mt-1">
-            <p
-              class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex vlc-agenda-items__status--positive">
-              <Auk::Icon
-                @name="check"
-                class="formally-ok-icon"
-              />
-              Formeel ok
-            </p>
-          </div>
-          {{/if}}
       </div>
       {{#if @subcase.title}}
       <p>{{capitalize @subcase.title}}</p>
+      {{/if}}
+      {{#if (eq @step "Bekrachtiging")}}
+        <AuHelpText @skin="secondary">Van het Vlaams Parlement</AuHelpText>
       {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Body>
@@ -57,11 +48,17 @@
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Status</AuHeading>
           {{#if (eq @status 'Act in afwachting')}}
-          <AuPill @skin="warning" @size="small">{{@status}}</AuPill>
+          {{!-- <AuPill @skin="warning" @size="small">{{@status}}</AuPill> --}}
           {{else}}
           <AuPill @skin="success" @size="small">{{@status}}</AuPill>
           {{/if}}
         </div>
+        {{#if (eq @step "Bekrachtiging")}}
+        <div class="au-o-grid__item au-u-1-2 au-u-3-4@medium">
+          <AuHeading @level="4" @skin="6">Opmerking</AuHeading>
+          <AuHelpText @skin="secondary">Voor inhoudelijk vragen mail karen@vlaamsparlement.be</AuHelpText>
+        </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
@@ -69,6 +66,6 @@
 
 
 
-  
 
-  
+
+

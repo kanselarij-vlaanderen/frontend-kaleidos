@@ -8,7 +8,7 @@
       @status="Act in afwachting"
     />
   </div>
-  <Mandatees::MandateesPanel
+  {{!-- <Mandatees::MandateesPanel
     @referenceDate={{if
       this.meeting
       this.meeting.plannedStart
@@ -19,16 +19,17 @@
     @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
     @allowEditing={{user-may "manage-cases"}}
     @onSave={{this.saveMandateeData}}
-  />
+  /> --}}
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
     @governmentAreas={{@model.subcase.governmentAreas}}
     @allowEditing={{user-may "manage-cases"}}
     @onSave={{this.saveGovernmentAreas}}
+    @ratification={{true}}
   />
 
   {{!-- Documents --}}
-  <div id="documents" class="auk-u-mb-4">
+  <div id="documents" class="auk-u-mb-4 c-linked-documents">
     <Auk::Panel data-test-subcase-description-panel>
       <Auk::Panel::Header>
         <Auk::Toolbar>
@@ -83,10 +84,44 @@
   <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}} class="c-linked-documents" />
 
   <div id="agenda">
-     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demoTwo={{true}} />
+    <Auk::Panel data-test-subcase-description-panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <div class="au-u-flex au-u-flex--spaced-small">
+                <h4 class="auk-panel__title">
+                  Document versies
+                </h4>
+              </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body class="auk-u-bg-alt">
+        <ul class="vlc-status-timeline">
+          <li
+            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+          >
+            <div class="vlc-status-timeline__dot"></div>
+            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
+              Upgedate op 2 december 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
+            </div>
+          </li>
+          <li
+            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+          >
+            <div class="vlc-status-timeline__dot"></div>
+            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
+              Verzonden op 1 december 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
+            </div>
+          </li>
+        </ul>
+      </Auk::Panel::Body>
+    </Auk::Panel>
   </div>
 
- 
+
 {{/if}}
 
 <ConfirmationModal
@@ -126,4 +161,38 @@
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
   />
+{{/if}}
+
+{{#if this.vpModal}}
+<Auk::Modal @size="medium">
+  <Auk::Modal::Header
+    @title="Verzonden op 22 november 2023"
+    @onClose={{this.showVpModal}}
+  />
+  <Auk::Modal::Body>
+    <AuContent>
+      <ul>
+        <li>
+          Eerste principiële goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -adviesnota.pdf</a></li>
+          </ul>
+        </li>
+        <li>
+          Definitieve goedkeuring:
+          <ul>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf (getekend)</a></li>
+            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
+          </ul>
+        </li>
+      </ul>
+    </AuContent>
+  </Auk::Modal::Body>
+</Auk::Modal>
 {{/if}}

@@ -375,5 +375,11 @@ export default class CasesCaseSubcasesDemoSubcaseDemoRatificationController exte
   refresh() {
     this.router.refresh('cases.case.subcases.subcase.documents');
   }
+
+  @tracked vpModal = false;
+  @action
+  showVpModal() {
+    this.vpModal = !this.vpModal;
+  }
 }
 

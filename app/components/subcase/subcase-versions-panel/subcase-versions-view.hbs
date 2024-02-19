@@ -5,7 +5,7 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
-              {{#if (eq @demoTwo true)}}Statussen{{else}}Agenderingen{{/if}}
+              {{#if (eq @demoTwo true)}}Document versies{{else}}Agenderingen{{/if}}
             </h4>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
@@ -14,7 +14,7 @@
     <Auk::Panel::Body class="auk-u-bg-alt">
       {{#if (eq @demo true)}}
       <div class="auk-u-mb-2">
-        <div class="au-u-flex au-u-flex--spaced-tiny">  
+        <div class="au-u-flex au-u-flex--spaced-tiny">
           <p class="au-u-medium">
             Laatst gewijzigd op {{#if (eq @step 'Definitieve goedkeuring')}}28-08-2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13-06-2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01-04-2023{{else}}11-10-2023{{/if}}
           </p>
@@ -56,9 +56,9 @@
       </ul>
       {{else if (eq @demoTwo true)}}
       <div class="auk-u-mb-2">
-        <div class="au-u-flex au-u-flex--spaced-tiny">  
+        <div class="au-u-flex au-u-flex--spaced-tiny">
           <p class="au-u-medium">
-            Laatst gewijzigd op 11-10-2023
+            Laatst gewijzigd op 2-12-2023
           </p>
         </div>
       </div>
@@ -68,7 +68,15 @@
         >
           <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            Act in afwachting op <AuLinkExternal @href="#!">11 november 2023</AuLinkExternal>
+            Upgedate op <AuLinkExternal @href="#!">2 december 2023</AuLinkExternal>
+          </div>
+        </li>
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Verzonden op <AuLinkExternal @href="#!">1 december 2023</AuLinkExternal>
           </div>
         </li>
         {{!-- <li

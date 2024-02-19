@@ -27,6 +27,11 @@
     </Auk::Panel::Header>
     {{#if @governmentAreas.length}}
       <Auk::Panel::Body @noPadding={{true}}>
+        {{#if @ratification}}
+        <div class="auk-u-m-4 auk-u-mb-2 auk-u-mt-2">
+          <p><strong>Thema's:</strong> Gezondheid, justitie, media</p>
+        </div>
+        {{/if}}
         <table class="auk-table">
           <thead>
             <tr>
@@ -54,6 +59,11 @@
       </Auk::Panel::Body>
     {{else}}
       <Auk::Panel::Body>
+        {{#if @ratification}}
+        <div class="auk-u-m-4 auk-u-mb-2 auk-u-mt-2">
+          <p><strong>Thema's:</strong> Gezondheid, justitie, media</p>
+        </div>
+        {{/if}}
         <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
       </Auk::Panel::Body>
     {{/if}}

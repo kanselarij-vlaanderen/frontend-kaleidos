@@ -204,11 +204,18 @@
           >
             {{#each this.selectedCurrentMinisters as |minister index|}}
               <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
-                <strong>{{minister.fullName}}</strong>
+                <div class="au-u-flex au-u-flex--vertical-center">
+                  <strong>{{minister.fullName}}</strong>
+                  {{#each minister.mandatees as |role index|}}
+                    {{#if (eq index 0)}}
+                      , {{role.title}}
+                    {{/if}}
+                  {{/each}}
+                </div>
                 <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
-                  <AuRadio 
-                    @name="submitter" 
-                    @checked={{if (eq index 0) true}} 
+                  <AuRadio
+                    @name="submitter"
+                    @checked={{if (eq index 0) true}}
                   />
                   <Auk::Label for="first" class="au-u-padding-bottom-none">Indiener</Auk::Label>
                 </div>
@@ -429,7 +436,7 @@
                 @limitedFields={{true}}
                 @piece={{piece}}
                 @allowDocumentContainerEdit={{true}}
-                @onDelete={{perform this.deletePiece piece}} 
+                @onDelete={{perform this.deletePiece piece}}
                 {{did-insert this.scrollIntoView}}
               />
             {{/each}}
@@ -438,7 +445,7 @@
       </Auk::Panel>
     </div>
   </div>
-  <AuToolbar 
+  <AuToolbar
     @reverse={{true}}
     @size="large"
     @border="top"
