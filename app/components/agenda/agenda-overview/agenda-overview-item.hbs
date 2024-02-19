@@ -11,7 +11,10 @@
     onExit=this.cancelLazyLoad
   }}
 >
-  <div data-test-agenda-overview-item-container class="vlc-agenda-items__body">
+  <div
+    data-test-agenda-overview-item-container
+    class="vlc-agenda-items__body {{if @allowReorderItems "auk-o-flex--vertical-center"}}"
+  >
     <h4 class="vlc-agenda-items__subject">
       {{#if @allowReorderItems}}
         <div class="vlc-agenda-items__cursor">
@@ -77,6 +80,17 @@
             </p>
           {{/if}}
         </div>
+        {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus @isEditingFormallyOkStatus)}}
+          <div class="auk-u-flex-grow auk-o-flex auk-o-flex--justify-end">
+            <div class="vlc-agenda-meta__status-holder">
+              <Utils::FormallyOkSelector
+                data-test-agenda-overview-item-formally-ok={{true}}
+                @formallyOkStatusUri={{@agendaitem.formallyOk}}
+                @onChange={{this.setAndSaveFormallyOkStatus}}
+              />
+            </div>
+          </div>
+        {{/if}}
         <div
           class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
         >
@@ -126,17 +140,6 @@
               {{!  TODO: Only here because required for alignment of flex items }}
               <span class="vlc-agenda-meta__times-passed"></span>
             {{/if}}
-          {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-            {{#if @isEditingFormallyOkStatus}}
-              <div class="vlc-agenda-meta__status-holder">
-                <Utils::FormallyOkSelector
-                  data-test-agenda-overview-item-formally-ok={{true}}
-                  @formallyOkStatusUri={{@agendaitem.formallyOk}}
-                  @onChange={{this.setAndSaveFormallyOkStatus}}
-                />
-              </div>
-            {{/if}}
-          {{/if}}
         </div>
       {{/unless}}
       {{#if (and this.documentsAreVisible (not @allowReorderItems))}}
