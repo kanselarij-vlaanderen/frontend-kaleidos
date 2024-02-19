@@ -61,8 +61,7 @@ context('Agendaitem changes tests', () => {
   it('should add a document to an agenda and should highlight as added', () => {
     cy.visitAgendaWithLink(agendaURL);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
-    // cy.setFormalOkOnItemWithIndex(1);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(1);
     agendaitemDocIsNewInOverview(subcaseTitle1);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, false);
@@ -75,9 +74,8 @@ context('Agendaitem changes tests', () => {
     cy.visitAgendaWithLink(agendaURL);
     // when toggling show changes the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2);
-    // cy.setFormalOkOnItemWithIndex(2); // punt 3
-    // cy.setFormalOkOnItemWithIndex(3); // punt 4
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(2); // punt 3
+    cy.setFormalOkOnItemWithIndex(3); // punt 4
     agendaitemIsNewInOverview(subcaseTitle2);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, false);
@@ -93,8 +91,7 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda'); // switch from agenda B to ontwerpagenda C
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
-    // cy.setFormalOkOnItemWithIndex(1);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(1);
     agendaitemDocIsNewInOverview(subcaseTitle1);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, false);
@@ -112,8 +109,7 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle3);
-    // cy.setFormalOkOnItemWithIndex(4);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(4);
     agendaitemIsNewInOverview(subcaseTitle3);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, false);
@@ -130,8 +126,7 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addDocumentsToAgendaitem(subcaseTitle3, files);
-    // cy.setFormalOkOnItemWithIndex(4);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(4);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, false);
     agendaitemExistsInOverview(subcaseTitle1, false);
@@ -152,8 +147,7 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(route.agendaitemDocuments.add).click();
     cy.addNewDocumentsInUploadModal(files, 'agendaitems');
-    // cy.setFormalOkOnItemWithIndex(0);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(0);
     agendaitemDocIsNewInOverview(approvalTitle);
     cy.toggleShowChanges();
     agendaitemExistsInOverview(approvalTitle, true);
@@ -270,7 +264,7 @@ context('Agendaitem changes tests', () => {
 
     cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten');
 
-    // cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaOverview.formallyOkEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(agendaitemTitle)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaItem');

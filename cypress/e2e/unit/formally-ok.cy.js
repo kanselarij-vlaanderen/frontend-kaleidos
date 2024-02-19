@@ -27,10 +27,10 @@ context('Formally ok/nok tests', () => {
   });
 
   // TODO-agendaheader this test belongs with other agenda-header tests
-  it.skip('should show warning when trying to approve agenda with "not yet formally ok" items', () => {
+  it('should show warning when trying to approve agenda with "not yet formally ok" items', () => {
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
-    // cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
+    cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Nog niet formeel OK');
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
@@ -39,11 +39,11 @@ context('Formally ok/nok tests', () => {
     // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(appuniversum.alert.container).should('exist');
     cy.get(auk.modal.footer.cancel).click();
-    // cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
+    cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
   });
 
-  it.skip('should change formally ok after changing beleidsveld', () => {
+  it('should change formally ok after changing beleidsveld', () => {
     const type = 'Nota';
     const shortSubcaseTitle = 'Cypress test: formally ok change';
     const labelName1 = 'Cultuur, Jeugd, Sport en Media';
@@ -58,7 +58,7 @@ context('Formally ok/nok tests', () => {
     // Make agendaitem
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.addAgendaitemToAgenda(shortSubcaseTitle);
-    // cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
+    cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
 
     // Change government domains
     cy.openDetailOfAgendaitem(shortSubcaseTitle);
@@ -81,7 +81,7 @@ context('Formally ok/nok tests', () => {
 
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
-    // cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
+    cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
     cy.openDetailOfAgendaitem(shortSubcaseTitle);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 

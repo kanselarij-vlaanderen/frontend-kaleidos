@@ -158,13 +158,13 @@ context('Testing the application as Admin user', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      // cy.get(agenda.agendaOverview.formallyOkEdit);
+      cy.get(agenda.agendaOverview.formallyOkEdit);
 
       // Overview Tab - General action - Dragging
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
-      // cy.get(agenda.agendaOverview.formallyOkEdit).click();
+      cy.get(agenda.agendaOverview.formallyOkEdit).click();
       cy.get(agenda.agendaOverviewItem.dragging);
       cy.get(agenda.agendaOverviewItem.moveUp);
       cy.get(agenda.agendaOverviewItem.moveDown);
@@ -522,9 +522,8 @@ context('Testing the application as Admin user', () => {
       cy.addDocumentsToAgendaitem(subcaseTitle1, files);
       cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
 
-      // cy.setFormalOkOnItemWithIndex(0);
-      // cy.setFormalOkOnItemWithIndex(1);
-      cy.setAllItemsFormallyOk();
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
       cy.approveAndCloseDesignAgenda();
       cy.releaseDecisions();
       cy.wait(80000);

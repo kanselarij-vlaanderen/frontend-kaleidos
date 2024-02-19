@@ -393,7 +393,7 @@ context('Decision tests post digital agenda', () => {
     // change order
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
-    // cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaOverview.formallyOkEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort1)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaitem');

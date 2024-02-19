@@ -30,8 +30,7 @@ context('Agenda reopen previous tests', () => {
   it('should delete current design agenda and reopen previous accepted agenda', () => {
     cy.createAgenda(null, dateToCreateAgenda, 'Reopen previous test');
     cy.openAgendaForDate(dateToCreateAgenda);
-    // cy.setFormalOkOnItemWithIndex(0);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(0);
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A');
     // check if action does not exist on design agenda A

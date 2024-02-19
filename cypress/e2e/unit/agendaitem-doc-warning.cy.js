@@ -104,8 +104,7 @@ context('Agendaitem document warning tests', () => {
     cy.createAgenda('Ministerraad', agendaDate);
     cy.openAgendaForDate(agendaDate);
     cy.addDocumentsToApprovalItem(agendaitemTitle, [file]);
-    // cy.setFormalOkOnItemWithIndex(0);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
     cy.approveAndCloseDesignAgenda();
   });

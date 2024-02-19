@@ -129,8 +129,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // PART 2, adding new document
     cy.visitAgendaWithLink('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016');
-    // cy.setFormalOkOnItemWithIndex(1);
-    cy.setAllItemsFormallyOk();
+    cy.setFormalOkOnItemWithIndex(1);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
     cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 0);
