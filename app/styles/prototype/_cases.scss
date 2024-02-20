@@ -29,7 +29,7 @@
 
   @include mq(medium) {
     .au-c-control-group--grid > * {
-      width: calc(33.333% - 2rem);
+      width: calc(20% - 2rem);
     }
   }
 }
@@ -145,7 +145,7 @@
     border: 0;
   }
 
-  .auk-u-mb-2 + .auk-u-mb-2 { 
+  .auk-u-mb-2 + .auk-u-mb-2 {
     border-top: 1px solid var(--au-gray-300);
   }
 
@@ -172,7 +172,7 @@
     border: 0;
   }
 
-  .auk-u-mb-2 + .auk-u-mb-2 { 
+  .auk-u-mb-2 + .auk-u-mb-2 {
     border-top: 1px solid var(--au-gray-300);
   }
 

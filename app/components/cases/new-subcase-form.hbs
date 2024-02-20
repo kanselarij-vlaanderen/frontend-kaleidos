@@ -190,7 +190,7 @@
           <Auk::CheckboxTree
             @label='Alle ministers'
             @items={{this.currentMinisters}}
-            @itemStructure={{hash label="fullName" role="true"}}
+            @itemStructure={{hash label="fullName"}}
             @selectedItems={{this.selectedCurrentMinisters}}
             @didUpdate={{this.onChangeCurrentMinisters}}
             @layout="grid"
@@ -198,9 +198,8 @@
           {{#if this.pastMinistersHidden}}
             <AuButton
               data-test-search-minister-filter-past-ministers
-              {{on "click" (toggle "pastMinistersHidden" this)}}
               @skin="link"
-              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-small"
               @icon="add"
             >
               {{t "show-past-ministers"}}
@@ -233,11 +232,11 @@
           >
             {{#each this.selectedCurrentMinisters as |minister index|}}
               <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
-                <div class="au-u-flex au-u-flex--vertical-center">
-                  <strong>{{minister.fullName}}</strong>
+                <div>
+                  <strong>{{minister.fullName}}</strong>,
                   {{#each minister.mandatees as |role index|}}
-                    {{#if (eq index 0)}}
-                      , {{role.title}}
+                    {{#if (and (and (eq role.end)(not-eq role.title))(not-eq role.title 'Minister-president van de Vlaamse Regering'))}}
+                      {{role.title}} <span class=" au-u-margin-left-tiny au-u-muted au-u-para-tiny">{{date role.start}} {{t "until"}} {{#if role.end}}{{date role.end}}{{else}}heden{{/if}}</span>
                     {{/if}}
                   {{/each}}
                 </div>

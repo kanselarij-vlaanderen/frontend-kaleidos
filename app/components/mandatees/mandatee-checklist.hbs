@@ -9,7 +9,7 @@
       <Auk::CheckboxTree
         @label='Alle ministers'
         @items={{this.mandateeOptions}}
-        @itemStructure={{hash label="fullDisplayName"}}
+        @itemStructure={{hash label="person.fullName"}}
         @selectedItems={{@buffer}}
         @didUpdate={{@onSelectMandatee}}
         @layout="grid"
