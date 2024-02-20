@@ -29,7 +29,7 @@
 
   @include mq(medium) {
     .au-c-control-group--grid > * {
-      width: calc(20% - 2rem);
+      width: calc(33.333% - 2rem);
     }
   }
 }

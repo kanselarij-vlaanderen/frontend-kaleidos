@@ -17,8 +17,8 @@
       <Group.Checkbox
         @value={{item}}
         @disabled={{@disabled}}
-      >
-        {{get item this.itemStructure.label}}
+      > 
+        {{get item this.itemStructure.label}}{{#if (eq this.itemStructure.role 'true')}}{{#each item.mandatees as |role index|}}{{#if (eq index 0)}}, {{role.title}}{{/if}}{{/each}}{{/if}}
       </Group.Checkbox>
     {{/each}}
   </AuCheckboxGroup>

@@ -190,11 +190,40 @@
           <Auk::CheckboxTree
             @label='Alle ministers'
             @items={{this.currentMinisters}}
-            @itemStructure={{hash label="fullName"}}
+            @itemStructure={{hash label="fullName" role="true"}}
             @selectedItems={{this.selectedCurrentMinisters}}
             @didUpdate={{this.onChangeCurrentMinisters}}
             @layout="grid"
           />
+          {{#if this.pastMinistersHidden}}
+            <AuButton
+              data-test-search-minister-filter-past-ministers
+              {{on "click" (toggle "pastMinistersHidden" this)}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="add"
+            >
+              {{t "show-past-ministers"}}
+            </AuButton>
+          {{else if this.preparePastMinisters.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <Auk::CheckboxTree
+              @label={{t "past-ministers"}}
+              @items={{this.pastMinisters}}
+              @itemStructure={{hash label="fullName"}}
+              @selectedItems={{this.selectedPastMinisters}}
+              @didUpdate={{this.onChangePastMinisters}}
+            />
+            <AuButton
+              {{on "click" (toggle "pastMinistersHidden" this)}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="remove"
+            >
+              {{t "hide-past-ministers"}}
+            </AuButton>
+          {{/if}}
           {{#if this.selectedCurrentMinisters}}
           <AuHr/>
           {{/if}}

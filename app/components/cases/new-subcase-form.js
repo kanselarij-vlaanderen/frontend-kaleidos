@@ -36,6 +36,9 @@ export default class CasesNewSubcaseForm extends Component {
   @tracked currentMinisters = [];
   @tracked selectedMinisterIds = [];
   @tracked selectedCurrentMinisterIds = [];
+  @tracked pastMinisters = [];
+  @tracked pastMinistersHidden = true;
+  @tracked selectedPastMinisterIds = [];
   @tracked showAllAreas = false;
   @tracked showAgendaModal = false;
   @tracked hasAgenda = false;
@@ -59,6 +62,12 @@ export default class CasesNewSubcaseForm extends Component {
     );
   }
 
+  get selectedPastMinisters() {
+    return this.selectedPastMinisterIds.map((ministerId) =>
+      this.pastMinisters.find((minister) => minister.id === ministerId)
+    );
+  }
+
   get selectedCurrentMinistersName() {
     return this.selectedCurrentMinisterIds.map((ministerLabel) =>
       this.currentMinisters.find((minister) => minister.fullName === ministerLabel)
@@ -76,9 +85,18 @@ export default class CasesNewSubcaseForm extends Component {
     this.args.onChange?.(this.selectedCurrentMinisterIds);
   }
 
+  @action
+  onChangePastMinisters(selected) {
+    this.selectedPastMinisterIds = selected.map((m) => m.id)
+    this.onChangeMinisters();
+  }
+
   @task
   *prepareMinisters() {
     yield this.prepareCurrentMinisters.perform();
+    if (this.args.showPastMinisters) {
+      yield this.preparePastMinisters.perform();
+    }
   }
 
   @task
@@ -92,7 +110,19 @@ export default class CasesNewSubcaseForm extends Component {
     this.currentMinisters = [...new Set(sortedMinisters)];
     this.selectedCurrentMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.currentMinisters.find((minister) => minister.id === ministerId));
   }
-  
+
+  @task
+  *preparePastMinisters() {
+    const allMinisters = yield this.store.queryAll('person', {
+      'filter[:has:mandatees]': true,
+      sort: 'last-name'
+    });
+    this.pastMinisters = allMinisters
+      .filter((minister) => !this.currentMinisters.includes(minister))
+      .filter((minister) => minister.uri.startsWith('http://themis.vlaanderen.be'));
+    this.selectedPastMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.pastMinisters.find((minister) => minister.id === ministerId));
+  }
+
   @task
   *loadAgendaItemTypes() {
     this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES);
@@ -551,7 +581,7 @@ export default class CasesNewSubcaseForm extends Component {
     });
     this.newPieces.pushObject(piece);
   }
-  
+
   @task
   *addPiece(piece, signFlow) {
     const shouldReplaceSignFlow = !!signFlow;
