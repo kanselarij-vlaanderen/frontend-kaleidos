@@ -3,18 +3,11 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {
-  task,
-  lastValue
-} from 'ember-concurrency';
+import { task, lastValue, all, animationFrame } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import {
-  all,
-  animationFrame
-} from 'ember-concurrency';
 
 export default class AgendaAgendaitemsController extends Controller {
   queryParams = [
