@@ -170,11 +170,11 @@ export default class NewsletterService extends Service {
   }
 
 /**
- * Updates the newsItem.inNewsletter of an agendaitem with type announcement to be false
- * This action should be triggered when :
+ * Updates the newsItem.inNewsletter of an agendaitem with type "announcement" to be false
+ * This action should be triggered when:
  * The decision result is changed to "postponed" or "retracted"
  * The subcase has been made confidential
- * Agendaitems with type note could be updated here, but profile "kort-bestek" prefers to keep manual control
+ * Agendaitems with type "note" could be updated here, but profile "kort-bestek" prefers to keep manual control
  * @param {Agendaitem} agendaitem: agendaitem to update
  */
 async updateNewsItemVisibility(agendaitem) {
