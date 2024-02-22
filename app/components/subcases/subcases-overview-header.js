@@ -2,40 +2,25 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
 import { inject as service } from '@ember/service';
 
 export default class SubCasesOverviewHeader extends Component {
   @service router;
 
   @tracked case;
-  @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
+  @tracked isArchivingCase = false;
 
   constructor() {
     super(...arguments);
     this.loadData.perform();
   }
 
-  get isEnabledNewCaseCreation() {
-    return isEnabledNewCaseCreation();
-  }
-
   @task
   *loadData() {
     this.case = yield this.args.decisionmakingFlow.case;
     this.publicationFlows = yield this.case.publicationFlows;
-  }
-
-  @action
-  openAddSubcaseModal() {
-    this.showAddSubcaseModal = true;
-  }
-
-  @action
-  closeAddSubcaseModal() {
-    this.showAddSubcaseModal = false;
   }
 
   @action
@@ -46,6 +31,16 @@ export default class SubCasesOverviewHeader extends Component {
   @action
   closeEditCaseModal() {
     this.showEditCaseModal = false;
+  }
+
+  @action
+  openArchiveCaseModal() {
+    this.isArchivingCase = true;
+  }
+
+  @action
+  closeArchiveCaseModal() {
+    this.isArchivingCase = false;
   }
 
   @action
@@ -65,6 +60,15 @@ export default class SubCasesOverviewHeader extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  @action
+  async archiveCase() {
+    const decisionmakingFlow = await this.case.decisionmakingFlow;
+    decisionmakingFlow.closed = new Date();
+    await decisionmakingFlow.save();
+    this.router.refresh();
+    this.isArchivingCase = false;
   }
 
   @action
