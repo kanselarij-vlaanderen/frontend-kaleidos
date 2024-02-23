@@ -107,6 +107,12 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
+  }
+
+  @action
   copySubcase() {
     this.plausible.trackEventWithRole('Kopieer voorgaande procedurestap');
     this.createSubcase.perform(true);
