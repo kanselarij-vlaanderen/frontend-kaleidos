@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, beforeEach, afterEach*/
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -18,6 +18,10 @@ context('Testing the application as Kort bestek user', () => {
     cy.loginFlow('Kort bestek');
     cy.wait(1000);
     cy.url().should('include', 'kort-bestek'); // make sure we transitioned to default route
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
