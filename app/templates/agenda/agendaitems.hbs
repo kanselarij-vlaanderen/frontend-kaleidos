@@ -7,7 +7,7 @@
           @onSearch={{this.searchAgendaitems}}
           @hideButtonText={{true}}
         />
-        <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
+        <div id="agendadetail-sidebar-container" class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
           <Agenda::AgendaDetail::Sidebar
             @notaGroups={{this.notaGroups}}
             @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}

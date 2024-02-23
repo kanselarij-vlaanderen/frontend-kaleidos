@@ -168,8 +168,8 @@ export default class PublicationsOverviewSearchRoute extends Route {
     controller.page = params.page;
     controller.dateFromBuffer = parseDate(params.dateFrom);
     controller.dateToBuffer = parseDate(params.dateTo);
-    controller.publicationStatuses = this.publicationStatuses.toArray();
-    controller.regulationTypes = this.regulationTypes.toArray();
+    controller.publicationStatuses = this.publicationStatuses.slice();
+    controller.regulationTypes = this.regulationTypes.slice();
     controller.mandatees = params.mandatees;
 
     if (controller.page !== this.lastParams.committed.page) {

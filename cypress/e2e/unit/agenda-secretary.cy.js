@@ -41,6 +41,7 @@ context('Agenda secretary tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(utils.governmentAreasPanel.emptyState);
+    cy.wait(2500); // hecking if this helps
   });
 
   it('should check default secretary', () => {

@@ -46,7 +46,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'fields[piece]': 'id,name,modified',
       sort: params.sort,
     });
-    for (const nota of notas.toArray()) { // proxyarray to native JS array
+    for (const nota of notas.slice()) { // proxyarray to native JS array
       const agendaitemsLinkedToNota = await nota.get('agendaitems');
       let agendaitemOnLatestAgenda;
       for (let index = 0; index < agendaitemsLinkedToNota.length; index++) {

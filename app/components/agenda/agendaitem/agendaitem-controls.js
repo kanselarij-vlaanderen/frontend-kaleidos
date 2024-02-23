@@ -105,7 +105,7 @@ export default class AgendaitemControls extends Component {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     }
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
@@ -225,7 +225,7 @@ export default class AgendaitemControls extends Component {
       ].includes(decisionResultCodeUri)
     ) {
       const pieces = yield this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );

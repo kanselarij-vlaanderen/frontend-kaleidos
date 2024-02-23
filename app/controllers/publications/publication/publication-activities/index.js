@@ -120,7 +120,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     deletes.push(mail?.destroyRecord());
 
     const pieces = await requestActivity.usedPieces;
-    for (const piece of pieces.toArray()) {
+    for (const piece of pieces.slice()) {
       const proofingActivity = await piece.proofingActivityGeneratedBy;
 
       // The pieces that are used in a proofingActivity should not be deleted

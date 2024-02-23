@@ -9,6 +9,11 @@ import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
+
+function newsletterTitle(mandatee) {
+  return `${mandatee.title} ${mandatee.fullName}`;
+}
 
 // TODO-command, might not have any other usages
 function changeSubcaseType(subcaseLink, type) {
@@ -364,7 +369,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // const agendaDate = Cypress.dayjs('2020-04-01');
     const agendaitemKBLink = '/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/6272890FE536C464112FFE76/kort-bestek';
     const subcaseTitleShort = 'Cypress test: KB edit - Nota edit full - 1651673319';
-    const proposalText = 'Op voorstel van minister-president Jan Jambon';
+    const proposalText = `Op voorstel van ${newsletterTitle(mandateeNames['02102019-10052021'].first)}`;
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
@@ -378,7 +383,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check and fill in all fields
     cy.get(newsletter.editItem.noNota).should('be.disabled');
     cy.get(newsletter.editItem.mandateeProposal).contains('Niet van toepassing');
-    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(dependency.rdfaEditor.inner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type('rollbackTest');
     cy.get(newsletter.editItem.remark).should('be.empty')
       .type('rollbackTestRemark');
@@ -393,7 +398,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('GET', '/themes**').as('getThemes2');
     cy.get(newsletter.newsItem.edit).click();
     cy.wait('@getThemes2');
-    cy.get(dependency.rdfa.editorInner).find('p')
+    cy.get(dependency.rdfaEditor.inner).find('p')
       .should('have.length', 1); // 1 trailing space inside a paragraph by default
     cy.get(newsletter.editItem.remark).should('be.empty');
     cy.get(newsletter.editItem.toggleFinished).should('not.be.checked');
@@ -401,7 +406,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // check after adding nota and mandatee
     cy.get(newsletter.editItem.cancel).click();
     cy.openAgendaitemDossierTab(subcaseTitleShort);
-    cy.addAgendaitemMandatee(1);
+    cy.addAgendaitemMandatee(mandateeNames['02102019-10052021'].first);
     cy.addDocumentsToAgendaitem(subcaseTitleShort, files);
     // TODO-bug reload should not be necessary
     // reload necessary for nota
@@ -557,7 +562,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/news-items').as('postNewsItem');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItem');
-    cy.get(dependency.rdfa.editorInner).clear();
+    cy.get(dependency.rdfaEditor.inner).clear();
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContent);
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItem');
     cy.get(newsletter.editItem.save).click();
@@ -601,10 +606,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // *note the next htmlContent is used in search-other-spec-data.spec, keep them identical
     const htmlContentNota = 'this nota info should be visible in definitief';
     const remarkTextNota = 'this nota remark should not be visible in definitief';
-    const proposalTextNota = 'Op voorstel van minister-president Jan Jambon';
+    const proposalTextNota = `Op voorstel van ${newsletterTitle(mandateeNames['10052021-16052022'].first)}`;
     const htmlContentMededeling = 'this announcement info should be visible in definitief';
     const remarkTextMededeling = 'this announcement remark should not be visible in definitief';
-    const proposalTextMededeling = 'Op voorstel van viceminister-president Hilde Crevits';
+    const proposalTextMededeling = `Op voorstel van ${newsletterTitle(mandateeNames['10052021-16052022'].second)}`;
     const subcaseTitleMededeling = 'Cypress test: KB Definitief view - mededeling - 1651673497';
     const subcaseTitleNota = 'Cypress test: KB Definitief view - nota - 1651673497';
 
@@ -625,7 +630,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     // add mandatee, info, remark and theme to mededeling, then check if shown/not shown correctly
     cy.visitAgendaWithLink(agendaLinkMed);
-    cy.addAgendaitemMandatee(2); // Hilde Crevits
+    cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].second); // Hilde Crevits
     cy.openAgendaitemKortBestekTab(subcaseTitleMededeling);
     cy.intercept('GET', '/themes**').as('getThemes_1');
     cy.get(newsletter.newsItem.edit).click();
@@ -652,7 +657,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.intercept('POST', '/news-items').as('postNewsItems');
     cy.get(newsletter.buttonToolbar.edit).click();
     cy.wait('@postNewsItems');
-    cy.get(dependency.rdfa.editorInner).clear({
+    cy.get(dependency.rdfaEditor.inner).clear({
       force: true,
     });
     cy.get(newsletter.editItem.rdfaEditor).type(htmlContentNota);
@@ -692,7 +697,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     // add mandatee and theme to nota, then check if shown/not shown correctly
     // visit link of mededeling, open nota (less agenda loading)
     cy.visitAgendaWithLink(agendaLinkNota);
-    cy.addAgendaitemMandatee(0);
+    cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].first);
     cy.openAgendaitemKortBestekTab(subcaseTitleNota);
     cy.intercept('GET', '/themes**').as('getThemes_2');
     cy.get(newsletter.newsItem.edit).click();

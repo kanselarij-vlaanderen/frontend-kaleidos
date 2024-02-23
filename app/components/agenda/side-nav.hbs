@@ -35,54 +35,12 @@
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <ul>
       {{#each (take 1 @reverseSortedAgendas) as |agenda|}}
-        <li
-          class="auk-sidebar__item auk-sidebar__item--styled
-            {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
-        >
-          <LinkTo
-            data-test-agenda-side-nav-agenda
-            @route="agenda.agendaitems"
-            @models={{array @meeting.id agenda.id}}
-          >
-            {{#if @isOpen}}
-              <div class="auk-sidebar__label" data-test-agenda-side-nav-agenda-name>
-                <strong>
-                  {{#if agenda.status.isDesignAgenda}}
-                    {{t "design-agenda"}}
-                  {{else}}
-                    {{t "agenda"}}
-                  {{/if}}
-                </strong>
-                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
-                  {{or agenda.serialnumber "-"}}
-                </AuPill>
-              </div>
-              <div class="auk-sidebar__sublabel">
-                {{#if agenda.status.isDesignAgenda}}
-                  {{t "latest-modified-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else}}
-                  {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |lastActivity|}}
-                    {{#if lastActivity.startDate}}
-                      {{t "approved-on"}}
-                      <br />
-                      {{date-format lastActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
-                    {{else}}
-                      {{t "approved"}}
-                    {{/if}}
-                  {{/let}}
-                {{/if}}
-              </div>
-            {{else}}
-              <div class="auk-sidebar__label">
-                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
-                  {{or agenda.serialnumber "-"}}
-                </AuPill>
-              </div>
-            {{/if}}
-          </LinkTo>
-        </li>
+        <Agenda::SideNav::Agenda 
+          @currentAgenda={{@currentAgenda}}
+          @meeting={{@meeting}}
+          @agenda={{agenda}}
+          @isOpen={{@isOpen}}
+        />
       {{/each}}
     </ul>
 
@@ -96,54 +54,12 @@
 
     <ul>
       {{#each (drop 1 @reverseSortedAgendas) as |agenda|}}
-        <li
-          class="auk-sidebar__item auk-sidebar__item--styled
-            {{if (eq @currentAgenda.id agenda.id) "auk-sidebar__item--active"}}"
-        >
-          <LinkTo
-            data-test-agenda-side-nav-agenda
-            @route="agenda.agendaitems"
-            @models={{array @meeting.id agenda.id}}
-          >
-            {{#if @isOpen}}
-              <div class="auk-sidebar__label" data-test-agenda-side-nav-agenda-name>
-                <strong>
-                  {{#if agenda.status.isDesignAgenda}}
-                    {{t "design-agenda"}}
-                  {{else}}
-                    {{t "agenda"}}
-                  {{/if}}
-                </strong>
-                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
-                  {{or agenda.serialnumber "-"}}
-                </AuPill>
-              </div>
-              <div class="auk-sidebar__sublabel">
-                {{#if agenda.status.isDesignAgenda}}
-                  {{t "latest-modified-on"}}
-                  <br />
-                  {{date-format agenda.modified "EEEEEE dd-MM-yyyy HH:mm"}}
-                {{else}}
-                  {{#let (await (this.getLatestAgendaStatusActivity agenda)) as |lastActivity|}}
-                    {{#if lastActivity.startDate}}
-                      {{t "approved-on"}}
-                      <br />
-                      {{date-format lastActivity.startDate "EEEEEE dd-MM-yyyy HH:mm"}}
-                    {{else}}
-                      {{t "approved"}}
-                    {{/if}}
-                  {{/let}}
-                {{/if}}
-              </div>
-            {{else}}
-              <div class="auk-sidebar__label">
-                <AuPill @size="small" @skin={{if agenda.status.isDesignAgenda "ongoing" null}} @draft={{agenda.status.isDesignAgenda}}>
-                  {{or agenda.serialnumber "-"}}
-                </AuPill>
-              </div>
-            {{/if}}
-          </LinkTo>
-        </li>
+        <Agenda::SideNav::Agenda 
+          @currentAgenda={{@currentAgenda}}
+          @meeting={{@meeting}}
+          @agenda={{agenda}}
+          @isOpen={{@isOpen}}
+        />
       {{/each}}
     </ul>
   </div>

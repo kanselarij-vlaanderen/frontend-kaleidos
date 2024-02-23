@@ -21,7 +21,7 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     if (!this.args.decisionActivities) {
       return;
     }
-    const decisionActivitiesOrMeetings = this.args.decisionActivities.toArray();
+    const decisionActivitiesOrMeetings = this.args.decisionActivities.slice();
 
     let hasConflictingSigners = false;
     let signers = [];
