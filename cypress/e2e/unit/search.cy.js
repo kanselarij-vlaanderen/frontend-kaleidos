@@ -8,6 +8,7 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
@@ -528,7 +529,7 @@ context('Search tests', () => {
         'Principiële goedkeuring',
         'Principiële goedkeuring m.h.o. op adviesaanvraag');
       cy.openSubcase(0, subcaseShortTitle);
-      cy.addSubcaseMandatee(4);
+      cy.addSubcaseMandatee(mandateeNames.current.fourth);
       cy.addDomainsAndFields(domains);
       cy.addDocumentsToSubcase(filesSubcase);
       cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
@@ -597,9 +598,9 @@ context('Search tests', () => {
       searchOnRoute(subcaseShortTitle, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(subcaseLongTitle, searchFlow, resultRow, caseShortTitle);
       // mandatees
-      searchOnRoute('Ben', searchFlow, resultRow, caseShortTitle);
-      searchOnRoute('Weyts', searchFlow, resultRow, caseShortTitle);
-      searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.firstName, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.lastName, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.searchTitle, searchFlow, resultRow, caseShortTitle);
       // news-item
       searchOnRoute(newsItemShortTitle, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(newsItemLongTitle, searchFlow, resultRow, caseShortTitle);
@@ -624,9 +625,9 @@ context('Search tests', () => {
       cy.visit('/zoeken/agendapunten');
 
       // mandatees
-      searchOnRoute('Ben', searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute('Weyts', searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.firstName, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.lastName, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.searchTitle, searchFlow, resultRow, subcaseShortTitle);
       // news-item
       searchOnRoute(newsItemContent, searchFlow, resultRow, subcaseShortTitle);
       // documents
@@ -696,7 +697,7 @@ context('Search tests', () => {
     // const noResult = 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.';
     const dateFrom = Cypress.dayjs().add(-1, 'years');
     const dateTo = Cypress.dayjs().add(1, 'years');
-    const checkbox1 = 'Ben Weyts';
+    const checkbox1 = mandateeNames.current.fourth.fullName;
     const checkbox2 = 'Cultuur, Jeugd, Sport en Media';
 
     // TODO-setup: remove a case

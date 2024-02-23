@@ -7,9 +7,14 @@ import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
+}
+
+function newsletterTitle(mandatee) {
+  return `${mandatee.title} ${mandatee.fullName}`;
 }
 
 function checkMandateesInList(mandatees, dateRange) {
@@ -22,8 +27,7 @@ function checkMandateesInList(mandatees, dateRange) {
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
   const agendaDate = Cypress.dayjs().add(1, 'weeks')
     .day(4); // Next friday
-  // This variable is used multiple times to check if data is properly loaded
-  const nameToCheck = 'Jambon';
+
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
   const isCI = Cypress.env('CI');
 
@@ -47,8 +51,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0, SubcaseTitleShort);
 
-    cy.addSubcaseMandatee(1);
-    cy.addSubcaseMandatee(2);
+    cy.addSubcaseMandatee(mandateeNames.current.first);
+    cy.addSubcaseMandatee(mandateeNames.current.second);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
@@ -58,7 +62,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // Checking if name of first mandatee is present ensures data is loaded
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
@@ -72,7 +76,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
 
     cy.changeDecisionResult('Goedgekeurd');
   });
@@ -90,7 +94,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(3);
+    cy.addSubcaseMandatee(mandateeNames.current.third);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
@@ -99,7 +103,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
@@ -112,7 +116,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
 
     cy.changeDecisionResult('Goedgekeurd');
   });
@@ -132,7 +136,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
-    cy.addSubcaseMandatee(4);
+    cy.addSubcaseMandatee(mandateeNames.current.fourth);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4, {
       timeout: 5000,
@@ -140,12 +144,12 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Add 1 more
-    cy.addSubcaseMandatee(5);
+    cy.addSubcaseMandatee(mandateeNames.current.fifth);
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {
       timeout: 5000,
@@ -153,7 +157,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
 
     cy.changeDecisionResult('Goedgekeurd');
 
@@ -169,7 +173,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     });
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.lastName);
   });
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
@@ -203,15 +207,15 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.log('in non-edit view, check if mandatees of last selected agendaitem are correctly ordered');
     cy.get(mandatee.mandateePanelView.row.name).as('mandateeNames');
     cy.get('@mandateeNames').eq(0)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.fullName);
     cy.get('@mandateeNames').eq(1)
-      .should('contain', 'Hilde Crevits');
+      .should('contain', mandateeNames.current.second.fullName);
     cy.get('@mandateeNames').eq(2)
-      .should('contain', 'Gwendolyn Rutten');
+      .should('contain', mandateeNames.current.third.fullName);
     cy.get('@mandateeNames').eq(3)
-      .should('contain', 'Ben Weyts');
+      .should('contain', mandateeNames.current.fourth.fullName);
     cy.get('@mandateeNames').eq(4)
-      .should('contain', 'Zuhal Demir');
+      .should('contain', mandateeNames.current.fifth.fullName);
 
     cy.log('when edit is open, check if mandatees are correct (in reverse order)');
     cy.get(mandatee.mandateePanelView.actions.edit).click();
@@ -253,7 +257,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.log('adding a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.addAgendaitemMandatee(6);
+    cy.addAgendaitemMandatee(mandateeNames.current.sixth);
     cy.get('@agendaitems').eq(1)
       .click();
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
@@ -363,11 +367,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals')
       .should('have.length', 3);
     cy.get('@proposals').eq(0)
-      .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)} en ${newsletterTitle(mandateeNames.current.second)}`);
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwendolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)}, ${newsletterTitle(mandateeNames.current.second)}, ${newsletterTitle(mandateeNames.current.third)}, ${newsletterTitle(mandateeNames.current.fourth)} en ${newsletterTitle(mandateeNames.current.fifth)}`);
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)}, ${newsletterTitle(mandateeNames.current.second)} en ${newsletterTitle(mandateeNames.current.sixth)}`);
     cy.clickReverseTab('Klad');
     cy.wait('@getMandatees1', {
       timeout: 60000,
@@ -381,11 +385,11 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(2000);
     cy.get(newsletter.newsletterPrint.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
-      .contains('Op voorstel van minister-president Jan Jambon en viceminister-president Hilde Crevits');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)} en ${newsletterTitle(mandateeNames.current.second)}`);
     cy.get('@proposals').eq(1)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits en Vlaams minister Matthias Diependaele');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)}, ${newsletterTitle(mandateeNames.current.second)} en ${newsletterTitle(mandateeNames.current.sixth)}`);
     cy.get('@proposals').eq(2)
-      .contains('Op voorstel van minister-president Jan Jambon, viceminister-president Hilde Crevits, viceminister-president Gwendolyn Rutten, viceminister-president Ben Weyts en Vlaams minister Zuhal Demir');
+      .contains(`Op voorstel van ${newsletterTitle(mandateeNames.current.first)}, ${newsletterTitle(mandateeNames.current.second)}, ${newsletterTitle(mandateeNames.current.third)}, ${newsletterTitle(mandateeNames.current.fourth)} en ${newsletterTitle(mandateeNames.current.fifth)}`);
   });
 
   it('check list of mandatees in 2020 agenda', () => {
