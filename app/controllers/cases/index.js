@@ -59,6 +59,8 @@ export default class CasesIndexController extends Controller {
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];
+  @tracked nameSearchText = null;
+  @tracked nameSearchTextBuffer = null;
   @tracked isLoadingModel;
 
   @action
@@ -76,8 +78,8 @@ export default class CasesIndexController extends Controller {
   }
 
   setNameSearchText = (value) => {
+    this.nameSearchTextBuffer = value;
     this.nameSearchText = value;
-    this.nameSearchTextUntracked = value;
   };
 
   nextPage = () => (this.page += 1);
