@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
 import { inject as service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 /**
  * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
@@ -27,5 +28,18 @@ export default class CasesHeader extends Component {
   saveNewCaseAddSubcase(decisionmakingFlow) {
     this.isOpenNewCaseAddSubcaseModal = false;
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
+  }
+
+  debouncedSetFilter = restartableTask(async (event) => {
+    if (event.target.value === "") {
+      this.clearFilter();
+      return;
+    }
+    await timeout(350);
+    this.args.setNameSearchText(event.target.value);
+  });
+
+  clearFilter = () => {
+    this.args.setNameSearchText(null);
   }
 }
