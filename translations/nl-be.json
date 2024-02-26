@@ -1323,5 +1323,8 @@
   "government-areas-and-fields": "Beleidsdomeinen en beleidsvelden",
   "save-in-progress": "Bezig met opslaan.",
   "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
-  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}"
+  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}",
+  "search-case-title": "Zoek op dossiernaam",
+  "no-subcases-yet-pill": "Geen procedurestappen",
+  "no-status-yet-pill": "Geen status"
 }
