@@ -1,0 +1,7 @@
+{{#if this.loadStatusText.isRunning}}
+  <AuLoader @inline={{true}} @hideMessage={{true}} />
+{{else}}
+  <AuPill @size="small" @skin="ongoing">
+    {{capitalize this.statusText}}
+  </AuPill>
+{{/if}}
