@@ -1,5 +1,7 @@
 {{#if this.loadSubmittersText.isRunning}}
   <AuLoader />
 {{else}}
-  {{this.submittersText}}
+  <FormatList @list={{this.submitters}} @locale="nl-be" as |formattedPart|>
+    {{formattedPart.value}}
+  </FormatList>
 {{/if}}

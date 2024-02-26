@@ -6,14 +6,14 @@ import { tracked } from '@glimmer/tracking';
 export default class CasesSubmitters extends Component {
   @service store;
 
-  @tracked submittersText = null;
+  @tracked submitters = null;
 
   constructor() {
     super(...arguments);
-    this.loadSubmittersText.perform();
+    this.loadSubmitters.perform();
   }
 
-  loadSubmittersText = task(async () => {
+  loadSubmitters= task(async () => {
     if (!this.args.case) {
       throw new Error('@case argument is required');
     }
@@ -30,6 +30,6 @@ export default class CasesSubmitters extends Component {
         persons.add(submitter.belongsTo('person').value().fullName);
       }
     });
-    this.submittersText = [...persons].join(',');
+    this.submitters = [...persons];
   });
 }
