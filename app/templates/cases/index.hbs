@@ -19,9 +19,10 @@
             @onDateToClear={{set this "dateTo" undefined}}
           />
           <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "submitter"}}</Auk::Label>
             <Search::MinisterFilter
-              @selected={{this.mandatees}}
-              @onChange={{this.setMandatees}}
+              @selected={{this.submitters}}
+              @onChange={{set this "submitters"}}
               @showPastMinisters={{true}}
             />
           </div>
@@ -55,15 +56,8 @@
                       @label={{t "created-on"}}
                       @onChange={{fn (mut this.sort)}}
                     />
-                    <Utils::ThSortable
-                      class="auk-table__header-title"
-                      @currentSorting={{this.sort}}
-                      @field="submitter"
-                      @label={{t "submitter"}}
-                      @onChange={{fn (mut this.sort)}}
-                    />
-                    <th class="auk-table__header-title">{{t "status"}}
-                    </th>
+                    <th class="auk-table__header-title">{{t "submitter"}}</th>
+                    <th class="auk-table__header-title">{{t "status"}}</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -97,7 +91,7 @@
                           {{datetime row.created}}
                         </td>
                         <td>
-                          Jan Jambon
+                          <Cases::Submitters @case={{row}} />
                         </td>
                         <td>
                           <Cases::StatusPill @case={{row}} />

@@ -46,6 +46,11 @@ export default class CasesIndexController extends Controller {
         type: 'string',
       },
     },
+    {
+      submitters: {
+        type: 'array',
+      },
+    },
   ];
 
   @tracked page = 0;
@@ -53,6 +58,7 @@ export default class CasesIndexController extends Controller {
   @tracked sort = '-created';
   @tracked dateFrom = null;
   @tracked dateTo = null;
+  @tracked submitters = [];
   @tracked isLoadingModel;
 
   @action

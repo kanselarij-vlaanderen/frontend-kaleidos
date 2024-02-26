@@ -36,6 +36,10 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'dossier_naam',
     },
+    submitters: {
+      refreshModel: true,
+      as: 'indieners'
+    },
   };
 
   model(params) {
@@ -63,11 +67,11 @@ export default class CasesIndexRoute extends Route {
       options['filter[:lte:created]'] = date.toISOString();
     }
 
-    // if (this.personFilter) {
-    //   options[
-    //     'filter[decisionmaking-flow][subcases][requestedBy][person][:id:]'
-    //   ] = null; // [lijst met ids]
-    // }
+    if (isPresent(params.submitters)) {
+      options[
+        'filter[decisionmaking-flow][subcases][requested-by][person][:id:]'
+      ] = params.submitters.join(',');
+    }
 
     return this.store.query('case', options);
   }
