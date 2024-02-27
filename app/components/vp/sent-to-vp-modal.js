@@ -24,7 +24,7 @@ export default class SentToVpModalComponent extends Component {
       list.push('Word');
     }
     if (submittedPiece.signedFile) {
-      list.push('ondertekend');
+      list.push('ondertekende PDF');
     }
 
     if (list.length) {
