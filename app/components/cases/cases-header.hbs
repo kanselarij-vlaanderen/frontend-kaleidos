@@ -11,34 +11,17 @@
         <Group.Item>
           {{#if (user-may "manage-cases")}}
             <AuButton
-              data-test-cases-header-add-case
-              @skin="primary"
-              @icon="plus"
-              {{on "click" (toggle "isOpenNewCaseModal" this)}}
-            >
-              {{t "add-case"}}
-            </AuButton>
-          {{/if}}
-          {{#if (and this.isEnabledNewCaseCreation (user-may "manage-cases"))}}
-            <AuButton
               @skin="primary"
               @icon="plus"
               {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
             >
-              {{t "add-case-new"}}
+              {{t "add-case"}}
             </AuButton>
           {{/if}}
         </Group.Item>
       </Toolbar.Group>
     </Auk::Toolbar>
 </Auk::Navbar>
-
-{{#if this.isOpenNewCaseModal}}
-  <Cases::NewCase
-    @didSave={{this.saveNewCase}}
-    @onCancel={{toggle "isOpenNewCaseModal" this}}
-  />
-{{/if}}
 
 {{#if this.isOpenNewCaseAddSubcaseModal}}
   <Cases::NewCase

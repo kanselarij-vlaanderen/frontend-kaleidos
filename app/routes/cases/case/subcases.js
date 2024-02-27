@@ -1,19 +1,9 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class CasesCaseSubcasesIndexRoute extends Route {
+export default class CasesCaseSubcasesSubcasesRoute extends Route {
   @service store;
-
-  queryParams = {
-    page: {
-      refreshModel: true,
-      as: 'pagina',
-    },
-    size: {
-      refreshModel: true,
-      as: 'aantal',
-    },
-  };
+  @service router;
 
   beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case');
@@ -24,13 +14,15 @@ export default class CasesCaseSubcasesIndexRoute extends Route {
     //  In practice, reverse sorting on created will be close
     const queryParams = {
       'filter[decisionmaking-flow][:id:]': this.decisionmakingFlow.id,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      sort: '-created',
+      sort: 'created',
+      include:'type'
     };
-    return this.store.query('subcase', queryParams);
+    return this.store.queryAll('subcase', queryParams);
+  }
+
+  async afterModel(model) {
+    const selectedSubcase = await model.get('lastObject');
+    this.router.transitionTo('cases.case.subcases.subcase', selectedSubcase.id);
   }
 
   setupController(controller) {

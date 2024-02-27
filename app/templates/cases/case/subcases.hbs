@@ -1,0 +1,15 @@
+<Subcases::SubcasesOverviewHeader
+  @decisionmakingFlow={{this.decisionmakingFlow}}
+  @onCreateSubcase={{this.refreshSubcases}}
+  @onSaveCase={{perform this.saveCase}}
+/>
+<div class="auk-panel-layout">
+  <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
+    <Subcases::SideNav
+      @subcases={{this.model}}> 
+    </Subcases::SideNav>
+  </div>
+  <div class="auk-panel-layout__main-content">
+    {{outlet}}
+  </div>
+</div>
