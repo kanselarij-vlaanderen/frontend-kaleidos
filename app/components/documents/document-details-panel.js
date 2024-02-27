@@ -59,8 +59,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   *loadSignatureRelatedData() {
     const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
     const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
-    const canEditOngoingSignFlows = this.currentSession.may('edit-documents-with-ongoing-signature')
-    return this.canEditPieceWithSignFlow = canEditOngoingSignFlows || !hasSignFlow || hasMarkedSignFlow;
+    return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
   }
 
   @task
