@@ -69,7 +69,13 @@ export default class MandateeSelectorPanel extends Component {
     const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(
       startOfDay(new Date())
     );
-    this.currentMandatees = currentMandatees.sort(
+    // Will be refactored in KAS-4540, for now, use hardcoded uri to filter out the double mandatee for PM
+    const filteredMandatees = currentMandatees.filter(
+      (mandatee) =>
+        mandatee.uri !=
+        'http://themis.vlaanderen.be/id/mandatee/658e57e6-4488-4aaf-bee7-1360ab362584'
+    );
+    this.currentMandatees = filteredMandatees.sort(
       (m1, m2) => m1.priority - m2.priority
     );
     const sortedMinisters = yield Promise.all(
