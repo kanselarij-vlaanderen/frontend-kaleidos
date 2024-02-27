@@ -1,7 +1,11 @@
 {{#if this.loadSubmittersText.isRunning}}
   <AuLoader />
 {{else}}
-  <FormatList @list={{this.submitters}} @locale="nl-be" as |formattedPart|>
-    {{formattedPart.value}}
-  </FormatList>
+  {{#if this.submitters.length}}
+    <FormatList @list={{this.submitters}} @locale="nl-be" as |formattedPart|>
+      {{formattedPart.value}}
+    </FormatList>
+  {{else}}
+    <p class="au-u-text-center">-</p>
+  {{/if}}
 {{/if}}

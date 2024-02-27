@@ -7,7 +7,7 @@ export default class CasesStatusPill extends Component {
   @service store;
   @service intl;
 
-  @tracked statusText;
+  @tracked statusText = null;
 
   constructor() {
     super(...arguments);
@@ -29,11 +29,7 @@ export default class CasesStatusPill extends Component {
       const subcaseType = await subcase.type;
       if (subcaseType) {
         this.statusText = subcaseType.label;
-      } else {
-        this.statusText = this.intl.t('no-status-yet-pill');
       }
-    } else {
-      this.statusText = this.intl.t('no-subcases-yet-pill');
     }
   });
 }
