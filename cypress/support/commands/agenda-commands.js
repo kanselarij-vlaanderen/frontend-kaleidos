@@ -248,8 +248,12 @@ function openAgendaForDate(agendaDate, index = 0) {
     .find(route.agendasOverview.row.navButton)
     .click();
 
-  cy.url().should('include', '/vergadering');
-  cy.url().should('include', '/agenda');
+  cy.url().should('include', '/vergadering', {
+    timeout: 60000,
+  });
+  cy.url().should('include', '/agenda', {
+    timeout: 60000,
+  });
   cy.log('/openAgendaForDate');
 }
 

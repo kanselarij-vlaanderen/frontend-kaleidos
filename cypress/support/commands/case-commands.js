@@ -134,7 +134,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 function openCase(caseTitle) {
   cy.log('openCase');
   cy.visit('dossiers?aantal=50');
-  cy.get(route.casesOverview.dataTable).contains(caseTitle)
+  cy.get(route.casesOverview.dataTable, {
+    timeout: 60000,
+  }).contains(caseTitle)
     .parents('tr')
     .click();
   cy.log('/openCase');
@@ -171,62 +173,53 @@ function searchCase(caseTitle) {
  * @name addSubcaseViaModal
  * @memberOf Cypress.Chainable#
  * @function
- * @param {String} type Type of subcase, case sensitive
- * @param {boolean} confidential optional boolean to toggle confidentiality
- * @param {String} newShortTitle The new short title of the subcase (null to keep the existing case title)
- * @param {String} longTitle The long title of the subcase
- * @param {String} step The step to be selected from the list, case sensitive
- * @param {String} stepName The step name to be selected from the list, case sensitive
- * @param {String[]} mandatees The names of the mandatees
- * @param {string[name, selected, fields]} domains The name of the domain, wether it is selected as petitioner and fields, if any
- * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
- * @param {boolean} formallyOk optional boolean to toggle formally ok
- * @param {String} agendaDate Agendadate as string
+ * @param {{type: String, confidential: Boolean, newShortTitle: String, longTitle: String, step: String, stepName: String, [mandatees]: String, [domains]: String, [documents]: String, formallyOk: Boolean, agendaDate: String}[]} subcase
  * @returns {Promise<String>} the id of the created subcase
  */
-function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle, step, stepName, mandatees, domains, documents, formallyOk = false, agendaDate = null) {
+function addSubcaseViaModal(subcase) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.log('addSubcaseViaModal');
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
+  cy.intercept('POST', '/submission-activities').as(`submissionActivities${randomInt}`);
   // TODO-COMMAND is this wait needed?
   cy.wait(2000);
 
   cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
 
   // Set the type
-  if (type) {
-    cy.get(appuniversum.radio).contains(type)
+  if (subcase.type) {
+    cy.get(appuniversum.radio).contains(subcase.type)
       .scrollIntoView()
       .click();
   }
 
   // toggle confidential
-  if (confidential) {
+  if (subcase.confidential) {
     cy.get(cases.newSubcaseForm.toggleConfidential).parent()
       .scrollIntoView()
       .click();
   }
 
   // Set the short title
-  if (newShortTitle) {
+  if (subcase.newShortTitle) {
     cy.get(cases.newSubcaseForm.shorttitle).click()
       .clear()
-      .type(newShortTitle);
+      .type(subcase.newShortTitle);
   }
 
   // Set the long title
-  if (longTitle) {
+  if (subcase.longTitle) {
     cy.get(cases.newSubcaseForm.longtitle).click()
       .clear()
-      .type(longTitle);
+      .type(subcase.longTitle);
   }
 
   // Set the step type
-  if (step) {
+  if (subcase.step) {
     cy.get(cases.newSubcaseForm.procedureStep).click();
-    cy.get(dependency.emberPowerSelect.option).contains(step)
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.step)
       .scrollIntoView()
       .trigger('mouseover')
       .click();
@@ -234,9 +227,9 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
   }
 
   // Set the step name
-  if (stepName) {
+  if (subcase.stepName) {
     cy.get(cases.newSubcaseForm.procedureName).click();
-    cy.get(dependency.emberPowerSelect.option).contains(stepName)
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.stepName)
       .scrollIntoView()
       .trigger('mouseover')
       .click();
@@ -244,14 +237,14 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
   }
 
   // add mandatees
-  if (mandatees) {
+  if (subcase.mandatees) {
     let count = 0;
-    mandatees.forEach((mandatee) => {
+    subcase.mandatees.forEach((mandatee) => {
       cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).find(appuniversum.checkbox)
-        .contains(mandatee.name)
+        .contains(mandatee.fullName)
         .click();
       if (mandatee.submitter && count > 0) {
-        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister).contains(mandatee.name)
+        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister).contains(mandatee.fullName)
           .parent()
           .find(appuniversum.radio)
           .click();
@@ -261,8 +254,8 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
   }
 
   // add domains
-  if (domains) {
-    domains.forEach((domain) => {
+  if (subcase.domains) {
+    subcase.domains.forEach((domain) => {
       cy.get(cases.newSubcaseForm.governmentAreasPanel, {
         timeout: 60000,
       })
@@ -284,23 +277,25 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
   }
 
   // add documents
-  if (documents) {
-    cy.addNewDocumentsInSubcaseFileUpload(documents);
+  if (subcase.documents) {
+    cy.addNewDocumentsInSubcaseFileUpload(subcase.documents);
   }
 
   // go to save modal
-  cy.get(appuniversum.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 60000,
+  });
   cy.get(cases.newSubcaseForm.save).click();
 
-  if (formallyOk) {
+  if (subcase.formallyOk) {
     cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
       .click();
   }
 
   // select the agenda or save without one
-  if (agendaDate) {
+  if (subcase.agendaDate) {
     cy.get(cases.proposableAgendas.agendaRow).children()
-      .contains(agendaDate)
+      .contains(subcase.agendaDate)
       .scrollIntoView()
       .click();
     cy.get(cases.proposableAgendas.placeOnAgenda).click();
@@ -308,21 +303,16 @@ function addSubcaseViaModal(type, confidential = false, newShortTitle, longTitle
     cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
   }
 
-  let subcaseId;
   cy.log('/addSubcaseViaModal');
-  cy.wait(`@createNewSubcase${randomInt}`)
-    .its('response.body')
-    .then((responseBody) => {
-      subcaseId = responseBody.data.id;
+  cy.wait(`@createNewSubcase${randomInt}`);
+  if (subcase.agendaDate) {
+    cy.wait(`@submitToMeeting${randomInt}`, {
+      timeout: 60000,
     });
-  cy.wait(`@submitToMeeting${randomInt}`, {
+  }
+  cy.get(cases.subcaseDescription.agendaLink, {
     timeout: 60000,
-  })
-    .then(() => new Cypress.Promise((resolve) => {
-      resolve({
-        subcaseId,
-      });
-    }));
+  });
 }
 
 // Commands

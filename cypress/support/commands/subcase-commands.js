@@ -113,7 +113,7 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
 }
 
 /**
- * Adds a mandatee to a sucase when used in the subcase view
+ * Adds a mandatee to a subcase when used in the subcase view
  * Pass a valid entry from 'mandatee-names.selectors.js'
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#

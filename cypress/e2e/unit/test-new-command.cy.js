@@ -28,7 +28,7 @@ context('testing new add subcase command', () => {
     const step = 'principiële goedkeuring';
     const stepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const mandatee1 = {
-      name: 'Ben Weyts',
+      name: 'Jan Jambon',
       submitter: false,
     };
     const mandatee2 = {
@@ -47,7 +47,7 @@ context('testing new add subcase command', () => {
       fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
     };
     const domains = [domain1, domain2];
-    const files = [
+    const files1 = [
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota',
       },
@@ -56,10 +56,24 @@ context('testing new add subcase command', () => {
       }
     ];
 
+    const subcase1 = {
+      type: agendaType,
+      confidential: true,
+      newShortTitle: newShortTitle,
+      longTitle: longTitle,
+      step: step,
+      stepName: stepName,
+      mandatees: mandatees,
+      domains: domains,
+      documents: files1,
+      formallyOk: true,
+      agendaDate: agendaDateFormatted,
+    };
+
     cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
 
     cy.visit('dossiers/655B933CD500B784623C3EAA/deeldossiers');
 
-    cy.addSubcaseViaModal(agendaType, true, newShortTitle, longTitle, step, stepName, mandatees, domains, files, true, agendaDateFormatted);
+    cy.addSubcaseViaModal(subcase1);
   });
 });
