@@ -48,8 +48,8 @@ export default class MHeader extends Component {
   }
 
   @action
-  logout() {
-    this.session.invalidate();
+  async logout() {
+    await this.session.invalidate();
   }
 
   @action
