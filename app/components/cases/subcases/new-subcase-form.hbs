@@ -163,6 +163,15 @@
                         {{t "cancel"}}
                       </AuButton>
                     {{/if}}
+                      <AuButton
+                        @skin="naked"
+                        @icon="trash"
+                        @alert={{true}}
+                        @hideText={{true}}
+                        {{on "click" this.clearSubcaseName}}
+                      >
+                        {{t "cancel"}}
+                      </AuButton>
                   </div>
                 </AuFormRow>
               </div>

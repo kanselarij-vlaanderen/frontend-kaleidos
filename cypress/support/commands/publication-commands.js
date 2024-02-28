@@ -5,6 +5,8 @@ import publication from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import utils from '../../selectors/utils.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 // ***********************************************
 // Functions
@@ -224,6 +226,40 @@ function checkColumnsIfUnchecked(columnKeyNames) {
   cy.get(publication.tableDisplayConfig.close).forceClick(); // close button may be out of view top right
 }
 
+/**
+ * Adds a mandatee to a publication when used in the publication case view
+ * Pass a valid entry from 'mandatee-names.selectors.js'
+ * @name addPublicationMandatee
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
+ */
+function addPublicationMandatee(mandateeNamesSelector = mandateeNames.current.first) {
+  cy.log('addPublicationMandatee');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
+  cy.get(publication.mandateesPanel.add).click();
+  cy.wait(`@getGovernmentBodies${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
+  cy.get(dependency.emberPowerSelect.trigger).click();
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+  if (mandateeNamesSelector.searchTitle) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.searchTitle)
+      .click();
+  } else {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.title)
+      .click();
+  }
+  cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
+  cy.get(utils.mandateesSelector.add).click();
+  cy.wait(`@patchPublicationFlow${randomInt}`);
+  cy.log('/addPublicationMandatee');
+}
+
 // ***********************************************
 // Commands
 Cypress.Commands.add('fillInNewPublicationFields', fillInNewPublicationFields);
@@ -232,3 +268,4 @@ Cypress.Commands.add('createPublicationWithStatus', createPublicationWithStatus)
 Cypress.Commands.add('changePublicationStatus', changePublicationStatus);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);
 Cypress.Commands.add('checkColumnsIfUnchecked', checkColumnsIfUnchecked);
+Cypress.Commands.add('addPublicationMandatee', addPublicationMandatee);

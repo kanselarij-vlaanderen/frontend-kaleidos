@@ -70,7 +70,6 @@ export default class NewSubcaseForm extends Component {
   @action
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
-    this.subcaseName = subcaseType.label;
     this.checkSubcaseType();
   }
   
@@ -105,6 +104,12 @@ export default class NewSubcaseForm extends Component {
   selectSubcaseName(shortcut) {
     this.selectedShortcut = shortcut;
     this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 
   @action

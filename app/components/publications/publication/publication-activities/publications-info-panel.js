@@ -56,6 +56,9 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
   @task
   *save() {
     yield this.args.publicationSubcase.save();
+    if (this.decision?.hasDirtyAttributes) {
+      yield this.decision.save();
+    }
     this.isEditing = false;
   }
 }
