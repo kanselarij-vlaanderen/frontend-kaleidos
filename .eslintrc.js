@@ -28,6 +28,7 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_' },
     ],
+    'no-dupe-class-members': 'off',
   },
   overrides: [
     // node files
@@ -57,6 +58,9 @@ module.exports = {
       // test files
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+      rules: {
+        'qunit/no-commented-tests': 'off',
+      },
     },
     // auk component "library"
     {
