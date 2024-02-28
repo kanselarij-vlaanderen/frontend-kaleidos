@@ -58,21 +58,21 @@
       </th>
       <Utils::ThSortable
         @currentSorting={{this.sortField}}
-        @field=<sign-subcase.sign-marking-activity.piece.name />
+        @field={{"sign-subcase.sign-marking-activity.piece.name"}}
         @onChange={{this.changeSort}}
         @label={{t "document-name"}}
       />
       <th>{{t "document-type"}}</th>
       <Utils::ThSortable
         @currentSorting={{this.sortField}}
-        @field=<decision-activity.treatment.agendaitems.short-title />
+        @field={{"decision-activity.treatment.agendaitems.short-title"}}
         @onChange={{this.changeSort}}
         @label={{capitalize (t "agendaitem")}}
       />
       <th>{{t "ministers"}}</th>
       <Utils::ThSortable
         @currentSorting={{this.sortField}}
-        @field=<decision-activity.start-date />
+        @field={{"decision-activity.start-date"}}
         @onChange={{this.changeSort}}
         @label={{t "decision-date"}}
       />
