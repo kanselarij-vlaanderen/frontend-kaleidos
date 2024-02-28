@@ -50,6 +50,7 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
+                  @disabled={{this.saveMinutes.isRunning}}
                   {{on "click" this.updateEditorContent}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 {{/if}}
@@ -58,6 +59,7 @@
                     @skin="link"
                     @icon="renew"
                     class="au-u-padding-left-none"
+                    @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" this.updateEditorNotas}}
                   >{{t "update-thing" thing=(t "agendaitems-subtitle")}}</AuButton>
                 {{/if}}
@@ -66,6 +68,7 @@
                     @skin="link"
                     @icon="renew"
                     class="au-u-padding-left-none"
+                    @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" this.updateEditorAnnouncements}}
                   >{{t "update-thing" thing=(t "announcements-subtitle")}}</AuButton>
                 {{/if}}
@@ -83,6 +86,7 @@
                 <Auk::Toolbar::Item>
                   <AuButton
                     @skin="naked"
+                    @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" (fn (set this "isEditing" false))}}
                   >
                     {{t "cancel"}}
