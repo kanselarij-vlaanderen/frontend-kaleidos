@@ -1,5 +1,10 @@
 <Auk::Tabs data-test-agenda-nav-tabs @reversed={{true}}>
-  <Auk::Tab @isHierarchicalBack={{true}} />
+  <Auk::Tab 
+    @isHierarchicalBack={{true}}
+    @route="agendas"
+  >
+    {{t "all-agendas"}}
+  </Auk::Tab>
   <Auk::Tab
     @route="agenda.agendaitems.index"
     @current-when="agenda.agendaitems.index" {{!-- NOTE: without explicitly defining `@current-when` the active state seems to be missing in some cases --}}
