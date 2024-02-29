@@ -43,7 +43,7 @@
           @badgeIcon={{document-icon @piece.file.extension}}
         >
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">Vervang document (pdf)</AuHeading>
+            <AuHeading @skin="5" @level="3">Vervang document</AuHeading>
           </div>
         </c.header>
         <c.content data-test-document-edit-source-file-replacer>
@@ -116,7 +116,7 @@
           @badgeIcon="document"
         >
           <div class="au-u-flex au-u-flex--spaced-small">
-            <AuHeading @skin="5" @level="3">Vervang bron (word)</AuHeading>
+            <AuHeading @skin="5" @level="3">Vervang bron</AuHeading>
           </div>
         </c.header>
         <c.content data-test-document-edit-derived-file-uploader>
@@ -136,40 +136,6 @@
             @selectedDocumentType={{this.documentType}}
             @onChange={{this.selectDocumentType}}
           />
-        </div>
-      </c.content>
-    </AuCard>
-    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
-      <c.content>
-        <div class="auk-form-group">
-          <AuLabel for="version">Versie</AuLabel>
-          <select
-            name="signee"
-            id="signee"
-            class="auk-select auk-select--block"
-          >
-            <option
-              value="Eerste"
-              selected="selected"
-            >
-              Eerste
-            </option>
-            <option
-              value="BIS"
-            >
-              BIS
-            </option>
-            <option
-              value="TER"
-            >
-              TER
-            </option>
-            <option
-              value="QUATER"
-            >
-              QUATER
-            </option>
-          </select>
         </div>
       </c.content>
     </AuCard>
