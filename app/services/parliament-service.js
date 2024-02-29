@@ -74,15 +74,26 @@ export default class ParliamentService extends Service {
       this.closeToastAndError(sendingToast, errorMessage)
     } else {
       const job = await response.json();
-      this.delayedPoll(job, sendingToast);
+      return { job, toast: sendingToast };
     }
+    return {};
   }
 
   async delayedPoll(job, toast) {
     // Many files will only take about half a second to send
     // This avoids having to wait 2 seconds until the next poll
     await new Promise((resolve) => setTimeout(resolve, 600));
-    this.pollSendToVpJob(job, toast);
+    const MAX_RETRIES = 10;
+    let retries = 0;
+    let pollResult;
+    while (!pollResult && retries < MAX_RETRIES) {
+      pollResult = await this.pollSendToVpJob(job, toast);
+      if (!pollResult) {
+        retries++;
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+    }
+    return pollResult;
   }
 
   async pollSendToVpJob(job, toast) {
@@ -90,31 +101,36 @@ export default class ParliamentService extends Service {
     try {
       jobResult = await this.getJob(job, 'send-to-vp-job');
     } catch (error) {
-      this.closeToastAndError(toast, error);
-      return;
+      if (toast) {
+        this.closeToastAndError(toast, error);
+      }
+      return true;
     }
 
     if (!jobResult) {
-      return;
+      return true;
     }
 
     if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.SUCCESS) {
-      this.toaster.close(toast);
-      this.toaster.success(
-        this.intl.t('the-documents-were-sent-to-parliament'),
-        null,
-        {
-          closable: true,
-          timeOut: 5 * 1000,
-        }
-      );
+      if (toast) {
+        this.toaster.close(toast);
+        this.toaster.success(
+          this.intl.t('the-documents-were-sent-to-parliament'),
+          null,
+          {
+            closable: true,
+            timeOut: 5 * 1000,
+          }
+        );
+      }
+      return true;
     } else if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.FAILED) {
-      this.closeToastAndError(toast, jobResult.errorMessage);
-    } else {
-      setTimeout(() => {
-        this.pollSendToVpJob(job, toast);
-      }, 2000);
+      if (toast) {
+        this.closeToastAndError(toast, jobResult.errorMessage);
+      }
+      return true;
     }
+    return false;
   }
 
   async getJob(job) {
