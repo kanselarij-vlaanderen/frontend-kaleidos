@@ -55,7 +55,29 @@ export default EmberObject.create({
         icon: 'circle-question',
         color: '',
       },
-    }
+    },
+    {
+      label: 'Aan het verwerken',
+      uri:
+        'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
+      iconClassNames: 'ki-circle-question formally-ok-icon',
+      svg: {
+        icon: 'circle-three-dots',
+        color: '',
+      },
+    },
+    {
+      label: 'Wachten op kabinet',
+      uri:
+        'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
+      iconClassNames: 'ki-circle-question formally-ok-icon',
+      svg: {
+        icon: 'clock',
+        color: '',
+      },
+    },
   ],
   latinAdverbialNumberals,
   numbersBylatinAdverbialNumberals,
