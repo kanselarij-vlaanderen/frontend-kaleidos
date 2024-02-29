@@ -83,7 +83,7 @@ export default class ParliamentService extends Service {
     // Many files will only take about half a second to send
     // This avoids having to wait 2 seconds until the next poll
     await new Promise((resolve) => setTimeout(resolve, 600));
-    const MAX_RETRIES = 10;
+    const MAX_RETRIES = 30;
     let retries = 0;
     let pollResult;
     while (!pollResult && retries < MAX_RETRIES) {
