@@ -50,11 +50,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
   }
 
-  get isSignaturesEnabled() {
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return hasPermission;
-  }
-
   @task
   *loadSignatureRelatedData() {
     const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);

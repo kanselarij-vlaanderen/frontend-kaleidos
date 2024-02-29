@@ -222,7 +222,7 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
-      {{#if (and this.isSignaturesEnabled (user-may "manage-signatures") (await (this.canViewSignedPiece)))}}
+      {{#if (await this.canViewSignedPiece)}}
         {{#if @piece.signedPiece.file}}
           <div class="auk-key-value-item">
             <div class="auk-key-value-item__label auk-u-max-width-medium">{{t "signed-document-certified"}}</div>
@@ -265,7 +265,6 @@
       {{/if}}
       {{#if
         (and
-          this.isSignaturesEnabled
           this.loadSignedPieces.isIdle
           this.signedPieceCopy.file
           (await (this.canViewConfidentialPiece))
