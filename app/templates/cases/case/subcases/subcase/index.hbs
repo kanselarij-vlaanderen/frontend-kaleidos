@@ -5,26 +5,6 @@
         <Subcase::SubcaseDescriptionPanel @subcase={{@model.subcase}} />
       </div>
       <div class="auk-u-mb-8">
-        <div class="auk-hr">
-          <hr />
-        </div>
-      </div>
-      {{#if (user-may "manage-cases")}}
-        <AuCheckbox
-          data-test-cases---subcase-overview-confidentiality-checkbox={{true}}
-          @checked={{@model.subcase.confidential}}
-          @disabled={{true}}
-        >
-          {{t "limited-access"}}
-        </AuCheckbox>
-      {{/if}}
-      <div class="auk-u-mb-8">
-        <Subcase::SubcaseTitlesPanel
-          @subcase={{@model.subcase}}
-          @meeting={{this.meeting}}
-          @allowEditing={{user-may "manage-cases"}}
-        />
-      </div>
       <Mandatees::MandateesPanel
         @referenceDate={{if
           this.meeting
@@ -37,6 +17,7 @@
         @allowEditing={{user-may "manage-cases"}}
         @onSave={{this.saveMandateeData}}
       />
+      </div>
       <Utils::GovernmentAreas::GovernmentAreasPanel
         @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
         @governmentAreas={{@model.subcase.governmentAreas}}
@@ -44,15 +25,57 @@
         @onSave={{this.saveGovernmentAreas}}
         class="auk-u-mb-8"
       />
-      <Subcases::SubcasesHistory
-        @decisionmakingFlow={{this.decisionmakingFlow}}
-        @subcases={{@model.siblingSubcases}}
-        @page={{this.page}}
-        @size={{this.size}}
-        @onNextPage={{this.nextPage}}
-        @onPreviousPage={{this.prevPage}}
-        @onSetSizeOption={{this.setSizeOption}}
-      />
+      <div id="documents" class="auk-u-mb-4">
+        <Auk::Panel>
+          <Auk::Panel::Header>
+            <Auk::Toolbar>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item>
+                  <div class="au-u-flex au-u-flex--spaced-small">
+                    <h4 class="auk-panel__title">
+                      {{t "documents"}}
+                    </h4>
+                  </div>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
+          </Auk::Panel::Header>
+          <Auk::Panel::Body>
+            {{#if this.documentsAreVisible}}
+              <Documents::DocumentCardList
+                @pieces={{this.model.pieces}}
+                @onAddPiece={{perform this.addPiece}}
+                @didDeleteContainer={{this.refresh}}
+                @isEditable={{true}}
+              />
+            {{else}}
+              <div>
+                <AuAlert
+                  @skin="info"
+                  @icon="info-circle"
+                  class="au-u-margin-bottom-none"
+                >
+                  {{t "no-documents-yet"}}
+                </AuAlert>
+              </div>
+            {{/if}}
+          </Auk::Panel::Body>
+          {{#if (user-may "manage-documents")}}
+          <Auk::Panel::Footer>
+            <AuButton
+              @skin="naked"
+              @icon="plus"
+              class="au-u-padding-left-none"
+              {{on "click" this.openPieceUploadModal}}
+            >
+              {{t "documents-add"}}
+            </AuButton>
+          </Auk::Panel::Footer>
+          {{/if}}
+        </Auk::Panel>
+      </div>
+      <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@model.subcase}}/>
+      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}}/>
     </div>
   </div>
 {{/if}}

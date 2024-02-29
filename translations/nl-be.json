@@ -1323,5 +1323,14 @@
   "save-in-progress": "Bezig met opslaan.",
   "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
   "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}",
-  "step-and-number": "stap #{number}"
+  "step-and-number": "stap #{number}",
+  "publication-statusses": "Publicatiestatussen",
+  "decreet-info": "Decreet info",
+  "newest-documents": "Nieuwste Documenten",
+  "document-versions": "Document versies",
+  "agenda-activities": "Agenderingen",
+  "approved-on-agenda-of": "Goedgekeurd op de agenda van",
+  "updated-on": "Upgedate op",
+  "on-this-page": "Op deze pagina",
+  "design-decreet-of": "Ontwerp van decreet over {subcaseShortTitle}"
 }
