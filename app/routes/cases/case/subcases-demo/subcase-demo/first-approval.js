@@ -9,6 +9,7 @@ import VrLegacyDocumentName,
 export default class CasesCaseSubcasesDemoSubcaseDemoFirstApprovalRoute extends Route {
   @service store;
   @service currentSession;
+  @service impersonation;
 
   queryParams = {
     page: {
@@ -106,7 +107,7 @@ export default class CasesCaseSubcasesDemoSubcaseDemoFirstApprovalRoute extends 
     }
     const decisionmakingFlow = this.modelFor('cases.case');
     this.case = await decisionmakingFlow.case;
-    
+
     this.mandatees = (await model.subcase.mandatees).sortBy('priority');
     this.submitter = await model.subcase.requestedBy;
     const agendaActivities = await model.subcase.agendaActivities;

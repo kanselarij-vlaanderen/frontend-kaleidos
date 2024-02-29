@@ -88,6 +88,18 @@
         @onChange={{this.selectSubcaseType}}
       />
     </div>
+    {{#if (eq @kabinet true)}}
+    <div class="auk-form-group">
+      <Auk::Label for="longTitle">Notificeer</Auk::Label>
+      <Auk::Textarea
+        data-test-new-subcase-longtitle
+        @rows="4"
+        @value=""
+        id="notifications"
+      />
+      <AuHelpText @skin="secondary">In dit veld kun je meerdere e-mailadressen invoeren, gescheiden door een komma (,). Bijvoorbeeld: jan@example.com, marie@example.com, peter@example.com</AuHelpText>
+    </div>
+    {{else}}
     <div class="auk-form-group">
       <Auk::Label>{{t "subcase-name"}}</Auk::Label>
       <AuInput
@@ -95,6 +107,7 @@
         @value={{mut this.subcaseName}}
       />
     </div>
+    {{/if}}
     <div>
       <div class="auk-form-group">
         <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>

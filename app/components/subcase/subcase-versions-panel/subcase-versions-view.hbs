@@ -21,14 +21,6 @@
         </div>
       </div>
       <ul class="vlc-status-timeline">
-        {{!-- <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Geagendeerd op de agenda van <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
-          </div>
-        </li> --}}
         <li
           class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
@@ -45,6 +37,7 @@
             Ingediend voor agendering op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
+        {{#if (not-eq @kabinet true)}}
         <li
           class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
@@ -53,6 +46,7 @@
             Geagendeerd op de agenda van <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
+        {{/if}}
       </ul>
       {{else if (eq @demoTwo true)}}
       <div class="auk-u-mb-2">
@@ -79,30 +73,6 @@
             Verzonden op <AuLinkExternal @href="#!">1 december 2023</AuLinkExternal>
           </div>
         </li>
-        {{!-- <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Goedgekeurd op de agenda van <AuLinkExternal @href="#!">11 oktober 2023</AuLinkExternal>
-          </div>
-        </li>
-        <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Ingediend voor agendering op <AuLinkExternal @href="#!">11 oktober 2023</AuLinkExternal>
-          </div>
-        </li>
-        <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Geagendeerd op de agenda van <AuLinkExternal @href="#!">11 oktober 2023</AuLinkExternal>
-          </div>
-        </li> --}}
       </ul>
       {{else}}
       <div class="auk-u-mb-2">

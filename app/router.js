@@ -42,6 +42,7 @@ Router.map(function() {
           this.route('decision', { path: '/beslissing', });
         });
         this.route('add-subcase', { path: '/procedurestap-toevoegen', });
+        this.route('add-agendapoint', { path: '/agendapunt-toevoegen', });
       });
       this.route('subcases-demo', { path: '/deeldossiers-demo', }, function() {
         this.route('subcase-demo', { path: ':subcase_id', }, function() {

@@ -16,6 +16,8 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
   @tracked currentRoute;
+  @service currentSession;
+  @service impersonation;
 
   constructor() {
     super(...arguments);

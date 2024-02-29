@@ -6,6 +6,7 @@
       @onSave={{this.stopEditing}}
       @step={{@step}}
       @status={{@status}}
+      @kabinet={{@kabinet}}
     />
   {{else}}
     <SubcaseDemo::ApprovalTitlesPanel::ApprovalTitlesPanelView
@@ -15,6 +16,7 @@
       @onClickEdit={{this.startEditing}}
       @step={{@step}}
       @status={{@status}}
+      @kabinet={{@kabinet}}
     />
   {{/if}}
 </div>

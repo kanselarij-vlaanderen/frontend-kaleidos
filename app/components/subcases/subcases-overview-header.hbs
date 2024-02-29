@@ -109,6 +109,19 @@
         {{/if}}
       </Auk::Toolbar::Group>
     {{/if}}
+    {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+      {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button"
+            @icon="plus"
+            @route="cases.case.subcases.add-agendapoint"
+          >
+            Voeg agendapunt toe
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
+    {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
 {{! MODAL }}

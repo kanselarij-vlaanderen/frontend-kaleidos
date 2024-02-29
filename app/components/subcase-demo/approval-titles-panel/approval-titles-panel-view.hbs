@@ -91,6 +91,11 @@
           <p class="auk-u-mt-1">{{@step}}</p>
           {{/if}}
         </div>
+        {{#if (eq @kabinet true)}}
+        <div class="au-o-grid__item au-u-1-2 au-u-3-4@medium">
+          <AuAlert @title="Nog niet geagendeerd" @size="small" @icon="circle-info" />
+        </div>
+        {{else}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Geagendeerd op</AuHeading>
           {{#if (eq @step 'Definitieve goedkeuring')}}
@@ -109,6 +114,7 @@
           <AuHeading @level="4" @skin="6">Status</AuHeading>
           <AuPill @skin="success" @size="small">{{@status}}</AuPill>
         </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>

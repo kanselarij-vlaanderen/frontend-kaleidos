@@ -3,9 +3,10 @@
     <SubcaseDemo::ApprovalTitlesPanel
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
-      @allowEditing={{user-may "manage-cases"}}
+      @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
       @step="Eerste principiële goedkeuring"
       @status="Goedgekeurd"
+      @kabinet={{or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')}}
     />
   </div>
   <Mandatees::MandateesPanel
@@ -17,13 +18,13 @@
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
     @governmentAreas={{@model.subcase.governmentAreas}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
     @onSave={{this.saveGovernmentAreas}}
   />
 
@@ -63,8 +64,7 @@
           </div>
         {{/if}}
       </Auk::Panel::Body>
-      {{#if (user-may "manage-documents")}}
-
+      {{#if (or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')))}}
       <Auk::Panel::Footer>
         <AuButton
           data-test-route-cases---subcase-documents-add
@@ -80,13 +80,16 @@
     </Auk::Panel>
   </div>
 
+  {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+  <div id="agenda">
+     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} @step="Eerste principiële goedkeuring" @kabinet={{true}} />
+  </div>
+  {{else}}
   <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}  class="c-linked-documents"/>
-
   <div id="agenda">
      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} @step="Eerste principiële goedkeuring" />
   </div>
-
-
+  {{/if}}
 {{/if}}
 
 <ConfirmationModal
