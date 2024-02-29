@@ -54,7 +54,7 @@
       {{/if}}
       {{#if
         (and
-          (or this.currentSession.isAdmin (await this.isDeletable))
+          (or (user-may "remove-approved-agendaitems") (await this.isDeletable))
           this.isDesignAgenda
           (user-may "manage-agendaitems")
         )
@@ -71,7 +71,7 @@
       {{/if}}
     </AuDropdown>
   {{else}}
-    <div class="auk-loader" role="alert" aria-busy="true"></div>
+    <Auk::Loader />
   {{/if}}
 {{/if}}
 <ConfirmationModal

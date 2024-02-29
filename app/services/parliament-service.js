@@ -35,7 +35,7 @@ export default class ParliamentService extends Service {
 
   async sendToVP(agendaitem, pieces, comment, isComplete) {
     const sendingToast = this.toaster.loading(
-      this.intl.t('the-files-are-being-sent-to-parliament'),
+      this.intl.t('the-documents-are-being-sent-to-parliament'),
       null,
       {
         timeOut: 10 * 60 * 1000,
@@ -101,7 +101,7 @@ export default class ParliamentService extends Service {
     if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.SUCCESS) {
       this.toaster.close(toast);
       this.toaster.success(
-        this.intl.t('the-files-are-sent-to-parliament'),
+        this.intl.t('the-documents-were-sent-to-parliament'),
         null,
         {
           closable: true,

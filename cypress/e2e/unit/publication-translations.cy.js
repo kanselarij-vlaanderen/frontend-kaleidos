@@ -286,7 +286,7 @@ context('Publications translation tests', () => {
       .clear()
       .type('{enter}');
     cy.get(publication.translationsInfoPanel.save).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.formHelpText).should('not.exist');
     cy.get(publication.translationsIndex.requestTranslation).click();
     cy.get(auk.datepicker.datepicker).should('have.value', '');

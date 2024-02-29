@@ -11,8 +11,9 @@ export default class AgendaMinutesRoute extends Route {
   @service signatureService;
 
   async getMandatees() {
+    const { meeting } = this.modelFor('agenda');
     const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
-      startOfDay(new Date()),
+      startOfDay(meeting.plannedStart),
       null,
       null,
       [
@@ -40,7 +41,7 @@ export default class AgendaMinutesRoute extends Route {
       'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'type.position,number',
     });
-    for (const agendaitem of agendaitems.toArray()) {
+    for (const agendaitem of agendaitems.slice()) {
       const type = await agendaitem.type;
       if (type?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
         announcements.push(agendaitem);

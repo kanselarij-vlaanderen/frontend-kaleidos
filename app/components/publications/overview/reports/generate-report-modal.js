@@ -151,7 +151,7 @@ export default class GenerateReportModalComponent extends Component {
 
   @task
   *loadGovernmentDomains() {
-    let governmentDomains = yield this.store.query('concept', {
+    let governmentDomains = yield this.store.queryAll('concept', {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
@@ -159,9 +159,10 @@ export default class GenerateReportModalComponent extends Component {
         CONFIG.PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
         'filter[deprecated]': false,
       }), // Exclude deprecated government domains when generating modern reports
-      'page[size]': 100,
     });
-    this.governmentDomains = governmentDomains.toArray().sortBy('label');
+    this.governmentDomains = governmentDomains
+      .slice()
+      .sort((d1, d2) => d1.label.localeCompare(d2.label));
     // everything selected by default
     this.selectedGovernmentDomains = this.governmentDomains.slice(0);
   }
@@ -174,8 +175,9 @@ export default class GenerateReportModalComponent extends Component {
   @task // @task: for consistency with other loadData tasks
   *loadRegulationTypes() {
     let regulationTypes = this.store.peekAll('regulation-type');
-    regulationTypes = regulationTypes.toArray();
-    regulationTypes = regulationTypes.sortBy('position');
+    regulationTypes = regulationTypes
+      .slice()
+      .sort((c1, c2) => c1.position - c2.position);
     this.regulationTypes = regulationTypes;
     yield; // for linter
     // everything selected by default
@@ -245,7 +247,7 @@ export default class GenerateReportModalComponent extends Component {
 
     if (this.args.userInputFields.mandateePersons) {
       if (this.selectedMandateePersons.length) {
-        const mandateePersons = this.selectedMandateePersons.mapBy('uri');
+        const mandateePersons = this.selectedMandateePersons.map((p) => p.uri);
         filterParams.mandateePersons = mandateePersons;
       }
     }

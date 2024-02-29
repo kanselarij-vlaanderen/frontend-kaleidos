@@ -101,7 +101,7 @@ export default class SearchDocumentsController extends Controller {
         await Promise.all(
           this.documentTypes?.map((id) => this.store.findRecord('document-type', id))
         )
-      ).toArray();
+      ).slice();
     } else {
       this.documentTypesBuffer = [];
     }

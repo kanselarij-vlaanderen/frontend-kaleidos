@@ -3,19 +3,7 @@
 
 // SCSS variables (to override)
 
-$mq-breakpoints: (
-  xsmall: 300px,
-  small: 500px,
-  medium: 767px,
-  large: 1023px,
-);
-
-$au-layout-width: 767px;
-$au-layout-width-small: 500px;
-$au-layout-width-large: 1023px;
-
 $au-button-height: 3.6rem;
-
 $au-label-color: var(--au-gray-700);
 
 
@@ -91,6 +79,10 @@ $au-label-color: var(--au-gray-700);
   padding-top: 0;
   white-space: nowrap;
   overflow: hidden;
+
+  &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
+    cursor: pointer;
+  }
 }
 
 .au-c-pill--link {
@@ -202,6 +194,11 @@ $au-label-color: var(--au-gray-700);
     > p + ul,
     > p + ol {
       margin-top: 0.2rem;
+    }
+
+    > ul[data-list-style='upper-alpha'] + p,
+    > ol[data-list-style='upper-alpha'] + p {
+      margin-top: 0;
     }
 
     > * + h1,
@@ -358,6 +355,16 @@ $au-label-color: var(--au-gray-700);
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
+.au-o-layout {
+  padding-right: $au-unit-small;
+  padding-left: $au-unit-small;
+
+  @include mq($au-layout-breakpoint) {
+    padding-right: $au-unit;
+    padding-left: $au-unit;
+  }
+}
+
 // Modal fixes
 .au-c-modal--fullscreen {
   max-width: 100%;
@@ -473,6 +480,20 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+// Loader
+
+.au-c-loader__animation {
+  height: 1.6rem + $au-unit;
+
+  .au-c-loader--small & {
+    height: 1.6rem;
+  }
+
+  .au-c-loader--large & {
+    height: 1.6rem + $au-unit-large;
+  }
+}
+
 // Additions
 
 .au-c-pill--blank {
@@ -541,6 +562,10 @@ $au-label-color: var(--au-gray-700);
 
     &[data-list-style='upper-alpha'] {
       list-style-type: upper-alpha;
+      margin-left: 2rem;
+      ol {
+        margin-left: 2rem;
+      }
     }
   }
 
@@ -630,6 +655,14 @@ $au-label-color: var(--au-gray-700);
 
 .au-u-flex-item--fixed {
   flex: 0 0 auto !important;
+}
+
+.au-u-maximize-width {
+  width: 100% !important;
+}
+
+.au-u-maximize-height {
+  height: 100% !important;
 }
 
 // TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed

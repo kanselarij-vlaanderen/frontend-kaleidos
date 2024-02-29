@@ -4,6 +4,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class SignaturesOngoingDecisionsController extends Controller {
   @service store;
@@ -29,16 +30,27 @@ export default class SignaturesOngoingDecisionsController extends Controller {
       },
       statuses: {
         type: 'array',
-      }
+      },
+      dateFrom: {
+        type: 'string',
+      },
+      dateTo: {
+        type: 'string',
+      },
     },
   ];
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[3];
-  @tracked sort = '-decision-activity.start-date';
+  @tracked sort = [
+    '-meeting.planned-start',
+    'sign-subcase.sign-marking-activity.piece.name',
+  ].join(',');
   @tracked isLoadingModel;
   @tracked mandatees = [];
   @tracked statuses = [];
+  @tracked dateFrom;
+  @tracked dateTo;
   @tracked excludedStatuses = [CONSTANTS.SIGNFLOW_STATUSES.MARKED]
 
 
@@ -72,10 +84,38 @@ export default class SignaturesOngoingDecisionsController extends Controller {
       }
     }
   }
+  
+  @action
+  async onClickRow (signFlow) {
+    if (await this.isRowDisabled(signFlow)) {
+      return;
+    }
+    await this.navigateToSignFlow(signFlow);
+  }
 
   @action
   onChangeStatus(statuses) {
     this.statuses = statuses;
+  }
+
+  @action
+  setDateFrom(date) {
+    this.dateFrom = formatDate(date);
+  }
+
+  @action
+  setDateTo(date) {
+    this.dateTo = formatDate(date);
+  }
+
+  @action
+  async isRowDisabled(row) {
+    if (this.currentSession.may('view-all-ongoing-signatures')) {
+      return false;
+    }
+
+    const creator = await row.creator;
+    return creator.id !== this.currentSession.user.id;
   }
 
   getMeetingDate = async (signFlowOrPromise) => {

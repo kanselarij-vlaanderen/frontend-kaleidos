@@ -10,10 +10,10 @@ export class TimelineActivity {
 
     if (row.isProofingActivity) {
       let pieces = await row.activity.generatedPieces;
-      pieces = pieces.toArray();
-      let publicationActivities = pieces.mapBy('publicationActivitiesUsedBy');
+      pieces = pieces.slice();
+      let publicationActivities = pieces.map((a) => a.publicationActivitiesUsedBy);
       publicationActivities = await Promise.all(publicationActivities);
-      publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.toArray());
+      publicationActivities = publicationActivities.map((publicationActivities) => publicationActivities.slice());
       publicationActivities = publicationActivities.flat();
       row.canDeletePieces = publicationActivities.length === 0;
     }
@@ -62,14 +62,14 @@ export default class PublicationsPublicationProofsRoute extends Route {
   async model() {
     this.publicationSubcase = this.modelFor('publications.publication.proofs');
 
-    let requestActivities = this.store.query('request-activity', {
+    let requestActivities = this.store.queryAll('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
       'filter[:has:proofing-activity]': true,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
-    let proofingActivities = this.store.query('proofing-activity', {
+    let proofingActivities = this.store.queryAll('proofing-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
       include: [
         'used-pieces',
@@ -89,7 +89,7 @@ export default class PublicationsPublicationProofsRoute extends Route {
       ...requestActivities.map((request) => TimelineActivity.create(request)),
       ...proofingActivities.map((proofing) => TimelineActivity.create(proofing)),
     ]);
-    rows = rows.sortBy('date').reverseObjects();
+    rows = rows.sort((r1, r2) => r1.date - r2.date).reverse();
     return rows;
   }
 

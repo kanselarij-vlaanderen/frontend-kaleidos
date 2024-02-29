@@ -22,6 +22,7 @@
     {{else if @content}}
       {{#each @content as |row|}}
         <tr
+          class="{{if (await (this.shouldDisableRow row)) "auk-table-row-disabled" ""}}"
           role="button"
           {{on "click" (fn (optional @onClickRow) row)}}
         >

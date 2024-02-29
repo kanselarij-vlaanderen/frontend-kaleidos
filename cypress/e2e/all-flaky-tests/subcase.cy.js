@@ -9,6 +9,7 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -75,8 +76,8 @@ context('Subcase tests', () => {
     cy.openSubcase(0, subcaseTitleShort);
 
     cy.changeSubcaseAccessLevel(true, subcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseMandatee(2, 'Crevits');
-    cy.addSubcaseMandatee(3);
+    cy.addSubcaseMandatee(mandateeNames.current.second);
+    cy.addSubcaseMandatee(mandateeNames.current.third);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -97,7 +98,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseDescription.requestedBy).contains(/Hilde Crevits/);
+    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
 
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(subcaseTitleShort);
@@ -134,7 +135,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseHeader.actions.deleteSubcase)
       .should('not.exist');
     cy.get(cases.subcaseDescription.agendaLink).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.changeDecisionResult('Goedgekeurd');
   });
 
@@ -162,7 +163,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseDescription.requestedBy).contains(/Hilde Crevits/);
+    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
@@ -475,7 +476,7 @@ context('Subcase tests', () => {
     cy.wait('@getSubcasesFiltered', {
       timeout: 12000,
     });
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 12000,
     }).should('not.exist');
     cy.get(dependency.emberDataTable.isLoading).should('not.exist');
@@ -529,7 +530,6 @@ context('Subcase tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.reload();
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.addNewPiece('VR 2020 1212 DOC.0001-1', file, 'agendaitems');
     cy.get(agenda.agendaitemNav.caseTab).click();

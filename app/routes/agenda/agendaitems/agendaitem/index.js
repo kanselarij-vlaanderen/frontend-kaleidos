@@ -40,7 +40,9 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     // The reload in model refreshes only the attributes and includes relations, makes saves with stale relation data possible
     await model.hasMany('mandatees').reload();
     await model.hasMany('pieces').reload();
-    this.mandatees = (await model.mandatees).sortBy('priority');
+    this.mandatees = (await model.mandatees)
+      .slice()
+      .sort((m1, m2) => m1.priority - m2.priority);
   }
 
   async setupController(controller) {

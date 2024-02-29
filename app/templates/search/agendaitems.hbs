@@ -64,7 +64,7 @@
       @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-agendaitems-data-table-row>
           <Search::ResultCards::Agendaitem
             @date={{row.sessionDates}}
             @agendaItemType={{row.type}}

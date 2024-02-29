@@ -64,8 +64,8 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
     ]);
 
     return [
-      ...publicationsByCase.toArray(),
-      ...publicationsNotViaCouncilOfMinisters.toArray()
+      ...publicationsByCase.slice(),
+      ...publicationsNotViaCouncilOfMinisters.slice()
     ];
   }
 }

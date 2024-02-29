@@ -83,7 +83,17 @@ services:
     user: ${HOST_UID_GID}
   decision-extraction:
     user: ${HOST_UID_GID}
-  chrome-browser:
+  minutes-report-generation:
     user: ${HOST_UID_GID}
   file-bundling:
     user: ${HOST_UID_GID}
+  agenda-submission:
+    environment:
+      CACHE_CLEAR_TIMEOUT: 8000
+  vlaams-parlement-sync:
+    environment:
+      ENABLE_SENDING_TO_VP_API: "false" # enable/disable the actual call to the VP-API
+      ENABLE_ALWAYS_CREATE_PARLIAMENT_FLOW: "true" # always creates a (mock) parliament-flow, even when ENABLE_SENDING_TO_VP_API is false
+      VP_API_DOMAIN: "https://replace.by.actual.api.url"
+      VP_API_CLIENT_ID: "yourVpApiClientId"
+      VP_API_CLIENT_SECRET: "yourVpApiClientSecret"

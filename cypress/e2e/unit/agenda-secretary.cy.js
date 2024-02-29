@@ -41,6 +41,7 @@ context('Agenda secretary tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(utils.governmentAreasPanel.emptyState);
+    cy.wait(2500); // hecking if this helps
   });
 
   it('should check default secretary', () => {
@@ -193,7 +194,7 @@ context('Agenda secretary tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
@@ -225,7 +226,7 @@ context('Agenda secretary tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.editMeeting.meetingLocation).click()
       .type(location);
     cy.intercept('PATCH', '/meetings/**').as('patchMeetings2');

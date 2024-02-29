@@ -93,13 +93,6 @@ const selectors = {
     save: '[data-test-vl-modal-verify-save]',
   },
 
-  // vl-alert
-  vlAlert: {
-    close: '[data-test-vl-alert-close]',
-    container: '[data-test-vl-alert]',
-    message: '[data-test-vl-alert-message]',
-  },
-
   // case-search
   caseSearch: {
     input: '[data-test-utils-case-search-input]',
@@ -134,8 +127,6 @@ const selectors = {
     pastMinisters: '[data-test-search-minister-filter-past-ministers]',
   },
 
-  sayEditor: {
-    rdfa: '[data-test-say-editor-rdfa]',
-  },
+  rdfaEditor: '[data-test-rdfa-editor]',
 };
 export default selectors;

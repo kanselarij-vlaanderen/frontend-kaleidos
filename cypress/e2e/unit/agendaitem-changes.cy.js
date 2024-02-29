@@ -2,10 +2,10 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function agendaitemExistsInOverview(agendaitemTitle, exists) {
   if (exists) {
@@ -36,6 +36,7 @@ context('Agendaitem changes tests', () => {
     cy.logout();
   });
 
+  // const agendaDate = Cypress.dayjs('2020-04-02');
   const agendaURL = '/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten';
   const approvalTitle = 'Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019';
   const agendaitemIndex2 = 'testId=1589276690: Cypress test dossier 1 test stap 1';
@@ -207,7 +208,7 @@ context('Agendaitem changes tests', () => {
     // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-    cy.addAgendaitemMandatee(1, 'Jambon', ministerTitle);
+    cy.addAgendaitemMandatee(mandateeNames['02102019-10052021'].first);
     cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', ministerTitle);
@@ -235,7 +236,7 @@ context('Agendaitem changes tests', () => {
     // After a page reload (or going to the address), the anchor still exists and is used for scrolling
     cy.reload();
     cy.get(agenda.agendaOverview.notesSectionTitle);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaOverviewItem.subitem).contains(visibleTitle)
       .should('be.visible');
     cy.get(agenda.agendaOverview.notesSectionTitle).should('not.be.visible');
@@ -276,7 +277,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .click()
       .wait('@patchAgendaitems');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -286,7 +287,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .click()
       .wait('@patchAgendaitems2');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .should('not.be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -296,7 +297,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .click()
       .wait('@patchAgendaitems3');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)
@@ -306,7 +307,7 @@ context('Agendaitem changes tests', () => {
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveUp)
       .click()
       .wait('@patchAgendaitems4');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.moveDown)
       .should('not.be.disabled');
     cy.get('@agendaItem').find(agenda.agendaOverviewItem.numbering)

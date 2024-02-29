@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrLegacyDocumentName,
@@ -15,34 +14,35 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   async model() {
     this.subcase = this.modelFor('cases.case.subcases.subcase');
     // Get any submission that is not yet on a meeting
-    const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
+    const submissionActivitiesWithoutActivity = await this.store.queryAll('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[:has-no:agenda-activity]': true,
-      'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
-    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
     // Get the submission from latest meeting if applicable
     const agendaActivities = await this.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       this.latestMeeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
         sort: '-planned-start',
       });
-      const submissionActivitiesFromLatestMeeting = await this.store.query('submission-activity', {
+      const submissionActivitiesFromLatestMeeting = await this.store.queryAll('submission-activity', {
         'filter[subcase][:id:]': this.subcase.id,
         'filter[agenda-activity][:id:]': latestActivity.id,
-        'page[size]': PAGE_SIZE.ACTIVITIES,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

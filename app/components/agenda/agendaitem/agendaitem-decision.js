@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import ENV from 'frontend-kaleidos/config/environment';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName, {
   compareFunction as compareNotulen,
@@ -91,7 +90,7 @@ export default class AgendaitemDecisionComponent extends Component {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'filter[:has-no:next-piece]': true,
     });
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
@@ -225,7 +224,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.report
       );
     }
-    this.loadBeslissingPiecePart.perform();
+    await this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -238,7 +237,7 @@ export default class AgendaitemDecisionComponent extends Component {
       ].includes(decisionResultCode?.uri)
     ) {
       const pieces = await this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );
@@ -254,7 +253,7 @@ export default class AgendaitemDecisionComponent extends Component {
       decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
     ) {
       const pieces = await this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.signatureService.removeSignFlowForPiece(piece);
       }
     }
@@ -795,16 +794,12 @@ export default class AgendaitemDecisionComponent extends Component {
     return false;
   }
 
-  get enableDigitalAgenda() {
-    return (
-      (ENV.APP.ENABLE_DIGITAL_AGENDA === 'true' ||
-        ENV.APP.ENABLE_DIGITAL_AGENDA === true) &&
-      !this.args.agendaContext.meeting.isPreDigitalDecisions
-    );
+  get isMeetingPostDigitalDecisions() {
+    return !this.args.agendaContext.meeting.isPreDigitalDecisions;
   }
 
   get mayEditDecisionReport() {
-    return this.enableDigitalAgenda &&
+    return this.isMeetingPostDigitalDecisions &&
       this.currentSession.may('manage-decisions') &&
       (this.pieceParts || !this.report) &&
       (this.hasSignFlow === false || this.hasMarkedSignFlow);

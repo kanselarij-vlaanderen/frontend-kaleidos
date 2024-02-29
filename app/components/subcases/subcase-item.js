@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -105,26 +104,26 @@ export default class SubcaseItemSubcasesComponent extends Component {
   *loadSubcaseDocuments() {
     // proceed to get the documents
     const queryParams = {
-      page: {
-        size: PAGE_SIZE.ACTIVITIES,
-      },
       include: 'pieces', // Make sure we have all pieces, unpaginated
       'filter[subcase][:id:]': this.args.subcase.id,
     };
     // only get the documents on latest agendaActivity if applicable
     const agendaActivities = yield this.args.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
     }
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
-    const submissionActivities = yield this.store.query('submission-activity', queryParams);
+    const submissionActivities = yield this.store.queryAll('submission-activity', queryParams);
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

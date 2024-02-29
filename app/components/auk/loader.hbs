@@ -1,8 +1,8 @@
 {{#if @message}}
-  <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-maximize-width auk-u-maximize-height">
-    <div class="auk-loader" role="alert" aria-busy="true"></div>
+  <div class="au-u-maximize-width au-u-maximize-height au-u-flex au-u-flex--column au-u-flex--center au-u-flex--vertical-center au-u-text-center">
+    <AuLoader @padding="small" @disableMessage={{true}} class="au-u-margin-bottom-tiny" />
     <p>{{@message}}</p>
   </div>
 {{else}}
-  <div class="auk-loader" role="alert" aria-busy="true"></div>
+  <AuLoader @padding="small" @disableMessage={{true}} />
 {{/if}}

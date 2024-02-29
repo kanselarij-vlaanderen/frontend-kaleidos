@@ -52,7 +52,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       'publications.publication.publication-activities'
     );
 
-    let requestActivities = this.store.query('request-activity', {
+    let requestActivities = this.store.queryAll('request-activity', {
       'filter[publication-subcase][:id:]': this.publicationSubcase.id,
       'filter[:has:publication-activity]': true,
       // eslint-disable-next-line prettier/prettier
@@ -62,7 +62,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
         'used-pieces.file'
       ].join(','),
     });
-    let publicationActivities = this.store.query('publication-activity', {
+    let publicationActivities = this.store.queryAll('publication-activity', {
       'filter[subcase][:id:]': this.publicationSubcase.id,
       // eslint-disable-next-line prettier/prettier
       include: [
@@ -79,8 +79,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
       ...requestActivities.map((request) => new TimelineActivity(request)),
       ...publicationActivities.map((publication) => new TimelineActivity(publication)),
     ]
-      .sortBy('date')
-      .reverseObjects();
+      .sort((a1, a2) => a1.date - a2.date)
+      .reverse();
   }
 
   afterModel() {

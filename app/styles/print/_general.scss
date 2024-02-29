@@ -7,13 +7,6 @@
     font-size: 50%;
   }
 
-  /* Govflanders (VL) overrides
-   ========================================================================== */
-
-  .vl-alert {
-    display: none;
-  }
-
   /* VLC overrides
    ========================================================================== */
 
@@ -76,6 +69,10 @@
   }
 
   .au-c-toaster {
+    display: none;
+  }
+
+  .au-c-alert {
     display: none;
   }
 }

@@ -3,6 +3,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 export default class Subcase extends ModelWithModifier {
+  @attr uri;
   @attr('datetime') created;
   @attr('datetime') modified;
   @attr shortTitle;

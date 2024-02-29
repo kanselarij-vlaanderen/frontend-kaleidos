@@ -1,0 +1,22 @@
+<Auk::Panel class="auk-u-mb-2">
+  <Auk::Panel::Header class="au-u-background-gray-100">
+    <h4 class="auk-panel__title">{{t "documents"}}</h4>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Auk::FileUploader
+      @multiple={{true}}
+      @reusable={{true}}
+      @onUpload={{this.uploadPiece}}
+      @onQueueUpdate={{@onFileQueueUpdate}}
+    />
+    <div class="upload-container">
+      {{#each @pieces as |piece|}}
+        <Documents::UploadedDocument
+          @piece={{piece}}
+          @allowDocumentContainerEdit={{true}}
+          @onDelete={{perform this.deletePiece piece}}
+        />
+      {{/each}}
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>

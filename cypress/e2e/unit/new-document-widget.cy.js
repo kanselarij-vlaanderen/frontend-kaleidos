@@ -89,8 +89,12 @@ context('check the functions of the new document widget', () => {
       .wait('@patchPieces3');
     cy.wait(500); // cypress might be too fast
     // Derived file should be converted pdf file
+    // *Note: as of 01/feb/2024, users don't want a new conversion of a docx if a pdf already exists
+    // *this is a result of docx files being added to manually generated pdf's.
+    // cy.get(document.documentCard.name.value)
+    //   .should('contain', `.${pdfExtension}`);
     cy.get(document.documentCard.name.value)
-      .should('contain', `.${pdfExtension}`);
+      .should('contain', `.${wordExtension}`);
     // Source file should link to the uploaded word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
       .should('contain', `${file.fileName}.${wordExtension}`);

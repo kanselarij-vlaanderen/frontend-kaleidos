@@ -40,10 +40,15 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   }
 
   async afterModel(model) {
-    this.mandatees = (await model.subcase.mandatees).sortBy('priority');
+    this.mandatees = (await model.subcase.mandatees)
+      .slice()
+      .sort((m1, m2) => m1.priority - m2.priority);
     this.submitter = await model.subcase.requestedBy;
     const agendaActivities = await model.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       this.meeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,

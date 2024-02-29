@@ -77,7 +77,9 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sortBy('groupNumber').map((group) => EmberObject.create(group));
+  groupsArray = groupsArray
+    .sort((g1, g2) => g1.groupNumber.localeCompare(g2.groupNumber))
+    .map((group) => EmberObject.create(group));
 
   return groupsArray;
 };
@@ -128,7 +130,8 @@ export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGen
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = [];
   const actualAnnouncements = [];
-  for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+  const sortedAgendaitems = agendaitems.slice().sort((a1, a2) => a1.number - a2.number)
+  for (const agendaitem of sortedAgendaitems) {
     if (!agendaitem.isDeleted) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
@@ -164,13 +167,13 @@ export class AgendaitemGroup {
 
   static sortedMandatees(mandatees) {
     // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.toArray());
-    return copiedMandatees.sortBy('priority');
+    const copiedMandatees = A(mandatees.slice());
+    return copiedMandatees.sort((m1, m2) => m1.priority - m2.priority);
   }
 
   static generateMandateeGroupId(sortedMandatees) {
     // Assumes mandatees to be sorted
-    return sortedMandatees.mapBy('id').join();
+    return sortedMandatees.map((m) => m.id).join();
   }
 
   /**
