@@ -14,7 +14,7 @@
         <Auk::Toolbar::Item>
           {{#if (or this.loadData.isRunning this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
-          {{else if this.canPropose}}
+          {{else}}
             <AuDropdown
               data-test-subcase-header-show-proposed-agendas={{true}}
               @skin="primary"
@@ -54,16 +54,16 @@
             @title={{t "actions"}}
             @alignment="right"
           >
-            {{#if this.canDelete}}
-              <AuButton
-                data-test-subcase-header-action-delete-subcase
-                @skin="link"
-                @alert={{true}}
-                {{on "click" (fn this.requestDeleteSubcase @subcase)}}
-                role="menuitem"
-              >
-                {{t "delete-subcase"}}
-              </AuButton>
+            {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
+            <AuButton
+              data-test-subcase-header-action-delete-subcase
+              @skin="link"
+              @alert={{true}}
+              {{on "click" (fn this.requestDeleteSubcase @subcase)}}
+              role="menuitem"
+            >
+              {{t "delete-subcase"}}
+            </AuButton>
             {{/if}}
             <AuButton
               data-test-subcase-header-action-move-subcase
@@ -73,6 +73,15 @@
             >
               {{t "move-subcase"}}
             </AuButton>
+            {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
+            <AuButton
+              @skin="link"
+              {{on "click" this.triggerAgendaSubcaseDialog}}
+              role="menuitem"
+            >
+              Indienen voor agendering
+            </AuButton>
+            {{/if}}
           </AuDropdown>
         </Auk::Toolbar::Item>
       {{/if}}
@@ -121,3 +130,70 @@
   @alert={{true}}
   @loading={{this.isLoading}}
 />
+
+{{#if this.showAgendaModal}}
+<Auk::Modal>
+  <Auk::Modal::Header @title="Agendering" @onClose={{this.triggerAgendaSubcaseDialog}} />
+  <Auk::Modal::Body>
+    <div>
+      <div class="auk-form-group">
+        <Auk::Label for="new-subcase-ok">Formeel ok</Auk::Label>
+        <AuToggleSwitch
+          id="new-subcase-ok"
+        />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="remarks">Interne opmerkingen</Auk::Label>
+        <Auk::Textarea
+          @rows="4"
+          @value=""
+          id="remarks"
+        />
+      </div>
+      <AuHr />
+      <table class="auk-table auk-table--striped">
+        <thead>
+          <tr>
+            <th class="auk-table__col--1"></th>
+            <Utils::ThSortable
+              @field="created"
+              @label="Datum aangemaakt"
+            />
+            <Utils::ThSortable
+              @field="short-title"
+              @label="Titel"
+            />
+          </tr>
+        </thead>
+        <tbody class="auk-table--clickable-rows">
+          {{#each this.agendas as |agenda|}}
+            <tr>
+              <td class="auk-table__col--1">
+                <AuRadio @name="agendas" {{on 'click' this.toggleAgenda }} />
+              </td>
+              <td class="auk-table__col--3">
+                {{agenda.created}}
+              </td>
+              <td class="auk-table__col--8">
+                <strong>{{agenda.title}}</strong>
+                <AuPill @skin="ongoing" @draft={{true}}>{{agenda.letter}}</AuPill>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{this.triggerAgendaSubcaseDialog}}
+  >
+    <AuButton
+      @skin="primary"
+      @disabled={{if (eq this.hasAgenda false) true}}
+      {{on "click" this.triggerAgendaSubcaseDialog}}
+    >
+      Plaats op agenda
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}

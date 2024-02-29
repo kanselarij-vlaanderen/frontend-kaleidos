@@ -80,34 +80,16 @@
       {{#if @subcase.title}}
       <p>{{capitalize @subcase.title}}</p>
       {{/if}}
-
     </Auk::Panel::Body>
-    {{!-- <Auk::Panel::Body class="auk-u-bg-alt">
-      <AuHeading @level="4" @skin="6">{{@step}} m.h.o. op adviesaanvragen</AuHeading>
-      <ul class="vlc-status-timeline">
-        <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Ingediend voor agendering op <AuLinkExternal>28 augustus 2023</AuLinkExternal>
-          </div>
-        </li>
-        <li
-          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
-          <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
-            Geagendeerd op agenda van <AuLinkExternal>30 november 2023</AuLinkExternal>
-          </div>
-        </li>
-      </ul>
-    </Auk::Panel::Body> --}}
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Procedurestap</AuHeading>
+          {{#if (or (eq @step 'Eerste principiële goedkeuring')(eq @step 'Tweede principiële goedkeuring'))}}
+          <p class="auk-u-mt-1">Principiële goedkeuring</p>
+          {{else}}
           <p class="auk-u-mt-1">{{@step}}</p>
+          {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Geagendeerd op</AuHeading>
@@ -123,20 +105,6 @@
           <AuHeading @level="4" @skin="6">Nummer vergadering</AuHeading>
           <p class="auk-u-mt-1">1446 (2022-2023) nr. 1</p>
         </div>
-        {{!-- <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">Ingediend door</AuHeading>
-          <p class="auk-u-mt-1">Bart Somers</p>
-        </div> --}}
-        {{!-- <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">Aangevraagd voor Bijzondere ministerraad</AuHeading>
-          {{#if (eq @step 'Definitieve goedkeuring')}}
-          <p class="auk-u-mt-1">28 augustus 2023</p>
-          {{else if (eq @step 'Tweede principiële goedkeuring')}}
-          <p class="auk-u-mt-1">13 juni 2023</p>
-          {{else if (eq @step 'Eerste principiële goedkeuring')}}
-          <p class="auk-u-mt-1">01 april 2023</p>
-          {{/if}}
-        </div> --}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Status</AuHeading>
           <AuPill @skin="success" @size="small">{{@status}}</AuPill>

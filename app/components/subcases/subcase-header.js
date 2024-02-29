@@ -27,6 +27,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canDelete = false;
   @tracked meetings;
   @tracked currentRoute;
+  @tracked showAgendaModal = false;
+  @tracked hasAgenda = false;
 
   constructor() {
     super(...arguments);
@@ -175,6 +177,16 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
+  triggerAgendaSubcaseDialog() {
+    this.showAgendaModal = !this.showAgendaModal;
+  }
+
+  @action
+  toggleAgenda() {
+    this.hasAgenda = true;
+  }
+
+  @action
   async moveSubcase(_newDecisionmakingFlow) {
     const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
 
@@ -206,4 +218,42 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.caseToDelete = null;
     this.router.transitionTo('cases.case.subcases');
   }
+
+  agendas = [
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '14-07-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '22-06-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'B',
+      'created': '22-06-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'D',
+      'created': '29-05-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'A',
+      'created': '15-05-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'D',
+      'created': '26-04-2023'
+    },
+    {
+      'title': 'Ontwerpagenda',
+      'letter': 'A',
+      'created': '18-01-2023'
+    }
+  ]
 }

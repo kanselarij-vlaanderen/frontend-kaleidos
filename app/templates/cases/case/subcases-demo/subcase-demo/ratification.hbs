@@ -5,7 +5,7 @@
       @meeting={{this.meeting}}
       @allowEditing={{user-may "manage-cases"}}
       @step="Bekrachtiging"
-      @status="Act in afwachting"
+      @status="Nog geen beslissing ingesteld"
     />
   </div>
   {{!-- <Mandatees::MandateesPanel
@@ -84,41 +84,7 @@
   <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}} class="c-linked-documents" />
 
   <div id="agenda">
-    <Auk::Panel data-test-subcase-description-panel>
-      <Auk::Panel::Header>
-        <Auk::Toolbar>
-          <Auk::Toolbar::Group @position="left">
-            <Auk::Toolbar::Item>
-              <div class="au-u-flex au-u-flex--spaced-small">
-                <h4 class="auk-panel__title">
-                  Document versies
-                </h4>
-              </div>
-            </Auk::Toolbar::Item>
-          </Auk::Toolbar::Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Header>
-      <Auk::Panel::Body class="auk-u-bg-alt">
-        <ul class="vlc-status-timeline">
-          <li
-            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-          >
-            <div class="vlc-status-timeline__dot"></div>
-            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
-              Upgedate op 2 december 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
-            </div>
-          </li>
-          <li
-            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-          >
-            <div class="vlc-status-timeline__dot"></div>
-            <div class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1">
-              Verzonden op 1 december 2023 <AuButton @skin="link" @icon="chevron-right" @iconAlignment="right" {{on 'click' this.showVpModal}}>Bekijk documenten</AuButton>
-            </div>
-          </li>
-        </ul>
-      </Auk::Panel::Body>
-    </Auk::Panel>
+     <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} @step="Definitieve goedkeuring" />
   </div>
 
 

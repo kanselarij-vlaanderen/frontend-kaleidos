@@ -47,8 +47,8 @@
       <div class="au-o-grid au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Status</AuHeading>
-          {{#if (eq @status 'Act in afwachting')}}
-          {{!-- <AuPill @skin="warning" @size="small">{{@status}}</AuPill> --}}
+          {{#if (eq @status 'Nog geen beslissing ingesteld')}}
+          <AuPill @skin="warning" @size="small">{{@status}}</AuPill>
           {{else}}
           <AuPill @skin="success" @size="small">{{@status}}</AuPill>
           {{/if}}
