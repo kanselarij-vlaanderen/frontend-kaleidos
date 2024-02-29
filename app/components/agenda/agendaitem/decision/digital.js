@@ -19,21 +19,19 @@ function editorContentChanged(piecePartRecord, piecePartEditor) {
 /**
  * @argument agendaitem
  * @argument decisionActivity
+ * @argument agendaContext
  */
-export default class AgendaitemDecisionComponent extends Component {
+export default class AgendaAgendaitemDecisionDigitalComponent extends Component {
   @service agendaitemNota;
-  @service fileConversionService;
   @service intl;
   @service pieceAccessLevelService;
   @service signatureService;
   @service store;
   @service toaster;
   @service decisionReportGeneration;
-  @service throttledLoadingService;
   @service currentSession;
 
   @tracked report;
-  @tracked previousReport;
   @tracked annotatiePiecePart;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
@@ -47,7 +45,6 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isEditingTreatment = false;
   @tracked isEditing = false;
   @tracked isEditingPill = false;
-  @tracked isAddingReport = false;
 
   @tracked editorValueAnnotatie = null;
   @tracked editorInstanceBeslissing = null;
@@ -172,7 +169,6 @@ export default class AgendaitemDecisionComponent extends Component {
       await this.loadAnnotatiePiecePart.perform();
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
-      this.previousReport = await this.report.previousPiece;
       await this.loadSignatureRelatedData.perform();
     } else {
       this.annotatiePiecePart = null;
@@ -272,86 +268,6 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.decisionReportGeneration.generateReplacementReport.perform(
       this.report
     );
-  }
-
-  @action
-  async attachNewReportVersionAsPiece(piece) {
-    await piece.save();
-    try {
-      const sourceFile = await piece.file;
-      await this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title')
-      );
-    }
-    this.args.decisionActivity.report = piece;
-    await this.args.decisionActivity.save();
-
-    // This should happen in document-card but isn't reached.
-    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
-
-    // This reload is a workaround for file-service "deleteDocumentContainer" having a stale list of pieces
-    // when deleting the full container right after adding a new report version without the version history open.
-    const documentContainer = await piece.documentContainer;
-    await documentContainer.hasMany('pieces').reload();
-    await this.loadReport.perform();
-  }
-
-  /**
-   * Needed for uploading a PDF manually
-   */
-  @action
-  async attachReportPdf(piece) {
-    const now = new Date();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-      type: this.decisionDocType,
-    });
-
-    const subcase = await this.args.decisionActivity.subcase;
-    const subcaseIsConfidential = subcase?.confidential;
-
-    const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept',
-      subcaseIsConfidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID
-    );
-
-    await documentContainer.save();
-    piece.setProperties({
-      accessLevel: defaultAccessLevel,
-      documentContainer,
-    });
-    await piece.save();
-    try {
-      const sourceFile = await piece.file;
-      await this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title')
-      );
-    }
-    this.args.decisionActivity.report = piece;
-    const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
-    if (!decisionResultCode?.uri) {
-      const agendaitemType = await this.args.agendaitem.type;
-      const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
-      const decisionresultCodeUri = isNota
-        ? CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-        : CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME;
-      const decisionResultCode = await this.store.findRecordByUri(
-        'concept',
-        decisionresultCodeUri
-      );
-      this.args.decisionActivity.decisionResultCode = decisionResultCode;
-    }
-    await this.args.decisionActivity.save();
-    this.isAddingReport = false;
-    await this.loadReport.perform();
   }
 
   @action
@@ -794,13 +710,8 @@ export default class AgendaitemDecisionComponent extends Component {
     return false;
   }
 
-  get isMeetingPostDigitalDecisions() {
-    return !this.args.agendaContext.meeting.isPreDigitalDecisions;
-  }
-
   get mayEditDecisionReport() {
-    return this.isMeetingPostDigitalDecisions &&
-      this.currentSession.may('manage-decisions') &&
+    return this.currentSession.may('manage-decisions') &&
       (this.pieceParts || !this.report) &&
       (this.hasSignFlow === false || this.hasMarkedSignFlow);
   }
