@@ -492,10 +492,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
     timeout: 24000,
   });
   cy.get(appuniversum.loader, {
-    timeout: 12000,
-  }).should('not.exist', {
     timeout: 60000,
-  });
+  }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
 

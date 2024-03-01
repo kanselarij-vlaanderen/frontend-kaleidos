@@ -21,6 +21,7 @@ const {
 // - remove-approved-agendaitems: Remove an approved agendaitem that are already spread to other profiles.
 // - reopen-approved-agenda-version: Remove the current design agenda and restore the last approved agenda to designagenda.
 // - remove-approved-agenda: Remove an approved agenda.
+// - edit-documents-with-ongoing-signature: can edit documents that are past the stage of marking.
 // Other permissions
 // - manage-signatures: currently everything related to digital signing. Will be detailed later
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
@@ -64,6 +65,7 @@ const groups = [
       'remove-approved-agendaitems',
       'reopen-approved-agenda-version',
       'remove-approved-agenda',
+      'edit-documents-with-ongoing-signature',
       'manage-signatures',
       'view-all-ongoing-signatures',
       'remove-signatures',

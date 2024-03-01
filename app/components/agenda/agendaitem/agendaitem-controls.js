@@ -70,10 +70,10 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
-  async onSendToVp() {
+  async onSendToVp(job, toast) {
     this.showVPModal = false;
     if (this.args.onSendToVp) {
-      this.args.onSendToVp();
+      this.args.onSendToVp(job, toast);
     }
   }
 
