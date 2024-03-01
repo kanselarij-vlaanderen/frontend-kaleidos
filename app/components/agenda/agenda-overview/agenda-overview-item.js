@@ -107,7 +107,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *lazyLoadSideData() {
     yield timeout(350);
     const tasks = [
-      this.loadNewsletterVisibility,
+      this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadNewDocuments
     ].filter((task) => task.performCount === 0);
