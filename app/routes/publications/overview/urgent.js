@@ -24,7 +24,7 @@ export default class PublicationsOverviewUrgentRoute extends PublicationsOvervie
         ':uri:': CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE,
       },
       status: {
-        ':id:': allStatusesExceptPublished.mapBy('id').join(','),
+        ':id:': allStatusesExceptPublished.map((s) => s.id).join(','),
       },
     };
   }

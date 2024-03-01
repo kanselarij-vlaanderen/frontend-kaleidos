@@ -170,7 +170,7 @@ export default class DecisionReportGeneration extends Service {
   async getAlterableReports(reports) {
     let alterableReports = [];
     let unalterableReports = [];
-    for (const report of reports.toArray()) {
+    for (const report of reports.slice()) {
       if (await this.canReplaceReport(report)) {
         alterableReports.push(report);
       } else {

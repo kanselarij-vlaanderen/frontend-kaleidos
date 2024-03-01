@@ -27,6 +27,7 @@ export default class NewSubcaseForm extends Component {
   @service toaster;
   @service agendaService;
   @service plausible;
+  @service intl;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -69,7 +70,6 @@ export default class NewSubcaseForm extends Component {
   @action
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
-    this.subcaseName = subcaseType.label;
     this.checkSubcaseType();
   }
   
@@ -104,6 +104,12 @@ export default class NewSubcaseForm extends Component {
   selectSubcaseName(shortcut) {
     this.selectedShortcut = shortcut;
     this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 
   @action
@@ -193,17 +199,19 @@ export default class NewSubcaseForm extends Component {
     yield this.savePieces.perform();
 
     if (meeting) {
-      const submissionActivities = yield this.subcase.submissionActivities;
-      const formallyOk = isFormallyOk
-        ? CONSTANTS.ACCEPTANCE_STATUSSES.OK
-        : CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK;
-
-      yield this.agendaService.putSubmissionOnAgenda(
-        meeting,
-        submissionActivities,
-        formallyOk,
-        privateComment
-      );
+      try {
+        yield this.agendaService.putSubmissionOnAgenda(
+          meeting,
+          this.subcase,
+          isFormallyOk,
+          privateComment
+        );
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
     }
 
     this.router.transitionTo(

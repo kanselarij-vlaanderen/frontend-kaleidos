@@ -95,9 +95,11 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
         translationActivity.generatedPieces,
       ]);
       this.transferredPieces = [
-        ...usedPieces.toArray(),
-        ...generatedPieces.toArray(),
-      ].sortBy('name', 'created');
+        ...usedPieces.slice(),
+        ...generatedPieces.slice(),
+      ].sort(
+        (p1, p2) => p1.name.localeCompare(p2.name) || p1.created - p2.created
+      );
     } else {
       this.transferredPieces = [];
     }

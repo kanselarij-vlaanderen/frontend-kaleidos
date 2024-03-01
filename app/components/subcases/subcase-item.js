@@ -131,7 +131,10 @@ export default class SubcaseItemSubcasesComponent extends Component {
     };
     // only get the documents on latest agendaActivity if applicable
     const agendaActivities = yield this.args.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
     }
@@ -140,9 +143,9 @@ export default class SubcaseItemSubcasesComponent extends Component {
     const submissionActivities = yield this.store.queryAll('submission-activity', queryParams);
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

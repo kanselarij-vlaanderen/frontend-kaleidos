@@ -1280,10 +1280,10 @@
   "decision-not-published-yet": "Beslissing is nog niet vrijgegeven",
   "decision-not-published-yet-may-be-altered": "De beslissing is nog niet goedgekeurd op de Ministerraad. Een wijziging is nog mogelijk.",
   "flemish-parliament": "Vlaams Parlement",
-  "this-case-was-submitted-on": "Dit dossier is doorgestuurd op",
-  "this-case-was-submitted-to-VP-on": "Dit dossier is doorgestuurd naar het Vlaams Parlement op",
+  "this-case-was-submitted-on": "Dit dossier is ingediend op",
+  "this-case-was-submitted-to-VP-on": "Dit dossier is ingediend bij het Vlaams Parlement op",
   "error-while-sending-to-VP-message": "Er ging iets fout tijdens het indienen bij het Vlaams Parlement. Probeer het opnieuw. Als het probleem niet opgelost is, neem dan contact op met kaleidos.servicedesk@vlaanderen.be. Gelieve volgende boodschap te vermelden:",
-  "case-was-sent-to-VP": "Dossier is succesvol verstuurd naar het Vlaams Parlement",
+  "case-was-sent-to-VP": "Dossier is succesvol ingediend bij het Vlaams Parlement",
   "for": "Voor",
   "minutes-next-meeting": "De volgende vergadering van de Vlaamse Regering heeft plaats op {date} om {time} op het kabinet van de minister-president van de Vlaamse Regering, Martelaarsplein 19 - 1000 Brussel.",
   "postponed-item-decision": "Dit punt wordt uitgesteld tot de volgende vergadering.",
@@ -1317,6 +1317,8 @@
   "no-new-files-will-be-sent": "Alle beschikbare documenten van dit dossier werden naar het Vlaams Parlement doorgestuurd.",
   "for-questions-contact": "Bij vragen contacteer:",
   "documents-sent-on": "Documenten doorgestuurd op",
+  "the-documents-are-being-sent-to-parliament": "De documenten worden doorgestuurd naar het Vlaams Parlement",
+  "the-documents-were-sent-to-parliament": "De documenten werden succesvol doorgestuurd naar het Vlaams Parlement",
   "started-by": "Opgestart door",
   "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
   "general-information": "Algemene info",
@@ -1324,5 +1326,6 @@
   "save-in-progress": "Bezig met opslaan.",
   "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
   "agendaitem-is-status-no-documents-available": "Dit agendapunt is {status}. Er zijn geen documenten beschikbaar",
-  "agendaitem-document-postponed-or-retracted--message": "De documenten van een {status} agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een {status} punt niet van toepassing."
+  "agendaitem-document-postponed-or-retracted--message": "De documenten van een {status} agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een {status} punt niet van toepassing.",
+  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}"
 }

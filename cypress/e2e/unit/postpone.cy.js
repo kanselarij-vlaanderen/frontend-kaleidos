@@ -236,19 +236,11 @@ context('Decision postponing tests', () => {
     cy.get(agenda.agendaitemPostponed.repropose)
       .children(appuniversum.button)
       .click();
-    cy.intercept('POST', '/submission-activities').as('postSubmissionActivities');
-    cy.intercept('POST', '/agenda-activities').as('postAgendaActivities');
-    cy.intercept('POST', '/decision-activities').as('postDecisionActivities');
-    cy.intercept('POST', '/agenda-item-treatments').as('postAgendaItemTreatments');
-    cy.intercept('PATCH', '/submission-activities/**').as('patchSubmissonActivities');
+    cy.intercept('POST', '/meetings/*/submit').as('submitSubcaseOnMeeting');
     cy.get(agenda.agendaitemPostponed.proposableMeeting)
       .contains(agendaDateFormatted)
       .forceClick()
-      .wait('@postSubmissionActivities')
-      .wait('@postAgendaActivities')
-      .wait('@postDecisionActivities')
-      .wait('@postAgendaItemTreatments')
-      .wait('@patchSubmissonActivities');
+      .wait('@submitSubcaseOnMeeting');
     cy.get(appuniversum.loader).should('not.exist');
 
     // click link to latest meeting

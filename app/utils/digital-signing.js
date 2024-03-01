@@ -7,6 +7,7 @@ async function uploadPiecesToSigninghub(signFlows) {
     data.push({
       type: 'sign-flows',
       id: signFlow.id,
+      uri: signFlow.uri,
     });
   }
   const body = { data };

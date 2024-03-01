@@ -110,7 +110,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[agendaitems][:id:]': agendaitem.id,
     'filter[:has-no:next-piece]': true,
   });
-  pieces = pieces.toArray();
+  pieces = pieces.slice();
   let sortedPieces;
   if (agendaitem.isApproval) {
     sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
@@ -301,7 +301,7 @@ export default class AgendaMinutesController extends Controller {
 
     await piecePart.save();
 
-    this.decisionReportGeneration.generateReplacementMinutes.perform(
+    await this.decisionReportGeneration.generateReplacementMinutes.perform(
       minutes,
     );
 

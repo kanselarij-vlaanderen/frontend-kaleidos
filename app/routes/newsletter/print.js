@@ -44,7 +44,10 @@ export default class PrintNewsletterRoute extends Route {
 
     let notas = []
     let announcements = [];
-    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+    const sortedAgendaitems = agendaitems
+      ?.slice()
+      .sort((a1, a2) => a1.number - a2.number)
+    for (const agendaitem of sortedAgendaitems) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
         notas.push(agendaitem);
@@ -54,8 +57,8 @@ export default class PrintNewsletterRoute extends Route {
     }
 
     if (params.showDraft) {
-      notas = notas.sortBy('number');
-      announcements = announcements.sortBy('number');
+      notas = notas.sort((n1, n2) => n1.number - n2.number);
+      announcements = announcements.sort((a1, a2) => a1.number - a2.number);
     } else { // Items need to be ordered by minister protocol order
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
       await setCalculatedGroupNumbers(notas);

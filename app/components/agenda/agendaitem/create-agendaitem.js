@@ -17,6 +17,8 @@ export default class CreateAgendaitem extends Component {
   @service store;
   @service subcasesService;
   @service agendaService;
+  @service toaster;
+  @service intl;
 
   @tracked selectedSubcases = [];
   @tracked subcases = [];
@@ -82,22 +84,15 @@ export default class CreateAgendaitem extends Component {
     const subcasesToAdd = new Set([...this.selectedSubcases]);
     const agendaItems = [];
     for (const subcase of subcasesToAdd) {
-      let submissionActivities = yield this.store.queryAll('submission-activity', {
-        'filter[subcase][:id:]': subcase.id,
-        'filter[:has-no:agenda-activity]': true,
-      });
-      submissionActivities = submissionActivities.toArray();
-      if (!submissionActivities.length) {
-        const now = new Date();
-        const submissionActivity = this.store.createRecord('submission-activity', {
-          startDate: now,
-          subcase,
-        });
-        yield submissionActivity.save();
-        submissionActivities = [submissionActivity];
+      try {
+        const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, subcase);
+        agendaItems.push(newItem);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+          this.intl.t('warning-title')
+        );
       }
-      const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, submissionActivities);
-      agendaItems.push(newItem);
     }
 
     this.args.onCreate(agendaItems);

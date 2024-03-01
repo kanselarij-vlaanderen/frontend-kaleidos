@@ -84,9 +84,9 @@ export default class CasesNewSubcase extends Component {
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
     return pieces;

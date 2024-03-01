@@ -96,7 +96,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @task
   *loadDocuments() {
     let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
@@ -119,7 +119,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *lazyLoadSideData() {
     yield timeout(350);
     const tasks = [
-      this.loadNewsletterVisibility,
+      this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadNewDocuments
     ].filter((task) => task.performCount === 0);

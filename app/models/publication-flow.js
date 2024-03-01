@@ -34,7 +34,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('decision-activity', { inverse: 'publicationFlows', async: true })
   decisionActivity;
   @belongsTo('identification', {
-    invserse: 'publicationFlowForThreadId',
+    inverse: 'publicationFlowForThreadId',
     async: true,
   })
   threadId; // Not serialized on pub-flow side to prevent errors when deleting

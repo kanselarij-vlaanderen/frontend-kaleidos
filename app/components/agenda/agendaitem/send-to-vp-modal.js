@@ -70,15 +70,16 @@ export default class SendToVpModalComponent extends Component {
   }
 
   sendToVP = task(async () => {
+    let sendToVpJob;
     if (this.piecesToBeSent?.ready) {
-      await this.parliamentService.sendToVP(
+      sendToVpJob = await this.parliamentService.sendToVP(
         this.args.agendaitem,
         this.piecesToBeSent.ready,
         this.comment,
         this.isComplete
       );
     }
-    this.args?.onClose();
+    this.args?.onClose(sendToVpJob.job, sendToVpJob.toast);
   });
 
   pieceFileTypes = async (pieceDescription) => {
@@ -104,7 +105,7 @@ export default class SendToVpModalComponent extends Component {
       list.push('Word');
     }
     if (signed) {
-      list.push('ondertekend');
+      list.push('ondertekende PDF');
     }
     if (list.length) {
       return `(${formatter.format(list)})`;
