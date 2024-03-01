@@ -657,6 +657,10 @@ $au-label-color: var(--au-gray-700);
   flex: 0 0 auto !important;
 }
 
+.au-u-flex-item--fill {
+  flex: 1 1 auto !important;
+}
+
 .au-u-maximize-width {
   width: 100% !important;
 }
