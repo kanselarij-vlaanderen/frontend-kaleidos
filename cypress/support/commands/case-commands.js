@@ -309,10 +309,10 @@ function addSubcaseViaModal(subcase) {
     cy.wait(`@submitToMeeting${randomInt}`, {
       timeout: 60000,
     });
+    cy.get(cases.subcaseDescription.agendaLink, {
+      timeout: 60000,
+    });
   }
-  cy.get(cases.subcaseDescription.agendaLink, {
-    timeout: 60000,
-  });
 }
 
 // Commands

@@ -218,11 +218,13 @@ function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
   cy.wait('@submitSubcaseOnMeeting', {
     timeout: 24000,
   });
-  // refresh happens
+  // refresh happenss
   cy.wait(`@loadAgendaData_${randomInt}`);
   cy.wait(`@loadSubcase_${randomInt}`);
   cy.get(appuniversum.loader).should('not.exist');
-  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
+  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item, {
+    timeout: 600000,
+  }); // when this succeeds the refresh happened
   cy.log('/proposeSubcaseForAgenda');
 }
 

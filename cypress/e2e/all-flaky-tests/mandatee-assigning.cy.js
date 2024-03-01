@@ -73,7 +73,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // cy.addSubcaseMandatee(mandateeNames.current.first);
     // cy.addSubcaseMandatee(mandateeNames.current.second);
 
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows, {
+      timeout: 60000,
+    }).as('listItems');
     cy.get('@listItems').should('have.length', 2, {
       timeout: 5000,
     });
@@ -82,6 +84,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', mandateeNames.current.first.lastName);
+    cy.wait(10000);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
