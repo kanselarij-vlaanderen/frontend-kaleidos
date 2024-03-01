@@ -31,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service decisionReportGeneration;
   @service throttledLoadingService;
   @service currentSession;
+  @service newsletterService;
 
   @tracked report;
   @tracked previousReport;
@@ -103,6 +104,17 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   toggleEditPill() {
     this.isEditingPill = !this.isEditingPill;
+  }
+
+  @task
+  *updateNewsItem() {
+    const resultCode = yield this.args.decisionActivity.decisionResultCode;
+    if ([
+      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+    ].includes(resultCode.uri)) {
+      yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+    }
   }
 
   onCreateNewVersion = task(async () => {
@@ -192,6 +204,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
     await this.updateDecisionPiecePart.perform();
+    await this.updateNewsItem.perform();
   });
 
   updateDecisionPiecePart = task(async () => {

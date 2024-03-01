@@ -70,15 +70,16 @@ export default class SendToVpModalComponent extends Component {
   }
 
   sendToVP = task(async () => {
+    let sendToVpJob;
     if (this.piecesToBeSent?.ready) {
-      await this.parliamentService.sendToVP(
+      sendToVpJob = await this.parliamentService.sendToVP(
         this.args.agendaitem,
         this.piecesToBeSent.ready,
         this.comment,
         this.isComplete
       );
     }
-    this.args?.onClose();
+    this.args?.onClose(sendToVpJob.job, sendToVpJob.toast);
   });
 
   pieceFileTypes = async (pieceDescription) => {
