@@ -99,6 +99,12 @@ export default class Piece extends Model {
     as: 'piece'
   })
   submittedPieces;
+  @hasMany('retrieved-piece', {
+    inverse: 'piece',
+    async: true,
+    as: 'piece',
+  })
+  retrievedPieces;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;
