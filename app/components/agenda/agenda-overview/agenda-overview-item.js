@@ -83,7 +83,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       this.documentsAreVisible = true;
     } else if (
       !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode)
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode.uri)
     ) {
       this.documentsAreVisible = false;
     } else {
