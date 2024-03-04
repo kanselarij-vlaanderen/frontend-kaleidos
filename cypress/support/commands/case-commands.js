@@ -183,10 +183,20 @@ function addSubcaseViaModal(subcase) {
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
   cy.intercept('POST', '/submission-activities').as(`submissionActivities${randomInt}`);
-  // TODO-COMMAND is this wait needed?
-  cy.wait(2000);
+  cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
+  cy.intercept('GET', '/subcase-types**').as(`getSubcaseTypes${randomInt}`);
+  cy.intercept('GET', '/government-bodies**').as(`getGovernmentBodies${randomInt}`);
 
   cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
+  cy.wait(`@getSubcaseTypes${randomInt}`, {
+    timeout: 60000,
+  });
+  cy.wait(`@getGovernmentBodies${randomInt}`, {
+    timeout: 60000,
+  });
 
   // Set the type
   if (subcase.type) {
@@ -305,6 +315,7 @@ function addSubcaseViaModal(subcase) {
 
   cy.log('/addSubcaseViaModal');
   cy.wait(`@createNewSubcase${randomInt}`);
+  cy.wait(`@submissionActivities${randomInt}`);
   if (subcase.agendaDate) {
     cy.wait(`@submitToMeeting${randomInt}`, {
       timeout: 60000,

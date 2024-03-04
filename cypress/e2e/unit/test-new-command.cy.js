@@ -8,6 +8,7 @@
 // import utils from '../../selectors/utils.selectors';
 // import auk from '../../selectors/auk.selectors';
 // import appuniversum from '../../selectors/appuniversum.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 context('testing new add subcase command', () => {
   beforeEach(() => {
@@ -28,11 +29,11 @@ context('testing new add subcase command', () => {
     const step = 'principiële goedkeuring';
     const stepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const mandatee1 = {
-      name: 'Jan Jambon',
+      fullName: mandateeNames.current.first.fullName,
       submitter: false,
     };
     const mandatee2 = {
-      name: 'Hilde Crevits',
+      fullName: mandateeNames.current.second.fullName,
       submitter: true,
     };
     const mandatees = [mandatee1, mandatee2];

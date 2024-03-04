@@ -168,6 +168,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
+    cy.get(mandatee.mandateePanelView.row.name);
     cy.openAgendaForDate(agendaDate);
 
     cy.addAgendaitemToAgenda(SubcaseTitleShort);
