@@ -11,6 +11,7 @@ export default class MandateeSelectorPanel extends Component {
   @tracked currentMinisters = []; // do not edit this array
   @tracked currentMandatees = []; // do not edit this array
   @tracked selectedCurrentMinisters = [];
+  @tracked submitterMandatee;
 
   constructor() {
     super(...arguments);
@@ -46,21 +47,21 @@ export default class MandateeSelectorPanel extends Component {
     // to be the first selected minister.
     // When there is no submitter but the list of selected ministers isn't empty, set submitter to first minister in the list
     if (
-      (this.args.submitter &&
+      (this.submitterMandatee &&
         !selectedMandatees.find(
           (selectedMandatee) =>
             selectedMandatee.person.get('id') ===
-            this.args.submitter.person.get('id')
+            this.submitterMandatee.person.get('id')
         )) ||
-      (!this.args.submitter && this.selectedCurrentMinisters.length)
+      (!this.submitterMandatee && this.selectedCurrentMinisters.length)
     ) {
-      this.args.setSubmitter(
-        selectedMandatees.find(
-          (selectedMandatee) =>
-            selectedMandatee.person.get('id') ===
-            this.selectedCurrentMinisters[0]?.get('id')
-        )
-      );
+      const submitterMandatee = selectedMandatees.find(
+        (selectedMandatee) =>
+          selectedMandatee.person.get('id') ===
+          this.selectedCurrentMinisters[0]?.get('id')
+      )
+      this.submitterMandatee = submitterMandatee;
+      this.args.setSubmitter(submitterMandatee);
     }
   }
 
@@ -102,15 +103,26 @@ export default class MandateeSelectorPanel extends Component {
       const ministersToSelect = yield Promise.all(
         selectedMandatees?.map((m) => m.person)
       );
+      // Only select submitter mandatee if they are still active
+      const submitterMandatee = this.currentMandatees.find(
+        (currentMandatee) =>
+          currentMandatee.get('id') === this.args.submitter.id
+      );
+      if (submitterMandatee) {
+        this.submitterMandatee = submitterMandatee;
+      }
       if (ministersToSelect?.length) {
         yield this.onChangeSelectedMinisters(ministersToSelect);
+      } else {
+        // clear the args mandatees and submitter if only old mandatees were present
+        this.args.setMandatees([]);
       }
     }
   }
 
   @action
   async checkIfSubmitter(minister) {
-    const submitterPersonId = await this.args.submitter.person.get('id');
+    const submitterPersonId = await this.submitterMandatee.person.get('id');
     return submitterPersonId === minister.id;
   }
 
@@ -120,6 +132,7 @@ export default class MandateeSelectorPanel extends Component {
       (currentMandatee) =>
         currentMandatee.person.get('id') === submitterMinister.id
     );
+    this.submitterMandatee = submitterMandatee;
     this.args.setSubmitter(submitterMandatee);
   }
 }
