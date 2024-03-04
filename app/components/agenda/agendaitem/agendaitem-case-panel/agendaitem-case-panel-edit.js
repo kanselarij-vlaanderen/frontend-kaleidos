@@ -24,6 +24,15 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   @action
+  async onChangeConfidentiality(event) {
+    this.confidentialChanged = true;
+    const agendaitemType = await this.args.agendaitem.type;
+    if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT && this.newsItem) {
+      this.newsItem.inNewsletter = event ? false : this.newsItem.inNewsletter;
+    }
+  }
+
+  @action
   cancelEditing() {
     if (this.args.agendaitem.hasDirtyAttributes) {
       this.args.agendaitem.rollbackAttributes();

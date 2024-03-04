@@ -103,8 +103,8 @@
               {{t "limited-access"}}
             </AuPill>
           {{/if}}
-          {{#if this.loadNewsletterVisibility.lastSuccessful}}
-            {{#if this.newsletterIsVisible}}
+          {{#if this.loadNewsItemVisibility.lastSuccessful}}
+            {{#if this.newsItem.inNewsletter}}
               <AuPill
                 @skin="border"
                 @icon="website"
