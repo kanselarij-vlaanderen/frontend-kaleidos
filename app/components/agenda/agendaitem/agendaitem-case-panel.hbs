@@ -5,16 +5,30 @@
     @newsItem={{@newsItem}}
     @onCancel={{this.cancelEditing}}
     @onSave={{this.stopEditing}}
-  />
-{{else}}
-  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
-    @agendaitem={{@agendaitem}}
-    @subcase={{@subcase}}
-    @agenda={{@agenda}}
-    @newsItem={{@newsItem}}
-    @onClickEdit={{this.startEditing}}
-    @allowEditing={{@allowEditing}}
   >
     {{yield}}
-  </Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView>
+  </Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelEdit>
+{{else}}
+{{#if this.isEditingCase}}
+  <Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCaseSidebarEdit
+    @agendaitem={{@agendaitem}}
+    @subcase={{@subcase}}
+    @newsItem={{@newsItem}}
+    @onCancel={{this.cancelEditingCase}}
+    @onSave={{this.stopEditingCase}}
+  >
+    {{yield}}
+  </Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCaseSidebarEdit>
+{{/if}}
+<Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView
+  @agendaitem={{@agendaitem}}
+  @subcase={{@subcase}}
+  @agenda={{@agenda}}
+  @newsItem={{@newsItem}}
+  @onClickEdit={{this.startEditing}}
+  @onClickEditCase={{this.startEditingCase}}
+  @allowEditing={{@allowEditing}}
+>
+  {{yield}}
+</Agenda::Agendaitem::AgendaitemCasePanel::AgendaitemCasePanelView>
 {{/if}}

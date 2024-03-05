@@ -1,0 +1,428 @@
+<div class="au-c-panel-sidebar">
+  <Auk::Panel class="auk-panel--editing">
+    <Auk::Panel::Header
+      @size="auto"
+      class="au-u-background-gray-100"
+    >
+      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+        <Toolbar.Group @position="left">
+          <h4 class="auk-toolbar__title">
+            Dossier wijzigen
+          </h4>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div class="auk-u-mb-4">
+        <div class="auk-form-group">
+          <AuFieldset as |Fieldset|>
+            <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+            <Fieldset.content>
+              <AuRadioGroup
+                data-test-new-subcase-type
+                @alignment="inline"
+                @selected="Nota"
+                as |Group|
+              >
+                <Group.Radio
+                  @value="Nota"
+                >
+                  Nota
+                </Group.Radio>
+                <Group.Radio
+                  @value="Mededeling"
+                >
+                  Mededeling
+                </Group.Radio>
+              </AuRadioGroup>
+            </Fieldset.content>
+          </AuFieldset>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+          <AuToggleSwitch
+            data-test-new-subcase-confidential
+            @checked={{this.confidential}}
+            id="new-subcase-confidential"
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+          <Textarea
+            data-test-agendaitem-titles-edit-shorttitle={{true}}
+            rows="2"
+            aria-labelledby="name-subcase"
+            class="auk-textarea"
+            @value={{@agendaitem.shortTitle}}
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+          <Textarea
+            data-test-agendaitem-titles-edit-title={{true}}
+            rows="4"
+            aria-labelledby="title-subcase"
+            class="auk-textarea"
+            @value={{@agendaitem.title}}
+          />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+          <Utils::ModelSelector
+            data-test-new-subcase-procedure-step
+            @modelName="subcase-type"
+            @searchField="label"
+            @sortField="label"
+            @selected={{this.type}}
+            @onChange={{this.selectType}}
+          as |model|>
+            {{capitalize model.label}}
+          </Utils::ModelSelector>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+          <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small">
+            {{#if (not this.isEditing)}}
+              <Utils::ModelSelector
+                data-test-new-subcase-procedure-name
+                class="auk-u-maximize-width"
+                @modelName="shortcut"
+                @searchField="label"
+                @sortField="label"
+                @filter={{this.filter}}
+                @selected={{this.selectedShortcut}}
+                @onChange={{this.selectSubcaseName}}
+              as |model|>
+                {{capitalize model.label}}
+              </Utils::ModelSelector>
+              <AuButton
+                @skin="naked"
+                @icon="pencil"
+                @hideText={{true}}
+                {{on "click" this.toggleIsEditing}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            {{else}}
+              <AuInput
+                @width="block"
+                @value={{this.subcaseName}}
+                id="subcaseNameId"
+              />
+              <AuButton
+                @skin="naked"
+                @icon="x"
+                @hideText={{true}}
+                {{on "click" this.toggleIsEditing}}
+              >
+                {{t "cancel"}}
+              </AuButton>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Ministers
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="au-c-panel-tree">
+          <Auk::CheckboxTree
+            @label='Alle ministers'
+            @items={{this.currentMinisters}}
+            @itemStructure={{hash label="fullName"}}
+            @selectedItems={{this.selectedCurrentMinisters}}
+            @didUpdate={{this.onChangeCurrentMinisters}}
+            @layout="grid"
+          />
+          {{#if this.pastMinistersHidden}}
+            <AuButton
+              data-test-search-minister-filter-past-ministers
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-small"
+              @icon="add"
+            >
+              {{t "show-past-ministers"}}
+            </AuButton>
+          {{else if this.preparePastMinisters.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            <Auk::CheckboxTree
+              @label={{t "past-ministers"}}
+              @items={{this.pastMinisters}}
+              @itemStructure={{hash label="fullName"}}
+              @selectedItems={{this.selectedPastMinisters}}
+              @didUpdate={{this.onChangePastMinisters}}
+            />
+            <AuButton
+              {{on "click" (toggle "pastMinistersHidden" this)}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="remove"
+            >
+              {{t "hide-past-ministers"}}
+            </AuButton>
+          {{/if}}
+          {{#if this.selectedCurrentMinisters}}
+          <AuHr/>
+          {{/if}}
+          <AuList
+            @divider={{true}}
+            as |Item|
+          >
+            {{#each this.selectedCurrentMinisters as |minister index|}}
+              <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
+                <div>
+                  <strong>{{minister.fullName}}</strong>,
+                  {{#each minister.mandatees as |role index|}}
+                    {{#if (and (and (eq role.end)(not-eq role.title))(not-eq role.title 'Minister-president van de Vlaamse Regering'))}}
+                      {{role.title}} <span class=" au-u-margin-left-tiny au-u-muted au-u-para-tiny">{{date role.start}} {{t "until"}} {{#if role.end}}{{date role.end}}{{else}}heden{{/if}}</span>
+                    {{/if}}
+                  {{/each}}
+                </div>
+                <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+                  <AuRadio
+                    @name="submitter"
+                    @checked={{if (eq index 0) true}}
+                  />
+                  <Auk::Label for="first" class="au-u-padding-bottom-none">Indiener</Auk::Label>
+                </div>
+              </Item>
+            {{/each}}
+          </AuList>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Beleidsdomeinen en beleidsvelden
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="au-c-panel-grid">
+          {{#each this.selectedCurrentMinisters as |minister|}}
+            {{#if (eq minister.fullName 'Jan Jambon')}}
+              <Auk::CheckboxTree
+                @label='Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management'
+                @items={{this.JanJambon}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleJanJambon}}
+                {{will-destroy this.toggleJanJambon}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Hilde Crevits')}}
+              <Auk::CheckboxTree
+                @label='Welzijn, Volksgezondheid en Gezin'
+                @items={{this.HildeCrevits}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleHildeCrevits}}
+                {{will-destroy this.toggleHildeCrevits}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Bart Somers')}}
+              <Auk::CheckboxTree
+                @label='Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen'
+                @items={{this.BartSomers}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleBartSomers}}
+                {{will-destroy this.toggleBartSomers}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Ben Weyts')}}
+              <Auk::CheckboxTree
+                @label='Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand'
+                @items={{this.BenWeyts}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleBenWeyts}}
+                {{will-destroy this.toggleBenWeyts}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Zuhal Demir')}}
+              <Auk::CheckboxTree
+                @label='Justitie en Handhaving, Omgeving, Energie en Toerisme'
+                @items={{this.ZuhalDemir}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleZuhalDemir}}
+                {{will-destroy this.toggleZuhalDemir}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Matthias Diependaele')}}
+              <Auk::CheckboxTree
+                @label='Financiën en Begroting, Wonen en Onroerend Erfgoed'
+                @items={{this.MatthiasDiepenDaele}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleMatthiasDiepenDaele}}
+                {{will-destroy this.toggleMatthiasDiepenDaele}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Lydia Peeters')}}
+              <Auk::CheckboxTree
+                @label='Mobiliteit en Openbare Werken'
+                @items={{this.LydiaPeeters}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleLydiaPeeters}}
+                {{will-destroy this.toggleLydiaPeeters}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Benjamin Dalle')}}
+              <Auk::CheckboxTree
+                @label='Brussel, Jeugd, Media en Armoedebestrijding'
+                @items={{this.BenjaminDalle}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleBenjaminDalle}}
+                {{will-destroy this.toggleBenjaminDalle}}
+              />
+            {{/if}}
+            {{#if (eq minister.fullName 'Jo Brouns')}}
+              <Auk::CheckboxTree
+                @label='Economie, Innovatie, Werk, Sociale Economie en Landbouw'
+                @items={{this.JoBrouns}}
+                @itemStructure={{hash label="fullName"}}
+                {{did-insert this.toggleJoBrouns}}
+                {{will-destroy this.toggleJoBrouns}}
+              />
+            {{/if}}
+          {{else}}
+            {{#if (eq this.showAllAreas false)}}
+            <Auk::EmptyState @message={{t "no-ministers-added"}} />
+            {{/if}}
+          {{/each}}
+          {{#if (and (eq this.isJanJambon false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management'
+              @items={{this.JanJambon}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isHildeCrevits false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Welzijn, Volksgezondheid en Gezin'
+              @items={{this.HildeCrevits}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isBartSomers false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen'
+              @items={{this.BartSomers}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isBenWeyts false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand'
+              @items={{this.BenWeyts}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isZuhalDemir false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Justitie en Handhaving, Omgeving, Energie en Toerisme'
+              @items={{this.ZuhalDemir}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isMatthiasDiepenDaele false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Financiën en Begroting, Wonen en Onroerend Erfgoed'
+              @items={{this.MatthiasDiepenDaele}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isLydiaPeeters false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Mobiliteit en Openbare Werken'
+              @items={{this.LydiaPeeters}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isBenjaminDalle false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Brussel, Jeugd, Media en Armoedebestrijding'
+              @items={{this.BenjaminDalle}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          {{#if (and (eq this.isJoBrouns false)(eq this.showAllAreas true))}}
+            <Auk::CheckboxTree
+              @label='Economie, Innovatie, Werk, Sociale Economie en Landbouw'
+              @items={{this.JoBrouns}}
+              @itemStructure={{hash label="fullName"}}
+            />
+          {{/if}}
+          <div class="au-u-1-1">
+            {{#if (eq this.showAllAreas true)}}
+            <AuButton
+              {{on "click" this.toggleAreas}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="remove"
+            >
+              Verberg alle beleidsdomeinen
+            </AuButton>
+            {{else}}
+            <AuButton
+              {{on "click" this.toggleAreas}}
+              @skin="link"
+              class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
+              @icon="add"
+            >
+              Toon alle beleidsdomeinen
+            </AuButton>
+            {{/if}}
+          </div>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </Auk::Panel::Body>
+    <Auk::Panel::Footer>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-agendaitem-titles-edit-cancel
+              @skin="naked"
+              {{on "click" this.cancelEditing}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-agendaitem-titles-edit-save={{true}}
+              @skin="primary"
+              @loading={{this.saveChanges.isRunning}}
+              {{on "click" (perform this.saveChanges)}}
+            >
+              {{t "save"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  </Auk::Panel>
+</div>
+
+{{#if this.saveChanges.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "saving-change-message"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

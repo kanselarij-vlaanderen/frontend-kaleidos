@@ -29,7 +29,7 @@
           <Group.Item>
             <AuButtonGroup>
               {{#if @subcase}}
-                <AuLink
+                {{!-- <AuLink
                   data-test-agendaitem-titles-link-to-subcase={{true}}
                   @skin="button-naked"
                   @icon="external"
@@ -39,7 +39,15 @@
                   @models={{array this.decisionmakingFlow.id @subcase.id}}
                 >
                   Dossier wijzigen
-                </AuLink>
+                </AuLink> --}}
+                <AuButton
+                  data-test-agendaitem-titles-edit
+                  @skin="naked"
+                  @icon="pencil"
+                  {{on "click" @onClickEditCase}}
+                >
+                  Dossier wijzigen
+                </AuButton>
               {{else}}
                 {{#if @allowEditing}}
                   <AuButton
@@ -59,10 +67,13 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
-        <h4 data-test-agendaitem-titles-short-title class="auk-u-m-0">
-          {{@agendaitem.shortTitle}}
-        </h4>
-        
+        <div>
+          <h4 data-test-agendaitem-titles-short-title class="auk-u-m-0">
+            {{@agendaitem.shortTitle}}
+          </h4>
+          <Auk::New @title="Nieuwe korte titel" class="auk-u-mt-2"/>
+        </div>
+
         {{#if @agendaitem.title}}
           <div class="auk-u-mb-2">
             <p
@@ -71,6 +82,7 @@
             >
               {{@agendaitem.title}}
             </p>
+            <Auk::New @title="Nieuwe titel" class="auk-u-mt-2"/>
           </div>
         {{/if}}
         <div class="auk-u-my-4">

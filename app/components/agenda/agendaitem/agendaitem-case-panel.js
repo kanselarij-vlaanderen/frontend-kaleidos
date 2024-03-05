@@ -10,6 +10,7 @@ import { action } from '@ember/object';
  */
 export default class AgendaitemCasePanel extends Component {
   @tracked isEditing = false;
+  @tracked isEditingCase = false;
 
   @action
   startEditing() {
@@ -24,5 +25,20 @@ export default class AgendaitemCasePanel extends Component {
   @action
   stopEditing() {
     this.isEditing = false;
+  }
+
+  @action
+  startEditingCase() {
+    this.isEditingCase = true;
+  }
+
+  @action
+  cancelEditingCase() {
+    this.isEditingCase = false;
+  }
+
+  @action
+  stopEditingCase() {
+    this.isEditingCase = false;
   }
 }
