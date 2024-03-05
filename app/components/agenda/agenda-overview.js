@@ -61,7 +61,6 @@ export default class AgendaOverview extends Component {
       this.args.toggleAnnouncementsHasChanged();
     }
     this.args.toggleIsEditingOverview?.();
-    // this.args.onCancel();
   }
 
   @action

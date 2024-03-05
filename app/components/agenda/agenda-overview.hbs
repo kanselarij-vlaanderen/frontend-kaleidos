@@ -3,8 +3,7 @@
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "apply-order"}}
-      @onClear={{this.save}}
-      @cancellable="true"
+      @onConfirm={{this.save}}
       @onCancel={{this.onCancel}}
     />
   {{/if}}

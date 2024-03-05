@@ -394,7 +394,7 @@ context('Decision tests post digital agenda', () => {
     // change order
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
-    cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort1)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaitem');
@@ -403,6 +403,7 @@ context('Decision tests post digital agenda', () => {
       .contains(2, {
         timeout: 60000,
       });
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems1');
     cy.intercept('POST', 'generate-decision-report/generate-reports').as('generateDecision1');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveUp)
       .click();
@@ -411,8 +412,9 @@ context('Decision tests post digital agenda', () => {
       .should('be.disabled');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.numbering)
       .contains(1);
-    cy.get(utils.changesAlert.close)
+    cy.get(utils.changesAlert.confirm)
       .click()
+      .wait('@patchAgendaitems1')
       .wait('@generateDecision1');
     // check toasts
     cy.get(appuniversum.toaster).contains('Beslissingen aangepast');
@@ -428,7 +430,7 @@ context('Decision tests post digital agenda', () => {
     // change order again
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
-    cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort1)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaitem');
@@ -437,14 +439,16 @@ context('Decision tests post digital agenda', () => {
       .contains(1, {
         timeout: 60000,
       });
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems2');
     cy.intercept('POST', 'generate-decision-report/generate-reports').as('generateDecision2');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveDown)
       .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveDown)
       .should('be.disabled');
-    cy.get(utils.changesAlert.close)
+    cy.get(utils.changesAlert.confirm)
       .click()
+      .wait('@patchAgendaitems2')
       .wait('@generateDecision2');
     // check toasts
     cy.get(appuniversum.toaster).contains('Beslissingen aangepast');

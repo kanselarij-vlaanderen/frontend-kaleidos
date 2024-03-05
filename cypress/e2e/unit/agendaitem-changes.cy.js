@@ -266,7 +266,7 @@ context('Agendaitem changes tests', () => {
 
     cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten');
 
-    cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(agendaitemTitle)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaItem');

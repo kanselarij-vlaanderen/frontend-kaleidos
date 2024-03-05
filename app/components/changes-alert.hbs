@@ -3,9 +3,10 @@
     <div class="au-c-alert__message au-u-flex au-u-flex--between au-u-flex--spaced-small" data-test-changes-alert-message>
       <p>{{@message}}</p>
       <AuButtonGroup>
-        {{#if @cancellable}}
+        {{#if @onCancel}}
           <AuButton
           class="au-u-flex-item--fixed"
+          data-test-changes-alert-cancel
           @skin="secondary"
           {{on "click" @onCancel}}
           >
@@ -14,9 +15,9 @@
         {{/if}}
         <AuButton
           class="au-u-flex-item--fixed"
-          data-test-changes-alert-close
+          data-test-changes-alert-confirm
           @skin="secondary"
-          {{on "click" @onClear}}
+          {{on "click" @onConfirm}}
         >
           {{@buttonText}}
         </AuButton>
