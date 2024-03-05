@@ -80,7 +80,7 @@ export default class AgendaAgendaitemsController extends Controller {
     const draggedAgendaItemType = yield draggedAgendaItem.type;
     // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
     const reorderedAgendaitemsOfCategory =  [];
-    for (const agendaitem of reorderedAgendaitems.toArray()) {
+    for (const agendaitem of reorderedAgendaitems.slice()) {
       const agendaItemType = yield agendaitem.type;
       if (agendaItemType.uri === draggedAgendaItemType.uri) {
         reorderedAgendaitemsOfCategory.push(agendaitem);
@@ -99,7 +99,7 @@ export default class AgendaAgendaitemsController extends Controller {
 
   @task
   *groupNotasOnGroupName() {
-    const agendaitemsArray = this.model.notas.toArray();
+    const agendaitemsArray = this.model.notas.slice();
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {

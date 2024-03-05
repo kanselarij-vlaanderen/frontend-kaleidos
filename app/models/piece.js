@@ -14,81 +14,89 @@ export default class Piece extends Model {
   @belongsTo('concept', { inverse: null, async: true }) accessLevel;
   @belongsTo('language', { inverse: null, async: true }) language;
   @belongsTo('file', { inverse: null, async: true }) file;
-  @belongsTo('document-container', { inverse: 'pieces', async: true })
+  @belongsTo('document-container', { inverse: 'pieces', async: true, as: 'piece' })
   documentContainer;
   @belongsTo('piece', {
     inverse: 'previousPiece',
     async: true,
     polymorphic: true,
+    as: 'piece'
   })
   nextPiece;
-  @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true })
+  @belongsTo('piece', { inverse: 'nextPiece', async: true, polymorphic: true, as: 'piece' })
   previousPiece;
   @belongsTo('piece', {
     inverse: 'unsignedPiece',
     async: true,
     polymorphic: true,
+    as: 'piece'
   })
   signedPiece;
   @belongsTo('piece', {
     inverse: 'signedPiece',
     async: true,
     polymorphic: true,
+    as: 'piece'
   })
   unsignedPiece;
   @belongsTo('piece', {
     inverse: 'signedPieceCopyOf',
     async: true,
     polymorphic: true,
+    as: 'piece'
   })
   signedPieceCopy;
   @belongsTo('piece', {
     inverse: 'signedPieceCopy',
     async: true,
     polymorphic: true,
+    as: 'piece'
   })
   signedPieceCopyOf;
 
   // resources with pieces linked:
 
-  @belongsTo('submission-activity', { inverse: 'pieces', async: true })
+  @belongsTo('submission-activity', { inverse: 'pieces', async: true, as: 'piece' })
   submissionActivity;
-  @belongsTo('meeting', { inverse: 'pieces', async: true }) meeting;
-  @belongsTo('publication-flow', { inverse: 'referenceDocuments', async: true })
+  @belongsTo('meeting', { inverse: 'pieces', async: true, as: 'piece' }) meeting;
+  @belongsTo('publication-flow', { inverse: 'referenceDocuments', async: true, as: 'piece' })
   publicationFlow;
-  @belongsTo('proofing-activity', { inverse: 'generatedPieces', async: true })
+  @belongsTo('proofing-activity', { inverse: 'generatedPieces', async: true, as: 'piece' })
   proofingActivityGeneratedBy;
   @belongsTo('translation-activity', {
     inverse: 'generatedPieces',
     async: true,
+    as: 'piece'
   })
   translationActivityGeneratedBy;
-  @belongsTo('sign-marking-activity', { inverse: 'piece', async: true })
+  @belongsTo('sign-marking-activity', { inverse: 'piece', async: true, as: 'piece' })
   signMarkingActivity;
   // @belongsTo('subcase', { inverse: 'linkedPieces', async: true }) linkedSubcase; // FIXME: This should be a hasMany
   @belongsTo('sign-completion-activity', {
     inverse: 'signedPiece',
     async: true,
+    as: 'piece'
   })
   signCompletionActivity;
 
-  @hasMany('request-activity', { inverse: 'usedPieces', async: true })
+  @hasMany('request-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   requestActivitiesUsedBy;
-  @hasMany('translation-activity', { inverse: 'usedPieces', async: true })
+  @hasMany('translation-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   translationActivitiesUsedBy;
-  @hasMany('proofing-activity', { inverse: 'usedPieces', async: true })
+  @hasMany('proofing-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   proofingActivitiesUsedBy;
-  @hasMany('publication-activity', { inverse: 'usedPieces', async: true })
+  @hasMany('publication-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   publicationActivitiesUsedBy;
 
-  @hasMany('case', { inverse: 'pieces', async: true }) cases;
-  @hasMany('agendaitem', { inverse: 'pieces', async: true }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
-  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true })
+  @hasMany('case', { inverse: 'pieces', async: true, as: 'piece' }) cases;
+  @hasMany('agendaitem', { inverse: 'pieces', async: true, as: 'piece' }) agendaitems; // This relation may contain stale data due to custom service, so we don't serialize it
+  @hasMany('agendaitem', { inverse: 'linkedPieces', async: true, as: 'piece' })
   linkedAgendaitems;
 
   @hasMany('submitted-piece', {
     inverse: 'piece',
-    async: true
+    async: true,
+    as: 'piece'
   })
   submittedPieces;
 
@@ -118,6 +126,11 @@ export default class Piece extends Model {
       const now = new Date();
       this.modified = now;
       this.accessLevelLastModified = now;
+      if (dirtyType == 'created') {
+        // When saving a newly created record force the creation date to equal
+        // the modified date.
+        this.created = now;
+      }
     }
     return super.save(...arguments);
   }

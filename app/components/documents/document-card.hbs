@@ -86,7 +86,7 @@
                 </p>
               {{/if}}
               {{#if
-                (await (this.canViewSignedPiece))
+                (await (this.canViewConfidentialPiece))
               }}
                 {{#if this.piece.signedPieceCopy.file}}
                   <p>
@@ -99,7 +99,7 @@
                       {{t "signed-document"}}
                     </AuLinkExternal>
                     {{t "on"}}
-                    {{datetime-at this.piece.signedPieceCopy.created}}
+                    {{datetime-at (or this.piece.signedPieceCopy.file.created this.piece.signedPieceCopy.created)}}
                   </p>
                 {{/if}}
               {{/if}}
@@ -300,7 +300,6 @@
                       piece
                     }}
                     @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-                    @label={{this.dateToShowLabel}}
                   />
                 </div>
               {{/each}}
@@ -316,7 +315,7 @@
     @piece={{this.piece}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
-    @onSave={{toggle "isEditingPiece" this}}
+    @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
   />
 {{/if}}
 

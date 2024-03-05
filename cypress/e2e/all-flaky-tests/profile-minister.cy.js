@@ -266,7 +266,7 @@ context('Testing the application as Minister user', () => {
       cy.get(document.documentCard.actions).should('not.exist');
 
       // TODO-bug
-      // ! doc history viewing is allowed for this profile, but only latest version is visible
+      // ! doc history viewing is allowed for this profile, but only latest version is visible (yggie has no path to the others)
       // cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       //   .should('not.be.disabled')
       //   .click();
@@ -821,12 +821,12 @@ context('Testing the application as Minister user', () => {
 
       // confidential file
       cy.visit('document/6374F2FBD9A98BD0A2288552');
-      cy.get(document.documentPreview.downloadLink).should('not.exist');
+      cy.get(document.documentPreview.downloadLink);
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).should('not.exist');
       cy.get(document.previewDetailsTab.sourceFile);
-      cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
+      cy.get(document.previewDetailsTab.sourceFileDownload);
     });
 
     it('check signatures tab', () => {

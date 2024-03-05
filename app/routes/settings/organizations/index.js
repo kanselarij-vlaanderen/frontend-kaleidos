@@ -73,7 +73,7 @@ export default class SettingsOrganizationsIndexRoute extends Route {
   }
 
   async afterModel() {
-    this.selectedOrganizations = (await Promise.all(this.lastParams.committed.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+    this.selectedOrganizations = (await Promise.all(this.lastParams.committed.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
   }
 
   setupController(controller) {

@@ -377,7 +377,15 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.documentCard.versionHistory).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Documents Tab - Document Card - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
     });
   });
 
@@ -894,12 +902,12 @@ context('Testing the application as Kort bestek user', () => {
 
       // confidential file
       cy.visit('document/6374F2FBD9A98BD0A2288552');
-      cy.get(document.documentPreview.downloadLink).should('not.exist');
+      cy.get(document.documentPreview.downloadLink);
       cy.get(document.previewDetailsTab.delete).should('not.exist');
       cy.get(document.previewDetailsTab.edit).should('not.exist');
-      cy.get(appuniversum.alert.message).contains('U hebt geen toegang tot dit document');
+      cy.get(appuniversum.alert.message).should('not.exist');
       cy.get(document.previewDetailsTab.sourceFile);
-      cy.get(document.previewDetailsTab.sourceFileDownload).should('not.exist');
+      cy.get(document.previewDetailsTab.sourceFileDownload);
     });
 
     it('check version tab', () => {

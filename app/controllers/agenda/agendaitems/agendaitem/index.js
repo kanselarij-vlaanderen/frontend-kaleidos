@@ -15,6 +15,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service agendaitemAndSubcasePropertiesSync;
   @service decisionReportGeneration;
   @service toaster;
+  @service parliamentService;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -77,7 +78,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   @action
-  async reloadParliamentFlow() {
+  async pollParliamentFlow(job, toast) {
+    await this.parliamentService.delayedPoll(job, toast);
     this.decisionmakingFlow = await this.subcase?.decisionmakingFlow.reload();
     this.case = await this.decisionmakingFlow?.case.reload();
     this.parliamentFlow = await this.case?.parliamentFlow.reload();

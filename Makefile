@@ -2,8 +2,8 @@ include .env.cypress
 export $(shell sed 's/=.*//' .env.cypress)
 
 reset-cache-resource-only:
-	- docker-compose ${COMPOSE_FILE} kill cache resource cache-warmup
-	- docker-compose ${COMPOSE_FILE} up -d cache resource cache-warmup
+	- docker-compose ${COMPOSE_FILE} kill cache resource cache-warmup forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d cache resource cache-warmup forever-cache
 	- sleep 5
 
 reset-cache:
@@ -62,6 +62,9 @@ drc-kill:
 
 drc-up-d-service:
 	- docker-compose ${COMPOSE_FILE} up -d ${SERV}
+
+drc-restart-service:
+	- docker-compose ${COMPOSE_FILE} restart ${SERV}
 
 drc:
 	- docker-compose ${COMPOSE_FILE} ${args}

@@ -15,6 +15,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @service toaster;
   @service fileConversionService;
 
+  @tracked isUploadingSourceFile = false;
   @tracked isReplacingSourceFile = false;
   @tracked isReplacingDerivedFile = false;
   @tracked isUploadingDerivedFile = false;
@@ -24,6 +25,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @tracked isUploadingReplacementDerivedFile = false;
 
   @tracked name;
+  @tracked uploadedSourceFile;
   @tracked uploadedDerivedFile;
   @tracked replacementSourceFile;
   @tracked replacementDerivedFile;
@@ -37,10 +39,16 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   get isDisabled() {
     return (
       this.saveEdit.isRunning
+        || this.isUploadingSourceFile
         || this.isUploadingDerivedFile
         || this.isUploadingReplacementDerivedFile
         || this.isUploadingReplacementSourceFile
     );
+  }
+
+  @action
+  handleSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
+    this.isUploadingSourceFile = uploadIsRunning && !uploadIsCompleted;
   }
 
   @action
@@ -76,6 +84,10 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   async cancelEdit() {
     this.name = null;
 
+    await this.uploadedSourceFile?.destroyRecord();
+    this.isUploadingSourceFile = false;
+    this.uploadedSourceFile = null;
+
     await this.replacementSourceFile?.destroyRecord();
     this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
@@ -105,18 +117,23 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       }
     }
 
-    const now = new Date();
-    this.args.piece.modified = now;
     this.args.piece.name = this.name?.trim();
     // If a piece has pieceParts, remove them
     // Might need to be improved to work for other piece subtypes
     const pieceParts = await this.args.piece.pieceParts;
     if (pieceParts?.length) {
-      for (const piecePart of pieceParts.toArray()) {
+      for (const piecePart of pieceParts.slice()) {
         await piecePart.destroyRecord();
       }
     }
-
+    if (this.uploadedSourceFile) {
+      // use-case: we have a pdf and we want to add docx but keep our pdf
+      // derived file does not exist yet in this case
+      const oldFile = await this.args.piece.file;
+      this.uploadedSourceFile.derived = oldFile;
+      this.args.piece.file = this.uploadedSourceFile;
+      await Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
+    }
     if (this.replacementSourceFile) {
       const oldFile = await this.args.piece.file;
       const derivedFile = await oldFile.derived;
@@ -157,10 +174,14 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       await file.save();
       await derivedFile.destroyRecord();
     }
-    this.args.piece.created = now;
     await this.args.piece.save();
 
     this.name = null;
+
+    this.args.onSave?.();
+
+    this.isUploadingSourceFile = false;
+    this.uploadedSourceFile = null;
 
     this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
@@ -170,7 +191,5 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
 
     this.uploadedDerivedFile = null;
     this.isDeletingDerivedFile = false;
-
-    this.args.onSave?.();
   });
 }

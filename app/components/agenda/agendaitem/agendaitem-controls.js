@@ -22,6 +22,7 @@ export default class AgendaitemControls extends Component {
   @service signatureService;
   @service decisionReportGeneration;
   @service parliamentService;
+  @service newsletterService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -69,10 +70,10 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
-  async onSendToVp() {
+  async onSendToVp(job, toast) {
     this.showVPModal = false;
     if (this.args.onSendToVp) {
-      this.args.onSendToVp();
+      this.args.onSendToVp(job, toast);
     }
   }
 
@@ -105,7 +106,7 @@ export default class AgendaitemControls extends Component {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     }
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
@@ -145,12 +146,14 @@ export default class AgendaitemControls extends Component {
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
     yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
     yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
   @action
@@ -225,7 +228,7 @@ export default class AgendaitemControls extends Component {
       ].includes(decisionResultCodeUri)
     ) {
       const pieces = yield this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );

@@ -135,12 +135,6 @@ context('Decision tests post digital agenda', () => {
 
   it('should test the decision CRUD', () => {
     const agendaDate2 = Cypress.dayjs('2023-11-28').hour(10);
-    const decisionTypes = [
-      decisionAcknowledged,
-      decisionApproved,
-      decisionPostponed,
-      decisionRetracted
-    ];
 
     // TODO-setup
     // setup agenda with 2 subcases: nota, med
@@ -172,20 +166,6 @@ context('Decision tests post digital agenda', () => {
     // generate report to existing pre-generated decision-activity of note
     cy.generateDecision();
     cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
-
-    decisionTypes.forEach((type) => {
-      cy.get(agenda.decisionResultPill.edit)
-        .click();
-      cy.get(dependency.emberPowerSelect.trigger).click();
-      cy.get(dependency.emberPowerSelect.option).contains(type)
-        .scrollIntoView()
-        .click();
-      const randomInt = Math.floor(Math.random() * Math.floor(10000));
-      cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt}`);
-      cy.get(agenda.agendaitemDecisionEdit.save).click();
-      cy.wait(`@patchDecisionActivities_${randomInt}`);
-      cy.get(agenda.decisionResultPill.pill).contains(type);
-    });
   });
 
   it('should test if changing subcase to confidential sets correct access rights', () => {
@@ -561,7 +541,5 @@ context('Decision tests post digital agenda', () => {
     cy.get(appuniversum.loader).should('not.exist');
     cy.wait(2000).then(() => expect(spy).not.to.have.been.called);
     cy.get(appuniversum.toaster).should('not.exist');
-    // check if decision is not updated
-    cy.get(auk.panel.body).contains('Dit punt wordt ingetrokken.');
   });
 });

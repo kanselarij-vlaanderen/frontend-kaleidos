@@ -31,6 +31,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @service decisionReportGeneration;
   @service throttledLoadingService;
   @service currentSession;
+  @service newsletterService;
 
   @tracked report;
   @tracked previousReport;
@@ -90,7 +91,7 @@ export default class AgendaitemDecisionComponent extends Component {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'filter[:has-no:next-piece]': true,
     });
-    pieces = pieces.toArray();
+    pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {
       sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
@@ -103,6 +104,17 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   toggleEditPill() {
     this.isEditingPill = !this.isEditingPill;
+  }
+
+  @task
+  *updateNewsItem() {
+    const resultCode = yield this.args.decisionActivity.decisionResultCode;
+    if ([
+      CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+      CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+    ].includes(resultCode.uri)) {
+      yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+    }
   }
 
   onCreateNewVersion = task(async () => {
@@ -192,6 +204,7 @@ export default class AgendaitemDecisionComponent extends Component {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
     await this.updateDecisionPiecePart.perform();
+    await this.updateNewsItem.perform();
   });
 
   updateDecisionPiecePart = task(async () => {
@@ -224,7 +237,7 @@ export default class AgendaitemDecisionComponent extends Component {
         this.report
       );
     }
-    this.loadBeslissingPiecePart.perform();
+    await this.loadBeslissingPiecePart.perform();
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
@@ -237,7 +250,7 @@ export default class AgendaitemDecisionComponent extends Component {
       ].includes(decisionResultCode?.uri)
     ) {
       const pieces = await this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );
@@ -253,7 +266,7 @@ export default class AgendaitemDecisionComponent extends Component {
       decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
     ) {
       const pieces = await this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
+      for (const piece of pieces.slice()) {
         await this.signatureService.removeSignFlowForPiece(piece);
       }
     }

@@ -12,11 +12,11 @@ export default class SubmissionsAlertComponent extends Component {
 
   get message() {
     if (this.args.parliamentFlow.isIncomplete) {
-      return this.intl.t('this-case-was-incompletely-submitted-to-VP-on');
+      return this.intl.t('this-case-was-submitted-to-VP-on');
     } else if (this.args.parliamentFlow.isBeingHandledByFP) {
-      return this.intl.t('this-case-was-completely-submitted-on');
+      return this.intl.t('this-case-was-submitted-on');
     } else if (this.args.parliamentFlow.isComplete) {
-      return this.intl.t('this-case-was-completely-submitted-to-VP-on');
+      return this.intl.t('this-case-was-submitted-to-VP-on');
     } else {
       return this.intl.t('this-case-was-submitted-to-VP-on');
     }
@@ -34,10 +34,10 @@ export default class SubmissionsAlertComponent extends Component {
   }
 
   get skin() {
-    if (this.args.parliamentFlow.isIncomplete) {
-      return "warning";
-    } else {
+    if (this.args.parliamentFlow.isBeingHandledByFP) {
       return "success";
+    } else {
+      return "info";
     }
   }
 

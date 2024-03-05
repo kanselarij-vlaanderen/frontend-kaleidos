@@ -13,6 +13,8 @@ import subDays from 'date-fns/subDays';
 export default class AgendaitemPostponed extends Component {
   @service store;
   @service agendaService;
+  @service toaster;
+  @service intl;
 
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;
@@ -67,7 +69,7 @@ export default class AgendaitemPostponed extends Component {
       },
       sort: '-planned-start',
     });
-    const allRecentMeetings = meetings.toArray();
+    const allRecentMeetings = meetings.slice();
     // filter our own meeting if present
     allRecentMeetings.removeObject(this.args.meeting);
     return allRecentMeetings;
@@ -76,33 +78,15 @@ export default class AgendaitemPostponed extends Component {
   @task
   *reProposeForMeeting(meeting) {
     this.closeProposingForOtherMeetingModal();
-    const submissionActivitiesFromAgendaActivity = yield this.store.queryAll('submission-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[agenda-activity][:id:]': this.args.agendaActivity.id,
-      include: 'pieces', // Make sure we have all pieces, unpaginated
-    });
-    // there could be new submission-activities after finalizing agenda
-    const newSubmissionActivities = yield this.store.queryAll('submission-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:agenda-activity]': true,
-      include: 'pieces', // Make sure we have all pieces, unpaginated
-    });
-    const submissionActivities = [...submissionActivitiesFromAgendaActivity.toArray(), ...newSubmissionActivities.toArray()];
-    const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
-      let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
-      pieces.push(...submissionPieces);
+    try {
+      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+    } catch (error) {
+      this.router.refresh();
+      this.toaster.error(
+        this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+        this.intl.t('warning-title')
+      );
     }
-    const submissionActivity = this.store.createRecord('submission-activity', {
-      startDate: new Date(),
-      subcase: this.args.subcase,
-      pieces: pieces,
-    });
-    yield submissionActivity.save();
-    yield this.agendaService.putSubmissionOnAgenda(meeting, [
-      submissionActivity,
-    ]);
     yield this.loadProposedStatus.perform();
   }
 

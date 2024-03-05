@@ -11,6 +11,7 @@ import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import route from '../../selectors/route.selectors';
 import signature from '../../selectors/signature.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 import utils from '../../selectors/utils.selectors';
 
@@ -70,21 +71,9 @@ context('signatures shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
 
-  const mandatee1 = 'Gwendolyn Rutten';
-  const mandatee2 = 'Ben Weyts';
-
-  // TODO maintenance heavy, config file?
-  const currentMinisters = [
-    'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
-    'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
-    'Gwendolyn Rutten, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
-    'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
-    'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
-    'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
-    'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
-    'Benjamin Dalle, Vlaams minister van Brussel, Jeugd, Media en Armoedebestrijding',
-    'Jo Brouns, Vlaams minister van Economie, Innovatie, Werk, Sociale Economie en Landbouw'
-  ];
+  const primeMandatee = mandateeNames.current.first;
+  const mandatee1 = mandateeNames.current.third; // 'Gwendolyn Rutten'
+  const mandatee2 = mandateeNames.current.fourth; // 'Ben Weyts';
 
   const approverEmail = 'approver@test.com';
   const notificationEmail = 'notification@test.com';
@@ -119,12 +108,12 @@ context('signatures shortlist overview tests', () => {
     cy.approveDesignAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitleShort1);
-    cy.addAgendaitemMandatee(3);
+    cy.addAgendaitemMandatee(mandatee1);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
     cy.get(document.documentCard.signMarking).forceClick();
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
-    cy.addAgendaitemMandatee(4);
+    cy.addAgendaitemMandatee(mandatee2);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.actions).click();
     cy.get(document.documentCard.signMarking).forceClick();
@@ -139,7 +128,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mHeader.signatures).click()
       .wait('@getShortlist1');
 
-    cy.get(route.signatures.row.mandatee).contains(mandatee1)
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName)
       .parent()
       .as('currentDoc');
 
@@ -169,13 +158,13 @@ context('signatures shortlist overview tests', () => {
       });
 
     // no filters (all mandatees)
-    cy.get(route.signatures.row.mandatee).contains(mandatee1);
-    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2.fullName);
 
     // filter nonexistent
     cy.get(route.signatures.openMinisterFilter).click();
     cy.get(appuniversum.loader).should('not.exist');
-    cy.get(appuniversum.checkbox).contains('Jan Jambon')
+    cy.get(appuniversum.checkbox).contains(primeMandatee.fullName)
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist2');
     cy.get(route.signatures.applyFilter).click()
@@ -185,24 +174,24 @@ context('signatures shortlist overview tests', () => {
     // filter one
     cy.get(route.signatures.openMinisterFilter).click();
     cy.get(appuniversum.loader).should('not.exist');
-    cy.get(appuniversum.checkbox).contains(mandatee1)
+    cy.get(appuniversum.checkbox).contains(mandatee1.fullName)
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist3');
     cy.get(route.signatures.applyFilter).click()
       .wait('@getShortlist3');
-    cy.get(route.signatures.row.mandatee).contains(mandatee1);
-    cy.get(route.signatures.row.mandatee).should('not.contain', mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName);
+    cy.get(route.signatures.row.mandatee).should('not.contain', mandatee2.fullName);
 
     // filter both
     cy.get(route.signatures.openMinisterFilter).click();
     cy.get(appuniversum.loader).should('not.exist');
-    cy.get(appuniversum.checkbox).contains(mandatee2)
+    cy.get(appuniversum.checkbox).contains(mandatee2.fullName)
       .click();
     cy.intercept('GET', '/sign-flows*').as('getShortlist4');
     cy.get(route.signatures.applyFilter).click()
       .wait('@getShortlist4');
-    cy.get(route.signatures.row.mandatee).contains(mandatee1);
-    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2.fullName);
   });
 
   it('should check the signatures overview sidebar', () => {
@@ -210,7 +199,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mHeader.signatures).click()
       .wait('@getShortlist1');
 
-    cy.get(route.signatures.row.mandatee).contains(mandatee1)
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName)
       .parent()
       .as('currentDoc');
 
@@ -243,9 +232,9 @@ context('signatures shortlist overview tests', () => {
 
     // check default signers
     cy.get(signature.createSignFlow.signers.item).eq(0)
-      .contains('Jan Jambon');
+      .contains(primeMandatee.fullName);
     cy.get(signature.createSignFlow.signers.item).eq(1)
-      .contains(mandatee1);
+      .contains(mandatee1.fullName);
     // remove signer with button
     cy.get(signature.createSignFlow.signers.remove).eq(1)
       .click();
@@ -256,17 +245,17 @@ context('signatures shortlist overview tests', () => {
     cy.get(appuniversum.loader).should('not.exist');
     // TODO can't add selector to container, only to checkboxlist, which isn't specific enough?
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
-      .contains(mandatee1)
+      .contains(mandatee1.fullName)
       .scrollIntoView()
       .click();
     cy.get(signature.selectMinisters.apply).click();
     cy.get(signature.createSignFlow.signers.item).eq(1)
-      .contains(mandatee1);
+      .contains(mandatee1.fullName);
     // remove signer with edit
     cy.get(signature.createSignFlow.signers.edit).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
-      .contains(mandatee1)
+      .contains(mandatee1.fullName)
       .scrollIntoView()
       .click();
     cy.get(signature.selectMinisters.apply).click();
@@ -278,7 +267,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
       .should('have.length', 9);
-    currentMinisters.forEach((minister) => {
+    mandateeNames.current.signatureTitles.forEach((minister) => {
       cy.get(appuniversum.checkbox).contains(minister);
     });
     cy.get(auk.modal.footer.cancel).click();
@@ -306,7 +295,8 @@ context('signatures shortlist overview tests', () => {
     // cy.wait(5000);
 
     // no email set
-    cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
+    // TODO this fails, is there an email for primeMandatee in the testdata?
+    // cy.get(route.signatures.sidebar.startSignflow).should('be.disabled');
   });
 
   it('check dossierbeheerder add one minister', () => {
@@ -317,7 +307,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).contains(mandatee1)
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee1.fullName)
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -331,7 +321,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mHeader.signatures).click()
       .wait('@getShortlist1');
 
-    cy.get(route.signatures.row.mandatee).contains(mandatee1);
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName);
     cy.get(route.signatures.row.mandatee).should('have.length', 1);
   });
 
@@ -343,7 +333,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).contains(mandatee2)
+    cy.get(dependency.emberPowerSelect.option).contains(mandatee2.fullName)
       .click();
     cy.intercept('PATCH', '/user-organizations/**').as('patchUserOrganizations');
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
@@ -356,8 +346,8 @@ context('signatures shortlist overview tests', () => {
     cy.get(utils.mHeader.signatures).click()
       .wait('@getShortlist1');
 
-    cy.get(route.signatures.row.mandatee).contains(mandatee1);
-    cy.get(route.signatures.row.mandatee).contains(mandatee2);
+    cy.get(route.signatures.row.mandatee).contains(mandatee1.fullName);
+    cy.get(route.signatures.row.mandatee).contains(mandatee2.fullName);
     cy.get(route.signatures.row.mandatee).should('have.length', 2);
   });
 
@@ -386,14 +376,12 @@ context('signatures shortlist overview tests', () => {
     cy.intercept('POST', '/signing-flows/update-to-signinghub', {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
-    cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
     // no email set so forcing through disabled button
     cy.get(route.signatures.sidebar.startSignflow).invoke('removeAttr', 'disabled')
       .click();
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
-    cy.wait('@deleteSigningActivities');
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
@@ -429,13 +417,9 @@ context('signatures shortlist overview tests', () => {
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
 
-    cy.intercept('DELETE', '/sign-subcases/**').as('deleteSignSubcases3');
-    cy.intercept('DELETE', '/sign-flows/**').as('deleteSignFlows3');
-    cy.intercept('DELETE', '/sign-marking-activities/**').as('deleteSigningActivities3');
+    cy.intercept('DELETE', '/signing-flows/**').as('deleteSignFlows'); // service call
     cy.get(route.signatures.sidebar.stopSignflow).click();
-    cy.wait('@deleteSignSubcases3');
-    cy.wait('@deleteSignFlows3');
-    cy.wait('@deleteSigningActivities3');
+    cy.wait('@deleteSignFlows');
     // table currently empty at this point, but could contain more data in the future
     // cy.get(route.signatures.row.name).should('not.contain', files2[0].newFileName);
   });

@@ -11,31 +11,21 @@ export default class CasesHeader extends Component {
   @service router;
 
   @tracked isOpenNewCaseModal = false;
-  @tracked IsOpenExperimentalNewCaseModal = false;
+  @tracked isOpenNewCaseAddSubcaseModal = false;
 
   get isEnabledNewCaseCreation() {
     return isEnabledNewCaseCreation();
   }
 
   @action
-  toggleIsOpenNewCaseModal() {
-    this.isOpenNewCaseModal = !this.isOpenNewCaseModal;
-  } 
-
-  @action
-  toggleIsOpenExperimentalNewCaseModal() {
-    this.IsOpenExperimentalNewCaseModal = !this.IsOpenExperimentalNewCaseModal;
-  }
-
-  @action
   saveNewCase() {
-    this.toggleIsOpenNewCaseModal();
+    this.isOpenNewCaseModal = false;
     this.args.didCreateNewCase(...arguments);
   }
 
   @action
-  saveExperimentalNewCase(decisionmakingFlow) {
-    this.IsOpenExperimentalNewCaseModal = false;
+  saveNewCaseAddSubcase(decisionmakingFlow) {
+    this.isOpenNewCaseAddSubcaseModal = false;
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }
 }

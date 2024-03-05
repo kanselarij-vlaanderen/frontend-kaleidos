@@ -15,6 +15,7 @@ export default class CasesCaseSubcasesAddSubcaseRoute extends Route {
       sort: '-created',
     });
     await this.latestSubcase?.mandatees;
+    await this.latestSubcase?.governmentAreas;
   }
 
   setupController(controller) {

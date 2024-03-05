@@ -14,7 +14,7 @@
               data-test-cases-header-add-case
               @skin="primary"
               @icon="plus"
-              {{on "click" this.toggleIsOpenNewCaseModal}}
+              {{on "click" (toggle "isOpenNewCaseModal" this)}}
             >
               {{t "add-case"}}
             </AuButton>
@@ -23,7 +23,7 @@
             <AuButton
               @skin="primary"
               @icon="plus"
-              {{on "click" this.toggleIsOpenExperimentalNewCaseModal}}
+              {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
             >
               {{t "add-case-new"}}
             </AuButton>
@@ -36,13 +36,13 @@
 {{#if this.isOpenNewCaseModal}}
   <Cases::NewCase
     @didSave={{this.saveNewCase}}
-    @onCancel={{this.toggleIsOpenNewCaseModal}}
+    @onCancel={{toggle "isOpenNewCaseModal" this}}
   />
 {{/if}}
 
-{{#if this.IsOpenExperimentalNewCaseModal}}
+{{#if this.isOpenNewCaseAddSubcaseModal}}
   <Cases::NewCase
-    @didSave={{this.saveExperimentalNewCase}}
-    @onCancel={{this.toggleIsOpenExperimentalNewCaseModal}}
+    @didSave={{this.saveNewCaseAddSubcase}}
+    @onCancel={{toggle "isOpenNewCaseAddSubcaseModal" this}}
   />
 {{/if}}

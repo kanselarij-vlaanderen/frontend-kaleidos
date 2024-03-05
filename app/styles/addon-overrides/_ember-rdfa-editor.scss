@@ -40,13 +40,16 @@ $say-editor-border-radius: $au-input-border-radius;
   border: .1rem solid $say-editor-border-color;
   border-radius: $say-editor-border-radius;
 
-  .vl-rdfa-editor--small & {
+  .wc-rdfa-editor--small & {
     height: $say-container-height-small;
   }
-}
 
-.auk-rdfa-fullscreen .say-container {
-  border-radius: 0;
+  .wc-rdfa-editor--fullscreen & {
+    border: 0;
+    border-top: .1rem solid $say-editor-border-color;
+    border-radius: 0;
+    height: calc(100vh - 6.5rem);
+  }
 }
 
 .say-toolbar {
@@ -82,12 +85,20 @@ $say-editor-border-radius: $au-input-border-radius;
 
 .say-editor {
   padding: 1.5rem 2rem;
+
+  .wc-rdfa-editor--fullscreen & {
+    padding: 3rem 4rem;
+  }
 }
 
 .say-editor__paper,
 .say-editor__inner {
-  .vl-rdfa-editor--small & {
+  .wc-rdfa-editor--small & {
     min-height: $say-paper-min-height-small;
+  }
+
+  .wc-rdfa-editor--fullscreen & {
+    min-height: calc((100vh - 6.5rem) * 2);
   }
 }
 
@@ -118,6 +129,11 @@ $say-editor-border-radius: $au-input-border-radius;
 
   > p + ul,
   > p + ol {
+    margin-top: 0;
+  }
+
+  > ul[data-list-style='upper-alpha'] + p,
+  > ol[data-list-style='upper-alpha'] + p {
     margin-top: 0;
   }
 
@@ -173,49 +189,8 @@ $say-editor-border-radius: $au-input-border-radius;
 }
 
 
-// Full screen
-
-.auk-rdfa-holder {
-  width: 100%;
-}
-
-.auk-rdfa-holder__header {
-  .auk-rdfa-fullscreen & {
-    padding: 1rem;
-    flex-grow: 0;
-  }
-}
-
-.auk-rdfa-fullscreen {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  top: .5rem;
-  left: .5rem;
-  height: calc(100% - 1rem);
-  width: calc(100% - 1rem);
-  z-index: 1;
-  background-color: #fff;
-  box-shadow: 0 0 6rem rgba(0,0,0,.8);
-
-  .say-container {
-    height: calc(100vh - 6.5rem);
-    border: 0;
-    border-top: .1rem solid $auk-gray-300;
-  }
-
-  .say-editor__paper,
-  .say-editor__inner {
-    min-height: calc((100vh - 6.5rem) * 2);
-  }
-
-  .say-editor {
-    padding: 3rem 4rem;
-  }
-}
-
 // selecting block nodes in rdfa-editor are more visual
+
 .ProseMirror-selectednode {
   background-color: var(--au-blue-200);
   outline: 2px solid var(--au-blue-500);

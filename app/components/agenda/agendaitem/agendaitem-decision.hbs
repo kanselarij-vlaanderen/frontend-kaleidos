@@ -106,7 +106,7 @@
         />
 
         <h4 class="auk-h4 au-u-padding-top">{{t "concerns"}}</h4>
-        <SayEditor
+        <Auk::Editor
           @size="small"
           @allowFullscreen={{true}}
           @title={{t "concerns"}}
@@ -126,9 +126,9 @@
               @onVersionClicked={{this.onRevertBetreftVersion}}
             />
           </:header>
-        </SayEditor>
+        </Auk::Editor>
         <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
-        <SayEditor
+        <Auk::Editor
           @allowFullscreen={{true}}
           @title={{t "agendaitem-decision"}}
           @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
@@ -148,7 +148,7 @@
               @onVersionClicked={{this.onRevertBeslissingVersion}}
             />
           </:header>
-        </SayEditor>
+        </Auk::Editor>
       </Auk::Panel::Body>
       <Auk::Panel::Footer class="au-u-background-gray-100">
         <Auk::Toolbar>
@@ -288,7 +288,7 @@
           {{/if}}
           {{#if (and this.isEditingConcern this.mayEditDecisionReport)}}
             <h4 class="auk-h4">{{t "concerns"}}</h4>
-            <SayEditor
+            <Auk::Editor
               @size="small"
               @allowFullscreen={{true}}
               @title={{t "concerns"}}
@@ -308,7 +308,7 @@
                   @onVersionClicked={{this.onRevertBetreftVersion}}
                 />
               </:header>
-            </SayEditor>
+            </Auk::Editor>
             <Auk::Toolbar>
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
@@ -369,7 +369,7 @@
           {{/if}}
           {{#if (and this.isEditingTreatment this.mayEditDecisionReport)}}
             <h4 class="auk-h4 au-u-padding-top">{{t "agendaitem-decision"}}</h4>
-            <SayEditor
+            <Auk::Editor
               @allowFullscreen={{true}}
               @title={{t "agendaitem-decision"}}
               @handleRdfaEditorInit={{this.handleRdfaEditorInitBeslissing}}
@@ -389,7 +389,7 @@
                   @onVersionClicked={{this.onRevertBeslissingVersion}}
                 />
               </:header>
-            </SayEditor>
+            </Auk::Editor>
             <Auk::Toolbar>
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>

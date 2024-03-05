@@ -25,10 +25,9 @@
               {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
-              {{! no lastPiece.created in legacy data }}
               {{#if this.lastPiece.created}}
                 {{t "uploaded-at"}}
-                {{datetime-at this.lastPiece.created}}
+                {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
               {{/if}}
             </div>
           </Group.Item>
@@ -94,10 +93,9 @@
                     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                   </div>
                   <div class="vlc-document-card-item__meta au-u-muted">
-                    {{!-- no piece.created in legacy data --}}
                     {{#if piece.created}}
                       {{t "uploaded-at"}}
-                      {{datetime-at piece.created}}
+                      {{datetime-at (or piece.file.created piece.created)}}
                     {{/if}}
                   </div>
                   <div class="vlc-document-card-item__icon">

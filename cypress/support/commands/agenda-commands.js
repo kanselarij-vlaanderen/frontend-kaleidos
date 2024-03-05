@@ -444,11 +444,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
   cy.log('addAgendaitemToAgenda');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/subcases?**sort**').as(`getSubcasesFiltered_${randomInt}`);
-  cy.intercept('POST', '/agendaitems').as(`createNewAgendaitem_${randomInt}`);
-  cy.intercept('POST', '/agenda-activities').as(`createAgendaActivity_${randomInt}`);
-  cy.intercept('POST', '/decision-activities').as(`createDecisionActivity_${randomInt}`);
-  cy.intercept('POST', '/agenda-item-treatments').as(`createAgendaItemTreatment_${randomInt}`);
-  cy.intercept('PATCH', '/agendas/**').as(`patchAgenda_${randomInt}`);
+  cy.intercept('POST', '/meetings/*/submit').as('submitSubcaseOnMeeting');
 
   cy.get(appuniversum.loader).should('not.exist', {
     timeout: 60000,
@@ -492,24 +488,12 @@ function addAgendaitemToAgenda(subcaseTitle) {
     cy.get(agenda.createAgendaitem.save).click();
   });
 
-  cy.wait(`@createAgendaActivity_${randomInt}`, {
-    timeout: 20000,
+  cy.wait('@submitSubcaseOnMeeting', {
+    timeout: 24000,
   });
-  cy.wait(`@createDecisionActivity_${randomInt}`);
-  cy.wait(`@createAgendaItemTreatment_${randomInt}`);
-  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaitems_${randomInt}`);
-  cy.wait(`@createNewAgendaitem_${randomInt}`, {
-    timeout: 30000,
-  })
-    .wait(`@patchAgenda_${randomInt}`, {
-      timeout: 20000,
-    });
-  cy.wait(`@loadAgendaitems_${randomInt}`);
   cy.get(appuniversum.loader, {
-    timeout: 12000,
-  }).should('not.exist', {
     timeout: 60000,
-  });
+  }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
 
@@ -785,7 +769,7 @@ function generateDecision(concerns, decision) {
   cy.get(agenda.agendaitemNav.decisionTab).click();
   cy.get(agenda.agendaitemDecision.create).click();
 
-  cy.get(utils.sayEditor.rdfa).eq(0)
+  cy.get(utils.rdfaEditor).eq(0)
     .as('concernsEditor');
   if (concerns) {
     cy.get('@concernsEditor').type(concerns);
@@ -793,7 +777,7 @@ function generateDecision(concerns, decision) {
     cy.get('@concernsEditor').type('Betreft');
   }
 
-  cy.get(utils.sayEditor.rdfa).eq(1)
+  cy.get(utils.rdfaEditor).eq(1)
     .as('decisionsEditor');
   if (decision) {
     cy.get('@decisionsEditor').type(decision);

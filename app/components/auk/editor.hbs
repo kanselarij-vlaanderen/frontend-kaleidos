@@ -1,10 +1,10 @@
 <div
-  class="auk-rdfa-holder
-    {{if this.isFullscreen 'auk-rdfa-fullscreen au-u-margin-top-none'}}"
+  class="auk-editor
+    {{if this.isFullscreen 'auk-editor--fullscreen au-u-margin-top-none'}}"
 >
   {{#if this.editorInstance}}
     <div
-      class="auk-rdfa-holder__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
+      class="auk-editor__header au-u-flex au-u-flex--between au-u-flex--vertical-center"
     >
       <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
         {{#if this.isFullscreen}}
@@ -28,6 +28,7 @@
             <AuButton
               @skin="primary"
               @loading={{@onSaveTask.isRunning}}
+              @disabled={{@fullScreenSaveDisabled}}
               {{on "click" (perform @onSaveTask)}}
             >
               {{t "save"}}
@@ -48,9 +49,9 @@
       {{/if}}
     </div>
   {{/if}}
-  <WebComponents::VlRdfaEditor
-    data-test-say-editor-rdfa
-    @size={{@size}}
+  <WebComponents::RdfaEditor
+    data-test-rdfa-editor
+    @size={{this.size}}
     @handleRdfaEditorInit={{this.handleRdfaEditorInit}}
   />
 </div>
