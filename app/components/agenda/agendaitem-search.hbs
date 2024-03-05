@@ -9,8 +9,9 @@
             @width="block"
             @value={{this.searchText}}
             @enter={{perform this.search}}
+            @disabled={{@isEditingOverview}}
             {{on "input" (perform this.debouncedSearch)}}
-            placeholder={{t "search-placeholder"}}
+            placeholder={{t (if @isEditingOverview "search-not-allowed-during-reordering" "search-placeholder")}}
           />
         </AuFormRow>
       </Auk::Toolbar::Item>

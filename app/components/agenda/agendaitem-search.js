@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { dropTask, restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default class AgendaItemSearch extends Component {
   @service currentSession;
@@ -14,7 +15,9 @@ export default class AgendaItemSearch extends Component {
   }
 
   get canEdit() {
-    return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
+    return this.currentSession.may('manage-agendaitems') &&
+      this.args.currentAgenda.status.get('isDesignAgenda') &&
+      isEmpty(this.searchText);
   }
 
   @restartableTask

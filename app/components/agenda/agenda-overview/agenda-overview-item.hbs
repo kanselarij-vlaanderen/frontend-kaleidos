@@ -104,7 +104,7 @@
             </AuPill>
           {{/if}}
           {{#if this.loadNewsItemVisibility.lastSuccessful}}
-            {{#if this.newsItem.inNewsletter}}
+            {{#if (and this.newsItem.inNewsletter (not @isEditingFormallyOkStatus))}}
               <AuPill
                 @skin="border"
                 @icon="website"

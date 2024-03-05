@@ -20,25 +20,26 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     {{#unless @isEditingOverview}}
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <AuButtonGroup>
-          <AuButton
-            data-test-agenda-overview-show-changes={{true}}
-            @skin="naked"
-            {{on "click" @toggleShowModifiedOnly}}
-          >
-            {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-          </AuButton>
-        </AuButtonGroup>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButtonGroup>
+            <AuButton
+              data-test-agenda-overview-show-changes={{true}}
+              @skin="naked"
+              {{on "click" @toggleShowModifiedOnly}}
+            >
+              {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+            </AuButton>
+          </AuButtonGroup>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
     {{/unless}}
   </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div class="auk-u-mb-8">
         <ul {{sortable-group groupName="notas" onChange=this.setNotas}}>
+          {{! this.notas list is used after 1 item has been reordered during editing until saved or cancelled}}
           {{#if (and this.notas.length @isEditingOverview)}}
             {{#each this.notas as |agendaitem indexItems|}}
               <li
@@ -128,7 +129,7 @@
   </div>
   <div class="auk-u-mb-4">
     {{#if this.announcements.length}}
-      <ul {{sortable-group groupName="announcements" onChange=@onReorderAgendaitems}}>
+      <ul {{sortable-group groupName="announcements" onChange=this.setAnnouncements}}>
         {{#each this.announcements as |announcement indexItems|}}
           <li
             class="vlc-agenda-items__sub-item"

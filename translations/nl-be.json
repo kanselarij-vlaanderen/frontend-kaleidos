@@ -1327,5 +1327,6 @@
   "change-order": "Volgorde aanpassen",
   "leave-unsaved-changed": "Wil je de wijzigingen laten verloren gaan?",
   "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
-  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}"
+  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}",
+  "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde"
 }
