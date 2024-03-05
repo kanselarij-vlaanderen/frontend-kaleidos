@@ -77,7 +77,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       this.documentsAreVisible = true;
     } else if (
       !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode.uri)
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
     ) {
       this.documentsAreVisible = false;
     } else {

@@ -48,7 +48,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
     this.loadDecisionActivity.perform();
-    this.loadDocumentsPublicationStatus.perform();
   }
 
   get documentListSize() {
@@ -83,7 +82,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       this.documentsAreVisible = true;
     } else if (
       !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode.uri)
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
     ) {
       this.documentsAreVisible = false;
     } else {
@@ -113,6 +112,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     yield this.decisionActivity?.decisionResultCode;
+    this.loadDocumentsPublicationStatus.perform();
   }
 
   @dropTask

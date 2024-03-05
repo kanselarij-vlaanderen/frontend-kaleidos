@@ -137,22 +137,24 @@
       </div>
       {{#if this.documentsAreVisible}}
         <div class="auk-u-mt-4">
-          {{#if (and (user-may "view-documents-postponed-and-retracted") this.decisionActivity.isPostponed)}}
-            <AuAlert
-              @skin="warning"
-              @icon="alert-triangle"
-              @title={{t "postponed-item"}}
-            >
-              {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "postponed"))}}
-            </AuAlert>
-          {{else if (and (user-may "view-documents-postponed-and-retracted") this.decisionActivity.isRetracted)}}
-            <AuAlert
-              @skin="warning"
-              @icon="alert-triangle"
-              @title={{t "retracted-item"}}
-            >
-              {{t "agendaitem-document-postponed-or-retracted--message" status=(lowercase (t "retracted"))}}
-            </AuAlert>
+          {{#if (user-may "view-documents-postponed-and-retracted")}}
+            {{#if this.decisionActivity.isPostponed}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "postponed-item"}}
+              >
+                {{t "agendaitem-document-postponed--message"}}
+              </AuAlert>
+            {{else if this.decisionActivity.isRetracted}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "retracted-item"}}
+              >
+                {{t "agendaitem-document-retracted--message"}}
+              </AuAlert>
+            {{/if}}
           {{/if}}
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
@@ -174,10 +176,12 @@
             {{/if}}
           </AuButton>
         {{/if}}
-      {{else if (and (not (user-may "view-documents-postponed-and-retracted")) this.decisionActivity.isPostponed)}}
-        {{t "agendaitem-is-status-no-documents-available" status=(lowercase (t "postponed"))}}
-      {{else if (and (not (user-may "view-documents-postponed-and-retracted")) this.decisionActivity.isRetracted)}}
-        {{t "agendaitem-is-status-no-documents-available" status=(lowercase (t "retracted"))}}
+      {{else if (not (user-may "view-documents-postponed-and-retracted"))}}
+        {{#if this.decisionActivity.isPostponed}}
+          {{t "agendaitem-postponed-no-documents-available"}}
+        {{else if this.decisionActivity.isRetracted}}
+          {{t "agendaitem-retracted-no-documents-available"}}
+        {{/if}}
       {{/if}}
       {{#unless @isEditingFormallyOkStatus}}
         {{#if @agendaitem.comment}}
