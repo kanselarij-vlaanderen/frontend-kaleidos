@@ -37,6 +37,11 @@
                   {{this.documentContainer.type.altLabel}}
                 {{/unless}}
               </span>
+              {{#if (eq @agendaContext.agenda.status.isDesignAgenda false)}}
+              <span data-test-document-card-number class="auk-overline">
+                VR 2020 2003 DOC.0246-
+              </span>
+              {{/if}}
             </div>
             <LinkTo
               @route="document"
@@ -116,7 +121,7 @@
               </p>
               {{/if}}
               {{#if (eq @agendaContext.agenda.status.isDesignAgenda false)}}
-                {{#if this.vpSent}} 
+                {{#if this.vpSent}}
                 <p>Dit document is doorgestuurd naar het Vlaams Parlement op 29/09/2023</p>
                 {{/if}}
               {{/if}}
@@ -378,7 +383,7 @@
 
 {{#if this.vpModal}}
 <Auk::Modal @size="medium">
-  <Auk::Modal::Header 
+  <Auk::Modal::Header
     @title="Document controleren"
     @onClose={{this.showVpModal}}
   />

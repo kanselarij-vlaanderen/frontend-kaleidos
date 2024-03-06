@@ -42,3 +42,14 @@
 .auk-table--sortable {
   position: relative;
 }
+
+.c-document-panel > .ember-view {
+  counter-reset: documents;
+
+  .vlc-document-card [data-test-document-card-number]::after {
+    display: inline;
+    counter-increment: documents;
+    content: counter(documents);
+    margin-left: -.5rem;
+  }
+}
