@@ -1,22 +1,33 @@
-{{#if (not @isEditable)}}
-  <AuPill
-    @size="small"
-    @skin={{this.skin}}
-    @icon={{this.icon}}
-    data-test-decision-result-pill
-  >
-    {{this.label}}
-  </AuPill>
-{{else}}
-  <AuPill
-    @size="small"
-    @skin={{this.skin}}
-    @icon={{this.icon}}
-    @onClickAction={{@onEdit}}
-    @actionIcon="pencil"
-    @actionText={{t "edit"}}
-    data-test-decision-result-pill
-  >
-    {{this.label}}
-  </AuPill>
-{{/if}}
+{{#let (load @decisionResultCode) as |decisionResultCode|}}
+  {{#if decisionResultCode.isResolved}}
+    {{#if (not @isEditable)}}
+      <AuPill
+        @size="small"
+        @skin={{this.skin}}
+        @icon={{this.icon}}
+        data-test-decision-result-pill
+      >
+        {{this.label}}
+      </AuPill>
+    {{else}}
+      <AuPill
+        @size="small"
+        @skin={{this.skin}}
+        @icon={{this.icon}}
+        @onClickAction={{@onEdit}}
+        @actionIcon="pencil"
+        @actionText={{t "edit"}}
+        data-test-decision-result-pill
+      >
+        {{this.label}}
+      </AuPill>
+    {{/if}}
+  {{else}}
+    <AuPill
+      @size="small"
+      @skin="default"
+    >
+      {{t "loading"}}
+    </AuPill>
+  {{/if}}
+{{/let}}
