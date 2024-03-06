@@ -279,7 +279,12 @@ export default class NewSubcaseForm extends Component {
 
   @action
   setMandatees(mandatees) {
-    this.mandatees = mandatees;
+    if (mandatees?.length) {
+      this.mandatees = mandatees;
+    } else {
+      this.mandatees.clear();
+      this.submitter = null;
+    }
   }
 
   /** government areas */
