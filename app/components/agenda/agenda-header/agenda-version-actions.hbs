@@ -6,14 +6,22 @@
   class="auk-u-hidden@print"
 >
   {{#if @currentAgenda.status.isDesignAgenda}}
-  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgenda}}
+  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgendaSidebar}}
     role="menuitem">
     {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
+  {{!-- <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgenda}}
+    role="menuitem">
+    {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
+  </AuButton> --}}
   <AuButton data-test-agenda-version-actions-approve-and-close-agenda @skin="link" {{on "click"
-    this.openConfirmApproveAgendaAndCloseMeeting}} role="menuitem">
+    this.openConfirmApproveAgendaAndCloseMeetingSidebar}} role="menuitem">
     {{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
+  {{!-- <AuButton data-test-agenda-version-actions-approve-and-close-agenda @skin="link" {{on "click"
+    this.openConfirmApproveAgendaAndCloseMeeting}} role="menuitem">
+    {{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
+  </AuButton> --}}
   <AuHr />
   {{/if}}
   {{#if this.isFinalMeeting}}
@@ -50,6 +58,26 @@
   </AuButton>
   {{/if}}
 </AuDropdown>
+
+{{! Check agenda }}
+{{#if this.showConfirmForApprovingAgendaSidebar}}
+<Agenda::AgendaHeader::AgendaCheck
+  @meeting={{@meeting}}
+  @currentAgenda={{@currentAgenda}}
+  @onCancel={{this.cancelApproveAgendaSidebar}}
+  @onSave={{this.openConfirmApproveAgenda}}
+/>
+{{/if}}
+
+{{! Check agenda and close }}
+{{#if this.showConfirmForApprovingAgendaAndClosingMeetingSidebar}}
+<Agenda::AgendaHeader::AgendaCheck
+  @meeting={{@meeting}}
+  @currentAgenda={{@currentAgenda}} 
+  @onCancel={{this.cancelApproveAgendaAndCloseMeetingSidebar}}
+  @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
+/>
+{{/if}}
 
 {{! new agenda actions with single pop-up for confirmation }}
 {{#if this.showConfirmForApprovingAgenda}}
@@ -148,6 +176,7 @@
   </Auk::Modal::Footer>
 </Auk::Modal>
 {{/if}}
+
 {{#if this.showConfirmForClosingMeeting}}
 <Auk::Modal @size={{if (await this.latestAgenda.status.isDesignAgenda) "large" "small" }}>
   <Auk::Modal::Header @title={{t "agenda-close" }} @onClose={{this.cancelCloseMeeting}} />
