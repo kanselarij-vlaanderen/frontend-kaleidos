@@ -7,6 +7,7 @@ import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 // ***********************************************
 // Functions
@@ -112,16 +113,14 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
 }
 
 /**
- * Adds a mandatees to a sucase when used in the subcase view
- * Pass the title of the mandatee to get a specific person
+ * Adds a mandatee to a sucase when used in the subcase view
+ * Pass a valid entry from 'mandatee-names.selectors.js'
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee from default list (this is ignored if mandateeSearchText is given)
- * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
- * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
  */
-function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
+function addSubcaseMandatee(mandateeNamesSelector = mandateeNames.current.first) {
   cy.log('addSubcaseMandatee');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
@@ -136,23 +135,16 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   });
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
-  if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
-  }
+  cy.get(dependency.emberPowerSelect.searchInput).type(mandateeNamesSelector.lastName);
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-  // we can search or select by number
-  // when searching we select the first option we get or the first option with a specific title
-  if (mandateeSearchText) {
-    if (mandateeTitle) {
-      cy.get(dependency.emberPowerSelect.option).contains(mandateeTitle)
-        .click();
-    } else {
-      cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
-        .click();
-    }
+
+  // when searching we select the result with a specific title
+  if (mandateeNamesSelector.searchTitle) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.searchTitle)
+      .click();
   } else {
-    cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.title)
       .click();
   }
   cy.get(dependency.emberPowerSelect.option).should('not.exist', {
@@ -167,24 +159,22 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
 }
 
 /**
- * Adds a mandatees to an agendaitem when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
- * Pass the title of the mandatee to get a specific person
+ * Adds a mandatee to an agendaitem when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
+ * Pass a valid entry from 'mandatee-names.selectors.js'
  * @name addAgendaitemMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee
- * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
- * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
  * @param {isDesignAgenda} isDesignAgenda - whether or not the agenda has status designagenda. Defaults to true
  */
-function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle, isDesignAgenda = true) {
+function addAgendaitemMandatee(mandateeNamesSelector = mandateeNames.current.first, isDesignAgenda = true) {
   cy.log('addAgendaitemMandatee');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('PATCH', '/agendaitems/*').as(`patchAgendaitem${randomInt}`);
   cy.intercept('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
 
 
-  cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
+  cy.addSubcaseMandatee(mandateeNamesSelector);
   cy.wait(`@patchAgendaitem${randomInt}`, {
     timeout: 40000,
   });

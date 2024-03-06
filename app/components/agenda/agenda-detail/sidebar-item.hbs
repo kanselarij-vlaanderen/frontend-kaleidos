@@ -30,7 +30,7 @@
         </h4>
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
-            {{#if this.newsletterIsVisible}}
+            {{#if this.newsItem.inNewsletter}}
               <AuPill
                 @size="small"
                 @skin="border"
