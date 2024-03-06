@@ -2,9 +2,10 @@
   <Auk::Modal::Header @title={{t "documents"}} @onClose={{@onCancel}} />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{this.isLoading}}>
-      <table class="auk-table auk-table--styled auk-table--bordered">
+      <table class="auk-table auk-table--sortable auk-table--styled auk-table--bordered">
         <thead>
           <tr>
+            <th></th>
             {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
                 <AuCheckbox
@@ -29,7 +30,7 @@
             <th>{{! Actions }}</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody {{sortable-group}}>
           {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}

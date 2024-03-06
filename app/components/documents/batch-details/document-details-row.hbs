@@ -1,7 +1,19 @@
 <tr
   data-test-document-details-row
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
+  {{sortable-item
+    distance="30"
+  }}
 >
+  <td class="auk-table-drag-col">
+    <AuIcon
+      data-test-agenda-overview-item-dragging
+      class="auk-u-cursor-grab auk-u-text-muted"
+      @icon="drag-handle-2"
+      @size="large"
+      {{sortable-handle}}
+    />
+  </td>
   {{#if @isEditingEnabled}}
     <td class="auk-table-checkbox-col">
       <AuCheckbox
