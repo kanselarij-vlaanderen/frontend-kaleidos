@@ -112,9 +112,4 @@ export default class SendToVpModalComponent extends Component {
     }
     return '';
   }
-
-  @action
-  onChangeComment(event) {
-    this.comment = event.target.value;
-  }
 }

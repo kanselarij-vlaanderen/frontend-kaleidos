@@ -45,11 +45,11 @@
           </ul>
           <div class="auk-form-group au-u-margin-top">
             <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
-            <Auk::Textarea
-              @rows="4"
+            <AuTextarea
+              rows="4"
               id="remarks"
-              value={{this.comment}}
-              {{on "change" this.onChangeComment}}
+              @width="block"
+              @value={{this.comment}}
             />
           </div>
         {{else}}
