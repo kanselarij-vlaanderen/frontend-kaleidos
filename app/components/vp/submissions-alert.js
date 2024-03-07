@@ -13,6 +13,8 @@ export default class SubmissionsAlertComponent extends Component {
   get message() {
     if (this.args.parliamentFlow.isIncomplete) {
       return this.intl.t('this-case-was-submitted-to-VP-on');
+    } else if (this.args.parliamentFlow.isRecieved) {
+      return this.intl.t('this-case-was-recieved-on');
     } else if (this.args.parliamentFlow.isBeingHandledByFP) {
       return this.intl.t('this-case-was-submitted-on');
     } else if (this.args.parliamentFlow.isComplete) {
@@ -23,7 +25,8 @@ export default class SubmissionsAlertComponent extends Component {
   }
 
   get parliamentLinkMessage() {
-    if (this.args.parliamentFlow.isBeingHandledByFP) {
+    if (this.args.parliamentFlow.isBeingHandledByFP ||
+        this.args.parliamentFlow.isRecieved) {
       return this.intl.t('this-case-is-being-handled-by-VP');
     }
     return '';
