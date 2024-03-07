@@ -3,6 +3,7 @@ const selectors = {
   casesHeader: {
     title: '[data-test-cases-header-title]',
     addCase: '[data-test-cases-header-add-case]',
+    addSubcase: '[data-test-cases-header-add-subcase]',
   },
 
   // new-case
@@ -10,6 +11,32 @@ const selectors = {
     shorttitle: '[data-test-new-case-shorttitle]',
     form: '[data-test-new-case-form]',
     save: '[data-test-new-case-save]',
+  },
+
+  // new-subcase-form
+  newSubcaseForm: {
+    toggleConfidential: '[data-test-new-subcase-form-toggle-confidential]',
+    shorttitle: '[data-test-new-subcase-form-shorttitle]',
+    longtitle: '[data-test-new-subcase-form-longtitle]',
+    procedureStep: '[data-test-new-subcase-form-procedure-step]',
+    procedureName: '[data-test-new-subcase-form-procedure-name]',
+    mandateeSelectorPanel: {
+      container: '[data-test-mandatee-selector-panel-container]',
+      selectedMinister: '[data-test-mandatee-selector-panel-selected-minister]',
+      submitterRadio: '[data-test-mandatee-selector-panel-submitter-radio]',
+    },
+    governmentAreasPanel: '[data-test-government-areas-panel]',
+    areasPanelFieldsList: '[data-test-government-areas-panel-fields-list]',
+    documentUploadPanel: '[data-test-add-subcase-document-upload-panel]',
+    save: '[data-test-new-subcase-form-save]',
+  },
+
+  // proposable-agendas
+  proposableAgendas: {
+    toggleFormallyOk: '[data-test-proposable-agendas-modal-toggle-formally-ok]',
+    agendaRow: '[data-test-proposable-agendas-modal-agenda-row]',
+    placeOnAgenda: '[data-test-proposable-agendas-modal-place-on-agenda]',
+    saveWithoutAgenda: '[data-test-proposable-agendas-modal-save-without-agenda]',
   },
 
   // subcase-detail-nav
@@ -25,6 +52,7 @@ const selectors = {
     publicationFlowLink: '[data-test-subcase-overview-header-publication-flow-link]',
     editCase: '[data-test-subcase-overview-header-edit-case]',
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
+    openAddSubcase: '[data-test-subcase-overview-header-open-add-subcase]',
   },
 
   // subcase-process

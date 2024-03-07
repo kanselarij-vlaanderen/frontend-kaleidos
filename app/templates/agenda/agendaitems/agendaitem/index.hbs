@@ -40,7 +40,7 @@
 </Auk::Toolbar>
 
 {{#if this.enableVlaamsParlement}}
-  {{#if this.parliamentFlow}}
+  {{#if (and this.parliamentFlow (not this.parliamentFlow.isReceived))}}
     <Vp::SubmissionsAlert
       @parliamentFlow={{this.parliamentFlow}}
     />
