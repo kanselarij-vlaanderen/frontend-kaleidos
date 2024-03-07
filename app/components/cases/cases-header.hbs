@@ -8,7 +8,7 @@
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
-      {{#if (user-may "manage-cases")}}
+      {{#if (or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')))}}
       <Group.Item>
         {{!-- <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mr-2">
           <AuToggleSwitch
@@ -31,19 +31,17 @@
           autocomplete="off"
         />
       </Group.Item>
-      {{/if}}
       <Group.Item>
-        {{#if (user-may "manage-cases")}}
-          <AuButton
-            data-test-cases-header-add-case
-            @skin="primary"
-            @icon="plus"
-            {{on "click" this.toggleIsOpenNewCaseModal}}
-          >
-            {{t "add-case"}}
-          </AuButton>
-        {{/if}}
+        <AuButton
+          data-test-cases-header-add-case
+          @skin="primary"
+          @icon="plus"
+          {{on "click" this.toggleIsOpenNewCaseModal}}
+        >
+          {{t "add-case"}}
+        </AuButton>
       </Group.Item>
+      {{/if}}
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>

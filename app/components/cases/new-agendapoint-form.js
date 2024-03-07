@@ -8,6 +8,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { startOfDay } from 'date-fns';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class CasesNewAgendapointForm extends Component {
   @service store;
@@ -42,6 +43,9 @@ export default class CasesNewAgendapointForm extends Component {
   @tracked showAllAreas = false;
   @tracked showAgendaModal = false;
   @tracked hasAgenda = false;
+
+  @tracked showNotifiersModal = false;
+  @tracked notificationAddresses = new TrackedArray([]);
 
   @tracked newPieces = A([]);
 
@@ -629,5 +633,16 @@ export default class CasesNewAgendapointForm extends Component {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+  }
+
+  @action
+  saveNotificationAddress(address) {
+    this.notificationAddresses.addObject(address);
+    this.showNotifiersModal = false;
+  }
+
+  @action
+  removeNotificationAddress(address) {
+    this.notificationAddresses.removeObject(address);
   }
 }

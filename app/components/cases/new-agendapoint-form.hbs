@@ -129,16 +129,60 @@
                 {{capitalize model.label}}
               </Utils::ModelSelector>
             </div>
-            <div class="auk-form-group">
-              <Auk::Label for="longTitle">Notificeer</Auk::Label>
-              <Auk::Textarea
-                data-test-new-subcase-longtitle
-                @rows="4"
-                @value=""
-                id="notifications"
-              />
-              <AuHelpText @skin="secondary">In dit veld kun je meerdere e-mailadressen invoeren, gescheiden door een komma (,). Bijvoorbeeld: jan@example.com, marie@example.com, peter@example.com</AuHelpText>
-            </div>
+            <Auk::Panel class="auk-u-mt-4">
+              <Auk::Panel::Header class="au-u-padding-left-small au-u-padding-right-small">
+                <Auk::Toolbar as |Toolbar|>
+                  <Toolbar.Group @position="left" as |Group|>
+                    <Group.Item>
+                      <h4 class="auk-h4 auk-u-m-0">
+                        Notificeer
+                      </h4>
+                    </Group.Item>
+                  </Toolbar.Group>
+                  <Toolbar.Group @position="right" as |Group|>
+                    <Group.Item>
+                      <AuButton
+                        data-test-signatures-create-sign-flow-approvers-add
+                        @skin="secondary"
+                        @icon="plus"
+                        {{on "click" (toggle "showNotifiersModal" this)}}
+                      >
+                        {{t "add"}}
+                      </AuButton>
+                    </Group.Item>
+                  </Toolbar.Group>
+                </Auk::Toolbar>
+              </Auk::Panel::Header>
+              <Auk::Panel::Body class="auk-u-p-0">
+                <AuList
+                  @divider={{true}}
+                  as |Item|
+                >
+                  {{#each this.notificationAddresses as |notificationAddress|}}
+                    <Item
+                      class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+                      data-test-signatures-create-sign-flow-notification-adresses-item
+                    >
+                      <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
+                      <AuButton
+                        data-test-signatures-create-sign-flow-notification-adresses-remove
+                        @skin="naked"
+                        @alert={{true}}
+                        @hideText={{true}}
+                        @icon="trash"
+                        {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
+                      >
+                        {{t "delete"}}
+                      </AuButton>
+                    </Item>
+                  {{else}}
+                    <Item class="au-u-padding-small">
+                      {{t "no-notification-addresses-selected"}}
+                    </Item>
+                  {{/each}}
+                </AuList>
+              </Auk::Panel::Body>
+            </Auk::Panel>
           </Utils::LoadableContent>
         </Auk::Panel::Body>
       </Auk::Panel>
@@ -516,4 +560,13 @@
     </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>
+{{/if}}
+
+
+{{#if this.showNotifiersModal}}
+  <Signatures::EmailModal
+    @title="Notificatie sturen naar"
+    @onConfirm={{this.saveNotificationAddress}}
+    @onCancel={{toggle "showNotifiersModal" this}}
+  />
 {{/if}}
