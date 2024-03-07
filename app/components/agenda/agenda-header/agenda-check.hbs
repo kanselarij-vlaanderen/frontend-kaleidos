@@ -13,6 +13,7 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
+      <div class="auk-u-mx-2">
         <Utils::LogoHeader />
         <h2
           class="auk-h2 auk-u-text-family-serif auk-u-text-align--center auk-u-mt-5 auk-u-mb-10"
@@ -29,7 +30,7 @@
         </h2>
 
         <div class="auk-content">
-          {{#if this.notaGroups}}
+          {{#if @notaGroups}}
             <div>
               <div class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header">
                 <div class="l-printable-agenda__header-prefix">A.</div>
@@ -38,7 +39,7 @@
                   >{{t "agendaitems"}}</h3>
               </div>
               <div class="l-printable-agenda__section-content">
-                {{#each this.notaGroups as |notaGroup|}}
+                {{#each @notaGroups as |notaGroup|}}
                   <Agenda::PrintableAgenda::ListSection::ItemGroup
                     @items={{notaGroup}}
                   />
@@ -47,7 +48,7 @@
             </div>
           {{/if}}
 
-          {{#if @currentAgenda.announcements}}
+          {{#if @model.announcements}}
             <div class="auk-u-on-fresh-page@print">
               <div class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header">
                 <div class="l-printable-agenda__header-prefix">B.</div>
@@ -56,7 +57,7 @@
                   >{{t "announcements-subtitle"}}</h3>
               </div>
               <div class="l-printable-agenda__section-content">
-                {{#each @currentAgenda.announcements as |announcement|}}
+                {{#each @model.announcements as |announcement|}}
                   <div class="l-printable-agenda__item">
                     <div class="auk-u-non-breakable-group@print">
                       <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
@@ -74,6 +75,7 @@
             </div>
           {{/if}}
         </div>
+      </div>
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
@@ -93,7 +95,7 @@
               @skin="primary"
               {{on "click" (perform this.saveChanges)}}
             >
-              {{t "save"}}
+              {{@saveLabel}}
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>

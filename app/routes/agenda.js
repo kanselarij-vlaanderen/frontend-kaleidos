@@ -1,9 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { set } from '@ember/object';
+import { task, all } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaRoute extends Route {
   @service('session') simpleAuthSession;
+  @service throttledLoadingService;
   @service agendaService;
   @service store;
 
@@ -26,11 +29,42 @@ export default class AgendaRoute extends Route {
       include: 'status',
     });
 
+    const agendaitems = await this.store.query('agendaitem', {
+      filter: {
+        agenda: {
+          id: agenda.id,
+        },
+      },
+      include: 'mandatees',
+    });
+    const notas = [];
+    const announcements = [];
+    for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+      const type = await agendaitem.type;
+      if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        notas.push(agendaitem);
+      } else {
+        announcements.push(agendaitem);
+      }
+    }
+    await this.loadDocuments.perform(agendaitems);
+
     return {
       meeting,
       agenda,
       reverseSortedAgendas,
+      notas,
+      announcements,
     };
+  }
+
+  @task
+  *loadDocuments(agendaitems) {
+    yield all(
+      agendaitems.map(async (agendaitem) => {
+        await this.throttledLoadingService.loadPieces.perform(agendaitem);
+      })
+    );
   }
 
   async afterModel(model) {

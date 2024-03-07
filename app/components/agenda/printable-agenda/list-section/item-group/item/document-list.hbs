@@ -1,7 +1,7 @@
 <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
   {{#each this.sortedPieces as |piece|}}
     <li>
-      <span class="auk-o-flex--inline auk-o-flex--vertical-center">
+      <span class="au-u-flex auk-u-flex--vertical-center au-u-flex--spaced-tiny">
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Document
           @piece={{piece}}
           @accessLevel={{piece.accessLevel}}

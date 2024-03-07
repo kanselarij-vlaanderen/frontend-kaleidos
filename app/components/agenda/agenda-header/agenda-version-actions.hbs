@@ -62,20 +62,26 @@
 {{! Check agenda }}
 {{#if this.showConfirmForApprovingAgendaSidebar}}
 <Agenda::AgendaHeader::AgendaCheck
+  @model={{@model}}
+  @notaGroups={{@notaGroups}}
   @meeting={{@meeting}}
   @currentAgenda={{@currentAgenda}}
   @onCancel={{this.cancelApproveAgendaSidebar}}
   @onSave={{this.openConfirmApproveAgenda}}
+  @saveLabel={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
 />
 {{/if}}
 
 {{! Check agenda and close }}
 {{#if this.showConfirmForApprovingAgendaAndClosingMeetingSidebar}}
 <Agenda::AgendaHeader::AgendaCheck
+  @model={{@model}}
+  @notaGroups={{@notaGroups}}
   @meeting={{@meeting}}
   @currentAgenda={{@currentAgenda}} 
   @onCancel={{this.cancelApproveAgendaAndCloseMeetingSidebar}}
   @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
+  @saveLabel={{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
 />
 {{/if}}
 

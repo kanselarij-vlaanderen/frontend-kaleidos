@@ -62,6 +62,16 @@
 
 .l-printable-agenda__document-list {
   list-style: none !important;
+
+  &.l-printable-agenda__item-indented {
+    padding-left: 2.75rem;
+  }
+
+  li + li {
+    margin-top: .5rem;
+    padding-top: .5rem;
+    border-top: 1px solid var(--au-gray-200);
+  }
 }
 
 .l-printable-agenda__item-indented {
