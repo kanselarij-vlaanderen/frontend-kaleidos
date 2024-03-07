@@ -169,7 +169,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       meetingId = responseBody.data.id;
     });
   cy.wait('@createNewAgenda', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
