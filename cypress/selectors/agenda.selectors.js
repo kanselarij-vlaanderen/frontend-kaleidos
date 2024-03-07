@@ -94,6 +94,7 @@ const selectors = {
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
     downloadDocuments: '[data-test-agenda-actions-download-documents]',
     downloadDecisions: '[data-test-agenda-actions-download-decisions]',
+    generateSignedDecisionsBundle: '[data-test-agenda-actions-generate-signed-decisions-bundle]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
     planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
