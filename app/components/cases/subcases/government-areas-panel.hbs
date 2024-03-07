@@ -9,7 +9,7 @@
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--tiny">
         {{#each this.domainSelections as |domainSelection|}}
-          <AuCheckboxGroup class="au-o-grid__item au-u-1-1 au-u-1-3@medium">
+          <AuCheckboxGroup class="au-o-grid__item au-u-1-1 au-u-1-3@medium" data-test-government-areas-panel>
             <AuCheckboxGroup class="auk-u-maximize-width">
               <AuCheckbox
                 @checked={{domainSelection.isSelected}}
@@ -19,6 +19,7 @@
                 <span class="au-u-medium">{{domainSelection.domain.label}}</span>
               </AuCheckbox>
               <AuCheckboxGroup
+                data-test-government-areas-panel-fields-list
                 @selected={{domainSelection.selectedFields}}
                 @onChange={{this.toggleItem}}
                 @disabled={{@disabled}}
