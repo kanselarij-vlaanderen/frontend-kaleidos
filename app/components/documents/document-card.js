@@ -11,6 +11,7 @@ import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -323,7 +324,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteUploadedPiece() {
     if (this.newPiece) {
-      this.pieces.removeObject(this.newPiece);
+      removeObject(this.pieces, this.newPiece);
       yield deletePiece(this.newPiece);
       this.newPiece = null;
     }

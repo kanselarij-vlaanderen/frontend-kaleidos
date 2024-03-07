@@ -74,7 +74,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         agendaitemShortTitle,
         ...pieceData,
       };
-      processedNotas.pushObject(processedNota);
+      processedNotas.push(processedNota);
     }
     return processedNotas;
   }

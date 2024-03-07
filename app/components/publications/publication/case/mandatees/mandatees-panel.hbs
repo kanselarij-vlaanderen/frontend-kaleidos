@@ -20,7 +20,7 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  {{#if @publicationFlow.mandatees}}
+  {{#if this.mandatees.value}}
     <Auk::Panel::Body @noPadding={{true}}>
       <table class="auk-table">
         <thead>
@@ -31,7 +31,7 @@
         </thead>
         <tbody>
           {{#each
-            (sort-by "priority" @publicationFlow.mandatees)
+            (sort-by "priority" this.mandatees.value)
             as |mandatee|
           }}
             <tr data-test-mandatees-panel-row>

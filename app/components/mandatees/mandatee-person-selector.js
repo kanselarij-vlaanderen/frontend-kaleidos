@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument dateRange
@@ -66,7 +67,7 @@ export default class MandateePersonSelector extends Component {
     const persons = [];
     for (const mandatee of mandatees) {
       const person = await mandatee.person;
-      persons.addObject(person);
+      addObject(persons, person);
     }
 
     return persons.sort((p1, p2) => p1.lastName.localeCompare(p2.lastName));

@@ -7,6 +7,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { trackedFunction } from 'ember-resources/util/function';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class SignaturesCreateSignFlowPieceComponent extends Component {
   @service store;
@@ -114,27 +115,27 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
 
   @action
   saveApprover(approver) {
-    this.approvers.addObject(approver.toLowerCase());
+    addObject(this.approvers, approver.toLowerCase());
     this.showApproversModal = false;
     this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   removeApprover(approver) {
-    this.approvers.removeObject(approver);
+    removeObject(this.approvers, approver);
     this.args.onChangeApprovers?.(this.approvers);
   }
 
   @action
   saveNotificationAddress(address) {
-    this.notificationAddresses.addObject(address.toLowerCase());
+    addObject(this.notificationAddresses, address.toLowerCase());
     this.showNotificationAddressesModal = false;
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
   @action
   removeNotificationAddress(address) {
-    this.notificationAddresses.removeObject(address);
+    removeObject(this.notificationAddresses, address);
     this.args.onChangeNotificationAddresses?.(this.notificationAddresses);
   }
 
@@ -149,7 +150,7 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
 
   @action
   removeSigner(signer) {
-    this.signers.removeObject(signer);
+    removeObject(this.signers, signer);
     this.args.onChangeSigners?.(this.signers);
   }
 
