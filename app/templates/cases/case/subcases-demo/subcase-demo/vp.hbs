@@ -23,7 +23,7 @@
         </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <AuHeading @level="4" @skin="6">Eerste principiële goedkeuring</AuHeading>
+        <AuHeading @level="4" @skin="6">Principiële goedkeuring</AuHeading>
         <ul>
           <li class="vlc-document-list__item">
             <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
@@ -62,7 +62,7 @@
             </div>
           </li>
         </ul>
-        <AuHeading @level="4" @skin="6" class="auk-u-mt-4">Tweede principiële goedkeuring</AuHeading>
+        <AuHeading @level="4" @skin="6" class="auk-u-mt-4">Principiële goedkeuring</AuHeading>
         <ul>
           <li class="vlc-document-list__item">
             <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
@@ -201,28 +201,134 @@
   />
   <Auk::Modal::Body>
     <AuContent>
-      <ul>
-        <li>
-          Eerste principiële goedkeuring:
-          <ul>
-            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
-            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
-            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf</a></li>
-            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
-            <li><a href="#!" target="blank">VR 2022 2212 DOC.0357-3BIS Parkendecreet -adviesnota.pdf</a></li>
-          </ul>
-        </li>
-        <li>
-          Definitieve goedkeuring:
-          <ul>
-            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Beslissingsfiche.pdf (getekend)</a></li>
-            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -Ontwerpdecreet.docx</a></li>
-            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -ontwerpdecreet.pdf (getekend)</a></li>
-            <li><a href="#!" target="blank">VR 2023 3103 DOC.0357-3BIS Parkendecreet -nota.pdf</a></li>
-          </ul>
-        </li>
-      </ul>
+      <p>Vink de documenten aan die verstuurd mogen worden naar het Vlaams Parlement</p>
+      <AuHeading @skin="6" @level="3" class="au-u-margin-top">Principiële goedkeuring:</AuHeading>
+      <div class="au-c-control-group">
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 0707 DOC.0919-2 Decreet dienstencheques - decreetBIS (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 0707 DOC.0919-3 Decreet dienstencheques - memorieTER (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 0707 DOC.0919-1 Decreet dienstencheques - notaBIS (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR PV 2023/31 - PUNT 0085 (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 0707 DOC.0919-4 Decreet dienstencheques - IF (PDF)</AuLinkExternal>
+        </AuCheckbox>
+      </div>
+
+      <AuHeading @skin="6" @level="3" class="au-u-margin-top">Principiële goedkeuring:</AuHeading>
+      <div class="au-c-control-group">
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-1 Decreet dienstencheques - nota (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR PV 2023/40 - PUNT 0011 (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{false}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-4 Decreet dienstencheques - advies (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-2 Decreet dienstencheques - decreet (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{false}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-5 Decreet dienstencheques advies (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-3 Decreet dienstencheques - memorie (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{false}}
+        >
+          <AuLinkExternal href="#!">VR 2023 1310 DOC.1311-6 Decreet dienstencheques - advies (PDF)</AuLinkExternal>
+        </AuCheckbox>
+      </div>
+
+      <AuHeading @skin="6" @level="3" class="au-u-margin-top">Definitieve goedkeuring:</AuHeading>
+      <div class="au-c-control-group">
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2024 2302 DOC.0200-2 Decreet dienstencheques - decreet (Word en PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2024 2302 DOC.0200-3 Decreet dienstencheques - memorie (Word en ondertekende PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{true}}
+        >
+          <AuLinkExternal href="#!">VR 2024 2302 DOC.0200-1 Decreet dienstencheques - nota (PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{false}}
+        >
+          <AuLinkExternal href="#!">VR PV 2024/8 - punt 0016 (ondertekende PDF)</AuLinkExternal>
+        </AuCheckbox>
+        <AuCheckbox
+          @checked={{false}}
+        >
+          <AuLinkExternal href="#!">VR 2024 2302 DOC.0200-4 Decreet dienstencheques - advies (PDF)</AuLinkExternal>
+        </AuCheckbox>
+      </div>
+
+      <div class="auk-form-group au-u-margin-top au-u-margin-bottom">
+        <Auk::Label for="remarks">Opmerkingen</Auk::Label>
+        <Auk::Textarea
+          @rows="4"
+          @value=""
+          id="remarks"
+        />
+      </div>
     </AuContent>
+    <AuCard
+      @shadow={{false}}
+      @standOut={{true}}
+      @size="small"
+      @expandable={{true}}
+      as |c|
+    >
+      <c.header>
+        <AuHeading @level="3" @skin="6">
+          Mogelijks zijn er nog documenten te kort, kijk je even mee?
+        </AuHeading>
+      </c.header>
+      <c.content>
+        <p>We deden een automatische check, misschien moet één van volgende documenten toch mee?</p>
+        <ul class="au-u-margin-top-small">
+          <li>
+            <AuLinkExternal href="#!">VR 2024 2302 DOC.0200-2 Decreet dienstencheques - decreet (ondertekende PDF)</AuLinkExternal>
+          </li>
+        </ul>
+      </c.content>
+    </AuCard>
   </Auk::Modal::Body>
 </Auk::Modal>
 {{/if}}
