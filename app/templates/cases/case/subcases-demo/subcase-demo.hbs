@@ -18,7 +18,36 @@
       @isOpen={{this.isOpenSideNav}}
       @onCollapse={{this.collapseSideNav}}
       @onOpen={{this.openSideNav}}
-    >
+    > 
+      {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+      <ul>
+
+        {{#if this.model.decisionmakingFlow.subcases}}
+          {{#each (reverse this.model.decisionmakingFlow.subcases) as |subcase index|}}
+            {{#if (eq index 0)}}
+            <li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link">
+              <LinkTo
+                @route="cases.case.subcases-demo.subcase-demo.publication"
+                @models={{array this.model.decisionmakingFlow.id subcase}}
+              >
+                <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+                  <strong>
+                    Principiële goedkeuring
+                  </strong>
+                </div>
+                <div class="auk-sidebar__sublabel au-u-margin-top-none">
+                  Laatste wijziging op 23-12-2023 17:02
+                </div>
+                <div class="au-u-margin-top-tiny">
+                  <AuPill @size="small" @skin="ongoing">Ingediend dossier</AuPill>
+                </div>
+              </LinkTo>
+            </li>
+            {{/if}}
+          {{/each}}
+          {{/if}}
+      </ul>
+      {{else}}
       <ul>
 
         {{#if this.model.decisionmakingFlow.subcases}}
@@ -136,6 +165,7 @@
           {{/each}}
           {{/if}}
       </ul>
+      {{/if}}
     </Subcases::SideNav>
   </div>
   <div class="auk-panel-layout__main-content">

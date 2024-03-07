@@ -16,11 +16,25 @@
       <div class="auk-u-mb-2">
         <div class="au-u-flex au-u-flex--spaced-tiny">
           <p class="au-u-medium">
+            {{#if (eq @kabinet true)}}
+            Laatst gewijzigd op op 23-12-2023
+            {{else}}
             Laatst gewijzigd op {{#if (eq @step 'Definitieve goedkeuring')}}28-08-2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13-06-2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01-04-2023{{else}}11-10-2023{{/if}}
+            {{/if}}
           </p>
         </div>
       </div>
       <ul class="vlc-status-timeline">
+        {{#if (eq @kabinet true)}}
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Ingediend op 23-12-2023
+          </div>
+        </li>
+        {{else}}
         <li
           class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >
@@ -37,7 +51,7 @@
             Ingediend voor agendering op <AuLinkExternal @href="#!">{{#if (eq @step 'Definitieve goedkeuring')}}28 augustus 2023{{else if (eq @step 'Tweede principiële goedkeuring')}}13 juni 2023{{else if (eq @step 'Eerste principiële goedkeuring')}}01 april 2023{{else}}11 november 2023{{/if}}</AuLinkExternal>
           </div>
         </li>
-        {{#if (not-eq @kabinet true)}}
+        
         <li
           class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         >

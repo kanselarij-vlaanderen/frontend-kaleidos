@@ -1,43 +1,139 @@
-{{#if this.model}}
-  <div id="case">
-    <SubcaseDemo::PublicationTitle
-      @subcase={{@model.subcase}}
-      @meeting={{this.meeting}}
-      @allowEditing={{user-may "manage-cases"}}
+{{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+  {{#if this.model}}
+    <div id="case">
+      <SubcaseDemo::ApprovalTitlesPanel
+        @subcase={{@model.subcase}}
+        @meeting={{this.meeting}}
+        @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+        @step="Eerste principiële goedkeuring"
+        @status="Goedgekeurd"
+        @kabinet={{or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')}}
+      />
+    </div>
+    <Mandatees::MandateesPanel
+      @referenceDate={{if
+        this.meeting
+        this.meeting.plannedStart
+        this.model.subcase.created
+      }}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
+      @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+      @onSave={{this.saveMandateeData}}
     />
-  </div>
-  <Mandatees::MandateesPanel
-    @referenceDate={{if
-      this.meeting
-      this.meeting.plannedStart
-      this.model.subcase.created
-    }}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-    @allowEditing={{false}}
-    @onSave={{this.saveMandateeData}}
-  />
-  <Utils::GovernmentAreas::GovernmentAreasPanel
-    @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
-    @governmentAreas={{@model.subcase.governmentAreas}}
-    @allowEditing={{false}}
-    @onSave={{this.saveGovernmentAreas}}
-  />
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
+      @governmentAreas={{@model.subcase.governmentAreas}}
+      @allowEditing={{or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
 
-  <div>
-     <SubcaseDemo::Contactpersons/>
-  </div>
+    {{!-- Documents --}}
+    <div id="documents" class="auk-u-mb-4 c-linked-documents">
+      <Auk::Panel data-test-subcase-description-panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <div class="au-u-flex au-u-flex--spaced-small">
+                  <h4 class="auk-panel__title">
+                    {{t "documents"}}
+                  </h4>
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="c-document-panel">
+          {{#if this.documentsAreVisible}}
+            <Documents::DocumentCardList
+              @pieces={{this.model.pieces}}
+              @onAddPiece={{perform this.addPiece}}
+              @didDeleteContainer={{this.refresh}}
+              @isEditable={{true}}
+            />
+          {{else}}
+            <div>
+              <AuAlert
+                @skin="info"
+                @icon="info-circle"
+                class="au-u-margin-bottom-none"
+              >
+                {{t "no-documents-yet"}}
+              </AuAlert>
+            </div>
+          {{/if}}
+        </Auk::Panel::Body>
+        {{#if (or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')))}}
+        <Auk::Panel::Footer>
+          <AuButton
+            data-test-route-cases---subcase-documents-add
+            @skin="naked"
+            @icon="plus"
+            class="au-u-padding-left-none"
+            {{on "click" this.openPieceUploadModal}}
+          >
+            {{t "documents-add"}}
+          </AuButton>
+        </Auk::Panel::Footer>
+        {{/if}}
+      </Auk::Panel>
+    </div>
 
-  <div id="documents" class="auk-u-mb-4">
-    <SubcaseDemo::Decisioninfo/>
-  </div>
+    {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+    <div id="agenda">
+      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} @step="Eerste principiële goedkeuring" @kabinet={{true}} />
+    </div>
+    {{else}}
+    <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}  class="c-linked-documents"/>
+    <div id="agenda">
+      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} @demo={{true}} @step="Eerste principiële goedkeuring" />
+    </div>
+    {{/if}}
+  {{/if}}
 
-  <div id="agenda">
-     <SubcaseDemo::PublicationStatus/>
-  </div>
+{{else}}
+  {{#if this.model}}
+    <div id="case">
+      <SubcaseDemo::PublicationTitle
+        @subcase={{@model.subcase}}
+        @meeting={{this.meeting}}
+        @allowEditing={{user-may "manage-cases"}}
+      />
+    </div>
+    <Mandatees::MandateesPanel
+      @referenceDate={{if
+        this.meeting
+        this.meeting.plannedStart
+        this.model.subcase.created
+      }}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
+      @allowEditing={{false}}
+      @onSave={{this.saveMandateeData}}
+    />
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
+      @governmentAreas={{@model.subcase.governmentAreas}}
+      @allowEditing={{false}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
+
+    <div>
+      <SubcaseDemo::Contactpersons/>
+    </div>
+
+    <div id="documents" class="auk-u-mb-4">
+      <SubcaseDemo::Decisioninfo/>
+    </div>
+
+    <div id="agenda">
+      <SubcaseDemo::PublicationStatus/>
+    </div>
+  {{/if}}
 {{/if}}
-
 <ConfirmationModal
   @modalOpen={{this.isOpenPieceUploadModal}}
   @title={{t "document-add"}}

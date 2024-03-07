@@ -101,10 +101,14 @@
                         {{datetime row.opened}}
                       </td>
                       <td>
+                        {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+                        <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
+                        {{else}}
                         {{#if row.case.isArchived}}
                         <AuPill @size="small">Principiële goedkeuring</AuPill>
                         {{else}}
                         <AuPill @size="small" @skin="ongoing">Bekrachtiging</AuPill>
+                        {{/if}}
                         {{/if}}
                       </td>
                       <td class="auk-u-text-align--right">

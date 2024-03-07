@@ -8,6 +8,8 @@ export default class CasesIndexController extends Controller {
   // Services
   @service router;
   @service store;
+  @service currentSession;
+  @service impersonation;
 
   queryParams = [
     {

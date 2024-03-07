@@ -24,6 +24,8 @@ export default class CasesCaseSubcasesDemoSubcaseDemoPublicationController exten
   @service fileConversionService;
   @service toaster;
   @service pieceAccessLevelService;
+  @service currentSession;
+  @service impersonation;
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[3];

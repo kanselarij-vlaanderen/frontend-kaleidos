@@ -7,6 +7,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CasesCaseSubcasesDemoSubcaseDemoController extends Controller {
   @service router;
+  @service currentSession;
+  @service impersonation;
   @tracked decisionmakingFlow;
   @tracked siblingSubcasesCount;
   @tracked currentRoute = this.router.currentRouteName;

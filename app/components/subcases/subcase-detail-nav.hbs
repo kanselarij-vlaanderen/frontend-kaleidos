@@ -1,19 +1,36 @@
 <div>
   {{#if (eq this.currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
-  <div class="c-anchor-nav-holder">
+    {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+    <div class="c-anchor-nav-holder">
     <p>Op deze pagina:</p>
     <ul class="au-c-anchor-nav">
       <li>
-        <a href="#case" class="js-anchor">Publicatie dossier</a>
+        <a href="#case" class="js-anchor">Overzicht</a>
       </li>
       <li>
-        <a href="#documents" class="js-anchor">Besluit(en) info</a>
+        <a href="#documents" class="js-anchor">Documenten</a>
       </li>
       <li>
-        <a href="#agenda" class="js-anchor">Publicatiestatussen</a>
+        <a href="#agenda" class="js-anchor">Agenderingen</a>
       </li>
     </ul>
   </div>
+    {{else}}
+    <div class="c-anchor-nav-holder">
+      <p>Op deze pagina:</p>
+      <ul class="au-c-anchor-nav">
+        <li>
+          <a href="#case" class="js-anchor">Publicatie dossier</a>
+        </li>
+        <li>
+          <a href="#documents" class="js-anchor">Besluit(en) info</a>
+        </li>
+        <li>
+          <a href="#agenda" class="js-anchor">Publicatiestatussen</a>
+        </li>
+      </ul>
+    </div>
+    {{/if}}
   {{else if (eq this.currentRoute 'cases.case.subcases-demo.subcase-demo.vp')}}
   <div class="c-anchor-nav-holder">
     <p>Op deze pagina:</p>
