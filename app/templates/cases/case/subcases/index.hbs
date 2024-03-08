@@ -1,0 +1,7 @@
+{{#if (not @model.subcases.length)}}
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+        <Auk::EmptyState @message={{t "no-subcases"}} />
+    </div>
+  </div>
+{{/if}}
