@@ -214,9 +214,7 @@ export default class NewSubcaseForm extends Component {
       }
     }
 
-    if (this.router.currentRoute.name.startsWith('cases.case.subcases')) {
-      this.router.refresh('cases.case.subcases');
-    }
+    this.args.onCreateSubcase?.();
     this.router.transitionTo(
       'cases.case.subcases.subcase',
       this.args.decisionmakingFlow.id,
