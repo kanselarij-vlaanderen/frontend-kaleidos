@@ -67,25 +67,41 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *updateHasDocumentsToShow() {
-    const doc = yield this.store.queryOne('submission-activity', {
+    const subcaseHasDocuments = yield this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has:pieces]': 'true',
     });
-    this.hasDocumentsToShow = doc !== null;
-    yield this.loadRelatedMeeting.perform();
+    this.hasDocumentsToShow = subcaseHasDocuments !== null;
+    if (!this.hasDocumentsToShow) {
+      this.documentsAreVisible = false;
+      return;
+    }
     // Additional failsafe check on document visibility. Strictly speaking this check
     // should not be necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
     // There is however a different situation when a subcase has been postponed.
     // In that case no documents should be showing (as the subcase in still progress)
-    // but those from the first meeting are already propagated and are visible. 
-    if (!this.currentSession.may('view-documents-before-release')) {
-      const documentPublicationActivity = yield this.latestMeeting?.internalDocumentPublicationActivity;
-      const documentPublicationStatus = yield documentPublicationActivity?.status;
-      if (documentPublicationStatus?.uri !== CONSTANTS.RELEASE_STATUSES.RELEASED) {
-        this.hasDocumentsToShow = false;
-      }
-    };
+    // but those from the first meeting are already propagated and are visible.
+    yield this.loadRelatedMeeting.perform();
+    this.decisionActivity = yield this.loadRelatedDecisionActivity.perform();
+    const decisionActivityResultCode = yield this.decisionActivity
+      ?.decisionResultCode;
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if (this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true;
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
+    ) {
+      this.documentsAreVisible = false;
+    } else {
+      const documentPublicationActivity = yield this.latestMeeting
+        ?.internalDocumentPublicationActivity;
+      const documentPublicationStatus =
+        yield documentPublicationActivity?.status;
+      this.documentsAreVisible =
+        documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    }
   }
 
   @task
@@ -100,8 +116,22 @@ export default class SubcaseItemSubcasesComponent extends Component {
     yield this.latestMeeting?.belongsTo('agenda').reload();
   }
 
+  loadRelatedDecisionActivity = task(async () => {
+    return await this.store.queryOne(
+      'decision-activity',
+      {
+        'filter[treatment][agendaitems][agenda-activity][subcase][:id:]':
+          this.args.subcase.id,
+        sort: '-treatment.agendaitems.agenda-activity.start-date',
+      }
+    );
+  });
+
   @task
   *loadSubcaseDocuments() {
+    if (!this.documentsAreVisible) {
+      return;
+    }
     // proceed to get the documents
     const queryParams = {
       include: 'pieces', // Make sure we have all pieces, unpaginated
