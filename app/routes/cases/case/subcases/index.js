@@ -5,7 +5,7 @@ export default class CasesCaseSubcasesIndexRoute extends Route {
   @service router;
 
   async redirect(model) {
-    const selectedSubcase = await model.get('lastObject');
+    const selectedSubcase = await model.subcases.slice().at(-1);
     this.router.replaceWith('cases.case.subcases.subcase', selectedSubcase.id);
   }
 }

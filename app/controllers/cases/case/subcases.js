@@ -7,7 +7,6 @@ import { inject as service } from '@ember/service';
 export default class CasesCaseSubcasesSubcasesController extends Controller {
   @service router;
 
-  @tracked decisionmakingFlow;
   @tracked selectedSubcase;
 
   @task
