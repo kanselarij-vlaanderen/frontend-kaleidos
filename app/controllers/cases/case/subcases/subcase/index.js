@@ -179,7 +179,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       );
     }
     yield this.handleSubmittedPieces.perform([piece]);
-    this.router.refresh('cases.case.subcases.subcase.documents');
+    this.router.refresh('cases.case.subcases.subcase');
   }
 
   @task
@@ -349,7 +349,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
         }
       }
     }
-    this.router.refresh('cases.case.subcases.subcase.documents');
+    this.router.refresh('cases.case.subcases.subcase');
   }
 
 
@@ -366,12 +366,12 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @action
   saveBatchDetails() {
-    this.router.refresh('cases.case.subcases.subcase.documents');
+    this.router.refresh('cases.case.subcases.subcase');
     this.isOpenBatchDetailsModal = false;
   }
 
   @action
   refresh() {
-    this.router.refresh('cases.case.subcases.subcase.documents');
+    this.router.refresh('cases.case.subcases.subcase');
   }
 }
