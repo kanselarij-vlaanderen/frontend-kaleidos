@@ -1,4 +1,4 @@
-<Auk::Panel class="auk-u-mb-2">
+<Auk::Panel class="auk-u-mb-2" data-test-mandatee-selector-panel-container>
   <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
     <h4 class="auk-panel__title">{{t "ministers"}}</h4>
   </Auk::Panel::Header>
@@ -18,7 +18,7 @@
       {{/if}}
       <AuList @divider={{true}} as |Item|>
         {{#each this.selectedCurrentMinisters as |minister|}}
-          <Item class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
+          <Item data-test-mandatee-selector-panel-selected-minister class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
             <strong>{{minister.fullName}}</strong>
             <div
               class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
