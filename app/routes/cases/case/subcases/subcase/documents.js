@@ -70,8 +70,16 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     // Additional failsafe check on document visibility. Strictly speaking this check
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
+    this.decisionActivity = await this.loadRelatedDecisionActivity();
+    const decisionActivityResultCode = await this.decisionActivity?.decisionResultCode;
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
     if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
+    ) {
+      this.documentsAreVisible = false;
     } else {
       const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
       const documentPublicationStatus = await documentPublicationActivity?.status;
@@ -81,6 +89,20 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     this.case = await decisionmakingFlow.case;
   }
 
+  async loadRelatedDecisionActivity() {
+    const subcase = this.modelFor('cases.case.subcases.subcase');
+    const latestDecisionActivity = await this.store.queryOne(
+      'decision-activity',
+      {
+        'filter[treatment][agendaitems][agenda-activity][subcase][:id:]':
+          subcase.id,
+        sort: '-treatment.agendaitems.agenda-activity.start-date',
+      }
+    );
+
+    return await latestDecisionActivity;
+  };
+
   setupController(controller) {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
@@ -88,5 +110,6 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     controller.case = this.case;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.decisionActivity = this.decisionActivity;
   }
 }

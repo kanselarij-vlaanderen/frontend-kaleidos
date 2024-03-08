@@ -102,7 +102,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.container).should('be.visible');
-    cy.get(utils.changesAlert.close).click();
+    cy.get(utils.changesAlert.confirm).click();
     cy.get(utils.changesAlert.container).should('not.exist');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
