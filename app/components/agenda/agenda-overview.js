@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 export default class AgendaOverview extends Component {
   /**
    * @argument notaGroups: Array of AgendaitemGroup-objects
@@ -19,6 +20,15 @@ export default class AgendaOverview extends Component {
    */
 
   @service currentSession;
+  @service router;
+
+  @tracked notas = [];
+  @tracked announcements = [];
+
+  constructor() {
+    super(...arguments);
+    this.announcements = this.args.announcements.slice();
+  }
 
   get canEdit() {
     return this.currentSession.may('manage-agendaitems') && this.args.currentAgenda.status.get('isDesignAgenda');
@@ -29,21 +39,59 @@ export default class AgendaOverview extends Component {
   }
 
   @action
+  setNotas(reorderedNotas) {
+    this.args.toggleNotasHasChanged();
+    this.notas = [...reorderedNotas];
+  }
+
+  @action
+  setAnnouncements(reorderedAnnouncements) {
+    this.args.toggleAnnouncementsHasChanged();
+    this.announcements = [...reorderedAnnouncements];
+  }
+
+  @action
+  onCancel() {
+    this.announcements = this.args.announcements.slice();
+    this.notas = [];
+    if (this.args.notasHasChanged) {
+      this.args.toggleNotasHasChanged();
+    }
+    if (this.args.announcementsHasChanged) {
+      this.args.toggleAnnouncementsHasChanged();
+    }
+    this.args.toggleIsEditingOverview?.();
+  }
+
+  @action
   async move(agendaitem, offset) {
     const changedAgendaItemType = await agendaitem.type;
     let agendaitemIndex = -1;
     let itemArray = [];
+
     if (changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
-      for (const notaGroup of this.args.notaGroups) {
-        if (notaGroup.agendaitems) {
-          for (const nota of notaGroup.agendaitems) {
-            itemArray.push(nota);
+      if (this.notas.length) {
+        itemArray = [...this.notas];
+      } else {
+        for (const notaGroup of this.args.notaGroups) {
+          if (notaGroup.agendaitems) {
+            for (const nota of notaGroup.agendaitems) {
+              itemArray.push(nota);
+            }
           }
         }
       }
+      this.notas = this.reorderItems(itemArray, agendaitem, agendaitemIndex, offset);
+      this.args.notasHasChanged == true ? null : this.args.toggleNotasHasChanged();
     } else if (changedAgendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      itemArray = [...this.args.announcements];
+      itemArray = this.announcements.length ? [...this.announcements] : [...this.args.announcements];
+      this.announcements = this.reorderItems(itemArray, agendaitem, agendaitemIndex, offset);
+      this.args.announcementsHasChanged == true ? null : this.args.toggleAnnouncementsHasChanged();
     }
+  }
+
+  @action
+  reorderItems(itemArray, agendaitem, agendaitemIndex, offset) {
     for (let i = 0; i < itemArray.length; i++) {
       if (itemArray[i].id === agendaitem.id) {
         agendaitemIndex = i;
@@ -55,6 +103,18 @@ export default class AgendaOverview extends Component {
       agendaitemIndex + offset < itemArray.length) {
         itemArray[agendaitemIndex] = itemArray.splice(agendaitemIndex + offset, 1, itemArray[agendaitemIndex])[0];
       }
-      this.args.onReorderAgendaitems(itemArray, agendaitem);
+    return itemArray;
+
+  }
+
+  @action
+  save() {
+    if (this.args.notasHasChanged) {
+      this.args.onReorderAgendaitems(this.notas);
+    }
+    if (this.args.announcementsHasChanged) {
+      this.args.onReorderAgendaitems(this.announcements);
+    }
+    this.args.toggleIsEditingOverview?.();
   }
 }
