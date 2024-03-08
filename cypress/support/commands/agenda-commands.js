@@ -313,7 +313,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
-  cy.get(agenda.agendaOverview.formallyOkEdit).click();
+  cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
   // Data loading occurs here
   cy.get(appuniversum.loader, {
     timeout: 20000,
@@ -334,7 +334,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.wait(`@patchAgendaitem_${int}`, {
     timeout: 60000,
   });
-  cy.get(utils.changesAlert.close).click();
+  cy.get(utils.changesAlert.confirm).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
 
