@@ -87,7 +87,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
@@ -190,7 +190,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
@@ -604,7 +604,9 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(cases.subcaseOverviewHeader.editCase).should('not.exist');
       cy.get(cases.subcaseOverviewHeader.createSubcase).should('not.exist');
 
-      cy.get(cases.subcaseItem.showDocuments).click();
+      cy.get(cases.subcaseItem.showDocuments).find(auk.accordion.item.button)
+        .should('not.be.disabled')
+        .click();
       cy.get(document.documentBadge.link).contains('VR 2022 2204 DOC.0001-5');
 
       // released agenda
@@ -612,7 +614,9 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       cy.get(cases.subcaseItem.approved);
 
-      cy.get(cases.subcaseItem.showDocuments).click();
+      cy.get(cases.subcaseItem.showDocuments).find(auk.accordion.item.button)
+        .should('not.be.disabled')
+        .click();
       cy.get(document.documentBadge.link).contains('VR 2022 2304 DOC.0001-5');
 
       // closed agenda

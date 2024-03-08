@@ -3,6 +3,7 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
@@ -85,7 +86,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
@@ -180,7 +181,7 @@ context('Testing the application as Vlaams Parlement', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
@@ -560,7 +561,9 @@ context('Testing the application as Vlaams Parlement', () => {
 
       cy.get(cases.subcaseItem.approved);
 
-      cy.get(cases.subcaseItem.showDocuments).click();
+      cy.get(cases.subcaseItem.showDocuments).find(auk.accordion.item.button)
+        .should('not.be.disabled')
+        .click();
       cy.get(document.documentBadge.link).contains('VR 2022 2304 DOC.0001-5');
 
       // closed agenda

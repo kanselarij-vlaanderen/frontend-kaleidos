@@ -75,7 +75,6 @@ const selectors = {
   agendaOverview: {
     notesSectionTitle: '[data-test-agenda-overview-section-title-notes]',
     showChanges: '[data-test-agenda-overview-show-changes]',
-    formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
   // agenda-header
@@ -209,6 +208,7 @@ const selectors = {
   // agendaitem-search
   agendaitemSearch: {
     input: '[data-test-agendaitem-search-input]',
+    formallyReorderEdit: '[data-test-agendaitem-search-formally-reorder-edit]',
   },
 
   // edit-meeting

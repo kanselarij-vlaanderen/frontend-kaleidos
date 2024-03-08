@@ -48,6 +48,9 @@ const selectors = {
     header: {
       button: '.auk-accordion__header .auk-accordion__button',
     },
+    item: {
+      button: '.auk-accordion__button',
+    },
   },
 
   emptyState: {
