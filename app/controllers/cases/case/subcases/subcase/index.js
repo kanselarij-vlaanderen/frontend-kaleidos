@@ -29,7 +29,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked submitter;
   @tracked meeting;
   @tracked agenda;
-  @tracked siblingSubcasesCount;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel

@@ -13,13 +13,6 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
 
   async model() {
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    // For showing the history of subcases within this route, we need a list of subcases without the current model
-    //  We want to sort descending on date the subcase was concluded.
-    //  In practice, reverse sorting on created will be close
-    const siblingSubcases = await this.store.query('subcase', {
-      'filter[decisionmaking-flow][:id:]': this.decisionmakingFlow.id,
-      sort: '-created',
-    });
 
      // Get any submission that is not yet on a meeting
      const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
@@ -61,7 +54,6 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     return {
       pieces: sortedPieces,
       subcase,
-      siblingSubcases,
     };
   }
 
