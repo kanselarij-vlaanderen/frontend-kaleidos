@@ -20,11 +20,6 @@ export default class CasesCaseSubcasesSubcasesRoute extends Route {
     return this.store.queryAll('subcase', queryParams);
   }
 
-  async afterModel(model) {
-    const selectedSubcase = await model.get('lastObject');
-    this.router.transitionTo('cases.case.subcases.subcase', selectedSubcase.id);
-  }
-
   setupController(controller) {
     super.setupController(...arguments);
     controller.decisionmakingFlow = this.decisionmakingFlow;
