@@ -9,6 +9,7 @@
       <AuFormRow>
         <Auk::Label for="new-subcase-ok">{{t "formal-ok"}}</Auk::Label>
         <AuToggleSwitch
+          data-test-proposable-agendas-modal-toggle-formally-ok
           id="new-subcase-ok"
           @checked={{this.isFormallyOk}}
           @onChange={{fn (mut this.isFormallyOk)}}
@@ -34,7 +35,7 @@
             </thead>
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
-                <tr {{on "click" (fn this.selectAgenda agenda)}}>
+                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
                   <td class="auk-table__col--1">
                     <AuRadio
                       @checked={{this.isSelectedAgenda agenda}}
@@ -67,6 +68,7 @@
     @onCancel={{@onCancel}}
   >
     <AuButton
+      data-test-proposable-agendas-modal-save-without-agenda
       @skin="secondary"
       {{on "click" this.saveSubcase}}
     >
@@ -74,6 +76,7 @@
     </AuButton>
 
     <AuButton
+      data-test-proposable-agendas-modal-place-on-agenda
       @skin="primary"
       @disabled={{not this.selectedAgenda}}
       @loading={{or

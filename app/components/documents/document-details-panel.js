@@ -50,11 +50,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
   }
 
-  get isSignaturesEnabled() {
-    const hasPermission = this.currentSession.may('manage-signatures');
-    return hasPermission;
-  }
-
   @task
   *loadSignatureRelatedData() {
     const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
@@ -106,14 +101,16 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       const signSubcase = yield signMarkingActivity?.signSubcase;
       const signFlow = yield signSubcase?.signFlow;
       const status = yield signFlow?.belongsTo('status').reload();
-      if (status?.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        yield this.cancelEditDetails.perform();
-        yield this.loadSignatureRelatedData.perform();
-        this.toaster.error(
-          this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
-          this.intl.t('changes-could-not-be-saved-title'),
-        );
-        return;
+      if (!this.currentSession.may('edit-documents-with-ongoing-signature')) {
+        if (status?.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
+          yield this.cancelEditDetails.perform();
+          yield this.loadSignatureRelatedData.perform();
+          this.toaster.error(
+            this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
+            this.intl.t('changes-could-not-be-saved-title'),
+          );
+          return;
+        }
       }
     }
     if (this.uploadedSourceFile) {

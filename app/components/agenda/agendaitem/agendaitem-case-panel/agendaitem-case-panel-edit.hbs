@@ -8,7 +8,7 @@
             data-test-agendaitem-titles-edit-confidential={{true}}
             @checked={{@subcase.confidential}}
             id="subcase-confidential"
-            @onChange={{set this "confidentialChanged" true}}
+            @onChange={{this.onChangeConfidentiality}}
           />
         </AuFormRow>
       {{/if}}
