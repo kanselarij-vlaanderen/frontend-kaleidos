@@ -12,6 +12,8 @@ import { task } from 'ember-concurrency';
 export default class SubcaseTitlesPanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
+  @service store;
+  @service newsletterService;
 
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
@@ -22,6 +24,18 @@ export default class SubcaseTitlesPanelEdit extends Component {
       this.args.subcase.rollbackAttributes();
     }
     this.args.onCancel();
+  }
+
+  @task
+  *updateNewsItem() {
+    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    if (latestAgendaitem) {
+      yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+    }
   }
 
   @task
@@ -49,6 +63,7 @@ export default class SubcaseTitlesPanelEdit extends Component {
     if (this.confidentialChanged && this.args.subcase.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
+      yield this.updateNewsItem.perform();
     }
     this.args.onSave();
   }

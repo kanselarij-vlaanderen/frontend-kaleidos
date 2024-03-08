@@ -22,6 +22,7 @@ export default class AgendaitemControls extends Component {
   @service signatureService;
   @service decisionReportGeneration;
   @service parliamentService;
+  @service newsletterService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -69,10 +70,10 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
-  async onSendToVp() {
+  async onSendToVp(job, toast) {
     this.showVPModal = false;
     if (this.args.onSendToVp) {
-      this.args.onSendToVp();
+      this.args.onSendToVp(job, toast);
     }
   }
 
@@ -145,12 +146,14 @@ export default class AgendaitemControls extends Component {
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
     yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
     yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
   @action

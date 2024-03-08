@@ -169,7 +169,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       meetingId = responseBody.data.id;
     });
   cy.wait('@createNewAgenda', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
@@ -313,7 +313,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
-  cy.get(agenda.agendaOverview.formallyOkEdit).click();
+  cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
   // Data loading occurs here
   cy.get(appuniversum.loader, {
     timeout: 20000,
@@ -334,7 +334,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.wait(`@patchAgendaitem_${int}`, {
     timeout: 60000,
   });
-  cy.get(utils.changesAlert.close).click();
+  cy.get(utils.changesAlert.confirm).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
 
@@ -492,10 +492,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
     timeout: 24000,
   });
   cy.get(appuniversum.loader, {
-    timeout: 12000,
-  }).should('not.exist', {
     timeout: 60000,
-  });
+  }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
 

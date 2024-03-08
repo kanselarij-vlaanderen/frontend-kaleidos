@@ -6,6 +6,7 @@ import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function visitPublicationSearch() {
   cy.intercept('GET', '/regulation-types?**').as('getRegulationTypes');
@@ -153,23 +154,6 @@ function triggerSearchPublication(checkboxContains) {
   cy.get(dependency.emberDataTable.isLoading).should('not.exist');
 }
 
-function addMandatee(mandatee) {
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-
-  cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
-  cy.get(publication.mandateesPanel.add).click();
-  cy.wait(`@getMandatees${randomInt}`);
-  cy.get(dependency.emberPowerSelect.trigger).click();
-  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-  cy.get(dependency.emberPowerSelect.option).contains(mandatee)
-    .scrollIntoView()
-    .click();
-  cy.intercept('PATCH', '/publication-flows/**').as(`patchPublicationFlow${randomInt}`);
-  cy.get(utils.mandateesSelector.add).click();
-  cy.wait(`@patchPublicationFlow${randomInt}`);
-}
-
 // TODO-publication make Test to register publication
 // cy.get(publication.publicationNav.publications).click();
 // cy.get(publication.publicationsInfoPanel.edit).click();
@@ -302,25 +286,25 @@ context('Search tests', () => {
   });
 
   it('setup: add some mandatees', () => {
-    const mandatee1 = 'Jan Jambon';
-    const mandatee2 = 'Hilde Crevits';
-    const mandatee3 = 'Bart Somers';
+    const mandatee1 = mandateeNames['10052021-16052022'].first; // 'Jan Jambon'
+    const mandatee2 = mandateeNames['10052021-16052022'].second; // 'Hilde Crevits'
+    const mandatee3 = mandateeNames['16052022-08112023'].third; // 'Bart Somers'
 
     visitPublications();
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields2.number)
       .click();
-    addMandatee(mandatee2);
+    cy.addPublicationMandatee(mandatee2);
 
     visitPublications();
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fields4.number)
       .click();
-    addMandatee(mandatee1);
-    addMandatee(mandatee2);
+    cy.addPublicationMandatee(mandatee1);
+    cy.addPublicationMandatee(mandatee2);
 
     visitPublications();
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fieldsWithDoubleDates.number)
       .click();
-    addMandatee(mandatee3);
+    cy.addPublicationMandatee(mandatee3);
 
     // add urgent !only when not running publication-new-features.spec!
     // visitPublications();
@@ -336,23 +320,23 @@ context('Search tests', () => {
 
   it('check mandatees filters', () => {
     const searchTerm = 'Besluitvorming Vlaamse Regering hoed';
-    const mandatee1 = 'Jan Jambon';
-    const mandatee2 = 'Hilde Crevits';
+    const mandatee1 = mandateeNames['10052021-16052022'].first; // 'Jan Jambon'
+    const mandatee2 = mandateeNames['10052021-16052022'].second; // 'Hilde Crevits'
     const mandatee4 = 'Paul Akkermans';
 
     visitPublicationSearch();
     cy.get(route.search.input).clear()
       .type(searchTerm);
 
-    // filter on Jan Jambon
-    triggerSearchPublication(mandatee1);
+    // filter on Prime minister
+    triggerSearchPublication(mandatee1.fullName);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length.at.least', 2)
       .contains(fields4.number);
 
-    // add Hilde Crevits
-    triggerSearchPublication(mandatee2);
+    // add second minister
+    triggerSearchPublication(mandatee2.fullName);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length.at.least', 3)
@@ -360,14 +344,14 @@ context('Search tests', () => {
     cy.get('@rows').contains(fields4.number);
     cy.get('@rows').contains(fields2.number);
 
-    // remove Jan Jambon
-    triggerSearchPublication(mandatee1);
+    // remove Prime minister
+    triggerSearchPublication(mandatee1.fullName);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length.at.least', 1);
 
-    // remove Hilde Crevits
-    triggerSearchPublication(mandatee2);
+    // remove second minister
+    triggerSearchPublication(mandatee2.fullName);
 
     // check previous mandatees works
     cy.get(utils.ministerFilter.pastMinisters).click();
@@ -379,8 +363,8 @@ context('Search tests', () => {
   it('combined searches in publicaties', () => {
     const generalTerm = '"Besluitvorming Vlaamse Regering hoed"';
     const urgent = 'Dringend';
-    const mandatee2 = 'Hilde Crevits';
-    const mandatee3 = 'Bart Somers';
+    const mandatee2 = mandateeNames['10052021-16052022'].second; // 'Hilde Crevits'
+    const mandatee3 = mandateeNames['16052022-08112023'].third; // 'Bart Somers'
 
     visitPublicationSearch();
 
@@ -425,9 +409,9 @@ context('Search tests', () => {
       .children('tr')
       .should('have.length', 1)
       .contains(fieldsWithDoubleDates.number);
-    // add Bart Somers
+    // add third minister
     cy.get(utils.ministerFilter.pastMinisters).click();
-    triggerSearchPublication(mandatee3); // this one
+    triggerSearchPublication(mandatee3.fullName); // this one
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
@@ -441,8 +425,8 @@ context('Search tests', () => {
     triggerSearchPublication(fields2.status);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
 
-    // filter on Crevits
-    triggerSearchPublication(mandatee2);
+    // filter on second minister
+    triggerSearchPublication(mandatee2.fullName);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
     // search without date
     // *Note doesn't always work on a first click
