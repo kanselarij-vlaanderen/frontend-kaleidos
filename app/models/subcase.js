@@ -21,6 +21,8 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('mandatee', { inverse: 'requestedSubcases', async: true })
   requestedBy;
   @belongsTo('concept', { inverse: null, async: true }) agendaItemType;
+  @belongsTo('parliament-retrieval-activity', { inverse: 'generatedSubcase', async: true})
+  parliamentRetrievalActivity;
 
   @hasMany('agenda-activity', { inverse: 'subcase', async: true })
   agendaActivities;
