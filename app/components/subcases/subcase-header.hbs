@@ -47,6 +47,7 @@
           {{/if}}
         </Auk::Toolbar::Item>
         {{/if}} --}}
+        {{#if (not (or (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.vp') (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')))}}
         <Auk::Toolbar::Item>
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
@@ -84,6 +85,7 @@
             {{/if}}
           </AuDropdown>
         </Auk::Toolbar::Item>
+        {{/if}}
       {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

@@ -59,9 +59,15 @@
             >
               <pre class="auk-u-text-pre-line">
                 {{#if @agendaitem.shortTitle}}
-                  {{@agendaitem.shortTitle}}
+                  {{@agendaitem.shortTitle}} 
+                  {{#if @isDesignAgenda}}
+                  <Auk::New @title="Nieuwe korte titel" class="auk-u-mt-2"/>
+                  {{/if}}
                 {{else}}
-                  {{@agendaitem.title}}
+                  {{@agendaitem.title}} 
+                  {{#if @isDesignAgenda}}
+                  <Auk::New @title="Nieuwe titel" class="auk-u-mt-2"/>
+                  {{/if}}
                   {{! Fallback for legacy data that doesn't have a short title }}
                 {{/if}}
               </pre>

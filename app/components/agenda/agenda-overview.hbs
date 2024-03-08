@@ -69,6 +69,7 @@
                 }}
               >
                 <Agenda::AgendaOverview::AgendaOverviewItem
+                  @isDesignAgenda={{@currentAgenda.status.isDesignAgenda}}
                   @agendaitem={{agendaitem}}
                   @meeting={{@meeting}}
                   @currentAgenda={{@currentAgenda}}
