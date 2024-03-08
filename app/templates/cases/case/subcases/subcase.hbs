@@ -5,13 +5,11 @@
 {{else}}
   {{page-title (capitalize this.model.subcaseName)}}
 {{/if}}
-<div class="auk-scroll-wrapper">
-  <div class="auk-u-bg-alt">
-    <Subcases::SubcaseHeader
-      @subcase={{this.model}}
-      @onMoveSubcase={{this.refreshSubcases}}
-      @onProposedForAgenda={{this.refreshSubcases}}
-    />
-  </div>
-  {{outlet}}
+<div class="auk-u-bg-alt">
+  <Subcases::SubcaseHeader
+    @subcase={{this.model}}
+    @onMoveSubcase={{this.refreshSubcases}}
+    @onProposedForAgenda={{this.refreshSubcases}}
+  />
 </div>
+{{outlet}}
