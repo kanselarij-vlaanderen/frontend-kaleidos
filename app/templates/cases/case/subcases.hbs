@@ -3,13 +3,19 @@
   @onCreateSubcase={{this.refreshSubcases}}
   @onSaveCase={{perform this.saveCase}}
 />
-<div class="auk-panel-layout">
-  <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
-    <Subcases::SideNav
-      @subcases={{this.model}}> 
-    </Subcases::SideNav>
+{{#if @model}}
+  <div class="auk-panel-layout">
+    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
+      <Subcases::SideNav @subcases={{@model}} />
+    </div>
+    <div class="auk-panel-layout__main-content">
+      {{outlet}}
+    </div>
   </div>
-  <div class="auk-panel-layout__main-content">
-    {{outlet}}
+{{else}}
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <Auk::EmptyState @message={{t "no-subcases"}} />
+    </div>
   </div>
-</div>
+{{/if}}
