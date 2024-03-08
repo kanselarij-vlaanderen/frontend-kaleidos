@@ -301,7 +301,7 @@ export default class AgendaMinutesController extends Controller {
 
     await piecePart.save();
 
-    this.decisionReportGeneration.generateReplacementMinutes.perform(
+    await this.decisionReportGeneration.generateReplacementMinutes.perform(
       minutes,
     );
 

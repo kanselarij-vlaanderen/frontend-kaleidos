@@ -77,15 +77,16 @@
             </AuButton>
           </AuDropdown>
         </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            <AuButton
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.navigateToAddSubcase}}
-            >
-              {{t "create-subcase"}}
-            </AuButton>
-          </Auk::Toolbar::Item>         
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-subcase-overview-header-open-add-subcase
+            @skin="primary"
+            @icon="plus"
+            {{on "click" this.navigateToAddSubcase}}
+          >
+            {{t "create-subcase"}}
+          </AuButton>
+        </Auk::Toolbar::Item>         
       </Auk::Toolbar::Group>
     {{/if}}
   </Auk::Toolbar>

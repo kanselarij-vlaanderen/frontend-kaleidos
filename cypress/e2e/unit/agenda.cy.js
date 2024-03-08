@@ -292,7 +292,7 @@ context('Agenda tests', () => {
     // Closing an agenda should remove any design agenda
     // check existence of showChanges and absence of the formally ok edit
     cy.get(agenda.agendaOverview.showChanges);
-    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
     // By checking the length of agendas and confirming "Agenda A", no other agenda exists
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A', false);

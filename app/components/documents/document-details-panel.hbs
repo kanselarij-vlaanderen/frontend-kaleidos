@@ -48,16 +48,19 @@
           <span>
             {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
           </span>
-          <AuButton
-            data-test-document-details-panel-upload
-            class="au-u-flex-item--fixed"
-            @icon="upload"
-            @iconAlignment="left"
-            @skin="secondary"
-            {{on "click" (toggle "isReplacingSourceFile" this)}}
-          >
-            {{t (if @piece.file "replace" "upload")}}
-          </AuButton>
+          {{! only allow the replacement of the docx if sign-flow is ongoing}}
+          {{#if (or this.canEditPieceWithSignFlow @piece.file.derived)}}
+            <AuButton
+              data-test-document-details-panel-upload
+              class="au-u-flex-item--fixed"
+              @icon="upload"
+              @iconAlignment="left"
+              @skin="secondary"
+              {{on "click" (toggle "isReplacingSourceFile" this)}}
+            >
+              {{t (if @piece.file "replace" "upload")}}
+            </AuButton>
+          {{/if}}
         </div>
       </Auk::KeyValue>
       {{#if this.isReplacingSourceFile}}
@@ -132,36 +135,51 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#unless (or this.loadDetailsData.isRunning this.loadSignatureRelatedData.isRunning)}}
-          {{#if (and (user-may "manage-documents") this.canEditPieceWithSignFlow)}}
-          <Toolbar.Group @position="right" as |Group|>
-            {{#if this.isLastVersionOfPiece}}
+        {{#unless
+          (or
+            this.loadDetailsData.isRunning
+            this.loadSignatureRelatedData.isRunning
+          )
+        }}
+          {{#if
+            (and
+              (user-may "manage-documents")
+              (or
+                this.canEditPieceWithSignFlow
+                (user-may "edit-documents-with-ongoing-signature")
+              )
+            )
+          }}
+            <Toolbar.Group @position="right" as |Group|>
+              {{#if
+                (and this.isLastVersionOfPiece this.canEditPieceWithSignFlow)
+              }}
+                <Group.Item>
+                  <AuButton
+                    data-test-details-tab-delete
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                </Group.Item>
+              {{/if}}
               <Group.Item>
                 <AuButton
-                  data-test-details-tab-delete
+                  data-test-details-tab-edit
                   @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
+                  @icon="pencil"
                   @hideText={{true}}
-                  {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+                  {{on "click" this.openEditDetails}}
                 >
-                  {{t "delete"}}
+                  {{t "edit"}}
                 </AuButton>
               </Group.Item>
-            {{/if}}
-            <Group.Item>
-              <AuButton
-                data-test-details-tab-edit
-                @skin="naked"
-                @icon="pencil"
-                @hideText={{true}}
-                {{on "click" this.openEditDetails}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Group.Item>
-          </Toolbar.Group>
-        {{/if}}
+            </Toolbar.Group>
+          {{/if}}
         {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
@@ -204,7 +222,7 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
-      {{#if (and this.isSignaturesEnabled (user-may "manage-signatures") (await (this.canViewSignedPiece)))}}
+      {{#if (await (this.canViewSignedPiece))}}
         {{#if @piece.signedPiece.file}}
           <div class="auk-key-value-item">
             <div class="auk-key-value-item__label auk-u-max-width-medium">{{t "signed-document-certified"}}</div>
@@ -247,7 +265,6 @@
       {{/if}}
       {{#if
         (and
-          this.isSignaturesEnabled
           this.loadSignedPieces.isIdle
           this.signedPieceCopy.file
           (await (this.canViewConfidentialPiece))
