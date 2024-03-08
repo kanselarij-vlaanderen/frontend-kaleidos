@@ -33,8 +33,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel
 
-  @tracked case;
-  @tracked subcase;
   @tracked defaultAccessLevel;
   @tracked documentsAreVisible = false;
   @tracked isOpenBatchDetailsModal = false;
@@ -115,10 +113,10 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: this.subcase.confidential || false,
+      confidential: this.model.subcase.confidential || false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
-      cases: [this.case],
+      cases: [this.model._case],
     });
     this.newPieces.pushObject(piece);
   }
@@ -165,7 +163,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   */
   @task
   *addPiece(piece) {
-    piece.cases.pushObject(this.case);
+    piece.cases.pushObject(this.model._case);
     yield piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
@@ -202,7 +200,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @keepLatestTask
   *ensureFreshData() {
     // piece is linked to a case at the piece-side,
-    // so we don't need to reload this.case and this.case.pieces
+    // so we don't need to reload this.model._case and this.model._case.pieces
 
     // we don't need to reload the subcase because we don't need to save it
     // Pieces are added on a submission activity, instead of directly on the subcase
@@ -229,7 +227,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       })
       // only continue if there is a piece left in the container (a container could have 0 pieces left)
       if (lastPiece) {
-        const agendaActivities = await this.subcase.agendaActivities;
+        const agendaActivities = await this.model.subcase.agendaActivities;
         const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
         if (latestActivity) {
           const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
@@ -273,7 +271,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @task
   *getAgendaActivity() {
     const latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': this.subcase.id,
+      'filter[subcase][:id:]': this.model.subcase.id,
       'filter[agendaitems][agenda][created-for][:has-no:agenda]': true,
       sort: '-start-date',
     });
@@ -285,7 +283,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *createSubmissionActivity(pieces, agendaActivity = null) {
     let submissionActivity = this.store.createRecord('submission-activity', {
       startDate: new Date(),
-      subcase: this.subcase,
+      subcase: this.model.subcase,
       pieces,
       agendaActivity,
     });
@@ -297,7 +295,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @task
   *updateSubmissionActivity(pieces) {
     const submissionActivity = yield this.store.queryOne('submission-activity', {
-      'filter[subcase][:id:]': this.subcase.id,
+      'filter[subcase][:id:]': this.model.subcase.id,
       'filter[:has-no:agenda-activity]': true,
     });
 
@@ -317,7 +315,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     // Link piece to all agendaitems that are related to the subcase via an agendaActivity
     // and related to an agenda in the design status
     const agendaitems = yield this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.subcase.id,
+      'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
       'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
 
