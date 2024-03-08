@@ -40,7 +40,7 @@
             {{#if this.canPropose}}
               <AuButton
                 @skin="link"
-                {{on "click" this.proposeForOtherAgenda}}
+                {{on "click" (toggle "isAssigningToAgenda" this)}}
                 role="menuitem"
               >
                 {{t "propose-for-agenda"}}
@@ -91,7 +91,7 @@
 
 {{#if this.isAssigningToAgenda}}
   <Cases::Subcases::ProposableAgendasModal
-    @onCancel={{toggle "showProposableAgendaModal" this}}
+    @onCancel={{toggle "isAssigningToAgenda" this}}
     @onConfirm={{perform this.proposeForAgenda}}
   />
 {{/if}}

@@ -84,17 +84,23 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = subcase;
   }
 
-  @action
-  proposeForOtherAgenda() {
-    this.isAssigningToAgenda = !this.isAssigningToAgenda;
-  }
-
+  /**
+   * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
+   * @param {Meeting} meeting
+   * @param {boolean} isFormallyOk
+   * @param {string} privatecomment
+   */
   @task
-  *proposeForAgenda(meeting) {
+  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
-      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+      yield this.agendaService.putSubmissionOnAgenda(
+        meeting,
+        this.args.subcase,
+        isFormallyOk,
+        privateComment,
+      );
     } catch (error) {
       this.router.refresh();
       this.toaster.error(
