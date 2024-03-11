@@ -22,7 +22,7 @@
         <AuInput
           @width="block"
           @icon="search"
-          @value={{@nameSearchText}}
+          value={{@nameSearchText}}
           placeholder={{t "search-case-title"}}
           autocomplete="off"
           {{on "input" (perform this.debouncedSetFilter)}}
