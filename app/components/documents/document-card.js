@@ -461,13 +461,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
 
-  canViewSignedPiece = async () => {
-    if (this.currentSession.may('manage-signatures')) {
-      return await this.signatureService.canManageSignFlow(this.args.piece);
-    }
-    return false;
-  }
-
   @action
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();

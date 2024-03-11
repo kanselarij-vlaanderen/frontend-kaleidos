@@ -86,7 +86,7 @@
                 </p>
               {{/if}}
               {{#if
-                (await (this.canViewSignedPiece))
+                (await (this.canViewConfidentialPiece))
               }}
                 {{#if this.piece.signedPieceCopy.file}}
                   <p>

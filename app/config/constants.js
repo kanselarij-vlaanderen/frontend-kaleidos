@@ -77,6 +77,12 @@ export default {
       SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
       FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
   },
+  VP_JOB_STATUSES: {
+    SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
+    BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
+    SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
+    FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
+  },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/bdba2bbc-7af6-490b-98a8-433955cfe869',
     DEFINITIEVE_GOEDKEURING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/6f7d1086-7c02-4a80-8c60-5690894f70fc',
@@ -141,6 +147,7 @@ export default {
     INCOMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/d30fdd4d-ba47-437d-b72e-4bff02e8c3fb',
     COMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/018fb31c-44ad-4bf5-b01b-76de2d48abf4',
     BEING_HANDLED_BY_FP: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/3905d9a1-c841-42fc-8a89-3b7d4ad61b4b',
+    RECEIVED: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/879aed2f-6efa-4d7b-ab1b-13cc406b1f92',
   },
   PARLIAMENT_CASE_URL_BASE: 'https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/',
   URGENCY_LEVELS: {

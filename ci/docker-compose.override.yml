@@ -79,6 +79,10 @@ services:
   mail-delivery:
     entrypoint: "echo 'service disabled'"
     restart: "no"
+  docx-conversion:
+    # old version that uses libreoffice for conversion instead of azure
+    image: kanselarij/docx-conversion-service:0.1.0
+    user: ${HOST_UID_GID}
   decision-report-generation:
     user: ${HOST_UID_GID}
   decision-extraction:
@@ -87,3 +91,13 @@ services:
     user: ${HOST_UID_GID}
   file-bundling:
     user: ${HOST_UID_GID}
+  agenda-submission:
+    environment:
+      CACHE_CLEAR_TIMEOUT: 8000
+  vlaams-parlement-sync:
+    environment:
+      ENABLE_SENDING_TO_VP_API: "false" # enable/disable the actual call to the VP-API
+      ENABLE_ALWAYS_CREATE_PARLIAMENT_FLOW: "true" # always creates a (mock) parliament-flow, even when ENABLE_SENDING_TO_VP_API is false
+      VP_API_DOMAIN: "https://replace.by.actual.api.url"
+      VP_API_CLIENT_ID: "yourVpApiClientId"
+      VP_API_CLIENT_SECRET: "yourVpApiClientSecret"

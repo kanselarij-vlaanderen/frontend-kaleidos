@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.10.3",
+  "version": "6.11.0",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -57,7 +57,7 @@
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#aed7406f3b8ca1f373fa504b029417ff03c27bf4",
+    "@lblod/ember-rdfa-editor": "git+https://github.com/brenner-company/ember-rdfa-editor.git#38b5378f68975b1392f93193f8ba4a95f7a4a4e0",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
     "@typescript-eslint/parser": "^5.48.2",

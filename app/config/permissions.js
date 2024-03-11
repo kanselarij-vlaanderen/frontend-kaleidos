@@ -21,6 +21,7 @@ const {
 // - remove-approved-agendaitems: Remove an approved agendaitem that are already spread to other profiles.
 // - reopen-approved-agenda-version: Remove the current design agenda and restore the last approved agenda to designagenda.
 // - remove-approved-agenda: Remove an approved agenda.
+// - edit-documents-with-ongoing-signature: can edit documents that are past the stage of marking.
 // Other permissions
 // - manage-signatures: currently everything related to digital signing. Will be detailed later
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
@@ -53,6 +54,7 @@ const {
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
 // - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
+// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 
 const groups = [
@@ -64,6 +66,7 @@ const groups = [
       'remove-approved-agendaitems',
       'reopen-approved-agenda-version',
       'remove-approved-agenda',
+      'edit-documents-with-ongoing-signature',
       'manage-signatures',
       'view-all-ongoing-signatures',
       'remove-signatures',
@@ -92,6 +95,7 @@ const groups = [
       'search-confidential-documents',
       'send-cases-to-vp',
       'impersonate-users',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -123,6 +127,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -152,6 +157,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidentnial-documents',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -169,6 +175,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
     ]
   },
   {
@@ -183,6 +190,7 @@ const groups = [
       'view-decisions-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -193,6 +201,7 @@ const groups = [
       'manage-signatures',
       'view-document-version-info',
       'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -206,6 +215,7 @@ const groups = [
       'view-documents-before-release',
       'view-only-specific-confidential-documents',
       'send-only-specific-cases-to-vp',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -215,6 +225,7 @@ const groups = [
     permissions: [
       'view-document-version-info',
       'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
