@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { isEnabledNewCaseCreation } from 'frontend-kaleidos/utils/feature-flag';
 import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
@@ -35,7 +36,7 @@ export default class CasesHeader extends Component {
       this.clearFilter();
       return;
     }
-    await timeout(350);
+    await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     this.args.setNameSearchText(event.target.value);
   });
 
