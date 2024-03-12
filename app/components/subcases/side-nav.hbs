@@ -1,0 +1,32 @@
+<Auk::Sidebar
+  @size="small"
+  @position="left"
+  @skin="gray-200"
+  class="auk-scroll-wrapper"
+  @isCollapsed={{false}}
+>
+  <Auk::Navbar @skin="gray-200">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left">
+        <AuHeading @level="2" @skin="6">{{t "subcases"}}</AuHeading>
+      </Toolbar.Group>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+      <ul>
+        {{#each @subcases as |subcase index|}}
+          <Subcases::SideNav::Subcase
+            @subcase={{subcase}}
+            @selected={{false}}
+            {{! Visually, we render the list from top to bototm but logically
+                the bottom item is number 1, that's why we calculate the number }}
+            @number={{sub @subcases.length (add index 1)}}
+          />
+        {{/each}}
+      </ul>
+  </div>
+</Auk::Sidebar>

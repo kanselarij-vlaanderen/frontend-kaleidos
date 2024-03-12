@@ -1,0 +1,20 @@
+<li class="auk-sidebar__item auk-sidebar__item--styled {{if @selected "auk-sidebar__item--active"}}">
+  <LinkTo 
+    @route="cases.case.subcases.subcase"
+    @model={{@subcase.id}}
+  >
+    <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
+      {{#if this.label}}
+        <strong>{{capitalize this.label}}</strong>
+      {{/if}} 
+    </div>
+    <div class="auk-sidebar__sublabel au-u-margin-top-none">
+      {{t "last-edited-on"}} {{datetime @subcase.modified}}
+    </div>
+    <div class="au-u-margin-top-tiny">
+      <Decision::DecisionResultPill
+        @decisionResultCode={{this.decisionResultCode}}
+      />
+    </div>
+  </LinkTo>
+</li>

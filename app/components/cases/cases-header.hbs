@@ -30,36 +30,18 @@
       </Group.Item>
       {{#if (user-may "manage-cases")}}
         <Group.Item>
-          {{#if this.isEnabledNewCaseCreation}}
-            <AuButton
-              @skin="primary"
-              @icon="plus"
-              {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
-            >
-              {{t "add-case-new"}}
-            </AuButton>
-          {{else}}
-            <AuButton
-              data-test-cases-header-add-case
-              @skin="primary"
-              @icon="plus"
-              {{on "click" (toggle "isOpenNewCaseModal" this)}}
-            >
-              {{t "add-case"}}
-            </AuButton>
-          {{/if}}
+          <AuButton
+            @skin="primary"
+            @icon="plus"
+            {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
+          >
+            {{t "add-case"}}
+          </AuButton>
         </Group.Item>
       {{/if}}
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-
-{{#if this.isOpenNewCaseModal}}
-  <Cases::NewCase
-    @didSave={{this.saveNewCase}}
-    @onCancel={{toggle "isOpenNewCaseModal" this}}
-  />
-{{/if}}
 
 {{#if this.isOpenNewCaseAddSubcaseModal}}
   <Cases::NewCase
