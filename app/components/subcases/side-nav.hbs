@@ -18,7 +18,7 @@
   </Auk::Navbar>
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <ul>
-        {{#each @subcases as |subcase index|}}
+        {{#each (reverse @subcases) as |subcase index|}}
           <Subcases::SideNav::Subcase
             @subcase={{subcase}}
             @selected={{false}}
