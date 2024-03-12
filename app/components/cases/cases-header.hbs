@@ -1,15 +1,44 @@
 <Auk::Navbar @skin="gray-100">
-    <Auk::Toolbar @auto={{true}} as |Toolbar|>
-      <Toolbar.Group @position="left" as |Group|>
+  <Auk::Toolbar @auto={{true}} as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <h1 data-test-cases-header-title class="auk-toolbar__title">
+          {{t "cases"}}
+        </h1>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      <Group.Item class="auk-o-flex">
+        {{#if @nameSearchText}}
+          <AuButton
+            @skin="naked"
+            @icon="undo"
+            @hideText={{true}}
+            {{on "click" this.clearFilter}}
+          >
+            {{t "clear-filter"}}
+          </AuButton>
+        {{/if}}
+        <AuInput
+          @width="block"
+          @icon="search"
+          value={{@nameSearchText}}
+          placeholder={{t "search-case-title"}}
+          autocomplete="off"
+          {{on "input" (perform this.debouncedSetFilter)}}
+        />
+      </Group.Item>
+      {{#if (user-may "manage-cases")}}
         <Group.Item>
-          <h1 data-test-cases-header-title class="auk-toolbar__title">
-            {{t "cases"}}
-          </h1>
-        </Group.Item>
-      </Toolbar.Group>
-      <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
-          {{#if (user-may "manage-cases")}}
+          {{#if this.isEnabledNewCaseCreation}}
+            <AuButton
+              @skin="primary"
+              @icon="plus"
+              {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
+            >
+              {{t "add-case-new"}}
+            </AuButton>
+          {{else}}
             <AuButton
               data-test-cases-header-add-case
               @skin="primary"
@@ -19,18 +48,10 @@
               {{t "add-case"}}
             </AuButton>
           {{/if}}
-          {{#if (and this.isEnabledNewCaseCreation (user-may "manage-cases"))}}
-            <AuButton
-              @skin="primary"
-              @icon="plus"
-              {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
-            >
-              {{t "add-case-new"}}
-            </AuButton>
-          {{/if}}
         </Group.Item>
-      </Toolbar.Group>
-    </Auk::Toolbar>
+      {{/if}}
+    </Toolbar.Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 
 {{#if this.isOpenNewCaseModal}}

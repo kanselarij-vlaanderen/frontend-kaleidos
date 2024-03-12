@@ -1329,6 +1329,8 @@
   "change-order": "Volgorde aanpassen",
   "leave-unsaved-changed": "Wil je de wijzigingen laten verloren gaan?",
   "documents-creating-progress-message": "{count} van {total} documenten aangemaakt.",
+  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}",
+  "search-case-title": "Zoek op dossiernaam",
   "agendaitem-postponed-no-documents-available": "Dit agendapunt is uitgesteld. Er zijn geen documenten beschikbaar.",
   "agendaitem-retracted-no-documents-available": "Dit agendapunt is ingetrokken. Er zijn geen documenten beschikbaar.",
   "agendaitem-document-postponed--message": "De documenten van een uitgesteld agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een uitgesteld punt niet van toepassing.",
