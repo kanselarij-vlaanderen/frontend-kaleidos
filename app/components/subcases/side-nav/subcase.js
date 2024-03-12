@@ -18,8 +18,8 @@ export default class SubcaseSideNavSubcaseComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (isEmpty(this.args.index)) {
-      throw new Error('@index is required');
+    if (isEmpty(this.args.number)) {
+      throw new Error('@number is required');
     }
 
     this.loadData.perform();
@@ -40,7 +40,7 @@ export default class SubcaseSideNavSubcaseComponent extends Component {
       this.label = await subcaseType.label;
     } else {
       this.label = this.intl.t('step-and-number', {
-        number: this.args.index + 1,
+        number: this.args.number + 1,
       });
     }
   };
