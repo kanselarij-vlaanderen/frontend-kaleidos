@@ -3,7 +3,7 @@
     <Auk::Toolbar as |Toolbar|>
       <Toolbar.Group @position="left" as |Group|>
         <Group.Item>
-          <h4 class="auk-panel__title">
+          <h4 data-test-agendaitem-titles-type class="auk-panel__title">
             {{#if (is-announcement @agendaitem.type)}}
               {{t "text"}}
             {{else}}
@@ -61,6 +61,7 @@
             )
           }}
             <p
+              data-test-agendaitem-titles-formally-ok
               class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex
                 {{if
                   (eq @agendaitem.formallyOkToShow.svg.color 'success')
