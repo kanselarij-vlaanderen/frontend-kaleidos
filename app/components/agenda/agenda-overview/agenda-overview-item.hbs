@@ -144,6 +144,25 @@
       {{/unless}}
       {{#if (and this.documentsAreVisible (not @allowReorderItems))}}
         <div class="auk-u-mt-4">
+          {{#if (user-may "view-documents-postponed-and-retracted")}}
+            {{#if this.decisionActivity.isPostponed}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "postponed-item"}}
+              >
+                {{t "agendaitem-document-postponed--message"}}
+              </AuAlert>
+            {{else if this.decisionActivity.isRetracted}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "retracted-item"}}
+              >
+                {{t "agendaitem-document-retracted--message"}}
+              </AuAlert>
+            {{/if}}
+          {{/if}}
           <Documents::DocumentBadgeList
             @pieces={{this.limitedAgendaitemDocuments}}
             @highlightedPieces={{this.newAgendaitemDocuments}}
@@ -163,6 +182,12 @@
               {{t "show-more"}}
             {{/if}}
           </AuButton>
+        {{/if}}
+      {{else if (not (user-may "view-documents-postponed-and-retracted"))}}
+        {{#if this.decisionActivity.isPostponed}}
+          {{t "agendaitem-postponed-no-documents-available"}}
+        {{else if this.decisionActivity.isRetracted}}
+          {{t "agendaitem-retracted-no-documents-available"}}
         {{/if}}
       {{/if}}
       {{#unless @isEditingFormallyOkStatus}}

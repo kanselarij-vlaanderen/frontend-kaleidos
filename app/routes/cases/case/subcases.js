@@ -12,7 +12,7 @@ export default class CasesCaseSubcasesRoute extends Route {
     const decisionmakingFlow = this.modelFor('cases.case');
     const queryParams = {
       'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
-      sort: 'created',
+      sort: '-created',
       include:'type'
     };
     return RSVP.hash({
