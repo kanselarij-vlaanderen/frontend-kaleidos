@@ -28,14 +28,18 @@ export default class SubcaseDescriptionView extends Component {
   }
 
   get showNotYetRequestedMessage() {
-    return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.subcaseType?.uri);
+    return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(
+      this.subcaseType?.uri
+    );
   }
 
   get canShowDecisionStatus() {
     return (
       this.isFinalMeeting &&
       (this.currentSession.may('view-decisions-before-release') ||
-        this.latestMeeting?.internalDecisionPublicationActivity?.get('startDate'))
+        this.latestMeeting?.internalDecisionPublicationActivity?.get(
+          'startDate'
+        ))
     );
   }
 
@@ -46,13 +50,17 @@ export default class SubcaseDescriptionView extends Component {
   @task
   *loadAgendaData() {
     this.subcaseType = yield this.args.subcase.type;
-    const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
+    const agendaActivities = yield this.args.subcase
+      .hasMany('agendaActivities')
+      .reload();
     const sortedAgendaActivities = agendaActivities
       ?.slice()
       ?.sort((a1, a2) => a1.startDate - a2.startDate);
 
     this.modelsOfMeetings = [];
-    for (const [index, agendaActivity] of sortedAgendaActivities.slice().entries()) {
+    for (const [index, agendaActivity] of sortedAgendaActivities
+      .slice()
+      .entries()) {
       // load models for linkTo and other uses
       const agendaitem = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': agendaActivity.id,
@@ -62,7 +70,9 @@ export default class SubcaseDescriptionView extends Component {
       const agenda = yield agendaitem.agenda;
       const meeting = yield agenda.createdFor;
       yield meeting?.kind;
-      const decisionPublicationActivity = yield meeting.belongsTo('internalDecisionPublicationActivity').reload();
+      const decisionPublicationActivity = yield meeting
+        .belongsTo('internalDecisionPublicationActivity')
+        .reload();
       yield decisionPublicationActivity?.status; // used in get-functions above
       // load decisionActivity
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released

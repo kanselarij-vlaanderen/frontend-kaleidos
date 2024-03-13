@@ -26,9 +26,16 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
-        <AuHeading @level="4" @skin="4">{{t "design-decreet-of" subcaseShortTitle=(capitalize @subcase.shortTitle)}}</AuHeading>
-        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+      <div
+        class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center"
+      >
+        <AuHeading @level="4" @skin="4">{{t
+            "design-decreet-of"
+            subcaseShortTitle=(capitalize @subcase.shortTitle)
+          }}</AuHeading>
+        <div
+          class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
+        >
           {{#if (is-nota @subcase.agendaItemType)}}
             <AuPill @size="small">{{t "note"}}</AuPill>
           {{else}}
@@ -36,7 +43,9 @@
           {{/if}}
           {{#if @allowEditing}}
             {{#if @subcase.confidential}}
-              <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t "limited-access"}}</AuPill>
+              <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t
+                  "limited-access"
+                }}</AuPill>
             {{/if}}
           {{/if}}
         </div>
@@ -56,9 +65,12 @@
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
           {{else if this.modelsOfMeetings}}
-            {{#each this.modelsOfMeetings as |models| }}
+            {{#each this.modelsOfMeetings as |models|}}
               {{#let models.[0] as |meeting|}}
-                  {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                {{date-phrase meeting.plannedStart}}{{if
+                  (has-next models this.modelsOfMeetings)
+                  ", "
+                }}
               {{/let}}
             {{/each}}
           {{else}}
@@ -69,17 +81,20 @@
           <AuHeading @level="4" @skin="6">{{t "number-session"}}</AuHeading>
           <p class="auk-u-mt-1">
             {{#if this.loadAgendaData.isRunning}}
-                  <Auk::Loader />
-              {{else if this.modelsOfMeetings}}
-                {{#each this.modelsOfMeetings as |models|}}
-                  {{#let models.[0] as |meeting|}}
-                    {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                  {{/let}}
-                {{/each}}
-              {{else}}
-                {{t "no-number-yet"}}
-              {{/if}}
-            </p>
+              <Auk::Loader />
+            {{else if this.modelsOfMeetings}}
+              {{#each this.modelsOfMeetings as |models|}}
+                {{#let models.[0] as |meeting|}}
+                  {{meeting.number}}{{if
+                    (has-next models this.modelsOfMeetings)
+                    ", "
+                  }}
+                {{/let}}
+              {{/each}}
+            {{else}}
+              {{t "no-number-yet"}}
+            {{/if}}
+          </p>
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Status</AuHeading>
