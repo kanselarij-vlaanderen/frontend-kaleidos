@@ -170,8 +170,10 @@ const selectors = {
 
   // agendaitem-titles-view
   agendaitemTitlesView: {
+    type: '[data-test-agendaitem-titles-type]',
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
+    formallyOk: '[data-test-agendaitem-titles-formally-ok]',
     subcaseName: '[data-test-agendaitem-subcase-name]',
     comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',

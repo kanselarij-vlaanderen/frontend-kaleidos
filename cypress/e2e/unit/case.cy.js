@@ -1,10 +1,46 @@
-/* global context, it, cy, beforeEach, afterEach */
+/* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
+import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
+import document from '../../selectors/document.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
+
+function getTranslatedMonth(month) {
+  switch (month) {
+    case 0:
+      return 'januari';
+    case 1:
+      return 'februari';
+    case 2:
+      return 'maart';
+    case 3:
+      return 'april';
+    case 4:
+      return 'mei';
+    case 5:
+      return 'juni';
+    case 6:
+      return 'juli';
+    case 7:
+      return 'augustus';
+    case 8:
+      return 'september';
+    case 9:
+      return 'oktober';
+    case 10:
+      return 'november';
+    case 11:
+      return 'december';
+    default:
+      return '';
+  }
+}
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -212,4 +248,232 @@ context('Create case as Admin user', () => {
     cy.go('back');
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitleChanged);
   });
+
+  it('create case and subcase via new flow', () => {
+    const caseTitle = 'test new flow';
+    const agendaDate = Cypress.dayjs().add(1, 'weeks')
+      .day(5);
+    const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
+    const monthDutch = getTranslatedMonth(agendaDate.month());
+    const agendaDateFormattedMonthDutch = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+    const agendaType = 'Nota';
+    const agendaTypeMed = 'Mededeling';
+    const newShortTitle = 'Test ShortTitle';
+    const longTitle = 'Test Longtitle';
+    const step = 'principiële goedkeuring';
+    const stepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const mandatee1 = {
+      fullName: mandateeNames.current.fourth.fullName,
+      submitter: false,
+    };
+    const mandatee2 = {
+      fullName: mandateeNames.current.second.fullName,
+      submitter: true,
+    };
+    const mandatees = [mandatee1, mandatee2];
+    const domain1 = {
+      name: 'Cultuur, Jeugd, Sport en Media',
+      selected: true,
+      fields: [],
+    };
+    const domain2 = {
+      name: 'Economie, Wetenschap en Innovatie',
+      selected: false,
+      fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
+    };
+    const domains = [domain1, domain2];
+    const files1 = [
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
+      }
+    ];
+    const files2 = [
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-3', fileType: 'Nota',
+      },
+      {
+        folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-4', fileType: 'Decreet',
+      }
+    ];
+    const subcase1 = {
+      type: agendaType,
+      confidential: true,
+      newShortTitle: newShortTitle,
+      longTitle: longTitle,
+      step: step,
+      stepName: stepName,
+      mandatees: mandatees,
+      domains: domains,
+      documents: files1,
+      formallyOk: true,
+      agendaDate: agendaDateFormatted,
+    };
+    const subcase2 = {
+      type: agendaTypeMed,
+      documents: files2,
+      agendaDate: agendaDateFormatted,
+    };
+
+    cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
+    cy.createCase(caseTitle);
+    cy.addSubcaseViaModal(subcase1);
+
+    // cy.openCase(caseTitle);
+    // cy.openSubcase(0);
+    // check that case was created succesfully
+    cy.get(auk.loader).should('not.exist');
+    cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormattedMonthDutch);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
+    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
+
+    cy.get(cases.subcaseTitlesView.type).contains(agendaType);
+    cy.get(cases.subcaseTitlesView.subcaseName).contains(stepName);
+
+    cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee');
+    cy.get('@listItemsMandatee').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsMandatee').eq(0)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName);
+    cy.get('@listItemsMandatee').eq(0)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+    cy.get('@listItemsMandatee').eq(1)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.fourth.fullName);
+    cy.get('@listItemsMandatee').eq(1)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('not.exist');
+
+    cy.get(utils.governmentAreasPanel.rows).as('listItemsAreas');
+    cy.get('@listItemsAreas').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsAreas').eq(0)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain1.name);
+    cy.get('@listItemsAreas').eq(0)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', '-');
+    cy.get('@listItemsAreas').eq(1)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain2.name);
+    cy.get('@listItemsAreas').eq(1)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', domain2.fields[0, 1]);
+
+    cy.get(cases.subcaseDetailNav.documents).click();
+    cy.get(document.documentCard.name.value).contains(files1[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files1[1].newFileName);
+
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(newShortTitle);
+
+    cy.get(agenda.agendaitemTitlesView.type).contains(agendaType);
+    cy.get(agenda.agendaitemTitlesView.formallyOk).contains('Formeel OK');
+
+    cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee2');
+    cy.get('@listItemsMandatee2').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsMandatee2').eq(0)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName);
+    cy.get('@listItemsMandatee2').eq(0)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+    cy.get('@listItemsMandatee2').eq(1)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.fourth.fullName);
+    cy.get('@listItemsMandatee2').eq(1)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('not.exist');
+
+    cy.get(utils.governmentAreasPanel.rows).as('listItemsAreas2');
+    cy.get('@listItemsAreas2').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsAreas2').eq(0)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain1.name);
+    cy.get('@listItemsAreas2').eq(0)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', '-');
+    cy.get('@listItemsAreas2').eq(1)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain2.name);
+    cy.get('@listItemsAreas2').eq(1)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', domain2.fields[0, 1]);
+
+    cy.openAgendaitemDocumentTab(newShortTitle);
+    cy.get(document.documentCard.name.value).contains(files1[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files1[1].newFileName);
+
+    cy.openCase(caseTitle);
+    cy.addSubcaseViaModal(subcase2);
+
+    cy.get(auk.loader).should('not.exist');
+    cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormattedMonthDutch);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
+    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
+
+    cy.get(cases.subcaseTitlesView.type).contains(agendaTypeMed);
+    cy.get(cases.subcaseTitlesView.subcaseName).should('not.exist');
+
+    cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee');
+    cy.get('@listItemsMandatee').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsMandatee').eq(0)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName);
+    cy.get('@listItemsMandatee').eq(0)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+    cy.get('@listItemsMandatee').eq(1)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.fourth.fullName);
+    cy.get('@listItemsMandatee').eq(1)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('not.exist');
+
+    cy.get(utils.governmentAreasPanel.rows).as('listItemsAreas');
+    cy.get('@listItemsAreas').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsAreas').eq(0)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain1.name);
+    cy.get('@listItemsAreas').eq(0)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', '-');
+    cy.get('@listItemsAreas').eq(1)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain2.name);
+    cy.get('@listItemsAreas').eq(1)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', domain2.fields[0, 1]);
+
+    cy.get(cases.subcaseDetailNav.documents).click();
+    cy.get(appuniversum.loader).should('not.exist', {
+      timeout: 60000,
+    });
+    cy.wait(10000);
+    cy.get(document.documentCard.name.value).contains(files2[0].newFileName);
+    cy.get(document.documentCard.name.value).contains(files2[1].newFileName);
+    cy.get(document.linkedDocumentLink.name).contains(files1[0].newFileName);
+    cy.get(document.linkedDocumentLink.name).contains(files1[1].newFileName);
+  });
+  // add new subcase, check inheritance, add new docs, new subcase type, also linked documents
 });
