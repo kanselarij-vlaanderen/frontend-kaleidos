@@ -1,0 +1,14 @@
+<div id="case" class="auk-u-mb-8">
+  <Subcase::DescriptionPanel @subcase={{@subcase}} />
+</div>
+<div class="auk-u-mb-8">
+  <Subcase::Detail::Panels::Mandatees
+    @mandatees=this.mandatees
+  />
+</div>
+<Subcase::Detail::Panels::GovernmentAreas />
+<div id="documents" class="auk-u-mb-4">
+  <Subcase::Detail::Panels::Documents />
+</div>
+<Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@subcase}} />
+<Subcase::SubcaseVersionsPanel @subcase={{@subcase}} id="agenda" />

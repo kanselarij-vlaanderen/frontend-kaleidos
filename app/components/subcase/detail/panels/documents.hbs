@@ -1,0 +1,78 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{t "documents"}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    {{#if this.documentsAreVisible}}
+      <Documents::DocumentCardList
+        @pieces={{@pieces}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeleteContainer={{this.refresh}}
+        @isEditable={{true}}
+      />
+    {{else}}
+      <div>
+        <AuAlert
+          @skin="info"
+          @icon="info-circle"
+          class="au-u-margin-bottom-none"
+        >
+          {{t "no-documents-yet"}}
+        </AuAlert>
+      </div>
+    {{/if}}
+  </Auk::Panel::Body>
+  {{#if (user-may "manage-documents")}}
+    <Auk::Panel::Footer>
+      <AuButton
+        @skin="naked"
+        @icon="plus"
+        class="au-u-padding-left-none"
+        {{on "click" this.openPieceUploadModal}}
+      >
+        {{t "documents-add"}}
+      </AuButton>
+    </Auk::Panel::Footer>
+  {{/if}}
+</Auk::Panel>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <Auk::Loader @message={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>

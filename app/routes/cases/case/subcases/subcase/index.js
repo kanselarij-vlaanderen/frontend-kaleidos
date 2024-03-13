@@ -53,10 +53,13 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       sortedPieces = sortPieces(pieces);
     }
 
+    const subcaseType = await subcase.type;
+
     return {
       decisionmakingFlow,
       _case,
       subcase,
+      subcaseType,
       pieces: sortedPieces,
     };
   }
