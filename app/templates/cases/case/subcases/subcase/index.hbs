@@ -1,18 +1,23 @@
 <div class="auk-scroll-wrapper__body">
-  <div class="auk-u-m-4">
-    {{!-- {{#if @model.subcase.isBekrachtiging}} --}}
-    {{#if false}}
-      <Subcase::Detail::Bekrachtiging
-        @subcase={{@model.subcase}}
-        @case={{@model._case}}
-        @pieces={{@model.pieces}}
-      />
-    {{else}}
-      <Subcase::Detail::Regular
-        @subcase={{@model.subcase}}
-        @case={{@model._case}}
-        @pieces={{@model.pieces}}
-      />
-    {{/if}}
-  </div>
+  <Subcase::Detail::Regular
+    @subcase={{@model.subcase}}
+    @case={{@model._case}}
+    @pieces={{@model.pieces}}
+    @meeting={{this.meeting}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @saveMandateeData={{this.saveMandateeData}}
+    @agenda={{this.agenda}}
+    @saveGovernmentAreas={{this.saveGovernmentAreas}}
+    @documentsAreVisible={{this.documentsAreVisible}}
+    @addPiece={{this.addPiece}}
+    @refresh={{this.refresh}}
+    @openPieceUploadModal={{this.openPieceUploadModal}}
+    @isOpenPieceUploadModal={{this.isOpenPieceUploadModal}}
+    @savePieces={{this.savePieces}}
+    @cancelUploadPieces={{this.cancelUploadPieces}}
+    @newPieces={{this.newPieces}}
+    @uploadPieces={{this.uploadPieces}}
+    @deletePiece={{this.deletePiece}}
+  />
 </div>
