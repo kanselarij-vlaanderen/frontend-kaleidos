@@ -1,6 +1,10 @@
 /* Framework & external component fixes
    ========================================================================== */
 
+.auk-u-flex-grow {
+  flex-grow: 1;
+}
+
 // Modal
 
 .auk-modal-backdrop > .ember-view {

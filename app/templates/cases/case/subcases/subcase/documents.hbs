@@ -35,6 +35,25 @@
     </Auk::Toolbar>
 
     {{#if this.documentsAreVisible}}
+      {{#if (user-may "view-documents-postponed-and-retracted")}}
+        {{#if this.decisionActivity.isPostponed}}
+          <AuAlert
+            @skin="warning"
+            @icon="alert-triangle"
+            @title={{t "postponed-item"}}
+          >
+            {{t "agendaitem-document-postponed--message"}}
+          </AuAlert>
+        {{else if this.decisionActivity.isRetracted}}
+          <AuAlert
+            @skin="warning"
+            @icon="alert-triangle"
+            @title={{t "retracted-item"}}
+          >
+            {{t "agendaitem-document-retracted--message"}}
+          </AuAlert>
+        {{/if}}
+      {{/if}}
       <Documents::DocumentCardList
         @pieces={{this.model.pieces}}
         @onAddPiece={{perform this.addPiece}}
@@ -47,7 +66,17 @@
           @skin="info"
           @icon="info-circle"
         >
-          {{t "no-documents-yet"}}
+          {{#if (not (user-may "view-documents-postponed-and-retracted"))}}
+            {{#if this.decisionActivity.isPostponed}}
+              {{t "agendaitem-postponed-no-documents-available"}}
+            {{else if this.decisionActivity.isRetracted}}
+              {{t "agendaitem-retracted-no-documents-available"}}
+            {{else}}
+              {{t "no-documents-yet"}}
+            {{/if}}
+          {{else}}
+            {{t "no-documents-yet"}}
+          {{/if}}
         </AuAlert>
       </div>
     {{/if}}
