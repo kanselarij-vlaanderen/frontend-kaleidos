@@ -34,10 +34,8 @@
           {{else}}
             <AuPill @size="small">{{t "text"}}</AuPill>
           {{/if}}
-          {{#if @allowEditing}}
-            {{#if @subcase.confidential}}
-              <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t "limited-access"}}</AuPill>
-            {{/if}}
+          {{#if @subcase.confidential}}
+            <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t "limited-access"}}</AuPill>
           {{/if}}
         </div>
       </div>
