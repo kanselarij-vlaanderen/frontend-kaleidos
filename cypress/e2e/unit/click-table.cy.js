@@ -65,7 +65,7 @@ context('Table Row Click tests', () => {
     cy.get(route.agendasOverview.filter.warning).should('be.visible');
     cy.get(route.agendasOverview.filter.warning).contains('Geen resultaten gevonden');
     cy.get(utils.changesAlert.message).contains('Deze data is gefilterd.');
-    cy.get(utils.changesAlert.close).click();
+    cy.get(utils.changesAlert.confirm).click();
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr')
       .should('not.have.length', 0);

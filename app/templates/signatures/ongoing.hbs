@@ -64,13 +64,17 @@
           {{#let signMarkingActivity.piece as |piece|}}
             <td data-test-route-search-signatures-ongoing-row-document-name>
               {{#if piece}}
-                {{piece.name}}
-                {{#if (this.isConfidential piece.accessLevel)}}
-                  <AccessLevelPill
-                    @accessLevel={{piece.accessLevel}}
-                    @isEditable={{false}}
-                  />
-                {{/if}}
+                <span class="au-u-flex--inline au-u-flex--vertical-center au-u-flex--spaced-small">
+                  {{piece.name}}
+                  {{#if (this.isConfidential piece.accessLevel)}}
+                    <span class="au-u-flex-item--fixed">
+                      <AccessLevelPill
+                        @accessLevel={{piece.accessLevel}}
+                        @isEditable={{false}}
+                      />
+                    </span>
+                  {{/if}}
+                </span>
               {{/if}}
             </td>
             <td>
@@ -105,8 +109,8 @@
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
               @isClickable={{
-                or 
-                  (not (await (this.isRowDisabled signFlow))) 
+                or
+                  (not (await (this.isRowDisabled signFlow)))
                   signFlow.isSigned
               }}
             />

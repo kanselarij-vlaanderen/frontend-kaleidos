@@ -75,7 +75,6 @@ const selectors = {
   agendaOverview: {
     notesSectionTitle: '[data-test-agenda-overview-section-title-notes]',
     showChanges: '[data-test-agenda-overview-show-changes]',
-    formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
   // agenda-header
@@ -173,8 +172,10 @@ const selectors = {
 
   // agendaitem-titles-view
   agendaitemTitlesView: {
+    type: '[data-test-agendaitem-titles-type]',
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
+    formallyOk: '[data-test-agendaitem-titles-formally-ok]',
     subcaseName: '[data-test-agendaitem-subcase-name]',
     comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',
@@ -211,6 +212,7 @@ const selectors = {
   // agendaitem-search
   agendaitemSearch: {
     input: '[data-test-agendaitem-search-input]',
+    formallyReorderEdit: '[data-test-agendaitem-search-formally-reorder-edit]',
   },
 
   // edit-meeting

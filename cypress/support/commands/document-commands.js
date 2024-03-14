@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
@@ -582,6 +583,67 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   cy.log('/deletePieceBatchEditRow');
 }
 
+/**
+ * @description Adds a new document for each file in the "files"-array to an opened document upload modal
+ * @name addNewDocumentsInSubcaseFileUpload
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
+ */
+function addNewDocumentsInSubcaseFileUpload(files) {
+  cy.log('addNewDocumentsInUploadModal');
+  cy.get(cases.newSubcaseForm.documentUploadPanel).as('fileUploadDialog');
+
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+  files.forEach((file, index) => {
+    cy.get('@fileUploadDialog').within(() => {
+      cy.intercept('GET', '/concepts**559774e3-061c-4f4b-a758-57228d4b68cd**').as(`loadConceptsDocType_${randomInt}`);
+      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+      // ensure the new uploadedDocument component is visible before trying to continue
+      cy.get(document.uploadedDocument.nameInput, {
+        timeout: 60000,
+      }).should('have.length.at.least', index + 1);
+
+      if (file.newFileName) {
+        cy.get(document.uploadedDocument.nameInput).eq(index)
+          .clear()
+          .type(file.newFileName);
+      }
+    });
+
+    if (file.fileType) {
+      cy.wait(`@loadConceptsDocType_${randomInt}`, {
+        timeout: 60000,
+      });
+      cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
+        .eq(index)
+        .find(document.uploadedDocument.documentTypes)
+        .as('radioOptions');
+      cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+      cy.get('@radioOptions').within(($t) => {
+        if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
+          cy.get(utils.radioDropdown.input).check(file.fileType, {
+            force: true,
+          }); // CSS has position:fixed, which cypress considers invisible
+        } else {
+          cy.get('input[type="radio"][value="Andere"]').check({
+            force: true,
+          });
+          cy.get(dependency.emberPowerSelect.trigger)
+            .click()
+            .parents('body') // we want to stay in the within, but have to search the options in the body
+            .find(dependency.emberPowerSelect.option)
+            .contains(file.fileType)
+            .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+        }
+      });
+    }
+  });
+
+  cy.log('/addNewDocumentsInUploadModal');
+}
+
 // ***********************************************
 // Commands
 
@@ -604,3 +666,4 @@ Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
 Cypress.Commands.add('deletePieceBatchEditRow', deletePieceBatchEditRow);
+Cypress.Commands.add('addNewDocumentsInSubcaseFileUpload', addNewDocumentsInSubcaseFileUpload);
