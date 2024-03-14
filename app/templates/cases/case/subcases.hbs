@@ -1,16 +1,1 @@
-<Subcases::SubcasesOverviewHeader
-  @decisionmakingFlow={{@model.decisionmakingFlow}}
-  @onSaveCase={{this.saveCase}}
-/>
-<div class="auk-panel-layout">
-  {{#if @model.subcases.length}}
-    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
-      <Subcases::SideNav
-        @subcases={{@model.subcases}}>
-      </Subcases::SideNav>
-    </div>
-  {{/if}}
-  <div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
-    {{outlet}}
-  </div>
-</div>
+{{outlet}}

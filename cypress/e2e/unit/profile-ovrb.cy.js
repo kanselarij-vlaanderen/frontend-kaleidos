@@ -676,7 +676,9 @@ context('Testing the application as OVRB', () => {
       cy.get(cases.subcaseOverviewHeader.editCase).should('not.exist');
       cy.get(cases.subcaseOverviewHeader.createSubcase).should('not.exist');
 
-      cy.get(cases.subcaseItem.showDocuments).click();
+      cy.get(cases.subcaseItem.showDocuments).find(auk.accordion.item.button)
+        .should('not.be.disabled')
+        .click();
       cy.get(document.documentBadge.link).contains('VR 2022 2204 DOC.0001-5');
 
       // released agenda
@@ -684,7 +686,9 @@ context('Testing the application as OVRB', () => {
 
       cy.get(cases.subcaseItem.approved);
 
-      cy.get(cases.subcaseItem.showDocuments).click();
+      cy.get(cases.subcaseItem.showDocuments).find(auk.accordion.item.button)
+        .should('not.be.disabled')
+        .click();
       cy.get(document.documentBadge.link).contains('VR 2022 2304 DOC.0001-5');
 
       // closed agenda

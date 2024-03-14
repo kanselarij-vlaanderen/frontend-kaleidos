@@ -57,13 +57,33 @@
       <Auk::Accordion::Item
         data-test-subcase-item-show-documents
         @title={{t "documents"}}
+        @disabled={{this.updateHasDocumentsToShow.isRunning}}
         @expandTask={{this.loadSubcaseDocuments}}
       >
         {{#if this.loadSubcaseDocuments.isRunning}}
           <div class="auk-u-p-3">
             <Auk::Loader />
           </div>
-        {{else}}
+        {{else if this.documentsAreVisible}}
+          {{#if (user-may "view-documents-postponed-and-retracted")}}
+            {{#if this.decisionActivity.isPostponed}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "postponed-item"}}
+              >
+                {{t "agendaitem-document-postponed--message"}}
+              </AuAlert>
+            {{else if this.decisionActivity.isRetracted}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "retracted-item"}}
+              >
+                {{t "agendaitem-document-retracted--message"}}
+              </AuAlert>
+            {{/if}}
+          {{/if}}
           <Documents::DocumentBadgeList
             @pieces={{this.limitedSubcaseDocuments}}
           />
@@ -81,8 +101,17 @@
               {{/if}}
             </AuButton>
           {{/if}}
+        {{else}}
+          {{#if this.decisionActivity.isPostponed}}
+            {{t "agendaitem-postponed-no-documents-available"}}
+          {{else if this.decisionActivity.isRetracted}}
+            {{t "agendaitem-retracted-no-documents-available" }}
+          {{else}}
+            {{t "no-documents-yet"}}
+          {{/if}}
         {{/if}}
       </Auk::Accordion::Item>
     </Auk::Accordion>
   {{/if}}
 </div>
+

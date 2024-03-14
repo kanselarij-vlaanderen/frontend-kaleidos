@@ -12,9 +12,8 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   }
 
   async model() {
-    const decisionmakingFlow = this.modelFor('cases.case');
+    const { decisionmakingFlow, subcase } = this.modelFor('cases.case.subcases.subcase');
     const _case = await decisionmakingFlow.case;
-    const subcase = this.modelFor('cases.case.subcases.subcase');
 
      // Get any submission that is not yet on a meeting
      const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {

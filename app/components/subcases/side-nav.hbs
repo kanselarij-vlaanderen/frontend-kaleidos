@@ -18,15 +18,15 @@
   </Auk::Navbar>
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <ul>
-        {{#if @subcases}}
-          {{#each (reverse @subcases) as |subcase|}}
-            <Subcases::SideNav::Subcase
-              @subcase={{subcase}}
-              @selected={{false}}
-              @label={{capitalize (await (this.calculateDisplayLabel subcase.id))}}
-            />
-          {{/each}}
-        {{/if}}
+        {{#each (reverse @subcases) as |subcase index|}}
+          <Subcases::SideNav::Subcase
+            @subcase={{subcase}}
+            @selected={{false}}
+            {{! Visually, we render the list from top to bototm but logically
+                the bottom item is number 1, that's why we calculate the number }}
+            @number={{sub @subcases.length (add index 1)}}
+          />
+        {{/each}}
       </ul>
   </div>
 </Auk::Sidebar>

@@ -4,8 +4,8 @@
     @model={{@subcase.id}}
   >
     <div class="auk-sidebar__label au-u-flex au-flex--vertical-center au-u-flex--spaced-tiny">
-      {{#if @label}}
-        <strong>{{@label}}</strong>
+      {{#if this.label}}
+        <strong>{{capitalize this.label}}</strong>
       {{/if}} 
     </div>
     <div class="auk-sidebar__sublabel au-u-margin-top-none">
