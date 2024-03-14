@@ -4,7 +4,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">
-            {{t "subcase"}}
+            {{t "overview"}}
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
@@ -12,6 +12,28 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="au-c-form">
+      <AuFormRow>
+        <AuFieldset as |Fieldset|>
+          <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+          <Fieldset.content>
+            <AuRadioGroup
+              data-test-subcase-description-edit-type
+              @alignment="inline"
+              @selected={{this.agendaItemType}}
+              @onChange={{this.onChangeAgendaItemType}}
+              as |Group|
+            >
+              {{#each this.agendaItemTypes as |type|}}
+                <Group.Radio
+                  @value={{type}}
+                >
+                  {{type.label}}
+                </Group.Radio>
+              {{/each}}
+            </AuRadioGroup>
+          </Fieldset.content>
+        </AuFieldset>
+      </AuFormRow>
       <AuFormRow>
         <Auk::Label for="subcase-confidential">
           {{t "limited-access"}}</Auk::Label>
@@ -21,10 +43,10 @@
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label id="name-subcase">
+        <Auk::Label id="short-title-subcase">
           {{t "name-subcase"}}</Auk::Label>
         <Textarea
-          aria-labelledby="name-subcase"
+          aria-labelledby="short-title-subcase"
           rows="2"
           class="auk-textarea"
           @value={{@subcase.shortTitle}}
@@ -34,32 +56,12 @@
         <Auk::Label id="title-subcase">
           {{t "title-subcase"}}</Auk::Label>
         <Textarea
-          aria-labelledby="name-subcase"
+          aria-labelledby="title-subcase"
           rows="4"
           class="auk-textarea"
           @value={{@subcase.title}}
         />
       </AuFormRow>
-      <AuFieldset as |Fieldset|>
-        <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
-        <Fieldset.content>
-          <AuRadioGroup
-            data-test-subcase-description-edit-type
-            @alignment="inline"
-            @selected={{this.agendaItemType}}
-            @onChange={{this.onChangeAgendaItemType}}
-            as |Group|
-          >
-            {{#each this.agendaItemTypes as |type|}}
-              <Group.Radio
-                @value={{type}}
-              >
-                {{type.label}}
-              </Group.Radio>
-            {{/each}}
-          </AuRadioGroup>
-        </Fieldset.content>
-      </AuFieldset>
       <AuFormRow>
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         <Utils::ModelSelector
