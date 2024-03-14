@@ -33,7 +33,7 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<div class="auk-scroll-wrapper">
+<div class="auk-scroll-wrapper au-u-flex-item--fill">
   <div class="auk-scroll-wrapper__body">
     <div class="au-o-region">
       <div class="au-o-layout">
@@ -245,6 +245,7 @@
   <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
     @onConfirm={{perform this.createSubcase}}
+    @showSaveWithoutAgenda={{true}}
   />
 {{/if}}
 
