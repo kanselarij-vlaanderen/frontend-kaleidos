@@ -1,15 +1,15 @@
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-4">
     <div id="case" class="auk-u-mb-4">
-      <Subcase::DescriptionPanel @subcase={{@subcase}} />
+      {{#if @subcase.isBekrachtiging}}
+        <Subcase::BekrachtigingDescriptionPanel @subcase={{@subcase}} />
+      {{else}}
+        <Subcase::DescriptionPanel @subcase={{@subcase}} />
+      {{/if}}
     </div>
     <div class="auk-u-mb-4">
       <Mandatees::MandateesPanel
-        @referenceDate={{if
-          @meeting
-          @meeting.plannedStart
-          @subcase.created
-        }}
+        @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
         @mandatees={{@mandatees}}
         @submitter={{@submitter}}
         @emptyStateMessage={{if

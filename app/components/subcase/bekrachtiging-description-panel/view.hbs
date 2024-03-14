@@ -4,9 +4,16 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "overview"}}
-            </h4>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                {{t "ratification-overview"}}
+              </h4>
+              {{#if @subcase.confidential}}
+                <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t
+                    "limited-access"
+                  }}</AuPill>
+              {{/if}}
+            </div>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         {{#if (user-may "manage-cases")}}
@@ -36,16 +43,6 @@
         <div
           class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
         >
-          {{#if (is-nota @subcase.agendaItemType)}}
-            <AuPill @size="small">{{t "note"}}</AuPill>
-          {{else}}
-            <AuPill @size="small">{{t "text"}}</AuPill>
-          {{/if}}
-          {{#if @subcase.confidential}}
-            <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t
-                "limited-access"
-              }}</AuPill>
-          {{/if}}
         </div>
       </div>
       {{#if @subcase.title}}
@@ -55,47 +52,21 @@
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
-          <p class="auk-u-mt-1">{{await @subcase.type.label}}</p>
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{t "is-on-agenda"}}</AuHeading>
+          <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
-          {{else if this.modelsOfMeetings}}
-            {{#each this.modelsOfMeetings as |models|}}
-              {{#let models.[0] as |meeting|}}
-                {{date-phrase meeting.plannedStart}}{{if
-                  (has-next models this.modelsOfMeetings)
-                  ", "
-                }}
-              {{/let}}
-            {{/each}}
+          {{else if this.canShowDecisionStatus}}
+            <Decision::DecisionResultPill
+              @decisionResultCode={{this.latestDecisionActivity.decisionResultCode}}
+            />
           {{else}}
-            {{t "not-yet-on-agenda"}}
+            {{t "not-yet-decided"}}
           {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{t "number-session"}}</AuHeading>
-          <p class="auk-u-mt-1">
-            {{#if this.loadAgendaData.isRunning}}
-              <Auk::Loader />
-            {{else if this.modelsOfMeetings}}
-              {{#each this.modelsOfMeetings as |models|}}
-                {{#let models.[0] as |meeting|}}
-                  {{meeting.number}}{{if
-                    (has-next models this.modelsOfMeetings)
-                    ", "
-                  }}
-                {{/let}}
-              {{/each}}
-            {{else}}
-              {{t "no-number-yet"}}
-            {{/if}}
-          </p>
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
+          <AuHeading @level="4" @skin="6">{{capitalize
+              (t "remark")
+            }}</AuHeading>
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
           {{else if this.canShowDecisionStatus}}
