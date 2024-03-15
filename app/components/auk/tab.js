@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 // eslint-disable-next-line ember/no-computed-properties-in-native-classes
-import { computed, action } from '@ember/object';
+import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 import { isPresent } from '@ember/utils';
 
