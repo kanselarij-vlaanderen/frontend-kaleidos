@@ -15,7 +15,12 @@
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
+            <Auk::Tab 
+              @route="newsletters" 
+              @isHierarchicalBack={{true}}
+            >
+              {{t "all-sessions"}}
+            </Auk::Tab>
             {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 data-test-newsletter-header-overview-index

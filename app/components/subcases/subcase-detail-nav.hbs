@@ -1,7 +1,10 @@
 <Auk::Tabs @reversed={{true}}>
   <Auk::Tab
+    @route="cases"
     @isHierarchicalBack={{true}}
-  />
+  >
+    {{t "all-cases"}}
+  </Auk::Tab>
   <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.index">
     {{t "overview"}}
   </Auk::Tab>
