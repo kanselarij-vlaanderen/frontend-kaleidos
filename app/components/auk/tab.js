@@ -49,11 +49,4 @@ export default class Tab extends Component {
     // return empty object
     return [];
   }
-
-  @action
-  transitionBack() {
-    if (history.length > 1) {
-      history.back();
-    }
-  }
 }
