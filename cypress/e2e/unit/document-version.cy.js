@@ -42,11 +42,11 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // all documents of current subcase are "linked documents" of newly created subcase
     cy.visit('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     const subcaseShortTitle = 'cypress test: 20+ documents linked subcase - 1589286110 part 2';
-    cy.addSubcase(null, subcaseShortTitle);
-    cy.openSubcase(0, subcaseShortTitle);
+    cy.addSubcaseViaModal({
+      newShortTitle: subcaseShortTitle,
+    });
 
     cy.intercept('GET', '/document-containers?filter**pieces**page**size**20').as('getLinkedContainers');
-    cy.clickReverseTab('Documenten');
     cy.wait('@getLinkedContainers', {
       timeout: 60000,
     });

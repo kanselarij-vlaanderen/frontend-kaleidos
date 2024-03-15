@@ -282,15 +282,13 @@ context('Decision postponing tests', () => {
     cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
 
     // add new doc (7)
-    cy.get(cases.subcaseDetailNav.documents).click();
-    cy.get(route.subcaseDocuments.add).click();
+    cy.get(route.subcase.add).click();
     cy.addNewDocumentsInUploadModal(files3, 'subcase');
     // check if doc 7 shows on subcase
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
 
     // check if doc 7 shows on 2nd agenda
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();
@@ -329,7 +327,6 @@ context('Decision postponing tests', () => {
     // check that doc 8 doesn't show on subcase
     cy.get(agenda.agendaitemNav.caseTab).click();
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDetailNav.documents).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
@@ -341,7 +338,6 @@ context('Decision postponing tests', () => {
       .should('not.exist');
 
     // check if doc 8 shows on 2nd agenda
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();

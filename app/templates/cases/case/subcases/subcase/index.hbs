@@ -1,4 +1,4 @@
-<div class="auk-scroll-wrapper__body">
+<div class="auk-scroll-wrapper__body" id="subcases-container">
   <div class="auk-u-m-8">
     <div id="case" class="auk-u-mb-8">
       <Subcase::SubcaseDescriptionPanel @subcase={{@model.subcase}} />
@@ -62,6 +62,7 @@
         {{#if (user-may "manage-documents")}}
         <Auk::Panel::Footer>
           <AuButton
+            data-test-route-cases---subcase-add-documents
             @skin="naked"
             @icon="plus"
             class="au-u-padding-left-none"

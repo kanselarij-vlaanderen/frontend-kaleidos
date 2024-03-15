@@ -148,9 +148,9 @@ context('Different session kinds should show different titles', () => {
 
     // check procedure step view
     cy.createCase(newCaseTitle);
-    // adding a subcase without a new shorttitle will use the shorttitle from case
-    cy.addSubcase();
-    cy.openSubcase(0);
+    cy.addSubcaseViaModal({
+      newCase: true,
+    });
     // TODO-bug multiple clicks on dropdown are flakey
     // Check if both agendas are listed in dropdown
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();

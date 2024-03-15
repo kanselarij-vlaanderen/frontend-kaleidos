@@ -1348,5 +1348,6 @@
   "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde",
   "all-agendas": "Alle agenda's",
   "all-cases": "Alle dossiers",
-  "all-sessions": "Alle ministerraden"
+  "all-sessions": "Alle ministerraden",
+  "case-actions": "Dossier acties"
 }

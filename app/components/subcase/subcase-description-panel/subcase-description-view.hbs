@@ -27,20 +27,36 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
-        <AuHeading @level="4" @skin="4">{{t "design-decreet-of" subcaseShortTitle=(capitalize @subcase.shortTitle)}}</AuHeading>
+        <AuHeading
+          data-test-subcase-description-short-title
+          @level="4"
+          @skin="4"
+        >
+          {{t "design-decreet-of" subcaseShortTitle=(capitalize @subcase.shortTitle)}}
+        </AuHeading>
         <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-          {{#if (is-nota @subcase.agendaItemType)}}
-            <AuPill @size="small">{{t "note"}}</AuPill>
-          {{else}}
-            <AuPill @size="small">{{t "text"}}</AuPill>
-          {{/if}}
+          <AuPill
+            data-test-subcase-description-agendaitem-type-pill
+            @size="small"
+          >
+            {{#if (is-announcement @subcase.agendaItemType)}}
+              {{capitalize (t "announcement")}}
+            {{else}}
+              {{t "note"}}
+            {{/if}}
+          </AuPill>
           {{#if @subcase.confidential}}
-            <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t "limited-access"}}</AuPill>
+            <AuPill
+              data-test-subcase-description-confidentiality-pill
+              @size="small"
+              @skin="warning"
+              @icon="lock-closed">{{t "limited-access"}}
+            </AuPill>
           {{/if}}
         </div>
       </div>
       {{#if @subcase.title}}
-        <p>{{capitalize @subcase.title}}</p>
+        <p data-test-subcase-description-title>{{capitalize @subcase.title}}</p>
       {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Body>
@@ -55,8 +71,19 @@
             <Auk::Loader />
           {{else if this.modelsOfMeetings}}
             {{#each this.modelsOfMeetings as |models| }}
-              {{#let models.[0] as |meeting|}}
+              {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                <AuLink
+                  data-test-subcase-description-agenda-link
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                    meeting.id
+                    agenda.id
+                    agendaitem.id
+                  }}
+                >
+                  {{! prettier-ignore}}
                   {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                </AuLink>
               {{/let}}
             {{/each}}
           {{else}}
@@ -64,10 +91,10 @@
           {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{t "number-session"}}</AuHeading>
+          <AuHeading data-test-subcase-description-meeting-number @level="4" @skin="6">{{t "number-session"}}</AuHeading>
           <p class="auk-u-mt-1">
             {{#if this.loadAgendaData.isRunning}}
-                  <Auk::Loader />
+                <Auk::Loader />
               {{else if this.modelsOfMeetings}}
                 {{#each this.modelsOfMeetings as |models|}}
                   {{#let models.[0] as |meeting|}}
@@ -80,7 +107,7 @@
             </p>
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">Status</AuHeading>
+          <AuHeading data-test-subcase-description-decided-on @level="4" @skin="6">Status</AuHeading>
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
           {{else if this.canShowDecisionStatus}}

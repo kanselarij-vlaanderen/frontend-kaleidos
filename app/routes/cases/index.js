@@ -20,10 +20,6 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-    showArchivedOnly: {
-      refreshModel: true,
-      as: 'toon_enkel_gearchiveerd',
-    },
     dateFrom: {
       refreshModel: true,
       as: 'van',
@@ -57,6 +53,7 @@ export default class CasesIndexRoute extends Route {
     }
 
     options['filter[:has:decisionmaking-flow]'] = true;
+    options['filter[decisionmaking-flow][:has-no:closed]'] = true;
 
     if (isPresent(params.dateFrom)) {
       const date = startOfDay(parseDate(params.dateFrom));

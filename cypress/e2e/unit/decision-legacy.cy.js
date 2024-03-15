@@ -192,39 +192,44 @@ context('Decision tests pre digital agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     // set subcase to confidential
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases1');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems1');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda1');
     cy.intercept('PATCH', '/reports/*').as('patchReport1');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases1')
       .wait('@patchagendaitems1')
       .wait('@patchAgenda1')
       .wait('@patchReport1');
 
     // check document confidentiality
-    cy.get(cases.subcaseDetailNav.decisions).click();
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // revert subcase confidentiality
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases2');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems2');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda2');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases2')
       .wait('@patchagendaitems2')
       .wait('@patchAgenda2');
@@ -262,17 +267,16 @@ context('Decision tests pre digital agenda', () => {
       .contains(accessCabinet);
 
     // set subcase to confidential again
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276/beslissing');
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases3');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems3');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda3');
     cy.intercept('PATCH', '/reports/*').as('patchReport3');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases3')
       .wait('@patchagendaitems3')
       .wait('@patchAgenda3')
@@ -301,14 +305,14 @@ context('Decision tests pre digital agenda', () => {
     };
 
     cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277');
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases')
       .wait('@patchagendaitems')
       .wait('@patchAgenda');

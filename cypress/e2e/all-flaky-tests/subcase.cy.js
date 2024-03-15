@@ -47,6 +47,7 @@ function getTranslatedMonth(month) {
 }
 
 context('Subcase tests', () => {
+  const decisionApproved = 'Goedgekeurd';
   const agendaDate = Cypress.dayjs().add(2, 'weeks')
     .day(4); // Next friday
   // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
@@ -72,8 +73,13 @@ context('Subcase tests', () => {
     const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0, subcaseTitleShort);
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: subcaseTitleShort,
+      longTitle: subcaseTitleLong,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+    });
 
     cy.changeSubcaseAccessLevel(true, subcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseMandatee(mandateeNames.current.second);
@@ -112,9 +118,14 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken en verwijderen van een procedurestap';
     const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0, shortSubcaseTitle);
+    cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: shortSubcaseTitle,
+      longTitle: subcaseTitleLong,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+    });
     cy.wait(2000);
     cy.deleteSubcase();
   });
@@ -125,9 +136,14 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor niet kunnen verwijderen van een procedurestap';
     const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0, shortSubcaseTitle);
+    cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: shortSubcaseTitle,
+      longTitle: subcaseTitleLong,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+    });
     cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
@@ -145,9 +161,14 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor te klikken op de link naar agenda vanuit procedurestap';
     const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
-    cy.openSubcase(0, shortSubcaseTitle);
+    cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: shortSubcaseTitle,
+      longTitle: subcaseTitleLong,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+    });
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
@@ -183,7 +204,14 @@ context('Subcase tests', () => {
     cy.createCase('Cypress mededeling test');
 
     // Aanmaken subcase.
-    cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: shortSubcaseTitle,
+      longTitle: subcaseTitleLong,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+    });
 
     // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
@@ -200,12 +228,13 @@ context('Subcase tests', () => {
     cy.url().should('contain', '/deeldossiers/');
 
     // Assert status also hidden
-    cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
+    cy.get(cases.subcaseDescription.panel);
+    cy.get(cases.subcaseDescription.confidentialityPill).should('not.exist');
     cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true) // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
-    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+    cy.get(cases.subcaseDescription.confidentialityPill);
     // Go to agendaitem
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
@@ -241,7 +270,7 @@ context('Subcase tests', () => {
 
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
-    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+    cy.get(cases.subcaseDescription.confidentialityPill);
   });
 
   it('Changes to agenda item Themas propagate properly', () => {
@@ -361,7 +390,16 @@ context('Subcase tests', () => {
     cy.approveAndCloseDesignAgenda();
 
     cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.get(cases.subcaseItem.approved).should('have.length', 3);
+    cy.get(cases.subcaseSideNav.decision)
+      .find(agenda.decisionResultPill.pill)
+      .as('pills')
+      .should('have.length', 3);
+    cy.get('@pills').eq(0)
+      .should('contain', decisionApproved);
+    cy.get('@pills').eq(1)
+      .should('contain', decisionApproved);
+    cy.get('@pills').eq(2)
+      .should('contain', decisionApproved);
     cy.openSubcase(2);
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
@@ -378,16 +416,23 @@ context('Subcase tests', () => {
 
     // setup
     cy.createCase(caseTitle1);
-    cy.addSubcase(type, subcaseShortTitle1);
-    cy.get(cases.subcaseItem.container).should('have.length', 1);
-    cy.addSubcase(type, subcaseShortTitle2);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: subcaseShortTitle1,
+    });
+    cy.get(cases.subcaseSideNav.subcase).should('have.length', 1);
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: subcaseShortTitle2,
+    });
     cy.createCase(caseTitle2);
+    cy.get(cases.newSubcaseForm.cancel).click();
     // wait for search index
     cy.wait(30000);
 
     // use case 1
     cy.openCase(caseTitle1);
-    cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -402,13 +447,10 @@ context('Subcase tests', () => {
       .wait('@patchSubcases1');
     cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2);
-    cy.get(cases.subcaseItem.container).should('have.length', 1)
-      .find(cases.subcaseItem.link)
-      .contains(subcaseShortTitle2);
+    cy.get(cases.subcaseSideNav.decision).should('have.length', 1);
 
     // use case 2
     cy.openCase(caseTitle1);
-    cy.openSubcase(0);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -425,14 +467,14 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseItem.container).should('not.exist');
     cy.openCase(caseTitle2);
-    cy.get(cases.subcaseItem.container).should('have.length', 2)
-      .find(cases.subcaseItem.link)
-      .contains(subcaseShortTitle1);
+    cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
 
     // use case 3
     cy.openCase(caseTitle1);
-    cy.addSubcase(type, subcaseShortTitle3);
-    cy.openSubcase(0, subcaseShortTitle3);
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: subcaseShortTitle3,
+    });
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -448,14 +490,12 @@ context('Subcase tests', () => {
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2);
-    cy.get(cases.subcaseItem.container).should('have.length', 3)
-      .find(cases.subcaseItem.link)
-      .contains(subcaseShortTitle3);
+    cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
   });
 
   it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+    // const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
     const subcaseWithName = 'testId=1589266576: Cypress test dossier 1 test stap 2';
     const encodedSubcaseTitle = encodeURIComponent(subcaseWithName);
 
@@ -491,17 +531,21 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
     cy.visit('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    cy.get(cases.subcaseItem.link).contains(nonCapital);
-    cy.get(cases.subcaseOverviewHeader.createSubcase).click();
-    cy.get(cases.newSubcase.procedureName).click();
+    // TODO KAS-4529 sidebar does not show subcase name
+    // cy.get(cases.subcaseItem.link).contains(nonCapital);
+    cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
+    cy.get(cases.newSubcaseForm.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
     cy.get(auk.modal.footer.cancel).click();
 
-    cy.get(cases.subcaseItem.link).eq(0)
-      .click();
-    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
-      .should('have.class', 'auk-u-text-capitalize');
-    cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
+    // TODO KAS-4529 sidebar
+    // cy.get(cases.subcaseItem.link).eq(0)
+    //   .click();
+    // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
+    // also, titltesView no longer exists
+    // cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
+    // .should('have.class', 'auk-u-text-capitalize');
+    // cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
   });
 
   it('check submission activities', () => {
@@ -515,8 +559,10 @@ context('Subcase tests', () => {
 
     // TODO-setup
     cy.createCase(caseTitle);
-    cy.addSubcase(null, subcaseTitleShort);
-    cy.openSubcase(0, subcaseTitleShort);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      newShortTitle: subcaseTitleShort,
+    });
     cy.addDocumentsToSubcase([
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 1212 DOC.0001-1', fileType: 'Nota',
@@ -544,7 +590,6 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitems')
       .wait('@patchAgendas');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDetailNav.documents).click();
     // if this fails, we are probably saving subcase with an incomplete list of submission activities
     cy.get(document.documentCard.card).should('have.length', 2)
       .find(document.documentCard.name.value)

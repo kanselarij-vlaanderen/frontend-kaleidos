@@ -98,6 +98,7 @@
                         <td class="auk-u-text-align--right">
                           {{#if row.decisionmakingFlow}}
                             <AuLink
+                              data-test-route-cases-overview-row-go-to-case
                               @skin="button-naked"
                               @icon="chevron-right"
                               @hideText={{true}}
@@ -156,20 +157,3 @@
     </AuBodyContainer>
   </m.content>
 </AuMainContainer>
-
-{{#if this.showEditCaseModal}}
-  <Cases::EditCase
-    @onClose={{this.closeEditCaseModal}}
-    @onSave={{this.saveEditCase}}
-    @case={{this.caseToEdit}}
-  />
-{{/if}}
-<ConfirmationModal
-  @modalOpen={{this.isArchivingCase}}
-  @title={{t "archive-case"}}
-  @message={{t "archive-case-message"}}
-  @onConfirm={{this.archiveCase}}
-  @onCancel={{this.cancelArchiveCase}}
-  @confirmMessage={{t "delete"}}
-  @alert={{true}}
-/>

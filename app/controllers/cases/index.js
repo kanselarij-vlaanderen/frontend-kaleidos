@@ -27,11 +27,6 @@ export default class CasesIndexController extends Controller {
       },
     },
     {
-      showArchivedOnly: {
-        type: 'boolean',
-      },
-    },
-    {
       dateFrom: {
         type: 'string',
       },
