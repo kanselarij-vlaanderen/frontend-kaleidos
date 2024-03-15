@@ -614,7 +614,7 @@ function addNewDocumentsInSubcaseFileUpload(files) {
 
     if (file.fileType) {
       cy.wait(`@loadConceptsDocType_${randomInt}`, {
-        timeout: 30000,
+        timeout: 60000,
       });
       cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
         .eq(index)
