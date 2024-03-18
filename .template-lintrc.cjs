@@ -8,7 +8,6 @@ module.exports = {
     // why the first clause has a negated condition some times.
     'no-negated-condition': 'off',
     // Temporary rules after updating ember-template-lint and ember-template-lint-plugin-prettier
-    'no-redundant-role': 'off',
     'require-valid-named-block-naming-format': 'off',
     'no-unsupported-role-attributes': 'off',
     'require-presentational-children': 'off',
