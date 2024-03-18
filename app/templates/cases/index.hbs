@@ -65,6 +65,7 @@
         </td>
         <td class="auk-u-text-align--right">
           {{#if (user-may "manage-cases")}}
+            {{!-- template-lint-disable require-context-role --}}
             <AuDropdown
               data-test-route-cases-overview-row-actions-dropdown
               @icon="three-dots"
@@ -100,6 +101,7 @@
                 {{t (if row.closed "unarchive-case" "archive-case")}}
               </AuButton>
             </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
           {{/if}}
           <AuLink
             data-test-route-cases-overview-row-go-to-case

@@ -16,6 +16,7 @@
           {{#if (or this.loadData.isRunning this.isLoading)}}
             <Auk::Loader />
           {{else if this.canPropose}}
+            {{!-- template-lint-disable require-context-role --}}
             <AuDropdown
               data-test-subcase-header-show-proposed-agendas={{true}}
               @skin="primary"
@@ -45,9 +46,11 @@
                 {{t "other-agenda"}}
               </AuButton>
             </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
             @skin="secondary"
@@ -74,6 +77,7 @@
               {{t "move-subcase"}}
             </AuButton>
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

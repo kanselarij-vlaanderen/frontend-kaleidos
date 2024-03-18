@@ -8,7 +8,6 @@ module.exports = {
     // why the first clause has a negated condition some times.
     'no-negated-condition': 'off',
     // Temporary rules after updating ember-template-lint and ember-template-lint-plugin-prettier
-    'require-context-role': 'off',
     'no-capital-arguments': 'off',
     'no-obscure-array-access': 'off',
     'no-redundant-fn': 'off',
