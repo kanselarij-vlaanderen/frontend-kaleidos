@@ -7,6 +7,5 @@ module.exports = {
     // We like to handle the most common branch in the first clause, which is
     // why the first clause has a negated condition some times.
     'no-negated-condition': 'off',
-    // Temporary rules after updating ember-template-lint and ember-template-lint-plugin-prettier
   },
 };
