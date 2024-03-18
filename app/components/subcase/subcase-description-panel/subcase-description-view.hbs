@@ -47,7 +47,7 @@
                   <Auk::Loader />
               {{else if this.modelsOfMeetings}}
                 {{#each this.modelsOfMeetings as |models|}}
-                  {{#let models.[0] as |meeting|}}
+                  {{#let (get models "0") as |meeting|}}
                     {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
                   {{/let}}
                 {{/each}}
@@ -87,7 +87,7 @@
                 <Auk::Loader />
               {{else if this.modelsOfMeetings}}
                 {{#each this.modelsOfMeetings as |models| }}
-                  {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                  {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
                     <AuLink
                       data-test-subcase-description-agenda-link
                       @route="agenda.agendaitems.agendaitem"
