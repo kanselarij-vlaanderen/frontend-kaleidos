@@ -172,7 +172,11 @@ function addSubcaseViaModal(subcase) {
   // Set the subcase type
   if (subcase.subcaseType) {
     cy.get(cases.newSubcaseForm.procedureStep).click();
-    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseType)
+    // types start lowercase and contains capitals, check case insensitive
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseType,
+      {
+        matchCase: false,
+      })
       .scrollIntoView()
       .trigger('mouseover')
       .click();
@@ -182,7 +186,11 @@ function addSubcaseViaModal(subcase) {
   // Set the subcase name
   if (subcase.subcaseName) {
     cy.get(cases.newSubcaseForm.procedureName).click();
-    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseName)
+    // names start upperCase and contains capitals, check case insensitive
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseName,
+      {
+        matchCase: false,
+      })
       .scrollIntoView()
       .trigger('mouseover')
       .click();
@@ -289,7 +297,8 @@ function visitCaseWithLink(link) {
   cy.visit(link);
   // When opening a case with subcase, you should always get a loading screen.
   // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
-  cy.get(appuniversum.loader).should('exist');
+  // cy.get(appuniversum.loader).should('exist'); // this checking for loader sometimes fails
+  cy.get(cases.subcaseOverviewHeader.titleContainer).should('exist');
   cy.get(appuniversum.loader, {
     timeout: 60000,
   }).should('not.exist');

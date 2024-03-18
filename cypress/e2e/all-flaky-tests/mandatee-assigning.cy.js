@@ -65,7 +65,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       mandatees: mandatees,
     };
 
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
 
     // cy.addSubcaseMandatee(mandateeNames.current.first);
@@ -82,7 +82,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', mandateeNames.current.first.lastName);
-    cy.wait(10000);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
@@ -115,7 +114,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       subcaseType: subcaseType,
       subcaseName: subcaseName,
     };
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -163,7 +162,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       subcaseName: subcaseName,
     };
 
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
     cy.get(mandatee.mandateePanelView.row.name);
     cy.openAgendaForDate(agendaDate);
@@ -200,7 +199,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if subcase has the same amount of mandatees
     cy.intercept('GET', '/subcases?filter**').as('getSubcase');
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.wait('@getSubcase');
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');

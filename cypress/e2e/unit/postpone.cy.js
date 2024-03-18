@@ -181,7 +181,7 @@ context('Decision postponing tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.postponed)
       .should('exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
+    cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
       .as('phases');
     cy.get('@phases').eq(0)
       .contains(/Ingediend voor agendering op/);
@@ -206,7 +206,7 @@ context('Decision postponing tests', () => {
     });
 
     // add new doc (6) on subcase
-    cy.visit('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');
     cy.addDocumentsToSubcase(files2);
     // check all docs visible
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
@@ -279,7 +279,7 @@ context('Decision postponing tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
 
     // check if planned start is last agenda
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
+    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
 
     // add new doc (7)
     cy.get(route.subcase.add).click();

@@ -192,14 +192,14 @@ context('Decision tests pre digital agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.visitCaseWithLink('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     // set subcase to confidential
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.visitCaseWithLink('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
@@ -221,7 +221,7 @@ context('Decision tests pre digital agenda', () => {
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
     // revert subcase confidentiality
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.visitCaseWithLink('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
@@ -267,7 +267,7 @@ context('Decision tests pre digital agenda', () => {
       .contains(accessCabinet);
 
     // set subcase to confidential again
-    cy.visit('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
+    cy.visitCaseWithLink('/dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6283927B7A5496079478E276');
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()

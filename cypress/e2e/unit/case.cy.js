@@ -110,11 +110,11 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseDescription.shortTitle).contains(subcase.newShortTitle);
     cy.get(cases.subcaseDescription.confidentialityPill);
     // ensure type is correct
-    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase.type);
+    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase.agendaitemType);
     // ensure confidentiality & type is the same after copy to new subcase
     cy.addSubcaseViaModal(subcaseClone);
     cy.get(cases.subcaseDescription.shortTitle).contains(subcaseClone.newShortTitle);
-    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase.type);
+    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase.agendaitemType);
     cy.get(cases.subcaseDescription.confidentialityPill);
   });
 
@@ -326,10 +326,16 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseDescription.meetingNumber).should('not.contain', 'Nog geen nummer');
     // TODO KAS-4529 meetingPlannedStart not there
     // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
-    // TODO KAS-4529 requestedBy only available in mandatees panel. What if it doesn't match?
-    // cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
 
-    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase1.type);
+    // check submitter
+    cy.get(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName)
+      .parent(mandatee.mandateePanelView.rows)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+
+    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase1.agendaitemType);
     // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
     // also, titltesView no longer exists
     // cy.get(cases.subcaseTitlesView.subcaseName).contains(subcaseName);
@@ -425,9 +431,15 @@ context('Create case as Admin user', () => {
     cy.get(auk.loader).should('not.exist');
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormattedMonthDutch);
     // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
-    // cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
+    // check submitter
+    cy.get(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName)
+      .parent(mandatee.mandateePanelView.rows)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
 
-    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase2.type);
+    cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase2.agendaitemType);
     // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
     // also, titltesView no longer exists
     // cy.get(cases.subcaseTitlesView.subcaseName).should('not.exist');

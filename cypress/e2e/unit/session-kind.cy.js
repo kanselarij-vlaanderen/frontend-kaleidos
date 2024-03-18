@@ -156,7 +156,8 @@ context('Different session kinds should show different titles', () => {
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
     // cy.get(cases.subcaseHeader.actions.proposeForAgenda).should('contain', fullmeetingNumberVV);
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
-    cy.proposeSubcaseForAgenda(agendaDate, fullmeetingNumberVV);
+    // TODO KAS-4529 numberrep no longer visible
+    cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 1);
     // PVV agenda doesn't have approval item by default

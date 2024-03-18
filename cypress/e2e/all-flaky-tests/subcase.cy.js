@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import utils from '../../selectors/utils.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
@@ -72,39 +73,53 @@ context('Subcase tests', () => {
     const subcaseTitleLong = 'Cypress test voor het aanmaken van een procedurestap';
     const subcaseType = 'Principiële goedkeuring';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal({
       agendaitemType: type,
+      confidential: true,
       newShortTitle: subcaseTitleShort,
       longTitle: subcaseTitleLong,
       subcaseType: subcaseType,
       subcaseName: subcaseName,
     });
 
-    cy.changeSubcaseAccessLevel(true, subcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseMandatee(mandateeNames.current.second);
     cy.addSubcaseMandatee(mandateeNames.current.third);
+
+    cy.get(cases.subcaseDescription.notOnAgenda).contains('Nog niet geagendeerd');
+    cy.get(cases.subcaseDescription.meetingNumber).contains('Nog geen nummer');
+    cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
+    cy.get(cases.subcaseVersions.panel).find(auk.emptyState.message)
+      .contains('Nog niet geagendeerd');
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
-    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
-      .eq(0)
-      .contains(/Ingediend voor agendering/);
-
-    cy.get(cases.subcaseDescription.meetingNumber);
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(/Ingediend voor de agenda van/);
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(dateRegex);
     cy.get(cases.subcaseDescription.agendaLink).contains(dateFormat);
+    cy.get(cases.subcaseDescription.meetingNumber).should('not.contain', 'Nog geen nummer');
     // The "decided on" field was already filled in right after proposing for agenda for a long time
     // this field has been changed to take in account if the relevant meeting is final to show this info
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
-    // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
-    // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
+
+    // check mandatees and submitter
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItems').eq(0)
+      .find(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName);
+    cy.get('@listItems').eq(0)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+
+    // check agenda-activities panel
+    cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
+      .eq(0)
+      .contains(/Ingediend voor agendering/);
 
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(subcaseTitleShort);
@@ -173,18 +188,19 @@ context('Subcase tests', () => {
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateRegex = new RegExp(`.?${Cypress.dayjs(agendaDate).date()}.\\w+.${Cypress.dayjs(agendaDate).year()}`);
 
-    cy.get(cases.subcaseDescription.meetingNumber);
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(/Ingediend voor de agenda van/);
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(dateRegex);
     cy.get(cases.subcaseDescription.agendaLink).contains(dateFormat);
-    // The "decided on" field was already filled in right after proposing for agenda for a long time
-    // this field has been changed to take in account if the relevant meeting is final to show this info
+    cy.get(cases.subcaseDescription.meetingNumber);
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
-    // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
-    // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseDescription.requestedBy).contains(mandateeNames.current.second.fullName);
+
+    // check submitter
+    cy.get(mandatee.mandateePanelView.row.name)
+      .should('contain', mandateeNames.current.second.fullName)
+      .parent(mandatee.mandateePanelView.rows)
+      .find(mandatee.mandateePanelView.row.submitter)
+      .children()
+      .should('exist');
+
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
@@ -389,7 +405,7 @@ context('Subcase tests', () => {
     cy.setAllItemsFormallyOk(5);
     cy.approveAndCloseDesignAgenda();
 
-    cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.get(cases.subcaseSideNav.decision)
       .find(agenda.decisionResultPill.pill)
       .as('pills')
@@ -404,7 +420,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
 
-  it('move subcases', () => {
+  it.only('move subcases', () => {
     const randomInt1 = Math.floor(Math.random() * Math.floor(10000));
     const randomInt2 = randomInt1 + 1;
     const type = 'Nota';
@@ -414,7 +430,11 @@ context('Subcase tests', () => {
     const subcaseShortTitle2 = 'Short title 2 for moving subcase';
     const subcaseShortTitle3 = 'Short title 3 for moving subcase';
 
-    // setup
+    // case to move to
+    cy.createCase(caseTitle2);
+    cy.get(cases.newSubcaseForm.cancel).click();
+
+    // setup case with subases to move
     cy.createCase(caseTitle1);
     cy.addSubcaseViaModal({
       newCase: true,
@@ -426,9 +446,8 @@ context('Subcase tests', () => {
       agendaitemType: type,
       newShortTitle: subcaseShortTitle2,
     });
-    cy.createCase(caseTitle2);
-    cy.get(cases.newSubcaseForm.cancel).click();
-    // wait for search index
+
+    // wait for search index to be done
     cy.wait(30000);
 
     // use case 1

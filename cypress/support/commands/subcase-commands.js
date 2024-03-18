@@ -188,35 +188,26 @@ function addAgendaitemMandatee(mandateeNamesSelector = mandateeNames.current.fir
  * @memberOf Cypress.Chainable#
  * @function
  * @param {date} agendaDate - The date of the agenda
- * @param {String} numberRep - The specific numberRep for the agenda you want to use
+//  * @param {String} numberRep - The specific numberRep for the agenda you want to use
  */
 // TODO KAS-4529 refactor to use the pop up modal
-function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
+function proposeSubcaseForAgenda(agendaDate) {
   cy.log('proposeSubcaseForAgenda');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/meetings/*/submit').as(`submitSubcaseOnMeeting_${randomInt}`);
-  const monthDutch = getTranslatedMonth(agendaDate.month());
-  let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-  if (numberRep) {
-    formattedDate = `${formattedDate} - ${numberRep}`;
-  }
+  const formattedDate = agendaDate.format('DD-MM-YYYY');
 
   cy.get(cases.subcaseHeader.actionsDropdown)
     .children(appuniversum.button)
     .click();
   cy.get(cases.subcaseHeader.actions.showProposedAgendas).forceClick();
-
-  cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
-    .click();
-  cy.get(cases.subcaseHeader.showProposedAgendas)
-    .should('not.exist');
-
+  // find the agenda in the list
   cy.get(cases.proposableAgendas.agendaRow).children()
     .contains(formattedDate)
     .scrollIntoView()
     .click();
   cy.get(cases.proposableAgendas.placeOnAgenda).click();
-  cy.wait(`submitSubcaseOnMeeting_${randomInt}`, {
+  cy.wait(`@submitSubcaseOnMeeting_${randomInt}`, {
     timeout: 60000,
   });
   cy.get(cases.subcaseDescription.agendaLink, {

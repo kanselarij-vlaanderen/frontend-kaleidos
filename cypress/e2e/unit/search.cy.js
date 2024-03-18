@@ -250,7 +250,7 @@ context('Search tests', () => {
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
-      cy.visit('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05');
+      cy.visitCaseWithLink('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05');
       cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
       cy.changeSubcaseAccessLevel(null, newSubcase2TitleShort, subcase2TitleLong);
       cy.wait('@patchAgendaitem');
@@ -451,7 +451,7 @@ context('Search tests', () => {
       const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
       cy.createAgenda(null, agendaDate, null);
-      cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+      cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
       cy.addSubcaseViaModal({
         agendaitemType: type,
         newShortTitle: subcaseTitleShort,

@@ -70,6 +70,7 @@ context('Propagation to other graphs', () => {
     ];
     cy.createCase(caseTitle);
     cy.addSubcaseViaModal({
+      newCase: true,
       agendaitemType: 'Nota',
       newShortTitle: subcaseTitle1,
       longTitle: 'Cypress test voor het propageren naar overheid',

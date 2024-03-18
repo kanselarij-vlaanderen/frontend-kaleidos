@@ -28,7 +28,7 @@ context('Table Row Click tests', () => {
   });
 
   it('should open a case after clicking a row', () => {
-    cy.intercept('GET', '/decisionmaking-flows**').as('getCases');
+    cy.intercept('GET', '/cases**').as('getCases');
     cy.visit('/dossiers?aantal=2');
     cy.wait('@getCases');
     cy.get(route.casesOverview.dataTable).find('tbody')

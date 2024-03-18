@@ -98,6 +98,7 @@ const selectors = {
     agendaitemTypePill: '[data-test-subcase-description-agendaitem-type-pill',
     confidentialityPill: '[data-test-subcase-description-confidentiality-pill]',
     title: '[data-test-subcase-description-title]',
+    notOnAgenda: '[data-test-subcase-description-not-on-agenda]',
     agendaLink: '[data-test-subcase-description-agenda-link]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     decidedOn: '[data-test-subcase-description-decided-on]',
@@ -118,6 +119,11 @@ const selectors = {
     actions: {
       save: '[data-test-subcase-description-edit-save]',
     },
+  },
+
+  // subcase-versions-panel
+  subcaseVersions: {
+    panel: '[data-test-subcase-versions-panel]',
   },
 
   // TODO KAS-4529 remove / cleanup templates

@@ -63,7 +63,13 @@
       <div class="au-o-grid au-o-grid--small au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
-          <p class="auk-u-mt-1">{{await @subcase.type.label}}</p>
+          <p>
+            {{#if (await @subcase.type)}}
+              {{@subcase.type.label}}
+            {{else}}
+              -
+            {{/if}}
+          </p>
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "is-on-agenda"}}</AuHeading>
@@ -87,12 +93,14 @@
               {{/let}}
             {{/each}}
           {{else}}
-            {{t "not-yet-on-agenda"}}
+            <p data-test-subcase-description-not-on-agenda>
+              {{t "not-yet-on-agenda"}}
+            </p>
           {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading data-test-subcase-description-meeting-number @level="4" @skin="6">{{t "number-session"}}</AuHeading>
-          <p class="auk-u-mt-1">
+          <AuHeading @level="4" @skin="6">{{t "number-session"}}</AuHeading>
+          <p data-test-subcase-description-meeting-number>
             {{#if this.loadAgendaData.isRunning}}
                 <Auk::Loader />
               {{else if this.modelsOfMeetings}}
@@ -107,7 +115,7 @@
             </p>
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading data-test-subcase-description-decided-on @level="4" @skin="6">Status</AuHeading>
+          <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
           {{else if this.canShowDecisionStatus}}
@@ -115,7 +123,9 @@
               @decisionResultCode={{this.latestDecisionActivity.decisionResultCode}}
             />
           {{else}}
-            {{t "not-yet-decided"}}
+            <p data-test-subcase-description-decided-on>
+              {{t "not-yet-decided"}}
+            </p>
           {{/if}}
         </div>
       </div>
