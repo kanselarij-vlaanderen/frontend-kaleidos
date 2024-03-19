@@ -247,8 +247,11 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.panel);
     cy.get(cases.subcaseDescription.confidentialityPill).should('not.exist');
     cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
+    cy.intercept('PATCH', '/news-items/**').as('newsItemsPatch');
     cy.changeSubcaseAccessLevel(true) // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
+    // We automatically toggled hide in newsletter, await the patch
+    cy.wait('@newsItemsPatch');
 
     cy.get(cases.subcaseDescription.confidentialityPill);
     // Go to agendaitem
@@ -263,19 +266,17 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.edit).click();
 
     // Check the toggle switch
-    cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .parent()
-      .click();
+    // TODO this is now done automatically when toggling confidential
+    // cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
+    //   .parent()
+    //   .click();
 
     // Save the changes setting
     cy.intercept('PATCH', '/agendas/**').as('patchAgenda');
-    cy.intercept('PATCH', '/news-items/**').as('newsItemsPatch');
     cy.get(agenda.agendaitemTitlesEdit.actions.save)
       .contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
-    // We toggled hide in newsletter, await the patch
-    cy.wait('@newsItemsPatch');
 
     // Assert status shown & confidentiality icon is visible
     cy.get(agenda.agendaitemTitlesView.newsItem).find(appuniversum.pill)
@@ -417,7 +418,9 @@ context('Subcase tests', () => {
     cy.get('@pills').eq(2)
       .should('contain', decisionApproved);
     cy.openSubcase(2);
-    cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
+    cy.get(cases.subcaseDescription.panel)
+      .find(agenda.decisionResultPill.pill)
+      .should('contain', decisionApproved);
   });
 
   it('move subcases', () => {
@@ -554,7 +557,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
     cy.get(cases.newSubcaseForm.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(cases.newSubcaseForm.cancel).click();
 
     // TODO KAS-4529 sidebar
     // cy.get(cases.subcaseItem.link).eq(0)

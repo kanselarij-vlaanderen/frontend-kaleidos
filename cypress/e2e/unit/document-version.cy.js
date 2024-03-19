@@ -24,7 +24,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // verify more than 20 docs are showing on agendaitem (default page-size is capped at 20, needed to artificially increase)
     cy.intercept('GET', '/pieces?filter**agendaitems**').as('getPiecesOfAgendaitem');
-    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/documenten');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/documenten', true);
     cy.wait('@getPiecesOfAgendaitem', {
       timeout: 60000,
     });
@@ -58,7 +58,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // Case with proposed subcase
     // Cypress.dayjs('2020-04-07');
     cy.visitCaseWithLink('/dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA953A751CF7000800000C');
-    // these files exist on /dossiers/5EBA94E4751CF70008000005/deeldossiers/5EBA94F7751CF70008000007/documenten
+    // these files exist on /dossiers/5EBA94E4751CF70008000005/deeldossiers/5EBA94F7751CF70008000007
     const files = [
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2022 0202 DOC.0001-10',
@@ -87,7 +87,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
       .contains(linkedDocumentsNames[2]);
 
     // check if these documents are also on agendaitem
-    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/628615092E53BE1FC759BC6A/documenten');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/628615092E53BE1FC759BC6A/documenten', true);
     cy.get(document.linkedDocumentLink.name).eq(0)
       .contains(linkedDocumentsNames[0]);
     cy.get(document.linkedDocumentLink.name).eq(1)

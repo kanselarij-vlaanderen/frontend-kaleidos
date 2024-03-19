@@ -23,7 +23,7 @@ context('Propagation of confidentiality setup', () => {
   // const agendaDate = Cypress.dayjs('2022-04-20').hour(10);
   // const subcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
   const agendaitem1Link = 'vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EBFEC3CB8277FF058F0/documenten';
-  const procedurestep1Link = 'dossiers/E14FB4F6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62B06D82EC3CB8277FF058D0/documenten';
+  const procedurestep1Link = 'dossiers/E14FB4F6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62B06D82EC3CB8277FF058D0';
   const docName1 = 'VR 2022 2004 DOC.0001-01 propagatie intern secretarie';
   const docName2 = 'VR 2022 2004 DOC.0001-02 propagatie ministerraad';
   const docName3 = 'VR 2022 2004 DOC.0001-03 propagatie intern regering';
@@ -32,7 +32,7 @@ context('Propagation of confidentiality setup', () => {
 
   const subcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
   // const agendaitem2Link = 'vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EECEC3CB8277FF058F3/documenten';
-  const procedurestep2Link = 'dossiers/E14FB501-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62B06DF6EC3CB8277FF058DD/documenten';
+  const procedurestep2Link = 'dossiers/E14FB501-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62B06DF6EC3CB8277FF058DD';
   const docNameLocked1 = 'VR 2022 2004 DOC.0002-01 propagatie vertrouwelijk intern secretarie';
   const docNameLocked2 = 'VR 2022 2004 DOC.0002-02 propagatie vertrouwelijk ministerraad';
   const docNameLocked3 = 'VR 2022 2004 DOC.0002-03 propagatie vertrouwelijk intern regering';
