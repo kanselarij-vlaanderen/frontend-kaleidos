@@ -14,6 +14,7 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
   @service currentSession;
   @service subcasesService;
 
+  @tracked comments = [];
   @tracked subcaseType = null;
   @tracked latestMeeting = null;
   @tracked latestAgenda = null;
@@ -25,7 +26,21 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
   constructor() {
     super(...arguments);
     this.loadAgendaData.perform();
+    this.loadComments.perform();
   }
+
+  loadComments = task(async () => {
+    const retrievedPieces = await this.store.queryAll('retrieved-piece', {
+      'filter[parliament-retrieval-activity][generated-subcase][:id:]':
+        this.args.subcase.id,
+    });
+    if (!retrievedPieces) {
+      this.comments = null;
+    } else {
+      const comments = retrievedPieces.map((piece) => piece.comment);
+      this.comments = comments;
+    }
+  });
 
   get showNotYetRequestedMessage() {
     return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(

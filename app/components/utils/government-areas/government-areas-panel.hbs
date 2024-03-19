@@ -24,8 +24,21 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  {{#if @governmentAreas.length}}
-    <Auk::Panel::Body @noPadding={{true}}>
+  <Auk::Panel::Body @noPadding={{if @governmentAreas.length true false}}>
+    {{#if @subcase.parliamentRetrievalActivity.themes}}
+      <div class="auk-u-m-4 auk-u-mb-2 auk-u-mt-2">
+        <p><strong>{{t "themes"}}: </strong>
+          <FormatList
+            @list={{@subcase.parliamentRetrievalActivity.themes}}
+            @locale="nl-be"
+            as |formattedPart|
+          >
+            {{formattedPart.value}}
+          </FormatList>
+        </p>
+      </div>
+    {{/if}}
+    {{#if @governmentAreas.length}}
       <table class="auk-table">
         <thead>
           <tr>
@@ -34,28 +47,30 @@
           </tr>
         </thead>
         <tbody>
-        {{#each this.rows as |row|}}
-          <tr data-test-government-areas-panel-row>
-            <td data-test-government-areas-panel-row-label>
-              {{row.governmentDomain.label}}
-            </td>
-            <td data-test-government-areas-panel-row-fields>
-              {{#if row.governmentFields}}
-                {{join ", " (map-by "label" row.sortedGovernmentFields)}}
-              {{else}}
-                {{t "dash"}}
-              {{/if}}
-            </td>
-          </tr>
-        {{/each}}
+          {{#each this.rows as |row|}}
+            <tr data-test-government-areas-panel-row>
+              <td data-test-government-areas-panel-row-label>
+                {{row.governmentDomain.label}}
+              </td>
+              <td data-test-government-areas-panel-row-fields>
+                {{#if row.governmentFields}}
+                  {{join ", " (map-by "label" row.sortedGovernmentFields)}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
         </tbody>
       </table>
-    </Auk::Panel::Body>
-  {{else}}
-    <Auk::Panel::Body>
-      <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
-    </Auk::Panel::Body>
-  {{/if}}
+    {{else}}
+      <Auk::EmptyState
+        data-test-government-areas-empty-state
+        @message={{t "no-added-government-fields"}}
+      />
+    {{/if}}
+
+  </Auk::Panel::Body>
 </Auk::Panel>
 
 {{#if this.isOpenEditModal}}

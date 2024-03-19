@@ -40,13 +40,12 @@
             "design-decreet-of"
             subcaseShortTitle=(capitalize @subcase.shortTitle)
           }}</AuHeading>
-        <div
-          class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
-        >
-        </div>
       </div>
       {{#if @subcase.title}}
         <p>{{capitalize @subcase.title}}</p>
+      {{/if}}
+      {{#if @subcase.parliamentRetrievalActivity}}
+        <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
       {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Body>
@@ -67,14 +66,12 @@
           <AuHeading @level="4" @skin="6">{{capitalize
               (t "remark")
             }}</AuHeading>
-          {{#if this.loadAgendaData.isRunning}}
+          {{#if this.loadComments.isRunning}}
             <Auk::Loader />
-          {{else if this.canShowDecisionStatus}}
-            <Decision::DecisionResultPill
-              @decisionResultCode={{this.latestDecisionActivity.decisionResultCode}}
-            />
           {{else}}
-            {{t "not-yet-decided"}}
+            {{#each this.comments as |comment|}}
+              <AuHelpText @skin="secondary">{{comment}}</AuHelpText>
+            {{/each}}
           {{/if}}
         </div>
       </div>
