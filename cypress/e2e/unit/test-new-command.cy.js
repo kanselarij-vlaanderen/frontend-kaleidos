@@ -73,7 +73,7 @@ context('testing new add subcase command', () => {
 
     cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
 
-    cy.visit('dossiers/655B933CD500B784623C3EAA/deeldossiers');
+    cy.visitCaseWithLink('dossiers/655B933CD500B784623C3EAA/deeldossiers');
 
     cy.addSubcaseViaModal(subcase1);
   });

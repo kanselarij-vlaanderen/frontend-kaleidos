@@ -548,7 +548,7 @@ context('Subcase tests', () => {
       .click();
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
-    cy.visit('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // TODO KAS-4529 sidebar does not show subcase name
     // cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();

@@ -304,7 +304,7 @@ context('Decision tests pre digital agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     };
 
-    cy.visit('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277');
+    cy.visitCaseWithLink('dossiers/E14FB58C-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628392827A5496079478E277');
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()

@@ -152,7 +152,7 @@ context('Agenda tests', () => {
     const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
-    cy.visit('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // keep this setup because we want to validate the trimming of text on creation of subcase
     cy.addSubcaseViaModal({
       agendaitemType: typeNota,
