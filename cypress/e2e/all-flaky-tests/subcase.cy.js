@@ -420,7 +420,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.decidedOn).contains(agendaDate.format('DD-MM-YYYY'));
   });
 
-  it.only('move subcases', () => {
+  it('move subcases', () => {
     const randomInt1 = Math.floor(Math.random() * Math.floor(10000));
     const randomInt2 = randomInt1 + 1;
     const type = 'Nota';
@@ -450,8 +450,7 @@ context('Subcase tests', () => {
     // wait for search index to be done
     cy.wait(30000);
 
-    // use case 1
-    cy.openCase(caseTitle1);
+    // use case 1. Move 1 subcase but more remain
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -468,7 +467,7 @@ context('Subcase tests', () => {
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseSideNav.decision).should('have.length', 1);
 
-    // use case 2
+    // use case 2. Move last subcase gives the option to delete the case (hard delete)
     cy.openCase(caseTitle1);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
@@ -484,11 +483,11 @@ context('Subcase tests', () => {
       .wait('@patchSubcases2');
     cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
-    cy.get(cases.subcaseItem.container).should('not.exist');
+    cy.get(cases.subcaseDescription.panel).should('not.exist');
     cy.openCase(caseTitle2);
     cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
 
-    // use case 3
+    // use case 3. Delete the case (hard delete)
     cy.openCase(caseTitle1);
     cy.addSubcaseViaModal({
       agendaitemType: type,

@@ -206,7 +206,7 @@ context('Decision postponing tests', () => {
     });
 
     // add new doc (6) on subcase
-    cy.visitCaseWithLink('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B');
     cy.addDocumentsToSubcase(files2);
     // check all docs visible
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);

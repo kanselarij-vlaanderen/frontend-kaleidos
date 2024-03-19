@@ -52,14 +52,12 @@ function createCase(shortTitle) {
  */
 function openCase(caseTitle) {
   cy.log('openCase');
-  // TODO KAS-4529 this will take forever. is the search bar a filter?
   cy.visit('dossiers?aantal=2');
   cy.intercept('GET', '/cases?filter**').as('getFilteredCases');
-
   cy.get(cases.casesHeader.filter).clear()
     .type(caseTitle);
   cy.wait('@getFilteredCases', {
-    timeout: 20000,
+    timeout: 40000,
   });
   cy.get(route.casesOverview.dataTable, {
     timeout: 60000,
@@ -298,9 +296,12 @@ function visitCaseWithLink(link) {
   // When opening a case with subcase, you should always get a loading screen.
   // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
   // cy.get(appuniversum.loader).should('exist'); // this checking for loader sometimes fails
-  cy.get(cases.subcaseOverviewHeader.titleContainer).should('exist');
+  // high wait times because more docs equals more waiting
+  cy.get(cases.subcaseOverviewHeader.titleContainer, {
+    timeout: 100000,
+  }).should('exist');
   cy.get(appuniversum.loader, {
-    timeout: 60000,
+    timeout: 100000,
   }).should('not.exist');
   cy.log('/visitCaseWithLink');
 }

@@ -61,7 +61,6 @@ function getTranslatedMonth(month) {
  */
 function openSubcase(index = 0) {
   cy.log('openSubcase');
-  // TODO KAS-4529 sidebar, no title, only type or a "stap #1"
   cy.get(cases.subcaseSideNav.subcase).eq(index)
     .click();
   cy.log('/openSubcase');

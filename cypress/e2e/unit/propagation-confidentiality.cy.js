@@ -65,14 +65,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -83,14 +83,14 @@ context('Propagation of confidentiality setup', () => {
   it('login as Secretarie and check access', () => {
     cy.login('Secretarie');
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -131,14 +131,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1, false);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -162,14 +162,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1, false);
     checkAccess(docName2);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2);
     checkAccess(docNameLocked3);
@@ -193,14 +193,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
     checkAccess(docName3);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2, false);
     checkAccess(docNameLocked3);
@@ -224,14 +224,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
     checkAccess(docName3, false);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2, false);
     checkAccess(docNameLocked3, false);
@@ -255,14 +255,14 @@ context('Propagation of confidentiality setup', () => {
     checkAccess(docNameLocked4);
     checkAccess(docNameLocked5);
 
-    cy.visit(procedurestep1Link);
+    cy.visitCaseWithLink(procedurestep1Link);
     checkAccess(docName1, false);
     checkAccess(docName2, false);
     checkAccess(docName3, false);
     checkAccess(docName4);
     checkAccess(docName5);
 
-    cy.visit(procedurestep2Link);
+    cy.visitCaseWithLink(procedurestep2Link);
     checkAccess(docNameLocked1, false);
     checkAccess(docNameLocked2, false);
     checkAccess(docNameLocked3, false);

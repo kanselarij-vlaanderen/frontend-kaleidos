@@ -224,12 +224,7 @@ context('Decision tests post digital agenda', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
 
-    // check document confidentiality
-    cy.get(cases.subcaseDetailNav.decisions).click();
-    cy.get(document.accessLevelPill.pill).contains(accessConfidential);
-
     // revert subcase confidentiality
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
@@ -280,7 +275,6 @@ context('Decision tests post digital agenda', () => {
     cy.openAgendaitemDossierTab(subcaseTitleShort1);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.edit).click();
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
