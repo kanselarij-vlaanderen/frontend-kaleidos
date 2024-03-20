@@ -1346,5 +1346,8 @@
   "agendaitem-document-postponed--message": "De documenten van een uitgesteld agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een uitgesteld punt niet van toepassing.",
   "agendaitem-document-retracted--message": "De documenten van een ingetrokken agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een ingetrokken punt niet van toepassing.",
   "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde",
-  "from-parliament": "Van het Vlaams Parlement"
+  "from-parliament": "Van het Vlaams Parlement",
+  "all-agendas": "Alle agenda's",
+  "all-cases": "Alle dossiers",
+  "all-sessions": "Alle ministerraden"
 }
