@@ -1344,7 +1344,6 @@
   "agendaitem-retracted-no-documents-available": "Dit agendapunt is ingetrokken. Er zijn geen documenten beschikbaar.",
   "agendaitem-document-postponed--message": "De documenten van een uitgesteld agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een uitgesteld punt niet van toepassing.",
   "agendaitem-document-retracted--message": "De documenten van een ingetrokken agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een ingetrokken punt niet van toepassing.",
-  "error-while-submitting-subcase-on-meeting": "Er ging iets mis tijdens het agenderen van de procedurestap: {error}",
   "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde",
   "all-agendas": "Alle agenda's",
   "all-cases": "Alle dossiers",

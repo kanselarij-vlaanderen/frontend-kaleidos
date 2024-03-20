@@ -5,7 +5,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
-  @service currentSession
+  @service currentSession;
 
   beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case');

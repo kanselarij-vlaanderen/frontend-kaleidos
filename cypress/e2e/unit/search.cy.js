@@ -715,8 +715,11 @@ context('Search tests', () => {
       const shortTitle = 'test dossier om te verwijderen';
       cy.createCase(shortTitle);
       cy.get(cases.newSubcaseForm.cancel).click();
-      cy.get(cases.subcaseOverviewHeader.actions.archive).forceClick();
       cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
+      cy.get(cases.subcaseOverviewHeader.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(cases.subcaseOverviewHeader.actions.archive).forceClick();
       cy.get(auk.confirmationModal.footer.confirm).click()
         .wait('@patchDecisionFlow');
     });

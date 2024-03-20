@@ -1,8 +1,8 @@
 {{page-title (t "cases")}}
 <Cases::CasesHeader
   @didCreateNewCase={{this.navigateToDecisionmakingFlow}}
-  @setNameSearchText={{this.setNameSearchText}}
-  @nameSearchText={{this.nameSearchText}}
+  @onSetFilter={{this.setCaseFilter}}
+  @caseFilter={{this.caseFilter}}
 />
 <AuMainContainer class="l-search-container" as |m|>
   <m.sidebar>

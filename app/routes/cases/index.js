@@ -28,7 +28,7 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
-    nameSearchText: {
+    caseFilter: {
       refreshModel: true,
       as: 'dossier_naam',
     },
@@ -48,8 +48,8 @@ export default class CasesIndexRoute extends Route {
       },
     };
 
-    if (params.nameSearchText) {
-      options['filter[short-title]'] = params.nameSearchText;
+    if (params.caseFilter) {
+      options['filter[short-title]'] = params.caseFilter;
     }
 
     options['filter[:has:decisionmaking-flow]'] = true;

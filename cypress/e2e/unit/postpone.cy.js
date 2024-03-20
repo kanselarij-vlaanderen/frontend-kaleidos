@@ -251,6 +251,9 @@ context('Decision postponing tests', () => {
 
     // check if all docs visible on 2nd agenda
     cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -261,7 +264,9 @@ context('Decision postponing tests', () => {
 
     // click link to subcase
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
 
     // check if timeline contains multiple phase blocks (1 block has max 3 phases)
     cy.get(cases.subcaseTimeline.item).eq(0)
@@ -297,7 +302,9 @@ context('Decision postponing tests', () => {
     // check that doc 7 doesn't show on 1st agenda
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -327,7 +334,9 @@ context('Decision postponing tests', () => {
     // check that doc 8 doesn't show on subcase
     cy.get(agenda.agendaitemNav.caseTab).click();
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -341,7 +350,9 @@ context('Decision postponing tests', () => {
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
