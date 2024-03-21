@@ -20,10 +20,6 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-    showArchivedOnly: {
-      refreshModel: true,
-      as: 'toon_enkel_gearchiveerd',
-    },
     dateFrom: {
       refreshModel: true,
       as: 'van',
@@ -32,7 +28,7 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'tot',
     },
-    nameSearchText: {
+    caseFilter: {
       refreshModel: true,
       as: 'dossier_naam',
     },
@@ -52,11 +48,12 @@ export default class CasesIndexRoute extends Route {
       },
     };
 
-    if (params.nameSearchText) {
-      options['filter[short-title]'] = params.nameSearchText;
+    if (params.caseFilter) {
+      options['filter[short-title]'] = params.caseFilter;
     }
 
     options['filter[:has:decisionmaking-flow]'] = true;
+    options['filter[decisionmaking-flow][:has-no:closed]'] = true;
 
     if (isPresent(params.dateFrom)) {
       const date = startOfDay(parseDate(params.dateFrom));

@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isPresent } from '@ember/utils';
 
 export default class SubcaseBekrachtigingDescriptionPanelView extends Component {
@@ -21,7 +20,6 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
   @tracked latestAgendaitem = null;
   @tracked latestDecisionActivity = null;
   @tracked approved = null;
-  @tracked modelsOfMeetings = [];
 
   constructor() {
     super(...arguments);
@@ -41,12 +39,6 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
       this.comments = comments;
     }
   });
-
-  get showNotYetRequestedMessage() {
-    return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(
-      this.subcaseType?.uri
-    );
-  }
 
   get canShowDecisionStatus() {
     return (
@@ -72,7 +64,6 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
       ?.slice()
       ?.sort((a1, a2) => a1.startDate - a2.startDate);
 
-    this.modelsOfMeetings = [];
     for (const [index, agendaActivity] of sortedAgendaActivities
       .slice()
       .entries()) {
@@ -93,14 +84,13 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
       const treatment = yield agendaitem?.treatment;
       const decisionActivity = yield treatment?.decisionActivity;
-      const resultCode = yield decisionActivity?.decisionResultCode;
+      yield decisionActivity?.decisionResultCode;
       // Other profiles should not have the latest decision when decisions have not been released yet
       if (decisionActivity) {
         // the last decision might be null, keep only the last one that exists
         this.latestDecisionActivity = decisionActivity;
       }
 
-      this.modelsOfMeetings.push([meeting, agenda, agendaitem, resultCode]);
       // we need this multiple times in the template and navigating the nested array each time is bothersome
       if (index === agendaActivities.length - 1) {
         this.latestMeeting = meeting;

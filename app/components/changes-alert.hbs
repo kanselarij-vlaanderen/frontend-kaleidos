@@ -16,7 +16,7 @@
         <AuButton
           class="au-u-flex-item--fixed"
           data-test-changes-alert-confirm
-          @skin="secondary"
+          @skin={{if @skin @skin "secondary"}}
           {{on "click" @onConfirm}}
         >
           {{@buttonText}}

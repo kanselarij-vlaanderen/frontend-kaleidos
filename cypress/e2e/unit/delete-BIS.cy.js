@@ -40,11 +40,15 @@ context('Delete BIS tests', () => {
       }
     ];
     cy.createCase(caseTitle);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test voor het propageren naar overheid',
-      'Principiële goedkeuring',
-      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    const subcase = {
+      newCase: true,
+      agendaitemType: 'Nota',
+      newShortTitle: subcaseTitle1,
+      longTitle: 'Cypress test voor het propageren naar overheid',
+      subcaseType: 'principiële goedkeuring',
+      subcaseName: 'Principiële goedkeuring m.h.o. op adviesaanvraag',
+    };
+    cy.addSubcaseViaModal(subcase);
     cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);

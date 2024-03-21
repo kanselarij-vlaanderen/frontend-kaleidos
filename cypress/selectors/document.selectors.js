@@ -93,6 +93,10 @@ const selectors = {
     add: '[data-test-linked-documents-add]',
   },
 
+  linkedDocumentsPanel: {
+    add: '[data-test-linked-documents-panel-add]',
+  },
+
   // linked-document-link
   linkedDocumentLink: {
     card: '[data-test-linked-document-link-card]',

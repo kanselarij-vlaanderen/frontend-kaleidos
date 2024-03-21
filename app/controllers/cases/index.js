@@ -27,11 +27,6 @@ export default class CasesIndexController extends Controller {
       },
     },
     {
-      showArchivedOnly: {
-        type: 'boolean',
-      },
-    },
-    {
       dateFrom: {
         type: 'string',
       },
@@ -42,7 +37,7 @@ export default class CasesIndexController extends Controller {
       },
     },
     {
-      nameSearchText: {
+      caseFilter: {
         type: 'string',
       },
     },
@@ -59,7 +54,7 @@ export default class CasesIndexController extends Controller {
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];
-  @tracked nameSearchText = null;
+  @tracked caseFilter = null;
   @tracked isLoadingModel;
 
   @action
@@ -76,7 +71,7 @@ export default class CasesIndexController extends Controller {
     );
   }
 
-  setNameSearchText = (value) => (this.nameSearchText = value);
+  setCaseFilter = (value) => (this.caseFilter = value);
 
   nextPage = () => (this.page += 1);
   prevPage = () => (this.page -= 1);
