@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isPresent } from '@ember/utils';
 
 export default class SubcaseDescriptionView extends Component {
@@ -25,12 +24,6 @@ export default class SubcaseDescriptionView extends Component {
   constructor() {
     super(...arguments);
     this.loadAgendaData.perform();
-  }
-
-  get showNotYetRequestedMessage() {
-    return ![CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(
-      this.subcaseType?.uri
-    );
   }
 
   get canShowDecisionStatus() {

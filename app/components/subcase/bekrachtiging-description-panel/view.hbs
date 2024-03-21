@@ -1,5 +1,5 @@
 <div {{did-update (perform this.loadAgendaData)}}>
-  <Auk::Panel data-test-subcase-description-panel>
+  <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
@@ -20,7 +20,6 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <AuButton
-                data-test-subcase-description-edit
                 @skin="naked"
                 @icon="pencil"
                 {{on "click" @onClickEdit}}
@@ -36,10 +35,9 @@
       <div
         class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center"
       >
-        <AuHeading @level="4" @skin="4">{{t
-            "design-decreet-of"
-            subcaseShortTitle=(capitalize @subcase.shortTitle)
-          }}</AuHeading>
+        <AuHeading @level="4" @skin="4">
+          {{capitalize @subcase.shortTitle}}
+        </AuHeading>
       </div>
       {{#if @subcase.title}}
         <p>{{capitalize @subcase.title}}</p>
@@ -63,14 +61,16 @@
           {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
-          <AuHeading @level="4" @skin="6">{{capitalize
-              (t "remark")
-            }}</AuHeading>
+          <AuHeading @level="4" @skin="6">
+            {{capitalize (t "remark")}}
+          </AuHeading>
           {{#if this.loadComments.isRunning}}
             <Auk::Loader />
           {{else}}
             {{#each this.comments as |comment|}}
               <AuHelpText @skin="secondary">{{comment}}</AuHelpText>
+            {{else}}
+            -
             {{/each}}
           {{/if}}
         </div>
