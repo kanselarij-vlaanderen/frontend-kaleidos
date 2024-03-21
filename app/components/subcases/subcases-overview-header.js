@@ -44,8 +44,8 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  async saveCase(caseData) {
-    await this.args.onSaveCase(caseData);
+  async saveCase() {
+    await this.case.save();
     this.closeEditCaseModal();
   }
 
@@ -63,6 +63,14 @@ export default class SubCasesOverviewHeader extends Component {
     await decisionmakingFlow.save();
     this.router.refresh();
     this.isArchivingCase = false;
+  }
+
+  @action
+  async unArchiveCase() {
+    const decisionmakingFlow = await this.case.decisionmakingFlow;
+    decisionmakingFlow.closed = null;
+    await decisionmakingFlow.save();
+    this.router.refresh();
   }
 
   @action

@@ -28,7 +28,7 @@ function changeSubcaseType(subcaseLink, type) {
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda${randomInt}`);
   cy.intercept('DELETE', '/news-items/**').as(`deleteNewsItem${randomInt}`);
   cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
-  cy.get(cases.subcaseDescriptionEdit.save).click();
+  cy.get(cases.subcaseDescriptionEdit.actions.save).click();
   cy.wait(`@patchSubcase${randomInt}`);
   cy.wait(`@patchAgendaitem${randomInt}`);
   cy.wait(`@patchAgenda${randomInt}`);

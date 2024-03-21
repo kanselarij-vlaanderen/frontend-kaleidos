@@ -7,11 +7,19 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
+ * @argument onSetFilter
+ * @argument caseFilter: filter's initial value
  */
 export default class CasesHeader extends Component {
   @service router;
 
   @tracked isOpenNewCaseAddSubcaseModal = false;
+  @tracked filterText;
+
+  constructor() {
+    super(...arguments);
+    this.filterText = this.args.caseFilter || '';
+  }
 
   @action
   saveNewCaseAddSubcase(decisionmakingFlow) {
@@ -20,15 +28,13 @@ export default class CasesHeader extends Component {
   }
 
   debouncedSetFilter = restartableTask(async (event) => {
-    if (event.target.value === "") {
-      this.clearFilter();
-      return;
-    }
+    this.filterText = event.target.value;
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
-    this.args.setNameSearchText(event.target.value);
+    this.args.onSetFilter(this.filterText);
   });
 
   clearFilter = () => {
-    this.args.setNameSearchText(null);
+    this.filterText = '';
+    this.args.onSetFilter(this.filterText);
   }
 }

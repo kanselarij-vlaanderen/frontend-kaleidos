@@ -26,8 +26,8 @@ context('testing new add subcase command', () => {
     const agendaType = 'Nota';
     const newShortTitle = 'Test ShortTitle';
     const longTitle = 'Test Longtitle';
-    const step = 'principiële goedkeuring';
-    const stepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const subcaseType = 'principiële goedkeuring';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const mandatee1 = {
       fullName: mandateeNames.current.first.fullName,
       submitter: false,
@@ -58,12 +58,12 @@ context('testing new add subcase command', () => {
     ];
 
     const subcase1 = {
-      type: agendaType,
+      agendaitemType: agendaType,
       confidential: true,
       newShortTitle: newShortTitle,
       longTitle: longTitle,
-      step: step,
-      stepName: stepName,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
       mandatees: mandatees,
       domains: domains,
       documents: files1,
@@ -73,7 +73,7 @@ context('testing new add subcase command', () => {
 
     cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
 
-    cy.visit('dossiers/655B933CD500B784623C3EAA/deeldossiers');
+    cy.visitCaseWithLink('dossiers/655B933CD500B784623C3EAA/deeldossiers');
 
     cy.addSubcaseViaModal(subcase1);
   });
