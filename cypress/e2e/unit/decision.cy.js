@@ -69,7 +69,7 @@ context('Decision tests post digital agenda', () => {
       subcaseType: subcaseType1,
       subcaseName: subcaseName1,
     });
-    cy.createAgenda('Ministerraad', agendaDate);
+    cy.createAgenda('Ministerraad', agendaDate, null, 100);
   });
 
   it('should test the document CRUD for a decision', () => {
@@ -567,9 +567,9 @@ context('Decision tests post digital agenda', () => {
 
   it('should test generate all decisions pdf', () => {
     const agendaDate4 = Cypress.dayjs('2023-11-28').hour(10);
-    // TODO: VR number is dynamic
     // const downloadPath = 'cypress/downloads';
-    // const downloadDecisionPDF = `${downloadPath}/VR PV 2023-3 - ALLE BESLISSINGEN.pdf`;
+    const fileName = 'VR PV 2023-100 - ALLE BESLISSINGEN.pdf';
+    // const downloadDecisionPDF = `${downloadPath}/${fileName}`;
 
     cy.openAgendaForDate(agendaDate4);
     cy.get(agenda.agendaActions.optionsDropdown).children(appuniversum.button)
@@ -577,13 +577,12 @@ context('Decision tests post digital agenda', () => {
     cy.get(agenda.agendaActions.generateSignedDecisionsBundle).forceClick();
     cy.wait(8000);
 
-    cy.get(agenda.agendaTabs.tabs).contains('Documenten')
+    cy.clickReverseTab('Documenten');
+
+    cy.get(document.documentCard.name.value).contains(fileName)
       .click();
 
-    cy.get(document.documentCard.name.value).contains('ALLE BESLISSINGEN')
-      .click();
-
-    cy.get(document.documentPreview.downloadLink).click();
+    // cy.get(document.documentPreview.downloadLink).click();
 
     // cy.readFile(downloadDecisionPDF, {
     //   timeout: 25000,
