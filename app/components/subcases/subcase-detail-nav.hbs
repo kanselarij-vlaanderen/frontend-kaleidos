@@ -1,17 +1,34 @@
-<Auk::Tabs @reversed={{true}}>
-  <Auk::Tab
-    @route="cases"
-    @isHierarchicalBack={{true}}
-  >
-    {{t "all-cases"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.index">
-    {{t "overview"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-documents @route="cases.case.subcases.subcase.documents">
-    {{t "documents"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-decisions @route="cases.case.subcases.subcase.decision">
-    {{capitalize (t "decision")}}
-  </Auk::Tab>
-</Auk::Tabs>
+<div>
+  <div class="c-anchor-nav-holder">
+    <p>{{t "on-this-page"}}: </p>
+    <ul class="au-c-anchor-nav">
+      <li>
+        <a
+          href="#case"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "case"}}
+        >
+          {{t "overview"}}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#documents"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "documents"}}
+        >
+          {{t "documents"}}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#agenda"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "agenda"}}
+        >
+          {{t "agenda-activities"}}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

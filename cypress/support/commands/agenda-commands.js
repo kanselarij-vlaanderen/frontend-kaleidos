@@ -204,8 +204,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} link The link to visit, should be "/vergadering/id/agenda/id/agendapunten" or "/vergadering/id/agenda/id/agendapunten/id"
+ * @param {boolean} longWait if many documents need to be loaded (20+) 60000 ms is not enough to ensure loading
  */
-function visitAgendaWithLink(link) {
+function visitAgendaWithLink(link, longWait = false) {
   cy.log('visitAgendaWithLink');
   // cy.intercept('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
@@ -213,8 +214,10 @@ function visitAgendaWithLink(link) {
   // When opening an agenda, you should always get a loading screen.
   // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
   cy.get(appuniversum.loader).should('exist');
+  // to be used when opening the document route with many docs (ex. document-version.cy.js)
+  const waitTime = longWait ? 200000 : 60000 ;
   cy.get(appuniversum.loader, {
-    timeout: 60000,
+    timeout: waitTime,
   }).should('not.exist');
   cy.log('/visitAgendaWithLink');
 }

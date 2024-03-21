@@ -93,7 +93,7 @@ services:
     user: ${HOST_UID_GID}
   agenda-submission:
     environment:
-      CACHE_CLEAR_TIMEOUT: 8000
+      CACHE_CLEAR_TIMEOUT: 10000
   vlaams-parlement-sync:
     environment:
       ENABLE_SENDING_TO_VP_API: "false" # enable/disable the actual call to the VP-API

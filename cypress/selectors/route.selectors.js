@@ -71,27 +71,15 @@ const selectors = {
 
   // cases/overview/template
   casesOverview: {
-    showArchived: '[data-test-route-cases-overview-show-archived]',
     dataTable: '[data-test-route-cases-overview-data-table]',
     row: {
       caseTitle: '[data-test-route-cases-overview-row-case-title]',
-      actionsDropdown: '[data-test-route-cases-overview-row-actions-dropdown]',
-      actions: {
-        edit: '[data-test-route-cases-overview-row-actions-edit]',
-        archive: '[data-test-route-cases-overview-row-actions-archive]',
-      },
       goToCase: '[data-test-route-cases-overview-row-go-to-case]',
     },
   },
 
-  // cases/case/subcase/subcase/overview/template
-  subcaseOverview: {
-    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox]',
-  },
-
-  subcaseDocuments: {
-    batchEdit: '[data-test-route-cases---subcase-documents-batch-edit]',
-    add: '[data-test-route-cases---subcase-documents-add]',
+  subcase: {
+    add: '[data-test-route-cases---subcase-add-documents]',
   },
 
   /**
