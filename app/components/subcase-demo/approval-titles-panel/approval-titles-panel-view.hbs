@@ -90,6 +90,8 @@
           {{else}}
           <p class="auk-u-mt-1">{{@step}}</p>
           {{/if}}
+          <AuHeading @level="4" @skin="6" class="au-u-margin-top-small">Procedurestap naam</AuHeading>
+          <p class="auk-u-mt-1">{{@subcase.subcaseName}}</p>
         </div>
         {{#if (eq @kabinet true)}}
         <div class="au-o-grid__item au-u-1-2 au-u-3-4@medium">
@@ -105,6 +107,7 @@
           {{else if (eq @step 'Eerste principiële goedkeuring')}}
           <p class="auk-u-mt-1">01 april 2023</p>
           {{/if}}
+          <p class="auk-u-mt-1"><AuPill @skin="border" @size="small">Via electronische procedure</AuPill></p>
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Nummer vergadering</AuHeading>
