@@ -1348,5 +1348,8 @@
   "all-agendas": "Alle agenda's",
   "all-cases": "Alle dossiers",
   "all-sessions": "Alle ministerraden",
-  "case-actions": "Dossier acties"
+  "case-actions": "Dossier acties",
+  "check-documents-to-be-sent-to-vp": "Vink de documenten aan die je naar het Vlaams Parlement wilt doorsturen.",
+  "possible-pieces-missing": "Kijk na of de bovenstaande lijst volledig is.",
+  "automatic-check-performed-possible-pieces-missing":"Op basis van een automatische controle lijken de volgende documenten te ontbreken. Wil je ze toch indienen? Laad ze dan op en stuur ze vervolgens door."
 }
