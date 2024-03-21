@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { task } from 'ember-concurrency';
 
 /**
  * @param decisionResultCode {DecisionResultCode}
@@ -10,6 +11,17 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  */
 export default class DecisionResultPill extends Component {
   @service intl;
+
+  constructor() {
+    super(...arguments);
+    // Resolve possible promise from args
+    this.loadDecisionResultCode.perform();
+  }
+
+  @task
+  *loadDecisionResultCode() {
+    yield this.args.decisionResultCode;
+  }
 
   get skin() {
     const codes = CONSTANTS.DECISION_RESULT_CODE_URIS;
