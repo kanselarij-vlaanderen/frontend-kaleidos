@@ -148,15 +148,16 @@ context('Different session kinds should show different titles', () => {
 
     // check procedure step view
     cy.createCase(newCaseTitle);
-    // adding a subcase without a new shorttitle will use the shorttitle from case
-    cy.addSubcase();
-    cy.openSubcase(0);
+    cy.addSubcaseViaModal({
+      newCase: true,
+    });
     // TODO-bug multiple clicks on dropdown are flakey
     // Check if both agendas are listed in dropdown
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
     // cy.get(cases.subcaseHeader.actions.proposeForAgenda).should('contain', fullmeetingNumberVV);
     // cy.get(cases.subcaseHeader.showProposedAgendas).click();
-    cy.proposeSubcaseForAgenda(agendaDate, fullmeetingNumberVV);
+    // TODO KAS-4529 numberrep no longer visible
+    cy.proposeSubcaseForAgenda(agendaDate);
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 1);
     // PVV agenda doesn't have approval item by default

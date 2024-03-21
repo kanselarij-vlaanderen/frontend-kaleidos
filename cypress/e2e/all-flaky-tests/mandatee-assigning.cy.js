@@ -57,18 +57,16 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     };
     const mandatees = [mandatee1, mandatee2];
     const subcase1 = {
-      type: type,
+      agendaitemType: type,
       newShortTitle: SubcaseTitleShort,
       longTitle: subcaseTitleLong,
-      step: subcaseType,
-      stepName: subcaseName,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
       mandatees: mandatees,
     };
 
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
-    // cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
-    // cy.openSubcase(0, SubcaseTitleShort);
 
     // cy.addSubcaseMandatee(mandateeNames.current.first);
     // cy.addSubcaseMandatee(mandateeNames.current.second);
@@ -84,7 +82,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
       .should('contain', mandateeNames.current.first.lastName);
-    cy.wait(10000);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Check if agendaitem has the same amount of mandatees
@@ -111,15 +108,14 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     const subcase1 = {
-      type: type,
+      agendaitemType: type,
       newShortTitle: SubcaseTitleShort,
       longTitle: subcaseTitleLong,
-      step: subcaseType,
-      stepName: subcaseName,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
     };
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
-    // cy.openSubcase(0, SubcaseTitleShort);
     cy.proposeSubcaseForAgenda(agendaDate);
 
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
@@ -159,14 +155,14 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
     const subcase1 = {
-      type: type,
+      agendaitemType: type,
       newShortTitle: SubcaseTitleShort,
       longTitle: subcaseTitleLong,
-      step: subcaseType,
-      stepName: subcaseName,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
     };
 
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.addSubcaseViaModal(subcase1);
     cy.get(mandatee.mandateePanelView.row.name);
     cy.openAgendaForDate(agendaDate);
@@ -203,9 +199,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     // Check if subcase has the same amount of mandatees
     cy.intercept('GET', '/subcases?filter**').as('getSubcase');
-    cy.visit('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB4BA-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     cy.wait('@getSubcase');
-    cy.openSubcase(0);
 
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {

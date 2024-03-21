@@ -5,10 +5,9 @@
         <AuLink
           @skin="button-naked"
           @icon="hierarchical-back"
-          @hideText={{true}}
-          {{on "click" this.transitionBack}}
+          @route="cases"
         >
-          {{t "back"}}
+          {{t "all-cases"}}
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
@@ -16,10 +15,12 @@
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
-          <Auk::AbbreviatedText
-            @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
-            @maxLength={{250}}
-          />
+          <h4 class="auk-toolbar-complex__title au-u-padding-none">
+            <Auk::AbbreviatedText
+              @text={{or this.case.shortTitle this.case.title}}
+              @maxLength={{250}}
+            />
+          </h4>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
@@ -50,53 +51,58 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if (user-may "manage-cases")}}
+    {{#if (and (user-may "manage-cases") (not this.loadData.isRunning))}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <AuButton
-            data-test-subcase-overview-header-edit-case
-            @skin="primary"
-            @icon="pencil"
-            {{on "click" this.openEditCaseModal}}
+          <AuDropdown
+            data-test-subcase-overview-header-actions-dropdown
+            @title={{t "case-actions"}}
+            @alignment="right"
+            @skin="secondary"
           >
-            {{t "edit-case"}}
-          </AuButton>
+            <AuButton
+              data-test-subcase-overview-header-edit-case
+              @skin="link"
+              {{on "click" this.openEditCaseModal}}
+              role="menuitem"
+            >
+              {{t "edit-case"}}
+            </AuButton>
+            <AuButton
+              data-test-subcase-overview-header-archive
+              @skin="link"
+              @alert={{true}}
+              role="menuitem"
+              {{on
+                "click"
+                (fn
+                  (if
+                    @decisionmakingFlow.closed
+                    this.unArchiveCase
+                    this.openArchiveCaseModal
+                  )
+                )
+              }}
+            >
+              {{t (if @decisionmakingFlow.closed "unarchive-case" "archive-case")}}
+            </AuButton>
+          </AuDropdown>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <AuButton
-            data-test-subcase-overview-header-create-subcase
+            data-test-subcase-overview-header-open-add-subcase
             @skin="primary"
             @icon="plus"
-            {{on "click" this.openAddSubcaseModal}}
+            {{on "click" this.navigateToAddSubcase}}
           >
             {{t "create-subcase"}}
           </AuButton>
-        </Auk::Toolbar::Item>
-        {{#if this.isEnabledNewCaseCreation}}
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-subcase-overview-header-open-add-subcase
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.navigateToAddSubcase}}
-            >
-              {{t "create-subcase-new"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        {{/if}}
+        </Auk::Toolbar::Item>         
       </Auk::Toolbar::Group>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
 {{! MODAL }}
-{{#if this.showAddSubcaseModal}}
-  <Cases::NewSubcase
-    @onClose={{this.closeAddSubcaseModal}}
-    @onCreate={{this.onCreateSubcase}}
-    @decisionmakingFlow={{@decisionmakingFlow}}
-  />
-{{/if}}
-
 {{#if this.showEditCaseModal}}
   <Cases::EditCase
     @onClose={{this.closeEditCaseModal}}
@@ -104,3 +110,13 @@
     @case={{this.case}}
   />
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isArchivingCase}}
+  @title={{t "archive-case"}}
+  @message={{t "archive-case-message"}}
+  @onConfirm={{this.archiveCase}}
+  @onCancel={{this.closeArchiveCaseModal}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+/>
