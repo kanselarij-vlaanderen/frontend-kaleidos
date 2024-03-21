@@ -49,16 +49,23 @@ function createCase(shortTitle) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} caseTitle The title to search in the list of cases, should be unique
+ * @param {Boolean} filter If filtering should happen before checking the rows in the datatable, default true
  */
-function openCase(caseTitle) {
+function openCase(caseTitle, filter = true) {
   cy.log('openCase');
-  cy.visit('dossiers?aantal=2');
-  cy.intercept('GET', '/cases?filter**').as('getFilteredCases');
-  cy.get(cases.casesHeader.filter).clear()
-    .type(caseTitle);
-  cy.wait('@getFilteredCases', {
-    timeout: 40000,
-  });
+  if (filter) {
+    cy.visit('dossiers?aantal=2');
+    cy.intercept('GET', '/cases?filter**').as('getFilteredCases');
+    cy.get(cases.casesHeader.filter).clear()
+      .type(caseTitle);
+    cy.wait('@getFilteredCases', {
+      timeout: 40000,
+    });
+  } else {
+    // look for a recently created case,
+    cy.visit('dossiers?aantal=5');
+  }
+
   cy.get(route.casesOverview.dataTable, {
     timeout: 60000,
   }).contains(caseTitle)

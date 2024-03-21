@@ -467,11 +467,11 @@ context('Subcase tests', () => {
       .click()
       .wait('@patchSubcases1');
     cy.get(auk.auModal.container).should('not.exist');
-    cy.openCase(caseTitle2);
+    cy.openCase(caseTitle2, false);
     cy.get(cases.subcaseSideNav.decision).should('have.length', 1);
 
     // use case 2. Move last subcase gives the option to delete the case (hard delete)
-    cy.openCase(caseTitle1);
+    cy.openCase(caseTitle1, false);
     cy.get(cases.subcaseHeader.actionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -487,11 +487,11 @@ context('Subcase tests', () => {
     cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseDescription.panel).should('not.exist');
-    cy.openCase(caseTitle2);
+    cy.openCase(caseTitle2, false);
     cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
 
     // use case 3. Delete the case (hard delete)
-    cy.openCase(caseTitle1);
+    cy.openCase(caseTitle1, false);
     cy.addSubcaseViaModal({
       agendaitemType: type,
       newShortTitle: subcaseShortTitle3,
@@ -510,7 +510,7 @@ context('Subcase tests', () => {
       .wait('@patchSubcases3');
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
-    cy.openCase(caseTitle2);
+    cy.openCase(caseTitle2, false);
     cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
   });
 
