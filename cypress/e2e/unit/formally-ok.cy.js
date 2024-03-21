@@ -49,11 +49,14 @@ context('Formally ok/nok tests', () => {
     const labelName1 = 'Cultuur, Jeugd, Sport en Media';
 
     // Make case
-
     cy.createCase('Cypress formally ok change');
 
     // Make subcase.
-    cy.addSubcase(type, shortSubcaseTitle);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: shortSubcaseTitle,
+    });
 
     // Make agendaitem
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');

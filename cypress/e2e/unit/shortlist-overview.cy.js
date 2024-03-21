@@ -88,12 +88,24 @@ context('signatures shortlist overview tests', () => {
 
   it('setup', () => {
     cy.createCase(caseTitle1);
-    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
-    cy.openSubcase(0, subcaseTitleShort1);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: subcaseTitleShort1,
+      longTitle: subcaseTitleLong1,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
     cy.addDocumentsToSubcase(files1);
     cy.createCase(caseTitle2);
-    cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
-    cy.openSubcase(0, subcaseTitleShort2);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type2,
+      newShortTitle: subcaseTitleShort2,
+      longTitle: subcaseTitleLong2,
+      subcaseType: subcaseType2,
+      subcaseName: subcaseName2,
+    });
     cy.addDocumentsToSubcase(files2);
 
     cy.createAgenda('Ministerraad', agendaDate);
@@ -490,12 +502,24 @@ context('publications shortlist overview tests', () => {
 
   it('setup', () => {
     cy.createCase(caseTitle1);
-    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
-    cy.openSubcase(0, subcaseTitleShort1);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: subcaseTitleShort1,
+      longTitle: subcaseTitleLong1,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
     cy.addDocumentsToSubcase(files1);
     cy.createCase(caseTitle2);
-    cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
-    cy.openSubcase(0, subcaseTitleShort2);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type2,
+      newShortTitle: subcaseTitleShort2,
+      longTitle: subcaseTitleLong2,
+      subcaseType: subcaseType2,
+      subcaseName: subcaseName2,
+    });
     cy.addDocumentsToSubcase(files2);
 
     cy.createAgenda('Ministerraad', agendaDate);

@@ -26,7 +26,7 @@ export default class ParliamentService extends Service {
       { headers: { Accept: 'application/vnd.api+json' } }
     );
     if (!resp.ok) {
-      return { ready: [], missing: [] };
+      return { ready: [], missing: [], required: [] };
     } else {
       const body = await resp.json();
       return body.data;
