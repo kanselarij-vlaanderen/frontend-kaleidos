@@ -25,6 +25,7 @@ Router.map(function() {
         this.route('documents', { path: '/documenten', });
         this.route('decisions', { path: '/beslissingen', });
         this.route('news-item', { path: '/kort-bestek', });
+        this.route('ratification', { path: '/bekrachtiging', });
       });
     });
     this.route('documents', { path: '/documenten', });
@@ -93,6 +94,8 @@ Router.map(function() {
       this.route('ongoing', { path: '/op-te-volgen' });
       this.route('decisions-and-notes', { path: '/beslissingen-en-notulen' });
       this.route('ongoing-decisions-and-notes', { path: '/op-te-volgen-beslissingen-en-notulen' });
+      this.route('ratification', { path: '/bekrachtigingen' });
+      this.route('ongoing-ratification', { path: '/op-te-volgen-bekrachtigingen' });
     });
   }
 

@@ -1,0 +1,114 @@
+{{page-title (t "to-follow-up") }}
+
+<AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
+  <m.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <div
+          id="search-subroute-filters-area"
+          class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
+        >
+          <Search::DateRangeFilter
+            @dateFrom={{this.dateFrom}}
+            @dateTo={{this.dateTo}}
+            @onDateFromChange={{this.setDateFrom}}
+            @onDateToChange={{this.setDateTo}}
+            @onDateFromClear={{set this "dateFrom" undefined}}
+            @onDateToClear={{set this "dateTo" undefined}}
+          />
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "status"}}</Auk::Label>
+            <Signatures::StatusFilter
+              @selectedStatusIds={{this.statuses}}
+              @onChange={{this.onChangeStatus}}
+              @excludedStatuses={{this.excludedStatuses}}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </m.sidebar>
+  <m.content @scroll={{true}}>
+    <KDataTable
+      data-test-route-search-publication-data-table
+      @hoverable={{true}}
+      @striped={{true}}
+      @loading={{this.isLoadingModel}}
+      @content={{@model}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @numberOfItems={{@model.length}}
+      @totalNumberOfItems={{@model.meta.count}}
+      @onChangeSize={{fn (mut this.size)}}
+      @onChangePage={{fn (mut this.page)}}
+      @onClickRow={{this.navigateToSignFlow}}
+      >
+      <:header>
+        <th class="auk-table__col--6">{{t "document-name"}}</th>
+        <th class="auk-table__col--1">{{t "document-type"}}</th>
+        {{!-- <th class="auk-table__col--1">{{t "ministers"}}</th> --}}
+        <th class="auk-table__col--2">Datum agenda</th>
+        <th class="auk-table__col--2">Opgestart door</th>
+        <th class="auk-table__col--2">{{t "status"}}</th>
+        <th class="auk-table__col--1"></th>
+        </:header>
+      <:body as |signFlow|>
+        {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
+          {{#let signMarkingActivity.piece as |piece|}}
+            <td>
+              {{#if piece}}
+                {{piece.name}}
+                {{#if (this.isConfidential piece.accessLevel)}}
+                  <AccessLevelPill
+                    @accessLevel={{piece.accessLevel}}
+                    @isEditable={{false}}
+                  />
+                {{/if}}
+              {{/if}}
+            </td>
+            <td>
+              {{#let piece.documentContainer.type as |type|}}
+                {{#if type}}
+                  <AuPill @size="small">
+                    {{type.label}}
+                  </AuPill>
+                {{else}}
+                  -
+                {{/if}}
+              {{/let}}
+            </td>
+          {{/let}}
+          {{!-- <td>
+            {{#let (await (this.getMandateeNames signFlow)) as |names|}}
+              {{#if names}}
+                {{join ", " names}}
+              {{else}}
+                -
+              {{/if}}
+            {{/let}}
+          </td> --}}
+          <td>
+            {{date signFlow.decisionActivity.startDate}}
+          </td>
+          <td></td>
+          <td>
+            <SignaturePill
+              @piece={{signMarkingActivity.piece}}
+              @signMarkingActivity={{signMarkingActivity}}
+              @isClickable={{false}}
+            />
+          </td>
+        {{/let}}
+        <td class="auk-u-text-align--right">
+          <AuButton
+            @skin="naked"
+            @icon="chevron-right"
+            @hideText={{true}}
+          >
+            {{t "open"}}
+          </AuButton>
+        </td>
+      </:body>
+    </KDataTable>
+  </m.content>
+</AuMainContainer>

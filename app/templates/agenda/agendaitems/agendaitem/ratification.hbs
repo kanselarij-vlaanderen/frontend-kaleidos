@@ -1,0 +1,116 @@
+<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+  <Toolbar.Group @position="left" as |Group|>
+    <Group.Item>
+      <h4 class="auk-toolbar__title">
+        Bekrachtiging
+      </h4>
+    </Group.Item>
+  </Toolbar.Group>
+</Auk::Toolbar>
+{{#unless this.loadData.isRunning}}
+  {{#if this.ratificationDocumentsAreVisible}}
+    <Documents::DocumentCardList
+      @pieces={{this.model.pieces}}
+      @highlightedPieces={{this.newAgendaitemPieces}}
+      @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
+      @onOpenUploadModal={{this.openUploadModalForNewPiece}}
+      @onAddPiece={{perform this.addPiece}}
+      @didDeleteContainer={{this.refresh}}
+      @isEditable={{true}}
+      @decisionActivity={{this.decisionActivity}}
+    />
+  {{else}}
+    <div class="auk-u-mt-2">
+      <AuAlert
+        @skin="info"
+        @icon="info-circle"
+      >
+        {{t "no-documents-yet"}}
+      </AuAlert>
+    </div>
+  {{/if}}
+{{/unless}}
+{{#if (user-may "manage-documents")}}
+  <div class="auk-u-mb-4">
+    <AuButton
+      data-test-route-agenda---agendaitem-documents-add
+      @skin="naked"
+      @icon="plus"
+      {{on "click" this.openPieceUploadModal}}
+    >
+      {{t "documents-add"}}
+    </AuButton>
+  </div>
+{{/if}}
+<div class="auk-u-mb-4">
+  <Agenda::Agendaitem::AgendaitemRatificationPanel
+    @agendaitem={{this.model.agendaitem}}
+    @subcase={{this.subcase}}
+    @agenda={{this.agenda}}
+    @newsItem={{this.newsItem}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+  /> 
+</div>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model.pieces}}
+    @decisionActivity={{this.decisionActivity}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @agendaitem={{this.agendaitem}}
+    @onClose={{this.closePublicationModal}}
+  />
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenWarnDocEditOnApproved}}
+  @title={{t "documents-on-approved-agenda-title"}}
+  @onConfirm={{this.confirmDocEditOnApproved}}
+  @onCancel={{this.closeWarnDocEditOnApproved}}
+>
+  <:body>
+      {{#if this.currentAgenda.nextVersion}}
+        <p>{{t "documents-on-approved-agenda-with-next-version"}}</p>
+      {{/if}}
+      <p>{{t "documents-on-approved-agenda-message"}}</p>
+  </:body>
+</ConfirmationModal>
