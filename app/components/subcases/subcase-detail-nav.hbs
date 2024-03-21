@@ -3,14 +3,32 @@
     <p>{{t "on-this-page"}}: </p>
     <ul class="au-c-anchor-nav">
       <li>
-        <a href="#case" class="js-anchor">{{t "overview"}}</a>
+        <a
+          href="#case"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "case"}}
+        >
+          {{t "overview"}}
+        </a>
       </li>
       <li>
-        <a href="#documents" class="js-anchor">{{t "documents"}}</a>
+        <a
+          href="#documents"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "documents"}}
+        >
+          {{t "documents"}}
+        </a>
       </li>
       <li>
-        <a href="#agenda" class="js-anchor">{{t "agenda-activities"}}</a>
-      </li> 
+        <a
+          href="#agenda"
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment "agenda"}}
+        >
+          {{t "agenda-activities"}}
+        </a>
+      </li>
     </ul>
   </div>
 </div>

@@ -17,7 +17,7 @@
           </span>
           <h4 class="auk-toolbar-complex__title au-u-padding-none">
             <Auk::AbbreviatedText
-              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @text={{or this.case.shortTitle this.case.title}}
               @maxLength={{250}}
             />
           </h4>
@@ -51,15 +51,17 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if (user-may "manage-cases")}}
+    {{#if (and (user-may "manage-cases") (not this.loadData.isRunning))}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <AuDropdown
-            @title="Dossier acties"
+            data-test-subcase-overview-header-actions-dropdown
+            @title={{t "case-actions"}}
             @alignment="right"
             @skin="secondary"
           >
             <AuButton
+              data-test-subcase-overview-header-edit-case
               @skin="link"
               {{on "click" this.openEditCaseModal}}
               role="menuitem"
@@ -67,12 +69,22 @@
               {{t "edit-case"}}
             </AuButton>
             <AuButton
+              data-test-subcase-overview-header-archive
               @skin="link"
               @alert={{true}}
               role="menuitem"
-              {{on "click" this.openArchiveCaseModal}}
+              {{on
+                "click"
+                (fn
+                  (if
+                    @decisionmakingFlow.closed
+                    this.unArchiveCase
+                    this.openArchiveCaseModal
+                  )
+                )
+              }}
             >
-              {{t (if this.isArchived "unarchive-case" "archive-case")}}
+              {{t (if @decisionmakingFlow.closed "unarchive-case" "archive-case")}}
             </AuButton>
           </AuDropdown>
         </Auk::Toolbar::Item>

@@ -21,7 +21,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 function createCase(shortTitle) {
   cy.log('createCase');
   cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
-  cy.visit('/dossiers?aantal=10');
+  cy.visit('/dossiers?aantal=2');
   cy.get(appuniversum.loader);
   cy.get(appuniversum.loader).should('not.exist');
 
@@ -44,96 +44,28 @@ function createCase(shortTitle) {
 }
 
 /**
- * @description Creates a new subcase from an open case overview.
- * @name addSubcase
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} type Type of subcase, case sensitive
- * @param {String} newShortTitle The new short title of the subcase (null to keep the existing case title)
- * @param {String} longTitle The long title of the subcase
- * @param {String} step The step to be selected from the list, case sensitive
- * @param {String} stepName The step name to be selected from the list, case sensitive
- * @returns {Promise<String>} the id of the created subcase
- */
-function addSubcase(type, newShortTitle, longTitle, step, stepName) {
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-
-  cy.log('addSubcase');
-  cy.intercept('POST', '/subcases').as(`addSubcase-createNewSubcase${randomInt}`);
-  cy.intercept('GET', '/decisionmaking-flows/**/subcases').as(`addSubcase-reloadDecisionmakingFlow${randomInt}`);
-  // TODO-COMMAND is this wait needed?
-  cy.wait(2000);
-
-  cy.get(cases.subcaseOverviewHeader.createSubcase).click();
-
-  // Set the type
-  if (type) {
-    cy.get(cases.newSubcase.type).contains(type)
-      .scrollIntoView()
-      .click();
-  }
-
-  // Set the short title
-  if (newShortTitle) {
-    cy.get(cases.newSubcase.shorttitle).click()
-      .clear()
-      .type(newShortTitle);
-  }
-
-  // Set the long title
-  if (longTitle) {
-    cy.get(cases.newSubcase.longtitle).click()
-      .clear()
-      .type(longTitle);
-  }
-
-  // Set the step type
-  if (step) {
-    cy.get(cases.newSubcase.procedureStep).click();
-    cy.get(dependency.emberPowerSelect.option).contains(step)
-      .scrollIntoView()
-      .trigger('mouseover')
-      .click();
-    cy.get(dependency.emberPowerSelect.option).should('not.exist');
-  }
-
-  // Set the step name
-  if (stepName) {
-    cy.get(cases.newSubcase.procedureName).click();
-    cy.get(dependency.emberPowerSelect.option).contains(stepName)
-      .scrollIntoView()
-      .trigger('mouseover')
-      .click();
-    cy.get(dependency.emberPowerSelect.option).should('not.exist');
-  }
-  cy.get(appuniversum.loader).should('not.exist');
-  cy.get(cases.newSubcase.save).click();
-
-  let subcaseId;
-  cy.log('/addSubcase');
-  cy.wait(`@addSubcase-createNewSubcase${randomInt}`)
-    .its('response.body')
-    .then((responseBody) => {
-      subcaseId = responseBody.data.id;
-    });
-  cy.wait(`@addSubcase-reloadDecisionmakingFlow${randomInt}`)
-    .then(() => new Cypress.Promise((resolve) => {
-      resolve({
-        subcaseId,
-      });
-    }));
-}
-
-/**
  * @description Navigates to the dossier route with page size 100 and opens the specified case if found.
  * @name openCase
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} caseTitle The title to search in the list of cases, should be unique
+ * @param {Boolean} filter If filtering should happen before checking the rows in the datatable, default true
  */
-function openCase(caseTitle) {
+function openCase(caseTitle, filter = true) {
   cy.log('openCase');
-  cy.visit('dossiers?aantal=50');
+  if (filter) {
+    cy.visit('dossiers?aantal=2');
+    cy.intercept('GET', '/cases?filter**').as('getFilteredCases');
+    cy.get(cases.casesHeader.filter).clear()
+      .type(caseTitle);
+    cy.wait('@getFilteredCases', {
+      timeout: 40000,
+    });
+  } else {
+    // look for a recently created case,
+    cy.visit('dossiers?aantal=5');
+  }
+
   cy.get(route.casesOverview.dataTable, {
     timeout: 60000,
   }).contains(caseTitle)
@@ -173,7 +105,23 @@ function searchCase(caseTitle) {
  * @name addSubcaseViaModal
  * @memberOf Cypress.Chainable#
  * @function
- * @param {{type: String, confidential: Boolean, newShortTitle: String, longTitle: String, step: String, stepName: String, [mandatees]: String, [domains]: String, [documents]: String, formallyOk: Boolean, agendaDate: String}[]} subcase
+ * @param {
+ *  {
+ *    newCase: Boolean
+ *    agendaitemType: String,
+ *    confidential: Boolean,
+ *    newShortTitle: String,
+ *    longTitle: String,
+ *    subcaseType: String,
+ *    subcaseName: String,
+ *    [mandatees]: String,
+ *    [domains]: String,
+ *    [documents]: String,
+ *    formallyOk: Boolean,
+ *    agendaDate: String,
+ *    clonePrevious: Boolean,
+ *  }[]
+ * } subcase
  * @returns {Promise<String>} the id of the created subcase
  */
 function addSubcaseViaModal(subcase) {
@@ -182,16 +130,16 @@ function addSubcaseViaModal(subcase) {
   cy.log('addSubcaseViaModal');
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
-  cy.intercept('POST', '/submission-activities').as(`submissionActivities${randomInt}`);
+  cy.intercept('POST', '/submission-activities').as(`postSubmissionActivities${randomInt}`);
   cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
-  cy.intercept('GET', '/subcase-types**').as(`getSubcaseTypes${randomInt}`);
   cy.intercept('GET', '/government-bodies**').as(`getGovernmentBodies${randomInt}`);
 
-  cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
+  // after creating a case we are already on the page to add a subcase
+  if (!subcase.newCase) {
+    cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
+  }
+
   cy.wait(`@getMandatees${randomInt}`, {
-    timeout: 60000,
-  });
-  cy.wait(`@getSubcaseTypes${randomInt}`, {
     timeout: 60000,
   });
   cy.wait(`@getGovernmentBodies${randomInt}`, {
@@ -199,8 +147,8 @@ function addSubcaseViaModal(subcase) {
   });
 
   // Set the type
-  if (subcase.type) {
-    cy.get(appuniversum.radio).contains(subcase.type)
+  if (subcase.agendaitemType) {
+    cy.get(appuniversum.radio).contains(subcase.agendaitemType)
       .scrollIntoView()
       .click();
   }
@@ -226,20 +174,28 @@ function addSubcaseViaModal(subcase) {
       .type(subcase.longTitle);
   }
 
-  // Set the step type
-  if (subcase.step) {
+  // Set the subcase type
+  if (subcase.subcaseType) {
     cy.get(cases.newSubcaseForm.procedureStep).click();
-    cy.get(dependency.emberPowerSelect.option).contains(subcase.step)
+    // types start lowercase and contains capitals, check case insensitive
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseType,
+      {
+        matchCase: false,
+      })
       .scrollIntoView()
       .trigger('mouseover')
       .click();
     cy.get(dependency.emberPowerSelect.option).should('not.exist');
   }
 
-  // Set the step name
-  if (subcase.stepName) {
+  // Set the subcase name
+  if (subcase.subcaseName) {
     cy.get(cases.newSubcaseForm.procedureName).click();
-    cy.get(dependency.emberPowerSelect.option).contains(subcase.stepName)
+    // names start upperCase and contains capitals, check case insensitive
+    cy.get(dependency.emberPowerSelect.option).contains(subcase.subcaseName,
+      {
+        matchCase: false,
+      })
       .scrollIntoView()
       .trigger('mouseover')
       .click();
@@ -291,31 +247,38 @@ function addSubcaseViaModal(subcase) {
     cy.addNewDocumentsInSubcaseFileUpload(subcase.documents);
   }
 
-  // go to save modal
-  cy.get(appuniversum.loader).should('not.exist', {
-    timeout: 60000,
-  });
-  cy.get(cases.newSubcaseForm.save).click();
-
-  if (subcase.formallyOk) {
-    cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
-      .click();
-  }
-
-  // select the agenda or save without one
-  if (subcase.agendaDate) {
-    cy.get(cases.proposableAgendas.agendaRow).children()
-      .contains(subcase.agendaDate)
-      .scrollIntoView()
-      .click();
-    cy.get(cases.proposableAgendas.placeOnAgenda).click();
+  if (subcase.clonePrevious) {
+    cy.get(cases.newSubcaseForm.clonePrevious).click();
+    // no option to put on agenda as of yet
+    // putting this last since it should be possible to make a copy with changes made above
   } else {
-    cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
+    // go to save modal
+    cy.get(appuniversum.loader).should('not.exist', {
+      timeout: 60000,
+    });
+    cy.get(cases.newSubcaseForm.save).click();
+
+    if (subcase.formallyOk) {
+      cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
+        .click();
+    }
+
+    // select the agenda or save without one
+    if (subcase.agendaDate) {
+      cy.get(cases.proposableAgendas.agendaRow).children()
+        .contains(subcase.agendaDate)
+        .scrollIntoView()
+        .click();
+      cy.get(cases.proposableAgendas.placeOnAgenda).click();
+    } else {
+      cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
+    }
   }
 
-  cy.log('/addSubcaseViaModal');
   cy.wait(`@createNewSubcase${randomInt}`);
-  cy.wait(`@submissionActivities${randomInt}`);
+  if (subcase.documents) {
+    cy.wait(`@postSubmissionActivities${randomInt}`);
+  }
   if (subcase.agendaDate) {
     cy.wait(`@submitToMeeting${randomInt}`, {
       timeout: 60000,
@@ -324,12 +287,38 @@ function addSubcaseViaModal(subcase) {
       timeout: 60000,
     });
   }
+  // check if we have transitioned to the detail page (Do we want to check/return the number from the responsebody?)
+  cy.get(cases.subcaseDescription.panel);
+  cy.log('/addSubcaseViaModal');
+}
+
+/**
+ * @description basic visit to case with some data loading
+ * @name visitCaseWithLink
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {*} link The link to visit, should be "/dossiers/id/deeldossiers/id" or "/dossiers/id/deeldossiers"
+ */
+function visitCaseWithLink(link) {
+  cy.log('visitCaseWithLink');
+  cy.visit(link);
+  // When opening a case with subcase, you should always get a loading screen.
+  // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
+  // cy.get(appuniversum.loader).should('exist'); // this checking for loader sometimes fails
+  // high wait times because more docs equals more waiting
+  cy.get(cases.subcaseOverviewHeader.titleContainer, {
+    timeout: 100000,
+  }).should('exist');
+  cy.get(appuniversum.loader, {
+    timeout: 100000,
+  }).should('not.exist');
+  cy.log('/visitCaseWithLink');
 }
 
 // Commands
 
 Cypress.Commands.add('createCase', createCase);
-Cypress.Commands.add('addSubcase', addSubcase);
 Cypress.Commands.add('openCase', openCase);
 Cypress.Commands.add('searchCase', searchCase);
 Cypress.Commands.add('addSubcaseViaModal', addSubcaseViaModal);
+Cypress.Commands.add('visitCaseWithLink', visitCaseWithLink);

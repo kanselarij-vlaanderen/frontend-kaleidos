@@ -200,9 +200,8 @@ function addDocumentsToMeeting(files) {
  */
 function addDocumentsToSubcase(files) {
   cy.log('addDocumentsToSubcase');
-  cy.clickReverseTab('Documenten');
   cy.wait(1000); // clicking adding documents sometimes does nothing, page not loaded?
-  cy.get(route.subcaseDocuments.add).click();
+  cy.get(route.subcase.add).click();
   return addNewDocumentsInUploadModal(files, 'subcase');
 }
 
@@ -340,7 +339,6 @@ function addNewPieceToApprovalItem(agendaitemTitle, oldFileName, file) {
  */
 function addNewPieceToSubcase(oldFileName, file) {
   cy.log('addNewPieceToSubcase');
-  cy.clickReverseTab('Documenten');
   return addNewPiece(oldFileName, file, 'subcases');
 }
 
@@ -497,7 +495,7 @@ function addLinkedDocument(filenames) {
   cy.intercept('GET', 'pieces').as('createNewPiece');
   cy.intercept('GET', '/pieces?page**').as('getPiecesList');
   cy.log('addLinkedDocument');
-  cy.get(document.linkedDocuments.add).click();
+  cy.get(document.linkedDocumentsPanel.add).click();
   cy.wait('@getPiecesList');
   cy.get(document.addExistingPiece.searchInput).click();
 

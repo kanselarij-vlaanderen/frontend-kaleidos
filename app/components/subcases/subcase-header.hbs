@@ -39,6 +39,7 @@
             </AuButton>
             {{#if this.canPropose}}
               <AuButton
+                data-test-subcase-header-action-show-proposed-agendas
                 @skin="link"
                 {{on "click" (toggle "isAssigningToAgenda" this)}}
                 role="menuitem"

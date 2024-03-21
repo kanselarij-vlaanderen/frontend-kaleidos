@@ -38,14 +38,17 @@
         <Auk::Label for="subcase-confidential">
           {{t "limited-access"}}</Auk::Label>
         <AuToggleSwitch
+          data-test-subcase-description-edit-confidential
           id="subcase-confidential"
           @checked={{@subcase.confidential}}
+          @onChange={{set this "confidentialChanged" true}}
         />
       </AuFormRow>
       <AuFormRow>
         <Auk::Label id="short-title-subcase">
           {{t "name-subcase"}}</Auk::Label>
         <Textarea
+          data-test-subcase-description-edit-short-title
           aria-labelledby="short-title-subcase"
           rows="2"
           class="auk-textarea"
@@ -56,6 +59,7 @@
         <Auk::Label id="title-subcase">
           {{t "title-subcase"}}</Auk::Label>
         <Textarea
+          data-test-subcase-description-edit-title
           aria-labelledby="title-subcase"
           rows="4"
           class="auk-textarea"
@@ -65,6 +69,7 @@
       <AuFormRow>
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         <Utils::ModelSelector
+          data-test-subcase-description-edit-procedure-step
           @modelName="subcase-type"
           @searchField="label"
           @sortField="label"
@@ -76,6 +81,7 @@
       <AuFormRow>
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <AuInput
+          data-test-subcase-description-edit-procedure-name
           @width="block"
           @value={{mut this.subcaseName}}
         />
@@ -88,7 +94,7 @@
         <Auk::Toolbar::Item>
           <AuButton
             @skin="naked"
-            {{on "click" @onCancel}}
+            {{on "click" this.cancelEditing}}
           >
             {{t "cancel"}}
           </AuButton>

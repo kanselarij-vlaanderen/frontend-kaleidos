@@ -9,8 +9,9 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item class="auk-o-flex">
-        {{#if @nameSearchText}}
+        {{#if this.filterText}}
           <AuButton
+            data-test-cases-header-clear-filter
             @skin="naked"
             @icon="undo"
             @hideText={{true}}
@@ -20,9 +21,10 @@
           </AuButton>
         {{/if}}
         <AuInput
+          data-test-cases-header-filter-input
           @width="block"
           @icon="search"
-          value={{@nameSearchText}}
+          value={{this.filterText}}
           placeholder={{t "search-case-title"}}
           autocomplete="off"
           {{on "input" (perform this.debouncedSetFilter)}}
@@ -31,6 +33,7 @@
       {{#if (user-may "manage-cases")}}
         <Group.Item>
           <AuButton
+            data-test-cases-header-add-case
             @skin="primary"
             @icon="plus"
             {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
