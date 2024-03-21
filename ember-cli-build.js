@@ -1,6 +1,7 @@
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const Funnel = require('broccoli-funnel');
+const webpack = require('webpack');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
@@ -46,6 +47,15 @@ module.exports = function (defaults) {
         '@ember-data/store': {
           polyfillUUID: true,
         },
+      },
+    },
+    autoImport: {
+      webpack: {
+        plugins: [
+          new webpack.ProvidePlugin({
+            process: 'process/browser.js',
+          }),
+        ],
       },
     },
   });

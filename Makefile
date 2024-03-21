@@ -3,13 +3,17 @@ export $(shell sed 's/=.*//' .env.cypress)
 
 reset-cache-resource-only:
 	- docker-compose ${COMPOSE_FILE} kill cache resource cache-warmup forever-cache
-	- docker-compose ${COMPOSE_FILE} up -d cache resource cache-warmup forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d cache resource forever-cache
+	- sleep 10
+	- docker-compose ${COMPOSE_FILE} up -d cache-warmup
 	- sleep 5
 
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file forever-cache cache resource migrations cache-warmup publication-report decision-report-generation
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report decision-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations database cache forever-cache
+	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
 
@@ -22,6 +26,8 @@ reset-elastic-and-cache:
 	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations database cache forever-cache
+	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 120
 
@@ -55,6 +61,8 @@ lint-html:
 	- ./node_modules/.bin/ember-template-lint .
 
 drc-up-d:
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations database cache forever-cache
+	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 
 drc-kill:
@@ -62,6 +70,9 @@ drc-kill:
 
 drc-up-d-service:
 	- docker-compose ${COMPOSE_FILE} up -d ${SERV}
+
+drc-restart-service:
+	- docker-compose ${COMPOSE_FILE} restart ${SERV}
 
 drc:
 	- docker-compose ${COMPOSE_FILE} ${args}

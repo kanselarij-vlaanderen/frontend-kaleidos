@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { groupBySubcaseName } from 'frontend-kaleidos/utils/vp';
-
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class SendToVpModalComponent extends Component {
   /**
    * @argument meeting
@@ -19,12 +19,13 @@ export default class SendToVpModalComponent extends Component {
 
   @tracked subcasesWithPieces = [];
   @tracked subcasesWithMissingPieces = [];
-  @tracked piecesToBeSent;
+  @tracked piecesToBeSent = [];
   @tracked showMissingPieces;
   @tracked showPieces;
   @tracked decisionsReleased;
   @tracked comment;
   @tracked internalDecisionPublicationActivity;
+  @tracked nothingToBeSent = true;
 
   isComplete = false;
 
@@ -33,27 +34,35 @@ export default class SendToVpModalComponent extends Component {
     this.loadData.perform();
   }
 
-  get isModalDisabled() {
-    return this.loadData.isRunning
-      || this.subcasesWithPieces.length == 0;
+  isModalDisabled() {
+    if (this.piecesToBeSent.length == 0
+    || this.subcasesWithPieces.length == 0) {
+      this.nothingToBeSent = true;
+    } else {
+      this.nothingToBeSent = false;
+    }
   }
 
   loadData = task(async () => {
     await this.loadInternalDecisionPublicationActivity();
-    await this.loadPiecesToBeSent();
+    await this.loadPieces();
+    this.isModalDisabled();
   });
 
-  async loadPiecesToBeSent () {
-    this.piecesToBeSent = await this.parliamentService.getPiecesReadyToBeSent(this.args.agendaitem);
-    if (this.piecesToBeSent) {
-      if (this.piecesToBeSent.ready) {
-        this.subcasesWithPieces = groupBySubcaseName(this.piecesToBeSent.ready);
+  async loadPieces () {
+    const pieces = await this.parliamentService.getPiecesReadyToBeSent(this.args.agendaitem);
+    if (pieces) {
+      if (pieces.ready) {
+        this.subcasesWithPieces = groupBySubcaseName(pieces.ready);
       }
-      if (this.piecesToBeSent.missing && this.piecesToBeSent.missing.length > 0) {
-        this.subcasesWithMissingPieces = groupBySubcaseName(this.piecesToBeSent.missing);
+      if (pieces.missing && pieces.missing.length > 0) {
+        this.subcasesWithMissingPieces = groupBySubcaseName(pieces.missing);
         this.isComplete = false;
       } else {
         this.isComplete = !!this.internalDecisionPublicationActivity?.startDate;
+      }
+      if (pieces.required) {
+        this.piecesToBeSent = pieces.required.filter((piece) => !this.isDisabled(piece.accessLevel));
       }
     }
     this.showPieces = this.subcasesWithPieces.length > 0;
@@ -70,16 +79,38 @@ export default class SendToVpModalComponent extends Component {
   }
 
   sendToVP = task(async () => {
-    if (this.piecesToBeSent?.ready) {
-      await this.parliamentService.sendToVP(
+    let sendToVpJob;
+    if (this.piecesToBeSent) {
+      sendToVpJob = await this.parliamentService.sendToVP(
         this.args.agendaitem,
-        this.piecesToBeSent.ready,
+        this.piecesToBeSent,
         this.comment,
         this.isComplete
       );
     }
-    this.args?.onClose();
+    this.args?.onClose(sendToVpJob.job, sendToVpJob.toast);
   });
+
+  getAccessLevel = async(accessLevelUri) => {
+    const accessLevel = await this.store.queryOne('concept', {
+      'filter[:uri:]': accessLevelUri
+    })
+    return accessLevel;
+  }
+
+  isDisabled = (accessLevelUri) => {
+    return accessLevelUri !== CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID &&
+    accessLevelUri !== CONSTANTS.ACCESS_LEVELS.PUBLIEK;
+  }
+
+  isSelected = (pieceDescription) => {
+    for (const piece of this.piecesToBeSent) {
+      if (piece.uri === pieceDescription.uri) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   pieceFileTypes = async (pieceDescription) => {
     const files = await pieceDescription.files;
@@ -115,5 +146,21 @@ export default class SendToVpModalComponent extends Component {
   @action
   onChangeComment(event) {
     this.comment = event.target.value;
+  }
+
+  @action
+  togglePieceSelection(pieceDescription) {
+    let index = -1;
+    for (let i = 0; i < this.piecesToBeSent.length; i++) {
+      if(this.piecesToBeSent[i].uri === pieceDescription.uri) {
+        index = i;
+      }
+    }
+    if (index > -1) {
+      this.piecesToBeSent.splice(index, 1);
+    } else {
+      this.piecesToBeSent.push(pieceDescription);
+    }
+    this.isModalDisabled();
   }
 }

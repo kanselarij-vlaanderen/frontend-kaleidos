@@ -28,7 +28,7 @@ function changeSubcaseType(subcaseLink, type) {
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda${randomInt}`);
   cy.intercept('DELETE', '/news-items/**').as(`deleteNewsItem${randomInt}`);
   cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
-  cy.get(cases.subcaseDescriptionEdit.save).click();
+  cy.get(cases.subcaseDescriptionEdit.actions.save).click();
   cy.wait(`@patchSubcase${randomInt}`);
   cy.wait(`@patchAgendaitem${randomInt}`);
   cy.wait(`@patchAgenda${randomInt}`);
@@ -102,7 +102,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.container).should('be.visible');
-    cy.get(utils.changesAlert.close).click();
+    cy.get(utils.changesAlert.confirm).click();
     cy.get(utils.changesAlert.container).should('not.exist');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
