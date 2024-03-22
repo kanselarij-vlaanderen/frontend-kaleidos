@@ -397,7 +397,12 @@ context('signatures shortlist overview tests', () => {
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
+    // TODO test error `cy.parents()` failed because it requires a DOM element or document.
+    cy.visit('ondertekenen/opstarten');
     // check succes
+    cy.get(route.signatures.row.name).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.signers.item); // wait for signers to load
