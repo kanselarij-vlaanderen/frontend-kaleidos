@@ -45,6 +45,7 @@ const {
 // - manage-alerts: Manage systeem notifications to be shown in the application
 // - manage-minutes: Create and update minutes for a meeting
 // - manage-secretary-signatures: Create and follow-up sign-flows for documents to be signed by secretaries
+// - add-past-mandatees: Adding past mandatees on subcases
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
@@ -88,6 +89,7 @@ const groups = [
       'manage-alerts',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -122,6 +124,7 @@ const groups = [
       'manage-themis-publications',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -152,6 +155,7 @@ const groups = [
       'manage-themis-publications',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
