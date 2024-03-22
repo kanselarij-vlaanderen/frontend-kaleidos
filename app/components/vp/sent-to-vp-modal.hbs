@@ -8,6 +8,10 @@
     {{date @submissionActivity.startDate}}</:title>
   <:body>
     <AuContent>
+      <p><strong>{{t "long-title"}}:</strong> {{or @submissionActivity.title "-"}}</p>
+      {{#if @submissionActivity.submitter.fullName}}
+        <p><strong>{{t "submitter"}}:</strong> {{or @submissionActivity.submitter.fullName}}</p>
+      {{/if}}
       {{#if this.subcaseWithPieces.isLoading}}
         <Auk::Loader />
       {{else if this.subcaseWithPieces.value}}
