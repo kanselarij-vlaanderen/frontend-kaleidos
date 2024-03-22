@@ -88,12 +88,24 @@ context('signatures shortlist overview tests', () => {
 
   it('setup', () => {
     cy.createCase(caseTitle1);
-    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
-    cy.openSubcase(0, subcaseTitleShort1);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: subcaseTitleShort1,
+      longTitle: subcaseTitleLong1,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
     cy.addDocumentsToSubcase(files1);
     cy.createCase(caseTitle2);
-    cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
-    cy.openSubcase(0, subcaseTitleShort2);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type2,
+      newShortTitle: subcaseTitleShort2,
+      longTitle: subcaseTitleLong2,
+      subcaseType: subcaseType2,
+      subcaseName: subcaseName2,
+    });
     cy.addDocumentsToSubcase(files2);
 
     cy.createAgenda('Ministerraad', agendaDate);
@@ -385,7 +397,12 @@ context('signatures shortlist overview tests', () => {
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
+    // TODO test error `cy.parents()` failed because it requires a DOM element or document.
+    cy.visit('ondertekenen/opstarten');
     // check succes
+    cy.get(route.signatures.row.name).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.signers.item); // wait for signers to load
@@ -490,12 +507,24 @@ context('publications shortlist overview tests', () => {
 
   it('setup', () => {
     cy.createCase(caseTitle1);
-    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
-    cy.openSubcase(0, subcaseTitleShort1);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: subcaseTitleShort1,
+      longTitle: subcaseTitleLong1,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
     cy.addDocumentsToSubcase(files1);
     cy.createCase(caseTitle2);
-    cy.addSubcase(type2, subcaseTitleShort2, subcaseTitleLong2, subcaseType2, subcaseName2);
-    cy.openSubcase(0, subcaseTitleShort2);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type2,
+      newShortTitle: subcaseTitleShort2,
+      longTitle: subcaseTitleLong2,
+      subcaseType: subcaseType2,
+      subcaseName: subcaseName2,
+    });
     cy.addDocumentsToSubcase(files2);
 
     cy.createAgenda('Ministerraad', agendaDate);

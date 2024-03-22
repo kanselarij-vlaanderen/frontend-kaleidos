@@ -1,22 +1,31 @@
-{{#if (not @isEditable)}}
+{{#if this.loadDecisionResultCode.isRunning}}
   <AuPill
     @size="small"
-    @skin={{this.skin}}
-    @icon={{this.icon}}
-    data-test-decision-result-pill
+    @skin="default"
   >
-    {{this.label}}
+    {{t "loading"}}
   </AuPill>
 {{else}}
-  <AuPill
-    @size="small"
-    @skin={{this.skin}}
-    @icon={{this.icon}}
-    @onClickAction={{@onEdit}}
-    @actionIcon="pencil"
-    @actionText={{t "edit"}}
-    data-test-decision-result-pill
-  >
-    {{this.label}}
-  </AuPill>
+  {{#if (not @isEditable)}}
+    <AuPill
+      @size="small"
+      @skin={{this.skin}}
+      @icon={{this.icon}}
+      data-test-decision-result-pill
+    >
+      {{this.label}}
+    </AuPill>
+  {{else}}
+    <AuPill
+      @size="small"
+      @skin={{this.skin}}
+      @icon={{this.icon}}
+      @onClickAction={{@onEdit}}
+      @actionIcon="pencil"
+      @actionText={{t "edit"}}
+      data-test-decision-result-pill
+    >
+      {{this.label}}
+    </AuPill>
+  {{/if}}
 {{/if}}

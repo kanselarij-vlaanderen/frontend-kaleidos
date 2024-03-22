@@ -1,6 +1,9 @@
-import Route from '@ember/routing/route';
-import { action } from "@ember/object";
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { isPresent } from '@ember/utils';
+import { startOfDay, endOfDay } from 'date-fns';
+import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import Route from '@ember/routing/route';
 
 export default class CasesIndexRoute extends Route {
   @service store;
@@ -17,28 +20,57 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
-    showArchivedOnly: {
+    dateFrom: {
       refreshModel: true,
-      as: 'toon_enkel_gearchiveerd',
+      as: 'van',
+    },
+    dateTo: {
+      refreshModel: true,
+      as: 'tot',
+    },
+    caseFilter: {
+      refreshModel: true,
+      as: 'dossier_naam',
+    },
+    submitters: {
+      refreshModel: true,
+      as: 'indieners'
     },
   };
 
   model(params) {
     const options = {
-      include: 'case',
+      include: 'decisionmaking-flow',
       sort: params.sort,
       page: {
         number: params.page,
         size: params.size,
       },
     };
-    if (params.showArchivedOnly) {
-      options['filter[:has:closed]'] = true;
-    } else {
-      options['filter[:has-no:closed]'] = true;
+
+    if (params.caseFilter) {
+      options['filter[short-title]'] = params.caseFilter;
     }
 
-    return this.store.query('decisionmaking-flow', options);
+    options['filter[:has:decisionmaking-flow]'] = true;
+    options['filter[decisionmaking-flow][:has-no:closed]'] = true;
+
+    if (isPresent(params.dateFrom)) {
+      const date = startOfDay(parseDate(params.dateFrom));
+      options['filter[:gte:created]'] = date.toISOString();
+    }
+    if (isPresent(params.dateTo)) {
+      const date = endOfDay(parseDate(params.dateTo));
+      options['filter[:lte:created]'] = date.toISOString();
+    }
+
+    if (isPresent(params.submitters)) {
+      options[
+        'filter[decisionmaking-flow][subcases][requested-by][person][:id:]'
+      ] = params.submitters.join(',');
+    }
+
+    return this.store.query('case', options);
   }
 
   @action
