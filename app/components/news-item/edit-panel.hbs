@@ -63,8 +63,9 @@
             <Auk::Label>{{t "short-title"}}</Auk::Label>
             <AuInput
               data-test-news-item-edit-item-short-title
+              value={{this.title}}
               @width="block"
-              @value={{this.title}}
+              {{on "input" (pick "target.value" (set this "title"))}}
             />
           </AuFormRow>
           <AuFormRow>
@@ -131,8 +132,9 @@
             <Auk::Label>{{t "comment-title"}}</Auk::Label>
             <AuInput
               data-test-news-item-edit-item-remark
+              value={{this.remark}}
               @width="block"
-              @value={{this.remark}}
+              {{on "input" (pick "target.value" (set this "remark"))}}
             />
           </AuFormRow>
           <AuFormRow>

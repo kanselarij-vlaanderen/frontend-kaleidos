@@ -82,8 +82,9 @@
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <AuInput
           data-test-subcase-description-edit-procedure-name
+          value={{this.subcaseName}}
           @width="block"
-          @value={{mut this.subcaseName}}
+          {{on "input" (pick "target.value" (set this "subcaseName"))}}
         />
       </AuFormRow>
     </div>

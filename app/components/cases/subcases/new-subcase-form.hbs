@@ -156,9 +156,10 @@
                       </AuButton>
                     {{else}}
                       <AuInput
-                        @width="block"
-                        @value={{this.subcaseName}}
                         id="subcaseNameId"
+                        value={{this.subcaseName}}
+                        @width="block"
+                        {{on "input" (pick "target.value" (set this "subcaseName"))}}
                       />
                       <AuButton
                         @skin="naked"
