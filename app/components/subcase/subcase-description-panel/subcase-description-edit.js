@@ -4,6 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -16,6 +17,7 @@ export default class SubcaseDescriptionEdit extends Component {
   @service decisionReportGeneration;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
+  @service pieceAccessLevelService;
 
   @tracked subcaseName;
   @tracked subcaseType;
@@ -23,6 +25,8 @@ export default class SubcaseDescriptionEdit extends Component {
   @tracked agendaItemTypes;
 
   @tracked isSaving = false;
+
+  confidentialChanged = false;
 
   constructor() {
     super(...arguments);
@@ -49,6 +53,26 @@ export default class SubcaseDescriptionEdit extends Component {
     );
   }
 
+  @task
+  *updateNewsItem() {
+    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    if (latestAgendaitem) {
+      yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+    }
+  }
+
+  @action
+  async cancelEditing() {
+    if (this.args.subcase.hasDirtyAttributes) {
+      this.args.subcase.rollbackAttributes();
+    }
+    this.args.onCancel();
+  }
+
   @action
   async selectSubcaseType(type) {
     this.subcaseType = type;
@@ -65,11 +89,18 @@ export default class SubcaseDescriptionEdit extends Component {
     const resetFormallyOk = true;
     this.isSaving = true;
 
+    const trimmedTitle = trimText(this.args.subcase.title);
+    const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
+
     const propertiesToSetOnAgendaitem = {
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
       type: this.agendaItemType,
     };
 
     const propertiesToSetOnSubCase = {
+      title: trimmedTitle,
+      shortTitle: trimmedShortTitle,
       subcaseName: this.subcaseName,
       type: this.subcaseType,
       agendaItemType: this.agendaItemType,
@@ -81,6 +112,12 @@ export default class SubcaseDescriptionEdit extends Component {
       propertiesToSetOnSubCase,
       resetFormallyOk
     );
+
+    if (this.confidentialChanged && this.args.subcase.confidential) {
+      await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+      await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
+      await this.updateNewsItem.perform();
+    }
 
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
       await this.updateNewsletterAfterRemarkChange();

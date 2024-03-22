@@ -72,14 +72,15 @@
     @cancelDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
     @onCancel={{@onCancel}}
   >
-    <AuButton
-      data-test-proposable-agendas-modal-save-without-agenda
-      @skin="secondary"
-      {{on "click" this.saveSubcase}}
-    >
-      {{t "save-without-agenda"}}
-    </AuButton>
-
+    {{#if @showSaveWithoutAgenda}}
+      <AuButton
+        data-test-proposable-agendas-modal-save-without-agenda
+        @skin="secondary"
+        {{on "click" this.saveSubcase}}
+      >
+        {{t "save-without-agenda"}}
+      </AuButton>
+    {{/if}}
     <AuButton
       data-test-proposable-agendas-modal-place-on-agenda
       @skin="primary"
