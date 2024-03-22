@@ -1,5 +1,6 @@
 import VrNotulenName from 'frontend-kaleidos/utils/vr-notulen-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 function formatDocuments(pieceRecords, isApproval) {
   const names = pieceRecords.map((record) => record.name);
@@ -36,20 +37,29 @@ function formatDocuments(pieceRecords, isApproval) {
   return `(${formatter.format(simplifiedNames)})`;
 }
 
-function generateBetreft(
+async function generateBetreft(
   shortTitle,
   title = null,
   isApproval,
   documents,
   subcaseName = null
 ) {
+  const documentsWithoutBijlageTerInzage = await Promise.all(documents.map(async (document) => {
+    const documentContainer = await document.documentContainer;
+    const type = await documentContainer.type;
+    if (type.uri !== CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
+      return document;
+    }
+    return null;
+  }))
+  const filteredDocuments = documentsWithoutBijlageTerInzage.filter((document) => document !== null);
   let betreft = '';
   betreft += `${shortTitle}`;
   betreft += title ? `<br/>${title}` : '';
   betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
   betreft +=
     documents && documents.length
-      ? `<br/>${formatDocuments(documents, isApproval)}`
+      ? `<br/>${formatDocuments(filteredDocuments, isApproval)}`
       : '';
   return betreft;
 }
