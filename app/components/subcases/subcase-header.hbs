@@ -2,53 +2,15 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
+        <div class="auk-o-flex auk-o-flex--vertical">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{@subcase.shortTitle}}</h4>
+            <Subcases::SubcaseDetailNav/>
           </div>
-          <Subcases::SubcaseDetailNav/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       {{#if (user-may "manage-agendaitems")}}
-        <Auk::Toolbar::Item>
-          {{#if (or this.loadData.isRunning this.isLoading)}}
-            <Auk::Loader />
-          {{else if this.canPropose}}
-            {{!-- template-lint-disable require-context-role --}}
-            <AuDropdown
-              data-test-subcase-header-show-proposed-agendas={{true}}
-              @skin="primary"
-              @title={{t "propose-for-agenda"}}
-              @alignment="right"
-            >
-              {{#each this.meetings as |meeting|}}
-                <AuButton
-                  data-test-subcase-header-propose-for-agenda
-                  @skin="link"
-                  {{on "click" (perform this.proposeForAgenda meeting)}}
-                  role="menuitem"
-                >
-                  {{t "agenda-for"}}
-                  {{date-phrase meeting.plannedStart}}
-                  {{concat " - " meeting.numberRepresentation}}
-                </AuButton>
-              {{/each}}
-              {{#if this.meetings}}
-                <AuHr />
-              {{/if}}
-              <AuButton
-                @skin="link"
-                {{on "click" this.proposeForOtherAgenda}}
-                role="menuitem"
-              >
-                {{t "other-agenda"}}
-              </AuButton>
-            </AuDropdown>
-            {{!-- template-lint-enable require-context-role --}}
-          {{/if}}
-        </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
@@ -76,6 +38,16 @@
             >
               {{t "move-subcase"}}
             </AuButton>
+            {{#if this.canPropose}}
+              <AuButton
+                data-test-subcase-header-action-show-proposed-agendas
+                @skin="link"
+                {{on "click" (toggle "isAssigningToAgenda" this)}}
+                role="menuitem"
+              >
+                {{t "propose-for-agenda"}}
+              </AuButton>
+            {{/if}}
           </AuDropdown>
           {{!-- template-lint-enable require-context-role --}}
         </Auk::Toolbar::Item>
@@ -109,13 +81,6 @@
   </:body>
 </AuModal>
 
-{{#if this.isAssigningToOtherAgenda}}
-  <Subcases::ProposableMeetings
-    @onProposeForMeeting={{perform this.proposeForAgenda}}
-    @onCancel={{this.cancel}}
-  />
-{{/if}}
-
 <ConfirmationModal
   @modalOpen={{this.isDeletingSubcase}}
   @title={{t "delete-subcase"}}
@@ -126,3 +91,10 @@
   @alert={{true}}
   @loading={{this.isLoading}}
 />
+
+{{#if this.isAssigningToAgenda}}
+  <Cases::Subcases::ProposableAgendasModal
+    @onCancel={{toggle "isAssigningToAgenda" this}}
+    @onConfirm={{perform this.proposeForAgenda}}
+  />
+{{/if}}

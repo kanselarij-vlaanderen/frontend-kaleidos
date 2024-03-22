@@ -155,7 +155,7 @@
               @agendaContext.agenda.previousVersion
             }}
           >
-            {{#unless this.loadAccessLevelRelatedData.isRunning}}
+            {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
               <AccessLevelPill
                 @accessLevel={{this.piece.accessLevel}}
                 @isEditable={{@isEditable}}

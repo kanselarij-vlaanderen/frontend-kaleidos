@@ -1,137 +1,159 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @didCreateNewCase={{this.navigateToDecisionmakingFlow}} />
-<div class="auk-scroll-wrapper__body">
-  <div class="auk-u-m-8">
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        {{#if (user-may "manage-cases")}}
-          <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
-            <Auk::Label
-              class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0"
-              for="show-cases-archived-only"
-            >
-              {{t "show-archived-only"}}
-            </Auk::Label>
-            <AuToggleSwitch
-              data-test-route-cases-overview-show-archived
-              @checked={{this.showArchivedOnly}}
-              id="show-cases-archived-only"
-            />
-          </Auk::Toolbar::Item>
-        {{/if}}
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-    <KDataTable
-      data-test-route-cases-overview-data-table
-      @hoverable={{true}}
-      @striped={{true}}
-      @clickable={{true}}
-      @loading={{this.isLoadingModel}}
-      @content={{this.model}}
-      @page={{this.page}}
-      @size={{this.size}}
-      @numberOfItems={{this.model.length}}
-      @totalNumberOfItems={{this.model.meta.count}}
-      @onChangeSize={{fn (mut this.size)}}
-      @onChangePage={{fn (mut this.page)}}
-    >
-      <:header>
-        <th class="auk-table__col--9">
-          {{t "case-name"}}
-        </th>
-        <Utils::ThSortable
-          class="auk-table__col--1"
-          @currentSorting={{this.sort}}
-          @field="opened"
-          @label={{t "created-on"}}
-          @onChange={{fn (mut this.sort)}}
-        />
-        <th class="auk-table__col--1"></th>
-      </:header>
-      {{! Users explicitly want the whole row to be clickable instead of only the arrow at the end }}
-      {{! template-lint-disable no-invalid-interactive }}
-      <:body as |row|>
-        <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
-          <p data-test-route-cases-overview-row-case-title>
-            {{#if row.case.shortTitle}}
-              {{row.case.shortTitle}}
-            {{else}}
-              {{row.case.title}}
-            {{/if}}
-          </p>
-        </td>
-        <td {{on "click" (fn this.navigateToDecisionmakingFlow row)}}>
-          {{datetime row.opened}}
-        </td>
-        <td class="auk-u-text-align--right">
-          {{#if (user-may "manage-cases")}}
-            {{!-- template-lint-disable require-context-role --}}
-            <AuDropdown
-              data-test-route-cases-overview-row-actions-dropdown
-              @icon="three-dots"
-              @title={{t "more"}}
-              @hideText={{true}}
-              @alignment="right"
-            >
-              <AuButton
-                data-test-route-cases-overview-row-actions-edit
-                @skin="link"
-                {{on "click" (fn this.openEditCaseModal row.case)}}
-                role="menuitem"
-              >
-                {{t "edit-case"}}
-              </AuButton>
-              <AuButton
-                data-test-route-cases-overview-row-actions-archive
-                @skin="link"
-                @alert={{true}}
-                {{on
-                  "click"
-                  (fn
-                    (if
-                      row.closed
-                      this.unarchiveCase
-                      this.requestArchiveCase
-                    )
-                    row.case
-                  )
-                }}
-                role="menuitem"
-              >
-                {{t (if row.closed "unarchive-case" "archive-case")}}
-              </AuButton>
-            </AuDropdown>
-            {{!-- template-lint-enable require-context-role --}}
-          {{/if}}
-          <AuLink
-            data-test-route-cases-overview-row-go-to-case
-            @skin="button-naked"
-            @icon="chevron-right"
-            @hideText={{true}}
-            @route="cases.case.subcases"
-            @model={{row.id}}
-          >
-            {{t "open"}}
-          </AuLink>
-        </td>
-      </:body>
-      {{! template-lint-enable no-invalid-interactive }}
-    </KDataTable>
-  </div>
-</div>
-{{#if this.showEditCaseModal}}
-  <Cases::EditCase
-    @onClose={{this.closeEditCaseModal}}
-    @onSave={{this.saveEditCase}}
-    @case={{this.caseToEdit}}
-  />
-{{/if}}
-<ConfirmationModal
-  @modalOpen={{this.isArchivingCase}}
-  @title={{t "archive-case"}}
-  @message={{t "archive-case-message"}}
-  @onConfirm={{this.archiveCase}}
-  @onCancel={{this.cancelArchiveCase}}
-  @confirmMessage={{t "delete"}}
-  @alert={{true}}
+<Cases::CasesHeader
+  @didCreateNewCase={{this.navigateToDecisionmakingFlow}}
+  @onSetFilter={{this.setCaseFilter}}
+  @caseFilter={{this.caseFilter}}
 />
+<AuMainContainer class="l-search-container" as |m|>
+  <m.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+          <Search::DateRangeFilter
+            @dateFrom={{this.dateFrom}}
+            @dateTo={{this.dateTo}}
+            @onDateFromChange={{this.setDateFrom}}
+            @onDateToChange={{this.setDateTo}}
+            @onDateFromClear={{set this "dateFrom" undefined}}
+            @onDateToClear={{set this "dateTo" undefined}}
+          />
+          <div class="au-c-card au-o-box au-o-box--small">
+            <Auk::Label>{{t "submitter"}}</Auk::Label>
+            <Search::MinisterFilter
+              @selected={{this.submitters}}
+              @onChange={{set this "submitters"}}
+              @showPastMinisters={{true}}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </m.sidebar>
+  <m.content @scroll={{false}}>
+    <AuBodyContainer>
+      <div class="auk-scroll-wrapper">
+        <div class="auk-scroll-wrapper__body">
+          {{#if this.model.length}}
+            <div>
+              <table
+                data-test-route-cases-overview-data-table
+                class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
+              >
+                <thead>
+                  <tr>
+                    <Utils::ThSortable
+                      class="auk-table__col--8 auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="title"
+                      @label={{t "name"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <Utils::ThSortable
+                      class="auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="created"
+                      @label={{t "created-on"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <th class="auk-table__header-title">{{t "submitter"}}</th>
+                    <th class="auk-table__header-title">{{t "status"}}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#if this.isLoadingModel}}
+                    <tr>
+                      <td data-test-route-agendas-overview-loader colspan="5">
+                        {{t "loading"}}
+                      </td>
+                    </tr>
+                  {{else}}
+                    {{#each @model as |row|}}
+                      <tr
+                        role="button"
+                        class="auk-u-text-align--center auk-table--clickable-rows"
+                        {{on
+                          "click"
+                          (fn this.navigateToDecisionmakingFlow row)
+                        }}
+                      >
+                        <td>
+                          <p data-test-route-cases-overview-row-case-title>
+                            {{#if row.shortTitle}}
+                              {{row.shortTitle}}
+                            {{else}}
+                              {{row.title}}
+                            {{/if}}
+                          </p>
+                        </td>
+                        <td>
+                          {{datetime row.created}}
+                        </td>
+                        <td>
+                          <Cases::Submitters @case={{row}} />
+                        </td>
+                        <td>
+                          <Cases::StatusPill @case={{row}} />
+                        </td>
+                        <td class="auk-u-text-align--right">
+                          {{#if row.decisionmakingFlow}}
+                            <AuLink
+                              data-test-route-cases-overview-row-go-to-case
+                              @skin="button-naked"
+                              @icon="chevron-right"
+                              @hideText={{true}}
+                              @route="cases.case.subcases"
+                              @model={{row.decisionmakingFlow.id}}
+                            >
+                              {{t "open"}}
+                            </AuLink>
+                          {{/if}}
+                        </td>
+                      </tr>
+                    {{/each}}
+                  {{/if}}
+                </tbody>
+              </table>
+            </div>
+          {{else}}
+            <Auk::Panel>
+              <Auk::Panel::Body>
+                <Auk::EmptyState @message={{t "no-results-found"}} />
+              </Auk::Panel::Body>
+            </Auk::Panel>
+          {{/if}}
+        </div>
+      </div>
+      <div>
+        <hr />
+      </div>
+      <div class="auk-u-mx-4">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Pagination
+                @page={{this.page}}
+                @size={{this.size}}
+                @nbOfItems={{this.model.length}}
+                @total={{this.model.meta.count}}
+                @onNextPage={{this.nextPage}}
+                @onPreviousPage={{this.prevPage}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              {{t "amount-per-page"}}
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item>
+              <WebComponents::AuPageSize
+                @selectedSize={{this.size}}
+                @onChange={{fn (mut this.size)}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+    </AuBodyContainer>
+  </m.content>
+</AuMainContainer>
