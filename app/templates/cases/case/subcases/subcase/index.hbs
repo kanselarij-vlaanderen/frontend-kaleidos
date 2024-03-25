@@ -1,111 +1,23 @@
 <div class="auk-scroll-wrapper__body">
-  <div class="auk-u-m-8">
-    <div id="case" class="auk-u-mb-8">
-      <Subcase::SubcaseDescriptionPanel @subcase={{@model.subcase}} />
-    </div>
-    <div class="auk-u-mb-8">
-    <Mandatees::MandateesPanel
-      @referenceDate={{if
-        this.meeting
-        this.meeting.plannedStart
-        this.model.subcase.created
-      }}
-      @mandatees={{this.mandatees}}
-      @submitter={{this.submitter}}
-      @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-      @allowEditing={{user-may "manage-cases"}}
-      @onSave={{this.saveMandateeData}}
-    />
-    </div>
-    <Utils::GovernmentAreas::GovernmentAreasPanel
-      @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
-      @governmentAreas={{@model.subcase.governmentAreas}}
-      @allowEditing={{user-may "manage-cases"}}
-      @onSave={{this.saveGovernmentAreas}}
-      class="auk-u-mb-8"
-    />
-    <div id="documents" class="auk-u-mb-4">
-      <Auk::Panel>
-        <Auk::Panel::Header>
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <div class="au-u-flex au-u-flex--spaced-small">
-                  <h4 class="auk-panel__title">
-                    {{t "documents"}}
-                  </h4>
-                </div>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </Auk::Panel::Header>
-        <Auk::Panel::Body>
-          {{#if this.documentsAreVisible}}
-            <Documents::DocumentCardList
-              @pieces={{this.model.pieces}}
-              @onAddPiece={{perform this.addPiece}}
-              @didDeleteContainer={{this.refresh}}
-              @isEditable={{true}}
-            />
-          {{else}}
-            <div>
-              <AuAlert
-                @skin="info"
-                @icon="info-circle"
-                class="au-u-margin-bottom-none"
-              >
-                {{t "no-documents-yet"}}
-              </AuAlert>
-            </div>
-          {{/if}}
-        </Auk::Panel::Body>
-        {{#if (user-may "manage-documents")}}
-        <Auk::Panel::Footer>
-          <AuButton
-            data-test-route-cases---subcase-add-documents
-            @skin="naked"
-            @icon="plus"
-            class="au-u-padding-left-none"
-            {{on "click" this.openPieceUploadModal}}
-          >
-            {{t "documents-add"}}
-          </AuButton>
-        </Auk::Panel::Footer>
-        {{/if}}
-      </Auk::Panel>
-    </div>
-    <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@model.subcase}}/>
-    <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} id="agenda"/>
-  </div>
+  <Subcase::Detail::Regular
+    @subcase={{@model.subcase}}
+    @case={{@model._case}}
+    @pieces={{@model.pieces}}
+    @meeting={{this.meeting}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @saveMandateeData={{this.saveMandateeData}}
+    @agenda={{this.agenda}}
+    @saveGovernmentAreas={{this.saveGovernmentAreas}}
+    @documentsAreVisible={{this.documentsAreVisible}}
+    @addPiece={{this.addPiece}}
+    @refresh={{this.refresh}}
+    @openPieceUploadModal={{this.openPieceUploadModal}}
+    @isOpenPieceUploadModal={{this.isOpenPieceUploadModal}}
+    @savePieces={{this.savePieces}}
+    @cancelUploadPieces={{this.cancelUploadPieces}}
+    @newPieces={{this.newPieces}}
+    @uploadPiece={{this.uploadPiece}}
+    @deletePiece={{this.deletePiece}}
+  />
 </div>
-
-<ConfirmationModal
-  @modalOpen={{this.isOpenPieceUploadModal}}
-  @title={{t "document-add"}}
-  @onConfirm={{perform this.savePieces}}
-  @onCancel={{perform this.cancelUploadPieces}}
-  @confirmMessage={{t "documents-add"}}
-  @disabled={{eq this.newPieces.length 0}}
-  @loading={{this.savePieces.isRunning}}
->
-  <:body>
-    {{#if this.savePieces.isRunning}}
-      <Auk::Loader @message={{t "documents-loading-text"}} />
-    {{else}}
-      <Auk::FileUploader
-        @multiple={{true}}
-        @reusable={{true}}
-        @onUpload={{this.uploadPiece}}
-      />
-      <div class="upload-container">
-        {{#each this.newPieces as |piece|}}
-          <Documents::UploadedDocument
-            @piece={{piece}}
-            @allowDocumentContainerEdit={{true}}
-            @onDelete={{perform this.deletePiece piece}}
-          />
-        {{/each}}
-      </div>
-    {{/if}}
-  </:body>
-</ConfirmationModal>
