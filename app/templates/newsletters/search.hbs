@@ -11,10 +11,11 @@
         </div>
         <AuInput
           data-test-route-search-input
-          @width="block"
-          @value={{this.searchTextBuffer}}
           id="keyword"
           placeholder={{t "search-placeholder"}}
+          value={{this.searchTextBuffer}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
         />
       </AuFormRow>
       <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-from>
@@ -41,9 +42,10 @@
         </Auk::Label>
         <AuInput
           data-test-route-search-mandatee-input
-          @width="block"
-          @value={{this.mandateesBuffer}}
           id="ministerName"
+          value={{this.mandateesBuffer}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "mandateesBuffer"))}}
         />
       </AuFormRow>
       <AuFormRow class="au-u-margin-top-none au-u-1-6">
