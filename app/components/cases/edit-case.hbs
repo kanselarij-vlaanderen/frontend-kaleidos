@@ -10,8 +10,9 @@
         <Auk::Label>{{t "short-title-case"}}</Auk::Label>
         <AuTextarea
           data-test-edit-case-shorttitle
+          value={{this.shortTitle}}
           @width="block"
-          @value={{this.shortTitle}}
+          {{on "input" (pick "target.value" (set this "shortTitle"))}}
         />
       </AuFormRow>
     </div>

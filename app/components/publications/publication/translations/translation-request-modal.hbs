@@ -104,8 +104,9 @@
           data-test-publication-translation-request-message
           id="translationRequestMessage"
           rows="16"
+          value={{this.message}}
           @width="block"
-          @value={{this.message}}
+          {{on "input" (pick "target.value" (set this "message"))}}
         />
       </AuFormRow>
     </div>

@@ -72,9 +72,10 @@
           <AuTextarea
             data-test-new-publication-short-title
             id="shortTitleInput"
+            value={{this.shortTitle}}
             @width="block"
-            @value={{this.shortTitle}}
             @error={{this.isShownShortTitleError}}
+            {{on "input" (pick "target.value" (set this "shortTitle"))}}
             {{on "focusout" this.enableErrorOnShortTitle}}
           />
           {{#if this.isShownShortTitleError}}
@@ -93,8 +94,9 @@
             data-test-new-publication-long-title
             id="longTitleInput"
             rows="4"
+            value={{this.longTitle}}
             @width="block"
-            @value={{this.longTitle}}
+            {{on "input" (pick "target.value" (set this "longTitle"))}}
           />
         </AuFormRow>
         <div class="auk-o-grid-auto">

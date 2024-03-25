@@ -18,10 +18,11 @@
       <AuFormRow>
         <Auk::Label for="remarks">{{t "private-comments-title"}}</Auk::Label>
         <AuTextarea
-          rows="4"
           id="remarks"
+          rows="4"
+          value={{this.privateComment}}
           @width="block"
-          @value={{this.privateComment}}
+          {{on "input" (pick "target.value" (set this "privateComment"))}}
         />
       </AuFormRow>
       <AuHr />
