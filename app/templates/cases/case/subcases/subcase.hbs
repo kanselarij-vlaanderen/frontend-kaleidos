@@ -13,7 +13,8 @@
   {{#if @model.subcases.length}}
     <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
       <Subcases::SideNav
-        @subcases={{@model.subcases}}>
+        @decisionmakingFlow={{@model.decisionmakingFlow}}
+        >
       </Subcases::SideNav>
     </div>
   {{/if}}
