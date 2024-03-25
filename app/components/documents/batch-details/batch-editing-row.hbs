@@ -28,10 +28,11 @@
     <td>
       <AuToggleSwitch
         @skin="primary"
-        @label={{t "present-for-signing"}}
         @disabled={{or this.isDisabled this.isSignMarkingDisabled @agendaitemIsRetracted}}
         @onChange={{this.setMarkedForSignature}}
-      />
+      >
+        {{t "present-for-signing"}}
+      </AuToggleSwitch>
     </td>
   {{/if}}
   <td class="auk-u-text-align--right">

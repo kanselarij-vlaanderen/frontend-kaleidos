@@ -13,12 +13,13 @@
       </div>
       <div data-test-route-settings-organizations-filter-blocked class="au-c-card au-o-box au-o-box--small">
         <AuToggleSwitch
-          @label={{t "show-only-blocked"}}
           @identifier="blocked"
           @name="blocked"
           @checked={{this.showBlockedOrganizationsOnly}}
           @onChange={{set this "showBlockedOrganizationsOnly"}}
-        />
+        >
+          {{t "show-only-blocked"}}
+        </AuToggleSwitch>
       </div>
     </div>
   </div>
