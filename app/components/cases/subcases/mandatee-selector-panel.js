@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { startOfDay } from 'date-fns';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import constants from 'frontend-kaleidos/config/constants';
 
 export default class MandateeSelectorPanel extends Component {
   @service mandatees;
@@ -12,6 +14,13 @@ export default class MandateeSelectorPanel extends Component {
   @tracked currentMandatees = []; // do not edit this array
   @tracked selectedCurrentMinisters = [];
   @tracked submitterMandatee;
+
+  @tracked selectedCurrentMandatees = [];
+  @tracked selectedPastMandatees = [];
+  @tracked selectedAllMandatees = [];
+  @tracked excludedMandatees = [];
+  @tracked openSearch = false;
+  @tracked selectedPastMandatee;
 
   constructor() {
     super(...arguments);
@@ -25,7 +34,7 @@ export default class MandateeSelectorPanel extends Component {
   }
 
   @action
-  async onChangeSelectedMinisters(selected) {
+  async onChangeSelectedCurrentMinisters(selected) {
     let selectedMandatees = [];
     selected.forEach((selectedMinister) => {
       const mandatee = this.currentMandatees.find(
@@ -41,41 +50,43 @@ export default class MandateeSelectorPanel extends Component {
       selectedMandatees.map((m) => m.person)
     );
     this.selectedCurrentMinisters = [...new Set(sortedMinisters)];
-    this.args.setMandatees(selectedMandatees);
+    this.selectedCurrentMandatees = selectedMandatees;
+    this.setAllMandatees();
 
-    // if there is a submitter but this submitter can't be found in the selected mandatees, then set the submitter
-    // to be the first selected minister.
-    // When there is no submitter but the list of selected ministers isn't empty, set submitter to first minister in the list
+    // when there is no submitter: get the first from this list if any exist
+    // when the submitter exists, check if it is still in selectedAllMandatees
+    // If not, first from list again, if undefined submitter will be cleared
     if (
       (this.submitterMandatee &&
-        !selectedMandatees.find(
+        !this.selectedAllMandatees.find(
           (selectedMandatee) =>
-            selectedMandatee.person.get('id') ===
-            this.submitterMandatee.person.get('id')
+            selectedMandatee.id ===
+            this.submitterMandatee.id
         )) ||
-      (!this.submitterMandatee && this.selectedCurrentMinisters.length)
+      (!this.submitterMandatee && this.selectedAllMandatees.length)
     ) {
-      const submitterMandatee = selectedMandatees.find(
-        (selectedMandatee) =>
-          selectedMandatee.person.get('id') ===
-          this.selectedCurrentMinisters[0]?.get('id')
-      )
-      this.submitterMandatee = submitterMandatee;
-      this.args.setSubmitter(submitterMandatee);
+      this.submitterMandatee = this.selectedAllMandatees[0];
+      this.args.setSubmitter(this.submitterMandatee);
     }
   }
 
-  @task
+  @task // run once
   *prepareCurrentMinisters() {
     const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(
       startOfDay(new Date())
     );
-    // Will be refactored in KAS-4540, for now, use hardcoded uri to filter out the double mandatee for PM
-    const filteredMandatees = currentMandatees.filter(
-      (mandatee) =>
-        mandatee.uri !=
-        'http://themis.vlaanderen.be/id/mandatee/658e57e6-4488-4aaf-bee7-1360ab362584'
+    // filter out the MP's other role as a MINISTER
+    const primeMinister = currentMandatees.find(
+        (mandatee) =>
+          mandatee.mandate.get('role').get('uri') ===
+          constants.MANDATE_ROLES.MINISTER_PRESIDENT
+      );
+    const ministers = currentMandatees.filter(
+      (minister) =>
+      minister.person.get('id') !== primeMinister.person.get('id')
     );
+    const filteredMandatees = [primeMinister, ...ministers];
+
     this.currentMandatees = filteredMandatees.sort(
       (m1, m2) => m1.priority - m2.priority
     );
@@ -83,6 +94,7 @@ export default class MandateeSelectorPanel extends Component {
       this.currentMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
+    this.setExcludedMandatees();
     this.loadArgsMinister.perform();
   }
 
@@ -112,7 +124,7 @@ export default class MandateeSelectorPanel extends Component {
         this.submitterMandatee = submitterMandatee;
       }
       if (ministersToSelect?.length) {
-        yield this.onChangeSelectedMinisters(ministersToSelect);
+        yield this.onChangeSelectedCurrentMinisters(ministersToSelect);
       } else {
         // clear the args mandatees and submitter if only old mandatees were present
         this.args.setMandatees([]);
@@ -121,18 +133,65 @@ export default class MandateeSelectorPanel extends Component {
   }
 
   @action
-  async checkIfSubmitter(minister) {
-    const submitterPersonId = await this.submitterMandatee.person.get('id');
-    return submitterPersonId === minister.id;
-  }
-
-  @action
-  onChangeSubmitter(submitterMinister) {
-    const submitterMandatee = this.currentMandatees.find(
+  onChangeSubmitter(mandatee) {
+    const submitterMandatee = this.selectedAllMandatees.find(
       (currentMandatee) =>
-        currentMandatee.person.get('id') === submitterMinister.id
+        currentMandatee.get('id') === mandatee.id
     );
     this.submitterMandatee = submitterMandatee;
     this.args.setSubmitter(submitterMandatee);
+  }
+
+  @action
+  setAllMandatees() {
+    // current mandatees always on top
+    this.selectedAllMandatees = [...this.selectedCurrentMandatees, ...this.selectedPastMandatees];
+    this.args.setMandatees(this.selectedAllMandatees);
+  }
+
+  @action
+  setExcludedMandatees() {
+    // all checkbox mandatees + the manually added past mandatees
+    this.excludedMandatees = [...this.currentMandatees, ...this.selectedPastMandatees];
+  }
+  
+  @action
+  async onAddPastMandatee() {
+    if (!this.selectedPastMandatee) {
+      return;
+    }
+    let unsortedPastMandatees = this.selectedPastMandatees.slice();
+    unsortedPastMandatees.push(this.selectedPastMandatee);
+    
+    // with open search there is no guarantee that priorities will be unique numbers, but we sort anyway
+    const sortedMandatees = unsortedPastMandatees.sort(
+      (m1, m2) => m1.priority - m2.priority
+    );
+    await Promise.all(
+      sortedMandatees.map((m) => m.person)
+    );
+    this.selectedPastMandatees = sortedMandatees;
+    this.setAllMandatees();
+    this.setExcludedMandatees();
+
+    // Only if there is no submitter yet we make this added mandatee the submitter
+    if (!this.submitterMandatee) {
+      this.submitterMandatee = this.selectedPastMandatee;
+      this.args.setSubmitter(this.submitterMandatee);
+    }
+    // if multiple need to be added it will be easier to keep the modal open, only clear the selection
+    this.selectedPastMandatee = null;
+  }
+
+  @action
+  async removePastMandatee(mandatee) {
+    removeObject(this.selectedPastMandatees, mandatee);
+    this.setAllMandatees();
+    this.setExcludedMandatees();
+    // change submitter if it was this mandatee and update args
+    if (this.submitterMandatee.id === mandatee.id) {
+      this.submitterMandatee = this.selectedAllMandatees[0];
+      this.args.setSubmitter(this.submitterMandatee);
+    }
   }
 }

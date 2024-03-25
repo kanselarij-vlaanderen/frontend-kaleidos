@@ -4,34 +4,73 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}} @reserveSpace={{false}}>
+      {{! This only shows the persons of active mandatees}}
       <Auk::CheckboxTree
         @label={{t "current-ministers"}}
         @items={{this.currentMinisters}}
         @itemStructure={{hash label="fullName"}}
         @selectedItems={{this.selectedCurrentMinisters}}
-        @didUpdate={{this.onChangeSelectedMinisters}}
+        @didUpdate={{this.onChangeSelectedCurrentMinisters}}
         @layout="grid"
         @disabled={{@disabled}}
       />
-      {{#if this.selectedCurrentMinisters}}
+      {{#if (user-may "add-past-mandatees")}}
+        <AuButton
+          @skin="link"
+          class="au-u-h-functional au-u-padding-left-none au-u-margin-top-small"
+          @icon="add"
+          @disabled={{@disabled}}
+          {{on "click" (toggle "openSearch" this)}}
+        >
+          {{t "show-past-ministers"}}
+        </AuButton>
+      {{/if}}
+      {{#if this.selectedAllMandatees}}
         <AuHr />
       {{/if}}
+      {{! This shows all selected mandatees current and past}}
       <AuList @divider={{true}} as |Item|>
-        {{#each this.selectedCurrentMinisters as |minister|}}
-          <Item data-test-mandatee-selector-panel-selected-minister class="au-u-flex au-u-flex--vertical-center au-u-flex--between">
-            <strong>{{minister.fullName}}</strong>
+        {{#each this.selectedAllMandatees as |mandatee|}}
+          <Item
+            data-test-mandatee-selector-panel-selected-minister
+            class="au-c-list__item au-u-flex au-u-flex--vertical-center au-u-flex--between"
+          >
+            {{! prettier-ignore}}
+            <div>
+              {{! <Mandatee::NameWithRange/> does not suit the needs}}
+              <strong>{{mandatee.person.fullName}}</strong>{{concat ', ' mandatee.displayTitle}}
+              {{#if (user-may "view-mandatees-with-range")}}
+                <span class="au-u-margin-left-tiny au-u-muted au-u-para-tiny">
+                  {{date mandatee.start}}
+                  {{t "until"}}
+                  {{if mandatee.end (date mandatee.end) (t "present-time")}}
+                </span>
+              {{/if}}
+            </div>
             <div
               class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
             >
               <AuRadio
                 @name="submitter"
-                @checked={{await (this.checkIfSubmitter minister)}}
+                @checked={{eq this.submitterMandatee.id mandatee.id}}
                 @disabled={{@disabled}}
-                {{on "click" (fn this.onChangeSubmitter minister)}}
+                {{on "click" (fn this.onChangeSubmitter mandatee)}}
               />
               <Auk::Label class="au-u-padding-bottom-none">
                 {{t "submitter"}}
               </Auk::Label>
+              {{#if (includes mandatee this.selectedPastMandatees)}}
+                <AuButton
+                  @skin="naked"
+                  @icon="trash"
+                  @alert={{true}}
+                  @hideText={{true}}
+                  @disabled={{@disabled}}
+                  {{on "click" (fn this.removePastMandatee mandatee)}}
+                >
+                  {{t "remove-past-minister"}}
+                </AuButton>
+              {{/if}}
             </div>
           </Item>
         {{/each}}
@@ -39,3 +78,36 @@
     </Utils::LoadableContent>
   </Auk::Panel::Body>
 </Auk::Panel>
+
+{{#if this.openSearch}}
+  <Auk::Modal @size="large">
+    <Auk::Modal::Header
+      @title={{t "add-past-minister"}}
+      @onClose={{toggle "openSearch" this}}
+    />
+    <Auk::Modal::Body>
+      <Utils::LoadableContent
+        @reserveSpace={{true}}
+      >
+        <Auk::Label>{{t "minister"}}</Auk::Label>
+        <Mandatees::MandateeSelector::OpenSearch
+          @excludeMandatees={{this.excludedMandatees}}
+          @onSelectMandatee={{set this "selectedPastMandatee"}}
+          @selectedMandatees={{this.selectedPastMandatee}}
+        />
+      </Utils::LoadableContent>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer
+      @onCancel={{toggle "openSearch" this}}
+    >
+      <AuButton
+        @skin="primary"
+        @icon="plus"
+        @disabled={{not this.selectedPastMandatee}}
+        {{on "click" this.onAddPastMandatee}}
+      >
+        {{t "add"}}
+      </AuButton>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
