@@ -69,12 +69,12 @@
           >
             {{t "name-subcase"}}
           </Auk::Label>
-          <Auk::Textarea
-            id="shortTitleInput"
-            @rows="2"
-            @value={{mut this.shortTitle}}
-            @error={{this.isShownShortTitleError}}
+          <AuTextarea
             data-test-new-publication-short-title
+            id="shortTitleInput"
+            @width="block"
+            @value={{this.shortTitle}}
+            @error={{this.isShownShortTitleError}}
             {{on "focusout" this.enableErrorOnShortTitle}}
           />
           {{#if this.isShownShortTitleError}}
@@ -89,11 +89,12 @@
           <Auk::Label for="longTitleInput">
             {{t "title-subcase"}}
           </Auk::Label>
-          <Auk::Textarea
-            id="longTitleInput"
-            @rows="4"
-            @value={{mut this.longTitle}}
+          <AuTextarea
             data-test-new-publication-long-title
+            id="longTitleInput"
+            rows="4"
+            @width="block"
+            @value={{this.longTitle}}
           />
         </AuFormRow>
         <div class="auk-o-grid-auto">

@@ -56,11 +56,12 @@
           <Auk::Label for="publicationRequestModal_message" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-publication-request-message
             id="publicationRequestModal_message"
             rows="16"
-            @value={{mut this.message}}
+            @width="block"
+            @value={{this.message}}
           />
         </AuFormRow>
       </div>
