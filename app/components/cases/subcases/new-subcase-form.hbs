@@ -90,7 +90,7 @@
                     data-test-new-subcase-form-toggle-confidential
                     id="subcase-confidential"
                     @checked={{this.confidential}}
-                    @onChange={{fn (mut this.confidential)}}
+                    @onChange={{set this "confidential"}}
                   />
                 </AuFormRow>
                 <AuFormRow>

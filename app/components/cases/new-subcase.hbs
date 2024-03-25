@@ -49,8 +49,9 @@
           <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
           <AuToggleSwitch
             data-test-new-subcase-confidential
-            @checked={{this.confidential}}
             id="new-subcase-confidential"
+            @checked={{this.confidential}}
+            @onChange={{set this "confidential"}}
           />
         </AuFormRow>
         <AuFormRow>

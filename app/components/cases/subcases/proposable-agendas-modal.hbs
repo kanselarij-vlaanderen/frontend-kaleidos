@@ -12,7 +12,7 @@
           data-test-proposable-agendas-modal-toggle-formally-ok
           id="new-subcase-ok"
           @checked={{this.isFormallyOk}}
-          @onChange={{fn (mut this.isFormallyOk)}}
+          @onChange={{set this "isFormallyOk"}}
         />
       </AuFormRow>
       <AuFormRow>

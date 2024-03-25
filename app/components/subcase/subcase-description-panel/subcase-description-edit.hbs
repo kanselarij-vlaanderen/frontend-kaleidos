@@ -41,7 +41,7 @@
           data-test-subcase-description-edit-confidential
           id="subcase-confidential"
           @checked={{@subcase.confidential}}
-          @onChange={{set this "confidentialChanged" true}}
+          @onChange={{queue (set @subcase "confidential") (set this "confidentialChanged" true)}}
         />
       </AuFormRow>
       <AuFormRow>

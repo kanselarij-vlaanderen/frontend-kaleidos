@@ -141,8 +141,9 @@
             <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
             <AuToggleSwitch
               data-test-news-item-edit-item-toggle-finished
-              @checked={{this.isFinished}}
               id="item-finished"
+              @checked={{this.isFinished}}
+              @onChange={{set this "isFinished"}}
             />
           </AuFormRow>
           <AuFormRow data-test-news-item-edit-item-themes-selector>
