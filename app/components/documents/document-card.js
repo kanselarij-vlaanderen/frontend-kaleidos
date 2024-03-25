@@ -65,6 +65,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasConfidentialityChanged = false;
   @tracked oldAccessLevelUri = null;
 
+  @tracked showAccessLevelPill = true;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
@@ -205,6 +207,21 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
+    this.loadAccessPillVisibilityData.perform();
+  }
+
+  @task 
+  *loadAccessPillVisibilityData() {
+    const decisionActivity = 
+    this.args.decisionActivity ? this.args.decisionActivity : 
+      yield this.store.queryOne('decision-activity', {
+        'filter[treatment][agendaitems][pieces][:id:]': this.args.piece.id
+      })
+    if (decisionActivity 
+      && decisionActivity.isPostponed
+      && !this.currentSession.may('view-access-level-pill-when-postponed')) {
+        this.showAccessLevelPill = false;
+    }
   }
 
   @task
