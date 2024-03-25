@@ -33,10 +33,11 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
         this.args.subcase.id,
     });
     if (!retrievedPieces) {
-      this.comments = null;
+      this.comments =  [];
     } else {
-      const comments = retrievedPieces.map((piece) => piece.comment);
-      this.comments = comments;
+      this.comments = retrievedPieces
+        .map((piece) => piece.comment)
+        .filter((comment) => comment?.length);
     }
   });
 

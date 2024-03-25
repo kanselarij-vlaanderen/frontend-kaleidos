@@ -25,7 +25,7 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body @noPadding={{if @governmentAreas.length true false}}>
-    {{#if @subcase.parliamentRetrievalActivity.themes}}
+    {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity.themes)}}
       <div class="auk-u-m-4 auk-u-mb-2 auk-u-mt-2">
         <p><strong>{{t "themes"}}: </strong>
           <FormatList

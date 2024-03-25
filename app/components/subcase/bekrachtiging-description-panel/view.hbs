@@ -42,7 +42,7 @@
       {{#if @subcase.title}}
         <p>{{capitalize @subcase.title}}</p>
       {{/if}}
-      {{#if @subcase.parliamentRetrievalActivity}}
+      {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity)}}
         <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
       {{/if}}
     </Auk::Panel::Body>

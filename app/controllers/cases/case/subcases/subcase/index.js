@@ -40,10 +40,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
 
-  get showMandateesNotApplicableMessage() {
-    return [CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.model.subcase.type?.get('uri'));
-  }
-
   @action
   async saveMandateeData(mandateeData) {
     const propertiesToSetOnAgendaitem = {
