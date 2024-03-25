@@ -67,11 +67,11 @@
           {{#unless this.isAnnexMeeting}}
             <AuInput
               data-test-edit-meeting-meeting-number
+              type="number"
               id="meetingNumberInput"
               class="auk-input-group--w-medium auk-u-mr-2"
               {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
               value={{this.meetingNumber}}
-              @type="number"
               @disabled={{this.initializeMeetingNumber.isRunning}}
               {{on "input" (pick "target.value" (set this "meetingNumber"))}}
             />

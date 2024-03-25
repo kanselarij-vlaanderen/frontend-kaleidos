@@ -34,8 +34,8 @@
           <div class="auk-u-mb">
             <AuInput
               data-test-new-publication-number
+              type="number"
               value={{this.number}}
-              @type="number"
               @error={{not this.isPublicationNumberValid}}
               @disabled={{this.initPublicationNumber.isRunning}}
               {{on "input" (perform this.setPublicationNumber)}}
