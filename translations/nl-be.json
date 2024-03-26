@@ -1355,5 +1355,11 @@
   "possible-pieces-missing": "Kijk na of de bovenstaande lijst volledig is.",
   "automatic-check-performed-possible-pieces-missing":"Op basis van een automatische controle lijken de volgende documenten te ontbreken. Wil je ze toch indienen? Laad ze dan op en stuur ze vervolgens door.",
   "add-past-minister": "Vorige minister toevoegen",
-  "remove-past-minister": "Vorige minister verwijderen"
+  "remove-past-minister": "Vorige minister verwijderen",
+  "ratification": "Bekrachtiging",
+  "ratifications": "Bekrachtigingen",
+  "ratifications-ongoing": "Bekrachtigingen opvolgen",
+  "ratification-add": "Bekrachtiging uploaden",
+  "ratification-title": "Bekrachtiging Vlaamse Regering",
+  "ratifying-mandatees": "Ondertekenende Ministers"
 }

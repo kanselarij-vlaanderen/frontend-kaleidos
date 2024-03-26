@@ -23,10 +23,11 @@ Router.map(function() {
         this.route('documents', { path: '/documenten', });
         this.route('decisions', { path: '/beslissingen', });
         this.route('news-item', { path: '/kort-bestek', });
+        this.route('ratification', { path: '/bekrachtiging', });
       });
     });
     this.route('documents', { path: '/documenten', });
-    this.route('minutes', { path: '/notulen', }); 
+    this.route('minutes', { path: '/notulen', });
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
@@ -73,6 +74,8 @@ Router.map(function() {
     this.route('ongoing', { path: '/opvolgen' });
     this.route('decisions', { path: '/beslissingen-en-notulen' });
     this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
+    this.route('ratifications', { path: '/bekrachtigingen' });
+    this.route('ongoing-ratifications', { path: '/bekrachtigingen opvolgen' });
   });
 
   this.route('search', { path: '/zoeken', }, function() {

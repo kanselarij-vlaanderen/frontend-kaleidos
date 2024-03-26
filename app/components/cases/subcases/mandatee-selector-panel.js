@@ -6,9 +6,11 @@ import { task } from 'ember-concurrency';
 import { startOfDay } from 'date-fns';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import constants from 'frontend-kaleidos/config/constants';
+import { isPresent } from '@ember/utils';
 
 export default class MandateeSelectorPanel extends Component {
   @service mandatees;
+  @service intl;
 
   @tracked currentMinisters = []; // do not edit this array
   @tracked currentMandatees = []; // do not edit this array
@@ -21,10 +23,15 @@ export default class MandateeSelectorPanel extends Component {
   @tracked excludedMandatees = [];
   @tracked openSearch = false;
   @tracked selectedPastMandatee;
+  @tracked showSubmitter = true;
 
   constructor() {
     super(...arguments);
     this.prepareCurrentMinisters.perform();
+    this.panelTitle = this.args.title || this.intl.t('ministers');
+    if (isPresent(this.args.showSubmitter)) {
+      this.showSubmitter = this.args.showSubmitter;
+    }
   }
 
   get areLoadingTasksRunning() {
@@ -57,7 +64,7 @@ export default class MandateeSelectorPanel extends Component {
     // when the submitter exists, check if it is still in selectedAllMandatees
     // If not, first from list again, if undefined submitter will be cleared
     if (
-      (this.submitterMandatee &&
+      (this.showSubmitter && this.submitterMandatee &&
         !this.selectedAllMandatees.find(
           (selectedMandatee) =>
             selectedMandatee.id ===
@@ -66,7 +73,9 @@ export default class MandateeSelectorPanel extends Component {
       (!this.submitterMandatee && this.selectedAllMandatees.length)
     ) {
       this.submitterMandatee = this.selectedAllMandatees[0];
-      this.args.setSubmitter(this.submitterMandatee);
+      if (this.showSubmitter) {
+        this.args.setSubmitter(this.submitterMandatee);
+      }
     }
   }
 
@@ -116,12 +125,14 @@ export default class MandateeSelectorPanel extends Component {
         selectedMandatees?.map((m) => m.person)
       );
       // Only select submitter mandatee if they are still active
-      const submitterMandatee = this.currentMandatees.find(
-        (currentMandatee) =>
-          currentMandatee.get('id') === this.args.submitter.id
-      );
-      if (submitterMandatee) {
-        this.submitterMandatee = submitterMandatee;
+      if (this.showSubmitter) {
+        const submitterMandatee = this.currentMandatees.find(
+          (currentMandatee) =>
+            currentMandatee.get('id') === this.args.submitter.id
+        );
+        if (submitterMandatee) {
+          this.submitterMandatee = submitterMandatee;
+        }
       }
       if (ministersToSelect?.length) {
         yield this.onChangeSelectedCurrentMinisters(ministersToSelect);
@@ -139,7 +150,9 @@ export default class MandateeSelectorPanel extends Component {
         currentMandatee.get('id') === mandatee.id
     );
     this.submitterMandatee = submitterMandatee;
-    this.args.setSubmitter(submitterMandatee);
+    if (this.showSubmitter) {
+      this.args.setSubmitter(submitterMandatee);
+    }
   }
 
   @action
@@ -154,7 +167,7 @@ export default class MandateeSelectorPanel extends Component {
     // all checkbox mandatees + the manually added past mandatees
     this.excludedMandatees = [...this.currentMandatees, ...this.selectedPastMandatees];
   }
-  
+
   @action
   async onAddPastMandatee() {
     if (!this.selectedPastMandatee) {
@@ -162,7 +175,7 @@ export default class MandateeSelectorPanel extends Component {
     }
     let unsortedPastMandatees = this.selectedPastMandatees.slice();
     unsortedPastMandatees.push(this.selectedPastMandatee);
-    
+
     // with open search there is no guarantee that priorities will be unique numbers, but we sort anyway
     const sortedMandatees = unsortedPastMandatees.sort(
       (m1, m2) => m1.priority - m2.priority
@@ -175,7 +188,7 @@ export default class MandateeSelectorPanel extends Component {
     this.setExcludedMandatees();
 
     // Only if there is no submitter yet we make this added mandatee the submitter
-    if (!this.submitterMandatee) {
+    if (!this.submitterMandatee && this.showSubmitter) {
       this.submitterMandatee = this.selectedPastMandatee;
       this.args.setSubmitter(this.submitterMandatee);
     }
@@ -189,7 +202,7 @@ export default class MandateeSelectorPanel extends Component {
     this.setAllMandatees();
     this.setExcludedMandatees();
     // change submitter if it was this mandatee and update args
-    if (this.submitterMandatee.id === mandatee.id) {
+    if (this.submitterMandatee.id === mandatee.id && this.showSubmitter) {
       this.submitterMandatee = this.selectedAllMandatees[0];
       this.args.setSubmitter(this.submitterMandatee);
     }
