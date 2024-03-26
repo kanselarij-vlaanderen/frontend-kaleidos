@@ -14,6 +14,14 @@ export default class CasesCaseRoute extends Route {
           reload: true,
         }
       ),
+      latestParliamentSubmissionActivity: this.store.queryOne(
+        'parliament-submission-activity',
+        {
+          'filter[parliament-subcase][parliament-flow][case][decisionmaking-flow][:id:]':
+            params.id,
+          sort: '-start-date',
+        }
+      ),
       parliamentFlow: this.store.queryOne('parliament-flow', {
         'filter[case][decisionmaking-flow][:id:]': params.id,
         include: 'status,parliament-subcase',

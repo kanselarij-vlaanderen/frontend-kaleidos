@@ -6,26 +6,6 @@ import { tracked } from '@glimmer/tracking';
 export default class SubcasesSideNavComponent extends Component {
   @service store;
 
-  @tracked latestActivity;
-
-  constructor() {
-    super(...arguments);
-    this.loadLatestSubmissionActivity.perform();
-  }
-
-  loadLatestSubmissionActivity = task(async () => {
-    const latestActivity = await this.store.queryOne(
-      'parliament-submission-activity',
-      {
-        'filter[parliament-subcase][parliament-flow][:id:]':
-          this.args.parliamentFlow.id,
-        sort: '-start-date',
-      }
-    );
-
-    this.latestActivity = latestActivity;
-  });
-
   get items() {
     let items = [];
 
@@ -39,14 +19,15 @@ export default class SubcasesSideNavComponent extends Component {
       );
     }
 
-    if (this.latestActivity) {
+    const activity = this.args.latestParliamentSubmissionActivity;
+    if (activity) {
       const insertItem = {
         parliamentFlow: this.args.parliamentFlow,
-        latestSubmissionActivity: this.latestActivity,
+        latestSubmissionActivity: activity,
         type: 'parliament',
       };
       const insertPos = items.findIndex(
-        (item) => item.subcase.created > this.latestActivity.startDate
+        (item) => item.subcase.created > activity.startDate
       );
       if (insertPos !== -1) {
         items.splice(insertPos, 0, insertItem);
