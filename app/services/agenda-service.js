@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import fetch from 'fetch';
 
 export default class AgendaService extends Service {
@@ -139,6 +140,30 @@ export default class AgendaService extends Service {
         `Backend response contained an error (status: ${
           response.status
         }): ${JSON.stringify(json)}`);
+    }
+    await subcase.type;
+    if (subcase.isBekrachtiging) {
+      const decisionmakingFlow = await subcase.decisionmakingFlow;
+      const latestApprovalSubcase = await this.store.queryOne('subcase', {
+        filter: {
+          'decisionmaking-flow': {
+            ':id:': decisionmakingFlow.id,
+          },
+          'type': {
+            ':uri:': CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+          }
+        },
+        sort: '-created',
+      });
+      if (latestApprovalSubcase) {
+        let ratifiedBy = await latestApprovalSubcase.mandatees;
+        ratifiedBy = ratifiedBy.slice()
+        if (ratifiedBy && ratifiedBy.length) {
+          subcase.ratifiedBy = ratifiedBy;
+          await subcase.save();
+          await subcase.hasMany('ratifiedBy').reload();
+        }
+      }
     }
     const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();

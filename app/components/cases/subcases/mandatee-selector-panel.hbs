@@ -1,6 +1,6 @@
 <Auk::Panel class="auk-u-mb-2" data-test-mandatee-selector-panel-container>
   <Auk::Panel::Header @size="auto" class="au-u-background-gray-100">
-    <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+    <h4 class="auk-panel__title">{{this.panelTitle}}</h4>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <Utils::LoadableContent @isLoading={{this.areLoadingTasksRunning}} @reserveSpace={{false}}>
@@ -50,15 +50,17 @@
             <div
               class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"
             >
-              <AuRadio
-                @name="submitter"
-                @checked={{eq this.submitterMandatee.id mandatee.id}}
-                @disabled={{@disabled}}
-                {{on "click" (fn this.onChangeSubmitter mandatee)}}
-              />
-              <Auk::Label class="au-u-padding-bottom-none">
-                {{t "submitter"}}
-              </Auk::Label>
+              {{#if this.showSubmitter}}
+                <AuRadio
+                  @name="submitter"
+                  @checked={{eq this.submitterMandatee.id mandatee.id}}
+                  @disabled={{@disabled}}
+                  {{on "click" (fn this.onChangeSubmitter mandatee)}}
+                />
+                <Auk::Label class="au-u-padding-bottom-none">
+                  {{t "submitter"}}
+                </Auk::Label>
+              {{/if}}
               {{#if (includes mandatee this.selectedPastMandatees)}}
                 <AuButton
                   @skin="naked"

@@ -16,6 +16,8 @@ export default class Mandatee extends Model {
   @hasMany('subcase', { inverse: 'mandatees', async: true }) subcases;
   @hasMany('subcase', { inverse: 'requestedBy', async: true })
   requestedSubcases;
+  @hasMany('subcase', { inverse: 'ratifiedBy', async: true })
+  ratifiedSubcases;
   @hasMany('agendaitem', { inverse: 'mandatees', async: true }) agendaitems;
   @hasMany('publication-flow', { inverse: 'mandatees', async: true })
   publicationFlows;

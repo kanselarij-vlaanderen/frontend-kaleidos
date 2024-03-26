@@ -27,7 +27,7 @@ const {
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
 // - manage-only-specific-signatures: allow the profile to only create signing flows for their own mandatee.
 // - view-all-ongoing-signatures: allow the profile to view ongoing sign-flows from other creators
-// - remove-signatures: Remove the signed piece and all data of a sign-flow 
+// - remove-signatures: Remove the signed piece and all data of a sign-flow
 // - search-publication-flows
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
@@ -74,6 +74,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -93,6 +94,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'send-cases-to-vp',
@@ -112,6 +114,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -128,6 +131,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
@@ -145,6 +149,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -177,6 +182,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
@@ -192,6 +198,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
