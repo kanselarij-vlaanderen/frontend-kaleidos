@@ -11,9 +11,18 @@ export default class SubcasesSideNavComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadParliamentSubcase.perform();
-    this.loadSubcases.perform();
+    this.loadData.perform();
   }
+
+  loadData = task(async () => {
+    const [subcases, parliamentSubcaseWithActivity] = await Promise.all([
+      this.loadSubcases.perform(),
+      this.loadParliamentSubcase.perform(),
+    ]);
+
+    this.subcases = subcases;
+    this.parliamentSubcaseWithActivity = parliamentSubcaseWithActivity;
+  });
 
   loadSubcases = task(async () => {
     const queryParams = {
@@ -22,24 +31,29 @@ export default class SubcasesSideNavComponent extends Component {
       include: 'type',
     };
 
-    this.subcases = await this.store.queryAll('subcase', queryParams);
+    return await this.store.queryAll('subcase', queryParams);
   });
 
   loadParliamentSubcase = task(async () => {
     const subcase = await this.store.queryOne('parliament-subcase', {
       'filter[parliament-flow][case][decisionmaking-flow][:id:]':
         this.args.decisionmakingFlow.id,
+      include: 'parliament-flow.status',
     });
 
-    const latestActivity = await this.store.queryOne('parliament-submission-activity', {
-      'filter[parliament-subcase][:id:]': subcase.id,
-      sort: '-start-date'
-    });
-    
-    this.parliamentSubcaseWithActivity = {
-      subcase ,
-      activity: latestActivity,
-    }
+    const latestActivity = await this.store.queryOne(
+      'parliament-submission-activity',
+      {
+        'filter[parliament-subcase][:id:]': subcase.id,
+        sort: '-start-date',
+      }
+    );
+
+    return {
+      subcase,
+      parliamentFlow: subcase.parliamentFlow,
+      latestSubmissionActivity: latestActivity,
+    };
   });
 
   get items() {
@@ -56,14 +70,13 @@ export default class SubcasesSideNavComponent extends Component {
     }
 
     if (this.parliamentSubcaseWithActivity) {
-      const { subcase, activity } = this.parliamentSubcaseWithActivity;
+      const { latestSubmissionActivity } = this.parliamentSubcaseWithActivity;
       const insertItem = {
-        subcase,
-        latestSubmissionActivity: activity,
+        ...this.parliamentSubcaseWithActivity,
         type: 'parliament',
       };
       const insertPos = items.findIndex(
-        (item) => item.subcase.created > activity.startDate
+        (item) => item.subcase.created > latestSubmissionActivity.startDate
       );
       if (insertPos !== -1) {
         items.splice(insertPos, 0, insertItem);
