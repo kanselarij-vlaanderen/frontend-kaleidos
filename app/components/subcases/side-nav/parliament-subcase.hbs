@@ -3,7 +3,6 @@
     {{if @selected 'auk-sidebar__item--active'}}"
 >
   <LinkTo
-    data-test-subcase-side-nav-subcase
     @route="cases.case.parliament-flow"
   >
     <div
@@ -15,7 +14,7 @@
       {{t "last-edited-on"}}
       {{datetime @latestSubmissionActivity.startDate}}
     </div>
-    <div data-test-subcase-side-nav-decision class="au-u-margin-top-tiny">
+    <div class="au-u-margin-top-tiny">
       <Parliament::StatusPill @parliamentFlow={{@parliamentFlow}} />
     </div>
   </LinkTo>
