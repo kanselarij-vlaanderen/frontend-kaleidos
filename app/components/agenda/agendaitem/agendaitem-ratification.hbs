@@ -36,7 +36,7 @@
 {{/if}}
 </Auk::Panel::Body>
 </Auk::Panel>
-{{#if (user-may "manage-ratification")}}
+{{#if (and this.showMandateeSelectorPanel (user-may "manage-ratification"))}}
   <Cases::Subcases::MandateeSelectorPanel
     @mandatees={{this.ratifiedBy}}
     @setMandatees={{this.setMandatees}}

@@ -22,7 +22,8 @@ export default class AgendaitemRatificationComponent extends Component {
   @tracked isAddingRatification = false;
   @tracked ratification;
   @tracked ratifiedBy;
-  @tracked disableMandateeSelectorPanel;
+  @tracked disableMandateeSelectorPanel = true;
+  @tracked showMandateeSelectorPanel = false;
 
   constructor() {
     super(...arguments);
@@ -30,6 +31,7 @@ export default class AgendaitemRatificationComponent extends Component {
     this.loadCodelists.perform();
     this.mandateeSelectorPanelTitle = this.intl.t('ratifying-mandatees');
     this.firstLoad = true;
+    this.showMandateeSelectorPanel = true;
   }
 
   loadRatification = task(async () => {

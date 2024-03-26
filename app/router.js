@@ -74,6 +74,8 @@ Router.map(function() {
     this.route('ongoing', { path: '/opvolgen' });
     this.route('decisions', { path: '/beslissingen-en-notulen' });
     this.route('ongoing-decisions', { path: '/beslissingen-en-notulen opvolgen' });
+    this.route('ratifications', { path: '/bekrachtigingen' });
+    this.route('ongoing-ratifications', { path: '/bekrachtigingen opvolgen' });
   });
 
   this.route('search', { path: '/zoeken', }, function() {
