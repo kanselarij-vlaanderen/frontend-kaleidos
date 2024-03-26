@@ -7,9 +7,9 @@ export default class SentToVpModalComponent extends Component {
   @service store;
 
   subcaseWithPieces = trackedFunction(this, async() => {
-    const parliamentarySubmissionActivity = await this.args.submissionActivity;
+    const parliamentSubmissionActivity = await this.args.submissionActivity;
 
-    const submittedPieces = await parliamentarySubmissionActivity.submittedPieces;
+    const submittedPieces = await parliamentSubmissionActivity.submittedPieces;
     const grouped = groupBySubcaseName(submittedPieces);
     return grouped;
   });

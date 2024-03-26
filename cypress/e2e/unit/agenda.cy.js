@@ -152,10 +152,13 @@ context('Agenda tests', () => {
     const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
-    cy.visit('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // keep this setup because we want to validate the trimming of text on creation of subcase
-    cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
-    cy.openSubcase(0, subcaseTitleShort);
+    cy.addSubcaseViaModal({
+      agendaitemType: typeNota,
+      newShortTitle: subcaseTitleShort + whitespace,
+      longTitle: subcaseTitleLong + whitespace,
+    });
     cy.visitAgendaWithLink('vergadering/627E52D589C002BE724F77C3/agenda/627E52D689C002BE724F77C4/agendapunten');
     cy.addAgendaitemToAgenda(subcaseTitleShort);
 
@@ -292,7 +295,7 @@ context('Agenda tests', () => {
     // Closing an agenda should remove any design agenda
     // check existence of showChanges and absence of the formally ok edit
     cy.get(agenda.agendaOverview.showChanges);
-    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
     // By checking the length of agendas and confirming "Agenda A", no other agenda exists
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A', false);

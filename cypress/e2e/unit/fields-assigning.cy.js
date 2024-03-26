@@ -43,10 +43,14 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     };
     const domains = [domain1, domain2];
 
+    const subcase = {
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: SubcaseTitleShort,
+      longTitle: subcaseTitleLong,
+    };
     cy.createCase(caseName);
-    cy.openCase(caseName);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0, SubcaseTitleShort);
+    cy.addSubcaseViaModal(subcase);
 
     // check rollback after cancel
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
@@ -100,7 +104,11 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     };
     const domains = [domain3];
     cy.openCase(caseName);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: SubcaseTitleShort,
+      longTitle: subcaseTitleLong,
+    });
 
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort);
@@ -144,8 +152,11 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     const domains1 = [domain4];
     const domains2 = [domain5];
     cy.openCase(caseName);
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0, SubcaseTitleShort);
+    cy.addSubcaseViaModal({
+      agendaitemType: type,
+      newShortTitle: SubcaseTitleShort,
+      longTitle: subcaseTitleLong,
+    });
     cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3, {
       timeout: 5000,
@@ -176,7 +187,6 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
 
     // Check if subcase has the same amount of domains
     cy.openCase(caseName);
-    cy.openSubcase(0);
 
     cy.get(utils.governmentAreasPanel.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5, {
@@ -195,10 +205,14 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     };
     const domains = [domain4];
 
+    const subcase2 = {
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: subcaseTitleShort,
+      longTitle: subcaseTitleLong,
+    };
     cy.createCase(caseName2);
-    cy.openCase(caseName2);
-    cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, null, null);
-    cy.openSubcase(0, subcaseTitleShort);
+    cy.addSubcaseViaModal(subcase2);
     cy.addDomainsAndFields(domains);
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort);

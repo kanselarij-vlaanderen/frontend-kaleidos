@@ -1,0 +1,134 @@
+<div {{did-update (perform this.loadAgendaData)}}>
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "overview"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#if (user-may "manage-cases")}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-subcase-description-edit
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" @onClickEdit}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/if}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
+        <AuHeading
+          data-test-subcase-description-short-title
+          @level="4"
+          @skin="4"
+        >
+          {{capitalize @subcase.shortTitle}}
+        </AuHeading>
+        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+          <AuPill
+            data-test-subcase-description-agendaitem-type-pill
+            @size="small"
+          >
+            {{#if (is-announcement @subcase.agendaItemType)}}
+              {{capitalize (t "announcement")}}
+            {{else}}
+              {{t "note"}}
+            {{/if}}
+          </AuPill>
+          {{#if @subcase.confidential}}
+            <AuPill
+              data-test-subcase-description-confidentiality-pill
+              @size="small"
+              @skin="warning"
+              @icon="lock-closed">{{t "limited-access"}}
+            </AuPill>
+          {{/if}}
+        </div>
+      </div>
+      {{#if @subcase.title}}
+        <p data-test-subcase-description-title>{{capitalize @subcase.title}}</p>
+      {{/if}}
+    </Auk::Panel::Body>
+    <Auk::Panel::Body>
+      <div class="au-o-grid au-o-grid--small au-u-1-1">
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
+          <p>
+            {{#if (await @subcase.type)}}
+              {{@subcase.type.label}}
+            {{else}}
+              -
+            {{/if}}
+          </p>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "is-on-agenda"}}</AuHeading>
+          {{#if this.loadAgendaData.isRunning}}
+            <Auk::Loader />
+          {{else if this.modelsOfMeetings}}
+            {{#each this.modelsOfMeetings as |models| }}
+              {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                <AuLink
+                  data-test-subcase-description-agenda-link
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                    meeting.id
+                    agenda.id
+                    agendaitem.id
+                  }}
+                >
+                  {{! prettier-ignore}}
+                  {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                </AuLink>
+              {{/let}}
+            {{/each}}
+          {{else}}
+            <p data-test-subcase-description-not-on-agenda>
+              {{t "not-yet-on-agenda"}}
+            </p>
+          {{/if}}
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "number-session"}}</AuHeading>
+          <p data-test-subcase-description-meeting-number>
+            {{#if this.loadAgendaData.isRunning}}
+                <Auk::Loader />
+              {{else if this.modelsOfMeetings}}
+                {{#each this.modelsOfMeetings as |models|}}
+                  {{#let models.[0] as |meeting|}}
+                    {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                  {{/let}}
+                {{/each}}
+              {{else}}
+                {{t "no-number-yet"}}
+              {{/if}}
+            </p>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
+          {{#if this.loadAgendaData.isRunning}}
+            <Auk::Loader />
+          {{else if this.canShowDecisionStatus}}
+            <Decision::DecisionResultPill
+              @decisionResultCode={{this.latestDecisionActivity.decisionResultCode}}
+            />
+          {{else}}
+            <p data-test-subcase-description-decided-on>
+              {{t "not-yet-decided"}}
+            </p>
+          {{/if}}
+        </div>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

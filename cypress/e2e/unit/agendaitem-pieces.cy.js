@@ -45,14 +45,14 @@ context('Tests of pieces on agendaitems', () => {
       .contains('VR 2020 1212 DOC.0001-2BIS');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.clickReverseTab('Documenten');
-    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
-    cy.get(document.documentCard.card).should('have.length', 2);
-    cy.get(document.documentCard.name.value).eq(0)
-      .contains('VR 2020 1212 DOC.0001-1');
-    cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
-    // after delete on subcase view the agendaitem pieces are correct
-    cy.get(document.documentCard.card).should('have.length', 2);
+    // TODO KAS-4529 selector no longer exists, batchedit is gone. No longer possible to remove last piece from subcase views
+    // cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
+    // cy.get(document.documentCard.card).should('have.length', 2);
+    // cy.get(document.documentCard.name.value).eq(0)
+    //   .contains('VR 2020 1212 DOC.0001-1');
+    // cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
+    // // after delete on subcase view the agendaitem pieces are correct
+    // cy.get(document.documentCard.card).should('have.length', 2);
   });
 
   it('should test deleting a BIS from document viewer after opening document directly', () => {

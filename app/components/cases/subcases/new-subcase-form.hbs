@@ -12,7 +12,7 @@
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <div class="auk-u-my">
+        <div data-test-new-subcase-form-title-container class="auk-u-my">
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
@@ -33,7 +33,7 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<div class="auk-scroll-wrapper">
+<div class="auk-scroll-wrapper au-u-flex-item--fill">
   <div class="auk-scroll-wrapper__body">
     <div class="au-o-region">
       <div class="au-o-layout">
@@ -72,6 +72,7 @@
                   {{#if @latestSubcase}}
                     <AuFormRow>
                       <AuButton
+                        data-test-new-subcase-form-clone-previous
                         @skin="secondary"
                         @icon="copy-paste"
                         {{on "click" this.copySubcase}}
@@ -86,6 +87,7 @@
                   <Auk::Label for="subcase-confidential">
                     {{t "limited-access"}}</Auk::Label>
                   <AuToggleSwitch
+                    data-test-new-subcase-form-toggle-confidential
                     id="subcase-confidential"
                     @checked={{this.confidential}}
                     @onChange={{fn (mut this.confidential)}}
@@ -95,6 +97,7 @@
                   <Auk::Label id="name-subcase">
                     {{t "name-subcase"}}</Auk::Label>
                   <Textarea
+                    data-test-new-subcase-form-shorttitle
                     aria-labelledby="name-subcase"
                     rows="2"
                     class="auk-textarea"
@@ -105,6 +108,7 @@
                   <Auk::Label id="title-subcase">
                     {{t "title-subcase"}}</Auk::Label>
                   <Textarea
+                    data-test-new-subcase-form-longtitle
                     aria-labelledby="name-subcase"
                     rows="4"
                     class="auk-textarea"
@@ -114,6 +118,7 @@
                 <AuFormRow>
                   <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
                   <Utils::ModelSelector
+                    data-test-new-subcase-form-procedure-step
                     @modelName="subcase-type"
                     @searchField="label"
                     @sortField="label"
@@ -129,6 +134,7 @@
                   >
                     {{#if (not this.isEditing)}}
                       <Utils::ModelSelector
+                        data-test-new-subcase-form-procedure-name
                         class="auk-u-maximize-width"
                         @modelName="shortcut"
                         @searchField="label"
@@ -218,6 +224,7 @@
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
       <AuButton
+        data-test-new-subcase-form-cancel
         @skin="naked"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
         {{on "click" (perform this.cancelForm)}}
@@ -225,6 +232,7 @@
         {{t "cancel"}}
       </AuButton>
       <AuButton
+        data-test-new-subcase-form-save
         @skin="primary"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
         {{on "click" (toggle "showProposableAgendaModal" this)}}
@@ -239,6 +247,7 @@
   <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
     @onConfirm={{perform this.createSubcase}}
+    @showSaveWithoutAgenda={{true}}
   />
 {{/if}}
 

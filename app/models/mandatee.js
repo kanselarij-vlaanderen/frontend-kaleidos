@@ -34,4 +34,9 @@ export default class Mandatee extends Model {
     }
     return `${title}`;
   }
+
+  get displayTitle() {
+    const title = this.title ?? this.mandate.get('role.label');
+    return `${title}`;
+  }
 }
