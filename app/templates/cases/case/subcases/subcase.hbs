@@ -6,28 +6,15 @@
   {{page-title (capitalize @model.subcase.subcaseName)}}
 {{/if}}
 
-<Subcases::SubcasesOverviewHeader
-  @decisionmakingFlow={{@model.decisionmakingFlow}}
-/>
-<div class="auk-panel-layout">
-  {{#if @model.subcases.length}}
-    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
-      <Subcases::SideNav
-        @decisionmakingFlow={{@model.decisionmakingFlow}}
-        >
-      </Subcases::SideNav>
+<div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
+  <div class="auk-scroll-wrapper">
+    <div class="auk-u-bg-alt">
+      <Subcases::SubcaseHeader
+        @subcase={{@model.subcase}}
+        @onMoveSubcase={{this.refreshSubcases}}
+        @onProposedForAgenda={{this.refreshSubcases}}
+      />
     </div>
-  {{/if}}
-  <div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
-    <div class="auk-scroll-wrapper">
-      <div class="auk-u-bg-alt">
-        <Subcases::SubcaseHeader
-          @subcase={{@model.subcase}}
-          @onMoveSubcase={{this.refreshSubcases}}
-          @onProposedForAgenda={{this.refreshSubcases}}
-        />
-      </div>
-      {{outlet}}
-    </div>
+    {{outlet}}
   </div>
 </div>
