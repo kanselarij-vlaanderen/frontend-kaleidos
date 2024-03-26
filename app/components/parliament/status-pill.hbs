@@ -1,0 +1,20 @@
+{{#let (load @parliamentFlow.status) as |statusPromise|}}
+  {{#if statusPromise.isResolved}}
+    {{#if statusPromise.value}}
+      <AuPill
+        @size="small"
+        @skin={{if @parliamentFlow.isComplete "success" "warning"}}
+      >
+        {{@parliamentFlow.status.label}}
+      </AuPill>
+    {{else}}
+      <AuPill @size="small" @skin="warning">
+        {{t "no-status"}}
+      </AuPill>
+    {{/if}}
+  {{else}}
+    <AuPill @size="small" @skin="default">
+      {{t "loading"}}
+    </AuPill>
+  {{/if}}
+{{/let}}
