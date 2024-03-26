@@ -1,7 +1,13 @@
-<Subcases::SubcasesOverviewHeader @decisionmakingFlow={{@model}} />
+<Subcases::SubcasesOverviewHeader
+  @decisionmakingFlow={{@model.decisionmakingFlow}}
+/>
 <div class="auk-panel-layout">
   <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--cases">
-    <Subcases::SideNav @decisionmakingFlow={{@model}} />
+    <Subcases::SideNav
+      @decisionmakingFlow={{@model.decisionmakingFlow}}
+      @parliamentFlow={{@model.parliamentFlow}}
+      @subcases={{@model.subcases}}
+    />
   </div>
   {{outlet}}
 </div>

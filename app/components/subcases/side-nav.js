@@ -6,62 +6,32 @@ import { tracked } from '@glimmer/tracking';
 export default class SubcasesSideNavComponent extends Component {
   @service store;
 
-  @tracked parliamentSubcaseWithActivity;
-  @tracked subcases = [];
+  @tracked latestActivity;
 
   constructor() {
     super(...arguments);
-    this.loadData.perform();
+    this.loadLatestSubmissionActivity.perform();
   }
 
-  loadData = task(async () => {
-    const [subcases, parliamentSubcaseWithActivity] = await Promise.all([
-      this.loadSubcases.perform(),
-      this.loadParliamentSubcase.perform(),
-    ]);
-
-    this.subcases = subcases;
-    this.parliamentSubcaseWithActivity = parliamentSubcaseWithActivity;
-  });
-
-  loadSubcases = task(async () => {
-    const queryParams = {
-      'filter[decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
-      sort: 'created',
-      include: 'type',
-    };
-
-    return await this.store.queryAll('subcase', queryParams);
-  });
-
-  loadParliamentSubcase = task(async () => {
-    const subcase = await this.store.queryOne('parliament-subcase', {
-      'filter[parliament-flow][case][decisionmaking-flow][:id:]':
-        this.args.decisionmakingFlow.id,
-      include: 'parliament-flow.status',
-    });
-
+  loadLatestSubmissionActivity = task(async () => {
     const latestActivity = await this.store.queryOne(
       'parliament-submission-activity',
       {
-        'filter[parliament-subcase][:id:]': subcase.id,
+        'filter[parliament-subcase][parliament-flow][:id:]':
+          this.args.parliamentFlow.id,
         sort: '-start-date',
       }
     );
 
-    return {
-      subcase,
-      parliamentFlow: subcase.parliamentFlow,
-      latestSubmissionActivity: latestActivity,
-    };
+    this.latestActivity = latestActivity;
   });
 
   get items() {
     let items = [];
 
-    if (this.subcases) {
+    if (this.args.subcases) {
       items = items.concat(
-        this.subcases.map((subcase, index) => ({
+        this.args.subcases.map((subcase, index) => ({
           subcase,
           number: index,
           type: 'regular',
@@ -69,14 +39,14 @@ export default class SubcasesSideNavComponent extends Component {
       );
     }
 
-    if (this.parliamentSubcaseWithActivity) {
-      const { latestSubmissionActivity } = this.parliamentSubcaseWithActivity;
+    if (this.latestActivity) {
       const insertItem = {
-        ...this.parliamentSubcaseWithActivity,
+        parliamentFlow: this.args.parliamentFlow,
+        latestSubmissionActivity: this.latestActivity,
         type: 'parliament',
       };
       const insertPos = items.findIndex(
-        (item) => item.subcase.created > latestSubmissionActivity.startDate
+        (item) => item.subcase.created > this.latestActivity.startDate
       );
       if (insertPos !== -1) {
         items.splice(insertPos, 0, insertItem);
