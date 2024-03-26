@@ -396,7 +396,7 @@ export default class AgendaitemDecisionComponent extends Component {
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const newBetreftContent = generateBetreft(shortTitle,
+    const newBetreftContent = await generateBetreft(shortTitle,
       title,
       this.args.agendaitem.isApproval,
       documents,

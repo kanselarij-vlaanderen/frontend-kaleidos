@@ -120,15 +120,16 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
-  return `
-  <h4 ${pagebreak}><u>${
-    agendaitem.number
-  }. ${generateBetreft(
+  const betreft = await generateBetreft(
     agendaitem.shortTitle,
     agendaitem.title,
     agendaitem.isApproval,
     sortedPieces,
-    subcase?.subcaseName).toUpperCase()}</u></h4>
+    subcase?.subcaseName);
+  return `
+  <h4 ${pagebreak}><u>${
+    agendaitem.number
+  }. ${betreft.toUpperCase()}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {
