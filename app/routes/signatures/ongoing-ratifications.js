@@ -6,8 +6,9 @@ import { isPresent } from '@ember/utils';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
 import endOfDay from 'date-fns/endOfDay';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class SignaturesOngoingDecisionsRoute extends Route {
+export default class SignaturesOngoingRatificationsRoute extends Route {
   @service currentSession;
   @service store;
 
@@ -66,7 +67,17 @@ export default class SignaturesOngoingDecisionsRoute extends Route {
 
     const filter = {
       ':has:creator': true,
-      ':has:meeting': true,
+      'sign-subcase': {
+        'sign-marking-activity': {
+          piece: {
+            'document-container': {
+              type: {
+                ':uri:': CONSTANTS.DOCUMENT_TYPES.BEKRACHTIGING,
+              },
+            },
+          }
+        },
+      },
     };
     if (params.statuses?.length > 0) {
       filter['status'] = {
@@ -74,14 +85,31 @@ export default class SignaturesOngoingDecisionsRoute extends Route {
       }
     }
 
-    filter['meeting'] = {};
+    filter['decision-activity'] = {};
+    if (params.mandatees?.length > 0) {
+      filter['decision-activity'] = {
+        subcase: {
+          'ratified-by': {
+            person: {
+              ':id:': params.mandatees.join(','),
+            },
+          },
+        },
+      };
+    }
+    if (params.statuses?.length > 0) {
+      filter['status'] = {
+        ':id:': params.statuses.join(','),
+      };
+    }
+
     if (isPresent(params.dateFrom)) {
       const date = startOfDay(parseDate(params.dateFrom));
-      filter['meeting'][':gte:planned-start'] = date.toISOString()
+      filter['decision-activity'][':gte:start-date'] = date.toISOString().slice(0, 10);
     }
     if (isPresent(params.dateTo)) {
       const date = endOfDay(parseDate(params.dateTo));
-      filter['meeting'][':lte:planned-start'] = date.toISOString();
+      filter['decision-activity'][':lte:start-date'] = date.toISOString().slice(0, 10);
     }
 
     this.lastParams.commit();

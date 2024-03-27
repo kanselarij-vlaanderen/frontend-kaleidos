@@ -23,6 +23,7 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('concept', { inverse: null, async: true }) agendaItemType;
   @belongsTo('parliament-retrieval-activity', { inverse: 'generatedSubcase', async: true})
   parliamentRetrievalActivity;
+  @belongsTo('piece', { inverse: 'ratificationSubcase', async: true }) ratification;
 
   @hasMany('agenda-activity', { inverse: 'subcase', async: true })
   agendaActivities;
@@ -31,6 +32,7 @@ export default class Subcase extends ModelWithModifier {
   @hasMany('piece', { inverse: null, async: true, polymorphic: true })
   linkedPieces; // Actual inverse is linkedSubcase(s), but unsure if it should be a one-to-many or many-to-many yet
   @hasMany('mandatee', { inverse: 'subcases', async: true }) mandatees;
+  @hasMany('mandatee', { inverse: 'ratifiedSubcases', async: true }) ratifiedBy;
   @hasMany('decision-activity', { inverse: 'subcase', async: true })
   decisionActivities;
   @hasMany('concept', { inverse: null, async: true }) governmentAreas;

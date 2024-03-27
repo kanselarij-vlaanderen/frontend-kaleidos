@@ -1,0 +1,12 @@
+{{#if this.isEditing}}
+  <Subcase::BekrachtigingDescriptionPanel::Edit
+    @subcase={{@subcase}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.stopEditing}}
+  />
+{{else}}
+  <Subcase::BekrachtigingDescriptionPanel::View
+    @subcase={{@subcase}}
+    @onClickEdit={{this.startEditing}}
+  />
+{{/if}}
