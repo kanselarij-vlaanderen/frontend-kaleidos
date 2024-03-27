@@ -3,8 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-import { task } from 'ember-concurrency';
-import { all } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 
 export default class AgendaDocumentsController extends Controller {
   @service store;

@@ -2,11 +2,7 @@ import AgendaSidebarItem from 'frontend-kaleidos/components/agenda/agenda-detail
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { timeout } from 'ember-concurrency';
-import {
-  dropTask,
-  task
-} from 'ember-concurrency';
+import { timeout, dropTask, task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,

@@ -20,11 +20,11 @@ let WuIconComponent = Component.extend({
   iconClass: alias('icon'),
   isFaIcon: computed('icon', function() {
     /* eslint-disable ember/no-get */
-    return this.get('icon') && this.get('icon').startsWith('fa-');
+    return this.icon && this.icon.startsWith('fa-');
   }),
   isViIcon: computed('icon', function() {
     /* eslint-disable ember/no-get */
-    return this.get('icon') && this.get('icon').startsWith('vi-');
+    return this.icon && this.icon.startsWith('vi-');
   })
 });
 
