@@ -50,7 +50,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemsLinkedToNota = await nota.get('agendaitems');
       let agendaitemOnLatestAgenda;
       for (let index = 0; index < agendaitemsLinkedToNota.length; index++) {
-        const agendaitemToFetch = agendaitemsLinkedToNota.objectAt(index);
+        const agendaitemToFetch = agendaitemsLinkedToNota.at(index);
         const agendaitemFromStore = await this.store.findRecord('agendaitem', agendaitemToFetch.id,
           {
             reload: true,
