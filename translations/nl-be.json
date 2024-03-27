@@ -1356,5 +1356,12 @@
   "automatic-check-performed-possible-pieces-missing":"Op basis van een automatische controle lijken de volgende documenten te ontbreken. Wil je ze toch indienen? Laad ze dan op en stuur ze vervolgens door.",
   "case-info": "Dossier info",
   "design-of": "Ontwerp van",
-  "last-statusses": "Laatste statussen"
+  "last-statusses": "Laatste statussen",
+  "to-flemish-parliament": "Naar Vlaams Parlement",
+  "number": "Nummer",
+  "accepted-in-plenary-meeting-on": "Aangenomen in plenaire vergadering op",
+  "ratified-and-announced-on": "Bekrachtigd en afgekondigd op",
+  "published-in-belgian-official-gazette": "Bekendgemaakt in het Belgisch Staatsblad op",
+  "updated-on-date": "Geüpdatet op {date}",
+  "sent-on-date-by-person": "Verzonden op {date} door {person}"
 }
