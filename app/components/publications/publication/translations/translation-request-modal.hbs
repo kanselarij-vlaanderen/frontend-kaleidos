@@ -97,11 +97,12 @@
         <Auk::Label for="translationRequestMessage" @required={{true}}>
           {{t "message"}}
         </Auk::Label>
-        <Auk::Textarea
+        <AuTextarea
           data-test-publication-translation-request-message
           id="translationRequestMessage"
           rows="16"
-          @value={{mut this.message}}
+          @width="block"
+          @value={{this.message}}
         />
       </AuFormRow>
     </div>

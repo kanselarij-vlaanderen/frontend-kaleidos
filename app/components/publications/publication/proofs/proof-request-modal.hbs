@@ -56,11 +56,12 @@
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-proof-request-message
             id="proofRequestMessage"
             rows="16"
-            @value={{mut this.message}}
+            @width="block"
+            @value={{this.message}}
           />
         </AuFormRow>
       </div>

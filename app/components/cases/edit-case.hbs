@@ -8,10 +8,10 @@
     <div class="au-c-form">
       <AuFormRow>
         <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-        <Auk::Textarea
+        <AuTextarea
           data-test-edit-case-shorttitle
-          @rows="2"
-          @value={{mut this.shortTitle}}
+          @width="block"
+          @value={{this.shortTitle}}
         />
       </AuFormRow>
     </div>

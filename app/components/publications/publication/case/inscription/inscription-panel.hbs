@@ -16,8 +16,9 @@
             <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
               {{t "short-title"}}
             </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-short-title
-              @rows="2"
+            <AuTextarea
+              data-test-inscription-edit-short-title
+              @width="block"
               @value={{this.shortTitle}}
               {{on "focusout" this.enableErrorDisplay}}
             />
@@ -33,8 +34,10 @@
             <Auk::Label>
               {{t "long-title"}}
             </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-long-title
-              @rows="4"
+            <AuTextarea
+              data-test-inscription-edit-long-title
+              rows="4"
+              @width="block"
               @value={{this.longTitle}}
             />
           </AuFormRow>

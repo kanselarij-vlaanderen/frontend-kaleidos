@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -141,11 +140,6 @@ export default class SendToVpModalComponent extends Component {
       return `(${formatter.format(list)})`;
     }
     return '';
-  }
-
-  @action
-  onChangeComment(event) {
-    this.comment = event.target.value;
   }
 
   @action
