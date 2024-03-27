@@ -157,8 +157,9 @@ export default class AgendaService extends Service {
       });
       if (latestApprovalSubcase) {
         let ratifiedBy = await latestApprovalSubcase.mandatees;
-        ratifiedBy = ratifiedBy.slice()
-        if (ratifiedBy && ratifiedBy.length) {
+        ratifiedBy = ratifiedBy.slice();
+        if (ratifiedBy) {
+          await subcase.ratifiedBy;
           subcase.ratifiedBy = ratifiedBy;
           await subcase.save();
           await subcase.hasMany('ratifiedBy').reload();
