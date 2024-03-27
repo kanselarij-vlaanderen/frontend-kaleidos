@@ -120,7 +120,11 @@ export default class SignaturesOngoingRatificationsController extends Controller
 
   getMeetingDate = async (signFlowOrPromise) => {
     const signFlow = await signFlowOrPromise;
-    const meeting = await signFlow.meeting;
-    return meeting.plannedStart;
+    const decisionActivity = await signFlow.decisionActivity;
+    const treatment = await decisionActivity?.treatment;
+    const agendaitems = await treatment?.agendaitems;
+    const agenda = await agendaitems[0]?.agenda;
+    const meeting = await agenda?.meeting;
+    return meeting?.plannedStart;
   }
 }

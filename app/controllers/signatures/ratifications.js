@@ -142,7 +142,7 @@ export default class SignaturesRatificationsController extends Controller {
     const agendaitems = await treatment?.agendaitems;
     const agenda = await agendaitems[0]?.agenda;
     const meeting = await agenda?.meeting;
-    return meeting.plannedStart;
+    return meeting?.plannedStart;
   }
 
   getAgendaitem = async (pieceOrPromise) => {
