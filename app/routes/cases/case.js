@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class CasesCaseRoute extends Route {
   @service store;
+  @service router;
 
   model(params) {
     return RSVP.hash({
@@ -29,5 +30,20 @@ export default class CasesCaseRoute extends Route {
         include: 'type',
       }),
     });
+  }
+
+  async redirect(model, transition) {
+    if (transition.to.name === 'cases.case.index') {
+      if (
+        model.latestParliamentSubmissionActivity.startDate >
+        model.subcases.lastObject.created
+      ) {
+        debugger;
+        this.router.transitionTo('cases.case.parliament-flow');
+      } else {
+        debugger;
+        this.router.transitionTo('cases.case.subcases');
+      }
+    }
   }
 }
