@@ -1,0 +1,36 @@
+<Auk::Panel data-test-subcase-description-panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{t "newest-documents"}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    {{#each-in this.piecesBySubcase as |subcaseName pieces|}}
+      <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
+      <ul>
+        {{#each pieces as |piece|}}
+          <li class="vlc-document-list__item">
+            <div
+              class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
+            >
+              <a>
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-document"></i>
+                </div>
+                <span>{{piece.name}}</span>
+              </a>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    {{/each-in}}
+  </Auk::Panel::Body>
+</Auk::Panel>
