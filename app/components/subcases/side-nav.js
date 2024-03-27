@@ -13,7 +13,8 @@ export default class SubcasesSideNavComponent extends Component {
       items = items.concat(
         this.args.subcases.map((subcase, index) => ({
           subcase,
-          number: index,
+          sortDate: subcase.created,
+          number: index, // subcases is already sorted
           type: 'regular',
         }))
       );
@@ -21,21 +22,14 @@ export default class SubcasesSideNavComponent extends Component {
 
     const activity = this.args.latestParliamentSubmissionActivity;
     if (activity) {
-      const insertItem = {
+      items.push({
         parliamentFlow: this.args.parliamentFlow,
         latestSubmissionActivity: activity,
+        sortDate: activity.startDate,
         type: 'parliament',
-      };
-      const insertPos = items.findIndex(
-        (item) => item.subcase.created > activity.startDate
-      );
-      if (insertPos !== -1) {
-        items.splice(insertPos, 0, insertItem);
-      } else {
-        items.push(insertItem); // Add to the end if not found in between
-      }
+      });
     }
 
-    return items.reverse();
+    return items.sort((item1, item2) => item1.sortDate < item2.sortDate);
   }
 }
