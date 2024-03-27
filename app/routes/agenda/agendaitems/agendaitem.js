@@ -25,12 +25,15 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
 
     this.treatment = await model.treatment;
+    this.agendaActivity = await model.agendaActivity;
+    this.subcase = await this.agendaActivity?.subcase;
   }
 
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.meeting = this.modelFor('agenda').meeting;
     controller.treatment = this.treatment;
+    controller.subcase = this.subcase;
 
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const parentController = this.controllerFor('agenda.agendaitems');

@@ -24,9 +24,7 @@
               as |Group|
             >
               {{#each this.agendaItemTypes as |type|}}
-                <Group.Radio
-                  @value={{type}}
-                >
+                <Group.Radio @value={{type}}>
                   {{type.label}}
                 </Group.Radio>
               {{/each}}
