@@ -47,20 +47,23 @@
           </Auk::Label>
           <AuInput
             data-test-proof-request-subject
-            @width="block"
-            @value={{mut this.subject}}
             id="proofRequestSubject"
+            value={{this.subject}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "subject"))}}
           />
         </AuFormRow>
         <AuFormRow>
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-proof-request-message
             id="proofRequestMessage"
             rows="16"
-            @value={{mut this.message}}
+            value={{this.message}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "message"))}}
           />
         </AuFormRow>
       </div>

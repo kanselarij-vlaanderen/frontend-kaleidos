@@ -67,12 +67,13 @@
           {{#unless this.isAnnexMeeting}}
             <AuInput
               data-test-edit-meeting-meeting-number
-              @type="number"
-              @value={{this.meetingNumber}}
-              @disabled={{this.initializeMeetingNumber.isRunning}}
+              type="number"
               id="meetingNumberInput"
               class="auk-input-group--w-medium auk-u-mr-2"
               {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
+              value={{this.meetingNumber}}
+              @disabled={{this.initializeMeetingNumber.isRunning}}
+              {{on "input" (pick "target.value" (set this "meetingNumber"))}}
             />
           {{/unless}}
           <div class="auk-o-flex__item">
@@ -101,9 +102,10 @@
           <div class="auk-o-flex">
             <AuInput
               data-test-edit-meeting-number-representation-input
-              @value={{this.numberRepresentation}}
               class="auk-input-group--w-medium auk-u-mr-2"
               {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
+              value={{this.numberRepresentation}}
+              {{on "input" (pick "target.value" (set this "numberRepresentation"))}}
             />
             <AuButton
               data-test-edit-meeting-number-representation-save
@@ -136,8 +138,9 @@
           </Auk::Label>
           <AuInput
             data-test-edit-meeting-meeting-location
+            value={{this.extraInfo}}
             @width="block"
-            @value={{this.extraInfo}}
+            {{on "input" (pick "target.value" (set this "extraInfo"))}}
           />
         </AuFormRow>
       {{/unless}}

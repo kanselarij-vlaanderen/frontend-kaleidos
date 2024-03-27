@@ -64,17 +64,17 @@
                 <div class="auk-u-mb">
                   <AuInput
                     data-test-publication-case-info-panel-edit-publication-number
-                    @type="number"
-                    @value={{this.publicationNumber}}
+                    type="number"
+                    value={{this.publicationNumber}}
                     @error={{this.publicationNumberErrorTranslationKey}}
                     {{on "input" (perform this.setPublicationNumber)}}
                   />
                   <AuInput
                     data-test-publication-case-info-panel-edit-publication-number-suffix
-                    @value={{this.publicationNumberSuffix}}
+                    class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
+                    value={{this.publicationNumberSuffix}}
                     @error={{this.publicationNumberErrorTranslationKey}}
                     {{on "input" (perform this.setPublicationNumberSuffix)}}
-                    class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
                   />
                   <Utils::Generic::TooltipHelp class="auk-u-mx">
                     {{t "publication-flow-publication-number-help"}}
@@ -116,7 +116,8 @@
                 </Auk::Label>
                 <AuInput
                   data-test-publication-case-info-panel-edit-thread-id
-                  @value={{mut this.threadId}}
+                  value={{this.threadId}}
+                  {{on "input" (pick "target.value" (set this "threadId"))}}
                 />
               </AuFormRow>
             </div>

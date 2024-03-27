@@ -2,7 +2,7 @@
   @size="medium">
   <Auk::Modal::Header
     @title={{t "add-contact"}}
-    @onClose={{@onCancel}} 
+    @onClose={{@onCancel}}
     @closeDisabled={{this.save.isRunning}}/>
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
@@ -19,11 +19,11 @@
               </AuLabel>
               <AuInput
                 data-test-contact-person-add-first-name
-                @width="block"
-                @value={{this.firstName}}
-                @error={{this.validators.firstName.showError}}
-                {{on "input" this.validators.firstName.enableError}}
                 id="firstNameInput"
+                value={{this.firstName}}
+                @width="block"
+                @error={{this.validators.firstName.showError}}
+                {{on "input" this.onInputFirstName}}
               />
             </AuFormRow>
           </div>
@@ -38,11 +38,11 @@
               </AuLabel>
               <AuInput
                 data-test-contact-person-add-last-name
-                @width="block"
-                @value={{this.lastName}}
-                @error={{this.validators.lastName.showError}}
-                {{on "input" this.validators.lastName.enableError}}
                 id="lastNameInput"
+                value={{this.lastName}}
+                @width="block"
+                @error={{this.validators.lastName.showError}}
+                {{on "input" this.onInputLastName}}
               />
             </AuFormRow>
           </div>
@@ -53,9 +53,10 @@
           </AuLabel>
           <AuInput
             data-test-contact-person-add-email
-            @width="block"
-            @value={{this.email}}
             id="emailInput"
+            value={{this.email}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "email"))}}
           />
         </AuFormRow>
         <AuFormRow>

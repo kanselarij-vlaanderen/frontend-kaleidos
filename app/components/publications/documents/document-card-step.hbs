@@ -29,6 +29,7 @@
               class="auk-o-flex auk-o-flex--vertical-center"
             >
               {{#if (and @isEnabledDelete @piece.file)}}
+                {{!-- template-lint-disable require-context-role --}}
                 <AuDropdown
                   @icon="three-dots"
                   @title={{t "more"}}
@@ -44,6 +45,7 @@
                     {{t "document-delete"}}
                   </AuButton>
                 </AuDropdown>
+                {{!-- template-lint-enable require-context-role --}}
               {{/if}}
             </Group.Item>
           </Toolbar.Group>

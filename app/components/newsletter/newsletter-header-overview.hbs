@@ -15,8 +15,8 @@
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab 
-              @route="newsletters" 
+            <Auk::Tab
+              @route="newsletters"
               @isHierarchicalBack={{true}}
             >
               {{t "all-sessions"}}
@@ -58,6 +58,7 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
+        {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
           data-test-newsletter-header-actions-dropdown
           @skin="secondary"
@@ -167,6 +168,7 @@
             {{/if}}
           {{/if}}
         </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
       </Group.Item>
     </Toolbar.Group>
   </Auk::Toolbar>

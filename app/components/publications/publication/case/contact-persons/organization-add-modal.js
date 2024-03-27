@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
@@ -35,5 +36,11 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
     this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.name)),
     });
+  }
+
+  @action
+  onInputName(event) {
+    this.name = event.target.value;
+    this.validators.name.enableError();
   }
 }

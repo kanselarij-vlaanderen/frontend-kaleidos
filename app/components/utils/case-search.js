@@ -50,8 +50,8 @@ export default class CaseSearch extends Component {
   }
 
   @action
-  updateSearchText(text) {
-    this.searchText = text.target.value;
+  updateSearchText(event) {
+    this.searchText = event.target.value;
     debounce(this, this.debouncedSearch, 500);
   }
 

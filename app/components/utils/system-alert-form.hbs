@@ -18,8 +18,9 @@
   <AuFormRow data-test-system-alert-form-title>
     <Auk::Label>{{t "title"}}</Auk::Label>
     <AuInput
+      value={{this.alert.title}}
       @width="block"
-      @value={{this.alert.title}}
+      {{on "input" (pick "target.value" (set this "alert.title"))}}
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-message>

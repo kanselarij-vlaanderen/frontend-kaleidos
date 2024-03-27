@@ -54,6 +54,7 @@
     {{#if (and (user-may "manage-cases") (not this.loadData.isRunning))}}
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-subcase-overview-header-actions-dropdown
             @title={{t "case-actions"}}
@@ -87,6 +88,7 @@
               {{t (if @decisionmakingFlow.closed "unarchive-case" "archive-case")}}
             </AuButton>
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <AuButton

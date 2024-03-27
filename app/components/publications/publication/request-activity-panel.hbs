@@ -11,6 +11,7 @@
     <Header.Actions as |Actions|>
       <Actions.Item>
         {{#unless @isDisabledDelete}}
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-request-activity-panel-dropdown
             @icon="three-dots"
@@ -28,6 +29,7 @@
               {{t "delete"}}
             </AuButton>
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         {{/unless}}
       </Actions.Item>
     </Header.Actions>

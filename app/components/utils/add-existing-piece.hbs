@@ -3,12 +3,12 @@
     <Auk::Toolbar::Item class="auk-u-maximize-width auk-u-overflow-hidden">
       <AuInput
         data-test-add-existing-piece-search-input={{true}}
-        @icon="search"
-        @width="block"
-        @value={{this.filter}}
-        {{on "input" (perform this.searchTask)}}
         id="searchId"
         placeholder={{t "search-placeholder"}}
+        value={{this.filter}}
+        @icon="search"
+        @width="block"
+        {{on "input" this.onInputFilter}}
       />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>

@@ -27,6 +27,7 @@
       </Auk::Button>
     {{else}}
       {{#if (user-may "manage-agendaitems")}}
+        {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
           data-test-agendaitem-postponed-repropose
           @skin="primary"
@@ -67,6 +68,7 @@
             </AuButton>
           {{/if}}
         </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
       {{/if}}
     {{/if}}
   {{/if}}

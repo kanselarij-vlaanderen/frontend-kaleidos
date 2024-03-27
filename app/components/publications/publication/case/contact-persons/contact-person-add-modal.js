@@ -49,6 +49,18 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   @action
+  onInputFirstName(event) {
+    this.firstName = event.target.value;
+    this.validators.firstName.enableError();
+  }
+
+  @action
+  onInputLastName(event) {
+    this.lastName = event.target.value;
+    this.validators.lastName.enableError();
+  }
+
+  @action
   setOrganization(organization) {
     this.organization = organization;
   }

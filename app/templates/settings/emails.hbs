@@ -20,19 +20,28 @@
               <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.translationRequestToEmail}}/>
+              <AuInput
+                value={{this.model.translationRequestToEmail}}
+                {{on "input" (pick "target.value" (set this "model.translationRequestToEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.translationRequestCcEmail}}/>
+              <AuInput
+                value={{this.model.translationRequestCcEmail}}
+                {{on "input" (pick "target.value" (set this "model.translationRequestCcEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.translationRequestReplyToEmail}}/>
+              <AuInput
+                value={{this.model.translationRequestReplyToEmail}}
+                {{on "input" (pick "target.value" (set this "model.translationRequestReplyToEmail"))}}
+              />
             </AuFormRow>
           </div>
         </div>
@@ -45,19 +54,28 @@
               <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.proofRequestToEmail}}/>
+              <AuInput
+                value={{this.model.proofRequestToEmail}}
+                {{on "input" (pick "target.value" (set this "model.proofRequestToEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.proofRequestCcEmail}}/>
+              <AuInput
+                value={{this.model.proofRequestCcEmail}}
+                {{on "input" (pick "target.value" (set this "model.proofRequestCcEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.proofRequestReplyToEmail}}/>
+              <AuInput
+                value={{this.model.proofRequestReplyToEmail}}
+                {{on "input" (pick "target.value" (set this "model.proofRequestReplyToEmail"))}}
+              />
             </AuFormRow>
           </div>
         </div>
@@ -70,19 +88,28 @@
               <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny">
                 {{t "email-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.publicationRequestToEmail}}/>
+              <AuInput
+                value={{this.model.publicationRequestToEmail}}
+                {{on "input" (pick "target.value" (set this "model.publicationRequestToEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-cc"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.publicationRequestCcEmail}}/>
+              <AuInput
+                value={{this.model.publicationRequestCcEmail}}
+                {{on "input" (pick "target.value" (set this "model.publicationRequestCcEmail"))}}
+              />
             </AuFormRow>
             <AuFormRow @alignment="inline">
               <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
               </AuLabel>
-              <AuInput @value={{mut this.model.publicationRequestReplyToEmail}}/>
+              <AuInput
+                value={{this.model.publicationRequestReplyToEmail}}
+                {{on "input" (pick "target.value" (set this "model.publicationRequestReplyToEmail"))}}
+              />
             </AuFormRow>
           </div>
         </div>

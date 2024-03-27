@@ -46,21 +46,23 @@
           </Auk::Label>
           <AuInput
             data-test-publication-request-subject
-            @width="block"
-            @value={{mut this.subject}}
             id="publicationRequestModal_subject"
+            value={{this.subject}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "subject"))}}
           />
         </AuFormRow>
         <AuFormRow>
           <Auk::Label for="publicationRequestModal_message" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-publication-request-message
             id="publicationRequestModal_message"
-            @block={{true}}
             rows="16"
-            @value={{mut this.message}}
+            value={{this.message}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "message"))}}
           />
         </AuFormRow>
       </div>

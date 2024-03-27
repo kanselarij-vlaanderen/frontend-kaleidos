@@ -29,13 +29,13 @@
             <:body as |row|>
               {{yield row to="body"}}
             </:body>
-            <:no-data>
-              {{#if (has-block "no-data")}}
-                {{yield to="no-data"}}
+            <:noData>
+              {{#if (has-block "noData")}}
+                {{yield to="noData"}}
               {{else}}
                 {{this.noDataMessage}}
               {{/if}}
-            </:no-data>
+            </:noData>
           </Table>
         </div>
         {{#if showAside}}
@@ -57,13 +57,13 @@
         <:body as |row|>
           {{yield row to="body"}}
         </:body>
-        <:no-data>
-          {{#if (has-block "no-data")}}
-            {{yield to="no-data"}}
+        <:noData>
+          {{#if (has-block "noData")}}
+            {{yield to="noData"}}
           {{else}}
             {{this.noDataMessage}}
           {{/if}}
-        </:no-data>
+        </:noData>
       </Table>
       {{#if showAside}}
         {{yield to="aside"}}

@@ -39,10 +39,12 @@
                 {{t "publication-remark-help"}}
               </Utils::Generic::TooltipHelp>
             </Auk::Label>
-            <Auk::Textarea
+            <AuTextarea
               data-test-remark-panel-textarea
-              @rows="12"
-              @value={{this.remark}}
+              rows="12"
+              value={{this.remark}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "remark"))}}
             />
           </AuFormRow>
         </div>

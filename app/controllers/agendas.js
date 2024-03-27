@@ -39,6 +39,13 @@ export default class AgendasController extends Controller {
   }
 
   @action
+  onEnterKeyFilter(event) {
+    if (event.key === 'Enter') {
+      this.setFilter(event.target.value);
+    }
+  }
+
+  @action
   setFilter(date) {
     if (this.dateRegex.test(date)) {
       this.filterAgendas = date;
@@ -199,7 +206,7 @@ export default class AgendasController extends Controller {
     let secretary;
     const meetingSecretary = await newMeeting.secretary;
     secretary =  meetingSecretary;
-    
+
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       secretary,
