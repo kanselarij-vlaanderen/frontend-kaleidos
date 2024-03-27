@@ -29,5 +29,14 @@ const selectors = {
     input: '[data-test-signatures-create-email-input]',
     add: '[data-test-signatures-create-email-add]',
   },
+
+  // decisions and notes
+
+  // create-sign-flow
+  decisionsSignFlow: {
+    pieceName: '[data-test-signatures-decisions-signflow-piece-name]',
+    meetingDate: '[data-test-signatures-decisions-signflow-meeting-date]',
+    secretaryName: '[data-test-signatures-decisions-signflow-secretary-nam]',
+  },
 };
 export default selectors;

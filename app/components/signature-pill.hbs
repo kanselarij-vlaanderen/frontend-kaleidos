@@ -3,6 +3,7 @@
 {{else}}
   {{#if this.data.value.signingHubUrl}}
     <AuPill
+      data-test-signature-pill
       @icon="sign"
       @skin={{this.skin}}
       @href={{if this.isClickable this.data.value.signingHubUrl}}
@@ -11,8 +12,9 @@
       {{this.data.value.status.label}}
     </AuPill>
   {{else}}
-    <AuPill 
-      @icon="sign" 
+    <AuPill
+      data-test-signature-pill
+      @icon="sign"
       @skin={{this.skin}}
       @route={{if (and this.isClickable this.data.value.route) this.data.value.route}}
       @models={{if (and this.isClickable this.data.value.models) this.data.value.models}}

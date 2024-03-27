@@ -70,7 +70,7 @@
             </AuCheckbox>
           </td>
           <td>
-            <AuLink @route="document" @model={{piece.id}}>
+            <AuLink data-test-signatures-decisions-signflow-piece-name @route="document" @model={{piece.id}}>
               {{piece.name}}
             </AuLink>
           </td>
@@ -85,8 +85,8 @@
               {{/let}}
             </AuPill>
           </td>
-          <td>{{date (await (this.getMeetingDate signFlow))}}</td>
-          <td>
+          <td data-test-signatures-decisions-signflow-meeting-date>{{date (await (this.getMeetingDate signFlow))}}</td>
+          <td data-test-signatures-decisions-signflow-secretary-name>
             {{#let (await (this.getSecretaryName signFlow)) as |name|}}
               {{#if name}}
                 {{name}}
