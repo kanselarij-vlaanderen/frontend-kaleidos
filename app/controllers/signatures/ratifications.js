@@ -35,7 +35,6 @@ export default class SignaturesRatificationsController extends Controller {
 
   @tracked sizeSignaturesRatifications = PAGINATION_SIZES[5];
   @tracked pageSignaturesRatifications = 0;
-  // @tracked sortSignaturesRatifications = DEFAULT_SORT_OPTIONS.join(',');
   @tracked sortSignaturesRatifications = DEFAULT_SORT_OPTIONS.join(`,`);
   @tracked sortField;
 
