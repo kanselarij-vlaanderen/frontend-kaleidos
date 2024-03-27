@@ -86,7 +86,7 @@ export default class SubcaseVersionsPanel extends Component {
     const sortedAgendaActivities = agendaActivities?.sortBy('startDate');
 
     this.modelsOfMeetings = [];
-    for (const agendaActivity of sortedAgendaActivities.toArray().entries()) {
+    for (const agendaActivity of sortedAgendaActivities.slice()) {
       // load models for linkTo and other uses
       const agendaitem = yield this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': agendaActivity.id,
