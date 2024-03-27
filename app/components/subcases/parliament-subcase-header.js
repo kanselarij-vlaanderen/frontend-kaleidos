@@ -6,9 +6,9 @@ export default class SubcasesParliamentSubcaseHeaderComponent extends Component 
 
   get items() {
     return [
-      { elementId: 'case', label: this.intl.t('case-info') },
+      { elementId: 'case-info', label: this.intl.t('case-info') },
       { elementId: 'documents', label: this.intl.t('newest-documents') },
-      { elementId: 'agenda', label: this.intl.t('document-versions') },
+      { elementId: 'document-versions', label: this.intl.t('document-versions') },
     ];
   }
 }

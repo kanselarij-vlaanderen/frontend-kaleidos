@@ -9,10 +9,7 @@ export default class CasesCaseRoute extends Route {
     return RSVP.hash({
       decisionmakingFlow: this.store.findRecord(
         'decisionmaking-flow',
-        params.id,
-        {
-          reload: true,
-        }
+        params.id
       ),
       latestParliamentSubmissionActivity: this.store.queryOne(
         'parliament-submission-activity',
