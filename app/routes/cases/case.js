@@ -38,10 +38,8 @@ export default class CasesCaseRoute extends Route {
         model.latestParliamentSubmissionActivity.startDate >
         model.subcases.lastObject.created
       ) {
-        debugger;
         this.router.transitionTo('cases.case.parliament-flow');
       } else {
-        debugger;
         this.router.transitionTo('cases.case.subcases');
       }
     }
