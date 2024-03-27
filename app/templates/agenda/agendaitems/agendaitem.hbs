@@ -22,6 +22,15 @@
           {{capitalize (t "decision")}}
         </Auk::Tab>
       {{/if}}
+      {{#if this.canShowRatificationTab}}
+        <Auk::Tab
+          @route="agenda.agendaitems.agendaitem.ratification"
+          data-test-agendaitem-nav-decision-tab
+          {{plausible-click "Actie" category="Bekrachtiging van agendapunt opvragen"}}
+        >
+          {{capitalize (t "ratification")}}
+        </Auk::Tab>
+      {{/if}}
       {{#if (not @model.isApproval)}}
         {{#if this.canShowNewsletterTab}}
           <Auk::Tab

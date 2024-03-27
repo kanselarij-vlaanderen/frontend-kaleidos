@@ -78,6 +78,7 @@ export default class Piece extends Model {
     as: 'piece'
   })
   signCompletionActivity;
+  @belongsTo('subcase', { inverse: 'ratification', async: true }) ratificationSubcase;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   requestActivitiesUsedBy;
