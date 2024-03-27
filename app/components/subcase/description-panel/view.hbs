@@ -91,11 +91,13 @@
                     {{! prettier-ignore}}
                     {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
                   </AuLink>
-                  <AuPill
-                    @size="small"
-                  >
-                    {{meeting.kind.label}}
-                  </AuPill>
+                  {{#if meeting.hasKindEP}}
+                    <AuPill
+                      @size="small"
+                    >
+                      {{meeting.kind.label}}
+                    </AuPill>
+                  {{/if}}
                 {{/let}}
               {{/if}}
             {{/each}}
