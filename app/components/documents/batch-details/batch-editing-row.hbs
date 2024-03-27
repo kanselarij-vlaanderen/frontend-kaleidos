@@ -29,7 +29,7 @@
       <AuToggleSwitch
         @skin="primary"
         @label={{t "present-for-signing"}}
-        @onChange={{fn this.setMarkedForSignature}}
+        @onChange={{this.setMarkedForSignature}}
         @disabled={{or this.isDisabled this.isSignMarkingDisabled @agendaitemIsRetracted}}
       />
     </td>

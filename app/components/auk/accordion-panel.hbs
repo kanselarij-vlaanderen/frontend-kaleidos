@@ -1,4 +1,5 @@
 <div class="auk-accordion-panel">
+  {{!-- template-lint-disable no-unsupported-role-attributes --}}
   <div
     class="auk-accordion-panel__item {{if (not this.isActive) "auk-accordion-panel__item--closed"}}"
     aria-expanded={{if this.isActive "true" "false"}}
@@ -19,4 +20,5 @@
       )
     }}
   </div>
+  {{!-- template-lint-enable no-unsupported-role-attributes --}}
 </div>

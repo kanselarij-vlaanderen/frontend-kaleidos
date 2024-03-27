@@ -243,6 +243,7 @@
                 />
               </div>
               {{#if (user-may "remove-signatures")}}
+                {{!-- template-lint-disable require-context-role --}}
                 <AuDropdown
                   @icon="three-dots"
                   @title={{t "more"}}
@@ -258,6 +259,7 @@
                     {{t "delete-signed-piece"}}
                   </AuButton>
                 </AuDropdown>
+                {{!-- template-lint-enable require-context-role --}}
               {{/if}}
             </div>
           </div>

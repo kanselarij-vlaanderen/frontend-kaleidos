@@ -56,7 +56,7 @@
     @skin="primary"
     @label={{t "present-for-signing"}}
     @checked={{this.hasMarkedSignFlow}}
-    @onChange={{fn this.markForSignFlow.perform}}
+    @onChange={{this.markForSignFlow.perform}}
     @disabled={{this.markForSignFlow.isRunning}}
   />
 {{/if}}
