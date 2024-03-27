@@ -40,10 +40,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
 
-  get showMandateesNotApplicableMessage() {
-    return [CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING].includes(this.model.subcase.type?.get('uri'));
-  }
-
   @action
   async saveMandateeData(mandateeData) {
     const propertiesToSetOnAgendaitem = {
@@ -77,24 +73,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       setNotYetFormallyOk(agendaitem);
       return agendaitem.save();
     }));
-  }
-
-  @action
-  prevPage() {
-    if (this.page > 0) {
-      this.page = this.page - 1;
-    }
-  }
-
-  @action
-  nextPage() {
-    this.page = this.page + 1;
-  }
-
-  @action
-  setSizeOption(size) {
-    this.size = size;
-    this.page = 0;
   }
 
   @action
