@@ -1,11 +1,6 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
-import { service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 export default class SubcasesSideNavComponent extends Component {
-  @service store;
-
   get items() {
     let items = [];
 
@@ -20,12 +15,14 @@ export default class SubcasesSideNavComponent extends Component {
       );
     }
 
-    const activity = this.args.latestParliamentSubmissionActivity;
-    if (activity) {
+    const submissionActivity = this.args.latestParliamentSubmissionActivity;
+    const retrievalActivity = this.args.latestParliamentRetrievalActivity;
+    if (this.args.parliamentFlow) {
       items.push({
         parliamentFlow: this.args.parliamentFlow,
-        latestSubmissionActivity: activity,
-        sortDate: activity.startDate,
+        latestSubmissionActivity: submissionActivity,
+        latestRetrievalActivity: retrievalActivity,
+        sortDate: retrievalActivity?.startDate ?? submissionActivity?.startDate,
         type: 'parliament',
       });
     }

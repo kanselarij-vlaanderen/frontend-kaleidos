@@ -20,6 +20,14 @@ export default class CasesCaseRoute extends Route {
           sort: '-start-date',
         }
       ),
+      latestParliamentRetrievalActivity: this.store.queryOne(
+        'parliament-retrieval-activity',
+        {
+          'filter[parliament-subcase][parliament-flow][case][decisionmaking-flow][:id:]':
+            params.id,
+          sort: '-start-date',
+        }
+      ),
       parliamentFlow: this.store.queryOne('parliament-flow', {
         'filter[case][decisionmaking-flow][:id:]': params.id,
         include: 'status,parliament-subcase',
@@ -35,8 +43,11 @@ export default class CasesCaseRoute extends Route {
   async redirect(model, transition) {
     if (transition.to.name === 'cases.case.index') {
       if (
-        model.latestParliamentSubmissionActivity.startDate >
-        model.subcases.lastObject.created
+        model.parliamentFlow &&
+        (model.latestParliamentRetrievalActivity?.startDate >
+          model.subcases?.lastObject.created ||
+          model.latestParliamentSubmissionActivity?.startDate >
+            model.subcases?.lastObject.created)
       ) {
         this.router.transitionTo('cases.case.parliament-flow');
       } else {
