@@ -51,6 +51,9 @@ export default class AgendaAgendaitemDecisionLegacyComponent extends Component {
   onDecisionEdit = task(async () => {
     await this.updateAgendaitemPiecesAccessLevels.perform();
     await this.updatePiecesSignFlows.perform();
+    // In digital we also check if newsItem needs to become hidden based on decisionResult
+    // That doesn't make sense here since these views are mainly for viewing
+    // For legacy edits we might have to remove some of the automatic updates
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {
