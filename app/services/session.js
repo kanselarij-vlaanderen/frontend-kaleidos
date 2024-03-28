@@ -27,8 +27,7 @@ export default class ExtendedSessionService extends SessionService {
     await this.currentSession.clear();
     const logoutUrl = ENV.torii.providers['acmidm-oauth2'].logoutUrl;
     try {
-      const url = new URL(logoutUrl);
-      window.location.replace(url.toString());
+      super.handleInvalidation(logoutUrl);
     } catch (error) { // eslint-disable-line no-unused-vars
       this.router.transitionTo(this.unauthenticatedRouteName);
     }
