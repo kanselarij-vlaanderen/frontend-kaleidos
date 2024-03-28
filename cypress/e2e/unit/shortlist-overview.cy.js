@@ -133,6 +133,7 @@ context('signatures shortlist overview tests', () => {
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    cy.wait(20000); // shortlist not always found
   });
 
   it('should check the signatures overview', () => {

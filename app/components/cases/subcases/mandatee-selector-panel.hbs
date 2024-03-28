@@ -52,6 +52,7 @@
             >
               {{#if this.showSubmitter}}
                 <AuRadio
+                  data-test-mandatee-selector-panel-submitter-radio
                   @name="submitter"
                   @checked={{eq this.submitterMandatee.id mandatee.id}}
                   @disabled={{@disabled}}

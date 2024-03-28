@@ -275,10 +275,14 @@ context('Decision postponing tests', () => {
       .contains('Ingediend voor');
 
     // check if meeting number contains multiple numbers
-    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+/);
 
     // check for multiple agenda links
-    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 1);
 
     // check if decided on
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');

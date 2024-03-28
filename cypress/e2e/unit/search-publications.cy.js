@@ -305,7 +305,7 @@ context('Search tests', () => {
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fieldsWithDoubleDates.number)
       .click();
     cy.addPublicationMandatee(mandatee3);
-    cy.wait(20000); // wait for indexing
+    cy.wait(60000); // wait for indexing
 
     // add urgent !only when not running publication-new-features.spec!
     // visitPublications();
