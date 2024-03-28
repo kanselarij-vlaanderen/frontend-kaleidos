@@ -12,25 +12,44 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  <Auk::Panel::Body>
-    {{#each-in this.piecesBySubcase as |subcaseName pieces|}}
-      <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
-      <ul>
-        {{#each pieces as |piece|}}
-          <li class="vlc-document-list__item">
-            <div
-              class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
-            >
-              <a>
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-document"></i>
-                </div>
-                <span>{{piece.name}}</span>
-              </a>
-            </div>
-          </li>
-        {{/each}}
-      </ul>
-    {{/each-in}}
-  </Auk::Panel::Body>
+  {{#if this.loadData.isIdle}}
+    <Auk::Panel::Body
+      @noPadding={{is-empty (keys this.piecesBySubcase)}}
+      class="c-document-panel"
+    >
+      {{#each-in this.piecesBySubcase as |subcaseName pieces|}}
+        <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
+        <ul>
+          {{#each pieces as |piece|}}
+            <li class="vlc-document-list__item">
+              <div
+                class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
+              >
+                <a>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-document"></i>
+                  </div>
+                  <span>{{piece.name}}</span>
+                </a>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <div>
+          <AuAlert
+            @skin="info"
+            @icon="info-circle"
+            class="au-u-margin-bottom-none"
+          >
+            {{t "no-documents-submitted-to-vp-yet"}}
+          </AuAlert>
+        </div>
+      {{/each-in}}
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <AuLoader />
+    </Auk::Panel::Body>
+  {{/if}}
 </Auk::Panel>

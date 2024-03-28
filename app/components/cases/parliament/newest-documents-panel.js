@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 export default class CasesParliamentNewestDocumentsPanelComponent extends Component {
   @service store;
 
-  @tracked piecesBySubcase;
+  @tracked piecesBySubcase = {};
 
   constructor() {
     super(...arguments);

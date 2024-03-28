@@ -12,41 +12,65 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
-  <Auk::Panel::Body class="auk-u-bg-alt">
+  <Auk::Panel::Body
+    @noPadding={{and
+      this.submissionActivities.isResolved
+      (is-empty this.submissionActivities.value)
+    }}
+    class="auk-u-bg-alt c-document-panel"
+  >
     {{#if this.submissionActivities.isResolved}}
-      <ul class="vlc-status-timeline">
-        {{#each this.submissionActivities.value as |submissionActivity index|}}
-          <li
-            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-          >
-            <div class="vlc-status-timeline__dot"></div>
-            <div
-              class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1"
+      {{#if (not (is-empty this.submissionActivities.value))}}
+        <ul class="vlc-status-timeline">
+          {{#each
+            this.submissionActivities.value
+            as |submissionActivity index|
+          }}
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
             >
-              {{#if
-                (not (eq (inc index) this.submissionActivities.value.length))
-              }}
-                {{t
-                  "updated-on-date"
-                  date=(date-phrase submissionActivity.startDate)
+              <div class="vlc-status-timeline__dot"></div>
+              <div
+                class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1"
+              >
+                {{#if
+                  (not (eq (inc index) this.submissionActivities.value.length))
                 }}
-              {{else}}
-                {{t
-                  "sent-on-date-by-person"
-                  date=(date-phrase submissionActivity.startDate)
-                  person=submissionActivity.submitter.fullName
-                }}
-              {{/if}}
-              <AuButton
-                @skin="link"
-                @icon="chevron-right"
-                @iconAlignment="right"
-                {{on "click" (set this "selectedSubmissionActivity" submissionActivity)}}
-              >{{t "view-documents-details"}}</AuButton>
-            </div>
-          </li>
-        {{/each}}
-      </ul>
+                  {{t
+                    "updated-on-date"
+                    date=(date-phrase submissionActivity.startDate)
+                  }}
+                {{else}}
+                  {{t
+                    "sent-on-date-by-person"
+                    date=(date-phrase submissionActivity.startDate)
+                    person=submissionActivity.submitter.fullName
+                  }}
+                {{/if}}
+                <AuButton
+                  @skin="link"
+                  @icon="chevron-right"
+                  @iconAlignment="right"
+                  {{on
+                    "click"
+                    (set this "selectedSubmissionActivity" submissionActivity)
+                  }}
+                >{{t "view-documents-details"}}</AuButton>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <div>
+          <AuAlert
+            @skin="info"
+            @icon="info-circle"
+            class="au-u-margin-bottom-none"
+          >
+            {{t "no-documents-submitted-to-vp-yet"}}
+          </AuAlert>
+        </div>
+      {{/if}}
     {{else}}
       <AuLoader />
     {{/if}}

@@ -46,9 +46,8 @@
   </Auk::Panel::Body>
   <Auk::Panel::Body class="auk-u-bg-alt">
     {{#if this.loadStatusData.isIdle}}
-      {{!-- {{#if @retrievalActivity}} --}}
-      {{#if true}}
-        <AuHeading @level="4" @skin="6">{{t "last-statusses"}}</AuHeading>
+      <AuHeading @level="4" @skin="6">{{t "last-statusses"}}</AuHeading>
+      {{#if this.latestRetrievalActivity}}
         <ul class="vlc-status-timeline">
           <li
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
@@ -56,12 +55,17 @@
             <div class="vlc-status-timeline__dot"></div>
             <div class="vlc-status-timeline__text">
               {{t "accepted-in-plenary-meeting-on"}}
-              {{! <AuLinkExternal
-              @icon="external"
-              @iconAlignment="right"
-              href="https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/1671548"
-            >03 september 2023</AuLinkExternal> }}
-              {{date-phrase @retrievalActivity.startDate}}
+              <AuLinkExternal
+                @icon="external"
+                @iconAlignment="right"
+                href={{concat
+                  "https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/"
+                  @parliamentFlow.parliamentId
+                }}
+              >{{date-phrase
+                  this.latestRetrievalActivity.startDate
+                }}</AuLinkExternal>
+
             </div>
           </li>
           {{#if this.latestMeeting}}
@@ -78,7 +82,7 @@
                 >{{date-phrase this.latestMeeting.startedOn}}</AuLinkExternal>
               </div>
             </li>
-            {{#if false}}
+            {{#if this.publicationStatus.isPublished}}
               <li
                 class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
               >
@@ -89,14 +93,16 @@
                     @icon="external"
                     @iconAlignment="right"
                     href="https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/1671548"
-                  >03 september 2023</AuLinkExternal>
+                  >{{this.latestPublicationActivity.startDate}}</AuLinkExternal>
                 </div>
               </li>
             {{/if}}
           {{/if}}
         </ul>
       {{else}}
-        Nog niet behandeld door het VP
+        <AuHelpText @skin="secondary">
+          {{t "no-statusses-available-yet"}}
+        </AuHelpText>
       {{/if}}
     {{else}}
       <AuLoader />

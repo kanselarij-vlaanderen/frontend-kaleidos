@@ -6,7 +6,11 @@ import { task } from 'ember-concurrency';
 export default class CasesParliamentDescriptionPanelComponent extends Component {
   @service store;
 
+  @tracked publciationStatus;
   @tracked latestMeeting;
+  @tracked publicationStatus;
+  @tracked latestPublicationActivity;
+  @tracked latestRetrievalActivity;
 
   constructor() {
     super(...arguments);
@@ -43,6 +47,24 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
       }
     }
 
+    const publicationStatus = await this.store.queryOne('publication-status', {
+      'filter[publications][case][parliament-flow][:id:]':
+        this.args.parliamentFlow.id,
+    });
+
+    const latestPublicationActivity = await this.store.queryOne(
+      'publication-activity',
+      {
+        '[subcase][publication-flow][case][parliament-flow][:id:]':
+          this.args.parliamentFlow.id,
+        sort: '-start-date',
+      }
+    );
+
+    this.publicationStatus = publicationStatus;
     this.latestMeeting = latestMeeting;
+    this.publicationStatus = publicationStatus;
+    this.latestPublicationActivity = latestPublicationActivity;
+    this.latestRetrievalActivity = latestRetrievalActivity;
   });
 }
