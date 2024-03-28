@@ -47,10 +47,10 @@ async function generateBetreft(
   const documentsWithoutBijlageTerInzage = await Promise.all(documents.map(async (document) => {
     const documentContainer = await document.documentContainer;
     const type = await documentContainer.type;
-    if (type.uri !== CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
-      return document;
+    if (type?.uri === CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
+      return null;
     }
-    return null;
+    return document;
   }))
   const filteredDocuments = documentsWithoutBijlageTerInzage.filter((document) => document !== null);
   let betreft = '';
