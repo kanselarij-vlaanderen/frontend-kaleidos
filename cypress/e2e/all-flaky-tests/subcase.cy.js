@@ -511,7 +511,7 @@ context('Subcase tests', () => {
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
     cy.openCase(caseTitle2, false);
-    cy.get(cases.subcaseSideNav.decision).should('have.length', 2);
+    cy.get(cases.subcaseSideNav.decision).should('have.length', 3);
   });
 
   it('check capital letters of subcase name', () => {
