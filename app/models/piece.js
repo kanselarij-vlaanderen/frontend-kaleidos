@@ -1,6 +1,12 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
 
+/**
+ * !when adding a new inverse relation (piece belongsTo/hasMany someModel), make sure to add the polymorphic type {as: 'piece'}
+ * !When setting the relation here or in the other model (someModel belongsTo/hasMany piece), make sure to add {polymorphic: true}
+ * Referencing a relation between piece and piece requires both
+ */
+
 export default class Piece extends Model {
   @attr('string') uri;
   @attr('string') name;
@@ -78,7 +84,7 @@ export default class Piece extends Model {
     as: 'piece'
   })
   signCompletionActivity;
-  @belongsTo('subcase', { inverse: 'ratification', async: true }) ratificationSubcase;
+  @belongsTo('subcase', { inverse: 'ratification', async: true, as: 'piece' }) ratificationSubcase;
 
   @hasMany('request-activity', { inverse: 'usedPieces', async: true, as: 'piece' })
   requestActivitiesUsedBy;

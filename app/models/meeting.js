@@ -41,6 +41,7 @@ export default class Meeting extends Model {
   @belongsTo('minutes', {
     inverse: 'minutesForMeeting',
     async: true,
+    polymorphic: true,
   })
   minutes;
   @belongsTo('mandatee', { inverse: 'secretaryForAgendas', async: true })
