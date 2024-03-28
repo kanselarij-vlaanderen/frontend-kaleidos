@@ -62,7 +62,7 @@ export default class SignaturePillComponent extends Component {
         const piece = await signMarkingActivity.piece;
         const documentContainer = await piece?.documentContainer;
         const pieceType = await documentContainer?.type;
-        switch (pieceType.uri) {
+        switch (pieceType?.uri) {
           case CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE:
             route = 'signatures.decisions';
             break;
