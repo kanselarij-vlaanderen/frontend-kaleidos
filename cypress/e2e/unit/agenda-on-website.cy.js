@@ -48,19 +48,19 @@ context('agenda notice test', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase1');
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
 
     // check rollback on cancel
-    cy.get('@subcase1').find(agenda.agendaDetailSidebarItem.inNewsletter);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter);
     cy.get(agenda.agendaitemTitlesView.edit).click();
     cy.get(agenda.agendaitemTitlesEdit.confidential).parent()
       .click();
-    cy.get(agenda.agendaDetailSidebarItem.confidential);
-    cy.get(agenda.agendaDetailSidebarItem.inNewsletter).should('not.exist');
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.confidential);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
+      .should('not.exist');
     cy.get(agenda.agendaitemTitlesEdit.actions.cancel).click();
-    cy.get('@subcase1').find(agenda.agendaDetailSidebarItem.inNewsletter);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter);
 
     // set to confidential via agendaitem view
     cy.get(agenda.agendaitemTitlesView.edit).click();
@@ -73,8 +73,8 @@ context('agenda notice test', () => {
       .wait('@patchAgendaitems1')
       .wait('@patchSubcases1')
       .wait('@patchNewsItems1');
-    cy.get('@subcase1').find(agenda.agendaDetailSidebarItem.confidential);
-    cy.get('@subcase1').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.confidential);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
 
     // revert confidential
@@ -88,8 +88,9 @@ context('agenda notice test', () => {
       .wait('@patchAgendaitems2')
       .wait('@patchSubcases2')
       .wait('@patchNewsItems2');
-    cy.get(agenda.agendaDetailSidebarItem.confidential).should('not.exist');
-    cy.get('@subcase1').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.confidential)
+      .should('not.exist');
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
@@ -114,11 +115,10 @@ context('agenda notice test', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase2');
-    cy.get('@subcase2').find(agenda.agendaDetailSidebarItem.confidential);
-    cy.get('@subcase2').find(agenda.agendaDetailSidebarItem.inNewsletter)
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.confidential);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
@@ -139,10 +139,9 @@ context('agenda notice test', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase3');
-    cy.get('@subcase3').find(agenda.agendaDetailSidebarItem.inNewsletter);
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter);
 
     cy.intercept('PATCH', '/decision-activities/**').as('patchActivity1');
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItems1');
@@ -153,7 +152,7 @@ context('agenda notice test', () => {
     cy.wait('@patchActivity1');
     cy.wait('@patchNewsItems1');
 
-    cy.get('@subcase3').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
@@ -174,9 +173,8 @@ context('agenda notice test', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase4');
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
 
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(agenda.decisionResultPill.edit)
@@ -189,7 +187,7 @@ context('agenda notice test', () => {
     cy.get(agenda.agendaitemDecisionEdit.save).click();
     cy.wait(`@patchDecisionActivities_${randomInt}`);
 
-    cy.get('@subcase4').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
@@ -210,9 +208,8 @@ context('agenda notice test', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase5');
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
 
     cy.intercept('PATCH', '/decision-activities/**').as('patchActivity2');
     cy.intercept('PATCH', '/news-items/**').as('patchNewsItems2');
@@ -223,7 +220,7 @@ context('agenda notice test', () => {
     cy.wait('@patchActivity2');
     cy.wait('@patchNewsItems2');
 
-    cy.get('@subcase5').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
@@ -243,13 +240,11 @@ context('agenda notice test', () => {
     // retract via decision
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase7');
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
 
-    cy.get('@subcase7').find(agenda.agendaDetailSidebarItem.inNewsletter);
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter);
 
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(agenda.decisionResultPill.edit)
@@ -262,11 +257,11 @@ context('agenda notice test', () => {
     cy.get(agenda.agendaitemDecisionEdit.save).click();
     cy.wait(`@patchDecisionActivities_${randomInt2}`);
 
-    cy.get('@subcase7').find(agenda.agendaDetailSidebarItem.inNewsletter)
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 
-  it('confidential subcase should not be on website', () => {
+  it('confidential announcement subcase should not be on website', () => {
     const caseTitle = `testId=${currentTimestamp()}: Cypress test retract via actions`;
     const subcaseTitleShort = `Cypress test: retract via actions - ${currentTimestamp()}`;
 
@@ -283,12 +278,10 @@ context('agenda notice test', () => {
     // confidential subcase should not be on website
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-
     cy.get(agenda.agendaDetailSidebarItem.shortTitle).contains(subcaseTitleShort)
-      .parent()
-      .parent()
-      .as('subcase6');
-    cy.get('@subcase6').find(agenda.agendaDetailSidebarItem.inNewsletter)
+      .parents(agenda.agendaDetailSidebarItem.container)
+      .as('sidebarItem');
+    cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
   });
 });

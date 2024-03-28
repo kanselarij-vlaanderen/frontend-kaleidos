@@ -12,7 +12,7 @@ reset-cache:
 	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
-	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations cache forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d triplestore database migrations cache forever-cache
 	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
@@ -26,7 +26,7 @@ reset-elastic-and-cache:
 	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
-	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations cache forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d triplestore database migrations cache forever-cache
 	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 120
