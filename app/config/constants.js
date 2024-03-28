@@ -60,6 +60,7 @@ export default {
     ADVIES: "http://themis.vlaanderen.be/id/concept/document-type/fb931eff-38f2-4743-802b-4240c35b8b0c",
     ADVIES_AGO: "http://themis.vlaanderen.be/id/concept/document-type/9c043848-6a9f-4448-9794-600e40dee6d2",
     BEKRACHTIGING: "http://themis.vlaanderen.be/id/concept/document-type/609cf883-b52c-43fe-84b1-eed02527173b",
+    BIJLAGE_TER_INZAGE: "http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043",
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
