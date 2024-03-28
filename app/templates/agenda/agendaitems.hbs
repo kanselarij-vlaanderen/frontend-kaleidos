@@ -7,7 +7,7 @@
           @onSearch={{this.searchAgendaitems}}
           @hideButtonText={{true}}
         />
-        <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
+        <div id="agendadetail-sidebar-container" class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
           <Agenda::AgendaDetail::Sidebar
             @notaGroups={{this.notaGroups}}
             @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
@@ -38,7 +38,11 @@
       <Agenda::AgendaitemSearch
         @searchText={{readonly this.filter}}
         @onSearch={{this.searchAgendaitems}}
-      />
+        @showReorderButton={{not this.showModifiedOnly}}
+        @isEditingOverview={{this.isEditingOverview}}
+        @toggleIsEditingOverview={{this.startEditingOverview}}
+        @currentAgenda={{this.agenda}}
+      />   
       <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical auk-u-hidden@print">
         {{#if this.isLoading}}
           <Auk::Loader @message={{t "agenda-loading"}} />
@@ -58,6 +62,10 @@
             @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
             @isEditingOverview={{this.isEditingOverview}}
             @toggleIsEditingOverview={{toggle "isEditingOverview" this}}
+            @notasHasChanged={{this.notasHasChanged}}
+            @toggleNotasHasChanged={{toggle "notasHasChanged" this}}
+            @announcementsHasChanged={{this.announcementsHasChanged}}
+            @toggleAnnouncementsHasChanged={{toggle "announcementsHasChanged" this}}
             class="auk-u-m-8"
           />
           {{#if this.assignNewPriorities.isRunning}}

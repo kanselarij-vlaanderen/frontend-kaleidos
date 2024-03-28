@@ -70,7 +70,6 @@ export default class NewSubcaseForm extends Component {
   @action
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
-    this.subcaseName = subcaseType.label;
     this.checkSubcaseType();
   }
   
@@ -105,6 +104,12 @@ export default class NewSubcaseForm extends Component {
   selectSubcaseName(shortcut) {
     this.selectedShortcut = shortcut;
     this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 
   @action
@@ -191,7 +196,9 @@ export default class NewSubcaseForm extends Component {
     addObjects(governmentAreas, newGovernmentAreas);
     yield this.subcase.save();
 
-    yield this.savePieces.perform();
+    if (this.pieces.length) {
+      yield this.savePieces.perform();
+    }
 
     if (meeting) {
       try {
@@ -209,6 +216,7 @@ export default class NewSubcaseForm extends Component {
       }
     }
 
+    this.args.onCreateSubcase?.();
     this.router.transitionTo(
       'cases.case.subcases.subcase',
       this.args.decisionmakingFlow.id,
@@ -274,7 +282,12 @@ export default class NewSubcaseForm extends Component {
 
   @action
   setMandatees(mandatees) {
-    this.mandatees = mandatees;
+    if (mandatees?.length) {
+      this.mandatees = mandatees;
+    } else {
+      this.mandatees.clear();
+      this.submitter = null;
+    }
   }
 
   /** government areas */

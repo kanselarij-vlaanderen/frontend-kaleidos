@@ -9,4 +9,6 @@ export default class ParliamentSubcase extends Model {
 
   @hasMany('parliament-submission-activity', { inverse: 'parliamentSubcase', async: true })
   parliamentSubmissionActivities;
+  @hasMany('parliament-retrieval-activity', { inverse: 'parliamentSubcase', async: true })
+  parliamentRetrievalActivities;
 }

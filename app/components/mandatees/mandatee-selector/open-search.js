@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 /**
  * @argument multiple
@@ -42,5 +43,11 @@ export default class MandateeSelector extends Component {
     this.mandateeOptions = mandateeOptions.filter(
       (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
     );
+  }
+
+  @action
+  onSelectMandatee(mandatee) {
+    this.mandateeOptions = [];
+    this.args.onSelectMandatee(mandatee);
   }
 }

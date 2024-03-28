@@ -29,10 +29,12 @@ context('Agenda secretary tests', () => {
     const subcaseTitle1 = `${caseTitle} test stap 1`;
 
     cy.createCase(caseTitle);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test voor het checken van de default secretaris op een agenda zonder secretaris'
-    );
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Nota',
+      newShortTitle: subcaseTitle1,
+      longTitle: 'Cypress test voor het checken van de default secretaris op een agenda zonder secretaris',
+    });
 
     cy.visitAgendaWithLink('vergadering/627E52AD89C002BE724F77B9/agenda/627E52AE89C002BE724F77BA/agendapunten/627E52AF89C002BE724F77BC?anchor=627E52AF89C002BE724F77BC');
     // check no secretary
@@ -41,6 +43,7 @@ context('Agenda secretary tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle1);
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.get(utils.governmentAreasPanel.emptyState);
+    cy.wait(2500); // hecking if this helps
   });
 
   it('should check default secretary', () => {
@@ -52,15 +55,19 @@ context('Agenda secretary tests', () => {
     const subcaseTitle2 = `${caseTitle2} test mededeling`;
 
     cy.createCase(caseTitle1);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test nota voor het checken van de default secretaris'
-    );
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Nota',
+      newShortTitle: subcaseTitle1,
+      longTitle: 'Cypress test nota voor het checken van de default secretaris',
+    });
     cy.createCase(caseTitle2);
-    cy.addSubcase('Mededeling',
-      subcaseTitle2,
-      'Cypress test mededeling voor het checken van de default secretaris'
-    );
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Mededeling',
+      newShortTitle: subcaseTitle2,
+      longTitle: 'Cypress test mededeling voor het checken van de default secretaris',
+    });
 
     cy.visit('/overzicht?sizeAgendas=2');
     cy.get(route.agendas.action.newMeeting, {
@@ -110,15 +117,19 @@ context('Agenda secretary tests', () => {
     const newSecretary = 'Dries Verhaeghe';
 
     cy.createCase(caseTitle1);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test nota voor het checken van de aangepaste secretaris'
-    );
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Nota',
+      newShortTitle: subcaseTitle1,
+      longTitle: 'Cypress test nota voor het checken van de aangepaste secretaris',
+    });
     cy.createCase(caseTitle2);
-    cy.addSubcase('Mededeling',
-      subcaseTitle2,
-      'Cypress test mededeling voor het checken van de aangepaste secretaris'
-    );
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Mededeling',
+      newShortTitle: subcaseTitle2,
+      longTitle: 'Cypress test mededeling voor het checken van de aangepaste secretaris',
+    });
     cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);

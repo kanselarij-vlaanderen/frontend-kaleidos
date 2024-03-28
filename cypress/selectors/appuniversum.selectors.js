@@ -17,5 +17,6 @@ const selectors = {
   },
   formRow: '.au-c-form-row',
   toaster: '.au-c-toaster',
+  fileUpload: '.auk-file-upload',
 };
 export default selectors;

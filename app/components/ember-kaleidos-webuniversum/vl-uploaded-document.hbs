@@ -1,19 +1,20 @@
-<div class="vl-uploaded-document">
-  <div class="vl-uploaded-document__title">
+<div class="au-u-padding">
+  <div class="au-u-flex">
     <AuBadge
       @icon="document"
       @skin="gray"
       class="au-c-badge--medium"
     />
-    <div class="vl-uploaded-document__title-container">
-      <div class="title">
+    <div class="au-u-margin-bottom au-u-margin-left-small">
+      <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
         <h6 class="auk-h4 auk-u-m-0"
           data-test-vl-uploaded-document-filename>
           {{@name}}
         </h6>
-        <AuButtonGroup>
+        <AuButtonGroup @inline={{true}}>
           {{#if @downloadLink}}
             <AuLinkExternal
+              @skin="button-naked"
               @icon="download"
               @hideText={{true}}
               href={{@downloadLink}}

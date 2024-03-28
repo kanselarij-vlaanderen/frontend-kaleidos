@@ -79,6 +79,10 @@ $au-label-color: var(--au-gray-700);
   padding-top: 0;
   white-space: nowrap;
   overflow: hidden;
+
+  &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
+    cursor: pointer;
+  }
 }
 
 .au-c-pill--link {
@@ -578,6 +582,10 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
+  .list-style-none {
+    list-style-type: none;
+  }
+
   // Provides the general styling for the decimal-extended (multi-level) list type
   // NOTE: This is limited to a certain levels deep because otherwise the styling keep overriding each other (`[data-list-style='decimal-extended']` and the rest of the ol/ul selectors)
   @mixin decimal-extended-styling($levels, $current-level: 1) {
@@ -651,6 +659,10 @@ $au-label-color: var(--au-gray-700);
 
 .au-u-flex-item--fixed {
   flex: 0 0 auto !important;
+}
+
+.au-u-flex-item--fill {
+  flex: 1 1 auto !important;
 }
 
 .au-u-maximize-width {

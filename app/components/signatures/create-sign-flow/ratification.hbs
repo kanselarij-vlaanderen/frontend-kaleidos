@@ -1,0 +1,46 @@
+{{#if this.hasConflictingSigners}}
+  <AuAlert
+    @skin="warning"
+    @icon="alert-triangle"
+    @title={{t "create-sign-flow-conflicting-signers-title"}}
+  >
+    <p>{{t "create-sign-flow-conflicting-signers-message"}}</p>
+  </AuAlert>
+{{/if}}
+<Auk::Panel class="auk-u-mt-2">
+  <Auk::Panel::Header class="auk-u-px-1">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-h4 auk-u-m-0">
+            {{t "to-sign-by"}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="auk-u-p-0">
+    <AuList
+      @divider={{true}}
+      as |Item|
+    >
+      {{#if this.loadSigners.isPending}}
+        <Item class="au-u-padding-small">
+          <Auk::Loader />
+        </Item>
+      {{else}}
+        {{#each this.signers as |signer|}}
+          <Item
+            class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+          >
+            {{signer.person.fullName}}
+          </Item>
+        {{else}}
+          <Item class="au-u-padding-small">
+            {{t "no-signers-selected"}}
+          </Item>
+        {{/each}}
+      {{/if}}
+    </AuList>
+  </Auk::Panel::Body>
+</Auk::Panel>

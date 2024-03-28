@@ -8,6 +8,7 @@ import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors.js';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -48,10 +49,26 @@ context('Decision tests post digital agenda', () => {
   // TODO-setup
   it('setup', () => {
     cy.createCase(caseTitle1);
-    cy.addSubcase(type1, subcaseTitleShort1, subcaseTitleLong1, subcaseType1, subcaseName1);
-    cy.addSubcase(typeNote, subcaseTitleShortNote, null, subcaseType1, subcaseName1);
-    cy.addSubcase(typeMed, subcaseTitleShortMed, null, subcaseType1, subcaseName1);
-
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: subcaseTitleShort1,
+      longTitle: subcaseTitleLong1,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
+    cy.addSubcaseViaModal({
+      agendaitemType: typeNote,
+      newShortTitle: subcaseTitleShortNote,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
+    cy.addSubcaseViaModal({
+      agendaitemType: typeMed,
+      newShortTitle: subcaseTitleShortMed,
+      subcaseType: subcaseType1,
+      subcaseName: subcaseName1,
+    });
     cy.createAgenda('Ministerraad', agendaDate);
   });
 
@@ -181,39 +198,41 @@ context('Decision tests post digital agenda', () => {
     cy.openAgendaitemDossierTab(subcaseTitleShort1);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
-    cy.get(cases.subcaseDetailNav.decisions).click();
-    cy.get(document.accessLevelPill.pill).contains(accessGovernment);
 
     // set subcase to confidential
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases1');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems1');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda1');
     cy.intercept('PATCH', '/reports/*').as('patchReports1');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases1')
       .wait('@patchagendaitems1')
       .wait('@patchAgenda1')
       .wait('@patchReports1');
 
-    // check document confidentiality
-    cy.get(cases.subcaseDetailNav.decisions).click();
+    // decision should stay confidential
+    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.accessLevelPill.pill).contains(accessConfidential);
 
+    cy.openAgendaitemDossierTab(subcaseTitleShort1);
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
+      .click();
+
     // revert subcase confidentiality
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases2');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems2');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda2');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases2')
       .wait('@patchagendaitems2')
       .wait('@patchAgenda2');
@@ -256,16 +275,15 @@ context('Decision tests post digital agenda', () => {
     cy.openAgendaitemDossierTab(subcaseTitleShort1);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
       .click();
-    cy.get(cases.subcaseDetailNav.overview).click();
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases3');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems3');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda3');
     cy.intercept('PATCH', '/reports/*').as('patchReports3');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases3')
       .wait('@patchagendaitems3')
       .wait('@patchAgenda3')
@@ -289,15 +307,14 @@ context('Decision tests post digital agenda', () => {
 
   it('should test if adding decision to confidential subcase sets correct default access rights', () => {
     cy.openCase(caseTitle1);
-    cy.openSubcase(0);
-    cy.get(cases.subcaseTitlesView.edit).click();
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.get(cases.subcaseDescription.edit).click();
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
     cy.intercept('PATCH', '/subcases/*').as('patchSubcases');
     cy.intercept('PATCH', '/agendaitems/*').as('patchagendaitems');
     cy.intercept('PATCH', '/agendas/*').as('patchAgenda');
-    cy.get(cases.subcaseTitlesEdit.actions.save).click()
+    cy.get(cases.subcaseDescriptionEdit.actions.save).click()
       .wait('@patchSubcases')
       .wait('@patchagendaitems')
       .wait('@patchAgenda');
@@ -393,7 +410,7 @@ context('Decision tests post digital agenda', () => {
     // change order
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
-    cy.get(agenda.agendaOverview.formallyOkEdit).click();
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort1)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaitem');
@@ -402,17 +419,19 @@ context('Decision tests post digital agenda', () => {
       .contains(2, {
         timeout: 60000,
       });
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems1');
     cy.intercept('POST', 'generate-decision-report/generate-reports').as('generateDecision1');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveUp)
-      .click()
-      .wait('@patchAgendaitems')
-      .wait('@generateDecision1');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveUp)
       .should('be.disabled');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.numbering)
       .contains(1);
+    cy.get(utils.changesAlert.confirm)
+      .click()
+      .wait('@patchAgendaitems1')
+      .wait('@generateDecision1');
     // check toasts
     cy.get(appuniversum.toaster).contains('Beslissingen aangepast');
     cy.get(appuniversum.alert.close).click({
@@ -427,6 +446,7 @@ context('Decision tests post digital agenda', () => {
     // change order again
     cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
       .click();
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
     cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort1)
       .parents(agenda.agendaOverviewItem.container)
       .as('agendaitem');
@@ -435,15 +455,17 @@ context('Decision tests post digital agenda', () => {
       .contains(1, {
         timeout: 60000,
       });
-    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems');
+    cy.intercept('PATCH', 'agendaitems/**').as('patchAgendaitems2');
     cy.intercept('POST', 'generate-decision-report/generate-reports').as('generateDecision2');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveDown)
-      .click()
-      .wait('@patchAgendaitems')
-      .wait('@generateDecision2');
+      .click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get('@agendaitem').find(agenda.agendaOverviewItem.moveDown)
       .should('be.disabled');
+    cy.get(utils.changesAlert.confirm)
+      .click()
+      .wait('@patchAgendaitems2')
+      .wait('@generateDecision2');
     // check toasts
     cy.get(appuniversum.toaster).contains('Beslissingen aangepast');
     cy.get(appuniversum.alert.close).click({
