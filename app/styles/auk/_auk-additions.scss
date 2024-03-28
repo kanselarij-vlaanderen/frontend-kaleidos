@@ -1,6 +1,10 @@
 /* Framework & external component fixes
    ========================================================================== */
 
+.auk-u-flex-grow {
+  flex-grow: 1;
+}
+
 // Modal
 
 .auk-modal-backdrop > .ember-view {
@@ -77,11 +81,9 @@ table tr.lt-expanded-row {
   padding: 0 1rem 0 1rem;
 }
 
-// When using auk-modal, the ember power select wormhole is behind the modal
-// auk-modal has z-index of 1600;
-
+// When using au-modal, the ember power select wormhole is behind the modal so we use the $ember-power-select-dropdown-z-index value from ember-appuniversum here to fix this
 .ember-power-select-dropdown {
-  z-index: $z-index-modal-additive + $z-index-dropdown;
+  z-index: 10000;
 }
 
 
@@ -192,6 +194,15 @@ table tr.lt-expanded-row {
     tr:focus-within td {
       background-color: transparent;
     }
+  }
+}
+
+.auk-table-row-disabled {
+  opacity: .7 !important;
+  cursor: not-allowed;
+
+  &:hover td {
+    background-color: transparent !important;
   }
 }
 
@@ -355,4 +366,50 @@ table tr.lt-expanded-row {
   &::first-letter {
     text-transform: lowercase !important;
   }
+}
+
+// Select
+
+.auk-select {
+  border: 0.1rem solid $au-input-border-color;
+  color: $au-input-color;
+  font-size: $au-input-font-size;
+  font-weight: var(--au-regular);
+  font-family: var(--au-font);
+  height: $au-input-height;
+  max-width: 100%;
+  padding: 0 $au-unit-small 0.1ex;
+  border-radius: $au-input-border-radius;
+
+  &[disabled],
+  &:disabled {
+    background-color: $au-input-disabled-background-color;
+    border-color: $au-input-disabled-border-color;
+    color: $au-input-disabled-color;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: var(--au-outline);
+    outline-offset: var(--au-outline-offset);
+    border-color: $au-input-border-color;
+    box-shadow: none;
+  }
+}
+
+// System alert
+
+.auk-system-alert {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+// Hierarchical back tab
+// Override the visibility of the back button label within Kaleidos only
+
+.auk-tabs__hierarchical-back .auk-tabs__tab__label {
+  display: block;
 }

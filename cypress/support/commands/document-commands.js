@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
@@ -199,9 +200,8 @@ function addDocumentsToMeeting(files) {
  */
 function addDocumentsToSubcase(files) {
   cy.log('addDocumentsToSubcase');
-  cy.clickReverseTab('Documenten');
   cy.wait(1000); // clicking adding documents sometimes does nothing, page not loaded?
-  cy.get(route.subcaseDocuments.add).click();
+  cy.get(route.subcase.add).click();
   return addNewDocumentsInUploadModal(files, 'subcase');
 }
 
@@ -212,7 +212,7 @@ function addDocumentsToSubcase(files) {
  * @function
  * @param {} file
  */
-function addDocumentToTreatment(file) {
+function addDocumentToTreatment(file, shouldConfirm = true) {
   cy.log('addDocumentsToTreatment');
   cy.get(agenda.agendaitemNav.decisionTab).click();
   // 1 default item treatment exists
@@ -221,6 +221,13 @@ function addDocumentToTreatment(file) {
   cy.get(auk.auModal.container).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
   });
+
+  if (shouldConfirm) {
+    cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+    cy.get(auk.confirmationModal.footer.confirm).click();
+    cy.wait('@patchDecisionActivities');
+  }
+  cy.log('/addDocumentsToTreatment');
 }
 
 /**
@@ -332,7 +339,6 @@ function addNewPieceToApprovalItem(agendaitemTitle, oldFileName, file) {
  */
 function addNewPieceToSubcase(oldFileName, file) {
   cy.log('addNewPieceToSubcase');
-  cy.clickReverseTab('Documenten');
   return addNewPiece(oldFileName, file, 'subcases');
 }
 
@@ -397,7 +403,7 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 
   cy.wait(`@createNewFile${randomInt}`);
   cy.wait(`@getNewFile${randomInt}`);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/uploadFile');
 }
 
@@ -412,9 +418,9 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 function addNewPieceToDecision(oldFileName, file) {
   cy.log('addNewPieceToDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
+  cy.intercept('POST', '/reports').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/reports/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -440,7 +446,7 @@ function addNewPieceToDecision(oldFileName, file) {
   cy.wait(`@patchDecisionActivity_${randomInt}`);
   cy.wait(`@getPreviousPiece_${randomInt}`);
   cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPieceToDecision');
 }
 
@@ -456,7 +462,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  // cy.intercept('GET', '/pieces/*/previous-piece').as(`getPreviousPiece_${randomInt}`);
+  cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -469,9 +475,11 @@ function addNewPieceToGeneratedDecision(oldFileName) {
     });
 
   cy.wait(`@patchDecisionActivity_${randomInt}`);
-  // cy.wait(`@getPreviousPiece_${randomInt}`);
-  cy.get(auk.auModal.container).should('not.exist');
-  cy.get(auk.loader).should('not.exist');
+  cy.wait(`@generateReport_${randomInt}`);
+  cy.get(appuniversum.loader).should('not.exist',
+    {
+      timeout: 60000,
+    });
   cy.log('/addNewPieceToGeneratedDecision');
 }
 
@@ -487,7 +495,7 @@ function addLinkedDocument(filenames) {
   cy.intercept('GET', 'pieces').as('createNewPiece');
   cy.intercept('GET', '/pieces?page**').as('getPiecesList');
   cy.log('addLinkedDocument');
-  cy.get(document.linkedDocuments.add).click();
+  cy.get(document.linkedDocumentsPanel.add).click();
   cy.wait('@getPiecesList');
   cy.get(document.addExistingPiece.searchInput).click();
 
@@ -554,8 +562,8 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   cy.intercept('DELETE', 'pieces/*').as(`deletePiece${randomInt}`);
   cy.intercept('PUT', '/agendaitems/**/pieces/restore').as(`putRestoreAgendaitems${randomInt}`);
   cy.get(editSelector).click();
-  cy.get(auk.loader);
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader);
+  cy.get(appuniversum.loader).should('not.exist');
   cy.get(document.documentDetailsRow.row).as('documentRows');
   cy.get('@documentRows').eq(indexToDelete)
     .find(document.documentDetailsRow.input)
@@ -571,6 +579,67 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
   }).wait(`@putRestoreAgendaitems${randomInt}`);
   cy.wait(2000);
   cy.log('/deletePieceBatchEditRow');
+}
+
+/**
+ * @description Adds a new document for each file in the "files"-array to an opened document upload modal
+ * @name addNewDocumentsInSubcaseFileUpload
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
+ */
+function addNewDocumentsInSubcaseFileUpload(files) {
+  cy.log('addNewDocumentsInUploadModal');
+  cy.get(cases.newSubcaseForm.documentUploadPanel).as('fileUploadDialog');
+
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+  files.forEach((file, index) => {
+    cy.get('@fileUploadDialog').within(() => {
+      cy.intercept('GET', '/concepts**559774e3-061c-4f4b-a758-57228d4b68cd**').as(`loadConceptsDocType_${randomInt}`);
+      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+      // ensure the new uploadedDocument component is visible before trying to continue
+      cy.get(document.uploadedDocument.nameInput, {
+        timeout: 60000,
+      }).should('have.length.at.least', index + 1);
+
+      if (file.newFileName) {
+        cy.get(document.uploadedDocument.nameInput).eq(index)
+          .clear()
+          .type(file.newFileName);
+      }
+    });
+
+    if (file.fileType) {
+      cy.wait(`@loadConceptsDocType_${randomInt}`, {
+        timeout: 60000,
+      });
+      cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
+        .eq(index)
+        .find(document.uploadedDocument.documentTypes)
+        .as('radioOptions');
+      cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+      cy.get('@radioOptions').within(($t) => {
+        if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
+          cy.get(utils.radioDropdown.input).check(file.fileType, {
+            force: true,
+          }); // CSS has position:fixed, which cypress considers invisible
+        } else {
+          cy.get('input[type="radio"][value="Andere"]').check({
+            force: true,
+          });
+          cy.get(dependency.emberPowerSelect.trigger)
+            .click()
+            .parents('body') // we want to stay in the within, but have to search the options in the body
+            .find(dependency.emberPowerSelect.option)
+            .contains(file.fileType)
+            .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+        }
+      });
+    }
+  });
+
+  cy.log('/addNewDocumentsInUploadModal');
 }
 
 // ***********************************************
@@ -595,3 +664,4 @@ Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
 Cypress.Commands.add('deletePieceBatchEditRow', deletePieceBatchEditRow);
+Cypress.Commands.add('addNewDocumentsInSubcaseFileUpload', addNewDocumentsInSubcaseFileUpload);

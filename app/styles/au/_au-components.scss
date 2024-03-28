@@ -3,57 +3,45 @@
 
 // SCSS variables (to override)
 
-$mq-breakpoints: (
-  xsmall: 300px,
-  small: 500px,
-  medium: 767px,
-  large: 1023px,
-);
-
-$au-layout-width: 767px;
-$au-layout-width-small: 500px;
-$au-layout-width-large: 1023px;
-
-$au-button-height: 3.4rem;
-
+$au-button-height: 3.6rem;
 $au-label-color: var(--au-gray-700);
 
 
 // Imports
 // sourced from "@appuniversum/ember-appuniversum" npm package
 
-@import 'ember-appuniversum/c-alert';
-@import 'ember-appuniversum/c-badge';
-@import "ember-appuniversum/c-body-container";
-@import 'ember-appuniversum/c-button';
-@import 'ember-appuniversum/c-button-group';
-@import 'ember-appuniversum/c-card';
-@import 'ember-appuniversum/c-content';
-@import 'ember-appuniversum/c-control';
-@import 'ember-appuniversum/c-control-group';
-@import 'ember-appuniversum/c-dropdown';
-@import 'ember-appuniversum/c-heading';
-@import 'ember-appuniversum/c-help-text';
-@import 'ember-appuniversum/c-hr';
-@import 'ember-appuniversum/c-fieldset';
-@import 'ember-appuniversum/c-form';
-@import 'ember-appuniversum/c-form-row';
-@import 'ember-appuniversum/c-icon';
-@import 'ember-appuniversum/c-input';
-@import "ember-appuniversum/c-label";
-@import 'ember-appuniversum/c-link';
-@import 'ember-appuniversum/c-list';
-@import 'ember-appuniversum/c-list-horizontal';
-@import "ember-appuniversum/c-list-navigation";
-@import 'ember-appuniversum/c-loader';
-@import 'ember-appuniversum/c-pill';
-@import "ember-appuniversum/c-main-container";
-@import 'ember-appuniversum/c-modal';
-@import "ember-appuniversum/c-sidebar";
-@import 'ember-appuniversum/c-table';
-@import 'ember-appuniversum/c-toaster';
-@import 'ember-appuniversum/c-toolbar';
-@import 'ember-appuniversum/c-toggle-switch';
+@import '@appuniversum/ember-appuniversum/styles/components/c-alert';
+@import '@appuniversum/ember-appuniversum/styles/components/c-badge';
+@import '@appuniversum/ember-appuniversum/styles/components/c-body-container';
+@import '@appuniversum/ember-appuniversum/styles/components/c-button';
+@import '@appuniversum/ember-appuniversum/styles/components/c-button-group';
+@import '@appuniversum/ember-appuniversum/styles/components/c-card';
+@import '@appuniversum/ember-appuniversum/styles/components/c-content';
+@import '@appuniversum/ember-appuniversum/styles/components/c-control';
+@import '@appuniversum/ember-appuniversum/styles/components/c-control-group';
+@import '@appuniversum/ember-appuniversum/styles/components/c-dropdown';
+@import '@appuniversum/ember-appuniversum/styles/components/c-heading';
+@import '@appuniversum/ember-appuniversum/styles/components/c-help-text';
+@import '@appuniversum/ember-appuniversum/styles/components/c-hr';
+@import '@appuniversum/ember-appuniversum/styles/components/c-fieldset';
+@import '@appuniversum/ember-appuniversum/styles/components/c-form';
+@import '@appuniversum/ember-appuniversum/styles/components/c-form-row';
+@import '@appuniversum/ember-appuniversum/styles/components/c-icon';
+@import '@appuniversum/ember-appuniversum/styles/components/c-input';
+@import '@appuniversum/ember-appuniversum/styles/components/c-label';
+@import '@appuniversum/ember-appuniversum/styles/components/c-link';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list-horizontal';
+@import '@appuniversum/ember-appuniversum/styles/components/c-list-navigation';
+@import '@appuniversum/ember-appuniversum/styles/components/c-loader';
+@import '@appuniversum/ember-appuniversum/styles/components/c-pill';
+@import '@appuniversum/ember-appuniversum/styles/components/c-main-container';
+@import '@appuniversum/ember-appuniversum/styles/components/c-modal';
+@import '@appuniversum/ember-appuniversum/styles/components/c-sidebar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-table';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
 
 
 // CSS variables (to override)
@@ -89,10 +77,16 @@ $au-label-color: var(--au-gray-700);
   line-height: 1; // vertical alignment is a bit off in Kaleidos
   border-radius: .5rem; // default border radius is .5rem in Kaleidos
   padding-top: 0;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
+    cursor: pointer;
+  }
 }
 
 .au-c-pill--link {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .au-c-link,
@@ -114,6 +108,10 @@ $au-label-color: var(--au-gray-700);
 .au-c-list-navigation__link {
   font-weight: 500;
   text-decoration: none;
+}
+
+.au-c-modal:not(.au-c-modal--large, .au-c-modal--fullscreen) {
+  max-width: 800px;
 }
 
 .au-c-modal__header {
@@ -186,26 +184,34 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
-  // override child (and heading) spacing to match the one in Kaleidos a bit more
-  > * + * {
-    margin-top: 1.5rem;
-  }
+  &,
+  > div:not([class]) {
+    // override child (and heading) spacing to match the one in Kaleidos a bit more
+    > * + * {
+      margin-top: 1.5rem;
+    }
 
-  > p + ul,
-  > p + ol {
-    margin-top: 0.2rem;
-  }
+    > p + ul,
+    > p + ol {
+      margin-top: 0.2rem;
+    }
 
-  > * + h1,
-  > * + h2,
-  > * + h3 {
-    margin-top: 3rem;
-  }
+    > ul[data-list-style='upper-alpha'] + p,
+    > ol[data-list-style='upper-alpha'] + p {
+      margin-top: 0;
+    }
 
-  > * + h4,
-  > * + h5,
-  > * + h6 {
-    margin-top: 1.5rem;
+    > * + h1,
+    > * + h2,
+    > * + h3 {
+      margin-top: 3rem;
+    }
+
+    > * + h4,
+    > * + h5,
+    > * + h6 {
+      margin-top: 1.5rem;
+    }
   }
 
   em { // default text color in Kaleidos
@@ -349,6 +355,16 @@ $au-label-color: var(--au-gray-700);
   margin-top: 0.4rem; // TODO: delete when global line height from AU is applied here in Kaleidos
 }
 
+.au-o-layout {
+  padding-right: $au-unit-small;
+  padding-left: $au-unit-small;
+
+  @include mq($au-layout-breakpoint) {
+    padding-right: $au-unit;
+    padding-left: $au-unit;
+  }
+}
+
 // Modal fixes
 .au-c-modal--fullscreen {
   max-width: 100%;
@@ -453,7 +469,29 @@ $au-label-color: var(--au-gray-700);
 // Toaster
 
 .au-c-toaster {
-  width: 420px;
+  width: auto;
+  align-items: flex-end;
+}
+
+.au-c-toaster {
+  .au-c-alert {
+    min-width: 420px;
+    max-width: 580px;
+  }
+}
+
+// Loader
+
+.au-c-loader__animation {
+  height: 1.6rem + $au-unit;
+
+  .au-c-loader--small & {
+    height: 1.6rem;
+  }
+
+  .au-c-loader--large & {
+    height: 1.6rem + $au-unit-large;
+  }
 }
 
 // Additions
@@ -498,5 +536,147 @@ $au-label-color: var(--au-gray-700);
 
   .au-c-badge__number {
     font-size: 1.8rem;
+  }
+}
+
+.au-c-content {
+  ol:not(.au-c-list-horizontal) {
+    list-style: decimal;
+    margin-left: $au-unit;
+
+    & > li > ol:not([data-list-style]) {
+      list-style-type: inherit;
+    }
+
+    &[data-list-style='decimal'] {
+      list-style-type: decimal;
+    }
+
+    &[data-list-style='upper-roman'] {
+      list-style-type: upper-roman;
+    }
+
+    &[data-list-style='lower-alpha'] {
+      list-style-type: lower-alpha;
+    }
+
+    &[data-list-style='upper-alpha'] {
+      list-style-type: upper-alpha;
+      margin-left: 2rem;
+      ol {
+        margin-left: 2rem;
+      }
+    }
+  }
+
+  ol.au-c-list {
+    list-style: none;
+    margin-left: 0;
+  }
+
+  ol:not(.au-c-list-horizontal) li + li {
+    margin-top: 0.1rem;
+  }
+
+  ol.au-c-list li + li {
+    margin-top: 0;
+  }
+
+  .list-style-none {
+    list-style-type: none;
+  }
+
+  // Provides the general styling for the decimal-extended (multi-level) list type
+  // NOTE: This is limited to a certain levels deep because otherwise the styling keep overriding each other (`[data-list-style='decimal-extended']` and the rest of the ol/ul selectors)
+  @mixin decimal-extended-styling($levels, $current-level: 1) {
+    display: table;
+    list-style-type: none;
+    margin: 0;
+    counter-reset: item;
+
+    > li {
+      display: table-row;
+      counter-increment: item;
+
+      &:before {
+        display: table-cell;
+        min-width: 2.4rem;
+        padding-right: .5ch;
+        text-align: end;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+        content: counters(item, ".") ". ";
+      }
+
+      @if $current-level < $levels {
+        > ol:not([data-list-style]) {
+          @include decimal-extended-styling($levels, $current-level + 1);
+        }
+      }
+
+      @if $current-level == $levels {
+        > ol:not([data-list-style]) {
+          list-style-type: decimal;
+
+          ol:not([data-list-style]) {
+            list-style-type: inherit;
+          }
+        }
+      }
+    }
+  }
+
+  ol[data-list-style='decimal-extended'] {
+    @include decimal-extended-styling(5, 1);
+  }
+
+  [data-indentation-level='1'] {
+    margin-left: 2.4rem;
+  }
+
+  [data-indentation-level='2'] {
+    margin-left: 4.8rem;
+  }
+
+  [data-indentation-level='3'] {
+    margin-left: 7.2rem;
+  }
+
+  [data-indentation-level='4'] {
+    margin-left: 9.6rem;
+  }
+}
+
+.au-c-link {
+  .au-c-icon {
+    flex: 0 0 auto;
+  }
+}
+
+.au-u-flex-item--shrink {
+  flex: 0 1 0 !important;
+}
+
+.au-u-flex-item--fixed {
+  flex: 0 0 auto !important;
+}
+
+.au-u-flex-item--fill {
+  flex: 1 1 auto !important;
+}
+
+.au-u-maximize-width {
+  width: 100% !important;
+}
+
+.au-u-maximize-height {
+  height: 100% !important;
+}
+
+// TODO: the selector below is not an ideal solution, this needs to replaced by a class selector like `.rdfa-table--fixed` or something similar when the omitted class issue on tabled within ember-rdfa-editor is fixed
+.au-c-content {
+  #attendees,
+  #absentees {
+    table-layout: fixed;
   }
 }

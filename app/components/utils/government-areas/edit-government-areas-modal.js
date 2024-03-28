@@ -22,7 +22,7 @@ export default class EditGovernmentAreasModal extends Component {
   *loadGovernmentAreas() {
     const concepts = yield this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
-    for (const concept of concepts.toArray()) {
+    for (const concept of concepts.slice()) {
       const isInDateRange =
         concept.startDate <= this.args.referenceDate &&
         (this.args.referenceDate <= concept.endDate ||

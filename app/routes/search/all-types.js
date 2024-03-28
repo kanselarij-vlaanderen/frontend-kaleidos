@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
 import { action } from '@ember/object';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -9,6 +8,7 @@ import CasesSearchRoute from './cases';
 import SearchDocumentsRoute from './documents';
 import SearchNewsItemsRoute from './news-items';
 import SearchDecisionsRoute from './decisions';
+import SearchPublicationFlowsRoute from './publication-flows';
 
 export default class AllTypes extends Route {
   @service store;
@@ -56,6 +56,14 @@ export default class AllTypes extends Route {
       createFilter: SearchNewsItemsRoute.createFilter,
       retrieveDate: (newsItem) => newsItem.latestAgendaitem.meetingDate,
     },
+    'publication-flows': {
+      searchType: 'publication-flows',
+      searchFields: SearchPublicationFlowsRoute.textSearchFields,
+      highlightFields: SearchPublicationFlowsRoute.highlightFields,
+      dataMapping: SearchPublicationFlowsRoute.postProcessData,
+      createFilter: SearchPublicationFlowsRoute.createFilter,
+      retrieveDate: (publicationFlow) => publicationFlow.sessionDate,
+    },
   };
 
   constructor() {
@@ -69,10 +77,6 @@ export default class AllTypes extends Route {
 
     this.lastParams.stageLive(params);
     this.lastParams.commit();
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
 
     const results = await Promise.all(
       Object.entries(this.CONTENT_TYPES).map(async (entry) => {
@@ -88,7 +92,7 @@ export default class AllTypes extends Route {
             10,
             null,
             filter,
-            (searchData) => type.dataMapping(searchData, this.store),
+            (searchData) => type.dataMapping(searchData, this.store, params),
             {
               fields: type.highlightFields,
             }
@@ -152,6 +156,11 @@ export default class AllTypes extends Route {
           route = 'search.news-items';
           tab = 'Kort bestek';
           break;
+        case 'publication-flows':
+          name = this.intl.t('publications');
+          route = 'search.publication-flows';
+          tab = 'Publicaties';
+          break;
         default:
           break;
       }
@@ -162,6 +171,7 @@ export default class AllTypes extends Route {
       params.searchText,
       flatResults.length,
       params.mandatees || [],
+      params.governmentAreas || [],
       params.dateFrom,
       params.dateTo,
     );
@@ -180,16 +190,23 @@ export default class AllTypes extends Route {
     controller.searchText = searchText;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to) {
+  async trackSearch(searchTerm, resultCount, mandatees, governmentAreas, from, to) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Aantal resultaten': resultCount,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Van': from,
       'Tot en met': to,
     }, true);

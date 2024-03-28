@@ -62,7 +62,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const status = yield this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (status.isDesignAgenda) {
         this.designAgenda = agenda;
@@ -70,7 +70,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
     }
 
-    for (const agenda of this.args.reverseSortedAgendas.toArray()) {
+    for (const agenda of this.args.reverseSortedAgendas.slice()) {
       const status = yield agenda.status;
       if (!status.isDesignAgenda) {
         this.lastApprovedAgenda = agenda;
@@ -116,7 +116,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     return (
       !this.isFinalMeeting &&
       this.isMeetingClosable &&
-      this.currentSession.isAdmin &&
+      (this.currentSession.may('reopen-approved-agenda-version')) &&
       this.currentAgendaIsLatest &&
       this.isDesignAgenda
     )
@@ -130,7 +130,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   get canDeleteSelectedAgenda() {
     return (
       this.isDesignAgenda ||
-      (this.currentSession.isAdmin && this.currentAgendaIsLatest)
+      ((this.currentSession.may('remove-approved-agenda')) && this.currentAgendaIsLatest)
     );
   }
 
@@ -145,7 +145,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
       .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-      .sortBy('number');
+      .sort((a1, a2) => a1.number - a2.number);
   }
 
   @bind

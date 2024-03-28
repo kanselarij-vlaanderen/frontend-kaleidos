@@ -26,7 +26,7 @@
       @onClickRow={{this.navigateToResult}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-all-types-data-table-row>
           {{#if (eq row.name "cases")}}
             <Search::ResultCards::Case
               @date={{row.data.attributes.sessionDates}}
@@ -92,20 +92,25 @@
               @agendaItemId={{row.data.latestAgendaitem.id}}
             />
           {{/if}}
+          {{#if (eq row.name "publication-flows")}}
+            <Search::ResultCards::PublicationFlow
+              @sessionDate={{row.data.sessionDate}}
+              @modifiedDate={{row.data.modified}}
+              @shortTitle={{row.data.shortTitle}}
+              @title={{row.data.title}}
+              @statusPillStep={{row.data.statusPillStep}}
+              @statusPillKey={{row.data.statusPillKey}}
+              @status={{row.data.status}}
+              @decisionmakingFlowId={{row.data.decisionmakingFlowId}}
+            />
+          {{/if}}
         </td>
       </:body>
     </KDataTable>
   {{else}}
-    {{#if this.emptySearch}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "fill-in-search-term"}}
-      />
-    {{else}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "no-results-found-modify-term"}}
-      />
-    {{/if}}
+    <Auk::EmptyState
+      @bordered={{true}}
+      @message={{t "no-results-found-modify-term"}}
+    />
   {{/if}}
 </div>

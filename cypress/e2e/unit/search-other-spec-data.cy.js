@@ -2,7 +2,6 @@
 /* global context, it, cy, beforeEach, afterEach, it */
 // / <reference types="Cypress" />
 import route from '../../selectors/route.selectors';
-import utils from '../../selectors/utils.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Search tests', () => {
@@ -36,7 +35,7 @@ context('Search tests', () => {
     cy.get(route.searchNewsletters.row.decisionResult).contains('Goedgekeurd');
     cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits');
     cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Matthias Diependaele');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Bart Somers, Ben Weyts, Zuhal Demir');
+    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Gwendolyn Rutten, Ben Weyts, Zuhal Demir');
     cy.get(route.searchNewsletters.row.goToAgendaitem).eq(0)
       .click();
     cy.url().should('contain', '/vergadering/');
@@ -94,7 +93,7 @@ context('Search tests', () => {
     cy.wait('@newsletterSearchCall');
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
-    cy.get(utils.vlAlert.container).should('not.exist');
+    cy.get(appuniversum.alert.container).should('not.exist');
     cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon');
   });
 });

@@ -26,30 +26,30 @@
           <div
             class="auk-o-flex auk-o-flex--spaced-wide auk-o-flex--vertical-center auk-u-maximize-width"
           >
-            <div class="auk-o-flex auk-o-flex--spaced">
+            <div class="auk-o-flex__item auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
               <AuBadge
                 @icon="paperclip"
                 @skin="gray"
                 @size="small"
               />
-              <h5 class="auk-h4 auk-u-m-0">{{piece.file.downloadFilename}}</h5>
+              <h5 class="auk-h4 auk-u-m-0 auk-u-overflow-wrap-anywhere auk-u-text-line-height--small">{{piece.file.downloadFilename}}</h5>
               <AuPill
                 @skin={{this.fileSizePillSkin piece.file.size}}
                 @icon={{this.fileSizePillIcon piece.file.size}}
+                class="auk-o-flex__item--fix"
               >
                 {{file-size piece.file.size}}
               </AuPill>
             </div>
             {{#if @setReceivedDate}}
-              <div class="auk-u-width-medium">
-                <Auk::Datepicker
-                  @placeholder={{t "date-received-placeholder"}}
-                  @date={{piece.receivedDate}}
-                  @onChange={{fn @setReceivedDate piece}}
-                />
-              </div>
+              <Auk::Datepicker
+                @placeholder={{t "date-received-placeholder"}}
+                @date={{piece.receivedDate}}
+                @onChange={{fn @setReceivedDate piece}}
+                class="auk-u-width-medium auk-o-flex__item--fix"
+              />
             {{/if}}
-            <AuButtonGroup>
+            <AuButtonGroup class="auk-o-flex__item--fix">
               <AuLinkExternal
                 @icon="download"
                 @hideText={{true}}

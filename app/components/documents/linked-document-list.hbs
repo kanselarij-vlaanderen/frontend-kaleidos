@@ -1,12 +1,14 @@
 <div {{did-update (perform this.loadData) @linkedPieces}}>
   {{#if this.loadData.isRunning}}
-    <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    <Auk::Loader @message={{t "documents-loading-text"}} />
   {{else}}
     {{#each this.sortedDocumentHistories as |history|}}
       <Documents::LinkedDocumentLink
         @documentContainer={{history.documentContainer}}
         @lastPiece={{history.lastPiece}}
-        @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}} />
+        @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}}
+        class="auk-u-mb-2"
+      />
     {{else}}
       <div class="auk-u-mt-2">
         <AuAlert

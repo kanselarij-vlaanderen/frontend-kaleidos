@@ -1,7 +1,7 @@
 <div class="vlc-document-card-item" data-test-vl-document-piece>
   <div class="vlc-document-card-item__title">
     {{#if this.loadFiles.isRunning}}
-      <AuLoader @padding="small" />
+      <Auk::Loader />
     {{else if @piece.file}}
       <LinkTo @route="document" @model={{@piece.id}}
         class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
@@ -34,8 +34,8 @@
   <div class="vlc-document-card-item__meta au-u-muted">
     {{!-- no piece.created in legacy data --}}
     {{#if @piece.created}}
-      {{@label}}
-      {{datetime-at @piece.created}}
+      {{this.labelToShow}}
+      {{datetime-at this.dateToShow}}
     {{/if}}
   </div>
   <div class="vlc-document-card-item__icon">

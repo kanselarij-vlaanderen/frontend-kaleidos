@@ -64,6 +64,7 @@ pipeline {
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T docx-conversion chmod 777 -R /share"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T publication-report chmod 777 -R /share"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T decision-report-generation chmod 777 -R /share"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T minutes-report-generation chmod 777 -R /share"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T decision-extraction chmod 777 -R /share"
 
         sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
@@ -77,7 +78,7 @@ pipeline {
         // Reset the contents of DB an search
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill elasticsearch search"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch search"
-        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report decision-extraction decision-report-generation file-bundling"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report decision-extraction decision-report-generation file-bundling minutes-report-generation"
         sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata && rm -rf testdata-elasticsearch"
         sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
         sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata-elasticsearch.zip -d ${WORKSPACE}/kaleidos-project"
@@ -100,7 +101,7 @@ pipeline {
         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
         // run specific specs example
-        // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/all-flaky-tests/*.spec.js'"
+        // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/unit/test-new-command.cy.js'"
       }
     }
   }

@@ -11,6 +11,7 @@ export default {
     DOCUMENT_TYPES: 'http://themis.vlaanderen.be/id/concept-scheme/559774e3-061c-4f4b-a758-57228d4b68cd',
     DECISION_RESULT_CODES: 'http://themis.vlaanderen.be/id/concept-scheme/43052680-1c88-47f1-b081-99087afc4497',
     SIGNFLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/ebfe253c-0537-11ee-bb35-ee395168dcf7',
+    PARLIAMENT_FLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/bfa3671b-68c1-4371-aa00-63840b7c9901',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
@@ -51,14 +52,43 @@ export default {
     DECREET: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
     BVR: 'https://data.vlaanderen.be/id/concept/AardWetgeving/BesluitVanDeVlaamseRegering',
     NOTULEN: 'http://themis.vlaanderen.be/id/concept/document-type/d638e0dc-c879-4a75-9485-9e6970a83d67',
+    BESLISSINGSFICHE: 'http://themis.vlaanderen.be/id/concept/document-type/e807feec-1958-46cf-a558-3379b5add49e',
+    ONTWERPDECREET: 'http://themis.vlaanderen.be/id/concept/document-type/8a1e048a-4b55-4a19-b1c0-c85dba09a15c',
+    MEMORIE: 'http://themis.vlaanderen.be/id/concept/document-type/f036e016-268e-4611-8fee-77d2047b51d8',
+    ADVIES_RVS: "http://themis.vlaanderen.be/id/concept/document-type/73d69df5-c3f3-43b2-aeae-5a24b56b376e",
+    ADVIES_IF: "http://themis.vlaanderen.be/id/concept/document-type/351ba62d-eeff-4b08-b1e3-0a56d38116c4",
+    ADVIES: "http://themis.vlaanderen.be/id/concept/document-type/fb931eff-38f2-4743-802b-4240c35b8b0c",
+    ADVIES_AGO: "http://themis.vlaanderen.be/id/concept/document-type/9c043848-6a9f-4448-9794-600e40dee6d2",
+    BEKRACHTIGING: "http://themis.vlaanderen.be/id/concept/document-type/609cf883-b52c-43fe-84b1-eed02527173b",
+    BIJLAGE_TER_INZAGE: "http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043",
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
     SUCCESS: 'http://vocab.deri.ie/cogs#Success',
     FAILED: 'http://vocab.deri.ie/cogs#Fail',
   },
+  DECISION_REPORT_JOB_STATUSSES: {
+      SCHEDULED: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/scheduled',
+      ONGOING: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/ongoing',
+      SUCCESS: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/success',
+      FAILURE: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/failure',
+  },
+  SIGN_FLOW_JOB_STATUSSES: {
+      SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
+      BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
+      SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
+      FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
+  },
+  VP_JOB_STATUSES: {
+    SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
+    BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
+    SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
+    FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
+  },
   SUBCASE_TYPES: {
-    BEKRACHTIGING: 'http://example.com/step/bdba2bbc-7af6-490b-98a8-433955cfe869',
+    BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/bdba2bbc-7af6-490b-98a8-433955cfe869',
+    DEFINITIEVE_GOEDKEURING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/6f7d1086-7c02-4a80-8c60-5690894f70fc',
+    PRINCIPIELE_GOEDKEURING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/7b90b3a6-2787-4b41-8a1d-886fc5abbb33',
   },
   // AGENDA
   ACCEPTANCE_STATUSSES: {
@@ -115,6 +145,13 @@ export default {
     REFUSED: 'http://themis.vlaanderen.be/id/handtekenstatus/3128aae6-0539-11ee-bb35-ee395168dcf7',
     CANCELED: 'http://themis.vlaanderen.be/id/handtekenstatus/2d043722-053a-11ee-bb35-ee395168dcf7',
   },
+  PARLIAMENT_FLOW_STATUSES: {
+    INCOMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/d30fdd4d-ba47-437d-b72e-4bff02e8c3fb',
+    COMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/018fb31c-44ad-4bf5-b01b-76de2d48abf4',
+    BEING_HANDLED_BY_FP: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/3905d9a1-c841-42fc-8a89-3b7d4ad61b4b',
+    RECEIVED: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/879aed2f-6efa-4d7b-ab1b-13cc406b1f92',
+  },
+  PARLIAMENT_CASE_URL_BASE: 'https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/',
   URGENCY_LEVELS: {
     SPEEDPROCEDURE: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
     STANDARD: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
@@ -137,6 +174,7 @@ export default {
     MINISTERRAAD: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/ef51c9d5-8b45-4501-9dcd-3e00ccff524f',
     PVV: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/9b4701f8-a136-4009-94c6-d64fdc96b9a2',
     ANNEX: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/30d6a064-8cca-4485-8b37-7ab2357d931d',
+    EP: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/2387564a-0897-4a62-9b9a-d1755eece7af',
   },
   MANDATE_ROLES: {
     MINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
@@ -156,5 +194,6 @@ export default {
     USER_LOGIN: 'Aanmelding (per rol)',
     USER_PAGEVIEW: 'Pageview (per rol)',
     FIRST_ACTION: 'Eerste actie',
+    COPY_SUBCASE_CLICK: 'Kopieer voorgaande procedurestap',
   }
 };

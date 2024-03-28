@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signing';
-import ENV from 'frontend-kaleidos/config/environment';
+import { task } from 'ember-concurrency';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 
@@ -64,19 +64,92 @@ export default class SignatureService extends Service {
       signFlow.status = status;
       await signFlow.save();
     }
-
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
-    if (!response.ok) {
+    if (response.ok) {
+      const job = await response.json();
+      await this.pollPrepareSignFlow(job);
+    } else {
       for (let signFlow of signFlows) {
-        await this.removeSignFlow(signFlow, true);
+        await signFlow.reload();
+        await signFlow.belongsTo('status').reload();
+        await signFlow.belongsTo('creator').reload();
       }
-      throw new Error('Failed to upload piece to Signing Hub');
+      let stringifiedJson;
+      try {
+        const json = await response?.json();
+        stringifiedJson = JSON.stringify(json);
+      } catch (error) {
+        // cannot stringify could mean digital-signing is down
+      }
+      throw new Error(stringifiedJson ?? response.statusText);
     }
   }
 
-  // return results are currently not used by any caller
-  async markDocumentForSignature(piece, decisionActivity) {
+  async pollPrepareSignFlow(job) {
+    let jobResult = await this.getJob.perform(job);
+    if (jobResult) {
+      // Use a loop here instead of a setTimeout like we do elsewhere because
+      // we need to throw an error here if the job fails. In a setTimeout that
+      // doesn't work.
+      while ([
+        constants.SIGN_FLOW_JOB_STATUSSES.BUSY,
+        constants.SIGN_FLOW_JOB_STATUSSES.SCHEDULED
+      ].includes(jobResult.status)) {
+        await new Promise(r => setTimeout(r, 2000));
+        jobResult = await this.getJob.perform(job);
+      }
+      if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.SUCCESS) {
+        // We're done polling :)
+      } else if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.FAILED) {
+        throw new Error(jobResult.error_message);
+      }
+    }
+  };
+
+  getJob = task(async (job) => {
+    let response;
+    try {
+      response = await fetch(`/signing-flows/job/${job.id}`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `Backend response contained an error (status: ${
+            response.status
+          }): ${JSON.stringify(data)}`
+        );
+      }
+      return data;
+    } catch (error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down. If so,
+      // throw a nice error that only contains the
+      // response status.
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+  });
+
+  /**
+   * Marks a piece for signature by creating a sign flow, sign subcase and sign
+   * marking activity. The sign subcase and sign flow are returned.
+   *
+   * Note: The return values are currently unused by any caller.
+   *
+   * @param {Piece} piece The piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes and reports
+   */
+  async markDocumentForSignature(piece, decisionActivity, meeting) {
     const existingSignMarking = await piece.belongsTo('signMarkingActivity').reload();
     if (existingSignMarking) {
       // someone else may have made a signflow, returning that one instead
@@ -88,42 +161,64 @@ export default class SignatureService extends Service {
       };
     }
     const subcase = await decisionActivity?.subcase;
-    if (subcase) {
-      const decisionmakingFlow = await subcase.decisionmakingFlow;
-      const _case = await decisionmakingFlow.case;
-      const now = new Date();
-      const status = await this.store.findRecordByUri('concept', MARKED);
+    const decisionmakingFlow = await subcase?.decisionmakingFlow;
+    const _case = await decisionmakingFlow?.case;
+    const now = new Date();
+    const status = await this.store.findRecordByUri('concept', MARKED);
 
-      // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
-      const signFlow = this.store.createRecord('sign-flow', {
-        openingDate: now,
-        shortTitle: _case.shortTitle,
-        longTitle: _case.title,
-        case: _case,
-        decisionActivity,
-        status: status,
-      });
-      await signFlow.save();
-      const signSubcase = this.store.createRecord('sign-subcase', {
+    // TODO: Shouldn't the short & long title be coming from the agendaitem. Also when would show or edit this data?
+    const signFlow = this.store.createRecord('sign-flow', {
+      openingDate: now,
+      shortTitle: _case?.shortTitle,
+      longTitle: _case?.title,
+      case: _case,
+      decisionActivity,
+      meeting,
+      status: status,
+    });
+    await signFlow.save();
+    const signSubcase = this.store.createRecord('sign-subcase', {
+      startDate: now,
+      signFlow: signFlow,
+    });
+    await signSubcase.save();
+    const signMarkingActivity = this.store.createRecord(
+      'sign-marking-activity',
+      {
         startDate: now,
-        signFlow: signFlow,
-      });
-      await signSubcase.save();
-      const signMarkingActivity = this.store.createRecord(
-        'sign-marking-activity',
-        {
-          startDate: now,
-          endDate: now,
-          signSubcase: signSubcase,
-          piece: piece,
-        }
-      );
-      await signMarkingActivity.save();
+        endDate: now,
+        signSubcase: signSubcase,
+        piece: piece,
+      }
+    );
+    await signMarkingActivity.save();
 
-      return {
-        signFlow,
-        signSubcase,
-      };
+    return {
+      signFlow,
+      signSubcase,
+    };
+  }
+
+
+  /**
+   * Marks a new version of a marked piece for signature by recreating the sign flow, sign subcase
+   * and sign marking activity.
+   * @param {Piece} oldPiece The old piece that should no longer be marked for signing
+   * @param {Piece} newPiece The new piece that will be marked for signing
+   * @param {DecisionActivity} decisionActivity The decision activity
+   *   related to the piece being marked for signing, this should only be passed
+   * for regular pieces and reports, not minutes
+   * @param {Meeting} meeting The meeting related to the piece being
+   *   marked for signing, this should only be be passed for minutes and reports
+   */
+  async markNewPieceForSignature(oldPiece, newPiece, decisionActivity, meeting) {
+    if (!oldPiece) {
+      oldPiece = await newPiece.previousPiece;
+    }
+    const hasMarkedSignFlow = await this.hasMarkedSignFlow(oldPiece);
+    if (hasMarkedSignFlow) {
+      await this.removeSignFlowForPiece(oldPiece);
+      await this.markDocumentForSignature(newPiece, decisionActivity, meeting);
     }
   }
 
@@ -140,7 +235,7 @@ export default class SignatureService extends Service {
           },
         }
       );
-      const subcase = await submissionActivity.subcase;
+      const subcase = await submissionActivity?.subcase;
       if (subcase) {
         const mandatee = await subcase.requestedBy;
         if (mandatee) {
@@ -162,70 +257,30 @@ export default class SignatureService extends Service {
     return false;
   }
 
-  async removeSignFlow(signFlow, keepMarkingActivity) {
+  async removeSignFlow(signFlow) {
     if (signFlow) {
       const signSubcase = await signFlow.signSubcase;
       const signMarkingActivity = await signSubcase.signMarkingActivity;
       const piece = await signMarkingActivity.piece;
-      const signedPiece = await piece.signedPiece;
-      const signedFile = await signedPiece?.file;
-      const signPreparationActivity = await signSubcase
-        ?.belongsTo('signPreparationActivity')
-        .reload();
-      const signCompletionActivity = await signSubcase
-        ?.belongsTo('signCompletionActivity')
-        .reload();
-      const signCancellationActivity = await signSubcase
-        ?.belongsTo('signCancellationActivity')
-        .reload();
-      const signApprovalActivities = await signSubcase
-        ?.hasMany('signApprovalActivities')
-        .reload();
-      const signSigningActivities = await signSubcase
-        ?.hasMany('signSigningActivities')
-        .reload();
-      const signRefusalActivities = await signSubcase
-        ?.hasMany('signRefusalActivities')
-        .reload();
-
-      // delete in reverse order of creation
-      await signedFile?.destroyRecord();
-      await signedPiece?.destroyRecord();
-      await signPreparationActivity?.destroyRecord();
-      await signCompletionActivity?.destroyRecord();
-      await signCancellationActivity?.destroyRecord();
-      await signApprovalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
+      await fetch(`/signing-flows/${signFlow.id}`, {
+        method: 'DELETE'
       });
-      await signSigningActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      await signRefusalActivities?.map(async (activity) => {
-        await activity.destroyRecord();
-      });
-      // destroying signSubcase can throw ember errors. reload fixed that problem.
-      await signSubcase?.reload();
-      if (!keepMarkingActivity) {
-        await signSubcase?.destroyRecord();
-        await signFlow?.destroyRecord();
-        await signMarkingActivity.destroyRecord();
-      } else if (signFlow) {
-        const status = await this.store.findRecordByUri('concept', MARKED);
-        signFlow.status = status;
-        signFlow.creator = null;
-        await signFlow.save();
-      }
+      // unload deleted records from store
+      await signFlow.unloadRecord();
+      await signSubcase.unloadRecord();
+      await signMarkingActivity.unloadRecord();
       await piece.belongsTo('signedPiece').reload();
+      await piece.belongsTo('signedPieceCopy').reload();
       await piece.belongsTo('signMarkingActivity').reload();
     }
   }
 
-  async removeSignFlowForPiece(piece) {
+  async removeSignFlowForPiece(piece, ignoreStatus=false) {
     const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();;
     const signSubcase = await signMarkingActivity?.signSubcase;
     const signFlow = await signSubcase?.signFlow;
     const status = await signFlow?.status;
-    if (signFlow && status.uri === MARKED) {
+    if (signFlow && (ignoreStatus || status.uri === MARKED)) {
       await this.removeSignFlow(signFlow);
     }
   }
@@ -242,29 +297,22 @@ export default class SignatureService extends Service {
   }
 
   async hasSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      if (await piece.signMarkingActivity) {
-        return true;
-      } else if (await piece.signCompletionActivity) {
-        return true;
-      } else if (await piece.signedPiece) {
-        return true;
-      }
+    if (await piece.signMarkingActivity) {
+      return true;
+    } else if (await piece.signCompletionActivity) {
+      return true;
+    } else if (await piece.signedPiece) {
+      return true;
     }
     return false;
   }
 
   async hasMarkedSignFlow(piece) {
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
-    if (signaturesEnabled) {
-      const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
-      const signSubcase = await signMarkingActivity?.signSubcase;
-      const signFlow = await signSubcase?.signFlow;
-      const status = await signFlow?.belongsTo('status').reload();
-      return status?.uri === MARKED;
-    }
-    return false;
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.belongsTo('status').reload();
+    return status?.uri === MARKED;
   }
 
   async getSigningHubUrl(signFlow, piece) {
@@ -276,4 +324,36 @@ export default class SignatureService extends Service {
       return result.url;
     }
   }
+
+  async markReportsForSignature(reports) {
+    if (!reports?.length) {
+      return this.toaster.warning(this.intl.t('no-decision-reports-to-mark-for-signing'));
+    }
+    const loadingToast = this.toaster.loading(
+      this.intl.t('decision-reports-are-being-marked-for-signing', {aantal: reports.length}),
+      null,
+      {
+        timeOut: 10 * 60 * 1000,
+      }
+    );
+    const resp = await fetch(`/signing-flows/mark-pieces-for-signing`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        data: reports.map((report) => ({ type: 'reports', id: report.id })),
+      }),
+    });
+    this.toaster.close(loadingToast);
+    if (!resp.ok) {
+      // TODO error from service? did all fail? maybe only 1 failed?
+      this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
+    } else {
+      this.toaster.success(
+        this.intl.t('decision-reports-are-marked-for-signing', {aantal: reports.length}),
+      );
+    }
+  }
+
 }

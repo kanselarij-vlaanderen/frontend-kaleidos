@@ -42,29 +42,57 @@
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-document-details-panel-source-file
-        @key={{t "source-file"}}
+        @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
       >
-        <div class="au-u-flex au-u-flex--between">
-          <p>
+        <div class="au-u-flex au-u-flex--between au-u-flex--spaced-tiny">
+          <span>
             {{@piece.name}}{{#if @piece.file}}.{{@piece.file.extension}}{{/if}}
-          </p>
-          <AuButton
-            data-test-document-details-panel-upload
-            @icon="upload"
-            @iconAlignment="left"
-            @skin="secondary"
-            {{on "click" (toggle "isReplacingSourceFile" this)}}
-          >
-            {{t (if @piece.file "replace" "upload")}}
-          </AuButton>
+          </span>
+          {{! only allow the replacement of the docx if sign-flow is ongoing}}
+          {{#if (or this.canEditPieceWithSignFlow @piece.file.derived)}}
+            <AuButton
+              data-test-document-details-panel-upload
+              class="au-u-flex-item--fixed"
+              @icon="upload"
+              @iconAlignment="left"
+              @skin="secondary"
+              {{on "click" (toggle "isReplacingSourceFile" this)}}
+            >
+              {{t (if @piece.file "replace" "upload")}}
+            </AuButton>
+          {{/if}}
         </div>
       </Auk::KeyValue>
       {{#if this.isReplacingSourceFile}}
         <Auk::FileUploader
+          @multiple={{false}}
           @onUpload={{set this "replacementSourceFile"}}
           @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
         />
       {{/if}}
+      {{#unless @piece.file.derived}}
+        <Auk::KeyValue
+          @key={{t "source-file"}}
+        >
+          <div class="au-u-flex au-u-flex--between">
+            <AuButton
+              @icon="upload"
+              @iconAlignment="left"
+              @skin="secondary"
+              {{on "click" (toggle "isAddingSourceFile" this)}}
+            >
+              {{t "upload"}}
+            </AuButton>
+          </div>
+        </Auk::KeyValue>
+        {{#if this.isAddingSourceFile}}
+          <Auk::FileUploader
+            @multiple={{false}}
+            @onUpload={{set this "uploadedSourceFile"}}
+            @onQueueUpdate={{this.handleSourceFileUploadQueue}}
+          />
+        {{/if}}
+      {{/unless}}
     </Auk::Panel::Body>
     <Auk::Panel::Footer>
       <Auk::Toolbar>
@@ -107,36 +135,51 @@
             </h4>
           </Group.Item>
         </Toolbar.Group>
-        {{#unless (or this.loadDetailsData.isRunning this.loadSignatureRelatedData.isRunning)}}
-          {{#if (and (user-may "manage-documents") this.canEditPieceWithSignFlow)}}
-          <Toolbar.Group @position="right" as |Group|>
-            {{#if this.isLastVersionOfPiece}}
+        {{#unless
+          (or
+            this.loadDetailsData.isRunning
+            this.loadSignatureRelatedData.isRunning
+          )
+        }}
+          {{#if
+            (and
+              (user-may "manage-documents")
+              (or
+                this.canEditPieceWithSignFlow
+                (user-may "edit-documents-with-ongoing-signature")
+              )
+            )
+          }}
+            <Toolbar.Group @position="right" as |Group|>
+              {{#if
+                (and this.isLastVersionOfPiece this.canEditPieceWithSignFlow)
+              }}
+                <Group.Item>
+                  <AuButton
+                    data-test-details-tab-delete
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                </Group.Item>
+              {{/if}}
               <Group.Item>
                 <AuButton
-                  data-test-details-tab-delete
+                  data-test-details-tab-edit
                   @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
+                  @icon="pencil"
                   @hideText={{true}}
-                  {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+                  {{on "click" this.openEditDetails}}
                 >
-                  {{t "delete"}}
+                  {{t "edit"}}
                 </AuButton>
               </Group.Item>
-            {{/if}}
-            <Group.Item>
-              <AuButton
-                data-test-details-tab-edit
-                @skin="naked"
-                @icon="pencil"
-                @hideText={{true}}
-                {{on "click" this.openEditDetails}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Group.Item>
-          </Toolbar.Group>
-        {{/if}}
+            </Toolbar.Group>
+          {{/if}}
         {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>
@@ -162,10 +205,11 @@
       </Auk::KeyValue>
       <Auk::KeyValue
         data-test-document-details-panel-source-file
-        @key={{t "source-file"}}
+        @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
       >
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
+            data-test-document-details-panel-source-file-download
             href={{@piece.file.namedDownloadLink}}
             @skin="primary"
             @icon="download"
@@ -178,10 +222,10 @@
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>
-      {{#if (and this.isSignaturesEnabled (await (this.canViewSignedPiece)))}}
+      {{#if (await (this.canViewSignedPiece))}}
         {{#if @piece.signedPiece.file}}
           <div class="auk-key-value-item">
-            <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+            <div class="auk-key-value-item__label auk-u-max-width-medium">{{t "signed-document-certified"}}</div>
             <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
               <AuLinkExternal
                 href={{await @piece.signedPiece.namedDownloadLinkPromise}}
@@ -192,10 +236,12 @@
               >
                 {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
               </AuLinkExternal>
-              <AccessLevelPill 
-                @accessLevel={{await @piece.signedPiece.accessLevel}} 
-                @isEditable={{false}}
-              />
+              <div class="auk-o-flex__item--fix">
+                <AccessLevelPill
+                  @accessLevel={{await @piece.signedPiece.accessLevel}}
+                  @isEditable={{false}}
+                />
+              </div>
               {{#if (user-may "remove-signatures")}}
                 <AuDropdown
                   @icon="three-dots"
@@ -216,6 +262,37 @@
             </div>
           </div>
         {{/if}}
+      {{/if}}
+      {{#if
+        (and
+          this.loadSignedPieces.isIdle
+          this.signedPieceCopy.file
+          (await (this.canViewConfidentialPiece))
+        )
+      }}
+        <div class="auk-key-value-item">
+          <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+          <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+            <AuLinkExternal
+              href={{await this.signedPieceCopy.namedDownloadLinkPromise}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{this.signedPieceCopy.name}}.{{this.signedPieceCopy.file.extension}}
+            </AuLinkExternal>
+            <div class="auk-o-flex__item--fix">
+              <AccessLevelPill
+                @accessLevel={{this.signedPieceCopy.accessLevel}}
+                @isEditable={{true}}
+                @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
+                @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
+                @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}
+              />
+            </div>
+          </div>
+        </div>
       {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>

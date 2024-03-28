@@ -1,6 +1,7 @@
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const Funnel = require('broccoli-funnel');
+const webpack = require('webpack');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
@@ -16,7 +17,7 @@ module.exports = function (defaults) {
         'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/',
         'node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/',
         'node_modules/@lblod/ember-rdfa-editor/app/styles/', // as a workaround for https://github.com/ember-cli/ember-cli/issues/8026#issuecomment-420245390
-        'node_modules/@appuniversum/ember-appuniversum/app/styles',
+        'node_modules/@appuniversum/ember-appuniversum',
       ],
     },
     flatpickr: {
@@ -28,6 +29,9 @@ module.exports = function (defaults) {
           'styleguide': '/assets/styleguide.css'
         }
       }
+    },
+    'ember-simple-auth': {
+      useSessionSetupMethod: true,
     },
     'ember-cli-babel': {
       includePolyfill: true,
@@ -43,6 +47,15 @@ module.exports = function (defaults) {
         '@ember-data/store': {
           polyfillUUID: true,
         },
+      },
+    },
+    autoImport: {
+      webpack: {
+        plugins: [
+          new webpack.ProvidePlugin({
+            process: 'process/browser.js',
+          }),
+        ],
       },
     },
   });

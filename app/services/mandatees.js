@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const DEFAULT_VISIBLE_ROLES = [
@@ -71,7 +70,7 @@ export default class MandateesService extends Service {
   @task
   *fetchGovernmentBodies(referenceDateFrom, referenceDateTo) {
     const governmentBodies = [];
-    const closedInRange = this.store.query('government-body', {
+    const closedInRange = this.store.queryAll('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
       'filter[generation][:lt:time]': referenceDateTo.toISOString(),
       'filter[invalidation][:gte:time]': referenceDateFrom.toISOString(),
@@ -112,7 +111,6 @@ export default class MandateesService extends Service {
       'filter[mandate][role][:id:]': visibleRoles
         .map((role) => role.id)
         .join(','),
-      'page[size]': PAGE_SIZE.MANDATEES_IN_GOV_BODY,
     };
     if (searchText) {
       queryOptions['filter[person][last-name]'] = searchText;
@@ -126,7 +124,7 @@ export default class MandateesService extends Service {
       // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
       // That's why we do some filtering client-side (see below)
     }
-    let mandatees = yield this.store.query('mandatee', queryOptions);
+    let mandatees = yield this.store.queryAll('mandatee', queryOptions);
     // We need to filter out the mandatees that are in the body
     // but have an end date before the range starts or active mandatees (i.e. no end date)
     if (referenceDateFrom) {
@@ -138,7 +136,8 @@ export default class MandateesService extends Service {
         }
       });
     }
-    mandatees = mandatees.sortBy('priority').toArray(); // TODO: sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    // sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
+    mandatees = mandatees.sort((m1, m2) => m1.priority - m2.priority);
     return mandatees;
   }
 
@@ -165,7 +164,7 @@ export default class MandateesService extends Service {
       this.store.query('mandatee', postOptions),
     ];
     const [preMandatees, postMandatees] = yield Promise.all(requests);
-    const mandatees = [...preMandatees.toArray(), ...postMandatees.toArray()];
+    const mandatees = [...preMandatees.slice(), ...postMandatees.slice()];
     const sortedMandatees = mandatees.sort((a, b) =>
       sortByDeltaToRef(referenceDate)(a.start, b.start)
     );

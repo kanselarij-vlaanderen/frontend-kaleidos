@@ -29,6 +29,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @service intl;
   @service jobMonitor;
   @service toaster;
+  @service signatureService;
+  @service decisionReportGeneration;
 
   downloadOptions = [
     {
@@ -131,7 +133,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const agendaitems = await this.args.currentAgenda.agendaitems;
     return agendaitems
       .filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.formallyOk))
-      .sortBy('number');
+      .sort((a1, a2) => a1.number - a2.number);
   }
 
   @task
@@ -190,6 +192,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.decisionPublicationActivity.startDate = new Date();
     this.decisionPublicationActivity.status = status;
     await this.decisionPublicationActivity.save();
+  }
+
+  @action
+  async generateSignedDecisionsBundle() {
+    this.decisionReportGeneration.generateReportBundle.perform(this.args.meeting);
   }
 
   @task
@@ -331,6 +338,18 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     await all(savePromises);
     this.args.onStopLoading();
     this.args.didApproveAgendaitems();
+  }
+
+  @action
+  async markDecisionsForSigning() {
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    await this.signatureService.markReportsForSignature(reports);
+    this.router.refresh(this.router.currentRouteName);
   }
 
   @action

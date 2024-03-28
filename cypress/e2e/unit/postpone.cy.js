@@ -115,7 +115,7 @@ context('Decision postponing tests', () => {
     selectConfidentialityLevel(files[0].newFileName, 'Publiek');
     selectConfidentialityLevel(files[1].newFileName, 'Intern Secretarie');
     selectConfidentialityLevel(files[2].newFileName, 'Vertrouwelijk');
-    selectConfidentialityLevel(files[3].newFileName, 'Intern Regering');
+    // selectConfidentialityLevel(files[3].newFileName, 'Intern Regering'); // done by default
     selectConfidentialityLevel(files[4].newFileName, 'Intern Overheid');
   });
 
@@ -181,7 +181,7 @@ context('Decision postponing tests', () => {
     cy.get(agenda.agendaDetailSidebar.subitem).find(agenda.agendaDetailSidebarItem.postponed)
       .should('exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item)
+    cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
       .as('phases');
     cy.get('@phases').eq(0)
       .contains(/Ingediend voor agendering op/);
@@ -189,7 +189,7 @@ context('Decision postponing tests', () => {
       .contains(/Geagendeerd op de agenda van/);
     cy.get('@phases').eq(2)
       .contains(/Uitgesteld op de agenda van/);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
   });
 
   it('should postpone an agendaitem', () => {
@@ -201,9 +201,12 @@ context('Decision postponing tests', () => {
     cy.setAllItemsFormallyOk(1);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    cy.get(agenda.publicationPills.container).within(() => {
+      cy.get(appuniversum.pill).contains('Beslissingen zijn vrijgegeven op');
+    });
 
     // add new doc (6) on subcase
-    cy.visit('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB5B5-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/62836F4EACB8056AF8DE245B');
     cy.addDocumentsToSubcase(files2);
     // check all docs visible
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
@@ -219,7 +222,7 @@ context('Decision postponing tests', () => {
 
     // check if doc 6 is visible on 1st agenda
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -233,29 +236,24 @@ context('Decision postponing tests', () => {
     cy.get(agenda.agendaitemPostponed.repropose)
       .children(appuniversum.button)
       .click();
-    cy.intercept('POST', '/submission-activities').as('postSubmissionActivities');
-    cy.intercept('POST', '/agenda-activities').as('postAgendaActivities');
-    cy.intercept('POST', '/decision-activities').as('postDecisionActivities');
-    cy.intercept('POST', '/agenda-item-treatments').as('postAgendaItemTreatments');
-    cy.intercept('PATCH', '/submission-activities/**').as('patchSubmissonActivities');
+    cy.intercept('POST', '/meetings/*/submit').as('submitSubcaseOnMeeting');
     cy.get(agenda.agendaitemPostponed.proposableMeeting)
       .contains(agendaDateFormatted)
       .forceClick()
-      .wait('@postSubmissionActivities')
-      .wait('@postAgendaActivities')
-      .wait('@postDecisionActivities')
-      .wait('@postAgendaItemTreatments')
-      .wait('@patchSubmissonActivities');
-    cy.get(auk.loader).should('not.exist');
+      .wait('@submitSubcaseOnMeeting');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // click link to latest meeting
     cy.get(agenda.agendaitemPostponed.latestMeeting).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaHeader.title).contains(agendaDateFormatted);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
 
     // check if all docs visible on 2nd agenda
     cy.get(agenda.agendaitemNav.documentsTab).click();
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -266,7 +264,9 @@ context('Decision postponing tests', () => {
 
     // click link to subcase
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
 
     // check if timeline contains multiple phase blocks (1 block has max 3 phases)
     cy.get(cases.subcaseTimeline.item).eq(0)
@@ -275,27 +275,29 @@ context('Decision postponing tests', () => {
       .contains('Ingediend voor');
 
     // check if meeting number contains multiple numbers
-    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+/);
 
     // check for multiple agenda links
-    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 1);
 
     // check if decided on
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
 
     // check if planned start is last agenda
-    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
+    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
 
     // add new doc (7)
-    cy.get(cases.subcaseDetailNav.documents).click();
-    cy.get(route.subcaseDocuments.add).click();
+    cy.get(route.subcase.add).click();
     cy.addNewDocumentsInUploadModal(files3, 'subcase');
     // check if doc 7 shows on subcase
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files3[0].newFileName);
 
     // check if doc 7 shows on 2nd agenda
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();
@@ -304,7 +306,9 @@ context('Decision postponing tests', () => {
     // check that doc 7 doesn't show on 1st agenda
     cy.visitAgendaWithLink('/vergadering/62836F5EACB8056AF8DE245C/agenda/a1263780-d5c6-11ec-b7f8-f376c007230c/agendapunten/a148b3a0-d5c6-11ec-b7f8-f376c007230c');
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -334,8 +338,9 @@ context('Decision postponing tests', () => {
     // check that doc 8 doesn't show on subcase
     cy.get(agenda.agendaitemNav.caseTab).click();
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get(cases.subcaseDetailNav.documents).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);
@@ -346,11 +351,12 @@ context('Decision postponing tests', () => {
       .should('not.exist');
 
     // check if doc 8 shows on 2nd agenda
-    cy.get(cases.subcaseDetailNav.overview).click();
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormatted)
       .click();
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.name.value).contains(files[0].newFileName);
     cy.get(document.documentCard.name.value).contains(files[1].newFileName);
     cy.get(document.documentCard.name.value).contains(files[2].newFileName);

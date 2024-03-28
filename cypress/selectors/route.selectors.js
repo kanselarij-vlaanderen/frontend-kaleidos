@@ -56,33 +56,30 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
+  // agenda/agendaitems/agendaitem/minutes/template
+  agendaitemMinutes: {
+    createEdit: '[data-test-route-agenda---agendaitem-minutes-create-edit]',
+    editor: {
+      updateContent: '[data-test-route-agenda---agendaitem-minutes-editor-update-content]',
+      save: '[data-test-route-agenda---agendaitem-minutes-editor-save]',
+    },
+  },
+
   /**
     ROUTE CASES
   */
 
   // cases/overview/template
   casesOverview: {
-    showArchived: '[data-test-route-cases-overview-show-archived]',
     dataTable: '[data-test-route-cases-overview-data-table]',
     row: {
       caseTitle: '[data-test-route-cases-overview-row-case-title]',
-      actionsDropdown: '[data-test-route-cases-overview-row-actions-dropdown]',
-      actions: {
-        edit: '[data-test-route-cases-overview-row-actions-edit]',
-        archive: '[data-test-route-cases-overview-row-actions-archive]',
-      },
       goToCase: '[data-test-route-cases-overview-row-go-to-case]',
     },
   },
 
-  // cases/case/subcase/subcase/overview/template
-  subcaseOverview: {
-    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox]',
-  },
-
-  subcaseDocuments: {
-    batchEdit: '[data-test-route-cases---subcase-documents-batch-edit]',
-    add: '[data-test-route-cases---subcase-documents-add]',
+  subcase: {
+    add: '[data-test-route-cases---subcase-add-documents]',
   },
 
   /**
@@ -94,8 +91,14 @@ const selectors = {
     input: '[data-test-route-search-input]',
     from: '[data-test-route-search-date-from]',
     to: '[data-test-route-search-date-to]',
+    ministerFilterContainer: '[data-test-route-search-minister-filter-container]',
     trigger: '[data-test-route-search-trigger]',
     mandatee: '[data-test-route-search-mandatee-input]',
+  },
+
+  // search/all-types
+  searchAlltypes: {
+    row: '[data-test-route-search-all-types-data-table-row]',
   },
 
   // search/agendaitems
@@ -105,6 +108,7 @@ const selectors = {
       finalAgenda: '[data-test-route-search-agendaitems-final-agenda-filter]',
     },
     dataTable: '[data-test-route-search-agendaitems-data-table]',
+    row: '[data-test-route-search-agendaitems-data-table-row]',
   },
 
   // search/cases
@@ -141,6 +145,7 @@ const selectors = {
 
   // search/decisions
   searchDecisions: {
+    filterContainer: '[data-test-route-search-decision-filter-container]',
     row: '[data-test-route-search-decisions-data-table-row]',
   },
 
@@ -186,20 +191,28 @@ const selectors = {
     agendaItem: '[data-test-route-search-result-cards-document-agendaitem]',
   },
 
-  // search/result-cards/document
+  // search/result-cards/decision
   decisionResultCard: {
     date: '[data-test-route-search-result-cards-decision-date]',
     shortTitleLink: '[data-test-route-search-result-cards-decision-shorttitle]',
     result: '[data-test-route-search-result-cards-decision-result]',
   },
 
-  // search/result-cards/document
+  // search/result-cards/news-item
   newsItemResultCard: {
     date: '[data-test-route-search-result-cards-news-item-date]',
     titleLink: '[data-test-route-search-result-cards-news-item-title]',
     text: '[data-test-route-search-result-cards-news-item-text]',
     mandatees: '[data-test-route-search-result-cards-news-item-mandatees]',
   },
+
+  // search/result-cards/publication-flow
+  publicationFlowResultCard: {
+    date: '[data-test-route-search-result-cards-publication-flow-date]',
+    shortTitleLink: '[data-test-route-search-result-cards-publication-flow-shorttitle]',
+    status: '[data-test-route-search-result-cards-publication-flow-status]',
+  },
+
   /**
     ROUTE NEWSLETTER
   */

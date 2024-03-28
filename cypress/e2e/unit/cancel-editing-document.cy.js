@@ -356,7 +356,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .click();
 
     // verify history in subcase view
-    cy.visit('/dossiers/E14FB4D9-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628208FF7D8287D7ED094CF2/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB4D9-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/628208FF7D8287D7ED094CF2');
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
       .should('not.be.disabled')
@@ -387,7 +387,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const accesLevelOption4 = 'Vertrouwelijk';
     const typeOption = 'Advies Inspectie Financiën';
     const typeOption2 = 'Besluit Vlaamse Regering';
-    const typeOption3 = 'Voorontwerp van decreet';
+    const typeOption3 = 'Groenboek';
     const typeSearchOption = 'Advies agentschap overheidspersoneel';
 
     // *Setup of this test:

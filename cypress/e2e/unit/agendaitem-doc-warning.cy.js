@@ -130,7 +130,7 @@ context('Agendaitem document warning tests', () => {
     cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems1');
     cy.addNewDocumentsInUploadModal([newFile], 'agendaitems');
     cy.wait('@patchAgendaitems1');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.name.value).contains(newFile.fileName);
 
     // check upload new piece and cancel

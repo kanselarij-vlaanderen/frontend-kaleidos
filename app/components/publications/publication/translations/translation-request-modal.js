@@ -91,7 +91,7 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       numberOfPages: this.numberOfPages,
       numberOfWords: this.numberOfWords,
       numberOfDocuments: this.uploadedPieces.length,
-      contactPersons: contactPersons.toArray(),
+      contactPersons: contactPersons.slice(),
     };
 
     const mailTemplate = yield translationRequestEmail(mailParams);

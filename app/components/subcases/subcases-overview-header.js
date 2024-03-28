@@ -2,12 +2,15 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { inject as service } from '@ember/service';
 
 export default class SubCasesOverviewHeader extends Component {
+  @service router;
+
   @tracked case;
-  @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
+  @tracked isArchivingCase = false;
 
   constructor() {
     super(...arguments);
@@ -21,16 +24,6 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  openAddSubcaseModal() {
-    this.showAddSubcaseModal = true;
-  }
-
-  @action
-  closeAddSubcaseModal() {
-    this.showAddSubcaseModal = false;
-  }
-
-  @action
   openEditCaseModal() {
     this.showEditCaseModal = true;
   }
@@ -41,15 +34,19 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  async saveCase(caseData) {
-    await this.args.onSaveCase(caseData);
-    this.closeEditCaseModal();
+  openArchiveCaseModal() {
+    this.isArchivingCase = true;
   }
 
   @action
-  async onCreateSubcase() {
-    await this.args.onCreateSubcase();
-    this.closeAddSubcaseModal();
+  closeArchiveCaseModal() {
+    this.isArchivingCase = false;
+  }
+
+  @action
+  async saveCase() {
+    await this.case.save();
+    this.closeEditCaseModal();
   }
 
   @action
@@ -57,5 +54,27 @@ export default class SubCasesOverviewHeader extends Component {
     if (history.length > 1) {
       history.back();
     }
+  }
+
+  @action
+  async archiveCase() {
+    const decisionmakingFlow = await this.case.decisionmakingFlow;
+    decisionmakingFlow.closed = new Date();
+    await decisionmakingFlow.save();
+    this.router.refresh();
+    this.isArchivingCase = false;
+  }
+
+  @action
+  async unArchiveCase() {
+    const decisionmakingFlow = await this.case.decisionmakingFlow;
+    decisionmakingFlow.closed = null;
+    await decisionmakingFlow.save();
+    this.router.refresh();
+  }
+
+  @action
+  navigateToAddSubcase() {
+    this.router.transitionTo('cases.case.subcases.add-subcase', this.args.decisionmakingFlow.id);
   }
 }

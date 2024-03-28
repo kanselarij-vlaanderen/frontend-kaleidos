@@ -6,12 +6,17 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addBusinessDays, setHours, setMinutes } from 'date-fns';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-const DEFAULT_SORT_OPTIONS = ['-created-for.agenda.status.label', '-created-for.planned-start', 'created-for.kind.label'];
+const DEFAULT_SORT_OPTIONS = [
+  '-created-for.agenda.status.label',
+  '-created-for.planned-start',
+  'created-for.kind.label',
+];
 export default class AgendasController extends Controller {
   queryParams = ['pageAgendas', 'sizeAgendas', 'sortAgendas', 'filterAgendas'];
 
   @service store;
   @service router;
+  @service mandatees;
 
   defaultPublicationActivityStatus;
   @tracked newMeeting;
@@ -55,18 +60,18 @@ export default class AgendasController extends Controller {
     const now = new Date();
     const plannedStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     this.newMeeting = this.store.createRecord('meeting', {
-      plannedStart
+      plannedStart,
     });
     const nextBusinessDay = setMinutes(setHours(addBusinessDays(plannedStart, 1), 14), 0);
     this.publicationActivities = [
       this.store.createRecord('internal-decision-publication-activity', {
         meeting: this.newMeeting,
-        status: this.defaultPublicationActivityStatus
+        status: this.defaultPublicationActivityStatus,
       }),
       this.store.createRecord('internal-document-publication-activity', {
         meeting: this.newMeeting,
         status: this.defaultPublicationActivityStatus,
-        plannedDate: nextBusinessDay
+        plannedDate: nextBusinessDay,
       }),
       this.store.createRecord('themis-publication-activity', {
         meeting: this.newMeeting,
@@ -75,7 +80,7 @@ export default class AgendasController extends Controller {
         scope: [
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS,
           CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS,
-        ]
+        ],
       }),
     ];
 
@@ -98,7 +103,7 @@ export default class AgendasController extends Controller {
         ':lt:planned-start': this.newMeeting.plannedStart.toISOString(),
         kind: {
           ':has-no:broader': true,
-        }
+        },
       },
       sort: '-planned-start',
     });
@@ -130,7 +135,7 @@ export default class AgendasController extends Controller {
     let newSortAgendas = sortField || DEFAULT_SORT_OPTIONS.join(',');
     for (const sortOption of DEFAULT_SORT_OPTIONS) {
       if (newSortAgendas.replace(/-/g, '').indexOf(sortOption.replace(/-/g, '')) === -1) {
-        newSortAgendas += ',' + sortOption
+        newSortAgendas += ',' + sortOption;
       }
     }
     this.sortAgendas = newSortAgendas;
@@ -162,11 +167,14 @@ export default class AgendasController extends Controller {
     );
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
-      title: `Agenda A voor zitting ${dateFormat(meeting.plannedStart, 'd-M-yyyy')}`,
+      title: `Agenda A voor zitting ${dateFormat(
+        meeting.plannedStart,
+        'd-M-yyyy'
+      )}`,
       createdFor: meeting,
       status,
       created: now,
-      modified: now
+      modified: now,
     });
     await agenda.save();
 
@@ -185,21 +193,19 @@ export default class AgendasController extends Controller {
 
   async createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting) {
     const now = new Date();
-
-    const decisionResultCode = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
-    );
-
     const startDate = newMeeting.plannedStart;
-    const decisionActivity = this.store.createRecord(
-      'decision-activity',
-      {
-        startDate: startDate,
-        decisionResultCode
-        // no subcase. Minutes approval aren't part of a (sub)case
-      }
-    );
+
+    // meeting secretary
+    let secretary;
+    const meetingSecretary = await newMeeting.secretary;
+    secretary =  meetingSecretary;
+    
+    const decisionActivity = this.store.createRecord('decision-activity', {
+      startDate: startDate,
+      secretary,
+      // no subcase. Minutes approval aren't part of a (sub)case
+      // no decision result for nota
+    });
     await decisionActivity.save();
 
     const agendaItemTreatment = this.store.createRecord(
@@ -207,21 +213,27 @@ export default class AgendasController extends Controller {
       {
         created: now,
         modified: now,
-        decisionActivity
+        decisionActivity,
       }
     );
     await agendaItemTreatment.save();
 
-    const notaType = await this.store.findRecordByUri('concept', CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
+    const notaType = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+    );
     const agendaitem = this.store.createRecord('agendaitem', {
       created: now,
       agenda,
       number: 1,
-      shortTitle: `Goedkeuring van het verslag van de vergadering van ${dateFormat(closestMeeting.plannedStart, 'EEEE dd-MM-yyyy')}`,
+      shortTitle: `Goedkeuring van het verslag van de vergadering van ${dateFormat(
+        closestMeeting.plannedStart,
+        'EEEE dd-MM-yyyy'
+      )}`,
       formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       isApproval: true,
       treatment: agendaItemTreatment,
-      type: notaType
+      type: notaType,
     });
     await agendaitem.save();
     return agendaitem;

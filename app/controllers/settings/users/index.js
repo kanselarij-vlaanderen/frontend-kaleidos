@@ -78,12 +78,12 @@ export default class UsersSettingsController extends Controller {
 
   @task
   *loadSelectedOrganizations() {
-    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).toArray();
+    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
   }
 
   @task
   *loadSelectedRoles() {
-    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).toArray();
+    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).slice();
   }
 
   @action

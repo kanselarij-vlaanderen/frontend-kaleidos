@@ -32,6 +32,7 @@
       {{t "agenda-view"}}
     </AuLink>
    <AuButton
+      @skin="link"
       {{on "click" this.print}}
       role="menuitem"
     >
@@ -54,7 +55,7 @@
   >
     {{t "download-documents"}}
   </AuButton>
-    <AuButton
+  <AuButton
     data-test-agenda-actions-download-decisions
     @skin="link"
     {{on "click" this.openDownloadDecisions}}
@@ -62,6 +63,15 @@
   >
     {{t "download-decisions"}}
   </AuButton>
+  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-documents"))}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.generateSignedDecisionsBundle}}
+      role="menuitem"
+    >
+      {{t "generate-signed-decisions-bundle"}}
+    </AuButton>
+  {{/if}}
 
   {{#if (user-may "manage-meetings")}}
     <AuHr />
@@ -72,6 +82,16 @@
       role="menuitem"
     >
       {{t "edit-meeting"}}
+    </AuButton>
+  {{/if}}
+  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
+    <AuHr />
+    <AuButton
+      @skin="link"
+      {{on "click" this.markDecisionsForSigning}}
+      role="menuitem"
+    >
+      {{t "sign-decisions"}}
     </AuButton>
   {{/if}}
   {{#if this.canEditDesignAgenda}}
@@ -284,29 +304,33 @@
     >
       <p>{{t "download-agenda-decisions-info"}}</p>
     </AuAlert>
-    <Mandatees::CheckboxSelect
-      @selected={{this.selectedMandatees}}
-      @referenceAgenda={{@currentAgenda}}
-      @onChange={{set this "selectedMandatees"}}
-    />
-    <AuFieldset as |Fieldset|>
-      <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
-      <Fieldset.content>
-        <AuRadioGroup
-          @alignment="inline"
-          @selected={{this.selectedDownloadOption}}
-          @onChange={{this.onChangeDownloadOption}}
-          as |Group|
-        >
-          {{#each this.downloadOptions as |option|}}
-          <Group.Radio
-            @value={{option.value}}
-            >
-            {{option.label}}
-          </Group.Radio>
-          {{/each}}
-        </AuRadioGroup>
-      </Fieldset.content>
-    </AuFieldset>
+    <div class="au-c-form">
+      <AuFormRow>
+        <Mandatees::CheckboxSelect
+          @selected={{this.selectedMandatees}}
+          @referenceAgenda={{@currentAgenda}}
+          @onChange={{set this "selectedMandatees"}}
+        />
+      </AuFormRow>
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            @alignment="inline"
+            @selected={{this.selectedDownloadOption}}
+            @onChange={{this.onChangeDownloadOption}}
+            as |Group|
+          >
+            {{#each this.downloadOptions as |option|}}
+            <Group.Radio
+              @value={{option.value}}
+              >
+              {{option.label}}
+            </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+    </div>
   </:body>
 </ConfirmationModal>

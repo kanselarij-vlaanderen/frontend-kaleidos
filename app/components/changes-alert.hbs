@@ -1,17 +1,27 @@
-<div
-  class="auk-o-flex auk-o-flex--justify-between auk-u-maximize-width vl-alert vl-alert--warning"
-  data-test-changes-alert
->
-  <p class="vl-alert__content">
-    {{@message}}
-  </p>
-  <div class="button-container">
-    <AuButton
-      data-test-changes-alert-close
-      @skin="secondary"
-      {{on "click" @onClear}}
-    >
-      {{@buttonText}}
-    </AuButton>
+<div class="au-c-alert au-c-alert--warning" role="alert" data-test-changes-alert>
+  <div class="au-c-alert__content">
+    <div class="au-c-alert__message au-u-flex au-u-flex--between au-u-flex--spaced-small" data-test-changes-alert-message>
+      <p>{{@message}}</p>
+      <AuButtonGroup>
+        {{#if @onCancel}}
+          <AuButton
+          class="au-u-flex-item--fixed"
+          data-test-changes-alert-cancel
+          @skin="secondary"
+          {{on "click" @onCancel}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        {{/if}}
+        <AuButton
+          class="au-u-flex-item--fixed"
+          data-test-changes-alert-confirm
+          @skin={{if @skin @skin "secondary"}}
+          {{on "click" @onConfirm}}
+        >
+          {{@buttonText}}
+        </AuButton>
+      </AuButtonGroup>
+    </div>
   </div>
 </div>

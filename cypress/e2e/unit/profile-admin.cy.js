@@ -158,13 +158,13 @@ context('Testing the application as Admin user', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit);
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit);
 
       // Overview Tab - General action - Dragging
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
-      cy.get(agenda.agendaOverview.formallyOkEdit).click();
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
       cy.get(agenda.agendaOverviewItem.dragging);
       cy.get(agenda.agendaOverviewItem.moveUp);
       cy.get(agenda.agendaOverviewItem.moveDown);
@@ -185,14 +185,14 @@ context('Testing the application as Admin user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort2);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort1);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
       cy.get(route.agendaitemDocuments.add);
@@ -222,12 +222,14 @@ context('Testing the application as Admin user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.create);
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort2);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -235,7 +237,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -325,7 +327,7 @@ context('Testing the application as Admin user', () => {
 
       // Overview Tab - General actions
       cy.get(agenda.agendaOverview.showChanges);
-      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+      cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
       cy.get(agenda.agendaOverviewItem.dragging).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveUp).should('not.exist');
       cy.get(agenda.agendaOverviewItem.moveDown).should('not.exist');
@@ -346,14 +348,14 @@ context('Testing the application as Admin user', () => {
 
       // Detail Tab - Document tab (no docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort4);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit).should('not.exist');
       cy.get(route.agendaitemDocuments.openPublication).should('not.exist');
       cy.get(route.agendaitemDocuments.add);
 
       // Detail Tab - Document tab (with docs)
       cy.openAgendaitemDocumentTab(subcaseTitleShort3);
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.agendaitemDocuments.batchEdit);
       cy.get(route.agendaitemDocuments.openPublication);
       cy.get(route.agendaitemDocuments.add);
@@ -374,12 +376,14 @@ context('Testing the application as Admin user', () => {
       cy.get(agenda.agendaitemNav.decisionTab).click();
       cy.get(agenda.decisionResultPill.pill);
       cy.get(agenda.decisionResultPill.edit);
-      cy.get(agenda.agendaitemDecision.create);
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile);
 
       // Detail Tab - Decisions tab - Document Card
       cy.openDetailOfAgendaitem(subcaseTitleShort4);
       cy.get(agenda.agendaitemNav.decisionTab).click();
-      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // pre digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit);
       cy.get(document.documentCard.actions)
@@ -387,7 +391,7 @@ context('Testing the application as Admin user', () => {
         .click();
       cy.get(document.documentCard.uploadPiece);
       cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
+      cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
@@ -506,11 +510,14 @@ context('Testing the application as Admin user', () => {
       const files = [file];
 
       cy.createCase(caseTitle);
-      cy.addSubcase('Nota',
-        subcaseTitle1,
-        'Cypress test voor nota updates',
-        'Principiële goedkeuring',
-        'Principiële goedkeuring m.h.o. op adviesaanvraag');
+      cy.addSubcaseViaModal({
+        newCase: true,
+        agendaitemType: 'Nota',
+        newShortTitle: subcaseTitle1,
+        longTitle: 'Cypress test voor nota updates',
+        subcaseType: 'principiële goedkeuring',
+        subcaseName: 'Principiële goedkeuring m.h.o. op adviesaanvraag',
+      });
       cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
       cy.openAgendaForDate(agendaDate);
@@ -551,7 +558,7 @@ context('Testing the application as Admin user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkOpenAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -650,7 +657,7 @@ context('Testing the application as Admin user', () => {
 
       it('check zebra view', () => {
         cy.visit(kortBestekLinkReleasedAgenda);
-        cy.get(auk.loader).should('not.exist');
+        cy.get(appuniversum.loader).should('not.exist');
 
         // check edit rights
         cy.get(newsletter.tableRow.newsletterRow).eq(0)
@@ -839,11 +846,11 @@ context('Testing the application as Admin user', () => {
       // cy.get(publication.publicationsIndex.tabs.search);
 
       cy.get(publication.publicationsIndex.tabs.reports).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(publication.reportsPanelEntry.create).should('not.be.disabled');
 
       cy.get(publication.publicationsIndex.tabs.search).click();
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.search.input);
       cy.get(route.search.trigger);
     });
@@ -891,138 +898,109 @@ context('Testing the application as Admin user', () => {
   context('Profile rights checks for signatures routes', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.signatures.openMinisterFilter);
     });
 
     it('check signatures/ongoing route', () => {
       cy.visit('ondertekenen/opvolgen');
-      cy.get(auk.loader).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
       cy.get(route.ongoing.statusFilter).find(appuniversum.checkbox);
       cy.get(route.ongoing.ministerFilter).find(appuniversum.checkbox);
     });
   });
 
   context('Profile rights checks for case routes', () => {
+    // const decisionNotSet = 'Nog geen beslissing ingesteld';
+    const decisionApproved = 'Goedgekeurd';
+    const decisionPostponed = 'Uitgesteld';
     it('check cases route', () => {
-      cy.visit('dossiers');
+      cy.visit('dossiers?aantal=2');
 
       cy.get(cases.casesHeader.addCase);
-      cy.get(route.casesOverview.showArchived);
-      cy.get(route.casesOverview.row.actionsDropdown).eq(0)
-        .click();
-      cy.get(route.casesOverview.row.actions.edit);
-      cy.get(route.casesOverview.row.actions.archive);
       cy.get(route.casesOverview.row.goToCase);
     });
 
     it('check subcases/overview route', () => {
-      // open agenda
-      cy.visit('dossiers/6374F284D9A98BD0A2288538/deeldossiers');
-
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
-      cy.get(cases.subcaseOverviewHeader.editCase);
-      cy.get(cases.subcaseOverviewHeader.createSubcase);
-      cy.get(cases.subcaseItem.pending);
-
-      cy.get(cases.subcaseItem.showDocuments).click();
-      cy.get(document.documentBadge.link).contains('VR 2022 2204 DOC.0001-5');
-
-      // released agenda
-      cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers');
-
-      cy.get(cases.subcaseItem.approved);
-
-      cy.get(cases.subcaseItem.showDocuments).click();
-      cy.get(document.documentBadge.link).contains('VR 2022 2304 DOC.0001-5');
-
-      // closed agenda
-      cy.visit('dossiers/E14FB514-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-
-      cy.get(cases.subcaseItem.pending);
-
-      cy.get(cases.subcaseItem.showDocuments).should('not.exist');
-    });
-
-    it('check subcases/overview route', () => {
       // actions on open agenda no decisions
-      cy.visit('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
+      cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
+      // overview header
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.optionsDropdown).click();
+      cy.get(cases.subcaseOverviewHeader.actions.editCase);
+      cy.get(cases.subcaseOverviewHeader.actions.archive);
+      cy.get(cases.subcaseOverviewHeader.openAddSubcase);
+
+      // sidebar
+      cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
+
+      // subcase header
       cy.get(cases.subcaseHeader.actionsDropdown).click();
       cy.get(cases.subcaseHeader.actions.moveSubcase);
 
-      // overview tab
-      cy.get(cases.subcaseDetailNav.overview);
+      // subcase - top panels
       cy.get(cases.subcaseDescription.edit);
-      cy.get(cases.subcaseTitlesView.edit);
       cy.get(mandatee.mandateePanelView.actions.edit);
       cy.get(utils.governmentAreasPanel.edit);
 
-      // documents tab
-      cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(route.subcaseDocuments.batchEdit);
-
-      cy.get(document.documentCard.actions).eq(0)
-        .click();
-      cy.get(document.documentCard.uploadPiece);
-      cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
-      cy.get(document.documentCard.delete);
-      cy.get(document.accessLevelPill.edit);
-
-      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
-        .should('not.be.disabled')
-        .click();
-      // Detail Tab - Decisions tab - Document Card history
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.pill);
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit);
-
-      cy.get(route.subcaseDocuments.add);
-      cy.get(document.linkedDocuments.add);
-
-      // docs visible on open agenda no decisions
+      // subcase - document panel
       cy.get(document.documentCard.name.value).contains('VR 2022 2204 DOC.0001-5')
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
         .should('contain', 'test.docx');
+      cy.get(document.documentCard.actions).eq(0)
+        .click();
+      cy.get(document.documentCard.uploadPiece);
+      cy.get(document.documentCard.editPiece);
+      cy.get(document.documentCard.signMarking).should('not.exist');
+      cy.get(document.documentCard.delete);
+      cy.get(document.accessLevelPill.edit);
 
-      // decisions tab (on open agenda with decision)
-      cy.visit('dossiers/6374F2C7D9A98BD0A2288546/deeldossiers/6374F2CDD9A98BD0A2288547/beslissing');
-      cy.get(cases.subcaseDetailNav.decisions);
-      cy.get(document.documentCard.card);
-      cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
         .click();
-      //  Decisions tab - Document Card history
+      // subcase - document panel - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
       cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
+        .find(document.accessLevelPill.edit);
+      cy.get(route.subcase.add);
+
+      // subcase - linked document panel
+      // none yet
+      cy.get(document.linkedDocumentsPanel.add);
+
 
       // actions on released agenda no decisions
-      cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
+      cy.visitCaseWithLink('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
 
+      // overview header
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist');
+      cy.get(cases.subcaseOverviewHeader.optionsDropdown).click();
+      cy.get(cases.subcaseOverviewHeader.actions.editCase);
+      cy.get(cases.subcaseOverviewHeader.actions.archive);
+      cy.get(cases.subcaseOverviewHeader.openAddSubcase);
+
+      // sidebar
+      cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
+
+      // subcase header
       cy.get(cases.subcaseHeader.actionsDropdown).click();
       cy.get(cases.subcaseHeader.actions.moveSubcase);
 
-      // overview tab
-      cy.get(cases.subcaseDetailNav.overview);
+      // subcase - top panels
       cy.get(cases.subcaseDescription.edit);
-      cy.get(cases.subcaseTitlesView.edit);
       cy.get(mandatee.mandateePanelView.actions.edit);
       cy.get(utils.governmentAreasPanel.edit);
 
-      // documents tab
-      cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(route.subcaseDocuments.batchEdit);
-
+      // subcase - document panel
+      cy.get(document.documentCard.name.value).contains('VR 2022 2304 DOC.0001-5')
+        .parent()
+        .find(document.documentCard.primarySourceLink)
+        .invoke('attr', 'href')
+        .should('contain', 'test.docx');
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -1040,60 +1018,49 @@ context('Testing the application as Admin user', () => {
       //   .find(document.accessLevelPill.pill);
       // cy.get(document.vlDocument.piece)
       //   .find(document.accessLevelPill.edit);
+      cy.get(route.subcase.add);
 
-      cy.get(route.subcaseDocuments.add);
-      cy.get(document.linkedDocuments.add);
+      // subcase - linked document panel
+      // none yet
+      cy.get(document.linkedDocumentsPanel.add);
 
-      // docs visible on released agenda no decisions
-      cy.get(document.documentCard.name.value).contains('VR 2022 2304 DOC.0001-5')
-        .parent()
-        .find(document.documentCard.primarySourceLink)
-        .invoke('attr', 'href')
-        .should('contain', 'test.docx');
-
-      // decisions tab (on released agenda with decision)
-      cy.visit('dossiers/6374F30CD9A98BD0A2288557/deeldossiers/6374F312D9A98BD0A2288558/beslissing');
-      cy.get(cases.subcaseDetailNav.decisions);
-      cy.get(document.documentCard.card);
-      cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
-        .should('not.be.disabled')
-        .click();
-      //  Decisions tab - Document Card history
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.pill);
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
 
       // actions on closed agenda no decisions
-      cy.visit('dossiers/6374F2D6D9A98BD0A2288549/deeldossiers/6374F2DCD9A98BD0A228854A');
+      cy.visitCaseWithLink('dossiers/E14FB514-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5DD7CDCE8C70A70008000006');
 
+      // overview header
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist');
+      cy.get(cases.subcaseOverviewHeader.optionsDropdown).click();
+      cy.get(cases.subcaseOverviewHeader.actions.editCase);
+      cy.get(cases.subcaseOverviewHeader.actions.archive);
+      cy.get(cases.subcaseOverviewHeader.openAddSubcase);
+
+      // sidebar
+      cy.get(agenda.decisionResultPill.pill).contains(decisionPostponed);
+
+      // subcase header
       cy.get(cases.subcaseHeader.actionsDropdown).click();
       cy.get(cases.subcaseHeader.actions.moveSubcase);
 
-      // overview tab
-      cy.get(cases.subcaseDetailNav.overview);
+      // subcase - top panels
       cy.get(cases.subcaseDescription.edit);
-      cy.get(cases.subcaseTitlesView.edit);
       cy.get(mandatee.mandateePanelView.actions.edit);
       cy.get(utils.governmentAreasPanel.edit);
 
-      // documents tab
-      cy.get(cases.subcaseDetailNav.documents).click();
-      cy.get(route.subcaseDocuments.batchEdit);
-
-      cy.get(document.documentCard.actions).eq(0)
-        .click();
-      cy.get(document.documentCard.uploadPiece);
-      cy.get(document.documentCard.editPiece);
-      cy.get(document.documentCard.signMarking).should('not.exist');
-      cy.get(document.documentCard.delete);
-      cy.get(document.accessLevelPill.edit);
-
-      // TODO released agenda docs has no previous version, setup?
+      // subcase - document panel
+      // TODO closed agenda docs has no docs, setup?
+      // cy.get(document.documentCard.name.value).contains('***')
+      //   .parent()
+      //   .find(document.documentCard.primarySourceLink)
+      //   .invoke('attr', 'href')
+      //   .should('contain', 'test.docx');
+      // cy.get(document.documentCard.actions).eq(0)
+      //   .click();
+      // cy.get(document.documentCard.uploadPiece);
+      // cy.get(document.documentCard.editPiece);
+      // cy.get(document.documentCard.signMarking).should('not.exist');
+      // cy.get(document.documentCard.delete);
+      // cy.get(document.accessLevelPill.edit);
       // cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       //   .should('not.be.disabled')
       //   .click();
@@ -1102,33 +1069,156 @@ context('Testing the application as Admin user', () => {
       //   .find(document.accessLevelPill.pill);
       // cy.get(document.vlDocument.piece)
       //   .find(document.accessLevelPill.edit);
+      cy.get(route.subcase.add);
 
-      cy.get(route.subcaseDocuments.add);
-      cy.get(document.linkedDocuments.add);
+      // subcase - linked document panel
+      // none yet
+      cy.get(document.linkedDocumentsPanel.add);
+    });
+  });
 
-      // docs visible on closed agenda no decisions
-      cy.get(document.documentCard.name.value).contains('VR 2022 2304 DOC.0001-5')
-        .parent()
-        .find(document.documentCard.primarySourceLink)
-        .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+  context('Profile rights checks for document route', () => {
+    it('check document view', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+      cy.get(document.documentPreview.title).contains('VR 2022 2204 DOC.0001-1BIS');
+      cy.get(document.documentPreview.downloadLink);
+      // cy.get(document.documentView.pdfView);
+    });
 
-      // decisions tab (on closed agenda with decision)
-      cy.visit('dossiers/6374F30CD9A98BD0A2288557/deeldossiers/6374F312D9A98BD0A2288558/beslissing');
-      cy.get(cases.subcaseDetailNav.decisions);
-      cy.get(document.documentCard.card);
-      cy.get(document.documentCard.actions).should('not.exist');
-      cy.get(document.accessLevelPill.pill);
-      cy.get(document.accessLevelPill.edit).should('not.exist');
-      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
-        .should('not.be.disabled')
+    it('check switching to all tabs', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+      cy.get(document.documentPreviewSidebar.tabs.signatures).click();
+      cy.url().should('include', '?tab=Ondertekenen');
+
+      cy.get(document.documentPreviewSidebar.tabs.versions).click();
+      cy.url().should('include', '?tab=Versies');
+
+      cy.get(document.documentPreviewSidebar.tabs.details).click();
+      cy.url().should('not.include', '?tab=Versies');
+      cy.url().should('not.include', '?tab=Ondertekenen');
+    });
+
+    it('check details tab', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A');
+
+      cy.get(document.previewDetailsTab.delete); // BIS version
+      cy.get(document.previewDetailsTab.edit);
+      cy.get(document.previewDetailsTab.sourceFile);
+      // switch version
+      cy.intercept('GET', '/pieces/*/file').as('getFileType');
+      cy.get(document.documentPreviewSidebar.tabs.versions).click()
+        .wait('@getFileType');
+      cy.get(document.previewVersionCard.name).contains('VR 2022 2204 DOC.0001-1.docx')
+        .parents(document.previewVersionCard.container)
         .click();
-      //  Decisions tab - Document Card history
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.pill);
-      cy.get(document.vlDocument.piece)
-        .find(document.accessLevelPill.edit)
-        .should('not.exist');
+      // check again
+      cy.get(document.documentPreviewSidebar.tabs.details).click();
+      cy.get(document.previewDetailsTab.delete).should('not.exist'); // previous version
+      cy.get(document.previewDetailsTab.edit);
+      // * remove signed piece not tested yet
+
+      // confidential file
+      cy.visit('document/6374F2FBD9A98BD0A2288552');
+      cy.get(document.documentPreview.downloadLink);
+      cy.get(document.previewDetailsTab.delete);
+      cy.get(document.previewDetailsTab.edit);
+      cy.get(appuniversum.alert.message).should('not.exist');
+      cy.get(document.previewDetailsTab.sourceFileDownload);
+    });
+
+    it('check signatures tab', () => {
+      // agendaitem document
+      cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Ondertekenen');
+      cy.get(document.previewSignaturesTab.markForSignflow);
+
+      // decision document
+      cy.visit('document/6374F736D9A98BD0A2288574?tab=Ondertekenen');
+      cy.get(document.previewSignaturesTab.markForSignflow);
+
+      // TODO-setup for notulen
+      // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
+      // cy.get(route.agendaitemMinutes.createEdit).click();
+      // cy.get(route.agendaitemMinutes.editor.updateContent).click();
+      // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
+      // cy.get(route.agendaitemMinutes.editor.save).click()
+      //   .wait('@patchMinutes');
+      // cy.get(document.documentCard.name.value)
+      //   .invoke('removeAttr', 'target')
+      //   .parent()
+      //   .click();
+      // // check notulen document
+      // cy.get(document.documentPreviewSidebar.tabs.signatures).click();
+      // cy.get(document.previewSignaturesTab.markForSignflow);
+    });
+
+    it('check version tab', () => {
+      cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Versies');
+      cy.get(document.previewVersionCard.container).contains('VR 2022 2204 DOC.0001');
+      cy.get(document.previewVersionCard.container).contains('Geüpload op');
+      cy.get(document.previewVersionCard.container).contains('Rechten gewijzigd op');
+    });
+  });
+
+  context('Profile rights checks for search routes', () => {
+    it('check search/all-types route', () => {
+      cy.visit('zoeken/alle-types');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+    });
+
+    it('check search/cases route', () => {
+      cy.visit('zoeken/dossiers');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchCases.removedCasesList);
+      cy.get(route.searchConfidentialOnly.checkbox);
+    });
+
+    it('check search/agendaitems route', () => {
+      cy.visit('zoeken/agendapunten');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchAgendaitems.filter.type);
+      cy.get(route.searchAgendaitems.filter.finalAgenda);
+    });
+
+    it('check search/documents route', () => {
+      cy.visit('zoeken/documenten');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchConfidentialOnly.checkbox);
+      cy.get(route.searchDocumentTypeFilter.list);
+    });
+
+    it('check search/decisions route', () => {
+      cy.visit('zoeken/beslissingen');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
+      cy.get(route.searchDecisions.filterContainer);
+    });
+
+    it('check search/newsletters route', () => {
+      cy.visit('zoeken/kort-bestek');
+
+      cy.get(route.search.input);
+      cy.get(route.search.from);
+      cy.get(route.search.to);
+      cy.get(route.search.ministerFilterContainer);
     });
   });
 });

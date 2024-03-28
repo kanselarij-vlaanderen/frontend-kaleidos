@@ -51,60 +51,60 @@ context('rdfa editor tests', () => {
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
 
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+u}Underline')
+    cy.get(dependency.rdfaEditor.inner).type('{ctrl+u}Underline')
       .type('{ctrl+u} ');
     cy.get('u').contains('Underline');
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+i}Italic')
+    cy.get(dependency.rdfaEditor.inner).type('{ctrl+i}Italic')
       .type('{ctrl+i} ');
     cy.get('em').contains('Italic');
-    cy.get(dependency.rdfa.editorInner).type('{ctrl+b}Bold')
+    cy.get(dependency.rdfaEditor.inner).type('{ctrl+b}Bold')
       .type('{ctrl+b} ');
     cy.get('strong').contains('Bold');
     // it's not possible to type super or subscript in a similar way here so it's only in the next test, same with lists
 
     // check single backspace
-    cy.get(dependency.rdfa.editorInner).type('{selectAll}{backspace}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
+    cy.get(dependency.rdfaEditor.inner).type('{selectAll}{backspace}');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', 'Bol');
     // check single delete
-    cy.get(dependency.rdfa.editorInner).type('Bold')
+    cy.get(dependency.rdfaEditor.inner).type('Bold')
       .type('{selectAll}')
       .type('{del}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bold');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', 'Bold');
     // check separate backspaces
-    cy.get(dependency.rdfa.editorInner).type('Bold')
+    cy.get(dependency.rdfaEditor.inner).type('Bold')
       .type('{end}{backspace}')
       .type('{backspace}')
       .type('{backspace}')
       .type('{backspace}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'Bol');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', 'Bol');
     // check separate deletes
-    cy.get(dependency.rdfa.editorInner).type('Bold')
+    cy.get(dependency.rdfaEditor.inner).type('Bold')
       .type('{home}{del}')
       .type('{del}')
       .type('{del}')
       .type('{del}');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', 'old');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', 'old');
     cy.get(newsletter.editItem.cancel).click();
 
     // check enter
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
-    cy.get(dependency.rdfa.editorInner).find('br')
+    cy.get(dependency.rdfaEditor.inner).find('br')
       .should('have.length', 1); // 1 br exists by default
-    cy.get(dependency.rdfa.editorInner).type('{enter}');
-    cy.get(dependency.rdfa.editorInner).find('br')
+    cy.get(dependency.rdfaEditor.inner).type('{enter}');
+    cy.get(dependency.rdfaEditor.inner).find('br')
       .should('have.length', 2);
     // check space
-    cy.get(dependency.rdfa.editorInner).clear()
+    cy.get(dependency.rdfaEditor.inner).clear()
       .type(' ');
-    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
+    cy.get(dependency.rdfaEditor.inner).should('contain', ' ');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', '\u00a0');
     // check that there are no &nbsp;
     // see: https://github.com/lblod/ember-rdfa-editor/pull/245
-    cy.get(dependency.rdfa.editorInner).clear()
+    cy.get(dependency.rdfaEditor.inner).clear()
       .type('test  test');
-    cy.get(dependency.rdfa.editorInner).should('contain', ' ');
-    cy.get(dependency.rdfa.editorInner).should('not.contain', '\u00a0');
+    cy.get(dependency.rdfaEditor.inner).should('contain', ' ');
+    cy.get(dependency.rdfaEditor.inner).should('not.contain', '\u00a0');
     cy.get(newsletter.editItem.cancel).click();
   });
 
@@ -116,47 +116,47 @@ context('rdfa editor tests', () => {
     cy.wait('@getThemes');
 
     pressRdfaButton('Doorstreept');
-    cy.get(dependency.rdfa.editorInner).type('Strikethrough');
+    cy.get(dependency.rdfaEditor.inner).type('Strikethrough');
     cy.wait(200);
     pressRdfaButton('Doorstreept');
-    cy.get(dependency.rdfa.editorInner).type(' ');
+    cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Onderstreept');
-    cy.get(dependency.rdfa.editorInner).type('Underline');
+    cy.get(dependency.rdfaEditor.inner).type('Underline');
     cy.wait(200);
     pressRdfaButton('Onderstreept');
-    cy.get(dependency.rdfa.editorInner).type(' ');
+    cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Schuingedrukt');
-    cy.get(dependency.rdfa.editorInner).type('Italic');
+    cy.get(dependency.rdfaEditor.inner).type('Italic');
     cy.wait(200);
     pressRdfaButton('Schuingedrukt');
-    cy.get(dependency.rdfa.editorInner).type(' ');
+    cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Vetgedrukt');
-    cy.get(dependency.rdfa.editorInner).type('Bold');
+    cy.get(dependency.rdfaEditor.inner).type('Bold');
     cy.wait(200);
     pressRdfaButton('Vetgedrukt');
 
-    cy.get(dependency.rdfa.editorInner).type(' ');
+    cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Subscript');
-    cy.get(dependency.rdfa.editorInner).type('Subscript');
+    cy.get(dependency.rdfaEditor.inner).type('Subscript');
     cy.wait(200);
     pressRdfaButton('Subscript');
-    cy.get(dependency.rdfa.editorInner).type(' ');
+    cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Superscript');
-    cy.get(dependency.rdfa.editorInner).type('Superscript');
+    cy.get(dependency.rdfaEditor.inner).type('Superscript');
     cy.wait(200);
 
-    cy.get(dependency.rdfa.editorInner).type('{enter}');
+    cy.get(dependency.rdfaEditor.inner).type('{enter}');
     pressRdfaButton('Ongeordende lijst');
-    cy.get(dependency.rdfa.editorInner).type('Ongeordende lijst');
+    cy.get(dependency.rdfaEditor.inner).type('Ongeordende lijst');
     cy.wait(200);
-    cy.get(dependency.rdfa.editorInner).type('{enter}');
-    pressRdfaButton('Lijstniveau lager');
-    cy.get(dependency.rdfa.editorInner).type('Lijstniveau lager');
+    cy.get(dependency.rdfaEditor.inner).type('{enter}');
+    pressRdfaButton('Indentatie vergroten');
+    cy.get(dependency.rdfaEditor.inner).type('Indentatie vergroten');
     cy.wait(200);
 
-    cy.get(dependency.rdfa.editorInner).type('{enter}');
-    pressRdfaButton('Lijstniveau hoger');
-    cy.get('button').contains('Lijstniveau lager');
+    cy.get(dependency.rdfaEditor.inner).type('{enter}');
+    pressRdfaButton('Indentatie verkleinen');
+    cy.get('button').contains('Indentatie vergroten');
 
     cy.get('del').contains('Strikethrough');
     cy.get('u').contains('Underline');
@@ -165,7 +165,7 @@ context('rdfa editor tests', () => {
     cy.get('sub').contains('Subscript');
     cy.get('sup').contains('Superscript');
     cy.get('ul').contains('Ongeordende lijst');
-    cy.get('li').contains('Lijstniveau lager');
+    cy.get('li').contains('Indentatie vergroten');
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click()

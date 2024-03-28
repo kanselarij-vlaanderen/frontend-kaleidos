@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -68,25 +67,41 @@ export default class SubcaseItemSubcasesComponent extends Component {
 
   @task
   *updateHasDocumentsToShow() {
-    const doc = yield this.store.queryOne('submission-activity', {
+    const subcaseHasDocuments = yield this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'filter[:has:pieces]': 'true',
     });
-    this.hasDocumentsToShow = doc !== null;
-    yield this.loadRelatedMeeting.perform();
+    this.hasDocumentsToShow = subcaseHasDocuments !== null;
+    if (!this.hasDocumentsToShow) {
+      this.documentsAreVisible = false;
+      return;
+    }
     // Additional failsafe check on document visibility. Strictly speaking this check
     // should not be necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
     // There is however a different situation when a subcase has been postponed.
     // In that case no documents should be showing (as the subcase in still progress)
-    // but those from the first meeting are already propagated and are visible. 
-    if (!this.currentSession.may('view-documents-before-release')) {
-      const documentPublicationActivity = yield this.latestMeeting?.internalDocumentPublicationActivity;
-      const documentPublicationStatus = yield documentPublicationActivity?.status;
-      if (documentPublicationStatus?.uri !== CONSTANTS.RELEASE_STATUSES.RELEASED) {
-        this.hasDocumentsToShow = false;
-      }
-    };
+    // but those from the first meeting are already propagated and are visible.
+    yield this.loadRelatedMeeting.perform();
+    this.decisionActivity = yield this.loadRelatedDecisionActivity.perform();
+    const decisionActivityResultCode = yield this.decisionActivity
+      ?.decisionResultCode;
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if (this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true;
+    } else if (
+      !this.currentSession.may('view-postponed-and-retracted') &&
+      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
+    ) {
+      this.documentsAreVisible = false;
+    } else {
+      const documentPublicationActivity = yield this.latestMeeting
+        ?.internalDocumentPublicationActivity;
+      const documentPublicationStatus =
+        yield documentPublicationActivity?.status;
+      this.documentsAreVisible =
+        documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    }
   }
 
   @task
@@ -101,30 +116,44 @@ export default class SubcaseItemSubcasesComponent extends Component {
     yield this.latestMeeting?.belongsTo('agenda').reload();
   }
 
+  loadRelatedDecisionActivity = task(async () => {
+    return await this.store.queryOne(
+      'decision-activity',
+      {
+        'filter[treatment][agendaitems][agenda-activity][subcase][:id:]':
+          this.args.subcase.id,
+        sort: '-treatment.agendaitems.agenda-activity.start-date',
+      }
+    );
+  });
+
   @task
   *loadSubcaseDocuments() {
+    if (!this.documentsAreVisible) {
+      return;
+    }
     // proceed to get the documents
     const queryParams = {
-      page: {
-        size: PAGE_SIZE.ACTIVITIES,
-      },
       include: 'pieces', // Make sure we have all pieces, unpaginated
       'filter[subcase][:id:]': this.args.subcase.id,
     };
     // only get the documents on latest agendaActivity if applicable
     const agendaActivities = yield this.args.subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       queryParams['filter[agenda-activity][:id:]'] = latestActivity.id;
     }
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
-    const submissionActivities = yield this.store.query('submission-activity', queryParams);
+    const submissionActivities = yield this.store.queryAll('submission-activity', queryParams);
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = yield submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 

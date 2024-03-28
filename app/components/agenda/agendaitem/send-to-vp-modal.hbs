@@ -1,0 +1,184 @@
+<ConfirmationModal
+  @modalOpen={{true}}
+  @closable={{this.sendToVP.isIdle}}
+  @confirmMessage={{t "send-to-VP"}}
+  @onConfirm={{perform this.sendToVP}}
+  @onCancel={{@onCancel}}
+  @loading={{this.sendToVP.isRunning}}
+  @disabled={{this.nothingToBeSent}}
+>
+  <:title>{{t "check-case"}}</:title>
+  <:body>
+    {{#if this.loadData.isRunning}}
+      <Auk::Loader />
+    {{else}}
+      <AuContent>
+        {{#if this.showPieces}}
+          <p>{{t "check-documents-to-be-sent-to-vp"}}</p>
+            <ul class="au-u-margin-top au-u-margin-left-none">
+            {{#each this.subcasesWithPieces as |subcaseWithPieces|}}
+              <li class="list-style-none">
+                {{#if subcaseWithPieces.subcaseName}}
+                  <p>
+                    <strong class="auk-u-text-bold">
+                      {{capitalize subcaseWithPieces.subcaseName}}:
+                     </strong>
+                  </p>  
+                  <ul class="au-u-margin-top-small au-u-margin-left-none">
+                    {{#each subcaseWithPieces.pieces as |piece|}}
+                      <li class="list-style-none">
+                        {{#if (this.isDisabled piece.accessLevel)}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                          @disabled={{true}}
+                        >
+                        <AuLink
+                          @route="document" 
+                          @model={{piece.id}}
+                          @skin="secondary"
+                          target="_blank"
+                        >
+                          {{piece.name}}
+                          {{await (this.pieceFileTypes piece)}}
+                        </AuLink>
+                        </AuCheckbox>
+                        <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
+                        {{else}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                        >
+                          <AuLink 
+                            @route="document" 
+                            @model={{piece.id}}
+                            target="_blank"
+                            >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </AuLink>
+                        </AuCheckbox>
+                        {{/if}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  {{#each subcaseWithPieces.pieces as |piece|}}
+                    <li class="list-style-none">
+                      {{#if (this.isDisabled piece.accessLevel)}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                          @disabled={{true}}
+                        >
+                        <LinkTo 
+                          @skin="secondary"
+                          @active="true"
+                        >
+                          {{piece.name}}
+                          {{await (this.pieceFileTypes piece)}}
+                        </LinkTo>
+                        </AuCheckbox>
+                        <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
+                      {{else}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                        >
+                          <LinkTo 
+                            @route="document" 
+                            @model={{piece.id}}
+                            >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
+                        </AuCheckbox>
+                      {{/if}}
+                    </li>
+                  {{/each}}
+                {{/if}}
+              </li>
+            {{/each}}
+          </ul>
+          <div class="auk-form-group au-u-margin-top">
+            <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+            <Auk::Textarea
+              @rows="4"
+              id="remarks"
+              value={{this.comment}}
+              {{on "change" this.onChangeComment}}
+            />
+          </div>
+        {{else}}
+          <p>
+            {{t "no-new-files-will-be-sent"}}
+            <br />
+            {{t "for-questions-contact"}}
+            <AuLinkExternal
+              href="mailto:kaleidos.servicedesk@vlaanderen.be"
+              target="_blank"
+            >
+              {{t "email-servicedesk"}}
+            </AuLinkExternal>
+          </p>
+        {{/if}}
+      </AuContent>
+      {{#if (not this.decisionsReleased)}}
+        <AuAlert
+          @title="{{t 'decision-not-published-yet'}}:"
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+          class="au-u-margin-bottom au-u-margin-top"
+        >
+          <AuContent>
+            {{t 'decision-not-published-yet-may-be-altered'}}
+          </AuContent>
+        </AuAlert>
+      {{/if}}
+      {{#if this.showMissingPieces}}
+      <AuCard
+      @shadow={{false}}
+      @standOut={{true}}
+      @size="small"
+      @expandable={{true}}
+      as |c|
+      >
+        <c.header>
+          <AuHeading @level="3" @skin="6">
+            {{t "possible-pieces-missing"}}
+          </AuHeading>
+        </c.header>
+              <c.content>
+          <p>{{t "automatic-check-performed-possible-pieces-missing"}}</p>
+            <ul>
+              {{#each this.subcasesWithMissingPieces as |subcaseWithMissingPieces|}}
+                <li>
+                  {{#if subcaseWithMissingPieces.subcaseName}}
+                    {{t "for"}}
+                    {{subcaseWithMissingPieces.subcaseName}}:
+                    <ul>
+                      {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                        <li>
+                            {{piece.type.label}}
+                            {{await (this.pieceFileTypes piece)}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{#each subcaseWithMissingPieces.pieces as |piece|}}
+                      <li>
+                          {{piece.type.label}}
+                          {{await (this.pieceFileTypes piece)}}
+                      </li>
+                    {{/each}}
+                  {{/if}}
+                </li>
+              {{/each}}
+            </ul>
+        </c.content>
+      </AuCard>
+      {{/if}}
+    {{/if}}
+  </:body>
+</ConfirmationModal>

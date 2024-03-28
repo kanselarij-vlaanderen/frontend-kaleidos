@@ -55,11 +55,16 @@ export default class SearchNewsItemsRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[`${searchModifier}${textSearchKey}`] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
+
     if (!isEmpty(params.mandatees)) {
       filter[':terms:agendaitems.mandatees.id'] = params.mandatees;
+    }
+
+    if (!isEmpty(params.governmentAreas)) {
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -102,10 +107,6 @@ export default class SearchNewsItemsRoute extends Route {
 
     const filter = SearchNewsItemsRoute.createFilter(params);
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
     const results = await search(
       'news-items',
       params.page,
@@ -122,6 +123,7 @@ export default class SearchNewsItemsRoute extends Route {
       params.searchText,
       results.length,
       params.mandatees,
+      params.governmentAreas,
       params.dateFrom,
       params.dateTo,
       params.sort,
@@ -130,16 +132,22 @@ export default class SearchNewsItemsRoute extends Route {
     return results;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort) {
+  async trackSearch(searchTerm, resultCount, mandatees, governmentAreas, from, to, sort) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Aantal resultaten': resultCount,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Van': from,
       'Tot en met': to,
       'Sorteringsoptie': sort,
@@ -180,7 +188,9 @@ export default class SearchNewsItemsRoute extends Route {
   static postProcessMandatees(newsletter) {
     const mandatees = newsletter.latestAgendaitem.mandatees;
     if (Array.isArray(mandatees)) {
-      const sortedMandatees = mandatees.sortBy('priority');
+      const sortedMandatees = mandatees
+        .slice()
+        .sort((m1, m2) => m1.priority - m2.priority);
       newsletter.mandatees = sortedMandatees;
     } else {
       newsletter.mandatees = [mandatees];

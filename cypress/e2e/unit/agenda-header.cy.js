@@ -89,8 +89,11 @@ context('Agenda-Header actions tests', () => {
     // verify delete agenda A works
     cy.deleteAgenda(true);
     // verify subcase can be proposed for different agenda
-    cy.visit('/dossiers/E14FB460-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EB287BBF359DD0009000007');
-    cy.get(cases.subcaseHeader.showProposedAgendas);
+    cy.visitCaseWithLink('/dossiers/E14FB460-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EB287BBF359DD0009000007');
+    cy.get(cases.subcaseHeader.actionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(cases.subcaseHeader.actions.showProposedAgendas);
   });
 
 
@@ -123,7 +126,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     // the new agendaitem was deleted by the backend service
@@ -175,7 +178,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(auk.loader, {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 3);

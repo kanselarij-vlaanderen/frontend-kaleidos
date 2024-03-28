@@ -59,6 +59,7 @@ export default class VRDocumentName {
       docType: match.groups.docType,
       caseNrRaw: match.groups.caseNr,
       caseNr: parseInt(match.groups.caseNr, 10),
+      indexNrRaw: match.groups.index,
       index: parseInt(match.groups.index, 10),
       versionSuffix,
       versionNumber,
@@ -94,9 +95,30 @@ export default class VRDocumentName {
   vrNumberWithSuffix() {
     try {
       const meta = this.parseMeta();
-      return `VR ${meta.dateRaw}${meta.casePrefix} ${meta.docType}.${meta.caseNrRaw}/${meta.index}${meta.versionSuffix || ''}`;
+      const index = meta.indexNrRaw ? `/${meta.index}` : ''; 
+      return `VR ${meta.dateRaw}${meta.casePrefix} ${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
     } catch(error) {
       return this.name;
+    }
+  }
+
+  vrDateOnly() {
+    try {
+      const meta = this.parseMeta();
+      return `VR ${meta.dateRaw}${meta.casePrefix}`;
+    } catch(error) {
+      return this.vrNumberWithSuffix();
+    }
+  }
+
+  withoutDate() {
+    try {
+      const meta = this.parseMeta();
+      const index = meta.indexNrRaw ? `/${meta.index}` : ''; 
+      const casePrefix = meta.casePrefix ? `${meta.casePrefix.trim()} ` : '';
+      return `${casePrefix}${meta.docType}.${meta.caseNrRaw}${index}${meta.versionSuffix || ''}`;
+    } catch(error) {
+      return this.vrNumberWithSuffix();
     }
   }
 }

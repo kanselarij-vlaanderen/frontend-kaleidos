@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function getTranslatedMonth(month) {
   switch (month) {
@@ -41,7 +42,7 @@ function getTranslatedMonth(month) {
 function downloadDocs(postAgenda = true) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
   cy.intercept('GET', '/file-bundling-jobs/**').as(`fileBundlingJobs${randomInt}`);
   cy.get(auk.confirmationModal.footer.confirm).click();
@@ -80,7 +81,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
@@ -103,7 +104,7 @@ context('Agenda tests', () => {
     // alert message exists after agendaitem that is not formally ok
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container);
@@ -114,7 +115,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
@@ -151,10 +152,13 @@ context('Agenda tests', () => {
     const privateComment = 'Dit is de interne opmerking';
     const whitespace = '\n';
 
-    cy.visit('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('dossiers/E14FB528-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     // keep this setup because we want to validate the trimming of text on creation of subcase
-    cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
-    cy.openSubcase(0, subcaseTitleShort);
+    cy.addSubcaseViaModal({
+      agendaitemType: typeNota,
+      newShortTitle: subcaseTitleShort + whitespace,
+      longTitle: subcaseTitleLong + whitespace,
+    });
     cy.visitAgendaWithLink('vergadering/627E52D589C002BE724F77C3/agenda/627E52D689C002BE724F77C4/agendapunten');
     cy.addAgendaitemToAgenda(subcaseTitleShort);
 
@@ -291,7 +295,7 @@ context('Agenda tests', () => {
     // Closing an agenda should remove any design agenda
     // check existence of showChanges and absence of the formally ok edit
     cy.get(agenda.agendaOverview.showChanges);
-    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
+    cy.get(agenda.agendaitemSearch.formallyReorderEdit).should('not.exist');
     // By checking the length of agendas and confirming "Agenda A", no other agenda exists
     cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
     cy.agendaNameExists('A', false);
@@ -385,9 +389,9 @@ context('Agenda tests', () => {
     cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
     // setup
     cy.openAgendaitemDossierTab(shortSubcaseTitle1);
-    cy.addAgendaitemMandatee(1, null, null, false);
+    cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].first, false);
     cy.openAgendaitemDossierTab(shortSubcaseTitle2);
-    cy.addAgendaitemMandatee(2, null, null, false);
+    cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].second, false);
 
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
@@ -408,7 +412,7 @@ context('Agenda tests', () => {
       .should('contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf');
   });
 
-  it('Should download all files for Jambon', () => {
+  it('Should download all files for Prime-minister', () => {
     cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
 
     cy.get(agenda.agendaActions.optionsDropdown)
@@ -416,7 +420,7 @@ context('Agenda tests', () => {
       .click();
     cy.get(agenda.agendaActions.downloadDocuments).forceClick();
     cy.get(appuniversum.checkbox)
-      .contains('Jambon')
+      .contains(mandateeNames['10052021-16052022'].first.lastName)
       .click();
     downloadDocs(false);
     cy.readFile(downloadZipAgendaA, {
@@ -433,7 +437,7 @@ context('Agenda tests', () => {
       .should('not.contain', 'DOC.0002-05 propagatie vertrouwelijk publiek.pdf');
   });
 
-  it('Should download all files for Crevits', () => {
+  it('Should download all files for second minister', () => {
     cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
 
     cy.get(agenda.agendaActions.optionsDropdown)
@@ -441,7 +445,7 @@ context('Agenda tests', () => {
       .click();
     cy.get(agenda.agendaActions.downloadDocuments).forceClick();
     cy.get(appuniversum.checkbox)
-      .contains('Crevits')
+      .contains(mandateeNames['10052021-16052022'].second.lastName)
       .click();
     downloadDocs(false);
     cy.readFile(downloadZipAgendaA, {
@@ -493,71 +497,84 @@ context('Agenda tests', () => {
       .should('contain', file.newFileName);
   });
 
-  it('Setup for downloading all decisions', () => {
-    const concerns = 'Cypress test for downloading decisions';
-    const decision = 'Goedgekeurd';
+  context('download decisions', () => {
+    const fileName2 = 'test'; // `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002` if generated
+    const fileName3 = 'replace'; // `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003` if generated
 
-    const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
-    const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
+    it('Setup for downloading all decisions', () => {
+      // const concerns = 'Cypress test for downloading decisions';
+      // const decision = 'Goedgekeurd';
+      const filePunt2 = {
+        folder: 'files', fileName: fileName2, fileExtension: 'pdf',
+      };
+      const filePunt3 = {
+        folder: 'files', fileName: fileName3, fileExtension: 'pdf',
+      };
 
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      const shortSubcaseTitle1 = 'test propagatie vertrouwelijkheid 1655729512';
+      const shortSubcaseTitle2 = 'test propagatie vertrouwelijkheid locked 1655729512';
 
-    cy.openDetailOfAgendaitem(shortSubcaseTitle1);
-    cy.addAgendaitemMandatee(1, null, null, false);
-    cy.get(agenda.agendaitemNav.decisionTab)
-      .should('be.visible')
-      .click();
-    cy.generateDecision(concerns, decision);
-    cy.openDetailOfAgendaitem(shortSubcaseTitle2);
-    cy.addAgendaitemMandatee(2, null, null, false);
-    cy.get(agenda.agendaitemNav.decisionTab)
-      .should('be.visible')
-      .click();
-    cy.generateDecision(concerns, decision);
-  });
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
 
-  it('Should download all decisions for Jambon', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    cy.get(appuniversum.checkbox)
-      .contains('Jambon')
-      .click();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
-      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
-  });
+      cy.openDetailOfAgendaitem(shortSubcaseTitle1);
+      // cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].first, false); // This already happened in previous setup
+      cy.get(agenda.agendaitemNav.decisionTab)
+        .should('be.visible')
+        .click();
+      cy.addDocumentToTreatment(filePunt2);
+      // cy.generateDecision(concerns, decision);
+      cy.openDetailOfAgendaitem(shortSubcaseTitle2);
+      // cy.addAgendaitemMandatee(mandateeNames['10052021-16052022'].second, false); // This already happened in previous setup
+      cy.get(agenda.agendaitemNav.decisionTab)
+        .should('be.visible')
+        .click();
+      // cy.generateDecision(concerns, decision);
+      cy.addDocumentToTreatment(filePunt3);
+    });
 
-  it('Should download all decisions for Crevits', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    cy.get(appuniversum.checkbox)
-      .contains('Crevits')
-      .click();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`)
-      .should('not.contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`);
-  });
+    it('Should download all decisions for Prime-minister', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      cy.get(appuniversum.checkbox)
+        .contains(mandateeNames['10052021-16052022'].first.lastName)
+        .click();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName2)
+        .should('not.contain', fileName3);
+    });
 
-  it('Should download all decisions', () => {
-    cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.downloadDecisions).forceClick();
-    downloadDocs(false);
-    cy.readFile(downloadZipAgendaA, {
-      timeout: 25000,
-    }).should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0002`)
-      .should('contain', `VR PV ${agendaDate.format('YYYY_DD')} - punt 0003`);
+    it('Should download all decisions for second minister', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      cy.get(appuniversum.checkbox)
+        .contains(mandateeNames['10052021-16052022'].second.lastName)
+        .click();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName3)
+        .should('not.contain', fileName2);
+    });
+
+    it('Should download all decisions', () => {
+      cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten?anchor=62B06EBFEC3CB8277FF058F0');
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions).forceClick();
+      downloadDocs(false);
+      cy.readFile(downloadZipAgendaA, {
+        timeout: 25000,
+      }).should('contain', fileName2)
+        .should('contain', fileName3);
+    });
   });
 });

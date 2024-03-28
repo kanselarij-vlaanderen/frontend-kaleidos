@@ -54,12 +54,16 @@ export default class SearchDocumentsRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
 
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
+    }
+
+    if (!isEmpty(params.governmentAreas)) {
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -121,10 +125,6 @@ export default class SearchDocumentsRoute extends Route {
 
     this.lastParams.commit();
 
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
     // agendaitems.meetingDate can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
@@ -153,6 +153,7 @@ export default class SearchDocumentsRoute extends Route {
       params.searchText,
       results.length,
       params.mandatees,
+      params.governmentAreas,
       params.dateFrom,
       params.dateTo,
       params.sort,
@@ -163,7 +164,7 @@ export default class SearchDocumentsRoute extends Route {
     return results;
   }
 
-  async trackSearch(searchTerm, resultCount, mandatees, from, to, sort, types, confidentialOnly) {
+  async trackSearch(searchTerm, resultCount, mandatees, governmentAreas, from, to, sort, types, confidentialOnly) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
@@ -174,9 +175,16 @@ export default class SearchDocumentsRoute extends Route {
         types?.map((id) => this.store.findRecord('concept', id)))
     ).map((document) => document.label);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Van': from,
       'Tot en met': to,
       'Sorteringsoptie': sort,

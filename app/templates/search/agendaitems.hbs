@@ -64,7 +64,7 @@
       @onClickRow={{this.resultClicked}}
     >
       <:body as |row|>
-        <td>
+        <td data-test-route-search-agendaitems-data-table-row>
           <Search::ResultCards::Agendaitem
             @date={{row.sessionDates}}
             @agendaItemType={{row.type}}
@@ -80,16 +80,9 @@
       </:body>
     </KDataTable>
   {{else}}
-    {{#if this.emptySearch}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "fill-in-search-term"}}
-      />
-    {{else}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "no-results-found-modify-term"}}
-      />
-    {{/if}}
+    <Auk::EmptyState
+      @bordered={{true}}
+      @message={{t "no-results-found-modify-term"}}
+    />
   {{/if}}
 </div>

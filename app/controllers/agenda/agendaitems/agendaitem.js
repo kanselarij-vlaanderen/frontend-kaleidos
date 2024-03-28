@@ -8,9 +8,14 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
 
   @tracked meeting;
   @tracked treatment;
+  @tracked subcase;
 
   get hasDecision() {
     return isPresent(this.treatment?.decisionActivity.get('id'));
+  }
+
+  get hasRatification() {
+    return isPresent(this.subcase?.ratification?.get('id'));
   }
 
   get hasNewsItem() {
@@ -23,7 +28,16 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
 
   get canShowDecisionTab() {
     return this.currentSession.may('manage-decisions')
+      || this.currentSession.may('view-decisions-before-release')
       || (this.isFinalAgenda && this.hasDecision);
+  }
+
+  get canShowRatificationTab() {
+    return this.subcase?.isBekrachtiging && (
+      this.currentSession.may('manage-ratification')
+      || this.currentSession.may('view-ratification-before-release')
+      || (this.isFinalAgenda && this.hasRatification)
+    );
   }
 
   get canShowNewsletterTab() {

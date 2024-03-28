@@ -3,9 +3,10 @@ import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import constants from 'frontend-kaleidos/config/constants';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import { SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
 
@@ -55,14 +56,29 @@ export default class SignaturePillComponent extends Component {
     let status = await signFlow?.belongsTo('status').reload();
     let signingHubUrl = null;
     let route = null;
+    let models = null;
     if (status) {
       if (status.uri === MARKED) {
-        route = "signatures.index";
-      }
-      if (status.uri !== REFUSED &&
-          status.uri !== CANCELED &&
-          status.uri !== SIGNED &&
-          status.uri !== MARKED) {
+        const piece = await signMarkingActivity.piece;
+        const documentContainer = await piece?.documentContainer;
+        const pieceType = await documentContainer?.type;
+        switch (pieceType?.uri) {
+          case CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE:
+            route = 'signatures.decisions';
+            break;
+          case CONSTANTS.DOCUMENT_TYPES.NOTULEN:
+            route = 'signatures.decisions';
+            break;
+          case CONSTANTS.DOCUMENT_TYPES.BEKRACHTIGING:
+            route = 'signatures.ratifications';
+            break;
+          default:
+            route = 'signatures.index';
+        }
+      } else if (status.uri === SIGNED) {
+        route = 'document';
+        models = [this.args.piece];
+      } else if (status.uri !== REFUSED && status.uri !== CANCELED) {
         const piece = await this.args.piece;
         const signFlow = await signSubcase.signFlow;
         const signFlowCreator = await signFlow.creator;
@@ -84,7 +100,8 @@ export default class SignaturePillComponent extends Component {
     return {
       signingHubUrl,
       status,
-      route
+      route,
+      models,
     };
   });
 
@@ -96,10 +113,10 @@ export default class SignaturePillComponent extends Component {
     const route = this.data?.value?.route;
     if (statusUri === REFUSED || statusUri === CANCELED) {
       return 'error';
-    } else if (signingHubUrl || route) {
-      return 'link';
     } else if (statusUri === SIGNED) {
       return 'success';
+    } else if (signingHubUrl || route) {
+      return 'link';
     }
     return 'default';
   }

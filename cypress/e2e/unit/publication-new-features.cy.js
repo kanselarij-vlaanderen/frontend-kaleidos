@@ -86,7 +86,7 @@ context('Publications new features tests', () => {
     cy.intercept('PATCH', '/translation-subcases/**').as('patchtranslationSubcase');
     cy.get(publication.translationUpload.save).click()
       .wait('@patchtranslationSubcase');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(publication.translationReceivedPanel.panel).find(publication.documentsList.piece)
       .should('have.length', 1);
     cy.intercept('PATCH', '/translation-activities/**').as('patchtranslationActivities');
@@ -117,7 +117,7 @@ context('Publications new features tests', () => {
     cy.intercept('PATCH', '/publication-subcases/**').as('patchPublicationSubcase');
     cy.get(publication.proofUpload.save).click()
       .wait('@patchPublicationSubcase');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     // TODO-waits no wait here causes error: "Attempted to handle event pushedData on <file:62bb06485718d2000e000032> while in state root.deleted.inFlight."
     cy.wait(2000);
     cy.get(publication.proofReceivedPanel.panel).find(publication.documentsList.piece)
@@ -166,7 +166,7 @@ context('Publications new features tests', () => {
     cy.get(publication.publicationRegistration.save).click()
       .wait('@patchPublicationFlow')
       .wait('@deleteStatus');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.container).should('not.exist'); // wait for popup to be done
     cy.get(publication.publicationsInfoPanel.view.publicationDate).contains(today);
     cy.get(publication.statusPill.contentLabel).contains(endStatus);
@@ -177,8 +177,8 @@ context('Publications new features tests', () => {
 
     cy.visit('publicaties/overzicht/dringend');
     // there should be no urgent records now in default data set
-    cy.get(auk.loader);
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader);
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.emptyState.message).contains(emptyStateMessage);
 
     // check urgency
@@ -192,7 +192,7 @@ context('Publications new features tests', () => {
 
     // there should be one record in urgent tab
     cy.visit('publicaties/overzicht/dringend');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(publication.publicationTableRow.rows).should('have.length', 1);
   });
 

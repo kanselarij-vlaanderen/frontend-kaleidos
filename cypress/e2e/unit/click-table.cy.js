@@ -28,8 +28,8 @@ context('Table Row Click tests', () => {
   });
 
   it('should open a case after clicking a row', () => {
-    cy.intercept('GET', '/decisionmaking-flows**').as('getCases');
-    cy.visit('/dossiers');
+    cy.intercept('GET', '/cases**').as('getCases');
+    cy.visit('/dossiers?aantal=2');
     cy.wait('@getCases');
     cy.get(route.casesOverview.dataTable).find('tbody')
       .children('tr')
@@ -64,8 +64,8 @@ context('Table Row Click tests', () => {
       .type('02/2019');
     cy.get(route.agendasOverview.filter.warning).should('be.visible');
     cy.get(route.agendasOverview.filter.warning).contains('Geen resultaten gevonden');
-    cy.get(utils.changesAlert.alert).contains('Deze data is gefilterd.');
-    cy.get(utils.changesAlert.close).click();
+    cy.get(utils.changesAlert.message).contains('Deze data is gefilterd.');
+    cy.get(utils.changesAlert.confirm).click();
     cy.get(route.agendasOverview.dataTable).find('tbody')
       .children('tr')
       .should('not.have.length', 0);

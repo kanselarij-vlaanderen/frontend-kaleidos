@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import utils from '../../selectors/utils.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function currentTimestamp() {
   return Cypress.dayjs().unix();
@@ -27,7 +28,6 @@ context('agenda notice test', () => {
     const type = 'Mededeling';
     const subcaseShortTitle = `test for adding minister - ${testId}`;
     const subcaseLongTitle  = `long title for test for adding minister - ${testId}`;
-    const nameToCheck = 'Jambon';
     const labelName1 = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName1 = 'Media';
     const labelName2 = 'Economie, Wetenschap en Innovatie';
@@ -35,12 +35,17 @@ context('agenda notice test', () => {
 
     // create agenda and notice
     cy.createAgenda(null, dateToCreateAgenda, 'add minister to notice');
+    const subcase = {
+      newCase: true,
+      agendaitemType: type,
+      newShortTitle: subcaseShortTitle,
+      longTitle: subcaseLongTitle,
+    };
     cy.createCase(caseShortTitle);
-    cy.addSubcase(type, subcaseShortTitle, subcaseLongTitle, null, null);
-    cy.openSubcase(0, subcaseShortTitle);
+    cy.addSubcaseViaModal(subcase);
     // add mandatees to notice
-    cy.addSubcaseMandatee(1);
-    cy.addSubcaseMandatee(2);
+    cy.addSubcaseMandatee(mandateeNames.current.first);
+    cy.addSubcaseMandatee(mandateeNames.current.second);
     // add fields
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
@@ -78,7 +83,7 @@ context('agenda notice test', () => {
     });
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', nameToCheck);
+      .should('contain', mandateeNames.current.first.fullName);
     cy.get('@listItems').eq(0)
       .find(mandatee.mandateePanelView.row.submitter)
       .children()
@@ -86,16 +91,16 @@ context('agenda notice test', () => {
     // TODO-notice add check for fields?
 
     // add more mandatees and check if they are shown correctly
-    cy.addAgendaitemMandatee(3);
-    cy.addAgendaitemMandatee(4);
-    cy.addAgendaitemMandatee(5);
+    cy.addAgendaitemMandatee(mandateeNames.current.third);
+    cy.addAgendaitemMandatee(mandateeNames.current.fourth);
+    cy.addAgendaitemMandatee(mandateeNames.current.fifth);
     cy.get('@listItems').eq(1)
-      .should('contain', 'Hilde Crevits');
+      .should('contain', mandateeNames.current.second.fullName);
     cy.get('@listItems').eq(2)
-      .should('contain', 'Bart Somers');
+      .should('contain', mandateeNames.current.third.fullName);
     cy.get('@listItems').eq(3)
-      .should('contain', 'Ben Weyts');
+      .should('contain', mandateeNames.current.fourth.fullName);
     cy.get('@listItems').eq(4)
-      .should('contain', 'Zuhal Demir');
+      .should('contain', mandateeNames.current.fifth.fullName);
   });
 });

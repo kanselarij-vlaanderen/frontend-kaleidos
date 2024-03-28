@@ -1,40 +1,52 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
+<Auk::Panel ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "government-domains-government-fields"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
           <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">
-              {{t "government-domains-government-fields"}}
-            </h4>
+            <AuButton
+              data-test-government-areas-panel-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" this.showEditModal}}
+            >
+              {{t "edit"}}
+            </AuButton>
           </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          {{#if (and @allowEditing this.groupGovernmentFieldsByDomain.isIdle)}}
-            <Auk::Toolbar::Item>
-              <AuButton
-                data-test-government-areas-panel-edit
-                @skin="naked"
-                @icon="pencil"
-                {{on "click" this.showEditModal}}
-              >
-                {{t "edit"}}
-              </AuButton>
-            </Auk::Toolbar::Item>
-          {{/if}}
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
+        {{/if}}
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body @noPadding={{if @governmentAreas.length true false}}>
+    {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity.themes)}}
+      <div class="auk-u-m-4 auk-u-mb-2 auk-u-mt-2">
+        <p><strong>{{t "themes"}}: </strong>
+          <FormatList
+            @list={{@subcase.parliamentRetrievalActivity.themes}}
+            @locale="nl-be"
+            as |formattedPart|
+          >
+            {{formattedPart.value}}
+          </FormatList>
+        </p>
+      </div>
+    {{/if}}
     {{#if @governmentAreas.length}}
-      <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th>{{t "government-domain"}}</th>
-              <th>{{t "government-fields"}}</th>
-            </tr>
-          </thead>
-          <tbody>
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "government-domain"}}</th>
+            <th>{{t "government-fields"}}</th>
+          </tr>
+        </thead>
+        <tbody>
           {{#each this.rows as |row|}}
             <tr data-test-government-areas-panel-row>
               <td data-test-government-areas-panel-row-label>
@@ -49,16 +61,17 @@
               </td>
             </tr>
           {{/each}}
-          </tbody>
-        </table>
-      </Auk::Panel::Body>
+        </tbody>
+      </table>
     {{else}}
-      <Auk::Panel::Body>
-        <Auk::EmptyState data-test-government-areas-empty-state @message={{t "no-added-government-fields"}} />
-      </Auk::Panel::Body>
+      <Auk::EmptyState
+        data-test-government-areas-empty-state
+        @message={{t "no-added-government-fields"}}
+      />
     {{/if}}
-  </Auk::Panel>
-</div>
+
+  </Auk::Panel::Body>
+</Auk::Panel>
 
 {{#if this.isOpenEditModal}}
   <Utils::GovernmentAreas::EditGovernmentAreasModal

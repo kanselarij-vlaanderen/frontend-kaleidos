@@ -1,27 +1,44 @@
 /* Appuniversum base
    ========================================================================== */
 
+// SCSS variables (to override)
+
+$mq-breakpoints: (
+  xsmall: 300px,
+  small: 500px,
+  medium: 767px,
+  large: 1023px,
+  xlarge: 1600px,
+);
+
+// $au-layout-width: 767px;
+// $au-layout-width-small: 500px;
+// $au-layout-width-large: 1023px;
+$au-layout-breakpoint: large;
+
+$au-region-breakpoint: large;
+
 // Imports
 // sourced from '@appuniversum/ember-appuniversum' npm package
 
-@import 'ember-appuniversum/a-settings';
-@import 'ember-appuniversum/a-tools';
-@import 'ember-appuniversum/a-objects';
+@import '@appuniversum/ember-appuniversum/styles/a-settings';
+@import '@appuniversum/ember-appuniversum/styles/a-tools';
+@import '@appuniversum/ember-appuniversum/styles/a-objects';
 
-// @import 'ember-appuniversum/a-utilities'; // REMARK: disabled for now (with individual imports below) as u-print breaks print styling (color & background-color) within Kaleidos
+// @import '@appuniversum/ember-appuniversum/styles/a-utilities'; // REMARK: disabled for now (with individual imports below) as u-print breaks print styling (color & background-color) within Kaleidos
 
-@import 'ember-appuniversum/u-align-text';
-@import 'ember-appuniversum/u-background';
-@import 'ember-appuniversum/u-break-word';
-@import 'ember-appuniversum/u-headings';
-@import 'ember-appuniversum/u-hide';
-@import 'ember-appuniversum/u-flex';
-@import 'ember-appuniversum/u-font-family';
-@import 'ember-appuniversum/u-font-weights';
-@import 'ember-appuniversum/u-max-widths';
-@import 'ember-appuniversum/u-paragraphs';
-// @import 'ember-appuniversum/u-print';
-@import 'ember-appuniversum/u-responsive-spacings';
-@import 'ember-appuniversum/u-spacings';
-@import 'ember-appuniversum/u-visible';
-@import 'ember-appuniversum/u-widths';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-align-text';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-background';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-break-word';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-headings';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-hide';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-flex';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-font-family';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-font-weights';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-max-widths';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-paragraphs';
+// @import '@appuniversum/ember-appuniversum/styles/utilities/u-print';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-responsive-spacings';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-spacings';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-visible';
+@import '@appuniversum/ember-appuniversum/styles/utilities/u-widths';

@@ -48,6 +48,9 @@ const selectors = {
     header: {
       button: '.auk-accordion__header .auk-accordion__button',
     },
+    item: {
+      button: '.auk-accordion__button',
+    },
   },
 
   emptyState: {
@@ -75,6 +78,10 @@ const selectors = {
     title: '[data-test-modal-header-title]',
   },
 
+  panel: {
+    body: '.auk-panel__body',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',
@@ -90,10 +97,6 @@ const selectors = {
 
   icon: {
     warning: '.auk-icon--warning',
-  },
-
-  alert: {
-    close: '.au-c-alert__close',
   },
 };
 export default selectors;

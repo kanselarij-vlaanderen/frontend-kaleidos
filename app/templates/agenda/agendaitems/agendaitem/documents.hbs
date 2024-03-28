@@ -36,9 +36,29 @@
 </Auk::Toolbar>
 {{#unless this.loadData.isRunning}}
   {{#if this.documentsAreVisible}}
+    {{#if (user-may "view-documents-postponed-and-retracted")}}
+      {{#if this.decisionActivity.isPostponed}}
+        <AuAlert
+          @skin="warning"
+          @icon="alert-triangle"
+          @title={{t "postponed-item"}}
+        >
+          {{t "agendaitem-document-postponed--message"}}
+        </AuAlert>
+      {{else if this.decisionActivity.isRetracted}}
+        <AuAlert
+          @skin="warning"
+          @icon="alert-triangle"
+          @title={{t "retracted-item"}}
+        >
+          {{t "agendaitem-document-retracted--message"}}
+        </AuAlert>
+      {{/if}}
+    {{/if}}
     <Documents::DocumentCardList
       @pieces={{this.model.pieces}}
       @highlightedPieces={{this.newAgendaitemPieces}}
+      @agendaitem={{this.agendaitem}}
       @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
       @onOpenUploadModal={{this.openUploadModalForNewPiece}}
       @onAddPiece={{perform this.addPiece}}
@@ -52,7 +72,17 @@
         @skin="info"
         @icon="info-circle"
       >
-        {{t "no-documents-yet"}}
+        {{#if (not (user-may "view-documents-postponed-and-retracted"))}}
+          {{#if this.decisionActivity.isPostponed}}
+            {{t "agendaitem-postponed-no-documents-available"}}
+          {{else if this.decisionActivity.isRetracted}}
+            {{t "agendaitem-retracted-no-documents-available"}}
+          {{else}}
+            {{t "no-documents-yet"}}
+          {{/if}}
+        {{else}}
+          {{t "no-documents-yet"}}
+        {{/if}}
       </AuAlert>
     </div>
   {{/if}}
@@ -99,7 +129,7 @@
 >
   <:body>
     {{#if this.savePieces.isRunning}}
-      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      <Auk::Loader @message={{t "documents-loading-text"}} />
     {{else}}
       <Auk::FileUploader
         @multiple={{true}}

@@ -1,37 +1,18 @@
-<Auk::Modal::Body>
-  <div class="au-c-form">
-    <AuFormRow data-test-new-case-shorttitle>
-      <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
-      <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
-    </AuFormRow>
-  </div>
-</Auk::Modal::Body>
-<Auk::Modal::Footer @custom={{true}}>
-  <Auk::Toolbar @size="large" as |Toolbar|>
-    <Toolbar.Group @position="left" as |Group|>
-      <Group.Item>
-        <AuButton
-          data-test-new-case-cancel
-          @skin="naked"
-          @disabled={{this.createCase.isRunning}}
-          {{on "click" @onCancel}}
-        >
-          {{t "cancel"}}
-        </AuButton>
-      </Group.Item>
-    </Toolbar.Group>
-    <Toolbar.Group @position="right" as |Group|>
-      <Group.Item>
-        <AuButton
-          data-test-new-case-save={{true}}
-          @skin="primary"
-          @disabled={{this.isCreateDisabled}}
-          @loading={{this.createCase.isRunning}}
-          {{on "click" (perform this.createCase)}}
-        >
-          {{t "create-case"}}
-        </AuButton>
-      </Group.Item>
-    </Toolbar.Group>
-  </Auk::Toolbar>
-</Auk::Modal::Footer>
+<ConfirmationModal
+  @modalOpen={{true}}
+  @title={{t "new-case"}}
+  @onConfirm={{perform this.createCase}}
+  @onCancel={{@onCancel}}
+  @confirmMessage={{t "create-case"}}
+  @disabled={{this.isCreateDisabled}}
+  @loading={{this.createCase.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow data-test-new-case-shorttitle>
+        <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
+        <Auk::Textarea @rows="2" @value={{mut this.shortTitle}} />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>

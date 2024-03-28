@@ -1,8 +1,8 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
-import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import fetch from 'fetch';
 
 export default class AgendaService extends Service {
   @service store;
@@ -10,7 +10,6 @@ export default class AgendaService extends Service {
   @service intl;
   @service currentSession;
   @service newsletterService;
-  @service mandatees;
   @service signatureService;
 
   @tracked addedPieces = null;
@@ -19,11 +18,16 @@ export default class AgendaService extends Service {
   /* API: agenda-sort-service */
 
   async agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    const endpoint = new URL('/agenda-comparison/agenda-with-changes', window.location.origin);
-    const queryParams = new URLSearchParams(Object.entries({
-      agendaToCompare: agendaToCompareID,
-      selectedAgenda: currentAgendaID,
-    }));
+    const endpoint = new URL(
+      '/agenda-comparison/agenda-with-changes',
+      window.location.origin
+    );
+    const queryParams = new URLSearchParams(
+      Object.entries({
+        agendaToCompare: agendaToCompareID,
+        selectedAgenda: currentAgendaID,
+      })
+    );
     endpoint.search = queryParams.toString();
     const response = await fetch(endpoint);
     if (response.ok) {
@@ -39,9 +43,15 @@ export default class AgendaService extends Service {
     const payload = await response.json();
     const itemsFromStore = [];
     for (const item of payload.data) {
-      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      let itemFromStore = this.store.peekRecord(
+        singularize(item.type),
+        item.id
+      );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(
+          singularize(item.type),
+          item.id
+        );
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -50,14 +60,22 @@ export default class AgendaService extends Service {
 
   async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
     // scopefields specify which fields to base upon for determining if an item was modified
-    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(',')}`;
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(
+      ','
+    )}`;
     const response = await fetch(url);
     const payload = await response.json();
     const itemsFromStore = [];
     for (const item of payload.data) {
-      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      let itemFromStore = this.store.peekRecord(
+        singularize(item.type),
+        item.id
+      );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(
+          singularize(item.type),
+          item.id
+        );
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -73,133 +91,98 @@ export default class AgendaService extends Service {
     const payload = await response.json();
     const piecesFromStore = [];
     for (const piece of payload.data) {
-      let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
+      let pieceFromStore = this.store.peekRecord(
+        singularize(piece.type),
+        piece.id
+      );
       if (!pieceFromStore) {
-        pieceFromStore = await this.store.queryRecord(singularize(piece.type), piece.id);
+        pieceFromStore = await this.store.queryRecord(
+          singularize(piece.type),
+          piece.id
+        );
       }
       piecesFromStore.push(pieceFromStore);
     }
     return piecesFromStore;
   }
 
-  /* No API */
-
-  async computeNextItemNumber(agenda, agendaItemType) {
-    const lastItem = await this.store.queryOne('agendaitem', {
-      'filter[agenda][:id:]': agenda.id,
-      'filter[type][:id:]': agendaItemType.get('id'),
-      sort: '-number',
-    });
-    if (lastItem) {
-      return lastItem.number + 1;
-    }
-    return 1;
-  }
+  /* API: agenda-submission-service */
 
   /**
    * @argument meeting
-   * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
-   * In the case where an agenda-item was deleted after multiple submissions occurred, one can put on agenda again with multiple submissions
+   * @argument subcase
    */
-  async putSubmissionOnAgenda(meeting, submissionActivities) {
-    const subcase = await submissionActivities[0].get('subcase');
-    const lastAgenda = await this.store.queryOne('agenda', {
-      'filter[created-for][:id:]': meeting.id,
-      'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-      sort: '-created', // serialnumber
+  async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
+    const url = `/meetings/${meeting.id}/submit`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+      body: JSON.stringify({
+        subcase: subcase.uri,
+        formallyOk: formallyOk,
+        privateComment: privateComment,
+      })
     });
-    const agendaItemType = await subcase.agendaItemType;
-    const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
-    const numberToAssign = await this.computeNextItemNumber(lastAgenda, agendaItemType);
-    const mandatees = await subcase.get('mandatees');
-    const now = new Date();
-
-    // Placement on agenda activity
-    const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: now,
-      subcase,
-    });
-    await agendaActivity.save();
-    for (const submissionActivity of submissionActivities) {
-      submissionActivity.agendaActivity = agendaActivity;
-      await submissionActivity.save();
+    let json;
+    try {
+      json = await response.json();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
     }
-
-    // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const decisionResultCode = await this.store.findRecordByUri('concept', defaultDecisionResultCodeUri);
-
-    // default secretary
-    const meetingSecretary = await meeting.secretary;
-    const currentApplicationSecretary = await this.mandatees.getCurrentApplicationSecretary();
-
-    // decision-activity
-    const decisionActivity = await this.store.createRecord('decision-activity', {
-      subcase,
-      startDate: meeting.plannedStart,
-      decisionResultCode,
-      secretary: meetingSecretary ? meetingSecretary : currentApplicationSecretary
-    });
-    await decisionActivity.save();
-
-    // Treatment
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: now,
-      modified: now,
-      decisionActivity,
-    });
-    await agendaItemTreatment.save();
-
-    let submittedPieces = [];
-    for (const submissionActivity of submissionActivities) {
-      const submissionActivity2 = await this.store.queryOne('submission-activity', {
-        'filter[:id:]': submissionActivity.id,
-        include: 'pieces', // query with include to avoid pagination issues
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    await subcase.type;
+    if (subcase.isBekrachtiging) {
+      const decisionmakingFlow = await subcase.decisionmakingFlow;
+      const latestApprovalSubcase = await this.store.queryOne('subcase', {
+        filter: {
+          'decisionmaking-flow': {
+            ':id:': decisionmakingFlow.id,
+          },
+          'type': {
+            ':uri:': CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+          }
+        },
+        sort: '-created',
       });
-      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
+      if (latestApprovalSubcase) {
+        let ratifiedBy = await latestApprovalSubcase.mandatees;
+        ratifiedBy = ratifiedBy.slice();
+        if (ratifiedBy) {
+          await subcase.ratifiedBy;
+          subcase.ratifiedBy = ratifiedBy;
+          await subcase.save();
+          await subcase.hasMany('ratifiedBy').reload();
+        }
+      }
     }
-
-    // signFlows
-    for (const piece of submittedPieces) {
-      await this.signatureService.replaceDecisionActivity(piece, decisionActivity);
-    }
-
-    const agendaitem = await this.store.createRecord('agendaitem', {
-      created: now,
-      number: numberToAssign,
-      agenda: lastAgenda,
-      title: subcase.title,
-      shortTitle: subcase.shortTitle,
-      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
-      type: agendaItemType,
-      mandatees,
-      pieces: submittedPieces,
-      linkedPieces: await subcase.linkedPieces,
-      agendaActivity,
-      treatment: agendaItemTreatment,
-    });
-    await agendaitem.save();
-    await lastAgenda.hasMany('agendaitems').reload();
+    const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
-    lastAgenda.modified = new Date();
-    lastAgenda.save();
-
-    // Create default newsItem for announcements with inNewsLetter = true
-    if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
-      newsItem.save();
-    }
     return agendaitem;
   }
+
+  /* No API */
 
   async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async(agendaitem) => {
+      agendaitems.map(async (agendaitem) => {
         let currentAgendaitemGroupName;
         const mandatees = await agendaitem.mandatees;
-        const sortedMandatees = mandatees.sortBy('priority');
+        const sortedMandatees = mandatees
+          .slice()
+          .sort((m1, m2) => m1.priority - m2.priority);
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
           agendaitem.set('ownGroupName', null);
@@ -226,9 +209,13 @@ export default class AgendaService extends Service {
   }
 
   async deleteAgendaitem(agendaitem) {
-    const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
-      reload: true,
-    });
+    const agendaitemToDelete = await this.store.findRecord(
+      'agendaitem',
+      agendaitem.get('id'),
+      {
+        reload: true,
+      }
+    );
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.agendaActivity;
     const treatment = await agendaitemToDelete.treatment;
@@ -249,11 +236,13 @@ export default class AgendaService extends Service {
         // TODO DELETE REPORT !
         await treatment.destroyRecord();
       }
-      await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
-        const agenda = await agendaitem.agenda;
-        await agendaitem.destroyRecord();
-        await agenda.hasMany('agendaitems').reload();
-      }));
+      await Promise.all(
+        agendaitemsFromActivity.map(async (agendaitem) => {
+          const agenda = await agendaitem.agenda;
+          await agendaitem.destroyRecord();
+          await agenda.hasMany('agendaitems').reload();
+        })
+      );
       await agendaActivity.destroyRecord();
       await subcase.hasMany('agendaActivities').reload();
       await subcase.hasMany('decisionActivities').reload();
@@ -263,10 +252,13 @@ export default class AgendaService extends Service {
   }
 
   async deleteAgendaitemFromMeeting(agendaitem) {
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       await this.deleteAgendaitem(agendaitem);
     } else {
-      this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
+      this.toaster.error(
+        this.intl.t('action-not-allowed'),
+        this.intl.t('warning-title')
+      );
     }
   }
 }

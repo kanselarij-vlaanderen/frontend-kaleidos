@@ -1,4 +1,4 @@
-<div class="vlc-document-card auk-u-mb-2" data-test-linked-document-link-card>
+<div class="vlc-document-card" data-test-linked-document-link-card ...attributes>
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
       <Auk::Toolbar @auto={{true}} as |Toolbar|>
@@ -25,26 +25,26 @@
               {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
-              {{! no lastPiece.created in legacy data }}
               {{#if this.lastPiece.created}}
                 {{t "uploaded-at"}}
-                {{datetime-at this.lastPiece.created}}
+                {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
               {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
-          <Group.Item class="auk-o-flex">
+          <Group.Item
+            class="auk-o-flex auk-o-flex--vertical-center"
+          >
             {{#if this.lastPiece}}
               <AccessLevelPill
                 @accessLevel={{this.accessLevel}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
               />
             {{/if}}
           </Group.Item>
-          <Group.Item>
+          <Group.Item
+            class="auk-o-flex auk-o-flex--vertical-center"
+          >
             {{#if (user-may "manage-documents")}}
               <AuButton
                 @skin="naked"
@@ -93,10 +93,9 @@
                     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
                   </div>
                   <div class="vlc-document-card-item__meta au-u-muted">
-                    {{!-- no piece.created in legacy data --}}
                     {{#if piece.created}}
                       {{t "uploaded-at"}}
-                      {{datetime-at piece.created}}
+                      {{datetime-at (or piece.file.created piece.created)}}
                     {{/if}}
                   </div>
                   <div class="vlc-document-card-item__icon">

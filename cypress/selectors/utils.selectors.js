@@ -35,8 +35,10 @@ const selectors = {
 
   // changes-alert
   changesAlert: {
-    alert: '[data-test-changes-alert]',
-    close: '[data-test-changes-alert-close]',
+    container: '[data-test-changes-alert]',
+    message: '[data-test-changes-alert-message]',
+    confirm: '[data-test-changes-alert-confirm]',
+    cancel: '[data-test-changes-alert-cancel]',
   },
 
   // number-pagination
@@ -89,15 +91,7 @@ const selectors = {
   // vl-modal-verify
   vlModalVerify: {
     container: '[data-test-vl-modal-verify-container]',
-    cancel: '[data-test-vl-modal-verify-cancel]',
     save: '[data-test-vl-modal-verify-save]',
-  },
-
-  // vl-alert
-  vlAlert: {
-    close: '[data-test-vl-alert-close]',
-    container: '[data-test-vl-alert]',
-    message: '[data-test-vl-alert-message]',
   },
 
   // case-search
@@ -134,8 +128,6 @@ const selectors = {
     pastMinisters: '[data-test-search-minister-filter-past-ministers]',
   },
 
-  sayEditor: {
-    rdfa: '[data-test-say-editor-rdfa]',
-  },
+  rdfaEditor: '[data-test-rdfa-editor]',
 };
 export default selectors;

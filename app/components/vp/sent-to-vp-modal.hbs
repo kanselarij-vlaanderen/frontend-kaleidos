@@ -1,0 +1,54 @@
+<AuModal
+  @modalOpen={{true}}
+  @closable={{true}}
+  @closeModal={{@closeModal}}
+  ...attributes
+>
+  <:title>{{t "documents-sent-on"}}
+    {{date @submissionActivity.startDate}}</:title>
+  <:body>
+    <AuContent>
+      <p><strong>{{t "long-title"}}:</strong> {{or @submissionActivity.title "-"}}</p>
+      {{#if @submissionActivity.submitter.fullName}}
+        <p><strong>{{t "submitter"}}:</strong> {{@submissionActivity.submitter.fullName}}</p>
+      {{/if}}
+      {{#if this.subcaseWithPieces.isLoading}}
+        <Auk::Loader />
+      {{else if this.subcaseWithPieces.value}}
+        <p>{{t "the-following-documents-were-sent"}}:</p>
+        <ul class="au-u-margin-top">
+          {{#each this.subcaseWithPieces.value as |subcaseWithPieces|}}
+            <li>
+              {{#if subcaseWithPieces.subcaseName}}
+                {{capitalize subcaseWithPieces.subcaseName}}:
+                <ul>
+                  {{#each subcaseWithPieces.pieces as |o|}}
+                    <li>
+                      <LinkTo @route="document" @model={{o.piece.id}}>
+                        {{o.name}}
+                        {{this.submittedPieceList o}}
+                      </LinkTo>
+                    </li>
+                  {{/each}}
+                </ul>
+              {{else}}
+                {{#each subcaseWithPieces.pieces as |o|}}
+                  <li>
+                    <LinkTo @route="document" @model={{o.piece.id}}>
+                      {{o.name}}
+                      {{this.submittedPieceList o}}
+                    </LinkTo>
+                  </li>
+                {{/each}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if @submissionActivity.comment}}
+        <h5>{{t "remarks"}}</h5>
+        <p>{{@submissionActivity.comment}}</p>
+      {{/if}}
+    </AuContent>
+  </:body>
+</AuModal>

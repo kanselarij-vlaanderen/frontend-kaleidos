@@ -58,9 +58,9 @@ export default class CasesSearchRoute extends Route {
     'subcaseSubTitle',
   ];
 
-  static postProcessData = (searchData) => {
+  static postProcessData = (searchData, _unused, params) => {
     CasesSearchRoute.postProcessHighlight(searchData);
-    CasesSearchRoute.postProcessDates(searchData);
+    CasesSearchRoute.postProcessDates(searchData, params);
     CasesSearchRoute.setSubcaseHighlights(searchData);
 
     searchData.highlight = {
@@ -71,11 +71,15 @@ export default class CasesSearchRoute extends Route {
     return searchData;
   };
 
-  static postProcessDates(_case) {
+  static postProcessDates(_case, params) {
     const { sessionDates } = _case.attributes;
     if (sessionDates) {
       if (Array.isArray(sessionDates)) {
-        const sorted = sessionDates.sort();
+        let sorted = sessionDates.sort();
+        if (!isEmpty(params.dateTo)) {
+          const maxDate = endOfDay(parse(params.dateTo, 'dd-MM-yyyy', new Date()));
+          sorted = sorted.filter((date) => new Date(date) <= maxDate);
+        }
         _case.attributes.sessionDates = sorted[sorted.length - 1];
       } else {
         _case.attributes.sessionDates = sessionDates;
@@ -112,14 +116,17 @@ export default class CasesSearchRoute extends Route {
 
     const filter = {};
 
-    if (!isEmpty(params.searchText)) {
-      filter[searchModifier + textSearchKey] = filterStopWords(params.searchText);
-    }
+    filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
+    ? '*'
+    : filterStopWords(params.searchText);
 
     if (!isEmpty(params.mandatees)) {
       filter[':terms:mandateeIds'] = params.mandatees;
     }
 
+    if (!isEmpty(params.governmentAreas)) {
+      filter[':terms:governmentAreaIds'] = params.governmentAreas;
+    }
     /* A closed range is treated as something different than 2 open ranges because
      * mu-search(/elastic?) (semtech/mu-search:0.6.0-beta.11, semtech/mu-search-elastic-backend:1.0.0)
      * returns an off-by-one result (1 to many) in case of two open ranges combined.
@@ -174,11 +181,7 @@ export default class CasesSearchRoute extends Route {
     const filter = CasesSearchRoute.createFilter(params);
 
     this.lastParams.commit();
-
-    if (isEmpty(params.searchText)) {
-      return [];
-    }
-
+    
     // session-dates can contain multiple values.
     // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
     let sort = params.sort;
@@ -194,7 +197,7 @@ export default class CasesSearchRoute extends Route {
       params.size,
       sort,
       filter,
-      CasesSearchRoute.postProcessData,
+      (searchData) => CasesSearchRoute.postProcessData(searchData, null, params),
       {
         fields: CasesSearchRoute.highlightFields,
       }
@@ -203,6 +206,7 @@ export default class CasesSearchRoute extends Route {
     this.trackSearch(
       params.searchText,
       params.mandatees,
+      params.governmentAreas,
       results.length,
       params.dateFrom,
       params.dateTo,
@@ -215,15 +219,21 @@ export default class CasesSearchRoute extends Route {
   }
 
 
-  async trackSearch(searchTerm, mandatees, resultCount, from, to, sort, archived, confidentialOnly) {
+  async trackSearch(searchTerm, mandatees, governmentAreas, resultCount, from, to, sort, archived, confidentialOnly) {
     const ministerNames = (
       await Promise.all(
         mandatees?.map((id) => this.store.findRecord('person', id)))
     ).map((person) => person.fullName);
 
+    const governmentAreaLabels = (
+      await Promise.all(
+        governmentAreas?.map((id) => this.store.findRecord('concept', id)))
+    ).map((concept) => concept.label);  
+
     this.plausible.trackEventWithRole('Zoekopdracht', {
       'Zoekterm': searchTerm,
       'Ministers': ministerNames.join(', '),
+      'Beleidsdomeinen': governmentAreaLabels.join(', '),
       'Aantal resultaten': resultCount,
       'Vanaf': from,
       'Tot en met': to,

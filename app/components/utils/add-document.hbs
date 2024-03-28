@@ -1,31 +1,30 @@
-<div class="auk-u-mb-4">
-  <ConfirmationModal
-    @modalOpen={{true}}
-    @title={{t "document-add"}}
-    @onConfirm={{perform this.save}}
-    @onCancel={{this.cancel}}
-    @confirmMessage={{t "document-add"}}
-    @disabled={{not this.pieceInCreation}}
-    @loading={{this.save.isRunning}}
-    @size="large"
-  >
-    <:body>
-      {{#if this.pieceInCreation}}
-        <div class="upload-container">
-          <EmberKaleidosWebuniversum::VlUploadedDocument
-            @name={{this.pieceInCreation.file.filename}}
-            @extension={{this.pieceInCreation.file.extension}}
-            @size={{this.pieceInCreation.file.size}}
-            @downloadName={{this.pieceInCreation.file.filename}}
-            @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
-            @onDelete={{this.deletePieceInCreation}}
-          />
-        </div>
-      {{else}}
-        <Auk::FileUploader
-          @onUpload={{this.createNewPiece}}
+<ConfirmationModal
+  @modalOpen={{true}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.save}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "document-add"}}
+  @disabled={{not this.pieceInCreation}}
+  @loading={{this.save.isRunning}}
+  @size="large"
+>
+  <:body>
+    {{#if this.pieceInCreation}}
+      <div class="upload-container">
+        <EmberKaleidosWebuniversum::VlUploadedDocument
+          @name={{this.pieceInCreation.file.filename}}
+          @extension={{this.pieceInCreation.file.extension}}
+          @size={{this.pieceInCreation.file.size}}
+          @downloadName={{this.pieceInCreation.file.filename}}
+          @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
+          @onDelete={{this.deletePieceInCreation}}
         />
-      {{/if}}
-    </:body>
-  </ConfirmationModal>
-</div>
+      </div>
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{false}}
+        @onUpload={{this.createNewPiece}}
+      />
+    {{/if}}
+  </:body>
+</ConfirmationModal>

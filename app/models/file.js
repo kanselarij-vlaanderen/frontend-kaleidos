@@ -2,6 +2,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
 
 export default class File extends Model {
+  @attr uri;
   @attr('string') filename;
   @attr('string') format;
   @attr('number') size;
@@ -31,7 +32,7 @@ export default class File extends Model {
   }
 
   get inlineViewLink() {
-    return `/files/${this.id}/download?content-disposition=inline`;
+    return `${this.namedDownloadLink}&content-disposition=inline`;
   }
 
   get namedDownloadLink() {

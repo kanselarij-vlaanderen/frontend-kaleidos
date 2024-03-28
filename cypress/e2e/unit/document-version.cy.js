@@ -23,8 +23,8 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     const amountOfDocs = 25;
 
     // verify more than 20 docs are showing on agendaitem (default page-size is capped at 20, needed to artificially increase)
-    cy.intercept('GET', '/pieces?filter**agendaitems**page**size**500').as('getPiecesOfAgendaitem');
-    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/documenten');
+    cy.intercept('GET', '/pieces?filter**agendaitems**').as('getPiecesOfAgendaitem');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/documenten', true);
     cy.wait('@getPiecesOfAgendaitem', {
       timeout: 60000,
     });
@@ -32,21 +32,21 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // verify more than 20 docs are showing from 1 submission-activity on subcase
     // (default page size submissActivity.pieces is not increased, but all pieces are included in a query)
-    cy.intercept('GET', '/submission-activities?filter**subcase**include**pieces**page**size**500').as('getPiecesOfSubcase');
-    cy.visit('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA94F7751CF70008000007/documenten');
+    cy.intercept('GET', '/submission-activities?filter**subcase**include**pieces**').as('getPiecesOfSubcase');
+    cy.visitCaseWithLink('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA94F7751CF70008000007');
     cy.wait('@getPiecesOfSubcase', {
       timeout: 60000,
     });
     cy.get(document.documentCard.card).should('have.length', amountOfDocs);
 
     // all documents of current subcase are "linked documents" of newly created subcase
-    cy.visit('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+    cy.visitCaseWithLink('/dossiers/E14FB5E6-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
     const subcaseShortTitle = 'cypress test: 20+ documents linked subcase - 1589286110 part 2';
-    cy.addSubcase(null, subcaseShortTitle);
-    cy.openSubcase(0, subcaseShortTitle);
+    cy.addSubcaseViaModal({
+      newShortTitle: subcaseShortTitle,
+    });
 
     cy.intercept('GET', '/document-containers?filter**pieces**page**size**20').as('getLinkedContainers');
-    cy.clickReverseTab('Documenten');
     cy.wait('@getLinkedContainers', {
       timeout: 60000,
     });
@@ -57,8 +57,8 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // current setup:
     // Case with proposed subcase
     // Cypress.dayjs('2020-04-07');
-    cy.visit('/dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA953A751CF7000800000C/documenten');
-    // these files exist on /dossiers/5EBA94E4751CF70008000005/deeldossiers/5EBA94F7751CF70008000007/documenten
+    cy.visitCaseWithLink('/dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA953A751CF7000800000C');
+    // these files exist on /dossiers/5EBA94E4751CF70008000005/deeldossiers/5EBA94F7751CF70008000007
     const files = [
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2022 0202 DOC.0001-10',
@@ -87,7 +87,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
       .contains(linkedDocumentsNames[2]);
 
     // check if these documents are also on agendaitem
-    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/628615092E53BE1FC759BC6A/documenten');
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/628615092E53BE1FC759BC6A/documenten', true);
     cy.get(document.linkedDocumentLink.name).eq(0)
       .contains(linkedDocumentsNames[0]);
     cy.get(document.linkedDocumentLink.name).eq(1)
@@ -123,7 +123,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 1);
 
     // Verify subcase is updated
-    cy.visit('/dossiers/E14FB4D8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA9556751CF7000800000F/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB4D8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA9556751CF7000800000F');
     cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}BIS`);
 
@@ -141,7 +141,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 1);
     cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 1);
     // Verify subcase is updated
-    cy.visit('/dossiers/E14FB4D8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA9556751CF7000800000F/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB4D8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA9556751CF7000800000F');
     cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}`);
   });
@@ -158,7 +158,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // Agenda 20/04/2020 has 2 agendaitems, 1 approval / 1 note, both formally ok
 
     // PART 1, adding new piece to subcase
-    cy.visit('/dossiers/E14FB5F0-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA95E1751CF7000800001A/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB5F0-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA95E1751CF7000800001A');
     // *note* This is the only use of this command so keep it.
     cy.addNewPieceToSubcase('test pdf', file);
     cy.get(document.documentCard.name.value).eq(0)
@@ -176,7 +176,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
     cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 0);
 
-    cy.visit('/dossiers/E14FB5F0-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA95E1751CF7000800001A/documenten');
+    cy.visitCaseWithLink('/dossiers/E14FB5F0-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA95E1751CF7000800001A');
     // *note* This is the only use of this command so keep it.
     cy.addDocumentsToSubcase([file]);
     cy.get(document.documentCard.name.value).eq(0)

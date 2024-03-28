@@ -30,8 +30,6 @@
 
 
 // GOVFLANDERS COMPONENTS
-@import 'govflanders/components/_alert';
-// @import 'govflanders/components/_datepicker';
 @import 'govflanders/components/_upload';
 
 
@@ -47,8 +45,7 @@
 
 
 // CUSTOM STYLING
-@import 'custom-application/pdf-viewer';
-@import 'custom-application/uploaded-document';
+@import 'custom-application/cases';
 
 // AUK COMPONENTS
 @import 'auk-components'; // sourced from "au-kaleidos-css" npm package

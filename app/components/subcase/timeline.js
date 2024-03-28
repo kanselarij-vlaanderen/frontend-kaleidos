@@ -28,12 +28,12 @@ export default class SubcaseTimeline extends Component {
   @dropTask
   *loadSubcasePhases() {
     const phases = [];
-    const sortedAgendaActivities = yield this.store.query('agenda-activity', {
+    const sortedAgendaActivities = yield this.store.queryAll('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       sort: 'start-date',
     });
 
-    for (const activity of sortedAgendaActivities.toArray()) {
+    for (const activity of sortedAgendaActivities.slice()) {
       // phase 1: When was the subcase proposed
       if (activity.startDate) {
         phases.push({

@@ -25,54 +25,72 @@
   </Toolbar.Group>
   <Toolbar.Group @position="right" as |Group|>
     <Group.Item>
-      {{#if (user-may "manage-agendaitems")}}
-        {{#unless this.isClosedMeeting}}
-          <Agenda::Agendaitem::AgendaitemControls
-            @agendaitem={{this.model}}
-            @agendaActivity={{this.agendaActivity}}
-            @currentAgenda={{this.agenda}}
-            @reverseSortedAgendas={{this.reverseSortedAgendas}}
-            @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
-          />
-        {{/unless}}
-      {{/if}}
+      <Agenda::Agendaitem::AgendaitemControls
+        @agendaitem={{this.model}}
+        @agendaActivity={{this.agendaActivity}}
+        @currentAgenda={{this.agenda}}
+        @subcase={{this.subcase}}
+        @meeting={{this.meeting}}
+        @reverseSortedAgendas={{this.reverseSortedAgendas}}
+        @onDeleteAgendaitem={{this.reassignNumbersAndNavigateToNeighbouringAgendaitem}}
+        @onSendToVp={{this.pollParliamentFlow}}
+      />
     </Group.Item>
   </Toolbar.Group>
 </Auk::Toolbar>
 
-<Agenda::Agendaitem::AgendaitemCasePanel
-  @agendaitem={{this.model}}
-  @subcase={{this.subcase}}
-  @agenda={{this.agenda}}
-  @newsItem={{this.newsItem}}
-  @allowEditing={{user-may "manage-agendaitems"}}
-/>
+{{#if this.enableVlaamsParlement}}
+  {{#if (and this.parliamentFlow (not this.parliamentFlow.isReceived))}}
+    <Vp::SubmissionsAlert
+      @parliamentFlow={{this.parliamentFlow}}
+    />
+  {{/if}}
+{{/if}}
+
+<div class="auk-u-mb-8">
+  <Agenda::Agendaitem::AgendaitemCasePanel
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @agenda={{this.agenda}}
+    @newsItem={{this.newsItem}}
+    @allowEditing={{user-may "manage-agendaitems"}}
+  />
+</div>
 {{#if (is-announcement @model.type)}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
+  <div class="auk-u-mb-8">
+    <Mandatees::MandateesPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+  </div>
 {{else if this.subcase}}
-  <Mandatees::MandateesPanel
-    @referenceDate={{this.meeting.plannedStart}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @allowEditing={{user-may "manage-agendaitems"}}
-    @onSave={{this.saveMandateeData}}
-  />
+  <div class="auk-u-mb-8">
+    <Mandatees::MandateesPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveMandateeData}}
+    />
+  </div>
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created}}
     @governmentAreas={{this.subcase.governmentAreas}}
     @allowEditing={{user-may "manage-agendaitems"}}
     @onSave={{this.saveGovernmentAreas}}
+    class="auk-u-mb-8"
   />
 {{/if}}
-<Mandatees::SecretaryPanel
-  @referenceDate={{this.meeting.plannedStart}}
-  @allowEditing={{user-may "manage-agendaitems"}}
-  @onSave={{this.saveSecretary}}
-  @secretary={{this.decisionActivity.secretary}}
-/>
+{{#if (not this.meeting.isPreKaleidos)}}
+  <div class="auk-u-mb-8">
+    <Mandatees::SecretaryPanel
+      @referenceDate={{this.meeting.plannedStart}}
+      @allowEditing={{user-may "manage-agendaitems"}}
+      @onSave={{this.saveSecretary}}
+      @secretary={{this.decisionActivity.secretary}}
+    />
+  </div>
+{{/if}}

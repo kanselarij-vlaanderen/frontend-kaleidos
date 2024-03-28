@@ -3,6 +3,7 @@
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 // ***********************************************
 
@@ -39,7 +40,7 @@ function clickReverseTab(tabName) {
   cy.get(auk.tabs.reversed).find(auk.tab.tab)
     .contains(tabName)
     .click();
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/clickReverseTab');
 }
 
@@ -75,7 +76,8 @@ function setDateAndTimeInFlatpickr(date) {
   setDateInFlatpickr(date);
   cy.get(dependency.flatPickr.time).within(() => {
     cy.get(dependency.flatPickr.hour).type(date.hour());
-    cy.get(dependency.flatPickr.minute).type(date.minute());
+    cy.get(dependency.flatPickr.minute).type(date.minute())
+      .type('{enter}');
   });
   cy.log('/setDateAndTimeInFlatpickr');
 }
@@ -120,7 +122,9 @@ function addDomainsAndFields(domains) {
   cy.get(utils.governmentAreasPanel.edit).click();
   cy.wait('@getConceptSchemes');
   domains.forEach((domain) => {
-    cy.get(utils.governmentAreaSelectorForm.container)
+    cy.get(utils.governmentAreaSelectorForm.container, {
+      timeout: 60000,
+    })
       .contains(domain.name)
       .as('domain');
     if (domain.selected) {

@@ -1,6 +1,5 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterService extends Service {
@@ -134,6 +133,11 @@ export default class NewsletterService extends Service {
       news.title = agendaitem.shortTitle || content;
       news.htmlContent = content;
       news.finished = true;
+      // We should check if the decision activity has "postponed" or "retracted" or subcase is confidential
+      // but right now, we always create newsitems for announcements in the `agenda-submission` service
+      // when creating the initial agendaitem
+      // there is no way for a user to remove an announcement newsItem so this should be next to unreachable code
+      // the only possible way is on legacy, where announcements do not have a newsItem (or even a subcase)
       news.inNewsletter = true;
     } else {
       news.title = agendaitem.shortTitle;
@@ -165,18 +169,35 @@ export default class NewsletterService extends Service {
     return news;
   }
 
+/**
+ * Updates the newsItem.inNewsletter of an agendaitem with type "announcement" to be false
+ * This action should be triggered when:
+ * The decision result is changed to "postponed" or "retracted"
+ * The subcase has been made confidential
+ * Agendaitems with type "note" could be updated here, but profile "kort-bestek" prefers to keep manual control
+ * @param {Agendaitem} agendaitem: agendaitem to update
+ */
+async updateNewsItemVisibility(agendaitem) {
+  const agendaitemType = await agendaitem.type;
+  if (agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+    const treatment = await agendaitem.treatment;
+    const newsItem = await treatment?.newsItem;
+    if (newsItem?.inNewsletter) {
+      newsItem.inNewsletter = false;
+      await newsItem.save();
+    }
+  }
+}
+
   async generateNewsItemMandateeProposalText(newsItem) {
     const treatment = await this.store.queryOne('agenda-item-treatment', {
       'filter[news-item][:id:]': newsItem.id,
       sort: '-agendaitems.agenda-activity.start-date',
     });
     if (treatment) {
-      let mandatees = await this.store.query('mandatee', {
+      let mandatees = await this.store.queryAll('mandatee', {
         'filter[subcases][decision-activities][treatment][:id:]': treatment.id,
         sort: 'priority',
-        page: {
-          size: PAGE_SIZE.MANDATEES_IN_GOV_BODY,
-        },
       });
 
       if (!mandatees.length) {

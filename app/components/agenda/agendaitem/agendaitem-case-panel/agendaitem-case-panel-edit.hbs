@@ -1,108 +1,106 @@
-<div class="auk-u-mb-8">
-  <Auk::Panel class="auk-panel--editing">
-    <Auk::Panel::Body>
-      <div class="au-c-form">
-        {{#if @subcase}}
-          <AuFormRow>
-            <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
-            <AuToggleSwitch
-              data-test-agendaitem-titles-edit-confidential={{true}}
-              @checked={{@subcase.confidential}}
-              id="subcase-confidential"
-              @onChange={{set this "confidentialChanged" true}}
-            />
-          </AuFormRow>
-        {{/if}}
+<Auk::Panel class="auk-panel--editing">
+  <Auk::Panel::Body>
+    <div class="au-c-form">
+      {{#if @subcase}}
         <AuFormRow>
-          <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-shorttitle={{true}}
-            rows="2"
-            aria-labelledby="name-subcase"
-            class="auk-textarea"
-            @value={{@agendaitem.shortTitle}}
+          <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+          <AuToggleSwitch
+            data-test-agendaitem-titles-edit-confidential={{true}}
+            @checked={{@subcase.confidential}}
+            id="subcase-confidential"
+            @onChange={{this.onChangeConfidentiality}}
           />
         </AuFormRow>
+      {{/if}}
+      <AuFormRow>
+        <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-agendaitem-titles-edit-shorttitle={{true}}
+          rows="2"
+          aria-labelledby="name-subcase"
+          class="auk-textarea"
+          @value={{@agendaitem.shortTitle}}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
+        <Textarea
+          data-test-agendaitem-titles-edit-title={{true}}
+          rows="4"
+          aria-labelledby="title-subcase"
+          class="auk-textarea"
+          @value={{@agendaitem.title}}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <Auk::Label id="comment-title">{{t "comment-title"}}</Auk::Label>
+        <Textarea
+          data-test-agendaitem-titles-edit-comment={{true}}
+          rows="2"
+          aria-labelledby="comment-title"
+          class="auk-textarea"
+          @value={{@agendaitem.comment}}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <Auk::Label id="private-comment-title">
+          <Auk::Icon @name="lock-closed" @size="small" />
+          {{t "private-comment-title"}}
+        </Auk::Label>
+        <Textarea
+          data-test-agendaitem-titles-edit-private-comment={{true}}
+          rows="2"
+          aria-labelledby="private-comment-title"
+          class="auk-textarea"
+          @value={{@agendaitem.privateComment}}
+        />
+      </AuFormRow>
+      {{#if (is-announcement @agendaitem.type)}}
         <AuFormRow>
-          <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-title={{true}}
-            rows="4"
-            aria-labelledby="title-subcase"
-            class="auk-textarea"
-            @value={{@agendaitem.title}}
-          />
-        </AuFormRow>
-        <AuFormRow>
-          <Auk::Label id="comment-title">{{t "comment-title"}}</Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-comment={{true}}
-            rows="2"
-            aria-labelledby="comment-title"
-            class="auk-textarea"
-            @value={{@agendaitem.comment}}
-          />
-        </AuFormRow>
-        <AuFormRow>
-          <Auk::Label id="private-comment-title">
-            <Auk::Icon @name="lock-closed" @size="small" />
-            {{t "private-comment-title"}}
+          <Auk::Label for="item-show-in-newsletter">
+            {{t "on-the-website"}}
           </Auk::Label>
-          <Textarea
-            data-test-agendaitem-titles-edit-private-comment={{true}}
-            rows="2"
-            aria-labelledby="private-comment-title"
-            class="auk-textarea"
-            @value={{@agendaitem.privateComment}}
-          />
+          {{#if this.newsItem}}
+            <AuToggleSwitch
+              data-test-agendaitem-titles-edit-showInNewsletter
+              @checked={{this.newsItem.inNewsletter}}
+              id="item-show-in-newsletter"
+            />
+          {{else}}
+            {{t "no-news-item"}}
+          {{/if}}
         </AuFormRow>
-        {{#if (is-announcement @agendaitem.type)}}
-          <AuFormRow>
-            <Auk::Label for="item-show-in-newsletter">
-              {{t "on-the-website"}}
-            </Auk::Label>
-            {{#if this.newsItem}}
-              <AuToggleSwitch
-                data-test-agendaitem-titles-edit-showInNewsletter
-                @checked={{this.newsItem.inNewsletter}}
-                id="item-show-in-newsletter"
-              />
-            {{else}}
-              {{t "no-news-item"}}
-            {{/if}}
-          </AuFormRow>
-        {{/if}}
-      </div>
-    </Auk::Panel::Body>
-    <Auk::Panel::Footer>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-agendaitem-titles-edit-cancel
-              @skin="naked"
-              {{on "click" this.cancelEditing}}
-            >
-              {{t "cancel"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-agendaitem-titles-edit-save={{true}}
-              @skin="primary"
-              @loading={{this.saveChanges.isRunning}}
-              {{on "click" (perform this.saveChanges)}}
-            >
-              {{t "save"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Footer>
-  </Auk::Panel>
-</div>
+      {{/if}}
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-agendaitem-titles-edit-cancel
+            @skin="naked"
+            {{on "click" this.cancelEditing}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-agendaitem-titles-edit-save={{true}}
+            @skin="primary"
+            @loading={{this.saveChanges.isRunning}}
+            {{on "click" (perform this.saveChanges)}}
+          >
+            {{t "save"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>
 
 {{#if this.saveChanges.isRunning}}
   <Auk::Modal @size="medium">

@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -19,17 +20,61 @@ export default class AgendaitemControls extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service decisionReportGeneration;
+  @service parliamentService;
+  @service newsletterService;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
+  @tracked showVPModal = false;
+  @tracked canSendToVP = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
+    this.loadCanSendToVP.perform();
+  }
+
+  loadCanSendToVP = task(async () => {
+    if (!isEnabledVlaamsParlement() || !this.args.subcase) {
+      this.canSendToVP = false;
+      return;
+    }
+
+    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+      const submitter = await this.args.subcase.requestedBy;
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      } else {
+        this.canSendToVP = false;
+      }
+    } else if (this.currentSession.may('send-cases-to-vp')) {
+      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+    } else {
+      this.canSendToVP = false;
+    }
+  });
+
+  get hasDropdownOptions() {
+    return (
+      (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
+      this.canSendToVP
+    );
+  }
+
+  @action
+  async onSendToVp(job, toast) {
+    this.showVPModal = false;
+    if (this.args.onSendToVp) {
+      this.args.onSendToVp(job, toast);
+    }
   }
 
   get areDecisionActionsEnabled() {
@@ -61,7 +106,7 @@ export default class AgendaitemControls extends Component {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
     }
-    if (this.currentSession.isAdmin) {
+    if (this.currentSession.may('remove-approved-agendaitems')) {
       return this.intl.t('delete-agendaitem-from-meeting-message');
     }
     return null;
@@ -85,7 +130,7 @@ export default class AgendaitemControls extends Component {
     this.showLoader = true;
     const agendaItemType = await agendaitem.type;
     const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
-    if (await this.isDeletable) {
+    if (this.isDeletable) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
@@ -100,12 +145,15 @@ export default class AgendaitemControls extends Component {
   @task
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
+    yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
-
 
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
+    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
   @action
@@ -116,6 +164,42 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @task
+  *updateDecisionPiecePart(message) {
+    const report = yield this.store.queryOne('report', {
+      filter: {
+        'decision-activity': { ':id:': this.decisionActivity.id },
+      },
+    });
+    if (report) {
+      const beslissingPiecePart = yield this.store.queryOne('piece-part', {
+        filter: {
+          report: { ':id:': report.id },
+          ':has-no:next-piece-part': true,
+          title: 'Beslissing',
+        },
+      });
+      if (beslissingPiecePart) {
+        const now = new Date();
+        const newBeslissingPiecePart = yield this.store.createRecord(
+          'piece-part',
+          {
+            title: 'Beslissing',
+            htmlContent: message,
+            report: report,
+            previousPiecePart: beslissingPiecePart,
+            created: now,
+          }
+        );
+        yield newBeslissingPiecePart.save();
+        yield this.decisionReportGeneration.generateReplacementReport.perform(
+          report
+        );
+      }
+    }
+    return;
   }
 
   @task
@@ -137,11 +221,21 @@ export default class AgendaitemControls extends Component {
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
     yield this.decisionActivity.save();
-    if ([CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD, CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN].includes(decisionResultCodeUri)) {
+    if (
+      [
+        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+      ].includes(decisionResultCodeUri)
+    ) {
       const pieces = yield this.args.agendaitem.pieces;
-      for (const piece of pieces.toArray()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(piece);
-        if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      for (const piece of pieces.slice()) {
+        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+          piece
+        );
+        if (
+          decisionResultCodeUri ===
+          CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+        ) {
           yield this.signatureService.removeSignFlowForPiece(piece);
         }
       }

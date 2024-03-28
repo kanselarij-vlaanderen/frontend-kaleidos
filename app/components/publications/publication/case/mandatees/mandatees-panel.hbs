@@ -1,75 +1,74 @@
-<div class="auk-u-mb-3">
-  <Auk::Panel>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">{{t "ministers"}}</h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-mandatees-panel-add
-              @skin="naked"
-              @icon="plus"
-              {{on "click" this.openSelectMandateeModal}}
-            >
-              {{t "add-minister"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    {{#if @publicationFlow.mandatees}}
-      <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th>{{t "minister"}}</th>
-              <th></th>
+<Auk::Panel ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            data-test-mandatees-panel-add
+            @skin="naked"
+            @icon="plus"
+            {{on "click" this.openSelectMandateeModal}}
+          >
+            {{t "add-minister"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if @publicationFlow.mandatees}}
+    <Auk::Panel::Body @noPadding={{true}}>
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "minister"}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each
+            (sort-by "priority" @publicationFlow.mandatees)
+            as |mandatee|
+          }}
+            <tr data-test-mandatees-panel-row>
+              <td data-test-mandatees-panel-row-full-name>
+                <Auk::Avatar @icon="user">
+                  {{mandatee.person.fullName}}
+                </Auk::Avatar>
+              </td>
+              <td class="auk-u-text-align--right">
+                <AuButton
+                  data-test-mandatees-panel-row-unlink
+                  @skin="naked"
+                  @alert={{true}}
+                  @icon="trash"
+                  {{on "click" (fn this.removeMandatee mandatee)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {{#each
-              (sort-by "priority" @publicationFlow.mandatees)
-              as |mandatee|
-            }}
-              <tr data-test-mandatees-panel-row>
-                <td data-test-mandatees-panel-row-full-name>
-                  <Auk::Avatar @icon="user">
-                    {{mandatee.person.fullName}}
-                  </Auk::Avatar>
-                </td>
-                <td class="auk-u-text-align--right">
-                  <AuButton
-                    data-test-mandatees-panel-row-unlink
-                    @skin="naked"
-                    @alert={{true}}
-                    @icon="trash"
-                    {{on "click" (fn this.removeMandatee mandatee)}}
-                  >
-                    {{t "delete"}}
-                  </AuButton>
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </Auk::Panel::Body>
-    {{else}}
-      <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-ministers-added"}} />
-      </Auk::Panel::Body>
-    {{/if}}
-  </Auk::Panel>
-</div>
+          {{/each}}
+        </tbody>
+      </table>
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::EmptyState @message={{t "no-ministers-added"}} />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
 
 {{#if this.showSelectMandateeModal}}
   {{! The @publicationFlow.openingDate is no more than a fallback in case decision date
   isn't filled in, which in theory can be the case for a non-MR publication-flow, but in practice should
   hardly ever occur }}
   <Mandatees::MandateesSelectorModal
+    @excludeMandatees={{@publicationFlow.mandatees}}
     @referenceDate={{or
       @publicationFlow.decisionActivity.startDate
       @publicationFlow.openingDate

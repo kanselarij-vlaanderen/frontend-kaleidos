@@ -2,15 +2,18 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function searchFunction(optionsToCheck, defaultOption) {
   optionsToCheck.forEach((option) => {
+    cy.wait(500);
     cy.get(route.search.input).clear()
       .type('test');
     cy.get(route.search.trigger).click();
@@ -25,11 +28,81 @@ function searchFunction(optionsToCheck, defaultOption) {
   });
 }
 
-function triggerSearch(searchFlow) {
+function triggerSearch(searchFlow, checkboxContains = null) {
+  // manual trigger or trigger by clicking checkbox
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}`);
-  cy.get(route.search.trigger).click();
+  if (checkboxContains) {
+    cy.get(appuniversum.checkbox)
+      .contains(checkboxContains)
+      .click();
+  } else {
+    cy.get(route.search.trigger).click();
+  }
   cy.wait(`@searchCall${randomInt}`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+}
+
+function triggerSearchRadio(searchFlow, radioContains) {
+  // trigger by clicking radio
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}`);
+
+  cy.get(appuniversum.radio)
+    .contains(radioContains)
+    .click();
+  cy.wait(`@searchCall${randomInt}`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+}
+
+function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+
+  cy.get(route.search.from)
+    .find(auk.datepicker.datepicker)
+    .click();
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}1`);
+  cy.setDateInFlatpickr(dateFrom);
+  cy.wait(`@searchCall${randomInt}1`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+  cy.get(resultRow);
+
+  cy.get(route.search.to)
+    .find(auk.datepicker.datepicker)
+    .click();
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}2`);
+  cy.setDateInFlatpickr(dateTo);
+  cy.wait(`@searchCall${randomInt}2`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+  cy.get(resultRow);
+
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}3`);
+  cy.get(route.search.from).find(auk.datepicker.clear)
+    .click();
+  cy.wait(`@searchCall${randomInt}3`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+  cy.get(resultRow);
+
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}4`);
+  cy.get(route.search.to).find(auk.datepicker.clear)
+    .click();
+  cy.wait(`@searchCall${randomInt}4`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+
+  cy.get(route.search.from)
+    .find(auk.datepicker.datepicker)
+    .click();
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}5`);
+  cy.setDateInFlatpickr(dateTo);
+  cy.wait(`@searchCall${randomInt}5`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+  cy.get(auk.emptyState.message).contains('Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
+
+  cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}6`);
+  cy.get(route.search.from).find(auk.datepicker.clear)
+    .click();
+  cy.wait(`@searchCall${randomInt}6`);
+  cy.get(dependency.emberDataTable.isLoading).should('not.exist');
 }
 
 function searchOnRoute(searchTerm, searchFlow, resultRow, Result) {
@@ -60,7 +133,7 @@ function setDocNameInViewer(docName, newName) {
     .wait('@patchDocuments');
 
   cy.go('back');
-  cy.get(auk.loader).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
 }
 
 context('Search tests', () => {
@@ -154,16 +227,16 @@ context('Search tests', () => {
     const case2TitleShort = 'testId=1653051342: Cypress search dossier 2';
     const newSubcase2TitleShort = 'testId=1653051342: korte titel for batterij';
     const subcase2TitleLong = 'testId=1653051342: lange titel for peerd';
-    // const fileAgendaitem2 = {
-    //   // unieke woorden: Walkman stereo
-    //   folder: 'files', fileName: 'search-agendaitem-piece_2', fileExtension: 'pdf', newFileName: 'piece 2 pdf', fileType: 'Nota',
-    // };
-    const treatmentWords2 = 'codez krokkettenmaker';
-    // const fileTreatment2 = {
-    //   words: 'codez krokkettenmaker',
-    //   // unieke woorden: codez krokkettenmaker
-    //   folder: 'files', fileName: 'search-agendaitem-treatment_2', fileExtension: 'pdf', newFileName: 'treatment 2 pdf',
-    // };
+    const fileAgendaitem2 = {
+      // unieke woorden: Walkman stereo
+      folder: 'files', fileName: 'search-agendaitem-piece_2', fileExtension: 'pdf', newFileName: 'piece 2 pdf', fileType: 'Nota',
+    };
+    // const treatmentWords2 = 'codez krokkettenmaker'; // if generated
+    const fileTreatment2 = {
+      words: 'codez krokkettenmaker',
+      // unieke woorden: codez krokkettenmaker
+      folder: 'files', fileName: 'search-agendaitem-treatment_2', fileExtension: 'pdf', newFileName: 'treatment 2 pdf',
+    };
 
     it('Add content for funky searchterms', () => {
       // *Existing data test: add this to setup, check ownership of files before zipping!
@@ -175,18 +248,16 @@ context('Search tests', () => {
       // cy.wait('@patchDecisionActivities');
 
       // *Live data test: change agendaitem/subcase titles, upload treatment file (*piece* for future tests in comment).
-      cy.visit('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05');
+      cy.visitCaseWithLink('/dossiers/E14FB5C8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/6287918EE1ADA5F6A459AC05');
       cy.intercept('PATCH', '/agendaitems/*').as('patchAgendaitem');
       cy.changeSubcaseAccessLevel(null, newSubcase2TitleShort, subcase2TitleLong);
       cy.wait('@patchAgendaitem');
 
       cy.visitAgendaWithLink('/vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D/documenten');
-      // cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
-      // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-      cy.generateDecision(null, treatmentWords2);
-      // cy.addDocumentToTreatment(fileTreatment2);
-      // cy.get(auk.confirmationModal.footer.confirm).click();
-      // cy.wait('@patchDecisionActivities');
+      cy.addDocumentsToAgendaitem(newSubcase2TitleShort, [fileAgendaitem2]);
+      cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
+      // cy.generateDecision(null, treatmentWords2); // if generated
+      cy.addDocumentToTreatment(fileTreatment2);
     });
 
     // *The next 3 tests do not use any of the context data, but are needed to give index the time to update
@@ -374,12 +445,18 @@ context('Search tests', () => {
       const subcaseTitleShort = `Cypress test: add subcase with accenten in title - ${currentTimestamp}`;
       const type = 'Nota';
       const subcaseTitleLong = 'Cypress test met accenten in title';
-      const subcaseType = 'Principiële goedkeuring';
+      const subcaseType = 'principiële goedkeuring';
       const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
       cy.createAgenda(null, agendaDate, null);
-      cy.visit('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-      cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+      cy.visitCaseWithLink('/dossiers/E14FB50A-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
+      cy.addSubcaseViaModal({
+        agendaitemType: type,
+        newShortTitle: subcaseTitleShort,
+        longTitle: subcaseTitleLong,
+        subcaseType: subcaseType,
+        subcaseName: subcaseName,
+      });
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseTitleShort);
       cy.wait(5000); // wait for elasticsearch
@@ -413,7 +490,7 @@ context('Search tests', () => {
   context('Search all fields', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-    const agendaDate = Cypress.dayjs('2023-06-06');
+    const agendaDate = Cypress.dayjs('2023-11-21');
     const caseShortTitle = `Cypress test - ${randomInt}: uniek precair interstellair, maar niet verstoken van enige flair`;
     const subcaseShortTitle = `Cypress test - ${randomInt}: uniek terracotta scherven die wij van ons moeder erven`;
     const subcaseLongTitle = `Cypress test - ${randomInt}: uniek dramatiek op de dansvloer zonder muziek`;
@@ -437,21 +514,30 @@ context('Search tests', () => {
         folder: 'files', fileName: fileNameAgendaitem, fileExtension: 'pdf', newFileName: newFileNameBvr, fileType: 'BVR',
       }
     ];
+    const domain1 = {
+      name: 'Cultuur, Jeugd, Sport en Media',
+      selected: true,
+      fields: [],
+    };
+    const domains = [domain1];
     const treatmentWords = 'codez krokkettenmaker';
     // const fileTreatment = {
     //   folder: 'files', fileName: fileNameTreatment, fileExtension: 'pdf',
     // };
 
     it('Search all fields setup', () => {
-      cy.visit('/dossiers');
+      cy.visit('/dossiers?aantal=2');
       cy.createCase(caseShortTitle);
-      cy.addSubcase('Nota',
-        subcaseShortTitle,
-        subcaseLongTitle,
-        'Principiële goedkeuring',
-        'Principiële goedkeuring m.h.o. op adviesaanvraag');
-      cy.openSubcase(0, subcaseShortTitle);
-      cy.addSubcaseMandatee(4);
+      cy.addSubcaseViaModal({
+        newCase: true,
+        agendaitemType: 'Nota',
+        newShortTitle: subcaseShortTitle,
+        longTitle: subcaseLongTitle,
+        subcaseType: 'principiële goedkeuring',
+        subcaseName: 'Principiële goedkeuring m.h.o. op adviesaanvraag',
+        mandatees: [mandateeNames.current.fourth],
+      });
+      cy.addDomainsAndFields(domains);
       cy.addDocumentsToSubcase(filesSubcase);
       cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
@@ -519,9 +605,9 @@ context('Search tests', () => {
       searchOnRoute(subcaseShortTitle, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(subcaseLongTitle, searchFlow, resultRow, caseShortTitle);
       // mandatees
-      searchOnRoute('Ben', searchFlow, resultRow, caseShortTitle);
-      searchOnRoute('Weyts', searchFlow, resultRow, caseShortTitle);
-      searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.firstName, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.lastName, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.searchTitle, searchFlow, resultRow, caseShortTitle);
       // news-item
       searchOnRoute(newsItemShortTitle, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(newsItemLongTitle, searchFlow, resultRow, caseShortTitle);
@@ -546,9 +632,9 @@ context('Search tests', () => {
       cy.visit('/zoeken/agendapunten');
 
       // mandatees
-      searchOnRoute('Ben', searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute('Weyts', searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute('Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand', searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.firstName, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.lastName, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(mandateeNames.current.fourth.searchTitle, searchFlow, resultRow, subcaseShortTitle);
       // news-item
       searchOnRoute(newsItemContent, searchFlow, resultRow, subcaseShortTitle);
       // documents
@@ -611,6 +697,242 @@ context('Search tests', () => {
       // news-item
       searchOnRoute(newsItemShortTitle, searchFlow, resultRow, newsItemShortTitle);
       searchOnRoute(newsItemContent, searchFlow, resultRow, newsItemShortTitle);
+    });
+  });
+
+  context('Search tests without searchterms', () => {
+    // const noResult = 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.';
+    const dateFrom = Cypress.dayjs().add(-1, 'years');
+    const dateTo = Cypress.dayjs().add(1, 'years');
+    const checkbox1 = mandateeNames.current.fourth.fullName;
+    const checkbox2 = 'Cultuur, Jeugd, Sport en Media';
+
+    // TODO-setup: remove a case
+    it('setup', () => {
+      // create and archive case
+      const shortTitle = 'test dossier om te verwijderen';
+      cy.createCase(shortTitle);
+      cy.get(cases.newSubcaseForm.cancel).click();
+      cy.intercept('PATCH', '/decisionmaking-flows/**').as('patchDecisionFlow');
+      cy.get(cases.subcaseOverviewHeader.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(cases.subcaseOverviewHeader.actions.archive).forceClick();
+      cy.get(auk.confirmationModal.footer.confirm).click()
+        .wait('@patchDecisionFlow');
+    });
+
+    it('Search all fields on all types', () => {
+      const searchFlow = 'decisionmaking-flows';
+      const resultRow = route.searchAlltypes.row;
+
+      cy.visit('/zoeken/alle-types');
+
+      // no filters
+      cy.get(route.caseResultCard.shortTitleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox1);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox2);
+    });
+
+    it('Search all fields on case', () => {
+      const searchFlow = 'decisionmaking-flows';
+      const resultRow = route.searchCases.row;
+      const checkbox3 = 'Toon verwijderde dossiers';
+      const checkbox4 = 'Toon enkel verwijderde dossiers';
+      const checkbox5 = 'Toon enkel dossiers met beperkte toegang';
+
+      cy.visit('/zoeken/dossiers');
+
+      // no filters
+      cy.get(route.caseResultCard.shortTitleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox1);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox2);
+
+      // filter mandatee removed case
+      triggerSearchRadio(searchFlow, checkbox3);
+      cy.get(dependency.emberDataTable.isLoading).should('not.exist');
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearchRadio(searchFlow, checkbox4);
+      cy.get(route.caseResultCard.shortTitleLink);
+      triggerSearchRadio(searchFlow, checkbox3);
+
+      // filter confidential
+      triggerSearch(searchFlow, checkbox5);
+      cy.get(route.caseResultCard.shortTitleLink);
+    });
+
+    it('Search all fields on agendaitems', () => {
+      const searchFlow = 'agendaitems';
+      const resultRow = route.searchAgendaitems.row;
+      const checkbox3 = 'Nota';
+      const checkbox4 = 'Mededeling';
+      const checkbox5 = 'Enkel op definitieve agenda';
+
+      cy.visit('/zoeken/agendapunten');
+
+      // no filters
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox2);
+
+      // filter type
+      triggerSearch(searchFlow, checkbox3);
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+      cy.get(appuniversum.checkbox)
+        .contains(checkbox2)
+        .click();
+      triggerSearch(searchFlow, checkbox4);
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+
+      // filter version
+      triggerSearch(searchFlow, checkbox5);
+      cy.get(route.agendaitemResultCard.shortTitleLink);
+    });
+
+    it('Search all fields on documents', () => {
+      const searchFlow = 'pieces';
+      const resultRow = route.searchDocuments.row;
+      const checkbox3 = 'Toon enkel documenten met beperkte toegang';
+      const checkbox4 = 'Advies Inspectie Financiën';
+
+      cy.visit('/zoeken/documenten');
+
+      // no filters
+      cy.get(route.documentResultCard.filename);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.documentResultCard.filename);
+      triggerSearch(searchFlow, checkbox1);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.documentResultCard.filename);
+      triggerSearch(searchFlow, checkbox2);
+
+      // filter confidential
+      triggerSearch(searchFlow, checkbox3);
+      cy.get(route.documentResultCard.filename);
+      triggerSearch(searchFlow, checkbox3);
+
+      // filter document type
+      triggerSearch(searchFlow, checkbox4);
+      cy.get(route.documentResultCard.filename);
+      triggerSearch(searchFlow, checkbox4);
+    });
+
+    it('Search all fields on decisions', () => {
+      cy.visit('/zoeken/beslissingen');
+      const searchFlow = 'agendaitems';
+      const resultRow = route.searchDecisions.row;
+      const checkbox3 = 'Goedgekeurd';
+
+      // no filters
+      cy.get(route.decisionResultCard.shortTitleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.decisionResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox1);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.decisionResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox2);
+
+      // filter decision result
+      triggerSearch(searchFlow, checkbox3);
+      cy.get(route.decisionResultCard.shortTitleLink);
+    });
+
+    it('Search all fields on news-items', () => {
+      const searchFlow = 'news-items';
+      const resultRow = route.searchNewsletters.row;
+
+      cy.visit('/zoeken/kort-bestek');
+
+      // no filters
+      cy.get(route.newsItemResultCard.titleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox1);
+      cy.get(route.newsItemResultCard.titleLink);
+      triggerSearch(searchFlow, checkbox1);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.newsItemResultCard.titleLink);
+    });
+
+    it('Search all fields on publications', () => {
+      const searchFlow = 'publication-flows';
+      const resultRow = route.searchPublications.row;
+
+      const checkbox3 = 'Jan Jambon';
+      const checkbox4 = 'Opgestart';
+
+      cy.visit('/zoeken/publicaties');
+
+      // no filters
+      cy.get(route.publicationFlowResultCard.shortTitleLink);
+
+      // filter daterange
+      searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
+
+      // filter mandatee
+      triggerSearch(searchFlow, checkbox3);
+      cy.get(route.publicationFlowResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox3);
+
+      // filter domain
+      triggerSearch(searchFlow, checkbox2);
+      cy.get(route.publicationFlowResultCard.shortTitleLink);
+      triggerSearch(searchFlow, checkbox2);
+
+      // filter status
+      triggerSearch(searchFlow, checkbox4);
+      cy.get(route.publicationFlowResultCard.shortTitleLink);
     });
   });
 });

@@ -1,6 +1,7 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
 import { A } from '@ember/array';
+import generateReportName from './generate-report-name';
 
 /**
  * @description Zet een agendaitem of subcase naar nog niet formeel ok
@@ -76,7 +77,9 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sortBy('groupNumber').map((group) => EmberObject.create(group));
+  groupsArray = groupsArray
+    .sort((g1, g2) => g1.groupNumber.localeCompare(g2.groupNumber))
+    .map((group) => EmberObject.create(group));
 
   return groupsArray;
 };
@@ -84,27 +87,51 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
 /**
  * Given a set of agendaitems, set their number
  * @name setAgendaitemsNumber
- * @param  {Array<agendaitem>}   agendaitems  Array of agendaitem objects to set number on.
- * @param  {Boolean} isEditor     When true, the user is allowed to edit the trigger a recalculation of the number.
- * @param {Boolean} isDesignAgenda  When true, the agenda is a designagenda.
+ * @param  {Array<Agendaitem>} agendaitems  Array of agendaitem objects to set number on.
+ * @param {Meeting} meeting The meeting the agendaitems belong to
+ * @param {Store} store The store service
+ * @param {DecisionReportGeneration} decisionReportGeneration The decisionReportGeneration service
+ * @param {Boolean} isEditor When true, the user is allowed to edit the trigger a recalculation of the number.
+ * @param {Boolean} isDesignAgenda When true, the agenda is a designagenda.
  */
-export const setAgendaitemsNumber = async(agendaitems, isEditor, isDesignAgenda) => {
+export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionReportGeneration, isEditor, isDesignAgenda) => {
   if (isEditor && isDesignAgenda) {
-    return await Promise.all(agendaitems.map(async(agendaitem, index) => {
+    const reports = [];
+    const promises = await Promise.all(agendaitems.map(async(agendaitem, index) => {
       if (agendaitem.number !== index + 1) {
-        agendaitem.set('number', index + 1);
-        return agendaitem.save();
+        agendaitem.number = index + 1;
+        const agendaitemSave = await agendaitem.save();
+
+        const report = await store.queryOne('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[:has:piece-parts]': true,
+          'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+        });
+        if (report) {
+          reports.push(report);
+          const documentContainer = await report.documentContainer;
+          const pieces = await documentContainer.pieces;
+          report.name = await generateReportName(agendaitem, meeting, pieces.length);
+          await report.belongsTo('file').reload();
+          await report.save();
+        }
+        return agendaitemSave;
       }
     }));
+    if (reports.length) {
+      await decisionReportGeneration.generateReplacementReports.perform(reports);
+    }
+    return promises;
   }
 };
 
-export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
+export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGeneration, isEditor) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = [];
   const actualAnnouncements = [];
-  for (const agendaitem of agendaitems.sortBy('number').toArray()) {
+  const sortedAgendaitems = agendaitems.slice().sort((a1, a2) => a1.number - a2.number)
+  for (const agendaitem of sortedAgendaitems) {
     if (!agendaitem.isDeleted) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
@@ -114,8 +141,9 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
       }
     }
   }
-  await setAgendaitemsNumber(actualAgendaitems, isEditor, true);
-  await setAgendaitemsNumber(actualAnnouncements, isEditor, true);
+  const meeting = await agenda.createdFor;
+  await setAgendaitemsNumber(actualAgendaitems, meeting, store, decisionReportGeneration, isEditor, true);
+  await setAgendaitemsNumber(actualAnnouncements, meeting, store, decisionReportGeneration, isEditor, true);
 };
 
 /**
@@ -139,13 +167,13 @@ export class AgendaitemGroup {
 
   static sortedMandatees(mandatees) {
     // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.toArray());
-    return copiedMandatees.sortBy('priority');
+    const copiedMandatees = A(mandatees.slice());
+    return copiedMandatees.sort((m1, m2) => m1.priority - m2.priority);
   }
 
   static generateMandateeGroupId(sortedMandatees) {
     // Assumes mandatees to be sorted
-    return sortedMandatees.mapBy('id').join();
+    return sortedMandatees.map((m) => m.id).join();
   }
 
   /**

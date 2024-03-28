@@ -15,6 +15,10 @@ export default class SearchRoute extends Route {
       refreshModel: true,
       as: 'ministers',
     },
+    governmentAreas: {
+      refreshModel: true,
+      as: 'beleidsdomeinen',
+    },
     dateFrom: {
       refreshModel: true,
       as: 'van',
@@ -26,7 +30,7 @@ export default class SearchRoute extends Route {
   };
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   /* There is no reset of query parameters here by means of "resetController".
@@ -41,6 +45,7 @@ export default class SearchRoute extends Route {
     const params = this.paramsFor('search');
     controller.searchTextBuffer = params.searchText;
     controller.mandatees = params.mandatees;
+    controller.governmentAreas = params.governmentAreas;
     controller.page = params.page;
     controller.dateFromBuffer = parseDate(params.dateFrom);
     controller.dateToBuffer = parseDate(params.dateTo);

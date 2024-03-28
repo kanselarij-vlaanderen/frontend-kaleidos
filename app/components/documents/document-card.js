@@ -7,8 +7,7 @@ import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
-import { isPresent, isEmpty } from '@ember/utils';
-import ENV from 'frontend-kaleidos/config/environment';
+import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
@@ -26,7 +25,13 @@ export default class DocumentsDocumentCardComponent extends Component {
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
-   * @argument decisionActivity: if a decision-activity is linked (specifically via agenda-item-treatment)
+   * @argument onChangeConfidentiality: action triggered when a subtype 'report' has an accessLevel change
+   *
+   * @argument [agendaitem]: if an agendaitem is linked to the current piece
+   * @argument [decisionActivity]: if a decision-activity is linked to the
+   *   current piece, either via agenda-item-treatment (for regular pieces) or
+   *   directly (for reports)
+   * @argument [meeting]: if a meeting is linked to the current piece
    */
   @service store;
   @service currentSession;
@@ -53,39 +58,68 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
 
-  @tracked altLabel;
+  @tracked dateToShowAltLabel;
+  @tracked altDateToShow;
+
+  // model "report" only
+  @tracked hasConfidentialityChanged = false;
+  @tracked oldAccessLevelUri = null;
 
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();
     this.loadPieceRelatedData.perform();
     this.loadFiles.perform();
-    this.signaturesEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
   }
 
-  get label() {
-    if (isPresent(this.args.label)) {
-      return this.intl.t(this.args.label);
+  get dateToShowLabel() {
+    if (isPresent(this.args.dateToShowLabel)) {
+      return this.intl.t(this.args.dateToShowLabel);
     }
-    if (isPresent(this.altLabel)) {
-      return this.altLabel;
+    if (isPresent(this.dateToShowAltLabel)) {
+      return this.dateToShowAltLabel;
     }
-    return this.intl.t('uploaded-at');
+    return this.intl.t('created-on');
+  }
+
+  get dateToShow() {
+    if (isPresent(this.altDateToShow)) {
+      return this.altDateToShow;
+    }
+    return this.args.piece.file?.get("created") || this.args.piece.created;
   }
 
   get bordered() {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  // getting complex with the temporary feature flags
+  // agendaitem doc can be marked - has agendaitem and has decisionActivity
+  // decisions can only be marked if flag is active and - has no agendaitem and has decisionActivity
+  // minutes can only be marked if flag is active and - has no agendaitem and has no decisionActivity and has meeting
   get mayCreateSignMarkingActivity() {
-    return !this.signMarkingActivity
-      && this.signaturesEnabled
-      && this.currentSession.may('manage-signatures')
-      && !!this.args.decisionActivity;
+    return (
+      !this.signMarkingActivity &&
+      this.currentSession.may('manage-signatures') &&
+      (
+        (this.args.agendaitem && this.args.decisionActivity) ||
+        (!this.args.agendaitem && this.args.decisionActivity) ||
+        (!this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
+      )
+    );
   }
 
-  get agendaitemIsRetracted() {
-    return this.args.decisionActivity?.get('isRetracted');
+  get markingForSigningIsDisabled() {
+    if (this.args.agendaitem) {
+      return this.args.decisionActivity?.get('isRetracted');
+    } else if (this.args.decisionActivity) {
+      return false;
+    } else if (this.args.meeting) {
+      return false;
+    } else {
+      // Not a handled case, disable the button
+      return true;
+    }
   }
 
   get mayShowEditDropdown() {
@@ -115,9 +149,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get showSignaturePill() {
-    const isEnabled = !isEmpty(ENV.APP.ENABLE_SIGNATURES);
     const hasPermission = this.currentSession.may('manage-signatures');
-    return isEnabled && hasPermission;
+    return hasPermission;
   }
 
   @task
@@ -135,29 +168,27 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': id,
         include: 'document-container,document-container.type,access-level',
       });
-    const loadReportPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
-        'filter[report][:id:]': id,
-      });
-    const loadMinutesPiecePart = (id) =>
-      this.store.queryOne('piece-part', {
-        'filter[minutes][:id:]': id,
-      });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
       // check for alternative label
-      const modelName = this.args.piece.constructor.modelName;
-      if (!isPresent(this.args.label)) {
-        let piecePart;
-        if (modelName === 'report') {
-          piecePart = yield loadReportPiecePart(this.piece.id);
-        } else if (modelName === 'minutes') {
-          piecePart = yield loadMinutesPiecePart(this.piece.id);
+      if (!isPresent(this.args.dateToShowLabel)) {
+        const fileCreated = yield this.args.piece.file?.get('created');
+        const hasPieceBeenEdited = this.piece.created?.getTime() !== this.piece.modified?.getTime();
+        // file is always create first, if file.created is larger it has been edited
+        const hasFileBeenReplaced = this.piece.created?.getTime() < fileCreated?.getTime();
+        if (hasPieceBeenEdited || hasFileBeenReplaced) {
+          this.dateToShowAltLabel = this.intl.t('edited-on');
+          // get the most recent date
+          this.altDateToShow = this.piece.modified?.getTime() > fileCreated?.getTime() ? this.piece.modified : fileCreated;
         }
-        this.altLabel = piecePart ? this.intl.t('created-on') : null;
+         else {
+          this.dateToShowAltLabel = this.intl.t('created-on');
+          // fallback to default DateToShow
+          // also if created, modifed and file.created are undefined in legacy
+        }
       }
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
@@ -210,13 +241,13 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadVersionHistory() {
     this.pieces = yield this.documentContainer.hasMany('pieces').reload();
-    for (const piece of this.pieces.toArray()) {
+    for (const piece of this.pieces.slice()) {
       yield piece.belongsTo('accessLevel').reload();
     }
   }
 
   get sortedPieces() {
-    return A(sortPieces(this.pieces.toArray()).reverse());
+    return A(sortPieces(this.pieces.slice()).reverse());
   }
 
   get reverseSortedPieces() {
@@ -277,7 +308,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
     try {
       this.newPiece.name = this.newPiece.name.trim();
-      yield this.args.onAddPiece(this.newPiece, this.signFlow);
+      yield this.args.onAddPiece(this.newPiece);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
@@ -368,25 +399,49 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *markDocumentForSigning() {
-    yield this.signatureService.markDocumentForSignature(this.piece, this.args.decisionActivity);
+    yield this.signatureService.markDocumentForSignature(
+      this.piece,
+      this.args.decisionActivity,
+      this.args.meeting,
+    );
     yield this.loadPieceRelatedData.perform();
   }
 
   @action
-  changeAccessLevel(accessLevel) {
+  async changeAccessLevel(accessLevel) {
+    const modelName = this.args.piece.constructor.modelName;
+    if (modelName === 'report' && this.args.onChangeConfidentiality) {
+      // multiple unsaved changes are possible, save the original accessLevel the first time
+      this.oldAccessLevelUri =
+        this.oldAccessLevelUri || this.piece.accessLevel?.get('uri');
+      const newAccessLevelUri = accessLevel?.get('uri');
+      if (
+        [this.oldAccessLevelUri, newAccessLevelUri].includes(
+          CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        )
+      ) {
+        this.hasConfidentialityChanged = true;
+      } else {
+        this.hasConfidentialityChanged = false;
+      }
+    }
     this.piece.accessLevel = accessLevel;
   }
 
   @action
   async saveAccessLevel() {
-    // TODO make sure not to overwrite things
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
+    if (this.hasConfidentialityChanged && this.args.onChangeConfidentiality) {
+      await this.args?.onChangeConfidentiality();
+      this.oldAccessLevelUri = null;
+      this.hasConfidentialityChanged = false;
+    }
     await this.loadPieceRelatedData.perform();
   }
 
   @action
-  changeAccessLevelOfPiece(piece, accessLevel) {
+  async changeAccessLevelOfPiece(piece, accessLevel) {
     piece.accessLevel = accessLevel;
   }
 
@@ -398,18 +453,12 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async reloadAccessLevel() {
+    this.hasConfidentialityChanged = false;
     await this.loadPieceRelatedData.perform();
   }
 
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
-  }
-
-  canViewSignedPiece = async () => {
-    if (this.currentSession.may('manage-signatures')) {
-      return await this.signatureService.canManageSignFlow(this.args.piece);
-    }
-    return false;
   }
 
   @action

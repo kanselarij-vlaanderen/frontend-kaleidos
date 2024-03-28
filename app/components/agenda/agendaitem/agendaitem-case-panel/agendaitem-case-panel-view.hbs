@@ -1,182 +1,181 @@
-<div class="auk-u-mb-8">
-  <Auk::Panel>
-    <Auk::Panel::Header>
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 data-test-agendaitem-titles-type class="auk-panel__title">
+            {{#if (is-announcement @agendaitem.type)}}
+              {{t "text"}}
+            {{else}}
+              {{t "note"}}
+            {{/if}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+      <Toolbar.Group @position="right" as |Group|>
+        <Group.Item>
+          <AuButtonGroup>
+            {{#if @subcase}}
+              <AuLink
+                data-test-agendaitem-titles-link-to-subcase={{true}}
+                @skin="button-naked"
+                @icon="chevron-right"
+                @iconAlignment="right"
+                @disabled={{this.loadCase.isRunning}}
+                @route="cases.case.subcases.subcase.index"
+                @models={{array this.decisionmakingFlow.id @subcase.id}}
+              >
+                {{t "to-subcase"}}
+              </AuLink>
+            {{/if}}
+            {{#if @allowEditing}}
+              <AuButton
+                data-test-agendaitem-titles-edit
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" @onClickEdit}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            {{/if}}
+          </AuButtonGroup>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="auk-content">
+      <div
+        class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
+      >
+        <h4 data-test-agendaitem-titles-short-title class="auk-u-m-0">
+          {{@agendaitem.shortTitle}}
+        </h4>
+        <div
+          class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
+        >
+          {{#if
+            (and
+              @agenda.status.isDesignAgenda
+              (and @allowEditing @agendaitem.formallyOkToShow)
+            )
+          }}
+            <p
+              data-test-agendaitem-titles-formally-ok
+              class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex
+                {{if
+                  (eq @agendaitem.formallyOkToShow.svg.color 'success')
+                  'vlc-agenda-items__status--positive'
+                }}"
+            >
+              <Auk::Icon
+                @name={{@agendaitem.formallyOkToShow.svg.icon}}
+                class="formally-ok-icon"
+              />
+              {{@agendaitem.formallyOkToShow.label}}
+            </p>
+          {{/if}}
+          {{#if @subcase.confidential}}
+            <Auk::Toolbar::Item>
+              <AuPill
+                @size="small"
+                @skin="warning"
+                @icon="lock-closed"
+                data-test-agendaitem-titles-confidential
+              >
+                {{t "limited-access"}}
+              </AuPill>
+            </Auk::Toolbar::Item>
+          {{/if}}
+        </div>
+      </div>
+      {{#if @agendaitem.title}}
+        <div class="auk-u-mb-2">
+          <span
+            data-test-agendaitem-titles-title
+            class="auk-o-flex--inline auk-u-text-pre-line"
+          >
+            {{@agendaitem.title}}
+          </span>
+        </div>
+      {{/if}}
+      {{#if (is-announcement @agendaitem.type)}}
+        <div class="auk-u-mt-2" data-test-agendaitem-titles-news-item>
+          {{#if @newsItem}}
+            {{#if @newsItem.inNewsletter}}
+              <AuPill @size="small" @skin="border" @icon="website">
+                {{t "on-the-website"}}
+              </AuPill>
+            {{else}}
+              <AuPill @size="small" @skin="border">
+                {{t "not-on-the-website"}}
+              </AuPill>
+            {{/if}}
+          {{else}}
+            <AuPill @size="small">
+              {{t "no-news-item"}}
+            </AuPill>
+          {{/if}}
+        </div>
+      {{else}}
+        {{#if @subcase.subcaseName}}
+          <div class="auk-u-mt-2">
+            <AuPill @size="small" data-test-agendaitem-subcase-name>
+              {{capitalize @subcase.subcaseName}}
+            </AuPill>
+          </div>
+        {{/if}}
+        {{#if this.decisionActivity.isPostponed}}
+          <div class="auk-u-mt-2">
+            <AuPill @size="small">
+              {{t "postponed-item"}}
+            </AuPill>
+          </div>
+        {{/if}}
+        {{#if this.decisionActivity.isRetracted}}
+          <div class="auk-u-mt-2">
+            <AuPill @size="small">
+              {{t "retracted-item"}}
+            </AuPill>
+          </div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </Auk::Panel::Body>
+  {{#if @agendaitem.comment}}
+    <Auk::Panel::Footer class="auk-u-maximize-height">
       <Auk::Toolbar as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
-            <h4 class="auk-panel__title">
-              {{#if (is-announcement @agendaitem.type)}}
-                {{t "text"}}
-              {{else}}
-                {{t "note"}}
-              {{/if}}
-            </h4>
-          </Group.Item>
-        </Toolbar.Group>
-        <Toolbar.Group @position="right" as |Group|>
-          <Group.Item>
-            <AuButtonGroup>
-              {{#if @subcase}}
-                <AuLink
-                  data-test-agendaitem-titles-link-to-subcase={{true}}
-                  @skin="button-naked"
-                  @icon="chevron-right"
-                  @iconAlignment="right"
-                  @disabled={{this.loadCase.isRunning}}
-                  @route="cases.case.subcases.subcase.index"
-                  @models={{array this.decisionmakingFlow.id @subcase.id}}
-                >
-                  {{t "to-subcase"}}
-                </AuLink>
-              {{/if}}
-              {{#if @allowEditing}}
-                <AuButton
-                  data-test-agendaitem-titles-edit
-                  @skin="naked"
-                  @icon="pencil"
-                  {{on "click" @onClickEdit}}
-                >
-                  {{t "edit"}}
-                </AuButton>
-              {{/if}}
-            </AuButtonGroup>
+            <pre
+              class="auk-u-text-pre-line"
+              data-test-agendaitem-titles-comment
+            >
+              {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+              {{! prettier-ignore }}
+              <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
+            </pre>
           </Group.Item>
         </Toolbar.Group>
       </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      <div class="auk-content">
-        <div
-          class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center"
-        >
-          <h4 data-test-agendaitem-titles-short-title class="auk-u-m-0">
-            {{@agendaitem.shortTitle}}
-          </h4>
-          <div
-            class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
-          >
-            {{#if
-              (and
-                @agenda.status.isDesignAgenda
-                (and @allowEditing @agendaitem.formallyOkToShow)
-              )
-            }}
-              <p
-                class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex
-                  {{if
-                    (eq @agendaitem.formallyOkToShow.svg.color 'success')
-                    'vlc-agenda-items__status--positive'
-                  }}"
-              >
-                <Auk::Icon
-                  @name={{@agendaitem.formallyOkToShow.svg.icon}}
-                  class="formally-ok-icon"
-                />
-                {{@agendaitem.formallyOkToShow.label}}
-              </p>
-            {{/if}}
-            {{#if @subcase.confidential}}
-              <Auk::Toolbar::Item>
-                <AuPill
-                  @size="small"
-                  @skin="warning"
-                  @icon="lock-closed"
-                  data-test-agendaitem-titles-confidential
-                >
-                  {{t "limited-access"}}
-                </AuPill>
-              </Auk::Toolbar::Item>
-            {{/if}}
-          </div>
-        </div>
-        {{#if @agendaitem.title}}
-          <div class="auk-u-mb-2">
-            <span
-              data-test-agendaitem-titles-title
-              class="auk-o-flex--inline auk-u-text-pre-line"
+    </Auk::Panel::Footer>
+  {{/if}}
+  {{#if @agendaitem.privateComment}}
+    <Auk::Panel::Footer class="auk-u-maximize-height auk-u-bg-alt">
+      <Auk::Toolbar as |Toolbar|>
+        <Toolbar.Group @position="left" as |Group|>
+          <Group.Item>
+            <pre
+              class="auk-u-text-pre-line auk-u-text-muted"
+              data-test-agendaitem-titles-private-comment
             >
-              {{@agendaitem.title}}
-            </span>
-          </div>
-        {{/if}}
-        {{#if (is-announcement @agendaitem.type)}}
-          <div class="auk-u-mt-2" data-test-agendaitem-titles-news-item>
-            {{#if @newsItem}}
-              {{#if @newsItem.inNewsletter}}
-                <AuPill @size="small" @skin="border" @icon="website">
-                  {{t "on-the-website"}}
-                </AuPill>
-              {{else}}
-                <AuPill @size="small" @skin="border">
-                  {{t "not-on-the-website"}}
-                </AuPill>
-              {{/if}}
-            {{else}}
-              <AuPill @size="small">
-                {{t "no-news-item"}}
-              </AuPill>
-            {{/if}}
-          </div>
-        {{else}}
-          {{#if @subcase.subcaseName}}
-            <div class="auk-u-mt-2">
-              <AuPill @size="small" data-test-agendaitem-subcase-name>
-                {{capitalize @subcase.subcaseName}}
-              </AuPill>
-            </div>
-          {{/if}}
-          {{#if this.decisionActivity.isPostponed}}
-            <div class="auk-u-mt-2">
-              <AuPill @size="small">
-                {{t "postponed-item"}}
-              </AuPill>
-            </div>
-          {{/if}}
-          {{#if this.decisionActivity.isRetracted}}
-            <div class="auk-u-mt-2">
-              <AuPill @size="small">
-                {{t "retracted-item"}}
-              </AuPill>
-            </div>
-          {{/if}}
-        {{/if}}
-      </div>
-    </Auk::Panel::Body>
-    {{#if @agendaitem.comment}}
-      <Auk::Panel::Footer class="auk-u-maximize-height">
-        <Auk::Toolbar as |Toolbar|>
-          <Toolbar.Group @position="left" as |Group|>
-            <Group.Item>
-              <pre
-                class="auk-u-text-pre-line"
-                data-test-agendaitem-titles-comment
-              >
-                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
-                {{! prettier-ignore }}
-                <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
-              </pre>
-            </Group.Item>
-          </Toolbar.Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
-    {{/if}}
-    {{#if @agendaitem.privateComment}}
-      <Auk::Panel::Footer class="auk-u-maximize-height auk-u-bg-alt">
-        <Auk::Toolbar as |Toolbar|>
-          <Toolbar.Group @position="left" as |Group|>
-            <Group.Item>
-              <pre
-                class="auk-u-text-pre-line auk-u-text-muted"
-                data-test-agendaitem-titles-private-comment
-              >
-                {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
-                {{! prettier-ignore }}
-                <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
-              </pre>
-            </Group.Item>
-          </Toolbar.Group>
-        </Auk::Toolbar>
-      </Auk::Panel::Footer>
-    {{/if}}
-  </Auk::Panel>
-</div>
+              {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
+              {{! prettier-ignore }}
+              <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+            </pre>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Footer>
+  {{/if}}
+</Auk::Panel>

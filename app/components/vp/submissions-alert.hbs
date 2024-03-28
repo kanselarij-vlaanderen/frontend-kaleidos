@@ -1,0 +1,35 @@
+{{#if @parliamentFlow.status}}
+  <AuAlert
+    @size="small"
+    @skin={{this.skin}}
+    @icon="mail"
+  >
+    <p class="au-u-medium">
+      {{ this.message }}
+      <FormatList
+        @list={{sort-by "startDate" @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities}}
+        @locale="nl-be"
+        as |formattedPart|
+      >
+        {{#let formattedPart.value as |submissionActivity|}}
+        <AuLink
+          @skin="primary"
+          {{on "click" (fn this.showModalFor submissionActivity)}}
+        >
+          {{this.formatDate submissionActivity.startDate formattedPart.isLast}}
+        </AuLink>
+        {{/let}}
+      </FormatList>
+      {{#if @parliamentFlow.isBeingHandledByFP}}
+        {{ this.parliamentLinkMessage }}
+        <a href="{{this.parliamentLink}}" target="_blank">{{ t "flemish-parliament" }}</a>.
+      {{/if}}
+    </p>
+  </AuAlert>
+{{/if}}
+{{#if this.showActivity}}
+  <Vp::SentToVpModal
+    @submissionActivity={{this.showActivity}}
+    @closeModal={{this.closeModal}}
+  />
+{{/if}}

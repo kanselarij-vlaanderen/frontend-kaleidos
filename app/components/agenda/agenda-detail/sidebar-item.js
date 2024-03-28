@@ -21,7 +21,7 @@ export default class SidebarItem extends Component {
   defaultAgendaitemSubroute = 'agenda.agendaitems.agendaitem.index';
   @tracked currentRouteName;
   @tracked subcase;
-  @tracked newsletterIsVisible;
+  @tracked newsItem;
   @tracked decisionActivity;
 
   constructor() {
@@ -61,7 +61,7 @@ export default class SidebarItem extends Component {
   *lazyLoadSideData() {
     yield timeout(350);
     const tasks = [
-      this.loadNewsletterVisibility,
+      this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadDecisionActivity
     ].filter((task) => task.performCount === 0);
@@ -81,15 +81,10 @@ export default class SidebarItem extends Component {
   }
 
   @task
-  *loadNewsletterVisibility() {
+  *loadNewsItemVisibility() {
     const treatment = yield this.args.agendaitem.treatment;
     // not all agendaitems have treatments (mainly in legacy)
-    const newsItem = yield treatment?.newsItem;
-    if (newsItem) {
-      this.newsletterIsVisible = newsItem.inNewsletter;
-    } else {
-      this.newsletterIsVisible = false;
-    }
+    this.newsItem = yield treatment?.newsItem;
   }
 
   @task
@@ -102,9 +97,17 @@ export default class SidebarItem extends Component {
   @action
   conditionallyScrollIntoView(element) {
     if (this.args.isActive) {
-      element.scrollIntoView({
-        behavior: 'smooth', block: 'center',
-      });
+      const container = document.getElementById('agendadetail-sidebar-container');
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const offset = elementRect.top - containerRect.top - (containerRect.height / 2) + (elementRect.height / 2);
+
+      if (offset >= 0) { // only try to scroll downwards as the container is already scrolled to the top
+        container.scrollTo({
+          top: offset,
+          behavior: 'smooth'
+        });
+      }
     }
   }
 }

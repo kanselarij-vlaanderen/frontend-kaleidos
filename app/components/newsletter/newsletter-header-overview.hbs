@@ -15,7 +15,12 @@
             </h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}} />
+            <Auk::Tab 
+              @route="newsletters" 
+              @isHierarchicalBack={{true}}
+            >
+              {{t "all-sessions"}}
+            </Auk::Tab>
             {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 data-test-newsletter-header-overview-index
@@ -214,7 +219,7 @@
     <Auk::Modal::Header @title={{t "show-newsletter"}} @onClose={{this.clearNewsletterHTML}} />
     <Auk::Modal::Body>
       {{#if this.loadNewsletterHTML.isRunning}}
-        <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
+        <Auk::Loader @message={{t "preview-loading-text"}} />
       {{else}}
         <AuContent>
           <SanitizeHtml @raw={{true}} @value={{this.newsletterHTML}} />

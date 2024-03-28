@@ -13,11 +13,11 @@ export class TimelineActivity {
         row.activity.usedPieces,
         row.activity.generatedPieces,
       ]);
-      pieces = pieces.map((pieces) => pieces.toArray());
+      pieces = pieces.map((pieces) => pieces.slice());
       pieces = pieces.flat();
-      let proofingActivities = pieces.mapBy('proofingActivitiesUsedBy');
+      let proofingActivities = pieces.map((a) => a.proofingActivitiesUsedBy);
       proofingActivities = await Promise.all(proofingActivities);
-      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.toArray());
+      proofingActivities = proofingActivities.map((proofingActivities) => proofingActivities.slice());
       proofingActivities = proofingActivities.flat();
       row.canDeletePieces = proofingActivities.length === 0;
     }
@@ -66,13 +66,13 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       'publications.publication.translations'
     );
 
-    const requestActivities = await this.store.query('request-activity', {
+    const requestActivities = await this.store.queryAll('request-activity', {
       'filter[translation-subcase][:id:]': this.translationSubcase.id,
       include: 'email,used-pieces,used-pieces.file',
       sort: '-start-date',
     });
 
-    const translationActivities = await this.store.query(
+    const translationActivities = await this.store.queryAll(
       'translation-activity',
       {
         'filter[subcase][:id:]': this.translationSubcase.id,
@@ -91,7 +91,7 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
       ...requestActivities.map((request) => TimelineActivity.create(request)),
       ...translationActivities.map((translation) => TimelineActivity.create(translation)),
     ]);
-    rows = rows.sortBy('date').reverseObjects();
+    rows = rows.sort((a1, a2) => a1.date - a2.date).reverse();
     return rows;
   }
 

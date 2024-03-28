@@ -1,5 +1,5 @@
 {{#if this.data.isRunning}}
-  <div class="auk-loader" role="alert" aria-busy="true"></div>
+  <Auk::Loader />
 {{else}}
   {{#if this.data.value.signingHubUrl}}
     <AuPill
@@ -15,7 +15,8 @@
       @icon="sign" 
       @skin={{this.skin}}
       @route={{if (and this.isClickable this.data.value.route) this.data.value.route}}
-      >
+      @models={{if (and this.isClickable this.data.value.models) this.data.value.models}}
+    >
       {{this.data.value.status.label}}
     </AuPill>
   {{/if}}

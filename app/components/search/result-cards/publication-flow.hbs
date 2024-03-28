@@ -1,0 +1,63 @@
+<AuCard
+  @shadow={{true}}
+  @size="small"
+  class="result-card"
+  as |card|
+>
+  <card.header>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      <p
+        class="au-u-para-small au-u-muted au-u-medium"
+        data-test-route-search-result-cards-publication-flow-date
+      >
+        {{date @sessionDate}}
+      </p>
+    </div>
+    <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
+      {{#if @decisionmakingFlowId}}
+        <AuLink
+          class="au-u-padding-none card-link"
+          @route="cases.case.subcases"
+          @model={{@decisionmakingFlowId}}
+        >
+          <span
+            class="card-link"
+            data-test-route-search-result-cards-publication-flow-shorttitle
+          >
+            <SanitizeHtml
+              @raw={{true}}
+              @value={{or @shortTitle @title}}
+            />
+          </span>
+        </AuLink>
+      {{else}}
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{or @shortTitle @title}}
+        />
+      {{/if}}
+    </AuHeading>
+  </card.header>
+  <card.footer>
+    <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+      {{#if @status}}
+        <div
+          class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center"
+          data-test-route-search-result-cards-publication-flow-status
+        >
+          <Auk::StatusPill
+            @step={{@statusPillStep}}
+            @status={{@statusPillKey}}
+          >
+            {{@status.label}}
+          </Auk::StatusPill>
+        </div>
+      {{/if}}
+      {{#if @modifiedDate}}
+        <p class="au-u-para-small au-u-muted au-u-medium">
+          {{t "last-edited"}}: {{date @modifiedDate}}
+        </p>
+      {{/if}}
+    </div>
+  </card.footer>
+</AuCard>

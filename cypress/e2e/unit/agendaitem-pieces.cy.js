@@ -2,10 +2,10 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
+import appuniversum from '../../selectors/appuniversum.selectors';
 
 context('Tests of pieces on agendaitems', () => {
   beforeEach(() => {
@@ -45,21 +45,21 @@ context('Tests of pieces on agendaitems', () => {
       .contains('VR 2020 1212 DOC.0001-2BIS');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.clickReverseTab('Documenten');
-    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
-    cy.get(document.documentCard.card).should('have.length', 2);
-    cy.get(document.documentCard.name.value).eq(0)
-      .contains('VR 2020 1212 DOC.0001-1');
-    cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
-    // after delete on subcase view the agendaitem pieces are correct
-    cy.get(document.documentCard.card).should('have.length', 2);
+    // TODO KAS-4529 selector no longer exists, batchedit is gone. No longer possible to remove last piece from subcase views
+    // cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
+    // cy.get(document.documentCard.card).should('have.length', 2);
+    // cy.get(document.documentCard.name.value).eq(0)
+    //   .contains('VR 2020 1212 DOC.0001-1');
+    // cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
+    // // after delete on subcase view the agendaitem pieces are correct
+    // cy.get(document.documentCard.card).should('have.length', 2);
   });
 
   it('should test deleting a BIS from document viewer after opening document directly', () => {
     cy.intercept('GET', '/pieces/62823C417471A1FC25E6DB61/next-piece').as('getNextPiece');
     cy.visit('/document/62823C417471A1FC25E6DB61');
     cy.wait('@getNextPiece');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     // can't delete previous version
     cy.get(document.previewDetailsTab.delete).should('not.exist');
     cy.get(document.documentPreviewSidebar.tabs.versions).click();
@@ -81,7 +81,7 @@ context('Tests of pieces on agendaitems', () => {
       .wait('@deleteFile')
       .wait('@deletePiece')
       .wait('@restoreFile');
-    cy.get(auk.loader).should('not.exist');
+    cy.get(appuniversum.loader).should('not.exist');
     cy.visitAgendaWithLink('/vergadering/62823C647471A1FC25E6DB64/agenda/c67b5fd0-d510-11ec-8327-9b7fa945c1fc/agendapunten/c6aea4d0-d510-11ec-8327-9b7fa945c1fc/documenten');
     cy.get(document.documentCard.name.value).eq(1)
       .contains('VR 2020 1212 DOC.0001-2.pdf');

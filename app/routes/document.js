@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from "@ember/object";
-import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
@@ -20,7 +19,7 @@ export default class DocumentRoute extends Route {
   isSigning = false;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   async model(params) {
@@ -47,11 +46,10 @@ export default class DocumentRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
 
-    const signaturesEnabled = !!ENV.APP.ENABLE_SIGNATURES;
     const canSign = this.currentSession.may('manage-signatures');
 
     if (this.isSigning) {
-      if (signaturesEnabled && canSign) {
+      if (canSign) {
         controller.tab = this.intl.t('signatures');
       }  else {
         controller.tab = 'details';

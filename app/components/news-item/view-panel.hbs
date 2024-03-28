@@ -9,7 +9,9 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right" as |Group|>
-        <Group.Item>
+        <Group.Item
+          class="auk-o-flex auk-o-flex--vertical-center"
+        >
           {{#if @newsItem.inNewsletter}}
             <AuPill @skin="default" @icon="visible">
               {{t "on-the-website"}}
@@ -20,7 +22,9 @@
             </AuPill>
           {{/if}}
         </Group.Item>
-        <Group.Item>
+        <Group.Item
+          class="auk-o-flex auk-o-flex--vertical-center"
+        >
           {{#if @newsItem.finished}}
             <AuPill @skin="success">
               {{t "finished"}}
@@ -35,10 +39,12 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
-    <AuContent data-test-agendaitem-news-item-content>
+    {{#if this.proposalText}}
       <p class="au-u-italic">
         {{this.proposalText}}
       </p>
+    {{/if}}
+    <AuContent class="{{if this.proposalText 'au-u-margin-top-small'}}" data-test-agendaitem-news-item-content>
       <SanitizeHtml
         class="auk-u-overflow-wrap-anywhere"
         @raw={{true}}

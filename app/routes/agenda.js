@@ -5,10 +5,11 @@ import { set } from '@ember/object';
 export default class AgendaRoute extends Route {
   @service('session') simpleAuthSession;
   @service agendaService;
+  @service router;
   @service store;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
   }
 
   async model(params) {
@@ -20,7 +21,7 @@ export default class AgendaRoute extends Route {
     const agenda = await this.store.findRecord('agenda', agendaId, {
       reload: true,
     });
-    const reverseSortedAgendas = await this.store.query('agenda', {
+    const reverseSortedAgendas = await this.store.queryAll('agenda', {
       'filter[created-for][:id:]': meetingId,
       sort: '-serialnumber',
       include: 'status',
@@ -35,6 +36,12 @@ export default class AgendaRoute extends Route {
 
   async afterModel(model) {
     await this.loadChangesToAgenda(model.agenda);
+  }
+
+  redirect(_model, transition) {
+    if (transition.to.name === 'agenda.index') {
+      this.router.transitionTo('agenda.agendaitems')
+    }
   }
 
   async loadChangesToAgenda(agenda) {
