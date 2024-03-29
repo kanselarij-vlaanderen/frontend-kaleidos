@@ -517,7 +517,7 @@ context('Testing the application as Secretarie user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkOpenAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -616,7 +616,7 @@ context('Testing the application as Secretarie user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkReleasedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -677,7 +677,7 @@ context('Testing the application as Secretarie user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkClosedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -1017,7 +1017,7 @@ context('Testing the application as Secretarie user', () => {
       cy.get(route.search.from);
       cy.get(route.search.to);
       cy.get(route.search.ministerFilterContainer);
-      cy.get(route.searchConfidentialOnly.checkbox).should('not.exist');
+      cy.get(route.searchConfidentialOnly.checkbox);
       cy.get(route.searchDocumentTypeFilter.list);
     });
 

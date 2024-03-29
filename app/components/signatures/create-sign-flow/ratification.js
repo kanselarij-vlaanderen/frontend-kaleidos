@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { TrackedArray } from 'tracked-built-ins'
 
 export default class SignaturesCreateSignFlowRatificationComponent extends Component {

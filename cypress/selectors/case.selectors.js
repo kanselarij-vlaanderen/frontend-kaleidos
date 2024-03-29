@@ -26,6 +26,7 @@ const selectors = {
     mandateeSelectorPanel: {
       container: '[data-test-mandatee-selector-panel-container]',
       selectedMinister: '[data-test-mandatee-selector-panel-selected-minister]',
+      selectedMinisterName: '[data-test-mandatee-selector-panel-selected-minister-name]',
       submitterRadio: '[data-test-mandatee-selector-panel-submitter-radio]',
     },
     governmentAreasPanel: '[data-test-government-areas-panel]',
@@ -88,6 +89,11 @@ const selectors = {
 
   subcaseTimeline: {
     item: '[data-test-subcase-timeline-item]',
+  },
+
+  // subcase-description
+  subcaseBekrachtigingDescription: {
+    panel: '[data-test-subcase-bekrachtiging-description-panel]',
   },
 
   // subcase-description

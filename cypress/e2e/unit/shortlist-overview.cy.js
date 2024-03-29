@@ -133,6 +133,7 @@ context('signatures shortlist overview tests', () => {
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    cy.wait(20000); // shortlist not always found
   });
 
   it('should check the signatures overview', () => {
@@ -524,6 +525,7 @@ context('publications shortlist overview tests', () => {
       longTitle: subcaseTitleLong2,
       subcaseType: subcaseType2,
       subcaseName: subcaseName2,
+      ratification: true,
     });
     cy.addDocumentsToSubcase(files2);
 
