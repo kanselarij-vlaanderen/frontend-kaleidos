@@ -22,8 +22,13 @@ function createCase(shortTitle) {
   cy.log('createCase');
   cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
   cy.visit('/dossiers?aantal=2');
-  cy.get(appuniversum.loader);
-  cy.get(appuniversum.loader).should('not.exist');
+  // page can be blank for awhile, unsure why
+  cy.get(appuniversum.loader, {
+    timeout: 60000,
+  });
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 60000,
+  });
 
   cy.get(cases.casesHeader.addCase).click();
   cy.get(cases.newCase.shorttitle).type(shortTitle);

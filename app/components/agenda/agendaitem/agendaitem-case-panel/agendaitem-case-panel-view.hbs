@@ -103,11 +103,11 @@
         <div class="auk-u-mt-2" data-test-agendaitem-titles-news-item>
           {{#if @newsItem}}
             {{#if @newsItem.inNewsletter}}
-              <AuPill @size="small" @skin="border" @icon="website">
+              <AuPill data-test-agendaitem-titles-on-the-website @size="small" @skin="border" @icon="website">
                 {{t "on-the-website"}}
               </AuPill>
             {{else}}
-              <AuPill @size="small" @skin="border">
+              <AuPill data-test-agendaitem-titles-not-on-the-website @size="small" @skin="border">
                 {{t "not-on-the-website"}}
               </AuPill>
             {{/if}}

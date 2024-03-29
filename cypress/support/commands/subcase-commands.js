@@ -83,6 +83,7 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
   cy.get(cases.subcaseDescription.edit).click();
 
   if (confidentialityChange) {
+    cy.wait(2000); // Cypress too fast? on save we don't pick up that the toggle happened
     cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
