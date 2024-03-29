@@ -9,6 +9,7 @@ const selectors = {
   agendaitemNav: {
     caseTab: '[data-test-agendaitem-nav-case-tab]',
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
+    ratificationTab: '[data-test-agendaitem-nav-ratification-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     tabs: '[data-test-agendaitem-nav-tabs]',
@@ -97,6 +98,7 @@ const selectors = {
     downloadDecisions: '[data-test-agenda-actions-download-decisions]',
     generateSignedDecisionsBundle: '[data-test-agenda-actions-generate-signed-decisions-bundle]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
+    markDecisionsForSigning: '[data-test-agenda-actions-mark-decisions-sor-signing]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
     planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
     approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems]',

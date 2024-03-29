@@ -88,6 +88,7 @@
   {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
     <AuHr />
     <AuButton
+      data-test-agenda-actions-mark-decisions-sor-signing
       @skin="link"
       {{on "click" this.markDecisionsForSigning}}
       role="menuitem"
