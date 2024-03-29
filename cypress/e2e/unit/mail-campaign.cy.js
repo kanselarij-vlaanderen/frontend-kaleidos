@@ -78,12 +78,21 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
 
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
 
+    // create case and subcases
     cy.createCase('Cypress test: nieuwsbrief');
-
-    // create subcase.
-    cy.addSubcase(type1, shortSubcaseTitle1);
-    cy.addSubcase(type2, shortSubcaseTitle2);
-    cy.addSubcase(type2, shortSubcaseTitle3);
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: type1,
+      newShortTitle: shortSubcaseTitle1,
+    });
+    cy.addSubcaseViaModal({
+      agendaitemType: type2,
+      newShortTitle: shortSubcaseTitle2,
+    });
+    cy.addSubcaseViaModal({
+      agendaitemType: type2,
+      newShortTitle: shortSubcaseTitle3,
+    });
     cy.wait(5000);
 
     // create agendaitem

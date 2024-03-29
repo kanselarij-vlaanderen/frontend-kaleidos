@@ -69,11 +69,14 @@ context('Propagation to other graphs', () => {
       }
     ];
     cy.createCase(caseTitle);
-    cy.addSubcase('Nota',
-      subcaseTitle1,
-      'Cypress test voor het propageren naar overheid',
-      'Principiële goedkeuring',
-      'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.addSubcaseViaModal({
+      newCase: true,
+      agendaitemType: 'Nota',
+      newShortTitle: subcaseTitle1,
+      longTitle: 'Cypress test voor het propageren naar overheid',
+      subcaseType: 'principiële goedkeuring',
+      subcaseName: 'Principiële goedkeuring m.h.o. op adviesaanvraag',
+    });
     cy.createAgenda(null, agendaDate, 'Zaal oxford bij Cronos Leuven');
 
     cy.openAgendaForDate(agendaDate);
@@ -143,16 +146,13 @@ context('Propagation to other graphs', () => {
   it('Test as Minister', () => {
     cy.login('Minister');
     cy.searchCase(caseTitle);
-    cy.openSubcase(0);
     cy.url().should('contain', '/deeldossiers/');
+    cy.get(cases.subcaseDescription.panel);
     cy.get(cases.subcaseDescription.edit).should('not.exist');
-    cy.get(cases.subcaseTitlesView.edit).should('not.exist');
     cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
     cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
-    cy.clickReverseTab('Documenten');
-    cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
-    cy.get(route.subcaseDocuments.add).should('not.exist');
-    cy.get(document.linkedDocuments.add).should('not.exist');
+    cy.get(route.subcase.add).should('not.exist');
+    cy.get(document.linkedDocumentsPanel.add).should('not.exist');
   });
 
   it('Test as Overheidsorganisatie', () => {

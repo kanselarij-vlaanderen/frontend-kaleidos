@@ -237,7 +237,7 @@ context('Search tests', () => {
     cy.logout();
   });
 
-  it.only('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
+  it('Should change the amount of elements to every value in selectbox in publicaties search view', () => {
     visitPublicationSearch();
     const options = [5, 10, 20, 25, 50, 100, 200];
     const defaultSize = options[2];
@@ -305,6 +305,7 @@ context('Search tests', () => {
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fieldsWithDoubleDates.number)
       .click();
     cy.addPublicationMandatee(mandatee3);
+    cy.wait(60000); // wait for indexing
 
     // add urgent !only when not running publication-new-features.spec!
     // visitPublications();

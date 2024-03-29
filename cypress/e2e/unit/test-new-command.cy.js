@@ -8,6 +8,7 @@
 // import utils from '../../selectors/utils.selectors';
 // import auk from '../../selectors/auk.selectors';
 // import appuniversum from '../../selectors/appuniversum.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 context('testing new add subcase command', () => {
   beforeEach(() => {
@@ -25,14 +26,14 @@ context('testing new add subcase command', () => {
     const agendaType = 'Nota';
     const newShortTitle = 'Test ShortTitle';
     const longTitle = 'Test Longtitle';
-    const step = 'principiële goedkeuring';
-    const stepName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const subcaseType = 'principiële goedkeuring';
+    const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     const mandatee1 = {
-      name: 'Ben Weyts',
+      fullName: mandateeNames.current.first.fullName,
       submitter: false,
     };
     const mandatee2 = {
-      name: 'Hilde Crevits',
+      fullName: mandateeNames.current.second.fullName,
       submitter: true,
     };
     const mandatees = [mandatee1, mandatee2];
@@ -47,7 +48,7 @@ context('testing new add subcase command', () => {
       fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
     };
     const domains = [domain1, domain2];
-    const files = [
+    const files1 = [
       {
         folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'Nota',
       },
@@ -56,10 +57,24 @@ context('testing new add subcase command', () => {
       }
     ];
 
+    const subcase1 = {
+      agendaitemType: agendaType,
+      confidential: true,
+      newShortTitle: newShortTitle,
+      longTitle: longTitle,
+      subcaseType: subcaseType,
+      subcaseName: subcaseName,
+      mandatees: mandatees,
+      domains: domains,
+      documents: files1,
+      formallyOk: true,
+      agendaDate: agendaDateFormatted,
+    };
+
     cy.createAgenda('Ministerraad', agendaDate, 'test add newsubcase');
 
-    cy.visit('dossiers/655B933CD500B784623C3EAA/deeldossiers');
+    cy.visitCaseWithLink('dossiers/655B933CD500B784623C3EAA/deeldossiers');
 
-    cy.addSubcaseViaModal(agendaType, true, newShortTitle, longTitle, step, stepName, mandatees, domains, files, true, agendaDateFormatted);
+    cy.addSubcaseViaModal(subcase1);
   });
 });

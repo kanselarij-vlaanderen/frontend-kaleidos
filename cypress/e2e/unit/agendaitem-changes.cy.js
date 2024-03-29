@@ -106,7 +106,13 @@ context('Agendaitem changes tests', () => {
   it('should add an agendaitem of type remark and highlight it as added', () => {
     const caseLink = 'dossiers/E14FB4CE-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers';
     cy.visit(caseLink);
-    cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'Principiële goedkeuring', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
+    cy.addSubcaseViaModal({
+      agendaitemType: 'Mededeling',
+      newShortTitle: subcaseTitle3,
+      longTitle: `${subcaseTitle3} lange titel`,
+      subcaseType: 'principiële goedkeuring',
+      subcaseName: 'Principiële goedkeuring m.h.o. op adviesaanvraag',
+    });
     cy.visitAgendaWithLink(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem added since current agenda should show

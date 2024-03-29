@@ -12,7 +12,7 @@
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <div class="auk-u-my">
+        <div data-test-new-subcase-form-title-container class="auk-u-my">
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
@@ -33,7 +33,7 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<div class="auk-scroll-wrapper">
+<div class="auk-scroll-wrapper au-u-flex-item--fill">
   <div class="auk-scroll-wrapper__body">
     <div class="au-o-region">
       <div class="au-o-layout">
@@ -72,6 +72,7 @@
                   {{#if @latestSubcase}}
                     <AuFormRow>
                       <AuButton
+                        data-test-new-subcase-form-clone-previous
                         @skin="secondary"
                         @icon="copy-paste"
                         {{on "click" this.copySubcase}}
@@ -223,6 +224,7 @@
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
       <AuButton
+        data-test-new-subcase-form-cancel
         @skin="naked"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
         {{on "click" (perform this.cancelForm)}}
@@ -245,6 +247,7 @@
   <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
     @onConfirm={{perform this.createSubcase}}
+    @showSaveWithoutAgenda={{true}}
   />
 {{/if}}
 

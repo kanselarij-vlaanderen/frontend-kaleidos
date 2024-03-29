@@ -1,41 +1,64 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
-
-  queryParams = {
-    page: {
-      refreshModel: true,
-      as: 'pagina',
-    },
-    size: {
-      refreshModel: true,
-      as: 'aantal',
-    },
-  };
+  @service currentSession;
 
   beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case');
   }
 
-  async model(params) {
-    const subcase = this.modelFor('cases.case.subcases.subcase');
-    // For showing the history of subcases within this route, we need a list of subcases without the current model
-    //  We want to sort descending on date the subcase was concluded.
-    //  In practice, reverse sorting on created will be close
-    const siblingSubcases = await this.store.query('subcase', {
-      'filter[decisionmaking-flow][:id:]': this.decisionmakingFlow.id,
-      page: {
-        number: params.page,
-        size: params.size,
-      },
-      sort: '-created',
+  async model() {
+    const { decisionmakingFlow, subcase } = this.modelFor('cases.case.subcases.subcase');
+    const _case = await decisionmakingFlow.case;
+
+     // Get any submission that is not yet on a meeting
+     const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': subcase.id,
+      'filter[:has-no:agenda-activity]': true,
+      include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
+    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    // Get the submission from latest meeting if applicable
+    const agendaActivities = await subcase.agendaActivities;
+    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    if (latestActivity) {
+      this.latestMeeting = await this.store.queryOne('meeting', {
+        'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
+        sort: '-planned-start',
+      });
+      const submissionActivitiesFromLatestMeeting = await this.store.query('submission-activity', {
+        'filter[subcase][:id:]': subcase.id,
+        'filter[agenda-activity][:id:]': latestActivity.id,
+        include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+      });
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+    }
+
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
+
+    let sortedPieces;
+    if (this.latestMeeting?.isPreKaleidos) {
+      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
+    await subcase.type;
 
     return {
+      decisionmakingFlow,
+      _case,
       subcase,
-      siblingSubcases,
+      pieces: sortedPieces,
     };
   }
 
@@ -57,6 +80,20 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       this.agenda = await this.meeting?.belongsTo('agenda').reload();
     }
     await model.subcase.governmentAreas;
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      await model.subcase.confidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
+
+    if (this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true;
+    } else {
+      const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
+      const documentPublicationStatus = await documentPublicationActivity?.status;
+      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    }
   }
 
   async setupController(controller) {
@@ -67,5 +104,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     controller.meeting = this.meeting;
     controller.agenda = this.agenda;
     controller.governmentAreas = this.governmentAreas;
+    controller.documentsAreVisible = this.documentsAreVisible;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 }

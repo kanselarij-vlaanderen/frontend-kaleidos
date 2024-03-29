@@ -27,7 +27,7 @@ const {
 //     in order to distinguish people that should prepare the flow, effectively sign, etc
 // - manage-only-specific-signatures: allow the profile to only create signing flows for their own mandatee.
 // - view-all-ongoing-signatures: allow the profile to view ongoing sign-flows from other creators
-// - remove-signatures: Remove the signed piece and all data of a sign-flow 
+// - remove-signatures: Remove the signed piece and all data of a sign-flow
 // - search-publication-flows
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
@@ -45,6 +45,7 @@ const {
 // - manage-alerts: Manage systeem notifications to be shown in the application
 // - manage-minutes: Create and update minutes for a meeting
 // - manage-secretary-signatures: Create and follow-up sign-flows for documents to be signed by secretaries
+// - add-past-mandatees: Adding past mandatees on subcases
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
@@ -54,6 +55,7 @@ const {
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
 // - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
+// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 
 const groups = [
@@ -72,6 +74,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -87,13 +90,16 @@ const groups = [
       'manage-alerts',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'send-cases-to-vp',
       'impersonate-users',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -108,6 +114,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -120,11 +127,14 @@ const groups = [
       'manage-themis-publications',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -139,6 +149,7 @@ const groups = [
       'manage-agenda-versions',
       'manage-agendaitems',
       'manage-decisions',
+      'manage-ratification',
       'manage-cases',
       'manage-meetings',
       'manage-documents',
@@ -149,11 +160,13 @@ const groups = [
       'manage-themis-publications',
       'manage-minutes',
       'manage-secretary-signatures',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
       'search-confidential-cases',
-      'search-confidentnial-documents',
+      'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
   },
@@ -169,8 +182,10 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
     ]
   },
   {
@@ -183,8 +198,10 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -195,6 +212,7 @@ const groups = [
       'manage-signatures',
       'view-document-version-info',
       'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -208,6 +226,7 @@ const groups = [
       'view-documents-before-release',
       'view-only-specific-confidential-documents',
       'send-only-specific-cases-to-vp',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
@@ -217,6 +236,7 @@ const groups = [
     permissions: [
       'view-document-version-info',
       'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
     ],
   },
   {
