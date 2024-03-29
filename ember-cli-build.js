@@ -81,5 +81,30 @@ module.exports = function (defaults) {
     destDir: '/assets/fonts'
   });
 
-  return app.toTree([iconAssets, fontAssets]);
+  // return app.toTree([iconAssets, fontAssets]);
+  const { Webpack } = require('@embroider/webpack');
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticHelpers: true,
+    staticModifiers: true,
+    staticComponents: true,
+    splitAtRoutes: ['route.name'], // can also be a RegExp
+    extraPublicTrees: [iconAssets, fontAssets],
+    packagerOptions: {
+      webpackConfig: {
+        node: {
+          global: true,
+          __filename: true,
+          __dirname: true,
+        },
+        resolve: {
+          fallback: {
+            stream: require.resolve('stream-browserify'),
+            crypto: require.resolve('crypto-browserify'),
+          }
+        },
+      }
+    }
+  });
 };
