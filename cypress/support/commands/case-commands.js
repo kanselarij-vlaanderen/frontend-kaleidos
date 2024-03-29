@@ -120,6 +120,7 @@ function searchCase(caseTitle) {
  *    formallyOk: Boolean,
  *    agendaDate: String,
  *    clonePrevious: Boolean,
+ *    ratification: Boolean,
  *  }[]
  * } subcase
  * @returns {Promise<String>} the id of the created subcase
@@ -204,19 +205,24 @@ function addSubcaseViaModal(subcase) {
 
   // add mandatees
   if (subcase.mandatees) {
-    let count = 0;
-    subcase.mandatees.forEach((mandatee) => {
-      cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).find(appuniversum.checkbox)
-        .contains(mandatee.fullName)
-        .click();
-      if (mandatee.submitter && count > 0) {
-        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister).contains(mandatee.fullName)
-          .parent()
-          .find(appuniversum.radio)
+    if (subcase.ratification) {
+      cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).should('not.exist');
+      cy.get(auk.emptyState.message).contains('Niet van toepassing');
+    } else {
+      let count = 0;
+      subcase.mandatees.forEach((mandatee) => {
+        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).find(appuniversum.checkbox)
+          .contains(mandatee.fullName)
           .click();
-      }
-      count++;
-    });
+        if (mandatee.submitter && count > 0) {
+          cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinisterName).contains(mandatee.fullName)
+            .parents(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister)
+            .find(appuniversum.radio)
+            .click();
+        }
+        count++;
+      });
+    }
   }
 
   // add domains
@@ -288,7 +294,11 @@ function addSubcaseViaModal(subcase) {
     });
   }
   // check if we have transitioned to the detail page (Do we want to check/return the number from the responsebody?)
-  cy.get(cases.subcaseDescription.panel);
+  if (subcase.ratification) {
+    cy.get(cases.subcaseBekrachtigingDescription.panel);
+  } else {
+    cy.get(cases.subcaseDescription.panel);
+  }
   cy.log('/addSubcaseViaModal');
 }
 

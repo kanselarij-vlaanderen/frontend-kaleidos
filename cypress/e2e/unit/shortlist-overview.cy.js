@@ -525,6 +525,7 @@ context('publications shortlist overview tests', () => {
       longTitle: subcaseTitleLong2,
       subcaseType: subcaseType2,
       subcaseName: subcaseName2,
+      ratification: true,
     });
     cy.addDocumentsToSubcase(files2);
 

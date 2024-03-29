@@ -154,7 +154,6 @@ context('Decision postponing tests', () => {
       .click();
     cy.get(agenda.agendaitemControls.action.postponeRevert).forceClick();
     cy.wait('@patchActivity2');
-    // TODO does this spy work?
     cy.wait(2000)
       .then(() => expect(spy).not.to.have.been.called);
     cy.get(auk.modal.container).should('not.exist');
