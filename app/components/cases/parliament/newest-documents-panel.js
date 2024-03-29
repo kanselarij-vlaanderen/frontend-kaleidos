@@ -14,7 +14,6 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
   }
 
   loadData = task(async () => {
-    // Hier wil ik alle submittedPieces van een parliamentFlow opvragen
     const subcase = await this.args.parliamentFlow.parliamentSubcase;
     const submissionActivities = await this.store.queryAll(
       'parliament-submission-activity',

@@ -10,11 +10,6 @@ export default class CasesCaseSubcasesRoute extends Route {
     //  We want to sort descending on date the subcase was concluded.
     //  In practice, reverse sorting on created will be close
     const { decisionmakingFlow, subcases } = this.modelFor('cases.case');
-    const queryParams = {
-      'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
-      sort: 'created',
-      include: 'type',
-    };
     return {
       decisionmakingFlow,
       subcases,
