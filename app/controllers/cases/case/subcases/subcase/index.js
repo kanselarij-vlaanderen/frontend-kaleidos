@@ -11,9 +11,7 @@ import {
   all,
   timeout
 } from 'ember-concurrency';
-import {
-  addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
-} from 'frontend-kaleidos/utils/documents';
+import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -186,50 +184,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
     // we don't need to reload subcase.agendaActivities nor subcase.submissionActivities
     // since we query them from the backend on addition of new pieces
-  }
-
-  /**
-   * When deleting a piece with multiple versions, we have to ensure that the agendaitem on the latest agenda is updated.
-   * This will only work correctly if only 1 agendaitem version needs to be corrected.
-   * this will not yield the correct results if multiple agenda versions (or with multiple agenda-activities) need corrections.
-   * @param {Piece} deletedPiece - the deleted piece from the store (after a destroyRecord)
-   */
-  @action
-  async setPreviousPiecesFromAgendaitem(deletedPiece) {
-    const documentContainer = await deletedPiece.documentContainer;
-    if (documentContainer) {
-      // deletedPiece.previousPiece might not work after delete, lastPiece query should return the same piece.
-      const lastPiece = await this.store.queryOne('piece', {
-        'filter[document-container][:id:]': documentContainer.id,
-        sort: '-created',
-      })
-      // only continue if there is a piece left in the container (a container could have 0 pieces left)
-      if (lastPiece) {
-        const agendaActivities = await this.model.subcase.agendaActivities;
-        const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
-        if (latestActivity) {
-          const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
-          const latestMeeting = await this.store.queryOne('meeting', {
-            'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
-            sort: '-planned-start',
-          });
-          const agendas = await latestMeeting.agendas;
-          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
-          const latestAgenda = sortedAgendas.firstObject;
-          for (let index = 0; index < agendaitems.length; index++) {
-            const agendaitem = agendaitems.objectAt(index);
-            const agenda = await agendaitem.agenda;
-
-            if (agenda.id === latestAgenda.id) {
-              await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
-              // TODO: make sure we're not loading stale cache
-              await agendaitem.hasMany('pieces').reload();
-              break;
-            }
-          }
-        }
-      }
-    }
   }
 
   @task
