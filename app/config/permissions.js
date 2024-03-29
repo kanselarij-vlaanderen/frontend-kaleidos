@@ -165,7 +165,7 @@ const groups = [
       'view-documents-before-release',
       'view-decisions-before-release',
       'search-confidential-cases',
-      'search-confidentnial-documents',
+      'search-confidential-documents',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
     ]
