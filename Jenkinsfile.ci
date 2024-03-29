@@ -99,9 +99,9 @@ pipeline {
       steps {
         // sh "npx cypress run"
         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-        // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
         // run specific specs example
-        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/unit/decision.cy.js'"
+        // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/unit/decision.cy.js'"
       }
     }
   }
