@@ -41,7 +41,9 @@ const selectors = {
 
   // agenda-detail/sidebar-item
   agendaDetailSidebarItem: {
+    container: '[data-test-agenda-detail-sidebar-item-container]',
     shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
+    inNewsletter: '[data-test-agenda-detail-sidebar-item-in-newsletter]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: {
       formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--check',
@@ -183,6 +185,8 @@ const selectors = {
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
     newsItem: '[data-test-agendaitem-titles-news-item]',
+    onTheWebsite: '[data-test-agendaitem-titles-on-the-website]',
+    notOnTheWebsite: '[data-test-agendaitem-titles-not-on-the-website]',
   },
 
   // agendaitem-titles-edit

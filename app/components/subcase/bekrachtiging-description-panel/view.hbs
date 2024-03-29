@@ -1,0 +1,80 @@
+<div {{did-update (perform this.loadAgendaData)}}>
+  <Auk::Panel data-test-subcase-bekrachtiging-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                {{t "ratification-overview"}}
+              </h4>
+              {{#if @subcase.confidential}}
+                <AuPill @size="small" @skin="warning" @icon="lock-closed">{{t
+                    "limited-access"
+                  }}</AuPill>
+              {{/if}}
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#if (user-may "manage-cases")}}
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <AuButton
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" @onClickEdit}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        {{/if}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <div
+        class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center"
+      >
+        <AuHeading @level="4" @skin="4">
+          {{capitalize @subcase.shortTitle}}
+        </AuHeading>
+      </div>
+      {{#if @subcase.title}}
+        <p>{{capitalize @subcase.title}}</p>
+      {{/if}}
+      {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity)}}
+        <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
+      {{/if}}
+    </Auk::Panel::Body>
+    <Auk::Panel::Body>
+      <div class="au-o-grid au-o-grid--small au-u-1-1">
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
+          {{#if this.loadAgendaData.isRunning}}
+            <Auk::Loader />
+          {{else if this.canShowDecisionStatus}}
+            <Decision::DecisionResultPill
+              @decisionResultCode={{this.latestDecisionActivity.decisionResultCode}}
+            />
+          {{else}}
+            {{t "not-yet-decided"}}
+          {{/if}}
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">
+            {{capitalize (t "remark")}}
+          </AuHeading>
+          {{#if this.loadComments.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            {{#each this.comments as |comment|}}
+              <AuHelpText @skin="secondary">{{comment}}</AuHelpText>
+            {{else}}
+            -
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

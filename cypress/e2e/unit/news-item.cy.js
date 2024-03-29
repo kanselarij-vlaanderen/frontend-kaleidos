@@ -28,7 +28,7 @@ function changeSubcaseType(subcaseLink, type) {
   cy.intercept('PATCH', '/agendas/**').as(`patchAgenda${randomInt}`);
   cy.intercept('DELETE', '/news-items/**').as(`deleteNewsItem${randomInt}`);
   cy.intercept('POST', '/news-items').as(`postNewsItem${randomInt}`);
-  cy.get(cases.subcaseDescriptionEdit.save).click();
+  cy.get(cases.subcaseDescriptionEdit.actions.save).click();
   cy.wait(`@patchSubcase${randomInt}`);
   cy.wait(`@patchAgendaitem${randomInt}`);
   cy.wait(`@patchAgenda${randomInt}`);
@@ -485,6 +485,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       const subcaseTitleShort = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
       cy.visit(newsletterLink);
+      // If we only get 1, something happened here
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
 
       cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
       cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)

@@ -211,6 +211,7 @@ context('New search views tests', () => {
       // TODO check if changing document title shows in result?
 
       // check resultcard
+      // TODO KAS-4529 is this dependent on document-version.cy?
       cy.get(route.documentResultCard.date).contains('08-04-2020');
       // TODO check shorttitle?
       cy.get(route.documentResultCard.agendaItem).contains('Geüpload in agendapunt');

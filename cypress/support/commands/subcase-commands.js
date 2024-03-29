@@ -57,19 +57,11 @@ function getTranslatedMonth(month) {
  * @memberOf Cypress.Chainable#
  * @name openSubcase
  * @function
- * @param {number} [index] The list index of the subcase to select, default 0
- * @param {string} - the short title to check if a new subcase is fully created before trying to open the latest one
+ * @param {number} [index] The list index of the subcase to select in the side nav, default 0
  */
-function openSubcase(index = 0, shortTitle) {
+function openSubcase(index = 0) {
   cy.log('openSubcase');
-  // cy.intercept('GET', '/subcases?**').as('getSubcases');
-  // cy.wait('@getSubcases', { timeout: 12000 });
-  cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
-  if (shortTitle) {
-    cy.get(cases.subcaseProcess.shorttitle).should('contain', shortTitle);
-  }
-  cy.get(cases.subcaseItem.container).eq(index)
-    .find(cases.subcaseItem.link)
+  cy.get(cases.subcaseSideNav.subcase).eq(index)
     .click();
   cy.log('/openSubcase');
 }
@@ -88,25 +80,26 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
   cy.log('changeSubcaseAccessLevel');
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get(cases.subcaseTitlesView.edit).click();
+  cy.get(cases.subcaseDescription.edit).click();
 
   if (confidentialityChange) {
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.wait(2000); // Cypress too fast? on save we don't pick up that the toggle happened
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
   }
   if (newShortTitle) {
-    cy.get(cases.subcaseTitlesEdit.shorttitle).click()
+    cy.get(cases.subcaseDescriptionEdit.shortTitle).click()
       .clear()
       .type(newShortTitle);
   }
   if (newLongTitle) {
-    cy.get(cases.subcaseTitlesEdit.title).click()
+    cy.get(cases.subcaseDescriptionEdit.title).click()
       .clear()
       .type(newLongTitle);
   }
 
-  cy.get(cases.subcaseTitlesEdit.actions.save)
+  cy.get(cases.subcaseDescriptionEdit.actions.save)
     .click();
   cy.wait('@patchSubcase');
   cy.log('/changeSubcaseAccessLevel');
@@ -195,36 +188,42 @@ function addAgendaitemMandatee(mandateeNamesSelector = mandateeNames.current.fir
  * @memberOf Cypress.Chainable#
  * @function
  * @param {date} agendaDate - The date of the agenda
- * @param {String} numberRep - The specific numberRep for the agenda you want to use
+ * @param {String} meetingKind - the kind of meeting
  */
-function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
+function proposeSubcaseForAgenda(agendaDate, kind) {
   cy.log('proposeSubcaseForAgenda');
-  cy.intercept('POST', '/meetings/*/submit').as('submitSubcaseOnMeeting');
-  const monthDutch = getTranslatedMonth(agendaDate.month());
-  let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-  if (numberRep) {
-    formattedDate = `${formattedDate} - ${numberRep}`;
-  }
-
-  cy.get(cases.subcaseHeader.showProposedAgendas).click();
-
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaData_${randomInt}`);
-  cy.intercept('GET', '/subcases?filter**decisionmaking-flow**').as(`loadSubcase_${randomInt}`);
-  cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
+  cy.intercept('POST', '/meetings/*/submit').as(`submitSubcaseOnMeeting_${randomInt}`);
+  const formattedDate = agendaDate.format('DD-MM-YYYY');
+
+  cy.get(cases.subcaseHeader.actionsDropdown)
+    .children(appuniversum.button)
     .click();
-  cy.get(cases.subcaseHeader.showProposedAgendas)
-    .should('not.exist');
-  cy.wait('@submitSubcaseOnMeeting', {
-    timeout: 24000,
+  cy.get(cases.subcaseHeader.actions.showProposedAgendas).forceClick();
+  // find the agenda in the list
+  if (kind) {
+    cy.get(cases.proposableAgendas.agendaRow).contains(kind,
+      {
+        matchCase: false,
+      })
+      .parents(cases.proposableAgendas.agendaRow)
+      .as('rows');
+  } else {
+    cy.get(cases.proposableAgendas.agendaRow).as('rows');
+  }
+  cy.get('@rows').children()
+    .contains(formattedDate)
+    .scrollIntoView()
+    .click();
+  cy.get(cases.proposableAgendas.placeOnAgenda).click();
+  cy.wait(`@submitSubcaseOnMeeting_${randomInt}`, {
+    timeout: 60000,
   });
-  // refresh happenss
-  cy.wait(`@loadAgendaData_${randomInt}`);
-  cy.wait(`@loadSubcase_${randomInt}`);
+  cy.get(cases.subcaseDescription.agendaLink, {
+    timeout: 60000,
+  });
   cy.get(appuniversum.loader).should('not.exist');
-  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item, {
-    timeout: 600000,
-  }); // when this succeeds the refresh happened
+  cy.get(cases.subcaseDescription.panel).find(cases.subcaseDescription.agendaLink);
   cy.log('/proposeSubcaseForAgenda');
 }
 
