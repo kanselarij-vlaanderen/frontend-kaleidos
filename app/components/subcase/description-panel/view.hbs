@@ -77,20 +77,29 @@
             <Auk::Loader />
           {{else if this.modelsOfMeetings}}
             {{#each this.modelsOfMeetings as |models| }}
-              {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
-                <AuLink
-                  data-test-subcase-description-agenda-link
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                    meeting.id
-                    agenda.id
-                    agendaitem.id
-                  }}
-                >
-                  {{! prettier-ignore}}
-                  {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                </AuLink>
-              {{/let}}
+              {{#if (not (has-next models this.modelsOfMeetings))}}
+                {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
+                  <AuLink
+                    data-test-subcase-description-agenda-link
+                    @route="agenda.agendaitems.agendaitem"
+                    @models={{array
+                      meeting.id
+                      agenda.id
+                      agendaitem.id
+                    }}
+                  >
+                    {{! prettier-ignore}}
+                    {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                  </AuLink>
+                  {{#if meeting.hasKindEP}}
+                    <AuPill
+                      @size="small"
+                    >
+                      {{meeting.kind.label}}
+                    </AuPill>
+                  {{/if}}
+                {{/let}}
+              {{/if}}
             {{/each}}
           {{else}}
             <p data-test-subcase-description-not-on-agenda>
@@ -105,9 +114,11 @@
                 <Auk::Loader />
               {{else if this.modelsOfMeetings}}
                 {{#each this.modelsOfMeetings as |models|}}
-                  {{#let (get models "0") as |meeting|}}
-                    {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                  {{/let}}
+                  {{#if (not (has-next models this.modelsOfMeetings))}}
+                    {{#let (get models "0") as |meeting|}}
+                      {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                    {{/let}}
+                  {{/if}}
                 {{/each}}
               {{else}}
                 {{t "no-number-yet"}}
@@ -127,6 +138,12 @@
               {{t "not-yet-decided"}}
             </p>
           {{/if}}
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
+          <p>
+            {{if @subcase.subcaseName @subcase.subcaseName '-'}}
+          </p>
         </div>
       </div>
     </Auk::Panel::Body>

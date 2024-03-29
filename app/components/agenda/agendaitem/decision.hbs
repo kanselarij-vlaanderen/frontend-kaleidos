@@ -1,0 +1,16 @@
+{{! @param {Agendaitem} agendaitem
+    @param {DecisionActivity} decisionAcitivity
+    @param {Object} agendaContext }}
+{{#if @agendaContext.meeting.isPreDigitalDecisions}}
+  <Agenda::Agendaitem::Decision::Legacy
+    @agendaitem={{@agendaitem}}
+    @decisionActivity={{@decisionActivity}}
+    @agendaContext={{@agendaContext}}
+  />
+{{else}}
+  <Agenda::Agendaitem::Decision::Digital
+    @agendaitem={{@agendaitem}}
+    @decisionActivity={{@decisionActivity}}
+    @agendaContext={{@agendaContext}}
+  />
+{{/if}}

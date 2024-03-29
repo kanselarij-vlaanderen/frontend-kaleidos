@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
@@ -142,7 +142,7 @@ export default class SignaturesRatificationsController extends Controller {
     const agendaitems = await treatment?.agendaitems;
     const agenda = await agendaitems[0]?.agenda;
     const meeting = await agenda?.meeting;
-    return meeting.plannedStart;
+    return meeting?.plannedStart;
   }
 
   getAgendaitem = async (pieceOrPromise) => {

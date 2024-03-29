@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -120,15 +120,16 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
-  return `
-  <h4 ${pagebreak}><u>${
-    agendaitem.number
-  }. ${generateBetreft(
+  const betreft = await generateBetreft(
     agendaitem.shortTitle,
     agendaitem.title,
     agendaitem.isApproval,
     sortedPieces,
-    subcase?.subcaseName).toUpperCase()}</u></h4>
+    subcase?.subcaseName);
+  return `
+  <h4 ${pagebreak}><u>${
+    agendaitem.number
+  }. ${betreft.toUpperCase()}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {

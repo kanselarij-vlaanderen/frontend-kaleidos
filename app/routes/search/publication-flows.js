@@ -67,7 +67,7 @@ export default class SearchPublicationFlowsRoute extends Route {
       const hasMultipleStatuses = Array.isArray(statusId);
       if (hasMultipleStatuses) {
         // due to inserts of double statuses we take the first one to not break the search
-        statusId = statusId.firstObject;
+        statusId = statusId.at(0);
         warn(`Publication flow ${entry.id} contains multiple statusses in search index`, !hasMultipleStatuses, { id: 'search.invalid-data' });
       }
       const status = await store.findRecord('publication-status', statusId);
