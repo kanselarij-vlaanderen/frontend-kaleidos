@@ -15,7 +15,7 @@ export default class AukInputPillsComponent extends Component {
 
   @action
   onRemoveTagAtIndex(index) {
-    const item = this.args.items.objectAt(index);
+    const item = this.args.items.at(index);
     this.args.onRemove(item);
   }
 }
