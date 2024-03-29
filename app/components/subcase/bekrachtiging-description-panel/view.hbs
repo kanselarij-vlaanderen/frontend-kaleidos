@@ -1,5 +1,5 @@
 <div {{did-update (perform this.loadAgendaData)}}>
-  <Auk::Panel>
+  <Auk::Panel data-test-subcase-bekrachtiging-description-panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
@@ -42,7 +42,7 @@
       {{#if @subcase.title}}
         <p>{{capitalize @subcase.title}}</p>
       {{/if}}
-      {{#if @subcase.parliamentRetrievalActivity}}
+      {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity)}}
         <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
       {{/if}}
     </Auk::Panel::Body>

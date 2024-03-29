@@ -96,9 +96,7 @@ function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
   cy.setDateInFlatpickr(dateTo);
   cy.wait(`@searchCall${randomInt}5`);
   cy.get(dependency.emberDataTable.isLoading).should('not.exist');
-  // TODO-bug this should say there are no results
-  // cy.get(auk.emptyState.message).contains('Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
-  cy.get(auk.emptyState.message).contains('Gelieve een zoekterm in te vullen.');
+  cy.get(auk.emptyState.message).contains('Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');
 
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}6`);
   cy.get(route.search.from).find(auk.datepicker.clear)

@@ -133,6 +133,7 @@ context('signatures shortlist overview tests', () => {
     cy.setAllItemsFormallyOk(2);
     cy.approveAndCloseDesignAgenda();
     cy.releaseDecisions();
+    cy.wait(20000); // shortlist not always found
   });
 
   it('should check the signatures overview', () => {
@@ -397,7 +398,12 @@ context('signatures shortlist overview tests', () => {
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
+    // TODO test error `cy.parents()` failed because it requires a DOM element or document.
+    cy.visit('ondertekenen/opstarten');
     // check succes
+    cy.get(route.signatures.row.name).contains(files1[0].newFileName)
+      .parents('tr')
+      .as('currentDoc');
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.signers.item); // wait for signers to load
@@ -519,6 +525,7 @@ context('publications shortlist overview tests', () => {
       longTitle: subcaseTitleLong2,
       subcaseType: subcaseType2,
       subcaseName: subcaseName2,
+      ratification: true,
     });
     cy.addDocumentsToSubcase(files2);
 

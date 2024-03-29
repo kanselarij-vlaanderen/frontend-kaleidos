@@ -13,7 +13,7 @@
         @mandatees={{@mandatees}}
         @submitter={{@submitter}}
         @emptyStateMessage={{if
-          this.showMandateesNotApplicableMessage
+          @subcase.isBekrachtiging
           (t "not-applicable")
         }}
         @allowEditing={{user-may "manage-cases"}}
