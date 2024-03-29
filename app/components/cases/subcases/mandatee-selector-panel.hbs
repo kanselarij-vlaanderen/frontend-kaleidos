@@ -36,7 +36,7 @@
             class="au-c-list__item au-u-flex au-u-flex--vertical-center au-u-flex--between"
           >
             {{! prettier-ignore}}
-            <div>
+            <div data-test-mandatee-selector-panel-selected-minister-name>
               {{! <Mandatee::NameWithRange/> does not suit the needs}}
               <strong>{{mandatee.person.fullName}}</strong>{{concat ', ' mandatee.displayTitle}}
               {{#if (user-may "view-mandatees-with-range")}}
@@ -52,6 +52,7 @@
             >
               {{#if this.showSubmitter}}
                 <AuRadio
+                  data-test-mandatee-selector-panel-submitter-radio
                   @name="submitter"
                   @checked={{eq this.submitterMandatee.id mandatee.id}}
                   @disabled={{@disabled}}

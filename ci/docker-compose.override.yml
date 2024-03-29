@@ -101,3 +101,7 @@ services:
       VP_API_DOMAIN: "https://replace.by.actual.api.url"
       VP_API_CLIENT_ID: "yourVpApiClientId"
       VP_API_CLIENT_SECRET: "yourVpApiClientSecret"
+  digital-signing:
+    environment:
+      - SIGNINGHUB_API_URL=<PUT_API_URL_HERE>
+    user: ${HOST_UID_GID}

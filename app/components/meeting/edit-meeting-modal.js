@@ -201,7 +201,7 @@ export default class MeetingEditMeetingComponent extends Component {
         .internalDocumentPublicationActivity;
       const themisPublicationActivities = yield this.args.meeting
         .themisPublicationActivities;
-      this.themisPublicationActivity = themisPublicationActivities.firstObject;
+      this.themisPublicationActivity = themisPublicationActivities.at(0);
     } else {
       // Ensure we get fresh data to avoid concurrency conflicts
       this.decisionPublicationActivity = yield this.args.meeting

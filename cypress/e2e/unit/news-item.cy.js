@@ -485,6 +485,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       const subcaseTitleShort = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
       cy.visit(newsletterLink);
+      // If we only get 1, something happened here
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
 
       cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
       cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)

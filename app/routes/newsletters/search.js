@@ -162,7 +162,7 @@ export default class NewslettersSearchRoute extends Route {
     const decisions = newsletter.attributes.decisions;
     if (Array.isArray(decisions)) {
       // TODO for now, if there are multiple decisions, we just grab the first one
-      newsletter.attributes.decision = decisions.firstObject;
+      newsletter.attributes.decision = decisions.at(0);
     } else {
       newsletter.attributes.decision = decisions;
     }

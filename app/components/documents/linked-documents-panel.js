@@ -58,7 +58,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
           size: 300,
         },
       });
-      allPiecesToLink = [...allPiecesToLink, ...linkedPieces.toArray()];
+      allPiecesToLink = [...allPiecesToLink, ...linkedPieces.slice()];
     }
 
     if (allPiecesToLink.length) {
@@ -102,7 +102,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
 
   @task
   *unlinkDocumentContainer(documentContainer) {
-    const linkedPiecesToRemove = (yield documentContainer.pieces).toArray();
+    const linkedPiecesToRemove = (yield documentContainer.pieces).slice();
 
     if (this.itemType === 'agendaitem') {
       // Unlink pieces from subcase related to the agendaitem

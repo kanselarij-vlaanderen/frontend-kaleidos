@@ -23,7 +23,7 @@ export default class Subcase extends ModelWithModifier {
   @belongsTo('concept', { inverse: null, async: true }) agendaItemType;
   @belongsTo('parliament-retrieval-activity', { inverse: 'generatedSubcase', async: true})
   parliamentRetrievalActivity;
-  @belongsTo('piece', { inverse: 'ratificationSubcase', async: true }) ratification;
+  @belongsTo('piece', { inverse: 'ratificationSubcase', async: true, polymorphic: true }) ratification;
 
   @hasMany('agenda-activity', { inverse: 'subcase', async: true })
   agendaActivities;
