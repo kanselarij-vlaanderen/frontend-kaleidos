@@ -567,27 +567,30 @@ context('Decision tests post digital agenda', () => {
 
   it('should test generate all decisions pdf', () => {
     const agendaDate4 = Cypress.dayjs('2023-11-28').hour(10);
-    // const downloadPath = 'cypress/downloads';
-    const fileName = 'VR PV 2023-100 - ALLE BESLISSINGEN.pdf';
-    // const downloadDecisionPDF = `${downloadPath}/${fileName}`;
+    const downloadPath = 'cypress/downloads';
+    const fileName = 'VR PV 2023/101 - ALLE BESLISSINGEN.pdf'; // slash for actual name, dash for downloaded file
+    const downloadedFileName = 'VR PV 2023-101 - ALLE BESLISSINGEN.pdf';
+    const downloadDecisionPDF = `${downloadPath}/${downloadedFileName}`;
 
     cy.openAgendaForDate(agendaDate4);
+    cy.wait(2000);
     cy.get(agenda.agendaActions.optionsDropdown).children(appuniversum.button)
       .click();
+    cy.intercept('POST', '/generate-decision-report/generate-reports-bundle').as('generateReportBundle');
     cy.get(agenda.agendaActions.generateSignedDecisionsBundle).forceClick();
-    cy.wait(8000);
-
+    cy.wait('@generateReportBundle');
+    cy.get(appuniversum.toaster).contains('Alle beslissingen PDF aangemaakt');
     cy.clickReverseTab('Documenten');
 
     cy.get(document.documentCard.name.value).contains(fileName)
       .click();
 
-    // cy.get(document.documentPreview.downloadLink).click();
+    cy.get(document.documentPreview.downloadLink).click();
 
-    // cy.readFile(downloadDecisionPDF, {
-    //   timeout: 25000,
-    // });
-    // TODO: checking content requires custom package
+    cy.readFile(downloadDecisionPDF, {
+      timeout: 25000,
+    });
+    // reading contents not out of the box with cypress
     // .should('contain', 'VR PV 2023/3 - punt 0002');
   });
 });
