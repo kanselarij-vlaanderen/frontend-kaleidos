@@ -9,6 +9,7 @@ const selectors = {
   agendaitemNav: {
     caseTab: '[data-test-agendaitem-nav-case-tab]',
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
+    ratificationTab: '[data-test-agendaitem-nav-ratification-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     tabs: '[data-test-agendaitem-nav-tabs]',
