@@ -98,3 +98,13 @@
     @onConfirm={{perform this.proposeForAgenda}}
   />
 {{/if}}
+
+
+{{#if (or this.proposeForAgenda.isRunning)}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "propose-for-agenda"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

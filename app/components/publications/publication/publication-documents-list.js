@@ -3,7 +3,7 @@ import {
     EMAIL_ATTACHMENT_MAX_SIZE,
   EMAIL_ATTACHMENT_WARN_SIZE,
 } from 'frontend-kaleidos/config/config';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 
 export default class PublicationsPublicationPublicationDocumentsList extends Component {
   fileSizePillSkin = (size) => {

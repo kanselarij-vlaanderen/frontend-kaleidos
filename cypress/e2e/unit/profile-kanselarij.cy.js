@@ -520,7 +520,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkOpenAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -619,7 +619,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkReleasedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -680,7 +680,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkClosedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');

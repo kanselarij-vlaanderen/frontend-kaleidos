@@ -25,7 +25,6 @@
 {{else if (user-may "manage-ratification")}}
   <div class="auk-u-p-2">
     <AuButton
-      data-test-agendaitem-ratification-upload-file
       @skin="naked"
       @icon="upload"
       {{on "click" (fn (set this "isAddingRatification" true))}}

@@ -66,6 +66,7 @@
   </AuButton>
   {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-documents"))}}
     <AuButton
+      data-test-agenda-actions-generate-signed-decisions-bundle
       @skin="link"
       {{on "click" this.generateSignedDecisionsBundle}}
       role="menuitem"
@@ -88,6 +89,7 @@
   {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
     <AuHr />
     <AuButton
+      data-test-agenda-actions-mark-decisions-sor-signing
       @skin="link"
       {{on "click" this.markDecisionsForSigning}}
       role="menuitem"

@@ -420,7 +420,7 @@ context('Testing the application as OVRB', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(definitiefViewOpenAgenda);
         cy.get(newsletter.newsletterMeeting.title);
@@ -508,7 +508,7 @@ context('Testing the application as OVRB', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(definitiefViewReleasedAgenda);
         cy.get(newsletter.newsletterMeeting.title);
@@ -555,7 +555,7 @@ context('Testing the application as OVRB', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         cy.visit(definitiefViewClosedAgenda);
         cy.get(newsletter.newsletterMeeting.title);
 

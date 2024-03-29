@@ -214,6 +214,7 @@ context('Agenda secretary tests', () => {
       .click({
         force: true,
       });
+    cy.wait(1000); // trigger('mouseover') failed because the page updated while this command was executing
     cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
       .click();
     cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
