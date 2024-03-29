@@ -55,6 +55,5 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
     this.latestMeeting = latestMeeting;
     this.publicationStatus = publicationStatus;
     this.latestPublicationActivity = latestPublicationActivity;
-    this.latestRetrievalActivity = latestRetrievalActivity;
   });
 }
