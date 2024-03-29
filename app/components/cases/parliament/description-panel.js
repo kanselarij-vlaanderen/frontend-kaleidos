@@ -10,7 +10,6 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
   @tracked latestMeeting;
   @tracked publicationStatus;
   @tracked latestPublicationActivity;
-  @tracked latestRetrievalActivity;
 
   constructor() {
     super(...arguments);
@@ -18,16 +17,7 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
   }
 
   loadStatusData = task(async () => {
-    const latestRetrievalActivity = await this.store.queryOne(
-      'parliament-retrieval-activity',
-      {
-        'filter[parliament-subcase][parliament-flow][:id:]':
-          this.args.parliamentFlow.id,
-        sort: '-start-date',
-      }
-    );
-
-    const generatedSubcase = await latestRetrievalActivity?.generatedSubcase;
+    const generatedSubcase = await this.args.latestRetrievalActivity?.generatedSubcase;
 
     let latestMeeting = null;
     if (generatedSubcase) {
