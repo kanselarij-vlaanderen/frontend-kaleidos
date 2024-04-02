@@ -5,7 +5,6 @@ export default class CasesCaseIndexRoute extends Route {
   @service router;
 
   async redirect(model, transition) {
-    debugger
     if (transition.to.name === 'cases.case.index') {
       if (
         model.parliamentFlow &&
