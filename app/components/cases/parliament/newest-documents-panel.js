@@ -26,18 +26,33 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
       'filter[parliament-submission-activity][:id:]': submissionActivities
         .map((x) => x.id)
         .join(','),
+      sort: '-parliament-submission-activity.start-date',
+      include: 'piece',
     });
 
-    const groupBySubcase = submittedPieces.reduce(
-      (acc, submittedPiece) => {
-        const { subcaseName } = submittedPiece;
-        acc[subcaseName] = acc[subcaseName] ?? [];
-        acc[subcaseName].push(submittedPiece);
-        return acc;
-      },
-      {}
-    );
+    const uniquePieces = removeDuplicatePiece(submittedPieces.slice());
 
-    this.piecesBySubcase = groupBySubcase;
+    const piecesBySubcase = uniquePieces.reduce((acc, submittedPiece) => {
+      const { subcaseName } = submittedPiece;
+      acc[subcaseName] = acc[subcaseName] ?? [];
+      acc[subcaseName].push(submittedPiece);
+      return acc;
+    }, {});
+
+    this.piecesBySubcase = piecesBySubcase;
   });
+}
+
+function removeDuplicatePiece(submittedPieces) {
+  const seen = new Set();
+  const uniquePieces = [];
+  for (const submittedPiece of submittedPieces) {
+    const piece = submittedPiece.belongsTo('piece').value();
+    if (!seen.has(piece.id)) {
+      seen.add(piece.id);
+      uniquePieces.push(submittedPiece);
+    }
+  }
+
+  return uniquePieces;
 }
