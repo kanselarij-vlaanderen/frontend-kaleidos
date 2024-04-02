@@ -119,6 +119,18 @@ export default class MandateeSelectorPanel extends Component {
         );
         if (mandatee) {
           selectedMandatees.push(mandatee);
+        } else {
+          const oldMandateePerson = oldMandatee.person;
+          const minister = this.currentMinisters.find(
+            (currentMinister) => currentMinister.get('id') === oldMandateePerson.id
+          )
+          if (minister) {
+            const activeMandatee = this.currentMandatees.find(
+              (currentMandatee) => 
+              currentMandatee.person.get('id') === minister.id
+              )
+            selectedMandatees.push(activeMandatee);
+          }
         }
       });
       const ministersToSelect = yield Promise.all(
