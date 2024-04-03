@@ -36,10 +36,8 @@
                 {{#if
                   (not (eq (inc index) this.submissionActivities.value.length))
                 }}
-                  {{t
-                    "updated-on-date"
-                    date=(date-phrase submissionActivity.startDate)
-                  }}
+                  {{t "edited-on"}}
+                  {{date-phrase submissionActivity.startDate}}
                 {{else}}
                   {{t
                     "sent-on-date-by-person"
