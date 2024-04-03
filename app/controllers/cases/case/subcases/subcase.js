@@ -7,6 +7,6 @@ export default class CasesCaseSubcasesSubcaseController extends Controller {
 
   @action
   refreshSubcases() {
-    this.router.refresh('cases.case.index');
+    this.router.refresh('cases.case');
   }
 }
