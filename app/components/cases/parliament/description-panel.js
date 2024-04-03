@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 export default class CasesParliamentDescriptionPanelComponent extends Component {
   @service store;
 
-  @tracked publciationStatus;
   @tracked latestMeeting;
   @tracked publicationStatus;
   @tracked latestPublicationActivity;
@@ -51,7 +50,6 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
       }
     );
 
-    this.publicationStatus = publicationStatus;
     this.latestMeeting = latestMeeting;
     this.publicationStatus = publicationStatus;
     this.latestPublicationActivity = latestPublicationActivity;
