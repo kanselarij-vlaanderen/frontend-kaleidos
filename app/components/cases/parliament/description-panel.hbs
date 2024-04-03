@@ -15,10 +15,7 @@
           <AuLinkExternal
             @icon="external"
             @iconAlignment="right"
-            href={{concat
-              "https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/"
-              @parliamentFlow.parliamentId
-            }}
+            href={{this.parliamentCaseLink}}
           >
             {{t "to-flemish-parliament"}}
           </AuLinkExternal>
@@ -58,10 +55,7 @@
               <AuLinkExternal
                 @icon="external"
                 @iconAlignment="right"
-                href={{concat
-                  "https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/"
-                  @parliamentFlow.parliamentId
-                }}
+                href={{this.parliamentCaseLink}}
               >{{date-phrase
                   this.latestRetrievalActivity.startDate
                 }}</AuLinkExternal>
@@ -78,7 +72,7 @@
                 <AuLinkExternal
                   @icon="external"
                   @iconAlignment="right"
-                  href="https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/1671548"
+                  href={{this.parliamentCaseLink}}
                 >{{date-phrase this.latestMeeting.startedOn}}</AuLinkExternal>
               </div>
             </li>
@@ -92,7 +86,7 @@
                   <AuLinkExternal
                     @icon="external"
                     @iconAlignment="right"
-                    href="https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/1671548"
+                    href={{this.parliamentCaseLink}}
                   >{{this.latestPublicationActivity.startDate}}</AuLinkExternal>
                 </div>
               </li>

@@ -54,4 +54,8 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
     this.publicationStatus = publicationStatus;
     this.latestPublicationActivity = latestPublicationActivity;
   });
+
+  get parliamentCaseLink() {
+    return `https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/${this.args.parliamentFlow.parliamentId}`;
+  }
 }
