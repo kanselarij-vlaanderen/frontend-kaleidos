@@ -26,11 +26,12 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
       'filter[parliament-submission-activity][:id:]': submissionActivities
         .map((x) => x.id)
         .join(','),
+      'filter[piece][:has-no:next-piece]': true,
       sort: '-parliament-submission-activity.start-date',
       include: 'piece',
     });
 
-    const uniquePieces = removeDuplicatePiece(submittedPieces.slice());
+    const uniquePieces = mergeDuplicatePieces(submittedPieces.slice());
 
     const piecesBySubcase = uniquePieces.reduce((acc, submittedPiece) => {
       const { subcaseName } = submittedPiece;
@@ -41,18 +42,42 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
 
     this.piecesBySubcase = piecesBySubcase;
   });
+
+  submittedPieceList = (submittedPiece) => {
+    const formatter = new Intl.ListFormat('nl-be');
+    const list = [];
+    if (submittedPiece.unsignedFile) {
+      list.push('PDF');
+    }
+    if (submittedPiece.wordFile) {
+      list.push('Word');
+    }
+    if (submittedPiece.signedFile) {
+      list.push('ondertekende PDF');
+    }
+
+    if (list.length) {
+      return `(${formatter.format(list)})`;
+    }
+    return '';
+  }
 }
 
-function removeDuplicatePiece(submittedPieces) {
-  const seen = new Set();
+/* Pieces can be submitted multiple times, with a different file */
+function mergeDuplicatePieces(submittedPieces) {
   const uniquePieces = [];
   for (const submittedPiece of submittedPieces) {
     const piece = submittedPiece.belongsTo('piece').value();
-    if (!seen.has(piece.id)) {
-      seen.add(piece.id);
+    const uniquePiece = uniquePieces.find((p) => {
+      return p.belongsTo('piece').value().id === piece.id
+    });
+    if (!uniquePiece) {
       uniquePieces.push(submittedPiece);
+    } else {
+      uniquePiece.unsignedFile = uniquePiece.unsignedFile ?? submittedPiece.unsignedFile;
+      uniquePiece.wordFile = uniquePiece.wordFile ?? submittedPiece.wordFile;
+      uniquePiece.signedFile = uniquePiece.signedFile ?? submittedPiece.signedFile;
     }
   }
-
   return uniquePieces;
 }

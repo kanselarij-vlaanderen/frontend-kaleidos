@@ -17,20 +17,26 @@
       @noPadding={{is-empty (keys this.piecesBySubcase)}}
       class="c-document-panel"
     >
-      {{#each-in this.piecesBySubcase as |subcaseName pieces|}}
+      {{#each-in this.piecesBySubcase as |subcaseName submittedPieces|}}
         <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
         <ul>
-          {{#each pieces as |piece|}}
+          {{#each submittedPieces as |submittedPiece|}}
             <li class="vlc-document-list__item">
               <div
                 class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
               >
-                <a>
+                <AuLink
+                @route="document"
+                @model={{submittedPiece.piece.id}}
+                @skin="secondary">
                   <div class="auk-icon auk-icon--default">
                     <i class="ki ki-document"></i>
                   </div>
-                  <span>{{piece.name}}</span>
-                </a>
+                  <span>
+                    {{submittedPiece.name}}
+                    {{this.submittedPieceList submittedPiece}}
+                  </span>
+                </AuLink>
               </div>
             </li>
           {{/each}}
