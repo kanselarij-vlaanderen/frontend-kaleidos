@@ -27,6 +27,8 @@ export default class SubcasesSideNavComponent extends Component {
       });
     }
 
-    return items.sort((item1, item2) => item1.sortDate < item2.sortDate);
+    return items.sort((item1, item2) =>
+      item2.sortDate?.valueOf() - item1.sortDate?.valueOf()
+    );
   }
 }
