@@ -15,7 +15,9 @@
       {{datetime @date}}
     </div>
     <div class="au-u-margin-top-tiny">
-      <Parliament::StatusPill @parliamentFlow={{@parliamentFlow}} />
+      <Parliament::StatusPill 
+      @parliamentFlow={{@parliamentFlow}}
+      @useAltLabel={{true}} />
     </div>
   </LinkTo>
 </li>

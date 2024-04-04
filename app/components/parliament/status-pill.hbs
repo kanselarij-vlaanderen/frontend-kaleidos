@@ -3,9 +3,13 @@
     {{#if statusPromise.value}}
       <AuPill
         @size="small"
-        @skin={{if @parliamentFlow.isComplete "success" "warning"}}
+        @skin={{if (or @parliamentFlow.isComplete @parliamentFlow.isBeingHandledByFP) "success" "warning"}}
       >
-        {{@parliamentFlow.status.label}}
+        {{#if @useAltLabel}}
+          {{@parliamentFlow.status.altLabel}}
+        {{else}}
+          {{@parliamentFlow.status.label}}
+        {{/if}}
       </AuPill>
     {{else}}
       <AuPill @size="small" @skin="warning">
