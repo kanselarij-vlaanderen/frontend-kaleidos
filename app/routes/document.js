@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from "@ember/object";
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import { setHash } from 'frontend-kaleidos/utils/hash-util';
 
 export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
@@ -41,6 +43,8 @@ export default class DocumentRoute extends Route {
 
     const params = this.paramsFor(this.routeName);
     this.isSigning = params.tab === this.intl.t('signatures');
+    const shortPieceName = new VRDocumentName(model?.name).vrNumberWithSuffix();
+    setHash(shortPieceName);
   }
 
   setupController(controller) {
