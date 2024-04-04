@@ -25,7 +25,11 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <AuHeading @level="4" @skin="4">
-      {{@latestRetrievalActivity.title}}
+      {{#if @latestSubmissionActivity}}
+        {{@latestSubmissionActivity.title}}
+      {{else}}
+        {{@latestRetrievalActivity.title}}
+      {{/if}}
     </AuHeading>
   </Auk::Panel::Body>
   <Auk::Panel::Body>
@@ -44,7 +48,7 @@
   <Auk::Panel::Body class="auk-u-bg-alt">
     {{#if this.loadStatusData.isIdle}}
       <AuHeading @level="4" @skin="6">{{t "last-statusses"}}</AuHeading>
-      {{#if this.latestRetrievalActivity}}
+      {{#if @latestRetrievalActivity}}
         <ul class="vlc-status-timeline">
           <li
             class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
@@ -57,12 +61,12 @@
                 @iconAlignment="right"
                 href={{this.parliamentCaseLink}}
               >{{date-phrase
-                  this.latestRetrievalActivity.startDate
+                  @latestRetrievalActivity.startDate
                 }}</AuLinkExternal>
 
             </div>
           </li>
-          {{#if this.latestMeeting}}
+          {{#if this.latestMeeting.agenda}}
             <li
               class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
             >
@@ -73,7 +77,7 @@
                   @icon="external"
                   @iconAlignment="right"
                   href={{this.parliamentCaseLink}}
-                >{{date-phrase this.latestMeeting.startedOn}}</AuLinkExternal>
+                >{{date-phrase this.latestMeeting.plannedStart}}</AuLinkExternal>
               </div>
             </li>
             {{#if this.publicationStatus.isPublished}}
@@ -87,7 +91,9 @@
                     @icon="external"
                     @iconAlignment="right"
                     href={{this.parliamentCaseLink}}
-                  >{{this.latestPublicationActivity.startDate}}</AuLinkExternal>
+                  >
+                    {{date-phrase this.latestPublicationActivity.endDate}}
+                  </AuLinkExternal>
                 </div>
               </li>
             {{/if}}

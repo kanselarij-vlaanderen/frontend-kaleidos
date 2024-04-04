@@ -7,11 +7,13 @@ export default class CasesCaseParliamentFlowIndex extends Route {
 
   model() {
     const {
+      decisionmakingFlow,
       parliamentFlow,
       latestParliamentSubmissionActivity,
       latestParliamentRetrievalActivity,
     } = this.modelFor('cases.case');
     return RSVP.hash({
+      decisionmakingFlow,
       parliamentFlow,
       latestSubmissionActivity: latestParliamentSubmissionActivity,
       latestRetrievalActivity: latestParliamentRetrievalActivity,

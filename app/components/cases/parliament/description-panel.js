@@ -32,26 +32,27 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
           'filter[agendas][agendaitems][agenda-activity][:id:]':
             latestAgendaActivity.id,
           sort: '-planned-start',
+          include: 'agenda'
         });
       }
     }
 
-    const publicationStatus = await this.store.queryOne('publication-status', {
-      'filter[publications][case][parliament-flow][:id:]':
-        this.args.parliamentFlow.id,
-    });
-
     const latestPublicationActivity = await this.store.queryOne(
       'publication-activity',
       {
-        '[subcase][publication-flow][case][parliament-flow][:id:]':
-          this.args.parliamentFlow.id,
+        'filter[subcase][publication-flow][case][decisionmaking-flow][:id:]':
+          this.args.decisionmakingFlow.id,
         sort: '-start-date',
       }
     );
 
-    this.latestMeeting = latestMeeting;
+    const publicationStatus = await this.store.queryOne('publication-status', {
+      'filter[publications][case][decisionmaking-flow][:id:]':
+        this.args.decisionmakingFlow.id,
+    });
+
     this.publicationStatus = publicationStatus;
+    this.latestMeeting = latestMeeting;
     this.latestPublicationActivity = latestPublicationActivity;
   });
 

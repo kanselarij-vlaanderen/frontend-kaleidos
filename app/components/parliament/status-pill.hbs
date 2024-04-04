@@ -3,7 +3,7 @@
     {{#if statusPromise.value}}
       <AuPill
         @size="small"
-        @skin={{if (or @parliamentFlow.isComplete @parliamentFlow.isBeingHandledByFP) "success" "warning"}}
+        @skin={{if @parliamentFlow.isIncomplete "warning" "success"}}
       >
         {{#if @useAltLabel}}
           {{@parliamentFlow.status.altLabel}}

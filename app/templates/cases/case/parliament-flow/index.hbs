@@ -9,8 +9,10 @@
       <div class="auk-u-m-4">
         <div id="case-info" class="auk-u-mb-4">
           <Cases::Parliament::DescriptionPanel
+            @decisionmakingFlow={{@model.decisionmakingFlow}}
             @parliamentFlow={{@model.parliamentFlow}}
             @latestRetrievalActivity={{@model.latestRetrievalActivity}}
+            @latestSubmissionActivity={{@model.latestSubmissionActivity}}
           />
         </div>
         <div id="documents" class="auk-u-mb-4">
