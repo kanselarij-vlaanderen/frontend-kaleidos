@@ -35,8 +35,13 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
 
     const piecesBySubcase = uniquePieces.reduce((acc, submittedPiece) => {
       const { subcaseName } = submittedPiece;
-      acc[subcaseName] = acc[subcaseName] ?? [];
-      acc[subcaseName].push(submittedPiece);
+      if (subcaseName) {
+        acc[subcaseName] = acc[subcaseName] ?? [];
+        acc[subcaseName].push(submittedPiece);
+      } else {
+        acc[''] = acc[''] ?? [];
+        acc[''].push(submittedPiece);
+      }
       return acc;
     }, {});
 
