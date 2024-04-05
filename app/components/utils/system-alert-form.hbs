@@ -24,11 +24,12 @@
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-message>
     <Auk::Label id="system-message">{{t "system-message"}}</Auk::Label>
-    <Textarea
+    <AuTextarea
       rows="2"
-      class="auk-textarea"
       aria-labelledby="system-message"
-      @value={{this.alert.message}}
+      value={{this.alert.message}}
+      @width="block"
+      {{on "input" (pick "target.value" (set this "alert.message"))}}
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-severity>
