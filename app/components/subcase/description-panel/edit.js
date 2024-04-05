@@ -122,11 +122,29 @@ export default class SubcaseDescriptionEdit extends Component {
     if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
       await this.updateNewsletterAfterRemarkChange();
       await this.updateDecisionReports();
+      await this.recalculateAgendaitemNumber();
     }
 
     this.args.onSave();
 
     this.isSaving = false;
+  }
+
+  async recalculateAgendaitemNumber() {
+    const agendaitemType = await this.args.subcase.agendaItemType;
+    const agendaItem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+    })
+
+    const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
+      'filter[agenda][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      'filter[agenda-activity][subcase][agenda-item-type][:uri:]': agendaitemType.uri,
+      sort: 'number'
+    })
+    agendaItem.number = latestAgendaitemOfType.number +1;
+    await agendaItem.save();
   }
 
   async updateDecisionReports() {
