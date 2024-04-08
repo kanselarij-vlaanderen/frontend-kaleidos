@@ -25,9 +25,9 @@
         </AuCheckbox>
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+        <AuLabel for="proofUploadReceivedDate" @required={{true}}>
           {{t "date"}}
-        </Auk::Label>
+        </AuLabel>
         <Auk::Datepicker
           id="proofUploadReceivedDate"
           @date={{this.receivedDate}}
@@ -35,9 +35,9 @@
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label for="proofPrintCorrector">
+        <AuLabel for="proofPrintCorrector">
           {{t "who-proof-reads"}}
-        </Auk::Label>
+        </AuLabel>
         <AuInput
           id="proofPrintCorrector"
           value={{this.proofPrintCorrector}}

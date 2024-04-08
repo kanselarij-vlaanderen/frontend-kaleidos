@@ -71,9 +71,9 @@
     <Auk::Modal::Body>
       <div class="au-c-form">
         <AuFormRow>
-          <Auk::Label for="proofUploadReceivedDate" @required={{true}}>
+          <AuLabel for="proofUploadReceivedDate" @required={{true}}>
             {{t "date"}}
-          </Auk::Label>
+          </AuLabel>
           <Auk::Datepicker
             id="proofUploadReceivedDate"
             @date={{this.newReceivedDate}}
@@ -81,9 +81,9 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="proofPrintCorrector">
+          <AuLabel for="proofPrintCorrector">
             {{t "who-proof-reads"}}
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             data-test-proof-received-panel-edit-corrector
             id="proofPrintCorrector"

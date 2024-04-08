@@ -14,9 +14,9 @@
     >
       <div class="au-c-form">
         <AuFormRow>
-          <Auk::Label @required={{true}}>
+          <AuLabel @required={{true}}>
             {{t "attachments"}}
-          </Auk::Label>
+          </AuLabel>
           <Publications::Publication::RequestUploader
             @onUpload={{this.uploadPiece}}
           />
@@ -42,9 +42,9 @@
           </AuCheckbox>
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="proofRequestSubject" @required={{true}}>
+          <AuLabel for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             data-test-proof-request-subject
             id="proofRequestSubject"
@@ -54,9 +54,9 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="proofRequestMessage" @required={{true}}>
+          <AuLabel for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
-          </Auk::Label>
+          </AuLabel>
           <AuTextarea
             data-test-proof-request-message
             id="proofRequestMessage"

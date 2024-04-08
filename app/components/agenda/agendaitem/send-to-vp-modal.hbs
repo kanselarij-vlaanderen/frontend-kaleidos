@@ -23,7 +23,7 @@
                     <strong class="auk-u-text-bold">
                       {{capitalize subcaseWithPieces.subcaseName}}:
                      </strong>
-                  </p>  
+                  </p>
                   <ul class="au-u-margin-top-small au-u-margin-left-none">
                     {{#each subcaseWithPieces.pieces as |piece|}}
                       <li class="list-style-none">
@@ -34,7 +34,7 @@
                           @disabled={{true}}
                         >
                         <AuLink
-                          @route="document" 
+                          @route="document"
                           @model={{piece.id}}
                           @skin="secondary"
                           target="_blank"
@@ -49,8 +49,8 @@
                           @checked={{this.isSelected piece}}
                           @onChange={{fn this.togglePieceSelection piece}}
                         >
-                          <AuLink 
-                            @route="document" 
+                          <AuLink
+                            @route="document"
                             @model={{piece.id}}
                             target="_blank"
                             >
@@ -71,13 +71,13 @@
                           @onChange={{fn this.togglePieceSelection piece}}
                           @disabled={{true}}
                         >
-                        <LinkTo 
+                        {{!-- <LinkTo
                           @skin="secondary"
                           @active="true"
                         >
                           {{piece.name}}
                           {{await (this.pieceFileTypes piece)}}
-                        </LinkTo>
+                        </LinkTo> --}}
                         </AuCheckbox>
                         <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
                       {{else}}
@@ -85,8 +85,8 @@
                           @checked={{this.isSelected piece}}
                           @onChange={{fn this.togglePieceSelection piece}}
                         >
-                          <LinkTo 
-                            @route="document" 
+                          <LinkTo
+                            @route="document"
                             @model={{piece.id}}
                             >
                             {{piece.name}}
@@ -101,7 +101,7 @@
             {{/each}}
           </ul>
           <div class="auk-form-group au-u-margin-top">
-            <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
+            <AuLabel for="remarks">{{t "remarks"}}</AuLabel>
             <AuTextarea
               id="remarks"
               rows="4"

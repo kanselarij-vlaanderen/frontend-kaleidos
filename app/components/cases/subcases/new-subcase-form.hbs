@@ -84,8 +84,8 @@
                   {{/if}}
                 </div>
                 <AuFormRow>
-                  <Auk::Label for="subcase-confidential">
-                    {{t "limited-access"}}</Auk::Label>
+                  <AuLabel for="subcase-confidential">
+                    {{t "limited-access"}}</AuLabel>
                   <AuToggleSwitch
                     data-test-new-subcase-form-toggle-confidential
                     id="subcase-confidential"
@@ -94,10 +94,11 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label id="name-subcase">
-                    {{t "name-subcase"}}</Auk::Label>
+                  <AuLabel for="name-subcase">
+                    {{t "name-subcase"}}</AuLabel>
                   <Textarea
                     data-test-new-subcase-form-shorttitle
+                    id="name-subcase"
                     aria-labelledby="name-subcase"
                     rows="2"
                     class="auk-textarea"
@@ -105,10 +106,11 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label id="title-subcase">
-                    {{t "title-subcase"}}</Auk::Label>
+                  <AuLabel for="title-subcase">
+                    {{t "title-subcase"}}</AuLabel>
                   <Textarea
                     data-test-new-subcase-form-longtitle
+                    id="title-subcase"
                     aria-labelledby="name-subcase"
                     rows="4"
                     class="auk-textarea"
@@ -116,7 +118,7 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+                  <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
                   <Utils::ModelSelector
                     data-test-new-subcase-form-procedure-step
                     @modelName="subcase-type"
@@ -128,7 +130,7 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+                  <AuLabel>{{t "subcase-name"}}</AuLabel>
                   <div
                     class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width"
                   >

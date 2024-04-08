@@ -36,9 +36,9 @@
             {{! Type regelgeving }}
             <div class="auk-o-grid-col-3">
               <AuFormRow data-test-decisions-info-panel-edit-regulation-type>
-                <Auk::Label>
+                <AuLabel>
                   {{t "regulation-type"}}
-                </Auk::Label>
+                </AuLabel>
                 <PowerSelect
                   @options={{this.sortedRegulationTypes}}
                   @onChange={{fn (mut @publicationFlow.regulationType)}}
@@ -54,7 +54,7 @@
             {{! Datum beslissing }}
             <div class="auk-o-grid-col-3">
               <AuFormRow>
-                <Auk::Label>{{t "decision-date"}}</Auk::Label>
+                <AuLabel>{{t "decision-date"}}</AuLabel>
                 {{#if (and this.isViaCouncilOfMinisters this.modelsForAgendaitemRoute)}}
                   <AuLink
                     @skin="primary"
@@ -82,7 +82,7 @@
             {{! Number of pages }}
             <div class="auk-o-grid-col-3">
               <AuFormRow data-test-decisions-info-panel-edit-number-of-pages>
-                <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
+                <AuLabel>{{t "number-of-pages"}}</AuLabel>
                 <AuInput
                   type="number"
                   value={{@publicationFlow.numberOfPages}}
@@ -95,7 +95,7 @@
             {{! Aantal uittreksels }}
             <div class="auk-o-grid-col-3">
               <AuFormRow>
-                <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
+                <AuLabel>{{t "publication-flow-number-of-extracts"}}</AuLabel>
                 <AuInput
                   data-test-decisions-info-panel-edit-number-of-extracts
                   type="number"

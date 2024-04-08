@@ -11,9 +11,9 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow class="auk-u-max-width-medium">
-        <Auk::Label for="translationRequestDueDate" @required={{true}}>
+        <AuLabel for="translationRequestDueDate" @required={{true}}>
           {{t "publication-flow-translation-due-date"}}
-        </Auk::Label>
+        </AuLabel>
         <Auk::Datepicker
           id="translationRequestDueDate"
           @date={{this.translationDueDate}}
@@ -21,16 +21,16 @@
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label>{{t "translation-burden"}}</Auk::Label>
+        <AuLabel>{{t "translation-burden"}}</AuLabel>
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6">
             <AuFormRow>
-              <Auk::Label
+              <AuLabel
                 for="translationNumberOfPages"
-                class="auk-label--light"
+                class="au-u-regular au-u-padding-bottom-small"
               >
                 {{t "number-of-pages-to-translate"}}
-              </Auk::Label>
+              </AuLabel>
               <AuInput
                 data-test-publication-translation-request-number-of-pages
                 id="translationNumberOfPages"
@@ -44,12 +44,12 @@
           </div>
           <div class="auk-o-grid-col-6">
             <AuFormRow>
-              <Auk::Label
+              <AuLabel
                 for="translationNumberOfWords"
-                class="auk-label--light"
+                class="au-u-regular au-u-padding-bottom-small"
               >
                 {{t "number-of-words-to-translate"}}
-              </Auk::Label>
+              </AuLabel>
               <AuInput
                 data-test-publication-translation-request-number-of-words
                 id="translationNumberOfWords"
@@ -64,9 +64,9 @@
         </div>
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label @required={{true}}>
+        <AuLabel @required={{true}}>
           {{t "attachments"}}
-        </Auk::Label>
+        </AuLabel>
         <Publications::Publication::RequestUploader
           @onUpload={{this.uploadPiece}}
         />
@@ -86,9 +86,9 @@
         </AuCheckbox>
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label for="translationRequestSubject" @required={{true}}>
+        <AuLabel for="translationRequestSubject" @required={{true}}>
           {{t "subject"}}
-        </Auk::Label>
+        </AuLabel>
         <AuInput
           id="translationRequestSubject"
           value={{this.subject}}
@@ -97,9 +97,9 @@
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label for="translationRequestMessage" @required={{true}}>
+        <AuLabel for="translationRequestMessage" @required={{true}}>
           {{t "message"}}
-        </Auk::Label>
+        </AuLabel>
         <AuTextarea
           data-test-publication-translation-request-message
           id="translationRequestMessage"

@@ -4,9 +4,9 @@
     <form {{on "submit" this.search}} class="au-c-form au-u-flex au-u-flex--spaced-small au-u-flex--vertical-end auk-u-maximize-width auk-u-mb-4 auk-u-mt-4">
       <AuFormRow class="au-u-2-6">
         <div class="auk-o-flex auk-o-flex--align-baseline">
-          <Auk::Label for="keyword" class="auk-u-mr">
+          <AuLabel for="keyword" class="auk-u-mr">
             {{capitalize (t "search-term")}}
-          </Auk::Label>
+          </AuLabel>
           <Utils::SearchTooltip />
         </div>
         <AuInput
@@ -19,9 +19,9 @@
         />
       </AuFormRow>
       <AuFormRow class="au-u-margin-top-none au-u-1-6">
-        <Auk::Label for="dateType">
+        <AuLabel for="dateType">
           {{capitalize (t "search-by-date-type")}}
-        </Auk::Label>
+        </AuLabel>
         <select
           data-test-route-search-publication-date-type
           name="dateType"
@@ -39,7 +39,7 @@
         </select>
       </AuFormRow>
       <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-from>
-        <Auk::Label>{{t "from"}}</Auk::Label>
+        <AuLabel>{{t "from"}}</AuLabel>
         <Auk::Datepicker
           @date={{this.dateFromBuffer}}
           @onChange={{set this "dateFromBuffer"}}
@@ -49,7 +49,7 @@
         />
       </AuFormRow>
       <AuFormRow class="au-u-margin-top-none au-u-1-6" data-test-route-search-date-to>
-        <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+        <AuLabel>{{t "until-inclusive"}}</AuLabel>
         <Auk::Datepicker
           @date={{this.dateToBuffer}}
           @onChange={{set this "dateToBuffer"}}

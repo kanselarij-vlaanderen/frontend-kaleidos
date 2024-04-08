@@ -14,13 +14,13 @@
             {{!Beslissingsdatum}}
             <div class="auk-o-grid-col-6">
               <AuFormRow>
-                <Auk::Label
+                <AuLabel
                   for="publicationReportsDecisionStartDate"
                   @required={{true}}
                   @error={{not this.isDecisionDateRangeStartValid}}
                 >
                   {{t "start-date"}}
-                </Auk::Label>
+                </AuLabel>
                 <Auk::Datepicker
                   id="publicationReportsDecisionStartDate"
                   @date={{this.decisionDateRangeStart}}
@@ -34,12 +34,12 @@
             </div>
             <div class="auk-o-grid-col-6">
               <AuFormRow>
-                <Auk::Label
+                <AuLabel
                   for="publicationReportsDecisionEndDate"
                   @error={{not this.isDecisionDateRangeEndValid}}
                 >
                   {{t "end-date"}}
-                </Auk::Label>
+                </AuLabel>
                 <Auk::Datepicker
                   id="publicationReportsDecisionEndDate"
                   @date={{this.decisionDateRangeEnd}}
@@ -54,12 +54,12 @@
         {{/if}}
         {{#if @userInputFields.publicationYear}}
           <AuFormRow>
-            <Auk::Label
+            <AuLabel
               for="publicationReportsPublicationYear"
               @error={{not this.isPublicationYearValid}}
             >
               {{t "year"}}
-            </Auk::Label>
+            </AuLabel>
             <AuInput
               type="number"
               id="publicationReportsPublicationYear"

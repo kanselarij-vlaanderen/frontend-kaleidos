@@ -14,7 +14,7 @@
             @onDateToClear={{set this "dateTo" undefined}}
           />
           <div data-test-route-signatures-ongoing-status-filter class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "status"}}</Auk::Label>
+            <AuLabel>{{t "status"}}</AuLabel>
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
               @onChange={{this.onChangeStatus}}
@@ -23,7 +23,7 @@
           </div>
           {{#if (user-may "view-all-ongoing-signatures")}}
           <div data-test-route-signatures-ongoing-minister-filter class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "submitter"}}</Auk::Label>
+            <AuLabel>{{t "submitter"}}</AuLabel>
               <Search::MinisterFilter
                 @selected={{this.mandatees}}
                 @onChange={{this.setMandatees}}
