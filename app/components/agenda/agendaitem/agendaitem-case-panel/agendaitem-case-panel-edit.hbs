@@ -14,35 +14,35 @@
       {{/if}}
       <AuFormRow>
         <AuLabel for="name-subcase">{{t "name-subcase"}}</AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-agendaitem-titles-edit-shorttitle={{true}}
           id="name-subcase"
           rows="2"
-          aria-labelledby="name-subcase"
-          class="auk-textarea"
-          @value={{@agendaitem.shortTitle}}
+          value={{@agendaitem.shortTitle}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @agendaitem "shortTitle"))}}
         />
       </AuFormRow>
       <AuFormRow>
         <AuLabel for="title-subcase">{{t "title-subcase"}}</AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-agendaitem-titles-edit-title={{true}}
           id="title-subcase"
           rows="4"
-          aria-labelledby="title-subcase"
-          class="auk-textarea"
-          @value={{@agendaitem.title}}
+          value={{@agendaitem.title}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @agendaitem "title"))}}
         />
       </AuFormRow>
       <AuFormRow>
         <AuLabel for="comment-title">{{t "comment-title"}}</AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-agendaitem-titles-edit-comment={{true}}
           id="comment-title"
           rows="2"
-          aria-labelledby="comment-title"
-          class="auk-textarea"
-          @value={{@agendaitem.comment}}
+          value={{@agendaitem.comment}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @agendaitem "comment"))}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -50,13 +50,13 @@
           <Auk::Icon @name="lock-closed" @size="small" />
           {{t "private-comment-title"}}
         </AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-agendaitem-titles-edit-private-comment={{true}}
           id="private-comment-title"
           rows="2"
-          aria-labelledby="private-comment-title"
-          class="auk-textarea"
-          @value={{@agendaitem.privateComment}}
+          value={{@agendaitem.privateComment}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @agendaitem "privateComment"))}}
         />
       </AuFormRow>
       {{#if (is-announcement @agendaitem.type)}}

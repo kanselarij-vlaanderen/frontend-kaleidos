@@ -23,11 +23,12 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
-        <Textarea
+        <AuTextarea
           data-test-details-tab-edit-name
           aria-labelledby="piece-name"
-          class="auk-textarea"
-          @value={{mut @piece.name}}
+          value={{@piece.name}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @piece "name"))}}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>

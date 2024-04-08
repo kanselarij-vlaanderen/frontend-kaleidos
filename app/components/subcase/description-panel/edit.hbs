@@ -45,25 +45,25 @@
       <AuFormRow>
         <AuLabel for="short-title-subcase">
           {{t "name-subcase"}}</AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-subcase-description-edit-short-title
           id="short-title-subcase"
-          aria-labelledby="short-title-subcase"
           rows="2"
-          class="auk-textarea"
-          @value={{@subcase.shortTitle}}
+          value={{@subcase.shortTitle}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @subcase "shortTitle"))}}
         />
       </AuFormRow>
       <AuFormRow>
         <AuLabel for="title-subcase">
           {{t "title-subcase"}}</AuLabel>
-        <Textarea
+        <AuTextarea
           data-test-subcase-description-edit-title
           id="title-subcase"
-          aria-labelledby="title-subcase"
           rows="4"
-          class="auk-textarea"
-          @value={{@subcase.title}}
+          value={{@subcase.title}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @subcase "title"))}}
         />
       </AuFormRow>
       <AuFormRow>
