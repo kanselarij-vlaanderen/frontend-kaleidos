@@ -60,7 +60,7 @@ context('Create case as Admin user', () => {
       cy.url().should('contain', `dossiers/${result.caseId}/deeldossiers/procedurestap-toevoegen`);
     });
     // title is visible in header
-    cy.get(cases.newSubcaseForm.titleContainer).within(() => {
+    cy.get(cases.subcaseOverviewHeader.titleContainer).within(() => {
       cy.contains(caseTitle);
     });
     const subcase = {

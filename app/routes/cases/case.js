@@ -1,42 +1,58 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import RSVP from 'rsvp';
 
 export default class CasesCaseRoute extends Route {
   @service store;
   @service router;
 
-  model(params) {
-    return RSVP.hash({
-      decisionmakingFlow: this.store.findRecord(
-        'decisionmaking-flow',
-        params.id
-      ),
-      latestParliamentSubmissionActivity: this.store.queryOne(
+  async model(params) {
+    const decisionmakingFlow = await this.store.findRecord(
+      'decisionmaking-flow',
+      params.id
+    );
+    const parliamentFlow = await this.store.queryOne('parliament-flow', {
+      'filter[case][decisionmaking-flow][:id:]': params.id,
+      include: 'parliament-subcase',
+    });
+
+    let parliamentSubmissionActivities;
+    let latestParliamentSubmissionActivity;
+    let latestParliamentRetrievalActivity;
+
+    if (parliamentFlow) {
+      parliamentSubmissionActivities = await this.store.queryAll(
         'parliament-submission-activity',
         {
-          'filter[parliament-subcase][parliament-flow][case][decisionmaking-flow][:id:]':
-            params.id,
+          'filter[parliament-subcase][parliament-flow][:id:]':
+            parliamentFlow.id,
           sort: '-start-date',
         }
-      ),
-      latestParliamentRetrievalActivity: this.store.queryOne(
+      );
+      parliamentSubmissionActivities = parliamentSubmissionActivities?.slice();
+      latestParliamentSubmissionActivity = parliamentSubmissionActivities?.at(0);
+      latestParliamentRetrievalActivity = await this.store.queryOne(
         'parliament-retrieval-activity',
         {
-          'filter[parliament-subcase][parliament-flow][case][decisionmaking-flow][:id:]':
-            params.id,
+          'filter[parliament-subcase][parliament-flow][:id:]':
+          parliamentFlow.id,
           sort: '-start-date',
         }
-      ),
-      parliamentFlow: this.store.queryOne('parliament-flow', {
-        'filter[case][decisionmaking-flow][:id:]': params.id,
-        include: 'status,parliament-subcase',
-      }),
-      subcases: this.store.queryAll('subcase', {
-        'filter[decisionmaking-flow][:id:]': params.id,
-        sort: 'created',
-        include: 'type',
-      }),
+      );
+    }
+
+    const subcases = await this.store.queryAll('subcase', {
+      'filter[decisionmaking-flow][:id:]': params.id,
+      sort: 'created',
+      include: 'type',
     });
+
+    return {
+      decisionmakingFlow,
+      parliamentSubmissionActivities,
+      latestParliamentSubmissionActivity,
+      latestParliamentRetrievalActivity,
+      parliamentFlow,
+      subcases: subcases?.slice(),
+    };
   }
 }

@@ -9,24 +9,16 @@ export default class CasesCaseParliamentFlowIndex extends Route {
     const {
       decisionmakingFlow,
       parliamentFlow,
+      parliamentSubmissionActivities,
       latestParliamentSubmissionActivity,
       latestParliamentRetrievalActivity,
     } = this.modelFor('cases.case');
     return RSVP.hash({
       decisionmakingFlow,
       parliamentFlow,
+      submissionActivities: parliamentSubmissionActivities,
       latestSubmissionActivity: latestParliamentSubmissionActivity,
       latestRetrievalActivity: latestParliamentRetrievalActivity,
-      subcase: this.store.queryOne('parliament-subcase', {
-        'filter[parliament-flow][:id:]': parliamentFlow.id,
-      }),
-      submissionActivities: this.store.queryAll(
-        'parliament-submission-activity',
-        {
-          'filter[parliament-subcase][parliament-flow][:id:]':
-            parliamentFlow.id,
-        }
-      ),
     });
   }
 }

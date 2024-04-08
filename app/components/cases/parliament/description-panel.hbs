@@ -1,4 +1,4 @@
-<Auk::Panel data-test-subcase-description-panel>
+<Auk::Panel>
   <Auk::Panel::Header>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
@@ -60,10 +60,9 @@
                 @icon="external"
                 @iconAlignment="right"
                 href={{this.parliamentCaseLink}}
-              >{{date-phrase
-                  @latestRetrievalActivity.startDate
-                }}</AuLinkExternal>
-
+              >
+                {{date-phrase @latestRetrievalActivity.startDate}}
+              </AuLinkExternal>
             </div>
           </li>
           {{#if this.latestMeeting.agenda}}
@@ -77,7 +76,9 @@
                   @icon="external"
                   @iconAlignment="right"
                   href={{this.parliamentCaseLink}}
-                >{{date-phrase this.latestMeeting.plannedStart}}</AuLinkExternal>
+                >
+                  {{date-phrase this.latestMeeting.plannedStart}}
+                </AuLinkExternal>
               </div>
             </li>
             {{#if this.publicationStatus.isPublished}}
@@ -105,7 +106,7 @@
         </AuHelpText>
       {{/if}}
     {{else}}
-      <AuLoader />
+      <Auk::Loader />
     {{/if}}
   </Auk::Panel::Body>
 </Auk::Panel>

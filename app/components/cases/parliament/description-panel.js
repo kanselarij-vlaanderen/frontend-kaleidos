@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesParliamentDescriptionPanelComponent extends Component {
   @service store;
@@ -57,6 +58,6 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
   });
 
   get parliamentCaseLink() {
-    return `https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/${this.args.parliamentFlow.parliamentId}`;
+    return CONSTANTS.PARLIAMENT_CASE_URL_BASE + this.args.parliamentFlow.parliamentId;
   }
 }

@@ -1,24 +1,22 @@
-{{#let (load @parliamentFlow.status) as |statusPromise|}}
-  {{#if statusPromise.isResolved}}
-    {{#if statusPromise.value}}
-      <AuPill
-        @size="small"
-        @skin={{if @parliamentFlow.isIncomplete "warning" "success"}}
-      >
-        {{#if @useAltLabel}}
-          {{@parliamentFlow.status.altLabel}}
-        {{else}}
-          {{@parliamentFlow.status.label}}
-        {{/if}}
-      </AuPill>
-    {{else}}
-      <AuPill @size="small" @skin="warning">
-        {{t "no-status"}}
-      </AuPill>
-    {{/if}}
+{{#if (await @parliamentFlow.status)}}
+  {{#if @parliamentFlow.status}}
+    <AuPill
+      @size="small"
+      @skin={{if @parliamentFlow.isIncomplete "warning" "success"}}
+    >
+      {{#if @useAltLabel}}
+        {{@parliamentFlow.status.altLabel}}
+      {{else}}
+        {{@parliamentFlow.status.label}}
+      {{/if}}
+    </AuPill>
   {{else}}
-    <AuPill @size="small" @skin="default">
-      {{t "loading"}}
+    <AuPill @size="small" @skin="warning">
+      {{t "no-status"}}
     </AuPill>
   {{/if}}
-{{/let}}
+{{else}}
+  <AuPill @size="small" @skin="default">
+    {{t "loading"}}
+  </AuPill>
+{{/if}}

@@ -18,11 +18,13 @@
         <div id="documents" class="auk-u-mb-4">
           <Cases::Parliament::NewestDocumentsPanel
             @parliamentFlow={{@model.parliamentFlow}}
+            @submissionActivities={{@model.submissionActivities}}
           />
         </div>
         <div id="document-versions" class="auk-u-mb-4">
           <Cases::Parliament::DocumentVersionsPanel
             @parliamentFlow={{@model.parliamentFlow}}
+            @submissionActivities={{@model.submissionActivities}}
           />
         </div>
       </div>

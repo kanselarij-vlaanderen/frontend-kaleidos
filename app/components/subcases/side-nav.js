@@ -1,7 +1,15 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class SubcasesSideNavComponent extends Component {
-  get items() {
+  @tracked items;
+
+  constructor() {
+    super(...arguments);
+    this.loadItems();
+  }
+
+  loadItems() {
     let items = [];
 
     if (this.args.subcases) {
@@ -27,7 +35,7 @@ export default class SubcasesSideNavComponent extends Component {
       });
     }
 
-    return items.sort((item1, item2) =>
+    this.items = items.sort((item1, item2) =>
       item2.sortDate?.valueOf() - item1.sortDate?.valueOf()
     );
   }

@@ -14,16 +14,8 @@ export default class CasesParliamentNewestDocumentsPanelComponent extends Compon
   }
 
   loadData = task(async () => {
-    const subcase = await this.args.parliamentFlow.parliamentSubcase;
-    const submissionActivities = await this.store.queryAll(
-      'parliament-submission-activity',
-      {
-        'filter[parliament-subcase][:id:]': subcase.id,
-      }
-    );
-
     const submittedPieces = await this.store.queryAll('submitted-piece', {
-      'filter[parliament-submission-activity][:id:]': submissionActivities
+      'filter[parliament-submission-activity][:id:]': this.args.submissionActivities
         .map((x) => x.id)
         .join(','),
       'filter[piece][:has-no:next-piece]': true,
