@@ -3,6 +3,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 export default class ParliamentRetrievalActivity extends Model {
   @attr('date') startDate;
   @attr('date') endDate;
+  @attr authorityDomain;
   @attr('string-set', {
     defaultValue: () => [],
   })
