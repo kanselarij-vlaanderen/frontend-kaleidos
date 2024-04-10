@@ -19,5 +19,5 @@ export default class ParliamentRetrievalActivity extends Model {
   })
   generatedSubcase;
 
-  @hasMany('retrieved-piece', { inverse: null, async: true }) submittedPieces;
+  @hasMany('retrieved-piece', { inverse: null, async: true }) retrievedPieces;
 }
