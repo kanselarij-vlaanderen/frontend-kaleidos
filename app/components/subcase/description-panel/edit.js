@@ -143,10 +143,11 @@ export default class SubcaseDescriptionEdit extends Component {
       'filter[:has-no:next-version]': 't',
     })
     if (agendaItem) {
+      const agenda = await agendaItem.agenda;
       const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
-        'filter[agenda][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+        'filter[agenda][:id:]': agenda.id,
         'filter[:has-no:next-version]': 't',
-        'filter[agenda-activity][subcase][agenda-item-type][:uri:]': this.agendaItemType.uri,
+        'filter[type][:uri:]': this.agendaItemType.uri,
         sort: '-number'
       });
       return latestAgendaitemOfType ? latestAgendaitemOfType.number + 1 : 1;
