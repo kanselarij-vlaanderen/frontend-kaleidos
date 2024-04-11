@@ -1,0 +1,18 @@
+<div>
+  <div class="c-anchor-nav-holder">
+    <p>{{t "on-this-page"}}: </p>
+    <ul class="au-c-anchor-nav">
+      {{#each @items as |item|}}
+        <li>
+          <a
+            href={{concat "#" item.elementId}}
+            class="js-anchor"
+            onclick={{fn this.scrollToFragment item.elementId}}
+          >
+            {{item.label}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
