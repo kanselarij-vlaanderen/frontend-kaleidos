@@ -139,6 +139,7 @@ const groups = [
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
     ]
   },
   {
