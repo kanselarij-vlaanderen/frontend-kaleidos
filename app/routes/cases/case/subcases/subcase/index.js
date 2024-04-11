@@ -8,7 +8,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service currentSession;
 
   beforeModel() {
-    this.decisionmakingFlow = this.modelFor('cases.case');
+    this.decisionmakingFlow = this.modelFor('cases.case').decisionmakingFlow;
   }
 
   async model() {

@@ -81,6 +81,7 @@ export default class CasesIndexRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
-    return true;
+    // false so we don't transition to the loading route when searching
+    return false;
   }
 }
