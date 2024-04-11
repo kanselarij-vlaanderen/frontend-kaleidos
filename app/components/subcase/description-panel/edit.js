@@ -92,12 +92,12 @@ export default class SubcaseDescriptionEdit extends Component {
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
 
+    const oldAgendaItemType = await this.args.subcase.agendaItemType;
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
       type: this.agendaItemType,
     };
-
     const propertiesToSetOnSubCase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
@@ -105,7 +105,15 @@ export default class SubcaseDescriptionEdit extends Component {
       type: this.subcaseType,
       agendaItemType: this.agendaItemType,
     };
-    const oldAgendaItemType = await this.args.subcase.agendaItemType;
+
+    const agendaitemTypeChanged = this.agendaItemType.uri !== oldAgendaItemType.uri;
+    if (agendaitemTypeChanged) {
+      const agendaitemNumber = await this.calculateAgendaitemNumber();
+      if (agendaitemNumber) {
+        propertiesToSetOnAgendaitem.number = agendaitemNumber;
+      }
+    }
+
     await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
@@ -119,10 +127,9 @@ export default class SubcaseDescriptionEdit extends Component {
       await this.updateNewsItem.perform();
     }
 
-    if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
+    if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
       await this.updateDecisionReports();
-      await this.recalculateAgendaitemNumber();
     }
 
     this.args.onSave();
@@ -130,8 +137,7 @@ export default class SubcaseDescriptionEdit extends Component {
     this.isSaving = false;
   }
 
-  async recalculateAgendaitemNumber() {
-    const agendaitemType = await this.args.subcase.agendaItemType;
+  async calculateAgendaitemNumber() {
     const agendaItem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
@@ -140,12 +146,12 @@ export default class SubcaseDescriptionEdit extends Component {
       const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
         'filter[agenda][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
         'filter[:has-no:next-version]': 't',
-        'filter[agenda-activity][subcase][agenda-item-type][:uri:]': agendaitemType.uri,
-        sort: 'number'
-      })
-      agendaItem.number = latestAgendaitemOfType.number +1;
-      await agendaItem.save();
+        'filter[agenda-activity][subcase][agenda-item-type][:uri:]': this.agendaItemType.uri,
+        sort: '-number'
+      });
+      return latestAgendaitemOfType ? latestAgendaitemOfType.number + 1 : 1;
     }
+    return undefined;
   }
 
   async updateDecisionReports() {
