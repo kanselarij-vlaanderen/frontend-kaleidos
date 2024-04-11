@@ -136,15 +136,16 @@ export default class SubcaseDescriptionEdit extends Component {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
     })
-
-    const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
-      'filter[agenda][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-version]': 't',
-      'filter[agenda-activity][subcase][agenda-item-type][:uri:]': agendaitemType.uri,
-      sort: 'number'
-    })
-    agendaItem.number = latestAgendaitemOfType.number +1;
-    await agendaItem.save();
+    if (agendaItem) {
+      const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
+        'filter[agenda][agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+        'filter[:has-no:next-version]': 't',
+        'filter[agenda-activity][subcase][agenda-item-type][:uri:]': agendaitemType.uri,
+        sort: 'number'
+      })
+      agendaItem.number = latestAgendaitemOfType.number +1;
+      await agendaItem.save();
+    }
   }
 
   async updateDecisionReports() {
