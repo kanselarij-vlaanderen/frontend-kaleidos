@@ -8,7 +8,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service currentSession;
 
   beforeModel() {
-    this.decisionmakingFlow = this.modelFor('cases.case');
+    this.decisionmakingFlow = this.modelFor('cases.case').decisionmakingFlow;
   }
 
   async model() {
@@ -21,10 +21,13 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       'filter[:has-no:agenda-activity]': true,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
-    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
     // Get the submission from latest meeting if applicable
     const agendaActivities = await subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       this.latestMeeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
@@ -35,13 +38,13 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
         'filter[agenda-activity][:id:]': latestActivity.id,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 
@@ -51,6 +54,8 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     } else {
       sortedPieces = sortPieces(pieces);
     }
+
+    await subcase.type;
 
     return {
       decisionmakingFlow,

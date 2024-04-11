@@ -1,0 +1,70 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{t "document-versions"}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body
+    @noPadding={{not @submissionActivities}}
+    class="auk-u-bg-alt c-document-panel"
+  >
+    {{#if @submissionActivities}}
+      <ul class="vlc-status-timeline">
+        {{#each @submissionActivities as |submissionActivity index|}}
+          <li
+            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+          >
+            <div class="vlc-status-timeline__dot"></div>
+            <div
+              class="vlc-status-timeline__text au-u-flex au-u-flex--spaced-tiny au-u-1-1"
+            >
+              {{#if (not (eq (inc index) @submissionActivities.length))}}
+                {{t "edited-on"}}
+                {{date-phrase submissionActivity.startDate}}
+              {{else}}
+                {{t
+                  "sent-on-date-by-person"
+                  date=(date-phrase submissionActivity.startDate)
+                  person=submissionActivity.submitter.fullName
+                }}
+              {{/if}}
+              <AuButton
+                @skin="link"
+                @icon="chevron-right"
+                @iconAlignment="right"
+                {{on
+                  "click"
+                  (set this "selectedSubmissionActivity" submissionActivity)
+                }}
+              >{{t "view-documents-details"}}</AuButton>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <div>
+        <AuAlert
+          @skin="info"
+          @icon="info-circle"
+          class="au-u-margin-bottom-none"
+        >
+          {{t "no-documents-submitted-to-vp-yet"}}
+        </AuAlert>
+      </div>
+    {{/if}}
+  </Auk::Panel::Body>
+</Auk::Panel>
+{{#if this.selectedSubmissionActivity}}
+  <Vp::SentToVpModal
+    @submissionActivity={{this.selectedSubmissionActivity}}
+    @closeModal={{set this "selectedSubmissionActivity" null}}
+  />
+{{/if}}

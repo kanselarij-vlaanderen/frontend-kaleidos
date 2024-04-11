@@ -58,6 +58,9 @@
       {{#if @subcase.title}}
         <p data-test-subcase-description-title>{{capitalize @subcase.title}}</p>
       {{/if}}
+      {{#if @subcase.parliamentRetrievalActivity}}
+        <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
+      {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
@@ -77,20 +80,29 @@
             <Auk::Loader />
           {{else if this.modelsOfMeetings}}
             {{#each this.modelsOfMeetings as |models| }}
-              {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
-                <AuLink
-                  data-test-subcase-description-agenda-link
-                  @route="agenda.agendaitems.agendaitem"
-                  @models={{array
-                    meeting.id
-                    agenda.id
-                    agendaitem.id
-                  }}
-                >
-                  {{! prettier-ignore}}
-                  {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                </AuLink>
-              {{/let}}
+              {{#if (not (has-next models this.modelsOfMeetings))}}
+                {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                  <AuLink
+                    data-test-subcase-description-agenda-link
+                    @route="agenda.agendaitems.agendaitem"
+                    @models={{array
+                      meeting.id
+                      agenda.id
+                      agendaitem.id
+                    }}
+                  >
+                    {{! prettier-ignore}}
+                    {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                  </AuLink>
+                  {{#if meeting.hasKindEP}}
+                    <AuPill
+                      @size="small"
+                    >
+                      {{meeting.kind.label}}
+                    </AuPill>
+                  {{/if}}
+                {{/let}}
+              {{/if}}
             {{/each}}
           {{else}}
             <p data-test-subcase-description-not-on-agenda>
@@ -105,9 +117,11 @@
                 <Auk::Loader />
               {{else if this.modelsOfMeetings}}
                 {{#each this.modelsOfMeetings as |models|}}
-                  {{#let models.[0] as |meeting|}}
-                    {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                  {{/let}}
+                  {{#if (not (has-next models this.modelsOfMeetings))}}
+                    {{#let models.[0] as |meeting|}}
+                      {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
+                    {{/let}}
+                  {{/if}}
                 {{/each}}
               {{else}}
                 {{t "no-number-yet"}}
@@ -128,6 +142,28 @@
             </p>
           {{/if}}
         </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
+          <p>
+            {{if @subcase.subcaseName @subcase.subcaseName '-'}}
+          </p>
+        </div>
+        {{#if @subcase.parliamentRetrievalActivity}}
+          <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+            <AuHeading @level="4" @skin="6">
+              {{capitalize (t "remark")}}
+            </AuHeading>
+            {{#if this.loadComments.isRunning}}
+              <Auk::Loader />
+            {{else}}
+              {{#each this.comments as |comment|}}
+                <AuHelpText @skin="secondary">{{comment}}</AuHelpText>
+              {{else}}
+              -
+              {{/each}}
+            {{/if}}
+          </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>

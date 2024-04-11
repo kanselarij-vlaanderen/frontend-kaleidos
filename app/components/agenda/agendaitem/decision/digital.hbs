@@ -16,7 +16,6 @@
             (user-may "manage-decisions")
             (not this.isEditing)
             (not this.pieceParts this.report)
-            this.isMeetingPostDigitalDecisions
           )
         }}
           <Group.Item>
@@ -40,8 +39,7 @@
     (and
       this.loadReport.isIdle
       (not this.isEditing)
-      this.pieceParts
-      this.isMeetingPostDigitalDecisions
+      this.report
     )
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
@@ -52,7 +50,6 @@
           @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
           @showCreateNewVersion={{true}}
@@ -178,46 +175,7 @@
         </Auk::Toolbar>
       </Auk::Panel::Footer>
     {{else}}
-      {{#if
-        (and
-          this.report
-          (or (not this.pieceParts) (not this.isMeetingPostDigitalDecisions))
-        )
-      }}
-        <Auk::Panel::Body class="au-o-flow" @noPadding={{true}}>
-          <Documents::DocumentCard
-            @piece={{this.report}}
-            @decisionActivity={{@decisionActivity}}
-            @meeting={{@agendaContent.meeting}}
-            @isEditable={{true}}
-            @agendaContext={{@agendaContext}}
-            @hideNewerVersions={{true}}
-            @onOpenUploadModal={{@onOpenUploadModal}}
-            @onAddPiece={{this.attachNewReportVersionAsPiece}}
-            @pieceSubtype="report"
-            @didDeleteContainer={{this.didDeleteReport}}
-            @bordered={{false}}
-          />
-        </Auk::Panel::Body>
-      {{else if
-        (and
-          (user-may "manage-decisions") (not this.isMeetingPostDigitalDecisions)
-        )
-      }}
-        <Auk::Panel::Body @noPadding={{true}}>
-          <div class="auk-u-p-2">
-            <AuButton
-              data-test-agendaitem-decision-upload-file
-              @skin="naked"
-              @icon="upload"
-              {{on "click" (fn (set this "isAddingReport" true))}}
-            >
-              {{t "signed-decision-add"}}
-            </AuButton>
-          </div>
-        </Auk::Panel::Body>
-      {{/if}}
-      {{#if (and this.pieceParts this.isMeetingPostDigitalDecisions)}}
+      {{#if this.pieceParts}}
         <Auk::Panel::Body
           class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
         >
@@ -451,7 +409,7 @@
         </Auk::Panel::Body>
       {{/if}}
     {{/if}}
-  {{else}}
+  {{else if (user-may "manage-decisions")}}
     <Auk::Panel::Body
       class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
     >
@@ -459,15 +417,6 @@
     </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>
-
-{{#if this.isAddingReport}}
-  <Utils::AddDocument
-    @title={{t "signed-decision-add"}}
-    @onSave={{this.attachReportPdf}}
-    @onCancel={{fn (set this "isAddingReport" false)}}
-    @pieceSubtype="report"
-  />
-{{/if}}
 
 {{#if this.updateAgendaitemPiecesAccessLevels.isRunning}}
   <Auk::Modal @size="medium">

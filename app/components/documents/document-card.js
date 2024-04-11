@@ -196,7 +196,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      const lastPiece = this.reverseSortedPieces.lastObject;
+      const lastPiece = this.reverseSortedPieces.at(-1);
       this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
@@ -291,7 +291,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
-    const previousPiece = this.sortedPieces.lastObject;
+    const previousPiece = this.sortedPieces.at(-1);
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
     this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {

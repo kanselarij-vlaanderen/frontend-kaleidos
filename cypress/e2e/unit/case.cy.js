@@ -59,15 +59,15 @@ context('Create case as Admin user', () => {
       // automatic transition to add new-subcase modal
       cy.url().should('contain', `dossiers/${result.caseId}/deeldossiers/procedurestap-toevoegen`);
     });
-    // title is visible in header
-    cy.get(cases.newSubcaseForm.titleContainer).within(() => {
-      cy.contains(caseTitle);
-    });
     const subcase = {
       newCase: true,
       agendaitemType: 'Nota',
     };
     cy.addSubcaseViaModal(subcase);
+    // case title is visible in header
+    cy.get(cases.subcaseOverviewHeader.titleContainer).within(() => {
+      cy.contains(caseTitle);
+    });
     // no short title results in case title being used for subcase
     cy.get(cases.subcaseDescription.shortTitle).contains(caseTitle);
     // subcase confidentiality should be false by default

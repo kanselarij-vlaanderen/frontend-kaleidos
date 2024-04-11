@@ -7,7 +7,7 @@ export default class SignCompletionActivityModel extends Model {
 
   @belongsTo('sign-subcase', { inverse: 'signCompletionActivity', async: true })
   signSubcase;
-  @belongsTo('piece', { inverse: 'signCompletionActivity', async: true })
+  @belongsTo('piece', { inverse: 'signCompletionActivity', async: true, polymorphic: true })
   signedPiece;
 
   @hasMany('sign-signing-activity', {
