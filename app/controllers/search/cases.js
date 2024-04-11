@@ -96,7 +96,7 @@ export default class CasesSearchController extends Controller {
       // do nothing, this was a clicked link in the card and the router will transition later
       return;
     } else {
-      this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+      this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
     }
   }
 
