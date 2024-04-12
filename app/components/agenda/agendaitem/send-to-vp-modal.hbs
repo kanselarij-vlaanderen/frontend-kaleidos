@@ -71,13 +71,15 @@
                           @onChange={{fn this.togglePieceSelection piece}}
                           @disabled={{true}}
                         >
-                        <LinkTo 
-                          @skin="secondary"
-                          @active="true"
-                        >
-                          {{piece.name}}
-                          {{await (this.pieceFileTypes piece)}}
-                        </LinkTo>
+                          {{! template-lint-disable no-unknown-arguments-for-builtin-components }}
+                          <LinkTo
+                            @skin="secondary"
+                            @active="true"
+                          >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
+                          {{! template-lint-enable no-unknown-arguments-for-builtin-components }}
                         </AuCheckbox>
                         <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
                       {{else}}
