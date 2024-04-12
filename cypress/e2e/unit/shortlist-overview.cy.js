@@ -472,7 +472,7 @@ context('publications shortlist overview tests', () => {
   const type2 = 'Nota';
   const subcaseTitleShort2 = `Cypress test: subcase shortlist publications route subcase 2 - ${currentTimestamp()}`;
   const subcaseTitleLong2 = 'Cypress test voor shortlist publications route subcase 2';
-  const subcaseType2 = 'Bekrachtiging Vlaamse Regering';
+  const subcaseType2 = 'Bekrachtiging en afkondiging';
   const subcaseName2 = 'Goedkeuring na adviezen';
 
   const files1 = [
