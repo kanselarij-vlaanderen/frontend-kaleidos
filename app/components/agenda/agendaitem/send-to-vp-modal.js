@@ -92,6 +92,9 @@ export default class SendToVpModalComponent extends Component {
   });
 
   getAccessLevel = async(accessLevelUri) => {
+    if (!accessLevelUri) {
+      return null;
+    }
     const accessLevel = await this.store.queryOne('concept', {
       'filter[:uri:]': accessLevelUri
     })
