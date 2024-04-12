@@ -245,6 +245,7 @@ function addPublicationMandatee(mandateeNamesSelector = mandateeNames.current.fi
     timeout: 60000,
   });
   cy.get(dependency.emberPowerSelect.trigger).click();
+  cy.get(dependency.emberPowerSelect.searchInput).type(mandateeNamesSelector.lastName);
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
   if (mandateeNamesSelector.searchTitle) {

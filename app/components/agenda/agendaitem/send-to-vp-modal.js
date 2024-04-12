@@ -92,6 +92,9 @@ export default class SendToVpModalComponent extends Component {
   });
 
   getAccessLevel = async(accessLevelUri) => {
+    if (!accessLevelUri) {
+      return null;
+    }
     const accessLevel = await this.store.queryOne('concept', {
       'filter[:uri:]': accessLevelUri
     })
@@ -141,11 +144,6 @@ export default class SendToVpModalComponent extends Component {
       return `(${formatter.format(list)})`;
     }
     return '';
-  }
-
-  @action
-  onChangeComment(event) {
-    this.comment = event.target.value;
   }
 
   @action
