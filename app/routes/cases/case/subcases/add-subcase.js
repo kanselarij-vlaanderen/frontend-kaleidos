@@ -5,7 +5,7 @@ export default class CasesCaseSubcasesAddSubcaseRoute extends Route {
   @service store;
 
   async model() {
-    const { decisionmakingFlow, subcases } = this.modelFor('cases.case.subcases');
+    const { decisionmakingFlow, subcases } = this.modelFor('cases.case');
     const latestSubcase = subcases.slice().at(-1);
     await latestSubcase?.mandatees;
     await latestSubcase?.governmentAreas;

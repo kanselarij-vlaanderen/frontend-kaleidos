@@ -6,7 +6,7 @@ export const PAGE_SIZE = {
   SELECT: 10,
 };
 
-export const LIVE_SEARCH_DEBOUNCE_TIME = 300;
+export const LIVE_SEARCH_DEBOUNCE_TIME = 500;
 
 export const PAGINATION_SIZES = [5, 10, 20, 25, 50, 100, 200];
 

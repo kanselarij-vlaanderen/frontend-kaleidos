@@ -71,13 +71,14 @@
                           @onChange={{fn this.togglePieceSelection piece}}
                           @disabled={{true}}
                         >
-                        <LinkTo 
-                          @skin="secondary"
-                          @active="true"
-                        >
-                          {{piece.name}}
-                          {{await (this.pieceFileTypes piece)}}
-                        </LinkTo>
+                          <LinkTo
+                            @route="document" 
+                            @model={{piece.id}}
+                            disabled={{true}}
+                          >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
                         </AuCheckbox>
                         <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
                       {{else}}
