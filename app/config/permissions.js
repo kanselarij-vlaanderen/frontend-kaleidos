@@ -45,11 +45,13 @@ const {
 // - manage-alerts: Manage systeem notifications to be shown in the application
 // - manage-minutes: Create and update minutes for a meeting
 // - manage-secretary-signatures: Create and follow-up sign-flows for documents to be signed by secretaries
+// - manage-ratification: Can add ratification docs and select mandatees who should sign it
 // - add-past-mandatees: Adding past mandatees on subcases
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
 // - view-only-specific-confidential-documents: allow the viewing of a restricted selection of confidential documents.
+// - view-ratification-before-release: See ratification info before the agenda is finalized
 // - search-confidential-cases: allow searching of cases that have at least 1 confidential subcase
 // - search-confidential-documents: allow searching of documents that have vertrouwelijk access level
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
@@ -176,6 +178,7 @@ const groups = [
     defaultRoute: 'publications',
     permissions: [
       'manage-signatures',
+      'manage-ratification',
       'view-all-ongoing-signatures',
       'manage-publication-flows',
       'search-publication-flows',

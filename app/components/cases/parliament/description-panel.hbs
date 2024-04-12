@@ -1,0 +1,112 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{t "case-info"}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuLinkExternal
+            @icon="external"
+            @iconAlignment="right"
+            href={{this.parliamentCaseLink}}
+          >
+            {{t "to-flemish-parliament"}}
+          </AuLinkExternal>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <AuHeading @level="4" @skin="4">
+      {{#if @latestSubmissionActivity}}
+        {{@latestSubmissionActivity.title}}
+      {{else}}
+        {{@latestRetrievalActivity.title}}
+      {{/if}}
+    </AuHeading>
+  </Auk::Panel::Body>
+  <Auk::Panel::Body>
+    <div class="au-o-grid au-o-grid--small au-u-1-1">
+      <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        <AuHeading @level="4" @skin="6">{{t "status"}}</AuHeading>
+        <Parliament::StatusPill @parliamentFlow={{@parliamentFlow}} />
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        <AuHeading @level="4" @skin="6">{{t "number"}}
+        </AuHeading>
+        <p class="auk-u-mt-1">{{@parliamentFlow.parliamentId}}</p>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Body class="auk-u-bg-alt">
+    {{#if this.loadStatusData.isIdle}}
+      <AuHeading @level="4" @skin="6">{{t "last-statusses"}}</AuHeading>
+      {{#if @latestRetrievalActivity}}
+        <ul class="vlc-status-timeline">
+          <li
+            class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+          >
+            <div class="vlc-status-timeline__dot"></div>
+            <div class="vlc-status-timeline__text">
+              {{t "accepted-in-plenary-meeting-on"}}
+              <AuLinkExternal
+                @icon="external"
+                @iconAlignment="right"
+                href={{this.parliamentCaseLink}}
+              >
+                {{date-phrase @latestRetrievalActivity.startDate}}
+              </AuLinkExternal>
+            </div>
+          </li>
+          {{#if this.latestMeeting.agenda}}
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                {{t "ratified-and-announced-on"}}
+                <AuLinkExternal
+                  @icon="external"
+                  @iconAlignment="right"
+                  href={{this.parliamentCaseLink}}
+                >
+                  {{date-phrase this.latestMeeting.plannedStart}}
+                </AuLinkExternal>
+              </div>
+            </li>
+            {{#if this.publicationStatus.isPublished}}
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  {{t "published-in-belgian-official-gazette"}}
+                  <AuLinkExternal
+                    @icon="external"
+                    @iconAlignment="right"
+                    href={{this.parliamentCaseLink}}
+                  >
+                    {{date-phrase this.latestPublicationActivity.endDate}}
+                  </AuLinkExternal>
+                </div>
+              </li>
+            {{/if}}
+          {{/if}}
+        </ul>
+      {{else}}
+        <AuHelpText @skin="secondary">
+          {{t "no-statusses-available-yet"}}
+        </AuHelpText>
+      {{/if}}
+    {{else}}
+      <Auk::Loader />
+    {{/if}}
+  </Auk::Panel::Body>
+</Auk::Panel>
