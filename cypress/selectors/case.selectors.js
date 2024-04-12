@@ -16,7 +16,6 @@ const selectors = {
 
   // new-subcase-form
   newSubcaseForm: {
-    titleContainer: '[data-test-new-subcase-form-title-container]',
     clonePrevious: '[data-test-new-subcase-form-clone-previous]',
     toggleConfidential: '[data-test-new-subcase-form-toggle-confidential]',
     shorttitle: '[data-test-new-subcase-form-shorttitle]',
