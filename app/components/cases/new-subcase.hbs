@@ -55,17 +55,17 @@
         </AuFormRow>
         <AuFormRow>
           <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-new-subcase-shorttitle
-            @rows="2"
+            @width="block"
             @value={{this.shortTitle}}
           />
         </AuFormRow>
         <AuFormRow>
           <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-          <Auk::Textarea
+          <AuTextarea
             data-test-new-subcase-longtitle
-            @rows="4"
+            @width="block"
             @value={{this.title}}
           />
         </AuFormRow>

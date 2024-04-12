@@ -45,7 +45,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   navigateToSubcaseOverview(decisionmakingFlow) {
-    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+    this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
   }
 
   toggleAllPropertiesBackToDefault() {
@@ -178,7 +178,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
         return;
       }
     }
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
     this.args.onMoveSubcase();
   });
 
@@ -186,6 +186,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   cancelDeleteCase() {
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
   }
 }

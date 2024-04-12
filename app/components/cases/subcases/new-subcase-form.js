@@ -121,7 +121,7 @@ export default class NewSubcaseForm extends Component {
   @task
   *cancelForm() {
     yield this.deletePieces();
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
   }
 
   @task

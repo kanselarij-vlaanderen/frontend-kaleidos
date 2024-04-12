@@ -111,8 +111,37 @@ export default class AgendaService extends Service {
   /**
    * @argument meeting
    * @argument subcase
+   * @argument formallyOk: optional
+   * @argument privateComment: optional
    */
   async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
+    // TODO I moved this part because saving subcase here after a service call will break relations
+    // Ideally we want to move this to the service?
+    await subcase.type;
+    if (subcase.isBekrachtiging) {
+      const decisionmakingFlow = await subcase.decisionmakingFlow;
+      const latestApprovalSubcase = await this.store.queryOne('subcase', {
+        filter: {
+          'decisionmaking-flow': {
+            ':id:': decisionmakingFlow.id,
+          },
+          'type': {
+            ':uri:': CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+          }
+        },
+        sort: '-created',
+      });
+      if (latestApprovalSubcase) {
+        let ratifiedBy = await latestApprovalSubcase.mandatees;
+        ratifiedBy = ratifiedBy?.slice();
+        if (ratifiedBy) {
+          await subcase.ratifiedBy;
+          subcase.ratifiedBy = ratifiedBy;
+          await subcase.save();
+          await subcase.hasMany('ratifiedBy').reload(); // TODO we set the list, so we shouldn't have to reload?
+        }
+      }
+    }
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',
@@ -140,31 +169,6 @@ export default class AgendaService extends Service {
         `Backend response contained an error (status: ${
           response.status
         }): ${JSON.stringify(json)}`);
-    }
-    await subcase.type;
-    if (subcase.isBekrachtiging) {
-      const decisionmakingFlow = await subcase.decisionmakingFlow;
-      const latestApprovalSubcase = await this.store.queryOne('subcase', {
-        filter: {
-          'decisionmaking-flow': {
-            ':id:': decisionmakingFlow.id,
-          },
-          'type': {
-            ':uri:': CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
-          }
-        },
-        sort: '-created',
-      });
-      if (latestApprovalSubcase) {
-        let ratifiedBy = await latestApprovalSubcase.mandatees;
-        ratifiedBy = ratifiedBy.slice();
-        if (ratifiedBy) {
-          await subcase.ratifiedBy;
-          subcase.ratifiedBy = ratifiedBy;
-          await subcase.save();
-          await subcase.hasMany('ratifiedBy').reload();
-        }
-      }
     }
     const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();

@@ -58,6 +58,9 @@
       {{#if @subcase.title}}
         <p data-test-subcase-description-title>{{capitalize @subcase.title}}</p>
       {{/if}}
+      {{#if @subcase.parliamentRetrievalActivity}}
+        <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>
+      {{/if}}
     </Auk::Panel::Body>
     <Auk::Panel::Body>
       <div class="au-o-grid au-o-grid--small au-u-1-1">
@@ -145,6 +148,22 @@
             {{if @subcase.subcaseName @subcase.subcaseName '-'}}
           </p>
         </div>
+        {{#if @subcase.parliamentRetrievalActivity}}
+          <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+            <AuHeading @level="4" @skin="6">
+              {{capitalize (t "remark")}}
+            </AuHeading>
+            {{#if this.loadComments.isRunning}}
+              <Auk::Loader />
+            {{else}}
+              {{#each this.comments as |comment|}}
+                <AuHelpText @skin="secondary">{{comment}}</AuHelpText>
+              {{else}}
+              -
+              {{/each}}
+            {{/if}}
+          </div>
+        {{/if}}
       </div>
     </Auk::Panel::Body>
   </Auk::Panel>
