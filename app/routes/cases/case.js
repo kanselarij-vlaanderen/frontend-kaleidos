@@ -12,6 +12,7 @@ export default class CasesCaseRoute extends Route {
         'filter[case][decisionmaking-flow][:id:]': params.id,
         include: 'parliament-subcase',
       }),
+      // this sort here matters for cases/case/index redirect
       this.store.queryAll('subcase', {
         'filter[decisionmaking-flow][:id:]': params.id,
         sort: 'created',
