@@ -7,6 +7,7 @@ import cases from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 // ***********************************************
 // Functions
@@ -56,19 +57,11 @@ function getTranslatedMonth(month) {
  * @memberOf Cypress.Chainable#
  * @name openSubcase
  * @function
- * @param {number} [index] The list index of the subcase to select, default 0
- * @param {string} - the short title to check if a new subcase is fully created before trying to open the latest one
+ * @param {number} [index] The list index of the subcase to select in the side nav, default 0
  */
-function openSubcase(index = 0, shortTitle) {
+function openSubcase(index = 0) {
   cy.log('openSubcase');
-  // cy.intercept('GET', '/subcases?**').as('getSubcases');
-  // cy.wait('@getSubcases', { timeout: 12000 });
-  cy.wait(2000); // link does not always work (not visible or click does nothing unless we wait)
-  if (shortTitle) {
-    cy.get(cases.subcaseProcess.shorttitle).should('contain', shortTitle);
-  }
-  cy.get(cases.subcaseItem.container).eq(index)
-    .find(cases.subcaseItem.link)
+  cy.get(cases.subcaseSideNav.subcase).eq(index)
     .click();
   cy.log('/openSubcase');
 }
@@ -87,41 +80,40 @@ function changeSubcaseAccessLevel(confidentialityChange, newShortTitle, newLongT
   cy.log('changeSubcaseAccessLevel');
   cy.intercept('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get(cases.subcaseTitlesView.edit).click();
+  cy.get(cases.subcaseDescription.edit).click();
 
   if (confidentialityChange) {
-    cy.get(cases.subcaseTitlesEdit.confidential)
+    cy.wait(2000); // Cypress too fast? on save we don't pick up that the toggle happened
+    cy.get(cases.subcaseDescriptionEdit.confidential)
       .parent()
       .click();
   }
   if (newShortTitle) {
-    cy.get(cases.subcaseTitlesEdit.shorttitle).click()
+    cy.get(cases.subcaseDescriptionEdit.shortTitle).click()
       .clear()
       .type(newShortTitle);
   }
   if (newLongTitle) {
-    cy.get(cases.subcaseTitlesEdit.title).click()
+    cy.get(cases.subcaseDescriptionEdit.title).click()
       .clear()
       .type(newLongTitle);
   }
 
-  cy.get(cases.subcaseTitlesEdit.actions.save)
+  cy.get(cases.subcaseDescriptionEdit.actions.save)
     .click();
   cy.wait('@patchSubcase');
   cy.log('/changeSubcaseAccessLevel');
 }
 
 /**
- * Adds a mandatees to a sucase when used in the subcase view
- * Pass the title of the mandatee to get a specific person
+ * Adds a mandatee to a subcase when used in the subcase view
+ * Pass a valid entry from 'mandatee-names.selectors.js'
  * @name addSubcaseMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee from default list (this is ignored if mandateeSearchText is given)
- * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
- * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
  */
-function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
+function addSubcaseMandatee(mandateeNamesSelector = mandateeNames.current.first) {
   cy.log('addSubcaseMandatee');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
@@ -136,23 +128,16 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
   });
   cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
     .click();
-  if (mandateeSearchText) {
-    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
-  }
+  cy.get(dependency.emberPowerSelect.searchInput).type(mandateeNamesSelector.lastName);
   cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
   cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-  // we can search or select by number
-  // when searching we select the first option we get or the first option with a specific title
-  if (mandateeSearchText) {
-    if (mandateeTitle) {
-      cy.get(dependency.emberPowerSelect.option).contains(mandateeTitle)
-        .click();
-    } else {
-      cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
-        .click();
-    }
+
+  // when searching we select the result with a specific title
+  if (mandateeNamesSelector.searchTitle) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.searchTitle)
+      .click();
   } else {
-    cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.title)
       .click();
   }
   cy.get(dependency.emberPowerSelect.option).should('not.exist', {
@@ -167,24 +152,22 @@ function addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle) {
 }
 
 /**
- * Adds a mandatees to an agendaitem when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
- * Pass the title of the mandatee to get a specific person
+ * Adds a mandatee to an agendaitem when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
+ * Pass a valid entry from 'mandatee-names.selectors.js'
  * @name addAgendaitemMandatee
  * @memberOf Cypress.Chainable#
  * @function
- * @param {Number} mandateeNumber - The list index of the mandatee
- * @param {String} mandateeSearchText - Search on the minister name (title no longer works)
- * @param {String} mandateeTitle - Select the found mandatee by correct title (optional, use when 1 person has multiple mandatees)
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
  * @param {isDesignAgenda} isDesignAgenda - whether or not the agenda has status designagenda. Defaults to true
  */
-function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle, isDesignAgenda = true) {
+function addAgendaitemMandatee(mandateeNamesSelector = mandateeNames.current.first, isDesignAgenda = true) {
   cy.log('addAgendaitemMandatee');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('PATCH', '/agendaitems/*').as(`patchAgendaitem${randomInt}`);
   cy.intercept('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
 
 
-  cy.addSubcaseMandatee(mandateeNumber, mandateeSearchText, mandateeTitle);
+  cy.addSubcaseMandatee(mandateeNamesSelector);
   cy.wait(`@patchAgendaitem${randomInt}`, {
     timeout: 40000,
   });
@@ -205,34 +188,42 @@ function addAgendaitemMandatee(mandateeNumber, mandateeSearchText, mandateeTitle
  * @memberOf Cypress.Chainable#
  * @function
  * @param {date} agendaDate - The date of the agenda
- * @param {String} numberRep - The specific numberRep for the agenda you want to use
+ * @param {String} meetingKind - the kind of meeting
  */
-function proposeSubcaseForAgenda(agendaDate, numberRep = '') {
+function proposeSubcaseForAgenda(agendaDate, kind) {
   cy.log('proposeSubcaseForAgenda');
-  cy.intercept('POST', '/meetings/*/submit').as('submitSubcaseOnMeeting');
-  const monthDutch = getTranslatedMonth(agendaDate.month());
-  let formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-  if (numberRep) {
-    formattedDate = `${formattedDate} - ${numberRep}`;
-  }
-
-  cy.get(cases.subcaseHeader.showProposedAgendas).click();
-
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('GET', '/agendaitems?filter**').as(`loadAgendaData_${randomInt}`);
-  cy.intercept('GET', '/subcases?filter**decisionmaking-flow**').as(`loadSubcase_${randomInt}`);
-  cy.get(cases.subcaseHeader.actions.proposeForAgenda).contains(formattedDate)
+  cy.intercept('POST', '/meetings/*/submit').as(`submitSubcaseOnMeeting_${randomInt}`);
+  const formattedDate = agendaDate.format('DD-MM-YYYY');
+
+  cy.get(cases.subcaseHeader.actionsDropdown)
+    .children(appuniversum.button)
     .click();
-  cy.get(cases.subcaseHeader.showProposedAgendas)
-    .should('not.exist');
-  cy.wait('@submitSubcaseOnMeeting', {
-    timeout: 24000,
+  cy.get(cases.subcaseHeader.actions.showProposedAgendas).forceClick();
+  // find the agenda in the list
+  if (kind) {
+    cy.get(cases.proposableAgendas.agendaRow).contains(kind,
+      {
+        matchCase: false,
+      })
+      .parents(cases.proposableAgendas.agendaRow)
+      .as('rows');
+  } else {
+    cy.get(cases.proposableAgendas.agendaRow).as('rows');
+  }
+  cy.get('@rows').children()
+    .contains(formattedDate)
+    .scrollIntoView()
+    .click();
+  cy.get(cases.proposableAgendas.placeOnAgenda).click();
+  cy.wait(`@submitSubcaseOnMeeting_${randomInt}`, {
+    timeout: 60000,
   });
-  // refresh happens
-  cy.wait(`@loadAgendaData_${randomInt}`);
-  cy.wait(`@loadSubcase_${randomInt}`);
+  cy.get(cases.subcaseDescription.agendaLink, {
+    timeout: 60000,
+  });
   cy.get(appuniversum.loader).should('not.exist');
-  cy.get(cases.subcaseDescription.panel).find(cases.subcaseTimeline.item); // when this succeeds the refresh happened
+  cy.get(cases.subcaseDescription.panel).find(cases.subcaseDescription.agendaLink);
   cy.log('/proposeSubcaseForAgenda');
 }
 

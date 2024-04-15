@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { addWeeks, subWeeks } from 'date-fns';
 
 /*
  * @argument subcase
@@ -16,7 +15,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service toaster;
   @service intl;
 
-  @tracked isAssigningToOtherAgenda = false;
+  @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
@@ -27,7 +26,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
-  @tracked meetings;
 
   constructor() {
     super(...arguments);
@@ -38,20 +36,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @task
   *loadData() {
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
-    this.canPropose = !(activities?.length || this.isAssigningToOtherAgenda || this.isLoading);
-    this.canDelete = (this.canPropose && !this.isAssigningToOtherAgenda);
-
-    const dateOfToday = subWeeks(new Date, 1).toISOString();
-    const futureDate = addWeeks(new Date, 20).toISOString();
-
-    this.meetings = yield this.store.query('meeting', {
-      filter: {
-        ':gte:planned-start': dateOfToday,
-        ':lte:planned-start': futureDate,
-        ':has-no:agenda': true
-      },
-      sort: 'planned-start',
-    });
+    this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
+    this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
   }
 
   triggerDeleteCaseDialog() {
@@ -59,11 +45,11 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   navigateToSubcaseOverview(decisionmakingFlow) {
-    this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+    this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
   }
 
   toggleAllPropertiesBackToDefault() {
-    this.isAssigningToOtherAgenda = false;
+    this.isAssigningToAgenda = false;
     this.isDeletingSubcase = false;
     this.selectedSubcase = null;
     this.subcaseToDelete = null;
@@ -98,17 +84,23 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = subcase;
   }
 
-  @action
-  proposeForOtherAgenda() {
-    this.isAssigningToOtherAgenda = !this.isAssigningToOtherAgenda;
-  }
-
+  /**
+   * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
+   * @param {Meeting} meeting
+   * @param {boolean} isFormallyOk
+   * @param {string} privatecomment
+   */
   @task
-  *proposeForAgenda(meeting) {
-    this.isAssigningToOtherAgenda = false;
+  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
+    this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
-      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+      yield this.agendaService.putSubmissionOnAgenda(
+        meeting,
+        this.args.subcase,
+        isFormallyOk,
+        privateComment,
+      );
     } catch (error) {
       this.router.refresh();
       this.toaster.error(
@@ -186,7 +178,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
         return;
       }
     }
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
     this.args.onMoveSubcase();
   });
 
@@ -194,6 +186,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   cancelDeleteCase() {
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
   }
 }

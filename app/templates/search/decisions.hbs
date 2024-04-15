@@ -47,16 +47,9 @@
       </:body>
     </KDataTable>
   {{else}}
-    {{#if this.emptySearch}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "fill-in-search-term"}}
-      />
-    {{else}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "no-results-found-modify-term"}}
-      />
-    {{/if}}
+    <Auk::EmptyState
+      @bordered={{true}}
+      @message={{t "no-results-found-modify-term"}}
+    />
   {{/if}}
 </div>

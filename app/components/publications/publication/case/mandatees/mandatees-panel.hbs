@@ -68,6 +68,7 @@
   isn't filled in, which in theory can be the case for a non-MR publication-flow, but in practice should
   hardly ever occur }}
   <Mandatees::MandateesSelectorModal
+    @excludeMandatees={{@publicationFlow.mandatees}}
     @referenceDate={{or
       @publicationFlow.decisionActivity.startDate
       @publicationFlow.openingDate

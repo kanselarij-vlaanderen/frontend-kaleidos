@@ -7,7 +7,7 @@ import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
 import endOfDay from 'date-fns/endOfDay';
 
-export default class SignaturesOngoingRoute extends Route {
+export default class SignaturesOngoingDecisionsRoute extends Route {
   @service currentSession;
   @service store;
 

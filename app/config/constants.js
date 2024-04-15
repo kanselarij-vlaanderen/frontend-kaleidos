@@ -59,6 +59,8 @@ export default {
     ADVIES_IF: "http://themis.vlaanderen.be/id/concept/document-type/351ba62d-eeff-4b08-b1e3-0a56d38116c4",
     ADVIES: "http://themis.vlaanderen.be/id/concept/document-type/fb931eff-38f2-4743-802b-4240c35b8b0c",
     ADVIES_AGO: "http://themis.vlaanderen.be/id/concept/document-type/9c043848-6a9f-4448-9794-600e40dee6d2",
+    BEKRACHTIGING: "http://themis.vlaanderen.be/id/concept/document-type/609cf883-b52c-43fe-84b1-eed02527173b",
+    BIJLAGE_TER_INZAGE: "http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043",
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
@@ -76,6 +78,12 @@ export default {
       BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
       SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
       FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
+  },
+  VP_JOB_STATUSES: {
+    SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
+    BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
+    SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
+    FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
   },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/bdba2bbc-7af6-490b-98a8-433955cfe869',
@@ -141,6 +149,7 @@ export default {
     INCOMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/d30fdd4d-ba47-437d-b72e-4bff02e8c3fb',
     COMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/018fb31c-44ad-4bf5-b01b-76de2d48abf4',
     BEING_HANDLED_BY_FP: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/3905d9a1-c841-42fc-8a89-3b7d4ad61b4b',
+    RECEIVED: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/879aed2f-6efa-4d7b-ab1b-13cc406b1f92',
   },
   PARLIAMENT_CASE_URL_BASE: 'https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/',
   URGENCY_LEVELS: {
@@ -165,6 +174,7 @@ export default {
     MINISTERRAAD: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/ef51c9d5-8b45-4501-9dcd-3e00ccff524f',
     PVV: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/9b4701f8-a136-4009-94c6-d64fdc96b9a2',
     ANNEX: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/30d6a064-8cca-4485-8b37-7ab2357d931d',
+    EP: 'http://themis.vlaanderen.be/id/concept/vergaderactiviteit-type/2387564a-0897-4a62-9b9a-d1755eece7af',
   },
   MANDATE_ROLES: {
     MINISTER_PRESIDENT: 'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president

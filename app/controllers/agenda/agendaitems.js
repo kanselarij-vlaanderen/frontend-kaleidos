@@ -3,18 +3,11 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {
-  task,
-  lastValue
-} from 'ember-concurrency';
+import { task, lastValue, all, animationFrame } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import {
-  all,
-  animationFrame
-} from 'ember-concurrency';
 
 export default class AgendaAgendaitemsController extends Controller {
   queryParams = [
@@ -48,8 +41,29 @@ export default class AgendaAgendaitemsController extends Controller {
   @tracked isEditingOverview = false;
 
   @tracked filter;
-  // @tracked showModifiedOnly;
-  // @tracked anchor;
+  @tracked notasHasChanged = false;
+  @tracked announcementsHasChanged = false;
+
+  constructor() {
+    super(...arguments);
+
+    this.router.on('routeWillChange', (transition) => {
+      if (this.notasHasChanged || this.announcementsHasChanged) {
+        if (!transition.isAborted) {
+          if (confirm(this.intl.t('leave-unsaved-changed'))) {
+            this.isEditingOverview = false;
+            this.notasHasChanged = false;
+            this.announcementsHasChanged = false;
+          } else {
+            transition.abort();
+            if (transition.to.name !== 'agenda.agendaitems.index') {
+              history.forward();
+            }
+          }
+        }
+      }
+    });
+  }
 
   get id() {
     return guidFor(this);
@@ -60,7 +74,9 @@ export default class AgendaAgendaitemsController extends Controller {
   }
 
   get isAgendaitemDetailRoute() {
-    return this.router.currentRouteName.startsWith('agenda.agendaitems.agendaitem');
+    return this.router.currentRouteName.startsWith(
+      'agenda.agendaitems.agendaitem'
+    );
   }
 
   get documentLoadingMessage() {
@@ -71,29 +87,27 @@ export default class AgendaAgendaitemsController extends Controller {
   }
 
   @action
+  startEditingOverview() {
+    this.isEditingOverview = true;
+  }
+
+  @action
   searchAgendaitems(value) {
     this.filter = value;
   }
 
   @task
-  *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
-    const draggedAgendaItemType = yield draggedAgendaItem.type;
-    // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
-    const reorderedAgendaitemsOfCategory =  [];
-    for (const agendaitem of reorderedAgendaitems.slice()) {
-      const agendaItemType = yield agendaitem.type;
-      if (agendaItemType.uri === draggedAgendaItemType.uri) {
-        reorderedAgendaitemsOfCategory.push(agendaitem);
-      }
-    }
+  *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsNumber(
-      reorderedAgendaitemsOfCategory,
+      reorderedAgendaitems,
       this.meeting,
       this.store,
       this.decisionReportGeneration,
       true,
-      true,
+      true
     ); // permissions guarded in template (and backend)
+    this.notasHasChanged = false;
+    this.announcementsHasChanged = false;
     this.router.refresh('agenda.agendaitems');
   }
 
@@ -104,7 +118,10 @@ export default class AgendaAgendaitemsController extends Controller {
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
       yield animationFrame(); // Computationally heavy task. This keeps the interface alive
-      if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
+      if (
+        currentAgendaitemGroup &&
+        (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
+      ) {
         currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
@@ -119,23 +136,27 @@ export default class AgendaAgendaitemsController extends Controller {
     const agendaitems = [...this.model.notas, ...this.model.announcements];
     this.documentLoadCount = 0;
     this.totalCount = agendaitems.length;
-    await all(agendaitems.map(async(agendaitem) => {
-      await this.throttledLoadingService.loadPieces.perform(agendaitem);
-      // Negates unreproducible issue (KAS-4219)
-      if (this.documentLoadCount < this.totalCount) {
-        this.documentLoadCount++;
-      }
-    }));
+    await all(
+      agendaitems.map(async (agendaitem) => {
+        await this.throttledLoadingService.loadPieces.perform(agendaitem);
+        // Negates unreproducible issue (KAS-4219)
+        if (this.documentLoadCount < this.totalCount) {
+          this.documentLoadCount++;
+        }
+      })
+    );
   });
 
   @action
   toggleShowModifiedOnly() {
-    set(this,'showModifiedOnly', !this.showModifiedOnly);
+    set(this, 'showModifiedOnly', !this.showModifiedOnly);
   }
 
   scrollToAnchor() {
     if (this.anchor) {
-      const itemCardLink = this.element?.querySelector(`a[href*='anchor=${this.anchor}']`);
+      const itemCardLink = this.element?.querySelector(
+        `a[href*='anchor=${this.anchor}']`
+      );
       if (itemCardLink) {
         itemCardLink.scrollIntoView({
           block: 'nearest',

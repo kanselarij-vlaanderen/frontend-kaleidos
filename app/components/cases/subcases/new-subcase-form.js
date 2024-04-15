@@ -70,7 +70,6 @@ export default class NewSubcaseForm extends Component {
   @action
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
-    this.subcaseName = subcaseType.label;
     this.checkSubcaseType();
   }
   
@@ -108,6 +107,12 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
+  }
+
+  @action
   copySubcase() {
     this.plausible.trackEventWithRole('Kopieer voorgaande procedurestap');
     this.createSubcase.perform(true);
@@ -116,7 +121,7 @@ export default class NewSubcaseForm extends Component {
   @task
   *cancelForm() {
     yield this.deletePieces();
-    this.router.transitionTo('cases.case.subcases');
+    this.router.transitionTo('cases.case.index');
   }
 
   @task
@@ -125,9 +130,9 @@ export default class NewSubcaseForm extends Component {
       this.title = this.args.latestSubcase.title;
       this.shortTitle = this.args.latestSubcase.shortTitle;
       this.confidential = this.args.latestSubcase.confidential;
-      addObjects(this.mandatees, yield this.args.latestSubcase.mandatees);
+      addObjects(this.mandatees, (yield this.args.latestSubcase.mandatees));
       this.submitter = yield this.args.latestSubcase.requestedBy;
-      addObjects(this.governmentAreas, yield this.args.latestSubcase.governmentAreas);
+      addObjects(this.governmentAreas, (yield this.args.latestSubcase.governmentAreas));
     } else {
       const _case = yield this.args.decisionmakingFlow.case;
       this.title = _case.title;
@@ -191,7 +196,9 @@ export default class NewSubcaseForm extends Component {
     addObjects(governmentAreas, newGovernmentAreas);
     yield this.subcase.save();
 
-    yield this.savePieces.perform();
+    if (this.pieces.length) {
+      yield this.savePieces.perform();
+    }
 
     if (meeting) {
       try {
@@ -209,6 +216,7 @@ export default class NewSubcaseForm extends Component {
       }
     }
 
+    this.args.onCreateSubcase?.();
     this.router.transitionTo(
       'cases.case.subcases.subcase',
       this.args.decisionmakingFlow.id,
@@ -274,7 +282,12 @@ export default class NewSubcaseForm extends Component {
 
   @action
   setMandatees(mandatees) {
-    this.mandatees = mandatees;
+    if (mandatees?.length) {
+      this.mandatees = mandatees;
+    } else {
+      this.mandatees.clear();
+      this.submitter = null;
+    }
   }
 
   /** government areas */

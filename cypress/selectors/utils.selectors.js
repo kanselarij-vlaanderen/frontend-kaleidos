@@ -37,7 +37,8 @@ const selectors = {
   changesAlert: {
     container: '[data-test-changes-alert]',
     message: '[data-test-changes-alert-message]',
-    close: '[data-test-changes-alert-close]',
+    confirm: '[data-test-changes-alert-confirm]',
+    cancel: '[data-test-changes-alert-cancel]',
   },
 
   // number-pagination

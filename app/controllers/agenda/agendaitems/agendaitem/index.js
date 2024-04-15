@@ -2,8 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda, setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -15,6 +14,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service agendaitemAndSubcasePropertiesSync;
   @service decisionReportGeneration;
   @service toaster;
+  @service parliamentService;
 
   @controller('agenda.agendaitems') agendaitemsController;
   @controller('agenda') agendaController;
@@ -77,7 +77,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   }
 
   @action
-  async reloadParliamentFlow() {
+  async pollParliamentFlow(job, toast) {
+    await this.parliamentService.delayedPoll(job, toast);
     this.decisionmakingFlow = await this.subcase?.decisionmakingFlow.reload();
     this.case = await this.decisionmakingFlow?.case.reload();
     this.parliamentFlow = await this.case?.parliamentFlow.reload();

@@ -5,7 +5,7 @@
   @onConfirm={{perform this.sendToVP}}
   @onCancel={{@onCancel}}
   @loading={{this.sendToVP.isRunning}}
-  @disabled={{this.isModalDisabled}}
+  @disabled={{this.nothingToBeSent}}
 >
   <:title>{{t "check-case"}}</:title>
   <:body>
@@ -14,29 +14,87 @@
     {{else}}
       <AuContent>
         {{#if this.showPieces}}
-          <p>{{t "the-following-things-will-be-sent"}}</p>
-          <ul class="au-u-margin-top">
+          <p>{{t "check-documents-to-be-sent-to-vp"}}</p>
+            <ul class="au-u-margin-top au-u-margin-left-none">
             {{#each this.subcasesWithPieces as |subcaseWithPieces|}}
-              <li>
+              <li class="list-style-none">
                 {{#if subcaseWithPieces.subcaseName}}
-                  {{capitalize subcaseWithPieces.subcaseName}}:
-                  <ul>
+                  <p>
+                    <strong class="auk-u-text-bold">
+                      {{capitalize subcaseWithPieces.subcaseName}}:
+                     </strong>
+                  </p>  
+                  <ul class="au-u-margin-top-small au-u-margin-left-none">
                     {{#each subcaseWithPieces.pieces as |piece|}}
-                      <li>
-                        <LinkTo @route="document" @model={{piece.id}}>
+                      <li class="list-style-none">
+                        {{#if (this.isDisabled piece.accessLevel)}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                          @disabled={{true}}
+                        >
+                        <AuLink
+                          @route="document" 
+                          @model={{piece.id}}
+                          @skin="secondary"
+                          target="_blank"
+                        >
                           {{piece.name}}
                           {{await (this.pieceFileTypes piece)}}
-                        </LinkTo>
+                        </AuLink>
+                        </AuCheckbox>
+                        <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
+                        {{else}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                        >
+                          <AuLink 
+                            @route="document" 
+                            @model={{piece.id}}
+                            target="_blank"
+                            >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </AuLink>
+                        </AuCheckbox>
+                        {{/if}}
                       </li>
                     {{/each}}
                   </ul>
                 {{else}}
                   {{#each subcaseWithPieces.pieces as |piece|}}
-                    <li>
-                      <LinkTo @route="document" @model={{piece.id}}>
-                        {{piece.name}}
-                        {{await (this.pieceFileTypes piece)}}
-                      </LinkTo>
+                    <li class="list-style-none">
+                      {{#if (this.isDisabled piece.accessLevel)}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                          @disabled={{true}}
+                        >
+                          <LinkTo
+                            @route="document" 
+                            @model={{piece.id}}
+                            disabled={{true}}
+                          >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
+                        </AuCheckbox>
+                        <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
+                      {{else}}
+                        <AuCheckbox
+                          @checked={{this.isSelected piece}}
+                          @onChange={{fn this.togglePieceSelection piece}}
+                        >
+                          <LinkTo 
+                            @route="document" 
+                            @model={{piece.id}}
+                            >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
+                        </AuCheckbox>
+                      {{/if}}
                     </li>
                   {{/each}}
                 {{/if}}
@@ -45,11 +103,11 @@
           </ul>
           <div class="auk-form-group au-u-margin-top">
             <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
-            <Auk::Textarea
-              @rows="4"
+            <AuTextarea
+              rows="4"
               id="remarks"
-              value={{this.comment}}
-              {{on "change" this.onChangeComment}}
+              @width="block"
+              @value={{this.comment}}
             />
           </div>
         {{else}}
@@ -72,7 +130,7 @@
           @skin="warning"
           @icon="alert-triangle"
           @size="small"
-          class="au-u-margin-bottom-none au-u-margin-top"
+          class="au-u-margin-bottom au-u-margin-top"
         >
           <AuContent>
             {{t 'decision-not-published-yet-may-be-altered'}}
@@ -80,13 +138,20 @@
         </AuAlert>
       {{/if}}
       {{#if this.showMissingPieces}}
-        <AuAlert
-          @title="{{t 'this-case-is-missing'}}:"
-          @skin="info"
-          @size="small"
-          class="au-u-margin-bottom-none au-u-margin-top"
-        >
-          <AuContent>
+      <AuCard
+      @shadow={{false}}
+      @standOut={{true}}
+      @size="small"
+      @expandable={{true}}
+      as |c|
+      >
+        <c.header>
+          <AuHeading @level="3" @skin="6">
+            {{t "possible-pieces-missing"}}
+          </AuHeading>
+        </c.header>
+              <c.content>
+          <p>{{t "automatic-check-performed-possible-pieces-missing"}}</p>
             <ul>
               {{#each this.subcasesWithMissingPieces as |subcaseWithMissingPieces|}}
                 <li>
@@ -112,8 +177,8 @@
                 </li>
               {{/each}}
             </ul>
-          </AuContent>
-        </AuAlert>
+        </c.content>
+      </AuCard>
       {{/if}}
     {{/if}}
   </:body>

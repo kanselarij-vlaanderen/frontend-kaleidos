@@ -91,7 +91,7 @@ export default class ModelWithModifier extends Model {
         errorMessage,
         this.intl.t('changes-could-not-be-saved-title'),
         {
-          timeOut: 600000,
+          timeOut: 60000,
         }
       );
       const modifiedOldDataErrorException = new ModifiedOldDataError();

@@ -9,6 +9,7 @@ const selectors = {
   agendaitemNav: {
     caseTab: '[data-test-agendaitem-nav-case-tab]',
     documentsTab: '[data-test-agendaitem-nav-documents-tab]',
+    ratificationTab: '[data-test-agendaitem-nav-ratification-tab]',
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     tabs: '[data-test-agendaitem-nav-tabs]',
@@ -41,7 +42,9 @@ const selectors = {
 
   // agenda-detail/sidebar-item
   agendaDetailSidebarItem: {
+    container: '[data-test-agenda-detail-sidebar-item-container]',
     shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
+    inNewsletter: '[data-test-agenda-detail-sidebar-item-in-newsletter]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: {
       formallyOk: '[data-test-agenda-detail-sidebar-item-status-pill] > .au-c-icon--check',
@@ -75,7 +78,6 @@ const selectors = {
   agendaOverview: {
     notesSectionTitle: '[data-test-agenda-overview-section-title-notes]',
     showChanges: '[data-test-agenda-overview-show-changes]',
-    formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
   // agenda-header
@@ -94,7 +96,9 @@ const selectors = {
     navigateToPrintableAgenda: '[data-test-agenda-actions-navigate-to-printable-agenda]',
     downloadDocuments: '[data-test-agenda-actions-download-documents]',
     downloadDecisions: '[data-test-agenda-actions-download-decisions]',
+    generateSignedDecisionsBundle: '[data-test-agenda-actions-generate-signed-decisions-bundle]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
+    markDecisionsForSigning: '[data-test-agenda-actions-mark-decisions-sor-signing]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
     planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
     approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems]',
@@ -171,8 +175,10 @@ const selectors = {
 
   // agendaitem-titles-view
   agendaitemTitlesView: {
+    type: '[data-test-agendaitem-titles-type]',
     title: '[data-test-agendaitem-titles-title]',
     shortTitle: '[data-test-agendaitem-titles-short-title]',
+    formallyOk: '[data-test-agendaitem-titles-formally-ok]',
     subcaseName: '[data-test-agendaitem-subcase-name]',
     comment: '[data-test-agendaitem-titles-comment]',
     privateComment: '[data-test-agendaitem-titles-private-comment]',
@@ -180,6 +186,8 @@ const selectors = {
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
     newsItem: '[data-test-agendaitem-titles-news-item]',
+    onTheWebsite: '[data-test-agendaitem-titles-on-the-website]',
+    notOnTheWebsite: '[data-test-agendaitem-titles-not-on-the-website]',
   },
 
   // agendaitem-titles-edit
@@ -209,6 +217,7 @@ const selectors = {
   // agendaitem-search
   agendaitemSearch: {
     input: '[data-test-agendaitem-search-input]',
+    formallyReorderEdit: '[data-test-agendaitem-search-formally-reorder-edit]',
   },
 
   // edit-meeting

@@ -39,6 +39,7 @@ $au-label-color: var(--au-gray-700);
 @import '@appuniversum/ember-appuniversum/styles/components/c-modal';
 @import '@appuniversum/ember-appuniversum/styles/components/c-sidebar';
 @import '@appuniversum/ember-appuniversum/styles/components/c-table';
+@import '@appuniversum/ember-appuniversum/styles/components/c-textarea';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
@@ -343,7 +344,8 @@ $au-label-color: var(--au-gray-700);
   border-top: none;
 }
 
-.au-c-input:focus {
+.au-c-input:focus,
+.au-c-textarea:focus {
   border-color: $au-input-border-color !important;
   box-shadow: none !important;
 
@@ -582,6 +584,10 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
+  .list-style-none {
+    list-style-type: none;
+  }
+
   // Provides the general styling for the decimal-extended (multi-level) list type
   // NOTE: This is limited to a certain levels deep because otherwise the styling keep overriding each other (`[data-list-style='decimal-extended']` and the rest of the ol/ul selectors)
   @mixin decimal-extended-styling($levels, $current-level: 1) {
@@ -655,6 +661,10 @@ $au-label-color: var(--au-gray-700);
 
 .au-u-flex-item--fixed {
   flex: 0 0 auto !important;
+}
+
+.au-u-flex-item--fill {
+  flex: 1 1 auto !important;
 }
 
 .au-u-maximize-width {

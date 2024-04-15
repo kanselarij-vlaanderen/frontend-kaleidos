@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { TrackedArray } from 'tracked-built-ins';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { startOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
@@ -50,7 +50,7 @@ export default class SignaturesCreateSignFlowPieceComponent extends Component {
     const getSubmitterAndCosigners = async (decisionActivity) => {
       const subcase = await decisionActivity.subcase;
       const submitter = await subcase?.requestedBy;
-      const cosigners = await subcase?.mandatees ?? [];
+      const cosigners = (await subcase?.mandatees) ?? [];
       return { submitter, cosigners };
     };
 

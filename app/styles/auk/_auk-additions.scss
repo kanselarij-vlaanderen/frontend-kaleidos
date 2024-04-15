@@ -1,6 +1,10 @@
 /* Framework & external component fixes
    ========================================================================== */
 
+.auk-u-flex-grow {
+  flex-grow: 1;
+}
+
 // Modal
 
 .auk-modal-backdrop > .ember-view {
@@ -401,4 +405,11 @@ table tr.lt-expanded-row {
   border-left: none;
   border-radius: 0;
   margin-bottom: 0;
+}
+
+// Hierarchical back tab
+// Override the visibility of the back button label within Kaleidos only
+
+.auk-tabs__hierarchical-back .auk-tabs__tab__label {
+  display: block;
 }

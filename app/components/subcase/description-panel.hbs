@@ -1,0 +1,12 @@
+{{#if this.isEditing}}
+  <Subcase::DescriptionPanel::Edit
+    @subcase={{@subcase}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.stopEditing}}
+  />
+{{else}}
+  <Subcase::DescriptionPanel::View
+    @subcase={{@subcase}}
+    @onClickEdit={{this.startEditing}}
+  />
+{{/if}}

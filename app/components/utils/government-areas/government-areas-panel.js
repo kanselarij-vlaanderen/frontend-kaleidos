@@ -39,13 +39,13 @@ export default class GovernmentAreasPanel extends Component {
 
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
-    const governmentAreas = this.args.governmentAreas?.slice();
+    const governmentAreas = yield this.args.governmentAreas;
     if (!governmentAreas) {
       return;
     }
     const domains = [];
     const fields = [];
-    for (let governmentArea of governmentAreas) {
+    for (let governmentArea of governmentAreas.slice()) {
       const topConceptSchemes = yield governmentArea.topConceptSchemes;
       if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
         domains.push(governmentArea);

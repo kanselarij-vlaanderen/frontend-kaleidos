@@ -3,6 +3,11 @@
     @decisionActivities={{@decisionActivities}}
     @onChangeSigners={{@onChangeSigners}}
   />
+{{else if @isRatification}}
+  <Signatures::CreateSignFlow::Ratification
+    @decisionActivities={{@decisionActivities}}
+    @onChangeSigners={{@onChangeSigners}}
+  />
 {{else}}
   <Signatures::CreateSignFlow::Piece
     @decisionActivities={{@decisionActivities}}

@@ -28,15 +28,15 @@
   >
     <button
       type="button"
-      {{!-- disabled={{not this.hasHistory}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
       class="auk-tabs__tab__link"
-      {{on "click" this.transitionBack}}
     >
       <Auk::Tab::InnerLayout
         @layout={{@layout}}
         @icon={{this.icon}}
         @counter={{@counter}}
-      />
+      >
+        {{yield}}
+      </Auk::Tab::InnerLayout>
     </button>
   </li>
 {{else}}

@@ -1,15 +1,20 @@
-{{#if this.model.shortTitle}}
-  {{page-title this.model.shortTitle}}
-{{else if this.model.title}}
-  {{page-title this.model.title}}
+{{#if @model.subcase.shortTitle}}
+  {{page-title @model.subcase.shortTitle}}
+{{else if @model.subcase.title}}
+  {{page-title @model.subcase.title}}
 {{else}}
-  {{page-title (capitalize this.model.subcaseName)}}
+  {{page-title (capitalize @model.subcase.subcaseName)}}
 {{/if}}
-<div class="auk-u-bg-alt">
-  <Subcases::SubcaseHeader
-    @subcase={{this.model}}
-    @onMoveSubcase={{this.refreshSubcases}}
-    @onProposedForAgenda={{this.refreshSubcases}}
-  />
+
+<div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
+  <div class="auk-scroll-wrapper">
+    <div class="auk-u-bg-alt">
+      <Subcases::SubcaseHeader
+        @subcase={{@model.subcase}}
+        @onMoveSubcase={{this.refreshSubcases}}
+        @onProposedForAgenda={{this.refreshSubcases}}
+      />
+    </div>
+    {{outlet}}
+  </div>
 </div>
-{{outlet}}

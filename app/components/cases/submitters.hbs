@@ -1,0 +1,11 @@
+{{#if this.loadSubmittersText.isRunning}}
+  <Auk::Loader />
+{{else}}
+  {{#if this.submitters.length}}
+    <FormatList @list={{this.submitters}} @locale="nl-be" as |formattedPart|>
+      {{formattedPart.value}}
+    </FormatList>
+  {{else}}
+    -
+  {{/if}}
+{{/if}}

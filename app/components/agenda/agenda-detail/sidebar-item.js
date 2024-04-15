@@ -2,11 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
-import {
-  dropTask,
-  task
-} from 'ember-concurrency';
+import { timeout, dropTask, task } from 'ember-concurrency';
 
 export default class SidebarItem extends Component {
   /**
@@ -21,7 +17,7 @@ export default class SidebarItem extends Component {
   defaultAgendaitemSubroute = 'agenda.agendaitems.agendaitem.index';
   @tracked currentRouteName;
   @tracked subcase;
-  @tracked newsletterIsVisible;
+  @tracked newsItem;
   @tracked decisionActivity;
 
   constructor() {
@@ -61,7 +57,7 @@ export default class SidebarItem extends Component {
   *lazyLoadSideData() {
     yield timeout(350);
     const tasks = [
-      this.loadNewsletterVisibility,
+      this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadDecisionActivity
     ].filter((task) => task.performCount === 0);
@@ -81,15 +77,10 @@ export default class SidebarItem extends Component {
   }
 
   @task
-  *loadNewsletterVisibility() {
+  *loadNewsItemVisibility() {
     const treatment = yield this.args.agendaitem.treatment;
     // not all agendaitems have treatments (mainly in legacy)
-    const newsItem = yield treatment?.newsItem;
-    if (newsItem) {
-      this.newsletterIsVisible = newsItem.inNewsletter;
-    } else {
-      this.newsletterIsVisible = false;
-    }
+    this.newsItem = yield treatment?.newsItem;
   }
 
   @task

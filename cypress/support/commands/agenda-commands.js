@@ -169,7 +169,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       meetingId = responseBody.data.id;
     });
   cy.wait('@createNewAgenda', {
-    timeout: 20000,
+    timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
@@ -204,8 +204,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
  * @memberOf Cypress.Chainable#
  * @function
  * @param {*} link The link to visit, should be "/vergadering/id/agenda/id/agendapunten" or "/vergadering/id/agenda/id/agendapunten/id"
+ * @param {boolean} longWait if many documents need to be loaded (20+) 60000 ms is not enough to ensure loading
  */
-function visitAgendaWithLink(link) {
+function visitAgendaWithLink(link, longWait = false) {
   cy.log('visitAgendaWithLink');
   // cy.intercept('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
   cy.visit(link);
@@ -213,8 +214,10 @@ function visitAgendaWithLink(link) {
   // When opening an agenda, you should always get a loading screen.
   // Concept-schemes loaded at application level show a blank screen, checking for loader to get past the white screen
   cy.get(appuniversum.loader).should('exist');
+  // to be used when opening the document route with many docs (ex. document-version.cy.js)
+  const waitTime = longWait ? 200000 : 60000 ;
   cy.get(appuniversum.loader, {
-    timeout: 60000,
+    timeout: waitTime,
   }).should('not.exist');
   cy.log('/visitAgendaWithLink');
 }
@@ -248,8 +251,12 @@ function openAgendaForDate(agendaDate, index = 0) {
     .find(route.agendasOverview.row.navButton)
     .click();
 
-  cy.url().should('include', '/vergadering');
-  cy.url().should('include', '/agenda');
+  cy.url().should('include', '/vergadering', {
+    timeout: 60000,
+  });
+  cy.url().should('include', '/agenda', {
+    timeout: 60000,
+  });
   cy.log('/openAgendaForDate');
 }
 
@@ -313,7 +320,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
-  cy.get(agenda.agendaOverview.formallyOkEdit).click();
+  cy.get(agenda.agendaitemSearch.formallyReorderEdit).click();
   // Data loading occurs here
   cy.get(appuniversum.loader, {
     timeout: 20000,
@@ -334,7 +341,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.wait(`@patchAgendaitem_${int}`, {
     timeout: 60000,
   });
-  cy.get(utils.changesAlert.close).click();
+  cy.get(utils.changesAlert.confirm).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
 
@@ -492,10 +499,8 @@ function addAgendaitemToAgenda(subcaseTitle) {
     timeout: 24000,
   });
   cy.get(appuniversum.loader, {
-    timeout: 12000,
-  }).should('not.exist', {
     timeout: 60000,
-  });
+  }).should('not.exist');
   cy.log('/addAgendaitemToAgenda');
 }
 

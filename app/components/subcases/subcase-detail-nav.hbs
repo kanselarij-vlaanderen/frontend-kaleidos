@@ -1,14 +1,1 @@
-<Auk::Tabs @reversed={{true}}>
-  <Auk::Tab
-    @isHierarchicalBack={{true}}
-  />
-  <Auk::Tab data-test-subcase-detail-nav-overview @route="cases.case.subcases.subcase.index">
-    {{t "overview"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-documents @route="cases.case.subcases.subcase.documents">
-    {{t "documents"}}
-  </Auk::Tab>
-  <Auk::Tab data-test-subcase-detail-nav-decisions @route="cases.case.subcases.subcase.decision">
-    {{capitalize (t "decision")}}
-  </Auk::Tab>
-</Auk::Tabs>
+<OnThisPageLinks @items={{this.items}} />

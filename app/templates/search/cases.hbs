@@ -1,7 +1,10 @@
 {{page-title (t "cases")}}
 {{#in-element this.customFiltersElement insertBefore=null}}
   {{#if (user-may "manage-cases")}}
-    <div data-test-route-search-removed-cases-list class="au-c-card au-o-box au-o-box--small">
+    <div
+      data-test-route-search-removed-cases-list
+      class="au-c-card au-o-box au-o-box--small"
+    >
       <Auk::Label>{{t "removed-cases"}}</Auk::Label>
       <AuRadioGroup
         @selected={{this.selectedArchivedOption}}
@@ -9,9 +12,7 @@
         as |Group|
       >
         {{#each this.archivedOptions as |option|}}
-          <Group.Radio
-            @value={{option.value}}
-          >
+          <Group.Radio @value={{option.value}}>
             {{option.label}}
           </Group.Radio>
         {{/each}}
@@ -66,16 +67,9 @@
       </:body>
     </KDataTable>
   {{else}}
-    {{#if this.emptySearch}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "fill-in-search-term"}}
-      />
-    {{else}}
-      <Auk::EmptyState
-        @bordered={{true}}
-        @message={{t "no-results-found-modify-term"}}
-      />
-    {{/if}}
+    <Auk::EmptyState
+      @bordered={{true}}
+      @message={{t "no-results-found-modify-term"}}
+    />
   {{/if}}
 </div>

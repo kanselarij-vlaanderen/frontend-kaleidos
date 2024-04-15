@@ -5,6 +5,7 @@ import {
   DIGITAL_MINUTES_IN_KALEIDOS_START_DATE,
   DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE,
 } from 'frontend-kaleidos/config/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class Meeting extends Model {
   @service intl;
@@ -40,6 +41,7 @@ export default class Meeting extends Model {
   @belongsTo('minutes', {
     inverse: 'minutesForMeeting',
     async: true,
+    polymorphic: true,
   })
   minutes;
   @belongsTo('mandatee', { inverse: 'secretaryForAgendas', async: true })
@@ -63,5 +65,9 @@ export default class Meeting extends Model {
 
   get isPreDigitalDecisions() {
     return this.plannedStart < DIGITAL_DECISIONS_IN_KALEIDOS_START_DATE;
+  }
+
+  get hasKindEP() {
+    return this.kind?.get('uri') === CONSTANTS.MEETING_KINDS.EP;
   }
 }

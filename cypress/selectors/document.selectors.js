@@ -93,6 +93,10 @@ const selectors = {
     add: '[data-test-linked-documents-add]',
   },
 
+  linkedDocumentsPanel: {
+    add: '[data-test-linked-documents-panel-add]',
+  },
+
   // linked-document-link
   linkedDocumentLink: {
     card: '[data-test-linked-document-link-card]',
@@ -157,6 +161,11 @@ const selectors = {
   documentBadge: {
     link: '[data-test-document-badge-link]',
     isNew: '[data-test-document-badge-isNew]',
+  },
+
+  // signature-pill
+  signaturePill: {
+    pill: '[data-test-signature-pill]',
   },
 
 };
