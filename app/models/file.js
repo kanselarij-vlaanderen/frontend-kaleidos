@@ -28,7 +28,11 @@ export default class File extends Model {
   }
 
   get downloadLink() {
-    return `/files/${this.id}/download`;
+    if (this.extension === 'pdf') {
+      return `/file-stamping/${this.id}/download`;
+    } else {
+      return `/files/${this.id}/download`;
+    }
   }
 
   get inlineViewLink() {
