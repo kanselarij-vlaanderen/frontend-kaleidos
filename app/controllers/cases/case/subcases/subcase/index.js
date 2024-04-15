@@ -1,10 +1,10 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { A } from '@ember/array';
 import {
   keepLatestTask,
   task,
@@ -12,6 +12,7 @@ import {
   timeout
 } from 'ember-concurrency';
 import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -36,7 +37,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
 
   @action
   async saveMandateeData(mandateeData) {
@@ -92,7 +93,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       documentContainer: documentContainer,
       cases: [this.model._case],
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
@@ -108,7 +109,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     yield all(savePromises);
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.router.refresh('cases.case.subcases.subcase');
   }
 
@@ -137,7 +138,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   */
   @task
   *addPiece(piece) {
-    piece.cases.pushObject(this.model._case);
+    // TODO KAS-4104 WHY DO WE ADD case to piece.cases, we have a service that does this automatically. This is asking for concurrency issues
+    // const cases = yield piece.cases;
+    // cases.push(this.case);
     yield piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
@@ -157,7 +160,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *cancelUploadPieces() {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -165,7 +168,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -231,7 +234,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
     if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
-      submissionPieces.pushObjects(pieces);
+      submissionPieces.push(pieces);
 
       yield submissionActivity.save();
       return submissionActivity;
