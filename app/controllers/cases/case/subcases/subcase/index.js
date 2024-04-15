@@ -12,7 +12,7 @@ import {
   timeout
 } from 'ember-concurrency';
 import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
-import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { removeObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -234,8 +234,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
     if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
-      submissionPieces.push(pieces);
-
+      addObjects(submissionPieces, pieces);
       yield submissionActivity.save();
       return submissionActivity;
     } else { // Create first submission activity to add pieces on

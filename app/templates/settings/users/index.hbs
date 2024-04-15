@@ -132,29 +132,33 @@
           </span>
         </td>
         <td class="au-o-flow au-o-flow--tiny">
-          {{#each (this.filterMemberships user.memberships) as |membership|}}
-            <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
-              <div>
-                <p class="au-u-muted au-u-h-functional">
-                  {{membership.organization.identifier}}
-                </p>
-                <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{membership.organization.name}}
-                </p>
+          {{#let (await (this.filterMemberships user)) as |memberships|}}
+            {{#each memberships as |membership|}}
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    {{membership.organization.identifier}}
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                    {{membership.organization.name}}
+                  </p>
+                </div>
+                {{#if membership.isBlocked}}
+                  <AuPill @icon="circle-x" @skin="error" @size="small">
+                    {{t "blocked-membership"}}
+                  </AuPill>
+                {{/if}}
               </div>
-              {{#if membership.isBlocked}}
-                <AuPill @icon="circle-x" @skin="error" @size="small">
-                  {{t "blocked-membership"}}
-                </AuPill>
-              {{/if}}
-            </div>
-          {{/each}}
+            {{/each}}
+          {{/let}}
         </td>
         <td data-test-route-settings-users-row-group>
           <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
-            {{#each (this.filterMemberships user.memberships) as |membership|}}
-              <p>{{membership.role.label}}</p>
-            {{/each}}
+            {{#let (await (this.filterMemberships user)) as |memberships|}}
+              {{#each memberships as |membership|}}
+                <p>{{membership.role.label}}</p>
+              {{/each}}
+            {{/let}}
           </div>
         </td>
         <td data-test-route-settings-users-row-person>

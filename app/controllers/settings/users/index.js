@@ -147,8 +147,9 @@ export default class UsersSettingsController extends Controller {
    * currently match the filtering options.
    */
   @action
-  filterMemberships(memberships) {
-    return memberships.filter((membership) => {
+  async filterMemberships(user) {
+    const memberships = await user.memberships;
+    return memberships?.filter((membership) => {
       const shouldShow = !this.showBlockedMembershipsOnly || membership.get('isBlocked');
       return this.roles.includes(membership.get('role.id')) && shouldShow;
     });
