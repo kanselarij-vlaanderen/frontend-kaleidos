@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -91,6 +92,9 @@ export default class SendToVpModalComponent extends Component {
   });
 
   getAccessLevel = async(accessLevelUri) => {
+    if (!accessLevelUri) {
+      return null;
+    }
     const accessLevel = await this.store.queryOne('concept', {
       'filter[:uri:]': accessLevelUri
     })

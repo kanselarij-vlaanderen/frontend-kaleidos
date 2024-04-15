@@ -24,7 +24,22 @@ export default class SubcaseDescriptionView extends Component {
   constructor() {
     super(...arguments);
     this.loadAgendaData.perform();
+    this.loadComments.perform();
   }
+
+  loadComments = task(async () => {
+    const retrievedPieces = await this.store.queryAll('retrieved-piece', {
+      'filter[parliament-retrieval-activity][generated-subcase][:id:]':
+        this.args.subcase.id,
+    });
+    if (!retrievedPieces) {
+      this.comments =  [];
+    } else {
+      this.comments = retrievedPieces
+        .map((piece) => piece.comment)
+        .filter((comment) => comment?.length);
+    }
+  });
 
   get canShowDecisionStatus() {
     return (
