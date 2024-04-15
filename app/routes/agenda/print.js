@@ -41,7 +41,7 @@ export default class AgendaPrintRoute extends Route {
   *loadDocuments(agendaitems) {
     yield all(
       agendaitems.map(async (agendaitem) => {
-        await this.throttledLoadingService.loadPieces.perform(agendaitem);
+        await this.throttledLoadingService.loadPieces.linked().perform(agendaitem);
       })
     );
   }
