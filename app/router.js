@@ -14,6 +14,7 @@ Router.map(function() {
   // Redirect routes
   this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' });
   this.route('meeting', { path: '/vergaderingen/:meeting_id' });
+  this.route('subcase', { path: '/procedurestap/:subcase_id' });
 
   this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
