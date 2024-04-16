@@ -17,6 +17,9 @@ const selectors = {
       item: '[data-test-signatures-create-sign-flow-notification-adresses-item]',
       remove: '[data-test-signatures-create-sign-flow-notification-adresses-remove]',
     },
+    reportOrMinutes: {
+      signer: '[data-test-signatures-create-signflow-report-or-minutes-signer]',
+    },
   },
 
   // select-ministers-modal

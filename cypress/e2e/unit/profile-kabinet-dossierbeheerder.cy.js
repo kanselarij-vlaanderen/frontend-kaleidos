@@ -814,7 +814,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
-      // cy.get(route.agendaitemMinutes.createEdit).click();
+      // cy.get(route.agendaMinutes.createEdit).click();
       // cy.get(route.agendaitemMinutes.editor.updateContent).click();
       // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
       // cy.get(route.agendaitemMinutes.editor.save).click()

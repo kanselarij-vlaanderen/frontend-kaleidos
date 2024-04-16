@@ -56,12 +56,12 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
-  // agenda/agendaitems/agendaitem/minutes/template
-  agendaitemMinutes: {
-    createEdit: '[data-test-route-agenda---agendaitem-minutes-create-edit]',
+  // agenda/minutes/template
+  agendaMinutes: {
+    createEdit: '[data-test-route-agenda-minutes-create-edit]',
     editor: {
-      updateContent: '[data-test-route-agenda---agendaitem-minutes-editor-update-content]',
-      save: '[data-test-route-agenda---agendaitem-minutes-editor-save]',
+      updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
+      save: '[data-test-route-agenda-minutes-editor-save]',
     },
   },
 
@@ -256,8 +256,11 @@ const selectors = {
     ROUTE SIGNATURES
   */
 
-  // signatures/template
+  // signatures/index
   signatures: {
+    navbar: {
+      startMultipleSignflows: '[data-test-route-signatures-start-multiple-signflows]',
+    },
     openMinisterFilter: '[data-test-route-signatures-open-minister-filter]',
     applyFilter: '[data-test-route-signatures-apply-filter]',
     dataTable: '[data-test-route-signatures-data-table]',
@@ -284,6 +287,31 @@ const selectors = {
     ministerFilter: '[data-test-route-signatures-ongoing-minister-filter]',
     row: {
       documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
+    },
+  },
+
+  // signatures/decisions
+  decisions: {
+    row: {
+      selectSignflow: '[data-test-route-signatures-decisions-row-select-signflow]',
+      pieceName: '[data-test-route-signatures-decisions-row-piece-name]',
+      openSidebar: '[data-test-route-signatures-decisions-row-open-sidebar]',
+    },
+    sidebar: {
+      close: '[data-test-route-signatures-decisions-sidebar-close]',
+      info: '[data-test-route-signatures-decisions-sidebar-info]',
+      preview: '[data-test-route-signatures-decisions-sidebar-preview]',
+      consultDecision: '[data-test-route-signatures-decisions-sidebar-consult-decision]',
+      consultMinutes: '[data-test-route-signatures-decisions-sidebar-consult-minutes]',
+      startSignflow: '[data-test-route-signatures-decisions-sidebar-start-signflow]',
+      stopSignflow: '[data-test-route-signatures-decisions-sidebar-stop-signflow]',
+    },
+  },
+
+  // signatures/ongoing-decisisons
+  ongoingDecisions: {
+    row: {
+      pieceName: '[data-test-route-signatures-ongoing-decisions-row-piece-name]',
     },
   },
 

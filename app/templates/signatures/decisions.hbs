@@ -59,7 +59,7 @@
     <:body as |signFlow|>
       {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
         {{#let signMarkingActivity.piece as |piece|}}
-          <td>
+          <td data-test-route-signatures-decisions-row-select-signflow>
             <AuCheckbox
               @checked={{includes signFlow this.selectedSignFlows}}
               @onChange={{fn this.toggleItem signFlow}}
@@ -69,7 +69,7 @@
               </span>
             </AuCheckbox>
           </td>
-          <td>
+          <td data-test-route-signatures-decisions-row-piece-name>
             <AuLink data-test-signatures-decisions-signflow-piece-name @route="document" @model={{piece.id}}>
               {{piece.name}}
             </AuLink>
@@ -97,6 +97,7 @@
           </td>
           <td>
             <AuButton
+              data-test-route-signatures-decisions-row-open-sidebar
               @skin="naked"
               @icon="sign"
               {{on "click" (fn this.openSidebarSingleItem signFlow piece)}}
@@ -114,13 +115,14 @@
             {{t "start-signing"}}
           </h4>
           <Auk::Button
+            data-test-route-signatures-decisions-sidebar-close
             @icon="x"
             @skin="borderless"
             @layout="icon-only"
             {{on "click" this.closeSidebar}}
           />
         </div>
-        <div class="auk-sidebar__body">
+        <div data-test-route-signatures-decisions-sidebar-info class="auk-sidebar__body">
           {{#unless this.selectedSignFlows.length}}
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
@@ -130,6 +132,7 @@
             <h5 class="auk-h4">{{this.piece.name}}</h5>
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
               <AuLink
+                data-test-route-signatures-decisions-sidebar-preview
                 @skin="naked"
                 @icon="book"
                 @route="document"
@@ -139,6 +142,7 @@
               </AuLink>
               {{#if (and this.meeting.id this.agenda.id this.agendaitem.id)}}
                 <AuLink
+                  data-test-route-signatures-decisions-sidebar-consult-decision
                   @skin="naked"
                   @icon="document"
                   @route="agenda.agendaitems.agendaitem.decisions"
@@ -148,6 +152,7 @@
                 </AuLink>
               {{else if (and this.meeting.id this.agenda.id)}}
                 <AuLink
+                  data-test-route-signatures-decisions-sidebar-consult-minutes
                   @skin="naked"
                   @icon="document"
                   @route="agenda.minutes"
@@ -176,6 +181,7 @@
           <AuToolbar as |Group|>
             <Group>
               <AuButton
+                data-test-route-signatures-decisions-sidebar-start-signflow
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
                 @disabled={{not this.signers.length}}
                 {{on "click" this.createSignFlow.perform}}
@@ -185,6 +191,7 @@
             </Group>
             <Group>
               <AuButton
+                data-test-route-signatures-decisions-sidebar-stop-signflow
                 @alert={{true}}
                 @skin="naked"
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
