@@ -1,5 +1,4 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
 import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';

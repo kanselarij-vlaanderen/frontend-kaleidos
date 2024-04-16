@@ -181,7 +181,7 @@ export default class DecisionReportGeneration extends Service {
   }
 
   generateReplacementReport = task(async (report) => {
-    if (!await this.canReplaceReport(report)) {
+    if (!(await this.canReplaceReport(report))) {
       this.toaster.error(
         this.intl.t('report-cannot-be-altered', {
           name: report.name

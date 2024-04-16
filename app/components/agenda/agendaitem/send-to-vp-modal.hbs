@@ -71,13 +71,14 @@
                           @onChange={{fn this.togglePieceSelection piece}}
                           @disabled={{true}}
                         >
-                        <LinkTo 
-                          @skin="secondary"
-                          @active="true"
-                        >
-                          {{piece.name}}
-                          {{await (this.pieceFileTypes piece)}}
-                        </LinkTo>
+                          <LinkTo
+                            @route="document" 
+                            @model={{piece.id}}
+                            disabled={{true}}
+                          >
+                            {{piece.name}}
+                            {{await (this.pieceFileTypes piece)}}
+                          </LinkTo>
                         </AuCheckbox>
                         <AccessLevelPill @accessLevel={{await (this.getAccessLevel piece.accessLevel)}}/>
                       {{else}}
@@ -102,11 +103,11 @@
           </ul>
           <div class="auk-form-group au-u-margin-top">
             <Auk::Label for="remarks">{{t "remarks"}}</Auk::Label>
-            <Auk::Textarea
-              @rows="4"
+            <AuTextarea
+              rows="4"
               id="remarks"
-              value={{this.comment}}
-              {{on "change" this.onChangeComment}}
+              @width="block"
+              @value={{this.comment}}
             />
           </div>
         {{else}}

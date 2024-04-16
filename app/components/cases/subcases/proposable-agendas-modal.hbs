@@ -17,7 +17,12 @@
       </AuFormRow>
       <AuFormRow>
         <Auk::Label for="remarks">{{t "private-comments-title"}}</Auk::Label>
-        <Auk::Textarea @rows="4" @value={{this.privateComment}} id="remarks" />
+        <AuTextarea
+          rows="4"
+          id="remarks"
+          @width="block"
+          @value={{this.privateComment}}
+        />
       </AuFormRow>
       <AuHr />
       <AuFormRow>
@@ -35,6 +40,7 @@
             </thead>
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
+                {{! template-lint-disable no-invalid-interactive }}
                 <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
                   <td class="auk-table__col--1">
                     <AuRadio
@@ -54,6 +60,7 @@
                     {{agenda.createdFor.kind.label}}
                   </td>
                 </tr>
+                {{! template-lint-enable no-invalid-interactive }}
               {{/each}}
             </tbody>
           </table>

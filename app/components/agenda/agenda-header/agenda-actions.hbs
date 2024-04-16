@@ -1,3 +1,4 @@
+{{!-- template-lint-disable require-context-role --}}
 <AuDropdown
   data-test-agenda-actions-options-dropdown={{true}}
   @skin="secondary"
@@ -152,6 +153,7 @@
     </AuButton>
   {{/if}}
 </AuDropdown>
+{{!-- template-lint-enable require-context-role --}}
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
