@@ -11,6 +11,7 @@ import { isPresent } from '@ember/utils';
 export default class MandateeSelectorPanel extends Component {
   @service mandatees;
   @service intl;
+  @service currentSession;
 
   @tracked currentMinisters = []; // do not edit this array
   @tracked currentMandatees = []; // do not edit this array
@@ -118,8 +119,10 @@ export default class MandateeSelectorPanel extends Component {
             currentMandatee.get('id') === oldMandatee.id
         );
         if (mandatee) {
+          // the mandatee is a current one
           selectedMandatees.push(mandatee);
         } else {
+          // best effort to match the mandatee person to a current one
           const oldMandateePerson = yield oldMandatee.person;
           const minister = this.currentMinisters.find(
             (currentMinister) => currentMinister.get('id') === oldMandateePerson.id
@@ -129,25 +132,45 @@ export default class MandateeSelectorPanel extends Component {
               (currentMandatee) => 
               currentMandatee.person.get('id') === minister.id
               )
+            // the mandatee is old, but the person still has an active mandatee
             selectedMandatees.push(activeMandatee);
+          } else {
+            if (this.currentSession.may('add-past-mandatees')) {
+              // the person of the mandatee is no longer active
+              this.selectedPastMandatees.push(oldMandatee);
+            }
           }
         }
       }
       const ministersToSelect = yield Promise.all(
         selectedMandatees?.map((m) => m.person)
       );
-      // Only select submitter mandatee if they are still active
+      // Try to match the args.submitter to an entry from the mandatees list
       if (this.showSubmitter) {
+        // First try to select the active mandatee of the submitter person
+        const argsSubmitterPerson = yield this.args.submitter?.person;
         const submitterMandatee = this.currentMandatees.find(
           (currentMandatee) =>
-            currentMandatee.get('id') === this.args.submitter.id
+            currentMandatee.person.get('id') === argsSubmitterPerson.id
         );
         if (submitterMandatee) {
           this.submitterMandatee = submitterMandatee;
+        } else {
+          // Second try to see if the mandatee was added to past mandatees (submitter is no longer active)
+          const oldSubmitterMandatee = this.selectedPastMandatees.find(
+            (pastMandatee) =>
+            pastMandatee.get('id') === this.args.submitter.id
+          );
+          if (oldSubmitterMandatee && this.currentSession.may('add-past-mandatees')) {
+            this.submitterMandatee = oldSubmitterMandatee;
+          } 
         }
       }
       if (ministersToSelect?.length) {
         yield this.onChangeSelectedCurrentMinisters(ministersToSelect);
+      } else if (this.selectedPastMandatees.length && this.currentSession.may('add-past-mandatees')) {
+        this.setAllMandatees();
+        this.setExcludedMandatees();
       } else {
         // clear the args mandatees and submitter if only old mandatees were present
         this.args.setMandatees([]);
