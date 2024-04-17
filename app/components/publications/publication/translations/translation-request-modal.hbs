@@ -33,11 +33,12 @@
               </Auk::Label>
               <AuInput
                 data-test-publication-translation-request-number-of-pages
-                @type="number"
-                @width="block"
-                @value={{mut this.numberOfPages}}
-                {{on "focusout" (perform this.setEmailFields)}}
                 id="translationNumberOfPages"
+                type="number"
+                value={{this.numberOfPages}}
+                @width="block"
+                {{on "input" (pick "target.value" (set this "numberOfPages"))}}
+                {{on "focusout" (perform this.setEmailFields)}}
               />
             </AuFormRow>
           </div>
@@ -51,11 +52,12 @@
               </Auk::Label>
               <AuInput
                 data-test-publication-translation-request-number-of-words
-                @type="number"
-                @width="block"
-                @value={{mut this.numberOfWords}}
-                {{on "focusout" (perform this.setEmailFields)}}
                 id="translationNumberOfWords"
+                type="number"
+                value={{this.numberOfWords}}
+                @width="block"
+                {{on "input" (pick "target.value" (set this "numberOfWords"))}}
+                {{on "focusout" (perform this.setEmailFields)}}
               />
             </AuFormRow>
           </div>
@@ -88,9 +90,10 @@
           {{t "subject"}}
         </Auk::Label>
         <AuInput
-          @width="block"
-          @value={{mut this.subject}}
           id="translationRequestSubject"
+          value={{this.subject}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "subject"))}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -101,8 +104,9 @@
           data-test-publication-translation-request-message
           id="translationRequestMessage"
           rows="16"
+          value={{this.message}}
           @width="block"
-          @value={{this.message}}
+          {{on "input" (pick "target.value" (set this "message"))}}
         />
       </AuFormRow>
     </div>

@@ -49,24 +49,27 @@
           <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
           <AuToggleSwitch
             data-test-new-subcase-confidential
-            @checked={{this.confidential}}
             id="new-subcase-confidential"
+            @checked={{this.confidential}}
+            @onChange={{set this "confidential"}}
           />
         </AuFormRow>
         <AuFormRow>
           <Auk::Label>{{t "name-subcase"}}</Auk::Label>
           <AuTextarea
             data-test-new-subcase-shorttitle
+            value={{this.shortTitle}}
             @width="block"
-            @value={{this.shortTitle}}
+            {{on "input" (pick "target.value" (set this "shortTitle"))}}
           />
         </AuFormRow>
         <AuFormRow>
           <Auk::Label>{{t "title-subcase"}}</Auk::Label>
           <AuTextarea
             data-test-new-subcase-longtitle
+            value={{this.title}}
             @width="block"
-            @value={{this.title}}
+            {{on "input" (pick "target.value" (set this "title"))}}
           />
         </AuFormRow>
         <AuFormRow>
@@ -109,9 +112,10 @@
               </AuButton>
             {{else}}
               <AuInput
-                @width="block"
-                @value={{this.subcaseName}}
                 id="subcaseNameId"
+                value={{this.subcaseName}}
+                @width="block"
+                {{on "input" (pick "target.value" (set this "subcaseName"))}}
               />
               <AuButton
                 @skin="naked"

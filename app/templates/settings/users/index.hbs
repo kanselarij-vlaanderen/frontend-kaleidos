@@ -74,10 +74,11 @@
     <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
       <AuInput
         data-test-route-settings-users-search-input
-        @type="search"
-        @value={{this.searchTextBuffer}}
-        class="auk-u-maximize-width"
+        type="search"
         placeholder={{t "user-search"}}
+        class="auk-u-maximize-width"
+        value={{this.searchTextBuffer}}
+        {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
       />
       <AuButton
         data-test-route-settings-users-search-button

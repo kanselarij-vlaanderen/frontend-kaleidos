@@ -6,8 +6,8 @@
           <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
           <AuToggleSwitch
             data-test-agendaitem-titles-edit-confidential={{true}}
-            @checked={{@subcase.confidential}}
             id="subcase-confidential"
+            @checked={{@subcase.confidential}}
             @onChange={{this.onChangeConfidentiality}}
           />
         </AuFormRow>
@@ -63,8 +63,9 @@
           {{#if this.newsItem}}
             <AuToggleSwitch
               data-test-agendaitem-titles-edit-showInNewsletter
-              @checked={{this.newsItem.inNewsletter}}
               id="item-show-in-newsletter"
+              @checked={{this.newsItem.inNewsletter}}
+              @onChange={{set this "newsItem.inNewsletter"}}
             />
           {{else}}
             {{t "no-news-item"}}
