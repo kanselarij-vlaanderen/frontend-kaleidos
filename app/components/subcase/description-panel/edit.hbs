@@ -39,7 +39,7 @@
           data-test-subcase-description-edit-confidential
           id="subcase-confidential"
           @checked={{@subcase.confidential}}
-          @onChange={{set this "confidentialChanged" true}}
+          @onChange={{queue (set @subcase "confidential") (set this "confidentialChanged" true)}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -82,8 +82,9 @@
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <AuInput
           data-test-subcase-description-edit-procedure-name
+          value={{this.subcaseName}}
           @width="block"
-          @value={{mut this.subcaseName}}
+          {{on "input" (pick "target.value" (set this "subcaseName"))}}
         />
       </AuFormRow>
     </div>

@@ -9,11 +9,11 @@
         <AuLabel>{{t "email-address"}}</AuLabel>
         <AuInput
           data-test-signatures-create-email-input
-          {{on "input" this.onInputEvent}}
-          @warning={{and this.emailBuffer (not this.isValid)}}
-          @type="text"
-          @width="block"
+          type="text"
           class="au-c-input--mask-normal-letter-spacing"
+          @warning={{and this.emailBuffer (not this.isValid)}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "emailBuffer"))}}
         />
       </AuFormRow>
     </div>

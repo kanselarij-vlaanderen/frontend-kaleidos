@@ -42,8 +42,9 @@
             <AuTextarea
               data-test-remark-panel-textarea
               rows="12"
+              value={{this.remark}}
               @width="block"
-              @value={{this.remark}}
+              {{on "input" (pick "target.value" (set this "remark"))}}
             />
           </AuFormRow>
         </div>

@@ -111,25 +111,6 @@ export default class GenerateReportModalComponent extends Component {
     return this.decisionDateRangeStart <= this.decisionDateRangeEnd;
   }
 
-  // using getters and setters to transform the year from a string to a number
-  // Input uses the property bound to @value to get and set the value
-  // It sets it to a string of the inputted number
-  // Storing it in the component as a number seems more understandable and usable
-  get publicationYearAsString() {
-    return this.publicationYear;
-  }
-
-  set publicationYearAsString(value) {
-    if (value === '') {
-      this.publicationYear = undefined;
-    } else {
-      const number = Number.parseInt(value);
-      if (!Number.isNaN(number)) {
-        this.publicationYear = number;
-      }
-    }
-  }
-
   get isPublicationYearValid() {
     const isPresent = this.publicationYear !== undefined;
     if (!isPresent) {
@@ -165,6 +146,18 @@ export default class GenerateReportModalComponent extends Component {
       .sort((d1, d2) => d1.label.localeCompare(d2.label));
     // everything selected by default
     this.selectedGovernmentDomains = this.governmentDomains.slice(0);
+  }
+
+  @action
+  onInputPublicationYear(event) {
+    if (event.target.value === '') {
+      this.publicationYear = undefined;
+    } else {
+      const number = Number.parseInt(event.target.value);
+      if (!Number.isNaN(number)) {
+        this.publicationYear = number;
+      }
+    }
   }
 
   @action
