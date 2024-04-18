@@ -219,6 +219,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       })
     if (decisionActivity 
       && decisionActivity.isPostponed
+      && decisionActivity.isRetracted
       && !this.currentSession.may('view-access-level-pill-when-postponed')) {
         this.showAccessLevelPill = false;
     }
