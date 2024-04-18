@@ -36,6 +36,7 @@ const selectors = {
   // decisions and notes
 
   // create-sign-flow
+  // TODO: cleanup? (not tested yet)
   decisionsSignFlow: {
     pieceName: '[data-test-signatures-decisions-signflow-piece-name]',
     meetingDate: '[data-test-signatures-decisions-signflow-meeting-date]',
