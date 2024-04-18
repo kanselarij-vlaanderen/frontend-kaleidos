@@ -26,13 +26,13 @@
         {{/if}}
         <AuInput
           data-test-route-agendas-overview-filter-input
-          @width="block"
-          @icon="search"
-          @value={{this.filterAgendas}}
-          @enter={{this.setFilter}}
-          {{on "input" (perform this.debouncedSetFilter)}}
           placeholder={{t "date-example"}}
           autocomplete="off"
+          value={{this.filterAgendas}}
+          @width="block"
+          @icon="search"
+          {{on "input" (perform this.debouncedSetFilter)}}
+          {{on "keydown" this.onEnterKeyFilter}}
         />
       </Group.Item>
       {{#if (user-may "manage-meetings")}}
@@ -110,8 +110,8 @@
               </tr>
             {{else}}
               {{#each @model as |agenda|}}
+                {{! template-lint-disable no-invalid-interactive }}
                 <tr
-                  role="button"
                   class="auk-u-text-align--center auk-table--clickable-rows"
                   {{on "click" (fn this.onClickRow agenda)}}
                 >
@@ -171,6 +171,7 @@
                     </AuLink>
                   </td>
                 </tr>
+                {{! template-lint-enable no-invalid-interactive }}
               {{/each}}
             {{/if}}
           </tbody>

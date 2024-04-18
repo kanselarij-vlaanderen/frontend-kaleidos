@@ -74,10 +74,11 @@
     <form {{on "submit" this.search}} class="auk-navbar auk-navbar--bordered-bottom au-u-padding-left-none au-u-padding-right-small au-u-padding-top-small au-u-padding-bottom-small au-u-flex--between au-u-flex--spaced-tiny">
       <AuInput
         data-test-route-settings-users-search-input
-        @type="search"
-        @value={{this.searchTextBuffer}}
-        class="auk-u-maximize-width"
+        type="search"
         placeholder={{t "user-search"}}
+        class="auk-u-maximize-width"
+        value={{this.searchTextBuffer}}
+        {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
       />
       <AuButton
         data-test-route-settings-users-search-button
@@ -175,6 +176,7 @@
         </td>
         <td data-test-route-settings-users-row-actions class="auk-u-text-align--right">
           <div class="auk-o-flex auk-o-flex--justify-end">
+            {{!-- template-lint-disable require-context-role --}}
             <AuDropdown
               data-test-route-settings-users-row-actions-dropdown
               @skin="naked"
@@ -224,6 +226,7 @@
                 </AuButton>
               {{/if}}
             </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
             <AuLink
               data-test-button-user-detail
               @skin="button-naked"

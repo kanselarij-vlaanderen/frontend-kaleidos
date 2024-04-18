@@ -101,6 +101,12 @@ export default class CreateAgendaitem extends Component {
   };
 
   @action
+  onInputFilter(event) {
+    this.filter = event.target.value;
+    this.searchTask.perform();
+  }
+
+  @action
   selectSize(size) {
     this.page = 0;
     this.size = size;

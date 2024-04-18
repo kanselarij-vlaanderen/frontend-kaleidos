@@ -54,11 +54,12 @@
   <AuToggleSwitch
     data-test-signatures-tab-mark-for-signflow
     @skin="primary"
-    @label={{t "present-for-signing"}}
     @checked={{this.hasMarkedSignFlow}}
-    @onChange={{fn this.markForSignFlow.perform}}
+    @onChange={{this.markForSignFlow.perform}}
     @disabled={{this.markForSignFlow.isRunning}}
-  />
+  >
+    {{t "present-for-signing"}}
+  </AuToggleSwitch>
 {{/if}}
 
 {{#if this.isOpenVerifyDeleteSignFlow}}

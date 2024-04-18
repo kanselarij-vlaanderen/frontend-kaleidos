@@ -12,16 +12,17 @@
           data-test-proposable-agendas-modal-toggle-formally-ok
           id="new-subcase-ok"
           @checked={{this.isFormallyOk}}
-          @onChange={{fn (mut this.isFormallyOk)}}
+          @onChange={{set this "isFormallyOk"}}
         />
       </AuFormRow>
       <AuFormRow>
         <Auk::Label for="remarks">{{t "private-comments-title"}}</Auk::Label>
         <AuTextarea
-          rows="4"
           id="remarks"
+          rows="4"
+          value={{this.privateComment}}
           @width="block"
-          @value={{this.privateComment}}
+          {{on "input" (pick "target.value" (set this "privateComment"))}}
         />
       </AuFormRow>
       <AuHr />
@@ -40,6 +41,7 @@
             </thead>
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
+                {{! template-lint-disable no-invalid-interactive }}
                 <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
                   <td class="auk-table__col--1">
                     <AuRadio
@@ -59,6 +61,7 @@
                     {{agenda.createdFor.kind.label}}
                   </td>
                 </tr>
+                {{! template-lint-enable no-invalid-interactive }}
               {{/each}}
             </tbody>
           </table>

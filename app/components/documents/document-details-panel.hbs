@@ -23,11 +23,12 @@
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
-        <Textarea
+        <AuTextarea
           data-test-details-tab-edit-name
           aria-labelledby="piece-name"
-          class="auk-textarea"
-          @value={{mut @piece.name}}
+          value={{@piece.name}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @piece "name"))}}
         />
       </Auk::KeyValue>
       <Auk::KeyValue data-test-details-tab-access-level @key={{t "publicity"}}>
@@ -243,6 +244,7 @@
                 />
               </div>
               {{#if (user-may "remove-signatures")}}
+                {{!-- template-lint-disable require-context-role --}}
                 <AuDropdown
                   @icon="three-dots"
                   @title={{t "more"}}
@@ -258,6 +260,7 @@
                     {{t "delete-signed-piece"}}
                   </AuButton>
                 </AuDropdown>
+                {{!-- template-lint-enable require-context-role --}}
               {{/if}}
             </div>
           </div>

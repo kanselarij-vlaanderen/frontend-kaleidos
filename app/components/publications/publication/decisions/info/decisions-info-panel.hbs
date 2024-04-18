@@ -84,9 +84,10 @@
               <AuFormRow data-test-decisions-info-panel-edit-number-of-pages>
                 <Auk::Label>{{t "number-of-pages"}}</Auk::Label>
                 <AuInput
-                  @type="number"
+                  type="number"
+                  value={{@publicationFlow.numberOfPages}}
                   @width="block"
-                  @value={{@publicationFlow.numberOfPages}}
+                  {{on "input" (pick "target.value" (set @publicationFlow "numberOfPages"))}}
                 />
               </AuFormRow>
             </div>
@@ -97,9 +98,10 @@
                 <Auk::Label>{{t "publication-flow-number-of-extracts"}}</Auk::Label>
                 <AuInput
                   data-test-decisions-info-panel-edit-number-of-extracts
-                  @type="number"
+                  type="number"
+                  value={{@publicationFlow.numberOfExtracts}}
                   @width="block"
-                  @value={{@publicationFlow.numberOfExtracts}}
+                  {{on "input" (pick "target.value" (set @publicationFlow "numberOfExtracts"))}}
                 />
               </AuFormRow>
             </div>

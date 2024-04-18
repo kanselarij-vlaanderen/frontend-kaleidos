@@ -39,29 +39,31 @@
           data-test-subcase-description-edit-confidential
           id="subcase-confidential"
           @checked={{@subcase.confidential}}
-          @onChange={{set this "confidentialChanged" true}}
+          @onChange={{queue (set @subcase "confidential") (set this "confidentialChanged" true)}}
         />
       </AuFormRow>
       <AuFormRow>
         <Auk::Label id="short-title-subcase">
           {{t "name-subcase"}}</Auk::Label>
-        <Textarea
+        <AuTextarea
           data-test-subcase-description-edit-short-title
-          aria-labelledby="short-title-subcase"
           rows="2"
-          class="auk-textarea"
-          @value={{@subcase.shortTitle}}
+          aria-labelledby="short-title-subcase"
+          value={{@subcase.shortTitle}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @subcase "shortTitle"))}}
         />
       </AuFormRow>
       <AuFormRow>
         <Auk::Label id="title-subcase">
           {{t "title-subcase"}}</Auk::Label>
-        <Textarea
+        <AuTextarea
           data-test-subcase-description-edit-title
-          aria-labelledby="title-subcase"
           rows="4"
-          class="auk-textarea"
-          @value={{@subcase.title}}
+          aria-labelledby="title-subcase"
+          value={{@subcase.title}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @subcase "title"))}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -80,8 +82,9 @@
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <AuInput
           data-test-subcase-description-edit-procedure-name
+          value={{this.subcaseName}}
           @width="block"
-          @value={{mut this.subcaseName}}
+          {{on "input" (pick "target.value" (set this "subcaseName"))}}
         />
       </AuFormRow>
     </div>

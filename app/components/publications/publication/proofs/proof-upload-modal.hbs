@@ -39,8 +39,9 @@
           {{t "who-proof-reads"}}
         </Auk::Label>
         <AuInput
-          @value={{mut this.proofPrintCorrector}}
           id="proofPrintCorrector"
+          value={{this.proofPrintCorrector}}
+          {{on "input" (pick "target.value" (set this "proofPrintCorrector"))}}
         />
       </AuFormRow>
     </div>
