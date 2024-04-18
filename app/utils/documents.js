@@ -1,4 +1,3 @@
-import { A } from '@ember/array';
 import VRDocumentName, {
   compareFunction,
 } from 'frontend-kaleidos/utils/vr-document-name';
@@ -14,7 +13,7 @@ export const sortDocumentContainers = async (
   const pieces = await piecesOrPromise;
   const containers = await containersOrPromise;
 
-  const sortedPieces = A(pieces.slice()).sort((pieceA, pieceB) =>
+  const sortedPieces = pieces.slice().sort((pieceA, pieceB) =>
     compareFunction(
       new VRDocumentName(pieceA.get('name')),
       new VRDocumentName(pieceB.get('name'))
@@ -29,7 +28,7 @@ export const sortDocumentContainers = async (
     Since names are now on each piece
     we can sort on the pieces themselves instead of on containers
   */
-  return A(containers.slice()).sort((containerA, containerB) => {
+  return containers.slice().sort((containerA, containerB) => {
     let matchingPieceA = null;
     let matchingPieceB = null;
     // Use .value() to get the value of a ManyArray, instead of working with the
@@ -72,7 +71,7 @@ export const sortPieces = (
   sortingFunc = compareFunction
 ) => {
   const validNamedPieces = [];
-  let invalidNamedPieces = A();
+  let invalidNamedPieces = [];
   for (const piece of pieces) {
     try {
       new NameClass(piece.name).parseMeta();

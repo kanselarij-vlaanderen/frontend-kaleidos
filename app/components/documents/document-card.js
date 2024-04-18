@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
+import { TrackedArray } from 'tracked-built-ins';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -54,7 +54,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked uploadedFile;
   @tracked newPiece;
   @tracked defaultAccessLevel;
-  @tracked pieces = A();
+  @tracked pieces = new TrackedArray([]);
 
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
@@ -241,14 +241,15 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadVersionHistory() {
-    this.pieces = yield this.documentContainer.hasMany('pieces').reload();
-    for (const piece of this.pieces.slice()) {
+    const piecesFromModel = yield this.documentContainer.hasMany('pieces').reload();
+    this.pieces = piecesFromModel.slice();
+    for (const piece of this.pieces) {
       yield piece.belongsTo('accessLevel').reload();
     }
   }
 
   get sortedPieces() {
-    return A(sortPieces(this.pieces.slice()).reverse());
+    return sortPieces(this.pieces).reverse();
   }
 
   get reverseSortedPieces() {
@@ -257,7 +258,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   get visiblePieces() {
     const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
-    return A(this.reverseSortedPieces.slice(idx));
+    return this.reverseSortedPieces.slice(idx);
   }
 
   @action

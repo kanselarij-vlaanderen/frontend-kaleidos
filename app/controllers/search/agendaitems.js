@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
@@ -41,7 +40,7 @@ export default class AgendaitemsSearchController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked types;
+  @tracked types = [];
   @tracked latestOnly; // Only show the most recent version of an agenda-item
   @tracked searchText;
 
@@ -50,7 +49,7 @@ export default class AgendaitemsSearchController extends Controller {
     this.page = 0;
     this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
-    this.types = A(['nota', 'mededeling']);
+    this.types = ['nota', 'mededeling'];
     this.latestOnly = true;
   }
 
@@ -64,10 +63,12 @@ export default class AgendaitemsSearchController extends Controller {
 
   set includeNotas(value) {
     if (value === true) {
-      addObject(this.type, 'nota');
+      addObject(this.types, 'nota');
     } else {
       removeObject(this.types, 'nota');
     }
+    // parent route does not see pushes in tracked array
+    this.types = [...this.types];
   }
 
   get includeMededelingen() {
@@ -80,6 +81,8 @@ export default class AgendaitemsSearchController extends Controller {
     } else {
       removeObject(this.types, 'mededeling');
     }
+    // parent route does not see pushes in tracked array
+    this.types = [...this.types];
   }
 
   @action

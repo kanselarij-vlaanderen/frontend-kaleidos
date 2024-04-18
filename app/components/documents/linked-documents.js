@@ -68,7 +68,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
           let subcasePieces = yield subcase.hasMany('linkedPieces').reload();
           subcasePieces = subcasePieces.slice()
           subcasePieces.push(...allPiecesToLink);
-          subcase.set('linkedPieces', subcasePieces);
+          subcase.linkedPieces = subcasePieces;
           yield subcase.save();
         }
       } else if (this.itemType === 'subcase') {
@@ -82,7 +82,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
           let agendaitemPieces = await agendaitem.hasMany('linkedPieces').reload();
           agendaitemPieces = agendaitemPieces.slice();
           agendaitemPieces.push(...allPiecesToLink);
-          agendaitem.set('linkedPieces', agendaitemPieces);
+          agendaitem.linkedPieces = agendaitemPieces;
           await agendaitem.save();
         });
         yield all(agendaitemUpdates);
@@ -92,7 +92,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
       let newLinkedPieces = yield this.args.agendaitemOrSubcase.hasMany('linkedPieces').reload();
       newLinkedPieces = newLinkedPieces.slice();
       newLinkedPieces.push(...allPiecesToLink);
-      this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedPieces);
+      this.args.agendaitemOrSubcase.linkedPieces = newLinkedPieces;
       yield this.args.agendaitemOrSubcase.save();
       this.linkedPieces = newLinkedPieces;
     }
@@ -113,7 +113,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
         let subcasePieces = yield subcase.hasMany('linkedPieces').reload();
         subcasePieces = subcasePieces.slice();
         removeObjects(subcasePieces, linkedPiecesToRemove);
-        subcase.set('linkedPieces', subcasePieces);
+        subcase.linkedPieces = subcasePieces;
         yield subcase.save();
       }
     } else if (this.itemType === 'subcase') {
@@ -127,7 +127,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
         let agendaitemPieces = await agendaitem.hasMany('linkedPieces').reload();
         agendaitemPieces = agendaitemPieces.slice();
         removeObjects(agendaitemPieces, linkedPiecesToRemove);
-        agendaitem.set('linkedPieces', agendaitemPieces);
+        agendaitem.linkedPieces = agendaitemPieces;
         await agendaitem.save();
       });
       yield all(agendaitemUpdates);
@@ -137,7 +137,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
     let newLinkedPieces = yield this.args.agendaitemOrSubcase.hasMany('linkedPieces').reload();
     newLinkedPieces = newLinkedPieces.slice();
     removeObjects(newLinkedPieces, linkedPiecesToRemove);
-    this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedPieces);
+    this.args.agendaitemOrSubcase.linkedPieces = newLinkedPieces;
     yield this.args.agendaitemOrSubcase.save();
     this.linkedPieces = newLinkedPieces;
   }

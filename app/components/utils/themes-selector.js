@@ -25,10 +25,12 @@ export default class ThemesSelector extends Component {
 
   @action
   toggleTheme(theme, checked) {
+    const themes = this.args.selectedThemes?.slice();
     if (checked) {
-      addObject(this.args.selectedThemes, theme);
+      addObject(themes, theme);
     } else {
-      removeObject(this.args.selectedThemes, theme);
+      removeObject(themes, theme);
     }
+    this.args.onChangeThemes?.(themes);
   }
 }

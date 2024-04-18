@@ -148,7 +148,10 @@
           </AuFormRow>
           <AuFormRow data-test-news-item-edit-item-themes-selector>
             <Auk::Label>{{t "themes"}}</Auk::Label>
-            <Utils::ThemesSelector @selectedThemes={{this.selectedThemes}} />
+            <Utils::ThemesSelector
+              @selectedThemes={{this.selectedThemes}}
+              @onChangeThemes={{this.setThemes}}
+            />
           </AuFormRow>
         </div>
       </Auk::Panel::Body>

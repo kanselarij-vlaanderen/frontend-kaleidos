@@ -97,6 +97,8 @@ export default class BatchDocumentsDetailsModal extends Component {
     } else {
       this.selectedRows.push(row);
     }
+    // array content changes are not tracked
+    this.selectedRows = [...this.selectedRows];
   }
 
   @action
