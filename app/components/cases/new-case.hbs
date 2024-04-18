@@ -11,7 +11,11 @@
     <div class="au-c-form">
       <AuFormRow data-test-new-case-shorttitle>
         <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
-        <AuTextarea @width="block" @value={{this.shortTitle}} />
+        <AuTextarea
+          value={{this.shortTitle}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "shortTitle"))}}
+        />
       </AuFormRow>
     </div>
   </:body>

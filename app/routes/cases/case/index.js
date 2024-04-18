@@ -9,9 +9,9 @@ export default class CasesCaseIndexRoute extends Route {
       if (
         model.parliamentFlow &&
         (model.latestParliamentRetrievalActivity?.startDate >
-          model.subcases?.lastObject.created ||
+          model.subcases?.at(-1).created ||
           model.latestParliamentSubmissionActivity?.startDate >
-            model.subcases?.lastObject.created)
+            model.subcases?.at(-1).created)
       ) {
         this.router.transitionTo('cases.case.parliament-flow');
       } else {

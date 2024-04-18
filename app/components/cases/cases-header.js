@@ -22,13 +22,18 @@ export default class CasesHeader extends Component {
   }
 
   @action
+  onInputFilter(event) {
+    this.filterText = event.target.value;
+    this.debouncedSetFilter.perform();
+  }
+
+  @action
   saveNewCaseAddSubcase(decisionmakingFlow) {
     this.isOpenNewCaseAddSubcaseModal = false;
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }
 
-  debouncedSetFilter = restartableTask(async (event) => {
-    this.filterText = event.target.value;
+  debouncedSetFilter = restartableTask(async () => {
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     this.args.onSetFilter(this.filterText);
   });

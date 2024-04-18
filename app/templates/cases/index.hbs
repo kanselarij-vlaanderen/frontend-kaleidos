@@ -69,8 +69,8 @@
                     </tr>
                   {{else}}
                     {{#each @model as |row|}}
+                      {{! template-lint-disable no-invalid-interactive }}
                       <tr
-                        role="button"
                         class="auk-u-text-align--center auk-table--clickable-rows"
                         {{on
                           "click"
@@ -110,6 +110,7 @@
                           {{/if}}
                         </td>
                       </tr>
+                      {{! template-lint-enable no-invalid-interactive }}
                     {{/each}}
                   {{/if}}
                 </tbody>

@@ -12,6 +12,7 @@
     <Auk::Toolbar::Group @position="right">
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
             @skin="secondary"
@@ -48,6 +49,7 @@
               </AuButton>
             {{/if}}
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

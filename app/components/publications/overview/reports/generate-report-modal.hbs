@@ -61,16 +61,17 @@
               {{t "year"}}
             </Auk::Label>
             <AuInput
-              @type="number"
-              @value={{this.publicationYearAsString}}
-              @error={{not this.isPublicationYearValid}}
-              {{on "focusout" (perform this.loadGovernmentDomains)}}
-              {{on "change" (perform this.loadGovernmentDomains)}}
+              type="number"
               id="publicationReportsPublicationYear"
               {{!min/max does not prevent input of invalid year by typing}}
               min={{this.publicationYearMin}}
               max={{this.publicationYearMax}}
               class="auk-input-group--w-small" {{! TODO: replace `auk-input-group--w-small` with matching @width argument when it is implemented }}
+              value={{this.publicationYear}}
+              @error={{not this.isPublicationYearValid}}
+              {{on "input" this.onInputPublicationYear}}
+              {{on "focusout" (perform this.loadGovernmentDomains)}}
+              {{on "change" (perform this.loadGovernmentDomains)}}
             />
           </AuFormRow>
         {{/if}}

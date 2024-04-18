@@ -55,29 +55,31 @@
                     data-test-new-subcase-form-toggle-confidential
                     id="subcase-confidential"
                     @checked={{this.confidential}}
-                    @onChange={{fn (mut this.confidential)}}
+                    @onChange={{set this "confidential"}}
                   />
                 </AuFormRow>
                 <AuFormRow>
                   <Auk::Label id="name-subcase">
                     {{t "name-subcase"}}</Auk::Label>
-                  <Textarea
+                  <AuTextarea
                     data-test-new-subcase-form-shorttitle
-                    aria-labelledby="name-subcase"
                     rows="2"
-                    class="auk-textarea"
-                    @value={{mut this.shortTitle}}
+                    aria-labelledby="name-subcase"
+                    value={{this.shortTitle}}
+                    @width="block"
+                    {{on "input" (pick "target.value" (set this "shortTitle"))}}
                   />
                 </AuFormRow>
                 <AuFormRow>
                   <Auk::Label id="title-subcase">
                     {{t "title-subcase"}}</Auk::Label>
-                  <Textarea
+                  <AuTextarea
                     data-test-new-subcase-form-longtitle
-                    aria-labelledby="name-subcase"
                     rows="4"
-                    class="auk-textarea"
-                    @value={{mut this.title}}
+                    aria-labelledby="name-subcase"
+                    value={{this.title}}
+                    @width="block"
+                    {{on "input" (pick "target.value" (set this "title"))}}
                   />
                 </AuFormRow>
                 <AuFormRow>
@@ -121,9 +123,10 @@
                       </AuButton>
                     {{else}}
                       <AuInput
-                        @width="block"
-                        @value={{this.subcaseName}}
                         id="subcaseNameId"
+                        value={{this.subcaseName}}
+                        @width="block"
+                        {{on "input" (pick "target.value" (set this "subcaseName"))}}
                       />
                       <AuButton
                         @skin="naked"

@@ -13,19 +13,20 @@
       </div>
       <AuInput
         data-test-route-search-input
-        @width="block"
-        @value={{this.searchTextBuffer}}
         id="keyword"
         placeholder={{t "search-placeholder"}}
+        value={{this.searchTextBuffer}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
       />
     </AuFormRow>
     <AuFormRow class="au-u-margin-top-none au-u-1-4">
       <AuButton
         data-test-route-search-trigger
         @skin="primary"
+        type="submit"
         @icon="search"
         @width="block"
-        type="submit"
       >
         {{t "search"}}
       </AuButton>

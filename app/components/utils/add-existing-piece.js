@@ -62,6 +62,12 @@ export default class AddExistingPiece extends Component {
   }
 
   @action
+  onInputFilter(event) {
+    this.filter = event.target.value;
+    this.searchTask.perform();
+  }
+
+  @action
   select(piece) {
     const index = this.selected.indexOf(piece);
     const isSelected = index > -1;

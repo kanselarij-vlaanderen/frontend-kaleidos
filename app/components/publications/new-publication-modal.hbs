@@ -34,8 +34,8 @@
           <div class="auk-u-mb">
             <AuInput
               data-test-new-publication-number
-              @type="number"
-              @value={{this.number}}
+              type="number"
+              value={{this.number}}
               @error={{not this.isPublicationNumberValid}}
               @disabled={{this.initPublicationNumber.isRunning}}
               {{on "input" (perform this.setPublicationNumber)}}
@@ -43,11 +43,11 @@
             />
             <AuInput
               data-test-new-publication-suffix
-              @value={{this.suffix}}
-              @error={{not this.isPublicationNumberValid}}
-              {{on "input" (perform this.setPublicationNumberSuffix)}}
               id="publicationSuffixInput"
               class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
+              value={{this.suffix}}
+              @error={{not this.isPublicationNumberValid}}
+              {{on "input" (perform this.setPublicationNumberSuffix)}}
             />
             <Utils::Generic::TooltipHelp class="auk-u-mx">
               {{t "publication-flow-publication-number-help"}}
@@ -72,9 +72,10 @@
           <AuTextarea
             data-test-new-publication-short-title
             id="shortTitleInput"
+            value={{this.shortTitle}}
             @width="block"
-            @value={{this.shortTitle}}
             @error={{this.isShownShortTitleError}}
+            {{on "input" (pick "target.value" (set this "shortTitle"))}}
             {{on "focusout" this.enableErrorOnShortTitle}}
           />
           {{#if this.isShownShortTitleError}}
@@ -93,8 +94,9 @@
             data-test-new-publication-long-title
             id="longTitleInput"
             rows="4"
+            value={{this.longTitle}}
             @width="block"
-            @value={{this.longTitle}}
+            {{on "input" (pick "target.value" (set this "longTitle"))}}
           />
         </AuFormRow>
         <div class="auk-o-grid-auto">

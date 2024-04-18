@@ -12,6 +12,7 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
+        {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
           data-test-proof-received-panel-dropdown
           @icon="three-dots"
@@ -37,6 +38,7 @@
             {{t "edit-2"}}
           </AuButton>
         </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>
@@ -84,8 +86,9 @@
           </Auk::Label>
           <AuInput
             data-test-proof-received-panel-edit-corrector
-            @value={{mut this.newProofPrintCorrector}}
             id="proofPrintCorrector"
+            value={{this.newProofPrintCorrector}}
+            {{on "input" (pick "target.value" (set this "newProofPrintCorrector"))}}
           />
         </AuFormRow>
       </div>

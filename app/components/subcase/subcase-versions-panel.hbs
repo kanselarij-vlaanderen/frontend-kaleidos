@@ -22,7 +22,7 @@
 
               {{#each this.modelsOfMeetings as |models index| }}
                 {{#if (eq index 0)}}
-                {{#let models.[0] models.[1] models.[2] as |meeting agenda agendaitem|}}
+                {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
                   <AuLink
                     @route="agenda.agendaitems.agendaitem"
                     @models={{array

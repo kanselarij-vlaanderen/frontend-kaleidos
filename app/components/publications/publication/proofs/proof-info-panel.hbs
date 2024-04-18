@@ -57,7 +57,8 @@
               </Auk::Label>
               <AuInput
                 data-test-proof-info-panel-edit-corrector
-                @value={{mut @publicationSubcase.proofPrintCorrector}}
+                value={{@publicationSubcase.proofPrintCorrector}}
+                {{on "input" (pick "target.value" (set @publicationSubcase "proofPrintCorrector"))}}
               />
             </AuFormRow>
           </div>

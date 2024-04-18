@@ -11,8 +11,9 @@
         <Auk::Label>{{t "name-document"}}</Auk::Label>
         <AuInput
           data-test-uploaded-document-name-input={{true}}
+          value={{@piece.name}}
           @width="block"
-          @value={{mut @piece.name}}
+          {{on "input" (pick "target.value" (set @piece "name"))}}
         />
       </AuFormRow>
       {{#unless this.loadData.isRunning}}

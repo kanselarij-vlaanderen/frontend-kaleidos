@@ -18,8 +18,9 @@
             </Auk::Label>
             <AuTextarea
               data-test-inscription-edit-short-title
+              value={{this.shortTitle}}
               @width="block"
-              @value={{this.shortTitle}}
+              {{on "input" (pick "target.value" (set this "shortTitle"))}}
               {{on "focusout" this.enableErrorDisplay}}
             />
             {{#if this.showShortTitleError}}
@@ -37,8 +38,9 @@
             <AuTextarea
               data-test-inscription-edit-long-title
               rows="4"
+              value={{this.longTitle}}
               @width="block"
-              @value={{this.longTitle}}
+              {{on "input" (pick "target.value" (set this "longTitle"))}}
             />
           </AuFormRow>
         </div>
