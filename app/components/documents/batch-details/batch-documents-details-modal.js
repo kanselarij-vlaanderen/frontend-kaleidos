@@ -75,6 +75,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.documentType = row.documentContainer.type;
         if (this.isSignaturesEnabled) {
           row.signMarkingActivity = await piece.signMarkingActivity;
+          row.signedPiece = await piece.signedPiece;
           row.showSignature = isPresent(this.args.decisionActivity);
           row.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(piece);
           row.hasSentSignFlow = row.signMarkingActivity && !row.hasMarkedSignFlow;
