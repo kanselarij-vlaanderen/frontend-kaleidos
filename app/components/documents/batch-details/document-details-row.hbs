@@ -57,7 +57,7 @@
             @label={{t "present-for-signing"}}
             @checked={{@row.markedForSignature}}
             @onChange={{fn @row.setMarkedForSignature}}
-            @disabled={{@agendaitemIsRetracted}}
+            @disabled={{or @agendaitemIsRetracted @row.signedPiece }}
           />
       {{/if}}
     </td>

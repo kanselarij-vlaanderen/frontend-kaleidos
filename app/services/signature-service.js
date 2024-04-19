@@ -301,8 +301,6 @@ export default class SignatureService extends Service {
       return true;
     } else if (await piece.signCompletionActivity) {
       return true;
-    } else if (await piece.signedPiece) {
-      return true;
     }
     return false;
   }
