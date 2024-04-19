@@ -258,7 +258,8 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get visiblePieces() {
-    return this.reverseSortedPieces.indexOf(this.piece) + 1;
+    const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
+    return this.reverseSortedPieces.slice(idx);
   }
 
   @action
