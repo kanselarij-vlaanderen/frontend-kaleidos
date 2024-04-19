@@ -301,8 +301,6 @@ export default class SignatureService extends Service {
       return true;
     } else if (await piece.signCompletionActivity) {
       return true;
-    } else if (await piece.signedPiece) {
-      return true;
     }
     return false;
   }
@@ -313,12 +311,6 @@ export default class SignatureService extends Service {
     const signFlow = await signSubcase?.signFlow;
     const status = await signFlow?.belongsTo('status').reload();
     return status?.uri === MARKED;
-  }
-
-  async hasSignPreparationActivity(piece) {
-    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
-    const signPreparationActivity = await signMarkingActivity?.signPreparationActivity;
-    return !!signPreparationActivity;
   }
 
   async getSigningHubUrl(signFlow, piece) {

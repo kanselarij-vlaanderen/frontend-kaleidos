@@ -57,8 +57,6 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
-  @tracked hasSignPreparationActivity = false;
-  @tracked signCompletionActivity;
 
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
@@ -102,6 +100,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return (
       !this.signMarkingActivity &&
+      !this.args.piece.signedPiece &&
       this.currentSession.may('manage-signatures') &&
       (
         (this.args.agendaitem && this.args.decisionActivity) ||
@@ -140,9 +139,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     return (
       !this.args.hideUpload
         && (!this.hasSignFlow
-            || ((this.hasMarkedSignFlow || this.hasSignPreparationActivity || !!this.signCompletionActivity ) 
-            && !!this.args.decisionActivity)
-          )
+            || (this.hasMarkedSignFlow && !!this.args.decisionActivity))
     );
   }
 
@@ -240,8 +237,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signFlow = yield signSubcase?.signFlow;
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
     this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
-    this.signCompletionActivity = yield this.piece.signCompletionActivity;
-    this.hasSignPreparationActivity = yield this.signatureService.hasSignPreparationActivity(this.piece);
   }
 
   @task
