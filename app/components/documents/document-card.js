@@ -100,6 +100,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return (
       !this.signMarkingActivity &&
+      !this.args.piece.signedPiece &&
       this.currentSession.may('manage-signatures') &&
       (
         (this.args.agendaitem && this.args.decisionActivity) ||
