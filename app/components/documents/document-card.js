@@ -250,16 +250,15 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get sortedPieces() {
-    return sortPieces(this.pieces).reverse();
+    return sortPieces(this.pieces.slice()).reverse();
   }
 
   get reverseSortedPieces() {
-    return this.sortedPieces.slice(0).reverse(); // slice(0) as a hack to create a new array, since "reverse" happens in-place
+    return this.sortedPieces.slice().reverse(); // slice() as a hack to create a new array, since "reverse" happens in-place
   }
 
   get visiblePieces() {
-    const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
-    return this.reverseSortedPieces.slice(idx);
+    return this.reverseSortedPieces.indexOf(this.piece) + 1;
   }
 
   @action
@@ -280,7 +279,11 @@ export default class DocumentsDocumentCardComponent extends Component {
     const previousPiece = this.sortedPieces.at(-1);
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
+    const newName = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(
+        this.sortedPieces.length + 1
+      );
     this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
+      name: newName,
       created: now,
       modified: now,
       file: file,
@@ -288,9 +291,6 @@ export default class DocumentsDocumentCardComponent extends Component {
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
     });
-    this.newPiece.name = new VRDocumentName(
-      previousPiece.name
-    ).withOtherVersionSuffix(this.sortedPieces.length);
   }
 
   @task

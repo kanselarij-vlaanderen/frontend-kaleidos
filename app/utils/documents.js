@@ -72,7 +72,7 @@ export const sortPieces = (
 ) => {
   const validNamedPieces = [];
   let invalidNamedPieces = [];
-  for (const piece of pieces) {
+  for (const piece of pieces.slice()) {
     try {
       new NameClass(piece.name).parseMeta();
       validNamedPieces.push(piece);
