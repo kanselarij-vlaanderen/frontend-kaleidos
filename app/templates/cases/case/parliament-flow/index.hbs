@@ -1,0 +1,33 @@
+{{page-title (t "flemish-parliament")}}
+
+<div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
+  <div class="auk-scroll-wrapper">
+    <div class="auk-u-bg-alt">
+      <Subcases::ParliamentSubcaseHeader />
+    </div>
+    <div class="auk-scroll-wrapper__body">
+      <div class="auk-u-m-4">
+        <div id="case-info" class="auk-u-mb-4">
+          <Cases::Parliament::DescriptionPanel
+            @decisionmakingFlow={{@model.decisionmakingFlow}}
+            @parliamentFlow={{@model.parliamentFlow}}
+            @latestRetrievalActivity={{@model.latestRetrievalActivity}}
+            @latestSubmissionActivity={{@model.latestSubmissionActivity}}
+          />
+        </div>
+        <div id="documents" class="auk-u-mb-4">
+          <Cases::Parliament::NewestDocumentsPanel
+            @parliamentFlow={{@model.parliamentFlow}}
+            @submissionActivities={{@model.submissionActivities}}
+          />
+        </div>
+        <div id="document-versions" class="auk-u-mb-4">
+          <Cases::Parliament::DocumentVersionsPanel
+            @parliamentFlow={{@model.parliamentFlow}}
+            @submissionActivities={{@model.submissionActivities}}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

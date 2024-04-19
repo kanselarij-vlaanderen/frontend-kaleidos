@@ -69,7 +69,7 @@ context('Decision tests post digital agenda', () => {
       subcaseType: subcaseType1,
       subcaseName: subcaseName1,
     });
-    cy.createAgenda('Ministerraad', agendaDate);
+    cy.createAgenda('Ministerraad', agendaDate, null, 100);
   });
 
   it('should fail to mark all decisions for signature', () => {
@@ -576,6 +576,35 @@ context('Decision tests post digital agenda', () => {
     cy.get(appuniversum.loader).should('not.exist');
     cy.wait(2000).then(() => expect(spy).not.to.have.been.called);
     cy.get(appuniversum.toaster).should('not.exist');
+  });
+
+  it('should test generate all decisions pdf', () => {
+    const agendaDate4 = Cypress.dayjs('2023-11-28').hour(10);
+    const downloadPath = 'cypress/downloads';
+    const fileName = 'VR PV 2023/101 - ALLE BESLISSINGEN.pdf'; // slash for actual name, dash for downloaded file
+    const downloadedFileName = 'VR PV 2023-101 - ALLE BESLISSINGEN.pdf';
+    const downloadDecisionPDF = `${downloadPath}/${downloadedFileName}`;
+
+    cy.openAgendaForDate(agendaDate4);
+    cy.wait(2000);
+    cy.get(agenda.agendaActions.optionsDropdown).children(appuniversum.button)
+      .click();
+    cy.intercept('POST', '/generate-decision-report/generate-reports-bundle').as('generateReportBundle');
+    cy.get(agenda.agendaActions.generateSignedDecisionsBundle).forceClick();
+    cy.wait('@generateReportBundle');
+    cy.get(appuniversum.toaster).contains('Alle beslissingen PDF aangemaakt');
+    cy.clickReverseTab('Documenten');
+
+    cy.get(document.documentCard.name.value).contains(fileName)
+      .click();
+
+    cy.get(document.documentPreview.downloadLink).click();
+
+    cy.readFile(downloadDecisionPDF, {
+      timeout: 25000,
+    });
+    // reading contents not out of the box with cypress
+    // .should('contain', 'VR PV 2023/3 - punt 0002');
   });
 
   it('should test mark all decisions for signing', () => {

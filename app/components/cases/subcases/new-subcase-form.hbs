@@ -1,38 +1,3 @@
-<Auk::Navbar @skin="gray-100">
-  <Auk::Toolbar @size="large">
-    <Auk::Toolbar::Group>
-      <Auk::Toolbar::Item>
-        <AuLink
-          @skin="button-naked"
-          @icon="hierarchical-back"
-          @hideText={{true}}
-          {{on "click" this.transitionBack}}
-        >
-          {{t "back"}}
-        </AuLink>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <div data-test-new-subcase-form-title-container class="auk-u-my">
-          <span class="auk-overline auk-u-block">
-            {{t "case"}}
-          </span>
-          <h4 class="auk-toolbar-complex__title">
-            <Auk::AbbreviatedText
-              @text={{or
-                @decisionmakingFlow.case.shortTitle
-                @decisionmakingFlow.case.title
-              }}
-              @maxLength={{250}}
-            />
-            -
-            {{t "create-subcase"}}
-          </h4>
-        </div>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
-
 <div class="auk-scroll-wrapper au-u-flex-item--fill">
   <div class="auk-scroll-wrapper__body">
     <div class="au-o-region">

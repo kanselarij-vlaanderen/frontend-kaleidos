@@ -25,20 +25,14 @@ export default class RatificationAgendaitemAgendaitemsAgendaRoute extends Route 
     // Check if the subcase is a ratification, otherwise redirect gracefully.
     // This happens when the agendaitem is changed while on this tab
     await this.subcase?.type;
-    if (!this.subcase.isBekrachtiging) {
+    if (!this.subcase?.isBekrachtiging) {
       this.router.transitionTo('agenda.agendaitems.agendaitem.index');
     }
-    await model.hasMany('mandatees').reload();
-    this.mandatees = (await model.mandatees)
-      .slice()
-      .sort((m1, m2) => m1.priority - m2.priority);
-
   }
 
   async setupController(controller) {
     super.setupController(...arguments);
     controller.subcase = this.subcase;
-    controller.mandatees = this.mandatees;
     controller.decisionActivity = this.decisionActivity;
   }
 }

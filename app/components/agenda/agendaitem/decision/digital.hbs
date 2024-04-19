@@ -39,7 +39,7 @@
     (and
       this.loadReport.isIdle
       (not this.isEditing)
-      this.pieceParts
+      this.report
     )
   }}
     <Auk::Panel::Body class="{{if this.isEditing 'au-u-background-gray-100'}}">
@@ -50,7 +50,6 @@
           @meeting={{@agendaContext.meeting}}
           @isEditable={{true}}
           @agendaContext={{@agendaContext}}
-          @hideNewerVersions={{true}}
           @hideEdit={{true}}
           @hideUpload={{true}}
           @showCreateNewVersion={{true}}
@@ -412,7 +411,7 @@
         </Auk::Panel::Body>
       {{/if}}
     {{/if}}
-  {{else}}
+  {{else if (user-may "manage-decisions")}}
     <Auk::Panel::Body
       class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
     >

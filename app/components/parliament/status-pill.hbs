@@ -1,0 +1,22 @@
+{{#if (await @parliamentFlow.status)}}
+  {{#if @parliamentFlow.status}}
+    <AuPill
+      @size="small"
+      @skin={{if @parliamentFlow.isIncomplete "warning" "success"}}
+    >
+      {{#if @useAltLabel}}
+        {{@parliamentFlow.status.altLabel}}
+      {{else}}
+        {{@parliamentFlow.status.label}}
+      {{/if}}
+    </AuPill>
+  {{else}}
+    <AuPill @size="small" @skin="warning">
+      {{t "no-status"}}
+    </AuPill>
+  {{/if}}
+{{else}}
+  <AuPill @size="small" @skin="default">
+    {{t "loading"}}
+  </AuPill>
+{{/if}}

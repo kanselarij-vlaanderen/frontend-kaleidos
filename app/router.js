@@ -14,6 +14,7 @@ Router.map(function() {
   // Redirect routes
   this.route('agendaitem', { path: '/agendapunten/:agendaitem_id' });
   this.route('meeting', { path: '/vergaderingen/:meeting_id' });
+  this.route('subcase', { path: '/procedurestap/:subcase_id' });
 
   this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
@@ -32,6 +33,7 @@ Router.map(function() {
 
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
+      this.route('parliament-flow', { path: '/parlement'}, function() {});
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {});
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});

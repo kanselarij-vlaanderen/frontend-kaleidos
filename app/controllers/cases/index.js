@@ -66,7 +66,7 @@ export default class CasesIndexController extends Controller {
   async navigateToDecisionmakingFlow(case_) {
     const decisionmakingFlow = await case_.decisionmakingFlow;
     this.router.transitionTo(
-      'cases.case.subcases',
+      'cases.case.index',
       decisionmakingFlow.id
     );
   }

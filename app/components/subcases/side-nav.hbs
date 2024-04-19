@@ -11,22 +11,30 @@
         <AuHeading @level="2" @skin="6">{{t "subcases"}}</AuHeading>
       </Toolbar.Group>
       <Toolbar.Group @position="left" as |Group|>
-        <Group.Item>
-        </Group.Item>
+        <Group.Item />
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Navbar>
-    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-      <ul>
-        {{#each (reverse @subcases) as |subcase index|}}
+  <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+    <ul>
+      {{#each this.items as |item|}}
+        {{#if (eq item.type "regular")}}
           <Subcases::SideNav::Subcase
-            @subcase={{subcase}}
+            @subcase={{item.subcase}}
             @selected={{false}}
-            {{! Visually, we render the list from top to bototm but logically
-                the bottom item is number 1, that's why we calculate the number }}
-            @number={{sub @subcases.length (add index 1)}}
+            @number={{item.number}}
           />
-        {{/each}}
-      </ul>
+        {{else if (eq item.type "parliament")}}
+          <Subcases::SideNav::ParliamentSubcase
+            @subcase={{item.subcase}}
+            @latestSubmissionActivity={{item.latestSubmissionActivity}}
+            @latestRetrievalActivity={{item.latestRetrievalActivity}}
+            @parliamentFlow={{item.parliamentFlow}}
+            @date={{item.sortDate}}
+            @selected={{false}}
+          />
+        {{/if}}
+      {{/each}}
+    </ul>
   </div>
 </Auk::Sidebar>

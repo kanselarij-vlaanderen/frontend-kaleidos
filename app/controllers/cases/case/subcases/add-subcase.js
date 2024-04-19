@@ -7,6 +7,6 @@ export default class CasesCaseSubcasesAddSubcaseController extends Controller {
 
   @action
   onCreateSubcase() {
-    this.router.refresh('cases.case.subcases');
+    this.router.refresh('cases.case');
   }
 }

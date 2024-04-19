@@ -1,6 +1,11 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['agendaActivities', 'submissionActivities', 'decisionActivities'];
+const SKIP_SERIALIZED = [
+  'parliamentRetrievalActivity',
+  'agendaActivities',
+  'submissionActivities',
+  'decisionActivities'
+];
 
 export default class SubcaseSerializer extends ApplicationSerializer {
   serializeBelongsTo(snapshot, json, relationship) {
