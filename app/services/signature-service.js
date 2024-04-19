@@ -315,6 +315,12 @@ export default class SignatureService extends Service {
     return status?.uri === MARKED;
   }
 
+  async hasSignPreparationActivity(piece) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+    const signPreparationActivity = await signMarkingActivity?.signPreparationActivity;
+    return !!signPreparationActivity;
+  }
+
   async getSigningHubUrl(signFlow, piece) {
     const response = await fetch(
       `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
