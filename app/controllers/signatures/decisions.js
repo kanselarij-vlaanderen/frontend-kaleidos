@@ -185,7 +185,7 @@ export default class SignaturesDecisionsController extends Controller {
 
   @action
   async openSidebarSingleItem(signFlow, piece) {
-
+    // TODO, this is happening async, so links can point to the wrong piece or agenda when we are switching between 2
     this.clearSidebarContentMultiItem();
     this.signFlow = await signFlow;
     this.piece = await piece;

@@ -260,7 +260,6 @@ context('signatures shortlist overview tests', () => {
     // add signer
     cy.get(signature.createSignFlow.signers.edit).click();
     cy.get(appuniversum.loader).should('not.exist');
-    // TODO can't add selector to container, only to checkboxlist, which isn't specific enough?
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
       .contains(mandatee1.fullName)
       .scrollIntoView()
@@ -685,14 +684,13 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(route.decisions.sidebar.close);
     // clicking it again should not close the sidebar (so close button should still be visible and clickable)
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
-    cy.wait(1000); // TODO flakey without wait, but why? Waiting for agendaitem doesn't help
+    cy.wait(2000); // TODO loading data in the sidebar is async, but we expect it to be sync.
     cy.get(route.decisions.sidebar.close).click();
     cy.get(route.decisions.sidebar.close).should('not.exist');
 
@@ -717,7 +715,7 @@ context('decisions and minutes shortlist overview tests', () => {
     // clicking it again should not close the sidebar (so close button should still be visible and clickable)
     cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
       .click();
-    cy.wait(1000); // TODO flakey without wait, but why? Waiting for agendaitem doesn't help
+    cy.wait(2000); // TODO loading data in the sidebar is async, but we expect it to be sync.
     cy.get(route.decisions.sidebar.close).click();
     cy.get(route.decisions.sidebar.close).should('not.exist');
   });
@@ -733,7 +731,6 @@ context('decisions and minutes shortlist overview tests', () => {
       .parents('tr')
       .as('currentDecision');
 
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
@@ -747,7 +744,6 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
     cy.url().should('include', 'document');
     cy.go('back');
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     // check last agendaitem
@@ -760,7 +756,6 @@ context('decisions and minutes shortlist overview tests', () => {
       .invoke('attr', 'class')
       .should('include', 'auk-sidebar__item--active');
     cy.go('back');
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
 
@@ -783,7 +778,6 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(route.decisions.sidebar.info).contains(minutesTitle);
 
     // check preview
-    cy.wait(1000); // TODO  next go('back') is flakey without wait here, but why? Waiting for agendaitem doesn't help
     cy.get(route.decisions.sidebar.preview).invoke('removeAttr', 'target')
       .click();
     cy.url().should('include', 'document');
