@@ -589,7 +589,7 @@ context('publications shortlist overview tests', () => {
   });
 });
 
-context.only('decisions and minutes shortlist overview tests', () => {
+context('decisions and minutes shortlist overview tests', () => {
   const agendaDate = Cypress.dayjs().add(15, 'weeks')
     .day(5);
   const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
