@@ -55,7 +55,7 @@
         {{else}}
           <AuToggleSwitch
             @skin="primary"
-            @disabled={{@agendaitemIsRetracted}}
+            @disabled={{or @agendaitemIsRetracted @row.signedPiece }}
             @checked={{@row.markedForSignature}}
             @onChange={{@row.setMarkedForSignature}}
           >
