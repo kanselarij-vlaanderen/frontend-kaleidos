@@ -1,7 +1,7 @@
 <div class="au-c-card au-o-box au-o-box--small">
   <div class="au-c-form">
     <AuFormRow data-test-route-search-date-from>
-      <Auk::Label>{{t "from"}}</Auk::Label>
+      <AuLabel>{{t "from"}}</AuLabel>
       <Auk::Datepicker
         @date={{@dateFrom}}
         @onChange={{@onDateFromChange}}
@@ -10,7 +10,7 @@
       />
     </AuFormRow>
     <AuFormRow class="au-u-margin-top-small" data-test-route-search-date-to>
-      <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+      <AuLabel>{{t "until-inclusive"}}</AuLabel>
       <Auk::Datepicker
         @date={{@dateTo}}
         @onChange={{@onDateToChange}}
