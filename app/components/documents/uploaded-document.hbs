@@ -8,7 +8,7 @@
   {{#if @allowDocumentContainerEdit}}
     <div class="au-c-form au-u-margin-left-large" data-test-uploaded-document-container>
       <AuFormRow>
-        <Auk::Label>{{t "name-document"}}</Auk::Label>
+        <AuLabel>{{t "name-document"}}</AuLabel>
         <AuInput
           data-test-uploaded-document-name-input={{true}}
           value={{@piece.name}}
@@ -18,7 +18,7 @@
       </AuFormRow>
       {{#unless this.loadData.isRunning}}
         <AuFormRow data-test-uploaded-document-types>
-          <Auk::Label>{{t "document-type"}}</Auk::Label>
+          <AuLabel>{{t "document-type"}}</AuLabel>
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
             @onSelect={{this.selectDocumentType}}

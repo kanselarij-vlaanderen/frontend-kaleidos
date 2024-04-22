@@ -100,7 +100,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayCreateSignMarkingActivity() {
     return (
       !this.signMarkingActivity &&
-      !this.piece.signedPiece?.id &&
+      !this.piece.signedPiece?.get('id') &&
       this.currentSession.may('manage-signatures') &&
       (
         (this.args.agendaitem && this.args.decisionActivity) ||
@@ -238,8 +238,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signFlow = yield signSubcase?.signFlow;
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
     this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
-    yield this.piece.signedPiece;
-    yield this.piece.signedPieceCopy;
+    yield this.piece.belongsTo('signedPiece').reload();
+    yield this.piece.belongsTo('signedPieceCopy').reload();
   }
 
   @task
