@@ -93,14 +93,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
-  // getting complex with the temporary feature flags
   // agendaitem doc can be marked - has agendaitem and has decisionActivity
-  // decisions can only be marked if flag is active and - has no agendaitem and has decisionActivity
-  // minutes can only be marked if flag is active and - has no agendaitem and has no decisionActivity and has meeting
+  // decisions can only be marked if it has no agendaitem and has decisionActivity
+  // minutes can only be marked if it has no agendaitem and has no decisionActivity and has meeting
   get mayCreateSignMarkingActivity() {
     return (
       !this.signMarkingActivity &&
-      !this.args.piece.signedPiece &&
+      !this.piece.signedPiece?.id &&
       this.currentSession.may('manage-signatures') &&
       (
         (this.args.agendaitem && this.args.decisionActivity) ||
@@ -176,7 +175,8 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       // check for alternative label
       if (!isPresent(this.args.dateToShowLabel)) {
-        const fileCreated = yield this.args.piece.file?.get('created');
+        yield this.piece.file;
+        const fileCreated = this.piece.file?.get('created');
         const hasPieceBeenEdited = this.piece.created?.getTime() !== this.piece.modified?.getTime();
         // file is always create first, if file.created is larger it has been edited
         const hasFileBeenReplaced = this.piece.created?.getTime() < fileCreated?.getTime();
@@ -237,6 +237,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.signFlow = yield signSubcase?.signFlow;
     this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
     this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
+    yield this.piece.signedPiece;
+    yield this.piece.signedPieceCopy;
   }
 
   @task
