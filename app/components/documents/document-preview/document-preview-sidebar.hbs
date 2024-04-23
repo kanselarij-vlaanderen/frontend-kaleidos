@@ -73,7 +73,7 @@
       <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
         {{! DETAILS }}
         {{#if (eq this.tab "details")}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::DetailsTab
               @piece={{@piece}}
               @documentContainer={{this.documentContainer}}
@@ -83,7 +83,7 @@
             {{! SIGNATURES }}
           </div>
         {{else if (eq this.tab (t "signatures"))}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::SignaturesTab
               @piece={{@piece}}
               @documentContainer={{this.documentContainer}}
@@ -91,7 +91,7 @@
             {{! VERSIONS }}
           </div>
         {{else if (eq this.tab (t "versions"))}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::VersionsTab
               @documentContainer={{this.documentContainer}}
               @currentVersion={{@piece}}
