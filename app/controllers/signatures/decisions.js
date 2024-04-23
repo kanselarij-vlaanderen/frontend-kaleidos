@@ -139,6 +139,7 @@ export default class SignaturesDecisionsController extends Controller {
     const piece = await pieceOrPromise;
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[treatment][decision-activity][report][:id:]' : piece.id,
+      'filter[:has-no:next-version]': 't',
     });
     return agendaitem;
   }
