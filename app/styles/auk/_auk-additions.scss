@@ -464,3 +464,12 @@ table tr.lt-expanded-row {
     }
   }
 }
+
+// Improve search categories on mobile
+.auk-search-categories {
+  @include mq($until: medium) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $au-unit-tiny
+  }
+}
