@@ -24,13 +24,13 @@
       {{/unless}}
       <div class="au-c-form">
         <AuFormRow>
-          <Auk::Label
+          <AuLabel
             for="publicationNumberInput"
             @required={{true}}
             @error={{not this.isPublicationNumberValid}}
           >
             {{t "publication-number"}}
-          </Auk::Label>
+          </AuLabel>
           <div class="auk-u-mb">
             <AuInput
               data-test-new-publication-number
@@ -62,13 +62,13 @@
           {{/if}}
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label
+          <AuLabel
             for="shortTitleInput"
             @required={{true}}
             @error={{this.isShownShortTitleError}}
           >
             {{t "name-subcase"}}
-          </Auk::Label>
+          </AuLabel>
           <AuTextarea
             data-test-new-publication-short-title
             id="shortTitleInput"
@@ -87,9 +87,9 @@
           {{/if}}
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="longTitleInput">
+          <AuLabel for="longTitleInput">
             {{t "title-subcase"}}
-          </Auk::Label>
+          </AuLabel>
           <AuTextarea
             data-test-new-publication-long-title
             id="longTitleInput"
@@ -101,9 +101,9 @@
         </AuFormRow>
         <div class="auk-o-grid-auto">
           <AuFormRow>
-            <Auk::Label>
+            <AuLabel>
               {{t "decision-date"}}
-            </Auk::Label>
+            </AuLabel>
             {{#if this.isViaCouncilOfMinisters}}
               <span class="auk-u-text-muted">
                 {{date this.decisionDate}}
@@ -116,18 +116,18 @@
             {{/if}}
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>
+            <AuLabel>
               {{t "publication-flow-opening-date"}}
-            </Auk::Label>
+            </AuLabel>
             <Auk::Datepicker
               @date={{this.openingDate}}
               @onChange={{set this "openingDate"}}
             />
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>
+            <AuLabel>
               {{t "publication-flow-publication-due-date"}}
-            </Auk::Label>
+            </AuLabel>
             <Auk::Datepicker
               @date={{this.publicationDueDate}}
               @onChange={{set this "publicationDueDate"}}

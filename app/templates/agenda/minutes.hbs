@@ -150,7 +150,7 @@
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
-              <AuContent>
+              <AuContent data-test-route-agenda-minutes-current-piece-view>
                 <SanitizeHtml
                   @raw={{true}}
                   @value={{this.currentPiecePartTask.value.htmlContent}}

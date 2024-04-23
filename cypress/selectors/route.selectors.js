@@ -59,6 +59,7 @@ const selectors = {
   // agenda/minutes/template
   agendaMinutes: {
     createEdit: '[data-test-route-agenda-minutes-create-edit]',
+    currentPieceView: '[data-test-route-agenda-minutes-current-piece-view]',
     editor: {
       updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
       save: '[data-test-route-agenda-minutes-editor-save]',

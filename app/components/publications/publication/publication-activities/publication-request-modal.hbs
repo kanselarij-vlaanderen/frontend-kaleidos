@@ -14,9 +14,9 @@
     >
       <div class="au-c-form">
         <AuFormRow data-test-publication-request-body>
-          <Auk::Label @required={{true}}>
+          <AuLabel @required={{true}}>
             {{t "attachments"}}
-          </Auk::Label>
+          </AuLabel>
           <Publications::Publication::RequestUploader
             @onUpload={{this.uploadPiece}}
           />
@@ -41,9 +41,9 @@
           </AuCheckbox>
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="publicationRequestModal_subject" @required={{true}}>
+          <AuLabel for="publicationRequestModal_subject" @required={{true}}>
             {{t "subject"}}
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             data-test-publication-request-subject
             id="publicationRequestModal_subject"
@@ -53,9 +53,9 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label for="publicationRequestModal_message" @required={{true}}>
+          <AuLabel for="publicationRequestModal_message" @required={{true}}>
             {{t "message"}}
-          </Auk::Label>
+          </AuLabel>
           <AuTextarea
             data-test-publication-request-message
             id="publicationRequestModal_message"
