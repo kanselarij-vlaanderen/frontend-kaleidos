@@ -509,6 +509,15 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-panel-layout--agenda {
+  @include mq($until: medium) {
+    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-items,
+    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-history {
+      display: none;
+    }
+  }
+}
+
 // Improve search categories on mobile
 .auk-search-categories {
   @include mq($until: medium) {
