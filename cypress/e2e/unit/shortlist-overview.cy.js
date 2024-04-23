@@ -863,7 +863,6 @@ context('decisions and minutes shortlist overview tests', () => {
   });
 
   it('check starting/stopping signflow', () => {
-    const decisionTitle = '0001';
     const staticResponse = {
       statusCode: 200,
       ok: true,
