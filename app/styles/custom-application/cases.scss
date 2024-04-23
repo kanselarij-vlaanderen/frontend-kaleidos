@@ -58,14 +58,19 @@
 .c-anchor-nav-holder {
   color: var(--au-gray-700);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  padding: $au-unit-tiny 0;
+  gap: $au-unit-tiny * .5;
 }
 
 .au-c-anchor-nav {
   display: flex;
-  gap: $au-unit-tiny;
+  flex-wrap: wrap;
+  gap: $au-unit-tiny * .75;
 
   a {
+    display: block;
     font-weight: var(--au-medium);
   }
 
@@ -79,7 +84,12 @@
     text-decoration: none;
   }
 
-  li:not(:last-child) a:after {
+  li {
+    display: flex;
+    align-items: baseline;
+  }
+
+  li:not(:last-child):after {
     content: ","
   }
 }
