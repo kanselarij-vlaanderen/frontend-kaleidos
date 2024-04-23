@@ -5,7 +5,7 @@
   class={{if @isOpen "auk-scroll-wrapper"}}
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}}>
+  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}} class="au-u-visible-from@medium">
     <Auk::Toolbar as |Toolbar|>
       {{#if @isOpen}}
         <Toolbar.Group @position="left">
