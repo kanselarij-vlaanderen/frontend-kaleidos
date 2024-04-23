@@ -145,10 +145,10 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@medium">
               {{t "amount-per-page"}}
             </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@small">
               <WebComponents::AuPageSize
                 @selectedSize={{this.size}}
                 @onChange={{fn (mut this.size)}}
