@@ -481,6 +481,34 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-panel-layout--documents {
+  @include mq($until: medium) {
+    flex-direction: column;
+
+    .auk-panel-layout__main-content {
+      width: 100%;
+      aspect-ratio: 1/1.4;
+    }
+
+    .auk-sidebar[data-collapsed="false"] {
+      width: 100%;
+      border-top: .1rem solid var(--au-gray-200);
+    }
+  }
+
+  @include mq(medium) {
+    .auk-sidebar[data-collapsed="false"] {
+      width: 40rem;
+    }
+  }
+
+  @include mq(large) {
+    .auk-sidebar[data-collapsed="false"] {
+      width: 55rem;
+    }
+  }
+}
+
 // Improve search categories on mobile
 .auk-search-categories {
   @include mq($until: medium) {
