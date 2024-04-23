@@ -465,6 +465,22 @@ table tr.lt-expanded-row {
   }
 }
 
+.auk-panel-layout__agenda-items {
+  @include mq($until: medium) {
+    height: auto !important;
+    width: 100% !important;
+    border-bottom: 1px solid var(--au-gray-200);
+
+    .auk-sidebar {
+      position: initial !important;
+      display: block !important;
+      overflow: initial !important;
+      width: 100% !important;
+      border-right: none !important;
+    }
+  }
+}
+
 // Improve search categories on mobile
 .auk-search-categories {
   @include mq($until: medium) {
