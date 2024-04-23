@@ -359,14 +359,14 @@ context('Decision tests post digital agenda', () => {
     cy.openAgendaForDate(agendaDate);
     cy.get(agenda.agendaTabs.tabs).contains('Notulen')
       .click();
-    cy.get(route.agendaitemMinutes.createEdit).click();
-    cy.get(route.agendaitemMinutes.editor.updateContent).click();
+    cy.get(route.agendaMinutes.createEdit).click();
+    cy.get(route.agendaMinutes.editor.updateContent).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
     cy.intercept('POST', 'minutes').as('postMinutes');
     cy.intercept('POST', 'piece-parts').as('postPieceParts');
     cy.intercept('GET', '/generate-minutes-report/*').as('generateMinutes');
-    cy.get(route.agendaitemMinutes.editor.save).click()
+    cy.get(route.agendaMinutes.editor.save).click()
       .wait('@createNewDocumentContainer')
       .wait('@postMinutes')
       .wait('@postPieceParts')
