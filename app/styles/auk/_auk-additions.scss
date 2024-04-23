@@ -526,3 +526,10 @@ table tr.lt-expanded-row {
     gap: $au-unit-tiny
   }
 }
+
+// Responsive tables
+.auk-table__col--8 {
+  @include mq($until: medium) {
+    min-width: 20rem;
+  }
+}
