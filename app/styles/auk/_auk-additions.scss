@@ -331,6 +331,16 @@ table tr.lt-expanded-row {
   background: #E4EBF5;
 }
 
+// Make sure long document links break on mobile
+.result-card .card-link {
+  @include mq($until: medium) {
+    white-space: normal;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+}
+
 // Bigger font
 // workaround for search legend sign example
 .auk-u-text-size--xlarge {
@@ -409,7 +419,48 @@ table tr.lt-expanded-row {
 
 // Hierarchical back tab
 // Override the visibility of the back button label within Kaleidos only
-
 .auk-tabs__hierarchical-back .auk-tabs__tab__label {
   display: block;
+}
+
+// Remove left padding
+.auk-tabs__hierarchical-back  .auk-tabs__tab__inner {
+  padding-left: 0;
+}
+
+// Responsive panel layout
+.auk-panel-layout--responsive {
+  @include mq($until: medium) {
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    height: 100% !important;
+
+    .auk-panel-layout__main-content {
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+  }
+}
+
+.auk-panel-layout__sidebar--responsive {
+  @include mq($until: medium) {
+    flex: 0 1 auto !important;
+    max-width: 100% !important;
+    height: initial !important;
+
+    .auk-sidebar {
+      position: relative !important;
+      display: block !important;
+      overflow: initial !important;
+      width: 100% !important;
+      border-right: none !important;
+    }
+
+    .auk-scroll-wrapper__body {
+      padding: $au-unit-tiny $au-unit-small !important;
+      border-bottom: 1px solid var(--au-gray-300) !important;
+      overflow: initial !important;
+    }
+  }
 }

@@ -1,17 +1,18 @@
 <Auk::Navbar @skin="gray-100">
-  <Auk::Toolbar @size="large">
-    <Auk::Toolbar::Group>
-      <Auk::Toolbar::Item>
+  <Auk::Toolbar @size="large" @responsive={{true}}>
+    <Auk::Toolbar::Group @position="left" @responsive={{true}}>
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
         <AuLink
           @skin="button-naked"
           @icon="hierarchical-back"
           @route="cases"
+          class="au-u-padding-left-none"
         >
           {{t "all-cases"}}
         </AuLink>
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <div data-test-subcase-overview-header-title-container class="auk-u-my">
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+        <div data-test-subcase-overview-header-title-container>
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
@@ -32,30 +33,28 @@
     }}
     {{#if this.publicationFlows}}
       <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <div class="auk-u-my">
-            <span class="auk-u-block auk-overline">
-              {{t "publications"}}
-            </span>
-            <div>
-              {{#each this.publicationFlows as |publicationFlow|}}
-                <AuPill
-                  data-test-subcase-overview-header-publication-flow-link
-                  @size="small"
-                  @route="publications.publication"
-                  @model={{publicationFlow.id}}
-                >
-                  {{publicationFlow.identification.idName}}
-                </AuPill>
-              {{/each}}
-            </div>
+        <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+          <span class="auk-u-block auk-overline">
+            {{t "publications"}}
+          </span>
+          <div>
+            {{#each this.publicationFlows as |publicationFlow|}}
+              <AuPill
+                data-test-subcase-overview-header-publication-flow-link
+                @size="small"
+                @route="publications.publication"
+                @model={{publicationFlow.id}}
+              >
+                {{publicationFlow.identification.idName}}
+              </AuPill>
+            {{/each}}
           </div>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
     {{#if (and (user-may "manage-cases") (not this.loadData.isRunning))}}
       <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
+        <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
           {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-subcase-overview-header-actions-dropdown

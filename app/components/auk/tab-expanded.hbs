@@ -1,0 +1,50 @@
+{{#if @route}}
+  <li
+    class="auk-tabs__tab auk-tabs__tab--expanded {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}"
+    ...attributes
+  >
+    <LinkTo
+      @route={{@route}}
+      @models={{this.models}}
+      @query={{this.query}}
+      @current-when={{@current-when}}
+      @disabled={{@disabled}}
+      @activeClass="auk-tabs__tab__link--active"
+      class="auk-tabs__tab__link"
+      data-route-name={{@route}}
+    >
+      {{yield}}
+    </LinkTo>
+  </li>
+{{else if @isHierarchicalBack}}
+  <li
+    class="auk-tabs__tab auk-tabs__hierarchical-back"
+    ...attributes
+  >
+    <button
+      type="button"
+      class="auk-tabs__tab__link"
+    >
+      <Auk::Tab::InnerLayout
+        @layout={{@layout}}
+        @icon={{this.icon}}
+        @counter={{@counter}}
+      >
+        {{yield}}
+      </Auk::Tab::InnerLayout>
+    </button>
+  </li>
+{{else}}
+  <li
+    class="auk-tabs__tab  auk-tabs__tab--expanded"
+    ...attributes
+  >
+    <button
+      type="button"
+      {{!-- disabled={{@disabled}} --}} {{!-- TODO: this does nothing at the moment as the link/anchor elements don't have any styling for the disabled state yet --}}
+      class="auk-tabs__tab__link {{if @active "auk-tabs__tab__link--active"}}"
+    >
+      {{yield}}
+    </button>
+  </li>
+{{/if}}

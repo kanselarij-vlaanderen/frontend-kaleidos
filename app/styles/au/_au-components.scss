@@ -48,8 +48,8 @@ $au-label-color: var(--au-gray-700);
 // CSS variables (to override)
 
 :root {
-  --au-outline: 0.3rem solid #{$auk-yellow-500};
-  --au-outline-color: #{$auk-yellow-500};
+  --au-outline: 0.3rem solid #{$au-yellow-400};
+  --au-outline-color: #{$au-yellow-400};
 
   --au-icon-size: 1.6rem;
   --au-icon-size-medium: 1.8rem;
@@ -133,7 +133,7 @@ $au-label-color: var(--au-gray-700);
 
 .au-c-content {
   @include au-font-size(1.5rem, 1.6); // default font size in Kaleidos
-  color: $auk-color-text; // default text color in Kaleidos
+  color: $au-gray-800; // default text color in Kaleidos
 
   h1, h2, h3, h4, h5, h6, // default heading styling in Kaleidos
   .au-c-heading--1,
@@ -142,7 +142,7 @@ $au-label-color: var(--au-gray-700);
   .au-c-heading--4,
   .au-c-heading--5,
   .au-c-heading--6 {
-    color: $auk-color-heading;
+    color: $au-gray-900;
     font-weight: 500;
   }
 
@@ -216,7 +216,7 @@ $au-label-color: var(--au-gray-700);
   }
 
   em { // default text color in Kaleidos
-    color: $auk-color-text;
+    color: $au-gray-800;
   }
 
   sub {
@@ -295,6 +295,15 @@ $au-label-color: var(--au-gray-700);
         td {
           padding: $au-unit-tiny;
         }
+      }
+    }
+  }
+
+  @include mq($until: medium) {
+    // Make sure tables fit into search cards
+    :is(.auk-table, *) & {
+      table {
+        min-width: auto;
       }
     }
   }
@@ -401,7 +410,7 @@ $au-label-color: var(--au-gray-700);
 }
 
 .au-c-fieldset-legend {
-  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
+  color: $au-gray-700; // TODO: delete when auk-label as a whole is refactored
   font-size: var(--au-global-font-size) !important;
 }
 
@@ -680,5 +689,40 @@ $au-label-color: var(--au-gray-700);
   #attendees,
   #absentees {
     table-layout: fixed;
+  }
+}
+
+// Responsive fixes
+// ---
+.au-c-button,
+.au-c-input {
+  @include mq($until:medium) {
+    $au-button-height: $au-unit-large * .65;
+    padding: 0 $au-unit-tiny;
+    line-height: $au-button-height - $au-button-border * 2;
+    height: $au-button-height;
+  }
+}
+
+// Make sure the dropdown does not overflow the screen
+.au-c-dropdown__menu {
+  max-width: 350px;
+}
+
+// Adjust layout of sidebar on mobile
+.au-c-sidebar__content--mobile {
+  @include mq($until: medium) {
+    display: flex;
+    padding: $au-unit-tiny $au-unit-small;
+    gap: $au-unit-small;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: initial;
+    min-height: 5rem;
+    height: auto;
+
+    &:has(nav) {
+      justify-content: space-between;
+    }
   }
 }
