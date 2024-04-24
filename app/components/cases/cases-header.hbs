@@ -10,19 +10,6 @@
     <Toolbar.Group @position="right" as |Group|>
       {{#if (or (user-may "manage-cases")(or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder')))}}
       <Group.Item>
-        {{!-- <div class="auk-o-flex auk-o-flex--vertical-center auk-u-mr-2">
-          <AuToggleSwitch
-            data-test-route-cases-overview-show-archived
-            @checked={{@showArchivedOnly}}
-            id="show-cases-archived-only"
-          />
-          <Auk::Label
-            class="auk-u-text-nowrap auk-u-ml-2 auk-u-p-0"
-            for="show-cases-archived-only"
-          >
-            {{t "show-archived-only"}}
-          </Auk::Label>
-        </div> --}}
         <AuInput
           @width="block"
           @icon="search"
@@ -32,6 +19,15 @@
         />
       </Group.Item>
       <Group.Item>
+        {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+        <AuLink
+          @route="cases.add-agendapoint"
+          @skin="button"
+          @icon="plus"
+        >
+          Dien agendapunt in
+        </AuLink>
+        {{else}}
         <AuButton
           data-test-cases-header-add-case
           @skin="primary"
@@ -40,6 +36,7 @@
         >
           {{t "add-case"}}
         </AuButton>
+        {{/if}}
       </Group.Item>
       {{/if}}
     </Toolbar.Group>

@@ -18,9 +18,9 @@
           </span>
           <h4 class="auk-toolbar-complex__title">
             <Auk::AbbreviatedText
-              @text={{or @decisionmakingFlow.case.shortTitle @decisionmakingFlow.case.title}}
+              @text=" "
               @maxLength={{250}}
-            /> - {{t "create-subcase"}}
+            /> Agendapunt indienen
           </h4>
         </div>
       </Auk::Toolbar::Item>
@@ -49,6 +49,14 @@
             @isLoading={{this.areLoadingTasksRunning}}
             @reserveSpace={{true}}
           >
+            <div class="auk-form-group">
+              <Auk::Label for="case">Dossier naam</Auk::Label>
+              <Auk::Textarea
+                @rows="2"
+                @value=""
+                id="case"
+              />
+            </div>
             <div class="auk-o-flex auk-o-flex--justify-between">
               <div class="auk-u-mb-4">
                 <AuFieldset as |Fieldset|>
@@ -72,23 +80,7 @@
                   </Fieldset.content>
                 </AuFieldset>
               </div>
-              <div class="auk-o-flex auk-o-flex--vertical-center">
-                <Auk::Toolbar>
-                  <Auk::Toolbar::Group @position="right">
-                    <Auk::Toolbar::Item>
-                      <AuButton
-                        data-test-new-subcase-clone-previous-subcase
-                        @skin="secondary"
-                        @icon="copy-paste"
-                        {{on "click" (perform this.copyFullSubcase)}}
-                        @disabled={{this.copyFullSubcase.isRunning}}
-                      >
-                        {{t "clone-previous-subcase"}}
-                      </AuButton>
-                    </Auk::Toolbar::Item>
-                  </Auk::Toolbar::Group>
-                </Auk::Toolbar>
-              </div>
+              
             </div>
             <div class="auk-form-group">
               <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
@@ -569,7 +561,7 @@
     <Group>
       <AuLink
         @skin="button-secondary"
-        @route="cases.case.subcases"
+        @route="cases.submissions"
       >
         Annuleer
       </AuLink>
@@ -577,7 +569,7 @@
         @skin="primary"
         {{on "click" this.toggleAgendaModal}}
       >
-        {{t "new-subcase"}}
+        Agendapunt indienen
       </AuButton>
     </Group>
   </AuToolbar>

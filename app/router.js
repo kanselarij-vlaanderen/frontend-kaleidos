@@ -29,6 +29,7 @@ Router.map(function() {
       });
     });
     this.route('documents', { path: '/documenten', });
+    this.route('submissions', { path: '/indieningen', });
     if (ENV.APP.ENABLE_DIGITAL_MINUTES === "true" || ENV.APP.ENABLE_DIGITAL_MINUTES === true) {
       this.route('minutes', { path: '/notulen', });
     }
@@ -36,6 +37,8 @@ Router.map(function() {
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
+    this.route('submissions', { path: '/indieningen', });
+    this.route('add-agendapoint', { path: '/indiening-toevoegen', });
     this.route('case', { path: ':id', }, function() {
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {

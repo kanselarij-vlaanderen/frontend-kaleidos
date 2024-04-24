@@ -71,7 +71,7 @@
                     class="auk-table__header-title"
                     @currentSorting={{this.sort}}
                     @field="opened"
-                    @label={{t "created-on"}}
+                    @label="Datum agendering"
                     @onChange={{fn (mut this.sort)}}
                   />
                   <Utils::ThSortable
@@ -112,7 +112,7 @@
                         </p>
                       </td>
                       <td>
-                        {{datetime row.opened}}
+                        {{date row.opened}}
                       </td>
                       <td>
                         {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
@@ -190,7 +190,7 @@
                         </p>
                       </td>
                       <td>
-                        {{datetime row.opened}}
+                        {{date row.opened}}
                       </td>
                       <td>
                         {{#if row.case.isArchived}}
