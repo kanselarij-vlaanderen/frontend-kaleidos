@@ -33,6 +33,7 @@
       {{#if (await first.pieces)}}
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
           @pieces={{first.pieces}}
+          @fileNameMappings={{@fileNameMappings}}
         />
       {{/if}}
     </div>

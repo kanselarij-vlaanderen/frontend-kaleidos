@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 import { A } from '@ember/array';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument onSave
@@ -7,6 +9,18 @@ import { A } from '@ember/array';
  */
 
 export default class AgendaHeaderAgendaCheck extends Component {
+  getFileNameMappings = task(async () => {
+    const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
+    const mappings = await res.json();
+    const mappingsMap = new Map(
+      mappings.map(({ uri, newTitle }) => [uri, newTitle])
+    );
+
+    return mappingsMap;
+  });
+
+  fileNameMappings = trackedTask(this, this.getFileNameMappings);
+
   get notaGroups() {
     const agendaitems = this.args.notas;
     if (agendaitems.length > 0) {

@@ -106,6 +106,7 @@
 {{! Check agenda }}
 {{#if this.showConfirmForApprovingAgendaSidebar}}
   <Agenda::AgendaHeader::AgendaCheck
+    @agenda={{@currentAgenda}}
     @meeting={{@meeting}}
     @onCancel={{this.cancelApproveAgendaSidebar}}
     @onSave={{this.openConfirmApproveAgenda}}
@@ -118,6 +119,7 @@
 {{! Check agenda and close }}
 {{#if this.showConfirmForApprovingAgendaAndClosingMeetingSidebar}}
 <Agenda::AgendaHeader::AgendaCheck
+  @agenda={{@currentAgenda}}
   @meeting={{@meeting}}
   @onCancel={{this.cancelApproveAgendaAndCloseMeetingSidebar}}
   @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
