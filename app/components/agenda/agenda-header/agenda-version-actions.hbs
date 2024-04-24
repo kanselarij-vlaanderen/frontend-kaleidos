@@ -7,12 +7,12 @@
   class="auk-u-hidden@print"
 >
   {{#if @currentAgenda.status.isDesignAgenda}}
-  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgenda}}
+  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgendaSidebar}}
     role="menuitem">
     {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
   <AuButton data-test-agenda-version-actions-approve-and-close-agenda @skin="link" {{on "click"
-    this.openConfirmApproveAgendaAndCloseMeeting}} role="menuitem">
+    this.openConfirmApproveAgendaAndCloseMeetingSidebar}} role="menuitem">
     {{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
   <AuHr />
@@ -102,6 +102,31 @@
   </Auk::Modal::Footer>
 </Auk::Modal>
 {{/if}}
+
+{{! Check agenda }}
+{{#if this.showConfirmForApprovingAgendaSidebar}}
+  <Agenda::AgendaHeader::AgendaCheck
+    @meeting={{@meeting}}
+    @onCancel={{this.cancelApproveAgendaSidebar}}
+    @onSave={{this.openConfirmApproveAgenda}}
+    @saveLabel={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
+    @notas={{@notas}}
+    @announcements={{@announcements}}
+  />
+{{/if}}
+
+{{! Check agenda and close }}
+{{#if this.showConfirmForApprovingAgendaAndClosingMeetingSidebar}}
+<Agenda::AgendaHeader::AgendaCheck
+  @meeting={{@meeting}}
+  @onCancel={{this.cancelApproveAgendaAndCloseMeetingSidebar}}
+  @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
+  @saveLabel={{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
+  @notas={{@notas}}
+  @announcements={{@announcements}}
+/>
+{{/if}}
+
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
 <Auk::Modal @size={{if (await (this.canBeApproved)) "small" "large" }}>
   <Auk::Modal::Header @title={{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber }}

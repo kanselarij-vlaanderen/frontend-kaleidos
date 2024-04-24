@@ -6,6 +6,8 @@
   (if this.model.meeting.isPreKaleidos (date this.model.meeting.plannedStart) (datetime this.model.meeting.plannedStart))
 }}
 <Agenda::AgendaHeader
+  @notas={{this.model.notas}}
+  @announcements={{this.model.announcements}}
   @meeting={{this.model.meeting}}
   @currentAgenda={{this.model.agenda}}
   @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
