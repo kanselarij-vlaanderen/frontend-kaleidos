@@ -17,5 +17,7 @@ export default class ToolbarGroup extends Component {
     if (this.args.responsive) {
       return `auk-toolbar-complex__responsive-item`;
     }
+
+    return '';
   }
 }
