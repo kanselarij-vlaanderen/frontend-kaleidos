@@ -401,7 +401,6 @@ $au-label-color: var(--au-gray-700);
 }
 
 .au-c-fieldset-legend {
-  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
   font-size: var(--au-global-font-size) !important;
 }
 
@@ -484,16 +483,29 @@ $au-label-color: var(--au-gray-700);
 
 // Loader
 
-.au-c-loader__animation {
-  height: 1.6rem + $au-unit;
+.au-c-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $au-unit-tiny / 2;
 
-  .au-c-loader--small & {
-    height: 1.6rem;
+  &.au-u-text-center { // REMARK: this a temporary fix because the usage of `inline-block` causes additional white space, `display: flex` fixes this but then we need another way to center the content
+    justify-content: center;
   }
 
-  .au-c-loader--large & {
-    height: 1.6rem + $au-unit-large;
+  &:has(span) {
+    flex-direction: row;
+    gap: $au-unit-tiny;
   }
+
+  .au-u-para {
+    @include au-font-size(var(--au-para-small), $important: true);
+  }
+}
+
+.au-p-c-loading-animation {
+  display: block;
+  height: 1.6rem;
 }
 
 // Additions

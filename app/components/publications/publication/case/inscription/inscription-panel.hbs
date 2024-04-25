@@ -13,9 +13,9 @@
       <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
         <div class="au-c-form">
           <AuFormRow>
-            <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
+            <AuLabel @required={{true}} @error={{this.showShortTitleError}}>
               {{t "short-title"}}
-            </Auk::Label>
+            </AuLabel>
             <AuTextarea
               data-test-inscription-edit-short-title
               value={{this.shortTitle}}
@@ -32,9 +32,9 @@
             {{/if}}
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>
+            <AuLabel>
               {{t "long-title"}}
-            </Auk::Label>
+            </AuLabel>
             <AuTextarea
               data-test-inscription-edit-long-title
               rows="4"

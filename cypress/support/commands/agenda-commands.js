@@ -362,7 +362,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 60000,
+  }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
@@ -833,6 +835,30 @@ function changeDecisionResult(result) {
   cy.get(agenda.decisionResultPill.pill).contains(result);
 }
 
+/**
+ * @description Generate the minutes report
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function generateMinutes() {
+  cy.log('generateMinutes');
+  cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+    .click();
+  cy.get(route.agendaMinutes.createEdit, {
+    timeout: 60000,
+  }).click();
+  cy.get(route.agendaMinutes.editor.updateContent).click();
+
+  cy.intercept('POST', '/minutes*').as('createNewMinutes');
+  cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
+  cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
+  cy.get(route.agendaMinutes.editor.save).click();
+  cy.wait('@createNewMinutes');
+  cy.wait('@patchMinutes');
+  cy.wait('@createNewPiecePart');
+  cy.log('/generateMinutes');
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -855,3 +881,4 @@ Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
 Cypress.Commands.add('generateDecision', generateDecision);
 Cypress.Commands.add('changeDecisionResult', changeDecisionResult);
+Cypress.Commands.add('generateMinutes', generateMinutes);
