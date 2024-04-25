@@ -48,7 +48,7 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
     );
 
     const publicationStatus = await this.store.queryOne('publication-status', {
-      'filter[publications][case][decisionmaking-flow][:id:]':
+      'filter[publication-flow][case][decisionmaking-flow][:id:]':
         this.args.decisionmakingFlow.id,
     });
 

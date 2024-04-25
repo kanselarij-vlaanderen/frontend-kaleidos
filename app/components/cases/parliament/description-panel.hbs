@@ -47,7 +47,7 @@
   </Auk::Panel::Body>
   <Auk::Panel::Body class="auk-u-bg-alt">
     {{#if this.loadStatusData.isIdle}}
-      <AuHeading @level="4" @skin="6">{{t "last-statusses"}}</AuHeading>
+      <AuHeading @level="4" @skin="6">{{t "history"}}</AuHeading>
       {{#if @latestRetrievalActivity}}
         <ul class="vlc-status-timeline">
           <li
@@ -72,13 +72,9 @@
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
                 {{t "ratified-and-announced-on"}}
-                <AuLinkExternal
-                  @icon="external"
-                  @iconAlignment="right"
-                  href={{this.parliamentCaseLink}}
-                >
+                <p>
                   {{date-phrase this.latestMeeting.plannedStart}}
-                </AuLinkExternal>
+                </p>
               </div>
             </li>
             {{#if this.publicationStatus.isPublished}}
@@ -88,13 +84,9 @@
                 <div class="vlc-status-timeline__dot"></div>
                 <div class="vlc-status-timeline__text">
                   {{t "published-in-belgian-official-gazette"}}
-                  <AuLinkExternal
-                    @icon="external"
-                    @iconAlignment="right"
-                    href={{this.parliamentCaseLink}}
-                  >
+                  <p>
                     {{date-phrase this.latestPublicationActivity.endDate}}
-                  </AuLinkExternal>
+                  </p>
                 </div>
               </li>
             {{/if}}
