@@ -49,6 +49,15 @@
         {{/if}} --}}
         {{#if (not (or (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.vp') (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')))}}
         <Auk::Toolbar::Item>
+          {{#if @submission}}
+            <AuButton
+              @skin="secondary"
+              {{on "click" this.triggerAgendaSubcaseDialog}}
+              role="menuitem"
+            >
+              Maak procedurestap en agendeer
+            </AuButton>
+          {{else}}
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
             @skin="secondary"
@@ -84,6 +93,7 @@
             </AuButton>
             {{/if}}
           </AuDropdown>
+          {{/if}}
         </Auk::Toolbar::Item>
         {{/if}}
       {{/if}}

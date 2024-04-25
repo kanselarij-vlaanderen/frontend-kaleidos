@@ -48,6 +48,11 @@ Router.map(function() {
         this.route('add-subcase', { path: '/procedurestap-toevoegen', });
         this.route('add-agendapoint', { path: '/agendapunt-toevoegen', });
       });
+      this.route('subcases-submission', { path: '/deeldossiers-indiening', }, function() {
+        this.route('subcase-submission', { path: ':subcase_id', }, function() {
+          this.route('approval', { path: '/goedkeuring', });
+        });
+      });
       this.route('subcases-demo', { path: '/deeldossiers-demo', }, function() {
         this.route('subcase-demo', { path: ':subcase_id', }, function() {
           this.route('publication', { path: '/publicatie', });

@@ -1,0 +1,183 @@
+<AuBodyContainer>
+  <div class="auk-scroll-wrapper">
+    <div class="auk-scroll-wrapper__body">
+      {{#if this.model.length}}
+      <div>
+        <table
+          data-test-route-cases-overview-data-table
+          class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
+        >
+          <thead>
+            <tr>
+              <Utils::ThSortable
+                class="auk-table__col--8 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="title"
+                @label="Naam"
+                @onChange={{fn (mut this.sort)}}
+              />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="opened"
+                @label="Indienend kabinet"
+                @onChange={{fn (mut this.sort)}}
+              />
+              <Utils::ThSortable
+                class="auk-table__col--3 auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="opened"
+                @label="Co-agendeerders"
+                @onChange={{fn (mut this.sort)}}
+              />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="isArchived"
+                @label="Type procedurestap"
+                @onChange={{fn (mut this.sort)}}
+              />
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#if this.isLoadingModel}}
+              <tr>
+                <td
+                  data-test-route-agendas-overview-loader
+                  colspan="5"
+                >
+                  {{t "loading"}}
+                </td>
+              </tr>
+            {{else}}
+              {{#each @model as |row index|}}
+                {{#if (eq index 0)}}
+                <tr
+                  role="button"
+                  class="auk-u-text-align--center auk-table--clickable-rows"
+                  {{on "click" (fn this.navigateToDemo row)}}
+                >
+                  <td>
+                    <p data-test-route-cases-overview-row-case-title>
+                      {{#if row.case.shortTitle}}
+                        {{row.case.shortTitle}}
+                      {{else}}
+                        {{row.case.title}}
+                      {{/if}}
+                    </p>
+                  </td>
+                  <td>
+                    Kabinet naam
+                  </td>
+                  <td>
+                    Co-agendeerder naam
+                  </td>
+                  <td>
+                    {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+                    <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
+                    {{else}}
+                    {{#if row.case.isArchived}}
+                    <AuPill @size="small">Principiële goedkeuring</AuPill>
+                    {{else}}
+                    <AuPill @size="small" @skin="ongoing">Bekrachtiging</AuPill>
+                    {{/if}}
+                    {{/if}}
+                  </td>
+                  <td class="auk-u-text-align--right">
+                    <AuLink
+                      @skin="button-naked"
+                      @icon="chevron-right"
+                      @hideText={{true}}
+                      @route="cases.case.subcases-submission"
+                      @model={{row.id}}
+                    >
+                      {{t "open"}}
+                    </AuLink>
+                  </td>
+                </tr>
+                {{else}}
+                <tr
+                  role="button"
+                  class="auk-u-text-align--center auk-table--clickable-rows"
+                  {{on "click" (fn this.navigateToDecisionmakingFlow row)}}
+                >
+                  <td>
+                    <p data-test-route-cases-overview-row-case-title>
+                      {{#if row.case.shortTitle}}
+                        {{row.case.shortTitle}}
+                      {{else}}
+                        {{row.case.title}}
+                      {{/if}}
+                    </p>
+                  </td>
+                  <td>
+                    {{date row.opened}}
+                  </td>
+                  <td>
+                    {{#if row.case.isArchived}}
+                    <AuPill @size="small">Principiële goedkeuring</AuPill>
+                    {{else}}
+                    <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
+                    {{/if}}
+                  </td>
+                  <td class="auk-u-text-align--right">
+                    <AuLink
+                      @skin="button-naked"
+                      @icon="chevron-right"
+                      @hideText={{true}}
+                      @route="cases.case.subcases-submission"
+                      @model={{row.id}}
+                    >
+                      {{t "open"}}
+                    </AuLink>
+                  </td>
+                </tr>
+                {{/if}}
+              {{/each}}
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+        <Auk::Panel>
+          <Auk::Panel::Body>
+            <Auk::EmptyState
+              @message={{t "no-results-found"}}
+            />
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <hr />
+  </div>
+  <div class="auk-u-mx-4">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Pagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{this.model.length}}
+            @total={{this.model.meta.count}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.prevPage}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{t "amount-per-page"}}
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <WebComponents::AuPageSize
+            @selectedSize={{this.size}}
+            @onChange={{fn (mut this.size)}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </div>
+</AuBodyContainer>

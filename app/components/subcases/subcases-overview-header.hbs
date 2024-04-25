@@ -54,6 +54,8 @@
     {{/if}}
     {{#if (user-may "manage-cases")}}
       <Auk::Toolbar::Group @position="right">
+        {{#if @submission}}
+        {{else}}
         <Auk::Toolbar::Item>
           {{!-- <AuButton
             @skin="secondary"
@@ -87,6 +89,7 @@
             </AuButton>
           </AuDropdown>
         </Auk::Toolbar::Item>
+        {{/if}}
         {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
         <Auk::Toolbar::Item>
           {{!-- <AuButton

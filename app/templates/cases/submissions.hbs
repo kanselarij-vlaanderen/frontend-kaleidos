@@ -126,48 +126,11 @@
                         {{/if}}
                       </td>
                       <td class="auk-u-text-align--right">
-                        {{!-- {{#if (user-may "manage-cases")}}
-                          <AuDropdown
-                            data-test-route-cases-overview-row-actions-dropdown
-                            @icon="three-dots"
-                            @title={{t "more"}}
-                            @hideText={{true}}
-                            @alignment="right"
-                          >
-                            <AuButton
-                              data-test-route-cases-overview-row-actions-edit
-                              @skin="link"
-                              {{on "click" (fn this.openEditCaseModal row.case)}}
-                              role="menuitem"
-                            >
-                              {{t "edit-case"}}
-                            </AuButton>
-                            <AuButton
-                              data-test-route-cases-overview-row-actions-archive
-                              @skin="link"
-                              @alert={{true}}
-                              {{on
-                                "click"
-                                (fn
-                                  (if
-                                    row.case.isArchived
-                                    this.unarchiveCase
-                                    this.requestArchiveCase
-                                  )
-                                  row.case
-                                )
-                              }}
-                              role="menuitem"
-                            >
-                              {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
-                            </AuButton>
-                          </AuDropdown>
-                        {{/if}} --}}
                         <AuLink
                           @skin="button-naked"
                           @icon="chevron-right"
                           @hideText={{true}}
-                          @route="cases.case.subcases"
+                          @route="cases.case.subcases-submission"
                           @model={{row.id}}
                         >
                           {{t "open"}}
@@ -200,48 +163,11 @@
                         {{/if}}
                       </td>
                       <td class="auk-u-text-align--right">
-                        {{!-- {{#if (user-may "manage-cases")}}
-                          <AuDropdown
-                            data-test-route-cases-overview-row-actions-dropdown
-                            @icon="three-dots"
-                            @title={{t "more"}}
-                            @hideText={{true}}
-                            @alignment="right"
-                          >
-                            <AuButton
-                              data-test-route-cases-overview-row-actions-edit
-                              @skin="link"
-                              {{on "click" (fn this.openEditCaseModal row.case)}}
-                              role="menuitem"
-                            >
-                              {{t "edit-case"}}
-                            </AuButton>
-                            <AuButton
-                              data-test-route-cases-overview-row-actions-archive
-                              @skin="link"
-                              @alert={{true}}
-                              {{on
-                                "click"
-                                (fn
-                                  (if
-                                    row.case.isArchived
-                                    this.unarchiveCase
-                                    this.requestArchiveCase
-                                  )
-                                  row.case
-                                )
-                              }}
-                              role="menuitem"
-                            >
-                              {{t (if row.case.isArchived "unarchive-case" "archive-case")}}
-                            </AuButton>
-                          </AuDropdown>
-                        {{/if}} --}}
                         <AuLink
                           @skin="button-naked"
                           @icon="chevron-right"
                           @hideText={{true}}
-                          @route="cases.case.subcases"
+                          @route="cases.case.subcases-submission"
                           @model={{row.id}}
                         >
                           {{t "open"}}

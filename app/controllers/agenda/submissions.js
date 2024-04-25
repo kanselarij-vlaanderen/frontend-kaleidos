@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
-export default class CasesSubmissionsController extends Controller {
+export default class AgendaSubmissionsController extends Controller {
   // Services
   @service router;
   @service store;

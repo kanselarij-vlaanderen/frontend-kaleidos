@@ -94,9 +94,16 @@
           <p class="auk-u-mt-1">{{@subcase.subcaseName}}</p>
         </div>
         {{#if (eq @kabinet true)}}
+        {{#if (eq @submission true)}}
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">Status</AuHeading>
+          <AuPill @skin="action" @size="small">{{@status}}</AuPill>
+        </div>
+        {{else}}
         <div class="au-o-grid__item au-u-1-2 au-u-3-4@medium">
           <AuAlert @title="Nog niet geagendeerd" @size="small" @icon="circle-info" />
         </div>
+        {{/if}}
         {{else}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">Geagendeerd op</AuHeading>

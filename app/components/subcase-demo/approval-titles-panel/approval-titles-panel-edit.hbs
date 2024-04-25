@@ -108,17 +108,42 @@
       />
     </div>
     {{/if}}
-    <div>
-      <div class="auk-form-group">
-        <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
-        <AuToggleSwitch
-          data-test-subcase-titles-edit-confidential={{true}}
-          @checked={{@subcase.confidential}}
-          id="subcase-confidential"
-          @onChange={{set this "confidentialChanged" true}}
-        />
-      </div>
+    <div class="auk-form-group">
+      <Auk::Label for="subcase-confidential">{{t "limited-access"}}</Auk::Label>
+      <AuToggleSwitch
+        data-test-subcase-titles-edit-confidential={{true}}
+        @checked={{@subcase.confidential}}
+        id="subcase-confidential"
+        @onChange={{set this "confidentialChanged" true}}
+      />
     </div>
+    {{#if (eq @submission true)}}
+    <div class="auk-form-group">
+      <Auk::Label>Status</Auk::Label>
+      <select
+        name="status"
+        id="status"
+        class="auk-select auk-select--block"
+      >
+        <option
+          value="ingediend"
+          selected="selected"
+        >
+          Ingediend
+        </option>
+        <option
+          value="verwerken"
+        >
+          Aan het verwerken
+        </option>
+        <option
+          value="wacht"
+        >
+          Wacht op het kabinet
+        </option>
+      </select>
+    </div>
+    {{/if}}
   </Auk::Panel::Body>
   <Auk::Panel::Footer>
     <Auk::Toolbar>
