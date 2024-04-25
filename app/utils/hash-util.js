@@ -1,4 +1,6 @@
-export function setHash(pieceName) {
-  const hash = pieceName.replaceAll(" ", "-");
-  window.location.replace(`#${hash}`);
+export function setHash(text) {
+  if (text) {
+    const hash = text.replaceAll(' ', '_');
+    window.location.replace(`#${hash}`);
+  }
 }

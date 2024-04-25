@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from "@ember/object";
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { setHash } from 'frontend-kaleidos/utils/hash-util';
+import { timeout } from 'ember-concurrency';
 
 export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
@@ -29,6 +30,7 @@ export default class DocumentRoute extends Route {
       'filter[:id:]': params.piece_id,
       include: 'file',
     });
+    this.piece = model; // this.model does not exist in local 'applyHash method'
     return model;
   }
 
@@ -43,8 +45,6 @@ export default class DocumentRoute extends Route {
 
     const params = this.paramsFor(this.routeName);
     this.isSigning = params.tab === this.intl.t('signatures');
-    const shortPieceName = new VRDocumentName(model?.name).vrNumberWithSuffix();
-    setHash(shortPieceName);
   }
 
   setupController(controller) {
@@ -76,9 +76,17 @@ export default class DocumentRoute extends Route {
     controller.isLoadingModel = true;
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
+      this.applyHash();
     });
     // Disable bubbling of loading event to prevent main loading route to be shown.
     // Otherwise it causes a 'flickering' effect because the m-header appears when selecting a version.
     return false;
+  }
+
+  @action
+  async applyHash() {
+    // after changing tabs, the hash needs to be re-applied but we don't refresh model
+    await timeout(1000);
+    setHash(new VRDocumentName(this.piece?.name).vrNumberWithSuffix());
   }
 }
