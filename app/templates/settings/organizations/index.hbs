@@ -13,11 +13,13 @@
       </div>
       <div data-test-route-settings-organizations-filter-blocked class="au-c-card au-o-box au-o-box--small">
         <AuToggleSwitch
-          @label={{t "show-only-blocked"}}
           @identifier="blocked"
           @name="blocked"
           @checked={{this.showBlockedOrganizationsOnly}}
-        />
+          @onChange={{set this "showBlockedOrganizationsOnly"}}
+        >
+          {{t "show-only-blocked"}}
+        </AuToggleSwitch>
       </div>
     </div>
   </div>
@@ -96,6 +98,7 @@
         </td>
         <td data-test-route-settings-organizations-row-actions class="auk-u-text-align--right">
           <div class="auk-o-flex auk-o-flex--justify-end">
+            {{!-- template-lint-disable require-context-role --}}
             <AuDropdown
               data-test-route-settings-organizations-row-actions-dropdown
               @skin="naked"
@@ -124,6 +127,7 @@
                 </AuButton>
               {{/if}}
             </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
             <AuLink
               data-test-route-settings-organizations-detail
               @skin="button-naked"

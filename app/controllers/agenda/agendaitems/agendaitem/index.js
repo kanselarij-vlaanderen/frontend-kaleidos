@@ -2,8 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda, setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 

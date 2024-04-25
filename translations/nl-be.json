@@ -672,7 +672,6 @@
   "style-guide-brand": "Brand",
   "style-guide-checkbox": "Checkboxes",
   "style-guide-dropdown": "Dropdown",
-  "style-guide-label": "Label",
   "style-guide-colors": "Colors",
   "style-guide-buttons-link": "Buttons (link)",
   "style-guide-empty-state": "Empty state",
@@ -1371,7 +1370,7 @@
   "ratifications": "Bekrachtigingen",
   "ratifications-ongoing": "Bekrachtigingen opvolgen",
   "ratification-add": "Bekrachtiging uploaden",
-  "ratification-title": "Bekrachtiging Vlaamse Regering",
+  "ratification-title": "Bekrachtiging en afkondiging",
   "ratifying-mandatees": "Ondertekenende Ministers",
   "authority-domain": "Bevoegdheidsdomein"
 }

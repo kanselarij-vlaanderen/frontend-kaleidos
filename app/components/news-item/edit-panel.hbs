@@ -54,21 +54,22 @@
       <Auk::Panel::Body>
         <div class="au-c-form">
           <AuFormRow>
-            <Auk::Label>{{t "title"}}</Auk::Label>
+            <AuLabel>{{t "title"}}</AuLabel>
             <p data-test-news-item-edit-item-long-title>
               {{@agendaitem.title}}
             </p>
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>{{t "short-title"}}</Auk::Label>
+            <AuLabel>{{t "short-title"}}</AuLabel>
             <AuInput
               data-test-news-item-edit-item-short-title
+              value={{this.title}}
               @width="block"
-              @value={{this.title}}
+              {{on "input" (pick "target.value" (set this "title"))}}
             />
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
+            <AuLabel>{{t "mandatee-proposal"}}</AuLabel>
             <p
               data-test-news-item-edit-item-mandatee-proposal
             >
@@ -82,10 +83,10 @@
           <AuFormRow>
             <div class="auk-editor {{if this.isFullscreen "auk-editor--fullscreen"}}">
               <div class="auk-editor__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-                <Auk::Label class="auk-u-p-0">
+                <AuLabel class="auk-u-p-0">
                   {{t "decision-in-newsletter"}}
                   <span class={{unless this.isFullscreen "au-u-hidden-visually"}}> voor {{this.title}}</span>
-                </Auk::Label>
+                </AuLabel>
                 {{#if this.isFullscreen}}
                   <AuButtonGroup>
                     <AuButton
@@ -128,23 +129,25 @@
       <Auk::Panel::Body>
         <div class="au-c-form">
           <AuFormRow class="auk-u-text-capitalize">
-            <Auk::Label>{{t "comment-title"}}</Auk::Label>
+            <AuLabel>{{t "comment-title"}}</AuLabel>
             <AuInput
               data-test-news-item-edit-item-remark
+              value={{this.remark}}
               @width="block"
-              @value={{this.remark}}
+              {{on "input" (pick "target.value" (set this "remark"))}}
             />
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label for="item-finished">{{t "finished"}}</Auk::Label>
+            <AuLabel for="item-finished">{{t "finished"}}</AuLabel>
             <AuToggleSwitch
               data-test-news-item-edit-item-toggle-finished
-              @checked={{this.isFinished}}
               id="item-finished"
+              @checked={{this.isFinished}}
+              @onChange={{set this "isFinished"}}
             />
           </AuFormRow>
           <AuFormRow data-test-news-item-edit-item-themes-selector>
-            <Auk::Label>{{t "themes"}}</Auk::Label>
+            <AuLabel>{{t "themes"}}</AuLabel>
             <Utils::ThemesSelector @selectedThemes={{this.selectedThemes}} />
           </AuFormRow>
         </div>

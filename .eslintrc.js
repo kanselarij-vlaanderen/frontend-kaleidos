@@ -2,12 +2,15 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true,
+    requireConfigFile: false,
+    babelOptions: {
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
     },
   },
   plugins: ['ember'],
@@ -25,6 +28,7 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_' },
     ],
+    'no-dupe-class-members': 'off',
   },
   overrides: [
     // node files
@@ -32,6 +36,7 @@ module.exports = {
       files: [
         './.eslintrc.js',
         './.prettierrc.cjs',
+        './.stylelintrc.js',
         './.template-lintrc.cjs',
         './ember-cli-build.js',
         './testem.js',
@@ -47,12 +52,14 @@ module.exports = {
         browser: false,
         node: true,
       },
-      plugins: ['node'],
-      extends: ['plugin:node/recommended'],
+      extends: ['plugin:n/recommended'],
+    },
+    {
+      // test files
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
       rules: {
-        // this can be removed once the following is fixed
-        // https://github.com/mysticatea/eslint-plugin-node/issues/77
-        'node/no-unpublished-require': 'off',
+        'qunit/no-commented-tests': 'off',
       },
     },
     // auk component "library"

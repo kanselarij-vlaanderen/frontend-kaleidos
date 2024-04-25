@@ -14,6 +14,7 @@
         </Group.Item>
       </Toolbar.Group>
       <Toolbar.Group @position="right">
+        {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
           @icon="three-dots"
           @title={{t "more"}}
@@ -33,6 +34,7 @@
             </AuButton>
           {{/if}}
         </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
       </Toolbar.Group>
     </Auk::Toolbar>
   </Auk::Panel::Header>

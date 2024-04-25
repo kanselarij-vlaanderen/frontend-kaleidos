@@ -10,7 +10,7 @@ services:
     volumes:
       - /usr/share/elasticsearch/data
   e2e-electron:
-    image: "kanselarij/kaleidos-cypress:3.0.0"
+    image: "kanselarij/kaleidos-cypress:3.0.1"
     ipc: host
     environment:
       NO_COLOR: 1

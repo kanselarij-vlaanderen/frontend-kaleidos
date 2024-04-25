@@ -72,6 +72,7 @@
         </Auk::Toolbar::Item>
       {{/if}}
       <Auk::Toolbar::Item>
+        {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
           @title={{t "help"}}
           @alignment="right"
@@ -111,9 +112,11 @@
             </span>
           </AuLinkExternal>
         </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         {{#if this.currentSession.user}}
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             @title={{this.currentSession.user.firstName}}
             @alignment="right"
@@ -186,6 +189,7 @@
               </AuButton>
             {{/if}}
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         {{else}}
           <AuLink
             @skin="secondary"
