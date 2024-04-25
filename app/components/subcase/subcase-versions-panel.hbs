@@ -14,7 +14,7 @@
     <Auk::Panel::Body class="auk-u-bg-alt">
       <div class="auk-u-mb-2">
         {{#if this.loadAgendaData.isRunning}}
-          <div class="auk-loader" role="alert" aria-busy="true"></div>
+          <Auk::Loader />
         {{else if this.modelsOfMeetings}}
           <div class="au-u-flex au-u-flex--spaced-tiny">
             <p class="au-u-medium">
