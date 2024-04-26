@@ -13,8 +13,13 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div data-test-subcase-overview-header-title-container class="auk-u-my">
+          
           <span class="auk-overline auk-u-block">
+            {{#if @submission}}
+            Indiening
+            {{else}}
             {{t "case"}}
+            {{/if}}
           </span>
           <h4 class="auk-toolbar-complex__title au-u-padding-none">
             <Auk::AbbreviatedText
@@ -53,9 +58,9 @@
       </Auk::Toolbar::Group>
     {{/if}}
     {{#if (user-may "manage-cases")}}
+      {{#if @submission}}
+      {{else}}
       <Auk::Toolbar::Group @position="right">
-        {{#if @submission}}
-        {{else}}
         <Auk::Toolbar::Item>
           {{!-- <AuButton
             @skin="secondary"
@@ -89,7 +94,6 @@
             </AuButton>
           </AuDropdown>
         </Auk::Toolbar::Item>
-        {{/if}}
         {{#if (not-eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')}}
         <Auk::Toolbar::Item>
           {{!-- <AuButton
@@ -111,6 +115,7 @@
         </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
+      {{/if}}
     {{/if}}
     {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
       <Auk::Toolbar::Item>

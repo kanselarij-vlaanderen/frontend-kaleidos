@@ -81,6 +81,13 @@
                     @label="Type procedurestap"
                     @onChange={{fn (mut this.sort)}}
                   />
+                  <Utils::ThSortable
+                    class="auk-table__header-title"
+                    @currentSorting={{this.sort}}
+                    @field="isArchived"
+                    @label="Status"
+                    @onChange={{fn (mut this.sort)}}
+                  />
                   <th></th>
                 </tr>
               </thead>
@@ -121,9 +128,12 @@
                         {{#if row.case.isArchived}}
                         <AuPill @size="small">Principiële goedkeuring</AuPill>
                         {{else}}
-                        <AuPill @size="small" @skin="ongoing">Bekrachtiging</AuPill>
+                        <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
                         {{/if}}
                         {{/if}}
+                      </td>
+                      <td>
+                        <AuPill @size="small" @skin="ongoing">Ingediend</AuPill>
                       </td>
                       <td class="auk-u-text-align--right">
                         <AuLink
