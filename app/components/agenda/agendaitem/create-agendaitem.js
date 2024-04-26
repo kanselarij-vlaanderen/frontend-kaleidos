@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import {
   task, timeout, restartableTask
 } from 'ember-concurrency';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument meeting
@@ -20,7 +22,7 @@ export default class CreateAgendaitem extends Component {
   @service toaster;
   @service intl;
 
-  @tracked selectedSubcases = [];
+  @tracked selectedSubcases = new TrackedArray([]);
   @tracked subcases = [];
   @tracked loader = false;
 
@@ -134,9 +136,9 @@ export default class CreateAgendaitem extends Component {
   @action
   selectSubcase(subcase) {
     if (this.selectedSubcases.includes(subcase)) {
-      this.selectedSubcases.removeObject(subcase);
+      removeObject(this.selectedSubcases, subcase);
     } else {
-      this.selectedSubcases.pushObject(subcase);
+      this.selectedSubcases.push(subcase);
     }
   };
 }
