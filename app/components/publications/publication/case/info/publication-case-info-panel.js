@@ -197,7 +197,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
 
     this.identification.rollbackAttributes();
     this.structuredIdentifier.rollbackAttributes();
-    this.decisionActivity.rollbackAttributes();
+    this.decisionActivity?.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
     yield this.args.publicationFlow.belongsTo('mode').reload();
