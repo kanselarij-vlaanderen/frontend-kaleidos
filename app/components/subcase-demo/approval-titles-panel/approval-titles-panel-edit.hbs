@@ -13,6 +13,40 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body>
+    {{#if (eq @submission true)}}
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label>Dossier</Auk::Label>
+        <select
+          name="dossier"
+          id="dossier"
+          class="auk-select auk-select--block"
+        >
+          <option
+            value="-"
+          >
+            
+          </option>
+          <option
+            value="1"
+          >
+            Dossier 1
+          </option>
+          <option
+            value="2"
+          >
+            Dossier 2
+          </option>
+          <option
+            value="3"
+          >
+            Dossier 3
+          </option>
+        </select>
+        <AuButton @skin="link" @icon="add" class="au-u-margin-top-small">Nieuw dossier toevoegen</AuButton>
+      </div>
+    </div>
+    {{/if}}
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
