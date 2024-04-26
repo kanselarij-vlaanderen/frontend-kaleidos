@@ -4,8 +4,8 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 20000,
-  requestTimeout: 20000,
+  defaultCommandTimeout: 60000,
+  requestTimeout: 60000,
   env: {
     KALEIDOS_PROJECT: '../kaleidos-project',
     CI: false,

@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 
 export default class LinkedDocumentLink extends Component {
@@ -10,7 +10,7 @@ export default class LinkedDocumentLink extends Component {
 
   @tracked isOpenVerifyDeleteModal = false;
 
-  @tracked sortedPieces = [];
+  @tracked sortedPieces = new TrackedArray([]);
   @tracked accessLevel;
 
   constructor() {
@@ -26,9 +26,9 @@ export default class LinkedDocumentLink extends Component {
       .sort((p1, p2) => p1.created - p2.created);
     if (this.args.lastPiece) {
       const idx = sortedContainerPieces.indexOf(this.args.lastPiece);
-      this.sortedPieces = A(sortedContainerPieces.slice(0, idx + 1));
+      this.sortedPieces = sortedContainerPieces.slice(0, idx + 1);
     } else {
-      this.sortedPieces = A(sortedContainerPieces);
+      this.sortedPieces = sortedContainerPieces;
     }
     this.accessLevel = yield this.lastPiece.accessLevel;
   }
