@@ -27,6 +27,8 @@ export default class SubcaseTitlesPanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 
+  @tracked caseModal = false;
+
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'confidential']);
 
@@ -145,5 +147,10 @@ export default class SubcaseTitlesPanelEdit extends Component {
         await newNewsItem.save();
       }
     }
+  }
+
+  @action
+  toggleCaseModal() {
+    this.caseModal = !this.caseModal;
   }
 }

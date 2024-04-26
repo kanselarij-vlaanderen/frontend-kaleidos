@@ -43,7 +43,7 @@
             Dossier 3
           </option>
         </select>
-        <AuButton @skin="link" @icon="add" class="au-u-margin-top-small">Nieuw dossier toevoegen</AuButton>
+        <AuButton @skin="link" @icon="add" class="au-u-margin-top-small" {{on "click" this.toggleCaseModal}}>Nieuw dossier toevoegen</AuButton>
       </div>
     </div>
     {{/if}}
@@ -206,3 +206,25 @@
     </Auk::Toolbar>
   </Auk::Panel::Footer>
 </Auk::Panel>
+
+{{#if this.caseModal}}
+<Auk::Modal>
+  <Auk::Modal::Header @title="Nieuw dossier toevoegen" @onClose={{this.toggleCaseModal}} />
+  <Auk::Modal::Body>
+    <div>
+      <Auk::Label>Dossier naam</Auk::Label>
+      <AuInput @width="block" @value="" />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{this.toggleCaseModal}}
+  >
+    <AuButton
+      @skin="primary"
+      {{on "click" this.toggleCaseModal}}
+    >
+      Dossier toevoegen
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+{{/if}}
