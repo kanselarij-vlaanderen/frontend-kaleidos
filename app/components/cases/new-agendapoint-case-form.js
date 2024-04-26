@@ -52,6 +52,8 @@ export default class CasesNewAgendapointForm extends Component {
 
   @tracked newPieces = A([]);
 
+  @tracked caseModal = false;
+
   constructor() {
     super(...arguments);
     this.loadAgendaItemTypes.perform();
@@ -78,6 +80,11 @@ export default class CasesNewAgendapointForm extends Component {
     return this.selectedCurrentMinisterIds.map((ministerLabel) =>
       this.currentMinisters.find((minister) => minister.fullName === ministerLabel)
     );
+  }
+
+  @action
+  toggleCaseModal() {
+    this.caseModal = !this.caseModal;
   }
 
   @action

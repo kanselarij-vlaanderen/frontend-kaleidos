@@ -13,9 +13,9 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <div data-test-subcase-overview-header-title-container class="auk-u-my">
-          <span class="auk-overline auk-u-block">
+          {{!-- <span class="auk-overline auk-u-block">
             {{t "case"}}
-          </span>
+          </span> --}}
           <h4 class="auk-toolbar-complex__title">
             <Auk::AbbreviatedText
               @text=" "
@@ -50,12 +50,34 @@
             @reserveSpace={{true}}
           >
             <div class="auk-form-group">
-              <Auk::Label for="case">Dossier naam</Auk::Label>
-              <Auk::Textarea
-                @rows="2"
-                @value=""
-                id="case"
-              />
+              <Auk::Label>Dossier</Auk::Label>
+              <select
+                name="dossier"
+                id="dossier"
+                class="auk-select auk-select--block"
+              >
+                <option
+                  value="-"
+                >
+                  
+                </option>
+                <option
+                  value="1"
+                >
+                  Dossier 1
+                </option>
+                <option
+                  value="2"
+                >
+                  Dossier 2
+                </option>
+                <option
+                  value="3"
+                >
+                  Dossier 3
+                </option>
+              </select>
+              <AuButton @skin="link" @icon="add" class="au-u-margin-top-small" {{on "click" this.toggleCaseModal}}>Nieuw dossier toevoegen</AuButton>
             </div>
             <div class="auk-o-flex auk-o-flex--justify-between">
               <div class="auk-u-mb-4">
@@ -644,4 +666,26 @@
     @onConfirm={{this.saveCCAddress}}
     @onCancel={{toggle "showCCModal" this}}
   />
+{{/if}}
+
+{{#if this.caseModal}}
+<Auk::Modal>
+  <Auk::Modal::Header @title="Nieuw dossier toevoegen" @onClose={{this.toggleCaseModal}} />
+  <Auk::Modal::Body>
+    <div>
+      <Auk::Label>Dossier naam</Auk::Label>
+      <AuInput @width="block" @value="" />
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{this.toggleCaseModal}}
+  >
+    <AuButton
+      @skin="primary"
+      {{on "click" this.toggleCaseModal}}
+    >
+      Dossier toevoegen
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>
 {{/if}}
