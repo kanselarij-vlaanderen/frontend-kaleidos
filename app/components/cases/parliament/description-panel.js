@@ -44,15 +44,15 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
         'filter[subcase][publication-flow][case][decisionmaking-flow][:id:]':
           this.args.decisionmakingFlow.id,
         sort: '-start-date',
+        include: 'subcase.publication-flow.status'
       }
     );
 
-    const publicationStatus = await this.store.queryOne('publication-status', {
-      'filter[publication-flow][case][decisionmaking-flow][:id:]':
-        this.args.decisionmakingFlow.id,
-    });
+    const subcase = await latestPublicationActivity?.subcase;
+    const publicationFlow = await subcase?.publicationFlow;
+    const status = await publicationFlow?.status;
 
-    this.publicationStatus = publicationStatus;
+    this.publicationStatus = status;
     this.latestMeeting = latestMeeting;
     this.latestPublicationActivity = latestPublicationActivity;
   });
