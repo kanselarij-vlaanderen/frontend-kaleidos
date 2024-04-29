@@ -6,6 +6,7 @@ self.deprecationWorkflow.config = {
     { handler: "throw", matchId: "remove-owner-inject" },
     { handler: "throw", matchId: "ember-data:deprecate-array-like" },
     { handler: "throw", matchId: "ember-data:non-explicit-relationships" },
+    { handler: "throw", matchId: "ember-data:deprecate-non-strict-relationships" },
     { handler: "throw", matchId: "ember-data:deprecate-promise-proxies" },
     { handler: "throw", matchId: "ember-data:deprecate-promise-many-array-behaviors" },
     { handler: "throw", matchId: "ember-data:model-save-promise" },

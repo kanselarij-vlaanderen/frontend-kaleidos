@@ -80,6 +80,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @action
   uploadPiece(file) {
     const now = new Date();
+    const confidential = this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
@@ -88,7 +89,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: this.model.subcase.confidential || false,
+      confidential: confidential,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
       cases: [this.model._case],
