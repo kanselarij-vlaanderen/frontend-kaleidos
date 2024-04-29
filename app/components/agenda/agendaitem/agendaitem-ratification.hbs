@@ -35,7 +35,13 @@
 </Auk::Panel::Body>
 </Auk::Panel>
 {{! don't rerender this panel or you end up in an infinite loop}}
-{{#if (and this.showMandateeSelectorPanel (user-may "manage-ratification"))}}
+{{#if
+  (and
+    this.initialLoad.isIdle
+    this.showMandateeSelectorPanel
+    (user-may "manage-ratification")
+  )
+}}
   <Cases::Subcases::MandateeSelectorPanel
     @mandatees={{this.ratifiedBy}}
     @setMandatees={{this.setMandatees}}

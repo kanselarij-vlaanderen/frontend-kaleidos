@@ -127,7 +127,8 @@ export default class MandateeSelectorPanel extends Component {
           const minister = this.currentMinisters.find(
             (currentMinister) => currentMinister.get('id') === oldMandateePerson.id
           )
-          if (minister) {
+          // matching person is an optional param (f.e. not wanted in ratifiedBy)
+          if (this.args.matchPerson && minister) {
             const activeMandatee = this.currentMandatees.find(
               (currentMandatee) => 
               currentMandatee.person.get('id') === minister.id
