@@ -366,6 +366,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      await this.stampDocuments();
       await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
@@ -380,6 +381,15 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       this.args.onStopLoading();
       this.args.didCloseMeeting();
     }
+  }
+
+  async stampDocuments() {
+    await fetch(
+      `/document-stamping/agendas/${this.args.currentAgenda.id}/agendaitems/documents/stamp`,
+      {
+        method: 'POST',
+      }
+    );
   }
 
   @action
