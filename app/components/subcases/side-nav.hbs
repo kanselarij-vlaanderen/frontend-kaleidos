@@ -33,6 +33,14 @@
             @date={{item.sortDate}}
             @selected={{false}}
           />
+        {{else if (eq item.type "publication")}}
+          <Subcases::SideNav::PublicationSubcase
+            @decisionmakingFlow={{item.decisionmakingFlow}}
+            @publicationFlow={{item.publicationFlow}}
+            @date={{item.sortDate}}
+            @selected={{false}}
+
+          />
         {{/if}}
       {{/each}}
     </ul>

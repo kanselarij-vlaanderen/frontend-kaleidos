@@ -1,0 +1,42 @@
+<div class="auk-u-mb-8">
+  <Auk::Panel data-test-subcase-description-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-statusses"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-bg-alt">
+      <div class="auk-u-mb-2">
+        <div class="au-u-flex au-u-flex--spaced-tiny">  
+          <p class="au-u-medium">
+            {{t "latest-modified-on"}} 23-12-2023
+          </p>
+        </div>
+      </div>
+      <ul class="vlc-status-timeline">
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            In vertaling op 23 december 2023
+          </div>
+        </li>
+        <li
+          class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+        >
+          <div class="vlc-status-timeline__dot"></div>
+          <div class="vlc-status-timeline__text">
+            Aanvraag drukproef op 18 december 2023
+          </div>
+        </li>
+      </ul>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

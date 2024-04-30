@@ -6,11 +6,15 @@ export default class CasesCaseRoute extends Route {
   @service router;
 
   async model(params) {
-    const [decisionmakingFlow, parliamentFlow, subcases] = await Promise.all([
+    console.log('case model')
+    const [decisionmakingFlow, parliamentFlow, publicationFlows, subcases] = await Promise.all([
       this.store.findRecord('decisionmaking-flow', params.id),
       this.store.queryOne('parliament-flow', {
         'filter[case][decisionmaking-flow][:id:]': params.id,
         include: 'parliament-subcase',
+      }),
+      this.store.queryAll('publication-flow', {
+        'filter[case][decisionmaking-flow][:id:]': params.id,
       }),
       // this sort here matters for cases/case/index redirect
       this.store.queryAll('subcase', {
@@ -48,6 +52,7 @@ export default class CasesCaseRoute extends Route {
       latestParliamentSubmissionActivity,
       latestParliamentRetrievalActivity,
       parliamentFlow,
+      publicationFlows: publicationFlows?.slice(),
       subcases: subcases?.slice(),
     };
   }
