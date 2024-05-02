@@ -512,6 +512,7 @@ function addNewPieceToGeneratedMinutes(oldFileName) {
     {
       timeout: 60000,
     });
+  cy.get(document.documentCard.versionHistory);
   cy.log('/addNewPieceToGeneratedMinutes');
 }
 

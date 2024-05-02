@@ -78,11 +78,13 @@ context('Testing the application as Admin user', () => {
     const caseTitle1 = `Cypress test: profile rights - digital agenda - ${currentTimestamp()}`;
     const type1 = 'Nota';
     const subcaseTitleShortDigital1 = `Cypress test: profile rights - subcase 1 no decision - ${currentTimestamp()}`;
+    // const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1714635617';
     const subcaseTitleLongDigital1 = 'Cypress test: profile rights - subcase 1 no decision';
     const subcaseType1 = 'Definitieve goedkeuring';
     const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
 
     const subcaseTitleShortDigital2 = `Cypress test: profile rights - subcase 2 with decision - ${currentTimestamp()}`;
+    // const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1714635617';
     const subcaseTitleLongDigital2 = 'Cypress test: profile rights - subcase 2 with decision';
 
     // setup for this context
@@ -124,7 +126,7 @@ context('Testing the application as Admin user', () => {
     });
 
     it.only('setup for digital agenda', () => {
-      cy.createAgenda('Ministerraad', agendaDate, null, 100);
+      cy.createAgenda('Ministerraad', agendaDate);
 
       cy.createCase(caseTitle1);
       cy.addSubcaseViaModal({
@@ -151,10 +153,11 @@ context('Testing the application as Admin user', () => {
       cy.addNewPieceToGeneratedDecision('VR PV');
       cy.generateMinutes();
       cy.addNewPieceToGeneratedMinutes('VR PV');
+      cy.wait(6000); // against potential flakeyness
       cy.setAllItemsFormallyOk(3);
       cy.approveDesignAgenda();
 
-      cy.createAgenda('Ministerraad', agendaDate2, null, 100);
+      cy.createAgenda('Ministerraad', agendaDate2);
       cy.openAgendaForDate(agendaDate2);
       cy.setAllItemsFormallyOk(1);
       cy.approveDesignAgenda();
@@ -225,6 +228,9 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
       // Minutes Tab - with minutes - Document Card history
       cy.get(document.vlDocument.piece)
         .find(document.accessLevelPill.pill);
