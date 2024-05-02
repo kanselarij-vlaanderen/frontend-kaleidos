@@ -17,6 +17,9 @@ const selectors = {
       item: '[data-test-signatures-create-sign-flow-notification-adresses-item]',
       remove: '[data-test-signatures-create-sign-flow-notification-adresses-remove]',
     },
+    reportOrMinutes: {
+      signer: '[data-test-signatures-create-signflow-report-or-minutes-signer]',
+    },
   },
 
   // select-ministers-modal
@@ -33,6 +36,7 @@ const selectors = {
   // decisions and notes
 
   // create-sign-flow
+  // TODO: cleanup? (not tested yet)
   decisionsSignFlow: {
     pieceName: '[data-test-signatures-decisions-signflow-piece-name]',
     meetingDate: '[data-test-signatures-decisions-signflow-meeting-date]',

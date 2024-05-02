@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { A } from '@ember/array';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   task, timeout
@@ -30,7 +29,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   }
 
   async model(params) {
-    const processedNotas = A([]);
+    const processedNotas = [];
     const newsletterModel = this.modelFor('newsletter');
     const meeting = newsletterModel.meeting;
     const agenda = newsletterModel.agenda;
@@ -74,7 +73,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         agendaitemShortTitle,
         ...pieceData,
       };
-      processedNotas.pushObject(processedNota);
+      processedNotas.push(processedNota);
     }
     return processedNotas;
   }

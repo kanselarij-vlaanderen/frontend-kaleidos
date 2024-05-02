@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
-import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { keepLatestTask, task, all, timeout } from 'ember-concurrency';
 import {
   addPieceToAgendaitem,
@@ -10,6 +10,7 @@ import {
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -32,7 +33,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked isOpenWarnDocEditOnApproved = false;
   @tracked hasConfirmedDocEditOnApproved = false;
 
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
   @tracked newAgendaitemPieces;
   @tracked agendaitem;
   @tracked currentAgenda;
@@ -128,7 +129,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
@@ -144,7 +145,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     yield all(savePromises);
     yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
   }
 
   /**
@@ -193,7 +194,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       this.deletePiece.perform(piece)
     );
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -208,7 +209,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();

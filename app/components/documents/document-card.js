@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
+import { TrackedArray } from 'tracked-built-ins';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -11,6 +11,7 @@ import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
 import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -53,7 +54,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked uploadedFile;
   @tracked newPiece;
   @tracked defaultAccessLevel;
-  @tracked pieces = A();
+  @tracked pieces = new TrackedArray([]);
 
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
@@ -243,23 +244,24 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadVersionHistory() {
-    this.pieces = yield this.documentContainer.hasMany('pieces').reload();
-    for (const piece of this.pieces.slice()) {
+    const piecesFromModel = yield this.documentContainer.hasMany('pieces').reload();
+    this.pieces = piecesFromModel.slice();
+    for (const piece of this.pieces) {
       yield piece.belongsTo('accessLevel').reload();
     }
   }
 
   get sortedPieces() {
-    return A(sortPieces(this.pieces.slice()).reverse());
+    return sortPieces(this.pieces.slice()).reverse();
   }
 
   get reverseSortedPieces() {
-    return this.sortedPieces.slice(0).reverse(); // slice(0) as a hack to create a new array, since "reverse" happens in-place
+    return this.sortedPieces.slice().reverse(); // slice() as a hack to create a new array, since "reverse" happens in-place
   }
 
   get visiblePieces() {
     const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
-    return A(this.reverseSortedPieces.slice(idx));
+    return this.reverseSortedPieces.slice(idx);
   }
 
   @action
@@ -280,7 +282,11 @@ export default class DocumentsDocumentCardComponent extends Component {
     const previousPiece = this.sortedPieces.at(-1);
     const previousAccessLevel = yield previousPiece.accessLevel;
     const now = new Date();
+    const newName = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(
+        this.sortedPieces.length + 1
+      );
     this.newPiece = this.store.createRecord(this.args.pieceSubtype ?? 'piece', {
+      name: newName,
       created: now,
       modified: now,
       file: file,
@@ -288,9 +294,6 @@ export default class DocumentsDocumentCardComponent extends Component {
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
     });
-    this.newPiece.name = new VRDocumentName(
-      previousPiece.name
-    ).withOtherVersionSuffix(this.sortedPieces.length);
   }
 
   @task
@@ -326,7 +329,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *deleteUploadedPiece() {
     if (this.newPiece) {
-      this.pieces.removeObject(this.newPiece);
+      removeObject(this.pieces, this.newPiece);
       yield deletePiece(this.newPiece);
       this.newPiece = null;
     }
