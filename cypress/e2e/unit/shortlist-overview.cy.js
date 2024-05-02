@@ -557,7 +557,7 @@ context('signatures shortlist overview tests', () => {
         .click();
     });
     cy.get(dependency.emberPowerSelect.option).contains('Ingetrokken')
-      .scrollIntoView();
+      .click();
     cy.intercept('DELETE', '/signing-flows/**').as('deleteSigningFlows');
     cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@deleteSigningFlows');
