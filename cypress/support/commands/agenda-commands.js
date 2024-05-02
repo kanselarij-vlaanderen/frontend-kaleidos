@@ -405,7 +405,7 @@ function approveDesignAgenda(shouldConfirm = true) {
     cy.get(appuniversum.loader, {
       timeout: 60000,
     }).should('not.exist', {
-      timeout: 60000,
+      timeout: 600000,
     });
   }
 

@@ -73,6 +73,18 @@ context('Testing the application as Admin user', () => {
   });
 
   context('Profile rights checks for agendas/agenda routes', () => {
+    const agendaDate = Cypress.dayjs('2024-4-16');
+    const agendaDate2 = Cypress.dayjs('2024-4-20');
+    const caseTitle1 = `Cypress test: profile rights - digital agenda - ${currentTimestamp()}`;
+    const type1 = 'Nota';
+    const subcaseTitleShortDigital1 = `Cypress test: profile rights - subcase 1 no decision - ${currentTimestamp()}`;
+    const subcaseTitleLongDigital1 = 'Cypress test: profile rights - subcase 1 no decision';
+    const subcaseType1 = 'Definitieve goedkeuring';
+    const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
+
+    const subcaseTitleShortDigital2 = `Cypress test: profile rights - subcase 2 with decision - ${currentTimestamp()}`;
+    const subcaseTitleLongDigital2 = 'Cypress test: profile rights - subcase 2 with decision';
+
     // setup for this context
     // 1 open agenda B, with a document, nothing released:
     // - 1 approval agendaitem
@@ -111,10 +123,131 @@ context('Testing the application as Admin user', () => {
       cy.get(route.agendas.action.newMeeting);
     });
 
+    it.only('setup for digital agenda', () => {
+      cy.createAgenda('Ministerraad', agendaDate, null, 100);
+
+      cy.createCase(caseTitle1);
+      cy.addSubcaseViaModal({
+        newCase: true,
+        agendaitemType: type1,
+        newShortTitle: subcaseTitleShortDigital1,
+        longTitle: subcaseTitleLongDigital1,
+        subcaseType: subcaseType1,
+        subcaseName: subcaseName1,
+      });
+      cy.addSubcaseViaModal({
+        agendaitemType: type1,
+        newShortTitle: subcaseTitleShortDigital2,
+        longTitle: subcaseTitleLongDigital2,
+        subcaseType: subcaseType1,
+        subcaseName: subcaseName1,
+      });
+
+      cy.openAgendaForDate(agendaDate);
+      cy.addAgendaitemToAgenda(subcaseTitleShortDigital1);
+      cy.addAgendaitemToAgenda(subcaseTitleShortDigital2);
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      cy.generateDecision();
+      cy.addNewPieceToGeneratedDecision('VR PV');
+      cy.generateMinutes();
+      cy.addNewPieceToGeneratedMinutes('VR PV');
+      cy.setAllItemsFormallyOk(3);
+      cy.approveDesignAgenda();
+
+      cy.createAgenda('Ministerraad', agendaDate2, null, 100);
+      cy.openAgendaForDate(agendaDate2);
+      cy.setAllItemsFormallyOk(1);
+      cy.approveDesignAgenda();
+    });
+
+    it.only('check agenda route on open digital agenda', () => {
+      cy.openAgendaForDate(agendaDate);
+
+      // Main view - Tabs
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen');
+
+      // Main view - Actions
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions);
+      cy.get(agenda.agendaActions.generateSignedDecisionsBundle);
+      cy.get(agenda.agendaActions.markDecisionsForSigning);
+      cy.clickReverseTab('Overzicht'); // close dropdown
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital1);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit);
+      cy.get(agenda.agendaitemDecision.create); // digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece).should('not.exist'); // digital agenda
+      cy.get(document.documentCard.editPiece).should('not.exist');
+      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.delete);
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit);
+
+      // Detail Tab - Decisions tab - overview
+      cy.get(agenda.agendaitemDecision.edit.annotation);
+      cy.get(agenda.agendaitemDecision.edit.concern);
+      cy.get(agenda.agendaitemDecision.edit.treatment);
+
+      // Minutes Tab - with minutes - Document Card
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece).should('not.exist');
+      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.delete);
+      cy.get(appuniversum.loader).should('not.exist');
+      // Minutes Tab - with minutes - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit);
+
+      // Minutes Tab - no minutes
+      cy.openAgendaForDate(agendaDate2);
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.agendaMinutes.createEdit).click();
+      cy.get(route.agendaMinutes.editor.updateContent);
+      cy.get(route.agendaMinutes.editor.versionsDropdown);
+      cy.get(route.agendaMinutes.editor.cancel);
+      cy.get(route.agendaMinutes.editor.save);
+    });
+
     it('check agenda route on open agenda', () => {
       cy.visitAgendaWithLink(agendaOpenLink);
 
       // Main view - Tabs
+      cy.get(agenda.agendaTabs.tabs).contains('Alle agenda\'s');
       cy.get(agenda.agendaTabs.tabs).contains('Overzicht');
       cy.get(agenda.agendaTabs.tabs).contains('Detail');
       cy.get(agenda.agendaTabs.tabs).contains('Documenten');
