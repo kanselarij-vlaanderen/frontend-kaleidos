@@ -352,6 +352,10 @@
   .auk-tabs__tab__link {
     height: initial;
     padding: $au-unit-tiny * 1.25;
+    border-right: 0.3rem solid transparent;
+    border-bottom: 0;
+
+    @include element-focus;
   }
 
   .auk-tabs__tab__link--active {
@@ -362,6 +366,7 @@
   }
 
   .auk-tabs__tab__inner {
+    top: 0;
     padding: 0;
   }
 
@@ -371,9 +376,6 @@
 
   &.auk-tabs--vertical .auk-tabs__tab__link  {
     padding: $au-unit-tiny * 1.25 $au-unit-tiny * 1.25 $au-unit-tiny * 1.25 $au-unit-tiny * 2;
-  }
-
-  &.auk-tabs--vertical .auk-tabs__tab__link--active {
     border-right: none;
   }
 }
