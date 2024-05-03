@@ -33,12 +33,17 @@
     </AuFormRow>
   </form>
 </Auk::Navbar>
-<AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
+<AuMainContainer class="au-u-background-gray-100 l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
   <m.sidebar>
       <div class="au-c-sidebar auk-u-overflow-initial">
         <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
           <Search::Navigation />
-          <Auk::MobileFilters @toggleLabel="Filters" @toggleIcon="filter">
+
+          <Auk::MobileFilters
+            @toggleLabel="Filters"
+            @toggleIcon="filter"
+            @onToggle={{this.onToggleFilters}}
+          >
             <div
               id="search-subroute-filters-area"
               class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
