@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 
 export default class AukMobileFiltersComponent extends Component {
@@ -12,6 +13,10 @@ export default class AukMobileFiltersComponent extends Component {
   @action
   toggleFilters() {
     this.filtersOpen = !this.filtersOpen;
+
+    if (isPresent(this.args.onToggle)) {
+      this.args.onToggle(this.filtersOpen);
+    }
   }
 
   @action
