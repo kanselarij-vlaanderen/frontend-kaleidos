@@ -27,20 +27,20 @@ export default class AgendaitemRatificationComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadRatification.perform();
-    this.loadCodelists.perform();
+    this.initialLoad.perform();
     this.mandateeSelectorPanelTitle = this.intl.t('ratifying-mandatees');
-    this.firstLoad = true;
     this.showMandateeSelectorPanel = true;
   }
+
+  initialLoad = task(async () => {
+    await this.loadRatification.perform();
+    await this.loadCodelists.perform();
+  });
 
   loadRatification = task(async () => {
     this.disableMandateeSelectorPanel = true;
     this.ratification = await this.args.subcase.belongsTo('ratification').reload();
     this.ratifiedBy = await this.args.subcase.hasMany('ratifiedBy').reload();
-    if (!this.ratifiedBy?.length) {
-      this.firstLoad = false;
-    }
     this.disableMandateeSelectorPanel = false;
   });
 
@@ -122,11 +122,15 @@ export default class AgendaitemRatificationComponent extends Component {
 
   @action
   async setMandatees(mandatees) {
-    if (this.firstLoad) {
-      // the checkbox mandatee panel will call this once on load if ratifiedBy is set
-      this.firstLoad = false;
-    } else {
-      this.ratifiedBy = mandatees
+    // the mandatee selector panel calls this on rendering
+    // we only want to save when the list has actually changed
+    const sameElements =
+      mandatees?.length == this.ratifiedBy?.length &&
+      this.ratifiedBy?.every((mandatee) =>
+        mandatees?.map((x) => x.id).includes(mandatee.id)
+      );
+    if (!sameElements) {
+      this.ratifiedBy = mandatees;
       debounce(this, this.saveRatifiedBy, 1000);
     }
   }

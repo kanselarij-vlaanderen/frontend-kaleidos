@@ -325,33 +325,67 @@ export default class SignatureService extends Service {
 
   async markReportsForSignature(reports) {
     if (!reports?.length) {
-      return this.toaster.warning(this.intl.t('no-decision-reports-to-mark-for-signing'));
+      return this.toaster.warning(
+        this.intl.t('no-decision-reports-to-mark-for-signing')
+      );
     }
-    const loadingToast = this.toaster.loading(
-      this.intl.t('decision-reports-are-being-marked-for-signing', {aantal: reports.length}),
+    let loadingToast = this.toaster.loading(
+      this.intl.t('decision-reports-are-being-marked-for-signing', {
+        aantal: reports.length,
+      }),
       null,
       {
         timeOut: 10 * 60 * 1000,
       }
     );
+    const batchSize = 20; // Can this be higher on server?
+    for (let idx = 0; idx < reports.length; idx = idx + batchSize) {
+      const batch = reports.slice(idx, idx + batchSize);
+      await this.batchReportsForSignature(batch);
+    }
+    this.toaster.close(loadingToast);
+    // if one of the batches failed, we might not want to show a success toast
+    this.toaster.success(
+      this.intl.t('decision-reports-are-marked-for-signing', {
+        aantal: reports.length,
+      }),
+      null,
+      {
+        // duration should longer than last info toast
+        timeOut: 10 * 1000,
+      }
+    );
+  }
+
+  async batchReportsForSignature(batchedReports) {
     const resp = await fetch(`/signing-flows/mark-pieces-for-signing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/vnd.api+json',
       },
       body: JSON.stringify({
-        data: reports.map((report) => ({ type: 'reports', id: report.id })),
+        data: batchedReports.map((report) => ({
+          type: 'reports',
+          id: report.id,
+        })),
       }),
     });
-    this.toaster.close(loadingToast);
     if (!resp.ok) {
       // TODO error from service? did all fail? maybe only 1 failed?
-      this.toaster.warning(this.intl.t('error-while-marking-decision-reports-for-signing'));
+      this.toaster.warning(
+        this.intl.t('error-while-marking-decision-reports-for-signing')
+      );
     } else {
-      this.toaster.success(
-        this.intl.t('decision-reports-are-marked-for-signing', {aantal: reports.length}),
+      this.toaster.info(
+        this.intl.t('decision-reports-are-marked-for-signing-batched', {
+          aantal: batchedReports.length,
+        }),
+        null,
+        {
+          closable: false,
+          timeOut: 5 * 1000,
+        }
       );
     }
   }
-
 }

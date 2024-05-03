@@ -538,14 +538,11 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   async attachNewReportVersion(previousReport) {
     const now = new Date();
-    let newName;
-    try {
-      newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
-        (await (await previousReport.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = previousReport.name;
-    }
+    const container = await previousReport.documentContainer;
+    const pieces = await container.pieces;
+    const newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
+      pieces.length + 1
+    );
     const report = this.store.createRecord('report', {
       name: newName,
       created: now,

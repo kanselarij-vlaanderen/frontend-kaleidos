@@ -173,8 +173,8 @@ export default class SearchPublicationFlowsRoute extends Route {
     this.trackSearch(
       params.searchText,
       results.length,
-      params.mandatees,
-      params.governmentAreas,
+      params.mandatees || [],
+      params.governmentAreas || [],
       params.statuses,
       params.dateFrom,
       params.dateTo,
