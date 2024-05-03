@@ -460,7 +460,6 @@ function addNewPieceToDecision(oldFileName, file) {
 function addNewPieceToGeneratedDecision(oldFileName) {
   cy.log('addNewPieceToGeneratedDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
   cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 

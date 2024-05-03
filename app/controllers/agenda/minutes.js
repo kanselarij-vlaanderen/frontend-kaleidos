@@ -346,6 +346,14 @@ export default class AgendaMinutesController extends Controller {
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
 
+    // TODO KAS-4654 unset meeting on old minutes to prevent many in a one-to-one
+    minutes.minutesForMeeting = null;
+    await minutes.belongsTo('file').reload(); // make sure we have the latest file
+    // nextVersion should be set correctly by setting the inverse, no reload needed
+    // any chance we need to reload the pieceParts here? We will possibly concurrently overwrite them
+    await minutes.save();
+    await this.meeting.belongsTo('minutes').reload();
+
     this.refresh();
   });
 

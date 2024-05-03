@@ -78,13 +78,13 @@ context('Testing the application as Admin user', () => {
     const caseTitle1 = `Cypress test: profile rights - digital agenda - ${currentTimestamp()}`;
     const type1 = 'Nota';
     const subcaseTitleShortDigital1 = `Cypress test: profile rights - subcase 1 no decision - ${currentTimestamp()}`;
-    // const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1714635617';
+    // const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1714736072';
     const subcaseTitleLongDigital1 = 'Cypress test: profile rights - subcase 1 no decision';
     const subcaseType1 = 'Definitieve goedkeuring';
     const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
 
     const subcaseTitleShortDigital2 = `Cypress test: profile rights - subcase 2 with decision - ${currentTimestamp()}`;
-    // const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1714635617';
+    // const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1714736072';
     const subcaseTitleLongDigital2 = 'Cypress test: profile rights - subcase 2 with decision';
 
     // setup for this context
