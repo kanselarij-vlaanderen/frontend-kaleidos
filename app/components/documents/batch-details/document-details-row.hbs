@@ -54,6 +54,7 @@
           />
         {{else}}
           <AuToggleSwitch
+            data-test-document-details-row-marked-for-signature
             @skin="primary"
             @disabled={{or @agendaitemIsRetracted @row.signedPiece }}
             @checked={{@row.markedForSignature}}
