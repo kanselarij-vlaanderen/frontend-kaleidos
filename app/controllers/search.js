@@ -42,6 +42,11 @@ export default class SearchController extends Controller {
     this.updateToggleableFilters();
   }
 
+  willDestroy() {
+    super.willDestroy(...arguments);
+    window.removeEventListener('resize', this.updateToggleableFilters);
+  }
+
   @action
   search(e) {
     e.preventDefault();
@@ -71,11 +76,6 @@ export default class SearchController extends Controller {
   @action
   updateToggleableFilters() {
     this.hasToggleableFilters = (window.innerWidth < 768) ? true : false;
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    window.removeEventListener('resize', this.updateToggleableFilters);
   }
 
   @action
