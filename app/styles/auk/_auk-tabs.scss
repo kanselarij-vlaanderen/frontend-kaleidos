@@ -352,6 +352,7 @@
   .auk-tabs__tab__link {
     height: initial;
     padding: $au-unit-tiny * 1.25;
+    border-top: 0;
     border-right: 0.3rem solid transparent;
     border-bottom: 0;
 
@@ -367,6 +368,7 @@
 
   .auk-tabs__tab__inner {
     top: 0;
+    bottom: 0;
     padding: 0;
   }
 
