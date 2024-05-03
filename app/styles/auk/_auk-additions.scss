@@ -81,11 +81,6 @@ table tr.lt-expanded-row {
   padding: 0 1rem 0 1rem;
 }
 
-// When using au-modal, the ember power select wormhole is behind the modal so we use the $ember-power-select-dropdown-z-index value from ember-appuniversum here to fix this
-.ember-power-select-dropdown {
-  z-index: 10000;
-}
-
 
 // Sortable
 
