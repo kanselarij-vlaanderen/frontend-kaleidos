@@ -81,6 +81,15 @@ $au-label-color: var(--au-gray-700);
   white-space: nowrap;
   overflow: hidden;
 
+  .auk-table & {
+    @include mq($until: large) {
+      padding: 0.3rem $au-unit-tiny;
+
+      line-height: 1.2;
+      white-space: normal;
+    }
+  }
+
   &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
     cursor: pointer;
   }
