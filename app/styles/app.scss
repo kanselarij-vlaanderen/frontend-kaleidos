@@ -7,6 +7,11 @@
  */
 
 
+ // EXTERNAL PLUGINS
+ @import 'ember-power-select';
+ @import 'ember-vo-webuniversum-data-table';
+
+
 // BASE
 @import 'au/au-base'; // Appuniversum base
 @import 'auk/auk-base'; // Kaleidos base
@@ -45,8 +50,6 @@
 
 
 // EXTERNAL
-@import 'ember-power-select';
-@import 'ember-vo-webuniversum-data-table';
 @import 'addon-overrides/ember-flatpickr';
 @import 'addon-overrides/ember-power-select';
 @import 'addon-overrides/ember-rdfa-editor';
