@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.case)
@@ -29,6 +30,14 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
       await this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
+  }
+
+  get getIsCaseLinkVisible() {
+    return isPresent(this.args.isCaseLinkVisible) ? this.args.isCaseLinkVisible : true;
+  }
+
+  get getIsEditingAllowed() {
+    return isPresent(this.args.isEditingAllowed) ? this.args.isEditingAllowed : true;
   }
 
   get isShortTitleValid() {

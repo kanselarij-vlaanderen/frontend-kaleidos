@@ -6,7 +6,6 @@ export default class CasesCaseRoute extends Route {
   @service router;
 
   async model(params) {
-    console.log('case model')
     const [decisionmakingFlow, parliamentFlow, publicationFlows, subcases] = await Promise.all([
       this.store.findRecord('decisionmaking-flow', params.id),
       this.store.queryOne('parliament-flow', {
@@ -15,6 +14,7 @@ export default class CasesCaseRoute extends Route {
       }),
       this.store.queryAll('publication-flow', {
         'filter[case][decisionmaking-flow][:id:]': params.id,
+        sort: '-modified'
       }),
       // this sort here matters for cases/case/index redirect
       this.store.queryAll('subcase', {

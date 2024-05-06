@@ -6,43 +6,54 @@
     <div class="auk-scroll-wrapper__body">
       <div class="auk-u-m-4">
         <div id="publication-case-info" class="auk-u-mb-4">
-          {{this.model.id}}
-          <Publications::Publication::Case::Info::PublicationCaseInfoPanel
-            @publicationFlow={{this.model}}
+          <Publications::Publication::Case::Info::ImprovedPublicationCaseInfoPanel
+            @publicationFlow={{this.model.publicationFlow}}
+            @meeting={{this.model.meeting}}
+            @subcase={{this.model.subcase}}
             class="auk-u-mb-3"
-          />      
+          />
         </div>
         <div id="inscription" class="auk-u-mb-4">
           <Publications::Publication::Case::Inscription::InscriptionPanel
-            @publicationFlow={{this.model}}
+            @publicationFlow={{this.model.publicationFlow}}
+            @isEditingAllowed={{false}}
+            @isCaseLinkVisible={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="mandatees" class="auk-u-mb-4">
-          <Publications::Publication::Case::Mandatees::MandateesPanel
-            @publicationFlow={{this.model}}
+          <Publications::Publication::Case::Mandatees::MandateesAndSubmitterPanel
+            @publicationFlow={{await this.model.publicationFlow}}
+            @submitter={{await this.model.subcase.requestedBy}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="government-areas" class="auk-u-mb-4">
           <Publications::Publication::Case::GovernmentAreas::GovernmentAreasPanel
-            @publicationFlow={{this.model}}
+            @publicationFlow={{this.model.publicationFlow}}
+            @isEditingAllowed={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="contact-persons" class="auk-u-mb-4">
           <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
-            @publicationFlow={{this.model}}
+            @publicationFlow={{this.model.publicationFlow}}
+            @mayAddContactPerson={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="publication-decisions" class="auk-u-mb-4">
-          <Publications::Publication::Decisions::Info::DecisionsInfoPanel
-            @publicationFlow={{this.model}}
+          <Publications::Publication::Case::Decisions::Info::DecisionsInfoAndDocumentsPanel
+            @publicationFlow={{this.model.publicationFlow}}
+            @pieces={{this.model.pieces}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="publication-statusses" class="auk-u-mb-4">
+          <Publications::Publication::Case::Statuses::PublicationStatusesInfoPanel
+            @publicationFlow={{await this.model.publicationFlow}}
+            class="auk-u-mb-3"
+          />
         </div>
       </div>
     </div>

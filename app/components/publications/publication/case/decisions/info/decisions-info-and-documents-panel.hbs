@@ -17,47 +17,55 @@
       <div class="au-o-grid au-u-1-1">
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "regulation-type"}}</AuHeading>
-          <p>Besluit van de Vlaamse Regering</p>
+            {{#if @publicationFlow.regulationType}}
+              {{@publicationFlow.regulationType.label}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "decision-date"}}</AuHeading>
-          <p>01-04-2023</p>
+          {{#if @publicationFlow.decisionActivity.startDate}}
+            {{date @publicationFlow.decisionActivity.startDate}}
+          {{else}}
+            {{t "dash"}}
+          {{/if}}
         </div>
       </div>
     </Auk::Panel::Body>
     <Auk::Panel::Body class="auk-panel__body auk-u-bg-alt">
+      {{#each @pieces as |piece|}}
         <div class="vlc-procedure-step vlc-procedure-step--nopadding">
-        <div class="vlc-procedure-step__badge-wrapper">
-          <AuBadge
-            @icon="document"
-            @skin="action"
-            class="au-c-badge--medium"
-          />
+          <div class="vlc-procedure-step__badge-wrapper">
+            <AuBadge
+              @icon="document"
+              @skin="action"
+              class="au-c-badge--medium"
+            />
+          </div>
+          <div>
+            <Publications::Documents::DocumentCardStep
+              @piece={{piece}}
+              @isEnabledDelete={{false}}
+            />
+          </div>
         </div>
-        <div>
-          <Auk::Panel
-          >
-            <Auk::Panel::Body>
-              <div class="vlc-document-card vlc-document-card--borderless">
-                <div class="vlc-document-card__content">
-                  <Auk::Toolbar @auto={{true}} as |Toolbar|>
-                    <Toolbar.Group @position="left" as |Group|>
-                      <Group.Item class="auk-u-maximize-width">
-                        <AuLinkExternal @href="#!">
-                          61171_Getekend BVR (met subsidie).pdf
-                        </AuLinkExternal>
-                        <div class="vlc-document-card-content__meta">
-                          Ontvangen op 20-04-2022
-                        </div>
-                      </Group.Item>
-                    </Toolbar.Group>
-                  </Auk::Toolbar>
-                </div>
-              </div>
-            </Auk::Panel::Body>
-          </Auk::Panel>
+      {{else}}
+        <div class="vlc-procedure-step vlc-procedure-step--nopadding">
+          <div class="vlc-procedure-step__badge-wrapper">
+            <AuBadge
+              @icon="circle-info"
+              @skin="action"
+              class="au-c-badge--medium"
+            />
+          </div>
+          <div>
+            <p class="auk-u-m-4">
+              {{t "no-documents-yet"}}
+            </p>
+          </div>
         </div>
-      </div>
+      {{/each}}
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { resource, use } from 'ember-resources';
+import { isPresent } from '@ember/utils';
 
 /**
  * @argument {PublicationFlow} publicationFlow include: contact-persons,contact-persons.person
@@ -29,6 +30,10 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
     return contactPersons;
   });
   /* eslint-enable ember/no-get */
+
+  get getMayAddContactPerson() {
+    return isPresent(this.args.mayAddContactPerson) ? this.args.mayAddContactPerson : true;
+  }
 
   @action
   openAddModal() {

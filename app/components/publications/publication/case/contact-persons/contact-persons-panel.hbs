@@ -8,18 +8,20 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-contact-persons-view-add
-            @skin="naked"
-            @icon="plus"
-            {{on "click" this.openAddModal}}
-          >
-            {{t "add-contact"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#if this.getMayAddContactPerson}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-contact-persons-view-add
+              @skin="naked"
+              @icon="plus"
+              {{on "click" this.openAddModal}}
+            >
+              {{t "add-contact"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
   {{#if this.contactPersons}}
@@ -53,16 +55,18 @@
                 {{/if}}
               </td>
               <td class="auk-u-text-align--right">
-                <AuButton
-                  data-test-contact-persons-row-delete
-                  @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
-                  @hideText={{true}}
-                  {{on "click" (fn this.delete contactPerson)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
+              {{#if this.getMayAddContactPerson}}
+                  <AuButton
+                    data-test-contact-persons-row-delete
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn this.delete contactPerson)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                {{/if}}
               </td>
             </tr>
           {{/each}}

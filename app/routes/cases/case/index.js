@@ -15,7 +15,7 @@ export default class CasesCaseIndexRoute extends Route {
       ) {
         this.router.transitionTo('cases.case.parliament-flow');
       } else if (model.publicationFlows) {
-        // this.router.transitionTo('cases.case.publication-flow', model.publicationFlows.at(0).id);
+        this.router.transitionTo('cases.case.publication-flow', model.publicationFlows[0].id);
       } else {
         this.router.transitionTo('cases.case.subcases');
       }
