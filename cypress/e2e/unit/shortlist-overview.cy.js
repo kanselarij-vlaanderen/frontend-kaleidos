@@ -316,7 +316,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
       .parents('li')
       .invoke('attr', 'class')
-      .should('include', 'auk-sidebar__item--active');
+      .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
       .click();
@@ -868,7 +868,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
       .parents('li')
       .invoke('attr', 'class')
-      .should('include', 'auk-sidebar__item--active');
+      .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
@@ -907,7 +907,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
       .parents('li')
       .invoke('attr', 'class')
-      .should('include', 'auk-sidebar__item--active');
+      .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
     cy.get('@currentMinutes').find(route.decisions.row.openSidebar)
       .click();
