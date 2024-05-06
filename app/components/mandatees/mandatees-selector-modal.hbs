@@ -13,13 +13,13 @@
       >
         {{t "open-search-for-mandatee"}}
       </AuCheckbox>
-      <Auk::Icon @skin="muted" @name="circle-info" class="auk-u-ml">
+      <AuIcon @icon="circle-info" @skin="muted" class="auk-u-ml">
         <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
           <p>
             {{t "open-search-for-mandatee-tooltip"}}
           </p>
         </EmberTooltip>
-      </Auk::Icon>
+      </AuIcon>
     </div>
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}

@@ -16,18 +16,18 @@
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             {{#if (await (this.checkAdded agendaitem))}}
-              <Auk::Icon @name="calendar-new" @skin="muted" />
+              <AuIcon @icon="calendar-new" @skin="muted" />
             {{/if}}
             {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
-              <Auk::Icon @name="lock-closed" @skin="muted" />
+              <AuIcon @icon="lock-closed" @skin="muted" />
             {{/if}}
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <span class="{{agendaitem.formallyOkToShow.classNames}}">
-              <Auk::Icon
-                @name={{agendaitem.formallyOkToShow.svg.icon}}
+              <AuIcon
+                @icon={{agendaitem.formallyOkToShow.svg.icon}}
                 class="formally-ok-icon"
               />
               {{agendaitem.formallyOkToShow.label}}

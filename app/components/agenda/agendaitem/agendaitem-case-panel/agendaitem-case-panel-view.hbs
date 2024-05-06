@@ -68,8 +68,8 @@
                   'vlc-agenda-items__status--positive'
                 }}"
             >
-              <Auk::Icon
-                @name={{@agendaitem.formallyOkToShow.svg.icon}}
+              <AuIcon
+                @icon={{@agendaitem.formallyOkToShow.svg.icon}}
                 class="formally-ok-icon"
               />
               {{@agendaitem.formallyOkToShow.label}}
@@ -171,7 +171,7 @@
             >
               {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
               {{! prettier-ignore }}
-              <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+              <strong class="auk-u-text-bold"><AuIcon @icon="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
             </pre>
           </Group.Item>
         </Toolbar.Group>
