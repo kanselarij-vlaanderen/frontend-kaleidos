@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, beforeEach */
+/* global context, it, cy, beforeEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -33,10 +33,10 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
 
   context('Profile rights checks for agendas/agenda routes', () => {
     // setup for this context -> see profile-admin.spec context
-    const agendaDate = Cypress.dayjs('2024-4-16');
-    const agendaDate2 = Cypress.dayjs('2024-4-20');
-    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1714459931';
-    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1714459931';
+    const digitalAgendaLinkA = 'vergadering/6639E50648A2200932C2E206/agenda/6639E50748A2200932C2E20A/agendapunten';
+    const digitalAgendaNoMinutesLinkA = 'vergadering/6639E55748A2200932C2E221/agenda/6639E55848A2200932C2E225/agendapunten';
+    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1715070204';
+    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1715070204';
 
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/6374F699D9A98BD0A228855D/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
@@ -57,7 +57,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
     });
 
     it('check agenda route on open digital agenda', () => {
-      cy.openAgendaForDate(agendaDate);
+      cy.visitAgendaWithLink(digitalAgendaLinkA);
 
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Notulen');
@@ -86,11 +86,12 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(document.accessLevelPill.pill);
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(route.agendaMinutes.currentPieceView).should('not.exist');
       // Minutes Tab - with minutes - Document Card history
       cy.get(document.vlDocument.piece).should('not.exist');
 
       // Minutes Tab - no minutes
-      cy.openAgendaForDate(agendaDate2);
+      cy.visitAgendaWithLink(digitalAgendaNoMinutesLinkA);
       cy.get(agenda.agendaTabs.tabs).contains('Notulen')
         .click();
       cy.get(appuniversum.loader).should('not.exist');

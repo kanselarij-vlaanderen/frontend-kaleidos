@@ -170,7 +170,7 @@ context('Testing the application as Admin user', () => {
       // cy.approveDesignAgenda();
     });
 
-    it.only('check agenda route on open digital agenda', () => {
+    it('check agenda route on open digital agenda', () => {
       cy.visitAgendaWithLink(digitalAgendaLinkB);
 
       // Main view - Tabs
@@ -235,6 +235,7 @@ context('Testing the application as Admin user', () => {
       cy.get(document.documentCard.signMarking);
       cy.get(document.documentCard.delete);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.agendaMinutes.currentPieceView);
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
         .should('not.be.disabled')
         .click();
