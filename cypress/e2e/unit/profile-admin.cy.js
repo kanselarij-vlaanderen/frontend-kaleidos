@@ -73,19 +73,22 @@ context('Testing the application as Admin user', () => {
   });
 
   context('Profile rights checks for agendas/agenda routes', () => {
-    const agendaDate = Cypress.dayjs('2024-4-16');
-    const agendaDate2 = Cypress.dayjs('2024-4-20');
-    const caseTitle1 = `Cypress test: profile rights - digital agenda - ${currentTimestamp()}`;
-    const type1 = 'Nota';
-    const subcaseTitleShortDigital1 = `Cypress test: profile rights - subcase 1 no decision - ${currentTimestamp()}`;
-    // const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1714736072';
-    const subcaseTitleLongDigital1 = 'Cypress test: profile rights - subcase 1 no decision';
-    const subcaseType1 = 'Definitieve goedkeuring';
-    const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
+    // const digitalAgenda = Cypress.dayjs('2024-5-7').hour(10); // digital agenda with minutes and 2 notas
+    // const digitalAgendaNoMinutes = Cypress.dayjs('2024-5-8').hour(10);
+    const digitalAgendaLinkB = 'vergadering/6639E50648A2200932C2E206/agenda/aab25440-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    // const digitalAgendaLinkA = 'vergadering/6639E50648A2200932C2E206/agenda/6639E50748A2200932C2E20A/agendapunten';
+    const digitalAgendaNoMinutesLinkB = 'vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    // const digitalAgendaNoMinutesLinkA = 'vergadering/6639E50648A2200932C2E206/agenda/6639E50748A2200932C2E20A/agendapunten';
+    // const caseTitle1 = `Cypress test: profile rights - digital agenda - ${currentTimestamp()}`;
+    // const type1 = 'Nota';
 
-    const subcaseTitleShortDigital2 = `Cypress test: profile rights - subcase 2 with decision - ${currentTimestamp()}`;
-    // const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1714736072';
-    const subcaseTitleLongDigital2 = 'Cypress test: profile rights - subcase 2 with decision';
+    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1715070204';
+    // const subcaseTitleLongDigital1 = 'Cypress test: profile rights - subcase 1 no decision';
+    // const subcaseType1 = 'Definitieve goedkeuring';
+    // const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
+
+    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1715070204';
+    // const subcaseTitleLongDigital2 = 'Cypress test: profile rights - subcase 2 with decision';
 
     // setup for this context
     // 1 open agenda B, with a document, nothing released:
@@ -125,46 +128,50 @@ context('Testing the application as Admin user', () => {
       cy.get(route.agendas.action.newMeeting);
     });
 
-    it.only('setup for digital agenda', () => {
-      cy.createAgenda('Ministerraad', agendaDate);
+    it.skip('setup for digital agenda', () => {
+      // TODO  SETUP IS DONE!
+      // cy.createAgenda('Ministerraad', agendaDate, 'Profiel testen digitale agenda');
 
-      cy.createCase(caseTitle1);
-      cy.addSubcaseViaModal({
-        newCase: true,
-        agendaitemType: type1,
-        newShortTitle: subcaseTitleShortDigital1,
-        longTitle: subcaseTitleLongDigital1,
-        subcaseType: subcaseType1,
-        subcaseName: subcaseName1,
-      });
-      cy.addSubcaseViaModal({
-        agendaitemType: type1,
-        newShortTitle: subcaseTitleShortDigital2,
-        longTitle: subcaseTitleLongDigital2,
-        subcaseType: subcaseType1,
-        subcaseName: subcaseName1,
-      });
+      // cy.createCase(caseTitle1);
+      // cy.addSubcaseViaModal({
+      //   newCase: true,
+      //   agendaitemType: type1,
+      //   newShortTitle: subcaseTitleShortDigital1,
+      //   longTitle: subcaseTitleLongDigital1,
+      //   subcaseType: subcaseType1,
+      //   subcaseName: subcaseName1,
+      // });
+      // cy.addSubcaseViaModal({
+      //   agendaitemType: type1,
+      //   newShortTitle: subcaseTitleShortDigital2,
+      //   longTitle: subcaseTitleLongDigital2,
+      //   subcaseType: subcaseType1,
+      //   subcaseName: subcaseName1,
+      // });
 
-      cy.openAgendaForDate(agendaDate);
-      cy.addAgendaitemToAgenda(subcaseTitleShortDigital1);
-      cy.addAgendaitemToAgenda(subcaseTitleShortDigital2);
-      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
-      cy.generateDecision();
-      cy.addNewPieceToGeneratedDecision('VR PV');
-      cy.generateMinutes();
-      cy.addNewPieceToGeneratedMinutes('VR PV');
-      cy.wait(6000); // against potential flakeyness
-      cy.setAllItemsFormallyOk(3);
-      cy.approveDesignAgenda();
+      // cy.openAgendaForDate(agendaDate);
+      // cy.addAgendaitemToAgenda(subcaseTitleShortDigital1);
+      // cy.addAgendaitemToAgenda(subcaseTitleShortDigital2);
+      // cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      // cy.generateDecision();
+      // cy.addNewPieceToGeneratedDecision('VR PV');
+      // cy.generateMinutes();
+      // cy.addNewPieceToGeneratedMinutes('VR PV');
+      // cy.wait(6000); // against potential flakeyness
+      // cy.setAllItemsFormallyOk(3);
+      // cy.approveDesignAgenda();
+      // added docs, linked docs, KB, mail-campaign, publication
 
-      cy.createAgenda('Ministerraad', agendaDate2);
-      cy.openAgendaForDate(agendaDate2);
-      cy.setAllItemsFormallyOk(1);
-      cy.approveDesignAgenda();
+    });
+    it.skip('setup for digital agenda', () => {
+      // cy.createAgenda('Ministerraad', agendaDate2, 'Profiel testen digitale agenda zonder notulen');
+      // cy.openAgendaForDate(agendaDate2);
+      // cy.setAllItemsFormallyOk(1);
+      // cy.approveDesignAgenda();
     });
 
     it.only('check agenda route on open digital agenda', () => {
-      cy.openAgendaForDate(agendaDate);
+      cy.visitAgendaWithLink(digitalAgendaLinkB);
 
       // Main view - Tabs
       cy.get(agenda.agendaTabs.tabs).contains('Notulen');
@@ -238,7 +245,7 @@ context('Testing the application as Admin user', () => {
         .find(document.accessLevelPill.edit);
 
       // Minutes Tab - no minutes
-      cy.openAgendaForDate(agendaDate2);
+      cy.visitAgendaWithLink(digitalAgendaNoMinutesLinkB);
       cy.get(agenda.agendaTabs.tabs).contains('Notulen')
         .click();
       cy.get(appuniversum.loader).should('not.exist');

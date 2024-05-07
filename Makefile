@@ -91,6 +91,9 @@ new-zip-run-migrations:
 # instead of backup up the zips you could rename the current ones after this step
 # wait till migrations are done
 
+new-zip-run-up-triplestore:
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
+
 new-zip-run-yggdrasil:
 # make sure the yggdrasil env flags are enabled => USE_DIRECT_QUERIES: "yes" / RELOAD_ON_INIT: "true"
 # manually remove all 3 graphs via sparql
