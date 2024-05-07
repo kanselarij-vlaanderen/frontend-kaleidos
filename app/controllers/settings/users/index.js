@@ -6,6 +6,7 @@ import { task, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME, PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class UsersSettingsController extends Controller {
   @service store;
@@ -100,9 +101,9 @@ export default class UsersSettingsController extends Controller {
   @action
   toggleMembershipBeingBlocked(membership, isChecked) {
     if (isChecked) {
-      this.membershipsBeingBlocked.addObject(membership);
+      addObject(this.membershipsBeingBlocked, membership);
     } else {
-      this.membershipsBeingBlocked.removeObject(membership);
+      removeObject(this.membershipsBeingBlocked, membership);
     }
   }
 
@@ -146,8 +147,9 @@ export default class UsersSettingsController extends Controller {
    * currently match the filtering options.
    */
   @action
-  filterMemberships(memberships) {
-    return memberships.filter((membership) => {
+  async filterMemberships(user) {
+    const memberships = await user.memberships;
+    return memberships?.filter((membership) => {
       const shouldShow = !this.showBlockedMembershipsOnly || membership.get('isBlocked');
       return this.roles.includes(membership.get('role.id')) && shouldShow;
     });

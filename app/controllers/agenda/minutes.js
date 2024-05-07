@@ -314,15 +314,11 @@ export default class AgendaMinutesController extends Controller {
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
-    let newName;
-    try {
-      newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
-        (await (await minutes.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = minutes.name;
-    }
-
+    const container = await minutes.documentContainer;
+    const pieces = await container.pieces;
+    const newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
+      pieces.length + 1
+    );
     const newVersion = this.store.createRecord('minutes', {
       name: newName,
       created: new Date(),

@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 const DEFAULT_VISIBLE_ROLES = [
   CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
@@ -60,7 +61,7 @@ export default class MandateesService extends Service {
           searchText,
           visibleRoles
         );
-        activeMandateesInRange.addObjects(mandatees);
+        addObjects(activeMandateesInRange, mandatees);
       }
 
       return activeMandateesInRange;
@@ -85,9 +86,9 @@ export default class MandateesService extends Service {
       closedInRange,
       activeRange,
     ]);
-    governmentBodies.addObjects(closedBodies);
+    addObjects(governmentBodies, closedBodies);
     if (activeBody) {
-      governmentBodies.addObject(activeBody);
+      addObject(governmentBodies, activeBody);
     }
 
     return governmentBodies;
