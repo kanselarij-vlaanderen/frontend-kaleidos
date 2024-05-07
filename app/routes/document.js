@@ -10,6 +10,7 @@ export default class DocumentRoute extends Route {
   @service currentSession;
   @service store;
   @service intl;
+  @service router;
 
   queryParams = {
     tab: {
@@ -87,6 +88,9 @@ export default class DocumentRoute extends Route {
   async applyHash() {
     // after changing tabs, the hash needs to be re-applied but we don't refresh model
     await timeout(1000);
-    setHash(new VRDocumentName(this.piece?.name).vrNumberWithSuffix());
+    // in case we are no longer on this route, don't apply the hash
+    if (this.router.currentRouteName?.startsWith('document')) {
+      setHash(new VRDocumentName(this.piece?.name).vrNumberWithSuffix());
+    }
   }
 }

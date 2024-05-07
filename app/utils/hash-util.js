@@ -1,6 +1,7 @@
 export function setHash(text) {
   if (text) {
-    const hash = text.replaceAll(' ', '_');
+    let hash = text.replaceAll(' ', '_');
+    hash = hash.replaceAll('/', '-');
     window.location.replace(`#${hash}`);
   }
 }
