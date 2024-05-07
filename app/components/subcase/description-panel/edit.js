@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -129,7 +130,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
     if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
-      await this.updateDecisionReports();
+      await this.updateDecisionReport(propertiesToSetOnAgendaitem.number);
     }
 
     this.args.onSave();
@@ -138,12 +139,13 @@ export default class SubcaseDescriptionEdit extends Component {
   }
 
   async calculateAgendaitemNumber() {
-    const agendaItem = await this.store.queryOne('agendaitem', {
+    const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
-    })
-    if (agendaItem) {
-      const agenda = await agendaItem.agenda;
+      sort: '-created',
+    });
+    if (agendaitem) {
+      const agenda = await agendaitem.agenda;
       const latestAgendaitemOfType = await this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': agenda.id,
         'filter[:has-no:next-version]': 't',
@@ -155,16 +157,25 @@ export default class SubcaseDescriptionEdit extends Component {
     return undefined;
   }
 
-  async updateDecisionReports() {
-    const reports = await this.store.queryAll('report', {
-      'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-piece]': true,
+  async updateDecisionReport() {
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
-    for (const report of reports.slice()) {
+    if (agendaitem) {
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[:has:piece-parts]': true,
+        'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+      });
       const pieceParts = await report?.pieceParts;
       if (pieceParts?.length) {
-        this.updateReportName(report, this.agendaItemType.uri);
+        this.updateReportName(
+          report,
+          this.agendaItemType.uri,
+          agendaitem.number
+        );
         await report.belongsTo('file').reload();
         await report.save();
         await this.decisionReportGeneration.generateReplacementReport.perform(
@@ -174,11 +185,12 @@ export default class SubcaseDescriptionEdit extends Component {
     }
   }
 
-  updateReportName(report, agendaitemTypeUri) {
+  updateReportName(report, agendaitemTypeUri, agendaitemNumber) {
+    const paddedNumber = addLeadingZeros(agendaitemNumber, 4);
     if (agendaitemTypeUri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      report.name = report.name.replace('punt', 'mededeling');
+      report.name = report.name.replace(/punt [0-9]{4}/, `mededeling ${paddedNumber}`);
     } else {
-      report.name = report.name.replace('mededeling', 'punt');
+      report.name = report.name.replace(/mededeling [0-9]{4}/g, `punt ${paddedNumber}`);
     }
   }
 
