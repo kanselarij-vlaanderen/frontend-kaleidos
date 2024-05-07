@@ -22,8 +22,9 @@
         <div class="au-u-flex au-u-flex--spaced-small">
           <AuInput
             data-test-document-edit-name-input
+            value={{this.name}}
             @width="block"
-            @value={{this.name}}
+            {{on "input" (pick "target.value" (set this "name"))}}
           />
           <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton

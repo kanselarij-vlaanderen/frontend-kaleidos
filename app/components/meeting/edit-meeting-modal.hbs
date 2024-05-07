@@ -13,9 +13,9 @@
       />
       {{#if this.isAnnexMeeting}}
         <AuFormRow>
-          <Auk::Label>
+          <AuLabel>
             {{t "related-main-meeting-field-label"}}
-          </Auk::Label>
+          </AuLabel>
           <Utils::ModelSelector
             data-test-edit-meeting-related-main-meeting
             @modelName="meeting"
@@ -35,7 +35,7 @@
         </AuFormRow>
       {{else}}
         <AuFormRow data-test-edit-meeting-datepicker>
-          <Auk::Label>{{t "start-date"}}</Auk::Label>
+          <AuLabel>{{t "start-date"}}</AuLabel>
           <Auk::Datepicker
             @enableTime={{true}}
             @date={{this.startDate}}
@@ -45,9 +45,9 @@
       {{/if}}
       {{!Publicatiedatum}}
       <AuFormRow data-test-edit-meeting-document-publication-date>
-        <Auk::Label>
+        <AuLabel>
           {{t "date-publication-documents"}}
-        </Auk::Label>
+        </AuLabel>
         <Auk::Datepicker
           @enableTime={{true}}
           @date={{this.plannedDocumentPublicationDate}}
@@ -60,19 +60,20 @@
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label>
+        <AuLabel>
           {{t "meeting-number"}}
-        </Auk::Label>
+        </AuLabel>
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
             <AuInput
               data-test-edit-meeting-meeting-number
-              @type="number"
-              @value={{this.meetingNumber}}
-              @disabled={{this.initializeMeetingNumber.isRunning}}
+              type="number"
               id="meetingNumberInput"
               class="auk-input-group--w-medium auk-u-mr-2"
               {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
+              value={{this.meetingNumber}}
+              @disabled={{this.initializeMeetingNumber.isRunning}}
+              {{on "input" (pick "target.value" (set this "meetingNumber"))}}
             />
           {{/unless}}
           <div class="auk-o-flex__item">
@@ -101,9 +102,10 @@
           <div class="auk-o-flex">
             <AuInput
               data-test-edit-meeting-number-representation-input
-              @value={{this.numberRepresentation}}
               class="auk-input-group--w-medium auk-u-mr-2"
               {{! TODO: replace `auk-input-group--w-medium` with matching @width argument when it is implemented }}
+              value={{this.numberRepresentation}}
+              {{on "input" (pick "target.value" (set this "numberRepresentation"))}}
             />
             <AuButton
               data-test-edit-meeting-number-representation-save
@@ -118,9 +120,9 @@
       {{#if (not this.isPreKaleidos)}}
         <AuFormRow data-test-edit-meeting-secretary>
           <div class="auk-input-group--w-large">
-            <Auk::Label>
+            <AuLabel>
               {{t "secretary-for-meeting"}}
-            </Auk::Label>
+            </AuLabel>
             <Mandatees::MandateeSelector
               @onSelectMandatee={{fn (mut this.secretary)}}
               @selectedMandatees={{this.secretary}}
@@ -131,13 +133,14 @@
       {{/if}}
       {{#unless this.isAnnexMeeting}}
         <AuFormRow>
-          <Auk::Label>
+          <AuLabel>
             {{t "meeting-location"}}
-          </Auk::Label>
+          </AuLabel>
           <AuInput
             data-test-edit-meeting-meeting-location
+            value={{this.extraInfo}}
             @width="block"
-            @value={{this.extraInfo}}
+            {{on "input" (pick "target.value" (set this "extraInfo"))}}
           />
         </AuFormRow>
       {{/unless}}

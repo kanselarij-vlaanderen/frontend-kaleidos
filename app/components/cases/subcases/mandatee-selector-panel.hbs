@@ -58,9 +58,9 @@
                   @disabled={{@disabled}}
                   {{on "click" (fn this.onChangeSubmitter mandatee)}}
                 />
-                <Auk::Label class="au-u-padding-bottom-none">
+                <AuLabel class="au-u-padding-bottom-none">
                   {{t "submitter"}}
-                </Auk::Label>
+                </AuLabel>
               {{/if}}
               {{#if (includes mandatee this.selectedPastMandatees)}}
                 <AuButton
@@ -92,7 +92,7 @@
       <Utils::LoadableContent
         @reserveSpace={{true}}
       >
-        <Auk::Label>{{t "minister"}}</Auk::Label>
+        <AuLabel>{{t "minister"}}</AuLabel>
         <Mandatees::MandateeSelector::OpenSearch
           @excludeMandatees={{this.excludedMandatees}}
           @onSelectMandatee={{set this "selectedPastMandatee"}}

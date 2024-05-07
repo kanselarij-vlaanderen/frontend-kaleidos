@@ -75,7 +75,7 @@ export default class SearchMinisterFilterComponent extends Component {
 
   @task
   *prepareCurrentMinisters() {
-    const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
+    const currentMandatees = yield this.mandatees.getMandateesActiveOn.linked().perform(startOfDay(new Date()));
     const sortedMandatees = currentMandatees
           .sort((m1, m2) => m1.priority - m2.priority)
     const sortedMinisters = yield Promise.all(

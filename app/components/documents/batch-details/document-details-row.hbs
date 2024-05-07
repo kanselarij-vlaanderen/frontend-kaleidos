@@ -14,8 +14,9 @@
     {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
         data-test-document-details-input
+        value={{@row.name}}
         @width="block"
-        @value={{mut @row.name}}
+        {{on "input" (pick "target.value" (set @row "name"))}}
       />
     {{else}}
       {{@row.name}}
@@ -53,12 +54,14 @@
           />
         {{else}}
           <AuToggleSwitch
+            data-test-document-details-row-marked-for-signature
             @skin="primary"
-            @label={{t "present-for-signing"}}
+            @disabled={{or @agendaitemIsRetracted @row.signedPiece }}
             @checked={{@row.markedForSignature}}
-            @onChange={{fn @row.setMarkedForSignature}}
-            @disabled={{@agendaitemIsRetracted}}
-          />
+            @onChange={{@row.setMarkedForSignature}}
+          >
+            {{t "present-for-signing"}}
+          </AuToggleSwitch>
       {{/if}}
     </td>
   {{/if}}

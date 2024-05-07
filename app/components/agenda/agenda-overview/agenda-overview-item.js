@@ -2,11 +2,7 @@ import AgendaSidebarItem from 'frontend-kaleidos/components/agenda/agenda-detail
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { timeout } from 'ember-concurrency';
-import {
-  dropTask,
-  task
-} from 'ember-concurrency';
+import { timeout, dropTask, task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import VrNotulenName,
@@ -94,7 +90,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+    let pieces = yield this.throttledLoadingService.loadPieces.linked().perform(this.args.agendaitem);
     pieces = pieces.slice();
     let sortedPieces;
     if (this.args.agendaitem.isApproval) {

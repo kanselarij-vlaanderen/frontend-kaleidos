@@ -56,6 +56,7 @@ const selectors = {
     input: '[data-test-document-details-input]',
     type: '[data-test-document-details-row-type]',
     accessLevel: '[data-test-document-details-row-access-level]',
+    markedForSignature: '[data-test-document-details-row-marked-for-signature]',
     undoDelete: '[data-test-document-details-row-undo-delete]',
     delete: '[data-test-document-details-row-delete]',
   },

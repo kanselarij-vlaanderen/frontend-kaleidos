@@ -152,8 +152,8 @@ export default class SearchDecisionsRoute extends Route {
     this.trackSearch(
       params.searchText,
       results.length,
-      params.mandatees,
-      params.governmentAreas,
+      params.mandatees || [],
+      params.governmentAreas || [],
       params.decisionResults,
       params.dateFrom,
       params.dateTo,

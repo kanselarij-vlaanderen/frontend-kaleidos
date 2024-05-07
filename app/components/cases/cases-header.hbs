@@ -22,12 +22,12 @@
         {{/if}}
         <AuInput
           data-test-cases-header-filter-input
-          @width="block"
-          @icon="search"
-          value={{this.filterText}}
           placeholder={{t "search-case-title"}}
           autocomplete="off"
-          {{on "input" (perform this.debouncedSetFilter)}}
+          value={{this.filterText}}
+          @width="block"
+          @icon="search"
+          {{on "input" this.onInputFilter}}
         />
       </Group.Item>
       {{#if (user-may "manage-cases")}}

@@ -80,7 +80,7 @@ export default class NewSubcaseForm extends Component {
       CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
     ].includes(this.subcaseType?.uri);
     if (this.isSubcaseTypeWithoutMandatees) {
-      this.mandatees.clear();
+      this.mandatees.length = 0;
       this.submitter = null;
     }
   }
@@ -130,9 +130,9 @@ export default class NewSubcaseForm extends Component {
       this.title = this.args.latestSubcase.title;
       this.shortTitle = this.args.latestSubcase.shortTitle;
       this.confidential = this.args.latestSubcase.confidential;
-      addObjects(this.mandatees, yield this.args.latestSubcase.mandatees);
+      addObjects(this.mandatees, (yield this.args.latestSubcase.mandatees));
       this.submitter = yield this.args.latestSubcase.requestedBy;
-      addObjects(this.governmentAreas, yield this.args.latestSubcase.governmentAreas);
+      addObjects(this.governmentAreas, (yield this.args.latestSubcase.governmentAreas));
     } else {
       const _case = yield this.args.decisionmakingFlow.case;
       this.title = _case.title;
@@ -186,13 +186,13 @@ export default class NewSubcaseForm extends Component {
     }
 
     const mandatees = yield this.subcase.mandatees;
-    mandatees.clear();
+    mandatees.length = 0;
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
     const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
     const governmentAreas = yield this.subcase.governmentAreas;
-    governmentAreas.clear();
+    governmentAreas.length = 0;
     addObjects(governmentAreas, newGovernmentAreas);
     yield this.subcase.save();
 

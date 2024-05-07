@@ -7,16 +7,18 @@
         >
           <Auk::Toolbar as |Toolbar|>
             <Toolbar.Group @position="left" as |Group|>
-              <h4 class="auk-toolbar__title">
-                {{t "minutes"}}
-              </h4>
+              <Group.Item>
+                <h4 class="auk-toolbar__title">
+                  {{t "minutes"}}
+                </h4>
+              </Group.Item>
             </Toolbar.Group>
             <Toolbar.Group @position="right" as |Group|>
               {{#if this.mayEditMinutes}}
                 {{#unless this.isEditing}}
                   <Group.Item>
                     <AuButton
-                      data-test-route-agenda---agendaitem-minutes-create-edit
+                      data-test-route-agenda-minutes-create-edit
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
@@ -47,7 +49,7 @@
               <:header>
                 {{#if this.editorShowContentUpdateButton}}
                 <AuButton
-                  data-test-route-agenda---agendaitem-minutes-editor-update-content
+                  data-test-route-agenda-minutes-editor-update-content
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
@@ -97,7 +99,7 @@
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <AuButton
-                    data-test-route-agenda---agendaitem-minutes-editor-save
+                    data-test-route-agenda-minutes-editor-save
                     @skin="primary"
                     @loading={{this.saveMinutes.isRunning}}
                     @disabled={{this.saveDisabled}}
@@ -148,7 +150,7 @@
             <Auk::Panel::Body
               class="au-o-flow {{if this.isEditing 'au-u-background-gray-100'}}"
             >
-              <AuContent>
+              <AuContent data-test-route-agenda-minutes-current-piece-view>
                 <SanitizeHtml
                   @raw={{true}}
                   @value={{this.currentPiecePartTask.value.htmlContent}}
