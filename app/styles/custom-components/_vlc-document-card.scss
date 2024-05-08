@@ -107,6 +107,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
 
   .auk-h1,
   .auk-h2,
