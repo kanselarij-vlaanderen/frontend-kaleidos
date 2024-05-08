@@ -314,6 +314,7 @@ export default class AgendaMinutesController extends Controller {
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
+    const accessLevel = await minutes.accessLevel;
     const container = await minutes.documentContainer;
     const pieces = await container.pieces;
     const newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
@@ -324,8 +325,8 @@ export default class AgendaMinutesController extends Controller {
       created: new Date(),
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
-      documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel,
+      documentContainer: container,
+      accessLevel: accessLevel,
     });
 
     await newVersion.save();
