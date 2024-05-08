@@ -51,13 +51,11 @@
 }
 
 .ember-power-select-selected-item {
-  display: inline-block; // allow block content in span.ember-power-select-selected-item
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 
   margin-left: 0;
-
-  > .au-c-icon {
-    font-size: 1.5rem;
-  }
 }
 
 .ember-power-select-placeholder {
@@ -97,10 +95,12 @@
 }
 
 .ember-power-select-option {
-  display: block;
   position: relative;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 
+  width: 100%;
   padding: 0.7rem 0 0.5rem 1rem;
 
   color: $auk-gray-800;
@@ -120,10 +120,6 @@
 
   &[aria-selected=true] {
     background-color: $auk-gray-200;
-  }
-
-  > .au-c-icon {
-    font-size: 1.5rem;
   }
 }
 

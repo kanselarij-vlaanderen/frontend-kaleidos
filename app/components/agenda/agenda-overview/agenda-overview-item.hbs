@@ -21,7 +21,7 @@
             <div class="vlc-agenda-items__icons">
               <AuIcon
                 data-test-agenda-overview-item-dragging
-                class="auk-u-cursor-grab auk-u-text-muted"
+                class="auk-u-cursor-grab au-u-muted"
                 @icon="drag-handle-2"
                 @size="large"
                 {{sortable-handle}}
@@ -208,7 +208,7 @@
             {{#if @agendaitem.privateComment}}
               <p class="auk-u-text-muted">
                 <strong class="auk-u-text-bold">
-                  <AuIcon @icon="lock-closed" @size="small" />
+                  <AuIcon @icon="lock-closed" />
                   {{t "private-comment-title"}}:
                 </strong>
                 {{@agendaitem.privateComment}}
@@ -218,16 +218,13 @@
           <div class="vlc-agenda-items__icons">
             <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
               {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-                <p
+                <span
                   class={{@agendaitem.formallyOkToShow.classNames}}
                   data-test-agenda-overview-item-status
                 >
-                  <AuIcon
-                    @icon={{@agendaitem.formallyOkToShow.svg.icon}}
-                    class="formally-ok-icon"
-                  />
+                  <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} />
                   {{@agendaitem.formallyOkToShow.label}}
-                </p>
+                </span>
               {{/if}}
             </div>
           </div>
