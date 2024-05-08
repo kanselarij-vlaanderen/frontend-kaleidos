@@ -12,20 +12,22 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         {{#unless this.loadData.isRunning}}
-          {{#each this.links as |link|}}
-            <Auk::Toolbar::Group @position="right">
-              <Auk::Toolbar::Item>
-                <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefCodex}}>
-                  {{t "codex"}}
-                </AuLinkExternal>
-              </Auk::Toolbar::Item>
-              <Auk::Toolbar::Item>
-                <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefGazette}}>
-                  {{t "belgian-official-gazette"}}
-                </AuLinkExternal>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          {{/each}}
+          {{#if (gt this.links.length 0)}}
+            {{#each this.links as |link|}}
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefCodex}}>
+                    {{t "codex"}}
+                  </AuLinkExternal>
+                </Auk::Toolbar::Item>
+                <Auk::Toolbar::Item>
+                  <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefGazette}}>
+                    {{t "belgian-official-gazette"}}
+                  </AuLinkExternal>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            {{/each}}
+          {{/if}}
         {{/unless}}
       </Auk::Toolbar>
     </Auk::Panel::Header>

@@ -37,26 +37,28 @@ export default class PublicationsPublicationCaseInfoImprovedPublicationCaseInfoP
       '[filter][subcase][publication-flow][:id:]': this.args.publicationFlow.id,
       sort: '-end-date'
     });
-    const decisions = yield publicationActivity.decisions;
-    const latestDecision = decisions
-    .slice()
-    .sort((d1, d2) => d1.publicationDate - d2.publicationDate)
-    .at(-1);
-    const latestDecisionPublicationDate = format(new Date(latestDecision?.publicationDate), 'yyyy-MM-dd');
-    for (const numacNumber of this.numacNumbers) {
-      const link = {};
-      const codexBaseUrl = "https://codex.vlaanderen.be/Zoeken/Document.aspx?";
-      const codexNumac = "NUMAC=" + numacNumber.idName;
-      const codexParams = "&param=inhoud";
-      link.hrefCodex = codexBaseUrl + codexNumac + codexParams;
-
-      const gazetteBaseUrl = "https://www.ejustice.just.fgov.be/cgi/api2.pl?";
-      const gazetteLanguage = "lg=nl";
-      const gazettePublicationDate = "pd=" + latestDecisionPublicationDate;
-      const gazetteNumac = "numac=" + numacNumber.idName;
-      link.hrefGazette = gazetteBaseUrl + gazetteLanguage + "&" + gazettePublicationDate + "&" + gazetteNumac;
-
-      this.links.push(link);
+    if (publicationActivity) {
+      const decisions = yield publicationActivity.decisions;
+      const latestDecision = decisions
+      .slice()
+      .sort((d1, d2) => d1.publicationDate - d2.publicationDate)
+      .at(-1);
+      const latestDecisionPublicationDate = format(new Date(latestDecision?.publicationDate), 'yyyy-MM-dd');
+      for (const numacNumber of this.numacNumbers) {
+        const link = {};
+        const codexBaseUrl = "https://codex.vlaanderen.be/Zoeken/Document.aspx?";
+        const codexNumac = "NUMAC=" + numacNumber.idName;
+        const codexParams = "&param=inhoud";
+        link.hrefCodex = codexBaseUrl + codexNumac + codexParams;
+  
+        const gazetteBaseUrl = "https://www.ejustice.just.fgov.be/cgi/api2.pl?";
+        const gazetteLanguage = "lg=nl";
+        const gazettePublicationDate = "pd=" + latestDecisionPublicationDate;
+        const gazetteNumac = "numac=" + numacNumber.idName;
+        link.hrefGazette = gazetteBaseUrl + gazetteLanguage + "&" + gazettePublicationDate + "&" + gazetteNumac;
+  
+        this.links.push(link);
+      }
     }
   }
 
