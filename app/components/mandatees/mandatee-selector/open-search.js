@@ -35,13 +35,14 @@ export default class MandateeSelector extends Component {
   *searchMandatee(searchTerm) {
     this.mandateeOptions = [];
     yield timeout(300);
+    const excludedMandatees = yield this.args.excludeMandatees;
     const mandateeOptions = yield this.mandatees.fetchMandateesByName.perform(
       searchTerm,
       this.referenceDate
     );
 
     this.mandateeOptions = mandateeOptions.filter(
-      (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
+      (mandatee) => !excludedMandatees?.includes(mandatee)
     );
   }
 

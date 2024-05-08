@@ -1,11 +1,12 @@
+import Application from '../app';
+import config from '../config/environment';
 import { setApplication } from '@ember/test-helpers';
-import { setup, start } from 'ember-qunit';
-import Application from 'frontend-kaleidos/app';
-import config from 'frontend-kaleidos/config/environment';
+import { start } from 'ember-qunit';
 import * as QUnit from 'qunit';
-
-setApplication(Application.create(config.APP));
+import { setup } from 'qunit-dom';
 
 setup(QUnit.assert);
+
+setApplication(Application.create(config.APP));
 
 start();
