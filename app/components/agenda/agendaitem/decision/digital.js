@@ -538,6 +538,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   async attachNewReportVersion(previousReport) {
     const now = new Date();
+    const previousAccessLevel = await previousReport.accessLevel;
     const container = await previousReport.documentContainer;
     const pieces = await container.pieces;
     const newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
@@ -548,8 +549,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       created: now,
       modified: now,
       previousPiece: previousReport,
-      accessLevel: previousReport.accessLevel,
-      documentContainer: previousReport.documentContainer,
+      accessLevel: previousAccessLevel,
+      documentContainer: container,
     });
 
     return report;
