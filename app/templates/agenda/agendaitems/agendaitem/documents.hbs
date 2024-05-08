@@ -6,7 +6,7 @@
       </h4>
     </Group.Item>
   </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
+  <Toolbar.Group @position="right" class="au-u-flex au-u-flex--wrap au-u-flex--spaced-tiny" as |Group|>
     {{#if this.model.pieces.length}}
       <Group.Item>
         {{#if (user-may "manage-documents")}}

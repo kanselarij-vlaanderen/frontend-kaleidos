@@ -54,8 +54,8 @@
       </span>
     </h4>
     <div class="vlc-agenda-items__text">
-      <div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
-        <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+      <div class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-flex--spaced-tiny au-u-flex--wrap">
+        <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny au-u-flex--wrap">
           <h4 class="vlc-agenda-items__subject auk-u-m-0">
             <LinkTo
               data-test-agenda-overview-item-sub-item
@@ -216,7 +216,7 @@
             {{/if}}
           </div>
           <div class="vlc-agenda-items__icons">
-            <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
+            <div class="vlc-agenda-meta__status-holder">
               {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
                 <p
                   class={{@agendaitem.formallyOkToShow.classNames}}
