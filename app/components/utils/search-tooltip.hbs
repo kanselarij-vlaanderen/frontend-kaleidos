@@ -1,11 +1,14 @@
 <span>
-  <AuIcon
-    @icon="circle-info"
-    @skin="muted"
-    class="auk-u-cursor-pointer"
-    {{on "click" this.openModal}}
-  >
+  {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
+    <AuIcon
+      @icon="circle-info"
+      @skin="muted"
+      id={{tooltipTriggerId}}
+      class="auk-u-cursor-pointer"
+      {{on "click" this.openModal}}
+    />
     <EmberPopover
+      @targetId={{tooltipTriggerId}}
       @tooltipClass="auk-u-max-width-xxlarge auk-popover"
       @showOn="click"
       @side="right-start"
@@ -82,5 +85,5 @@
         </table>
       </div>
     </EmberPopover>
-  </AuIcon>
+  {{/let}}
 </span>

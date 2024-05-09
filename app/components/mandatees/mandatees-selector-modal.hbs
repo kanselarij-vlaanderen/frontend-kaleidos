@@ -13,13 +13,14 @@
       >
         {{t "open-search-for-mandatee"}}
       </AuCheckbox>
-      <AuIcon @icon="circle-info" @skin="muted" class="auk-u-ml">
-        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+      {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
+        <AuIcon @icon="circle-info" id={{tooltipTriggerId}} class="au-u-muted auk-u-ml" />
+        <EmberTooltip @targetId={{tooltipTriggerId}} @tooltipClass="auk-tooltip" @side="bottom">
           <p>
             {{t "open-search-for-mandatee-tooltip"}}
           </p>
         </EmberTooltip>
-      </AuIcon>
+      {{/let}}
     </div>
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}
