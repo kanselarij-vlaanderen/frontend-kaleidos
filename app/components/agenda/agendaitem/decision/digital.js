@@ -31,6 +31,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @service decisionReportGeneration;
   @service currentSession;
   @service newsletterService;
+  @service router;
 
   @tracked report;
   @tracked annotatiePiecePart;
@@ -58,6 +59,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
+
+    this.router.on('routeWillChange', (transition) => {
+      if (this.saveReport.isRunning) {
+        if (!transition.isAborted) {
+          transition.abort();
+          this.toaster.warning(this.intl.t('saving-in-progress-please-wait'));
+        }
+      }
+    })
   }
 
   loadNota = task(async () => {
