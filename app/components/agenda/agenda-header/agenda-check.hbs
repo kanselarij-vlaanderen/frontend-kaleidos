@@ -17,7 +17,7 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if this.fileNameMappings.isRunning}}
+      {{#if (or this.fileNameMappings.isRunning this.agendaitems.isRunning)}}
         <AuLoader />
       {{else}}
         <div class="auk-u-mx-2">
@@ -57,7 +57,7 @@
               </div>
             {{/if}}
 
-            {{#if @announcements}}
+            {{#if this.agendaitems.value.announcements}}
               <div class="auk-u-on-fresh-page@print">
                 <div
                   class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header"
@@ -68,7 +68,7 @@
                   >{{t "announcements-subtitle"}}</h3>
                 </div>
                 <div class="l-printable-agenda__section-content">
-                  {{#each @announcements as |announcement|}}
+                  {{#each this.agendaitems.value.announcements as |announcement|}}
                     <div class="l-printable-agenda__item">
                       <div class="auk-u-non-breakable-group@print">
                         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
