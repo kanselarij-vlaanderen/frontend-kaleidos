@@ -128,48 +128,6 @@ context('Testing the application as Admin user', () => {
       cy.get(route.agendas.action.newMeeting);
     });
 
-    it.skip('setup for digital agenda', () => {
-      // TODO  SETUP IS DONE!
-      // cy.createAgenda('Ministerraad', agendaDate, 'Profiel testen digitale agenda');
-
-      // cy.createCase(caseTitle1);
-      // cy.addSubcaseViaModal({
-      //   newCase: true,
-      //   agendaitemType: type1,
-      //   newShortTitle: subcaseTitleShortDigital1,
-      //   longTitle: subcaseTitleLongDigital1,
-      //   subcaseType: subcaseType1,
-      //   subcaseName: subcaseName1,
-      // });
-      // cy.addSubcaseViaModal({
-      //   agendaitemType: type1,
-      //   newShortTitle: subcaseTitleShortDigital2,
-      //   longTitle: subcaseTitleLongDigital2,
-      //   subcaseType: subcaseType1,
-      //   subcaseName: subcaseName1,
-      // });
-
-      // cy.openAgendaForDate(agendaDate);
-      // cy.addAgendaitemToAgenda(subcaseTitleShortDigital1);
-      // cy.addAgendaitemToAgenda(subcaseTitleShortDigital2);
-      // cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
-      // cy.generateDecision();
-      // cy.addNewPieceToGeneratedDecision('VR PV');
-      // cy.generateMinutes();
-      // cy.addNewPieceToGeneratedMinutes('VR PV');
-      // cy.wait(6000); // against potential flakeyness
-      // cy.setAllItemsFormallyOk(3);
-      // cy.approveDesignAgenda();
-      // added docs, linked docs, KB, mail-campaign, publication
-
-    });
-    it.skip('setup for digital agenda', () => {
-      // cy.createAgenda('Ministerraad', agendaDate2, 'Profiel testen digitale agenda zonder notulen');
-      // cy.openAgendaForDate(agendaDate2);
-      // cy.setAllItemsFormallyOk(1);
-      // cy.approveDesignAgenda();
-    });
-
     it('check agenda route on open digital agenda', () => {
       cy.visitAgendaWithLink(digitalAgendaLinkB);
 
