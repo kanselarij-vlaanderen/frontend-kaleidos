@@ -2,7 +2,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
 import { A } from '@ember/array';
 import generateReportName from './generate-report-name';
-
+import { equalContentArrays } from './array-helpers';
 /**
  * @description Zet een agendaitem of subcase naar nog niet formeel ok
  * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
@@ -62,6 +62,33 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
   });
   return groups;
 };
+
+/**
+* @param {Array} notas agendaitems with type CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+*/
+export const getNotaGroups = async (notas) => {
+  if (notas?.length > 0) {
+    const mandatees = await notas.firstObject.mandatees;
+    let currentSubmittersArray = mandatees.sortBy('priority');
+    let currentItemArray = A([]);
+    const groups = [];
+    groups.pushObject(currentItemArray);
+    for (let index = 0; index < notas.length; index++) {
+      const nota = notas.objectAt(index);
+      const mandatees = nota.mandatees;
+      const subm = mandatees.sortBy('priority');
+      if (equalContentArrays(currentSubmittersArray, subm)) {
+        currentItemArray.pushObject(nota);
+      } else {
+        currentItemArray = A([nota]);
+        groups.pushObject(currentItemArray);
+        currentSubmittersArray = subm;
+      }
+    }
+    return groups;
+  }
+  return A([]);
+}
 
 /**
  * Given a set of grouped agendaitems, sort them by number

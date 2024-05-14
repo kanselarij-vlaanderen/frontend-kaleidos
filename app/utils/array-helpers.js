@@ -19,3 +19,10 @@ export function addObject(array, entry) {
 export function addObjects(array, entries) {
   entries.forEach((entry) => addObject(array, entry));
 }
+
+export function equalContentArrays(array1, array2) {
+  if (array1.length === array2.length) {
+    return array1.every((elem) => array2.includes(elem));
+  }
+  return false;
+}

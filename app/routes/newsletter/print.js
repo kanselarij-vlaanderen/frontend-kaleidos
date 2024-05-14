@@ -62,7 +62,7 @@ export default class PrintNewsletterRoute extends Route {
     } else { // Items need to be ordered by minister protocol order
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
       await setCalculatedGroupNumbers(notas);
-      await this.agendaService.groupAgendaitemsOnGroupName(notas);
+      await this.agendaService.setAgendaitemsGroupname(notas);
       const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
 
       const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups

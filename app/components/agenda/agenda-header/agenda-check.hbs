@@ -36,7 +36,7 @@
           </h2>
 
           <div class="auk-content">
-            {{#if this.notaGroups}}
+            {{#if this.agendaitems.value.notaGroups}}
               <div>
                 <div
                   class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header"
@@ -47,7 +47,7 @@
                   >{{t "agendaitems"}}</h3>
                 </div>
                 <div class="l-printable-agenda__section-content">
-                  {{#each this.notaGroups as |notaGroup|}}
+                  {{#each this.agendaitems.value.notaGroups as |notaGroup|}}
                     <Agenda::PrintableAgenda::ListSection::ItemGroup
                       @items={{notaGroup}}
                       @fileNameMappings={{this.fileNameMappings.value}}

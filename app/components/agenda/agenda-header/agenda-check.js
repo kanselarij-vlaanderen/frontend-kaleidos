@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-import { A } from '@ember/array';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 /**
  * @argument onSave
@@ -26,7 +26,8 @@ export default class AgendaHeaderAgendaCheck extends Component {
         }
       }
     }
-    return { notas, announcements };
+    let notaGroups = await getNotaGroups(notas);
+    return { notaGroups, announcements };
   });
 
   agendaitems = trackedTask(this, this.getAgendaitems);
@@ -43,35 +44,4 @@ export default class AgendaHeaderAgendaCheck extends Component {
 
   fileNameMappings = trackedTask(this, this.getFileNameMappings);
 
-  get notaGroups() {
-    const agendaitems = this.agendaitems.value?.notas;
-    if (agendaitems?.length > 0) {
-      const mandatees = agendaitems.firstObject.mandatees;
-      let currentSubmittersArray = mandatees.sortBy('priority');
-      let currentItemArray = A([]);
-      const groups = [];
-      groups.pushObject(currentItemArray);
-      for (let index = 0; index < agendaitems.length; index++) {
-        const agendaitem = agendaitems.objectAt(index);
-        const mandatees = agendaitem.mandatees;
-        const subm = mandatees.sortBy('priority');
-        if (equalContentArrays(currentSubmittersArray, subm)) {
-          currentItemArray.pushObject(agendaitem);
-        } else {
-          currentItemArray = A([agendaitem]);
-          groups.pushObject(currentItemArray);
-          currentSubmittersArray = subm;
-        }
-      }
-      return groups;
-    }
-    return A([]);
-  }
-}
-
-function equalContentArrays(array1, array2) {
-  if (array1.length === array2.length) {
-    return array1.every((elem) => array2.includes(elem));
-  }
-  return false;
 }
