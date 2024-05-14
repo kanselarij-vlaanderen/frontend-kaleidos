@@ -2,11 +2,11 @@
   <div class="auk-o-flex auk-o-flex--vertical-center">
     <AuInput
       data-test-utils-case-search-input
-      @value={{this.searchText}}
+      placeholder={{t "search-placeholder"}}
+      value={{this.searchText}}
+      class="auk-u-maximize-width"
       @width="block"
       {{on "input" this.updateSearchText}}
-      class="auk-u-maximize-width"
-      placeholder={{t "search-placeholder"}}
     />
   </div>
 

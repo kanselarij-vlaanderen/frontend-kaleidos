@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
-import { A } from '@ember/array';
 import {
   setCalculatedGroupNumbers,
   groupAgendaitemsByGroupname,
@@ -9,6 +8,7 @@ import {
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -42,7 +42,7 @@ export default class PrintNewsletterRoute extends Route {
     // Pre-Kaleidos items have undefined isApproval so can't be filtered in the query above
     agendaitems = agendaitems.filter((item) => item.isApproval !== true);
 
-    let notas = []
+    let notas = [];
     let announcements = [];
     const sortedAgendaitems = agendaitems
       ?.slice()
@@ -66,9 +66,9 @@ export default class PrintNewsletterRoute extends Route {
       const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
 
       const itemGroups = sortByNumber(groupedAgendaitems, true); // An array of groups
-      notas = A([]);
+      notas = [];
       for (const group of itemGroups) {
-        notas.addObjects(group.agendaitems);
+        addObjects(notas, group.agendaitems);
       }
     }
 

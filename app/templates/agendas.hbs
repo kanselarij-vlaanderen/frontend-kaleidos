@@ -26,13 +26,13 @@
         {{/if}}
         <AuInput
           data-test-route-agendas-overview-filter-input
-          @width="block"
-          @icon="search"
-          @value={{this.filterAgendas}}
-          @enter={{this.setFilter}}
-          {{on "input" (perform this.debouncedSetFilter)}}
           placeholder={{t "date-example"}}
           autocomplete="off"
+          value={{this.filterAgendas}}
+          @width="block"
+          @icon="search"
+          {{on "input" (perform this.debouncedSetFilter)}}
+          {{on "keydown" this.onEnterKeyFilter}}
         />
       </Group.Item>
       {{#if (user-may "manage-meetings")}}

@@ -7,11 +7,12 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
-        <Auk::Label>{{t "short-title-case"}}</Auk::Label>
+        <AuLabel>{{t "short-title-case"}}</AuLabel>
         <AuTextarea
           data-test-edit-case-shorttitle
+          value={{this.shortTitle}}
           @width="block"
-          @value={{this.shortTitle}}
+          {{on "input" (pick "target.value" (set this "shortTitle"))}}
         />
       </AuFormRow>
     </div>

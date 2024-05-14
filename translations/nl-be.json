@@ -672,7 +672,6 @@
   "style-guide-brand": "Brand",
   "style-guide-checkbox": "Checkboxes",
   "style-guide-dropdown": "Dropdown",
-  "style-guide-label": "Label",
   "style-guide-colors": "Colors",
   "style-guide-buttons-link": "Buttons (link)",
   "style-guide-empty-state": "Empty state",
@@ -1307,6 +1306,7 @@
   "loading-minutes": "De notulen worden opgesteld.",
   "sign-decisions": "Beslissingen aanbieden voor ondertekenen",
   "decision-reports-are-being-marked-for-signing": "De {aantal, plural, =1 {beslissing wordt} other {# beslissingen worden}} aangeboden voor ondertekenen",
+  "decision-reports-are-marked-for-signing-batched": "{aantal, plural, =1 {beslissing is} other {# beslissingen zijn}} succesvol aangeboden voor ondertekenen",
   "decision-reports-are-marked-for-signing": "De {aantal, plural, =1 {beslissing is} other {# beslissingen zijn}} succesvol aangeboden voor ondertekenen",
   "error-while-marking-decision-reports-for-signing": "Er ging iets fout tijdens het markeren voor ondertekenen",
   "no-decision-reports-to-mark-for-signing": "Er zijn geen beslissingen om aan te bieden voor ondertekenen",
@@ -1356,7 +1356,6 @@
   "automatic-check-performed-possible-pieces-missing":"Op basis van een automatische controle lijken de volgende documenten te ontbreken. Wil je ze toch indienen? Laad ze dan op en stuur ze vervolgens door.",
   "case-info": "Dossier info",
   "design-of": "Ontwerp van",
-  "last-statusses": "Laatste statussen",
   "to-flemish-parliament": "Naar Vlaams Parlement",
   "number": "Nummer",
   "accepted-in-plenary-meeting-on": "Aangenomen in plenaire vergadering op",
@@ -1374,5 +1373,6 @@
   "ratification-title": "Bekrachtiging en afkondiging",
   "ratifying-mandatees": "Ondertekenende Ministers",
   "authority-domain": "Bevoegdheidsdomein",
-  "check-agenda": "Agenda controleren"
+  "check-agenda": "Agenda controleren",
+  "most-recent-documents": "Recentste documenten"
 }

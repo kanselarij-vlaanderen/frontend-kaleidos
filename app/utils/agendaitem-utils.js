@@ -1,8 +1,8 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
-import { A } from '@ember/array';
 import generateReportName from './generate-report-name';
 import { equalContentArrays } from './array-helpers';
+
 /**
  * @description Zet een agendaitem of subcase naar nog niet formeel ok
  * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
@@ -68,26 +68,26 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
 */
 export const getNotaGroups = async (notas) => {
   if (notas?.length > 0) {
-    const mandatees = await notas.firstObject.mandatees;
-    let currentSubmittersArray = mandatees.sortBy('priority');
-    let currentItemArray = A([]);
     const groups = [];
-    groups.pushObject(currentItemArray);
+    const mandatees = await notas.firstObject.mandatees;
+    let currentSubmittersArray = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
+    let currentItemArray = [];
+    groups.push(currentItemArray);
     for (let index = 0; index < notas.length; index++) {
-      const nota = notas.objectAt(index);
-      const mandatees = nota.mandatees;
-      const subm = mandatees.sortBy('priority');
+      const nota = notas.at(index);
+      const mandatees = await nota.mandatees;
+      const subm = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
       if (equalContentArrays(currentSubmittersArray, subm)) {
-        currentItemArray.pushObject(nota);
+        currentItemArray.push(nota);
       } else {
-        currentItemArray = A([nota]);
-        groups.pushObject(currentItemArray);
+        currentItemArray = [nota];
+        groups.push(currentItemArray);
         currentSubmittersArray = subm;
       }
     }
     return groups;
   }
-  return A([]);
+  return [];
 }
 
 /**
@@ -183,18 +183,18 @@ export class AgendaitemGroup {
 
   /**
    * Create an AgendaitemGroup.
-   * @param {EmberArray} mandatees - The group of mandatees.
+   * @param {Array} mandatees - The group of mandatees.
    * @param {Agendaitem} firstAgendaItem - A first agenda-item to initialize the list of items with.
    */
   constructor(mandatees, firstAgendaItem) {
     this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
-    this.agendaitems = A([firstAgendaItem]);
+    this.agendaitems = [firstAgendaItem];
   }
 
   static sortedMandatees(mandatees) {
     // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.slice());
+    const copiedMandatees = mandatees.slice();
     return copiedMandatees.sort((m1, m2) => m1.priority - m2.priority);
   }
 
