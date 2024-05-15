@@ -88,6 +88,7 @@
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-route-agenda-minutes-editor-cancel
                     @skin="naked"
                     @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" (fn (set this "isEditing" false))}}
