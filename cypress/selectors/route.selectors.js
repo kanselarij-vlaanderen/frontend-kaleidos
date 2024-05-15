@@ -62,6 +62,8 @@ const selectors = {
     currentPieceView: '[data-test-route-agenda-minutes-current-piece-view]',
     editor: {
       updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
+      versionsDropdown: '[data-test-route-agenda-minutes-editor-versions-dropdown]',
+      cancel: '[data-test-route-agenda-minutes-editor-cancel]',
       save: '[data-test-route-agenda-minutes-editor-save]',
     },
   },
