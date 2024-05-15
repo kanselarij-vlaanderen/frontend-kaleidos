@@ -4,7 +4,7 @@
 
 // Variables
 
-$say-toolbar-background: var(--au-white);
+// $say-toolbar-background: var(--au-white);
 $say-editor-background: var(--au-white);
 $say-editor-padding: 1rem;
 $say-paper-min-height: 120rem;
@@ -31,6 +31,15 @@ $say-editor-border-radius: $au-input-border-radius;
 @import 'ember-rdfa-editor/c-table';
 @import 'ember-rdfa-editor/shame';
 
+ol > li[data-list-marker]::marker {
+  content: attr(data-list-marker);
+  font-variant-numeric: tabular-nums;
+}
+ol > *[data-content-container] > li[data-list-marker]::marker {
+  content: attr(data-list-marker);
+  font-variant-numeric: tabular-nums;
+}
+
 
 // Overrides
 
@@ -52,31 +61,31 @@ $say-editor-border-radius: $au-input-border-radius;
   }
 }
 
-.say-toolbar {
-  border-bottom-color: $say-editor-border-color;
-  border-top-left-radius: $say-editor-border-radius;
-  border-top-right-radius: $say-editor-border-radius;
-}
+// .say-toolbar {
+//   border-bottom-color: $say-editor-border-color;
+//   border-top-left-radius: $say-editor-border-radius;
+//   border-top-right-radius: $say-editor-border-radius;
+// }
 
-.say-toolbar__group {
-  padding-right: 0;
-  padding-left: 0;
-}
+// .say-toolbar__group {
+//   padding-right: 0;
+//   padding-left: 0;
+// }
 
-.say-toolbar__button,
-.say-dropdown__button {
-  &:focus {
-    outline-offset: -0.3rem;
-  }
-}
+// .say-toolbar__button,
+// .say-dropdown__button {
+//   &:focus {
+//     outline-offset: -0.3rem;
+//   }
+// }
 
-.say-toolbar__button + .say-toolbar__button {
-  border-left-color: $say-editor-border-color;
-}
+// .say-toolbar__button + .say-toolbar__button {
+//   border-left-color: $say-editor-border-color;
+// }
 
-.say-dropdown + .say-toolbar__button {
-  border-left: 0.1rem solid $say-editor-border-color;
-}
+// .say-dropdown + .say-toolbar__button {
+//   border-left: 0.1rem solid $say-editor-border-color;
+// }
 
 .say-container__main {
   border-bottom-right-radius: $say-editor-border-radius;
@@ -155,29 +164,29 @@ $say-editor-border-radius: $au-input-border-radius;
     }
   }
 
-  @mixin decimal-extended-styling($levels, $current-level: 1) {
-    padding-left: 0;
+  // @mixin decimal-extended-styling($levels, $current-level: 1) {
+  //   padding-left: 0;
 
-    > li {
-      &:before {
-        @if $current-level == 1 {
-          min-width: 5.8rem;
-        } @else {
-          min-width: 3.8rem;
-        }
-      }
+  //   > li {
+  //     &:before {
+  //       @if $current-level == 1 {
+  //         min-width: 5.8rem;
+  //       } @else {
+  //         min-width: 3.8rem;
+  //       }
+  //     }
 
-      @if $current-level < $levels {
-        > ol:not([data-list-style]) {
-          @include decimal-extended-styling($levels, $current-level + 1);
-        }
-      }
-    }
-  }
+  //     @if $current-level < $levels {
+  //       > ol:not([data-list-style]) {
+  //         @include decimal-extended-styling($levels, $current-level + 1);
+  //       }
+  //     }
+  //   }
+  // }
 
-  ol[data-list-style='decimal-extended'] {
-    @include decimal-extended-styling(5, 1);
-  }
+  // ol[data-list-style='decimal-extended'] {
+  //   @include decimal-extended-styling(5, 1);
+  // }
 }
 
 .say-container__aside {

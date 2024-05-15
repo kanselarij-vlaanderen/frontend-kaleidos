@@ -51,13 +51,14 @@ import {
 import {
   tableKeymap,
   tableNodes,
-  tablePlugin,
+  tablePlugins,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  listTrackingPlugin,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 
 import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
@@ -66,6 +67,11 @@ export default class WebComponentsRdfaEditor extends Component {
   @service userAgent;
 
   @tracked controller;
+  @tracked plugins = [
+    listTrackingPlugin(),
+    ...tablePlugins,
+    tableKeymap,
+  ];
 
   get sizeClass() {
     if (this.args.size == 'small') return 'wc-rdfa-editor--small';
@@ -73,9 +79,9 @@ export default class WebComponentsRdfaEditor extends Component {
     else return '';
   }
 
-  get plugins() {
-    return [tablePlugin, tableKeymap];
-  }
+  // get plugins() {
+  //   return [tablePlugin, tableKeymap];
+  // }
 
   get browserName() {
     const browser = this.userAgent.browser;
@@ -99,9 +105,9 @@ export default class WebComponentsRdfaEditor extends Component {
         paragraph,
         section_rdfa,
         repaired_block,
-        list_item,
-        ordered_list,
-        bullet_list,
+        list_item: listItemWithConfig({ enableHierarchicalList: true }),
+        ordered_list: orderedListWithConfig({ enableHierarchicalList: true }),
+        bullet_list: bulletListWithConfig({ enableHierarchicalList: true }),
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         heading,
         text,
