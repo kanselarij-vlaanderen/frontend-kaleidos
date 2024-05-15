@@ -460,7 +460,6 @@ function addNewPieceToDecision(oldFileName, file) {
 function addNewPieceToGeneratedDecision(oldFileName) {
   cy.log('addNewPieceToGeneratedDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', '/pieces').as(`createNewPiece_${randomInt}`);
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
   cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 
@@ -481,6 +480,39 @@ function addNewPieceToGeneratedDecision(oldFileName) {
       timeout: 60000,
     });
   cy.log('/addNewPieceToGeneratedDecision');
+}
+
+/**
+ * @description Add a new version to minutes.
+ * @name addNewPieceToGeneratedMinutes
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ */
+function addNewPieceToGeneratedMinutes(oldFileName) {
+  cy.log('addNewPieceToGeneratedMinutes');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('PATCH', '/meetings/*').as(`patchMeetings_${randomInt}`);
+  cy.intercept('GET', '/generate-minutes-report/*').as(`generateReport_${randomInt}`);
+
+  cy.get(document.documentCard.name.value).contains(oldFileName)
+    .parents(document.documentCard.card)
+    .within(() => {
+      cy.get(document.documentCard.actions)
+        .should('not.be.disabled')
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.generateNewPiece).forceClick();
+    });
+
+  cy.wait(`@patchMeetings_${randomInt}`);
+  cy.wait(`@generateReport_${randomInt}`);
+  cy.get(appuniversum.loader).should('not.exist',
+    {
+      timeout: 60000,
+    });
+  cy.get(document.documentCard.versionHistory);
+  cy.log('/addNewPieceToGeneratedMinutes');
 }
 
 /**
@@ -658,6 +690,7 @@ Cypress.Commands.add('addNewPieceToApprovalItem', addNewPieceToApprovalItem);
 Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
 Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
 Cypress.Commands.add('addNewPieceToGeneratedDecision', addNewPieceToGeneratedDecision);
+Cypress.Commands.add('addNewPieceToGeneratedMinutes', addNewPieceToGeneratedMinutes);
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
