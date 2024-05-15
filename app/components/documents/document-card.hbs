@@ -156,7 +156,7 @@
             }}
           >
             {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
-              {{#if this.showAccessLevelPill}}
+              {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
                   @isEditable={{@isEditable}}
@@ -165,7 +165,7 @@
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
                   @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
                 />
-              {{/if}}
+              {{/unless}}
             {{/unless}}
           </Group.Item>
           {{#if this.showSignatureLoader}}

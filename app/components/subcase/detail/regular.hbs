@@ -48,12 +48,13 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
-          {{#if @documentsAreVisible}}
+          {{#if (and @documentsAreVisible (not this.loadAccessLevelPillVisibility.isRunning))}}
             <Documents::DocumentCardList
               @pieces={{@pieces}}
               @onAddPiece={{perform @addPiece}}
               @didDeleteContainer={{@refresh}}
               @isEditable={{true}}
+              @hideAccessLevel={{this.hideAccessLevel}}
             />
           {{else}}
             <div>

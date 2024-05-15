@@ -48,6 +48,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return mayPublish && hasCase && hasPieces;
   }
 
+  get hideAccessLevel() {
+    if (!this.decisionActivity ||
+      ((this.decisionActivity.isRetracted || 
+        this.decisionActivity.isPostponed) &&
+        !this.currentSession.may('view-access-level-pill-when-postponed'))
+    ) {
+      return true;
+    }
+    return false;
+   }
+
   @task
   *loadNewPieces() {
     if (this.previousAgenda) {
