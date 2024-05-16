@@ -1,9 +1,9 @@
-<Auk::Navbar @skin="gray-100" @auto={{true}}>
+<Auk::Navbar @skin="gray-100" @auto={{true}} @border="none">
   <Auk::Toolbar as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
-        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
+        <div class="auk-o-flex auk-o-flex--vertical auk-u-my-2">
+          <div class="auk-o-flex auk-o-flex--vertical-center au-u-flex--wrap">
             <h4
               class="auk-toolbar-complex__title"
               data-test-agenda-header-title
@@ -31,11 +31,19 @@
             {{/if}}
           </div>
           <Agenda::AgendaHeader::PublicationPills @meeting={{@meeting}} />
-          <Agenda::AgendaHeader::AgendaTabs
-            @currentAgenda={{@currentAgenda}}
-            @currentMeeting={{@meeting}}
-          />
         </div>
+      </Group.Item>
+    </Toolbar.Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <Agenda::AgendaHeader::AgendaTabs
+          @currentAgenda={{@currentAgenda}}
+          @currentMeeting={{@meeting}}
+        />
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>

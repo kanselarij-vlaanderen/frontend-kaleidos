@@ -1,85 +1,148 @@
-<Auk::Navbar @skin="gray-200">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <h4 class="auk-h4 auk-u-m-0">
-          {{t "agendaitems-subtitle"}}
-        </h4>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{!-- TODO: this button needs to be displayed in a smaller size --}}
-        <AuButton
-          @skin="link"
-          {{on "click" @toggleShowModifiedOnly}}
-        >
-          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-        </AuButton>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
-<div>
-  {{#if (not @isLoadingNotaGroups)}}
-    {{#each @notaGroups as |agendaitemGroup index|}}
-      {{!-- template-lint-disable simple-unless --}}
-      {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
-        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
-      {{/unless}}
-      {{!-- template-lint-enable simple-unless --}}
-      {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-        <div
-          data-test-agenda-detail-sidebar-sub-item
-          class="vlc-agenda-detail-sidebar__sub-item">
-          <Agenda::AgendaDetail::SidebarItem
-            @agendaitem={{agendaitem}}
-            @isNew={{includes agendaitem @newItems}}
-            @isActive={{eq @activeItem agendaitem}}
-            @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
-          />
-        </div>
-      {{/each}}
-    {{else}}
-      <div class="vlc-agenda-detail-sidebar__no-items-message">
-        <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
-      </div>
-    {{/each}}
-  {{else}}
-    <Auk::Loader @message={{t "agendaitem-grouping-message"}} />
-  {{/if}}
-</div>
+<div class="auk-mobile-sidebar" {{did-insert this.didInsertPanel}}>
+  <Auk::Navbar @skin="gray-200" class="au-u-hidden-from@medium">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton 
+            @skin="naked" 
+            @icon="ordered-list" 
+            @size="small" 
+            class="au-u-padding-left-none" 
+            {{on "click" this.togglePanel}}
+          >
+            {{t "agendaitems-subtitle"}} & {{t "announcements-subtitle"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{!-- TODO: this button needs to be displayed in a smaller size --}}
+          <AuButton
+            @skin="naked"
+            class="au-u-padding-right-none"
+            {{on "click" @toggleShowModifiedOnly}}
+          >
+            {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
 
-<Auk::Navbar @skin="gray-200">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <h4 class="auk-h4 auk-u-m-0">
-          {{t "announcements-subtitle"}}
-        </h4>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
-<div class="auk-u-mb-4">
-  {{#each @announcements as |announcement|}}
-    <div
-      data-test-agenda-detail-sidebar-sub-item
-      class="vlc-agenda-detail-sidebar__sub-item"
-    >
-      <Agenda::AgendaDetail::SidebarItem
-        @agendaitem={{announcement}}
-        @isNew={{includes announcement @newItems}}
-        @isActive={{eq @activeItem announcement}}
-        @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
-      />
+  <div class="auk-mobile-sidebar__panel {{if this.panelOpen 'is-open'}}">
+    <Auk::Navbar @skin="gray-200" class="au-u-hidden-from@medium">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-h4 auk-u-m-0">
+              {{t "agendaitems-subtitle"}} & {{t "announcements-subtitle"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton 
+              @hideText={{true}} 
+              @icon="cross" 
+              @skin="naked" 
+              @size="small" 
+              {{on "click" this.togglePanel}}
+            >
+              <span class="au-u-hidden-visually">Sluit</span>
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Navbar>
+
+    <div class="auk-mobile-sidebar__content">
+      <Auk::Navbar @skin="gray-200">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-h4 auk-u-m-0">
+                {{t "agendaitems-subtitle"}}
+              </h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              {{!-- TODO: this button needs to be displayed in a smaller size --}}
+              <AuButton
+                @skin="link"
+                class="au-u-visible-from@medium"
+                {{on "click" @toggleShowModifiedOnly}}
+              >
+                {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Navbar>
+
+      <div>
+        {{#if (not @isLoadingNotaGroups)}}
+          {{#each @notaGroups as |agendaitemGroup index|}}
+            {{!-- template-lint-disable simple-unless --}}
+            {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
+              <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
+            {{/unless}}
+            {{!-- template-lint-enable simple-unless --}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              <div
+                data-test-agenda-detail-sidebar-sub-item
+                class="vlc-agenda-detail-sidebar__sub-item">
+                <Agenda::AgendaDetail::SidebarItem
+                  @agendaitem={{agendaitem}}
+                  @isNew={{includes agendaitem @newItems}}
+                  @isActive={{eq @activeItem agendaitem}}
+                  @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
+                />
+              </div>
+            {{/each}}
+          {{else}}
+            <div class="vlc-agenda-detail-sidebar__no-items-message">
+              <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
+            </div>
+          {{/each}}
+        {{else}}
+          <Auk::Loader @message={{t "agendaitem-grouping-message"}} />
+        {{/if}}
+      </div>
+
+      <Auk::Navbar @skin="gray-200">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-h4 auk-u-m-0">
+                {{t "announcements-subtitle"}}
+              </h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Navbar>
+      <div class="auk-u-mb-4">
+        {{#each @announcements as |announcement|}}
+          <div
+            data-test-agenda-detail-sidebar-sub-item
+            class="vlc-agenda-detail-sidebar__sub-item"
+          >
+            <Agenda::AgendaDetail::SidebarItem
+              @agendaitem={{announcement}}
+              @isNew={{includes announcement @newItems}}
+              @isActive={{eq @activeItem announcement}}
+              @showFormallyOkStatus={{@currentAgenda.status.isDesignAgenda}}
+            />
+          </div>
+        {{else}}
+          <div class="vlc-agenda-detail-sidebar__no-items-message">
+            <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
+          </div>
+        {{/each}}
+      </div>
+      {{#if this.showLoader}}
+        <WebComponents::LoadingOverlay />
+      {{/if}}
     </div>
-  {{else}}
-    <div class="vlc-agenda-detail-sidebar__no-items-message">
-      <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-announcements-yet"}}</p>
-    </div>
-  {{/each}}
+  </div>
 </div>
-{{#if this.showLoader}}
-  <WebComponents::LoadingOverlay />
-{{/if}}
