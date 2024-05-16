@@ -94,14 +94,14 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
-            <AuButton @skin="naked" {{on "click" @onCancel}}>
+            <AuButton data-test-agenda-check-cancel @skin="naked" {{on "click" @onCancel}}>
               {{t "cancel"}}
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <AuButton @skin="primary" {{on "click" @onSave}}>
+            <AuButton data-test-agenda-check-confirm @skin="primary" {{on "click" @onSave}}>
               {{@saveLabel}}
             </AuButton>
           </Auk::Toolbar::Item>
