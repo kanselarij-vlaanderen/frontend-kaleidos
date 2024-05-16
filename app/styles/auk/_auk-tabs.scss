@@ -373,7 +373,7 @@
   }
 
   &.auk-tabs--vertical {
-    width: 100%;
+    min-width: 100%;
   }
 
   &.auk-tabs--vertical .auk-tabs__tab__link  {
