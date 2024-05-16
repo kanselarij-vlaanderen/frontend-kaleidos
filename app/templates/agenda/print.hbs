@@ -57,11 +57,13 @@
                       @item={{announcement}}
                     />
                   </div>
-                  {{#if announcement.pieces}}
-                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                      @pieces={{announcement.pieces}}
-                    />
-                  {{/if}}
+                  {{#let (await announcement.pieces) as |pieces|}}
+                    {{#if pieces}}
+                      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                        @pieces={{pieces}}
+                      />
+                    {{/if}}
+                  {{/let}}
                 </div>
               {{/each}}
             </div>

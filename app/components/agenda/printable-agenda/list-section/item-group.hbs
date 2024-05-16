@@ -30,12 +30,14 @@
           />
         </div>
       </div>
-      {{#if (await first.pieces)}}
-        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-          @pieces={{first.pieces}}
-          @fileNameMappings={{@fileNameMappings}}
-        />
-      {{/if}}
+      {{#let (await first.pieces) as |pieces|}}
+        {{#if pieces}}
+          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+            @pieces={{pieces}}
+            @fileNameMappings={{@fileNameMappings}}
+          />
+        {{/if}}
+      {{/let}}
     </div>
   {{/let}}
   {{#each (drop 1 @items) as |agendaitem|}}
@@ -46,12 +48,14 @@
             @item={{agendaitem}}
           />
         </div>
-        {{#if (await agendaitem.pieces)}}
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-            @pieces={{agendaitem.pieces}}
-            @fileNameMappings={{@fileNameMappings}}
-          />
-        {{/if}}
+        {{#let (await agendaitem.pieces) as |pieces|}}
+          {{#if pieces}}
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+              @pieces={{pieces}}
+              @fileNameMappings={{@fileNameMappings}}
+            />
+          {{/if}}
+        {{/let}}
       </div>
     </div>
   {{/each}}

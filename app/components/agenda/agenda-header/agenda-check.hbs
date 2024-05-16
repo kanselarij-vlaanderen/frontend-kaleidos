@@ -75,12 +75,14 @@
                           @item={{announcement}}
                         />
                       </div>
-                      {{#if announcement.pieces}}
-                        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                          @pieces={{announcement.pieces}}
-                          @fileNameMappings={{this.fileNameMappings.value}}
-                        />
-                      {{/if}}
+                      {{#let (await announcement.pieces) as |pieces|}}
+                        {{#if pieces}}
+                          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                            @pieces={{pieces}}
+                            @fileNameMappings={{this.fileNameMappings.value}}
+                          />
+                        {{/if}}
+                      {{/let}}
                     </div>
                   {{/each}}
                 </div>
