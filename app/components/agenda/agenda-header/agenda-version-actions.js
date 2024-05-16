@@ -33,6 +33,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @service store;
   @service currentSession;
   @service agendaService;
+  @service documentService;
   @service router;
   @service intl;
   @service toaster;
@@ -328,6 +329,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     try {
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
+      await this.documentService.stampDocuments(this.args.currentAgenda.id);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -389,6 +391,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      await this.documentService.stampDocuments(this.args.currentAgenda.id);
       await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
