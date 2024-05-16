@@ -27,8 +27,6 @@ $calendarWidth: $daysWidth;
 .flatpickr-months {
   .flatpickr-prev-month,
   .flatpickr-next-month {
-    @extend .auk-icon;
-
     top: 8px;
     height: 28px;
     padding: 7px;
@@ -36,10 +34,6 @@ $calendarWidth: $daysWidth;
     border-radius: 50%;
 
     color: $auk-gray-600;
-
-    &:before {
-      @extend %auk-icons-font-style;
-    }
 
     &:hover {
       background-color: $auk-gray-100;
@@ -55,9 +49,7 @@ $calendarWidth: $daysWidth;
   }
 
   .flatpickr-prev-month {
-    &:before {
-      @extend .ki-chevron-left;
-    }
+    @include au-background-icon('chevron-left', 1.4rem);
 
     &.flatpickr-prev-month {
       left: 10px;
@@ -65,9 +57,7 @@ $calendarWidth: $daysWidth;
   }
 
   .flatpickr-next-month {
-    &:before {
-      @extend .ki-chevron-right;
-    }
+    @include au-background-icon('chevron-right', 1.4rem);
 
     &.flatpickr-next-month {
       right: 10px;

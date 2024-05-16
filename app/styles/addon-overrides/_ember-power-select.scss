@@ -194,29 +194,18 @@
   @extend .auk-filter-pill;
 
   flex-direction: row-reverse;
-
   margin: 0;
 
   .ember-power-select-multiple-remove-btn {
-    @extend .auk-icon;
-    @extend .auk-icon--x;
+    @include au-background-icon('cross', 1.8rem);
+    @extend .auk-filter-pill__action;
 
-    &:before {
-      @extend %auk-icons-font-style;
-      @extend .ki-x;
-    }
-
-    // hide text node & re-apply correct color + size in the `&:after` selector below
+    // hide text node & re-apply correct color in the `&:before` selector
     color: transparent;
     font-size: 0;
 
     &:not(:hover) {
       opacity: 1;
-    }
-
-    &:before {
-      color: $auk-gray-600;
-      font-size: 1.8rem;
     }
   }
 }
