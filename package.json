@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.12.9",
+  "version": "6.12.10",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -79,6 +79,7 @@
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-dependency-lint": "^2.0.1",
+    "ember-cli-deprecation-workflow": "^2.2.0",
     "ember-cli-head": "^2.0.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
@@ -155,7 +156,9 @@
     "xml-formatter": "^3.2.0"
   },
   "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1"
+    "babel-plugin-ember-template-compilation": "2.2.1",
+    "prosemirror-transform": "1.8.0",
+    "prosemirror-model": "1.19.4"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"

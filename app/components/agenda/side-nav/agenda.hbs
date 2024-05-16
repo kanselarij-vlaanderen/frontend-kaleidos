@@ -1,7 +1,7 @@
 <Auk::TabExpanded
   data-test-agenda-side-nav-agenda
   @route="agenda.agendaitems"
-  @current-when="agenda.agendaitems"
+  @current-when={{(eq @currentAgenda.id @agenda.id)}} {{!-- as by LinkTo specs, @current-when can also be a boolean, which is needed here --}}
   @models={{array @meeting.id @agenda.id}}
 >
   {{#if @isOpen}}

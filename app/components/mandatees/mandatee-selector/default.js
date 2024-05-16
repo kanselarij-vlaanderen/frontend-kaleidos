@@ -37,8 +37,9 @@ export default class MandateeSelector extends Component {
       undefined,
       this.args.visibleRoles
     );
+    const excludedMandatees = await this.args.excludeMandatees;
     mandateeOptions = mandateeOptions.filter(
-      (mandatee) => !this.args.excludeMandatees?.includes(mandatee)
+      (mandatee) => !excludedMandatees?.includes(mandatee)
     );
 
     return mandateeOptions;

@@ -314,7 +314,7 @@ context('signatures shortlist overview tests', () => {
       .click();
     cy.url().should('include', 'agendapunten');
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
-      .parents('li')
+      .parents('a')
       .invoke('attr', 'class')
       .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
@@ -866,7 +866,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.url().should('include', 'agendapunten');
     cy.url().should('include', 'beslissingen');
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
-      .parents('li')
+      .parents('a')
       .invoke('attr', 'class')
       .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
@@ -905,7 +905,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.url().should('include', 'agenda');
     cy.url().should('include', 'notulen');
     cy.get(agenda.agendaSideNav.agendaName).contains('B')
-      .parents('li')
+      .parents('a')
       .invoke('attr', 'class')
       .should('include', 'auk-tabs__tab__link--active');
     cy.go('back');
