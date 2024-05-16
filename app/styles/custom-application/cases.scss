@@ -58,9 +58,8 @@
 .c-anchor-nav-holder {
   display: flex;
   align-items: start;
-
+  flex-wrap: wrap;
   margin: $au-unit-tiny 0;
-
   color: var(--au-gray-700);
 
   > p {

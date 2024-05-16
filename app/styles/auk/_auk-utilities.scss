@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Kaleidos utilities
+   ========================================================================== */
+
+
+// Utilities
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-cursors';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-dimensions';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-generic';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-print';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-scroll';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-spacer';
+@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-text';
+
+// Custom
+// Hide dropdown text on mobile: exception for the m-header help dropdown
+.auk-u-text-hidden-mobile {
+  @include mq($until:small) {
+    .au-c-button {
+      min-height: 28px;
+    }
+
+    .au-c-dropdown__name {
+      border: 0 !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      height: 1px !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+      position: absolute !important;
+      white-space: nowrap !important;
+      width: 1px !important;
+    }
+  }
+}
+
+// Responsive margin
+.auk-u-responsive-margin {
+  margin: $au-unit-small;
+ 
+  @include mq(medium) {
+    margin: $au-unit;
+  }
+}
+
+// Reset overflow
+.auk-u-overflow-initial {
+  overflow: initial !important;
+}
