@@ -19,6 +19,11 @@ const selectors = {
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     create: '[data-test-agendaitem-decision-create]',
+    edit: {
+      annotation: '[data-test-agendaitem-decision-edit-annotation]',
+      concern: '[data-test-agendaitem-decision-edit-concern]',
+      treatment: '[data-test-agendaitem-decision-edit-treatment]',
+    },
     save: '[data-test-agendaitem-decision-save]',
   },
 

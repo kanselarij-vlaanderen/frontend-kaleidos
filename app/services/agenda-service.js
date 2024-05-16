@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import fetch from 'fetch';
+import { startOfDay } from 'date-fns';
 
 export default class AgendaService extends Service {
   @service store;
@@ -134,12 +135,24 @@ export default class AgendaService extends Service {
       if (latestApprovalSubcase) {
         let ratifiedBy = await latestApprovalSubcase.mandatees;
         ratifiedBy = ratifiedBy?.slice();
-        if (ratifiedBy) {
-          await subcase.ratifiedBy;
-          subcase.ratifiedBy = ratifiedBy;
-          await subcase.save();
-          await subcase.hasMany('ratifiedBy').reload(); // TODO we set the list, so we shouldn't have to reload?
+        // add the current prime minister if not present
+        if (!ratifiedBy) {
+          ratifiedBy = [];
         }
+        const primeMinister = await this.store.queryOne('mandatee', {
+          'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
+          'filter[:lte:start]': startOfDay(new Date()).toISOString(),
+          'filter[:has-no:end]': true,
+          include: 'person,mandate.role',
+        });
+        const ratifiedByIds = ratifiedBy.map((signer) => signer.id);
+        if (!ratifiedByIds.includes(primeMinister.id)) {
+          ratifiedBy.push(primeMinister);
+        }
+        await subcase.ratifiedBy;
+        subcase.ratifiedBy = ratifiedBy;
+        await subcase.save();
+        await subcase.hasMany('ratifiedBy').reload(); // TODO we set the list, so we shouldn't have to reload?
       }
     }
     const url = `/meetings/${meeting.id}/submit`;
