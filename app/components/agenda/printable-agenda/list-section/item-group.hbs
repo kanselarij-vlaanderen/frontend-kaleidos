@@ -33,6 +33,7 @@
       {{#if (await first.pieces)}}
         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
           @pieces={{first.pieces}}
+          @fileNameMappings={{@fileNameMappings}}
         />
       {{/if}}
     </div>
@@ -45,9 +46,10 @@
             @item={{agendaitem}}
           />
         </div>
-        {{#if (await @item.pieces)}}
+        {{#if (await agendaitem.pieces)}}
           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
             @pieces={{agendaitem.pieces}}
+            @fileNameMappings={{@fileNameMappings}}
           />
         {{/if}}
       </div>

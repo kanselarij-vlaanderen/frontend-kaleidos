@@ -40,7 +40,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = false;
   @tracked showConfirmForApprovingAgenda = false;
+  @tracked showAgendaCheck = false;
   @tracked showConfirmForApprovingAgendaAndClosingMeeting = false;
+  @tracked showAgendaCheckWithCloseMeeting = false;
   @tracked showConfirmForClosingMeeting = false;
   @tracked showConfirmForDeletingSelectedAgenda = false;
   @tracked showConfirmForReopeningPreviousAgenda = false;
@@ -290,8 +292,19 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   @action
+  async openAgendaCheck() {
+    this.reloadAgendaitemsData.perform();
+    this.showAgendaCheck = true;
+  }
+
+  @action
   cancelApproveAgenda() {
     this.showConfirmForApprovingAgenda = false;
+  }
+
+  @action
+  cancelAgendaCheck() {
+    this.showAgendaCheck = false;
   }
 
   /**
@@ -343,6 +356,17 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @action
   cancelApproveAgendaAndCloseMeeting() {
     this.showConfirmForApprovingAgendaAndClosingMeeting = false;
+  }
+
+  @action
+  async openAgendaCheckWithCloseMeeting() {
+    this.reloadAgendaitemsData.perform();
+    this.showAgendaCheckWithCloseMeeting = true;
+  }
+
+  @action
+  cancelAgendaCheckWithCloseMeeting() {
+    this.showAgendaCheckWithCloseMeeting = false;
   }
 
   /**
