@@ -52,6 +52,10 @@ context('Testing the application as Minister user', () => {
 
   context('Profile rights checks for agendas/agenda routes', () => {
     // setup for this context -> see profile-admin.spec context
+    const digitalAgendaLinkA = 'vergadering/6639E50648A2200932C2E206/agenda/6639E50748A2200932C2E20A/agendapunten';
+    const digitalAgendaNoMinutesLinkA = 'vergadering/6639E55748A2200932C2E221/agenda/6639E55848A2200932C2E225/agendapunten';
+    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1715070204';
+    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1715070204';
 
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/6374F699D9A98BD0A228855D/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
@@ -69,6 +73,49 @@ context('Testing the application as Minister user', () => {
     it('check agendas route', () => {
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
+    });
+
+    it('check agenda route on open digital agenda', () => {
+      cy.visitAgendaWithLink(digitalAgendaLinkA);
+
+      // Main view - Tabs
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen');
+
+      // Main view - Actions
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions);
+      cy.get(agenda.agendaActions.generateSignedDecisionsBundle).should('not.exist');
+      cy.get(agenda.agendaActions.markDecisionsForSigning).should('not.exist');
+      cy.clickReverseTab('Overzicht'); // close dropdown
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital1);
+      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      cy.get(agenda.agendaitemNav.decisionTab).should('not.exist');
+
+      // Minutes Tab - with minutes - Document Card
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(route.agendaMinutes.currentPieceView).should('not.exist');
+      // Minutes Tab - with minutes - Document Card history
+      cy.get(document.vlDocument.piece).should('not.exist');
+
+      // Minutes Tab - no minutes
+      cy.visitAgendaWithLink(digitalAgendaNoMinutesLinkA);
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(appuniversum.alert.container).contains('Er zijn nog geen notulen voor deze vergadering');
+      cy.get(route.agendaMinutes.createEdit).should('not.exist');
     });
 
     it('check agenda route on open agenda', () => {
@@ -820,10 +867,10 @@ context('Testing the application as Minister user', () => {
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
-      // cy.get(route.agendaitemMinutes.createEdit).click();
-      // cy.get(route.agendaitemMinutes.editor.updateContent).click();
+      // cy.get(route.agendaMinutes.createEdit).click();
+      // cy.get(route.agendaMinutes.editor.updateContent).click();
       // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
-      // cy.get(route.agendaitemMinutes.editor.save).click()
+      // cy.get(route.agendaMinutes.editor.save).click()
       //   .wait('@patchMinutes');
       // cy.get(document.documentCard.name.value)
       //   .invoke('removeAttr', 'target')

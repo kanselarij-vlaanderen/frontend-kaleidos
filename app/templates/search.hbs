@@ -6,26 +6,27 @@
   >
     <AuFormRow class="au-u-3-4">
       <div class="auk-o-flex auk-o-flex--align-baseline">
-        <Auk::Label for="keyword" class="auk-u-mr">
+        <AuLabel for="keyword" class="auk-u-mr">
           {{capitalize (t "keyword")}}
-        </Auk::Label>
+        </AuLabel>
         <Utils::SearchTooltip />
       </div>
       <AuInput
         data-test-route-search-input
-        @width="block"
-        @value={{this.searchTextBuffer}}
         id="keyword"
         placeholder={{t "search-placeholder"}}
+        value={{this.searchTextBuffer}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
       />
     </AuFormRow>
     <AuFormRow class="au-u-margin-top-none au-u-1-4">
       <AuButton
         data-test-route-search-trigger
         @skin="primary"
+        type="submit"
         @icon="search"
         @width="block"
-        type="submit"
       >
         {{t "search"}}
       </AuButton>

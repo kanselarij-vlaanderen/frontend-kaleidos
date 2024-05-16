@@ -13,12 +13,14 @@
       <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
         <div class="au-c-form">
           <AuFormRow>
-            <Auk::Label @required={{true}} @error={{this.showShortTitleError}}>
+            <AuLabel @required={{true}} @error={{this.showShortTitleError}}>
               {{t "short-title"}}
-            </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-short-title
-              @rows="2"
-              @value={{this.shortTitle}}
+            </AuLabel>
+            <AuTextarea
+              data-test-inscription-edit-short-title
+              value={{this.shortTitle}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "shortTitle"))}}
               {{on "focusout" this.enableErrorDisplay}}
             />
             {{#if this.showShortTitleError}}
@@ -30,12 +32,15 @@
             {{/if}}
           </AuFormRow>
           <AuFormRow>
-            <Auk::Label>
+            <AuLabel>
               {{t "long-title"}}
-            </Auk::Label>
-            <Auk::Textarea data-test-inscription-edit-long-title
-              @rows="4"
-              @value={{this.longTitle}}
+            </AuLabel>
+            <AuTextarea
+              data-test-inscription-edit-long-title
+              rows="4"
+              value={{this.longTitle}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "longTitle"))}}
             />
           </AuFormRow>
         </div>

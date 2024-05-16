@@ -46,7 +46,8 @@ async function generateBetreft(
 ) {
   const documentsWithoutBijlageTerInzage = await Promise.all(documents.map(async (document) => {
     const documentContainer = await document.documentContainer;
-    const type = await documentContainer.type;
+    // it is possible to concurrently change the type, need to reload just in case
+    const type = await documentContainer.belongsTo('type').reload();
     if (type?.uri === CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
       return null;
     }

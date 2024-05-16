@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Service, { inject as service } from '@ember/service';
-import { A } from '@ember/array';
+import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';
 import { later } from '@ember/runloop';
@@ -9,22 +9,22 @@ import { action } from '@ember/object';
 export default class SystemAlertService extends Service {
   @service store;
 
-  @tracked alerts = A([]);
+  @tracked alerts = new TrackedArray([]);
 
   updateInterval = 60 * 1000;
 
   get currentAlerts() {
     const now = new Date();
-    return A(this.alerts.filter((alert) => alert.beginDate < now && alert.endDate > now));
+    return this.alerts.filter((alert) => alert.beginDate < now && alert.endDate > now);
   }
 
   get futureAlerts() {
     const now = new Date();
-    return A(this.alerts.filter((alert) => alert.beginDate > now));
+    return this.alerts.filter((alert) => alert.beginDate > now);
   }
 
   get unconfirmedAlerts() {
-    return A(this.currentAlerts.filter((alert) => !alert.confirmed));
+    return this.currentAlerts.filter((alert) => !alert.confirmed);
   }
 
   constructor() {
@@ -70,6 +70,6 @@ export default class SystemAlertService extends Service {
     );
     prevConfirmedAlerts.setEach('confirmed', true);
 
-    this.alerts = A(alerts);
+    this.alerts = alerts;
   }
 }

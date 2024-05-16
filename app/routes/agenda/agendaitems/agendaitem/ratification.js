@@ -7,12 +7,13 @@ export default class RatificationAgendaitemAgendaitemsAgendaRoute extends Route 
 
   model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    return this.store.findRecord('agendaitem', agendaItem.id, {
+    return this.store.queryOne('agendaitem', {
+      'filter[:id:]': agendaItem.id,
       include: [
         'agenda-activity',
         'agenda-activity.subcase',
         'agenda-activity.subcase.type',
-        'agenda-activity.subcase.mandatees',
+        'agenda-activity.subcase.ratified-by',
       ].join(','),
     });
   }

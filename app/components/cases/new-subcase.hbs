@@ -46,31 +46,34 @@
           </AuFormRow>
         </div>
         <AuFormRow>
-          <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+          <AuLabel for="new-subcase-confidential">{{t "limited-access"}}</AuLabel>
           <AuToggleSwitch
             data-test-new-subcase-confidential
-            @checked={{this.confidential}}
             id="new-subcase-confidential"
+            @checked={{this.confidential}}
+            @onChange={{set this "confidential"}}
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-          <Auk::Textarea
+          <AuLabel>{{t "name-subcase"}}</AuLabel>
+          <AuTextarea
             data-test-new-subcase-shorttitle
-            @rows="2"
-            @value={{this.shortTitle}}
+            value={{this.shortTitle}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "shortTitle"))}}
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-          <Auk::Textarea
+          <AuLabel>{{t "title-subcase"}}</AuLabel>
+          <AuTextarea
             data-test-new-subcase-longtitle
-            @rows="4"
-            @value={{this.title}}
+            value={{this.title}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "title"))}}
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+          <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
           <Utils::ModelSelector
             data-test-new-subcase-procedure-step
             @modelName="subcase-type"
@@ -83,7 +86,7 @@
           </Utils::ModelSelector>
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+          <AuLabel>{{t "subcase-name"}}</AuLabel>
           <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small auk-input-group--w-large">
             {{#if (not this.isEditing)}}
               <Utils::ModelSelector
@@ -109,9 +112,10 @@
               </AuButton>
             {{else}}
               <AuInput
-                @width="block"
-                @value={{this.subcaseName}}
                 id="subcaseNameId"
+                value={{this.subcaseName}}
+                @width="block"
+                {{on "input" (pick "target.value" (set this "subcaseName"))}}
               />
               <AuButton
                 @skin="naked"

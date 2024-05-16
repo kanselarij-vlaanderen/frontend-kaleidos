@@ -1,4 +1,6 @@
+{{!-- template-lint-disable require-context-role --}}
 <AuDropdown
+  data-test-route-agenda-minutes-editor-versions-dropdown
   @title={{this.labelForVersion this.selectedVersion}}
   @alignment="left"
   @skin="naked"
@@ -22,3 +24,4 @@
     </AuButton>
   {{/each}}
 </AuDropdown>
+{{!-- template-lint-enable require-context-role --}}

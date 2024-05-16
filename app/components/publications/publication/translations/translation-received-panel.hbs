@@ -13,6 +13,7 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
+          {{!-- template-lint-disable require-context-role --}}
           <AuDropdown
             data-test-translation-received-panel-dropdown
             @icon="three-dots"
@@ -37,6 +38,7 @@
               {{t "edit-2"}}
             </AuButton>
           </AuDropdown>
+          {{!-- template-lint-enable require-context-role --}}
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

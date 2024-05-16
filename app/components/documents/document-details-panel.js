@@ -123,13 +123,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
-      const derivedFile = yield oldFile.derived;
+      // oldFile may not exist in rare cases where file is missing/not automatically generated, you should be able to replace
+      const derivedFile = yield oldFile?.derived;
       if (derivedFile) {
         oldFile.derived = null;
         this.replacementSourceFile.derived = derivedFile;
         yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
       }
-      yield oldFile.destroyRecord();
+      yield oldFile?.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import sanitizeHtml from 'sanitize-html';
-import merge from 'lodash/merge';
+import assign from 'lodash/merge';
 import { isPresent } from '@ember/utils';
 
 const additionalAllowedTags = ['del'];
@@ -30,7 +30,7 @@ export default class SanitizeHtmlComponent extends Component {
   get sanitizedValue() {
     const options = this.args.options || {};
     options.allowedTags = isPresent(options.allowedTags) ? options.allowedTags : sanitizeHtml.defaults.allowedTags.concat(additionalAllowedTags); // add more tags to the default allowed tags
-    options.allowedAttributes = isPresent(options.allowedAttributes) ? options.allowedAttributes : merge(sanitizeHtml.defaults.allowedAttributes, additionalAllowedAttributes); // add more attributes to the default allowed attributes
+    options.allowedAttributes = isPresent(options.allowedAttributes) ? options.allowedAttributes : assign(sanitizeHtml.defaults.allowedAttributes, additionalAllowedAttributes); // add more attributes to the default allowed attributes
     const value = Array.isArray(this.args.value) ? this.args.value.join(' - ') : this.args.value || '';
     return sanitizeHtml(value, options) || '';
   }

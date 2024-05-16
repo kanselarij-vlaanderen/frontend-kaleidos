@@ -147,11 +147,6 @@ export default class SendToVpModalComponent extends Component {
   }
 
   @action
-  onChangeComment(event) {
-    this.comment = event.target.value;
-  }
-
-  @action
   togglePieceSelection(pieceDescription) {
     let index = -1;
     for (let i = 0; i < this.piecesToBeSent.length; i++) {

@@ -139,6 +139,7 @@ export default class SignaturesDecisionsController extends Controller {
     const piece = await pieceOrPromise;
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[treatment][decision-activity][report][:id:]' : piece.id,
+      'filter[:has-no:next-version]': 't',
     });
     return agendaitem;
   }
@@ -185,7 +186,7 @@ export default class SignaturesDecisionsController extends Controller {
 
   @action
   async openSidebarSingleItem(signFlow, piece) {
-
+    // TODO, this is happening async, so links can point to the wrong piece or agenda when we are switching between 2
     this.clearSidebarContentMultiItem();
     this.signFlow = await signFlow;
     this.piece = await piece;

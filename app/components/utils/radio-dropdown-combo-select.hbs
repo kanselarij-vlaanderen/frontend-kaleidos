@@ -3,7 +3,7 @@
   class="auk-u-mb-2"
   as |Group|
 >
-  {{#each this.radioOptions as |opt index|}}
+  {{#each this.radioOptions as |opt|}}
     <Group.Radio
       data-test-radio-dropdown-input
       @value={{get opt this.radioLabelKey}}

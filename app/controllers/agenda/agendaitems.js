@@ -3,12 +3,11 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, lastValue } from 'ember-concurrency';
+import { task, lastValue, all, animationFrame } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
-  AgendaitemGroup,
+  AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { all, animationFrame } from 'ember-concurrency';
 
 export default class AgendaAgendaitemsController extends Controller {
   queryParams = [
@@ -24,7 +23,7 @@ export default class AgendaAgendaitemsController extends Controller {
       },
     },
   ];
-
+  
   @service store;
   @service router;
   @service intl;
@@ -123,10 +122,10 @@ export default class AgendaAgendaitemsController extends Controller {
         currentAgendaitemGroup &&
         (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
       ) {
-        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
+        currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }
