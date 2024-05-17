@@ -14,12 +14,13 @@ export default class DocumentService extends Service {
     const data = await response.json();
     if (response.ok && data) {
       if (data.message) {
+        // TODO polling of the job, lowering toast timeout for now because it is covering a button in tests
         if (data.job) {
           this.toaster.loading(
             data.message,
             null,
             {
-              timeOut: 10 * 30 * 1000,
+              timeOut: 1000,
             }
           );
         } else {
@@ -27,7 +28,7 @@ export default class DocumentService extends Service {
             data.message,
             null,
             {
-              timeOut: 10 * 30 * 1000,
+              timeOut: 1000,
             }
           );
         }

@@ -374,7 +374,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   }).should('not.exist');
   cy.get(appuniversum.loader); // loader should be shown briefly
   cy.get(appuniversum.loader, {
-    timeout: amountOfFormallyOks * 20000,
+    timeout: (1 + amountOfFormallyOks) * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }

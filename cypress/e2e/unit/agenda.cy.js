@@ -108,10 +108,12 @@ context('Agenda tests', () => {
     cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(agenda.agendaCheck.confirm).click();
     cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
 
     cy.setAllItemsFormallyOk(1);
     // alert message no longer exists after agendaitems are formally ok
