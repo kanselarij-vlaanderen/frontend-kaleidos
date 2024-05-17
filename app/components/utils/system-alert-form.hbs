@@ -1,6 +1,6 @@
 <div class="au-c-form">
   <AuFormRow data-test-system-alert-form-begin-date>
-    <Auk::Label>{{t "start-date"}}</Auk::Label>
+    <AuLabel>{{t "start-date"}}</AuLabel>
     <Auk::Datepicker
       @enableTime={{true}}
       @date={{this.beginDate}}
@@ -8,7 +8,7 @@
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-end-date>
-    <Auk::Label>{{t "end-date"}}</Auk::Label>
+    <AuLabel>{{t "end-date"}}</AuLabel>
     <Auk::Datepicker
       @enableTime={{true}}
       @date={{this.endDate}}
@@ -16,23 +16,25 @@
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-title>
-    <Auk::Label>{{t "title"}}</Auk::Label>
+    <AuLabel>{{t "title"}}</AuLabel>
     <AuInput
+      value={{this.alert.title}}
       @width="block"
-      @value={{this.alert.title}}
+      {{on "input" (pick "target.value" (set this "alert.title"))}}
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-message>
-    <Auk::Label id="system-message">{{t "system-message"}}</Auk::Label>
-    <Textarea
+    <AuLabel for="system-message">{{t "system-message"}}</AuLabel>
+    <AuTextarea
+      id="system-message"
       rows="2"
-      class="auk-textarea"
-      aria-labelledby="system-message"
-      @value={{this.alert.message}}
+      value={{this.alert.message}}
+      @width="block"
+      {{on "input" (pick "target.value" (set this "alert.message"))}}
     />
   </AuFormRow>
   <AuFormRow data-test-system-alert-form-severity>
-    <Auk::Label>{{t "severity"}}</Auk::Label>
+    <AuLabel>{{t "severity"}}</AuLabel>
     <Utils::ModelSelector
       @modelName="alert-type"
       @searchField="label"

@@ -1,6 +1,6 @@
 <Auk::Navbar @skin="gray-100">
   <Auk::Toolbar @auto={{true}} as |Toolbar|>
-    <Toolbar.Group @position="left" as |Group|>
+    <Toolbar.Group @position="left" class="au-u-visible-from@small" as |Group|>
       <Group.Item>
         <h1 data-test-cases-header-title class="auk-toolbar__title">
           {{t "cases"}}
@@ -8,7 +8,7 @@
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
-      <Group.Item class="auk-o-flex">
+      <Group.Item class="auk-o-flex au-u-padding-tiny">
         {{#if this.filterText}}
           <AuButton
             data-test-cases-header-clear-filter
@@ -22,12 +22,12 @@
         {{/if}}
         <AuInput
           data-test-cases-header-filter-input
-          @width="block"
-          @icon="search"
-          value={{this.filterText}}
           placeholder={{t "search-case-title"}}
           autocomplete="off"
-          {{on "input" (perform this.debouncedSetFilter)}}
+          value={{this.filterText}}
+          @width="block"
+          @icon="search"
+          {{on "input" this.onInputFilter}}
         />
       </Group.Item>
       {{#if (user-may "manage-cases")}}

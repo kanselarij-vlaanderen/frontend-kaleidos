@@ -314,22 +314,19 @@ export default class AgendaMinutesController extends Controller {
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
-    let newName;
-    try {
-      newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
-        (await (await minutes.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = minutes.name;
-    }
-
+    const accessLevel = await minutes.accessLevel;
+    const container = await minutes.documentContainer;
+    const pieces = await container.pieces;
+    const newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
+      pieces.length + 1
+    );
     const newVersion = this.store.createRecord('minutes', {
       name: newName,
       created: new Date(),
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
-      documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel,
+      documentContainer: container,
+      accessLevel: accessLevel,
     });
 
     await newVersion.save();
@@ -349,6 +346,14 @@ export default class AgendaMinutesController extends Controller {
     await this.signatureService.markNewPieceForSignature(minutes, newVersion, null, this.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
+
+    // TODO KAS-4654 unset meeting on old minutes to prevent many in a one-to-one
+    minutes.minutesForMeeting = null;
+    await minutes.belongsTo('file').reload(); // make sure we have the latest file
+    // nextVersion should be set correctly by setting the inverse, no reload needed
+    // any chance we need to reload the pieceParts here? We will possibly concurrently overwrite them
+    await minutes.save();
+    await this.meeting.belongsTo('minutes').reload();
 
     this.refresh();
   });

@@ -4,28 +4,34 @@
   @onSetFilter={{this.setCaseFilter}}
   @caseFilter={{this.caseFilter}}
 />
-<AuMainContainer class="l-search-container" as |m|>
+<AuMainContainer class="l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
   <m.sidebar>
     <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
-          <Search::DateRangeFilter
-            @dateFrom={{this.dateFrom}}
-            @dateTo={{this.dateTo}}
-            @onDateFromChange={{this.setDateFrom}}
-            @onDateToChange={{this.setDateTo}}
-            @onDateFromClear={{set this "dateFrom" undefined}}
-            @onDateToClear={{set this "dateTo" undefined}}
-          />
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "submitter"}}</Auk::Label>
-            <Search::MinisterFilter
-              @selected={{this.submitters}}
-              @onChange={{set this "submitters"}}
-              @showPastMinisters={{true}}
+      <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+        <Auk::MobileFilters
+          @toggleLabel="Filters"
+          @toggleIcon="filter"
+          @onToggle={{this.onToggleFilters}}
+        >
+          <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+            <Search::DateRangeFilter
+              @dateFrom={{this.dateFrom}}
+              @dateTo={{this.dateTo}}
+              @onDateFromChange={{this.setDateFrom}}
+              @onDateToChange={{this.setDateTo}}
+              @onDateFromClear={{set this "dateFrom" undefined}}
+              @onDateToClear={{set this "dateTo" undefined}}
             />
+            <div class="au-c-card au-o-box au-o-box--small">
+              <AuLabel>{{t "submitter"}}</AuLabel>
+              <Search::MinisterFilter
+                @selected={{this.submitters}}
+                @onChange={{set this "submitters"}}
+                @showPastMinisters={{true}}
+              />
+            </div>
           </div>
-        </div>
+        </Auk::MobileFilters>
       </div>
     </div>
   </m.sidebar>
@@ -143,10 +149,10 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@medium">
               {{t "amount-per-page"}}
             </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@small">
               <WebComponents::AuPageSize
                 @selectedSize={{this.size}}
                 @onChange={{fn (mut this.size)}}

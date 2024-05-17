@@ -97,9 +97,10 @@
       >
         <h4 class="auk-h4">{{t "annotation"}}</h4>
         <AuInput
-          @width="block"
-          @value={{mut this.editorValueAnnotatie}}
           id="decisionAnnotation"
+          value={{this.editorValueAnnotatie}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "editorValueAnnotatie"))}}
         />
 
         <h4 class="auk-h4 au-u-padding-top">{{t "concerns"}}</h4>
@@ -182,9 +183,10 @@
           {{#if (and this.isEditingAnnotation this.mayEditDecisionReport)}}
             <h4 class="auk-h4">{{t "annotation"}}</h4>
             <AuInput
-              @width="block"
-              @value={{mut this.editorValueAnnotatie}}
               id="decisionAnnotation"
+              value={{this.editorValueAnnotatie}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "editorValueAnnotatie"))}}
             />
             <Auk::Toolbar>
               <Auk::Toolbar::Group @position="left">
@@ -225,6 +227,7 @@
                 }}
                   <Group.Item>
                     <AuButton
+                      data-test-agendaitem-decision-edit-annotation
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
@@ -305,7 +308,7 @@
                 }}
                   <Group.Item>
                     <AuButton
-                      data-test-agendaitem-decision-create
+                      data-test-agendaitem-decision-edit-concern
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"
@@ -386,7 +389,7 @@
                 }}
                   <Group.Item>
                     <AuButton
-                      data-test-agendaitem-decision-create
+                      data-test-agendaitem-decision-edit-treatment
                       @skin="naked"
                       @icon="pencil"
                       @iconAlignment="left"

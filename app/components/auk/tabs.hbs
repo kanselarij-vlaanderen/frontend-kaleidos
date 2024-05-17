@@ -1,7 +1,46 @@
-<ul role="tablist" class="auk-tabs {{this.reversed}}" ...attributes>
+{{#if this.responsive}}
+<div {{did-insert this.didInsertAukTabs}} class="auk-tabs-holder {{this.responsiveBreakpoint}} {{this.verticalHolder}}">
+  <AuButton
+    {{this.reference}}
+    aria-haspopup="true"
+    aria-expanded="{{if this.dropdownOpen 'true' 'false'}}"
+    class="auk-tabs-trigger "
+    @skin="naked"
+    type="button"
+    {{on "click" this.toggleDropdown}}
+  >
+    {{#unless this.verticalHolder}}
+    <AuIcon @icon="drag-handle" @iconAlignment="left" />
+    {{/unless}}
+    {{this.activeRouteName}}
+    {{#if this.verticalHolder}}
+      <AuIcon @icon="chevron-down" @iconAlignment="left" />
+    {{/if}}
+  </AuButton>
+  <ul role="tablist" class="auk-tabs {{this.reversed}} {{this.vertical}} {{this.responsive}} {{if this.dropdownOpen 'is-open'}}" ...attributes>
+    {{#if this.useTabExpanded}}
+      {{yield
+        (hash
+          Tab=(component "auk/tab-expanded")
+        )
+      }}
+    {{else}}
+      {{yield
+        (hash
+          Tab=(component "auk/tab")
+        )
+      }}
+    {{/if}}
+  </ul>
+</div>
+{{else}}
+<ul role="tablist" class="auk-tabs {{this.reversed}} {{this.vertical}} {{this.responsive}} {{if this.dropdownOpen 'is-open'}}" ...attributes>
   {{yield
     (hash
-      Tab=(component "auk/tab")
+      Tab=(component "auk/tab-expanded")
     )
   }}
 </ul>
+{{/if}}
+
+

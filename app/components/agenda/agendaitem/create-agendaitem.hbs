@@ -23,13 +23,13 @@
               <Auk::Toolbar::Item class="auk-u-maximize-width">
                 <AuInput
                   data-test-create-agendaitem-input={{true}}
-                  @icon="search"
-                  @width="block"
-                  @value={{this.filter}}
-                  @disabled={{this.showPostponed}}
                   id="searchId"
                   placeholder={{t "search-placeholder"}}
-                  {{on "input" (perform this.searchTask)}}
+                  value={{this.filter}}
+                  @icon="search"
+                  @width="block"
+                  @disabled={{this.showPostponed}}
+                  {{on "input" this.onInputFilter}}
                 />
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
@@ -93,10 +93,10 @@
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>
               <Auk::Toolbar::Group @position="right">
-                <Auk::Toolbar::Item>
+                <Auk::Toolbar::Item class="au-u-visible-from@medium">
                   {{t "amount-per-page"}}
                 </Auk::Toolbar::Item>
-                <Auk::Toolbar::Item>
+                <Auk::Toolbar::Item class="au-u-visible-from@small">
                   <WebComponents::AuPageSize
                     @selectedSize={{this.size}}
                     @onChange={{this.selectSize}}

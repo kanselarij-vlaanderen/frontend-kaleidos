@@ -1,6 +1,5 @@
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
-import { A } from '@ember/array';
 import generateReportName from './generate-report-name';
 
 /**
@@ -156,18 +155,18 @@ export class AgendaitemGroup {
 
   /**
    * Create an AgendaitemGroup.
-   * @param {EmberArray} mandatees - The group of mandatees.
+   * @param {Array} mandatees - The group of mandatees.
    * @param {Agendaitem} firstAgendaItem - A first agenda-item to initialize the list of items with.
    */
   constructor(mandatees, firstAgendaItem) {
     this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
-    this.agendaitems = A([firstAgendaItem]);
+    this.agendaitems = [firstAgendaItem];
   }
 
   static sortedMandatees(mandatees) {
     // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.slice());
+    const copiedMandatees = mandatees.slice();
     return copiedMandatees.sort((m1, m2) => m1.priority - m2.priority);
   }
 

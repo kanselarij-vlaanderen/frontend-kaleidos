@@ -334,8 +334,12 @@
 >
   <:body>
     {{#if this.newPiece}}
-      <Auk::Label>{{t "name"}}</Auk::Label>
-      <AuInput @width="block" @value={{this.newPiece.name}} />
+      <AuLabel>{{t "name"}}</AuLabel>
+      <AuInput
+        value={{this.newPiece.name}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "newPiece.name"))}}
+      />
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}

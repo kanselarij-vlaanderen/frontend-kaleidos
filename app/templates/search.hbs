@@ -6,66 +6,74 @@
   >
     <AuFormRow class="au-u-3-4">
       <div class="auk-o-flex auk-o-flex--align-baseline">
-        <Auk::Label for="keyword" class="auk-u-mr">
+        <AuLabel for="keyword" class="auk-u-mr">
           {{capitalize (t "keyword")}}
-        </Auk::Label>
+        </AuLabel>
         <Utils::SearchTooltip />
       </div>
       <AuInput
         data-test-route-search-input
-        @width="block"
-        @value={{this.searchTextBuffer}}
         id="keyword"
         placeholder={{t "search-placeholder"}}
+        value={{this.searchTextBuffer}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "searchTextBuffer"))}}
       />
     </AuFormRow>
     <AuFormRow class="au-u-margin-top-none au-u-1-4">
       <AuButton
         data-test-route-search-trigger
         @skin="primary"
+        type="submit"
         @icon="search"
         @width="block"
-        type="submit"
       >
         {{t "search"}}
       </AuButton>
     </AuFormRow>
   </form>
 </Auk::Navbar>
-<AuMainContainer class="l-search-container au-u-background-gray-100" as |m|>
+<AuMainContainer class="au-u-background-gray-100 l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
   <m.sidebar>
-    <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <Search::Navigation />
-        <div
-          id="search-subroute-filters-area"
-          class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
-        >
-          <Search::DateRangeFilter
-            @dateFrom={{this.dateFrom}}
-            @dateTo={{this.dateTo}}
-            @onDateFromChange={{this.setDateFrom}}
-            @onDateToChange={{this.setDateTo}}
-            @onDateFromClear={{set this "dateFrom" undefined}}
-            @onDateToClear={{set this "dateTo" undefined}}
-          />
-          <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-minister-filter-container>
-            <Search::MinisterFilter
-              @selected={{this.mandatees}}
-              @onChange={{this.setMandatees}}
-              @showPastMinisters={{true}}
-            />
-          </div>
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Search::GovernmentAreaFilter
-              @selected={{this.governmentAreas}}
-              @onChange={{this.setGovernmentAreas}}
-              @showPastGovernmentAreas={{true}}
-            />
-          </div>
+      <div class="au-c-sidebar auk-u-overflow-initial">
+        <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+          <Search::Navigation />
+
+          <Auk::MobileFilters
+            @toggleLabel="Filters"
+            @toggleIcon="filter"
+            @onToggle={{this.onToggleFilters}}
+          >
+            <div
+              id="search-subroute-filters-area"
+              class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny"
+            >
+              <Search::DateRangeFilter
+                @dateFrom={{this.dateFrom}}
+                @dateTo={{this.dateTo}}
+                @onDateFromChange={{this.setDateFrom}}
+                @onDateToChange={{this.setDateTo}}
+                @onDateFromClear={{set this "dateFrom" undefined}}
+                @onDateToClear={{set this "dateTo" undefined}}
+              />
+              <div class="au-c-card au-o-box au-o-box--small" data-test-route-search-minister-filter-container>
+                <Search::MinisterFilter
+                  @selected={{this.mandatees}}
+                  @onChange={{this.setMandatees}}
+                  @showPastMinisters={{true}}
+                />
+              </div>
+              <div class="au-c-card au-o-box au-o-box--small">
+                <Search::GovernmentAreaFilter
+                  @selected={{this.governmentAreas}}
+                  @onChange={{this.setGovernmentAreas}}
+                  @showPastGovernmentAreas={{true}}
+                />
+              </div>
+            </div>
+          </Auk::MobileFilters>
         </div>
       </div>
-    </div>
   </m.sidebar>
   <m.content @scroll={{true}}>
     {{outlet}}

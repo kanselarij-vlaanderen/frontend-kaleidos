@@ -85,6 +85,7 @@
   top: 100%;
   width: 100%;
   transform: translateY(0.5rem);
+  z-index: 10000; // When using au-modal, the ember power select wormhole is behind the modal so we use the $ember-power-select-dropdown-z-index value from ember-appuniversum here to fix this
 
   border: none;
   border-radius: 0.3rem;
@@ -144,7 +145,7 @@
   padding: 0 1rem;
 
   color: $auk-color-text;
-  font-family: $auk-font-sans-family;
+  font-family: $g-base-font-family;
   font-size: 1.6rem;
   line-height: 3.5rem;
 

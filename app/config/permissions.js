@@ -185,6 +185,7 @@ const groups = [
       'view-all-ongoing-signatures',
       'manage-publication-flows',
       'search-publication-flows',
+      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',

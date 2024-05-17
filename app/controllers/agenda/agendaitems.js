@@ -122,10 +122,10 @@ export default class AgendaAgendaitemsController extends Controller {
         currentAgendaitemGroup &&
         (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
       ) {
-        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
+        currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }

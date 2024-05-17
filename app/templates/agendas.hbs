@@ -1,7 +1,7 @@
 {{page-title (t "agenda-title")}}
 <Auk::Navbar @skin="gray-100">
   <Auk::Toolbar @auto={{true}} as |Toolbar|>
-    <Toolbar.Group @position="left" as |Group|>
+    <Toolbar.Group @position="left" class="au-u-visible-from@small" as |Group|>
       <Group.Item>
         <h2 class="auk-toolbar__title" data-test-route-agendas-title>
           {{t "agenda-title"}}
@@ -12,7 +12,7 @@
       <Group.Item
         data-test-route-agendas-overview-filter-container
         data-children-count="1"
-        class="auk-o-flex"
+        class="auk-o-flex au-u-padding-tiny"
       >
         {{#if this.filterAgendas}}
           <AuButton
@@ -26,13 +26,13 @@
         {{/if}}
         <AuInput
           data-test-route-agendas-overview-filter-input
-          @width="block"
-          @icon="search"
-          @value={{this.filterAgendas}}
-          @enter={{this.setFilter}}
-          {{on "input" (perform this.debouncedSetFilter)}}
           placeholder={{t "date-example"}}
           autocomplete="off"
+          value={{this.filterAgendas}}
+          @width="block"
+          @icon="search"
+          {{on "input" (perform this.debouncedSetFilter)}}
+          {{on "keydown" this.onEnterKeyFilter}}
         />
       </Group.Item>
       {{#if (user-may "manage-meetings")}}
@@ -207,10 +207,10 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="au-u-visible-from@medium">
         {{t "amount-per-page"}}
       </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="au-u-visible-from@small">
         <WebComponents::AuPageSize
           @selectedSize={{this.sizeAgendas}}
           @onChange={{this.setSizeOption}}
