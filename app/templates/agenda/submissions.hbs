@@ -106,11 +106,12 @@
                     </AuLink>
                   </td>
                 </tr>
-                {{else}}
+                {{/if}}
+                {{#if (eq index 0)}}
                 <tr
                   role="button"
                   class="auk-u-text-align--center auk-table--clickable-rows"
-                  {{on "click" (fn this.navigateToDecisionmakingFlow row)}}
+                  {{on "click" (fn this.navigateToDocuments row)}}
                 >
                   <td>
                     <p data-test-route-cases-overview-row-case-title>
@@ -122,21 +123,31 @@
                     </p>
                   </td>
                   <td>
-                    {{date row.opened}}
+                    Kabinet naam
                   </td>
                   <td>
+                    Co-agendeerder naam
+                  </td>
+                  <td>
+                    {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+                    <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
+                    {{else}}
                     {{#if row.case.isArchived}}
                     <AuPill @size="small">Principiële goedkeuring</AuPill>
                     {{else}}
-                    <AuPill @size="small" @skin="ongoing">Principiële goedkeuring</AuPill>
+                    <AuPill @size="small" @skin="ongoing">Bekrachtiging</AuPill>
                     {{/if}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    <AuPill @size="small" @skin="ongoing">Ingediend</AuPill>
                   </td>
                   <td class="auk-u-text-align--right">
                     <AuLink
                       @skin="button-naked"
                       @icon="chevron-right"
                       @hideText={{true}}
-                      @route="cases.case.subcases-submission"
+                      @route="cases.case.subcases-documents"
                       @model={{row.id}}
                     >
                       {{t "open"}}

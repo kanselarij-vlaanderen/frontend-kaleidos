@@ -50,6 +50,14 @@
       >
         Doorsturen naar het Vlaams Parlement
       </AuButton>
+      <AuButton
+        @skin="link"
+        @alert={{true}}
+        role="menuitem"
+        {{on "click" this.revert}}
+      >
+        Verwijder en terug naar indiener sturen
+      </AuButton>
       {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
         <AuButton
           data-test-agendaitem-controls-action-delete

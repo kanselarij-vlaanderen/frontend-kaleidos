@@ -20,6 +20,12 @@
                 @skin="success"
                 class="au-c-badge--medium"
               />
+            {{else if @newDocuments}}
+              <AuBadge
+                @icon="document-added"
+                @skin="success"
+                class="au-c-badge--medium"
+              />
             {{else}}
               <AuBadge
                 @icon="document"
@@ -43,25 +49,33 @@
               </span>
               {{/if}}
             </div>
-            <LinkTo
-              @route="document"
-              @model={{this.piece.id}}
-              class="auk-h4"
-              data-test-document-card-name-value
-            >
-              {{#if this.loadFiles.isRunning}}
-                <AuLoader @padding="small" />
-              {{else}}
-                {{#let
-                  (or
-                    this.piece.file.derived.extension this.piece.file.extension
-                  )
-                  as |extension|
-                }}
-                  {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                {{/let}}
+            <div class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center">
+              <LinkTo
+                @route="document"
+                @model={{this.piece.id}}
+                class="auk-h4"
+                data-test-document-card-name-value
+              >
+                {{#if this.loadFiles.isRunning}}
+                  <AuLoader @padding="small" />
+                {{else}}
+                  {{#let
+                    (or
+                      this.piece.file.derived.extension this.piece.file.extension
+                    )
+                    as |extension|
+                  }}
+                    {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                  {{/let}}
+                {{/if}}
+              </LinkTo>
+              {{#if @newDocuments}}
+              <span data-test-document-badge-isNew class="auk-o-flex auk-o-flex--spaced au-u-flex--vertical-center auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+                <Auk::ColorBadge @skin="success" />
+                <span>{{t "new-document"}}</span>
+              </span>
               {{/if}}
-            </LinkTo>
+            </div>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
               {{#if this.piece.created}}
@@ -290,6 +304,29 @@
                 {{/if}}
               </AuDropdown>
             </Group.Item>
+          {{/if}}
+          {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+          {{#if @submission}}
+          <Group.Item>
+            <AuDropdown
+              data-test-document-card-actions={{true}}
+              @icon="three-dots"
+              @title={{t "more"}}
+              @hideText={{true}}
+              @disabled={{this.loadPieceRelatedData.isRunning}}
+              @alignment="right"
+            >
+              <AuButton
+                data-test-document-upload-new-piece
+                @skin="link"
+                {{on "click" this.openUploadModal}}
+                role="menuitem"
+              >
+                {{t "new-version"}}
+              </AuButton>
+            </AuDropdown>
+          </Group.Item>
+          {{/if}}
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>

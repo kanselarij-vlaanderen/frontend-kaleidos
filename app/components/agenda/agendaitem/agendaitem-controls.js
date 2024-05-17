@@ -19,6 +19,7 @@ export default class AgendaitemControls extends Component {
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service toaster;
 
   @tracked isVerifying = false;
   @tracked showLoader = false;
@@ -116,6 +117,14 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @action
+  revert() {
+    if (history.length > 1) {
+      history.back();
+    }
+    this.toaster.success('Agendapunt verwijderd en teruggestuurd');
   }
 
   @task

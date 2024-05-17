@@ -121,6 +121,11 @@ export default class AgendaSubmissionsController extends Controller {
   }
 
   @action
+  navigateToDocuments(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases-documents', decisionmakingFlow.id);
+  }
+
+  @action
   navigateAfterCreate(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }

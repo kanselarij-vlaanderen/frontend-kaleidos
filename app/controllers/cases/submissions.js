@@ -121,6 +121,16 @@ export default class CasesSubmissionsController extends Controller {
   }
 
   @action
+  navigateToDemoEdit(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases-submission-edit', decisionmakingFlow.id);
+  }
+
+  @action
+  navigateToDocuments(decisionmakingFlow) {
+    this.router.transitionTo('cases.case.subcases-documents', decisionmakingFlow.id);
+  }
+
+  @action
   navigateAfterCreate(decisionmakingFlow) {
     this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }

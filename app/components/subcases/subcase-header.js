@@ -13,6 +13,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
   @service router;
+  @service toaster;
 
   @tracked isAssigningToOtherAgenda = false;
   @tracked isAssigningToOtherCase = false;
@@ -179,6 +180,30 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @action
   triggerAgendaSubcaseDialog() {
     this.showAgendaModal = !this.showAgendaModal;
+  }
+
+  @action
+  acceptDocuments() {
+    if (history.length > 1) {
+      history.back();
+    }
+    this.toaster.success('Nieuwe documenten aanvaard');
+  }
+
+  @action
+  revert() {
+    if (history.length > 1) {
+      history.back();
+    }
+    this.toaster.success('Indiening teruggestuurd');
+  }
+
+  @action
+  revertStep() {
+    if (history.length > 1) {
+      history.back();
+    }
+    this.toaster.success('Procedurestap verwijderd en teruggestuurd');
   }
 
   @action

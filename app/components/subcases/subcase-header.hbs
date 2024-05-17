@@ -49,14 +49,52 @@
         {{/if}} --}}
         {{#if (not (or (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.vp') (eq @currentRoute 'cases.case.subcases-demo.subcase-demo.publication')))}}
         <Auk::Toolbar::Item>
-          {{#if @submission}}
+          {{#if @documents}}
+            <AuDropdown
+              @skin="primary"
+              @title="Acties"
+              @alignment="right"
+            >
+              <AuButton
+                @skin="link"
+                {{on "click" this.acceptDocuments}}
+                role="menuitem"
+              >
+                Aanvaard nieuwe documenten
+              </AuButton>
+                <AuHr />
+              <AuButton
+                @skin="link"
+                @alert={{true}}
+                {{on "click" this.revert}}
+                role="menuitem"
+              >
+                Stuur terug naar indiener
+              </AuButton>
+            </AuDropdown>
+          {{else if @submission}}
+          <AuDropdown
+              @skin="primary"
+              @title="Acties"
+              @alignment="right"
+            >
             <AuButton
-              @skin="secondary"
+              @skin="link"
               {{on "click" this.triggerAgendaSubcaseDialog}}
               role="menuitem"
             >
               Maak procedurestap en agendeer
             </AuButton>
+              <AuHr />
+            <AuButton
+              @skin="link"
+              @alert={{true}}
+              {{on "click" this.revert}}
+              role="menuitem"
+            >
+              Stuur terug naar indiener
+            </AuButton>
+          </AuDropdown>
           {{else}}
           <AuDropdown
             data-test-subcase-header-actions-dropdown={{true}}
@@ -75,6 +113,14 @@
               {{t "delete-subcase"}}
             </AuButton>
             {{/if}}
+            <AuButton
+              @skin="link"
+              @alert={{true}}
+              {{on "click" this.revertStep}}
+              role="menuitem"
+            >
+              Procedurestap verwijderen en terug naar indiener sturen
+            </AuButton>
             <AuButton
               data-test-subcase-header-action-move-subcase
               @skin="link"
@@ -96,6 +142,31 @@
           {{/if}}
         </Auk::Toolbar::Item>
         {{/if}}
+      {{/if}}
+      {{#if @kabinet}}
+      <Auk::Toolbar::Item>
+        <AuLink
+          @skin="button-secondary"
+          @icon="add"
+          role="menuitem"
+          @route="cases.case.subcases-documents"
+          @model={{@model.id}}
+        >
+          Dien nieuwe documenten in
+        </AuLink>
+      </Auk::Toolbar::Item>
+      {{/if}}
+      {{#if @edit}} 
+      <Auk::Toolbar::Item>
+        <AuLink
+          @skin="button-secondary"
+          @icon="pencil"
+          role="menuitem"
+          @route="cases.case.subcases.add-agendapoint"
+        >
+          Bewerk
+        </AuLink>
+      </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

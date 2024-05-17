@@ -12,7 +12,7 @@
   @onSaveCase={{perform this.saveCase}}
   @currentRoute={{this.currentRoute}}
   @submission={{true}}
-  @submission-detail={{true}}
+  @documents={{true}}
 />
 <div class="auk-panel-layout">
   <div class="auk-panel-layout__main-content">
@@ -24,10 +24,37 @@
         @onProposedForAgenda={{this.refreshSubcases}}
         @currentRoute={{this.currentRoute}}
         @submission={{true}}
+        @documents={{true}}
       />
       <AuBodyContainer @scroll={{true}}>
-        <div class="auk-u-m-4 js-subcase-nav-observer">
-          {{outlet}}
+        <div class="auk-scroll-wrapper">
+          <div class="auk-scroll-wrapper__body">
+            <div class="auk-u-m-4 js-subcase-nav-observer">
+              {{outlet}}
+            </div>
+          </div>
+          {{#if (or (eq this.impersonation.role.label 'Kabinetsdossierbeheerder')(eq this.currentSession.role.label 'Kabinetsdossierbeheerder'))}}
+          <AuToolbar
+            @reverse={{true}}
+            @size="large"
+            @border="top"
+            as |Group|>
+            <Group>
+              <AuLink
+                @skin="button-secondary"
+                @route="cases.case.subcases"
+              >
+                Annuleer
+              </AuLink>
+              <AuLink
+                @skin="button"
+                @route="cases.submissions"
+              >
+                Dien nieuwe documenten in
+              </AuLink>
+            </Group>
+          </AuToolbar>
+          {{/if}}
         </div>
       </AuBodyContainer>
       {{else}}

@@ -53,6 +53,16 @@ Router.map(function() {
           this.route('approval', { path: '/goedkeuring', });
         });
       });
+      this.route('subcases-submission-edit', { path: '/deeldossiers-indiening-edit', }, function() {
+        this.route('subcase-submission-edit', { path: ':subcase_id', }, function() {
+          this.route('approval', { path: '/goedkeuring', });
+        });
+      });
+      this.route('subcases-documents', { path: '/deeldossiers-documenten', }, function() {
+        this.route('subcase-documents', { path: ':subcase_id', }, function() {
+          this.route('approval', { path: '/goedkeuring', });
+        });
+      });
       this.route('subcases-demo', { path: '/deeldossiers-demo', }, function() {
         this.route('subcase-demo', { path: ':subcase_id', }, function() {
           this.route('publication', { path: '/publicatie', });

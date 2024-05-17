@@ -55,6 +55,9 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked vpModal = false;
   @tracked vpSent = false;
 
+  @service currentSession;
+  @service impersonation;
+
   constructor() {
     super(...arguments);
     this.loadCodelists.perform();

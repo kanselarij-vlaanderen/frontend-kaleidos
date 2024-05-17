@@ -1,0 +1,152 @@
+{{#if this.model}}
+  <div id="case">
+    <SubcaseDemo::ApprovalTitlesPanel
+      @subcase={{@model.subcase}}
+      @meeting={{this.meeting}}
+      @allowEditing={{user-may "manage-cases"}}
+      @step="Eerste principiële goedkeuring"
+      @status="Ingediend"
+      @submission={{true}}
+      @kabinet={{true}}
+    />
+  </div>
+  <Mandatees::MandateesPanel
+    @referenceDate={{if
+      this.meeting
+      this.meeting.plannedStart
+      this.model.subcase.created
+    }}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
+    @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
+    @allowEditing={{user-may "manage-cases"}}
+    @onSave={{this.saveMandateeData}}
+  />
+  <Utils::GovernmentAreas::GovernmentAreasPanel
+    @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
+    @governmentAreas={{@model.subcase.governmentAreas}}
+    @allowEditing={{user-may "manage-cases"}}
+    @onSave={{this.saveGovernmentAreas}}
+  />
+
+  {{!-- Documents --}}
+  <div id="documents" class="auk-u-mb-4 c-linked-documents">
+    <Auk::Panel data-test-subcase-description-panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <div class="au-u-flex au-u-flex--spaced-small">
+                <h4 class="auk-panel__title">
+                  {{t "documents"}}
+                </h4>
+              </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body class="c-document-panel">
+        {{#if this.documentsAreVisible}}
+          <Documents::DocumentCardList
+            @pieces={{this.model.pieces}}
+            @onAddPiece={{perform this.addPiece}}
+            @didDeleteContainer={{this.refresh}}
+            @isEditable={{true}}
+          />
+        {{else}}
+          <div>
+            <AuAlert
+              @skin="info"
+              @icon="info-circle"
+              class="au-u-margin-bottom-none"
+            >
+              {{t "no-documents-yet"}}
+            </AuAlert>
+          </div>
+        {{/if}}
+      </Auk::Panel::Body>
+      {{#if (user-may "manage-cases")}}
+      <Auk::Panel::Footer>
+        <AuButton
+          data-test-route-cases---subcase-documents-add
+          @skin="naked"
+          @icon="plus"
+          class="au-u-padding-left-none"
+          {{on "click" this.openPieceUploadModal}}
+        >
+          {{t "documents-add"}}
+        </AuButton>
+      </Auk::Panel::Footer>
+      {{/if}}
+    </Auk::Panel>
+  </div>
+
+  <div id="agenda">
+     <div>
+      <Auk::Panel data-test-subcase-description-panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  Agenderingen
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-bg-alt">
+          <ul class="vlc-status-timeline">
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Ingediend op 23-12-2023
+              </div>
+            </li>
+          </ul>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+  </div>
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deletePiece piece}} />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.model.pieces}}
+    @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}
