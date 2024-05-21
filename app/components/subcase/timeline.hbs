@@ -1,13 +1,27 @@
 {{#unless this.loadSubcasePhases.isRunning}}
   <ul class="vlc-status-timeline">
-    {{#each this.phases as |phase|}}
+    {{#each this.processedPhases as |phase|}}
       <li
         class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
         data-test-subcase-timeline-item
       >
         <div class="vlc-status-timeline__dot"></div>
           <div class="vlc-status-timeline__text">
-            {{this.subcaseTimelineItemText phase}}
+            {{#if phase.beforeText}}
+              {{phase.beforeText}}
+              <AuLink
+                @route="agenda.agendaitems.agendaitem"
+                @models={{array
+                  phase.meetingId
+                  phase.agendaId
+                  phase.agendaitemId
+                }}
+              >
+                {{phase.linkText}}
+              </AuLink>
+            {{else}}
+              {{this.subcaseTimelineItemText phase}}
+            {{/if}}      
           </div>
       </li>
     {{/each}}

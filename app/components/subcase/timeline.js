@@ -15,6 +15,24 @@ export default class SubcaseTimeline extends Component {
     this.loadSubcasePhases.perform();
   }
 
+
+  get processedPhases() {
+    return this.phases.map((phase) => {
+      if (phase.label.includes(this.intl.t('activity-phase-approved-on-agenda'))) {
+        const index = phase.label.indexOf('agenda');
+        const before = phase.label.substring(0, index);
+        const after = phase.label.substring(index, phase.label.length);
+        return {
+          ...phase,
+          beforeText: before,
+          linkText: `${after} ${dateFormat(phase.date, 'dd MMMM yyyy')}`,
+        };
+      } else {
+        return phase;
+      }
+    });
+  }
+
   subcaseTimelineItemText = (timelineItem) => {
     const label = timelineItem.label || '';
     const date = timelineItem.date;
@@ -30,7 +48,7 @@ export default class SubcaseTimeline extends Component {
     const phases = [];
     const sortedAgendaActivities = yield this.store.queryAll('agenda-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
-      sort: 'start-date',
+      sort: '-start-date',
     });
 
     for (const activity of sortedAgendaActivities.slice()) {
@@ -54,6 +72,9 @@ export default class SubcaseTimeline extends Component {
         phases.push({
           label: this.intl.t('activity-phase-approved-on-agenda'),
           date: meeting.plannedStart,
+          meetingId: meeting.id,
+          agendaId: agenda.id,
+          agendaitemId: firstAgendaitemOfActivity.id
         });
         // phase 3: if on approved, what is the decision
         const treatment = yield firstAgendaitemOfActivity.treatment;
@@ -73,6 +94,6 @@ export default class SubcaseTimeline extends Component {
         }
       }
     }
-    this.phases = phases;
+    this.phases = phases.reverse();
   }
 }
