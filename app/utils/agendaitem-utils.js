@@ -180,16 +180,18 @@ export class AgendaitemGroup {
   sortedMandatees;
   mandateeGroupId;
   agendaitems;
+  isBekrachtiging;
 
   /**
    * Create an AgendaitemGroup.
    * @param {Array} mandatees - The group of mandatees.
    * @param {Agendaitem} firstAgendaItem - A first agenda-item to initialize the list of items with.
    */
-  constructor(mandatees, firstAgendaItem) {
+  constructor(mandatees, firstAgendaItem, isBekrachtiging) {
     this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
     this.agendaitems = [firstAgendaItem];
+    this.isBekrachtiging = isBekrachtiging;
   }
 
   static sortedMandatees(mandatees) {

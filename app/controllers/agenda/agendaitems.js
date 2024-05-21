@@ -125,7 +125,11 @@ export default class AgendaAgendaitemsController extends Controller {
         currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem);
+        const subcase = yield this.store.queryOne('subcase', {
+          'filter[agenda-activities][agendaitems][:id:]': agendaitem.id,
+          include: 'type'
+        });
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem, subcase?.isBekrachtiging);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }

@@ -214,6 +214,16 @@ export default class AgendaService extends Service {
             .join('<br/>');
         }
 
+        const subcase = await this.store.queryOne('subcase', {
+          'filter[agenda-activities][agendaitems][:id:]': agendaitem.id,
+          include: 'type'
+        });
+
+        if (subcase && subcase.isBekrachtiging) {
+          agendaitem.set('groupName', this.intl.t('ratification-title'));
+          currentAgendaitemGroupName = this.intl.t('ratification-title');
+        }
+
         if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
           agendaitem.set('groupName', currentAgendaitemGroupName);
