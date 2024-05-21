@@ -6,22 +6,20 @@
   >
     <p class="au-u-medium">
       {{ this.message }}
-      {{#let (await @parliamentFlow.parliamentSubcase.parliamentSubmissionActivities) as |parliamentSubmissionActivities| }}
-        <FormatList
-          @list={{sort-by "startDate" parliamentSubmissionActivities}}
-          @locale="nl-be"
-          as |formattedPart|
+      <FormatList
+        @list={{this.parliamentSubmissionActivities}}
+        @locale="nl-be"
+        as |formattedPart|
+      >
+        {{#let formattedPart.value as |submissionActivity|}}
+        <AuLink
+          @skin="primary"
+          {{on "click" (fn this.showModalFor submissionActivity)}}
         >
-          {{#let formattedPart.value as |submissionActivity|}}
-          <AuLink
-            @skin="primary"
-            {{on "click" (fn this.showModalFor submissionActivity)}}
-          >
-            {{this.formatDate submissionActivity.startDate formattedPart.isLast}}
-          </AuLink>
-          {{/let}}
-        </FormatList>
-      {{/let}}
+          {{this.formatDate submissionActivity.startDate formattedPart.isLast}}
+        </AuLink>
+        {{/let}}
+      </FormatList>
       {{#if @parliamentFlow.isBeingHandledByFP}}
         {{ this.parliamentLinkMessage }}
         <a href="{{this.parliamentLink}}" target="_blank" rel="noopener noreferrer">{{ t "flemish-parliament" }}</a>.
