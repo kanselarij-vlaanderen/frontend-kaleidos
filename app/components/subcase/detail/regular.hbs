@@ -20,6 +20,13 @@
         @onSave={{@saveMandateeData}}
       />
     </div>
+    {{#if @subcase.isBekrachtiging}}
+      <div class="auk-u-mb-2">
+        <Subcase::Ratification
+          @subcase={{@subcase}}
+        />
+      </div>
+    {{/if}}
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @referenceDate={{or
         @meeting.plannedStart
