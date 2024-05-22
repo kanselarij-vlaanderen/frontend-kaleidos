@@ -95,7 +95,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   // agendaitem doc can be marked - has agendaitem and has decisionActivity
-  // decisions can only be marked if it has no agendaitem and has decisionActivity
+  // decisions and ratification can only be marked if it has no agendaitem and has decisionActivity
   // minutes can only be marked if it has no agendaitem and has no decisionActivity and has meeting
   get mayCreateSignMarkingActivity() {
     return (
