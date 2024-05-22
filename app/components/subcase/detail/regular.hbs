@@ -15,10 +15,6 @@
           @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
           @mandatees={{@mandatees}}
           @submitter={{@submitter}}
-          @emptyStateMessage={{if
-            @subcase.isBekrachtiging
-            (t "not-applicable")
-          }}
           @allowEditing={{user-may "manage-cases"}}
           @onSave={{@saveMandateeData}}
         />
