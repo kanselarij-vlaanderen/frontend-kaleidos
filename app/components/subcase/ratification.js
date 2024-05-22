@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
  * @argument subcase
+ * @argument decisionActivity (needed for marking for signing only when on agendaitem view)
  */
 export default class SubcaseRatificationComponent extends Component {
   @service store;
