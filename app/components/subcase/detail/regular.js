@@ -20,7 +20,7 @@ export default class SubcaseDetailRegular extends Component {
       'filter[subcase][:id:]': this.args.subcase.id,
       sort: '-start-date',
     });
-    if (!latestDecisionActivity || 
+    if (latestDecisionActivity && 
       ((latestDecisionActivity.isRetracted || latestDecisionActivity.isPostponed) &&
       !this.currentSession.may('view-access-level-pill-when-postponed'))) {
       this.hideAccessLevel = true;

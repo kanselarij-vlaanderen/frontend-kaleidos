@@ -50,8 +50,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   get hideAccessLevel() {
-    if (!this.decisionActivity ||
-      ((this.decisionActivity.isRetracted || 
+    if (this.decisionActivity &&
+      ((this.decisionActivity.isRetracted ||
         this.decisionActivity.isPostponed) &&
         !this.currentSession.may('view-access-level-pill-when-postponed'))
     ) {
