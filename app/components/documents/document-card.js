@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 import { TrackedArray } from 'tracked-built-ins';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
@@ -252,7 +252,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   }
 
   get sortedPieces() {
-    return sortPieces(this.pieces.slice()).reverse();
+    return sortPieceVersions(this.pieces.slice()).reverse();
   }
 
   get reverseSortedPieces() {

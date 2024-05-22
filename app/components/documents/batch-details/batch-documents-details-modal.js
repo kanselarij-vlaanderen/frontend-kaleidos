@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent} from '@ember/utils';
@@ -56,7 +56,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
     for (const key of documentsByContainer.keys()) {
       const documents = documentsByContainer.get(key);
-      const sortedDocuments = sortPieces(documents);
+      const sortedDocuments = sortPieceVersions(documents);
       documentsByContainer.set(key, sortedDocuments);
     }
 

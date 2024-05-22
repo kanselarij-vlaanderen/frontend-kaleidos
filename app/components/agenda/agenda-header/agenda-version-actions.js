@@ -228,7 +228,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
     });
     yield all(agendaitemNewPieces);
-    this.piecesToDeleteReopenPreviousAgenda = sortPieces(pieces);
+    this.piecesToDeleteReopenPreviousAgenda = yield sortPieces(pieces);
   }
 
   // TODO KAS-2399 could we get rid of this when we reload the model with agendaitems includes?
