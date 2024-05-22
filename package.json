@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.12.9",
+  "version": "6.12.10",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -63,6 +63,7 @@
     "@lblod/ember-rdfa-editor": "git+https://github.com/ValenberghsSven/ember-rdfa-editor.git#23ff47de32382f55c39207b8e3625c8842fc2dae",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
+    "@nullvoxpopuli/ember-composable-helpers": "^5.1.1",
     "@typescript-eslint/parser": "^5.48.2",
     "alphabet": "^1.0.0",
     "broccoli-asset-rev": "^3.0.0",
@@ -90,7 +91,6 @@
     "ember-cli-update": "^1.0.1",
     "ember-click-outside": "^5.0.1",
     "ember-code-snippet": "^3.0.0",
-    "ember-composable-helpers": "^5.0.0",
     "ember-concurrency": "^2.3.7",
     "ember-copy": "^2.0.1",
     "ember-data": "~4.11.3",

@@ -5,7 +5,7 @@
   class="auk-scroll-wrapper"
   @isCollapsed={{false}}
 >
-  <Auk::Navbar @skin="gray-200">
+  <Auk::Navbar @skin="gray-200" class="au-u-visible-from@medium">
     <Auk::Toolbar as |Toolbar|>
       <Toolbar.Group @position="left">
         <AuHeading @level="2" @skin="6">{{t "subcases"}}</AuHeading>
@@ -16,7 +16,8 @@
     </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    <ul>
+    <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small"
+    @expanded={{true}}>
       {{#each this.items as |item|}}
         {{#if (eq item.type "regular")}}
           <Subcases::SideNav::Subcase
@@ -35,6 +36,6 @@
           />
         {{/if}}
       {{/each}}
-    </ul>
+    </Auk::Tabs>
   </div>
 </Auk::Sidebar>

@@ -1,0 +1,28 @@
+<div>
+  <AuButton 
+    aria-haspopup="true"
+    aria-expanded="{{if this.filtersOpen 'true' 'false'}}"
+    @skin="naked" 
+    @size="small" 
+    @icon={{@toggleIcon}} 
+    class="auk-mobile-filters-toggle" 
+    {{on "click" this.toggleFilters}}
+  >
+    {{@toggleLabel}}
+  </AuButton>
+  <div class="auk-mobile-filters-content {{if this.filtersOpen 'is-open'}}">
+    <div class="auk-mobile-filters-header">
+      <AuHeading @level="2" @skin="5">{{@toggleLabel}}</AuHeading>
+      <AuButton 
+        @hideText={{true}} 
+        @icon="cross" 
+        @skin="naked" 
+        @size="small" 
+        {{on "click" this.toggleFilters}}
+      >
+        <span class="au-u-hidden-visually">Sluit</span>
+      </AuButton>
+    </div>
+    {{yield}}
+  </div>
+</div>

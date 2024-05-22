@@ -1,0 +1,32 @@
+/* ==========================================================================
+  auk-pagination
+   ========================================================================== */
+
+.auk-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+  font-size: 1.5rem;
+
+  @include mq($until: medium) {
+    margin: 0;
+  }
+}
+
+.auk-pagination--small,
+.auk-pagination--document { // old occurrence (present inside prototypes?)
+  margin: .75rem 0;
+}
+
+.auk-pagination__list,
+.auk-pagination__size-options {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auk-pagination__element-link--active {
+  font-weight: 500;
+}
