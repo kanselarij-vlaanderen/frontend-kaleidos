@@ -10,10 +10,7 @@ export default class SubcaseVersionsPanel extends Component {
   @service store;
   @service intl;
 
-  @tracked latestDecisionActivity = null;
-  @tracked modelsOfMeetings = [];
   @tracked hasAgendaitems = false;
-  @tracked phases;
 
   constructor() {
     super(...arguments);
