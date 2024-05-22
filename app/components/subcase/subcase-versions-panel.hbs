@@ -15,31 +15,7 @@
       <div class="auk-u-mb-2">
         {{#if this.loadAgendaData.isRunning}}
           <Auk::Loader />
-        {{else if this.modelsOfMeetings}}
-          <div class="au-u-flex au-u-flex--spaced-tiny">
-            <p class="au-u-medium">
-              {{t "is-on-agenda"}}
-
-              {{#each this.modelsOfMeetings as |models index| }}
-                {{#if (eq index (sub this.modelsOfMeetings.length 1))}}
-                {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
-                  <AuLink
-                    @route="agenda.agendaitems.agendaitem"
-                    @models={{array
-                      meeting.id
-                      agenda.id
-                      agendaitem.id
-                    }}
-                  >
-                    {{! prettier-ignore}}
-                    {{date-phrase meeting.plannedStart}}
-                  </AuLink>
-                {{/let}}
-                {{/if}}
-              {{/each}}
-            </p>
-          </div>
-        {{else}}
+        {{else if (not this.hasAgendaitems)}}
           <Auk::EmptyState @message={{t "not-yet-on-agenda"}} />
         {{/if}}
       </div>

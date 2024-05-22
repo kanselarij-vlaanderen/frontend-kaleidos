@@ -705,6 +705,8 @@
   "relevance-score": "Relevantie",
   "activity-phase-proposed-for-agenda": "Ingediend voor agendering op",
   "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
+  "activity-phase-approved-on-agenda-prefix": "Geagendeerd op de",
+  "activity-phase-approved-on-agenda-suffix": "{agenda} van",
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
   "decision-activity-result": "op de agenda van",
   "result-decision": "Resultaat beslissing",
