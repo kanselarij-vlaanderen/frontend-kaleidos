@@ -1,5 +1,5 @@
 <div class="auk-scroll-wrapper__body">
-  <div class="auk-u-m-4">
+  <div class="auk-u-responsive-margin">
     <div id="case" class="auk-u-mb-4">
       {{#if @subcase.isBekrachtiging}}
         <Subcase::BekrachtigingDescriptionPanel @subcase={{@subcase}} />
@@ -8,17 +8,17 @@
       {{/if}}
     </div>
     <div class="auk-u-mb-4">
-      <Mandatees::MandateesPanel
-        @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
-        @mandatees={{@mandatees}}
-        @submitter={{@submitter}}
-        @emptyStateMessage={{if
-          @subcase.isBekrachtiging
-          (t "not-applicable")
-        }}
-        @allowEditing={{user-may "manage-cases"}}
-        @onSave={{@saveMandateeData}}
-      />
+      {{#if @subcase.isBekrachtiging}}
+        <Subcase::Ratification @subcase={{@subcase}} />
+      {{else}}
+        <Mandatees::MandateesPanel
+          @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
+          @mandatees={{@mandatees}}
+          @submitter={{@submitter}}
+          @allowEditing={{user-may "manage-cases"}}
+          @onSave={{@saveMandateeData}}
+        />
+      {{/if}}
     </div>
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @referenceDate={{or

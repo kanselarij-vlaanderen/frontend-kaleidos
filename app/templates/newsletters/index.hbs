@@ -1,7 +1,7 @@
 {{#if (gt this.model.length 0)}}
   <div class="auk-u-maximize-height auk-scroll-wrapper">
     <div class="auk-scroll-wrapper__body">
-      <div class="auk-u-m-8">
+      <div class="auk-u-responsive-margin">
         <KDataTable
           data-test-route-newsletters-data-table
           @hoverable={{true}}
@@ -97,7 +97,7 @@
     </div>
   </div>
 {{else}}
-  <div class="auk-u-m-8">
+  <div class="auk-u-responsive-margin">
     <AuAlert
       @skin="info"
       @icon="info-circle"

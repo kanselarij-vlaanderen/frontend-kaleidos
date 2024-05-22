@@ -1,59 +1,65 @@
+<Auk::Navbar @skin="gray-100" @auto={{true}} @border="none">
+  <Auk::Toolbar as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item>
+        <div class="auk-o-flex auk-o-flex--vertical-center">
+          <h4
+            class="auk-toolbar-complex__title auk-u-text-capitalize"
+            data-test-newsletter-header-overview-title
+          >
+            {{t "newsletter-overview-pdf-name"}}
+            -
+            {{@meeting.kind.label}}
+            {{date @meeting.plannedStart}}
+          </h4>
+        </div>
+      </Group.Item>
+    </Toolbar.Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
-        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4
-              class="auk-toolbar-complex__title auk-u-text-capitalize"
-              data-test-newsletter-header-overview-title
-            >
-              {{t "newsletter-overview-pdf-name"}}
-              -
-              {{@meeting.kind.label}}
-              {{date @meeting.plannedStart}}
-            </h4>
-          </div>
-          <Auk::Tabs @reversed={{true}}>
+        <Auk::Tabs @reversed={{true}} @responsive={{true}} @responsiveBreakpoint="small">
+          <Auk::Tab
+            @route="newsletters"
+            @isHierarchicalBack={{true}}
+          >
+            {{t "all-sessions"}}
+          </Auk::Tab>
+          {{#if (user-may "manage-news-items")}}
             <Auk::Tab
-              @route="newsletters"
-              @isHierarchicalBack={{true}}
+              data-test-newsletter-header-overview-index
+              @route="newsletter.index"
+              @model={{@meeting.id}}
             >
-              {{t "all-sessions"}}
+              {{t "overview"}}
             </Auk::Tab>
-            {{#if (user-may "manage-news-items")}}
-              <Auk::Tab
-                data-test-newsletter-header-overview-index
-                @route="newsletter.index"
-                @model={{@meeting.id}}
-              >
-                {{t "overview"}}
-              </Auk::Tab>
-              <Auk::Tab
-                data-test-newsletter-header-overview-print-draft
-                @route="newsletter.print"
-                @model={{@meeting.id}}
-                @query={{hash showDraft=true}}
-              >
-                {{t "design"}}
-              </Auk::Tab>
-              <Auk::Tab
-                data-test-newsletter-header-overview-print
-                @route="newsletter.print"
-                @model={{@meeting.id}}
-                @query={{hash showDraft=false}}
-              >
-                {{t "definite"}}
-              </Auk::Tab>
-              <Auk::Tab
-                data-test-newsletter-header-overview-nota-updates
-                @route="newsletter.nota-updates"
-              >
-                {{t "newsletter-update-notas"}}
-              </Auk::Tab>
-            {{/if}}
-          </Auk::Tabs>
-        </div>
+            <Auk::Tab
+              data-test-newsletter-header-overview-print-draft
+              @route="newsletter.print"
+              @model={{@meeting.id}}
+              @query={{hash showDraft=true}}
+            >
+              {{t "design"}}
+            </Auk::Tab>
+            <Auk::Tab
+              data-test-newsletter-header-overview-print
+              @route="newsletter.print"
+              @model={{@meeting.id}}
+              @query={{hash showDraft=false}}
+            >
+              {{t "definite"}}
+            </Auk::Tab>
+            <Auk::Tab
+              data-test-newsletter-header-overview-nota-updates
+              @route="newsletter.nota-updates"
+            >
+              {{t "newsletter-update-notas"}}
+            </Auk::Tab>
+          {{/if}}
+        </Auk::Tabs>
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>

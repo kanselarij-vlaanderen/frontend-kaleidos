@@ -5,7 +5,7 @@
   class={{if @isOpen "auk-scroll-wrapper"}}
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}}>
+  <Auk::Navbar @skin="gray-200" @noPadding={{not @isOpen}} class="au-u-visible-from@medium">
     <Auk::Toolbar as |Toolbar|>
       {{#if @isOpen}}
         <Toolbar.Group @position="left">
@@ -33,7 +33,8 @@
     </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    <ul>
+    <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small"
+    @expanded={{true}}>
       {{#each (take 1 @reverseSortedAgendas) as |agenda|}}
         <Agenda::SideNav::Agenda 
           @currentAgenda={{@currentAgenda}}
@@ -42,17 +43,15 @@
           @isOpen={{@isOpen}}
         />
       {{/each}}
-    </ul>
 
-    {{#if (and @isOpen (gt (get @reverseSortedAgendas "length") 1))}}
-      <Auk::Navbar @skin="gray-200" class="auk-u-border-top">
-        <AuHeading @level="3" @skin="functional">
-          {{t "previous-agendas"}}
-        </AuHeading>
-      </Auk::Navbar>
-    {{/if}}
+      {{#if (and @isOpen (gt (get @reverseSortedAgendas "length") 1))}}
+        <div class="au-u-padding-small auk-tabs__divider">
+          <AuHeading @level="3" @skin="functional">
+            {{t "previous-agendas"}}
+          </AuHeading>
+        </div>
+      {{/if}}
 
-    <ul>
       {{#each (drop 1 @reverseSortedAgendas) as |agenda|}}
         <Agenda::SideNav::Agenda 
           @currentAgenda={{@currentAgenda}}
@@ -61,6 +60,6 @@
           @isOpen={{@isOpen}}
         />
       {{/each}}
-    </ul>
+    </Auk::Tabs>
   </div>
 </Auk::Sidebar>

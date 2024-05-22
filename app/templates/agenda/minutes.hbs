@@ -1,6 +1,6 @@
 <div class="auk-panel-layout__main-content">
   <div class="auk-scroll-wrapper__body">
-    <div class="auk-u-m-8">
+    <div class="auk-u-responsive-margin">
       <Auk::Panel>
         <Auk::Panel::Header
           class="{{if this.isEditing 'au-u-background-gray-100'}}"
@@ -88,6 +88,7 @@
               <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-route-agenda-minutes-editor-cancel
                     @skin="naked"
                     @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" (fn (set this "isEditing" false))}}
