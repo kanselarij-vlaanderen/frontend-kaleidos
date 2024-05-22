@@ -191,7 +191,7 @@ export default class AgendaService extends Service {
 
   /* No API */
 
-  async groupAgendaitemsOnGroupName(agendaitems) {
+  async setAgendaitemsGroupname(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async (agendaitem) => {

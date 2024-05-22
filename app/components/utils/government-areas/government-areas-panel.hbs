@@ -33,17 +33,19 @@
       </div>
       <div class="auk-u-responsive-margin auk-u-mb-2 auk-u-mt-2">
         <p><strong>{{t "themes"}}: </strong>
-        {{#if @subcase.parliamentRetrievalActivity.themes}}
-          <FormatList
-            @list={{@subcase.parliamentRetrievalActivity.themes}}
-            @locale="nl-be"
-            as |formattedPart|
-          >
-            {{formattedPart.value}}
-          </FormatList>
-        {{else}}
-          -
-        {{/if}}
+        {{#let (await @subcase.parliamentRetrievalActivity.themes) as |themes|}}
+          {{#if themes}}
+            <FormatList
+              @list={{themes}}
+              @locale="nl-be"
+              as |formattedPart|
+            >
+              {{formattedPart.value}}
+            </FormatList>
+          {{else}}
+            -
+          {{/if}}
+        {{/let}}
         </p>
       </div>
     {{/if}}
