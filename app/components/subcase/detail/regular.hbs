@@ -8,25 +8,22 @@
       {{/if}}
     </div>
     <div class="auk-u-mb-4">
-      <Mandatees::MandateesPanel
-        @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
-        @mandatees={{@mandatees}}
-        @submitter={{@submitter}}
-        @emptyStateMessage={{if
-          @subcase.isBekrachtiging
-          (t "not-applicable")
-        }}
-        @allowEditing={{user-may "manage-cases"}}
-        @onSave={{@saveMandateeData}}
-      />
-    </div>
-    {{#if @subcase.isBekrachtiging}}
-      <div class="auk-u-mb-2">
-        <Subcase::Ratification
-          @subcase={{@subcase}}
+      {{#if @subcase.isBekrachtiging}}
+        <Subcase::Ratification @subcase={{@subcase}} />
+      {{else}}
+        <Mandatees::MandateesPanel
+          @referenceDate={{if @meeting @meeting.plannedStart @subcase.created}}
+          @mandatees={{@mandatees}}
+          @submitter={{@submitter}}
+          @emptyStateMessage={{if
+            @subcase.isBekrachtiging
+            (t "not-applicable")
+          }}
+          @allowEditing={{user-may "manage-cases"}}
+          @onSave={{@saveMandateeData}}
         />
-      </div>
-    {{/if}}
+      {{/if}}
+    </div>
     <Utils::GovernmentAreas::GovernmentAreasPanel
       @referenceDate={{or
         @meeting.plannedStart

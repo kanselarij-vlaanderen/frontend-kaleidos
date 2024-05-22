@@ -13,11 +13,8 @@
 {{!-- TODO do we want agendaitem info when available? --}}
   <Documents::DocumentCard
     @piece={{this.ratification}}
-    {{!-- @agendaitem={{@agendaitem}} --}}
-    {{!-- @decisionActivity={{@decisionActivity}} --}}
-    {{!-- @meeting={{@agendaContext.meeting}} --}}
+    @decisionActivity={{@decisionActivity}}
     @isEditable={{user-may "manage-ratification"}}
-    {{!-- @agendaContext={{@agendaContext}} --}}
     @onAddPiece={{this.attachNewRatificationVersionAsPiece}}
     @didDeleteContainer={{this.didDeleteRatification}}
     @bordered={{false}}
