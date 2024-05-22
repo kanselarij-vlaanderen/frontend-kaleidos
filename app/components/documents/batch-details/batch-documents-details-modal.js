@@ -18,6 +18,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   @service currentSession;
 
   @tracked rows;
+  @tracked reorderableRows;
   @tracked selectedRows = [];
 
   constructor() {
@@ -84,6 +85,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         return row;
       })
     );
+    this.reorderableRows = this.rows.slice();
   }
 
   get areAllSelected() {
@@ -113,7 +115,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
-    yield all(this.rows.map(async (row) => {
+    yield all(this.reorderableRows.map(async (row, index) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
@@ -136,6 +138,10 @@ export default class BatchDocumentsDetailsModal extends Component {
         if (documentContainer.type !== row.documentType) {
           hasChanged = true;
           documentContainer.type = row.documentType;
+        }
+        if (documentContainer.position !== index + 1) {
+          hasChanged = true;
+          documentContainer.position = index + 1;
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
@@ -160,5 +166,10 @@ export default class BatchDocumentsDetailsModal extends Component {
       }
     }));
     this.args.onSave();
+  }
+
+  @action
+  onReorderPieces(rows, _movedRow) {
+    this.reorderableRows = rows;
   }
 }
