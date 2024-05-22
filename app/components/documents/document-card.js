@@ -293,6 +293,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       previousPiece: previousPiece,
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: this.documentContainer,
+      originalName: previousPiece.originalName,
     });
   }
 
