@@ -8,20 +8,20 @@ export default class SubcaseDetailRegular extends Component {
   @service currentSession;
 
   @tracked hideAccessLevel = false;
-
+  @tracked latestDecisionActivity;
   constructor() {
     super(...arguments);
-    this.loadAccessLevelPillVisibility.perform();
+    this.loadLatestDecisionActivity.perform();
   }
 
   @task
-  *loadAccessLevelPillVisibility() {
-    const latestDecisionActivity = yield this.store.queryOne('decision-activity', {
+  *loadLatestDecisionActivity() {
+    this.latestDecisionActivity = yield this.store.queryOne('decision-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       sort: '-start-date',
     });
-    if (latestDecisionActivity && 
-      ((latestDecisionActivity.isRetracted || latestDecisionActivity.isPostponed) &&
+    if (this.latestDecisionActivity &&
+      ((this.latestDecisionActivity.isRetracted || this.latestDecisionActivity.isPostponed) &&
       !this.currentSession.may('view-access-level-pill-when-postponed'))) {
       this.hideAccessLevel = true;
     }
