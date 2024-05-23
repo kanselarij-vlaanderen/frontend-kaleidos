@@ -1,8 +1,25 @@
 import Component from '@glimmer/component';
 import { TrackedArray } from 'tracked-built-ins';
 import { resource, use } from 'ember-resources';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 
 export default class AgendaPrintableAgendaListSectionItemGroupComponent extends Component {
+
+  @tracked isBekrachtiging
+
+  constructor() {
+    super(...arguments);
+    this.loadData.perform();
+  }
+
+  @task
+  *loadData() {
+    const agendaitem = this.args.items.at(0);
+    const agendaActivity = yield agendaitem.agendaActivity;
+    const subcase = yield agendaActivity?.subcase;
+    this.isBekrachtiging = subcase?.isBekrachtiging;
+  }
 
   @use sortedMandateesFromFirst = resource(() => {
     const sortedMandatees = new TrackedArray([]);

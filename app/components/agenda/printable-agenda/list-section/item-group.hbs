@@ -7,23 +7,31 @@
   {{#let (object-at 0 @items) as |first|}}
     <div class="l-printable-agenda__faux-item">
       <div class="auk-u-non-breakable-group@print">
-        {{#let this.sortedMandateesFromFirst as |mandatees|}}
+        {{#if this.isBekrachtiging}}
           <h3
-            class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
-              {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
-          >{{! auk-u-text-decoration-underline }}
-            {{#if mandatees}}
-              {{#each mandatees as |mandatee|}}
-                {{mandatee.title}}
-                {{#if (has-next mandatee mandatees)}}
-                  <br />&
-                {{/if}}
-              {{/each}}
-            {{else}}
-              {{t "no-mandatee-assigned"}}
-            {{/if}}
+              class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header"
+            >
+            {{t "ratification-title"}}
           </h3>
-        {{/let}}
+        {{else}}
+          {{#let this.sortedMandateesFromFirst as |mandatees|}}
+            <h3
+              class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+                {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
+            >{{! auk-u-text-decoration-underline }}
+              {{#if mandatees}}
+                {{#each mandatees as |mandatee|}}
+                  {{mandatee.title}}
+                  {{#if (has-next mandatee mandatees)}}
+                    <br />&
+                  {{/if}}
+                {{/each}}
+              {{else}}
+                {{t "no-mandatee-assigned"}}
+              {{/if}}
+            </h3>
+          {{/let}}
+        {{/if}}
         <div value={{first.number}}>
           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
             @item={{first}}
