@@ -156,14 +156,16 @@
             }}
           >
             {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
-              <AccessLevelPill
-                @accessLevel={{this.piece.accessLevel}}
-                @isEditable={{@isEditable}}
-                @isDraft={{this.isDraftAccessLevel}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-              />
+              {{#unless @hideAccessLevel}}
+                <AccessLevelPill
+                  @accessLevel={{this.piece.accessLevel}}
+                  @isEditable={{@isEditable}}
+                  @isDraft={{this.isDraftAccessLevel}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              {{/unless}}
             {{/unless}}
           </Group.Item>
           {{#if this.showSignatureLoader}}

@@ -51,6 +51,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return mayPublish && hasCase && hasPieces;
   }
 
+  get hideAccessLevel() {
+    if (this.decisionActivity &&
+      ((this.decisionActivity.isRetracted ||
+        this.decisionActivity.isPostponed) &&
+        !this.currentSession.may('view-access-level-pill-when-postponed'))
+    ) {
+      return true;
+    }
+    return false;
+   }
+
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
       const d1 = p1.belongsTo('documentContainer').value();
