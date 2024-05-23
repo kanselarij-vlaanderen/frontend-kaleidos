@@ -16,6 +16,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service currentSession;
+  @service documentService;
 
   @tracked rows;
   @tracked selectedRows = [];
@@ -113,6 +114,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
+    const changedPieces = [];
     yield all(this.rows.map(async (row) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
@@ -156,9 +158,11 @@ export default class BatchDocumentsDetailsModal extends Component {
           if (accessLevelHasChanged) {
             await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           }
+          changedPieces.push(piece);
         }
       }
     }));
+    yield this.documentService.checkAndRestamp(changedPieces);
     this.args.onSave();
   }
 }
