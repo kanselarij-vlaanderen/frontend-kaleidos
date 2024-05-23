@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
 import invert from 'lodash.invert';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const numbersBylatinAdverbialNumberals = {
   '': 1,
@@ -24,8 +25,7 @@ export default EmberObject.create({
   formallyOkOptions: [
     {
       label: 'Formeel OK',
-      uri:
-        'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
+      uri: CONSTANTS.FORMALLY_OK_STATUSES.FORMALLY_OK,
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-o-flex',
       approved: true,
       iconClassNames: 'ki-check formally-ok-icon',
@@ -36,8 +36,7 @@ export default EmberObject.create({
     },
     {
       label: 'Formeel niet OK',
-      uri:
-        'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
+      uri: CONSTANTS.FORMALLY_OK_STATUSES.FORMALLY_NOT_OK,
       classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-o-flex',
       iconClassNames: 'ki-x formally-ok-icon',
       svg: {
@@ -47,8 +46,7 @@ export default EmberObject.create({
     },
     {
       label: 'Nog niet formeel OK',
-      uri:
-        'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+      uri: CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
       classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
       iconClassNames: 'ki-circle-question formally-ok-icon',
       svg: {

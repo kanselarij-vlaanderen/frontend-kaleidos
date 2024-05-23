@@ -36,7 +36,7 @@ export default class AgendaHeaderAgendaCheck extends Component {
     const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
     const mappings = await res.json();
     const mappingsMap = new Map(
-      mappings.map(({ uri, newTitle }) => [uri, newTitle])
+      mappings.map(({ uri, generatedName }) => [uri, generatedName])
     );
 
     return mappingsMap;

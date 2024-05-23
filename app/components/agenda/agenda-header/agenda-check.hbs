@@ -51,6 +51,7 @@
                     <Agenda::PrintableAgenda::ListSection::ItemGroup
                       @items={{notaGroup}}
                       @fileNameMappings={{this.fileNameMappings.value}}
+                      @hideNotFormallyOk={{true}}
                     />
                   {{/each}}
                 </div>
@@ -68,7 +69,7 @@
                   >{{t "announcements-subtitle"}}</h3>
                 </div>
                 <div class="l-printable-agenda__section-content">
-                  {{#each this.agendaitems.value.announcements as |announcement|}}
+                  {{#each (filter-by "isFormallyOk" this.agendaitems.value.announcements) as |announcement|}}
                     <div class="l-printable-agenda__item">
                       <div class="auk-u-non-breakable-group@print">
                         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
@@ -84,6 +85,8 @@
                         {{/if}}
                       {{/let}}
                     </div>
+                  {{else}}
+                    {{! Do we want to show something if there are no formally OK announcements?}}
                   {{/each}}
                 </div>
               </div>
