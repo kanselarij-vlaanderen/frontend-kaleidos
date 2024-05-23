@@ -12,6 +12,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
    * @param {Function} onSave: the action to execute after saving changes
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
+  @service documentService;
   @service intl;
   @service toaster;
   @service fileConversionService;
@@ -190,6 +191,14 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     }
     await this.args.piece.save();
     await this.args.documentContainer.save();
+
+    if (this.replacementSourceFile) {
+      if (this.args.piece.stamp) {
+        await this.documentService.stampDocuments([this.args.piece]);
+      }
+    } else {
+      await this.documentService.checkAndRestamp([this.args.piece]);
+    }
 
     this.name = null;
 

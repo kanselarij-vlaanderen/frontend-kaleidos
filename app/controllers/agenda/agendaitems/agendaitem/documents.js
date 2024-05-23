@@ -15,6 +15,7 @@ import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-n
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
+  @service documentService;
   @service intl;
   @service toaster;
   @service store;
@@ -159,8 +160,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     this.newPieces.push(piece);
   }
 
-  @task
-  *savePieces() {
+  savePieces = task(async () => {
     const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {
         await this.savePiece.perform(piece, index);
@@ -169,11 +169,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         throw error;
       }
     });
-    yield all(savePromises);
-    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    await all(savePromises);
+    await this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    const agendaStatus = await this.currentAgenda.status;
+    if (agendaStatus.isApproved) {
+      await this.documentService.stampDocuments(
+        this.newPieces
+      );
+    }
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-  }
+  });
 
   /**
    * Save a new document container and the piece it wraps
@@ -213,6 +219,12 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         this.intl.t('warning-title'),
       );
     }
+
+    // Stamp the new piece if needed
+    if (this.model.pieces.some(piece => piece.stamp)) {
+      yield this.documentService.stampDocuments([piece])
+    }
+
     yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
   }
 

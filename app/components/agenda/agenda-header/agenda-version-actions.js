@@ -341,7 +341,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.agendaCheckMapping,
         this.openAgendaCheckTimestamp,
       );
-      await this.documentService.stampDocuments(this.args.currentAgenda.id);
+      await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -412,7 +412,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.agendaCheckMapping,
         this.openAgendaCheckTimestamp,
       );
-      await this.documentService.stampDocuments(this.args.currentAgenda.id);
+      await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
       await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
