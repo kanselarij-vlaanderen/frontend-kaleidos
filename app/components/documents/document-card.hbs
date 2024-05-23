@@ -317,6 +317,7 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
+    @documentContainer={{this.documentContainer}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
     @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}

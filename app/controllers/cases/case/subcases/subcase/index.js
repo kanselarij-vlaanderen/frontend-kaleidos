@@ -13,6 +13,7 @@ import {
 } from 'ember-concurrency';
 import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
 import { removeObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -38,6 +39,16 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = new TrackedArray([]);
+
+  get sortedNewPieces() {
+    return this.newPieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1.position - d2.position || p1.created - p2.created;
+    });
+  }
+
 
   @action
   async saveMandateeData(mandateeData) {
@@ -78,11 +89,28 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
+    const name = file.filenameWithoutExtension;
+    const parsed = new VRCabinetDocumentName(name).parsed;
+
+    let type;
+    const types = await this.store.queryAll('document-type', { filter: parsed.type });
+    for (const maybeType of types.slice()) {
+      if (maybeType.label === parsed.type) {
+        type = maybeType;
+        break;
+      } else if (maybeType.altLabel === parsed.type) {
+        type = maybeType;
+        break;
+      }
+    }
+
     const now = new Date();
     const confidential = this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
+      position: parsed.index,
+      type,
     });
     const piece = this.store.createRecord('piece', {
       created: now,
@@ -90,7 +118,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       file: file,
       accessLevel: this.defaultAccessLevel,
       confidential: confidential,
-      name: file.filenameWithoutExtension,
+      name: parsed.subject,
       documentContainer: documentContainer,
       cases: [this.model._case],
     });
@@ -99,9 +127,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+    const savePromises = this.sortedNewPieces.map(async(piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
@@ -118,8 +146,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
    * Save a new document container and the piece it wraps
   */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    documentContainer.position = index + 1 + (this.model.pieces?.length ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();

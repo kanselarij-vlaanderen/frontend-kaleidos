@@ -8,8 +8,6 @@ import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { addWeeks } from 'date-fns';
@@ -111,12 +109,9 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[:has-no:next-piece]': true,
   });
   pieces = pieces.slice();
-  let sortedPieces;
-  if (agendaitem.isApproval) {
-    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-  } else {
-    sortedPieces = sortPieces(pieces);
-  }
+  const sortedPieces = await sortPieces(
+    pieces, { isApproval: agendaitem.isApproval }
+  );
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';

@@ -6,6 +6,7 @@ export default class JobModel extends Model {
   SUCCESS = CONFIG.JOB_STATUSSES.SUCCESS;
   FAILED = CONFIG.JOB_STATUSSES.FAILED;
 
+  @attr('string') uri;
   @attr('datetime') created;
   @attr('string') status;
   @attr('datetime') timeStarted;

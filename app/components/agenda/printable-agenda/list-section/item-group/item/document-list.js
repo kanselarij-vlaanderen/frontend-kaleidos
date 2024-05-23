@@ -9,8 +9,8 @@ export default class AgendaPrintableAgendaListSectionItemGroupItemDocumentListCo
     const sortedPieces = new TrackedArray([]);
     const calculateSortedPieces = async () => {
       sortedPieces.length = 0;
-      const pieces = await this.args.pieces;
-      sortPieces(pieces)
+      const pieces = await this.args.pieces.slice();
+      (await sortPieces(pieces))
         .forEach((piece) => sortedPieces.push(piece));
     };
     calculateSortedPieces();

@@ -140,7 +140,7 @@
         @onUpload={{this.uploadPiece}}
       />
       <div class="upload-container">
-        {{#each this.newPieces as |piece|}}
+        {{#each this.sortedNewPieces as |piece|}}
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
