@@ -209,7 +209,6 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadSignatureRelatedData.perform();
   }
 
-
   @task
   *loadFiles() {
     const sourceFile = yield this.args.piece.file;
