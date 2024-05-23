@@ -34,7 +34,16 @@
             -
             {{kind-print-label @meeting.kind}}
           </h2>
-
+          {{#if (not @canBeApproved)}}
+            <AuAlert
+              @skin="error"
+              @icon="circle-x"
+              @size="small"
+              class="auk-u-mb-2"
+            >
+              <p>{{t "check-agenda-not-ok-message" }}</p>
+            </AuAlert>
+          {{/if}}
           <div class="auk-content">
             {{#if this.agendaitems.value.notaGroups}}
               <div>
