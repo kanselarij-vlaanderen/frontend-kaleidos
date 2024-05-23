@@ -12,11 +12,8 @@
 {{#if this.ratification}}
   <Documents::DocumentCard
     @piece={{this.ratification}}
-    @agendaitem={{@agendaitem}}
     @decisionActivity={{@decisionActivity}}
-    @meeting={{@agendaContext.meeting}}
-    @isEditable={{true}}
-    @agendaContext={{@agendaContext}}
+    @isEditable={{user-may "manage-ratification"}}
     @onAddPiece={{this.attachNewRatificationVersionAsPiece}}
     @didDeleteContainer={{this.didDeleteRatification}}
     @bordered={{false}}
