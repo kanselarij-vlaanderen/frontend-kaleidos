@@ -55,9 +55,10 @@ export default class DocumentService extends Service {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+    // TODO: this only deals with successful jobs, we need to handle errors as well
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
-      await this.jobMonitor.register(job, () => console.debug(`Finished job with uri ${job.uri}`));
+      await this.jobMonitor.register(job);
     } else {
       throw new Error('Could not find job for generating piece names');
     }
