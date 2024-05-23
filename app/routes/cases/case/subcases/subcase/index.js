@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
@@ -50,12 +49,9 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       pieces.push(...submissionPieces);
     }
 
-    let sortedPieces;
-    if (this.latestMeeting?.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
+    const sortedPieces = await sortPieces(
+      pieces, { isPreKaleidos: this.latestMeeting?.isPreKaleidos }
+    );
 
     await subcase.type;
 

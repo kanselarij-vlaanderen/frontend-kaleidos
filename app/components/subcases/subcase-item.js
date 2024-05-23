@@ -4,8 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrLegacyDocumentName,
-{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubcaseItemSubcasesComponent extends Component {
@@ -157,11 +155,9 @@ export default class SubcaseItemSubcasesComponent extends Component {
       pieces.push(...submissionPieces);
     }
 
-    if (this.latestMeeting?.isPreKaleidos) {
-      this.subcaseDocuments = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
-    } else {
-      this.subcaseDocuments = sortPieces(pieces);
-    }
+    this.subcaseDocuments = yield sortPieces(
+      pieces, { isPreKaleidos: this.meeting.isPreKaleidos }
+    );
   }
 
   @task

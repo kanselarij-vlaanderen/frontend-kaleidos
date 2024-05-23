@@ -3,8 +3,8 @@ import { task, timeout } from 'ember-concurrency';
 
 export default class JobMonitorService extends Service {
 
-  register(job, callbackFn) {
-    this.monitorJobProgress.perform(job, callbackFn);
+  async register(job, callbackFn=()=>{}) {
+    return this.monitorJobProgress.perform(job, callbackFn);
   }
 
   @task

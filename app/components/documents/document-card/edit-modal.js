@@ -8,6 +8,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class DocumentsDocumentCardEditModalComponent extends Component {
   /**
    * @param {Piece} piece: the piece we will be editing
+   * @param {DocumentContainer} documentContainer: the documentContainer the piece belongs to
    * @param {Function} onSave: the action to execute after saving changes
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
@@ -26,6 +27,8 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   @tracked isUploadingReplacementDerivedFile = false;
 
   @tracked name;
+  @tracked documentType;
+
   @tracked uploadedSourceFile;
   @tracked uploadedDerivedFile;
   @tracked replacementSourceFile;
@@ -35,7 +38,12 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     super(...arguments);
 
     this.name = this.args.piece.name;
+    this.loadData.perform();
   }
+
+  loadData = task(async () => {
+    this.documentType = await this.args.documentContainer.type;
+  });
 
   get isDisabled() {
     return (
@@ -82,6 +90,11 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
   }
 
   @action
+  selectDocumentType(value) {
+    this.documentType = value;
+  }
+
+  @action
   async cancelEdit() {
     this.name = null;
 
@@ -119,6 +132,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     }
 
     this.args.piece.name = this.name?.trim();
+    this.args.documentContainer.type = this.documentType;
     // If a piece has pieceParts, remove them
     // Might need to be improved to work for other piece subtypes
     const pieceParts = await this.args.piece.pieceParts;
@@ -176,6 +190,8 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       await derivedFile.destroyRecord();
     }
     await this.args.piece.save();
+    await this.args.documentContainer.save();
+
     if (this.replacementSourceFile) {
       if (this.args.piece.stamp) {
         await this.documentService.stampDocuments([this.args.piece]);
@@ -185,6 +201,8 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     }
 
     this.name = null;
+
+    this.documentType = null;
 
     this.args.onSave?.();
 

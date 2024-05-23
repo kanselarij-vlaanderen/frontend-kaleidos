@@ -860,6 +860,7 @@
   "approve-agenda-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat. Als u ervoor kiest om door te gaan zullen er mogelijk wijzigingen verloren gaan bij het goedkeuren van deze ontwerpagenda.",
   "approve-agenda-close-meeting-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat. Als u doorgaat gaan er mogelijk wijzigingen verloren bij afsluiten van de agenda!",
   "approve-agenda-close-meeting-confirmation": "Bent u zeker dat u de agenda wil goedkeuren en afsluiten?",
+  "check-agenda-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat (niet formeel OK). Deze worden niet getoond in dit overzicht.",
   "close-meeting-confirmation": "Bent u zeker dat u de agenda wil afsluiten?",
   "delete-agenda-message": "Bent u zeker dat u {agenda} wil verwijderen?",
   "delete-final-agenda-and-meeting": "U staat op het punt om de laatste agenda van de vergadering te verwijderen, wat zal resulteren in het verwijderen van de vergadering.",
