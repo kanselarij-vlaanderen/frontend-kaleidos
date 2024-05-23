@@ -54,11 +54,11 @@ export default class ResponsiveService extends Service.extend(Evented) {
   }
 
   get classNames() {
-    return this.matches.map((match) => `auk-media-${dasherize(match)}`).join(' ');
+    return this.matches.map((match) => `auk-breakpoint-${dasherize(match)}`).join(' ');
   }
 
   _triggerEvent() {
-    run(this, this.trigger('mediaChanged', {}));
+    run(this, this.trigger('breakpointChanged', {}));
   }
 
   match(name, query) {
