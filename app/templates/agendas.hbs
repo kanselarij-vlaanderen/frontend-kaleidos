@@ -1,6 +1,8 @@
 {{page-title (t "agenda-title")}}
 
-{{responsive.isTablet}}
+Mobile: {{responsive "isMobile"}}<br>
+Tablet: {{responsive "isTablet"}}<br>
+Desktop: {{responsive "isDesktop"}}
 
 <Auk::Navbar @skin="gray-100">
   <Auk::Toolbar @auto={{true}} as |Toolbar|>

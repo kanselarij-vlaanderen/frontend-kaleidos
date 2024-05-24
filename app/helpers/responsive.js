@@ -1,7 +1,7 @@
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
 
-export default class Media extends Helper {
+export default class Responsive extends Helper {
   @service responsive;
 
   constructor() {

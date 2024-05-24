@@ -57,8 +57,12 @@ export default class ResponsiveService extends Service.extend(Evented) {
     return this.matches.map((match) => `auk-breakpoint-${dasherize(match)}`).join(' ');
   }
 
+  _triggerBreakpointChanged() {
+    this.trigger('breakpointChanged', {});
+  }
+
   _triggerEvent() {
-    run(this, this.trigger('breakpointChanged', {}));
+    run(this, this._triggerBreakpointChanged);
   }
 
   match(name, query) {
