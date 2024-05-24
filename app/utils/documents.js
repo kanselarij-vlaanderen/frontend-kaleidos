@@ -1,7 +1,10 @@
-import VRDocumentName, {
-  compareFunction,
-} from 'frontend-kaleidos/utils/vr-document-name';
 import fetch from 'fetch';
+import VRDocumentName,
+{ compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
+import VrLegacyDocumentName,
+{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export const sortDocumentContainers = async (
   piecesOrPromise,
@@ -65,7 +68,34 @@ export const sortDocumentContainers = async (
   });
 };
 
-export const sortPieces = (
+export const sortPieceVersions = (pieces) => {
+  // This function wraps sortPieces just so that the intent of calling it
+  // is more obvious, i.e. when calling this function you're passing in all
+  // the pieces that belong to a single document container.
+  return sortPiecesByName(pieces, VRDocumentName, compareFunction);
+};
+
+export const sortPieces = async (
+  pieces,
+  { isApproval=false, isPreKaleidos=false }={},
+) => {
+  await Promise.all(pieces.map((piece) => piece.documentContainer));
+  let positionsAvailable = !pieces.some(
+    (piece) => piece.belongsTo('documentContainer').value().position === undefined
+  );
+
+  if (positionsAvailable) {
+    return await sortPiecesByPosition(pieces);
+  } else if (isApproval) {
+    return sortPiecesByName(pieces, VrNotulenName, compareNotulen);
+  } else if (isPreKaleidos) {
+    return sortPiecesByName(pieces, VrLegacyDocumentName, compareLegacyDocuments);
+  } else {
+    return sortPiecesByName(pieces);
+  }
+}
+
+const sortPiecesByName = (
   pieces,
   NameClass = VRDocumentName,
   sortingFunc = compareFunction
@@ -89,6 +119,17 @@ export const sortPieces = (
   invalidNamedPieces.reverse();
 
   return [...validNamedPieces, ...invalidNamedPieces];
+};
+
+const sortPiecesByPosition = async (pieces) => {
+  await Promise.all(pieces.map((piece) => piece.documentContainer));
+
+  return pieces.sort((p1, p2) => {
+    const d1 = p1.belongsTo('documentContainer').value();
+    const d2 = p2.belongsTo('documentContainer').value();
+
+    return d1.position - d2.position || p1.created - p2.created;
+  });
 };
 
 export const addPieceToAgendaitem = async function (agendaitem, piece) {

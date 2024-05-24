@@ -34,7 +34,16 @@
             -
             {{kind-print-label @meeting.kind}}
           </h2>
-
+          {{#if (not @canBeApproved)}}
+            <AuAlert
+              @skin="error"
+              @icon="circle-x"
+              @size="small"
+              class="auk-u-mb-2"
+            >
+              <p>{{t "check-agenda-not-ok-message" }}</p>
+            </AuAlert>
+          {{/if}}
           <div class="auk-content">
             {{#if this.agendaitems.value.notaGroups}}
               <div>
@@ -51,6 +60,7 @@
                     <Agenda::PrintableAgenda::ListSection::ItemGroup
                       @items={{notaGroup}}
                       @fileNameMappings={{this.fileNameMappings.value}}
+                      @hideNotFormallyOk={{true}}
                     />
                   {{/each}}
                 </div>
@@ -68,7 +78,7 @@
                   >{{t "announcements-subtitle"}}</h3>
                 </div>
                 <div class="l-printable-agenda__section-content">
-                  {{#each this.agendaitems.value.announcements as |announcement|}}
+                  {{#each (filter-by "isFormallyOk" this.agendaitems.value.announcements) as |announcement|}}
                     <div class="l-printable-agenda__item">
                       <div class="auk-u-non-breakable-group@print">
                         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
@@ -103,7 +113,7 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <AuButton data-test-agenda-check-confirm @skin="primary" {{on "click" @onSave}}>
+            <AuButton data-test-agenda-check-confirm @skin="primary" {{on "click" this.onSave}}>
               {{@saveLabel}}
             </AuButton>
           </Auk::Toolbar::Item>
