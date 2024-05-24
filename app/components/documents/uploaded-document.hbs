@@ -18,10 +18,13 @@
       </AuFormRow>
       {{#unless this.loadData.isRunning}}
         <AuFormRow data-test-uploaded-document-types>
-          <AuLabel for="type">{{t "document-type"}}</AuLabel>
-          <Utils::DocumentTypeSelector
-            @selectedDocumentType={{this.selectedDocumentType}}
-            @onChange={{this.selectDocumentType}}
+          <AuLabel>{{t "document-type"}}</AuLabel>
+          <Utils::RadioDropdownComboSelect
+            @options={{this.sortedDocumentTypes}}
+            @onSelect={{this.selectDocumentType}}
+            @dropdownLabelKey="altLabel"
+            @radioOptionsSize="8"
+            @selected={{this.selectedDocumentType}}
           />
         </AuFormRow>
       {{/unless}}
