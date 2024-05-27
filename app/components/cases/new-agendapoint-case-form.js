@@ -535,8 +535,6 @@ export default class CasesNewAgendapointForm extends Component {
     'Luchtvervoersovereenkomst Nederlandse Antillen'
   ];
 
-
-
   @task
   *search(query) {
     const staticCases = [

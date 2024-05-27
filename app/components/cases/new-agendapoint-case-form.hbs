@@ -551,6 +551,7 @@
           <div class="upload-container">
             {{#each this.newPieces as |piece|}}
               <Documents::UploadedDocument
+                @kabinet={{true}}
                 @limitedFields={{true}}
                 @piece={{piece}}
                 @allowDocumentContainerEdit={{true}}
@@ -621,6 +622,11 @@
           {{/each}}
         </tbody>
       </table>
+    </div>
+    <AuHr/>
+    <div>
+      <AuLabel>Opmerking</AuLabel>
+      <AuTextarea @value="" @width="block" />
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer

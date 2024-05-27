@@ -27,6 +27,16 @@
           />
         </div>
       {{/unless}}
+      {{#if @kabinet}}
+        <div class="auk-form-group">
+          <AuCheckbox
+            @name="vertrouwelijk"
+            @checked={{false}}
+          >
+            Vertrouwelijk
+          </AuCheckbox>
+        </div>
+      {{/if}}
     </div>
   {{/if}}
 </EmberKaleidosWebuniversum::VlUploadedDocument>
