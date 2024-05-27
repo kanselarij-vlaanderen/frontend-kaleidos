@@ -118,17 +118,19 @@ export default class AgendaAgendaitemsController extends Controller {
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
       yield animationFrame(); // Computationally heavy task. This keeps the interface alive
+      const subcase = yield this.store.queryOne('subcase', {
+        'filter[agenda-activities][agendaitems][:id:]': agendaitem.id,
+        include: 'type'
+      });
       if (
         currentAgendaitemGroup &&
-        (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
+        (yield currentAgendaitemGroup.itemBelongsToThisGroup(
+          agendaitem, subcase?.isBekrachtiging
+        ))
       ) {
         currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        const subcase = yield this.store.queryOne('subcase', {
-          'filter[agenda-activities][agendaitems][:id:]': agendaitem.id,
-          include: 'type'
-        });
         currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem, subcase?.isBekrachtiging);
         agendaitemGroups.push(currentAgendaitemGroup);
       }

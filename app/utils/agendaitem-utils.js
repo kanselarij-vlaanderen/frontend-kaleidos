@@ -208,12 +208,22 @@ export class AgendaitemGroup {
   /**
    * Determine if a given agenda-item belongs in this group (can be used before adding it to this.agendaitems)
    * @param {Agendaitem} agendaitem
+   * @param {boolean} isBekrachtiging
    * @return {boolean}
    */
-  async itemBelongsToThisGroup(agendaitem) {
+  async itemBelongsToThisGroup(agendaitem, isBekrachtiging) {
     const mandatees = await agendaitem.mandatees;
     const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
+
+    // Differentiate "no mandatee" groups from bekrachtiging
+    if (this.mandateeGroupId === "" && mandateeGroupId === "") {
+      // If either both or none are a bekrachtiging, the agendaitem
+      // fits in this group. If one is but the other isn't, it doesn't
+      // fit.
+      return (this.isBekrachtiging && isBekrachtiging)
+        || (!this.isBekrachtiging && !isBekrachtiging);
+    }
     return mandateeGroupId === this.mandateeGroupId;
   }
 }
