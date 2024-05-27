@@ -5,7 +5,14 @@ import { inject as service } from '@ember/service';
 export default class PublicationsOverviewShortlistRoute extends Route {
   @service store;
 
-  async model() {
+  queryParams = {
+    sort: {
+      refreshModel: true,
+      as: 'sorteer',
+    },
+  };
+
+  async model(params) {
     const endpoint = '/publication-flows/shortlist';
     const response = await fetch(endpoint, {
       Headers: {
@@ -17,13 +24,14 @@ export default class PublicationsOverviewShortlistRoute extends Route {
     if (result?.data?.length) {
       return this.store.query('piece', {
         include: [
+          'agendaitems.agenda',
           'agendaitems.agenda.next-version',
+          'agendaitems.agenda.created-for',
           'agendaitems.mandatees.person',
           'agendaitems.treatment.decision-activity',
           'document-container.type',
         ].join(','),
-        sort: '-created',
-        'page[size]': result.data.length,
+        sort: params.sort,
         'filter[:id:]': result.data.map((record) => record.id).join(','),
       });
     }
