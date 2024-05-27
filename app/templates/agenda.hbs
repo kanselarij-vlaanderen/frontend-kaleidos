@@ -5,6 +5,7 @@
   " van "
   (if this.model.meeting.isPreKaleidos (date this.model.meeting.plannedStart) (datetime this.model.meeting.plannedStart))
 }}
+isOpenSideNav: {{this.isOpenSideNav}}
 <Agenda::AgendaHeader
   @meeting={{this.model.meeting}}
   @currentAgenda={{this.model.agenda}}
@@ -23,7 +24,7 @@
         @meeting={{this.model.meeting}}
         @currentAgenda={{this.model.agenda}}
         @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
-        @isOpen={{this.isOpenSideNav}}
+        @isOpen={{or this.isOpenSideNav (responsive "isMobile")}}
         @onCollapse={{this.collapseSideNav}}
         @onOpen={{this.openSideNav}}
       />
