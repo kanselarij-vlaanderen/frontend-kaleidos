@@ -28,6 +28,10 @@ export default class ResponsiveService extends Service.extend(Evented) {
   constructor() {
     super(...arguments);
 
+    if (!BREAKPOINTS || !this.enabled) {
+      return;
+    }
+
     const breakpoints = {};
     Object.keys(BREAKPOINTS).forEach((key) => {
       breakpoints[camelize(key.toLowerCase())] = BREAKPOINTS[key];

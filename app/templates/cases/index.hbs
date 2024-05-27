@@ -4,7 +4,7 @@
   @onSetFilter={{this.setCaseFilter}}
   @caseFilter={{this.caseFilter}}
 />
-<AuMainContainer class="l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
+<AuMainContainer class="l-search-container {{if (and (responsive "isMobile") this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
   <m.sidebar>
     <div class="au-c-sidebar">
       <div class="au-c-sidebar__content au-c-sidebar__content--mobile">

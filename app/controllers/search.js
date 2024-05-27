@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { debounce } from '@ember/runloop';
 import formatDate from '../utils/format-date-search-param';
 
 export default class SearchController extends Controller {
@@ -38,13 +37,6 @@ export default class SearchController extends Controller {
 
   constructor() {
     super(...arguments);
-    window.addEventListener('resize', () => debounce(this, this.updateToggleableFilters, 150));
-    this.updateToggleableFilters();
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    window.removeEventListener('resize', this.updateToggleableFilters);
   }
 
   @action
@@ -71,11 +63,6 @@ export default class SearchController extends Controller {
   @action
   setGovernmentAreas(governmentAreas) {
     this.governmentAreas = governmentAreas;
-  }
-
-  @action
-  updateToggleableFilters() {
-    this.hasToggleableFilters = (window.innerWidth < 768) ? true : false;
   }
 
   @action
