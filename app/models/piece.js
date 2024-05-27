@@ -16,8 +16,8 @@ export default class Piece extends Model {
   @attr('datetime') receivedDate;
   @attr('datetime') modified;
   @attr('datetime') accessLevelLastModified;
-  @attr('number') position;
   @attr('string') originalName;
+  @attr('string') stamp;
 
   @belongsTo('concept', { inverse: null, async: true }) accessLevel;
   @belongsTo('language', { inverse: null, async: true }) language;

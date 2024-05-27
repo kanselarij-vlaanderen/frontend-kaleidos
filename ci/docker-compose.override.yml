@@ -105,3 +105,5 @@ services:
     environment:
       - SIGNINGHUB_API_URL=<PUT_API_URL_HERE>
     user: ${HOST_UID_GID}
+  document-stamping:
+    user: ${HOST_UID_GID}

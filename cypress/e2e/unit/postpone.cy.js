@@ -183,11 +183,11 @@ context('Decision postponing tests', () => {
     cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
       .as('phases');
     cy.get('@phases').eq(0)
-      .contains(/Ingediend voor agendering op/);
+      .contains(/Uitgesteld op de agenda van/);
     cy.get('@phases').eq(1)
       .contains(/Geagendeerd op de agenda van/);
     cy.get('@phases').eq(2)
-      .contains(/Uitgesteld op de agenda van/);
+      .contains(/Ingediend voor agendering op/);
     cy.get(appuniversum.loader).should('not.exist');
   });
 
@@ -268,10 +268,18 @@ context('Decision postponing tests', () => {
     }).should('not.exist');
 
     // check if timeline contains multiple phase blocks (1 block has max 3 phases)
-    cy.get(cases.subcaseTimeline.item).eq(0)
-      .contains('Ingediend voor');
-    cy.get(cases.subcaseTimeline.item).eq(3)
-      .contains('Ingediend voor');
+    cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
+      .as('phases');
+    cy.get('@phases').eq(0)
+      .contains(/Geagendeerd op de ontwerpagenda van/);
+    cy.get('@phases').eq(1)
+      .contains(/Ingediend voor agendering op/);
+    cy.get('@phases').eq(2)
+      .contains(/Uitgesteld op de agenda van/);
+    cy.get('@phases').eq(3)
+      .contains(/Geagendeerd op de agenda van/);
+    cy.get('@phases').eq(4)
+      .contains(/Ingediend voor agendering op/);
 
     // check if meeting number contains multiple numbers
     // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)

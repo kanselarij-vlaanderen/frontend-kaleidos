@@ -1,6 +1,6 @@
 <div class="auk-scroll-wrapper">
-  <Auk::Navbar>
-    <Auk::Tabs data-test-agendaitem-nav-tabs>
+  <Auk::Navbar class="auk-agenda-subnav">
+    <Auk::Tabs data-test-agendaitem-nav-tabs  @responsive={{true}} @responsiveBreakpoint="medium">
       <Auk::Tab
         @route="agenda.agendaitems.agendaitem.index"
         data-test-agendaitem-nav-case-tab
@@ -45,7 +45,7 @@
     </Auk::Tabs>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-    <div class="auk-u-m-4">
+    <div class="auk-u-responsive-margin">
       <div class="auk-u-mb-3">
         {{outlet}}
       </div>

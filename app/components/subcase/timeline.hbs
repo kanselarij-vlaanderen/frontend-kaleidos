@@ -6,9 +6,23 @@
         data-test-subcase-timeline-item
       >
         <div class="vlc-status-timeline__dot"></div>
-          <div class="vlc-status-timeline__text">
+        <div class="vlc-status-timeline__text">
+          {{#if phase.beforeText}}
+            {{phase.beforeText}}
+            <AuLink
+              @route="agenda.agendaitems.agendaitem"
+              @models={{array
+                phase.meetingId
+                phase.agendaId
+                phase.agendaitemId
+              }}
+            >
+              {{phase.linkText}}
+            </AuLink>
+          {{else}}
             {{this.subcaseTimelineItemText phase}}
-          </div>
+          {{/if}}
+        </div>
       </li>
     {{/each}}
   </ul>

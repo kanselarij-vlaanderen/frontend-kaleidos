@@ -7,9 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName, {
-  compareFunction as compareNotulen,
-} from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -99,13 +96,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       'filter[:has-no:next-piece]': true,
     });
     pieces = pieces.slice();
-    let sortedPieces;
-    if (this.args.agendaitem.isApproval) {
-      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
-    this.pieces = sortedPieces;
+    this.pieces = await sortPieces(
+      pieces, { isApproval: this.args.agendaitem.isApproval }
+    );
   });
 
   @action
