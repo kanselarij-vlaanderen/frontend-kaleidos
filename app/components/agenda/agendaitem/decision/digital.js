@@ -339,7 +339,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     } else {
       this.setBetreftEditorContent('');
     }
-  } 
+  }
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
