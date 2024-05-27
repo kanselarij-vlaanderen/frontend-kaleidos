@@ -53,3 +53,16 @@
     margin-left: -.5rem;
   }
 }
+
+.auk-document-card-list {
+  counter-reset: documentslist; // Reset the counter at the start of the container
+
+  & > .auk-u-mb-2 {
+    counter-increment: documentslist; // Increment the counter for each .auk-u-mb-4
+
+    .auk-h4::before {
+      content: counter(documentslist) '.'; // Display the counter before each .auk-h4
+    }
+  }
+}
+
