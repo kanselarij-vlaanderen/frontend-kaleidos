@@ -51,33 +51,20 @@
           >
             <div class="auk-form-group">
               <Auk::Label>Dossier</Auk::Label>
-              <select
-                name="dossier"
-                id="dossier"
-                class="auk-select auk-select--block"
+              <PowerSelect
+                @search={{perform this.search}}
+                @searchMessage="Dossier naam"
+                @searchEnabled={{true}}
+                @noMatchesMessage={{t "no-results-found"}}
+                @loadingMessage={{t "please-be-patient"}}
+                @options={{this.options}}
+                @selected={{this.selected}}
+                @onChange={{fn (mut this.selected)}}
+                class="au-u-1-1"
+                as |case|
               >
-                <option
-                  value="-"
-                  selected="selected"
-                >
-                  Tegemoetkomingen mobiliteitshulpmiddelen
-                </option>
-                <option
-                  value="1"
-                >
-                  Vlaamse advies- en beleidsparticipatieraad van personen met en handicap(NOOZO vzw): subsidie werkjaar 2023
-                </option>
-                <option
-                  value="2"
-                >
-                  Luchtvervoersovereenkomst Nederlandse Antillen
-                </option>
-                <option
-                  value="3"
-                >
-                  Implementatie BelRAI LTCF 
-                </option>
-              </select>
+                {{case}}
+              </PowerSelect>
               <AuButton @skin="link" @icon="add" class="au-u-margin-top-small" {{on "click" this.toggleCaseModal}}>Nieuw dossier toevoegen</AuButton>
             </div>
             <div class="auk-o-flex auk-o-flex--justify-between">

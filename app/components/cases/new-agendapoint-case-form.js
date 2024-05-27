@@ -5,10 +5,11 @@ import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { startOfDay } from 'date-fns';
 import { TrackedArray } from 'tracked-built-ins';
+import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 export default class CasesNewAgendapointForm extends Component {
   @service store;
@@ -53,6 +54,7 @@ export default class CasesNewAgendapointForm extends Component {
   @tracked newPieces = A([]);
 
   @tracked caseModal = false;
+
 
   constructor() {
     super(...arguments);
@@ -525,5 +527,29 @@ export default class CasesNewAgendapointForm extends Component {
   @action
   removeCCAddress(address) {
     this.CCAddresses.removeObject(address);
+  }
+
+  options = [
+    'Tegemoetkomingen mobiliteitshulpmiddelen',
+    'Vlaamse advies- en beleidsparticipatieraad van personen met en handicap(NOOZO vzw): subsidie werkjaar 2023',
+    'Luchtvervoersovereenkomst Nederlandse Antillen'
+  ];
+
+
+
+  @task
+  *search(query) {
+    const staticCases = [
+      'Tegemoetkomingen mobiliteitshulpmiddelen',
+      'Vlaamse advies- en beleidsparticipatieraad van personen met en handicap(NOOZO vzw): subsidie werkjaar 2023',
+      'Luchtvervoersovereenkomst Nederlandse Antillen'
+    ];
+
+    if (query) {
+      yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
+      return staticCases.filter(caseName => 
+        caseName.toLowerCase().includes(query.toLowerCase())
+      );
+    }
   }
 }
