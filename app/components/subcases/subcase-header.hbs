@@ -85,14 +85,27 @@
             >
               Maak procedurestap en agendeer
             </AuButton>
-              <AuHr />
+            <AuButton
+              @skin="link"
+              role="menuitem"
+            >
+              Neem in behandeling
+            </AuButton>
+            <AuHr />
             <AuButton
               @skin="link"
               @alert={{true}}
-              {{on "click" this.revert}}
+              {{on "click" this.triggerRevertDialog}}
               role="menuitem"
             >
               Stuur terug naar indiener
+            </AuButton>
+            <AuButton
+              @skin="link"
+              @alert={{true}}
+              role="menuitem"
+            >
+              Verwijder indiening
             </AuButton>
           </AuDropdown>
           {{else}}
@@ -204,6 +217,37 @@
   <:body>
     <Utils::CaseSearch @onSelect={{this.moveSubcase}} />
   </:body>
+</AuModal>
+
+<AuModal
+  @modalOpen={{this.showRevertModal}}
+  @closeModal={{this.triggerRevertDialog}}
+>
+  <:title>
+    Terugsturen naar indiener
+  </:title>
+  <:body>
+    <AuLabel for="remarks">
+      Opmerking
+    </AuLabel>
+    <Auk::Textarea @rows="4" @value="" id="remarks" />
+  </:body>
+  <:footer>
+    <AuToolbar
+      as |Group|
+      >
+      <Group>
+        <AuButton @skin="link" {{on "click" this.triggerRevertDialog}}>
+          Annuleer
+        </AuButton>
+      </Group>
+      <Group>
+        <AuButton @skin="primary" {{on "click" this.revert}}>
+          Stuur terug naar indiener
+        </AuButton>
+      </Group>
+    </AuToolbar>
+  </:footer>
 </AuModal>
 
 {{#if this.isAssigningToOtherAgenda}}

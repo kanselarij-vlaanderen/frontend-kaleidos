@@ -44,6 +44,13 @@
                 @label="Status"
                 @onChange={{fn (mut this.sort)}}
               />
+              <Utils::ThSortable
+                class="auk-table__header-title"
+                @currentSorting={{this.sort}}
+                @field="isArchived"
+                @label="Behandeld door"
+                @onChange={{fn (mut this.sort)}}
+              />
               <th></th>
             </tr>
           </thead>
@@ -92,7 +99,10 @@
                     {{/if}}
                   </td>
                   <td>
-                    <AuPill @size="small" @skin="ongoing">Ingediend</AuPill>
+                    <AuPill @size="small" @skin="ongoing">Opnieuw ingediend</AuPill>
+                  </td>
+                  <td>
+                    Naam
                   </td>
                   <td class="auk-u-text-align--right">
                     <AuLink
@@ -140,7 +150,10 @@
                     {{/if}}
                   </td>
                   <td>
-                    <AuPill @size="small" @skin="ongoing">Ingediend</AuPill>
+                    <AuPill @size="small" @skin="ongoing">Update ingediend</AuPill>
+                  </td>
+                  <td>
+                    Naam
                   </td>
                   <td class="auk-u-text-align--right">
                     <AuLink

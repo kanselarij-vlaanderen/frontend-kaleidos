@@ -190,6 +190,13 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.toaster.success('Nieuwe documenten aanvaard');
   }
 
+  @tracked showRevertModal = false;
+
+  @action
+  triggerRevertDialog() {
+    this.showRevertModal = !this.showRevertModal;
+  }
+
   @action
   revert() {
     if (history.length > 1) {
