@@ -34,11 +34,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
+  cy.intercept('GET', '/mandatees*').as('getMandatees');
 
   cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendas.action.newMeeting, {
     timeout: 60000,
-  }).click();
+  }).click()
+    .wait('@getMandatees'); // wait to prevent rerender;
 
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
@@ -372,7 +374,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   }).should('not.exist');
   cy.get(appuniversum.loader); // loader should be shown briefly
   cy.get(appuniversum.loader, {
-    timeout: amountOfFormallyOks * 20000,
+    timeout: (1 + amountOfFormallyOks) * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -394,6 +396,7 @@ function approveDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
@@ -429,6 +432,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();
@@ -463,7 +467,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     .click();
   cy.get(agenda.agendaActions.addAgendaitems).forceClick();
   cy.wait(`@getSubcasesFiltered_${randomInt}`, {
-    timeout: 20000,
+    timeout: 60000,
   });
   const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
 

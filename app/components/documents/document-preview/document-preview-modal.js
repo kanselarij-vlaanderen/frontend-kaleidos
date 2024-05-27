@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { debounce } from '@ember/runloop';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   /**
@@ -20,6 +21,9 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
     this.selectedVersion = this.args.piece;
     this.sidebarIsOpen = JSON.parse(localStorage.getItem('documentViewerSidebar')) ?? true;
     this.loadFile.perform();
+
+    window.addEventListener('resize', () => debounce(this, this.updateSidebarVisibility, 150));
+    this.updateSidebarVisibility();
   }
 
   @action
@@ -38,5 +42,17 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
 
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.selectedVersion);
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    window.removeEventListener('resize', this.updateSidebarVisibility);
+  }
+
+  @action
+  updateSidebarVisibility() {
+    if (window.innerWidth < 768) {
+      this.sidebarIsOpen = true;
+    }
   }
 }

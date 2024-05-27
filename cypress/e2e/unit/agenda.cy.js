@@ -83,10 +83,12 @@ context('Agenda tests', () => {
       .should('not.exist');
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
 
     // Should not be able to close a session with only a design agenda, cfr. KAS-1551
     cy.get(agenda.agendaVersionActions.optionsDropdown)
@@ -106,9 +108,11 @@ context('Agenda tests', () => {
     cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container);
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
 
     cy.setAllItemsFormallyOk(1);
     // alert message no longer exists after agendaitems are formally ok
@@ -117,10 +121,12 @@ context('Agenda tests', () => {
       .should('not.exist');
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
     cy.approveAndCloseDesignAgenda(false);
     cy.get(auk.modal.body).find(appuniversum.alert.container)
       .should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
+    cy.get(agenda.agendaCheck.cancel).click();
   });
 
   it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {

@@ -8,8 +8,6 @@ import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { addWeeks } from 'date-fns';
@@ -111,12 +109,9 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[:has-no:next-piece]': true,
   });
   pieces = pieces.slice();
-  let sortedPieces;
-  if (agendaitem.isApproval) {
-    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-  } else {
-    sortedPieces = sortPieces(pieces);
-  }
+  const sortedPieces = await sortPieces(
+    pieces, { isApproval: agendaitem.isApproval }
+  );
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
@@ -314,6 +309,7 @@ export default class AgendaMinutesController extends Controller {
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
+    const accessLevel = await minutes.accessLevel;
     const container = await minutes.documentContainer;
     const pieces = await container.pieces;
     const newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
@@ -324,8 +320,8 @@ export default class AgendaMinutesController extends Controller {
       created: new Date(),
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
-      documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel,
+      documentContainer: container,
+      accessLevel: accessLevel,
     });
 
     await newVersion.save();
@@ -345,6 +341,14 @@ export default class AgendaMinutesController extends Controller {
     await this.signatureService.markNewPieceForSignature(minutes, newVersion, null, this.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
+
+    // TODO KAS-4654 unset meeting on old minutes to prevent many in a one-to-one
+    minutes.minutesForMeeting = null;
+    await minutes.belongsTo('file').reload(); // make sure we have the latest file
+    // nextVersion should be set correctly by setting the inverse, no reload needed
+    // any chance we need to reload the pieceParts here? We will possibly concurrently overwrite them
+    await minutes.save();
+    await this.meeting.belongsTo('minutes').reload();
 
     this.refresh();
   });

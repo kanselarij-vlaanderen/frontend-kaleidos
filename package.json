@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "6.12.8",
+  "version": "7.0.1",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -63,6 +63,7 @@
     "@lblod/ember-rdfa-editor": "git+https://github.com/ValenberghsSven/ember-rdfa-editor.git#23ff47de32382f55c39207b8e3625c8842fc2dae",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
+    "@nullvoxpopuli/ember-composable-helpers": "^5.1.1",
     "@typescript-eslint/parser": "^5.48.2",
     "alphabet": "^1.0.0",
     "broccoli-asset-rev": "^3.0.0",
@@ -79,6 +80,7 @@
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-dependency-lint": "^2.0.1",
+    "ember-cli-deprecation-workflow": "^2.2.0",
     "ember-cli-head": "^2.0.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
@@ -89,7 +91,6 @@
     "ember-cli-update": "^1.0.1",
     "ember-click-outside": "^5.0.1",
     "ember-code-snippet": "^3.0.0",
-    "ember-composable-helpers": "^5.0.0",
     "ember-concurrency": "^2.3.7",
     "ember-copy": "^2.0.1",
     "ember-data": "~4.11.3",
@@ -155,7 +156,9 @@
     "xml-formatter": "^3.2.0"
   },
   "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1"
+    "babel-plugin-ember-template-compilation": "2.2.1",
+    "prosemirror-transform": "1.8.0",
+    "prosemirror-model": "1.19.4"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
