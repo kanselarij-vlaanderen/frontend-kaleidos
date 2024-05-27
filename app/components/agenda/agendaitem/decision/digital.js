@@ -315,30 +315,29 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const subcase = await agendaActivity?.subcase;
     const subcaseType = await subcase?.type;
     const ratification = await subcase.ratification;
-    if (subcaseType.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
-      const newBetreftContent = await generateBetreft(
+    let newBetreftContent;
+    if (subcaseType?.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
+      newBetreftContent = await generateBetreft(
         subcase.shortTitle,
         null,
         this.args.agendaitem.isApproval,
-        [ratification]
-      );
-      this.setBetreftEditorContent(
-        `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
+        ratification ? [...documents, ratification] : documents,
       );
     } else {
-      const newBetreftContent = await generateBetreft(shortTitle,
+      newBetreftContent = await generateBetreft(
+        shortTitle,
         title,
         this.args.agendaitem.isApproval,
         documents,
         subcase?.subcaseName
       );
-      if (newBetreftContent) {
-        this.setBetreftEditorContent(
-          `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
-        );
-      } else {
-        this.setBetreftEditorContent('');
-      }
+    }
+    if (newBetreftContent) {
+      this.setBetreftEditorContent(
+        `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
+      );
+    } else {
+      this.setBetreftEditorContent('');
     }
   } 
 
@@ -379,7 +378,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        if (subcaseType.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
+        if (subcaseType?.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
           newBeslissingHtmlContent = "De Vlaamse Regering bekrachtigt bovengenoemd decreet en beslist over te gaan tot de afkondiging ervan.";
         } else if (this.args.agendaitem.isApproval) {
           const { shortTitle, title } = this.args.agendaContext.agendaitem;
