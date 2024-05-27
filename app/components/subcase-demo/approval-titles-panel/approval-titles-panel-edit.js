@@ -5,6 +5,7 @@ import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { TrackedArray } from 'tracked-built-ins';
 
 /**
  * @argument subcase
@@ -152,5 +153,33 @@ export default class SubcaseTitlesPanelEdit extends Component {
   @action
   toggleCaseModal() {
     this.caseModal = !this.caseModal;
+  }
+
+  @tracked showNotifiersModal = false;
+  @tracked notificationAddresses = new TrackedArray([]);
+
+  @tracked showCCModal = false;
+  @tracked CCAddresses = new TrackedArray([]);
+
+  @action
+  saveNotificationAddress(address) {
+    this.notificationAddresses.addObject(address);
+    this.showNotifiersModal = false;
+  }
+
+  @action
+  removeNotificationAddress(address) {
+    this.notificationAddresses.removeObject(address);
+  }
+
+  @action
+  saveCCAddress(address) {
+    this.CCAddresses.addObject(address);
+    this.showCCModal = false;
+  }
+
+  @action
+  removeCCAddress(address) {
+    this.CCAddresses.removeObject(address);
   }
 }
