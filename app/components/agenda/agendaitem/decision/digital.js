@@ -314,7 +314,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
     const subcaseType = await subcase?.type;
-    const ratification = await subcase.ratification;
+    const ratification = await subcase?.ratification;
     let newBetreftContent;
     if (subcaseType?.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
       newBetreftContent = await generateBetreft(
