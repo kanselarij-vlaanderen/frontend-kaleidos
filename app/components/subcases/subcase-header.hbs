@@ -167,6 +167,17 @@
         </AuButton>
       </Auk::Toolbar::Item>
       {{/if}}
+      {{#if @send}} 
+      <Auk::Toolbar::Item>
+        <AuButton
+          @skin="secondary"
+          role="menuitem"
+          {{on "click" this.submit}}
+        >
+          Dien update in
+        </AuButton>
+      </Auk::Toolbar::Item>
+      {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

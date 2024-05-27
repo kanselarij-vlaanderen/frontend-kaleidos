@@ -53,6 +53,11 @@ Router.map(function() {
           this.route('approval', { path: '/goedkeuring', });
         });
       });
+      this.route('subcases-submission-send', { path: '/deeldossiers-indiening-send', }, function() {
+        this.route('subcase-submission-send', { path: ':subcase_id', }, function() {
+          this.route('approval', { path: '/goedkeuring', });
+        });
+      });
       this.route('subcases-submission-edit', { path: '/deeldossiers-indiening-edit', }, function() {
         this.route('subcase-submission-edit', { path: ':subcase_id', }, function() {
           this.route('approval', { path: '/goedkeuring', });

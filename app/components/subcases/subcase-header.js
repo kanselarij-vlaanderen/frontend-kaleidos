@@ -199,6 +199,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
+  submit() {
+    this.router.transitionTo('cases.submissions');
+    this.toaster.success('Update ingediend');
+  }
+
+  @action
   resubmit() {
     if (history.length > 1) {
       history.back();
