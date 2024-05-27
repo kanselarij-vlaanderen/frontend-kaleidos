@@ -1376,6 +1376,7 @@
   "ratification-title": "Bekrachtiging en afkondiging",
   "ratifying-mandatees": "Ondertekenende Ministers",
   "authority-domain": "Bevoegdheidsdomein",
-  "check-agenda": "Agenda controleren",
-  "most-recent-documents": "Recentste documenten"
+  "most-recent-documents": "Recentste documenten",
+  "saving-in-progress-please-wait": "Bezig met opslaan, gelieve even te wachten.",
+  "check-agenda": "Agenda controleren"
 }
