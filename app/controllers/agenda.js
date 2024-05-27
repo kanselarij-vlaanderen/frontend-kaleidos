@@ -7,12 +7,17 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaController extends Controller {
   @service router;
   @service responsive;
+  @service resize;
 
   @tracked isLoading = false;
   @tracked isOpenSideNav = this.responsive.isTablet ? false : true;
 
   constructor() {
     super(...arguments);
+
+    this.resize.on('resize', () => {
+      this.isOpenSideNav = this.responsive.isTablet ? false : true;
+    })
   }
 
   get meetingKindPrefix() {

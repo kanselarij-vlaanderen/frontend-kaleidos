@@ -1,9 +1,10 @@
 import Service from '@ember/service';
 import { run } from '@ember/runloop';
 import { classify, dasherize } from '@ember/string';
-import { getOwner } from '@ember/application';
 import Evented from '@ember/object/evented';
 import { tracked, TrackedObject } from 'tracked-built-ins';
+import { camelize } from '@ember/string';
+import { BREAKPOINTS } from 'frontend-kaleidos/config/config';
 
 export default class ResponsiveService extends Service.extend(Evented) {
   @tracked _matches = [];
@@ -27,11 +28,10 @@ export default class ResponsiveService extends Service.extend(Evented) {
   constructor() {
     super(...arguments);
 
-    const breakpoints = getOwner(this).lookup('breakpoints:main');
-
-    if (!breakpoints || !this.enabled) {
-      return;
-    }
+    const breakpoints = {};
+    Object.keys(BREAKPOINTS).forEach((key) => {
+      breakpoints[camelize(key.toLowerCase())] = BREAKPOINTS[key];
+    });
 
     Object.keys(breakpoints).forEach((name) => {
       const getterName = `is${classify(name)}`;

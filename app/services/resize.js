@@ -2,23 +2,22 @@ import { set } from '@ember/object';
 import Evented from '@ember/object/evented';
 import { cancel, debounce } from '@ember/runloop';
 import Service from '@ember/service';
-import { classify } from '@ember/string';
+import { camelize } from '@ember/string';
+import { RESIZE_SERVICE_DEFAULTS } from 'frontend-kaleidos/config/config';
 
 class ResizeService extends Service.extend(Evented) {
   _oldWidth = window.innerWidth;
   _oldHeight = window.innerHeight;
-  _oldWidthDebounced = window.innerWidth;
-  _oldHeightDebounced = window.innerHeight;
 
   constructor() {
     super(...arguments);
 
-    this._setDefaults();
+    this._setConfig();
     this._onResizeHandler = event => {
-      this._fireResizeNotification(event);
-      const scheduledDebounce = debounce(this, this._fireDebouncedResizeNotification, event, this.debounceTimeout);
+      const scheduledDebounce = debounce(this, this._fireResizeNotification, event, this.debounceTimeout);
       this._scheduledDebounce = scheduledDebounce;
     };
+
     this._installResizeListener();
   }
 
@@ -29,29 +28,23 @@ class ResizeService extends Service.extend(Evented) {
     this._cancelScheduledDebounce();
   }
 
-   _setDefaults() {
-    const defaults = (this.resizeServiceDefaults === undefined ? {} : this.resizeServiceDefaults);
+   _setConfig() {
+    const defaults = (RESIZE_SERVICE_DEFAULTS === undefined ? {} : RESIZE_SERVICE_DEFAULTS);
 
     Object.keys(defaults).map((key) => {
-      const classifiedKey = classify(key);
-      const defaultKey = `default${classifiedKey}`;
-      return set(this, defaultKey, defaults[key]);
+      return set(this, camelize(key.toLowerCase()), defaults[key]);
     });
   }
 
-  _hasWindowSizeChanged(w, h, debounced = false) {
-    const wKey = debounced ? '_oldWidthDebounced' : '_oldWidth';
-    const hKey = debounced ? '_oldHeightDebounced' : '_oldHeight';
+  _hasWindowSizeChanged(w, h) {
     return (
-      (this.widthSensitive && w !== wKey) || (this.heightSensitive && h !== hKey)
+      (this.widthSensitive && w !== this._oldWidth) || (this.heightSensitive && h !== this._oldHeight)
     );
   }
 
-  _updateCachedWindowSize(w, h, debounced = false) {
-    const wKey = debounced ? '_oldWidthDebounced' : '_oldWidth';
-    const hKey = debounced ? '_oldHeightDebounced' : '_oldHeight';
-    this.set(wKey, w);
-    this.set(hKey, h);
+  _updateCachedWindowSize(w, h) {
+    this._oldWidth = w;
+    this._oldHeight = h;
   }
 
   _installResizeListener() {
@@ -77,15 +70,8 @@ class ResizeService extends Service.extend(Evented) {
 
   _fireResizeNotification(event) {
     const { innerWidth, innerHeight } = window;
-    if (this._hasWindowSizeChanged(innerWidth, innerHeight)) {
-      this.trigger('didResize', event);
-      this._updateCachedWindowSize(innerWidth, innerHeight);
-    }
-  }
-  _fireDebouncedResizeNotification(event) {
-    const { innerWidth, innerHeight } = window;
     if (this._hasWindowSizeChanged(innerWidth, innerHeight, true)) {
-      this.trigger('debouncedDidResize', event);
+      this.trigger('resize', event);
       this._updateCachedWindowSize(innerWidth, innerHeight, true);
     }
   }
