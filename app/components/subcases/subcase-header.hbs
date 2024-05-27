@@ -158,14 +158,13 @@
       {{/if}}
       {{#if @edit}} 
       <Auk::Toolbar::Item>
-        <AuLink
-          @skin="button-secondary"
-          @icon="pencil"
+        <AuButton
+          @skin="secondary"
           role="menuitem"
-          @route="cases.case.subcases.add-agendapoint"
+          {{on "click" this.resubmit}}
         >
-          Bewerk
-        </AuLink>
+          Dien opnieuw in
+        </AuButton>
       </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

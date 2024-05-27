@@ -199,6 +199,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   @action
+  resubmit() {
+    if (history.length > 1) {
+      history.back();
+    }
+    this.toaster.success('Opnieuw ingediend');
+  }
+
+  @action
   revertStep() {
     if (history.length > 1) {
       history.back();

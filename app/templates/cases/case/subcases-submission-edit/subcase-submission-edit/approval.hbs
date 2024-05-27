@@ -3,7 +3,7 @@
     <SubcaseDemo::ApprovalTitlesPanel
       @subcase={{@model.subcase}}
       @meeting={{this.meeting}}
-      @allowEditing={{user-may "manage-cases"}}
+      @allowEditing={{true}}
       @step="Eerste principiële goedkeuring"
       @status="Ingediend"
       @submission={{true}}
@@ -19,13 +19,13 @@
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{true}}
     @onSave={{this.saveMandateeData}}
   />
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
     @governmentAreas={{@model.subcase.governmentAreas}}
-    @allowEditing={{user-may "manage-cases"}}
+    @allowEditing={{true}}
     @onSave={{this.saveGovernmentAreas}}
   />
 
@@ -52,6 +52,7 @@
             @onAddPiece={{perform this.addPiece}}
             @didDeleteContainer={{this.refresh}}
             @isEditable={{true}}
+            @submission={{true}}
           />
         {{else}}
           <div>
@@ -65,7 +66,6 @@
           </div>
         {{/if}}
       </Auk::Panel::Body>
-      {{#if (user-may "manage-cases")}}
       <Auk::Panel::Footer>
         <AuButton
           data-test-route-cases---subcase-documents-add
@@ -77,7 +77,6 @@
           {{t "documents-add"}}
         </AuButton>
       </Auk::Panel::Footer>
-      {{/if}}
     </Auk::Panel>
   </div>
 
