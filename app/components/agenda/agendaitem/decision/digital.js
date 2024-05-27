@@ -11,7 +11,6 @@ import VrNotulenName, {
   compareFunction as compareNotulen,
 } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
-import constants from 'frontend-kaleidos/config/constants';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
@@ -313,10 +312,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const subcaseType = await subcase?.type;
-    const ratification = await subcase?.ratification;
     let newBetreftContent;
-    if (subcaseType?.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
+    if (subcase?.isBekrachtiging) {
+      const ratification = await subcase.ratification;
       newBetreftContent = await generateBetreft(
         subcase.shortTitle,
         null,
@@ -369,7 +367,6 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       .decisionResultCode;
     const agendaActivity = await this.args.agendaContext.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const subcaseType = await subcase?.type;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
@@ -378,7 +375,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        if (subcaseType?.uri === constants.SUBCASE_TYPES.BEKRACHTIGING) {
+        if (subcase?.isBekrachtiging) {
           newBeslissingHtmlContent = "De Vlaamse Regering bekrachtigt bovengenoemd decreet en beslist over te gaan tot de afkondiging ervan.";
         } else if (this.args.agendaitem.isApproval) {
           const { shortTitle, title } = this.args.agendaContext.agendaitem;
