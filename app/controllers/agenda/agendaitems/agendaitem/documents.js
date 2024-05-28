@@ -12,6 +12,7 @@ import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { capitalizeFirstLetter, findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -142,17 +143,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
 
-    let type;
-    const types = await this.store.queryAll('document-type', { filter: parsed.type });
-    for (const maybeType of types.slice()) {
-      if (maybeType.label === parsed.type) {
-        type = maybeType;
-        break;
-      } else if (maybeType.altLabel === parsed.type) {
-        type = maybeType;
-        break;
-      }
-    }
+    const capitalizedType = capitalizeFirstLetter(parsed.type);
+    const types = await this.store.queryAll('document-type', { filter: capitalizedType });
+    const type = findDocType(capitalizedType, types);
 
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
