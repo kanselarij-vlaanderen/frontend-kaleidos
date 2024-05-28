@@ -84,6 +84,10 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = subcase;
   }
 
+  get hasActions() {
+    return this.canDelete || this.canPropose || this.args.parliamentFlow;
+  }
+
   /**
    * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
    * @param {Meeting} meeting
