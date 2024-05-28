@@ -4,6 +4,9 @@
       class="auk-container auk-container--center l-printable-agenda"
       data-test-printable-agenda-container
     >
+      {{#if this.notaGroups.isRunning}}
+        <Auk::Loader />
+      {{else}}
       <Utils::LogoHeader />
       <h2
         class="auk-h2 auk-u-text-family-serif auk-u-text-align--center auk-u-mt-5 auk-u-mb-10"
@@ -20,7 +23,7 @@
       </h2>
 
       <div class="auk-content">
-        {{#if this.notaGroups}}
+        {{#if this.notaGroups.value}}
           <div>
             <div class="auk-o-flex auk-u-mb-4 l-printable-agenda__section-header">
               <div class="l-printable-agenda__header-prefix">A.</div>
@@ -29,7 +32,7 @@
                 >{{t "agendaitems"}}</h3>
             </div>
             <div class="l-printable-agenda__section-content">
-              {{#each this.notaGroups as |notaGroup|}}
+              {{#each this.notaGroups.value as |notaGroup|}}
                 <Agenda::PrintableAgenda::ListSection::ItemGroup
                   @items={{notaGroup}}
                 />
@@ -54,17 +57,20 @@
                       @item={{announcement}}
                     />
                   </div>
-                  {{#if @item.pieces}}
-                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                      @pieces={{announcement.pieces}}
-                    />
-                  {{/if}}
+                  {{#let (await announcement.pieces) as |pieces|}}
+                    {{#if pieces}}
+                      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                        @pieces={{pieces}}
+                      />
+                    {{/if}}
+                  {{/let}}
                 </div>
               {{/each}}
             </div>
           </div>
         {{/if}}
       </div>
+      {{/if}}
     </div>
   </div>
 </div>

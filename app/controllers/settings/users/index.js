@@ -7,6 +7,7 @@ import { LIVE_SEARCH_DEBOUNCE_TIME, PAGINATION_SIZES } from 'frontend-kaleidos/c
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class UsersSettingsController extends Controller {
   @service store;
@@ -19,7 +20,7 @@ export default class UsersSettingsController extends Controller {
   @tracked searchTextBuffer;
 
   @tracked userBeingBlocked = null;
-  @tracked membershipsBeingBlocked = [];
+  @tracked membershipsBeingBlocked = new TrackedArray([]);
 
   @tracked showBlockMembershipsConfirmationModal = false;
   @tracked showBlockUserConfirmationModal = false;
@@ -89,13 +90,13 @@ export default class UsersSettingsController extends Controller {
   @action
   toggleShowBlockMembershipsConfirmationModal() {
     this.showBlockMembershipsConfirmationModal = !this.showBlockMembershipsConfirmationModal;
-    this.membershipsBeingBlocked = [];
+    this.membershipsBeingBlocked = new TrackedArray([]);
   }
 
   @action
   toggleShowUnblockMembershipsConfirmationModal() {
     this.showUnblockMembershipsConfirmationModal = !this.showUnblockMembershipsConfirmationModal;
-    this.membershipsBeingBlocked = [];
+    this.membershipsBeingBlocked = new TrackedArray([]);
   }
 
   @action

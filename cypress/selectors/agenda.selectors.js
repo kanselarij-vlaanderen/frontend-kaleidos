@@ -93,6 +93,11 @@ const selectors = {
     title: '[data-test-agenda-header-title]',
   },
 
+  agendaCheck: {
+    confirm: '[data-test-agenda-check-confirm]',
+    cancel: '[data-test-agenda-check-cancel]',
+  },
+
   // agenda-actions
   agendaActions: {
     optionsDropdown: '[data-test-agenda-actions-options-dropdown]',

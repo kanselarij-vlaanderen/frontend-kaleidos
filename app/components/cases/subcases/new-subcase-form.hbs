@@ -181,7 +181,7 @@
             @disabled={{this.createSubcase.isRunning}}
           />
           <Cases::Subcases::DocumentUploadPanel
-            @pieces={{this.pieces}}
+            @pieces={{this.sortedPieces}}
             @onAddPiece={{this.addPiece}}
             @onDeletePiece={{this.deletePiece}}
             @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
