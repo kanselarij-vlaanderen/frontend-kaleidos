@@ -173,6 +173,7 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   }
   cy.wait(`@loadPieces_${randomInt}`); // This call does not happen when loading subcase/documents route, but when loading the documents in that route
   cy.wait(1000); // Cypress is too fast
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPiece');
 }
 
