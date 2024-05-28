@@ -123,8 +123,6 @@ $calendarWidth: $daysWidth;
 
 .numInputWrapper {
   span {
-    @extend .auk-icon;
-
     border: 0.1rem solid transparent;
     border-left-color: $auk-gray-300;
     padding: 0.1rem 0 0 0.1rem;
@@ -134,10 +132,6 @@ $calendarWidth: $daysWidth;
 
     &:after {
       content: normal;
-    }
-
-    &:before {
-      @extend %auk-icons-font-style;
     }
 
     &:hover {
@@ -153,20 +147,16 @@ $calendarWidth: $daysWidth;
     }
 
     &.arrowUp {
-      border-top-right-radius: .3rem;
+      @include au-background-icon('plus', 1rem);
 
-      &:before {
-        @extend .ki-plus;
-      }
+      border-top-right-radius: .3rem;
     }
 
     &.arrowDown {
+      @include au-background-icon('dash', 1rem);
+
       border-top-color: $auk-gray-300;
       border-bottom-right-radius: .3rem;
-
-      &:before {
-        @extend .ki-dash;
-      }
     }
   }
 }
