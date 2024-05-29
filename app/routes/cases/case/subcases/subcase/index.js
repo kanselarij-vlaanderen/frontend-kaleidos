@@ -83,7 +83,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     await model.subcase.governmentAreas;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      await model.subcase.confidential
+      (await model.subcase.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
