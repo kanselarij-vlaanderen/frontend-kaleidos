@@ -27,7 +27,7 @@
                   {{t "delete-subcase"}}
                 </AuButton>
               {{/if}}
-              {{#if @parliamentFlow}}
+              {{#unless @parliamentFlow}}
                 <AuButton
                   data-test-subcase-header-action-move-subcase
                   @skin="link"
@@ -36,7 +36,7 @@
                 >
                   {{t "move-subcase"}}
                 </AuButton>
-              {{/if}}
+              {{/unless}}
               {{#if this.canPropose}}
                 <AuButton
                   data-test-subcase-header-action-show-proposed-agendas
