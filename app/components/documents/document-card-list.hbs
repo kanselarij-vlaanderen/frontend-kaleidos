@@ -1,5 +1,5 @@
-<Documents::DocumentList class="auk-document-card-list" @pieces={{@pieces}} as |documents|>
-  {{#each documents as |doc|}}
+<Documents::DocumentList @pieces={{@pieces}} as |documents|>
+  {{#each documents as |doc index|}}
     <div class="auk-u-mb-2">
       <Documents::DocumentCard
         @piece={{doc}}
@@ -13,6 +13,7 @@
         @decisionActivity={{@decisionActivity}}
         @submission={{@submission}}
         @newDocuments={{@newDocuments}}
+        @index={{index}}
       />
     </div>
   {{else}}

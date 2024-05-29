@@ -15,6 +15,7 @@
                 />
               </th>
             {{/if}}
+            <th class="auk-table-checkbox-col"></th>
             <th>{{t "name-document"}}</th>
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
@@ -38,9 +39,10 @@
               @isSignaturesEnabled={{this.isSignaturesEnabled}}
             />
           {{/if}}
-          {{#each this.rows as |row|}}
+          {{#each this.rows as |row index|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
+              @index={{index}}
               @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
