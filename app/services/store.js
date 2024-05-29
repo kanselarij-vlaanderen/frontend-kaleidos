@@ -1,4 +1,4 @@
-import Store from '@ember-data/store';
+import Store from 'ember-data/store';
 import ArrayProxy from '@ember/array/proxy';
 
 export default class ExtendedStoreService extends Store {

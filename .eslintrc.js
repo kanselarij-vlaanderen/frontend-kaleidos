@@ -29,6 +29,7 @@ module.exports = {
       { argsIgnorePattern: '^_' },
     ],
     'no-dupe-class-members': 'off',
+    'ember/use-ember-data-rfc-395-imports': 'off'
   },
   overrides: [
     // node files
