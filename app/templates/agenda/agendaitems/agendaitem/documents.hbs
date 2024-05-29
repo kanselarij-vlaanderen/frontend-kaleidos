@@ -42,6 +42,7 @@
           @skin="warning"
           @icon="alert-triangle"
           @title={{t "postponed-item"}}
+          class="auk-u-mb-2"
         >
           {{t "agendaitem-document-postponed--message"}}
         </AuAlert>
@@ -50,6 +51,7 @@
           @skin="warning"
           @icon="alert-triangle"
           @title={{t "retracted-item"}}
+          class="auk-u-mb-2"
         >
           {{t "agendaitem-document-retracted--message"}}
         </AuAlert>
@@ -65,6 +67,7 @@
       @didDeleteContainer={{this.refresh}}
       @isEditable={{true}}
       @decisionActivity={{this.decisionActivity}}
+      @hideAccessLevel={{this.hideAccessLevel}}
     />
   {{else}}
     <div class="auk-u-mt-2">
@@ -137,7 +140,7 @@
         @onUpload={{this.uploadPiece}}
       />
       <div class="upload-container">
-        {{#each this.newPieces as |piece|}}
+        {{#each this.sortedNewPieces as |piece|}}
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}

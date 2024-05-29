@@ -7,12 +7,10 @@ import { debounce } from '@ember/runloop';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /**
- * @argument agendaitem
  * @argument subcase
- * @argument decisionActivity
- * @argument agendaContext
+ * @argument decisionActivity (needed for marking for signing only when on agendaitem view)
  */
-export default class AgendaitemRatificationComponent extends Component {
+export default class SubcaseRatificationComponent extends Component {
   @service store;
   @service toaster;
   @service intl;

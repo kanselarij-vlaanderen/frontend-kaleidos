@@ -46,6 +46,7 @@ export default class CreateAgendaitem extends Component {
       },
       filter: {
         ':has-no:agenda-activities' : 'yes',
+        ':has:created': `date-added-for-cache-busting-${new Date().toISOString()}`,
       }
     };
     if (this.filter) {
