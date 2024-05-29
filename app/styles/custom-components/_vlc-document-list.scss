@@ -36,9 +36,8 @@
     }
   }
 
-  .auk-icon {
-    margin-right: 0.7rem;
-    line-height: 1rem;
+  .au-c-icon {
+    margin-right: 0.5rem;
   }
 }
 
@@ -46,7 +45,7 @@
    ========================================================================== */
 
 .vlc-document-list__item--active {
-  .auk-icon {
+  .au-c-icon {
     color: $auk-green-500;
   }
 }

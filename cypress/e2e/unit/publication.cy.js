@@ -522,7 +522,7 @@ context('Publications tests', () => {
       .wait('@patchPublicationFlow');
 
     // check if fields updated
-    cy.get(publication.publicationCaseInfo.urgencyLevel).find(auk.icon.warning);
+    cy.get(publication.publicationCaseInfo.urgencyLevel).find(appuniversum.icon.warning);
     cy.get(publication.publicationCaseInfo.publicationMode).contains(publicationMode1);
     cy.get(publication.publicationCaseInfo.decisionDate).contains(formattedDecisionDate);
 
