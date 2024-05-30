@@ -755,3 +755,8 @@ $au-label-color: var(--au-gray-700);
     min-width: 354px;
   }
 }
+
+// Adjust width of modals on mobile
+.auk-modal {
+    max-width: calc(100% - 2rem);
+}
