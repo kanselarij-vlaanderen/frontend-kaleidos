@@ -85,7 +85,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   get hasActions() {
-    return this.canDelete || this.canPropose || this.args.parliamentFlow;
+    return this.canDelete || this.canPropose || !this.args.parliamentFlow;
   }
 
   /**
