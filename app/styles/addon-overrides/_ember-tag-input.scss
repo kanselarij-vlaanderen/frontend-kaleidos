@@ -7,7 +7,7 @@
   border-radius: .3rem;
   width: 100%;
   background-color: $auk-white;
-  padding: .7rem;
+  padding: .7rem .7rem .4rem .7rem;
 
   font-family: $g-base-font-family;
   font-size: 1.5rem;
@@ -40,13 +40,8 @@
 }
 
 .emberTagInput-remove {
-  @extend .auk-icon;
-  @extend .auk-icon--x;
-
-  &:before {
-    @extend %auk-icons-font-style;
-    @extend .ki-x;
-  }
+  @include au-background-icon('cross', 1.8rem);
+  @extend .auk-filter-pill__action;
 
   text-decoration: none !important;
   color: inherit !important;

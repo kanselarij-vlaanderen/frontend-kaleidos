@@ -3,7 +3,7 @@
     href={{@doc.viewDocumentURL}} rel="noreferrer noopener"
     data-test-document-badge-link
   >
-    <Auk::Icon @name={{if @isHighlighted "document-added" "document"}} />
+    <AuIcon @icon={{if @isHighlighted "document-added" "document"}} />
     <span>
     {{@doc.name}}
     </span>

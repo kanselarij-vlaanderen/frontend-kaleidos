@@ -26,9 +26,8 @@ export default EmberObject.create({
     {
       label: 'Formeel OK',
       uri: CONSTANTS.FORMALLY_OK_STATUSES.FORMALLY_OK,
-      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-o-flex',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive',
       approved: true,
-      iconClassNames: 'ki-check formally-ok-icon',
       svg: {
         icon: 'check',
         color: 'success',
@@ -37,18 +36,16 @@ export default EmberObject.create({
     {
       label: 'Formeel niet OK',
       uri: CONSTANTS.FORMALLY_OK_STATUSES.FORMALLY_NOT_OK,
-      classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-o-flex',
-      iconClassNames: 'ki-x formally-ok-icon',
+      classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold',
       svg: {
         icon: 'x',
-        color: 'danger',
+        color: 'error',
       },
     },
     {
       label: 'Nog niet formeel OK',
       uri: CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
-      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
-      iconClassNames: 'ki-circle-question formally-ok-icon',
+      classNames: 'vlc-agenda-items__status auk-u-text-bold',
       svg: {
         icon: 'circle-question',
         color: '',

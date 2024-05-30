@@ -94,9 +94,5 @@ const selectors = {
   formHelpText: '.auk-form-help-text',
 
   fileUpload: '.auk-file-upload',
-
-  icon: {
-    warning: '.auk-icon--warning',
-  },
 };
 export default selectors;
