@@ -747,3 +747,11 @@ $au-label-color: var(--au-gray-700);
     }
   }
 }
+
+// Adjust width of toaster on mobile
+.au-c-toaster .au-c-alert {
+  @include mq($until: medium) {
+    max-width: 354px;
+    min-width: 354px;
+  }
+}
