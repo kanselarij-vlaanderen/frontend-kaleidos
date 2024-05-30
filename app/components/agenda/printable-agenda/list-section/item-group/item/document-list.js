@@ -10,7 +10,12 @@ export default class AgendaPrintableAgendaListSectionItemGroupItemDocumentListCo
     const calculateSortedPieces = async () => {
       sortedPieces.length = 0;
       const pieces = await this.args.pieces.slice();
-      (await sortPieces(pieces))
+      const piecesNoNextVersion = await Promise.all(pieces.map(async (piece) => {
+        const nextPiece = await piece.nextPiece;
+        return !nextPiece ? piece : null; 
+      }));
+      const filteredPieces = piecesNoNextVersion.filter((piece) => piece !== null);
+      (await sortPieces(filteredPieces))
         .forEach((piece) => sortedPieces.push(piece));
     };
     calculateSortedPieces();
