@@ -64,11 +64,13 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   }
 
   async afterModel(model) {
-    this.mandatees = (await model.subcase.mandatees)
+    const subcase = model.subcase;
+    const unsortedMandatees = await subcase.mandatees;
+    this.mandatees = unsortedMandatees
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
-    this.submitter = await model.subcase.requestedBy;
-    const agendaActivities = await model.subcase.agendaActivities;
+    this.submitter = await subcase.requestedBy;
+    const agendaActivities = await subcase.agendaActivities;
     const latestActivity = agendaActivities
       .slice()
       .sort((a1, a2) => a1.startDate - a2.startDate)
@@ -80,10 +82,10 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       });
       this.agenda = await this.meeting?.belongsTo('agenda').reload();
     }
-    await model.subcase.governmentAreas;
+    await subcase.governmentAreas;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      await model.subcase.confidential
+      subcase.confidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
