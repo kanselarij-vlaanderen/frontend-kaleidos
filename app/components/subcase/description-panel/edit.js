@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
+import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -19,6 +20,7 @@ export default class SubcaseDescriptionEdit extends Component {
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
   @service pieceAccessLevelService;
+  @service currentSession;
 
   @tracked subcaseName;
   @tracked subcaseType;
@@ -114,24 +116,24 @@ export default class SubcaseDescriptionEdit extends Component {
         propertiesToSetOnAgendaitem.number = agendaitemNumber;
       }
     }
-    
+
     await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
       resetFormallyOk
     );
-    
+
     if (this.confidentialChanged && this.args.subcase.confidential) {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       await this.updateNewsItem.perform();
     }
-    
+
     if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
       await this.updateDecisionReport(propertiesToSetOnAgendaitem.number);
-      await this.recalculateAgendaitemNumbersFromOldType(oldAgendaItemType.uri)
+      await this.recalculateAllAgendaitemNumbersOnAgenda()
     }
 
     this.args.onSave();
@@ -139,7 +141,7 @@ export default class SubcaseDescriptionEdit extends Component {
     this.isSaving = false;
   }
 
-  async recalculateAgendaitemNumbersFromOldType(oldAgendaItemTypeUri) {
+  async recalculateAllAgendaitemNumbersOnAgenda() {
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
@@ -147,23 +149,12 @@ export default class SubcaseDescriptionEdit extends Component {
     });
     if (agendaitem) {
       const agenda = await agendaitem.agenda;
-      const agendaitemsWithOldTypeFromAgenda = await this.store.queryAll('agendaitem', {
-        'filter[agenda][:id:]': agenda.id,
-        'filter[:has-no:next-version]': 't',
-        'filter[type][:uri:]': oldAgendaItemTypeUri,
-        sort:'number'
-      });
-      const latestAgendaitemWithOldType = agendaitemsWithOldTypeFromAgenda.slice().at(agendaitemsWithOldTypeFromAgenda.length - 1);
-      if (agendaitem.id === latestAgendaitemWithOldType.id) {
-        return;
-      }
-      for (let index = 0; index < agendaitemsWithOldTypeFromAgenda.slice().length; index++) {
-        const agendaitem = agendaitemsWithOldTypeFromAgenda.slice().at(index);
-        if (agendaitem.number !== index + 1 ) {
-          agendaitem.number = index + 1;
-          await agendaitem.save();
-        }
-      }
+      await reorderAgendaitemsOnAgenda(
+        agenda,
+        this.store,
+        this.decisionReportGeneration,
+        this.currentSession.may('manage-agendaitems'),
+      );
     }
 
   }
