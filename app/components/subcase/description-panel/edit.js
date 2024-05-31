@@ -114,28 +114,58 @@ export default class SubcaseDescriptionEdit extends Component {
         propertiesToSetOnAgendaitem.number = agendaitemNumber;
       }
     }
-
+    
     await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
       resetFormallyOk
     );
-
+    
     if (this.confidentialChanged && this.args.subcase.confidential) {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       await this.updateNewsItem.perform();
     }
-
+    
     if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
       await this.updateDecisionReport(propertiesToSetOnAgendaitem.number);
+      await this.recalculateAgendaitemNumbersFromOldType(oldAgendaItemType.uri)
     }
 
     this.args.onSave();
 
     this.isSaving = false;
+  }
+
+  async recalculateAgendaitemNumbersFromOldType(oldAgendaItemTypeUri) {
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-created',
+    });
+    if (agendaitem) {
+      const agenda = await agendaitem.agenda;
+      const agendaitemsWithOldTypeFromAgenda = await this.store.queryAll('agendaitem', {
+        'filter[agenda][:id:]': agenda.id,
+        'filter[:has-no:next-version]': 't',
+        'filter[type][:uri:]': oldAgendaItemTypeUri,
+        sort:'number'
+      });
+      const latestAgendaitemWithOldType = agendaitemsWithOldTypeFromAgenda.slice().at(agendaitemsWithOldTypeFromAgenda.length - 1);
+      if (agendaitem.id === latestAgendaitemWithOldType.id) {
+        return;
+      }
+      for (let index = 0; index < agendaitemsWithOldTypeFromAgenda.slice().length; index++) {
+        const agendaitem = agendaitemsWithOldTypeFromAgenda.slice().at(index);
+        if (agendaitem.number !== index + 1 ) {
+          agendaitem.number = index + 1;
+          await agendaitem.save();
+        }
+      }
+    }
+
   }
 
   async calculateAgendaitemNumber() {
