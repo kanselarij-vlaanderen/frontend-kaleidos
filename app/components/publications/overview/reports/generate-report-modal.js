@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import * as CONFIG from 'frontend-kaleidos/config/config';
+import{ PUBLICATIONS_IN_KALEIDOS_START_DATE, PUBLICATION_REPORT_START_YEAR } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument title
@@ -74,7 +74,7 @@ export default class GenerateReportModalComponent extends Component {
   }
 
   get publicationsStartYear() {
-    return CONFIG.PUBLICATION_REPORT_START_YEAR;
+    return PUBLICATION_REPORT_START_YEAR;
   }
 
   get isLoading() {
@@ -137,7 +137,7 @@ export default class GenerateReportModalComponent extends Component {
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
       ...(this.publicationYear >=
-        CONFIG.PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
+        PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
         'filter[deprecated]': false,
       }), // Exclude deprecated government domains when generating modern reports
     });
