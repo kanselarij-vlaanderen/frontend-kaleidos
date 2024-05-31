@@ -21,7 +21,7 @@ export default class VRCabinetDocumentName {
 
   get regex() {
     const regexGroup = VRCabinetDocumentName.regexGroups;
-    return new RegExp(`(?<subject>.*?)(?:[/-]${regexGroup.type})?[/-]${regexGroup.index}${regexGroup.versionSuffix}?$`);
+    return new RegExp(`(?<subject>.*?)(?:[/-]${regexGroup.index})?[/-]${regexGroup.type}${regexGroup.versionSuffix}?$`);
   }
 
   parseMeta() {

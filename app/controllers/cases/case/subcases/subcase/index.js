@@ -14,7 +14,7 @@ import {
 import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
 import { removeObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
-import { capitalizeFirstLetter, findDocType } from 'frontend-kaleidos/utils/document-type';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -24,6 +24,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @service fileConversionService;
   @service toaster;
   @service pieceAccessLevelService;
+  @service conceptStore
 
   @tracked decisionmakingFlow;
   @tracked mandatees;
@@ -93,10 +94,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   async uploadPiece(file) {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
-
-    const capitalizedType = capitalizeFirstLetter(parsed.type);
-    const types = await this.store.queryAll('document-type', { filter: capitalizedType });
-    const type = findDocType(capitalizedType, types);
+    const type = await findDocType(this.conceptStore, parsed.type);
 
     const now = new Date();
     const confidential = this.model.subcase.confidential || false;
