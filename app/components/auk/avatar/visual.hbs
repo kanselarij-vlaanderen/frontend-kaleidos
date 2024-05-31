@@ -1,6 +1,6 @@
 <div class="auk-avatar {{this.type}} {{this.size}}" aria-label={{if @icon this.name}} role={{if @icon "img"}} ...attributes>
   {{#if @icon}}
-    <Auk::Icon @name={{@icon}} @size={{@size}} />
+    <AuIcon @icon={{@icon}} />
   {{else if @image}}
     <img src="{{@image}}" alt="{{this.name}}" />
   {{/if}}
