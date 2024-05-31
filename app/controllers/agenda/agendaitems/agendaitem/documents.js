@@ -12,6 +12,7 @@ import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -24,6 +25,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service router;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service conceptStore;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -141,19 +143,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   async uploadPiece(file) {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
-
-    let type;
-    const types = await this.store.queryAll('document-type', { filter: parsed.type });
-    for (const maybeType of types.slice()) {
-      if (maybeType.label === parsed.type) {
-        type = maybeType;
-        break;
-      } else if (maybeType.altLabel === parsed.type) {
-        type = maybeType;
-        break;
-      }
-    }
-
+    const type = await findDocType(this.conceptStore, parsed.type);
+    
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
