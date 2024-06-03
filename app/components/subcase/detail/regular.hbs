@@ -45,6 +45,22 @@
                 </div>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              {{#if (and @documentsAreVisible @pieces.length)}}
+                <Auk::Toolbar::Item>
+                  {{#if (user-may "manage-documents")}}
+                    <AuButton
+                      data-test-route-agenda-documents-batch-edit
+                      @skin="secondary"
+                      @icon="pencil"
+                      {{on "click" this.openBatchDetails}}
+                    >
+                      {{t "batch-edit"}}
+                    </AuButton>
+                  {{/if}}
+                </Auk::Toolbar::Item>
+              {{/if}}
+            </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
@@ -139,3 +155,11 @@
     {{/if}}
   </:body>
 </ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{@pieces}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+  />
+{{/if}}
