@@ -44,7 +44,7 @@
               class="auk-h4"
               data-test-document-card-name-value
             >
-              {{#if this.loadFiles.isRunning}}
+              {{#if (or this.loadFiles.isRunning this.loadPieceRelatedData.isRunning)}}
                 <Auk::Loader />
               {{else}}
                 {{#let
@@ -53,6 +53,9 @@
                   )
                   as |extension|
                 }}
+                  {{#if this.documentContainer.position}}
+                    {{this.documentContainer.position}}. 
+                  {{/if}}
                   {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}

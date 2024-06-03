@@ -22,6 +22,11 @@
     </td>
   {{/if}}
   <td>
+    {{#if @row.documentContainer.position}}
+      {{@row.documentContainer.position}}.
+    {{/if}}
+  </td>
+  <td>
     {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
         data-test-document-details-input
