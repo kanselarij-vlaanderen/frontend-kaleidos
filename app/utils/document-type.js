@@ -8,11 +8,15 @@ import CONSTANTS from "frontend-kaleidos/config/constants";
 async function findDocType(conceptStore, maybeType) {
   const types = await conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
   let actualType;
+  const incomingType =  maybeType?.toLowerCase();
+  if (!incomingType) {
+    return;
+  }
   for (const type of types.slice()) {
-    if (type.label.toLowerCase() === maybeType.toLowerCase()) {
+    if (type.label.toLowerCase() === incomingType) {
       actualType = type;
       break;
-    } else if (type.altLabel.toLowerCase() === maybeType.toLowerCase()) {
+    } else if (type.altLabel.toLowerCase() === incomingType) {
       actualType = type;
       break;
     }
