@@ -5,9 +5,6 @@ import { action } from '@ember/object';
 import { timeout, dropTask, task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
-import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
@@ -92,15 +89,13 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *loadDocuments() {
     let pieces = yield this.throttledLoadingService.loadPieces.linked().perform(this.args.agendaitem);
     pieces = pieces.slice();
-    let sortedPieces;
-    if (this.args.agendaitem.isApproval) {
-      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else if (this.args.meeting.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
-    this.agendaitemDocuments = sortedPieces;
+    this.agendaitemDocuments = yield sortPieces(
+      pieces,
+      {
+        isApproval: this.args.agendaitem.isApproval,
+        isPreKaleidos: this.args.meeting.isPreKaleidos,
+      }
+    );
   }
 
   @task

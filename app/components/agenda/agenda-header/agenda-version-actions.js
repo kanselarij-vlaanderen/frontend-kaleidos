@@ -33,6 +33,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @service store;
   @service currentSession;
   @service agendaService;
+  @service documentService;
   @service router;
   @service intl;
   @service toaster;
@@ -40,7 +41,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = false;
   @tracked showConfirmForApprovingAgenda = false;
+  @tracked showAgendaCheck = false;
   @tracked showConfirmForApprovingAgendaAndClosingMeeting = false;
+  @tracked showAgendaCheckWithCloseMeeting = false;
   @tracked showConfirmForClosingMeeting = false;
   @tracked showConfirmForDeletingSelectedAgenda = false;
   @tracked showConfirmForReopeningPreviousAgenda = false;
@@ -49,6 +52,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @tracked isDesignAgenda = false;
   @tracked designAgenda = null;
   @tracked lastApprovedAgenda = null;
+
+  @tracked agendaCheckMapping = null;
+  @tracked openAgendaCheckTimestamp = null;
 
   constructor() {
     super(...arguments);
@@ -225,7 +231,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       }
     });
     yield all(agendaitemNewPieces);
-    this.piecesToDeleteReopenPreviousAgenda = sortPieces(pieces);
+    this.piecesToDeleteReopenPreviousAgenda = yield sortPieces(pieces);
   }
 
   // TODO KAS-2399 could we get rid of this when we reload the model with agendaitems includes?
@@ -284,9 +290,17 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   @action
-  async openConfirmApproveAgenda() {
+  async openConfirmApproveAgenda(mapping) {
     this.reloadAgendaitemsData.perform();
+    this.agendaCheckMapping = mapping;
     this.showConfirmForApprovingAgenda = true;
+  }
+
+  @action
+  async openAgendaCheck() {
+    this.reloadAgendaitemsData.perform();
+    this.openAgendaCheckTimestamp = new Date();
+    this.showAgendaCheck = true;
   }
 
   @action
@@ -294,8 +308,15 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.showConfirmForApprovingAgenda = false;
   }
 
+  @action
+  cancelAgendaCheck() {
+    this.openAgendaCheckTimestamp = null;
+    this.agendaCheckMapping = null;
+    this.showAgendaCheck = false;
+  }
+
   /**
-   * This method is going to send the current design agenda to the agenda service for approval
+   * This method is going to set the generated piece names and send the current design agenda to the agenda service for approval
    * - For new items that were formally not ok, they have to be removed from the approved agenda and the agendaitems on that agenda have to be resorted (do this in service ?)
    * - For items that have been on previous approved agendas (and not formally ok now), we have to move the changes made to the new agenda
    * This means rolling back the agendaitem version on the recently approved agenda to match what was approved in the past
@@ -315,6 +336,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     try {
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
+      await this.documentService.setGeneratedPieceNames(
+        this.args.currentAgenda.id,
+        this.agendaCheckMapping,
+        this.openAgendaCheckTimestamp,
+      );
+      await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
@@ -335,14 +362,29 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   }
 
   @action
-  async openConfirmApproveAgendaAndCloseMeeting() {
+  async openConfirmApproveAgendaAndCloseMeeting(mapping) {
     this.reloadAgendaitemsData.perform();
+    this.agendaCheckMapping = mapping;
     this.showConfirmForApprovingAgendaAndClosingMeeting = true;
   }
 
   @action
   cancelApproveAgendaAndCloseMeeting() {
     this.showConfirmForApprovingAgendaAndClosingMeeting = false;
+  }
+
+  @action
+  async openAgendaCheckWithCloseMeeting() {
+    this.reloadAgendaitemsData.perform();
+    this.openAgendaCheckTimestamp = new Date();
+    this.showAgendaCheckWithCloseMeeting = true;
+  }
+
+  @action
+  cancelAgendaCheckWithCloseMeeting() {
+    this.openAgendaCheckTimestamp = null;
+    this.agendaCheckMapping = null;
+    this.showAgendaCheckWithCloseMeeting = false;
   }
 
   /**
@@ -365,6 +407,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     try {
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      await this.documentService.setGeneratedPieceNames(
+        this.args.currentAgenda.id,
+        this.agendaCheckMapping,
+        this.openAgendaCheckTimestamp,
+      );
+      await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
       await timeout(1000); // timeout to await async cache invalidations in backend to be finished
       // Data reloading
       await this.reloadAgenda(this.args.currentAgenda);

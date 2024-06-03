@@ -705,6 +705,8 @@
   "relevance-score": "Relevantie",
   "activity-phase-proposed-for-agenda": "Ingediend voor agendering op",
   "activity-phase-approved-on-agenda": "Geagendeerd op de agenda van",
+  "activity-phase-approved-on-agenda-prefix": "Geagendeerd op de",
+  "activity-phase-approved-on-agenda-suffix": "{agenda} van",
   "activity-phase-postponed-on-agenda": "Uitgesteld op de agenda van",
   "decision-activity-result": "op de agenda van",
   "result-decision": "Resultaat beslissing",
@@ -858,6 +860,7 @@
   "approve-agenda-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat. Als u ervoor kiest om door te gaan zullen er mogelijk wijzigingen verloren gaan bij het goedkeuren van deze ontwerpagenda.",
   "approve-agenda-close-meeting-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat. Als u doorgaat gaan er mogelijk wijzigingen verloren bij afsluiten van de agenda!",
   "approve-agenda-close-meeting-confirmation": "Bent u zeker dat u de agenda wil goedkeuren en afsluiten?",
+  "check-agenda-not-ok-message": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat (niet formeel OK). Deze worden niet getoond in dit overzicht.",
   "close-meeting-confirmation": "Bent u zeker dat u de agenda wil afsluiten?",
   "delete-agenda-message": "Bent u zeker dat u {agenda} wil verwijderen?",
   "delete-final-agenda-and-meeting": "U staat op het punt om de laatste agenda van de vergadering te verwijderen, wat zal resulteren in het verwijderen van de vergadering.",
@@ -1343,8 +1346,8 @@
   "search-case-title": "Zoek op dossiernaam",
   "agendaitem-postponed-no-documents-available": "Dit agendapunt is uitgesteld. Er zijn geen documenten beschikbaar.",
   "agendaitem-retracted-no-documents-available": "Dit agendapunt is ingetrokken. Er zijn geen documenten beschikbaar.",
-  "agendaitem-document-postponed--message": "De documenten van een uitgesteld agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een uitgesteld punt niet van toepassing.",
-  "agendaitem-document-retracted--message": "De documenten van een ingetrokken agendapunt zijn niet zichtbaar voor de gebruikers van een overheidsorganisatie of het Vlaams Parlement. De toegangsrechten 'publiek' of 'intern overheid' zijn op de documenten van een ingetrokken punt niet van toepassing.",
+  "agendaitem-document-postponed--message": "De documenten van uitgestelde agendapunten zijn niet zichtbaar voor de overheid.",
+  "agendaitem-document-retracted--message": "De documenten van een ingetrokken agendapunt zijn niet zichtbaar voor de overheid.",
   "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde",
   "from-parliament": "Van het Vlaams Parlement",
   "all-agendas": "Alle agenda's",
@@ -1373,5 +1376,7 @@
   "ratification-title": "Bekrachtiging en afkondiging",
   "ratifying-mandatees": "Ondertekenende Ministers",
   "authority-domain": "Bevoegdheidsdomein",
-  "most-recent-documents": "Recentste documenten"
+  "most-recent-documents": "Recentste documenten",
+  "saving-in-progress-please-wait": "Bezig met opslaan, gelieve even te wachten.",
+  "check-agenda": "Agenda controleren"
 }

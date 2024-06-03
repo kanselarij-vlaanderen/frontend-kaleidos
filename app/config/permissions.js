@@ -103,6 +103,7 @@ const groups = [
       'impersonate-users',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
     ]
   },
   {
@@ -138,6 +139,7 @@ const groups = [
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
     ]
   },
   {
@@ -170,6 +172,7 @@ const groups = [
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
     ]
   },
   {
