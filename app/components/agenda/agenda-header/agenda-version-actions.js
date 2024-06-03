@@ -333,6 +333,16 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       this.showNotAllowedToast();
       return;
     }
+    const hasJobAfterOpenModal = !!(await this.store.queryOne('job', {
+      'filter[status]': CONSTANTS.JOB_STATUSSES.SUCCESS,
+      'filter[:gte:time-ended]': this.openAgendaCheckTimestamp.toISOString(),
+    }));
+    if (hasJobAfterOpenModal) {
+      this.showAgendaHasChangedToast();
+      this.showAgendaCheck = false;
+      this.showAgendaCheckWithCloseMeeting = false;
+      return;
+    }
     try {
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
@@ -606,5 +616,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       this.intl.t('action-not-allowed'),
       this.intl.t('warning-title')
     );
+  }
+
+  @action
+  showAgendaHasChangedToast() {
+    this.toaster.error(
+      this.intl.t('an-agenda-was-approved-since-modal-was-opened'),
+      this.intl.t('warning-title')
+    )
   }
 }
