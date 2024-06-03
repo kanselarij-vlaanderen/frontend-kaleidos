@@ -90,7 +90,7 @@
                   </Fieldset.content>
                 </AuFieldset>
               </div>
-              
+
             </div>
             <div class="auk-form-group">
               <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
@@ -109,7 +109,7 @@
                 id="shortTitle"
               />
             </div>
-            <div class="auk-form-group">
+            {{!-- <div class="auk-form-group">
               <Auk::Label for="longTitle">{{t "title-subcase"}}</Auk::Label>
               <Auk::Textarea
                 data-test-new-subcase-longtitle
@@ -117,7 +117,7 @@
                 @value={{this.title}}
                 id="longTitle"
               />
-            </div>
+            </div> --}}
             <div class="auk-form-group">
               <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
               <Utils::ModelSelector
@@ -131,13 +131,34 @@
                 {{capitalize model.label}}
               </Utils::ModelSelector>
             </div>
-            <Auk::Panel class="auk-u-mt-4">
+          </Utils::LoadableContent>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                Notificaties
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Utils::LoadableContent
+            @isLoading={{this.areLoadingTasksRunning}}
+            @reserveSpace={{true}}
+          >
+            <Auk::Panel>
               <Auk::Panel::Header class="au-u-padding-left-small au-u-padding-right-small">
                 <Auk::Toolbar as |Toolbar|>
                   <Toolbar.Group @position="left" as |Group|>
                     <Group.Item>
                       <h4 class="auk-h4 auk-u-m-0">
-                        Goedkeuring
+                        Notificatie voor indiening en goedkeuring
                       </h4>
                     </Group.Item>
                   </Toolbar.Group>
@@ -149,7 +170,7 @@
                         @icon="plus"
                         {{on "click" (toggle "showNotifiersModal" this)}}
                       >
-                        {{t "add"}}
+                        E-mailadressen toevoegen
                       </AuButton>
                     </Group.Item>
                   </Toolbar.Group>
@@ -187,7 +208,7 @@
               </Auk::Panel::Body>
               <Auk::Panel::Body class="auk-u-p-2">
                 <div class="auk-form-group">
-                  <Auk::Label for="approvalComment">Opmerking</Auk::Label>
+                  <Auk::Label for="approvalComment">Aanvullende informatie</Auk::Label>
                   <Auk::Textarea
                     @rows="4"
                     @value=""
@@ -202,7 +223,7 @@
                   <Toolbar.Group @position="left" as |Group|>
                     <Group.Item>
                       <h4 class="auk-h4 auk-u-m-0">
-                        CC
+                        Notificatie naar de IKW-groep
                       </h4>
                     </Group.Item>
                   </Toolbar.Group>
@@ -214,7 +235,7 @@
                         @icon="plus"
                         {{on "click" (toggle "showCCModal" this)}}
                       >
-                        {{t "add"}}
+                        E-mailadressen toevoegen
                       </AuButton>
                     </Group.Item>
                   </Toolbar.Group>
@@ -251,7 +272,7 @@
               </Auk::Panel::Body>
               <Auk::Panel::Body class="auk-u-p-2">
                 <div class="auk-form-group">
-                  <Auk::Label for="ccComment">Opmerking</Auk::Label>
+                  <Auk::Label for="ccComment">Aanvullende informatie voor de IKW-groep</Auk::Label>
                   <Auk::Textarea
                     @rows="4"
                     @value=""
@@ -625,7 +646,7 @@
     </div>
     <AuHr/>
     <div>
-      <AuLabel>Opmerking</AuLabel>
+      <AuLabel>Opmerkingen voor de secretarie over de indiening</AuLabel>
       <AuTextarea @value="" @width="block" />
     </div>
   </Auk::Modal::Body>
@@ -648,7 +669,7 @@
 
 {{#if this.showNotifiersModal}}
   <Signatures::EmailModal
-    @title="Goedkeuring vragen aan"
+    @title="Notificatie voor indiening en goedkeuring"
     @onConfirm={{this.saveNotificationAddress}}
     @onCancel={{toggle "showNotifiersModal" this}}
   />
@@ -656,7 +677,7 @@
 
 {{#if this.showCCModal}}
   <Signatures::EmailModal
-    @title="CC sturen naar"
+    @title="Notificatie naar de IKW-groep"
     @onConfirm={{this.saveCCAddress}}
     @onCancel={{toggle "showCCModal" this}}
   />
