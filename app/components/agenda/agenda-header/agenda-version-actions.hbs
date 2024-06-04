@@ -107,6 +107,7 @@
 {{#if this.showAgendaCheck}}
   <Agenda::AgendaHeader::AgendaCheck
     @agenda={{@currentAgenda}}
+    @canBeApproved={{await (this.canBeApproved)}}
     @meeting={{@meeting}}
     @onCancel={{this.cancelAgendaCheck}}
     @onSave={{this.openConfirmApproveAgenda}}
@@ -118,6 +119,7 @@
 {{#if this.showAgendaCheckWithCloseMeeting}}
 <Agenda::AgendaHeader::AgendaCheck
   @agenda={{@currentAgenda}}
+  @canBeApproved={{await (this.canBeApproved)}}
   @meeting={{@meeting}}
   @onCancel={{this.cancelAgendaCheckWithCloseMeeting}}
   @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
@@ -270,7 +272,7 @@
                     {{datetime-at (or piece.file.created piece.created)}}
                   </div>
                   <div class="vlc-document-card-item__icon">
-                    <Auk::Icon @name="clock-rewind" @size="small" />
+                    <AuIcon @icon="clock-rewind" />
                   </div>
                 </div>
               </div>

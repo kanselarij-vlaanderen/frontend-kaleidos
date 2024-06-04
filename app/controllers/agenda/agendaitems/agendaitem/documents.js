@@ -11,6 +11,8 @@ import {
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -23,6 +25,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service router;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service conceptStore;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -48,6 +51,26 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const hasCase = isPresent(this.agendaActivity);
     const hasPieces = isPresent(this.model.pieces);
     return mayPublish && hasCase && hasPieces;
+  }
+
+  get hideAccessLevel() {
+    if (this.decisionActivity &&
+      ((this.decisionActivity.isRetracted ||
+        this.decisionActivity.isPostponed) &&
+        !this.currentSession.may('view-access-level-pill-when-postponed'))
+    ) {
+      return true;
+    }
+    return false;
+   }
+
+  get sortedNewPieces() {
+    return this.newPieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1.position - d2.position || p1.created - p2.created;
+    });
   }
 
   @task
@@ -117,26 +140,32 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
+    const name = file.filenameWithoutExtension;
+    const parsed = new VRCabinetDocumentName(name).parsed;
+    const type = await findDocType(this.conceptStore, parsed.type);
+    
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
+      position: parsed.index,
+      type,
     });
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      name: file.filenameWithoutExtension,
+      name: parsed.subject,
       documentContainer: documentContainer,
     });
     this.newPieces.push(piece);
   }
 
   savePieces = task(async () => {
-    const savePromises = this.newPieces.map(async (piece) => {
+    const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
@@ -158,8 +187,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
    * Save a new document container and the piece it wraps
    */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    documentContainer.position = index + 1 + (this.model.pieces?.length ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();

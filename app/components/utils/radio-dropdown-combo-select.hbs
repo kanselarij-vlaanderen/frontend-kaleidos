@@ -7,7 +7,7 @@
     <Group.Radio
       data-test-radio-dropdown-input
       @value={{get opt this.radioLabelKey}}
-      @checked={{eq opt this.selectedOption}}
+      checked={{eq opt.id this.selectedOption.id}}
       {{on "input" (fn this.select opt)}}
     >
       {{get opt this.radioLabelKey}}
@@ -15,7 +15,7 @@
   {{/each}}
   <Group.Radio
     @value="Andere"
-    @checked={{this.selectedIsInOthers}}
+    checked={{this.selectedIsInOthers}}
     {{on "input" this.showOthers}}
   >
     {{t "option-others"}}

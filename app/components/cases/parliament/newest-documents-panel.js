@@ -65,6 +65,12 @@ function mergeDuplicatePieces(submittedPieces) {
   const uniquePieces = [];
   for (const submittedPiece of submittedPieces) {
     const piece = submittedPiece.belongsTo('piece').value();
+    if (!piece) {
+      console.debug(
+        'SubmittedPiece does not seem to have a piece connected, it may have been removed'
+      );
+      continue;
+    }
     const uniquePiece = uniquePieces.find((p) => {
       return p.belongsTo('piece').value().id === piece.id
     });

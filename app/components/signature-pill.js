@@ -2,13 +2,12 @@ import Component from '@glimmer/component';
 import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import constants from 'frontend-kaleidos/config/constants';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import { SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/config/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
+const { SIGNED, REFUSED, CANCELED, MARKED } = CONSTANTS.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
