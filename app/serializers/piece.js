@@ -11,6 +11,7 @@ const SKIP_SERIALIZED = [
 
 const SKIP_ATTRIBUTES = [
   'stamp',
+  'originalName'
 ];
 
 export default class PieceSerializer extends ApplicationSerializer {
