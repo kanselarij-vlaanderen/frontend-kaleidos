@@ -89,7 +89,7 @@ export default class VRDocumentName {
   }
 
   withOtherVersionSuffix(pieceNr) {
-    return `${this.withoutVersionSuffix} ${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
+    return `${this.withoutVersionSuffix.trim()} ${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
   }
 
   vrNumberWithSuffix() {
