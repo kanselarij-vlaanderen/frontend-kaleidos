@@ -1,9 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import fetch from 'fetch';
-import { startOfDay } from 'date-fns';
 
 export default class AgendaService extends Service {
   @service store;
@@ -116,45 +114,6 @@ export default class AgendaService extends Service {
    * @argument privateComment: optional
    */
   async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
-    // TODO I moved this part because saving subcase here after a service call will break relations
-    // Ideally we want to move this to the service?
-    await subcase.type;
-    if (subcase.isBekrachtiging) {
-      const decisionmakingFlow = await subcase.decisionmakingFlow;
-      const latestApprovalSubcase = await this.store.queryOne('subcase', {
-        filter: {
-          'decisionmaking-flow': {
-            ':id:': decisionmakingFlow.id,
-          },
-          'type': {
-            ':uri:': CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
-          }
-        },
-        sort: '-created',
-      });
-      if (latestApprovalSubcase) {
-        let ratifiedBy = await latestApprovalSubcase.mandatees;
-        ratifiedBy = ratifiedBy?.slice();
-        // add the current prime minister if not present
-        if (!ratifiedBy) {
-          ratifiedBy = [];
-        }
-        const primeMinister = await this.store.queryOne('mandatee', {
-          'filter[mandate][role][:uri:]': CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT,
-          'filter[:lte:start]': startOfDay(new Date()).toISOString(),
-          'filter[:has-no:end]': true,
-          include: 'person,mandate.role',
-        });
-        const ratifiedByIds = ratifiedBy.map((signer) => signer.id);
-        if (!ratifiedByIds.includes(primeMinister.id)) {
-          ratifiedBy.push(primeMinister);
-        }
-        await subcase.ratifiedBy;
-        subcase.ratifiedBy = ratifiedBy;
-        await subcase.save();
-        await subcase.hasMany('ratifiedBy').reload(); // TODO we set the list, so we shouldn't have to reload?
-      }
-    }
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',

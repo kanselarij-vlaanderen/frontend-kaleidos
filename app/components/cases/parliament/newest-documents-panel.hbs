@@ -26,12 +26,11 @@
                 class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
               >
                 <AuLink
-                @route="document"
-                @model={{submittedPiece.piece.id}}
-                @skin="secondary">
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-document"></i>
-                  </div>
+                  @route="document"
+                  @model={{submittedPiece.piece.id}}
+                  @skin="secondary"
+                >
+                  <AuIcon @icon="document" />
                   <span>
                     {{submittedPiece.name}}
                     {{this.submittedPieceList submittedPiece}}

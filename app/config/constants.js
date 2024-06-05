@@ -185,6 +185,11 @@ export default {
     SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/9d5ebfb9-3829-4b1f-a2a8-15033f7e2097',
     WAARNEMEND_SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/cfa6ed74-bb6f-4d4c-b905-9a205be135d7',
   },
+  FORMALLY_OK_STATUSES: {
+    FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
+    FORMALLY_NOT_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
+    NOT_YET_FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+  },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {
     SEARCH_RESULT_KLIK: 'Zoekresultaat klik',

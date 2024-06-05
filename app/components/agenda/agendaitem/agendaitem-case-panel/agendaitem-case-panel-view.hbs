@@ -60,20 +60,17 @@
               (and @allowEditing @agendaitem.formallyOkToShow)
             )
           }}
-            <p
+            <span
               data-test-agendaitem-titles-formally-ok
-              class="auk-u-text-size--small auk-u-m-0 vlc-agenda-items__status auk-u-text-bold auk-o-flex
+              class="vlc-agenda-items__status auk-u-text-size--small auk-u-text-bold
                 {{if
                   (eq @agendaitem.formallyOkToShow.svg.color 'success')
                   'vlc-agenda-items__status--positive'
                 }}"
             >
-              <Auk::Icon
-                @name={{@agendaitem.formallyOkToShow.svg.icon}}
-                class="formally-ok-icon"
-              />
+              <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} />
               {{@agendaitem.formallyOkToShow.label}}
-            </p>
+            </span>
           {{/if}}
           {{#if @subcase.confidential}}
             <Auk::Toolbar::Item>
@@ -171,7 +168,7 @@
             >
               {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
               {{! prettier-ignore }}
-              <strong class="auk-u-text-bold"><Auk::Icon @name="lock-closed" @size="small" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
+              <strong class="auk-u-text-bold"><AuIcon @icon="lock-closed" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
             </pre>
           </Group.Item>
         </Toolbar.Group>

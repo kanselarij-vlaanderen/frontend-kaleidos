@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -36,7 +37,7 @@ export default class AgendaHeaderAgendaCheck extends Component {
     const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
     const mappings = await res.json();
     const mappingsMap = new Map(
-      mappings.map(({ uri, newTitle }) => [uri, newTitle])
+      mappings.map(({ uri, generatedName }) => [uri, generatedName])
     );
 
     return mappingsMap;
@@ -44,4 +45,8 @@ export default class AgendaHeaderAgendaCheck extends Component {
 
   fileNameMappings = trackedTask(this, this.getFileNameMappings);
 
+  @action
+  onSave() {
+    this.args.onSave?.(this.fileNameMappings.value);
+  }
 }

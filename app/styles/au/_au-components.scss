@@ -328,9 +328,34 @@ $au-label-color: var(--au-gray-700);
   vertical-align: baseline;
 }
 
+// Icon
+
 .au-c-icon {
   bottom: 0;
 }
+
+@mixin au-background-icon($icon: 'add', $size: 1.6rem) {
+  $icon-url: #{'/@appuniversum/ember-appuniversum/icons/' + $icon +'.svg'};
+
+  display: inline-flex;
+  vertical-align: middle;
+  align-content: center;
+  justify-content: center;
+
+  &:before {
+    content: '';
+    width: $size;
+    height: $size;
+
+    mask-image: url($icon-url);
+    mask-size: $size;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: currentColor;
+  }
+}
+
+// Dropdown
 
 .au-c-dropdown > .au-c-button--naked { // TODO: delete when `.au-c-dropdown > .au-c-button--naked` override inside ember-appuniversum is removed
   &.au-c-button--icon-only {
@@ -711,6 +736,10 @@ $au-label-color: var(--au-gray-700);
   #absentees {
     table-layout: fixed;
   }
+}
+
+.au-u-primary {
+  color: var(--au-blue-700) !important;
 }
 
 // Responsive fixes

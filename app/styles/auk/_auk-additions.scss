@@ -418,6 +418,14 @@ table tr.lt-expanded-row {
   display: block;
 }
 
+// Tab
+
+.auk-tabs__tab__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 // Remove left padding
 .auk-tabs__hierarchical-back  .auk-tabs__tab__inner {
   padding-left: 0;
