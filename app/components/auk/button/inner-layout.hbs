@@ -1,14 +1,14 @@
 <span class="auk-button__content">
   {{#if @icon}}
     {{#unless @layout}}
-      <Auk::Icon @name={{@icon}} @size={{@size}} />
+      <AuIcon @icon={{@icon}} />
       <span class="auk-button__label">
         {{yield}}
       </span>
     {{/unless}}
 
     {{#if (eq @layout "icon-only")}}
-      <Auk::Icon @name={{@icon}} @size={{@size}} />
+      <AuIcon @icon={{@icon}} />
       <span class="auk-u-sr-only">{{yield}}</span>
     {{/if}}
 
@@ -16,7 +16,7 @@
       <span class="auk-button__label">
         {{yield}}
       </span>
-      <Auk::Icon @name={{@icon}} @size={{@size}} />
+      <AuIcon @icon={{@icon}} />
     {{/if}}
   {{else}}
 

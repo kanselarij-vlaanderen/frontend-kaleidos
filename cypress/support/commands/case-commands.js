@@ -212,7 +212,8 @@ function addSubcaseViaModal(subcase) {
   if (subcase.mandatees) {
     if (subcase.ratification) {
       cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).should('not.exist');
-      cy.get(auk.emptyState.message).contains('Niet van toepassing');
+      // We show ratification doc panel and "signing mandatees" panel instead
+      // cy.get(auk.emptyState.message).contains('Niet van toepassing');
     } else {
       let count = 0;
       subcase.mandatees.forEach((mandatee) => {
@@ -264,9 +265,9 @@ function addSubcaseViaModal(subcase) {
     // putting this last since it should be possible to make a copy with changes made above
   } else {
     // go to save modal
-    cy.get(appuniversum.loader).should('not.exist', {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
-    });
+    }).should('not.exist');
     cy.get(cases.newSubcaseForm.save).click();
 
     if (subcase.formallyOk) {

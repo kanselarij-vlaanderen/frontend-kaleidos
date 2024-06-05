@@ -34,11 +34,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.intercept('POST', '/meetings').as('createNewMeeting');
   cy.intercept('POST', '/agendas').as('createNewAgenda');
   cy.intercept('POST', '/agendaitems').as('createAgendaitem');
+  cy.intercept('GET', '/mandatees*').as('getMandatees');
 
   cy.visit('/overzicht?sizeAgendas=2');
   cy.get(route.agendas.action.newMeeting, {
     timeout: 60000,
-  }).click();
+  }).click()
+    .wait('@getMandatees'); // wait to prevent rerender;
 
   // Set the kind
   // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
@@ -100,6 +102,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumber) {
+    cy.wait(2000); // wait for datepicker change to trigger calculation of the next number before changing
     cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
@@ -360,7 +363,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  // TODO why is this taking so long to go away?
+  cy.get(appuniversum.loader, {
+    timeout: 50000,
+  }).should('not.exist', {
+    timeout: 60000,
+  }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
   cy.get(agenda.agendaActions.confirm.approveAllAgendaitems).click();
   cy.wait('@patchAgendaitems');
@@ -370,7 +378,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   }).should('not.exist');
   cy.get(appuniversum.loader); // loader should be shown briefly
   cy.get(appuniversum.loader, {
-    timeout: amountOfFormallyOks * 20000,
+    timeout: (1 + amountOfFormallyOks) * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -392,6 +400,7 @@ function approveDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
@@ -427,6 +436,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();
@@ -461,7 +471,7 @@ function addAgendaitemToAgenda(subcaseTitle) {
     .click();
   cy.get(agenda.agendaActions.addAgendaitems).forceClick();
   cy.wait(`@getSubcasesFiltered_${randomInt}`, {
-    timeout: 20000,
+    timeout: 60000,
   });
   const encodedSubcaseTitle = encodeURIComponent(subcaseTitle);
 
@@ -831,6 +841,30 @@ function changeDecisionResult(result) {
   cy.get(agenda.decisionResultPill.pill).contains(result);
 }
 
+/**
+ * @description Generate the minutes report
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function generateMinutes() {
+  cy.log('generateMinutes');
+  cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+    .click();
+  cy.get(route.agendaMinutes.createEdit, {
+    timeout: 60000,
+  }).click();
+  cy.get(route.agendaMinutes.editor.updateContent).click();
+
+  cy.intercept('POST', '/minutes*').as('createNewMinutes');
+  cy.intercept('PATCH', '/minutes/*').as('patchMinutes');
+  cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
+  cy.get(route.agendaMinutes.editor.save).click();
+  cy.wait('@createNewMinutes');
+  cy.wait('@patchMinutes');
+  cy.wait('@createNewPiecePart');
+  cy.log('/generateMinutes');
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -853,3 +887,4 @@ Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
 Cypress.Commands.add('generateDecision', generateDecision);
 Cypress.Commands.add('changeDecisionResult', changeDecisionResult);
+Cypress.Commands.add('generateMinutes', generateMinutes);

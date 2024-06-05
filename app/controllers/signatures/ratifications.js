@@ -141,7 +141,7 @@ export default class SignaturesRatificationsController extends Controller {
     const treatment = await decisionActivity?.treatment;
     const agendaitems = await treatment?.agendaitems;
     const agenda = await agendaitems[0]?.agenda;
-    const meeting = await agenda?.meeting;
+    const meeting = await agenda?.createdFor;
     return meeting?.plannedStart;
   }
 
@@ -149,6 +149,7 @@ export default class SignaturesRatificationsController extends Controller {
     const piece = await pieceOrPromise;
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][ratification][:id:]' : piece.id,
+      'filter[:has-no:previous-version]': 't',
     });
     return agendaitem;
   }

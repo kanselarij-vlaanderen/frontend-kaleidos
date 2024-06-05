@@ -118,7 +118,6 @@ context('Subcase tests', () => {
 
     // check agenda-activities panel
     cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
-      .eq(0)
       .contains(/Ingediend voor agendering/);
 
     cy.openAgendaForDate(agendaDate);

@@ -1,10 +1,10 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { A } from '@ember/array';
 import {
   keepLatestTask,
   task,
@@ -12,6 +12,9 @@ import {
   timeout
 } from 'ember-concurrency';
 import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
+import { removeObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -21,6 +24,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @service fileConversionService;
   @service toaster;
   @service pieceAccessLevelService;
+  @service conceptStore
 
   @tracked decisionmakingFlow;
   @tracked mandatees;
@@ -36,7 +40,17 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
+
+  get sortedNewPieces() {
+    return this.newPieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1.position - d2.position || p1.created - p2.created;
+    });
+  }
+
 
   @action
   async saveMandateeData(mandateeData) {
@@ -59,9 +73,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = this.model.subcase.governmentAreas;
-    governmentAreas.clear();
-    governmentAreas.pushObjects(newGovernmentAreas);
+    this.model.subcase.governmentAreas = newGovernmentAreas;
     await this.model.subcase.save();
     const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
@@ -79,29 +91,36 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
+    const name = file.filenameWithoutExtension;
+    const parsed = new VRCabinetDocumentName(name).parsed;
+    const type = await findDocType(this.conceptStore, parsed.type);
+
     const now = new Date();
+    const confidential = this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
+      position: parsed.index,
+      type,
     });
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: this.model.subcase.confidential || false,
-      name: file.filenameWithoutExtension,
+      confidential: confidential,
+      name: parsed.subject,
       documentContainer: documentContainer,
       cases: [this.model._case],
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+    const savePromises = this.sortedNewPieces.map(async(piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
@@ -110,7 +129,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     yield all(savePromises);
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.router.refresh('cases.case.subcases.subcase');
   }
 
@@ -118,8 +137,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
    * Save a new document container and the piece it wraps
   */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    documentContainer.position = index + 1 + (this.model.pieces?.length ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();
@@ -139,7 +159,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   */
   @task
   *addPiece(piece) {
-    piece.cases.pushObject(this.model._case);
+    // TODO KAS-4104 WHY DO WE ADD case to piece.cases, we have a service that does this automatically. This is asking for concurrency issues
+    // const cases = yield piece.cases;
+    // cases.push(this.case);
     yield piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
@@ -159,7 +181,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *cancelUploadPieces() {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -167,7 +189,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -233,8 +255,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
     if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
-      submissionPieces.pushObjects(pieces);
-
+      addObjects(submissionPieces, pieces);
       yield submissionActivity.save();
       return submissionActivity;
     } else { // Create first submission activity to add pieces on

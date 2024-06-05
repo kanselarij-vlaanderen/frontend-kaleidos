@@ -7,9 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName, {
-  compareFunction as compareNotulen,
-} from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -31,6 +28,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @service decisionReportGeneration;
   @service currentSession;
   @service newsletterService;
+  @service router;
 
   @tracked report;
   @tracked annotatiePiecePart;
@@ -58,6 +56,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
+
+    this.router.on('routeWillChange', (transition) => {
+      if (this.saveReport.isRunning) {
+        if (!transition.isAborted) {
+          transition.abort();
+          this.toaster.warning(this.intl.t('saving-in-progress-please-wait'));
+        }
+      }
+    })
   }
 
   loadNota = task(async () => {
@@ -89,13 +96,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       'filter[:has-no:next-piece]': true,
     });
     pieces = pieces.slice();
-    let sortedPieces;
-    if (this.args.agendaitem.isApproval) {
-      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
-    this.pieces = sortedPieces;
+    this.pieces = await sortPieces(
+      pieces, { isApproval: this.args.agendaitem.isApproval }
+    );
   });
 
   @action
@@ -538,21 +541,19 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   async attachNewReportVersion(previousReport) {
     const now = new Date();
-    let newName;
-    try {
-      newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
-        (await (await previousReport.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = previousReport.name;
-    }
+    const previousAccessLevel = await previousReport.accessLevel;
+    const container = await previousReport.documentContainer;
+    const pieces = await container.pieces;
+    const newName = new VRDocumentName(previousReport.name).withOtherVersionSuffix(
+      pieces.length + 1
+    );
     const report = this.store.createRecord('report', {
       name: newName,
       created: now,
       modified: now,
       previousPiece: previousReport,
-      accessLevel: previousReport.accessLevel,
-      documentContainer: previousReport.documentContainer,
+      accessLevel: previousAccessLevel,
+      documentContainer: container,
     });
 
     return report;

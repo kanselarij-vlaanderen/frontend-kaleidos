@@ -67,6 +67,15 @@ export default class NewSubcaseForm extends Component {
     return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
   }
 
+  get sortedPieces() {
+    return this.pieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1?.position - d2?.position || p1.created - p2.created;
+    });
+  }
+
   @action
   async selectSubcaseType(subcaseType) {
     this.subcaseType = subcaseType;
@@ -80,7 +89,7 @@ export default class NewSubcaseForm extends Component {
       CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING,
     ].includes(this.subcaseType?.uri);
     if (this.isSubcaseTypeWithoutMandatees) {
-      this.mandatees.clear();
+      this.mandatees.length = 0;
       this.submitter = null;
     }
   }
@@ -186,13 +195,13 @@ export default class NewSubcaseForm extends Component {
     }
 
     const mandatees = yield this.subcase.mandatees;
-    mandatees.clear();
+    mandatees.length = 0;
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
     const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
     const governmentAreas = yield this.subcase.governmentAreas;
-    governmentAreas.clear();
+    governmentAreas.length = 0;
     addObjects(governmentAreas, newGovernmentAreas);
     yield this.subcase.save();
 
@@ -327,9 +336,9 @@ export default class NewSubcaseForm extends Component {
   @task
   *savePieces() {
     this.piecesCreatedCounter = 0;
-    const savePromises = this.pieces.map(async (piece) => {
+    const savePromises = this.sortedPieces.map(async (piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece(piece);
         throw error;
@@ -341,8 +350,9 @@ export default class NewSubcaseForm extends Component {
   }
 
   @task({ maxConcurrency: 5, enqueue: true })
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    documentContainer.position = index + 1;
     yield documentContainer.save();
     const defaultAccessLevel = yield this.store.findRecordByUri(
       'concept',

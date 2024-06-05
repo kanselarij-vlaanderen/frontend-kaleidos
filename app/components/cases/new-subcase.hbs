@@ -46,7 +46,7 @@
           </AuFormRow>
         </div>
         <AuFormRow>
-          <Auk::Label for="new-subcase-confidential">{{t "limited-access"}}</Auk::Label>
+          <AuLabel for="new-subcase-confidential">{{t "limited-access"}}</AuLabel>
           <AuToggleSwitch
             data-test-new-subcase-confidential
             id="new-subcase-confidential"
@@ -55,7 +55,7 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+          <AuLabel>{{t "name-subcase"}}</AuLabel>
           <AuTextarea
             data-test-new-subcase-shorttitle
             value={{this.shortTitle}}
@@ -64,7 +64,7 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+          <AuLabel>{{t "title-subcase"}}</AuLabel>
           <AuTextarea
             data-test-new-subcase-longtitle
             value={{this.title}}
@@ -73,7 +73,7 @@
           />
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+          <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
           <Utils::ModelSelector
             data-test-new-subcase-procedure-step
             @modelName="subcase-type"
@@ -86,7 +86,7 @@
           </Utils::ModelSelector>
         </AuFormRow>
         <AuFormRow>
-          <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+          <AuLabel>{{t "subcase-name"}}</AuLabel>
           <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small auk-input-group--w-large">
             {{#if (not this.isEditing)}}
               <Utils::ModelSelector

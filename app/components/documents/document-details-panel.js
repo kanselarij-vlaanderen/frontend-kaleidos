@@ -16,6 +16,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service toaster;
   @service signatureService;
   @service currentSession;
+  @service documentService;
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -123,13 +124,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     }
     if (this.replacementSourceFile) {
       const oldFile = yield this.args.piece.file;
-      const derivedFile = yield oldFile.derived;
+      // oldFile may not exist in rare cases where file is missing/not automatically generated, you should be able to replace
+      const derivedFile = yield oldFile?.derived;
       if (derivedFile) {
         oldFile.derived = null;
         this.replacementSourceFile.derived = derivedFile;
         yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
       }
-      yield oldFile.destroyRecord();
+      yield oldFile?.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
       yield this.args.piece.save();
       const sourceFile = yield this.args.piece.file;
@@ -151,6 +153,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
+    if (this.replacementSourceFile) {
+      if (this.args.piece.stamp) {
+        yield this.documentService.stampDocuments([this.args.piece]);
+      }
+    } else {
+      yield this.documentService.checkAndRestamp([this.args.piece]);
+    }
+
     this.isEditingDetails = false;
     this.replacementSourceFile = null;
     this.isReplacingSourceFile = false;

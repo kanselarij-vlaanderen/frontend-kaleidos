@@ -1,7 +1,7 @@
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="au-u-visible-from@small">
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4
             data-test-route-publications-index-title
@@ -10,7 +10,7 @@
         </div>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <Auk::Tabs>
+        <Auk::Tabs @responsive={{true}} @responsiveBreakpoint="large">
           <Auk::Tab data-test-route-publications-index-tabs-all @route="publications.overview.all">
             {{t "publications-tabs-all"}}
           </Auk::Tab>

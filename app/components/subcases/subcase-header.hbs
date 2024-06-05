@@ -2,54 +2,54 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <div class="auk-o-flex auk-o-flex--vertical">
-          <div class="auk-o-flex auk-o-flex--vertical-center">
-            <Subcases::SubcaseDetailNav/>
-          </div>
-        </div>
+        <Subcases::SubcaseDetailNav/>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
-          {{!-- template-lint-disable require-context-role --}}
-          <AuDropdown
-            data-test-subcase-header-actions-dropdown={{true}}
-            @skin="secondary"
-            @title={{t "actions"}}
-            @alignment="right"
-          >
-            {{#if this.canDelete}}
-              <AuButton
-                data-test-subcase-header-action-delete-subcase
-                @skin="link"
-                @alert={{true}}
-                {{on "click" (fn this.requestDeleteSubcase @subcase)}}
-                role="menuitem"
-              >
-                {{t "delete-subcase"}}
-              </AuButton>
-            {{/if}}
-            <AuButton
-              data-test-subcase-header-action-move-subcase
-              @skin="link"
-              {{on "click" this.triggerMoveSubcaseDialog}}
-              role="menuitem"
+          {{#if this.hasActions}}
+            {{!-- template-lint-disable require-context-role --}}
+            <AuDropdown
+              data-test-subcase-header-actions-dropdown={{true}}
+              @skin="secondary"
+              @title={{t "actions"}}
+              @alignment="right"
             >
-              {{t "move-subcase"}}
-            </AuButton>
-            {{#if this.canPropose}}
-              <AuButton
-                data-test-subcase-header-action-show-proposed-agendas
-                @skin="link"
-                {{on "click" (toggle "isAssigningToAgenda" this)}}
-                role="menuitem"
-              >
-                {{t "propose-for-agenda"}}
-              </AuButton>
-            {{/if}}
-          </AuDropdown>
-          {{!-- template-lint-enable require-context-role --}}
+              {{#if this.canDelete}}
+                <AuButton
+                  data-test-subcase-header-action-delete-subcase
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" (fn this.requestDeleteSubcase @subcase)}}
+                  role="menuitem"
+                >
+                  {{t "delete-subcase"}}
+                </AuButton>
+              {{/if}}
+              {{#unless @parliamentFlow}}
+                <AuButton
+                  data-test-subcase-header-action-move-subcase
+                  @skin="link"
+                  {{on "click" this.triggerMoveSubcaseDialog}}
+                  role="menuitem"
+                >
+                  {{t "move-subcase"}}
+                </AuButton>
+              {{/unless}}
+              {{#if this.canPropose}}
+                <AuButton
+                  data-test-subcase-header-action-show-proposed-agendas
+                  @skin="link"
+                  {{on "click" (toggle "isAssigningToAgenda" this)}}
+                  role="menuitem"
+                >
+                  {{t "propose-for-agenda"}}
+                </AuButton>
+              {{/if}}
+            </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
+          {{/if}}
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

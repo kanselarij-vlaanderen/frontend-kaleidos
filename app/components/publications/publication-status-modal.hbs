@@ -7,7 +7,7 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
-        <Auk::Label for="blockInput">{{t "status"}}</Auk::Label>
+        <AuLabel for="blockInput">{{t "status"}}</AuLabel>
         <PowerSelect
           data-test-publication-status-select
           @options={{this.publicationStatusses}}
@@ -16,27 +16,27 @@
           as |status|
         >
           {{#if status.isPublished}}
-            <Auk::Icon @name="circle-check" @skin="success" />
+            <AuIcon @icon="circle-check" class="au-u-success" />
           {{else if status.isPaused}}
-            <Auk::Icon @name="circle-pause" @skin="muted" />
+            <AuIcon @icon="circle-pause" class="au-u-muted" />
           {{else if status.isWithdrawn}}
-            <Auk::Icon @name="circle-x" @skin="danger" />
+            <AuIcon @icon="circle-x" class="au-u-error" />
           {{else if status.isTranslationRequested}}
-            <Auk::Icon @name="circle-step-1" @skin="primary" />
+            <AuIcon @icon="circle-step-1" class="au-u-primary" />
           {{else if status.isTranslationReceived}}
-            <Auk::Icon @name="circle-step-2" @skin="primary" />
+            <AuIcon @icon="circle-step-2" class="au-u-primary" />
           {{else if status.isProofRequested}}
-            <Auk::Icon @name="circle-step-3" @skin="primary" />
+            <AuIcon @icon="circle-step-3" class="au-u-primary" />
           {{else if status.isProofReceived}}
-            <Auk::Icon @name="circle-step-4" @skin="primary" />
+            <AuIcon @icon="circle-step-4" class="au-u-primary" />
           {{else if status.isProofRecalled}}
-            <Auk::Icon @name="circle-step-5" @skin="primary" />
+            <AuIcon @icon="circle-step-5" class="au-u-primary" />
           {{else if status.isProofCorrected}}
-            <Auk::Icon @name="circle-step-6" @skin="primary" />
+            <AuIcon @icon="circle-step-6" class="au-u-primary" />
           {{else if status.isPublicationRequested}}
-            <Auk::Icon @name="circle-full" @skin="primary" />
+            <AuIcon @icon="circle-full" class="au-u-primary" />
           {{else}}
-            <Auk::Icon @name="circle" @skin="primary" />
+            <AuIcon @icon="circle" class="au-u-primary" />
           {{/if}}
           {{status.label}}
         </PowerSelect>

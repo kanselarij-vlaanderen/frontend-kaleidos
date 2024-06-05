@@ -2,6 +2,7 @@ import { belongsTo, hasMany, attr } from '@ember-data/model';
 import EmberObject from '@ember/object';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class Agendaitem extends ModelWithModifier {
   @attr('string') uri;
@@ -38,6 +39,10 @@ export default class Agendaitem extends ModelWithModifier {
 
   get modelName() {
     return this.constructor.modelName;
+  }
+
+  get isFormallyOk() {
+    return this.formallyOk === CONSTANTS.FORMALLY_OK_STATUSES.FORMALLY_OK;
   }
 
   get formallyOkToShow() {

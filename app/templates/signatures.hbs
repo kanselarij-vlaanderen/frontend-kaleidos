@@ -6,7 +6,7 @@
 >
   <Auk::Toolbar as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
-      <Group.Item>
+      <Group.Item class="au-u-visible-from@small">
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4 class="auk-toolbar-complex__title">
             {{t "signatures"}}
@@ -14,7 +14,7 @@
         </div>
       </Group.Item>
       <Group.Item>
-        <Auk::Tabs>
+        <Auk::Tabs @responsive={{true}} @responsiveBreakpoint="large">
           <Auk::Tab @route="signatures.index">
             {{t "to-start-up"}}
           </Auk::Tab>
@@ -40,7 +40,7 @@
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
       <Group.Item>
-        <div id="signatures-navbar-buttons-area">
+        <div data-test-route-signatures-start-multiple-signflows id="signatures-navbar-buttons-area">
         </div>
       </Group.Item>
     </Toolbar.Group>

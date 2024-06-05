@@ -42,10 +42,8 @@
       {{else if this.uploadIsRunning}}
         {{t "uploading-files" numFiles=this.fileQueue.files.length}}
       {{else if this.uploadIsCompleted}}
-        <div class="auk-o-flex auk-o-flex--vertical-align">
-          <div class="auk-u-mr">
-            <Auk::Icon @name="check" @skin="success-dark" />
-          </div>
+        <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
+          <AuIcon @icon="check" class="au-u-success" />
           <p>{{t "uploaded-files" numFiles=this.uploadedFileLength}}</p>
         </div>
       {{/if}}

@@ -7,12 +7,12 @@
   class="auk-u-hidden@print"
 >
   {{#if @currentAgenda.status.isDesignAgenda}}
-  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openConfirmApproveAgenda}}
+  <AuButton data-test-agenda-version-actions-approve-agenda @skin="link" {{on "click" this.openAgendaCheck}}
     role="menuitem">
     {{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
   <AuButton data-test-agenda-version-actions-approve-and-close-agenda @skin="link" {{on "click"
-    this.openConfirmApproveAgendaAndCloseMeeting}} role="menuitem">
+    this.openAgendaCheckWithCloseMeeting}} role="menuitem">
     {{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
   </AuButton>
   <AuHr />
@@ -102,6 +102,31 @@
   </Auk::Modal::Footer>
 </Auk::Modal>
 {{/if}}
+
+{{! Check agenda }}
+{{#if this.showAgendaCheck}}
+  <Agenda::AgendaHeader::AgendaCheck
+    @agenda={{@currentAgenda}}
+    @canBeApproved={{await (this.canBeApproved)}}
+    @meeting={{@meeting}}
+    @onCancel={{this.cancelAgendaCheck}}
+    @onSave={{this.openConfirmApproveAgenda}}
+    @saveLabel={{t "approve-design-agenda" serialnumber=@currentAgenda.serialnumber}}
+  />
+{{/if}}
+
+{{! Check agenda and close }}
+{{#if this.showAgendaCheckWithCloseMeeting}}
+<Agenda::AgendaHeader::AgendaCheck
+  @agenda={{@currentAgenda}}
+  @canBeApproved={{await (this.canBeApproved)}}
+  @meeting={{@meeting}}
+  @onCancel={{this.cancelAgendaCheckWithCloseMeeting}}
+  @onSave={{this.openConfirmApproveAgendaAndCloseMeeting}}
+  @saveLabel={{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber}}
+/>
+{{/if}}
+
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
 <Auk::Modal @size={{if (await (this.canBeApproved)) "small" "large" }}>
   <Auk::Modal::Header @title={{t "approve-agenda-and-close" serialnumber=@currentAgenda.serialnumber }}
@@ -247,7 +272,7 @@
                     {{datetime-at (or piece.file.created piece.created)}}
                   </div>
                   <div class="vlc-document-card-item__icon">
-                    <Auk::Icon @name="clock-rewind" @size="small" />
+                    <AuIcon @icon="clock-rewind" />
                   </div>
                 </div>
               </div>

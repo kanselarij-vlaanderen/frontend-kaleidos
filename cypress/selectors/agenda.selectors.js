@@ -19,6 +19,11 @@ const selectors = {
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     create: '[data-test-agendaitem-decision-create]',
+    edit: {
+      annotation: '[data-test-agendaitem-decision-edit-annotation]',
+      concern: '[data-test-agendaitem-decision-edit-concern]',
+      treatment: '[data-test-agendaitem-decision-edit-treatment]',
+    },
     save: '[data-test-agendaitem-decision-save]',
   },
 
@@ -86,6 +91,11 @@ const selectors = {
     isFinalPillClosed: '[data-test-agenda-header-is-final-pill-closed]',
     isFinalPillOpened: '[data-test-agenda-header-is-final-pill-opened]',
     title: '[data-test-agenda-header-title]',
+  },
+
+  agendaCheck: {
+    confirm: '[data-test-agenda-check-confirm]',
+    cancel: '[data-test-agenda-check-cancel]',
   },
 
   // agenda-actions

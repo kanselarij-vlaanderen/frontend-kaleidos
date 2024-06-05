@@ -10,6 +10,7 @@ export default class Subcase extends ModelWithModifier {
   @attr title;
   @attr('boolean') confidential; // this is now "limited access"
   @attr subcaseName;
+  @attr('number') agendaActivityNumber;
 
   get modelName() {
     return this.constructor.modelName;

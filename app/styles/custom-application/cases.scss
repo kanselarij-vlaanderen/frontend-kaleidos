@@ -56,16 +56,26 @@
 }
 
 .c-anchor-nav-holder {
-  color: var(--au-gray-700);
   display: flex;
-  align-items: center;
+  align-items: start;
+  flex-wrap: wrap;
+  margin: $au-unit-tiny 0;
+  color: var(--au-gray-700);
+
+  > p {
+    flex: 0 0 auto;
+  }
 }
 
 .au-c-anchor-nav {
   display: flex;
-  gap: $au-unit-tiny;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: $au-unit-tiny / 1.5;
+  row-gap: 0;
 
   a {
+    display: inline-flex;
     font-weight: var(--au-medium);
   }
 
@@ -80,7 +90,7 @@
   }
 
   li:not(:last-child) a:after {
-    content: ","
+    content: ",";
   }
 }
 
@@ -126,10 +136,10 @@
 }
 
 .c-document-panel {
-  padding: 0;
   .auk-u-mb-2 {
     margin-bottom: 0 !important;
   }
+
   .vlc-document-card {
     background-color: white;
     border: 0;

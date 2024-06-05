@@ -159,5 +159,16 @@
         </AuCard>
       {{/unless}}
     {{/if}}
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="type">{{t "document-type"}}</AuLabel>
+          <Utils::DocumentTypeSelector
+            @selectedDocumentType={{this.documentType}}
+            @onChange={{this.selectDocumentType}}
+          />
+        </div>
+      </c.content>
+    </AuCard>
   </:body>
 </ConfirmationModal>

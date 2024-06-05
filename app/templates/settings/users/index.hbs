@@ -13,9 +13,9 @@
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
         <div class="au-c-form">
-          <Auk::Label class="au-u-padding-bottom-none">{{t "filter-on-last-seen"}}</Auk::Label>
+          <AuLabel class="au-u-margin-bottom-none">{{t "filter-on-last-seen"}}</AuLabel>
           <AuFormRow data-test-route-settings-user-date-from class="au-u-margin-top-tiny">
-            <Auk::Label>{{t "from"}}</Auk::Label>
+            <AuLabel>{{t "from"}}</AuLabel>
             <Auk::Datepicker
               @date={{this.dateFromBuffer}}
               @onChange={{set this "dateFromBuffer"}}
@@ -25,7 +25,7 @@
             />
           </AuFormRow>
           <AuFormRow data-test-route-settings-user-date-to class="au-u-margin-top-small">
-            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
+            <AuLabel>{{t "until-inclusive"}}</AuLabel>
             <Auk::Datepicker
               @date={{this.dateToBuffer}}
               @onChange={{set this "dateToBuffer"}}
@@ -133,29 +133,33 @@
           </span>
         </td>
         <td class="au-o-flow au-o-flow--tiny">
-          {{#each (this.filterMemberships user.memberships) as |membership|}}
-            <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
-              <div>
-                <p class="au-u-muted au-u-h-functional">
-                  {{membership.organization.identifier}}
-                </p>
-                <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-                  {{membership.organization.name}}
-                </p>
+          {{#let (await (this.filterMemberships user)) as |memberships|}}
+            {{#each memberships as |membership|}}
+              <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small {{if membership.isBlocked "au-u-muted"}}">
+                <div>
+                  <p class="au-u-muted au-u-h-functional">
+                    {{membership.organization.identifier}}
+                  </p>
+                  <p class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+                    {{membership.organization.name}}
+                  </p>
+                </div>
+                {{#if membership.isBlocked}}
+                  <AuPill @icon="circle-x" @skin="error" @size="small">
+                    {{t "blocked-membership"}}
+                  </AuPill>
+                {{/if}}
               </div>
-              {{#if membership.isBlocked}}
-                <AuPill @icon="circle-x" @skin="error" @size="small">
-                  {{t "blocked-membership"}}
-                </AuPill>
-              {{/if}}
-            </div>
-          {{/each}}
+            {{/each}}
+          {{/let}}
         </td>
         <td data-test-route-settings-users-row-group>
           <div class="au-u-flex au-u-flex--column au-u-flex--spaced">
-            {{#each (this.filterMemberships user.memberships) as |membership|}}
-              <p>{{membership.role.label}}</p>
-            {{/each}}
+            {{#let (await (this.filterMemberships user)) as |memberships|}}
+              {{#each memberships as |membership|}}
+                <p>{{membership.role.label}}</p>
+              {{/each}}
+            {{/let}}
           </div>
         </td>
         <td data-test-route-settings-users-row-person>
@@ -180,27 +184,29 @@
               @alignment="right"
               @icon="three-dots"
             >
-              {{#if (not (is-empty (filter-by "isBlocked" user.memberships)))}}
-                <AuButton
-                  data-test-route-settings-users-row-action-unblock-membership
-                  @skin="naked"
-                  role="menuitem"
-                  {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
-                >
-                  {{t "unblock-membership"}}
-                </AuButton>
-              {{/if}}
-              {{#if (not (is-empty (reject-by "isBlocked" user.memberships)))}}
-                <AuButton
-                  data-test-route-settings-users-row-action-block-membership
-                  @skin="naked"
-                  @alert={{true}}
-                  role="menuitem"
-                  {{on "click" (queue this.toggleShowBlockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
-                >
-                  {{t "block-membership"}}
-                </AuButton>
-              {{/if}}
+              {{#let (await user.memberships) as |memberships|}}
+                {{#if (not (is-empty (filter-by "isBlocked" memberships)))}}
+                  <AuButton
+                    data-test-route-settings-users-row-action-unblock-membership
+                    @skin="naked"
+                    role="menuitem"
+                    {{on "click" (queue this.toggleShowUnblockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
+                  >
+                    {{t "unblock-membership"}}
+                  </AuButton>
+                {{/if}}
+                {{#if (not (is-empty (reject-by "isBlocked" memberships)))}}
+                  <AuButton
+                    data-test-route-settings-users-row-action-block-membership
+                    @skin="naked"
+                    @alert={{true}}
+                    role="menuitem"
+                    {{on "click" (queue this.toggleShowBlockMembershipsConfirmationModal (set this "userBeingBlocked" user))}}
+                  >
+                    {{t "block-membership"}}
+                  </AuButton>
+                {{/if}}
+              {{/let}}
               {{#if user.isBlocked}}
                 <AuButton
                   data-test-route-settings-users-row-action-unblock-user
@@ -256,16 +262,18 @@
       <AuFieldset as |f|>
         <f.legend>{{t "block-membership-which-one"}}</f.legend>
         <f.content>
-          {{#each (reject-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
-            {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
-              <AuCheckbox
-                @identifier={{membershipLabel}}
-                @onChange={{fn this.toggleMembershipBeingBlocked membership}}
-              >
-                {{membershipLabel}}
-              </AuCheckbox>
-            {{/let}}
-          {{/each}}
+          {{#let (await this.userBeingBlocked.memberships) as |memberships|}}
+            {{#each (reject-by "isBlocked" memberships) as |membership|}}
+              {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
+                <AuCheckbox
+                  @identifier={{membershipLabel}}
+                  @onChange={{fn this.toggleMembershipBeingBlocked membership}}
+                >
+                  {{membershipLabel}}
+                </AuCheckbox>
+              {{/let}}
+            {{/each}}
+          {{/let}}
         </f.content>
       </AuFieldset>
     </div>
@@ -289,16 +297,18 @@
       <AuFieldset as |f|>
         <f.legend>{{t "unblock-membership-which-one"}}</f.legend>
         <f.content>
-          {{#each (filter-by "isBlocked" this.userBeingBlocked.memberships) as |membership|}}
-            {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
-              <AuCheckbox
-                @identifier={{membershipLabel}}
-                @onChange={{fn this.toggleMembershipBeingBlocked membership}}
-              >
-                {{membershipLabel}}
-              </AuCheckbox>
-            {{/let}}
-          {{/each}}
+          {{#let (await this.userBeingBlocked.memberships) as |memberships|}}
+            {{#each (filter-by "isBlocked" memberships) as |membership|}}
+              {{#let (concat membership.organization.name " - " membership.role.label) as |membershipLabel|}}
+                <AuCheckbox
+                  @identifier={{membershipLabel}}
+                  @onChange={{fn this.toggleMembershipBeingBlocked membership}}
+                >
+                  {{membershipLabel}}
+                </AuCheckbox>
+              {{/let}}
+            {{/each}}
+          {{/let}}
         </f.content>
       </AuFieldset>
     </div>

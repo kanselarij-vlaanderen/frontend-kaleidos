@@ -12,11 +12,8 @@
 {{#if this.ratification}}
   <Documents::DocumentCard
     @piece={{this.ratification}}
-    @agendaitem={{@agendaitem}}
     @decisionActivity={{@decisionActivity}}
-    @meeting={{@agendaContext.meeting}}
-    @isEditable={{true}}
-    @agendaContext={{@agendaContext}}
+    @isEditable={{user-may "manage-ratification"}}
     @onAddPiece={{this.attachNewRatificationVersionAsPiece}}
     @didDeleteContainer={{this.didDeleteRatification}}
     @bordered={{false}}
@@ -34,7 +31,14 @@
 {{/if}}
 </Auk::Panel::Body>
 </Auk::Panel>
-{{#if (and this.showMandateeSelectorPanel (user-may "manage-ratification"))}}
+{{! don't rerender this panel or you end up in an infinite loop}}
+{{#if
+  (and
+    this.initialLoad.isIdle
+    this.showMandateeSelectorPanel
+    (user-may "manage-ratification")
+  )
+}}
   <Cases::Subcases::MandateeSelectorPanel
     @mandatees={{this.ratifiedBy}}
     @setMandatees={{this.setMandatees}}
