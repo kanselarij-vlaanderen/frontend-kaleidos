@@ -37,12 +37,12 @@
                 {{/if}}
               </h3>
             {{/let}}
-            <div value={{first.number}}>
-              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-                @item={{first}}
-              />
-            </div>
           {{/if}}
+          <div value={{first.number}}>
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+              @item={{first}}
+            />
+          </div>
         </div>
         {{#let (await first.pieces) as |pieces|}}
           {{#if pieces}}
