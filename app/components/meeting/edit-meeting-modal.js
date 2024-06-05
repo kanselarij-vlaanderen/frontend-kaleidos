@@ -10,7 +10,6 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
-import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
@@ -240,47 +239,6 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  regenerateDecisionReportNames = task(async () => {
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    if (reports?.length > 0) {
-      let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
-      if (alterableReports.length === 0) {
-        this.toaster.error(
-          this.intl.t('reports-cannot-be-altered')
-        );
-        return;
-      }
-      await Promise.all(alterableReports.map(async (report) => {
-        const agendaitem = await this.store.queryOne('agendaitem', {
-          'filter[:has-no:next-version]': true,
-          'filter[treatment][decision-activity][report][:id:]': report.id,
-        });
-        const documentContainer = await report.documentContainer;
-        const pieces = await documentContainer.pieces;
-        report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
-        await report.belongsTo('file').reload();
-        await report.save();
-      }));
-    }
-  });
-
-  regenerateDecisionReports = task(async () => {
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    if (reports.length) {
-      this.decisionReportGeneration.generateReplacementReports.perform(reports);
-    }
-  });
-
   @task
   *saveMeeting() {
     const now = new Date();
@@ -348,10 +306,11 @@ export default class MeetingEditMeetingComponent extends Component {
               })
             );
           }
+          let regenerateReportNames = false;
           if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
-            yield this.regenerateDecisionReportNames.perform();
+            regenerateReportNames = true;
           }
-          yield this.regenerateDecisionReports.perform();
+          yield this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting.id, regenerateReportNames);
           yield this.regenerateMinutes();
         }
       }

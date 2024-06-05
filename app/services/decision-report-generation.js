@@ -2,12 +2,48 @@ import Service, { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 export default class DecisionReportGeneration extends Service {
   @service toaster;
   @service router;
   @service store;
   @service intl;
+
+  regenerateDecisionReportsForMeeting = task(async (meetingId, newNames=false) => {
+    if (!meetingId) {
+      return;
+    }
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+      meetingId,
+    });
+    if (reports?.length > 0) {
+      let { alterableReports } = await this.getAlterableReports(reports);
+      if (alterableReports.length === 0) {
+        this.toaster.error(
+          this.intl.t('reports-cannot-be-altered')
+        );
+        return;
+      }
+      if (newNames) {
+        await Promise.all(alterableReports.map(async (report) => {
+          const agendaitem = await this.store.queryOne('agendaitem', {
+            'filter[:has-no:next-version]': true,
+            'filter[treatment][decision-activity][report][:id:]': report.id,
+          });
+          const documentContainer = await report.documentContainer;
+          const pieces = await documentContainer.pieces;
+          report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+          await report.belongsTo('file').reload();
+          await report.save();
+        }));
+      }
+      this.generateReplacementReports.perform(reports);
+    }
+  });
 
   generateReportBundle = task(async (meeting) => {
     const generatingBundleToast = this.toaster.loading(

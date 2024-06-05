@@ -17,7 +17,6 @@ import {
 import bind from 'frontend-kaleidos/utils/bind';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
-import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 /**
  * A component that contains most of the meeting/agenda actions that interact with a backend service.
@@ -182,36 +181,6 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
     return approvedAgendaitems;
   }
-
-  regenerateDecisionReportNames = task(async () => {
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    if (reports?.length > 0) {
-      let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
-      if (alterableReports.length === 0) {
-        this.toaster.error(
-          this.intl.t('reports-cannot-be-altered')
-        );
-        return;
-      }
-      await Promise.all(alterableReports.map(async (report) => {
-        const agendaitem = await this.store.queryOne('agendaitem', {
-          'filter[:has-no:next-version]': true,
-          'filter[treatment][decision-activity][report][:id:]': report.id,
-        });
-        const documentContainer = await report.documentContainer;
-        const pieces = await documentContainer.pieces;
-        report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
-        await report.belongsTo('file').reload();
-        await report.save();
-      }));
-      this.decisionReportGeneration.generateReplacementReports.perform(reports);
-    }
-  });
 
   /**
    * This task will reload the agendaitems of the current agenda
@@ -380,7 +349,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
       if (agendaitemsNotOk) {
-        await this.regenerateDecisionReportNames.perform();
+        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting.id, true);
       }
       this.args.onStopLoading();
       return this.router.transitionTo(
