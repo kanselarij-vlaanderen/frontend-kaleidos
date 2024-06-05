@@ -102,6 +102,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumber) {
+    cy.wait(2000); // wait for datepicker change to trigger calculation of the next number before changing
     cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
