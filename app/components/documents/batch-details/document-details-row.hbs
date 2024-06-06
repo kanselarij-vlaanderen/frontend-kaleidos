@@ -101,7 +101,7 @@
       >
         {{t "undo"}}
       </AuButton>
-    {{else if (not @row.hasSentSignFlow)}}
+    {{else if (and (not @row.hasSentSignFlow) (not @disableDelete))}}
       <AuButton
         data-test-document-details-row-delete
         @skin="naked"

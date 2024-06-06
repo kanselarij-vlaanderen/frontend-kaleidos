@@ -46,11 +46,10 @@
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             <Auk::Toolbar::Group @position="right">
-              {{#if (and @documentsAreVisible @pieces.length)}}
+              {{#if @pieces.length}}
                 <Auk::Toolbar::Item>
                   {{#if (user-may "manage-documents")}}
                     <AuButton
-                      data-test-route-agenda-documents-batch-edit
                       @skin="secondary"
                       @icon="pencil"
                       {{on "click" this.openBatchDetails}}
@@ -161,5 +160,6 @@
     @pieces={{@pieces}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
+    @disableDelete={{true}}
   />
 {{/if}}
