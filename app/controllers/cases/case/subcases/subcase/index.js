@@ -118,6 +118,21 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @task
   *savePieces() {
+    // enforce all new pieces must have type on document container
+    const typesPromises = this.newPieces.map(async (piece) => {
+      const container = await piece.documentContainer;
+      const type = await container.type;
+      return type;
+    });
+    const types = yield all(typesPromises);
+    if (types.some(type => !type)) {
+      this.toaster.error(
+        this.intl.t('document-type-required'),
+        this.intl.t('warning-title'),
+      );
+      return;
+    }
+
     const savePromises = this.sortedNewPieces.map(async(piece, index) => {
       try {
         await this.savePiece.perform(piece, index);
@@ -301,7 +316,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     }
     this.router.refresh('cases.case.subcases.subcase');
   }
-
 
   @action
   async openBatchDetails() {
