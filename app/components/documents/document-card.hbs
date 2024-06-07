@@ -38,13 +38,18 @@
                 {{/unless}}
               </span>
             </div>
+            {{#if this.documentContainer.position}}
+              <span>
+                {{this.documentContainer.position}}.
+              </span>
+            {{/if}}
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
               class="auk-h4"
               data-test-document-card-name-value
             >
-              {{#if (or this.loadFiles.isRunning this.loadPieceRelatedData.isRunning)}}
+              {{#if this.loadFiles.isRunning}}
                 <Auk::Loader />
               {{else}}
                 {{#let
@@ -53,9 +58,6 @@
                   )
                   as |extension|
                 }}
-                  {{#if this.documentContainer.position}}
-                    {{this.documentContainer.position}}. 
-                  {{/if}}
                   {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
                 {{/let}}
               {{/if}}
