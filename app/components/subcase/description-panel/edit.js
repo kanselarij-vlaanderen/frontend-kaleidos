@@ -22,6 +22,11 @@ export default class SubcaseDescriptionEdit extends Component {
   @service pieceAccessLevelService;
   @service currentSession;
 
+  @tracked filter = Object.freeze({
+    type: 'subcase-name',
+  });
+  @tracked isEditingSubcaseName = false;
+  @tracked selectedShortcut;
   @tracked subcaseName;
   @tracked subcaseType;
   @tracked agendaItemType;
@@ -34,6 +39,7 @@ export default class SubcaseDescriptionEdit extends Component {
   constructor() {
     super(...arguments);
     this.subcaseName = this.args.subcase.subcaseName;
+    this.isEditingSubcaseName = this.subcaseName?.length;
     this.loadSubcaseType.perform();
     this.loadAgendaItemType.perform();
     this.loadAgendaItemTypes.perform();
@@ -66,6 +72,18 @@ export default class SubcaseDescriptionEdit extends Component {
     if (latestAgendaitem) {
       yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
     }
+  }
+
+  @action
+  selectSubcaseName(shortcut) {
+    this.selectedShortcut = shortcut;
+    this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 
   @action
