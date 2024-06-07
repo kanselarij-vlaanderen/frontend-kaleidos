@@ -21,6 +21,11 @@
       />
     </td>
   {{/if}}
+  <td class="auk-table-number-col">
+    {{#if @row.documentContainer.position}}
+      {{@row.documentContainer.position}}.
+    {{/if}}
+  </td>
   <td>
     {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
