@@ -36,12 +36,13 @@ export default class VRCabinetDocumentName {
       match = this.regexTypeNumber.exec(this.name);
       if (!match || !match.groups.type) {
         return {
-          subject: this.name,
+            subject: this.name,
+            index: parseInt(match?.groups.index, 10),
         };
       }
     }
 
-    const subject = match.groups.subject;
+    const subject = match.groups.subject?.trim();
     const versionSuffix = match.groups.versionSuffix;
     let versionNumber = 1;
     if (versionSuffix) {
@@ -50,7 +51,6 @@ export default class VRCabinetDocumentName {
     const meta = {
       subject,
       type: match.groups.type,
-      indexNrRaw: match.groups.index,
       index: parseInt(match.groups.index, 10),
       versionSuffix,
       versionNumber,
