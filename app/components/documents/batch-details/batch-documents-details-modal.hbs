@@ -42,6 +42,7 @@
               @decisionActivity={{@decisionActivity}}
               @isSignaturesEnabled={{this.isSignaturesEnabled}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
+              @disableDelete={{@disableDelete}}
             />
           {{/if}}
           {{#each this.reorderableRows as |row|}}
@@ -51,6 +52,7 @@
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
+              @disableDelete={{@disableDelete}}
             />
           {{/each}}
         </tbody>
