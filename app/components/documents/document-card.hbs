@@ -38,6 +38,11 @@
                 {{/unless}}
               </span>
             </div>
+            {{#if this.documentContainer.position}}
+              <span>
+                {{this.documentContainer.position}}.
+              </span>
+            {{/if}}
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
