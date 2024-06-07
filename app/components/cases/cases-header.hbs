@@ -42,6 +42,17 @@
           </AuButton>
         </Group.Item>
       {{/if}}
+      {{#if this.mayCreateSubmissions}}
+        <Group.Item>
+          <AuLink
+            @skin="button"
+            @icon="plus"
+            @route="cases.new-submission"
+          >
+            {{t "submit-agendaitem"}}
+          </AuLink>
+        </Group.Item>
+      {{/if}}
     </Toolbar.Group>
   </Auk::Toolbar>
 </Auk::Navbar>

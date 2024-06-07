@@ -1,0 +1,167 @@
+<Auk::Panel ...attributes>
+  <Auk::Panel::Header
+    @size="auto"
+    class="au-u-background-gray-100"
+  >
+    <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Toolbar.Group @position="left">
+        <h4 class="auk-toolbar__title">
+          {{t "notifications-submission"}}
+        </h4>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.areLoadingTasksRunning}}
+      @reserveSpace={{true}}
+    >
+      <Auk::Panel>
+        <Auk::Panel::Header class="au-u-padding-left-small au-u-padding-right-small">
+          <Auk::Toolbar as |Toolbar|>
+            <Toolbar.Group @position="left" as |Group|>
+              <Group.Item>
+                <h4 class="auk-h4 auk-u-m-0">
+                  {{t "notification-for-submission-and-approval"}}
+                </h4>
+              </Group.Item>
+            </Toolbar.Group>
+            <Toolbar.Group @position="right" as |Group|>
+              <Group.Item>
+                <AuButton
+                  @skin="secondary"
+                  @icon="plus"
+                  {{on "click" (toggle "showNotifiersModal" this)}}
+                >
+                  {{t "add-emails"}}
+                </AuButton>
+              </Group.Item>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-p-0">
+          <AuList
+            @divider={{true}}
+            as |Item|
+          >
+            {{#each @notificationAddresses as |notificationAddress|}}
+              <Item
+                class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+              >
+                <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
+                <AuButton
+                  @skin="naked"
+                  @alert={{true}}
+                  @hideText={{true}}
+                  @icon="trash"
+                  {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              </Item>
+            {{else}}
+              <Item class="au-u-padding-small">
+                {{t "no-notification-addresses-selected"}}
+              </Item>
+            {{/each}}
+          </AuList>
+        </Auk::Panel::Body>
+        <Auk::Panel::Body class="auk-u-p-2">
+          <div class="auk-form-group">
+            <AuLabel for="approvalComment">
+              {{t "additional-information"}}
+            </AuLabel>
+            <AuTextarea
+              @width="block"
+              rows="4"
+              @value=""
+              id="approvalComment"
+              {{on "change" (pick "target.value" @onChangeNotificationMessage)}}
+            />
+          </div>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+      <Auk::Panel class="auk-u-mt-4">
+        <Auk::Panel::Header class="au-u-padding-left-small au-u-padding-right-small">
+          <Auk::Toolbar as |Toolbar|>
+            <Toolbar.Group @position="left" as |Group|>
+              <Group.Item>
+                <h4 class="auk-h4 auk-u-m-0">
+                  {{t "notification-for-ikw-group"}}
+                </h4>
+              </Group.Item>
+            </Toolbar.Group>
+            <Toolbar.Group @position="right" as |Group|>
+              <Group.Item>
+                <AuButton
+                  @skin="secondary"
+                  @icon="plus"
+                  {{on "click" (toggle "showCCModal" this)}}
+                >
+                  {{t "add-emails"}}
+                </AuButton>
+              </Group.Item>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-p-0">
+          <AuList
+            @divider={{true}}
+            as |Item|
+          >
+            {{#each @ccAddresses as |CCAddress|}}
+              <Item
+                class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+              >
+                <Auk::AbbreviatedText @text={{CCAddress}} @maxLength={{35}} />
+                <AuButton
+                  @skin="naked"
+                  @alert={{true}}
+                  @hideText={{true}}
+                  @icon="trash"
+                  {{on "click" (fn this.removeCCAddress CCAddress)}}
+                >
+                  {{t "delete"}}
+                </AuButton>
+              </Item>
+            {{else}}
+              <Item class="au-u-padding-small">
+                {{t "no-notification-addresses-selected"}}
+              </Item>
+            {{/each}}
+          </AuList>
+        </Auk::Panel::Body>
+        <Auk::Panel::Body class="auk-u-p-2">
+          <div class="auk-form-group">
+            <AuLabel for="ccComment">
+              {{t "additional-information-for-ikw-group"}}
+            </AuLabel>
+            <AuTextarea
+              @width="block"
+              rows="4"
+              @value=""
+              id="ccComment"
+              {{on "change" (pick "target.value" @onChangeCCMessage)}}
+            />
+          </div>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </Utils::LoadableContent>
+  </Auk::Panel::Body>
+</Auk::Panel>
+
+{{#if this.showNotifiersModal}}
+  <Signatures::EmailModal
+    @title={{t "notification-for-submission-and-approval"}}
+    @onConfirm={{this.saveNotificationAddress}}
+    @onCancel={{toggle "showNotifiersModal" this}}
+  />
+{{/if}}
+
+{{#if this.showCCModal}}
+  <Signatures::EmailModal
+    @title={{t "notification-for-ikw-group"}}
+    @onConfirm={{this.saveCCAddress}}
+    @onCancel={{toggle "showCCModal" this}}
+  />
+{{/if}}

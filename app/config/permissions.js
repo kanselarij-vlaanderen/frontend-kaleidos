@@ -59,6 +59,7 @@ const {
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 // - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
+// - create-submissions: Allow the creation of submissions (by cabinets)
 
 const groups = [
   {
@@ -234,6 +235,7 @@ const groups = [
       'view-only-specific-confidential-documents',
       'send-only-specific-cases-to-vp',
       'view-documents-postponed-and-retracted',
+      'create-submissions',
     ],
   },
   {
