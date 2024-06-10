@@ -1,0 +1,50 @@
+{{#if this.isLoading}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{else}}
+  {{#if (not this.isEditing)}}
+    <AuPill
+      @size={{@size}}
+      @skin={{this.pillSkin}}
+      @icon={{this.pillIcon}}
+      @draft={{@isDraft}}
+      @onClickAction={{this.openEditMode}}
+      @actionIcon="pencil"
+      data-test-access-level-pill
+    >
+      {{this.statusLabel}}
+    </AuPill>
+  {{else}}
+    <div class="auk-o-flex auk-o-flex--vertical-center">
+      <div class="auk-u-maximize-width">
+        <Utils::StatusSelector
+          @allowClear={{true}}
+          @displayField="label"
+          @sortField="position"
+          @selected={{@status}}
+          @onChange={{this.changeStatus}}
+          data-test-access-level-pill-selector
+        />
+      </div>
+      <AuButton
+        data-test-access-level-pill-save
+        @skin="naked"
+        @icon="check"
+        @hideText={{true}}
+        {{on "click" (perform this.confirmChangeStatus @status)}}
+        class="auk-o-flex__item--fix auk-u-ml"
+      >
+        {{t "save"}}
+      </AuButton>
+      <AuButton
+        data-test-access-level-pill-cancel
+        @skin="naked"
+        @icon="x"
+        @hideText={{true}}
+        {{on "click" (perform this.cancelChangeStatus)}}
+        class="auk-o-flex__item--fix"
+      >
+        {{t "cancel"}}
+      </AuButton>
+    </div>
+  {{/if}}
+{{/if}}

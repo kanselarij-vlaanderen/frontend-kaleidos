@@ -1,0 +1,16 @@
+<PowerSelect
+  @allowClear={{this.allowClear}}
+  @renderInPlace={{this.renderInPlace}}
+  @disabled={{this.disabled}}
+  @searchEnabled={{this.searchEnabled}}
+  @loadingMessage={{this.loadingMessage}}
+  @noMatchesMessage={{this.noMatchesMessage}}
+  @searchMessage={{this.searchMessage}}
+  @options={{this.options}}
+  @selected={{this.selected}}
+  @onChange={{fn (mut this.selected)}}
+  @placeholder={{this.placeholder}}
+  class="au-u-1-1"
+  as |singleselect|>
+  {{singleselect}}
+</PowerSelect>

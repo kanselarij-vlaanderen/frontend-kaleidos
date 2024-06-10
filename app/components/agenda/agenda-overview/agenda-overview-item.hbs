@@ -192,16 +192,7 @@
           <div class="vlc-agenda-items__icons">
             <div class="vlc-agenda-meta__status-holder auk-u-ml-2">
               {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-                <p
-                  class={{@agendaitem.formallyOkToShow.classNames}}
-                  data-test-agenda-overview-item-status
-                >
-                  <Auk::Icon
-                    @name={{@agendaitem.formallyOkToShow.svg.icon}}
-                    class="formally-ok-icon"
-                  />
-                  {{@agendaitem.formallyOkToShow.label}}
-                </p>
+                <FormallyOkPill @status={{@agendaitem.formallyOkToShow.label}} />
               {{/if}}
             </div>
           </div>
