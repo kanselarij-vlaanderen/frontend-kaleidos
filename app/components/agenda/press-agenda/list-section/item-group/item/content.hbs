@@ -1,0 +1,43 @@
+<div class="auk-o-flex auk-u-mb l-printable-agenda__item-header">
+  {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+  {{! prettier-ignore }}
+  <h4 class="auk-u-m-0 auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{if @item.shortTitle @item.shortTitle @item.title}}/></h4>
+</div>
+<div class="auk-u-mb-4 l-printable-agenda__item">
+  {{#if @item.title}}
+    {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+    {{! prettier-ignore }}
+    <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
+  {{/if}}
+  {{#let @item.treatment.decisionActivity as |decisionActivity| }}
+    <div
+      class="{{if
+          (or decisionActivity.isPostponed decisionActivity.isRetracted @item.agendaActivity.subcase.confidential)
+          "auk-u-mt-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center"
+        }}"
+    >
+      {{#if @item.agendaActivity.subcase.confidential}}
+        <AuPill @size="small" @skin="danger" @icon="lock-closed">
+          {{t "limited-access"}}
+        </AuPill>
+      {{/if}}
+      {{#if decisionActivity.isPostponed}}
+        <AuPill @size="small">{{t "postponed"}}</AuPill>
+      {{/if}}
+      {{#if decisionActivity.isRetracted}}
+        <AuPill @size="small">{{t "retracted"}}</AuPill>
+      {{/if}}
+      {{#if decisionActivity.subcase.subcaseName}}
+      <div class="auk-u-mt-2">
+        <AuPill @size="small" class="vlc-agenda-meta__times-passed" data-test-agenda-overview-item-subcase-name>
+          {{!capitalization using helper instead of css class:
+                because of `display: inline-flex` property of Auk::Pill
+                it is not affected by the `::first-letter` selector
+                used in the auk-u-text-capitalize class }}
+          {{capitalize decisionActivity.subcase.subcaseName}}
+        </AuPill>
+      </div>
+      {{/if}}
+    </div>
+  {{/let}}
+</div>

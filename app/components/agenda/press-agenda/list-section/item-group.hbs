@@ -1,0 +1,49 @@
+{{!
+  To enable correct breaking of elements & content when printing the rendering of all items where divided as followed:
+    - The first item (without the document list) is grouped together with the header using `break-inside: avoid;`
+    - The remaining items are generated as default
+}}
+<div class="l-printable-agenda__item-group">
+  {{#let (object-at 0 @items) as |first|}}
+    <div class="l-printable-agenda__faux-item">
+      <div class="auk-u-non-breakable-group@print">
+        {{#let this.sortedMandateesFromFirst as |mandatees|}}
+          <h3
+            class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+              {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
+          >{{! auk-u-text-decoration-underline }}
+            {{#if mandatees}}
+              {{#each mandatees as |mandatee|}}
+                {{mandatee.title}}
+                {{#if (not-eq mandatee mandatees.lastObject)}}
+                  <br />&
+                {{/if}}
+              {{/each}}
+            {{else}}
+              {{t "no-mandatee-assigned"}}
+            {{/if}}
+          </h3>
+        {{/let}}
+        <div value={{first.number}}>
+          {{#if (starts-with first.shortTitle "Goedkeuring")}}
+          {{else}}
+          <Agenda::PressAgenda::ListSection::ItemGroup::Item::Content
+            @item={{first}}
+          />
+          {{/if}}
+        </div>
+      </div> 
+    </div>
+  {{/let}}
+  {{#each (drop 1 @items) as |agendaitem|}}
+    <div value={{agendaitem.number}}>
+      <div class="l-printable-agenda__item">
+        <div class="auk-u-non-breakable-group@print">
+          <Agenda::PressAgenda::ListSection::ItemGroup::Item::Content
+            @item={{agendaitem}}
+          />
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

@@ -1,0 +1,37 @@
+<div class="auk-scroll-wrapper auk-u-maximize-width auk-u-scroll-scrollable vlc-hide-scrollbar-on-print">
+  <div class="auk-u-m-8 auk-u-m-0@print">
+    <div
+      class="auk-container auk-container--center l-printable-agenda"
+      data-test-printable-agenda-container
+    >
+      <Utils::LogoHeader />
+      <h2
+        class="auk-h2 auk-u-text-family-serif auk-u-text-align--center auk-u-mt-5 auk-u-mb-10"
+        data-test-printable-agenda-header-title
+      >
+        {{t "agenda-of"}}
+        {{#if @model.meeting.isPreKaleidos}}
+          {{date @model.meeting.plannedStart}}
+        {{else}}
+          {{datetime-at @model.meeting.plannedStart}}
+        {{/if}}
+        -
+        {{kind-print-label @model.meeting.kind}}
+      </h2>
+
+      <div class="auk-content">
+        {{#if this.notaGroups}}
+          <div>
+            <div class="l-printable-agenda__section-content">
+              {{#each this.notaGroups as |notaGroup index|}}
+                <Agenda::PressAgenda::ListSection::ItemGroup
+                  @items={{notaGroup}}
+                />
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
