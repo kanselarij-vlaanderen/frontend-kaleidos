@@ -55,3 +55,20 @@
 }
 
 
+.vlc-numbered-list {
+  counter-reset: --documents;
+
+  .vlc-document-list__item {
+    display: flex;
+    align-items: center;
+  }
+
+  .vlc-document-list__item::before {
+    display: inline;
+    counter-increment: --documents;
+    content: counter(--documents) '.';
+    color: var(--au-gray-700);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
