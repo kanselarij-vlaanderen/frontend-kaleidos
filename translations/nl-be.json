@@ -1384,5 +1384,16 @@
   "submissions": "Indieningen",
   "cabinet-submitter": "Indediend kabinet",
   "co-submitters": "Co-agendeerders",
-  "treated-by": "Bheandeld door"
+  "treated-by": "Bheandeld door",
+  "submit-agendaitem": "Dien agendapunt in",
+  "new-submission": "Nieuwe indiening",
+  "add-new-case": "Nieuw dossier toevoegen",
+  "search-on-case-name": "Zoek op dossier naam",
+  "notifications-submission": "Notificaties",
+  "notification-for-submission-and-approval": "Notificatie voor indiening en goedkeuring",
+  "notification-for-ikw-group": "Notificatie naar de IKW-groep",
+  "add-emails": "E-mailadressen toevoegen",
+  "additional-information": "Aanvullende informatie",
+  "additional-information-for-ikw-group": "Aanvullende informatie voor de IKW-groep",
+  "remarks-for-secretary-about-submission": "Opmerkingen voor de secretarie over de indiening"
 }

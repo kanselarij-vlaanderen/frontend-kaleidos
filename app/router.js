@@ -1,5 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
+import { isEnabledCabinetSubmissions } from './utils/feature-flag';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -33,11 +34,15 @@ Router.map(function() {
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
+    if (isEnabledCabinetSubmissions())
+      this.route('new-submission', { path: '/nieuwe-indiening' });
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {});
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
+        if (isEnabledCabinetSubmissions())
+          this.route('new-submission', { path: '/nieuwe-indiening' });
       });
     });
   });

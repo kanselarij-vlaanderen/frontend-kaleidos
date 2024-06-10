@@ -1,0 +1,126 @@
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <div class="au-c-case-form">
+      <Auk::Panel class="auk-u-mb-2">
+        <Auk::Panel::Header
+          @size="auto"
+          class="au-u-background-gray-100"
+        >
+          <Auk::Toolbar @auto={{true}} as |Toolbar|>
+            <Toolbar.Group @position="left">
+              <h4 class="auk-toolbar__title">
+                {{t "general-information"}}
+              </h4>
+            </Toolbar.Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          <Utils::LoadableContent
+            @reserveSpace={{true}}
+          >
+            <Cases::Submissions::DecisionmakingFlowSelector
+              class="auk-u-mb-4"
+              @disableEdit={{@disableEdit}}
+              @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
+              @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}
+              @onChangeSelected={{fn (mut this.selectedDecisionmakingFlow)}}
+            />
+            <Cases::Submissions::AgendaItemTypeSelector
+              class="auk-u-mb-4"
+              @onChangeAgendaItemType={{fn (mut this.agendaItemType)}}
+            />
+            <div class="auk-form-group">
+              <AuLabel for="new-subcase-confidential">
+                {{t "limited-access"}}
+              </AuLabel>
+              <AuToggleSwitch
+                @checked={{this.confidential}}
+                id="new-subcase-confidential"
+              />
+            </div>
+            <div class="auk-form-group">
+              <AuLabel for="shortTitle">{{t "name-subcase"}}</AuLabel>
+              <AuTextarea
+                @rows="2"
+                @value={{this.shortTitle}}
+                @width="block"
+                id="shortTitle"
+              />
+            </div>
+            <div class="auk-form-group">
+              <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
+              <Utils::ModelSelector
+                @modelName="subcase-type"
+                @searchField="label"
+                @sortField="label"
+                @selected={{this.type}}
+                @onChange={{fn (mut this.type)}}
+                as |model|>
+                {{capitalize model.label}}
+              </Utils::ModelSelector>
+            </div>
+          </Utils::LoadableContent>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+
+      <Cases::Submissions::Notifications
+        class="auk-u-mb-2"
+        @notificationAddresses={{this.notificationAddresses}}
+        @ccAddresses={{this.CCAddresses}}
+        @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
+        @onChangeNotificationMessage={{fn (mut this.notificationMessage)}}
+        @onChangeCCAddresses={{fn (mut this.CCAddresses)}}
+        @onChangeCCMessage={{fn (mut this.CCMessage)}}
+      />
+      <Cases::Subcases::MandateeSelectorPanel
+        @mandatees={{this.mandatees}}
+        @submitter={{this.submitter}}
+        @setSubmitter={{fn (mut this.submitter)}}
+        @setMandatees={{fn (mut this.mandatees)}}
+        @disabled={{this.createSubcase.isRunning}}
+        @matchPerson={{true}}
+      />
+      <Cases::Subcases::GovernmentAreasPanel
+        @governmentAreas={{this.governmentAreas}}
+        @onSelectFields={{this.selectField}}
+        @onDeselectFields={{this.deselectField}}
+        @onSelectDomains={{this.selectDomain}}
+        @onDeselectDomains={{this.deselectDomain}}
+        @disabled={{this.createSubcase.isRunning}}
+      />
+      <Cases::Submissions::DocumentUploadPanel
+        @pieces={{this.sortedPieces}}
+        @onAddPiece={{this.addPiece}}
+        @onDeletePiece={{this.deletePiece}}
+        @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
+      />
+    </div>
+  </div>
+  <AuToolbar
+    @reverse={{true}}
+    @size="large"
+    @border="top"
+    as |Group|>
+    <Group>
+      <AuButton
+        @skin="secondary"
+        {{on "click" @onCancel}}
+      >
+        {{t "cancel"}}
+      </AuButton>
+      <AuButton
+        @skin="primary"
+        {{on "click" (toggle "showProposableAgendaModal" this)}}
+      >
+        {{t "add-new-case"}}
+      </AuButton>
+    </Group>
+  </AuToolbar>
+</div>
+
+{{#if this.showProposableAgendaModal}}
+  <Cases::Submissions::ProposableAgendasModal
+    @onCancel={{toggle "showProposableAgendaModal" this}}
+    @onConfirm={{perform this.createSubmission}}
+  />
+{{/if}}

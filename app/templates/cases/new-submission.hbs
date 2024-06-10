@@ -1,0 +1,32 @@
+{{page-title (t "new-submission")}}
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group>
+      <Auk::Toolbar::Item>
+        <AuLink
+          @skin="button-naked"
+          @icon="hierarchical-back"
+          @hideText={{true}}
+          {{on "click" this.transitionBack}}
+        >
+          {{t "back"}}
+        </AuLink>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <div data-test-subcase-overview-header-title-container class="auk-u-my">
+          <h4 class="auk-toolbar-complex__title">
+            <Auk::AbbreviatedText
+              @text=" "
+              @maxLength={{250}}
+            />
+            {{t "new-submission"}}
+          </h4>
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<Cases::NewSubmission
+  @onCancel={{this.onCancelSubmission}}
+/>
