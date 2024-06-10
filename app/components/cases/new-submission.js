@@ -12,6 +12,7 @@ import {
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesNewSubmissionComponent extends Component {
+  @service agendaService;
   @service conceptStore;
   @service mandatees;
   @service router;
@@ -117,11 +118,12 @@ export default class CasesNewSubmissionComponent extends Component {
     await this.submission.save();
 
     // Create submission change
+    const submitted = await this.store.findRecordByUri('concept', CONSTANTS.SUBMISSION_STATUSES.INGEDIEND);
     const submissionStatusChange = this.store.createRecord('submission-status-change-activity', {
       startedAt: now,
       comment,
       submission: this.submission,
-      status: CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
+      status: submitted,
     });
     await submissionStatusChange.save();
 
@@ -131,6 +133,7 @@ export default class CasesNewSubmissionComponent extends Component {
           meeting,
           this.submission,
         );
+        this.router.transitionTo('cases');
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
