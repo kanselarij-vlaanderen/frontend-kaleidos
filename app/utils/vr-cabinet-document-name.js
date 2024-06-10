@@ -5,7 +5,7 @@ export default class VRCabinetDocumentName {
     return Object.freeze({
       type: '(?<type>.*)',
       index: '(?<index>\\d{1,3})',
-      versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+      versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix?.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
   }
@@ -19,19 +19,30 @@ export default class VRCabinetDocumentName {
     return this.name;
   }
 
-  get regex() {
+  get regexNumberType() {
+    // versionSuffix doesn't really work here, since type uses .*; even with tweaks, QUATER matches with TER
     const regexGroup = VRCabinetDocumentName.regexGroups;
-    return new RegExp(`(?<subject>.*?)(?:[/-]${regexGroup.index})?[/-]${regexGroup.type}${regexGroup.versionSuffix}?$`);
+    return new RegExp(`(?<subject>.*)?[/-]${regexGroup.index}(?:[/-]${regexGroup.type})${regexGroup.versionSuffix}?$`);
+  }
+
+  get regexTypeNumber() {
+    const regexGroup = VRCabinetDocumentName.regexGroups;
+    return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?$`);
   }
 
   parseMeta() {
-    const match = this.regex.exec(this.name);
-    if (!match) {
-      return {
-        subject: this.name,
-      };
+    let match = this.regexNumberType.exec(this.name);
+    if (!match || !match.groups.type) {
+      match = this.regexTypeNumber.exec(this.name);
+      if (!match || !match.groups.type) {
+        return {
+            subject: this.name,
+            index: parseInt(match?.groups.index, 10),
+        };
+      }
     }
-    const subject = match.groups.subject;
+
+    const subject = match.groups.subject?.trim();
     const versionSuffix = match.groups.versionSuffix;
     let versionNumber = 1;
     if (versionSuffix) {
@@ -40,7 +51,6 @@ export default class VRCabinetDocumentName {
     const meta = {
       subject,
       type: match.groups.type,
-      indexNrRaw: match.groups.index,
       index: parseInt(match.groups.index, 10),
       versionSuffix,
       versionNumber,
