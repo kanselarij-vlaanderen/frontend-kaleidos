@@ -1,8 +1,22 @@
 import Component from '@glimmer/component';
 import { TrackedArray } from 'tracked-built-ins';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { resource, use } from 'ember-resources';
+import { task } from 'ember-concurrency';
 
 export default class AgendaPrintableAgendaListSectionItemGroupComponent extends Component {
+
+  getRatifications = task(async () => {
+    return await Promise.all(this.args.items.map(async (item) => {
+      const agendaActivity = await item.agendaActivity;
+      const subcase = await agendaActivity?.subcase;
+      const ratification = await subcase?.ratification;
+
+      return ratification; 
+    }));
+  });
+
+  ratifications = trackedTask(this, this.getRatifications);
 
   @use sortedMandateesFromFirst = resource(() => {
     const sortedMandatees = new TrackedArray([]);

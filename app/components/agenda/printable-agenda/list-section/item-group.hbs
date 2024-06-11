@@ -3,68 +3,97 @@
     - The first item (without the document list) is grouped together with the header using `break-inside: avoid;`
     - The remaining items are generated as default
 }}
-<div class="l-printable-agenda__item-group">
-  {{#let (object-at 0 @items) as |first|}}
-    {{#if (and @hideNotFormallyOk (not first.isFormallyOk))}}
-      {{! Don't show this as its not formally OK}}
-    {{else}}
-      <div class="l-printable-agenda__faux-item">
-        <div class="auk-u-non-breakable-group@print">
-          {{#let this.sortedMandateesFromFirst as |mandatees|}}
-            <h3
-              class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
-                {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
-            >{{! auk-u-text-decoration-underline }}
-              {{#if mandatees}}
-                {{#each mandatees as |mandatee|}}
-                  {{mandatee.title}}
-                  {{#if (has-next mandatee mandatees)}}
-                    <br />&
-                  {{/if}}
-                {{/each}}
-              {{else}}
-                {{t "no-mandatee-assigned"}}
-              {{/if}}
-            </h3>
-          {{/let}}
-          <div value={{first.number}}>
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-              @item={{first}}
-            />
-          </div>
-        </div>
-        {{#let (await first.pieces) as |pieces|}}
-          {{#if pieces}}
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-              @pieces={{pieces}}
-              @fileNameMappings={{@fileNameMappings}}
-            />
-          {{/if}}
-        {{/let}}
-      </div>
-    {{/if}}
-  {{/let}}
-  {{#each (drop 1 @items) as |agendaitem|}}
-    {{#if (and @hideNotFormallyOk (not agendaitem.isFormallyOk))}}
-      {{! Don't show this as its not formally OK}}
-    {{else}}
-      <div value={{agendaitem.number}}>
-        <div class="l-printable-agenda__item">
+{{#if this.ratifications.isRunning}}
+  <AuLoader />
+{{else}}
+  <div class="l-printable-agenda__item-group">
+    {{#let (object-at 0 @items) as |first|}}
+      {{#if (and @hideNotFormallyOk (not first.isFormallyOk))}}
+        {{! Don't show this as its not formally OK}}
+      {{else}}
+        <div class="l-printable-agenda__faux-item">
           <div class="auk-u-non-breakable-group@print">
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-              @item={{agendaitem}}
-            />
-          </div>
-          {{#let (await agendaitem.pieces) as |pieces|}}
-            {{#if pieces}}
-              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                @pieces={{pieces}}
-                @fileNameMappings={{@fileNameMappings}}
+            {{#let this.sortedMandateesFromFirst as |mandatees|}}
+              <h3
+                class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+                  {{if
+                    (not mandatees)
+                    'l-printable-agenda__item-group-header--muted auk-u-keep-colors@print'
+                  }}"
+              >{{! auk-u-text-decoration-underline }}
+                {{#if mandatees}}
+                  {{#each mandatees as |mandatee|}}
+                    {{mandatee.title}}
+                    {{#if (has-next mandatee mandatees)}}
+                      <br />&
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  {{t "no-mandatee-assigned"}}
+                {{/if}}
+              </h3>
+            {{/let}}
+            <div value={{first.number}}>
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+                @item={{first}}
               />
-            {{/if}}
+            </div>
+          </div>
+          {{#let (await first.pieces) as |pieces|}}
+            {{#let
+              (object-at 0 this.ratifications.value)
+              as |firstRatification|
+            }}
+              {{#let
+                (if firstRatification (append pieces firstRatification) pieces)
+                as |piecesWithRatification|
+              }}
+                {{#if pieces}}
+                  <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                    @pieces={{piecesWithRatification}}
+                    @fileNameMappings={{@fileNameMappings}}
+                    @hideInternSecretarie={{@hideInternSecretarie}}
+                  />
+                {{/if}}
+              {{/let}}
+            {{/let}}
           {{/let}}
         </div>
-      </div>
-    {{/if}}
-  {{/each}}
-</div>
+      {{/if}}
+    {{/let}}
+    {{#each (drop 1 @items) as |agendaitem index|}}
+      {{#if (and @hideNotFormallyOk (not agendaitem.isFormallyOk))}}
+        {{! Don't show this as its not formally OK}}
+      {{else}}
+        <div value={{agendaitem.number}}>
+          <div class="l-printable-agenda__item">
+            <div class="auk-u-non-breakable-group@print">
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+                @item={{agendaitem}}
+              />
+            </div>
+            {{#let (await agendaitem.pieces) as |pieces|}}
+              {{#let
+                (object-at (add index 1) this.ratifications.value)
+                as |ratification|
+              }}
+                {{#let
+                  (if ratification (append pieces ratification) pieces)
+                  as |piecesWithRatification|
+                }}
+                  {{#if pieces}}
+                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                      @pieces={{piecesWithRatification}}
+                      @fileNameMappings={{@fileNameMappings}}
+                      @hideInternSecretarie={{@hideInternSecretarie}}
+                    />
+                  {{/if}}
+                {{/let}}
+              {{/let}}
+            {{/let}}
+          </div>
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
+{{/if}}
