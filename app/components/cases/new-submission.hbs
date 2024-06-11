@@ -42,9 +42,9 @@
               <AuLabel for="shortTitle">{{t "name-subcase"}}</AuLabel>
               <AuTextarea
                 @rows="2"
-                @value={{this.shortTitle}}
                 @width="block"
                 id="shortTitle"
+                {{on "change" (pick "target.value" (fn (mut this.shortTitle)))}}
               />
             </div>
             <div class="auk-form-group">

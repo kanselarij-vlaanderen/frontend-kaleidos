@@ -14,7 +14,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class CasesNewSubmissionComponent extends Component {
   @service agendaService;
   @service conceptStore;
-  @service mandatees;
   @service router;
   @service store;
   @service toaster
@@ -97,28 +96,30 @@ export default class CasesNewSubmissionComponent extends Component {
 
     await this.savePieces.perform();
 
+    const submitted = await this.store.findRecordByUri('concept', CONSTANTS.SUBMISSION_STATUSES.INGEDIEND);
+
     this.submission = this.store.createRecord('submission', {
       created: now,
       modified: now,
-      type: this.subcaseType,
       shortTitle: trimText(this.shortTitle),
       title: trimText(this.decisionmakingFlowTitle),
       confidential: this.confidential,
+      type: this.type,
       agendaItemType: this.agendaItemType,
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       approvedBy: this.notificationAddresses,
       approvalComment: trimText(this.notificationMessage),
       notified: this.CCAddresses,
       notificationComment: trimText(this.CCMessage),
-      madnatees: this.mandatees,
+      mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
       governmentAreas: [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains],
+      status: submitted,
     });
 
     await this.submission.save();
 
     // Create submission change
-    const submitted = await this.store.findRecordByUri('concept', CONSTANTS.SUBMISSION_STATUSES.INGEDIEND);
     const submissionStatusChange = this.store.createRecord('submission-status-change-activity', {
       startedAt: now,
       comment,
