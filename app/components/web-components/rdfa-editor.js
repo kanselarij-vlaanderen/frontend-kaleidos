@@ -3,8 +3,37 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
-
-import { Schema } from '@lblod/ember-rdfa-editor';
+import { Schema } from 'prosemirror-model';
+import {
+  em,
+  strikethrough,
+  strong,
+  subscript,
+  superscript,
+  underline,
+} from '@lblod/ember-rdfa-editor/plugins/text-style';
+import {
+  block_rdfa,
+  doc,
+  hard_break,
+  invisible_rdfa,
+  paragraph,
+  repaired_block,
+  text,
+} from '@lblod/ember-rdfa-editor/nodes';
+import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
+import {
+  tableKeymap,
+  tableNodes,
+  tablePlugins,
+} from '@lblod/ember-rdfa-editor/plugins/table';
+import {
+  bulletListWithConfig,
+  listItemWithConfig,
+  listTrackingPlugin,
+  orderedListWithConfig,
+} from '@lblod/ember-rdfa-editor/plugins/list';
+import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
 
 export const section_rdfa = {
   content: 'block+',
@@ -27,51 +56,9 @@ export const section_rdfa = {
   },
 }
 
-import {
-  block_rdfa,
-  doc,
-  hard_break,
-  invisible_rdfa,
-  paragraph,
-  repaired_block,
-  text,
-} from '@lblod/ember-rdfa-editor/nodes';
-
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
-
-import {
-  em,
-  strikethrough,
-  strong,
-  subscript,
-  superscript,
-  underline,
-} from '@lblod/ember-rdfa-editor/plugins/text-style';
-
-import {
-  tableKeymap,
-  tableNodes,
-  tablePlugins,
-} from '@lblod/ember-rdfa-editor/plugins/table';
-
-import {
-  bulletListWithConfig,
-  listItemWithConfig,
-  listTrackingPlugin,
-  orderedListWithConfig,
-} from '@lblod/ember-rdfa-editor/plugins/list';
-
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
-
 export default class WebComponentsRdfaEditor extends Component {
   @service userAgent;
-
   @tracked controller;
-  @tracked plugins = [
-    listTrackingPlugin(),
-    ...tablePlugins,
-    tableKeymap,
-  ];
 
   get sizeClass() {
     if (this.args.size == 'small') return 'wc-rdfa-editor--small';
@@ -79,9 +66,13 @@ export default class WebComponentsRdfaEditor extends Component {
     else return '';
   }
 
-  // get plugins() {
-  //   return [tablePlugin, tableKeymap];
-  // }
+  get plugins() {
+    return [
+      listTrackingPlugin(),
+      ...tablePlugins,
+      tableKeymap,
+    ];
+  }
 
   get browserName() {
     const browser = this.userAgent.browser;
