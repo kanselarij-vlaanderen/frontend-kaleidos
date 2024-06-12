@@ -10,15 +10,15 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  regenerateDecisionReportsForMeeting = task(async (meetingId, newNames=false) => {
-    if (!meetingId) {
+  regenerateDecisionReportsForMeeting = task(async (meeting, newNames=false) => {
+    if (!meeting.id) {
       return;
     }
     const reports = await this.store.queryAll('report', {
       'filter[:has-no:next-piece]': true,
       'filter[:has:piece-parts]': true,
       'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-      meetingId,
+      meeting.id,
     });
     if (reports?.length > 0) {
       let { alterableReports } = await this.getAlterableReports(reports);
@@ -36,7 +36,7 @@ export default class DecisionReportGeneration extends Service {
           });
           const documentContainer = await report.documentContainer;
           const pieces = await documentContainer.pieces;
-          report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
+          report.name = await generateReportName(agendaitem, meeting, pieces.length);
           await report.belongsTo('file').reload();
           await report.save();
         }));

@@ -310,7 +310,7 @@ export default class MeetingEditMeetingComponent extends Component {
           if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
             regenerateReportNames = true;
           }
-          yield this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting.id, regenerateReportNames);
+          yield this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames);
           yield this.regenerateMinutes();
         }
       }
