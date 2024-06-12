@@ -34,7 +34,7 @@
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
     <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small"
-    @expanded={{true}}>
+    @expanded={{true}} @label="Agenda">
       {{#each (take 1 @reverseSortedAgendas) as |agenda|}}
         <Agenda::SideNav::Agenda 
           @currentAgenda={{@currentAgenda}}
