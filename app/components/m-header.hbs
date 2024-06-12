@@ -6,13 +6,13 @@
       </Auk::Toolbar::Item>
       {{#if this.session.isAuthenticated}}
         <Auk::Toolbar::Item>
-          <Auk::Tabs>
+          <Auk::Tabs @responsive={{true}} @responsiveBreakpoint="medium">
             <Auk::Tab
               @route="search.index"
               @current-when="search"
               data-test-m-header-search
             >
-              <Auk::Icon @name="search" />
+              <AuIcon @icon="search" />
               {{capitalize (t "search")}}
             </Auk::Tab>
             <Auk::Tab
@@ -57,20 +57,6 @@
       {{/if}}
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right" class="auk-u-mr-3">
-      {{#if this.currentSession.isImpersonator}}
-        <Auk::Toolbar::Item class="auk-u-mr-3">
-          <div class="vlc-environment-pill">
-            {{t "you-see-the-app-as" name=this.impersonation.role.label}}
-          </div>
-        </Auk::Toolbar::Item>
-      {{/if}}
-      {{#if this.environmentName}}
-        <Auk::Toolbar::Item class="auk-u-mr-3">
-          <div class="vlc-environment-pill {{this.environmentClass}}">
-            {{this.environmentName}}
-          </div>
-        </Auk::Toolbar::Item>
-      {{/if}}
       <Auk::Toolbar::Item>
         {{!-- template-lint-disable require-context-role --}}
         <AuDropdown
@@ -78,6 +64,7 @@
           @alignment="right"
           @icon="circle-question"
           @iconAlignment="left"
+          class="auk-u-text-hidden-mobile"
         >
           <AuLinkExternal
             href="/handleiding"
@@ -203,3 +190,15 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
+
+{{#if this.currentSession.isImpersonator}}
+<div class="vlc-environment-pill">
+  {{t "you-see-the-app-as" name=this.impersonation.role.label}}
+</div>
+{{/if}}
+
+{{#if this.environmentName}}
+<div class="vlc-environment-pill {{this.environmentClass}}">
+  {{this.environmentName}}
+</div>
+{{/if}}

@@ -102,6 +102,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumber) {
+    cy.wait(2000); // wait for datepicker change to trigger calculation of the next number before changing
     cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
@@ -362,7 +363,10 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(appuniversum.loader).should('not.exist', {
+  // TODO why is this taking so long to go away?
+  cy.get(appuniversum.loader, {
+    timeout: 50000,
+  }).should('not.exist', {
     timeout: 60000,
   }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
@@ -374,7 +378,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   }).should('not.exist');
   cy.get(appuniversum.loader); // loader should be shown briefly
   cy.get(appuniversum.loader, {
-    timeout: amountOfFormallyOks * 20000,
+    timeout: (1 + amountOfFormallyOks) * 20000,
   }).should('not.exist');
   cy.log('/setAllItemsFormallyOk');
 }
@@ -396,6 +400,7 @@ function approveDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
@@ -431,6 +436,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(agenda.agendaCheck.confirm).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();

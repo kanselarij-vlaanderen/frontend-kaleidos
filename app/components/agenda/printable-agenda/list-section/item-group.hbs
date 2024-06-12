@@ -5,52 +5,66 @@
 }}
 <div class="l-printable-agenda__item-group">
   {{#let (object-at 0 @items) as |first|}}
-    <div class="l-printable-agenda__faux-item">
-      <div class="auk-u-non-breakable-group@print">
-        {{#let this.sortedMandateesFromFirst as |mandatees|}}
-          <h3
-            class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
-              {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
-          >{{! auk-u-text-decoration-underline }}
-            {{#if mandatees}}
-              {{#each mandatees as |mandatee|}}
-                {{mandatee.title}}
-                {{#if (has-next mandatee mandatees)}}
-                  <br />&
-                {{/if}}
-              {{/each}}
-            {{else}}
-              {{t "no-mandatee-assigned"}}
-            {{/if}}
-          </h3>
-        {{/let}}
-        <div value={{first.number}}>
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-            @item={{first}}
-          />
+    {{#if (and @hideNotFormallyOk (not first.isFormallyOk))}}
+      {{! Don't show this as its not formally OK}}
+    {{else}}
+      <div class="l-printable-agenda__faux-item">
+        <div class="auk-u-non-breakable-group@print">
+          {{#let this.sortedMandateesFromFirst as |mandatees|}}
+            <h3
+              class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+                {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
+            >{{! auk-u-text-decoration-underline }}
+              {{#if mandatees}}
+                {{#each mandatees as |mandatee|}}
+                  {{mandatee.title}}
+                  {{#if (has-next mandatee mandatees)}}
+                    <br />&
+                  {{/if}}
+                {{/each}}
+              {{else}}
+                {{t "no-mandatee-assigned"}}
+              {{/if}}
+            </h3>
+          {{/let}}
+          <div value={{first.number}}>
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+              @item={{first}}
+            />
+          </div>
         </div>
+        {{#let (await first.pieces) as |pieces|}}
+          {{#if pieces}}
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+              @pieces={{pieces}}
+              @fileNameMappings={{@fileNameMappings}}
+            />
+          {{/if}}
+        {{/let}}
       </div>
-      {{#if (await first.pieces)}}
-        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-          @pieces={{first.pieces}}
-        />
-      {{/if}}
-    </div>
+    {{/if}}
   {{/let}}
   {{#each (drop 1 @items) as |agendaitem|}}
-    <div value={{agendaitem.number}}>
-      <div class="l-printable-agenda__item">
-        <div class="auk-u-non-breakable-group@print">
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-            @item={{agendaitem}}
-          />
+    {{#if (and @hideNotFormallyOk (not agendaitem.isFormallyOk))}}
+      {{! Don't show this as its not formally OK}}
+    {{else}}
+      <div value={{agendaitem.number}}>
+        <div class="l-printable-agenda__item">
+          <div class="auk-u-non-breakable-group@print">
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+              @item={{agendaitem}}
+            />
+          </div>
+          {{#let (await agendaitem.pieces) as |pieces|}}
+            {{#if pieces}}
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                @pieces={{pieces}}
+                @fileNameMappings={{@fileNameMappings}}
+              />
+            {{/if}}
+          {{/let}}
         </div>
-        {{#if (await @item.pieces)}}
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-            @pieces={{agendaitem.pieces}}
-          />
-        {{/if}}
       </div>
-    </div>
+    {{/if}}
   {{/each}}
 </div>

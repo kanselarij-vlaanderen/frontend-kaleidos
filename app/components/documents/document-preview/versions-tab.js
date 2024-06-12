@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
@@ -18,6 +18,6 @@ export default class DocumentsDocumentPreviewVersionsTabComponent extends Compon
   }
 
   get sortedVersions() {
-    return sortPieces(this.versions);
+    return sortPieceVersions(this.versions);
   }
 }

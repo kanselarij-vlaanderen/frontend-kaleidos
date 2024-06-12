@@ -1,4 +1,4 @@
-<Auk::Toolbar class="auk-u-mb-4" as |Toolbar|>
+<Auk::Toolbar class="auk-u-mb-4" @responsive={{true}} as |Toolbar|>
   <Toolbar.Group @position="left" as |Group|>
     <Group.Item>
       <h4 class="auk-toolbar__title">
@@ -6,7 +6,7 @@
       </h4>
     </Group.Item>
   </Toolbar.Group>
-  <Toolbar.Group @position="right" as |Group|>
+  <Toolbar.Group @position="right" class="au-u-flex au-u-flex--wrap au-u-flex--spaced-tiny" as |Group|>
     {{#if this.model.pieces.length}}
       <Group.Item>
         {{#if (user-may "manage-documents")}}
@@ -42,6 +42,7 @@
           @skin="warning"
           @icon="alert-triangle"
           @title={{t "postponed-item"}}
+          class="auk-u-mb-2"
         >
           {{t "agendaitem-document-postponed--message"}}
         </AuAlert>
@@ -50,6 +51,7 @@
           @skin="warning"
           @icon="alert-triangle"
           @title={{t "retracted-item"}}
+          class="auk-u-mb-2"
         >
           {{t "agendaitem-document-retracted--message"}}
         </AuAlert>
@@ -65,6 +67,7 @@
       @didDeleteContainer={{this.refresh}}
       @isEditable={{true}}
       @decisionActivity={{this.decisionActivity}}
+      @hideAccessLevel={{this.hideAccessLevel}}
     />
   {{else}}
     <div class="auk-u-mt-2">
@@ -137,7 +140,7 @@
         @onUpload={{this.uploadPiece}}
       />
       <div class="upload-container">
-        {{#each this.newPieces as |piece|}}
+        {{#each this.sortedNewPieces as |piece|}}
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}

@@ -11,7 +11,7 @@
 >
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
-      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Auk::Toolbar @auto={{true}} @responsive={{true}} as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
@@ -38,6 +38,11 @@
                 {{/unless}}
               </span>
             </div>
+            {{#if this.documentContainer.position}}
+              <span>
+                {{this.documentContainer.position}}.
+              </span>
+            {{/if}}
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
@@ -156,14 +161,16 @@
             }}
           >
             {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
-              <AccessLevelPill
-                @accessLevel={{this.piece.accessLevel}}
-                @isEditable={{@isEditable}}
-                @isDraft={{this.isDraftAccessLevel}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-              />
+              {{#unless @hideAccessLevel}}
+                <AccessLevelPill
+                  @accessLevel={{this.piece.accessLevel}}
+                  @isEditable={{@isEditable}}
+                  @isDraft={{this.isDraftAccessLevel}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              {{/unless}}
             {{/unless}}
           </Group.Item>
           {{#if this.showSignatureLoader}}
@@ -315,6 +322,7 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
+    @documentContainer={{this.documentContainer}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
     @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}

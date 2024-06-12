@@ -2,41 +2,48 @@
   <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
     {{t "content"}}
   </AuHeading>
-  <ul class="au-c-list-navigation">
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.all-types">
-        {{t "all-content"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.cases">
-        {{t "cases"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.agendaitems">
-        {{t "agendas"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.documents">
-        {{t "documents"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.decisions">
-        {{t "decisions"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.news-items">
-        {{t "newsletter"}}
-      </AuNavigationLink>
-    </li>
-    <li class="au-c-list-navigation__item">
-      <AuNavigationLink @route="search.publication-flows">
-        {{t "publications"}}
-      </AuNavigationLink>
-    </li>
-  </ul>
+  <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
+    <Auk::Tab
+      @route="search.all-types"
+      @current-when="search.all-types"
+    >
+      {{t "all-content"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.cases"
+      @current-when="search.cases"
+    >
+      {{t "cases"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.agendaitems"
+      @current-when="search.agendaitems"
+    >
+      {{t "agendas"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.documents"
+      @current-when="search.documents"
+    >
+      {{t "documents"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.decisions"
+      @current-when="search.decisions"
+    >
+      {{t "decisions"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.news-items"
+      @current-when="search.news-items"
+    >
+      {{t "newsletter"}}
+    </Auk::Tab>
+    <Auk::Tab
+      @route="search.publication-flows"
+      @current-when="search.publication-flows"
+    >
+      {{t "publications"}}
+    </Auk::Tab>
+  </Auk::Tabs>
 </nav>

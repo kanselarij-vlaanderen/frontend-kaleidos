@@ -19,5 +19,8 @@ const selectors = {
   toaster: '.au-c-toaster',
   fileUpload: '.auk-file-upload',
   onWebsite: '.au-c-icon--website',
+  icon: {
+    warning: '.au-c-icon.au-u-warning',
+  },
 };
 export default selectors;

@@ -181,7 +181,7 @@
             @disabled={{this.createSubcase.isRunning}}
           />
           <Cases::Subcases::DocumentUploadPanel
-            @pieces={{this.pieces}}
+            @pieces={{this.sortedPieces}}
             @onAddPiece={{this.addPiece}}
             @onDeletePiece={{this.deletePiece}}
             @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
@@ -204,7 +204,7 @@
         data-test-new-subcase-form-save
         @skin="primary"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
-        {{on "click" (toggle "showProposableAgendaModal" this)}}
+        {{on "click" (perform this.openProposableAgendaModal)}}
       >
         {{t "new-subcase"}}
       </AuButton>

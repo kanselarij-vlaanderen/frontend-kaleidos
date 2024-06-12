@@ -6,9 +6,10 @@
   />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{this.isLoading}}>
-      <table class="auk-table auk-table--styled auk-table--bordered">
+      <table class="auk-table auk-table--sortable auk-table--styled auk-table--bordered">
         <thead>
           <tr>
+            <th></th>
             {{#if (user-may "manage-documents")}}
               <th class="auk-table-checkbox-col">
                 <AuCheckbox
@@ -18,6 +19,7 @@
                 />
               </th>
             {{/if}}
+            <th></th>
             <th>{{t "name-document"}}</th>
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
@@ -33,22 +35,24 @@
             <th>{{! Actions }}</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody {{sortable-group onChange=this.onReorderPieces}}>
           {{#if (user-may "manage-documents")}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
               @decisionActivity={{@decisionActivity}}
               @isSignaturesEnabled={{this.isSignaturesEnabled}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
+              @disableDelete={{@disableDelete}}
             />
           {{/if}}
-          {{#each this.rows as |row|}}
+          {{#each this.reorderableRows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
               @isEditingEnabled={{user-may "manage-documents"}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
+              @disableDelete={{@disableDelete}}
             />
           {{/each}}
         </tbody>

@@ -41,33 +41,33 @@ function addNewDocumentsInUploadModal(files, model) {
       }
     });
 
-    if (file.fileType) {
-      cy.wait(`@loadConceptsDocType_${randomInt}`, {
-        timeout: 30000,
-      });
-      cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
-        .eq(index)
-        .find(document.uploadedDocument.documentTypes)
-        .as('radioOptions');
-      cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-      cy.get('@radioOptions').within(($t) => {
-        if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
-          cy.get(utils.radioDropdown.input).check(file.fileType, {
-            force: true,
-          }); // CSS has position:fixed, which cypress considers invisible
-        } else {
-          cy.get('input[type="radio"][value="Andere"]').check({
-            force: true,
-          });
-          cy.get(dependency.emberPowerSelect.trigger)
-            .click()
-            .parents('body') // we want to stay in the within, but have to search the options in the body
-            .find(dependency.emberPowerSelect.option)
-            .contains(file.fileType)
-            .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
-        }
-      });
-    }
+    // File type is required for agendaitems and subcases, not for agenda
+    const fileType = file.fileType || 'Bijlage';
+    cy.wait(`@loadConceptsDocType_${randomInt}`, {
+      timeout: 30000,
+    });
+    cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
+      .eq(index)
+      .find(document.uploadedDocument.documentTypes)
+      .as('radioOptions');
+    cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+    cy.get('@radioOptions').within(($t) => {
+      if ($t.find(`input[type="radio"][value="${fileType}"]`).length) {
+        cy.get(utils.radioDropdown.input).check(fileType, {
+          force: true,
+        }); // CSS has position:fixed, which cypress considers invisible
+      } else {
+        cy.get('input[type="radio"][value="Andere"]').check({
+          force: true,
+        });
+        cy.get(dependency.emberPowerSelect.trigger)
+          .click()
+          .parents('body') // we want to stay in the within, but have to search the options in the body
+          .find(dependency.emberPowerSelect.option)
+          .contains(fileType)
+          .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+      }
+    });
   });
   // Click save
   cy.intercept('POST', 'pieces').as('createNewPiece');
@@ -173,6 +173,7 @@ function addNewPiece(oldFileName, file, modelToPatch, hasSubcase = true) {
   }
   cy.wait(`@loadPieces_${randomInt}`); // This call does not happen when loading subcase/documents route, but when loading the documents in that route
   cy.wait(1000); // Cypress is too fast
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/addNewPiece');
 }
 
@@ -642,33 +643,33 @@ function addNewDocumentsInSubcaseFileUpload(files) {
       }
     });
 
-    if (file.fileType) {
-      cy.wait(`@loadConceptsDocType_${randomInt}`, {
-        timeout: 60000,
-      });
-      cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
-        .eq(index)
-        .find(document.uploadedDocument.documentTypes)
-        .as('radioOptions');
-      cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-      cy.get('@radioOptions').within(($t) => {
-        if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
-          cy.get(utils.radioDropdown.input).check(file.fileType, {
-            force: true,
-          }); // CSS has position:fixed, which cypress considers invisible
-        } else {
-          cy.get('input[type="radio"][value="Andere"]').check({
-            force: true,
-          });
-          cy.get(dependency.emberPowerSelect.trigger)
-            .click()
-            .parents('body') // we want to stay in the within, but have to search the options in the body
-            .find(dependency.emberPowerSelect.option)
-            .contains(file.fileType)
-            .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
-        }
-      });
-    }
+    // File type is required for agendaitems and subcases, not for agenda
+    const fileType = file.fileType || 'Bijlage';
+    cy.wait(`@loadConceptsDocType_${randomInt}`, {
+      timeout: 60000,
+    });
+    cy.get('@fileUploadDialog').find(document.uploadedDocument.container)
+      .eq(index)
+      .find(document.uploadedDocument.documentTypes)
+      .as('radioOptions');
+    cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
+    cy.get('@radioOptions').within(($t) => {
+      if ($t.find(`input[type="radio"][value="${fileType}"]`).length) {
+        cy.get(utils.radioDropdown.input).check(fileType, {
+          force: true,
+        }); // CSS has position:fixed, which cypress considers invisible
+      } else {
+        cy.get('input[type="radio"][value="Andere"]').check({
+          force: true,
+        });
+        cy.get(dependency.emberPowerSelect.trigger)
+          .click()
+          .parents('body') // we want to stay in the within, but have to search the options in the body
+          .find(dependency.emberPowerSelect.option)
+          .contains(fileType)
+          .click(); // Match is not exact, ex. fileType "Advies" yields "Advies AgO" instead of "Advies"
+      }
+    });
   });
 
   cy.log('/addNewDocumentsInUploadModal');
