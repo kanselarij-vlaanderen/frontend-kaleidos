@@ -163,6 +163,20 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   savePieces = task(async () => {
+    // enforce all new pieces must have type on document container
+    const typesPromises = this.newPieces.map(async (piece) => {
+      const container = await piece.documentContainer;
+      const type = await container.type;
+      return type;
+    });
+    const types = await all(typesPromises);
+    if (types.some(type => !type)) {
+      this.toaster.error(
+        this.intl.t('document-type-required'),
+        this.intl.t('warning-title'),
+      );
+      return;
+    }
     const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {
         await this.savePiece.perform(piece, index);

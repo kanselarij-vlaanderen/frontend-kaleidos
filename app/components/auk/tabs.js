@@ -83,8 +83,8 @@ export default class Tabs extends Component {
   @action updateActiveRouteName() {
     const activeLink = this.dropdownElement.querySelector('.auk-tabs__tab__link--active');
     const label = activeLink ? activeLink.querySelector('.auk-sidebar__label') : null;
+    const buttonLabel = this.args.label || 'Laden';
 
-    
     // Check if a sublabel was found, otherwise use the activeLink's innerText
     if (label) {
       this.activeRouteName = label.innerText;
@@ -92,7 +92,7 @@ export default class Tabs extends Component {
       this.activeRouteName = activeLink.innerText;
     } else {
       // Optionally handle the case where no active link or sublabel is found
-      this.activeRouteName = 'Laden';
+      this.activeRouteName = buttonLabel;
     }
   }
 

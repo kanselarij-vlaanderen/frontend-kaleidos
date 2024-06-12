@@ -38,6 +38,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @service intl;
   @service toaster;
   @service decisionReportGeneration;
+  @service jobMonitor;
 
   @tracked showLoadingOverlay = false;
   @tracked loadingMessage = false;
@@ -335,6 +336,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
+      await this.jobMonitor.ensureNoJobExistsSince(
+        this.openAgendaCheckTimestamp,
+        'document-naming-job',
+        undefined,
+        this.intl.t('an-agenda-was-approved-since-modal-was-opened')
+      );
       const agendaitemsNotOk = await this.allAgendaitemsNotOk();
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
@@ -362,6 +369,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('error-approve-agenda', { message: error.message }),
         this.intl.t('warning-title')
       );
+      this.showAgendaCheck = false;
       this.args.onStopLoading();
     }
   }
@@ -411,6 +419,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       return;
     }
     try {
+      await this.jobMonitor.ensureNoJobExistsSince(
+        this.openAgendaCheckTimestamp,
+        'document-naming-job',
+        undefined,
+        this.intl.t('an-agenda-was-approved-since-modal-was-opened')
+      );
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
@@ -429,6 +443,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('warning-title')
       );
     } finally {
+      this.showAgendaCheckWithCloseMeeting = false;
       this.args.onStopLoading();
       this.args.didCloseMeeting();
     }

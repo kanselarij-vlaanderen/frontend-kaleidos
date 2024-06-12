@@ -21,16 +21,16 @@
         <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
         <ul>
           {{#each submittedPieces as |submittedPiece|}}
-            <li class="vlc-document-list__item">
+            <li class="vlc-document-list__item vlc-document-list__item--condensed">
               <div
-                class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"
+                class="auk-o-flex au-u-flex--spaced-tiny auk-o-flex--vertical-center"
               >
                 <AuLink
                   @route="document"
                   @model={{submittedPiece.piece.id}}
                   @skin="secondary"
                 >
-                  <AuIcon @icon="document" />
+                  <AuIcon @icon="document" class="au-u-flex-item--fixed" />
                   <span>
                     {{submittedPiece.name}}
                     {{this.submittedPieceList submittedPiece}}
