@@ -1384,7 +1384,7 @@
   "submissions": "Indieningen",
   "cabinet-submitter": "Indediend kabinet",
   "co-submitters": "Co-agendeerders",
-  "treated-by": "Bheandeld door",
+  "treated-by": "Behandeld door",
   "submit-agendaitem": "Dien agendapunt in",
   "new-submission": "Nieuwe indiening",
   "add-new-case": "Nieuw dossier toevoegen",
@@ -1395,5 +1395,8 @@
   "add-emails": "E-mailadressen toevoegen",
   "additional-information": "Aanvullende informatie",
   "additional-information-for-ikw-group": "Aanvullende informatie voor de IKW-groep",
-  "remarks-for-secretary-about-submission": "Opmerkingen voor de secretarie over de indiening"
+  "remarks-for-secretary-about-submission": "Opmerkingen voor de secretarie over de indiening",
+  "date-put-on-agenda": "Datum agendering",
+  "submission": "Indiening",
+  "all-submissions": "Alle indieningen"
 }
