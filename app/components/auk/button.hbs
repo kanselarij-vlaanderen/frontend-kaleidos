@@ -16,7 +16,7 @@
     @models={{this.models}}
     ...attributes
   >
-    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Auk::Button::InnerLayout>
   </LinkTo>
@@ -29,7 +29,7 @@
     disabled={{@disabled}}
     ...attributes
   >
-    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Auk::Button::InnerLayout>
   </a>
@@ -40,7 +40,7 @@
     disabled={{@disabled}}
     ...attributes
   >
-    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Auk::Button::InnerLayout>
     {{#if (has-block "floater")}}

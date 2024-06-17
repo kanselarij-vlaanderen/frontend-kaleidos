@@ -204,7 +204,7 @@
         data-test-new-subcase-form-save
         @skin="primary"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
-        {{on "click" (toggle "showProposableAgendaModal" this)}}
+        {{on "click" (perform this.openProposableAgendaModal)}}
       >
         {{t "new-subcase"}}
       </AuButton>

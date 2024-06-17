@@ -10,7 +10,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.isUrgent}}
     <td class="auk-u-text-align--center">
       {{#if @publicationFlow.urgencyLevel.isUrgent}}
-        <Auk::Icon @skin="warning" @name="alert-triangle" />
+        <AuIcon @icon="alert-triangle" class="au-u-warning" />
       {{else}}
         {{t "dash"}}
       {{/if}}

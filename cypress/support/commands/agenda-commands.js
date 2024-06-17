@@ -102,6 +102,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumber) {
+    cy.wait(2000); // wait for datepicker change to trigger calculation of the next number before changing
     cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
@@ -362,7 +363,10 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
     .click();
   cy.intercept('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaActions.approveAllAgendaitems).forceClick();
-  cy.get(appuniversum.loader).should('not.exist', {
+  // TODO why is this taking so long to go away?
+  cy.get(appuniversum.loader, {
+    timeout: 50000,
+  }).should('not.exist', {
     timeout: 60000,
   }); // new loader when refreshing data
   cy.get(auk.modal.body).should('contain', verifyText);
