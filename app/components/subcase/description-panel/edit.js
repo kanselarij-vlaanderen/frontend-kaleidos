@@ -6,7 +6,6 @@ import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
-import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class SubcaseDescriptionEdit extends Component {
   /**
@@ -14,6 +13,7 @@ export default class SubcaseDescriptionEdit extends Component {
    * @argument onCancel
    * @argument onSave
    */
+  @service agendaService;
   @service store;
   @service conceptStore;
   @service decisionReportGeneration;
@@ -151,30 +151,18 @@ export default class SubcaseDescriptionEdit extends Component {
     if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
       await this.updateDecisionReport(propertiesToSetOnAgendaitem.number);
-      await this.recalculateAllAgendaitemNumbersOnAgenda()
+      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        const agenda = await this.store.queryOne('agenda', {
+          'filter[agendaitems][agenda-activity][subcase][:id:]': this.args.subcase.id,
+          'filter[:has-no:next-version]': 't',
+        });
+        await this.agendaService.reorderAgenda(agenda);
+      }
     }
 
     this.args.onSave();
 
     this.isSaving = false;
-  }
-
-  async recalculateAllAgendaitemNumbersOnAgenda() {
-    const agendaitem = await this.store.queryOne('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-version]': 't',
-      sort: '-created',
-    });
-    if (agendaitem) {
-      const agenda = await agendaitem.agenda;
-      await reorderAgendaitemsOnAgenda(
-        agenda,
-        this.store,
-        this.decisionReportGeneration,
-        this.currentSession.may('manage-agendaitems'),
-      );
-    }
-
   }
 
   async calculateAgendaitemNumber() {
