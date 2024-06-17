@@ -1,0 +1,41 @@
+<div
+  class="auk-o-flex auk-o-flex--vertical-center"
+  ...attributes
+>
+  {{#if this.onChange.isRunning}}
+    <div class="auk-u-text-muted">
+      {{t "please-be-patient"}}
+      <Auk::Loader />
+    </div>
+  {{/if}}
+  <PowerSelect
+    @options={{this.formallyOkOptions}}
+    @selected={{this.selectedFormallyOkOption}}
+    @onChange={{this.onChange}}
+    @disabled={{this.onSave.isRunning}}
+  as |option|>
+    {{#if option.svg }}
+      <AuIcon @icon={{option.svg.icon}} class={{(concat "au-u-" option.svg.color)}} />
+    {{/if}}
+    {{option.label}}
+  </PowerSelect>
+  <AuButton
+    @skin="naked"
+    @icon="check"
+    @hideText={{true}}
+    @loading={{this.onSave.isRunning}}
+    {{on "click" (perform this.onSave)}}
+    class="auk-u-ml"
+  >
+    {{t "save"}}
+  </AuButton>
+  <AuButton
+    @skin="naked"
+    @icon="x"
+    @hideText={{true}}
+    @loading={{this.onSave.isRunning}}
+    {{on "click" @cancelEdit}}
+  >
+    {{t "cancel"}}
+  </AuButton>
+</div>
