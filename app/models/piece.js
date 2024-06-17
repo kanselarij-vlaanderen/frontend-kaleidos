@@ -1,5 +1,6 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { attr, belongsTo, hasMany } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
+import ModelWithModifier from './model-with-modifier';
 
 /**
  * !when adding a new inverse relation (piece belongsTo/hasMany someModel), make sure to add the polymorphic type {as: 'piece'}
@@ -7,7 +8,7 @@ import sanitize from 'sanitize-filename';
  * Referencing a relation between piece and piece requires both
  */
 
-export default class Piece extends Model {
+export default class Piece extends ModelWithModifier {
   @attr('string') uri;
   @attr('string') name;
   @attr('number') numberOfPages;
