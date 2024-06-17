@@ -204,6 +204,10 @@
     color: transparent;
     font-size: 0;
 
+    &:before {
+      color: $auk-gray-600;
+    }
+
     &:not(:hover) {
       opacity: 1;
     }
