@@ -31,10 +31,14 @@ $say-editor-border-radius: $au-input-border-radius;
 @import 'ember-rdfa-editor/c-table';
 @import 'ember-rdfa-editor/shame';
 
+
+// Copy from ember-rdfa-editor package as we can't individually import this yet
+
 ol > li[data-list-marker]::marker {
   content: attr(data-list-marker);
   font-variant-numeric: tabular-nums;
 }
+
 ol > *[data-content-container] > li[data-list-marker]::marker {
   content: attr(data-list-marker);
   font-variant-numeric: tabular-nums;
@@ -60,32 +64,6 @@ ol > *[data-content-container] > li[data-list-marker]::marker {
     height: calc(100vh - 6.5rem);
   }
 }
-
-// .say-toolbar {
-//   border-bottom-color: $say-editor-border-color;
-//   border-top-left-radius: $say-editor-border-radius;
-//   border-top-right-radius: $say-editor-border-radius;
-// }
-
-// .say-toolbar__group {
-//   padding-right: 0;
-//   padding-left: 0;
-// }
-
-// .say-toolbar__button,
-// .say-dropdown__button {
-//   &:focus {
-//     outline-offset: -0.3rem;
-//   }
-// }
-
-// .say-toolbar__button + .say-toolbar__button {
-//   border-left-color: $say-editor-border-color;
-// }
-
-// .say-dropdown + .say-toolbar__button {
-//   border-left: 0.1rem solid $say-editor-border-color;
-// }
 
 .say-container__main {
   border-bottom-right-radius: $say-editor-border-radius;
@@ -132,61 +110,10 @@ ol > *[data-content-container] > li[data-list-marker]::marker {
     @include au-font-size(1.8rem);
   }
 
-  > * + * {
-    margin-top: 1.5rem;
-  }
-
   > p + ul,
   > p + ol {
     margin-top: 0;
   }
-
-  > ul[data-list-style='upper-alpha'] + p,
-  > ol[data-list-style='upper-alpha'] + p {
-    margin-top: 0;
-  }
-
-  ul,
-  ol {
-    padding-left: 5.8rem; // `margin-left: 2.8rem;` replaced by 3rem (default padding-left) + 2.8rem (default margin-left)
-
-    ul,
-    ol {
-      padding-left: 3.8rem;
-    }
-
-    &[data-list-style='upper-alpha'] {
-      padding-left: 2.9rem;
-
-      ol {
-        padding-left: 1.9rem;
-      }
-    }
-  }
-
-  // @mixin decimal-extended-styling($levels, $current-level: 1) {
-  //   padding-left: 0;
-
-  //   > li {
-  //     &:before {
-  //       @if $current-level == 1 {
-  //         min-width: 5.8rem;
-  //       } @else {
-  //         min-width: 3.8rem;
-  //       }
-  //     }
-
-  //     @if $current-level < $levels {
-  //       > ol:not([data-list-style]) {
-  //         @include decimal-extended-styling($levels, $current-level + 1);
-  //       }
-  //     }
-  //   }
-  // }
-
-  // ol[data-list-style='decimal-extended'] {
-  //   @include decimal-extended-styling(5, 1);
-  // }
 }
 
 .say-container__aside {
