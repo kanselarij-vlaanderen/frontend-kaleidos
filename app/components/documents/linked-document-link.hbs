@@ -1,7 +1,7 @@
 <div class="vlc-document-card" data-test-linked-document-link-card ...attributes>
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
-      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Auk::Toolbar @auto={{true}} @responsive={{true}} as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             <AuBadge
@@ -99,7 +99,7 @@
                     {{/if}}
                   </div>
                   <div class="vlc-document-card-item__icon">
-                    <Auk::Icon @name="clock-rewind" @size="small" />
+                    <AuIcon @icon="clock-rewind" />
                   </div>
                 </div>
               </div>

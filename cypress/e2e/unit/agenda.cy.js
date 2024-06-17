@@ -41,6 +41,7 @@ function getTranslatedMonth(month) {
 
 function downloadDocs(postAgenda = true) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.wait(2000); // wait for deltas or file replacement from document-stamping service
 
   cy.get(appuniversum.loader).should('not.exist');
   cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
