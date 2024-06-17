@@ -1,0 +1,174 @@
+<ConfirmationModal
+  @modalOpen={{true}}
+  @title={{t "modify-document"}}
+  @onConfirm={{perform this.saveEdit}}
+  @onCancel={{this.cancelEdit}}
+  @confirmMessage={{t "save"}}
+  @loading={{this.saveEdit.isRunning}}
+  @disabled={{this.isDisabled}}
+>
+  <:body>
+    <AuCard
+      @flex={{true}}
+      @size="small"
+      as |c|
+    >
+      <c.header
+        @badgeIcon={{document-icon @piece.file.extension}}
+      >
+        <p class="vlc-subline au-u-medium au-u-muted">
+          {{uppercase @piece.file.extension}}
+        </p>
+        <div class="au-u-flex au-u-flex--spaced-small">
+          <AuInput
+            value={{this.name}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "name"))}}
+          />
+          <AuButtonGroup class="au-u-flex--no-wrap">
+            <AuButton
+              @skin="secondary"
+              {{on "click" this.toggleUploadReplacementSourceFile}}
+            >
+              {{t "replace"}}
+            </AuButton>
+          </AuButtonGroup>
+        </div>
+        {{#if @piece.created}}
+          <AuHelpText @skin="secondary">
+            {{t "uploaded-at"}}
+            {{datetime-at (or @piece.file.created @piece.created)}}
+          </AuHelpText>
+        {{/if}}
+      </c.header>
+      {{#if this.isReplacingSourceFile}}
+        <c.content>
+          <Auk::FileUploader
+            @isSubmission={{true}}
+            @multiple={{false}}
+            @onUpload={{set this "replacementSourceFile"}}
+            @onQueueUpdate={{this.handleReplacementSourceFileUploadQueue}}
+          />
+        </c.content>
+      {{/if}}
+    </AuCard>
+    {{#if @piece.file.derived}}
+      <AuCard
+        @flex={{true}}
+        @size="small"
+        class="au-u-margin-top-small {{if this.isDeletingDerivedFile 'vlc-document--deleted-state'}}"
+        as |c|
+      >
+        <c.header
+          @badgeIcon={{document-icon @piece.file.derived.extension}}
+        >
+          <p class="vlc-subline au-u-medium au-u-muted">
+            {{uppercase @piece.file.derived.extension}}
+          </p>
+          <div class="au-u-flex au-u-flex--between au-u-flex--spaced-small">
+            <p>
+              {{@piece.name}}
+            </p>
+            <AuButtonGroup class="au-u-flex--no-wrap">
+              <AuButton
+                @skin="secondary"
+                {{on "click" this.toggleUploadReplacementDerivedFile}}
+              >
+                {{t "replace"}}
+              </AuButton>
+              <AuButton
+                @skin="secondary"
+                @alert={{true}}
+                @icon="trash"
+                @hideText={{true}}
+                {{on "click" (toggle "isDeletingDerivedFile" this)}}
+              >
+              </AuButton>
+            </AuButtonGroup>
+          </div>
+          {{#if @piece.file.derived.created}}
+            <AuHelpText @skin="secondary">
+              {{t "uploaded-at"}}
+              {{datetime-at @piece.file.derived.created}}
+            </AuHelpText>
+          {{/if}}
+        </c.header>
+        {{#if this.isReplacingDerivedFile}}
+          <c.content>
+            <Auk::FileUploader
+              @isSubmission={{true}}
+              @multiple={{false}}
+              @onUpload={{set this "replacementDerivedFile"}}
+              @onQueueUpdate={{this.handleReplacementDerivedFileUploadQueue}}
+            />
+          </c.content>
+        {{/if}}
+      </AuCard>
+    {{else}}
+      {{#unless this.uploadedDerivedFile}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small"
+          as |c|
+        >
+          <c.header
+            @badgeIcon="document"
+          >
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <AuHeading @skin="5" @level="3">{{t "upload-source-document"}}</AuHeading>
+            </div>
+          </c.header>
+          <c.content>
+            <Auk::FileUploader
+              @isSubmission={{true}}
+              @multiple={{false}}
+              @onUpload={{set this "uploadedSourceFile"}}
+              @onQueueUpdate={{this.handleSourceFileUploadQueue}}
+            />
+          </c.content>
+        </AuCard>
+      {{/unless}}
+      {{#unless (or this.uploadedDerivedFile this.uploadedSourceFile)}}
+        <div class="auk-u-mt-2 auk-u-text-align--center">
+          <p>{{t "or"}}</p>
+        </div>
+      {{/unless}}
+      {{#unless this.uploadedSourceFile}}
+        <AuCard
+          @flex={{true}}
+          @size="small"
+          class="au-u-margin-top-small"
+          as |c|
+        >
+          <c.header
+            @badgeIcon="document"
+          >
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
+            </div>
+          </c.header>
+          <c.content>
+            <Auk::FileUploader
+              @isSubmission={{true}}
+              @multiple={{false}}
+              @onUpload={{set this "uploadedDerivedFile"}}
+              @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
+            />
+          </c.content>
+        </AuCard>
+      {{/unless}}
+    {{/if}}
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="type">{{t "document-type"}}</AuLabel>
+          <Utils::DocumentTypeSelector
+            @selectedDocumentType={{this.documentType}}
+            @onChange={{this.selectDocumentType}}
+          />
+        </div>
+      </c.content>
+    </AuCard>
+  </:body>
+</ConfirmationModal>
