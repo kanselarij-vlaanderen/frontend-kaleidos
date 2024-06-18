@@ -355,7 +355,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      if (agendaitemsNotOk) {
+      if (agendaitemsNotOk?.length) {
         await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
       }
       this.args.onStopLoading();
@@ -438,7 +438,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      if (agendaitemsNotOk) {
+      if (agendaitemsNotOk?.length) {
         await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
       }
     } catch (error) {
