@@ -31,7 +31,8 @@ export default class FileConversionService extends Service {
           await oldDerivedFile.destroyRecord();
         }
         const result = await response.json();
-        const derivedFile = await this.store.findRecord('file', result.data[0].id)
+        const modelName = sourceFile.constructor.name.replace('Model', '');
+        const derivedFile = await this.store.findRecord(modelName, result.data[0].id)
         sourceFile.derived = derivedFile;
         await sourceFile.save();
       } else {
