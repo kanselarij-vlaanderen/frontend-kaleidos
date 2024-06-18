@@ -1,0 +1,69 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "overview"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#if @submission.isSentBack}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-subcase-description-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" @onClickEdit}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
+      <AuHeading
+        @level="4"
+        @skin="4"
+      >
+        {{capitalize @submission.shortTitle}}
+      </AuHeading>
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+        <AuPill
+          @size="small"
+        >
+          {{#if (is-announcement @submission.agendaItemType)}}
+            {{capitalize (t "announcement")}}
+          {{else}}
+            {{t "note"}}
+          {{/if}}
+        </AuPill>
+        {{#if @submission.confidential}}
+          <AuPill
+            @size="small"
+            @skin="warning"
+            @icon="lock-closed">{{t "limited-access"}}
+          </AuPill>
+        {{/if}}
+      </div>
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Body>
+    <div class="au-o-grid au-o-grid--small au-u-1-1">
+      <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
+        <p>
+          {{#if (await @submission.type)}}
+            {{@submission.type.label}}
+          {{else}}
+            -
+          {{/if}}
+        </p>
+      </div>
+    </div>
+  </Auk::Panel::Body>
+</Auk::Panel>

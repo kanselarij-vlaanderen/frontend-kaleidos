@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaService extends Service {
   @service store;
@@ -146,6 +147,61 @@ export default class AgendaService extends Service {
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
     return agendaitem;
+  }
+
+  /**
+   * @argument meeting
+   * @argument submission
+   */
+  async putDraftSubmissionOnAgenda(meeting, submission) {
+    if (!isEnabledCabinetSubmissions()) {
+      return;
+    }
+    const url = `/meetings/${meeting.id}/submit-submission`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+      body: JSON.stringify({
+        meeting: meeting.uri,
+        submission: submission.uri,
+      })
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${response.statusText}`);
+    }
+  }
+
+  async getOpenMeetings() {
+    if (!isEnabledCabinetSubmissions()) {
+      return;
+    }
+    const url = `/meetings/open`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    let json;
+    try {
+      json = await response.json();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    return json;
   }
 
   /* No API */

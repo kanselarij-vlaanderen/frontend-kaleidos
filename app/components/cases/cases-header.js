@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /**
  * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
@@ -11,6 +12,7 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
  * @argument caseFilter: filter's initial value
  */
 export default class CasesHeader extends Component {
+  @service currentSession;
   @service router;
 
   @tracked isOpenNewCaseAddSubcaseModal = false;
@@ -19,6 +21,14 @@ export default class CasesHeader extends Component {
   constructor() {
     super(...arguments);
     this.filterText = this.args.caseFilter || '';
+  }
+
+  get mayCreateSubmissions() {
+    return this.currentSession.may('create-submissions') && isEnabledCabinetSubmissions();
+  }
+
+  get isInCasesRoute() {
+    return this.router.currentRouteName === 'cases.index';
   }
 
   @action

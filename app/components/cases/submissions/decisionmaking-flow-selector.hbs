@@ -1,0 +1,45 @@
+<AuFormRow ...attributes>
+  <AuLabel>{{capitalize (t "case")}}</AuLabel>
+  <PowerSelect
+    @disabled={{@disableEdit}}
+    @search={{perform this.searchDecisionmakingFlows}}
+    @searchMessage={{t "search-on-case-name"}}
+    @searchEnabled={{true}}
+    @noMatchesMessage={{t "no-results-found"}}
+    @loadingMessage={{t "please-be-patient"}}
+    @selected={{this.decisionmakingFlowOrTitle}}
+    @onChange={{this.onSelectDecisionmakingFlow}}
+    class="au-u-1-1"
+    as |decisionmakingFlow|
+  >
+    {{or decisionmakingFlow.case.shortTitle decisionmakingFlow}}
+  </PowerSelect>
+  {{#unless @disableEdit}}
+    <AuButton
+      @skin="link"
+      @icon="add"
+      class="au-u-margin-top-small"
+      {{on "click" (toggle "isAddingNewDecisionmakingFlow" this)}}
+    >
+      {{t "add-new-case"}}
+    </AuButton>
+  {{/unless}}
+</AuFormRow>
+
+<ConfirmationModal
+  @modalOpen={{this.isAddingNewDecisionmakingFlow}}
+  @title={{t "add-new-case"}}
+  @onConfirm={{toggle "isAddingNewDecisionmakingFlow" this}}
+  @onCancel={{toggle "isAddingNewDecisionmakingFlow" this}}
+  @confirmMessage={{t "add-case"}}
+>
+  <:body>
+    <div>
+      <AuLabel>{{t "case-name"}}</AuLabel>
+      <AuInput
+        @width="block"
+        {{on "change" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
+      />
+    </div>
+  </:body>
+</ConfirmationModal>

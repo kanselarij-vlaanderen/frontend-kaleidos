@@ -190,6 +190,14 @@ export default {
     FORMALLY_NOT_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
     NOT_YET_FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
   },
+  SUBMISSION_STATUSES: {
+    INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b8a0cec4-60d5-431e-b27f-9696bde22552",
+    IN_BEHANDELING: "http://themis.vlaanderen.be/id/indieningstatus/1fa83eac-e995-4d0f-8a02-6c6e66ade185",
+    TERUGGESTUURD: "http://themis.vlaanderen.be/id/indieningstatus/b6e33771-665b-4af2-9f1d-41405d1a24d3",
+    OPNIEUW_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b27cd825-72ae-44b0-b1ea-9dafdebe4e85",
+    UPDATE_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/11c6fd4b-c4d9-4cd4-9a8a-2fa2820e9353",
+    AANVAARD: "http://themis.vlaanderen.be/id/indieningstatus/dd4f1819-a70d-453f-95cb-ab5ade98563e",
+  },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {
     SEARCH_RESULT_KLIK: 'Zoekresultaat klik',
