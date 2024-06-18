@@ -143,7 +143,7 @@ context('Agendaitem document warning tests', () => {
 
     // check upload new piece and confirm
     addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);
-    cy.get(document.documentCard.name.value).contains(`${file.fileName}BIS`);
+    cy.get(document.documentCard.name.value).contains(`${file.fileName} BIS`);
 
     // new doc and BIS should not exist on B
     cy.changeSelectedAgenda('Agenda B');
@@ -151,7 +151,7 @@ context('Agendaitem document warning tests', () => {
     cy.get(document.documentCard.name.value).contains(file.fileName);
     cy.get(document.documentCard.name.value).contains(newFile.fileName)
       .should('not.exist');
-    cy.get(document.documentCard.name.value).contains(`${file.fileName}BIS`)
+    cy.get(document.documentCard.name.value).contains(`${file.fileName} BIS`)
       .should('not.exist');
 
     // check warning and cancel on B (closed agenda)
@@ -183,6 +183,6 @@ context('Agendaitem document warning tests', () => {
 
     // check upload new piece and confirm
     addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);
-    cy.get(document.documentCard.name.value).contains(`${file.fileName}TER`);
+    cy.get(document.documentCard.name.value).contains(`${file.fileName} TER`);
   });
 });

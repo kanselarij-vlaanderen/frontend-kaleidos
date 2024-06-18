@@ -21,6 +21,11 @@
       />
     </td>
   {{/if}}
+  <td class="auk-table-checkbox-col">
+    {{#if @row.documentContainer.position}}
+      {{@row.documentContainer.position}}.
+    {{/if}}
+  </td>
   <td>
     {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
@@ -101,7 +106,7 @@
       >
         {{t "undo"}}
       </AuButton>
-    {{else if (not @row.hasSentSignFlow)}}
+    {{else if (and (not @row.hasSentSignFlow) (not @disableDelete))}}
       <AuButton
         data-test-document-details-row-delete
         @skin="naked"

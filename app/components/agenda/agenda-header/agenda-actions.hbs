@@ -182,12 +182,14 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        <p>
-          {{t
-            "approve-all-agendaitems-warning-message"
-            amountOfAgendaitems=(get (await (this.allAgendaitemsNotOk)) "length")
-          }}
-        </p>
+        {{#let (await (this.allAgendaitemsNotOk)) as |agendaitemsNotOk|}}
+          <p>
+            {{t
+              "approve-all-agendaitems-warning-message"
+              amountOfAgendaitems=(get agendaitemsNotOk "length")
+            }}
+          </p>
+        {{/let}}
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>
