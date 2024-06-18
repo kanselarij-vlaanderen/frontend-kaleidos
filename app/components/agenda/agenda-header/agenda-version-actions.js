@@ -37,6 +37,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
   @service router;
   @service intl;
   @service toaster;
+  @service decisionReportGeneration;
   @service jobMonitor;
 
   @tracked showLoadingOverlay = false;
@@ -341,6 +342,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         undefined,
         this.intl.t('an-agenda-was-approved-since-modal-was-opened')
       );
+      const agendaitemsNotOk = await this.allAgendaitemsNotOk();
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
       await this.documentService.setGeneratedPieceNames(
@@ -353,6 +355,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
+      if (agendaitemsNotOk?.length) {
+        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
+      }
       this.args.onStopLoading();
       return this.router.transitionTo(
         'agenda.agendaitems',
@@ -420,6 +425,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         undefined,
         this.intl.t('an-agenda-was-approved-since-modal-was-opened')
       );
+      const agendaitemsNotOk = await this.allAgendaitemsNotOk();
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
@@ -432,6 +438,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
+      if (agendaitemsNotOk?.length) {
+        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
+      }
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-approve-close-agenda', { message: error.message }),
