@@ -3,9 +3,11 @@
     href={{@doc.viewDocumentURL}} rel="noreferrer noopener"
     data-test-document-badge-link
   >
-    {{#if @doc.documentContainer}}
-      {{await @doc.documentContainer.position}}.&nbsp;
-    {{/if}}
+    {{#let (await @doc.documentContainer) as |documentContainer|}}
+      {{#if documentContainer.position}}
+        <p>{{documentContainer.position}}.&nbsp;</p>
+      {{/if}}
+    {{/let}}
     <AuIcon @icon={{if @isHighlighted "document-added" "document"}} />
     <span>
     {{@doc.name}}
