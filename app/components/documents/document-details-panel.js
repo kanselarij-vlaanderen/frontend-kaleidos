@@ -53,9 +53,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *loadSignatureRelatedData() {
-    const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
-    const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
-    return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
+    if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
+      const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
+      const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
+      return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
+    }
+    return this.canEditPieceWithSignFlow = true;
   }
 
   @task
@@ -97,7 +100,10 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *saveDetails() {
-    const signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    let signMarkingActivity;
+    if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
+      signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    }
     if (signMarkingActivity) {
       const signSubcase = yield signMarkingActivity?.signSubcase;
       const signFlow = yield signSubcase?.signFlow;

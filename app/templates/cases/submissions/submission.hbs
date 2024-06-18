@@ -1,0 +1,101 @@
+{{#if @model.shortTitle}}
+  {{page-title @model.shortTitle}}
+{{else}}
+  {{page-title (t "submission")}}
+{{/if}}
+
+<Submissions::OverviewHeader
+  @submission={{@model}}
+/>
+
+<Submission::Header />
+
+<div class="auk-scroll-wrapper__body">
+  <div class="auk-u-responsive-margin">
+    <div id="case" class="auk-u-mb-4">
+      <Submission::DescriptionPanel
+        @submission={{@model}}
+      />
+    </div>
+
+    <div class="auk-u-mb-4">
+      <Mandatees::MandateesPanel
+        @referenceDate={{@model.created}}
+        @submitter={{await @model.requestedBy}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{@model.isSentBack}}
+      />
+    </div>
+
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      class="auk-u-mb-4"
+      @referenceDate={{@model.created}}
+      @governmentAreas={{@model.governmentAreas}}
+      @allowEditing={{@model.isSentBack}}
+      @subcase={{@model}}
+    />
+
+    <div id="documents" class="auk-u-mb-4">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <div class="au-u-flex au-u-flex--spaced-small">
+                  <h4 class="auk-panel__title">
+                    {{t "documents"}}
+                  </h4>
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              {{#if @model.pieces.length}}
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="secondary"
+                    @icon="pencil"
+                    {{on "click" (noop)}}
+                  >
+                    {{t "batch-edit"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              {{/if}}
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          {{#let (await @model.pieces) as |pieces|}}
+            {{#if pieces.length}}
+              <Documents::DraftDocumentCardList
+                @pieces={{pieces}}
+                @isEditable={{@submission.isSentBack}}
+                @hideAccessLevel={{true}}
+              />
+            {{else}}
+              <div>
+                <AuAlert
+                  @skin="info"
+                  @icon="info-circle"
+                  class="au-u-margin-bottom-none"
+                >
+                  {{t "no-documents-yet"}}
+                </AuAlert>
+              </div>
+            {{/if}}
+          {{/let}}
+        </Auk::Panel::Body>
+        <Auk::Panel::Footer>
+          <AuButton
+            @skin="naked"
+            @icon="plus"
+            class="au-u-padding-left-none"
+            {{on "click" (noop)}}
+          >
+            {{t "documents-add"}}
+          </AuButton>
+        </Auk::Panel::Footer>
+      </Auk::Panel>
+    </div>
+
+  </div>
+</div>

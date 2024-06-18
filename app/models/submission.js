@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubmissionModel extends Model {
   @attr uri;
@@ -6,6 +7,7 @@ export default class SubmissionModel extends Model {
   @attr title;
   @attr('boolean') confidential;
   @attr subcaseName;
+  @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
   @attr('string-set', { defaultValue: () => [] }) approvedBy;
@@ -15,7 +17,7 @@ export default class SubmissionModel extends Model {
 
   @belongsTo('decisionmaking-flow', { inverse: 'submissions', async: true })
   decisionmakingFlow;
-  @belongsTo('subcase', { inverse: 'submission', async: true })
+  @belongsTo('subcase', { inverse: 'submissions', async: true })
   subcase;
   @belongsTo('subcase-type', { inverse: null, async: true })
   type;
@@ -41,5 +43,12 @@ export default class SubmissionModel extends Model {
   @hasMany('concept', { inverse: null, async: true })
   governmentAreas;
   @hasMany('draft-piece', { inverse: null, async: true })
-  draftPieces;
+  pieces;
+
+  get isSentBack() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD
+    );
+  }
 }

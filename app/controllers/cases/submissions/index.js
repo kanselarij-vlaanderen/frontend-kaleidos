@@ -1,16 +1,13 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import { debounce } from '@ember/runloop';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
-import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
-export default class CasesIndexController extends Controller {
-  // Services
+export default class CasesSubmissionsIndexController extends Controller {
+  @service currentSession;
   @service router;
-  @service store;
 
   queryParams = [
     {
@@ -39,11 +36,6 @@ export default class CasesIndexController extends Controller {
       },
     },
     {
-      caseFilter: {
-        type: 'string',
-      },
-    },
-    {
       submitters: {
         type: 'array',
       },
@@ -56,8 +48,7 @@ export default class CasesIndexController extends Controller {
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];
-  @tracked caseFilter = null;
-  @tracked isLoadingModel;
+
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
 
@@ -73,20 +64,6 @@ export default class CasesIndexController extends Controller {
   }
 
   @action
-  selectSize(size) {
-    this.size = size;
-  }
-
-  @action
-  async navigateToDecisionmakingFlow(case_) {
-    const decisionmakingFlow = await case_.decisionmakingFlow;
-    this.router.transitionTo(
-      'cases.case.index',
-      decisionmakingFlow.id
-    );
-  }
-
-  @action
   updateToggleableFilters() {
     this.hasToggleableFilters = (window.innerWidth < 768) ? true : false;
   }
@@ -96,15 +73,27 @@ export default class CasesIndexController extends Controller {
     this.filtersOpen = open;
   }
 
-  get mayShowSubmissionsTab() {
-    return isEnabledCabinetSubmissions();
+  get mayShowMinisterFilter() {
+    return this.currentSession.may('view-all-submissions');
   }
 
-  setCaseFilter = (value) => (this.caseFilter = value);
+  navigateToSubmission = (submission) => {
+    this.router.transitionTo(
+      'cases.submissions.submission',
+      submission.id
+    );
+  }
 
-  nextPage = () => (this.page += 1);
-  prevPage = () => (this.page -= 1);
-
-  setDateFrom = (date) => (this.dateFrom = formatDate(date));
-  setDateTo = (date) => (this.dateTo = formatDate(date));
+  getMandateeNames = async (submission) => {
+    const submitter = await submission.requestedBy;
+    const mandatees = await submission.mandatees;
+    const persons = await Promise.all(
+      mandatees
+        .slice()
+        .filter((m) => submitter?.id !== m.id)
+        .sort((m1, m2) => m1.priority - m2.priority)
+        .map((mandatee) => mandatee.person)
+    );
+    return persons.map((person) => person.fullName);
+  };
 }

@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import {
@@ -40,10 +41,10 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked submitter;
   @tracked mandatees;
 
-  @tracked governmentAreas = [];
-  @tracked selectedGovernmentDomains = [];
-  @tracked selectedGovernmentFields = [];
-  @tracked pieces = [];
+  @tracked governmentAreas = new TrackedArray([]);
+  @tracked selectedGovernmentDomains = new TrackedArray([]);
+  @tracked selectedGovernmentFields = new TrackedArray([]);
+  @tracked pieces = new TrackedArray([]);
 
   @tracked showProposableAgendaModal = false;
 
@@ -115,6 +116,7 @@ export default class CasesNewSubmissionComponent extends Component {
       requestedBy: this.submitter,
       governmentAreas: [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains],
       status: submitted,
+      pieces: this.pieces,
     });
 
     await this.submission.save();

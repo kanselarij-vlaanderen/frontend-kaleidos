@@ -1378,6 +1378,12 @@
   "most-recent-documents": "Recentste documenten",
   "saving-in-progress-please-wait": "Bezig met opslaan, gelieve even te wachten.",
   "check-agenda": "Agenda controleren",
+  "an-agenda-was-approved-since-modal-was-opened": "Er werd in tussentijd reeds een agenda goedgekeurd. De automatische documentsnamen zijn niet meer up-to-date, herlaad de pagina en probeer opnieuw.",
+  "document-type-required": "Type document is verplicht, gelieve voor alle documenten een type in te stellen.",
+  "submissions": "Indieningen",
+  "cabinet-submitter": "Indediend kabinet",
+  "co-submitters": "Co-agendeerders",
+  "treated-by": "Behandeld door",
   "submit-agendaitem": "Dien agendapunt in",
   "new-submission": "Nieuwe indiening",
   "add-new-case": "Nieuw dossier toevoegen",
@@ -1389,6 +1395,7 @@
   "additional-information": "Aanvullende informatie",
   "additional-information-for-ikw-group": "Aanvullende informatie voor de IKW-groep",
   "remarks-for-secretary-about-submission": "Opmerkingen voor de secretarie over de indiening",
-  "an-agenda-was-approved-since-modal-was-opened": "Er werd in tussentijd reeds een agenda goedgekeurd. De automatische documentsnamen zijn niet meer up-to-date, herlaad de pagina en probeer opnieuw.",
-  "document-type-required": "Type document is verplicht, gelieve voor alle documenten een type in te stellen."
+  "date-put-on-agenda": "Datum agendering",
+  "submission": "Indiening",
+  "all-submissions": "Alle indieningen"
 }

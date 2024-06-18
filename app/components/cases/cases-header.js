@@ -27,6 +27,10 @@ export default class CasesHeader extends Component {
     return this.currentSession.may('create-submissions') && isEnabledCabinetSubmissions();
   }
 
+  get isInCasesRoute() {
+    return this.router.currentRouteName === 'cases.index';
+  }
+
   @action
   onInputFilter(event) {
     this.filterText = event.target.value;

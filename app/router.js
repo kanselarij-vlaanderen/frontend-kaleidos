@@ -30,11 +30,16 @@ Router.map(function() {
     });
     this.route('documents', { path: '/documenten', });
     this.route('minutes', { path: '/notulen', });
+    this.route('submissions', { path: '/indieningen', });
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
-    if (isEnabledCabinetSubmissions())
+    if (isEnabledCabinetSubmissions()) {
       this.route('new-submission', { path: '/nieuwe-indiening' });
+      this.route('submissions', { path: '/indieningen' }, function() {
+        this.route('submission', { path: ':submission_id' });
+      });
+    }
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
       this.route('subcases', { path: '/deeldossiers', }, function() {
