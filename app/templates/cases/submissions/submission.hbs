@@ -15,15 +15,19 @@
     <div id="case" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
+        @mayEdit={{this.mayEdit}}
       />
     </div>
 
     <div class="auk-u-mb-4">
       <Mandatees::MandateesPanel
+        @onSave={{this.saveMandateeData}}
         @referenceDate={{@model.created}}
         @submitter={{await @model.requestedBy}}
         @mandatees={{this.mandatees}}
-        @allowEditing={{@model.isSentBack}}
+        @allowEditing={{this.mayEdit}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
       />
     </div>
 
@@ -31,7 +35,7 @@
       class="auk-u-mb-4"
       @referenceDate={{@model.created}}
       @governmentAreas={{@model.governmentAreas}}
-      @allowEditing={{@model.isSentBack}}
+      @allowEditing={{this.mayEdit}}
       @subcase={{@model}}
     />
 
@@ -49,12 +53,12 @@
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             <Auk::Toolbar::Group @position="right">
-              {{#if @model.pieces.length}}
+              {{#if (and this.mayEdit this.pieces.length)}}
                 <Auk::Toolbar::Item>
                   <AuButton
                     @skin="secondary"
                     @icon="pencil"
-                    {{on "click" (noop)}}
+                    {{on "click" (toggle "isOpenBatchDetailsModal" this)}}
                   >
                     {{t "batch-edit"}}
                   </AuButton>
@@ -64,38 +68,79 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
-          {{#let (await @model.pieces) as |pieces|}}
-            {{#if pieces.length}}
-              <Documents::DraftDocumentCardList
-                @pieces={{pieces}}
-                @isEditable={{@submission.isSentBack}}
-                @hideAccessLevel={{true}}
-              />
-            {{else}}
-              <div>
-                <AuAlert
-                  @skin="info"
-                  @icon="info-circle"
-                  class="au-u-margin-bottom-none"
-                >
-                  {{t "no-documents-yet"}}
-                </AuAlert>
-              </div>
-            {{/if}}
-          {{/let}}
+          {{#if this.pieces.length}}
+            <Documents::DraftDocumentCardList
+              @pieces={{this.pieces}}
+              @isEditable={{this.mayEdit}}
+              @hideAccessLevel={{true}}
+            />
+          {{else}}
+            <div>
+              <AuAlert
+                @skin="info"
+                @icon="info-circle"
+                class="au-u-margin-bottom-none"
+              >
+                {{t "no-documents-yet"}}
+              </AuAlert>
+            </div>
+          {{/if}}
         </Auk::Panel::Body>
-        <Auk::Panel::Footer>
-          <AuButton
-            @skin="naked"
-            @icon="plus"
-            class="au-u-padding-left-none"
-            {{on "click" (noop)}}
-          >
-            {{t "documents-add"}}
-          </AuButton>
-        </Auk::Panel::Footer>
+        {{#if this.mayEdit}}
+          <Auk::Panel::Footer>
+            <AuButton
+              @skin="naked"
+              @icon="plus"
+              class="au-u-padding-left-none"
+              {{on "click" (toggle "isOpenPieceUploadModal" this)}}
+            >
+              {{t "documents-add"}}
+            </AuButton>
+          </Auk::Panel::Footer>
+        {{/if}}
       </Auk::Panel>
     </div>
 
   </div>
 </div>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <Auk::Loader @message={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @isSubmission={{true}}
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{fn this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.pieces}}
+    @onCancel={{toggle "isOpenBatchDetailsModal" this}}
+    @onSave={{this.saveBatchDetails}}
+    @disableDelete={{true}}
+  />
+{{/if}}

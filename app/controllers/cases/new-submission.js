@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 export default class CasesNewSubmissionController extends Controller {
   @service router;
 
+  submitter;
+
   @action
   transitionBack() {
     if (history.length > 1) {

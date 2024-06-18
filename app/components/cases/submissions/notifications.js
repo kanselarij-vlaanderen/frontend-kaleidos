@@ -8,8 +8,16 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
   @tracked showNotifiersModal = false;
   @tracked showCCModal = false;
 
+  addedNotificationAddresses = new Set();
+
+  @action
+  isDefaultNotificationAddress(address) {
+    return !this.addedNotificationAddresses.has(address);
+  }
+
   @action
   saveNotificationAddress(address) {
+    this.addedNotificationAddresses.add(address);
     const copy = this.args.notificationAddresses?.slice() ?? [];
     addObject(copy, address);
     this.args.onChangeNotificationAddresses?.(copy);
@@ -18,6 +26,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
 
   @action
   removeNotificationAddress(address) {
+    this.addedNotificationAddresses.delete(address);
     const copy = this.args.notificationAddresses?.slice() ?? [];
     removeObject(copy, address);
     this.args.onChangeNotificationAddresses?.(copy);

@@ -2,5 +2,7 @@
 <Cases::NewSubmission
   @decisionmakingFlow={{@model}}
   @disableEdit={{true}}
+  @submitter={{this.submitter}}
+  @mandatees={{array this.submitter}}
   @onCancel={{this.onCancelSubmission}}
 />

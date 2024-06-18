@@ -62,6 +62,7 @@ const {
 // - create-submissions: Allow the creation of submissions (by cabinets)
 // - view-submissions: Allow the viewing of submissions
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
+// - always-edit-submissions: Allow editing submissions regardless of status
 
 const groups = [
   {
@@ -109,6 +110,7 @@ const groups = [
       'view-access-level-pill-when-postponed',
       'view-submissions',
       'view-all-submissions',
+      'always-edit-submissions',
     ]
   },
   {

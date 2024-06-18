@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { debounce } from '@ember/runloop';
+import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class CasesSubmissionsIndexController extends Controller {
@@ -44,7 +45,7 @@ export default class CasesSubmissionsIndexController extends Controller {
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[2];
-  @tracked sort = '-created';
+  @tracked sort = 'planned-start';
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];
@@ -72,6 +73,9 @@ export default class CasesSubmissionsIndexController extends Controller {
   onToggleFilters(open) {
     this.filtersOpen = open;
   }
+
+  setDateFrom = (date) => (this.dateFrom = formatDate(date));
+  setDateTo = (date) => (this.dateTo = formatDate(date));
 
   get mayShowMinisterFilter() {
     return this.currentSession.may('view-all-submissions');

@@ -37,6 +37,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
 
   model(params) {
     const options = {
+      'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'type,status,requested-by,mandatees.person,being-treated-by',
       sort: params.sort,
       page: {
@@ -63,7 +64,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
 
     if (!this.currentSession.may('view-all-submissions')) {
       options[
-        'filter[requested-by][user-organizations][:id:]'
+        'filter[mandatees][user-organizations][:id:]'
       ] = this.currentSession.organization.id;
     }
 

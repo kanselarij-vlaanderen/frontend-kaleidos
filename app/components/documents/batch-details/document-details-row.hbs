@@ -50,7 +50,7 @@
       {{@row.documentType.label}}
     {{/if}}
   </td>
-  {{#if @isEditingEnabled}}
+  {{#if (and @isEditingEnabled @isAccessLevelEnabled)}}
     <td>
       <Utils::AccessLevelSelector
         data-test-document-details-row-access-level
