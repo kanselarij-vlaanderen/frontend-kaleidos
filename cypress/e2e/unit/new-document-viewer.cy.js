@@ -68,7 +68,7 @@ context('new document viewer tests', () => {
     cy.logout();
   });
   const defaultAccessLevel = 'Intern Regering';
-  const bisName = 'test pdfBIS';
+  const bisName = 'test pdf BIS';
   const newName = 'new name test';
   const newDocumentType = 'Besluit Vlaamse Regering';
   const newAccessLevel = 'Intern Overheid';
