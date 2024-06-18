@@ -49,15 +49,17 @@
                 class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
               >
                 <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
-                <AuButton
-                  @skin="naked"
-                  @alert={{true}}
-                  @hideText={{true}}
-                  @icon="trash"
-                  {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
+                {{#unless (this.isDefaultNotificationAddress notificationAddress)}}
+                  <AuButton
+                    @skin="naked"
+                    @alert={{true}}
+                    @hideText={{true}}
+                    @icon="trash"
+                    {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                {{/unless}}
               </Item>
             {{else}}
               <Item class="au-u-padding-small">

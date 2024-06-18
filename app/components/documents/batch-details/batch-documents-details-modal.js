@@ -39,9 +39,19 @@ export default class BatchDocumentsDetailsModal extends Component {
     return this.isLoading || this.save.isRunning;
   }
 
+  get hasDraftPieces() {
+    return this.args.pieces.any(
+      (piece) => !piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')
+    );
+  }
+
   get isSignaturesEnabled() {
     const hasPermission = this.currentSession.may('manage-signatures');
-    return hasPermission;
+    return hasPermission && !this.hasDraftPieces;
+  }
+
+  get isAccessLevelEnabled() {
+    return !this.hasDraftPieces;
   }
 
   @task

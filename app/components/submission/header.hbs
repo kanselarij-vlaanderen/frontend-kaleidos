@@ -5,5 +5,16 @@
         <OnThisPageLinks @items={{this.items}} />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <AuDropdown
+        @skin="secondary"
+        @title={{t "actions"}}
+        @alignment="right"
+      >
+        <AuButton>
+          {{t "take-in-treatment"}}
+        </AuButton>
+      </AuDropdown>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

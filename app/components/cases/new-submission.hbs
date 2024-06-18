@@ -55,6 +55,7 @@
                 @sortField="label"
                 @selected={{this.type}}
                 @onChange={{fn (mut this.type)}}
+                @filterOptions={{this.filterSubcaseTypes}}
                 as |model|>
                 {{capitalize model.label}}
               </Utils::ModelSelector>
@@ -78,6 +79,8 @@
         @setSubmitter={{fn (mut this.submitter)}}
         @setMandatees={{fn (mut this.mandatees)}}
         @disabled={{this.createSubcase.isRunning}}
+        @disableMinisterCheckbox={{this.disableMinisterCheckbox}}
+        @disableSubmitter={{true}}
         @matchPerson={{true}}
       />
       <Cases::Subcases::GovernmentAreasPanel
@@ -110,6 +113,7 @@
       </AuButton>
       <AuButton
         @skin="primary"
+        @disabled={{this.saveIsDisabled}}
         {{on "click" (toggle "showProposableAgendaModal" this)}}
       >
         {{t "add-new-case"}}

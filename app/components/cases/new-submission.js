@@ -52,6 +52,16 @@ export default class CasesNewSubmissionComponent extends Component {
     super(...arguments);
 
     this.selectedDecisionmakingFlow = this.args.decisionmakingFlow;
+    this.submitter = this.args.submitter;
+    this.mandatees = this.args.mandatees;
+  }
+
+  get saveIsDisabled() {
+    const decisionmakingFlowSet =
+      !!this.selectedDecisionmakingFlow ||
+      !!this.decisionmakingFlowTitle;
+    const subcaseTypeSet = !!this.type;
+    return !decisionmakingFlowSet || !subcaseTypeSet;
   }
 
   get sortedPieces() {
@@ -61,6 +71,15 @@ export default class CasesNewSubmissionComponent extends Component {
 
       return d1?.position - d2?.position || p1.created - p2.created;
     });
+  }
+
+  filterSubcaseTypes = (subcaseTypes) => {
+    return subcaseTypes.filter((type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING)
+  }
+
+  disableMinisterCheckbox = (minister) => {
+    const person = this.submitter.belongsTo('person').value();
+    return minister.id === person.id;
   }
 
   selectField = (selectedField) => {

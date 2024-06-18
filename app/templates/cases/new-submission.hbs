@@ -28,5 +28,7 @@
 </Auk::Navbar>
 
 <Cases::NewSubmission
+  @submitter={{this.submitter}}
+  @mandatees={{array this.submitter}}
   @onCancel={{this.onCancelSubmission}}
 />

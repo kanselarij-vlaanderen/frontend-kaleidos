@@ -23,7 +23,9 @@
             <th>{{t "name-document"}}</th>
             <th>{{t "document-type"}}</th>
             {{#if (user-may "manage-documents")}}
+            {{#if this.isAccessLevelEnabled}}
               <th>{{t "publicity"}}</th>
+            {{/if}}
               {{#if this.isSignaturesEnabled}}
                 {{#if @decisionActivity}}
                   <th>{{t "signature"}}</th>
@@ -41,6 +43,7 @@
               @selectedRows={{this.selectedRows}}
               @decisionActivity={{@decisionActivity}}
               @isSignaturesEnabled={{this.isSignaturesEnabled}}
+              @isAccessLevelEnabled={{this.isAccessLevelEnabled}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}
               @disableDelete={{@disableDelete}}
             />
@@ -49,6 +52,7 @@
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
               @isEditingEnabled={{user-may "manage-documents"}}
+              @isAccessLevelEnabled={{this.isAccessLevelEnabled}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
               @agendaitemIsRetracted={{this.agendaitemIsRetracted}}

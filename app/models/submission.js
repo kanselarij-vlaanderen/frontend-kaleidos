@@ -45,6 +45,13 @@ export default class SubmissionModel extends Model {
   @hasMany('draft-piece', { inverse: null, async: true })
   pieces;
 
+  get isSubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
+    );
+  }
+
   get isSentBack() {
     return (
       this.status?.get('uri') ===
