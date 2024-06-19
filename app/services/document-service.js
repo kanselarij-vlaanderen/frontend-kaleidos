@@ -6,6 +6,7 @@ export default class DocumentService extends Service {
   @service jobMonitor;
   @service store;
   @service toaster;
+  @service intl;
 
   async checkAndRestamp(pieces) {
     const piecesToStamp = pieces.filter(
@@ -39,14 +40,18 @@ export default class DocumentService extends Service {
     const data = await response.json();
     if (response.ok && data) {
       if (data.message) {
-        // TODO polling of the job, lowering toast timeout for now because it is covering a button in tests
         if (data.job) {
-          this.toaster.loading(data.message, null, {
-            timeOut: 1000,
+          const stampingJob = await this.store.findRecord('job', data.job.id);
+          const stampingToaster = this.toaster.loading(data.message, null, {
+            timeOut: 60000,
           });
+          await this.jobMonitor.register(stampingJob);
+          setTimeout(() => {
+            this.toaster.close(stampingToaster);    
+          }, 2000);
         } else {
           this.toaster.warning(data.message, null, {
-            timeOut: 1000,
+            timeOut: 5000,
           });
         }
       }
@@ -63,14 +68,18 @@ export default class DocumentService extends Service {
     const data = await response.json();
     if (response.ok && data) {
       if (data.message) {
-        // TODO polling of the job, lowering toast timeout for now because it is covering a button in tests
         if (data.job) {
-          this.toaster.loading(data.message, null, {
-            timeOut: 1000,
+          const stampingJob = await this.store.findRecord('job', data.job.id);
+          const stampingToaster = this.toaster.loading(data.message, null, {
+            timeOut: 60000,
           });
+          await this.jobMonitor.register(stampingJob);
+          setTimeout(() => {
+            this.toaster.close(stampingToaster);    
+          }, 2000);
         } else {
           this.toaster.warning(data.message, null, {
-            timeOut: 1000,
+            timeOut: 5000,
           });
         }
       }
@@ -97,7 +106,18 @@ export default class DocumentService extends Service {
     // TODO: this only deals with successful jobs, we need to handle errors as well
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
+      const namingToaster = this.toaster.loading(
+        this.intl.t('document-naming--toast-generating--message'),
+        this.intl.t('document-naming--toast-generating--title'),
+        {
+          timeOut: 60000,
+          closable: false,
+        }
+      );
       await this.jobMonitor.register(job);
+      setTimeout(() => {
+        this.toaster.close(namingToaster);    
+      }, 2000);
     } else {
       throw new Error('Could not find job for generating piece names');
     }
