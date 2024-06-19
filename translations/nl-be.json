@@ -1380,5 +1380,8 @@
   "saving-in-progress-please-wait": "Bezig met opslaan, gelieve even te wachten.",
   "check-agenda": "Agenda controleren",
   "an-agenda-was-approved-since-modal-was-opened": "Er werd in tussentijd reeds een agenda goedgekeurd. De automatische documentsnamen zijn niet meer up-to-date, herlaad de pagina en probeer opnieuw.",
-  "document-type-required": "Type document is verplicht, gelieve voor alle documenten een type in te stellen."
+  "document-type-required": "Type document is verplicht, gelieve voor alle documenten een type in te stellen.",
+  "document-naming--toast-generating--message": "De VR nummers worden toegepast.",
+  "document-naming--toast-generating--title": "VR nummering",
+  "document-naming--toast-generating--success": "De VR nummers zijn toegepast."
 }
