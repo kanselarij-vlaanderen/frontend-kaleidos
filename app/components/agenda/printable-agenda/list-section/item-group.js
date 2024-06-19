@@ -18,6 +18,7 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
     const agendaitem = this.args.items.at(0);
     const agendaActivity = yield agendaitem.agendaActivity;
     const subcase = yield agendaActivity?.subcase;
+    yield subcase?.type;
     this.isBekrachtiging = subcase?.isBekrachtiging;
   }
 

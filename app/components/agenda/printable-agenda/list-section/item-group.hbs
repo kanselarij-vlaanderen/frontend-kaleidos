@@ -10,7 +10,8 @@
     {{else}}
       <div class="l-printable-agenda__faux-item">
         <div class="auk-u-non-breakable-group@print">
-          {{#if this.isBekrachtiging}}
+          {{!-- {{#if this.isBekrachtiging}} --}}
+          {{#if (and (eq this.sortedMandateesFromFirst.length 0) this.isBekrachtiging)}}
             <h3
               class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header"
             >
