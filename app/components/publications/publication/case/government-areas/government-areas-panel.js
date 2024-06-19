@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { isPresent } from '@ember/utils';
 
 /**
  * @param publicationFlow {PublicationFlow}
@@ -19,10 +18,6 @@ export default class PublicationsPublicationCaseGovernmentAreasGovernmnetAreasPa
   constructor() {
     super(...arguments);
     this.loadData.perform();
-  }
-
-  get getAllowEditing() {
-    return isPresent(this.args.isEditingAllowed) ? this.args.isEditingAllowed : true;
   }
 
   @task

@@ -25,71 +25,77 @@
           </div>
         </div>
         <ul class="vlc-status-timeline">
-          {{#if this.publicationActivity}}
-            {{#if this.publicationActivity.endDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-publication-received-on"}} {{date this.publicationActivity.endDate}}
-                </div>
-              </li>
-            {{/if}}
-            {{#if this.publicationActivity.startDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-publication-requested-on"}} {{date this.publicationActivity.startDate}}
-                </div>
-              </li>
-            {{/if}}
+          {{#if (gt this.publicationActivities.length 0)}}
+            {{#each this.publicationActivities as |publicationActivity|}}
+              {{#if publicationActivity.endDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-publication-received-on"}} {{date publicationActivity.endDate}}
+                  </div>
+                </li>
+              {{/if}}
+              {{#if publicationActivity.startDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-publication-requested-on"}} {{date publicationActivity.startDate}}
+                  </div>
+                </li>
+              {{/if}}
+            {{/each}}
           {{/if}}
-          {{#if this.proofingActivity}}
-            {{#if this.proofingActivity.endDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-proof-received-on"}} {{date this.proofingActivity.endDate}}
-                </div>
-              </li>
-            {{/if}}
-            {{#if this.proofingActivity.startDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-proof-requested-on"}} {{date this.proofingActivity.startDate}}
-                </div>
-              </li>          
-            {{/if}}
+          {{#if (gt this.proofingActivities.length 0)}}
+            {{#each this.proofingActivities as |proofingActivity|}}
+              {{#if proofingActivity.endDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-proof-received-on"}} {{date proofingActivity.endDate}}
+                  </div>
+                </li>
+              {{/if}}
+              {{#if proofingActivity.startDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-proof-requested-on"}} {{date proofingActivity.startDate}}
+                  </div>
+                </li>          
+              {{/if}}
+            {{/each}}
           {{/if}}
-          {{#if this.translationActivity}}
-            {{#if this.translationActivity.endDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-translation-received-on"}} {{date this.translationActivity.endDate}}
-                </div>
-              </li>
-            {{/if}}
-            {{#if this.translationActivity.startDate}}
-              <li
-                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-              >
-                <div class="vlc-status-timeline__dot"></div>
-                <div class="vlc-status-timeline__text">
-                  {{t "publications-translation-requested-on"}} {{date this.translationActivity.startDate}}
-                </div>
-              </li>
-            {{/if}}
+          {{#if (gt this.translationActivities.length 0)}}
+            {{#each this.translationActivities as |translationActivity|}}
+              {{#if translationActivity.endDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-translation-received-on"}} {{date translationActivity.endDate}}
+                  </div>
+                </li>
+              {{/if}}
+              {{#if translationActivity.startDate}}
+                <li
+                  class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+                >
+                  <div class="vlc-status-timeline__dot"></div>
+                  <div class="vlc-status-timeline__text">
+                    {{t "publications-translation-requested-on"}} {{date translationActivity.startDate}}
+                  </div>
+                </li>
+              {{/if}}
+            {{/each}}
           {{/if}}
         </ul>
       {{/if}}

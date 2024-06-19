@@ -2,7 +2,7 @@
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @publicationFlow.created}}
     @governmentAreas={{this.governmentAreas}}
-    @allowEditing={{this.getAllowEditing}}
+    @allowEditing={{@allowEditing}}
     @onSave={{this.saveGovernmentAreas}}
     class="auk-u-mb-3"
   />

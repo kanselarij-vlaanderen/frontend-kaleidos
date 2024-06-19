@@ -31,14 +31,14 @@
         <div id="government-areas" class="auk-u-mb-4">
           <Publications::Publication::Case::GovernmentAreas::GovernmentAreasPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @isEditingAllowed={{false}}
+            @allowEditing={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="contact-persons" class="auk-u-mb-4">
           <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @mayAddContactPerson={{false}}
+            @isAddContactPersonDisabled={{true}}
             class="auk-u-mb-3"
           />
         </div>

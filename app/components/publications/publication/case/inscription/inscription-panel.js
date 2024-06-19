@@ -32,10 +32,6 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
       );
   }
 
-  get getIsCaseLinkVisible() {
-    return isPresent(this.args.isCaseLinkVisible) ? this.args.isCaseLinkVisible : true;
-  }
-
   get getIsEditingAllowed() {
     return isPresent(this.args.isEditingAllowed) ? this.args.isEditingAllowed : true;
   }

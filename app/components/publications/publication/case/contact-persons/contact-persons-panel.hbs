@@ -55,7 +55,7 @@
                 {{/if}}
               </td>
               <td class="auk-u-text-align--right">
-              {{#if this.getMayAddContactPerson}}
+              {{#unless @isAddContactPersonDisabled}}
                   <AuButton
                     data-test-contact-persons-row-delete
                     @skin="naked"
@@ -66,7 +66,7 @@
                   >
                     {{t "delete"}}
                   </AuButton>
-                {{/if}}
+                {{/unless}}
               </td>
             </tr>
           {{/each}}

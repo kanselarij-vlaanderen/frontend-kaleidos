@@ -88,7 +88,7 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
-          {{#if (and this.isViaCouncilOfMinisters this.getIsCaseLinkVisible)}}
+          {{#if (and this.isViaCouncilOfMinisters @isCaseLinkVisible)}}
             <Auk::Toolbar::Item>
               <AuLink
                 data-test-inscription-view-to-case
