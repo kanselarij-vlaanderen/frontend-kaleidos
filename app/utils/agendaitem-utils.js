@@ -137,12 +137,15 @@ export const setAgendaitemsNumber = async(agendaitems, agenda, store, decisionRe
           'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
         });
         if (report) {
-          reports.push(report);
           const documentContainer = await report.documentContainer;
           const pieces = await documentContainer.pieces;
-          report.name = await generateReportName(agendaitem, meeting, pieces.length);
-          await report.belongsTo('file').reload();
-          await report.save();
+          const newName = await generateReportName(agendaitem, meeting, pieces.length);
+          if (report.name !== newName) {
+            reports.push(report);
+            report.name = newName;
+            await report.belongsTo('file').reload();
+            await report.save();
+          }
         }
         return;
       }));

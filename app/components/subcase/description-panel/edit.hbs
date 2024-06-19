@@ -161,3 +161,12 @@
     </Auk::Toolbar>
   </Auk::Panel::Footer>
 </Auk::Panel>
+
+{{#if this.isSaving}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "save-in-progress"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-in-progress-please-wait"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
