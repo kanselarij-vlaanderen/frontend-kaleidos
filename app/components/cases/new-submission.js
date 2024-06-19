@@ -78,8 +78,8 @@ export default class CasesNewSubmissionComponent extends Component {
   }
 
   disableMinisterCheckbox = (minister) => {
-    const person = this.submitter.belongsTo('person').value();
-    return minister.id === person.id;
+    const person = this.submitter?.belongsTo('person').value();
+    return minister.id === person?.id;
   }
 
   selectField = (selectedField) => {
@@ -155,7 +155,7 @@ export default class CasesNewSubmissionComponent extends Component {
           meeting,
           this.submission,
         );
-        this.router.transitionTo('cases');
+        this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),

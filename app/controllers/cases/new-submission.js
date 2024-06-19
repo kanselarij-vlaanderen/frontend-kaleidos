@@ -6,6 +6,7 @@ export default class CasesNewSubmissionController extends Controller {
   @service router;
 
   submitter;
+  mandatees;
 
   @action
   transitionBack() {

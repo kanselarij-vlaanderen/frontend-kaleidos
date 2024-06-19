@@ -7,6 +7,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   @service store;
 
   submitter;
+  mandatees;
 
   async beforeModel(_transition) {
     const linkedMandatees = await this.store.queryAll('mandatee', {
@@ -21,6 +22,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
       return role?.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT;
     });
     this.submitter = ministerPresident ?? linkedMandatees.slice().at(0);
+    this.mandatees = this.submitter ? [this.submitter] : [];
   }
 
   async model() {
@@ -31,5 +33,6 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   setupController(controller, _model, _transition) {
     super.setupController(...arguments);
     controller.submitter = this.submitter;
+    controller.mandatees = this.mandatees;
   }
 }
