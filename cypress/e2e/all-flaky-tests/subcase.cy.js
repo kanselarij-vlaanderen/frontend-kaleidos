@@ -556,7 +556,7 @@ context('Subcase tests', () => {
     cy.get(dependency.emberPowerSelect.option).contains(capital);
     cy.get(cases.newSubcaseForm.cancel).click();
 
-    // also, titltesView no longer exists
+    // check that subcasename shows capitalized with css but is really not.
     cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
       .should('have.class', 'auk-u-text-capitalize');
   });
