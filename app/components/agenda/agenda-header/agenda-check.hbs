@@ -113,7 +113,12 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <AuButton data-test-agenda-check-confirm @skin="primary" {{on "click" this.onSave}}>
+            <AuButton
+              data-test-agenda-check-confirm
+              @skin="primary"
+              @loading={{this.fileNameMappings.isRunning}}
+              @disabled={{not this.fileNameMappings.value}}
+              {{on "click" this.onSave}}>
               {{@saveLabel}}
             </AuButton>
           </Auk::Toolbar::Item>
