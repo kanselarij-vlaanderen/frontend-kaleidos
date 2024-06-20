@@ -45,7 +45,8 @@ context('Tests of pieces on agendaitems', () => {
       .contains('VR 2020 1212 DOC.0001-2 BIS');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    // TODO KAS-4529 selector no longer exists, batchedit is gone. No longer possible to remove last piece from subcase views
+    // Deleting documents from subcase views has been purposefully turned off. Too risky to allow the action if subcase was preproposed
+    // Keeping this code for now should the request ever come to allow edits (which is only fine if not yet submitted to an agenda)
     // cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1BIS', 0, route.subcaseDocuments.batchEdit);
     // cy.get(document.documentCard.card).should('have.length', 2);
     // cy.get(document.documentCard.name.value).eq(0)

@@ -68,24 +68,6 @@ const selectors = {
     decision: '[data-test-subcase-side-nav-decision]',
   },
 
-  // TODO KAS-4529 CLEANUP + template + component
-  // subcase-process
-  subcaseProcess: {
-    shorttitle: '[data-test-subcases-process-shorttitle]',
-  },
-
-  // new-subcase
-  // TODO KAS-4529 CLEANUP + template + component
-  newSubcase: {
-    clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',
-    type: '[data-test-new-subcase-type]',
-    shorttitle: '[data-test-new-subcase-shorttitle]',
-    longtitle: '[data-test-new-subcase-longtitle]',
-    procedureStep: '[data-test-new-subcase-procedure-step]',
-    procedureName: '[data-test-new-subcase-procedure-name]',
-    save: '[data-test-new-subcase-save]',
-  },
-
   subcaseTimeline: {
     item: '[data-test-subcase-timeline-item]',
   },
@@ -107,10 +89,7 @@ const selectors = {
     agendaLink: '[data-test-subcase-description-agenda-link]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     decidedOn: '[data-test-subcase-description-decided-on]',
-    // TODO KAS-4529 NO LONGER EXISTS, should it?
     subcaseName: '[data-test-subcase-description-subcase-name]',
-    meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
-    requestedBy: '[data-test-subcase-description-requested-by]',
   },
 
   // subcase-description-edit
@@ -131,27 +110,14 @@ const selectors = {
     panel: '[data-test-subcase-versions-panel]',
   },
 
-  // TODO KAS-4529 remove / cleanup templates
-  // subcase-item
-  subcaseItem: {
-    container: '[data-test-subcase-item-container]',
-    link: '[data-test-subcase-item-link]',
-    approved: '[data-test-subcase-item-approved]',
-    pending: '[data-test-subcase-item-pending]',
-    showDocuments: '[data-test-subcase-item-show-documents]',
-  },
-
   // subcase-header
   subcaseHeader: {
     actionsDropdown: '[data-test-subcase-header-actions-dropdown]',
     actions: {
-      // TODO KAS-4529 now opens a modal instead of a dropdown
-      showProposedAgendas: '[data-test-subcase-header-action-show-proposed-agendas]',
+      showProposedAgendas: '[data-test-subcase-header-action-open-proposable-agendas]',
       deleteSubcase: '[data-test-subcase-header-action-delete-subcase]',
       moveSubcase: '[data-test-subcase-header-action-move-subcase]',
     },
-    // TODO KAS-4529 no longer exists
-    proposeForAgenda: '[data-test-subcase-header-show-propose-for-agenda]',
   },
 
   // edit-case-modal

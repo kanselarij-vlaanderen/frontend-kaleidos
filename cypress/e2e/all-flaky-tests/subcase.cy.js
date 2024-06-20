@@ -515,7 +515,7 @@ context('Subcase tests', () => {
 
   it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    // const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+    const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
     const subcaseWithName = 'testId=1589266576: Cypress test dossier 1 test stap 2';
     const encodedSubcaseTitle = encodeURIComponent(subcaseWithName);
 
@@ -551,21 +551,14 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
     cy.visitCaseWithLink('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    // TODO KAS-4529 sidebar does not show subcase name
-    // cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
     cy.get(cases.newSubcaseForm.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
     cy.get(cases.newSubcaseForm.cancel).click();
 
-    // TODO KAS-4529 sidebar
-    // cy.get(cases.subcaseItem.link).eq(0)
-    //   .click();
-    // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
     // also, titltesView no longer exists
-    // cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
-    // .should('have.class', 'auk-u-text-capitalize');
-    // cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
+    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
+      .should('have.class', 'auk-u-text-capitalize');
   });
 
   it('check submission activities', () => {

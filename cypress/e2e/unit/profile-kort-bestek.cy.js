@@ -765,7 +765,7 @@ context('Testing the application as Kort bestek user', () => {
       cy.get(cases.subcaseOverviewHeader.openAddSubcase).should('not.exist');
 
       // sidebar
-      // TODO KAS-4529 this has changed > approved should not show before decisions are released?
+      // * 16/03/24 this has changed > approved should not show before decisions are released?
       cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
 
       // subcase header
