@@ -53,7 +53,7 @@ context('Create case as Admin user', () => {
 
   // TODO-abbreviated
 
-  it.only('Create a case with short title', () => {
+  it('Create a case with short title', () => {
     const caseTitle = 'Check confidential';
     cy.createCase(caseTitle).then((result) => {
       // automatic transition to add new-subcase modal
