@@ -21,9 +21,9 @@ export default class PublicationsPublicationCaseStatusesPublicationStatusesInfoP
   @task
   *loadData() {
     const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
-    this.publicationActivities = yield publicationSubcase.publicationActivities;
-    this.proofingActivities = yield publicationSubcase.proofingActivities;
+    this.publicationActivities = yield publicationSubcase?.publicationActivities;
+    this.proofingActivities = yield publicationSubcase?.proofingActivities;
     const translationSubcase = yield this.args.publicationFlow.translationSubcase;
-    this.translationActivities = yield translationSubcase.translationActivities;
+    this.translationActivities = yield translationSubcase?.translationActivities;
   }
 }
