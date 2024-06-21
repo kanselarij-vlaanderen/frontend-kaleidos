@@ -82,7 +82,7 @@
                     {{t "as"}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
-                      href={{this.piece.file.namedDownloadLink}}
+                      href={{await this.piece.namedDownloadLinkPromise}}
                       download
                     >
                       {{t "source-file-lowercase"}}

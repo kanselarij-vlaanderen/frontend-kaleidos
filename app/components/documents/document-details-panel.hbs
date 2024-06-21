@@ -211,7 +211,7 @@
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             data-test-document-details-panel-source-file-download
-            href={{@piece.file.namedDownloadLink}}
+            href={{await @piece.namedDownloadLinkPromise}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
