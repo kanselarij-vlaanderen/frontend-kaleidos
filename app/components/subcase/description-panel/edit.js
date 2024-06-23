@@ -14,6 +14,7 @@ export default class SubcaseDescriptionEdit extends Component {
    * @argument onCancel
    * @argument onSave
    */
+  @service agendaService;
   @service store;
   @service conceptStore;
   @service decisionReportGeneration;
@@ -109,6 +110,7 @@ export default class SubcaseDescriptionEdit extends Component {
   async saveChanges() {
     const resetFormallyOk = true;
     this.isSaving = true;
+    let reportNeedsReplacing = false;
 
     const trimmedTitle = trimText(this.args.subcase.title);
     const trimmedShortTitle = trimText(this.args.subcase.shortTitle);
@@ -146,12 +148,25 @@ export default class SubcaseDescriptionEdit extends Component {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       await this.updateNewsItem.perform();
+      reportNeedsReplacing = true;
     }
 
     if (agendaitemTypeChanged) {
       await this.updateNewsletterAfterRemarkChange();
-      await this.updateDecisionReport(propertiesToSetOnAgendaitem.number);
-      await this.recalculateAllAgendaitemNumbersOnAgenda()
+      await this.updateDecisionReport();
+      reportNeedsReplacing = false;
+      if (this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        // use the agenda service call to reorder based on mandatee logic
+        await this.recalculateAllAgendaitemNumbersOnAgenda(this.agendaService);
+      } else {
+        await this.recalculateAllAgendaitemNumbersOnAgenda();
+      }
+    }
+
+    // when report needs to be recreated for confidential when the type has not changed as well
+    // when a subcase is no longer confidential, we don't regenerate the report. Manual change is needed.
+    if (reportNeedsReplacing) {
+      await this.updateDecisionReport();
     }
 
     this.args.onSave();
@@ -159,7 +174,7 @@ export default class SubcaseDescriptionEdit extends Component {
     this.isSaving = false;
   }
 
-  async recalculateAllAgendaitemNumbersOnAgenda() {
+  async recalculateAllAgendaitemNumbersOnAgenda(agendaService) {
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
@@ -172,9 +187,9 @@ export default class SubcaseDescriptionEdit extends Component {
         this.store,
         this.decisionReportGeneration,
         this.currentSession.may('manage-agendaitems'),
+        agendaService,
       );
     }
-
   }
 
   async calculateAgendaitemNumber() {

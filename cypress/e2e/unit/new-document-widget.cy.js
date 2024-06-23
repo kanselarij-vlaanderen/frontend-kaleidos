@@ -93,8 +93,11 @@ context('check the functions of the new document widget', () => {
     // *this is a result of docx files being added to manually generated pdf's.
     // cy.get(document.documentCard.name.value)
     //   .should('contain', `.${pdfExtension}`);
+    // *Note: as 20/june/2024, for digital agenda we do want to change the derived when changing the docx.
+    // cy.get(document.documentCard.name.value)
+    //   .should('contain', `.${wordExtension}`);
     cy.get(document.documentCard.name.value)
-      .should('contain', `.${wordExtension}`);
+      .should('contain', `.${pdfExtension}`);
     // Source file should link to the uploaded word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
       .should('contain', `${file.fileName}.${wordExtension}`);

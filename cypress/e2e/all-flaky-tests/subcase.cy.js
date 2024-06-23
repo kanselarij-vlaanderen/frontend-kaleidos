@@ -613,6 +613,6 @@ context('Subcase tests', () => {
     // if this fails, we are probably saving subcase with an incomplete list of submission activities
     cy.get(document.documentCard.card).should('have.length', 2)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
   });
 });
