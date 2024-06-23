@@ -58,7 +58,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
     // TODO-access-level verification of access-level no longer in history
     // cy.get(document.documentCard.versionHistory)
     //   .find(auk.accordion.header.button)
@@ -140,7 +140,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     // Cancel/save name in document card
     const extraName = (' - Nota');
-    const savedName = `${fileName}BIS${extraName}`;
+    const savedName = `${fileName} BIS${extraName}`;
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
 
     cy.get(document.documentCard.name.value).contains(fileName);
@@ -285,7 +285,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
 
     cy.log('uploadFileToCancel 2');
     uploadFileToCancel(file);
@@ -296,7 +296,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}TER`);
+      .contains(`${file.newFileName} TER`);
 
     cy.log('uploadFileToCancel 3');
     uploadFileToCancel(file);
@@ -334,7 +334,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}QUATER`);
+      .contains(`${file.newFileName} QUATER`);
 
     cy.get(document.documentCard.versionHistory)
       .find(auk.accordion.header.button)
@@ -343,10 +343,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}TER`);
+      .contains(`${file.newFileName} TER`);
     cy.get('@pieces').eq(1)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
     cy.get('@pieces').eq(2)
       .find(document.vlDocument.name)
       .contains(file.newFileName);
@@ -364,10 +364,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}TER`);
+      .contains(`${file.newFileName} TER`);
     cy.get('@pieces').eq(1)
       .find(document.vlDocument.name)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
     cy.get('@pieces').eq(2)
       .find(document.vlDocument.name)
       .contains(file.newFileName);

@@ -37,12 +37,12 @@ context('Tests of pieces on agendaitems', () => {
     cy.addNewPieceToAgendaitem(subcaseTitleShort, 'VR 2020 1212 DOC.0001-2', file); // add BIS to doc 2
     cy.get(document.documentCard.card).should('have.length', 2);
 
-    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1TER', 0, route.agendaitemDocuments.batchEdit);
+    cy.deletePieceBatchEditRow('VR 2020 1212 DOC.0001-1 TER', 0, route.agendaitemDocuments.batchEdit);
     cy.get(document.documentCard.card).should('have.length', 2);
     cy.get(document.documentCard.name.value).eq(0)
       .contains('VR 2020 1212 DOC.0001-1BIS');
     cy.get(document.documentCard.name.value).eq(1)
-      .contains('VR 2020 1212 DOC.0001-2BIS');
+      .contains('VR 2020 1212 DOC.0001-2 BIS');
     cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // TODO KAS-4529 selector no longer exists, batchedit is gone. No longer possible to remove last piece from subcase views
@@ -64,7 +64,7 @@ context('Tests of pieces on agendaitems', () => {
     cy.get(document.previewDetailsTab.delete).should('not.exist');
     cy.get(document.documentPreviewSidebar.tabs.versions).click();
     cy.get(document.previewVersionCard.name).eq(0)
-      .contains('VR 2020 1212 DOC.0001-2BIS.pdf');
+      .contains('VR 2020 1212 DOC.0001-2 BIS.pdf');
     cy.get(document.previewVersionCard.name).eq(1)
       .contains('VR 2020 1212 DOC.0001-2.pdf')
       .parents(document.previewVersionCard.container)
