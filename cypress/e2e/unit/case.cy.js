@@ -246,7 +246,7 @@ context('Create case as Admin user', () => {
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitleWithSubcaseChanged);
   });
 
-  it.only('create case and subcase via new flow', () => {
+  it('create case and subcase via new flow', () => {
     const caseTitle = 'test new flow';
     const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(5);
