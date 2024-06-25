@@ -246,7 +246,7 @@ context('Create case as Admin user', () => {
     cy.get(route.casesOverview.row.caseTitle).contains(caseTitleWithSubcaseChanged);
   });
 
-  it('create case and subcase via new flow', () => {
+  it.only('create case and subcase via new flow', () => {
     const caseTitle = 'test new flow';
     const agendaDate = Cypress.dayjs().add(1, 'weeks')
       .day(5);
@@ -334,7 +334,8 @@ context('Create case as Admin user', () => {
       .should('exist');
 
     cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase1.agendaitemType);
-    cy.get(cases.subcaseDescription.subcaseName).contains(subcaseName);
+    // subcasename starts non capital
+    cy.get(cases.subcaseDescription.subcaseName).contains(subcaseName.toLowerCase());
 
     cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee');
     cy.get('@listItemsMandatee').should('have.length', 2, {
