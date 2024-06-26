@@ -557,8 +557,8 @@ context('Subcase tests', () => {
     cy.get(cases.newSubcaseForm.cancel).click();
 
     // check that subcasename shows capitalized with css but is really not.
-    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
-      .should('have.class', 'auk-u-text-capitalize');
+    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital);
+    // .should('have.class', 'auk-u-text-capitalize'); //this is no longer done by added class but by text-transform: uppercase on p element
   });
 
   it('check submission activities', () => {
