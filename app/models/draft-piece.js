@@ -12,7 +12,7 @@ export default class DraftPieceModel extends Model {
   @belongsTo('draft-document-container', { inverse: 'pieces', async: true })
   documentContainer;
   @belongsTo('piece', { inverse: null, async: true }) previousPiece;
-  @belongsTo('submission', { inverse: null, async: true }) submission;
+  @belongsTo('submission', { inverse: 'pieces', async: true }) submission;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

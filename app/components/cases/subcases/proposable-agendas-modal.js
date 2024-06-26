@@ -21,6 +21,7 @@ export default class ProposableAgendasModal extends Component {
   constructor() {
     super(...arguments);
     this.loadAgendas.perform();
+    this.selectedAgenda = this.args.defaultAgenda;
   }
 
   @task
@@ -47,7 +48,7 @@ export default class ProposableAgendasModal extends Component {
   @task
   *saveSubcaseAndSubmitToAgenda() {
     const meeting = yield this.selectedAgenda.createdFor;
-    this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
+    yield this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
   }
 
 @action

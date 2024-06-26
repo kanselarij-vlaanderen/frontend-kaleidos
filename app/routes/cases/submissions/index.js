@@ -38,6 +38,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
   model(params) {
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      'filter[:has-no:subcase]': true,
       include: 'type,status,requested-by,mandatees.person,being-treated-by',
       sort: params.sort,
       page: {

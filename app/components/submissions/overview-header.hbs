@@ -12,18 +12,22 @@
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
-        <div data-test-subcase-overview-header-title-container>
+        <div>
           <span class="auk-overline auk-u-block">
             {{t "submission"}}
           </span>
           <h4 class="auk-toolbar-complex__title au-u-padding-none">
-            {{#if (not this.loadData.isRunning)}}
-              <Auk::AbbreviatedText
-                @text={{or @submission.shortTitle "-"}}
-                @maxLength={{250}}
-              />
-            {{/if}}
+            <Auk::AbbreviatedText
+              @text={{or @submission.shortTitle "-"}}
+              @maxLength={{250}}
+            />
           </h4>
+          {{#if @submission.beingTreatedBy}}
+            <span class="auk-u-block">
+              {{t "this-submission-is-being-treated-by-user"
+                  user=@submission.beingTreatedBy.fullName}}
+            </span>
+          {{/if}}
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

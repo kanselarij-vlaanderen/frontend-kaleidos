@@ -4,10 +4,12 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
+  @service router;
   @service store;
 
   pieces;
   mandatees;
+  statusChangeActivities;
   currentLinkedMandatee;
 
   async beforeModel(_transition) {
@@ -32,6 +34,12 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       params.submission_id
     );
 
+    const status = await submission.status;
+    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.AANVAARD) {
+      this.router.transitionTo('cases.submissions');
+      return;
+    }
+
     await submission.requestedBy;
 
     const mandatees = await submission.mandatees;
@@ -50,6 +58,12 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       return d1?.position - d2?.position || p1.created - p2.created;
     });
 
+    const statusChangeActivities = await submission.statusChangeActivities;
+    this.statusChangeActivities = statusChangeActivities
+      .slice()
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime());
+    await Promise.all(this.statusChangeActivities.map((a) => a.status));
+
     return submission;
   }
 
@@ -57,6 +71,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
+    controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
   }
 }

@@ -5,16 +5,121 @@
         <OnThisPageLinks @items={{this.items}} />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{!-- <Auk::Toolbar::Group @position="right">
-      <AuDropdown
-        @skin="secondary"
-        @title={{t "actions"}}
-        @alignment="right"
-      >
-        <AuButton>
-          {{t "take-in-treatment"}}
-        </AuButton>
-      </AuDropdown>
-    </Auk::Toolbar::Group> --}}
+    {{#if this.hasActions}}
+      <Auk::Toolbar::Group @position="right">
+        <AuDropdown
+          @skin="secondary"
+          @title={{t "actions"}}
+          @alignment="right"
+        >
+          {{#if this.canResubmitSubmission}}
+            <AuButton
+              @skin="naked"
+              {{on "click" (toggle "isOpenResubmitModal" this)}}
+            >
+              {{t "resubmit-submission"}}
+            </AuButton>
+          {{/if}}
+          {{#if this.canCreateSubcase}}
+            <AuButton
+              @skin="naked"
+              {{on "click" (toggle "isOpenCreateSubcaseModal" this)}}
+            >
+              {{t "create-subcase-and-put-on-agenda"}}
+            </AuButton>
+          {{/if}}
+          {{#if this.canTakeInTreatment}}
+            <AuButton
+              @skin="naked"
+              {{on "click" this.takeInTreatment}}
+            >
+              {{t "take-in-treatment"}}
+            </AuButton>
+          {{/if}}
+          <AuHr/>
+          {{#if this.canSendBackToSubmitter}}
+            <AuButton
+              @skin="naked"
+              @alert={{true}}
+              {{on "click" (toggle "isOpenSendBackModal" this)}}
+            >
+              {{t "send-back-to-submitter"}}
+            </AuButton>
+          {{/if}}
+          {{#if this.canDeleteSubmission}}
+            <AuButton
+              @skin="naked"
+              @alert={{true}}
+              {{on "click" (toggle "isOpenDeleteModal" this)}}
+            >
+              {{t "delete-submission"}}
+            </AuButton>
+          {{/if}}
+        </AuDropdown>
+      </Auk::Toolbar::Group>
+    {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenResubmitModal}}
+  @onCancel={{this.toggleResubmitModal}}
+  @title={{t "resubmit-submission"}}
+  @onConfirm={{queue (perform this.resubmitSubmission) this.toggleResubmitModal}}
+  @loading={{this.resubmitSubmission.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-resubmit">{{t "comment-title"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-resubmit"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
+
+{{#if (and (not this.loadAgenda.isRunning) this.isOpenCreateSubcaseModal)}}
+  <Cases::Subcases::ProposableAgendasModal
+    @onCancel={{this.toggleCreateSubcaseModal}}
+    @onConfirm={{queue (perform this.createSubcase) this.toggleCreateSubcaseModal}}
+    @defaultAgenda={{this.selectedAgenda}}
+    @showSaveWithoutAgenda={{true}}
+  />
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenSendBackModal}}
+  @onCancel={{this.toggleSendBackModal}}
+  @title={{t "send-back-to-submitter"}}
+  @onConfirm={{queue (perform this.sendBackToSubmitter) this.toggleSendBackModal}}
+  @alert={{true}}
+  @loading={{this.sendBackToSubmitter.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenDeleteModal}}
+  @onCancel={{this.toggleDeleteModal}}
+  @title={{t "delete-submission"}}
+  @onConfirm={{queue (perform this.deleteSubmission) this.toggleDeleteModal}}
+  @alert={{true}}
+  @loading={{this.deleteSubmission.isRunning}}
+/>

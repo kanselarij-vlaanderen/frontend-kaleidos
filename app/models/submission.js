@@ -6,7 +6,6 @@ export default class SubmissionModel extends Model {
   @attr shortTitle;
   @attr title;
   @attr('boolean') confidential;
-  @attr subcaseName;
   @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
@@ -42,13 +41,27 @@ export default class SubmissionModel extends Model {
   statusChangeActivities;
   @hasMany('concept', { inverse: null, async: true })
   governmentAreas;
-  @hasMany('draft-piece', { inverse: null, async: true })
+  @hasMany('draft-piece', { inverse: 'submission', async: true })
   pieces;
 
   get isSubmitted() {
     return (
       this.status?.get('uri') ===
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
+    );
+  }
+
+  get isResubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND
+    )
+  }
+
+  get isInTreatment() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING
     );
   }
 

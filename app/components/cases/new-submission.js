@@ -17,11 +17,11 @@ export default class CasesNewSubmissionComponent extends Component {
   @service conceptStore;
   @service router;
   @service store;
-  @service toaster
+  @service toaster;
   @service fileConversionService;
   @service intl;
 
-  @tracked selectedDecisionmakingFlow
+  @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
 
   @tracked agendaItemType;
@@ -30,7 +30,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   @tracked type;
 
-  @tracked notificationAddresses = ["secretarie@vlaanderen.be"];
+  @tracked notificationAddresses = ['secretarie@vlaanderen.be'];
   @tracked notificationMessage;
   @tracked CCAddresses;
   @tracked CCMessage;
@@ -58,8 +58,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   get saveIsDisabled() {
     const decisionmakingFlowSet =
-      !!this.selectedDecisionmakingFlow ||
-      !!this.decisionmakingFlowTitle;
+      !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitle;
     const subcaseTypeSet = !!this.type;
     return !decisionmakingFlowSet || !subcaseTypeSet;
   }
@@ -74,29 +73,31 @@ export default class CasesNewSubmissionComponent extends Component {
   }
 
   filterSubcaseTypes = (subcaseTypes) => {
-    return subcaseTypes.filter((type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING)
-  }
+    return subcaseTypes.filter(
+      (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING
+    );
+  };
 
   disableMinisterCheckbox = (minister) => {
     const person = this.submitter?.belongsTo('person').value();
     return minister.id === person?.id;
-  }
+  };
 
   selectField = (selectedField) => {
     addObjects(this.selectedGovernmentFields, selectedField);
-  }
+  };
 
   deselectField = (selectedField) => {
     removeObjects(this.selectedGovernmentFields, selectedField);
-  }
+  };
 
   selectDomain = (selectedDomain) => {
     addObjects(this.selectedGovernmentDomains, selectedDomain);
-  }
+  };
 
   deselectDomain = (selectedDomain) => {
     removeObjects(this.selectedGovernmentDomains, selectedDomain);
-  }
+  };
 
   addPiece = (piece) => {
     addObject(this.pieces, piece);
@@ -114,9 +115,10 @@ export default class CasesNewSubmissionComponent extends Component {
   createSubmission = dropTask(async (meeting, comment) => {
     const now = new Date();
 
-    await this.savePieces.perform();
-
-    const submitted = await this.store.findRecordByUri('concept', CONSTANTS.SUBMISSION_STATUSES.INGEDIEND);
+    const submitted = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
+    );
 
     this.submission = this.store.createRecord('submission', {
       created: now,
@@ -133,37 +135,50 @@ export default class CasesNewSubmissionComponent extends Component {
       notificationComment: trimText(this.CCMessage),
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
-      governmentAreas: [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains],
+      governmentAreas: [
+        ...this.selectedGovernmentFields,
+        ...this.selectedGovernmentDomains,
+      ],
       status: submitted,
       pieces: this.pieces,
     });
 
     await this.submission.save();
 
+    await this.savePieces.perform();
+
     // Create submission change
-    const submissionStatusChange = this.store.createRecord('submission-status-change-activity', {
-      startedAt: now,
-      comment,
-      submission: this.submission,
-      status: submitted,
-    });
+    const submissionStatusChange = this.store.createRecord(
+      'submission-status-change-activity',
+      {
+        startedAt: now,
+        comment,
+        submission: this.submission,
+        status: submitted,
+      }
+    );
     await submissionStatusChange.save();
 
     if (meeting) {
       try {
         await this.agendaService.putDraftSubmissionOnAgenda(
           meeting,
-          this.submission,
+          this.submission
         );
-        this.router.transitionTo('cases.submissions.submission', this.submission.id);
+        this.router.transitionTo(
+          'cases.submissions.submission',
+          this.submission.id
+        );
       } catch (error) {
         this.toaster.error(
-          this.intl.t('error-while-submitting-subcase-on-meeting', { error: error.message }),
+          this.intl.t('error-while-submitting-subcase-on-meeting', {
+            error: error.message,
+          }),
           this.intl.t('warning-title')
         );
       }
     }
-  })
+  });
 
   savePieces = task(async () => {
     this.piecesCreatedCounter = 0;
@@ -176,31 +191,35 @@ export default class CasesNewSubmissionComponent extends Component {
       }
     });
     await Promise.all(savePromises);
-  })
+  });
 
-  savePiece = task({ maxConcurrency: 5, enqueue: true }, async (piece, index) => {
-    const documentContainer = await piece.documentContainer;
-    documentContainer.position = index + 1;
-    await documentContainer.save();
-    const defaultAccessLevel = await this.store.findRecordByUri(
-      'concept',
-      this.confidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
-    piece.accessLevel = defaultAccessLevel;
-    piece.accessLevelLastModified = new Date();
-    piece.name = piece.name.trim();
-    await piece.save();
-    try {
-      const sourceFile = await piece.file;
-      await this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title')
+  savePiece = task(
+    { maxConcurrency: 5, enqueue: true },
+    async (piece, index) => {
+      const documentContainer = await piece.documentContainer;
+      documentContainer.position = index + 1;
+      await documentContainer.save();
+      const defaultAccessLevel = await this.store.findRecordByUri(
+        'concept',
+        this.confidential
+          ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+          : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
       );
+      piece.accessLevel = defaultAccessLevel;
+      piece.accessLevelLastModified = new Date();
+      piece.name = piece.name.trim();
+      piece.submission = this.submission;
+      await piece.save();
+      try {
+        const sourceFile = await piece.file;
+        await this.fileConversionService.convertSourceFile(sourceFile);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-convert-file', { message: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
+      this.piecesCreatedCounter++;
     }
-    this.piecesCreatedCounter++;
-  })
+  );
 }

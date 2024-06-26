@@ -63,6 +63,10 @@ const {
 // - view-submissions: Allow the viewing of submissions
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
 // - always-edit-submissions: Allow editing submissions regardless of status
+// - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
+// - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
+// - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
+// - delete-submissions
 
 const groups = [
   {
@@ -111,6 +115,9 @@ const groups = [
       'view-submissions',
       'view-all-submissions',
       'always-edit-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
+      'delete-submissions',
     ]
   },
   {
@@ -149,6 +156,8 @@ const groups = [
       'view-access-level-pill-when-postponed',
       'view-submissions',
       'view-all-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
     ]
   },
   {
@@ -184,6 +193,8 @@ const groups = [
       'view-access-level-pill-when-postponed',
       'view-submissions',
       'view-all-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
     ]
   },
   {
@@ -231,6 +242,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-documents-postponed-and-retracted',
+      'create-submissions',
+      'edit-sent-back-submissions',
     ],
   },
   {
@@ -246,6 +259,7 @@ const groups = [
       'send-only-specific-cases-to-vp',
       'view-documents-postponed-and-retracted',
       'create-submissions',
+      'edit-sent-back-submissions',
     ],
   },
   {
