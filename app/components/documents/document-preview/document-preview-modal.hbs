@@ -14,7 +14,7 @@
             {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
             @iconAlignment="left"
-            href={{this.file.namedDownloadLink}}
+            href={{this.downloadLink}}
             download
           >{{t "download-2"}}</AuLinkExternal>
         {{/if}}
@@ -27,7 +27,7 @@
         {{#if this.loadFile.isRunning}}
           <WebComponents::LoadingPage />
         {{else}}
-          <Documents::DocumentView @file={{this.file}} @piece={{this.selectedVersion}} />
+          <Documents::DocumentView @file={{this.file}} @piece={{this.selectedVersion}} @inlineViewLink={{this.inlineViewLink}} />
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">

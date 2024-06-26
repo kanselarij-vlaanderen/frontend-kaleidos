@@ -33,9 +33,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked agenda;
 
   @tracked isOpenPieceUploadModal = false;
-  @tracked defaultAccessLevel
 
-  @tracked defaultAccessLevel;
   @tracked documentsAreVisible = false;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
@@ -103,6 +101,12 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       position: parsed.index,
       type,
     });
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      confidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,

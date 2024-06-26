@@ -31,7 +31,7 @@ export const DOCUMENT_DELETE_UNDO_TIME_MS = 15000;
 export const DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS = [
   'doc',
   'docx',
-  'odp',
+  'odt',
   'xls',
   'xlsx',
   'ods',
