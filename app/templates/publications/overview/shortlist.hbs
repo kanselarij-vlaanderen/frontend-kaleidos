@@ -2,18 +2,18 @@
   <div class="auk-scroll-wrapper__body">
     <KDataTable data-test-route-publications-overview-shortlist-table @content={{@model}} @enablePagination={{false}}>
       <:header>
-        <th>{{t "agendaitem-field-label"}}</th>
-        <th>{{t "document-name"}}</th>
-        <th>{{t "document-type"}}</th>
-        <th>{{t "minister"}}</th>
+        <th class="auk-table__col--1">{{t "agendaitem-field-label"}}</th>
+        <th class="auk-table__col--7">{{t "document-name"}}</th>
+        <th class="auk-table__col--1">{{t "document-type"}}</th>
+        <th class="auk-table__col--1">{{t "minister"}}</th>
         <Utils::ThSortable
-          class="auk-u-min-width-medium"
+          class="auk-table__col--1"
           @currentSorting={{this.sort}}
           @field="agendaitems.treatment.decision-activity.start-date,agendaitems.number"
-          @onChange={{fn (mut this.sort)}}
+          @onChange={{this.changeSort}}
           @label={{t "decision-date"}}
         />
-        <th></th>
+        <th class="auk-table__col--1 u-hide-on-print"></th>
       </:header>
       <:body as |row|>
         <Publications::Shortlist::PublicationsTableRow

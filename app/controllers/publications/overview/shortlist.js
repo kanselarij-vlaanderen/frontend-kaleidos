@@ -16,13 +16,20 @@ export default class PublicationsOverviewShortlistController extends Controller 
     },
   ];
 
-  @tracked sort = "-agendaitems.treatment.decision-activity.start-date,agendaitems.number";
+  SORT_FIELD = "agendaitems.treatment.decision-activity.start-date,agendaitems.number";
+
+  @tracked sort = `-${this.SORT_FIELD}`;
   @tracked isOpenNewPublicationModal;
   pieceForPublication;
   agendaitemForPublication;
   decisionActivityForPublication;
   caseForPublication;
   mandateesForPublication;
+
+  @action
+  changeSort() {
+    this.sort = (this.sort === this.SORT_FIELD) ? `-${this.SORT_FIELD}` : this.SORT_FIELD;
+  }
 
   @action
   async openNewPublicationModal(piece, agendaitem) {

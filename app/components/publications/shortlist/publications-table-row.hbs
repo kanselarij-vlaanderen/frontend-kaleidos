@@ -1,13 +1,20 @@
 <td class="auk-table__col--1">
-  <AuLink @route="agenda.agendaitems.agendaitem" @models={{array this.meetingId this.agendaId this.agendaitem.id}}>
+  <AuLink
+    @route="agenda.agendaitems.agendaitem"
+    @models={{array this.meetingId this.agendaId this.agendaitem.id}}
+  >
     {{this.formattedAgendaNumber}}
   </AuLink>
 </td>
-<td class="auk-table__col--6">
-  <AuLink data-test-route-publications-overview-shortlist-row-name @route="document" @model={{@row.id}}>
+<td class="auk-table__col--7">
+  <AuLink
+    data-test-route-publications-overview-shortlist-row-name
+    @route="document"
+    @model={{@row.id}}
+  >
     {{@row.name}}
   </AuLink>
-  <br>
+  <br />
   {{this.agendaitem.title}}
 </td>
 <td class="auk-table__col--1">
@@ -16,16 +23,16 @@
   </AuPill>
 </td>
 <td class="auk-table__col--1">
-  {{#each this.mandateePersonNames as |name|}}
-    {{name}}
+  {{#if this.mandateePersonNames}}
+    {{join ", " this.mandateePersonNames}}
   {{else}}
     -
-  {{/each}}
+  {{/if}}
 </td>
 <td class="auk-table__col--1">
   {{date this.decisionDate}}
 </td>
-<td class="auk-table__col--1">
+<td class="auk-table__col--1 u-hide-on-print">
   <AuButton
     data-test-route-publications-overview-shortlist-row-open-new-publication
     @skin="naked"
