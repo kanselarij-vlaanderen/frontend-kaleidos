@@ -61,12 +61,12 @@
             )
           }}
             {{#if (not this.isEditingFormallyOk)}}
-              <Agenda::FormallyOkPill
+              <Agenda::Agendaitem::FormallyOkPill
                 @formallyOk={{@agendaitem.formallyOkToShow}}
                 @onEdit={{this.toggleIsEditingFormallyOk}}
               />
             {{else}}
-              <Agenda::FormallyOkEdit
+              <Agenda::Agendaitem::FormallyOkEdit
                 @selectedFormallyOk={{@agendaitem.formallyOkToShow}}
                 @cancelEdit={{this.toggleIsEditingFormallyOk}}
                 @onSave={{this.setAndSaveFormallyOkStatus}}

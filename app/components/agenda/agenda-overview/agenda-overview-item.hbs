@@ -219,12 +219,12 @@
             <div class="vlc-agenda-meta__status-holder">
               {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
                 {{#if (not this.isEditingFormallyOk)}}
-                  <Agenda::FormallyOkPill
+                  <Agenda::Agendaitem::FormallyOkPill
                     @formallyOk={{@agendaitem.formallyOkToShow}}
                     @onEdit={{this.toggleIsEditingFormallyOk}}
                   />
                 {{else}}
-                  <Agenda::FormallyOkEdit
+                  <Agenda::Agendaitem::FormallyOkEdit
                     @selectedFormallyOk={{@agendaitem.formallyOkToShow}}
                     @cancelEdit={{this.toggleIsEditingFormallyOk}}
                     @onSave={{this.setAndSaveFormallyOkStatus}}
