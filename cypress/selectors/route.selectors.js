@@ -63,6 +63,7 @@ const selectors = {
     editor: {
       updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
       versionsDropdown: '[data-test-route-agenda-minutes-editor-versions-dropdown]',
+      fullscreen: '.au-c-button .au-c-button--naked > au-c-icon--expand',
       cancel: '[data-test-route-agenda-minutes-editor-cancel]',
       save: '[data-test-route-agenda-minutes-editor-save]',
     },

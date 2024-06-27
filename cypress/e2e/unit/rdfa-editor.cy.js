@@ -1,7 +1,7 @@
 /* global context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
-// import agenda from '../../selectors/agenda.selectors';
+import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
 // import appuniversum from '../../selectors/appuniversum.selectors';
 // import cases from '../../selectors/case.selectors';
@@ -205,5 +205,35 @@ context('rdfa editor tests', () => {
     cy.get(route.searchNewsletters.row.title).eq(0)
       .as('searchResultContent');
     checkCSS('@searchResultContent');
+  });
+
+  it.only('should test the fullscreen mode', () => {
+    // in minutes
+
+    cy.visitAgendaWithLink('/vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/notulen');
+    cy.get(route.agendaMinutes.createEdit).click();
+    cy.get(agenda.agendaVersionActions.optionsDropdown).should('be.visible');
+    cy.get(agenda.agendaActions.optionsDropdown).should('be.visible');
+
+    // in zebra view
+    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.get(newsletter.buttonToolbar.edit).eq(0)
+      .click();
+    cy.get(newsletter.editItem.save).scrollIntoView()
+      .should('be.visible');
+    cy.get(newsletter.editItem.cancel).scrollIntoView()
+      .should('be.visible');
+    cy.get(auk.expand).scrollIntoView()
+      .click();
+    cy.get(newsletter.editItem.save).eq(0)
+      .scrollIntoView()
+      .should('be.visible');
+    cy.get(newsletter.editItem.cancel).scrollIntoView()
+      .should('not.be.visible');
+    cy.get(auk.minimize).click();
+    cy.get(newsletter.editItem.save).scrollIntoView()
+      .should('be.visible');
+    cy.get(newsletter.editItem.cancel).scrollIntoView()
+      .should('be.visible');
   });
 });
