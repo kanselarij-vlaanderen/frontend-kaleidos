@@ -653,7 +653,7 @@ context('Testing the application as Vlaams Parlement', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-2.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 

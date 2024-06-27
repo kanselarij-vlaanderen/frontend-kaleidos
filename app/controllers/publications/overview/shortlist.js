@@ -8,7 +8,17 @@ export default class PublicationsOverviewShortlistController extends Controller 
   @service publicationService;
   @service router;
   @service store;
+  queryParams = [
+    {
+      sort: {
+        type: 'string',
+      },
+    },
+  ];
 
+  SORT_FIELD = "agendaitems.treatment.decision-activity.start-date,agendaitems.number";
+
+  @tracked sort = `-${this.SORT_FIELD}`;
   @tracked isOpenNewPublicationModal;
   pieceForPublication;
   agendaitemForPublication;
@@ -16,41 +26,15 @@ export default class PublicationsOverviewShortlistController extends Controller 
   caseForPublication;
   mandateesForPublication;
 
-  getAgendaitem = async (piece) => {
-    const agendaitems = await piece.agendaitems;
-    let agendaitem;
-    for (let maybeAgendaitem of agendaitems) {
-      const agenda = await maybeAgendaitem.agenda;
-      const nextVersion = await agenda.nextVersion;
-      if (!nextVersion) {
-        agendaitem = maybeAgendaitem;
-        break;
-      }
-    }
-    return agendaitem;
-  }
-
-  getDecisionDate = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const treatment = await agendaitem.treatment;
-    const decisionActivity = await treatment.decisionActivity;
-    const decisionDate = await decisionActivity.startDate;
-    return decisionDate;
-  }
-
-  getMandateeNames = async (piece) => {
-    const agendaitem = await this.getAgendaitem(piece);
-    const mandatees = await agendaitem.mandatees;
-    const persons = await Promise.all(
-      mandatees.map((mandatee) => mandatee.person)
-    );
-    return persons.map((person) => person.fullName);
+  @action
+  changeSort() {
+    this.sort = (this.sort === this.SORT_FIELD) ? `-${this.SORT_FIELD}` : this.SORT_FIELD;
   }
 
   @action
-  async openNewPublicationModal(piece) {
+  async openNewPublicationModal(piece, agendaitem) {
     this.pieceForPublication = piece;
-    this.agendaitemForPublication = await this.getAgendaitem(piece);
+    this.agendaitemForPublication = agendaitem;
     this.mandateesForPublication = await this.agendaitemForPublication.mandatees;
 
     const treatment = await this.agendaitemForPublication.treatment;
