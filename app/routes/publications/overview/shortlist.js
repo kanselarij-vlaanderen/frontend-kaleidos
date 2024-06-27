@@ -22,7 +22,7 @@ export default class PublicationsOverviewShortlistRoute extends Route {
     const result = await response.json();
 
     if (result?.data?.length) {
-      const model = await this.store.query('piece', {
+      const model = await this.store.queryAll('piece', {
         include: ['agendaitems.treatment.decision-activity'].join(','),
         sort: params.sort,
         'filter[:id:]': result.data.map((record) => record.id).join(','),
