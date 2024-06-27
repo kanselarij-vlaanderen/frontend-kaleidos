@@ -286,8 +286,10 @@ function addSubcaseViaModal(subcase) {
       cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
     }
   }
-
-  cy.wait(`@createNewSubcase${randomInt}`);
+  let subcaseId;
+  cy.wait(`@createNewSubcase${randomInt}`)
+    .its('response.body')
+    .as('subcaseResponseBody');
   if (subcase.documents) {
     cy.wait(`@postSubmissionActivities${randomInt}`);
   }
@@ -306,6 +308,16 @@ function addSubcaseViaModal(subcase) {
     cy.get(cases.subcaseDescription.panel);
   }
   cy.log('/addSubcaseViaModal');
+  cy.get('@subcaseResponseBody')
+    .then((responseBody) => {
+      subcaseId = responseBody.data.id;
+      cy.log('subcaseId', subcaseId);
+    })
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve({
+        subcaseId,
+      });
+    }));
 }
 
 /**

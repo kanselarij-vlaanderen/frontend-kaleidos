@@ -294,9 +294,6 @@ context('Decision postponing tests', () => {
     // check if decided on
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
 
-    // check if planned start is last agenda
-    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
-
     // add new doc (7)
     cy.get(route.subcase.add).click();
     cy.addNewDocumentsInUploadModal(files3, 'subcase');
