@@ -1,0 +1,44 @@
+<td class="auk-table__col--1">
+  <AuLink
+    @route="agenda.agendaitems.agendaitem"
+    @models={{array this.meetingId this.agendaId this.agendaitem.id}}
+  >
+    {{this.formattedAgendaNumber}}
+  </AuLink>
+</td>
+<td class="auk-table__col--7">
+  <AuLink
+    data-test-route-publications-overview-shortlist-row-name
+    @route="document"
+    @model={{@row.id}}
+  >
+    {{@row.name}}
+  </AuLink>
+  <br />
+  {{this.agendaitem.title}}
+</td>
+<td class="auk-table__col--1">
+  <AuPill data-test-route-publications-overview-shortlist-row-type>
+    {{@row.documentContainer.type.label}}
+  </AuPill>
+</td>
+<td class="auk-table__col--1">
+  {{#if this.mandateePersonNames}}
+    {{join ", " this.mandateePersonNames}}
+  {{else}}
+    -
+  {{/if}}
+</td>
+<td class="auk-table__col--1">
+  {{date this.decisionDate}}
+</td>
+<td class="auk-table__col--1 u-hide-on-print">
+  <AuButton
+    data-test-route-publications-overview-shortlist-row-open-new-publication
+    @skin="naked"
+    @icon="add"
+    {{on "click" (fn @openNewPublicationModal @row this.agendaitem)}}
+  >
+    {{t "publications-new"}}
+  </AuButton>
+</td>
