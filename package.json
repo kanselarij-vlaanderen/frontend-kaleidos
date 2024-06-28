@@ -151,6 +151,7 @@
     "sanitize-html": "^2.8.1",
     "sass": "^1.57.7",
     "tracked-built-ins": "^3.3.0",
+    "tracked-toolbox": "^2.0.0",
     "webpack": "^5.78.0",
     "xml-formatter": "^3.2.0"
   },
