@@ -88,7 +88,7 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
-          {{#if this.isViaCouncilOfMinisters}}
+          {{#if (and this.isViaCouncilOfMinisters @isCaseLinkVisible)}}
             <Auk::Toolbar::Item>
               <AuLink
                 data-test-inscription-view-to-case
@@ -96,22 +96,24 @@
                 @icon="chevron-right"
                 @iconAlignment="right"
                 @route="cases.case.index"
-                @model={{@publicationFlow.case.decisionmakingFlow.id}}
+                @model={{await @publicationFlow.case.decisionmakingFlow.id}}
               >
                 {{t "to-case"}}
               </AuLink>
             </Auk::Toolbar::Item>
           {{/if}}
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-inscription-view-edit
-              @skin="naked"
-              @icon="pencil"
-              {{on "click" this.openEditingPanel}}
-            >
-              {{t "edit"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
+          {{#if @allowEditing}}
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-inscription-view-edit
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" this.openEditingPanel}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          {{/if}}
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>

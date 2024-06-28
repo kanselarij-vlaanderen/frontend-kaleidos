@@ -2,41 +2,24 @@
   <div class="auk-scroll-wrapper__body">
     <KDataTable data-test-route-publications-overview-shortlist-table @content={{@model}} @enablePagination={{false}}>
       <:header>
-        <th>{{t "document-name"}}</th>
-        <th>{{t "document-type"}}</th>
-        <th>{{t "minister"}}</th>
-        <th>{{t "decision-date"}}</th>
-        <th></th>
+        <th class="auk-table__col--1">{{t "agendaitem-field-label"}}</th>
+        <th class="auk-table__col--7">{{t "document-name"}}</th>
+        <th class="auk-table__col--1">{{t "document-type"}}</th>
+        <th class="auk-table__col--1">{{t "minister"}}</th>
+        <Utils::ThSortable
+          class="auk-table__col--1"
+          @currentSorting={{this.sort}}
+          @field="agendaitems.treatment.decision-activity.start-date,agendaitems.number"
+          @onChange={{this.changeSort}}
+          @label={{t "decision-date"}}
+        />
+        <th class="auk-table__col--1 u-hide-on-print"></th>
       </:header>
       <:body as |row|>
-        <td>
-          <AuLink data-test-route-publications-overview-shortlist-row-name @route="document" @model={{row.id}}>
-            {{row.name}}
-          </AuLink>
-        </td>
-        <td>
-          <AuPill data-test-route-publications-overview-shortlist-row-type>
-            {{row.documentContainer.type.label}}
-          </AuPill>
-        </td>
-        <td>
-          {{#each (await (this.getMandateeNames row)) as |name|}}
-            {{name}}
-          {{else}}
-            -
-          {{/each}}
-        </td>
-        <td>{{date (await (this.getDecisionDate row))}}</td>
-        <td>
-          <AuButton
-            data-test-route-publications-overview-shortlist-row-open-new-publication
-            @skin="naked"
-            @icon="add"
-            {{on "click" (fn this.openNewPublicationModal row)}}
-          >
-            {{t "publications-new"}}
-          </AuButton>
-        </td>
+        <Publications::Shortlist::PublicationsTableRow
+          @row={{row}}
+          @openNewPublicationModal={{this.openNewPublicationModal}}
+        />
       </:body>
     </KDataTable>
   </div>

@@ -115,19 +115,21 @@ export const sortByNumber = (groupedAgendaitems, allowEmptyGroups) => {
  * Given a set of agendaitems, set their number
  * @name setAgendaitemsNumber
  * @param  {Array<Agendaitem>} agendaitems  Array of agendaitem objects to set number on.
- * @param {Meeting} meeting The meeting the agendaitems belong to
+ * @param {Agenda} agenda The agenda the agendaitems belong to
  * @param {Store} store The store service
  * @param {DecisionReportGeneration} decisionReportGeneration The decisionReportGeneration service
  * @param {Boolean} isEditor When true, the user is allowed to edit the trigger a recalculation of the number.
- * @param {Boolean} isDesignAgenda When true, the agenda is a designagenda.
+ * @param {AgendaService} agendaService when present, we have to reorder notas via service call to ensure mandatee sorting logic
  */
-export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionReportGeneration, isEditor, isDesignAgenda) => {
+export const setAgendaitemsNumber = async(agendaitems, agenda, store, decisionReportGeneration, isEditor, agendaService) => {
+  const isDesignAgenda = await agenda.status.get('isDesignAgenda');
   if (isEditor && isDesignAgenda) {
-    const reports = [];
-    const promises = await Promise.all(agendaitems.map(async(agendaitem, index) => {
-      if (agendaitem.number !== index + 1) {
-        agendaitem.number = index + 1;
-        const agendaitemSave = await agendaitem.save();
+    const meeting = await agenda.createdFor;
+    let reports = [];
+    if (agendaService) {
+      await agendaService.reorderAgenda(agenda);
+      await Promise.all(agendaitems.map(async(agendaitem) => {
+        agendaitem.reload();
 
         const report = await store.queryOne('report', {
           'filter[:has-no:next-piece]': true,
@@ -135,24 +137,50 @@ export const setAgendaitemsNumber = async(agendaitems, meeting, store, decisionR
           'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
         });
         if (report) {
-          reports.push(report);
           const documentContainer = await report.documentContainer;
           const pieces = await documentContainer.pieces;
-          report.name = await generateReportName(agendaitem, meeting, pieces.length);
-          await report.belongsTo('file').reload();
-          await report.save();
+          const newName = await generateReportName(agendaitem, meeting, pieces.length);
+          if (report.name !== newName) {
+            reports.push(report);
+            report.name = newName;
+            await report.belongsTo('file').reload();
+            await report.save();
+          }
         }
-        return agendaitemSave;
-      }
-    }));
+        return;
+      }));
+    } else {
+      await Promise.all(agendaitems.map(async(agendaitem, index) => {
+        if (agendaitem.number !== index + 1) {
+          agendaitem.number = index + 1;
+          const agendaitemSave = await agendaitem.save();
+
+          const report = await store.queryOne('report', {
+            'filter[:has-no:next-piece]': true,
+            'filter[:has:piece-parts]': true,
+            'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+          });
+          if (report) {
+            reports.push(report);
+            const documentContainer = await report.documentContainer;
+            const pieces = await documentContainer.pieces;
+            report.name = await generateReportName(agendaitem, meeting, pieces.length);
+            await report.belongsTo('file').reload();
+            await report.save();
+          }
+          return agendaitemSave;
+        }
+      }));
+    }
+
     if (reports.length) {
       await decisionReportGeneration.generateReplacementReports.perform(reports);
     }
-    return promises;
+    // return promises;
   }
 };
 
-export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGeneration, isEditor) => {
+export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGeneration, isEditor, agendaService) => {
   await agenda.hasMany('agendaitems').reload();
   const agendaitems = await agenda.get('agendaitems');
   const actualAgendaitems = [];
@@ -168,9 +196,8 @@ export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGen
       }
     }
   }
-  const meeting = await agenda.createdFor;
-  await setAgendaitemsNumber(actualAgendaitems, meeting, store, decisionReportGeneration, isEditor, true);
-  await setAgendaitemsNumber(actualAnnouncements, meeting, store, decisionReportGeneration, isEditor, true);
+  await setAgendaitemsNumber(actualAgendaitems, agenda, store, decisionReportGeneration, isEditor, agendaService);
+  await setAgendaitemsNumber(actualAnnouncements, agenda, store, decisionReportGeneration, isEditor);
 };
 
 /**

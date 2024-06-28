@@ -28,10 +28,23 @@ export const SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS = 60 * 1000;
 
 export const DOCUMENT_DELETE_UNDO_TIME_MS = 15000;
 
+export const DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS = [
+  'doc',
+  'docx',
+  'odt',
+  'xls',
+  'xlsx',
+  'ods',
+];
 export const DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES = [
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/octet-stream',
+  'application/msword', // DOC (LibreOffice)
+  'application/vnd.ms-excel', // XLS (LibreOffice)
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX (Word)
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX (Excel)
+  'application/vnd.oasis.opendocument.text', // ODT (Google Docs, LibreOffice)
+  'application/vnd.oasis.opendocument.spreadsheet', // ODS (Google Docs, LibreOffice)
+  'application/zip', // DOCX (Google Docs), XLSX (Google Docs, LibreOffice)
+  'application/octet-stream' // DOCX (LibreOffice - Word 2010 - 365 format),
 ];
 export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
 export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB

@@ -93,6 +93,10 @@ $au-label-color: var(--au-gray-700);
   &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
     cursor: pointer;
   }
+
+  .au-c-icon {
+    flex: 0 0 auto;
+  }
 }
 
 .au-c-pill--link {
@@ -775,4 +779,17 @@ $au-label-color: var(--au-gray-700);
       justify-content: space-between;
     }
   }
+}
+
+// Adjust width of toaster on mobile
+.au-c-toaster .au-c-alert {
+  @include mq($until: medium) {
+    max-width: 354px;
+    min-width: 354px;
+  }
+}
+
+// Adjust width of modals on mobile
+.auk-modal {
+    max-width: calc(100% - 2rem);
 }

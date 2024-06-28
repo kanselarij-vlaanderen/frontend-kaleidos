@@ -100,11 +100,10 @@ export default class AgendaAgendaitemsController extends Controller {
   *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsNumber(
       reorderedAgendaitems,
-      this.meeting,
+      this.agenda,
       this.store,
       this.decisionReportGeneration,
       true,
-      true
     ); // permissions guarded in template (and backend)
     this.notasHasChanged = false;
     this.announcementsHasChanged = false;

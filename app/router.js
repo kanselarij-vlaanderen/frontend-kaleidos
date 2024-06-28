@@ -34,6 +34,7 @@ Router.map(function() {
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
+      this.route('publication-flow', { path: '/publicatie/:publication_id'});
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {});
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
@@ -126,7 +127,6 @@ Router.map(function() {
     this.route('empty-state');
     this.route('layout-grid');
     this.route('heading');
-    this.route('icons');
     this.route('key-value');
     this.route('link-button');
     this.route('loader');

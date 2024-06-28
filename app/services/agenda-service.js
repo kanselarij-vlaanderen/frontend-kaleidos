@@ -107,6 +107,21 @@ export default class AgendaService extends Service {
 
   /* API: agenda-submission-service */
 
+  async reorderAgenda(agenda) {
+    const url = `/agendas/${agenda.id}/reorder`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        })}`);
+    }
+    await agenda.hasMany('agendaitems').reload();
+  }
+
   /**
    * @argument meeting
    * @argument subcase
