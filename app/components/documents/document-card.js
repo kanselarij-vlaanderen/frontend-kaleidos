@@ -176,7 +176,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       yield this.loadVersionHistory.perform();
       // check for alternative label
       if (!isPresent(this.args.dateToShowLabel)) {
-        yield this.piece.file.reload();
+        yield this.piece.belongsTo('file').reload();
         const fileCreated = this.piece.file?.get('created');
         const hasPieceBeenEdited = this.piece.created?.getTime() !== this.piece.modified?.getTime();
         // file is always create first, if file.created is larger it has been edited
@@ -212,7 +212,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadFiles() {
     const sourceFile = yield this.args.piece.file;
-    yield sourceFile?.derived.reload();
+    yield sourceFile?.belongsTo('derived').reload();
   }
 
 

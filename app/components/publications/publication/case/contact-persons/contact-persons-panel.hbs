@@ -8,7 +8,7 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      {{#if this.getMayAddContactPerson}}
+      {{#if @allowEditing}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
@@ -49,13 +49,18 @@
               </td>
               <td data-test-contact-persons-row-email>
                 {{#if contactPerson.email}}
-                  <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                  <AuLinkExternal
+                    href="mailto:{{contactPerson.email}}"
+                    target="_blank"
+                  >
+                    {{contactPerson.email}}
+                  </AuLinkExternal>
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
               </td>
               <td class="auk-u-text-align--right">
-              {{#unless @isAddContactPersonDisabled}}
+                {{#if @allowEditing}}
                   <AuButton
                     data-test-contact-persons-row-delete
                     @skin="naked"
@@ -66,7 +71,7 @@
                   >
                     {{t "delete"}}
                   </AuButton>
-                {{/unless}}
+                {{/if}}
               </td>
             </tr>
           {{/each}}

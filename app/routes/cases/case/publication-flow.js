@@ -21,10 +21,8 @@ export default class CasesCasePublicationFlowIndexRoute extends Route {
         'mandatees.person',
       ].join(',')
     });
-    const _case = await publicationFlow.case;
-    const decisionmakingFlow = await _case.decisionmakingFlow
     const subcase = await this.store.queryOne('subcase', {
-      'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
+      'filter[decision-activities][publication-flows][:id:]': publicationFlow.id,
       include: [
         'requested-by',
         'requested-by.person'
@@ -34,20 +32,21 @@ export default class CasesCasePublicationFlowIndexRoute extends Route {
       'filter[agendas][agendaitems][agenda-activity][subcase][:id:]': subcase.id,
       include: 'kind'
     });
-    const pieces = await this.store.queryAll('piece', {
+    const referenceDocuments = await this.store.queryAll('piece', {
       'filter[publication-flow][:id:]': publicationFlow.id,
       include: [
         'file',
         'document-container',
         'document-container.type',
         'access-level'
-      ].join(',')
+      ].join(','),
+      sort: 'name',
     });
     return RSVP.hash({
       publicationFlow,
       subcase,
       meeting,
-      pieces
+      referenceDocuments
     })
   }
 }

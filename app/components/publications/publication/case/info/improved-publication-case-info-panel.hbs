@@ -33,7 +33,6 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <p class="auk-overline">
-        
         {{#if this.loadData.isRunning}}
           <Auk::Loader />
         {{else}}
@@ -57,11 +56,9 @@
           <AuHeading @level="4" @skin="6">
             {{t "status"}}
           </AuHeading>
-          <div class="au-u-margin-top-tiny">
-            <Publications::Publication::StatusPill 
-              @publicationFlow={{@publicationFlow}}
-            />
-          </div>
+          <Publications::Publication::StatusPill 
+            @publicationFlow={{@publicationFlow}}
+          />
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">

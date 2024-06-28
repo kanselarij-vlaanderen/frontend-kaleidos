@@ -16,13 +16,11 @@
         <div id="inscription" class="auk-u-mb-4">
           <Publications::Publication::Case::Inscription::InscriptionPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @isEditingAllowed={{false}}
-            @isCaseLinkVisible={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="mandatees" class="auk-u-mb-4">
-          <Publications::Publication::Case::Mandatees::MandateesAndSubmitterPanel
+          <Publications::Publication::Case::Mandatees::MandateesPanel
             @publicationFlow={{await this.model.publicationFlow}}
             @submitter={{await this.model.subcase.requestedBy}}
             class="auk-u-mb-3"
@@ -31,21 +29,19 @@
         <div id="government-areas" class="auk-u-mb-4">
           <Publications::Publication::Case::GovernmentAreas::GovernmentAreasPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @allowEditing={{false}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="contact-persons" class="auk-u-mb-4">
           <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @isAddContactPersonDisabled={{true}}
             class="auk-u-mb-3"
           />
         </div>
         <div id="publication-decisions" class="auk-u-mb-4">
           <Publications::Publication::Case::Decisions::Info::DecisionsInfoAndDocumentsPanel
             @publicationFlow={{this.model.publicationFlow}}
-            @pieces={{this.model.pieces}}
+            @referenceDocuments={{this.model.referenceDocuments}}
             class="auk-u-mb-3"
           />
         </div>
