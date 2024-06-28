@@ -69,21 +69,29 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
 export const getNotaGroups = async (notas) => {
   if (notas?.length > 0) {
     const groups = [];
-    const mandatees = await notas.firstObject.mandatees;
-    let currentSubmittersArray = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
+    const firstMandatees = await notas.firstObject.mandatees;
+    const firstAgendaActivity = await notas.firstObject.agendaActivity;
+    const firstSubcase = await firstAgendaActivity?.subcase;
+    await firstSubcase?.type;
+    let currentSubmittersArray = firstMandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
+    let isBekrachtiging = firstSubcase?.isBekrachtiging;
     let currentItemArray = [];
     groups.push(currentItemArray);
     for (let index = 0; index < notas.length; index++) {
       const nota = notas.at(index);
       const mandatees = await nota.mandatees;
+      const agendaActivity = await nota.agendaActivity;
+      const subcase = await agendaActivity?.subcase;
+      await subcase?.type;
       const subm = mandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
-      if (equalContentArrays(currentSubmittersArray, subm)) {
+      if (equalContentArrays(currentSubmittersArray, subm) && (isBekrachtiging == subcase?.isBekrachtiging)) {
         currentItemArray.push(nota);
       } else {
         currentItemArray = [nota];
         groups.push(currentItemArray);
-        currentSubmittersArray = subm;
       }
+      currentSubmittersArray = subm;
+      isBekrachtiging = subcase?.isBekrachtiging;
     }
     return groups;
   }
@@ -242,9 +250,8 @@ export class AgendaitemGroup {
     const mandatees = await agendaitem.mandatees;
     const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
-
     // Differentiate "no mandatee" groups from bekrachtiging
-    if (this.mandateeGroupId === "" && mandateeGroupId === "") {
+    if (this.mandateeGroupId === "" && mandateeGroupId === "" || this.mandateeGroupId === mandateeGroupId) {
       // If either both or none are a bekrachtiging, the agendaitem
       // fits in this group. If one is but the other isn't, it doesn't
       // fit.
