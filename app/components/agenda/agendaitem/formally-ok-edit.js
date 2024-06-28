@@ -1,40 +1,16 @@
 import Component from '@glimmer/component';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { tracked } from '@glimmer/tracking';
-import { action  } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { localCopy } from 'tracked-toolbox';
 
 export default class AgendaFormallyOkEdit extends Component {
-  /**
-   * @argument formallyOkStatusUri: TODO: change to ember object
-   * @argument onChange
-   */
+  @localCopy ('args.selectedFormallyOk') selectedFormallyOkOption;
 
-  formallyOkOptions;
-  @tracked defaultFormallyOkOption;
-  @tracked selectedFormallyOkOption;
+  onUpdateSelectedOption = (option) => {
+    this.selectedFormallyOkOption = option;
+  };
 
-  constructor() {
-    super(...arguments);
-    this.formallyOkOptions = CONFIG.formallyOkOptions;
-    this.selectedFormallyOkOption = this.formallyOkStatus || this.formallyOkOptions.find((formallyOkOption) => formallyOkOption.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
-  }
-
-  get formallyOkStatus() {
-    return this.formallyOkOptions.find((formallyOkOption) => formallyOkOption.uri === this.args.selectedFormallyOk.uri);
-  }
-
-  @action
-  onChange(formallyOkOption) {
-    this.selectedFormallyOkOption = formallyOkOption;
-  }
-
-  @task
-  *onSave() {
-    if (this.args.onSave) {
-      yield this.args.onSave(this.selectedFormallyOkOption.uri);
-      }
+  onSave = task(async () => {
+    await this.args.onSave?.(this.selectedFormallyOkOption?.uri);
     this.args.cancelEdit();
-  }
+  });
 }

@@ -8,17 +8,12 @@
       <Auk::Loader />
     </div>
   {{/if}}
-  <PowerSelect
-    @options={{this.formallyOkOptions}}
-    @selected={{this.selectedFormallyOkOption}}
-    @onChange={{this.onChange}}
+  <Agenda::Agendaitem::FormallyOkPowerselect 
+    @selectedFormallyOkOption={{this.selectedFormallyOkOption}}
+    @onChange={{this.onUpdateSelectedOption}}
+    @onSave={{this.onSave}}
     @disabled={{this.onSave.isRunning}}
-  as |option|>
-    {{#if option.svg }}
-      <AuIcon @icon={{option.svg.icon}} class={{(concat "au-u-" option.svg.color)}} />
-    {{/if}}
-    {{option.label}}
-  </PowerSelect>
+  />
   <AuButton
     @skin="naked"
     @icon="check"

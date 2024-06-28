@@ -1,0 +1,15 @@
+<PowerSelect
+  @options={{this.formallyOkOptions}}
+  @selected={{@selectedFormallyOkOption}}
+  @onChange={{@onChange}}
+  @disabled={{@disabled}}
+  as |option|
+>
+  {{#if option.svg}}
+    <AuIcon
+      @icon={{option.svg.icon}}
+      class={{(concat "au-u-" option.svg.color)}}
+    />
+  {{/if}}
+  {{option.label}}
+</PowerSelect>
