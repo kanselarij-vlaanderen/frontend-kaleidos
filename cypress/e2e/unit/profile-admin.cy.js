@@ -1057,7 +1057,7 @@ context('Testing the application as Admin user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -1108,7 +1108,7 @@ context('Testing the application as Admin user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
