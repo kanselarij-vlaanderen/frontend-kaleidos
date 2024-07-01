@@ -10,7 +10,7 @@ export default class PublicationsOverviewShortlistController extends Controller 
   @service store;
   queryParams = [
     {
-      sort: {
+      sortShortlist: {
         type: 'string',
       },
     },
@@ -18,7 +18,7 @@ export default class PublicationsOverviewShortlistController extends Controller 
 
   SORT_FIELD = "agendaitems.treatment.decision-activity.start-date,agendaitems.number";
 
-  @tracked sort = `-${this.SORT_FIELD}`;
+  @tracked sortShortlist = `-${this.SORT_FIELD}`;
   @tracked isOpenNewPublicationModal;
   pieceForPublication;
   agendaitemForPublication;
@@ -28,7 +28,7 @@ export default class PublicationsOverviewShortlistController extends Controller 
 
   @action
   changeSort() {
-    this.sort = (this.sort === this.SORT_FIELD) ? `-${this.SORT_FIELD}` : this.SORT_FIELD;
+    this.sortShortlist = (this.sortShortlist === this.SORT_FIELD) ? `-${this.SORT_FIELD}` : this.SORT_FIELD;
   }
 
   @action

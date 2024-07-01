@@ -55,6 +55,7 @@ const selectors = {
     optionsDropdown: '[data-test-subcase-overview-header-actions-dropdown]',
     titleContainer: '[data-test-subcase-overview-header-title-container]',
     publicationFlowLink: '[data-test-subcase-overview-header-publication-flow-link]',
+    publicationFlowPill: '[data-test-subcase-overview-header-publication-flow-pill]',
     openAddSubcase: '[data-test-subcase-overview-header-open-add-subcase]',
     actions: {
       editCase: '[data-test-subcase-overview-header-edit-case]',

@@ -33,12 +33,14 @@
   {{date this.decisionDate}}
 </td>
 <td class="auk-table__col--1 u-hide-on-print">
-  <AuButton
-    data-test-route-publications-overview-shortlist-row-open-new-publication
-    @skin="naked"
-    @icon="add"
-    {{on "click" (fn @openNewPublicationModal @row this.agendaitem)}}
-  >
-    {{t "publications-new"}}
-  </AuButton>
+  {{#unless this.loadData.isRunning}}
+    <AuButton
+      data-test-route-publications-overview-shortlist-row-open-new-publication
+      @skin="naked"
+      @icon="add"
+      {{on "click" (fn @openNewPublicationModal @row this.agendaitem)}}
+    >
+      {{t "publications-new"}}
+    </AuButton>
+  {{/unless}}
 </td>

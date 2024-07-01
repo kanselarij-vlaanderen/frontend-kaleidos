@@ -49,7 +49,10 @@
                   {{publicationFlow.identification.idName}}
                 </AuPill>
               {{else}}
-                <AuPill @size="small">
+                <AuPill
+                  data-test-subcase-overview-header-publication-flow-pill
+                  @size="small"
+                >
                   {{publicationFlow.identification.idName}}
                 </AuPill>
               {{/if}}

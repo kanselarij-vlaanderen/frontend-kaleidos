@@ -760,7 +760,8 @@ context('Testing the application as Kort bestek user', () => {
       cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
       // overview header
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowPill);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist'); // no permission to manage
       cy.get(cases.subcaseOverviewHeader.optionsDropdown).should('not.exist');
       cy.get(cases.subcaseOverviewHeader.openAddSubcase).should('not.exist');
 

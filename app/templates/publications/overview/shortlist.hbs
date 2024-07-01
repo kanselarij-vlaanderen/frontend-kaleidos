@@ -8,7 +8,7 @@
         <th class="auk-table__col--1">{{t "minister"}}</th>
         <Utils::ThSortable
           class="auk-table__col--1"
-          @currentSorting={{this.sort}}
+          @currentSorting={{this.sortShortlist}}
           @field="agendaitems.treatment.decision-activity.start-date,agendaitems.number"
           @onChange={{this.changeSort}}
           @label={{t "decision-date"}}

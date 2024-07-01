@@ -836,7 +836,8 @@ context('Testing the application as Secretarie user', () => {
       cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
       // overview header
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowPill);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist'); // no permission to manage
       cy.get(cases.subcaseOverviewHeader.optionsDropdown).click();
       cy.get(cases.subcaseOverviewHeader.actions.editCase);
       cy.get(cases.subcaseOverviewHeader.actions.archive);
