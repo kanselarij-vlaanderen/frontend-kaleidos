@@ -15,7 +15,7 @@ export default class AgendaPrintRoute extends Route {
           id: agenda.id,
         },
       },
-      include: 'mandatees',
+      include: 'mandatees,agenda-activity.subcase.type',
     });
     const notas = [];
     const announcements = [];
