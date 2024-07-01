@@ -53,22 +53,28 @@
           {{t "send-to-VP"}}
         </AuButton>
       {{/if}}
-      {{#if
-        (and
-          (or (user-may "remove-approved-agendaitems") (await this.isDeletable))
-          this.isDesignAgenda
-          (user-may "manage-agendaitems")
-        )
-      }}
-        <AuButton
-          data-test-agendaitem-controls-action-delete
-          @skin="link"
-          @alert={{true}}
-          role="menuitem"
-          {{on "click" this.toggleIsVerifying}}
-        >
-          {{t "delete"}}
-        </AuButton>
+      {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
+        {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
+          <AuButton
+            data-test-agendaitem-controls-action-delete
+            @skin="link"
+            @alert={{true}}
+            role="menuitem"
+            {{on "click" this.toggleIsVerifyingSendBack}}
+          >
+            {{t "delete-and-send-back-to-submitter"}}
+          </AuButton>
+        {{else if (or (user-may "remove-approved-agendaitems") this.isDeletable)}}
+          <AuButton
+            data-test-agendaitem-controls-action-delete
+            @skin="link"
+            @alert={{true}}
+            role="menuitem"
+            {{on "click" this.toggleIsVerifying}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        {{/if}}
       {{/if}}
     </AuDropdown>
     {{!-- template-lint-enable require-context-role --}}
@@ -76,6 +82,7 @@
     <Auk::Loader />
   {{/if}}
 {{/if}}
+
 <ConfirmationModal
   @modalOpen={{this.isVerifying}}
   @title={{t "delete-agendaitem"}}
@@ -86,6 +93,18 @@
   @confirmIcon="trash"
   @alert={{true}}
 />
+
+<ConfirmationModal
+  @modalOpen={{this.isVerifyingSendBack}}
+  @title={{t "delete-agendaitem"}}
+  @message={{this.deleteWarningText}}
+  @onConfirm={{fn this.verifySendBackToSubmitter @agendaitem}}
+  @onCancel={{this.toggleIsVerifyingSendBack}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+/>
+
 {{#if this.showVPModal}}
   <Agenda::Agendaitem::SendToVpModal
     @onClose={{this.onSendToVp}}

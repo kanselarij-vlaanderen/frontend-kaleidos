@@ -25,6 +25,7 @@ export default class AgendaitemControls extends Component {
   @service newsletterService;
 
   @tracked isVerifying = false;
+  @tracked isVerifyingSendBack = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
@@ -37,6 +38,7 @@ export default class AgendaitemControls extends Component {
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
     this.loadCanSendToVP.perform();
+    this.loadSubmissionDate.perform();
   }
 
   loadCanSendToVP = task(async () => {
@@ -102,6 +104,10 @@ export default class AgendaitemControls extends Component {
     return true;
   }
 
+  get agendaItemWasSubmitted() {
+    return this.submissions?.length === 1;
+  }
+
   get deleteWarningText() {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
@@ -123,6 +129,11 @@ export default class AgendaitemControls extends Component {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     yield this.decisionActivity?.decisionResultCode;
+  }
+
+  @task
+  *loadSubmissionDate() {
+    this.submissions = yield this.args.subcase.submissions;
   }
 
   async deleteItem(agendaitem) {
@@ -162,8 +173,37 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
+  toggleIsVerifyingSendBack() {
+    this.isVerifyingSendBack = !this.isVerifyingSendBack;
+  }
+
+  @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @action
+  async verifySendBackToSubmitter(agendaitem) {
+    const submission = this.submissions.at(0);
+    await submission.updateStatus(CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD);
+    this.deleteItem(agendaitem);
+    const subcase = await submission.subcase;
+    // If decisionmaking flow & case are new & they don't have other subcases
+    //  → Delete
+    if (submission.title) {
+      const decisionmakingFlow = await submission.decisionmakingFlow;
+      const subcases = await decisionmakingFlow.subcases;
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
   }
 
   @task

@@ -113,29 +113,7 @@ export default class SubmissionHeaderComponent extends Component {
    * @private
    */
   _updateSubmission = async (statusUri, comment) => {
-    const now = new Date();
-    const currentUser = this.currentSession.user;
-    const newStatus = await this.store.findRecordByUri('concept', statusUri);
-
-    const submissionStatusChange = this.store.createRecord(
-      'submission-status-change-activity',
-      {
-        startedAt: now,
-        comment,
-        submission: this.args.submission,
-        status: newStatus,
-      }
-    );
-    await submissionStatusChange.save();
-
-    this.args.submission.status = newStatus;
-    this.args.submission.modified = now;
-    this.args.submission.modifiedBy = currentUser;
-    const statusChangeActivities = await this.args.submission
-      .statusChangeActivities;
-    addObject(statusChangeActivities, submissionStatusChange);
-
-    await this.args.submission.save();
+    this.args.submission.updateStatus(statusUri, comment);
   };
 
   resubmitSubmission = task(async () => {
