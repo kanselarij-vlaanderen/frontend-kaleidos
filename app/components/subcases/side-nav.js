@@ -35,6 +35,17 @@ export default class SubcasesSideNavComponent extends Component {
       });
     }
 
+    if (this.args.publicationFlows) {
+      for (const publicationFlow of this.args.publicationFlows) {
+        items.push({
+          publicationFlow: publicationFlow,
+          sortDate: publicationFlow.modified,
+          decisionmakingFlow: this.args.decisionmakingFlow,
+          type: 'publication'
+        })
+      }
+    }
+
     this.items = items.sort((item1, item2) =>
       item2.sortDate?.valueOf() - item1.sortDate?.valueOf()
     );
