@@ -63,18 +63,18 @@ context('Create case as Admin user', () => {
       newCase: true,
       agendaitemType: 'Nota',
     };
-    cy.addSubcaseViaModal(subcase);
-    // case title is visible in header
-    cy.get(cases.subcaseOverviewHeader.titleContainer).within(() => {
-      cy.contains(caseTitle);
+    cy.addSubcaseViaModal(subcase).then((result) => {
+      // case title is visible in header
+      cy.get(cases.subcaseOverviewHeader.titleContainer).within(() => {
+        cy.contains(caseTitle);
+      });
+      // no short title results in case title being used for subcase
+      cy.get(cases.subcaseDescription.shortTitle).contains(caseTitle);
+      // subcase confidentiality should be false by default
+      cy.get(cases.subcaseDescription.confidentialityPill).should('not.exist');
+      cy.url().should('contain', `/deeldossiers/${result.subcaseId}`);
+      cy.url().should('not.contain', '/deeldossiers/procedurestap-toevoegen');
     });
-    // no short title results in case title being used for subcase
-    cy.get(cases.subcaseDescription.shortTitle).contains(caseTitle);
-    // subcase confidentiality should be false by default
-    cy.get(cases.subcaseDescription.confidentialityPill).should('not.exist');
-    // TODO KAS-4529 do we want to check the id?
-    // cy.url().should('contain', `/deeldossiers/${result.subcaseId}`);
-    cy.url().should('not.contain', '/deeldossiers/procedurestap-toevoegen');
   });
 
   it('Hitting cancel or close should hide the model and not remember state', () => {
@@ -324,8 +324,6 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormattedMonthDutch);
     // we don't know the exact number, just that it exists
     cy.get(cases.subcaseDescription.meetingNumber).should('not.contain', 'Nog geen nummer');
-    // TODO KAS-4529 meetingPlannedStart not there
-    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
 
     // check submitter
     cy.get(mandatee.mandateePanelView.row.name)
@@ -336,9 +334,8 @@ context('Create case as Admin user', () => {
       .should('exist');
 
     cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase1.agendaitemType);
-    // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
-    // also, titltesView no longer exists
-    // cy.get(cases.subcaseTitlesView.subcaseName).contains(subcaseName);
+    // subcasename starts non capital
+    cy.get(cases.subcaseDescription.subcaseName).contains(subcaseName.toLowerCase());
 
     cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee');
     cy.get('@listItemsMandatee').should('have.length', 2, {
@@ -430,7 +427,6 @@ context('Create case as Admin user', () => {
 
     cy.get(auk.loader).should('not.exist');
     cy.get(cases.subcaseDescription.agendaLink).contains(agendaDateFormattedMonthDutch);
-    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(agendaDateFormattedMonthDutch);
     // check submitter
     cy.get(mandatee.mandateePanelView.row.name)
       .should('contain', mandateeNames.current.second.fullName)
@@ -440,9 +436,7 @@ context('Create case as Admin user', () => {
       .should('exist');
 
     cy.get(cases.subcaseDescription.agendaitemTypePill).contains(subcase2.agendaitemType);
-    // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
-    // also, titltesView no longer exists
-    // cy.get(cases.subcaseTitlesView.subcaseName).should('not.exist');
+    cy.get(cases.subcaseDescription.subcaseName).contains('-');
 
     cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee');
     cy.get('@listItemsMandatee').should('have.length', 2, {

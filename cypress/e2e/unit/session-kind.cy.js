@@ -151,11 +151,6 @@ context('Different session kinds should show different titles', () => {
     cy.addSubcaseViaModal({
       newCase: true,
     });
-    // TODO-bug multiple clicks on dropdown are flakey
-    // Check if both agendas are listed in dropdown
-    // cy.get(cases.subcaseHeader.showProposedAgendas).click();
-    // cy.get(cases.subcaseHeader.actions.proposeForAgenda).should('contain', fullmeetingNumberVV);
-    // cy.get(cases.subcaseHeader.showProposedAgendas).click();
     cy.proposeSubcaseForAgenda(agendaDate, vvKind);
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 1);

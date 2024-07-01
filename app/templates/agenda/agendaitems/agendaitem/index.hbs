@@ -73,6 +73,10 @@
       @mandatees={{this.mandatees}}
       @submitter={{this.submitter}}
       @allowEditing={{user-may "manage-agendaitems"}}
+      @emptyStateMessage={{if
+        this.subcase.isBekrachtiging
+        (t "not-applicable")
+      }}
       @onSave={{this.saveMandateeData}}
     />
   </div>
