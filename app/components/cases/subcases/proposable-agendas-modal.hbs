@@ -7,12 +7,11 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
-        <AuLabel for="new-subcase-ok">{{t "formal-ok"}}</AuLabel>
-        <AuToggleSwitch
-          data-test-proposable-agendas-modal-toggle-formally-ok
-          id="new-subcase-ok"
-          @checked={{this.isFormallyOk}}
-          @onChange={{set this "isFormallyOk"}}
+        <AuLabel for="new-subcase-ok">{{t "status"}}</AuLabel>
+        <Agenda::Agendaitem::FormallyOkPowerselect
+          @selectedFormallyOkOption={{this.selectedFormallyOkOption}}
+          @onChange={{set this "selectedFormallyOkOption"}}
+          @disabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -42,11 +41,12 @@
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
                 {{! template-lint-disable no-invalid-interactive }}
-                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
+                <tr
+                  data-test-proposable-agendas-modal-agenda-row
+                  {{on "click" (fn this.selectAgenda agenda)}}
+                >
                   <td class="auk-table__col--1">
-                    <AuRadio
-                      @checked={{this.isSelectedAgenda agenda}}
-                    />
+                    <AuRadio @checked={{this.isSelectedAgenda agenda}} />
                   </td>
                   <td class="auk-table__col--3">
                     {{date agenda.createdFor.plannedStart}}

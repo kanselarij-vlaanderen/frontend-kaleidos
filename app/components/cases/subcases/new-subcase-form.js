@@ -154,7 +154,7 @@ export default class NewSubcaseForm extends Component {
   *createSubcase(
     fullCopy = false,
     meeting = null,
-    isFormallyOk = false,
+    formallyOkStatus = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
     privateComment = null
   ) {
     this.showProposableAgendaModal = false;
@@ -214,7 +214,7 @@ export default class NewSubcaseForm extends Component {
         yield this.agendaService.putSubmissionOnAgenda(
           meeting,
           this.subcase,
-          isFormallyOk,
+          formallyOkStatus,
           privateComment
         );
       } catch (error) {

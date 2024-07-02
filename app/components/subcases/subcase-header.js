@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /*
  * @argument subcase
@@ -99,10 +100,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
+      const { FORMALLY_OK, NOT_YET_FORMALLY_OK } = CONSTANTS.FORMALLY_OK_STATUSES;
+      const formallyOkStatus = isFormallyOk ? FORMALLY_OK : NOT_YET_FORMALLY_OK;
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
-        isFormallyOk,
+        formallyOkStatus,
         privateComment,
       );
     } catch (error) {

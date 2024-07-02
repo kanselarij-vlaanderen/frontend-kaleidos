@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaService extends Service {
   @service store;
@@ -113,14 +114,19 @@ export default class AgendaService extends Service {
    * @argument formallyOk: optional
    * @argument privateComment: optional
    */
-  async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
+  async putSubmissionOnAgenda(
+    meeting,
+    subcase,
+    formallyOkStatus = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
+    privateComment = null
+  ) {
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
       body: JSON.stringify({
         subcase: subcase.uri,
-        formallyOk: formallyOk,
+        formallyOkStatus,
         privateComment: privateComment,
       })
     });
