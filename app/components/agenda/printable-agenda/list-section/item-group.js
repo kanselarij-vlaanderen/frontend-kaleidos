@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 
 export default class AgendaPrintableAgendaListSectionItemGroupComponent extends Component {
 
-  @tracked isBekrachtiging
+  @tracked isBekrachtiging;
 
   constructor() {
     super(...arguments);
@@ -21,6 +21,18 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
     yield subcase?.type;
     this.isBekrachtiging = subcase?.isBekrachtiging;
   }
+
+  getPiecesForAgendaitem = async (agendaitem) => {
+    let pieces = await agendaitem.pieces;
+    pieces = pieces?.slice();
+    if (this.isBekrachtiging) {
+      const agendaActivity = await agendaitem.agendaActivity;
+      const subcase = await agendaActivity?.subcase;
+      const ratification = await subcase?.ratification;
+      pieces.push(ratification);
+    }
+    return pieces;
+  };
 
   @use sortedMandateesFromFirst = resource(() => {
     const sortedMandatees = new TrackedArray([]);

@@ -45,11 +45,12 @@
             />
           </div>
         </div>
-        {{#let (await first.pieces) as |pieces|}}
+        {{#let (await (this.getPiecesForAgendaitem first)) as |pieces|}}
           {{#if pieces}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
               @pieces={{pieces}}
               @fileNameMappings={{@fileNameMappings}}
+              @isBekrachtiging={{this.isBekrachtiging}}
             />
           {{/if}}
         {{/let}}
@@ -67,11 +68,12 @@
               @item={{agendaitem}}
             />
           </div>
-          {{#let (await agendaitem.pieces) as |pieces|}}
+          {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}
             {{#if pieces}}
               <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                 @pieces={{pieces}}
                 @fileNameMappings={{@fileNameMappings}}
+                @isBekrachtiging={{this.isBekrachtiging}}
               />
             {{/if}}
           {{/let}}
