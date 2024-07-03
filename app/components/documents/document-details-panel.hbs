@@ -212,7 +212,7 @@
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             data-test-document-details-panel-source-file-download
-            href={{@piece.file.namedDownloadLink}}
+            href={{this.downloadLinkSourceFile}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
@@ -220,7 +220,7 @@
           >
             {{@piece.name}}.{{@piece.file.extension}}
           </AuLinkExternal>
-          {{else}}
+        {{else}}
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>

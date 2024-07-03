@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import sanitize from 'sanitize-filename';
 
 /**
  * @param {Piece} piece
@@ -53,6 +54,23 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   get isDraftPiece() {
     return this.args.piece.constructor.name === 'DraftPiece';
+  }
+
+  // @piece.downloadlinkPromise does not recalculate after edit of this.args.piece.name
+  // we want the piece name + the correct file download (in this case always the source file)
+  get downloadLinkSourceFile() {
+    const file = this.args.piece.get('file');
+    if (file) {
+      const filename = `${this.args.piece.name}.${file.get('extension')}`;
+      const downloadFilename = sanitize(filename, {
+        replacement: '_',
+      });
+      return `${file.get('downloadLink')}?name=${encodeURIComponent(
+        downloadFilename
+      )}`;
+    }
+    // should be unreachable, getter used in template with {{#if @piece.file}}
+    return undefined;
   }
 
   @task

@@ -36,7 +36,8 @@ context('Formally ok/nok tests', () => {
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
-    cy.get(agenda.agendaCheck.confirm).click();
+    cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
+      .click();
     // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(appuniversum.alert.container).should('exist');
     cy.get(auk.modal.footer.cancel).click();

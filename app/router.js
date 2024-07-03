@@ -42,6 +42,7 @@ Router.map(function() {
     }
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
+      this.route('publication-flow', { path: '/publicatie/:publication_id'});
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {});
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});

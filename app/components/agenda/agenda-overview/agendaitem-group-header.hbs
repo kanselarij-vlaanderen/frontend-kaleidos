@@ -6,10 +6,12 @@
       <AuIcon @icon="users" />
     {{/if}}
   </div>
-  <div class="auk-section-header__title auk-section-header__title--small {{if (eq @mandatees.length 0) "auk-section-header__title--muted"}}">
+  <div class="auk-section-header__title auk-section-header__title--small {{if (and (eq @mandatees.length 0) (not @isBekrachtiging)) "auk-section-header__title--muted"}}">
     {{#each @mandatees as |mandatee index|}}
       {{#if (not-eq index 0)}}<br>{{/if}}
       {{mandatee.title}}
+    {{else if @isBekrachtiging}}
+      {{t 'ratification-title'}}
     {{else}}
       {{t 'no-mandatee-assigned'}}
     {{/each}}
