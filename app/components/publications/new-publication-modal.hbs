@@ -13,126 +13,128 @@
       @isLoading={{this.save.isRunning}}
       @reserveSpace={{true}}
     >
-      {{#unless this.isViaCouncilOfMinisters}}
-        <AuAlert
-          data-test-new-publication-alert-info
-          @icon="info-circle"
-          @size="small"
-        >
-          <p>{{t "publications-new-warning-message"}}</p>
-        </AuAlert>
-      {{/unless}}
-      <div class="au-c-form">
-        <AuFormRow>
-          <AuLabel
-            for="publicationNumberInput"
-            @required={{true}}
-            @error={{not this.isPublicationNumberValid}}
+      <div class="au-o-flow">
+        {{#unless this.isViaCouncilOfMinisters}}
+          <AuAlert
+            data-test-new-publication-alert-info
+            @icon="info-circle"
+            @size="small"
           >
-            {{t "publication-number"}}
-          </AuLabel>
-          <div class="auk-u-mb">
-            <AuInput
-              data-test-new-publication-number
-              type="number"
-              value={{this.number}}
-              @error={{not this.isPublicationNumberValid}}
-              @disabled={{this.initPublicationNumber.isRunning}}
-              {{on "input" (perform this.setPublicationNumber)}}
-              id="publicationNumberInput"
-            />
-            <AuInput
-              data-test-new-publication-suffix
-              id="publicationSuffixInput"
-              class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
-              value={{this.suffix}}
-              @error={{not this.isPublicationNumberValid}}
-              {{on "input" (perform this.setPublicationNumberSuffix)}}
-            />
-            <Utils::Generic::TooltipHelp class="auk-u-mx">
-              {{t "publication-flow-publication-number-help"}}
-            </Utils::Generic::TooltipHelp>
-          </div>
-          {{#if this.publicationNumberErrorTranslationKey}}
-            <Auk::FormHelpText
-              @text={{t this.publicationNumberErrorTranslationKey}}
-              @skin="danger"
-              @icon="alert-triangle"
-            />
-          {{/if}}
-        </AuFormRow>
-        <AuFormRow>
-          <AuLabel
-            for="shortTitleInput"
-            @required={{true}}
-            @error={{this.isShownShortTitleError}}
-          >
-            {{t "name-subcase"}}
-          </AuLabel>
-          <AuTextarea
-            data-test-new-publication-short-title
-            id="shortTitleInput"
-            value={{this.shortTitle}}
-            @width="block"
-            @error={{this.isShownShortTitleError}}
-            {{on "input" (pick "target.value" (set this "shortTitle"))}}
-            {{on "focusout" this.enableErrorOnShortTitle}}
-          />
-          {{#if this.isShownShortTitleError}}
-            <Auk::FormHelpText
-              @text={{t "input-error-message"}}
-              @skin="danger"
-              @icon="alert-triangle"
-            />
-          {{/if}}
-        </AuFormRow>
-        <AuFormRow>
-          <AuLabel for="longTitleInput">
-            {{t "title-subcase"}}
-          </AuLabel>
-          <AuTextarea
-            data-test-new-publication-long-title
-            id="longTitleInput"
-            rows="4"
-            value={{this.longTitle}}
-            @width="block"
-            {{on "input" (pick "target.value" (set this "longTitle"))}}
-          />
-        </AuFormRow>
-        <div class="auk-o-grid-auto">
+            <p>{{t "publications-new-warning-message"}}</p>
+          </AuAlert>
+        {{/unless}}
+        <div class="au-c-form">
           <AuFormRow>
-            <AuLabel>
-              {{t "decision-date"}}
+            <AuLabel
+              for="publicationNumberInput"
+              @required={{true}}
+              @error={{not this.isPublicationNumberValid}}
+            >
+              {{t "publication-number"}}
             </AuLabel>
-            {{#if this.isViaCouncilOfMinisters}}
-              <span class="auk-u-text-muted">
-                {{date this.decisionDate}}
-              </span>
-            {{else}}
-              <Auk::Datepicker
-                @date={{this.decisionDate}}
-                @onChange={{set this "decisionDate"}}
+            <div class="auk-u-mb">
+              <AuInput
+                data-test-new-publication-number
+                type="number"
+                value={{this.number}}
+                @error={{not this.isPublicationNumberValid}}
+                @disabled={{this.initPublicationNumber.isRunning}}
+                {{on "input" (perform this.setPublicationNumber)}}
+                id="publicationNumberInput"
+              />
+              <AuInput
+                data-test-new-publication-suffix
+                id="publicationSuffixInput"
+                class="auk-input-group--w-xsmall" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
+                value={{this.suffix}}
+                @error={{not this.isPublicationNumberValid}}
+                {{on "input" (perform this.setPublicationNumberSuffix)}}
+              />
+              <Utils::Generic::TooltipHelp class="auk-u-mx">
+                {{t "publication-flow-publication-number-help"}}
+              </Utils::Generic::TooltipHelp>
+            </div>
+            {{#if this.publicationNumberErrorTranslationKey}}
+              <Auk::FormHelpText
+                @text={{t this.publicationNumberErrorTranslationKey}}
+                @skin="danger"
+                @icon="alert-triangle"
               />
             {{/if}}
           </AuFormRow>
           <AuFormRow>
-            <AuLabel>
-              {{t "publication-flow-opening-date"}}
+            <AuLabel
+              for="shortTitleInput"
+              @required={{true}}
+              @error={{this.isShownShortTitleError}}
+            >
+              {{t "name-subcase"}}
             </AuLabel>
-            <Auk::Datepicker
-              @date={{this.openingDate}}
-              @onChange={{set this "openingDate"}}
+            <AuTextarea
+              data-test-new-publication-short-title
+              id="shortTitleInput"
+              value={{this.shortTitle}}
+              @width="block"
+              @error={{this.isShownShortTitleError}}
+              {{on "input" (pick "target.value" (set this "shortTitle"))}}
+              {{on "focusout" this.enableErrorOnShortTitle}}
             />
+            {{#if this.isShownShortTitleError}}
+              <Auk::FormHelpText
+                @text={{t "input-error-message"}}
+                @skin="danger"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </AuFormRow>
           <AuFormRow>
-            <AuLabel>
-              {{t "publication-flow-publication-due-date"}}
+            <AuLabel for="longTitleInput">
+              {{t "title-subcase"}}
             </AuLabel>
-            <Auk::Datepicker
-              @date={{this.publicationDueDate}}
-              @onChange={{set this "publicationDueDate"}}
+            <AuTextarea
+              data-test-new-publication-long-title
+              id="longTitleInput"
+              rows="4"
+              value={{this.longTitle}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "longTitle"))}}
             />
           </AuFormRow>
+          <div class="auk-o-grid-auto">
+            <AuFormRow>
+              <AuLabel>
+                {{t "decision-date"}}
+              </AuLabel>
+              {{#if this.isViaCouncilOfMinisters}}
+                <span class="auk-u-text-muted">
+                  {{date this.decisionDate}}
+                </span>
+              {{else}}
+                <Auk::Datepicker
+                  @date={{this.decisionDate}}
+                  @onChange={{set this "decisionDate"}}
+                />
+              {{/if}}
+            </AuFormRow>
+            <AuFormRow>
+              <AuLabel>
+                {{t "publication-flow-opening-date"}}
+              </AuLabel>
+              <Auk::Datepicker
+                @date={{this.openingDate}}
+                @onChange={{set this "openingDate"}}
+              />
+            </AuFormRow>
+            <AuFormRow>
+              <AuLabel>
+                {{t "publication-flow-publication-due-date"}}
+              </AuLabel>
+              <Auk::Datepicker
+                @date={{this.publicationDueDate}}
+                @onChange={{set this "publicationDueDate"}}
+              />
+            </AuFormRow>
+          </div>
         </div>
       </div>
     </Utils::LoadableContent>
