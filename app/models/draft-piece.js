@@ -1,7 +1,7 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 import sanitize from 'sanitize-filename';
 
-export default class DraftPieceModel extends Model {
+export default class DraftPiece extends Model {
   @attr uri;
   @attr name;
   @attr('datetime') created;

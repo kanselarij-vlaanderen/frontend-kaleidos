@@ -51,6 +51,10 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
   }
 
+  get isDraftPiece() {
+    return this.args.piece.constructor.name === 'DraftPiece';
+  }
+
   @task
   *loadSignatureRelatedData() {
     if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {

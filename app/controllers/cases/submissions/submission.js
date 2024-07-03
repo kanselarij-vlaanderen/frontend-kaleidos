@@ -20,6 +20,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
 
+  @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
@@ -68,8 +69,15 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await this.model.save();
   };
 
+  @action
+  async saveGovernmentAreas(newGovernmentAreas) {
+    this.model.governmentAreas = newGovernmentAreas;
+    await this.model.save();
+  }
+
   saveBatchDetails = () => {
-    return;
+    this.router.refresh();
+    this.isOpenBatchDetailsModal = false;
   };
 
   @action
@@ -93,6 +101,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       modified: now,
       file: file,
       confidential: confidential,
+      accessLevel: this.defaultAccessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
       submission: this.model,
@@ -128,7 +137,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.router.refresh('cases.submissions.subcase');
+    this.router.refresh();
   });
 
   savePiece = task(async (piece, index) => {

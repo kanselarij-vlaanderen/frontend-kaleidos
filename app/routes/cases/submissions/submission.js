@@ -11,6 +11,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   mandatees;
   statusChangeActivities;
   currentLinkedMandatee;
+  defaultAccessLevel;
 
   async beforeModel(_transition) {
     const linkedMandatees = await this.store.queryAll('mandatee', {
@@ -64,6 +65,13 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime());
     await Promise.all(this.statusChangeActivities.map((a) => a.status));
 
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      submission.confidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
+
     return submission;
   }
 
@@ -73,5 +81,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.pieces = this.pieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
+    controller.defaultAccessLevel = this.defaultAccessLevel
   }
 }

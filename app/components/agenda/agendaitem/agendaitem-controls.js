@@ -125,6 +125,11 @@ export default class AgendaitemControls extends Component {
     yield this.decisionActivity?.decisionResultCode;
   }
 
+  @task
+  *loadSubmissionDate() {
+    this.submissions = yield this.args.subcase?.submissions;
+  }
+
   async deleteItem(agendaitem) {
     this.isVerifying = false;
     this.showLoader = true;
@@ -164,6 +169,30 @@ export default class AgendaitemControls extends Component {
   @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @action
+  async verifySendBackToSubmitter(agendaitem) {
+    const submission = this.submissions.at(0);
+    await submission.updateStatus(CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD);
+    await this.deleteItem(agendaitem);
+    const subcase = await submission.subcase;
+    // If decisionmaking flow & case are new & they don't have other subcases
+    //  → Delete
+    if (submission.title) {
+      const decisionmakingFlow = await submission.decisionmakingFlow;
+      const subcases = await decisionmakingFlow.subcases;
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
   }
 
   @task
