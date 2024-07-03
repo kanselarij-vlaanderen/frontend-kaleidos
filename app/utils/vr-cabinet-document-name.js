@@ -7,6 +7,7 @@ export default class VRCabinetDocumentName {
       index: '(?<index>\\d{1,3})',
       versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix?.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
+      confidential: '(?<confidential>VERTROUWELIJK|vertrouwelijk)', //
     });
   }
 
@@ -21,28 +22,35 @@ export default class VRCabinetDocumentName {
 
   get regexNumberType() {
     // versionSuffix doesn't really work here, since type uses .*; even with tweaks, QUATER matches with TER
+    // parsing confidential is also difficult in this regex, it will be included in type just as suffix
     const regexGroup = VRCabinetDocumentName.regexGroups;
     return new RegExp(`(?<subject>.*)?[/-]${regexGroup.index}(?:[/-]${regexGroup.type})${regexGroup.versionSuffix}?$`);
   }
 
-  get regexTypeNumber() {
+  get regexTypeNumberConfidential() {
     const regexGroup = VRCabinetDocumentName.regexGroups;
-    return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?$`);
+    // versionSuffex is probably not in the right location here, but realistically this is only used for first upload and version should never be present
+    return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?(?:[\\s/-]*${regexGroup.confidential})?$`);
   }
 
   parseMeta() {
-    // 1 side effect, if "vertrouwelijk" is also in the subject this will replace that one instead
-    const trimmedName = this.name.replace(/[\s-]*VERTROUWELIJK/i, '');
-    const confidential = this.name.length < trimmedName.length ? true : false;
-
-    let match = this.regexNumberType.exec(trimmedName);
+    let confidential = false;
+    let match = this.regexNumberType.exec(this.name);
     if (!match || !match.groups.type) {
-      match = this.regexTypeNumber.exec(trimmedName);
+      match = this.regexTypeNumberConfidential.exec(this.name);
       if (!match || !match.groups.type) {
         return {
             subject: this.name,
             index: parseInt(match?.groups.index, 10),
         };
+      } else {
+        confidential = match.groups.confidential ? true : false;
+      }
+    } else {
+      const trimmedtype = match.groups.type.replace(/[\s-]*VERTROUWELIJK/i, '');
+      if (trimmedtype.length < match.groups.type.length) {
+        confidential= true;
+        match.groups.type = trimmedtype;
       }
     }
 
