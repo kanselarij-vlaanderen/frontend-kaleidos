@@ -7,7 +7,7 @@ export default class VRCabinetDocumentName {
       index: '(?<index>\\d{1,3})',
       versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix?.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
-      confidential: '(?<confidential>VERTROUWELIJK|vertrouwelijk)', //
+      confidential: '(?<confidential>VERTROUWELIJK)', //
     });
   }
 
@@ -20,6 +20,11 @@ export default class VRCabinetDocumentName {
     return this.name;
   }
 
+  get regexConfidential() {
+    const regexGroup = VRCabinetDocumentName.regexGroups;
+    return new RegExp(`(?<subject>.*)?[\\s/-]+(?:${regexGroup.confidential})$`);
+  }
+
   get regexNumberType() {
     // versionSuffix doesn't really work here, since type uses .*; even with tweaks, QUATER matches with TER
     // parsing confidential is also difficult in this regex, it will be included in type just as suffix
@@ -30,27 +35,29 @@ export default class VRCabinetDocumentName {
   get regexTypeNumberConfidential() {
     const regexGroup = VRCabinetDocumentName.regexGroups;
     // versionSuffex is probably not in the right location here, but realistically this is only used for first upload and version should never be present
-    return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?(?:[\\s/-]*${regexGroup.confidential})?$`);
+    return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?$`);
   }
 
   parseMeta() {
     let confidential = false;
-    let match = this.regexNumberType.exec(this.name);
+    let strippedName = this.name;
+    let confidentialMatch = this.regexConfidential.exec(this.name.toUpperCase());
+    if (confidentialMatch?.groups.confidential) {
+      confidential = true;
+      // if found here it matches the group confidential, but it could still be in subject which the regex can't see.
+      // we need to replace "vertrouwelijk" in any case in this.name without changing the actual subject
+      const indexToCut = confidentialMatch.groups.subject.length;
+      strippedName = this.name.substring(0, indexToCut) + (this.name.substring(indexToCut).replace(/[\s-]*VERTROUWELIJK/i, ''));
+    }
+
+    let match = this.regexNumberType.exec(strippedName);
     if (!match || !match.groups.type) {
-      match = this.regexTypeNumberConfidential.exec(this.name);
+      match = this.regexTypeNumberConfidential.exec(strippedName);
       if (!match || !match.groups.type) {
         return {
             subject: this.name,
             index: parseInt(match?.groups.index, 10),
         };
-      } else {
-        confidential = match.groups.confidential ? true : false;
-      }
-    } else {
-      const trimmedtype = match.groups.type.replace(/[\s-]*VERTROUWELIJK/i, '');
-      if (trimmedtype.length < match.groups.type.length) {
-        confidential= true;
-        match.groups.type = trimmedtype;
       }
     }
 
