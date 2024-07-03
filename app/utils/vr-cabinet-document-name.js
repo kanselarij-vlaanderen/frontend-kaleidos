@@ -7,7 +7,7 @@ export default class VRCabinetDocumentName {
       index: '(?<index>\\d{1,3})',
       versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix?.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
-      confidential: '(?<confidential>VERTROUWELIJK)', //
+      confidential: '(?<confidential>VERTROUWELIJK)', // check with uppercased string
     });
   }
 
