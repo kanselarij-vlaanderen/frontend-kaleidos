@@ -21,8 +21,9 @@ export default class VRCabinetDocumentName {
   }
 
   get regexConfidential() {
+    // the group before confidential group matches greedily after index is found to include all extra spaces and dashes
     const regexGroup = VRCabinetDocumentName.regexGroups;
-    return new RegExp(`(?<subject>.*)?[\\s/-]+(?:${regexGroup.confidential})$`);
+    return new RegExp(`(?<subject>.*)[/-]${regexGroup.index}(?:.*${regexGroup.confidential})$`);
   }
 
   get regexNumberType() {
