@@ -31,9 +31,13 @@ export default class VRCabinetDocumentName {
   }
 
   parseMeta() {
-    let match = this.regexNumberType.exec(this.name);
+    // 1 side effect, if "vertrouwelijk" is also in the subject this will replace that one instead
+    const trimmedName = this.name.replace(/[\s-]*VERTROUWELIJK/i, '');
+    const confidential = this.name.length < trimmedName.length ? true : false;
+
+    let match = this.regexNumberType.exec(trimmedName);
     if (!match || !match.groups.type) {
-      match = this.regexTypeNumber.exec(this.name);
+      match = this.regexTypeNumber.exec(trimmedName);
       if (!match || !match.groups.type) {
         return {
             subject: this.name,
@@ -54,6 +58,7 @@ export default class VRCabinetDocumentName {
       index: parseInt(match.groups.index, 10),
       versionSuffix,
       versionNumber,
+      confidential
     };
     return meta;
   }
