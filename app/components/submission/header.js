@@ -31,10 +31,12 @@ export default class SubmissionHeaderComponent extends Component {
 
   loadAgenda = task(async () => {
     const meeting = await this.args.submission.meeting;
-    this.selectedAgenda = await this.store.queryOne('agenda', {
-      'filter[created-for][:id:]': meeting.id,
-      'filter[:has-no:next-version]': true,
-    });
+    if (meeting?.id) {
+      this.selectedAgenda = await this.store.queryOne('agenda', {
+        'filter[created-for][:id:]': meeting.id,
+        'filter[:has-no:next-version]': true,
+      });
+    }
   });
 
   get items() {

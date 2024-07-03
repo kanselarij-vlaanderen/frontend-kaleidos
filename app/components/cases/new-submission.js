@@ -120,10 +120,16 @@ export default class CasesNewSubmissionComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
     );
 
+    const _case = await this.selectedDecisionmakingFlow?.case;
+    const decisionmakingFlowTitle =
+      this.decisionmakingFlowTitle ??
+      _case?.shortTitle ??
+      '';
+
     this.submission = this.store.createRecord('submission', {
       created: now,
       modified: now,
-      shortTitle: trimText(this.shortTitle),
+      shortTitle: trimText(this.shortTitle ?? decisionmakingFlowTitle),
       title: trimText(this.decisionmakingFlowTitle),
       confidential: this.confidential,
       type: this.type,

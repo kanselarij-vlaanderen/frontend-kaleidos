@@ -133,7 +133,7 @@ export default class AgendaitemControls extends Component {
 
   @task
   *loadSubmissionDate() {
-    this.submissions = yield this.args.subcase.submissions;
+    this.submissions = yield this.args.subcase?.submissions;
   }
 
   async deleteItem(agendaitem) {
@@ -186,7 +186,7 @@ export default class AgendaitemControls extends Component {
   async verifySendBackToSubmitter(agendaitem) {
     const submission = this.submissions.at(0);
     await submission.updateStatus(CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD);
-    this.deleteItem(agendaitem);
+    await this.deleteItem(agendaitem);
     const subcase = await submission.subcase;
     // If decisionmaking flow & case are new & they don't have other subcases
     //  → Delete

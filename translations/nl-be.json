@@ -1410,5 +1410,7 @@
   "in-treatment-by-user-on": "Behandeld door {user} op {date}",
   "update-submitted-on": "Update ingediend op {date}",
   "accepted-on": "Aanvaard op {date}",
-  "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen"
+  "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
+  "submit-new-documents": "Dien nieuwe documenten in",
+  "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen?"
 }
