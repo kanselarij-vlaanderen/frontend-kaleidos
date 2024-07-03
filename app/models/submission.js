@@ -1,7 +1,12 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class SubmissionModel extends Model {
+  @service currentSession;
+  @service store;
+
   @attr uri;
   @attr shortTitle;
   @attr title;
@@ -70,5 +75,30 @@ export default class SubmissionModel extends Model {
       this.status?.get('uri') ===
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD
     );
+  }
+
+  async updateStatus(statusUri, comment) {
+    const now = new Date();
+    const currentUser = this.currentSession.user;
+    const newStatus = await this.store.findRecordByUri('concept', statusUri);
+
+    const submissionStatusChange = this.store.createRecord(
+      'submission-status-change-activity',
+      {
+        startedAt: now,
+        comment,
+        submission: this,
+        status: newStatus,
+      }
+    );
+    await submissionStatusChange.save();
+
+    this.status = newStatus;
+    this.modified = now;
+    this.modifiedBy = currentUser;
+    const statusChangeActivities = await this.statusChangeActivities;
+    addObject(statusChangeActivities, submissionStatusChange);
+
+    await this.save();
   }
 }

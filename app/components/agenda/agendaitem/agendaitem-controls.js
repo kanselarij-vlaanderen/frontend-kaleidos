@@ -25,6 +25,7 @@ export default class AgendaitemControls extends Component {
   @service newsletterService;
 
   @tracked isVerifying = false;
+  @tracked isVerifyingSendBack = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
@@ -37,6 +38,7 @@ export default class AgendaitemControls extends Component {
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
     this.loadCanSendToVP.perform();
+    this.loadSubmissionDate.perform();
   }
 
   loadCanSendToVP = task(async () => {
@@ -102,6 +104,10 @@ export default class AgendaitemControls extends Component {
     return true;
   }
 
+  get agendaItemWasSubmitted() {
+    return this.submissions?.length === 1;
+  }
+
   get deleteWarningText() {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
@@ -164,6 +170,11 @@ export default class AgendaitemControls extends Component {
   @action
   toggleIsVerifying() {
     this.isVerifying = !this.isVerifying;
+  }
+
+  @action
+  toggleIsVerifyingSendBack() {
+    this.isVerifyingSendBack = !this.isVerifyingSendBack;
   }
 
   @action
