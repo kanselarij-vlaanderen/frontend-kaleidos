@@ -27,14 +27,13 @@ export default class VRCabinetDocumentName {
 
   get regexNumberType() {
     // versionSuffix doesn't really work here, since type uses .*; even with tweaks, QUATER matches with TER
-    // parsing confidential is also difficult in this regex, it will be included in type just as suffix
     const regexGroup = VRCabinetDocumentName.regexGroups;
     return new RegExp(`(?<subject>.*)?[/-]${regexGroup.index}(?:[/-]${regexGroup.type})${regexGroup.versionSuffix}?$`);
   }
 
-  get regexTypeNumberConfidential() {
+  get regexTypeNumber() {
     const regexGroup = VRCabinetDocumentName.regexGroups;
-    // versionSuffex is probably not in the right location here, but realistically this is only used for first upload and version should never be present
+    // versionSuffix is included here, but realistically this is only used for first upload and version should never be present
     return new RegExp(`(?<subject>.*)(?:[/-]${regexGroup.type})[/-]${regexGroup.index}${regexGroup.versionSuffix}?$`);
   }
 
@@ -52,7 +51,7 @@ export default class VRCabinetDocumentName {
 
     let match = this.regexNumberType.exec(strippedName);
     if (!match || !match.groups.type) {
-      match = this.regexTypeNumberConfidential.exec(strippedName);
+      match = this.regexTypeNumber.exec(strippedName);
       if (!match || !match.groups.type) {
         return {
             subject: this.name,
