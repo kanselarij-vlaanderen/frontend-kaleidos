@@ -1385,5 +1385,7 @@
   "error-while-fetching-document-naming-mapping": "Er ging iets fout tijdens het berekenen van de VR nummers.",
   "no-document-naming-needed": "Er zijn geen nieuwe documenten om te nummeren voor deze agenda.",
   "error-while-sending-document-naming-mapping": "Er ging iets fout tijdens het toepassen van de VR nummers. Er is geen mapping beschikbaar",
-  "error-while-searching-document-naming-job": "Er is geen lopende VR nummering job gevonden."
+  "error-while-searching-document-naming-job": "Er is geen lopende VR nummering job gevonden.",
+  "error-while-stamping-document": "Er ging iets fout tijdens het stempelen van de documenten.",
+  "succes-stamping-documents": "De documenten zijn gestempeld."
 }
