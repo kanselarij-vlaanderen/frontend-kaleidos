@@ -8,7 +8,9 @@
   @submission={{@model}}
 />
 
-<Submission::Header />
+<Submission::Header
+  @submission={{@model}}
+/>
 
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-responsive-margin">
@@ -37,6 +39,7 @@
       @governmentAreas={{@model.governmentAreas}}
       @allowEditing={{this.mayEdit}}
       @subcase={{@model}}
+      @onSave={{this.saveGovernmentAreas}}
     />
 
     <div id="documents" class="auk-u-mb-4">
@@ -101,6 +104,31 @@
       </Auk::Panel>
     </div>
 
+    <div id="agenda">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  {{t "agenda-activities"}}
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-bg-alt">
+          <ul class="vlc-status-timeline">
+            {{#each this.statusChangeActivities as |activity|}}
+              <Submission::StatusChangeActivity
+                @activity={{activity}}
+                @beingTreatedByName={{@model.beingTreatedBy.fullName}}
+              />
+            {{/each}}
+          </ul>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
   </div>
 </div>
 

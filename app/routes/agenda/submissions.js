@@ -23,6 +23,7 @@ export default class AgendaSubmissionsRoute extends Route{
     const { meeting } = this.modelFor('agenda');
     const options = {
       'filter[meeting][:id:]': meeting.id,
+      'filter[:has-no:subcase]': true,
       include: 'type,status,mandatees.person,mandatees.person.organization,being-treated-by',
       sort: params.sort,
       page: {

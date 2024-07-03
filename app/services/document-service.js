@@ -102,4 +102,24 @@ export default class DocumentService extends Service {
       throw new Error('Could not find job for generating piece names');
     }
   };
+
+  async moveDraftFile(fileId) {
+    const response = await fetch(
+      `/draft-files/${fileId}/move`,
+      {
+        method: 'POST',
+        headers: { 'Accept': 'application/vnd.api+json' },
+      }
+    );
+    const json = await response.json();
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    if (json?.data?.id) {
+      const file = await this.store.findRecord('file', json.data.id);
+      return file;
+    } else {
+      throw new Error('Could not find moved file');
+    }
+  }
 }

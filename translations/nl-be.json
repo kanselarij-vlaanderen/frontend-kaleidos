@@ -1398,5 +1398,19 @@
   "date-put-on-agenda": "Datum agendering",
   "submission": "Indiening",
   "all-submissions": "Alle indieningen",
-  "take-in-treatment": "Neem in behandeling"
+  "take-in-treatment": "Neem in behandeling",
+  "create-subcase-and-put-on-agenda": "Maak procedurestap en agendeer",
+  "send-back-to-submitter": "Stuur terug naar indiener",
+  "delete-submission": "Verwijder indiening",
+  "this-submission-is-being-treated-by-user": "Deze indiening is in behandeling genomen door {user}",
+  "resubmit-submission": "Dien opnieuw in",
+  "submitted-on": "Ingediend op {date}",
+  "resubmitted-on": "Opnieuw ingediend op {date}",
+  "sent-back-on": "Teruggestuurd op {date}",
+  "in-treatment-by-user-on": "Behandeld door {user} op {date}",
+  "update-submitted-on": "Update ingediend op {date}",
+  "accepted-on": "Aanvaard op {date}",
+  "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
+  "submit-new-documents": "Dien nieuwe documenten in",
+  "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen?"
 }

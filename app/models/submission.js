@@ -1,12 +1,16 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class SubmissionModel extends Model {
+  @service currentSession;
+  @service store;
+
   @attr uri;
   @attr shortTitle;
   @attr title;
   @attr('boolean') confidential;
-  @attr subcaseName;
   @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
@@ -42,7 +46,7 @@ export default class SubmissionModel extends Model {
   statusChangeActivities;
   @hasMany('concept', { inverse: null, async: true })
   governmentAreas;
-  @hasMany('draft-piece', { inverse: null, async: true })
+  @hasMany('draft-piece', { inverse: 'submission', async: true })
   pieces;
 
   get isSubmitted() {
@@ -52,10 +56,49 @@ export default class SubmissionModel extends Model {
     );
   }
 
+  get isResubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND
+    )
+  }
+
+  get isInTreatment() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING
+    );
+  }
+
   get isSentBack() {
     return (
       this.status?.get('uri') ===
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD
     );
+  }
+
+  async updateStatus(statusUri, comment) {
+    const now = new Date();
+    const currentUser = this.currentSession.user;
+    const newStatus = await this.store.findRecordByUri('concept', statusUri);
+
+    const submissionStatusChange = this.store.createRecord(
+      'submission-status-change-activity',
+      {
+        startedAt: now,
+        comment,
+        submission: this,
+        status: newStatus,
+      }
+    );
+    await submissionStatusChange.save();
+
+    this.status = newStatus;
+    this.modified = now;
+    this.modifiedBy = currentUser;
+    const statusChangeActivities = await this.statusChangeActivities;
+    addObject(statusChangeActivities, submissionStatusChange);
+
+    await this.save();
   }
 }
