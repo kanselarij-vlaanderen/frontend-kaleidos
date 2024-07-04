@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -105,7 +105,7 @@ export default class AgendaitemControls extends Component {
   }
 
   get agendaItemWasSubmitted() {
-    return this.submissions?.length === 1;
+    return this.submissions?.length === 1 && isEnabledCabinetSubmissions();
   }
 
   get deleteWarningText() {
