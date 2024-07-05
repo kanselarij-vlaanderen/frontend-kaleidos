@@ -95,7 +95,8 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     const type = await findDocType(this.conceptStore, parsed.type);
 
     const now = new Date();
-    const confidential = this.model.subcase.confidential || false;
+    const confidential =
+      parsed.confidential || this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
       position: parsed.index,

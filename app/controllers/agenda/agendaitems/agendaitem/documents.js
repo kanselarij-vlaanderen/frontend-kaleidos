@@ -151,11 +151,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       position: parsed.index,
       type,
     });
+    const accessLevel = parsed.confidential
+      ? this.confidentialAccessLevel
+      : this.defaultAccessLevel;
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
+      file,
+      accessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
     });
