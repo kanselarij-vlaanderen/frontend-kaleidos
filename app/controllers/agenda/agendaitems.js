@@ -100,11 +100,10 @@ export default class AgendaAgendaitemsController extends Controller {
   *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsNumber(
       reorderedAgendaitems,
-      this.meeting,
+      this.agenda,
       this.store,
       this.decisionReportGeneration,
       true,
-      true
     ); // permissions guarded in template (and backend)
     this.notasHasChanged = false;
     this.announcementsHasChanged = false;
@@ -118,14 +117,19 @@ export default class AgendaAgendaitemsController extends Controller {
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
       yield animationFrame(); // Computationally heavy task. This keeps the interface alive
+      const agendaActivity = yield agendaitem.agendaActivity;
+      const subcase = yield agendaActivity?.subcase;
+      yield subcase?.type;
       if (
         currentAgendaitemGroup &&
-        (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
+        (yield currentAgendaitemGroup.itemBelongsToThisGroup(
+          agendaitem, subcase?.isBekrachtiging
+        ))
       ) {
         currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem);
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem, subcase?.isBekrachtiging);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }

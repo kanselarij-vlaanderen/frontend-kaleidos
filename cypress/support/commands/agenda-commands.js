@@ -102,6 +102,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumber) {
+    cy.wait(2000); // wait for datepicker change to trigger calculation of the next number before changing
     cy.get(agenda.editMeeting.meetingNumber).click()
       .clear()
       .type(meetingNumber);
@@ -399,7 +400,8 @@ function approveDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
-  cy.get(agenda.agendaCheck.confirm).click();
+  cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
+    .click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAgenda)
       .click();
@@ -435,7 +437,8 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
   cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
-  cy.get(agenda.agendaCheck.confirm).click();
+  cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
+    .click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();

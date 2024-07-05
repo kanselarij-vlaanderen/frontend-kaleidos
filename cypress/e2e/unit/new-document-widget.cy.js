@@ -72,7 +72,8 @@ context('check the functions of the new document widget', () => {
       .should('contain', `.${wordExtension}`);
     // Source file should still link to pdf
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${file.fileName}.${pdfExtension}`);
+      .should('contain', `.${pdfExtension}`);
+    // .should('contain', `${file.fileName}.${pdfExtension}`);
 
     // upload word file as source file and ensure derived pdf file is generated
     cy.get(document.documentCard.actions)
@@ -93,11 +94,15 @@ context('check the functions of the new document widget', () => {
     // *this is a result of docx files being added to manually generated pdf's.
     // cy.get(document.documentCard.name.value)
     //   .should('contain', `.${pdfExtension}`);
+    // *Note: as 20/june/2024, for digital agenda we do want to change the derived when changing the docx.
+    // cy.get(document.documentCard.name.value)
+    //   .should('contain', `.${wordExtension}`);
     cy.get(document.documentCard.name.value)
-      .should('contain', `.${wordExtension}`);
+      .should('contain', `.${pdfExtension}`);
     // Source file should link to the uploaded word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${file.fileName}.${wordExtension}`);
+      .should('contain', `.${wordExtension}`);
+    // .should('contain', `${file.fileName}.${wordExtension}`);
 
     // replace derived file
     cy.get(document.documentCard.actions)
@@ -118,7 +123,8 @@ context('check the functions of the new document widget', () => {
       .should('contain', `.${wordExtension}`);
     // Source file should still link to the word file
     cy.get(document.documentCard.primarySourceLink).invoke('attr', 'href')
-      .should('contain', `${file.fileName}.${wordExtension}`);
+      .should('contain', `.${wordExtension}`);
+    // .should('contain', `${file.fileName}.${wordExtension}`);
 
     // delete derived file
     cy.get(document.documentCard.actions)

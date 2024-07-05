@@ -760,12 +760,13 @@ context('Testing the application as Kort bestek user', () => {
       cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
       // overview header
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowPill);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist'); // no permission to manage
       cy.get(cases.subcaseOverviewHeader.optionsDropdown).should('not.exist');
       cy.get(cases.subcaseOverviewHeader.openAddSubcase).should('not.exist');
 
       // sidebar
-      // TODO KAS-4529 this has changed > approved should not show before decisions are released?
+      // * 16/03/24 this has changed > approved should not show before decisions are released?
       cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
 
       // subcase header
@@ -781,7 +782,7 @@ context('Testing the application as Kort bestek user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 
@@ -825,7 +826,7 @@ context('Testing the application as Kort bestek user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 

@@ -141,7 +141,7 @@
   padding: 0 1rem;
 
   color: $auk-color-text;
-  font-family: $g-base-font-family;
+  font-family: $au-font;
   font-size: 1.6rem;
   line-height: 3.5rem;
 
@@ -203,6 +203,10 @@
     // hide text node & re-apply correct color in the `&:before` selector
     color: transparent;
     font-size: 0;
+
+    &:before {
+      color: $auk-gray-600;
+    }
 
     &:not(:hover) {
       opacity: 1;

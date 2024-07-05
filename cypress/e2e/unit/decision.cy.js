@@ -207,6 +207,7 @@ context('Decision tests post digital agenda', () => {
 
     cy.get(appuniversum.loader).should('not.exist');
     cy.generateDecision();
+    cy.wait(3000); // does this fix flaky? check if commands needs more intercepts
 
     cy.openAgendaitemDossierTab(subcaseTitleShort1);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
@@ -582,7 +583,7 @@ context('Decision tests post digital agenda', () => {
     const agendaDate4 = Cypress.dayjs('2023-11-28').hour(10);
     const downloadPath = 'cypress/downloads';
     const fileName = 'VR PV 2023/101 - ALLE BESLISSINGEN.pdf'; // slash for actual name, dash for downloaded file
-    const downloadedFileName = 'VR PV 2023-101 - ALLE BESLISSINGEN.pdf';
+    const downloadedFileName = 'VR PV 2023_101 - ALLE BESLISSINGEN.pdf';
     const downloadDecisionPDF = `${downloadPath}/${downloadedFileName}`;
 
     cy.openAgendaForDate(agendaDate4);

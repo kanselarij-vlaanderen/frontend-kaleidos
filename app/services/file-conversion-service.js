@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import {
+  DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS,
   DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES,
 } from 'frontend-kaleidos/config/config';
 
@@ -8,12 +9,13 @@ export default class FileConversionService extends Service {
   @service store;
 
   async convertSourceFile(sourceFile) {
-    if (DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some((mimeType) => sourceFile.format.includes(mimeType))) {
+    if (
+      DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES.some(
+        (mimeType) => sourceFile.format.includes(mimeType)
+      )
+        && DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS.includes(sourceFile.extension)
+    ) {
       const oldDerivedFile = await sourceFile.derived;
-      if (oldDerivedFile) {
-        // if derived file exists we keep it. Generated PDF is not yet correct for users
-        return;
-      }
       const response = await fetch(`/files/${sourceFile.id}/convert`, {
         method: 'POST',
         headers: {

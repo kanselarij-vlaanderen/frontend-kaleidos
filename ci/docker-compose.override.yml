@@ -107,3 +107,6 @@ services:
     user: ${HOST_UID_GID}
   document-stamping:
     user: ${HOST_UID_GID}
+  agenda-approve:
+    environment:
+      SERVER_BUSY_TIMEOUT: 10
