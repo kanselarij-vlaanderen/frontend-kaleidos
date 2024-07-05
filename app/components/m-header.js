@@ -81,7 +81,7 @@ export default class MHeader extends Component {
   @task
   *loadRoles() {
     this.roles = yield this.store.queryAll('role', {
-      'filter[concept-scheme][:uri:]': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
+      'filter[concept-scheme]': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
       sort: 'position'
     });
   }
