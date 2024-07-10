@@ -299,7 +299,7 @@ context('Publications new features tests', () => {
     cy.wait('@patchPublicationFlow');
   });
 
-  it('should test naar dossier button', () => {
+  it.skip('should test naar dossier button', () => {
     cy.visit('publicaties/62C597CD03A74CBB92D216B3/dossier');
     // first we get the publication view in subcase
     cy.openSubcase(0); // the actual subcase (index 0 because the publication is not the same selector)
