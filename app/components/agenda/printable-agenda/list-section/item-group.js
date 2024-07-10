@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency';
 
 export default class AgendaPrintableAgendaListSectionItemGroupComponent extends Component {
 
-  @tracked isBekrachtiging
+  @tracked isBekrachtiging;
 
   constructor() {
     super(...arguments);
@@ -21,6 +21,22 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
     yield subcase?.type;
     this.isBekrachtiging = subcase?.isBekrachtiging;
   }
+
+  getPiecesForAgendaitem = async (agendaitem) => {
+    let pieces = await agendaitem.pieces;
+    pieces = pieces?.slice();
+    const agendaActivity = await agendaitem.agendaActivity;
+    await agendaActivity?.subcase;
+    // TODO fix in KAS-4671, ratification was first document in agenda check
+    // const subcase = await agendaActivity?.subcase;
+    // if (this.isBekrachtiging) {
+    //   const ratification = await subcase?.ratification;
+    //   if (ratification) {
+    //     pieces.push(ratification);
+    //   }
+    // }
+    return pieces;
+  };
 
   @use sortedMandateesFromFirst = resource(() => {
     const sortedMandatees = new TrackedArray([]);
