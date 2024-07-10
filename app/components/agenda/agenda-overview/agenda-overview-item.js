@@ -34,6 +34,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked decisionActivity;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
+  @tracked isEditingFormallyOk = false;
 
   constructor() {
     super(...arguments);
@@ -125,6 +126,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     }
   }
 
+
   @action
   cancelLazyLoad() {
     this.lazyLoadSideData.cancelAll();
@@ -148,5 +150,10 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       this.args.agendaitem.rollbackAttributes();
       this.toaster.error();
     }
+  }
+
+  @action
+  toggleIsEditingFormallyOk() {
+    this.isEditingFormallyOk = !this.isEditingFormallyOk;
   }
 }
