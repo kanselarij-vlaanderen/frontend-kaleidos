@@ -485,6 +485,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       this.args.decisionActivity.decisionResultCode = decisionResultCode;
     }
 
+    // double check the name is still correct to manually fix concurrency issues with naming
+    const pieces = await documentContainer.pieces;
+    const newName = await generateReportName(
+      this.args.agendaitem,
+      this.args.agendaContext.meeting,
+      pieces.length,
+    );
+    report.name = newName;
+
     await documentContainer.save();
     await report.belongsTo('file').reload();
     await report.save();

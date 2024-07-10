@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { debounce } from '@ember/runloop';
+import sanitize from 'sanitize-filename';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
   /**
@@ -24,6 +25,23 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
 
     window.addEventListener('resize', () => debounce(this, this.updateSidebarVisibility, 150));
     this.updateSidebarVisibility();
+  }
+
+  // piece or file downloadlinks for not suitable for switch between source and derived
+  // we want the piece name + the correct file download
+  get downloadLink() {
+    const filename = `${this.selectedVersion.name}.${this.file.extension}`;
+    const downloadFilename = sanitize(filename, {
+      replacement: '_',
+    });
+    return `${this.file.downloadLink}?name=${encodeURIComponent(
+      downloadFilename
+    )}`;
+  }
+
+  get inlineViewLink() {
+    // only shown in pdf reader if extension is pdf, but always calculated.
+    return `${this.downloadLink}&content-disposition=inline`;
   }
 
   @action

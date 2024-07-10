@@ -4,6 +4,7 @@ import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { inject as service } from '@ember/service';
 
 /**
  * @argument onSave
@@ -11,6 +12,8 @@ import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
  */
 
 export default class AgendaHeaderAgendaCheck extends Component {
+  @service toaster;
+  @service intl;
 
   getAgendaitems = task(async () => {
     const notas = [];
@@ -34,13 +37,25 @@ export default class AgendaHeaderAgendaCheck extends Component {
   agendaitems = trackedTask(this, this.getAgendaitems);
 
   getFileNameMappings = task(async () => {
-    const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
-    const mappings = await res.json();
-    const mappingsMap = new Map(
-      mappings.map(({ uri, generatedName }) => [uri, generatedName])
-    );
-
-    return mappingsMap;
+    try {
+      const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
+      const mappings = await res.json();
+      // if service threw an error for some reason
+      if (mappings.error) {
+        throw new Error(mappings.error);
+      }
+      const mappingsMap = new Map(
+        mappings.map(({ uri, generatedName }) => [uri, generatedName])
+      );
+      return mappingsMap;
+    } catch (error) {
+      // if service did not respond or self thrown errors
+      this.toaster.error(
+        error?.message || '',
+        this.intl.t('error-while-fetching-document-naming-mapping')
+      );
+      return;
+    }
   });
 
   fileNameMappings = trackedTask(this, this.getFileNameMappings);

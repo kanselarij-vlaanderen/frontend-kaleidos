@@ -13,6 +13,7 @@ export default class FormallyOkPill extends Component {
 
   loadFormallyOk() {
     const formallyOkOptions = CONFIG.formallyOkOptions;
-    this.selectedFormallyOkOption = this.args.formallyOk ? this.args.formallyOk : formallyOkOptions.find((formallyOkOption) => formallyOkOption.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+    const defaultOption = formallyOkOptions.find((option) => option.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+    this.selectedFormallyOkOption = this.args.formallyOk ? this.args.formallyOk : defaultOption;
   }
 }
