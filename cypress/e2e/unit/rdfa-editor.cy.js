@@ -8,7 +8,7 @@ import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
-// import utils from '../../selectors/utils.selectors';
+import utils from '../../selectors/utils.selectors';
 
 // TODO-command
 function pressRdfaButton(buttonName) {
@@ -207,33 +207,84 @@ context('rdfa editor tests', () => {
     checkCSS('@searchResultContent');
   });
 
-  it.only('should test the fullscreen mode', () => {
-    // in minutes
+  context('should test the fullscreen mode', () => {
+    it('should test the minutes fullscreen mode covers buttons', (done) => {
+      cy.visitAgendaWithLink('/vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/notulen');
+      cy.get(route.agendaMinutes.createEdit).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('be.visible');
+      cy.get(agenda.agendaActions.optionsDropdown).should('be.visible');
+      cy.get(auk.expand).scrollIntoView()
+        .click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown).shouldNotBeActionable(done);
+      // no further testing possible
+    });
 
-    cy.visitAgendaWithLink('/vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/notulen');
-    cy.get(route.agendaMinutes.createEdit).click();
-    cy.get(agenda.agendaVersionActions.optionsDropdown).should('be.visible');
-    cy.get(agenda.agendaActions.optionsDropdown).should('be.visible');
+    it('should test the minutes fullscreen mode covers m-header', (done) => {
+      cy.visitAgendaWithLink('/vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/notulen');
+      cy.get(route.agendaMinutes.createEdit).click();
+      cy.get(utils.mHeader.search).should('be.visible');
+      cy.get(auk.expand).scrollIntoView()
+        .click();
+      cy.get(utils.mHeader.search).shouldNotBeActionable(done);
+      // no further testing possible
+    });
 
-    // in zebra view
-    cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
-    cy.get(newsletter.buttonToolbar.edit).eq(0)
-      .click();
-    cy.get(newsletter.editItem.save).scrollIntoView()
-      .should('be.visible');
-    cy.get(newsletter.editItem.cancel).scrollIntoView()
-      .should('be.visible');
-    cy.get(auk.expand).scrollIntoView()
-      .click();
-    cy.get(newsletter.editItem.save).eq(0)
-      .scrollIntoView()
-      .should('be.visible');
-    cy.get(newsletter.editItem.cancel).scrollIntoView()
-      .should('not.be.visible');
-    cy.get(auk.minimize).click();
-    cy.get(newsletter.editItem.save).scrollIntoView()
-      .should('be.visible');
-    cy.get(newsletter.editItem.cancel).scrollIntoView()
-      .should('be.visible');
+    it('should test the minutes fullscreen mode', () => {
+      cy.visitAgendaWithLink('/vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/notulen');
+      cy.get(route.agendaMinutes.createEdit).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown).should('be.visible');
+      cy.get(agenda.agendaActions.optionsDropdown).should('be.visible');
+      cy.get(auk.expand).click();
+      // any tests here?
+      cy.get(auk.minimize).click();
+      cy.get(agenda.agendaVersionActions.optionsDropdown).click();
+      cy.get(agenda.agendaActions.optionsDropdown).click();
+    });
+
+    it('should test the zebra view fullscreen mode covers buttons', (done) => {
+      // in zebra view
+      cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).should('be.visible');
+      cy.get(newsletter.buttonToolbar.edit).eq(0)
+        .click();
+      cy.get(auk.expand).scrollIntoView()
+        .click();
+      cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).scrollIntoView()
+        .shouldNotBeActionable(done);
+      // no further testing possible
+    });
+
+    it('should test the zebra view fullscreen mode covers m-header', (done) => {
+      // in zebra view
+      cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');+
+      cy.get(utils.mHeader.search).should('be.visible');
+      cy.get(newsletter.buttonToolbar.edit).eq(0)
+        .click();
+      cy.get(newsletter.editItem.save).scrollIntoView()
+        .should('be.visible');
+      cy.get(newsletter.editItem.cancel).should('be.visible');
+      cy.get(auk.expand).scrollIntoView()
+        .click();
+      cy.get(utils.mHeader.search).shouldNotBeActionable(done);
+      // no further testing possible
+    });
+
+
+    it('should test the zebra view fullscreen mode has a different save button', () => {
+      // in zebra view
+      cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+      cy.get(newsletter.editItem.saveFullscreen).should('not.exist');
+      cy.get(newsletter.buttonToolbar.edit).eq(0)
+        .click();
+      cy.get(auk.expand).scrollIntoView()
+        .click();
+      cy.get(newsletter.editItem.saveFullscreen).should('be.visible');
+      cy.get(newsletter.editItem.save).should('not.be.visible'); // because of scrolling, not because of covering
+      cy.get(auk.minimize).click();
+      cy.get(newsletter.editItem.saveFullscreen).should('not.exist');
+      cy.get(newsletter.editItem.save).scrollIntoView()
+        .should('be.visible');
+      cy.get(newsletter.editItem.cancel).should('be.visible');
+    });
   });
 });
