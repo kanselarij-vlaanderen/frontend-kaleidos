@@ -315,12 +315,24 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const newBetreftContent = await generateBetreft(shortTitle,
-      title,
-      this.args.agendaitem.isApproval,
-      documents,
-      subcase?.subcaseName
-    );
+    let newBetreftContent;
+    if (subcase?.isBekrachtiging) {
+      const ratification = await subcase.ratification;
+      newBetreftContent = await generateBetreft(
+        subcase.shortTitle,
+        null,
+        this.args.agendaitem.isApproval,
+        ratification ? [...documents, ratification] : documents,
+      );
+    } else {
+      newBetreftContent = await generateBetreft(
+        shortTitle,
+        title,
+        this.args.agendaitem.isApproval,
+        documents,
+        subcase?.subcaseName
+      );
+    }
     if (newBetreftContent) {
       this.setBetreftEditorContent(
         `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
@@ -356,6 +368,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
+    const agendaActivity = await this.args.agendaContext.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
@@ -364,7 +378,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        if (this.args.agendaitem.isApproval) {
+        if (subcase?.isBekrachtiging) {
+          newBeslissingHtmlContent = "De Vlaamse Regering bekrachtigt bovengenoemd decreet en beslist over te gaan tot de afkondiging ervan.";
+        } else if (this.args.agendaitem.isApproval) {
           const { shortTitle, title } = this.args.agendaContext.agendaitem;
           let beslissing = title || shortTitle || '';
           beslissing = beslissing.replace(
