@@ -302,6 +302,9 @@ context('Publications new features tests', () => {
   it('should test naar dossier button', () => {
     cy.visit('publicaties/62C597CD03A74CBB92D216B3/dossier');
     cy.get(publication.inscription.view.toSubcase).click();
+    // first we get the publication view in subcase
+    cy.url().should('contain', 'dossiers/E1503C64-3347-11ED-B8A0-F82C0F9DE1CF/publicatie/62C597CD03A74CBB92D216B3');
+    cy.openSubcase(0); // the actual subcase (index 0 because the publication is not the same selector)
     cy.url().should('contain', 'dossiers/E1503C64-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
   });
 });

@@ -11,6 +11,7 @@ export default class JobModel extends Model {
   @attr('string') status;
   @attr('datetime') timeStarted;
   @attr('datetime') timeEnded;
+  @attr('string') message;
 
   get hasEnded() {
     return this.status === this.SUCCESS || this.status === this.FAILED;

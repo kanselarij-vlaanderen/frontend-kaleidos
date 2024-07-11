@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 export default class DocumentService extends Service {
   @service jobMonitor;
@@ -45,10 +46,7 @@ export default class DocumentService extends Service {
           const stampingToaster = this.toaster.loading(data.message, null, {
             timeOut: 60000,
           });
-          await this.jobMonitor.register(stampingJob);
-          setTimeout(() => {
-            this.toaster.close(stampingToaster);    
-          }, 2000);
+          await this.handleStampingErrors(stampingJob, stampingToaster);
         } else {
           this.toaster.warning(data.message, null, {
             timeOut: 5000,
@@ -73,10 +71,7 @@ export default class DocumentService extends Service {
           const stampingToaster = this.toaster.loading(data.message, null, {
             timeOut: 60000,
           });
-          await this.jobMonitor.register(stampingJob);
-          setTimeout(() => {
-            this.toaster.close(stampingToaster);    
-          }, 2000);
+          await this.handleStampingErrors(stampingJob, stampingToaster);
         } else {
           this.toaster.warning(data.message, null, {
             timeOut: 5000,
@@ -136,4 +131,27 @@ export default class DocumentService extends Service {
       throw new Error(this.intl.t('error-while-searching-document-naming-job'));
     }
   };
+
+  async handleStampingErrors(job, toasterToClose) {
+    await this.jobMonitor.register(job, async (job) => {
+      setTimeout(() => {
+        this.toaster.close(toasterToClose);    
+      }, 2000);
+      if (job.status === job.SUCCESS) {
+        this.toaster.success(
+          this.intl.t('succes-stamping-documents'),
+        );
+      } else {
+        this.toaster.show(CopyErrorToClipboardToast, {
+          title: this.intl.t('warning-title'),
+          message: this.intl.t('error-while-stamping-document'),
+          errorContent: job.message,
+          showDatetime: true,
+          options: {
+            timeOut: 60 * 10 * 1000,
+          },
+        });
+      }
+    });
+  }
 }
