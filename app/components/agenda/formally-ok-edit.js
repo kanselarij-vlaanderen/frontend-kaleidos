@@ -7,18 +7,19 @@ import { task } from 'ember-concurrency';
 
 export default class AgendaFormallyOkEdit extends Component {
   /**
-   * @argument formallyOkStatusUri: TODO: change to ember object
+   * @argument formallyOkStatusUri
    * @argument onChange
+   * @argument onSave
    */
 
   formallyOkOptions;
-  @tracked defaultFormallyOkOption;
   @tracked selectedFormallyOkOption;
 
   constructor() {
     super(...arguments);
     this.formallyOkOptions = CONFIG.formallyOkOptions;
-    this.selectedFormallyOkOption = this.formallyOkStatus || this.formallyOkOptions.find((formallyOkOption) => formallyOkOption.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+    const defaultOption = this.formallyOkOptions.find((option) => option.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+    this.selectedFormallyOkOption = this.formallyOkStatus || defaultOption;
   }
 
   get formallyOkStatus() {

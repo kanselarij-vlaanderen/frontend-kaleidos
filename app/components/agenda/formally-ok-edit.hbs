@@ -9,6 +9,7 @@
     </div>
   {{/if}}
   <PowerSelect
+    data-test-formally-ok-edit-selector
     @options={{this.formallyOkOptions}}
     @selected={{this.selectedFormallyOkOption}}
     @onChange={{this.onChange}}
@@ -20,6 +21,7 @@
     {{option.label}}
   </PowerSelect>
   <AuButton
+    data-test-formally-ok-edit-save
     @skin="naked"
     @icon="check"
     @hideText={{true}}
@@ -30,6 +32,7 @@
     {{t "save"}}
   </AuButton>
   <AuButton
+    data-test-formally-ok-edit-cancel
     @skin="naked"
     @icon="x"
     @hideText={{true}}

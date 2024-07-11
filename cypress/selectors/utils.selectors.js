@@ -86,6 +86,17 @@ const selectors = {
     confirm: '[data-test-alert-dialog-confirm]',
   },
 
+  formallyOkPill: {
+    pill: '[data-test-formally-ok-pill]',
+  },
+
+  formallyOkEdit: {
+    selector: '[data-test-formally-ok-edit-selector]',
+    // unused selectors, we would start changing commands to use these now and make new tests
+    save: '[data-test-formally-ok-edit-save]',
+    cancel: '[data-test-formally-ok-edit-cancel]',
+  },
+
   /** Section VL-components **/
 
   // vl-modal-verify
