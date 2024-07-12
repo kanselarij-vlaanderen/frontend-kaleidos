@@ -2,10 +2,12 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 
 export default class CasesSubmissionsIndexRoute extends Route {
   @service currentSession;
+  @service conceptStore;
   @service store;
 
   queryParams = {
@@ -31,20 +33,36 @@ export default class CasesSubmissionsIndexRoute extends Route {
     },
     submitters: {
       refreshModel: true,
-      as: 'indieners'
+      as: 'indieners',
     },
   };
 
-  model(params) {
+  async model(params) {
+    const statusIds = (
+      await this.conceptStore.queryAllByConceptScheme(
+        CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
+      )
+    )
+      .filter((status) =>
+        [
+          CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
+          CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING,
+          CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
+          CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
+          CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND,
+        ].includes(status.uri)
+      )
+      .map((status) => status.id);
+
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      'filter[:has-no:subcase]': true,
+      'filter[status][:id:]': statusIds.join(','),
       include: 'type,status,requested-by,mandatees.person,being-treated-by',
       sort: params.sort,
       page: {
         number: params.page,
         size: params.size,
-      }
+      },
     };
 
     if (isPresent(params.dateFrom)) {
@@ -57,16 +75,13 @@ export default class CasesSubmissionsIndexRoute extends Route {
     }
 
     if (isPresent(params.submitters)) {
-      options[
-        'filter[requested-by][person][:id:]'
-      ] = params.submitters.join(',');
+      options['filter[requested-by][person][:id:]'] =
+        params.submitters.join(',');
     }
 
-
     if (!this.currentSession.may('view-all-submissions')) {
-      options[
-        'filter[mandatees][user-organizations][:id:]'
-      ] = this.currentSession.organization.id;
+      options['filter[mandatees][user-organizations][:id:]'] =
+        this.currentSession.organization.id;
     }
 
     return this.store.query('submission', options);

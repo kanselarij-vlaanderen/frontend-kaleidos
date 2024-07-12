@@ -1,6 +1,8 @@
-<Subcases::SubcasesOverviewHeader
-  @decisionmakingFlow={{@model.decisionmakingFlow}}
-/>
+{{#unless this.isAddingSubmissionToExistingSubcase}}
+  <Subcases::SubcasesOverviewHeader
+    @decisionmakingFlow={{@model.decisionmakingFlow}}
+  />
+{{/unless}}
 {{#if this.isAddingSubmission}}
   {{outlet}}
 {{else}}

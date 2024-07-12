@@ -1,12 +1,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
   @service router;
   @service store;
 
+  newPieces;
   pieces;
   mandatees;
   statusChangeActivities;
@@ -48,16 +51,73 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
 
-    const pieces = await submission.pieces;
-    await Promise.all(
-      pieces.map(async (piece) => await piece.documentContainer)
-    );
-    this.pieces = pieces.slice().sort((p1, p2) => {
-      const d1 = p1.belongsTo('documentContainer').value();
-      const d2 = p2.belongsTo('documentContainer').value();
+    const newPieces = await submission.pieces;
+    let pieces = [];
+    const subcase = await submission.subcase;
+    if (subcase) {
+      const submissionActivitiesWithoutActivity = await this.store.query(
+        'submission-activity',
+        {
+          'filter[subcase][:id:]': subcase.id,
+          'filter[:has-no:agenda-activity]': true,
+          include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+        }
+      );
+      let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
+      // Get the submission from latest meeting if applicable
+      const agendaActivities = await subcase.agendaActivities;
+      const latestActivity = agendaActivities
+        .slice()
+        .sort((a1, a2) => a1.startDate - a2.startDate)
+        .at(-1);
+      if (latestActivity) {
+        this.latestMeeting = await this.store.queryOne('meeting', {
+          'filter[agendas][agendaitems][agenda-activity][:id:]':
+            latestActivity.id,
+          sort: '-planned-start',
+        });
+        const submissionActivitiesFromLatestMeeting = await this.store.query(
+          'submission-activity',
+          {
+            'filter[subcase][:id:]': subcase.id,
+            'filter[agenda-activity][:id:]': latestActivity.id,
+            include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
+          }
+        );
+        addObjects(
+          submissionActivities,
+          submissionActivitiesFromLatestMeeting.slice()
+        );
+      }
 
-      return d1?.position - d2?.position || p1.created - p2.created;
-    });
+      for (const submissionActivity of submissionActivities.slice()) {
+        let submissionPieces = await submissionActivity.pieces;
+        submissionPieces = submissionPieces.slice();
+        pieces.push(...submissionPieces);
+      }
+
+      for (const piece of newPieces) {
+        const previousPiece = await piece.previousPiece;
+        if (previousPiece && previousPiece.constructor.name === 'Piece') {
+          for (let i = 0; i < pieces.length; i++) {
+            if (pieces[i].id === previousPiece.id) {
+              pieces[i] = piece;
+            }
+          }
+          // const index = pieces.indexOf((p) => p.id === previousPiece.id);
+          // if (index >= 0) {
+          //   pieces[index] = piece;
+          // }
+        } else {
+          pieces.push(piece);
+        }
+      }
+    } else {
+      pieces = newPieces.slice();
+    }
+
+    this.pieces = await sortPieces(pieces);
+    this.highlightedPieces = newPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
@@ -79,6 +139,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
+    controller.highlightedPieces = this.highlightedPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.defaultAccessLevel = this.defaultAccessLevel

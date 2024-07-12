@@ -1,23 +1,35 @@
-<div class="auk-scroll-wrapper__body">
-  <Subcase::Detail::Regular
-    @subcase={{@model.subcase}}
-    @case={{@model._case}}
-    @pieces={{@model.pieces}}
-    @meeting={{this.meeting}}
-    @mandatees={{this.mandatees}}
-    @submitter={{this.submitter}}
-    @saveMandateeData={{this.saveMandateeData}}
-    @agenda={{this.agenda}}
-    @saveGovernmentAreas={{this.saveGovernmentAreas}}
-    @documentsAreVisible={{this.documentsAreVisible}}
-    @addPiece={{this.addPiece}}
-    @refresh={{this.refresh}}
-    @openPieceUploadModal={{this.openPieceUploadModal}}
-    @isOpenPieceUploadModal={{this.isOpenPieceUploadModal}}
-    @savePieces={{this.savePieces}}
-    @cancelUploadPieces={{this.cancelUploadPieces}}
-    @newPieces={{this.sortedNewPieces}}
-    @uploadPiece={{this.uploadPiece}}
-    @deletePiece={{this.deletePiece}}
-  />
+<div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
+  <div class="auk-scroll-wrapper">
+    <div class="auk-u-bg-alt">
+      <Subcases::SubcaseHeader
+        @subcase={{@model.subcase}}
+        @parliamentFlow={{@model.parliamentFlow}}
+        @onMoveSubcase={{this.refreshSubcases}}
+        @onProposedForAgenda={{this.refreshSubcases}}
+      />
+    </div>
+    <div class="auk-scroll-wrapper__body">
+      <Subcase::Detail::Regular
+        @subcase={{@model.subcase}}
+        @case={{@model._case}}
+        @pieces={{@model.pieces}}
+        @meeting={{this.meeting}}
+        @mandatees={{this.mandatees}}
+        @submitter={{this.submitter}}
+        @saveMandateeData={{this.saveMandateeData}}
+        @agenda={{this.agenda}}
+        @saveGovernmentAreas={{this.saveGovernmentAreas}}
+        @documentsAreVisible={{this.documentsAreVisible}}
+        @addPiece={{this.addPiece}}
+        @refresh={{this.refresh}}
+        @openPieceUploadModal={{this.openPieceUploadModal}}
+        @isOpenPieceUploadModal={{this.isOpenPieceUploadModal}}
+        @savePieces={{this.savePieces}}
+        @cancelUploadPieces={{this.cancelUploadPieces}}
+        @newPieces={{this.sortedNewPieces}}
+        @uploadPiece={{this.uploadPiece}}
+        @deletePiece={{this.deletePiece}}
+      />
+    </div>
+  </div>
 </div>

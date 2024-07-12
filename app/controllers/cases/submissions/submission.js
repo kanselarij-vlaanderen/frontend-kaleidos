@@ -23,6 +23,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
+  @tracked highlightedPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
 
   statusChangeActivities;
@@ -107,6 +108,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       submission: this.model,
     });
     this.newPieces.push(piece);
+    this.highlightedPieces.push(piece);
   }
 
   savePieces = task(async () => {
