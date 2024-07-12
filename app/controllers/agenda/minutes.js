@@ -114,13 +114,16 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   );
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
+  const agendaitemType = await agendaitem.type;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
   const betreft = await generateBetreft(
     agendaitem.shortTitle,
     agendaitem.title,
     agendaitem.isApproval,
     sortedPieces,
-    subcase?.subcaseName);
+    subcase?.subcaseName,
+    agendaitemType,
+  );
   return `
   <h4 ${pagebreak}><u>${
     agendaitem.number
