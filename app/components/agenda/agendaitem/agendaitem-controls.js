@@ -38,7 +38,7 @@ export default class AgendaitemControls extends Component {
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
     this.loadCanSendToVP.perform();
-    this.loadSubmissionDate.perform();
+    this.loadSubmissions.perform();
   }
 
   loadCanSendToVP = task(async () => {
@@ -132,7 +132,7 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *loadSubmissionDate() {
+  *loadSubmissions() {
     this.submissions = yield this.args.subcase?.submissions;
   }
 

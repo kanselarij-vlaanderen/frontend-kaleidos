@@ -14,7 +14,7 @@
 
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-responsive-margin">
-    <div id="case" class="auk-u-mb-4">
+    <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
         @mayEdit={{this.mayEdit}}
@@ -170,5 +170,6 @@
     @onCancel={{toggle "isOpenBatchDetailsModal" this}}
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
+    @allowEditing={{this.mayEdit}}
   />
 {{/if}}

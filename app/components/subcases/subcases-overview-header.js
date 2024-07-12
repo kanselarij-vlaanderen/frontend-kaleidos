@@ -8,6 +8,7 @@ import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-fla
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
   @service router;
+  @service store;
 
   @tracked case;
   @tracked showEditCaseModal = false;
@@ -17,10 +18,20 @@ export default class SubCasesOverviewHeader extends Component {
   constructor() {
     super(...arguments);
     this.loadData.perform();
+    this.loadLinkedMandatees.perform();
   }
 
+  loadLinkedMandatees = task(async () => {
+    this.linkedMandatees = await this.store.queryAll('mandatee', {
+      'filter[user-organizations][:id:]': this.currentSession.organization.id,
+      'filter[:has-no:end]': true,
+      include: 'mandate.role',
+      sort: 'start',
+    });
+  });
+
   get mayCreateSubmissions() {
-    return this.currentSession.may('create-submissions') && isEnabledCabinetSubmissions();
+    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
   }
 
   @task

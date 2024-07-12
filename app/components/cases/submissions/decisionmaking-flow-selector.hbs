@@ -1,5 +1,5 @@
 <AuFormRow ...attributes>
-  <AuLabel>{{capitalize (t "case")}}</AuLabel>
+  <AuLabel @required={{true}} @inline={{true}}>{{capitalize (t "case")}}</AuLabel>
   <PowerSelect
     @disabled={{@disableEdit}}
     @search={{perform this.searchDecisionmakingFlows}}

@@ -1,6 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
-import { isEnabledCabinetSubmissions } from './utils/feature-flag';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -30,7 +30,9 @@ Router.map(function() {
     });
     this.route('documents', { path: '/documenten', });
     this.route('minutes', { path: '/notulen', });
-    this.route('submissions', { path: '/indieningen', });
+    if (isEnabledCabinetSubmissions()) {
+      this.route('submissions', { path: '/indieningen', });
+    }
   });
 
   this.route('cases', { path: '/dossiers', }, function() {

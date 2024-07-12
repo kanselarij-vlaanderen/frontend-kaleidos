@@ -51,7 +51,14 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get isAccessLevelEnabled() {
+    // TODO not fully sure why we shouldn't show the access level? I would want to make sure my confidential file is marked as such..
+    // or edit mistakes, maybe don't allow cabinet to edit 'intern-secretarie'
+    // it is visible just fine in documents route either way
     return !this.hasDraftPieces;
+  }
+
+  get isEditingEnabled() {
+    return this.args.allowEditing || this.currentSession.may('manage-documents');
   }
 
   @task

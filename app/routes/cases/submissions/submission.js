@@ -62,7 +62,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
       .slice()
-      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime());
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
+      .reverse();
     await Promise.all(this.statusChangeActivities.map((a) => a.status));
 
     this.defaultAccessLevel = await this.store.findRecordByUri(
@@ -81,6 +82,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.pieces = this.pieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
-    controller.defaultAccessLevel = this.defaultAccessLevel
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 }
