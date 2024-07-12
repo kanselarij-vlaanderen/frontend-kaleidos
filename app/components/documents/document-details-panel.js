@@ -115,6 +115,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *saveDetails() {
+    // This is to avoid concurrency issues where the piece
+    // might have changed already
+    try {
+      const oldPiece = yield this.args.piece;
+      yield oldPiece.save();
+    } catch (e) {
+      return;
+    }
     const signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
     if (signMarkingActivity) {
       const signSubcase = yield signMarkingActivity?.signSubcase;
