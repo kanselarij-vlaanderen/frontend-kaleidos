@@ -20,6 +20,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @service toaster;
   @service fileConversionService;
   @service intl;
+  @service currentSession;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
@@ -138,7 +139,7 @@ export default class CasesNewSubmissionComponent extends Component {
       this.decisionmakingFlowTitle ??
       _case?.shortTitle ??
       '';
-
+    const creator = await this.currentSession.user;
     this.submission = this.store.createRecord('submission', {
       created: now,
       modified: now,
@@ -148,6 +149,7 @@ export default class CasesNewSubmissionComponent extends Component {
       type: this.type,
       agendaItemType: this.agendaItemType,
       decisionmakingFlow: this.selectedDecisionmakingFlow,
+      creator: creator,
       approvedBy: this.notificationAddresses,
       approvalComment: trimText(this.notificationMessage),
       notified: this.CCAddresses,
