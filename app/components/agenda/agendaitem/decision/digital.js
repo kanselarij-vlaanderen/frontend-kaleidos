@@ -315,11 +315,14 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const newBetreftContent = await generateBetreft(shortTitle,
+    const agendaitemType = await this.args.agendaitem.type;
+    const newBetreftContent = await generateBetreft(
+      shortTitle,
       title,
       this.args.agendaitem.isApproval,
       documents,
-      subcase?.subcaseName
+      subcase?.subcaseName,
+      agendaitemType,
     );
     if (newBetreftContent) {
       this.setBetreftEditorContent(
@@ -484,6 +487,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       );
       this.args.decisionActivity.decisionResultCode = decisionResultCode;
     }
+
+    // double check the name is still correct to manually fix concurrency issues with naming
+    const pieces = await documentContainer.pieces;
+    const newName = await generateReportName(
+      this.args.agendaitem,
+      this.args.agendaContext.meeting,
+      pieces.length,
+    );
+    report.name = newName;
 
     await documentContainer.save();
     await report.belongsTo('file').reload();
