@@ -53,12 +53,11 @@
               <Utils::ModelSelector
                 @modelName="subcase-type"
                 @sortField="label"
+                @displayField="label"
                 @selected={{this.type}}
                 @onChange={{fn (mut this.type)}}
                 @filterOptions={{this.filterSubcaseTypes}}
-                as |model|>
-                {{capitalize model.label}}
-              </Utils::ModelSelector>
+              />
             </div>
           </Utils::LoadableContent>
         </Auk::Panel::Body>
