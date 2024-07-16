@@ -10,7 +10,7 @@
         <thead>
           <tr>
             <th></th>
-            {{#if (user-may "manage-documents")}}
+            {{#if this.isEditingEnabled}}
               <th class="auk-table-checkbox-col">
                 <AuCheckbox
                   data-test-batch-documents-details-select-all
@@ -22,10 +22,10 @@
             <th></th>
             <th>{{t "name-document"}}</th>
             <th>{{t "document-type"}}</th>
-            {{#if (user-may "manage-documents")}}
-            {{#if this.isAccessLevelEnabled}}
-              <th>{{t "publicity"}}</th>
-            {{/if}}
+            {{#if this.isEditingEnabled}}
+              {{#if this.isAccessLevelEnabled}}
+                <th>{{t "publicity"}}</th>
+              {{/if}}
               {{#if this.isSignaturesEnabled}}
                 {{#if @decisionActivity}}
                   <th>{{t "signature"}}</th>
@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody {{sortable-group onChange=this.onReorderPieces}}>
-          {{#if (user-may "manage-documents")}}
+          {{#if this.isEditingEnabled}}
             <Documents::BatchDetails::BatchEditingRow
               @selectedRows={{this.selectedRows}}
               @decisionActivity={{@decisionActivity}}
@@ -51,7 +51,7 @@
           {{#each this.reorderableRows as |row|}}
             <Documents::BatchDetails::DocumentDetailsRow
               @row={{row}}
-              @isEditingEnabled={{user-may "manage-documents"}}
+              @isEditingEnabled={{this.isEditingEnabled}}
               @isAccessLevelEnabled={{this.isAccessLevelEnabled}}
               @isSelected={{includes row this.selectedRows}}
               @onSelect={{this.toggleSelection}}
@@ -64,7 +64,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}} @cancelDisabled={{this.save.isRunning}}>
-    {{#if (user-may "manage-documents")}}
+    {{#if this.isEditingEnabled}}
       <AuButton
         data-test-batch-documents-details-save
         @skin="primary"

@@ -44,6 +44,8 @@ export default class MandateeSelectorPanel extends Component {
   @action
   async onChangeSelectedCurrentMinisters(selected) {
     let selectedMandatees = [];
+    // if disableMinisterCheckbox is true, unchecking all would also remove our mandatory option
+    // checkboxTree now has an param for a mandatory option to always persist
     selected.forEach((selectedMinister) => {
       const mandatee = this.currentMandatees.find(
         (currentMandatee) =>
@@ -73,6 +75,9 @@ export default class MandateeSelectorPanel extends Component {
         )) ||
       (!this.submitterMandatee && this.selectedAllMandatees.length)
     ) {
+      if (this.args.disableMinisterCheckbox) {
+        return; // submitter should not be unset or set
+      }
       this.submitterMandatee = this.selectedAllMandatees[0];
       if (this.showSubmitter) {
         this.args.setSubmitter(this.submitterMandatee);

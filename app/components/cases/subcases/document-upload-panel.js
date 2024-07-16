@@ -7,7 +7,7 @@ import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class DocumentUploadPlanel extends Component {
   @service store;
-  @service conceptStore
+  @service conceptStore;
 
   @action
   async uploadPiece(file) {

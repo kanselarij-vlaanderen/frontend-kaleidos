@@ -36,10 +36,11 @@
               <AuToggleSwitch
                 @checked={{this.confidential}}
                 id="new-subcase-confidential"
+                @onChange={{set this "confidential"}}
               />
             </div>
             <div class="auk-form-group">
-              <AuLabel for="shortTitle">{{t "name-subcase"}}</AuLabel>
+              <AuLabel for="shortTitle" @required={{true}} @inline={{true}}>{{t "name-subcase"}}</AuLabel>
               <AuTextarea
                 @rows="2"
                 @width="block"
@@ -48,17 +49,15 @@
               />
             </div>
             <div class="auk-form-group">
-              <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
+              <AuLabel @required={{true}} @inline={{true}}>{{t "subcase-type-dropdown"}}</AuLabel>
               <Utils::ModelSelector
                 @modelName="subcase-type"
-                @searchField="label"
                 @sortField="label"
+                @displayField="label"
                 @selected={{this.type}}
                 @onChange={{fn (mut this.type)}}
                 @filterOptions={{this.filterSubcaseTypes}}
-                as |model|>
-                {{capitalize model.label}}
-              </Utils::ModelSelector>
+              />
             </div>
           </Utils::LoadableContent>
         </Auk::Panel::Body>
@@ -107,14 +106,15 @@
     <Group>
       <AuButton
         @skin="secondary"
-        {{on "click" @onCancel}}
+        @disabled={{or this.createSubmission.isRunning this.isUploadingFiles}}
+        {{on "click" (perform this.cancelForm)}}
       >
         {{t "cancel"}}
       </AuButton>
       <AuButton
         @skin="primary"
         @disabled={{this.saveIsDisabled}}
-        {{on "click" (toggle "showProposableAgendaModal" this)}}
+        {{on "click" (perform this.openProposableAgendaModal)}}
       >
         {{t "add-new-case"}}
       </AuButton>

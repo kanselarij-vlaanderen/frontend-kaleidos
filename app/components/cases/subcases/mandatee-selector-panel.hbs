@@ -11,6 +11,7 @@
         @itemStructure={{hash label="fullName"}}
         @selectedItems={{this.selectedCurrentMinisters}}
         @didUpdate={{this.onChangeSelectedCurrentMinisters}}
+        @mandatoryItem={{if @disableMinisterCheckbox (await this.submitterMandatee.person)}}
         @layout="grid"
         @disabled={{@disabled}}
         @itemDisabled={{@disableMinisterCheckbox}}

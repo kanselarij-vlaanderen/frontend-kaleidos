@@ -78,10 +78,11 @@
           >
             {{t "present-for-signing"}}
           </AuToggleSwitch>
-      {{/if}}
-    </td>
+        {{/if}}
+      </td>
+    {{/if}}
   {{/if}}
-  {{else}}
+  {{#if (not @isEditingEnabled)}}
     <td>
       <Utils::Documents::FileTypePill
         @extension={{@row.piece.file.extension}}
@@ -89,7 +90,7 @@
     </td>
   {{/if}}
   <td class="auk-u-text-align--right">
-    {{#if (or @row.hasSentSignFlow (not @isEditingEnabled))}}
+    {{#if (or @row.hasSentSignFlow (not @isEditingEnabled) @disableDelete)}}
       <AuLinkExternal
         @icon="book"
         @hideText={{true}}

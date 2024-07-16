@@ -38,7 +38,7 @@ export default class AgendaitemControls extends Component {
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
     this.loadCanSendToVP.perform();
-    this.loadSubmissionDate.perform();
+    this.loadSubmissions.perform();
   }
 
   loadCanSendToVP = task(async () => {
@@ -132,7 +132,7 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *loadSubmissionDate() {
+  *loadSubmissions() {
     this.submissions = yield this.args.subcase?.submissions;
   }
 
@@ -192,7 +192,7 @@ export default class AgendaitemControls extends Component {
     //  → Delete
     if (submission.title) {
       const decisionmakingFlow = await submission.decisionmakingFlow;
-      const subcases = await decisionmakingFlow.subcases;
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
       if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
         const _case = await decisionmakingFlow.case;
         await _case.destroyRecord();
