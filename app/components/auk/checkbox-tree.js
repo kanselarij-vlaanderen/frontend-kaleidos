@@ -19,7 +19,7 @@ const DEFAULT_ITEM_STRUCTURE = {
  * @argument selectedItems {Array} Subset of @items representing the selected options
  * @argument didUpdate {Function} Action called whenever the selection is updated. Returns the checked item objects.
  * @argument disabled {Boolean}
- * @argument mandatoryItem {Array} 1 @item representing a mandatory selected option
+ * @argument mandatoryItem {Object} 1 @item representing a mandatory selected option
  */
 export default class CheckboxTree extends Component {
   @tracked selectedItems; // still needed despite TrackedArray in case a new TrackedArray gets assigned
@@ -54,7 +54,7 @@ export default class CheckboxTree extends Component {
       this.selectedItems = new TrackedArray(this.args.items);
     }
     if (this.args.mandatoryItem) {
-      addObject(this.selectedItems, this.args.mandatoryItem)
+      addObject(this.selectedItems, this.args.mandatoryItem);
     }
 
     if (isPresent(this.args.didUpdate)) {

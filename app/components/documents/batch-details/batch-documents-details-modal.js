@@ -41,7 +41,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   get hasDraftPieces() {
     return this.args.pieces.any(
-      (piece) => !piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')
+      (piece) => piece.constructor.modelName === 'draft-piece'
     );
   }
 
