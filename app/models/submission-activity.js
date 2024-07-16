@@ -5,6 +5,8 @@ export default class SubmissionActivity extends Model {
 
   @belongsTo('subcase', { inverse: 'submissionActivities', async: true })
   subcase;
+  @belongsTo('submission', { inverse: 'submissionActivities', async: true })
+  submission;
   @belongsTo('agenda-activity', {
     inverse: 'submissionActivities',
     async: true,

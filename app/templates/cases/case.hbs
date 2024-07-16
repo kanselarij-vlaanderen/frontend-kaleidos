@@ -1,16 +1,20 @@
 <Subcases::SubcasesOverviewHeader
   @decisionmakingFlow={{@model.decisionmakingFlow}}
 />
-<div class="auk-panel-layout auk-panel-layout--responsive auk-panel-layout--cases">
-  <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--responsive auk-panel-layout__sidebar--cases">
-    <Subcases::SideNav
-      @decisionmakingFlow={{@model.decisionmakingFlow}}
-      @latestParliamentSubmissionActivity={{@model.latestParliamentSubmissionActivity}}
-      @latestParliamentRetrievalActivity={{@model.latestParliamentRetrievalActivity}}
-      @parliamentFlow={{@model.parliamentFlow}}
-      @publicationFlows={{@model.publicationFlows}}
-      @subcases={{@model.subcases}}
-    />
-  </div>
+{{#if this.isAddingSubmission}}
   {{outlet}}
-</div>
+{{else}}
+  <div class="auk-panel-layout auk-panel-layout--responsive auk-panel-layout--cases">
+    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--responsive auk-panel-layout__sidebar--cases">
+      <Subcases::SideNav
+        @decisionmakingFlow={{@model.decisionmakingFlow}}
+        @latestParliamentSubmissionActivity={{@model.latestParliamentSubmissionActivity}}
+        @latestParliamentRetrievalActivity={{@model.latestParliamentRetrievalActivity}}
+        @parliamentFlow={{@model.parliamentFlow}}
+        @publicationFlows={{@model.publicationFlows}}
+        @subcases={{@model.subcases}}
+      />
+    </div>
+    {{outlet}}
+  </div>
+{{/if}}

@@ -59,6 +59,14 @@ const {
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 // - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
+// - create-submissions: Allow the creation of submissions (by cabinets)
+// - view-submissions: Allow the viewing of submissions
+// - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
+// - always-edit-submissions: Allow editing submissions regardless of status
+// - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
+// - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
+// - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
+// - delete-submissions
 
 const groups = [
   {
@@ -104,6 +112,12 @@ const groups = [
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
+      'always-edit-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
+      'delete-submissions',
     ]
   },
   {
@@ -140,6 +154,10 @@ const groups = [
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
     ]
   },
   {
@@ -173,6 +191,10 @@ const groups = [
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
+      'edit-in-treatment-submissions',
+      'create-subcases-from-submissions',
     ]
   },
   {
@@ -220,6 +242,8 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-documents-postponed-and-retracted',
+      'create-submissions',
+      'edit-sent-back-submissions',
     ],
   },
   {
@@ -234,6 +258,8 @@ const groups = [
       'view-only-specific-confidential-documents',
       'send-only-specific-cases-to-vp',
       'view-documents-postponed-and-retracted',
+      'create-submissions',
+      'edit-sent-back-submissions',
     ],
   },
   {

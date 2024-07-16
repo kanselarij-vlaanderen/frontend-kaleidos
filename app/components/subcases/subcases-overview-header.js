@@ -3,9 +3,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class SubCasesOverviewHeader extends Component {
+  @service currentSession;
   @service router;
+  @service store;
 
   @tracked case;
   @tracked showEditCaseModal = false;
@@ -15,6 +18,20 @@ export default class SubCasesOverviewHeader extends Component {
   constructor() {
     super(...arguments);
     this.loadData.perform();
+    this.loadLinkedMandatees.perform();
+  }
+
+  loadLinkedMandatees = task(async () => {
+    this.linkedMandatees = await this.store.queryAll('mandatee', {
+      'filter[user-organizations][:id:]': this.currentSession.organization.id,
+      'filter[:has-no:end]': true,
+      include: 'mandate.role',
+      sort: 'start',
+    });
+  });
+
+  get mayCreateSubmissions() {
+    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
   }
 
   @task
@@ -76,5 +93,10 @@ export default class SubCasesOverviewHeader extends Component {
   @action
   navigateToAddSubcase() {
     this.router.transitionTo('cases.case.subcases.add-subcase', this.args.decisionmakingFlow.id);
+  }
+
+  @action
+  navigateToAddSubmission() {
+    this.router.transitionTo('cases.case.subcases.new-submission', this.args.decisionmakingFlow.id);
   }
 }

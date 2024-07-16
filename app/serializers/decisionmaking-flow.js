@@ -1,6 +1,6 @@
 import ApplicationSerializer from './application';
 
-const SKIP_SERIALIZED = ['subcases'];
+const SKIP_SERIALIZED = ['subcases', 'submissions'];
 
 export default class DecisionmakingFlowSerializer extends ApplicationSerializer {
   serializeHasMany(snapshot, json, relationship) {

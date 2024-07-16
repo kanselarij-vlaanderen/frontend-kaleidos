@@ -14,7 +14,15 @@ function isEnabledVlaamsParlement() {
   );
 }
 
+function isEnabledCabinetSubmissions() {
+  return (
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS === 'true' ||
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS === true
+  );
+}
+
 export {
   isEnabledVlaamsParlement,
   isEnabledImpersonation,
+  isEnabledCabinetSubmissions,
 }
