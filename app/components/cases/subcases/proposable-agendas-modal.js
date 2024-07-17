@@ -48,7 +48,8 @@ export default class ProposableAgendasModal extends Component {
   @task
   *saveSubcaseAndSubmitToAgenda() {
     const meeting = yield this.selectedAgenda.createdFor;
-    yield this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
+    // don't yield this, the confirm closes this model so the task is aborted midway
+    this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
   }
 
 @action

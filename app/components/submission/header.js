@@ -264,6 +264,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.AANVAARD);
+      this.toggleCreateSubcaseModal();
 
       this.router.transitionTo(
         'cases.case.subcases.subcase',
