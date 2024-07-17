@@ -11,7 +11,7 @@ export default class DraftPiece extends Model {
   @belongsTo('draft-file', { inverse: null, async: true }) file;
   @belongsTo('draft-document-container', { inverse: 'pieces', async: true })
   documentContainer;
-  @belongsTo('piece', { inverse: null, async: true }) previousPiece;
+  @belongsTo('piece', { inverse: null, async: true, polymorphic: true }) previousPiece;
   @belongsTo('submission', { inverse: 'pieces', async: true }) submission;
 
   get viewDocumentURL() {

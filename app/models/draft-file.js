@@ -19,7 +19,7 @@ export default class DraftFileModel extends Model {
   }
 
   get downloadLink() {
-    return `/files/${this.id}/download`;
+    return `/draft-files/${this.id}/download`;
   }
 
   get inlineViewLink() {

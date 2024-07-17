@@ -20,6 +20,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @service toaster;
   @service fileConversionService;
   @service intl;
+  @service currentSession;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
@@ -45,6 +46,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked selectedGovernmentDomains = new TrackedArray([]);
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
+  @tracked isUploadingFiles;
 
   @tracked showProposableAgendaModal = false;
 
@@ -60,7 +62,7 @@ export default class CasesNewSubmissionComponent extends Component {
     const decisionmakingFlowSet =
       !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitle;
     const subcaseTypeSet = !!this.type;
-    return !decisionmakingFlowSet || !subcaseTypeSet;
+    return !decisionmakingFlowSet || !subcaseTypeSet || this.isUploadingFiles;
   }
 
   get sortedPieces() {
@@ -112,6 +114,18 @@ export default class CasesNewSubmissionComponent extends Component {
     await piece?.destroyRecord();
   };
 
+  deletePieces = async () => {
+    const savePromises = this.pieces.map(async (piece) => {
+      await this.deletePiece(piece);
+    });
+    await Promise.all(savePromises);
+    this.pieces = new TrackedArray([]);
+  };
+
+  handleFileUploadQueueUpdates = ({ uploadIsRunning, uploadIsCompleted}) => {
+    this.isUploadingFiles = uploadIsRunning && !uploadIsCompleted;
+  };
+
   createSubmission = dropTask(async (meeting, comment) => {
     const now = new Date();
 
@@ -125,7 +139,7 @@ export default class CasesNewSubmissionComponent extends Component {
       this.decisionmakingFlowTitle ??
       _case?.shortTitle ??
       '';
-
+    const creator = await this.currentSession.user;
     this.submission = this.store.createRecord('submission', {
       created: now,
       modified: now,
@@ -135,6 +149,7 @@ export default class CasesNewSubmissionComponent extends Component {
       type: this.type,
       agendaItemType: this.agendaItemType,
       decisionmakingFlow: this.selectedDecisionmakingFlow,
+      creator: creator,
       approvedBy: this.notificationAddresses,
       approvalComment: trimText(this.notificationMessage),
       notified: this.CCAddresses,
@@ -228,4 +243,29 @@ export default class CasesNewSubmissionComponent extends Component {
       this.piecesCreatedCounter++;
     }
   );
+
+  cancelForm = task(async () => {
+    await this.deletePieces();
+    this.args?.onCancel();
+  });
+
+  openProposableAgendaModal = task(async () => {
+    if (this.pieces.length) {
+      // enforce all new pieces must have type on document container
+      const typesPromises = this.pieces.map(async (piece) => {
+        const container = await piece.documentContainer;
+        const type = await container.type;
+        return type;
+      });
+      const types = await Promise.all(typesPromises);
+      if (types.some(type => !type)) {
+        this.toaster.error(
+          this.intl.t('document-type-required'),
+          this.intl.t('warning-title'),
+        );
+        return;
+      }
+    }
+    this.showProposableAgendaModal = true;
+  });
 }

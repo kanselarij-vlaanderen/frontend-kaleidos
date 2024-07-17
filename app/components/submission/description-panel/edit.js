@@ -23,7 +23,6 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
     type: 'subcase-name',
   });
   @tracked selectedShortcut;
-  @tracked subcaseName;
   @tracked subcaseType;
   @tracked agendaItemType;
   @tracked agendaItemTypes;
@@ -67,7 +66,6 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @action
   async selectSubcaseType(type) {
     this.subcaseType = type;
-    this.subcaseName = type.label;
   }
 
   @action
@@ -91,4 +89,10 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
 
     this.isSaving = false;
   }
+
+  filterSubcaseTypes = (subcaseTypes) => {
+    return subcaseTypes.filter(
+      (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING
+    );
+  };
 }

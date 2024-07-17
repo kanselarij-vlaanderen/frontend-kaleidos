@@ -42,21 +42,12 @@ export default class CasesSubmissionsIndexRoute extends Route {
       await this.conceptStore.queryAllByConceptScheme(
         CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
       )
-    )
-      .filter((status) =>
-        [
-          CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
-          CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING,
-          CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
-          CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
-          CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND,
-        ].includes(status.uri)
-      )
-      .map((status) => status.id);
+    ).map((status) => status.id);
 
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[status][:id:]': statusIds.join(','),
+      'filter[subcase][:has-no:decisionmaking-flow]': true,
       include: 'type,status,requested-by,mandatees.person,being-treated-by',
       sort: params.sort,
       page: {
@@ -75,8 +66,10 @@ export default class CasesSubmissionsIndexRoute extends Route {
     }
 
     if (isPresent(params.submitters)) {
-      options['filter[requested-by][person][:id:]'] =
-        params.submitters.join(',');
+      const submitters = Array.isArray(params.submitters)
+        ? params.submitters.join(',')
+        : params.submitters || '';
+      options['filter[requested-by][person][:id:]'] = submitters;
     }
 
     if (!this.currentSession.may('view-all-submissions')) {

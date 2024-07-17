@@ -40,8 +40,15 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const status = await submission.status;
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.AANVAARD) {
-      this.router.transitionTo('cases.submissions');
-      return;
+      const subcase = await submission.subcase;
+      if (subcase)  {
+        const decisionmakingFlow = await subcase.decisionmakingFlow;
+        return this.router.transitionTo(
+          'cases.case.subcases.subcase',
+          decisionmakingFlow.id,
+          subcase.id
+        );
+      }
     }
 
     await submission.requestedBy;
@@ -122,7 +129,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
       .slice()
-      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime());
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
+      .reverse();
     await Promise.all(this.statusChangeActivities.map((a) => a.status));
 
     this.defaultAccessLevel = await this.store.findRecordByUri(
@@ -142,6 +150,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.highlightedPieces = this.highlightedPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
-    controller.defaultAccessLevel = this.defaultAccessLevel
+    controller.defaultAccessLevel = this.defaultAccessLevel;
   }
 }
