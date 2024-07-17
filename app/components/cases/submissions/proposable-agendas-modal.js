@@ -43,6 +43,8 @@ export default class CasesSubmissionsProposableAgendasModalComponent extends Com
   @task
   *saveSubcaseAndSubmitToAgenda() {
     const meeting = yield this.selectedAgenda.createdFor;
+    // TODO check if this yeild is needed. we should close this component and show a loader.
+    // in that case, you don't want to yield since the task will be aborted on destruction
     this.args.onConfirm(meeting, this.remarks);
   }
 

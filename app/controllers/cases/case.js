@@ -8,4 +8,8 @@ export default class CasesCaseController extends Controller {
   get isAddingSubmission() {
     return isEnabledCabinetSubmissions() && this.router.currentRouteName.includes('new-submission');
   }
+
+  get isAddingSubmissionToExistingSubcase() {
+    return isEnabledCabinetSubmissions() && this.router.currentRouteName.includes('subcase.new-submission');
+  }
 }

@@ -1,16 +1,12 @@
 <div
   class="vlc-document-card
-    {{if (not this.bordered) 'vlc-document-card--borderless'}}
-    {{if
-      this.deleteDocumentContainerWithUndo.isRunning
-      'vlc-document--deleted-state'
-    }}"
+    {{if (not this.bordered) 'vlc-document-card--borderless'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
 >
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
-      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+      <Auk::Toolbar @auto={{true}} @responsive={{true}} as |Toolbar|>
         <Toolbar.Group @position="left" as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
@@ -61,29 +57,64 @@
               {{/if}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
-              <p>
-                {{this.dateToShowLabel}}
-                {{datetime-at this.dateToShow}}
-                {{#if
-                  (and
-                    this.piece.file.derived
-                    (await (this.canViewConfidentialPiece))
-                  )
-                }}
-                  {{t "as"}}
-                  <AuLinkExternal
-                    href={{this.piece.file.namedDownloadLink}}
-                    download
-                  >
-                    {{t "source-file-lowercase"}}
-                  </AuLinkExternal>
+              {{! no piece.created in legacy data }}
+              {{#if this.dateToShow}}
+                <p>
+                  {{this.dateToShowLabel}}
+                  {{datetime-at this.dateToShow}}
+                  {{#if
+                    (and
+                      this.piece.file.derived
+                      (await (this.canViewConfidentialPiece))
+                    )
+                  }}
+                    {{t "as"}}
+                    <AuLinkExternal
+                      href={{await this.piece.namedDownloadLinkPromise}}
+                      download
+                    >
+                      {{t "source-file-lowercase"}}
+                    </AuLinkExternal>
+                  {{/if}}
+                </p>
+              {{/if}}
+              {{#if
+                (await (this.canViewConfidentialPiece))
+              }}
+                {{#if this.piece.signedPieceCopy.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await
+                        this.piece.signedPieceCopy.namedDownloadLinkPromise
+                      }}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at (or this.piece.signedPieceCopy.file.created this.piece.signedPieceCopy.created)}}
+                  </p>
                 {{/if}}
-              </p>
+              {{/if}}
             </div>
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
-          {{#if this.mayEdit}}
+          <Group.Item class="auk-o-flex auk-o-flex--vertical-center">
+            {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
+              {{#unless @hideAccessLevel}}
+                <AccessLevelPill
+                  @accessLevel={{this.piece.accessLevel}}
+                  @isEditable={{@isEditable}}
+                  @isDraft={{this.isDraftAccessLevel}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              {{/unless}}
+            {{/unless}}
+          </Group.Item>
+          {{#if this.mayShowDropdown}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
@@ -95,23 +126,12 @@
                 @disabled={{this.loadPieceRelatedData.isRunning}}
                 @alignment="right"
               >
-                {{#if (not @hideEdit)}}
-                  <AuButton
-                    @skin="link"
-                    {{on "click" (toggle "isEditingPiece" this)}}
-                    role="menuitem"
-                  >
-                    {{t "edit"}}
-                  </AuButton>
-                {{/if}}
-                <AuHr />
                 <AuButton
                   @skin="link"
-                  @alert={{true}}
-                  {{on "click" this.deleteDocumentContainer}}
+                  {{on "click" (toggle "isOpenUploadModal" this)}}
                   role="menuitem"
                 >
-                  {{t "document-delete"}}
+                  {{t "create-new-version"}}
                 </AuButton>
               </AuDropdown>
               {{!-- template-lint-enable require-context-role --}}
@@ -154,23 +174,30 @@
     {{/if}}
   {{/if}}
 </div>
-{{#if this.isEditingPiece}}
-  <Documents::DraftDocumentCard::EditModal
-    @piece={{this.piece}}
-    @documentContainer={{this.documentContainer}}
-    @signFlow={{this.signFlow}}
-    @onCancel={{this.cancelEditPiece}}
-    @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
-  />
-{{/if}}
 
 <ConfirmationModal
-  @modalOpen={{this.isOpenVerifyDeleteModal}}
-  @title={{t "document-container-delete"}}
-  @message={{t "delete-document-container-message"}}
-  @onConfirm={{this.verifyDeleteDocumentContainer}}
-  @onCancel={{this.cancelDeleteDocumentContainer}}
-  @confirmMessage={{t "delete"}}
-  @confirmIcon="trash"
-  @alert={{true}}
-/>
+  @modalOpen={{this.isOpenUploadModal}}
+  @title={{t "new-document-piece"}}
+  @onConfirm={{perform this.addPiece}}
+  @onCancel={{perform this.cancelUploadPiece}}
+  @confirmMessage={{t "add"}}
+  @loading={{this.addPiece.isRunning}}
+  @disabled={{not this.newPiece}}
+>
+  <:body>
+    {{#if this.newPiece}}
+      <AuLabel>{{t "name"}}</AuLabel>
+      <AuInput
+        value={{this.newPiece.name}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "newPiece.name"))}}
+      />
+      <Documents::UploadedDocument
+        @piece={{this.newPiece}}
+        @onDelete={{perform this.deleteUploadedPiece}}
+      />
+    {{else}}
+      <Auk::FileUploader @isSubmission={{true}} @multiple={{false}} @onUpload={{perform this.uploadPiece}} />
+    {{/if}}
+  </:body>
+</ConfirmationModal>

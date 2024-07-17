@@ -1,17 +1,15 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { TrackedArray } from 'tracked-built-ins';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
-import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
-import { deleteDocumentContainer } from 'frontend-kaleidos/utils/document-delete-helpers';
-import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
-export default class DocumentsDraftDocumentCardComponent extends Component {
+export default class DocumentsAddDraftDocumentCardComponent extends Component {
   /**
    * A document card with expandable document history .
    * By default uses the @piece argument, but can fall back to @documentContainer when
@@ -19,11 +17,9 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
    *
    * @argument piece: a Piece object
    * @argument documentContainer: a DocumentContainer object
-   * @argument didDeleteContainer: action triggered when a container has been deleted
    * @argument onAddPiece: action triggered when a new version has been added
    * @argument bordered: determines if the card has a border
    * @argument label: used to determine what label should be used with the date
-   * @argument onChangeConfidentiality: action triggered when a subtype 'report' has an accessLevel change
    *
    * @argument [agendaitem]: if an agendaitem is linked to the current piece
    */
@@ -31,12 +27,10 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service toaster;
   @service intl;
 
-  @tracked isOpenVerifyDeleteModal = false;
-  @tracked isEditingPiece = false;
-
   @tracked piece;
   @tracked documentContainer;
 
+  @tracked isOpenUploadModal = false;
   @tracked uploadedFile;
   @tracked newPiece;
   @tracked pieces = new TrackedArray([]);
@@ -48,10 +42,6 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     super(...arguments);
     this.loadPieceRelatedData.perform();
     this.loadFiles.perform();
-  }
-
-  get mayEdit() {
-    return this.args.isEditable && this.args.piece.constructor.name === 'DraftPiece';
   }
 
   get dateToShowLabel() {
@@ -148,7 +138,10 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     for (const piece of this.pieces) {
       yield piece.belongsTo('accessLevel').reload();
     }
+  }
 
+  get mayShowDropdown() {
+    return this.piece.constructor.name === 'Piece';
   }
 
   get sortedPieces() {
@@ -165,6 +158,21 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   @task
+  *addPiece() {
+    try {
+      this.newPiece.name = this.newPiece.name.trim();
+      yield this.args.onAddPiece(this.piece, this.newPiece);
+      this.loadVersionHistory.perform();
+      this.newPiece = null;
+      this.isOpenUploadModal = false;
+    } catch (error) {
+      yield this.deleteUploadedPiece.perform();
+      this.isOpenUploadModal = false;
+      throw error;
+    }
+  }
+
+  @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.at(-1);
@@ -172,51 +180,37 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     const newName = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
+    const type = yield this.documentContainer.type;
+    const documentContainer = this.store.createRecord('draft-document-container', {
+      created: this.documentContainer.created,
+      position: this.documentContainer.position,
+      type,
+    });
+    const accessLevel = yield previousPiece.accessLevel;
     this.newPiece = this.store.createRecord('draft-piece', {
       name: newName,
       created: now,
       modified: now,
       file: file,
       previousPiece: previousPiece,
-      documentContainer: this.documentContainer,
+      documentContainer: documentContainer,
       originalName: previousPiece.originalName,
+      accessLevel,
     });
   }
 
-  @action
-  deleteDocumentContainer() {
-    this.isOpenVerifyDeleteModal = true;
-  }
-
-  @action
-  cancelDeleteDocumentContainer() {
-    this.isOpenVerifyDeleteModal = false;
-  }
-
-  @action
-  async verifyDeleteDocumentContainer() {
-    const revertActionToastOptions = {
-      message: this.intl.t('document-being-deleted'),
-      timeOut: 15000,
-      onUndo: () => {
-        this.deleteDocumentContainerWithUndo.cancelAll();
-      },
-    };
-    this.toaster.show(RevertActionToast, revertActionToastOptions);
-    this.deleteDocumentContainerWithUndo.perform();
-    this.isOpenVerifyDeleteModal = false;
+  @task
+  *deleteUploadedPiece() {
+    if (this.newPiece) {
+      removeObject(this.pieces, this.newPiece);
+      yield deletePiece(this.newPiece);
+      this.newPiece = null;
+    }
   }
 
   @task
-  *deleteDocumentContainerWithUndo() {
-    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
-    yield deleteDocumentContainer(this.documentContainer);
-    this.args.didDeleteContainer?.(this.documentContainer);
-  }
-
-  @action
-  async cancelEditPiece() {
-    await this.loadPieceRelatedData.perform();
-    this.isEditingPiece = false;
+  *cancelUploadPiece() {
+    yield this.deleteUploadedPiece.perform();
+    this.isOpenUploadModal = false;
   }
 }
