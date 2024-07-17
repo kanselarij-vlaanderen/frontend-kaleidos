@@ -149,6 +149,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
     );
+    const updateSubmitted = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+    );
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
@@ -163,6 +167,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
       .at(0);
     const meeting = await originalSubmission.meeting;
+
+    const status = originalSubmission ? updateSubmitted : submitted;
 
     this.submission = this.store.createRecord('submission', {
       meeting,
@@ -181,7 +187,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       mandatees,
       requestedBy,
       governmentAreas,
-      status: submitted,
+      status,
       pieces: this.highlightedPieces,
     });
 
@@ -199,7 +205,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
         startedAt: now,
         comment: this.comment,
         submission: this.submission,
-        status: submitted,
+        status,
       }
     );
     await submissionStatusChange.save();

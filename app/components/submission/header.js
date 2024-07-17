@@ -69,7 +69,8 @@ export default class SubmissionHeaderComponent extends Component {
   get canTakeInTreatment() {
     return (
       (this.args.submission.isSubmitted ||
-        this.args.submission.isResubmitted) &&
+        this.args.submission.isResubmitted ||
+        this.args.submission.isUpdateSubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }

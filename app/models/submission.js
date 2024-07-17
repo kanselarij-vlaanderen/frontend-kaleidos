@@ -79,6 +79,13 @@ export default class SubmissionModel extends Model {
     );
   }
 
+  get isUpdateSubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+    );
+  }
+
   async updateStatus(statusUri, comment) {
     const now = new Date();
     const currentUser = this.currentSession.user;

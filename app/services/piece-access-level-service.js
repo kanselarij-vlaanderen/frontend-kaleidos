@@ -259,14 +259,28 @@ export default class PieceAccessLevelService extends Service {
           subcase = await decisionActivity.subcase;
         }
       }
-      if (subcase) {
-        const mandatees = await subcase.mandatees;
+      let mandatees = await subcase?.mandatees;
+      if (!mandatees) {
+        // draft piece linked to a submission
+        // TODO, BIS updates could change mandatees. only check latest submission?
+        const submission = await this.store.queryOne('submission', {
+          filter: {
+            pieces: {
+              ':id:': piece?.id,
+            },
+          },
+        });
+        if (submission) {
+          mandatees = await submission.mandatees;
+        }
+      } 
+      if (mandatees.length) {
         const currentUserOrganization = await this.currentSession.organization;
         const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
         const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
         const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
         for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
-          if (mandatees.length && mandateeUris.includes(orgMandateeUri)) {
+          if (mandateeUris.includes(orgMandateeUri)) {
             return true;
           }
         }
