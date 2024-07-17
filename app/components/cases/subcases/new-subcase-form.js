@@ -208,7 +208,6 @@ export default class NewSubcaseForm extends Component {
     if (this.pieces.length) {
       yield this.savePieces.perform();
     }
-
     if (meeting) {
       try {
         yield this.agendaService.putSubmissionOnAgenda(
