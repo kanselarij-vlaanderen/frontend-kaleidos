@@ -242,8 +242,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-documents-postponed-and-retracted',
-      'create-submissions',
-      'edit-sent-back-submissions',
+      // TODO minister should be able to view only the submissions
     ],
   },
   {
