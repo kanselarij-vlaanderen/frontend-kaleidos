@@ -15,6 +15,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service store;
   @service toaster;
   @service pieceUpload;
+  @service subcaseService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -172,11 +173,18 @@ export default class SubmissionHeaderComponent extends Component {
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
+        let linkedPieces;
+        if (this.args.previousSubcase) {
+          linkedPieces = await this.subcaseService.loadSubcasePieces(
+            this.args.previousSubcase
+          );
+        }
         subcase = this.store.createRecord('subcase', {
           shortTitle: this.args.submission.shortTitle,
           created: this.args.submission.created,
           modified: now,
           confidential: this.args.submission.confidential,
+          linkedPieces,
           type,
           decisionmakingFlow,
           requestedBy,
