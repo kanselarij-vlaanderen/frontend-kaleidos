@@ -270,4 +270,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   refresh() {
     this.router.refresh('cases.case.subcases.subcase');
   }
+
+  @action
+  refreshSubcases() {
+    this.router.refresh('cases.case');
+  }
 }
