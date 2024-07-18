@@ -89,11 +89,15 @@ export default class SubmissionHeaderComponent extends Component {
 
   get hasActions() {
     return (
-      this.canResubmitSubmission ||
-      this.canCreateSubcase ||
       this.canTakeInTreatment ||
-      this.canSendBackToSubmitter ||
-      this.canDeleteSubmission
+      (this.args.hasActions &&
+        (
+          this.canResubmitSubmission ||
+          this.canCreateSubcase ||
+          this.canSendBackToSubmitter ||
+          this.canDeleteSubmission
+        )
+      )
     );
   }
 

@@ -26,6 +26,8 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @tracked subcaseType;
   @tracked agendaItemType;
   @tracked agendaItemTypes;
+  @tracked decisionmakingFlow;
+  @tracked decisionmakingFlowTitle;
 
   @tracked isSaving = false;
 
@@ -33,9 +35,17 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
 
   constructor() {
     super(...arguments);
+    this.loadDecisionmakingFlow.perform();
     this.loadSubcaseType.perform();
     this.loadAgendaItemType.perform();
     this.loadAgendaItemTypes.perform();
+  }
+
+  @task
+  *loadDecisionmakingFlow() {
+    this.decisionmakingFlow = yield this.args.submission.decisionmakingFlow;
+    yield this.decisionmakingFlow?.case;
+    this.decisionmakingFlowTitle = yield this.args.submission.title;
   }
 
   @task
@@ -76,13 +86,14 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @action
   async saveChanges() {
     this.isSaving = true;
+    this.args.submission.decisionmakingFlow = this.decisionmakingFlow;
+    this.args.submission.title = this.decisionmakingFlowTitle;
 
     const trimmedShortTitle = trimText(this.args.submission.shortTitle);
 
     this.args.submission.shortTitle = trimmedShortTitle;
     this.args.submission.type = this.subcaseType;
     this.args.submission.agendaItemType = this.agendaItemType;
-
     await this.args.submission.save();
 
     this.args.onSave();

@@ -12,6 +12,15 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body>
     <div class="au-c-form">
+      {{#if this.loadDecisionmakingFlow.isIdle}}
+        <Cases::Submissions::DecisionmakingFlowSelector
+          class="auk-u-mb-4"
+          @selectedDecisionmakingFlow={{this.decisionmakingFlow}}
+          @selectedDecisionmakingFlowTitle={{this.decisionmakingFlowTitle}}
+          @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}
+          @onChangeSelected={{fn (mut this.decisionmakingFlow)}}
+        />
+      {{/if}}
       <AuFormRow>
         <AuFieldset as |Fieldset|>
           <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
