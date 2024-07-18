@@ -134,5 +134,19 @@
   @onConfirm={{queue (perform this.deleteSubmission) this.toggleDeleteModal}}
   @alert={{true}}
   @loading={{this.deleteSubmission.isRunning}}
+  @disabled={{this.createSubcase.isRunning}}
   @message={{t "delete-submission-confirmation"}}
 />
+
+{{#if this.createSubcase.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      {{#if this.pieces.length}}
+        <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesCreatedCounter total=this.pieces.length)}} />
+      {{else}}
+        <Auk::Loader @message={{t "save-in-progress"}} />
+      {{/if}}
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

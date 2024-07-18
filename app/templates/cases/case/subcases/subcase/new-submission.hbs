@@ -82,7 +82,8 @@
               @isEditable={{this.mayEdit}}
               @hideAccessLevel={{true}}
               @onAddPiece={{this.onAddNewPieceVersion}}
-              @highlightedPieces={{this.highlightedPieces}}
+              @highlightedPieces={{this.newDraftPieces}}
+              {{!-- @didDeleteContainer={{this.refresh}} --}}
             />
           {{else}}
             <div>
@@ -111,15 +112,16 @@
   </div>
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
-      <AuLink
-        @skin="button-naked"
-        @route="cases.case.subcases.subcase"
+      <AuButton
+        @skin="secondary"
+        @disabled={{or this.createSubmission.isRunning}}
+        {{on "click" (perform this.cancelForm)}}
       >
         {{t "cancel"}}
-      </AuLink>
+      </AuButton>
       <AuButton
         @skin="primary"
-        @disabled={{eq this.highlightedPieces.length 0}}
+        @disabled={{eq this.newDraftPieces.length 0}}
         {{on "click" (toggle "isOpenCreateSubmissionModal" this)}}
         >
         {{t "new-submission"}}

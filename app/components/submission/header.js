@@ -231,6 +231,7 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
+            originalName: draftPiece.originalName,
           });
           await piece.save();
           return piece;

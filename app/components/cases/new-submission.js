@@ -21,6 +21,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @service fileConversionService;
   @service intl;
   @service currentSession;
+  @service documentService;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
@@ -47,6 +48,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked isUploadingFiles;
+  @tracked piecesCreatedCounter = 0;
 
   @tracked showProposableAgendaModal = false;
 
@@ -128,7 +130,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   createSubmission = dropTask(async (meeting, comment) => {
     const now = new Date();
-
+    this.showProposableAgendaModal = false;
     const submitted = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
@@ -250,22 +252,9 @@ export default class CasesNewSubmissionComponent extends Component {
   });
 
   openProposableAgendaModal = task(async () => {
-    if (this.pieces.length) {
-      // enforce all new pieces must have type on document container
-      const typesPromises = this.pieces.map(async (piece) => {
-        const container = await piece.documentContainer;
-        const type = await container.type;
-        return type;
-      });
-      const types = await Promise.all(typesPromises);
-      if (types.some(type => !type)) {
-        this.toaster.error(
-          this.intl.t('document-type-required'),
-          this.intl.t('warning-title'),
-        );
-        return;
-      }
-    }
+    const typesRequired = await this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
+
     this.showProposableAgendaModal = true;
   });
 }

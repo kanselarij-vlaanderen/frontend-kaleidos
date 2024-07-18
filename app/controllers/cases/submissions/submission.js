@@ -16,6 +16,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @service fileConversionService;
   @service toaster;
   @service intl;
+  @service documentService;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
@@ -23,7 +24,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
-  @tracked highlightedPieces = new TrackedArray([]);
+  @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
 
   statusChangeActivities;
@@ -81,6 +82,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     this.isOpenBatchDetailsModal = false;
   };
 
+  refresh = () => {
+    this.router.refresh();
+  };
+
   @action
   async uploadPiece(file) {
     const name = file.filenameWithoutExtension;
@@ -108,24 +113,12 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       submission: this.model,
     });
     this.newPieces.push(piece);
-    this.highlightedPieces.push(piece);
+    this.newDraftPieces.push(piece);
   }
 
   savePieces = task(async () => {
-    // enforce all new pieces must have type on document container
-    const typesPromises = this.newPieces.map(async (piece) => {
-      const container = await piece.documentContainer;
-      const type = await container.type;
-      return type;
-    });
-    const types = await Promise.all(typesPromises);
-    if (types.some((type) => !type)) {
-      this.toaster.error(
-        this.intl.t('document-type-required'),
-        this.intl.t('warning-title')
-      );
-      return;
-    }
+    const typesRequired = await this.documentService.enforceDocType(this.newPieces);
+    if (typesRequired) return;
 
     const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {

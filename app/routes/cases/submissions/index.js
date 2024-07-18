@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
@@ -44,6 +45,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
       )
     ).map((status) => status.id);
 
+    // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[status][:id:]': statusIds.join(','),
@@ -77,5 +79,18 @@ export default class CasesSubmissionsIndexRoute extends Route {
     }
 
     return this.store.query('submission', options);
+  }
+
+  // when filtering on date, show a loader
+  @action
+  loading(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+    // false so we don't transition to the loading route when searching
+    return false;
   }
 }

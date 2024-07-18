@@ -13,7 +13,6 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
 
   constructor() {
     super(...arguments);
-
     this.selectedDecisionmakingFlow = this.args.selectedDecisionmakingFlow;
   }
 
@@ -33,7 +32,6 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
   onSelectDecisionmakingFlow = (decisionmakingFlow) => {
     this.decisionmakingFlowTitle = null;
     this.selectedDecisionmakingFlow = decisionmakingFlow;
-
     this.args.onChangeTitle?.(null);
     this.args.onChangeSelected?.(decisionmakingFlow);
   }
@@ -41,9 +39,32 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
   onChangeDecisionmakingFlowTitle = (title) => {
     this.decisionmakingFlowTitle = title;
     this.selectedDecisionmakingFlow = null;
-
     this.args.onChangeTitle?.(title);
     this.args.onChangeSelected?.(null);
 
   }
+  onConfirmDecisionmakingFlowTitle = () => {
+    // trim so you can't just create whitespace named
+    this.args.onChangeTitle?.(this.decisionmakingFlowTitle?.trim());
+    this.args.onChangeSelected?.(null);
+    this.isAddingNewDecisionmakingFlow = false;
+  }
+
+  onCancelDecisionmakingFlowTitle = () => {
+    this.decisionmakingFlowTitle = '';
+    this.selectedDecisionmakingFlow = null;
+    this.args.onChangeTitle?.(this.decisionmakingFlowTitle);
+    this.args.onChangeSelected?.(this.selectedDecisionmakingFlow);
+    this.isAddingNewDecisionmakingFlow = false;
+  }
+
+  setFocus = async () => {
+    // after opening the modal, focus the input field reduced manual clicking
+    // doesn't work without a timeout though
+    await timeout(50);
+    const element = document.getElementById('searchCaseId');
+    if (element) {
+      element.focus();
+    }
+  };
 }

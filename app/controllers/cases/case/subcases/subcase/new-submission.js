@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, all } from 'ember-concurrency';
+import { task, all, timeout } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
@@ -16,6 +16,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service store;
   @service toaster;
   @service fileConversionService;
+  @service documentService;
 
   defaultAccessLevel;
 
@@ -27,7 +28,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked notificationComment;
   @tracked pieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
-  @tracked highlightedPieces = new TrackedArray([]);
+  @tracked newDraftPieces = new TrackedArray([]);
 
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
@@ -45,7 +46,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const index = this.pieces.indexOf(piece);
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
-    addObject(this.highlightedPieces, newVersion);
+    addObject(this.newDraftPieces, newVersion);
   };
 
   uploadPiece = async (file) => {
@@ -80,26 +81,15 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   }
 
   savePieces = task(async () => {
-    // enforce all new pieces must have type on document container
-    const typesPromises = this.newPieces.map(async (piece) => {
-      const container = await piece.documentContainer;
-      const type = await container.type;
-      return type;
-    });
-    const types = await all(typesPromises);
-    if (types.some(type => !type)) {
-      this.toaster.error(
-        this.intl.t('document-type-required'),
-        this.intl.t('warning-title'),
-      );
-      return;
-    }
+    const typesRequired = await this.documentService.enforceDocType(this.newPieces);
+    if (typesRequired) return;
+
     const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {
         await this.savePiece.perform(piece, index);
         this.pieces.push(piece);
         this.pieces = [...this.pieces];
-        addObject(this.highlightedPieces, piece);
+        addObject(this.newDraftPieces, piece);
       } catch (error) {
         await this.deletePiece(piece);
         throw error;
@@ -136,6 +126,28 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.isOpenPieceUploadModal = false;
   });
 
+  deleteDraftPieces = task(async () => {
+    const deletePromises = this.newDraftPieces.map((piece) =>
+      this.deleteDraftPiece(piece)
+    );
+    await Promise.all(deletePromises);
+    this.newDraftPieces = new TrackedArray([]);
+  });
+
+  deleteDraftPiece = async (piece) => {
+    const file = await piece.file;
+    await file.destroyRecord();
+    removeObject(this.newDraftPieces, piece);
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.destroyRecord();
+    await piece.destroyRecord();
+  }
+
+  cancelForm = task(async () => {
+    await this.deleteDraftPieces.perform();
+    this.router.transitionTo('cases.case.subcases.subcase');
+  });
+  
   cancelCreateSubmission = () => {
     this.isOpenCreateSubmissionModal = false;
     this.approvalComment = null;
@@ -188,12 +200,12 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       requestedBy,
       governmentAreas,
       status,
-      pieces: this.highlightedPieces,
+      pieces: this.newDraftPieces,
     });
 
     await this.submission.save();
 
-    await Promise.all(this.highlightedPieces.map((p) => {
+    await Promise.all(this.newDraftPieces.map((p) => {
       p.submission = this.submission;
       return p.save();
     }));
