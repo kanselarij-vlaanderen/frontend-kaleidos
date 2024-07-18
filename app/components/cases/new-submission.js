@@ -244,7 +244,6 @@ export default class CasesNewSubmissionComponent extends Component {
       return;
     }
 
-    debugger
     this.cabinetMail.sendFirstSubmissionMails(
       this.emailSettings,
       this.submission,
