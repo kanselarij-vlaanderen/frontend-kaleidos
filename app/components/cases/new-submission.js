@@ -177,7 +177,7 @@ export default class CasesNewSubmissionComponent extends Component {
       created: now,
       modified: now,
       shortTitle: trimText(this.shortTitle ?? decisionmakingFlowTitle),
-      title: trimText(this.decisionmakingFlowTitle),
+      title: trimText(decisionmakingFlowTitle),
       confidential: this.confidential,
       type: this.type,
       agendaItemType: this.agendaItemType,
@@ -244,12 +244,10 @@ export default class CasesNewSubmissionComponent extends Component {
       return;
     }
 
+    debugger
     this.cabinetMail.sendFirstSubmissionMails(
       this.emailSettings,
       this.submission,
-      this.submitter,
-      this.notificationAddresses,
-      this.CCAddresses
     );
   }
 
