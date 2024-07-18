@@ -43,12 +43,12 @@ export default class CasesSubmissionsIndexRoute extends Route {
         CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
       )
     ).map((status) => status.id);
-
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[status][:id:]': statusIds.join(','),
-      include: 'type,status,requested-by,mandatees.person,being-treated-by',
-      sort: params.sort,
+      'filter[:has-no:submission-activities]': 't',
+      include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
+      sort: params.sort + ',-modified',
       page: {
         number: params.page,
         size: params.size,

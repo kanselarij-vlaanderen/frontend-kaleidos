@@ -173,7 +173,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
-        let linkedPieces;
+        let linkedPieces = [];
         if (this.args.previousSubcase) {
           linkedPieces = await this.subcaseService.loadSubcasePieces(
             this.args.previousSubcase
@@ -194,7 +194,6 @@ export default class SubmissionHeaderComponent extends Component {
         });
         await subcase.save();
       }
-
       const pieces = await Promise.all(
         draftPieces.map(async (draftPiece) => {
           const previousPiece = await draftPiece.previousPiece;
@@ -246,11 +245,12 @@ export default class SubmissionHeaderComponent extends Component {
       );
 
       const agendaActivity = await this.pieceUpload.getAgendaActivity(subcase);
+
       if (agendaActivity) {
-        await this.pieceUpload.createSubmissionActivity(pieces, subcase, agendaActivity);
+        await this.pieceUpload.createSubmissionActivity(pieces, subcase, agendaActivity, this.args.submission);
         await this.pieceUpload.updateRelatedAgendaitems.perform(pieces, subcase);
       } else {
-        await this.pieceUpload.updateSubmissionActivity(pieces, subcase);
+        await this.pieceUpload.updateSubmissionActivity(pieces, subcase, this.args.submission);
       }
 
       if (meeting) {
