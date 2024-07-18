@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, all, timeout } from 'ember-concurrency';
+import { task, dropTask, all } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
@@ -17,6 +17,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service toaster;
   @service fileConversionService;
   @service documentService;
+  @service agendaService;
 
   defaultAccessLevel;
 
@@ -154,8 +155,9 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = null;
   }
 
-  createSubmission = task(async () => {
+  createSubmission = dropTask(async () => {
     const now = new Date();
+    this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
       'concept',
@@ -183,7 +185,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const status = originalSubmission ? updateSubmitted : submitted;
 
     this.submission = this.store.createRecord('submission', {
-      meeting,
       created: now,
       modified: now,
       shortTitle: trimText(this.model.shortTitle),
@@ -201,6 +202,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       governmentAreas,
       status,
       pieces: this.newDraftPieces,
+      plannedStart: meeting.plannedStart,
     });
 
     await this.submission.save();
@@ -222,6 +224,24 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     );
     await submissionStatusChange.save();
 
-    this.router.transitionTo('cases.submissions.submission', this.submission.id);
+    if (meeting) {
+      try {
+        await this.agendaService.putDraftSubmissionOnAgenda(
+          meeting,
+          this.submission
+        );
+        this.router.transitionTo(
+          'cases.submissions.submission',
+          this.submission.id
+        );
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-while-submitting-subcase-on-meeting', {
+            error: error.message,
+          }),
+          this.intl.t('warning-title')
+        );
+      }
+    }
   });
 }

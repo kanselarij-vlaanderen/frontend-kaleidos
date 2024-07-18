@@ -131,7 +131,7 @@
 
 {{#if this.createSubmission.isRunning}}
   <Auk::Modal @size="medium">
-    <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
+    <Auk::Modal::Header @title={{t "new-submission"}} @closeable={{false}} />
     <Auk::Modal::Body>
       {{#if this.pieces.length}}
         <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesCreatedCounter total=this.pieces.length)}} />
