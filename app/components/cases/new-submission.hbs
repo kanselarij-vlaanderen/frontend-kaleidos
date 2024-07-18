@@ -67,10 +67,11 @@
       <Cases::Submissions::Notifications
         class="auk-u-mb-2"
         @notificationAddresses={{this.notificationAddresses}}
-        @ccAddresses={{this.CCAddresses}}
+        @ccAddresses={{this.addedCCAddresses}}
+        @defaultCCAddress={{this.defaultCCAddress}}
         @onChangeNotificationAddresses={{fn (mut this.notificationAddresses)}}
         @onChangeNotificationMessage={{fn (mut this.notificationMessage)}}
-        @onChangeCCAddresses={{fn (mut this.CCAddresses)}}
+        @onChangeCCAddresses={{fn (mut this.addedCCAddresses)}}
         @onChangeCCMessage={{fn (mut this.CCMessage)}}
       />
       <Cases::Subcases::MandateeSelectorPanel

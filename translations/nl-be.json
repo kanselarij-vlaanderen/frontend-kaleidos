@@ -1428,5 +1428,10 @@
   "error-while-sending-document-naming-mapping": "Er ging iets fout tijdens het toepassen van de VR nummers. Er is geen mapping beschikbaar",
   "error-while-searching-document-naming-job": "Er is geen lopende VR nummering job gevonden.",
   "error-while-stamping-document": "Er ging iets fout tijdens het stempelen van de documenten.",
-  "succes-stamping-documents": "De documenten zijn gestempeld."
+  "succes-stamping-documents": "De documenten zijn gestempeld.",
+  "cabinet-submissions": "Kabinetten Indienen",
+  "ikw": "IKW",
+  "ikw-confidential": "IKW Vertrouwelijk",
+  "secretary-mail": "Secretarie",
+  "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden."
 }

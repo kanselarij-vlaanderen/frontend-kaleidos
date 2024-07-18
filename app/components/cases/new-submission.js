@@ -14,25 +14,26 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesNewSubmissionComponent extends Component {
   @service agendaService;
+  @service cabinetMail;
   @service conceptStore;
+  @service fileConversionService;
+  @service intl;
   @service router;
   @service store;
   @service toaster;
-  @service fileConversionService;
-  @service intl;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
 
   @tracked agendaItemType;
-  @tracked confidential;
+  @tracked confidential = false;
   @tracked shortTitle;
 
   @tracked type;
 
-  @tracked notificationAddresses = ['secretarie@vlaanderen.be'];
+  @tracked notificationAddresses = [];
   @tracked notificationMessage;
-  @tracked CCAddresses;
+  @tracked addedCCAddresses = [];
   @tracked CCMessage;
 
   @tracked showAgendaModal = false;
@@ -46,22 +47,54 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked isUploadingFiles;
+  @tracked emailSettings;
 
   @tracked showProposableAgendaModal = false;
 
   constructor() {
     super(...arguments);
 
+    this.loadEmailSettings.perform();
+
     this.selectedDecisionmakingFlow = this.args.decisionmakingFlow;
     this.submitter = this.args.submitter;
     this.mandatees = this.args.mandatees;
+  }
+
+  loadEmailSettings = task(async () => {
+    this.emailSettings = await this.store.queryOne(
+      'email-notification-setting'
+    );
+    if (this.emailSettings.cabinetSubmissionsSecretaryEmail) {
+      this.notificationAddresses = [
+        this.emailSettings.cabinetSubmissionsSecretaryEmail,
+        ...this.notificationAddresses,
+      ];
+    }
+  });
+
+  get defaultCCAddress() {
+    if (this.confidential) {
+      return this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail;
+    } else {
+      return this.emailSettings?.cabinetSubmissionsIkwEmail;
+    }
+  }
+
+  get CCAddresses() {
+    return [this.defaultCCAddress, ...this.addedCCAddresses];
   }
 
   get saveIsDisabled() {
     const decisionmakingFlowSet =
       !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitle;
     const subcaseTypeSet = !!this.type;
-    return !decisionmakingFlowSet || !subcaseTypeSet || this.isUploadingFiles;
+    return (
+      !decisionmakingFlowSet ||
+      !subcaseTypeSet ||
+      this.isUploadingFiles ||
+      this.loadEmailSettings.isRunning
+    );
   }
 
   get sortedPieces() {
@@ -177,6 +210,7 @@ export default class CasesNewSubmissionComponent extends Component {
       }
     );
     await submissionStatusChange.save();
+    this.createNotificationMailResources();
 
     if (meeting) {
       try {
@@ -198,6 +232,24 @@ export default class CasesNewSubmissionComponent extends Component {
       }
     }
   });
+
+  createNotificationMailResources() {
+    if (!this.emailSettings) {
+      this.toaster.warning(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      return;
+    }
+
+    this.cabinetMail.sendFirstSubmissionMails(
+      this.emailSettings,
+      this.submission,
+      this.submitter,
+      this.notificationAddresses,
+      this.CCAddresses
+    );
+  }
 
   savePieces = task(async () => {
     this.piecesCreatedCounter = 0;

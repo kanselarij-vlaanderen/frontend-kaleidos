@@ -48,7 +48,7 @@
               <Item
                 class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
               >
-                <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{35}} />
+                <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{100}} />
                 {{#unless (this.isDefaultNotificationAddress notificationAddress)}}
                   <AuButton
                     @skin="naked"
@@ -111,11 +111,17 @@
             @divider={{true}}
             as |Item|
           >
+          {{#if (or @defaultCCAddress @ccAddresses)}}
+            <Item
+              class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+            >
+              <Auk::AbbreviatedText @text={{@defaultCCAddress}} @maxLength={{100}} />
+            </Item>
             {{#each @ccAddresses as |CCAddress|}}
               <Item
                 class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
               >
-                <Auk::AbbreviatedText @text={{CCAddress}} @maxLength={{35}} />
+                <Auk::AbbreviatedText @text={{CCAddress}} @maxLength={{100}} />
                 <AuButton
                   @skin="naked"
                   @alert={{true}}
@@ -126,11 +132,12 @@
                   {{t "delete"}}
                 </AuButton>
               </Item>
-            {{else}}
+            {{/each}}
+          {{else}}
               <Item class="au-u-padding-small">
                 {{t "no-notification-addresses-selected"}}
               </Item>
-            {{/each}}
+          {{/if}}
           </AuList>
         </Auk::Panel::Body>
         <Auk::Panel::Body class="auk-u-p-2">
