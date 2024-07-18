@@ -10,12 +10,14 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
+  @service cabinetMail;
   @service conceptStore;
   @service intl;
   @service router;
   @service store;
   @service toaster;
   @service fileConversionService;
+  @service currentSession;
 
   defaultAccessLevel;
 
@@ -169,12 +171,15 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const meeting = await originalSubmission.meeting;
 
     const status = originalSubmission ? updateSubmitted : submitted;
+    const creator = await this.currentSession.user;
 
     this.submission = this.store.createRecord('submission', {
       meeting,
       created: now,
+      creator,
       modified: now,
       shortTitle: trimText(this.model.shortTitle),
+      title: originalSubmission?.title,
       confidential: this.model.confidential,
       subcase: this.model,
       type,
@@ -209,7 +214,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       }
     );
     await submissionStatusChange.save();
-
+    this.cabinetMail.sendUpdateSubmissionMails(this.submission);
     this.router.transitionTo('cases.submissions.submission', this.submission.id);
   });
 }

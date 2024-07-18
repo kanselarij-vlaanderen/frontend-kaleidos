@@ -10,13 +10,14 @@ import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 // 2. no mulitline string:
 // => ensure exact representation
 
-const footer = 'Met vriendelijke groet,\n'
-  + '\n'
-  + 'Vlaamse overheid\t\n'
-  + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n'
-  + 'Team Ondersteuning Vlaamse Regering\t\n'
-  + 'publicatiesBS@vlaanderen.be\t\n'
-  + 'Koolstraat 35, 1000 Brussel\t\n';
+const footer =
+  'Met vriendelijke groet,\n' +
+  '\n' +
+  'Vlaamse overheid\t\n' +
+  'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n' +
+  'Team Ondersteuning Vlaamse Regering\t\n' +
+  'publicatiesBS@vlaanderen.be\t\n' +
+  'Koolstraat 35, 1000 Brussel\t\n';
 
 function caseSubmittedEmail(params) {
   let message = '';
@@ -35,8 +36,7 @@ function caseSubmittedApproversEmail(params) {
   let message = caseSubmittedEmail(params);
   if (params.approversComment) {
     message +=
-      `\t\n` +
-      `Aanvullende informatie: "${params.approversComment}"\t\n`
+      `\t\n` + `Aanvullende informatie: "${params.approversComment}"\t\n`;
   }
 
   return {
@@ -49,11 +49,9 @@ function caseSubmittedIkwEmail(params) {
   const subject = `Nieuwe indiening in dossier "${params.caseName}"`;
 
   let message = caseSubmittedEmail(params);
-  
+
   if (params.ikwComment) {
-    message +=
-      `\t\n` +
-      `Aanvullende informatie: "${params.ikwComment}"\t\n`
+    message += `\t\n` + `Aanvullende informatie: "${params.ikwComment}"\t\n`;
   }
 
   return {
@@ -89,7 +87,7 @@ function caseSendBackEmail(params) {
     '\n' +
     `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd met de volgende opmerking: \n` +
     `"${params.comment}"\t\n` +
-    `U kunt de indiening hier bekijken: ${params.submissionUrl}`
+    `U kunt de indiening hier bekijken: ${params.submissionUrl}`;
 
   return {
     subject,
@@ -129,11 +127,69 @@ function caseResubmittedEmail(params) {
   };
 }
 
+function caseUpdateSubmissionApproversEmail(params) {
+  // TODO: fix message content
+  const subject = `Herindiening in het dossier "${params.caseName}"`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}".\n` +
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
+    `Aanvullende informatie: "${params.approversComment}"\t\n`;
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
+function caseUpdateSubmissionIkwEmail(params) {
+  // TODO: fix message content
+  const subject = `Herindiening in het dossier "${params.caseName}"`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}".\n` +
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
+    `Aanvullende informatie: "${params.ikwComment}"\t\n`;
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
+function caseUpdateSubmissionSubmitterEmail(params) {
+  // TODO: fix message content
+  const subject = `Herindiening in het dossier "${params.caseName}"`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Uw herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" werd goed ontvangen.\n` +
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
+    `Aanvullende informatie: "${params.approversComment}"\t\n` +
+    `Aanvullende informatie voor IKW: "${params.ikwComment}"\t\n`;
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
 export {
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
   caseSendBackEmail,
   caseResubmittedSubmitterEmail,
-  caseResubmittedEmail
+  caseResubmittedEmail,
+  caseUpdateSubmissionApproversEmail,
+  caseUpdateSubmissionIkwEmail,
+  caseUpdateSubmissionSubmitterEmail,
 };

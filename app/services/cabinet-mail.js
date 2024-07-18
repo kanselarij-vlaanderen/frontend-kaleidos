@@ -7,6 +7,9 @@ import {
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
+  caseUpdateSubmissionApproversEmail,
+  caseUpdateSubmissionIkwEmail,
+  caseUpdateSubmissionSubmitterEmail,
 } from 'frontend-kaleidos/utils/cabinet-submission-email';
 
 export default class CabinetMailService extends Service {
@@ -138,6 +141,74 @@ export default class CabinetMailService extends Service {
     const approversMail = caseSubmittedApproversEmail(params);
     const ikwMail = caseSubmittedIkwEmail(params);
     const submitterMail = caseSubmittedSubmitterEmail(params);
+
+    const approversMailResources = submission.approvedBy.map((address) =>
+      this.store.createRecord('email', {
+        to: address,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
+        subject: approversMail.subject,
+        message: approversMail.message,
+      })
+    );
+
+    const ikwMailResources = submission.notified.map((address) =>
+      this.store.createRecord('email', {
+        to: address,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
+        subject: ikwMail.subject,
+        message: ikwMail.message,
+      })
+    );
+
+    const creator = await submission.creator;
+    const submitterMailResource = this.store.createRecord('email', {
+      to: creator.email,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: submitterMail.subject,
+      message: submitterMail.message,
+    });
+
+    await Promise.all([
+      ...approversMailResources.map((resource) => resource.save()),
+      ...ikwMailResources.map((resource) => resource.save()),
+      submitterMailResource.save(),
+    ]);
+  }
+
+  async sendUpdateSubmissionMails(submission) {
+    const [mailSettings, outbox] = await Promise.all([
+      this.store.queryOne('email-notification-setting'),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+    ]);
+
+    if (!(mailSettings && outbox)) {
+      this.toaster.warning(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      return;
+    }
+
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.router.urlFor(
+      'cases.submissions.submission',
+      submission
+    );
+
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      submissionTitle: submission.shortTitle,
+      caseName: submission.title,
+      approversComment: submission.approvalComment,
+      ikwComment: submission.notificationComment,
+    };
+
+    const approversMail = caseUpdateSubmissionApproversEmail(params);
+    const ikwMail = caseUpdateSubmissionIkwEmail(params);
+    const submitterMail = caseUpdateSubmissionSubmitterEmail(params);
 
     const approversMailResources = submission.approvedBy.map((address) =>
       this.store.createRecord('email', {
