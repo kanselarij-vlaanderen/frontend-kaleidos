@@ -6,17 +6,17 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        {{#if this.mayCreateNewSubmission}}
-            <AuLink
-              @skin="button-secondary"
-              @icon="plus"
-              @route="cases.case.subcases.subcase.new-submission"
-            >
-              {{t "submit-new-documents"}}
-            </AuLink>
-          {{/if}}
-      </Auk::Toolbar::Item>
+      {{#if this.mayCreateNewSubmission}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @icon="plus"
+            @route="cases.case.subcases.subcase.new-submission"
+          >
+            {{t "submit-new-documents"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if this.hasActions}}
