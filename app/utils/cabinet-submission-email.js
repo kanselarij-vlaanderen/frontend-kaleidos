@@ -23,14 +23,14 @@ function caseSubmittedEmail(params) {
   message +=
     'Beste,\n' +
     '\n' +
-    `Er is een nieuwe indiening "${params.submissionTitle}" in het dossier: ${params.caseName}\n` +
+    `Er is een nieuwe indiening "${params.submissionTitle}" in het dossier "${params.caseName}"\n` +
     `U kunt deze hier bekijken: ${params.submissionUrl}`;
 
   return message;
 }
 
 function caseSubmittedApproversEmail(params) {
-  const subject = `Nieuwe indiening in dossier: ${params.caseName}`;
+  const subject = `Nieuwe indiening in dossier "${params.caseName}"`;
 
   let message = caseSubmittedEmail(params);
   if (params.approversComment) {
@@ -40,13 +40,13 @@ function caseSubmittedApproversEmail(params) {
   }
 
   return {
-    subject: subject,
+    subject,
     message: [message, footer].join('\n\n'),
   };
 }
 
 function caseSubmittedIkwEmail(params) {
-  const subject = `Nieuwe indiening in dossier: ${params.caseName}`;
+  const subject = `Nieuwe indiening in dossier "${params.caseName}"`;
 
   let message = caseSubmittedEmail(params);
   
@@ -57,13 +57,13 @@ function caseSubmittedIkwEmail(params) {
   }
 
   return {
-    subject: subject,
+    subject,
     message: [message, footer].join('\n\n'),
   };
 }
 
 function caseSubmittedSubmitterEmail(params) {
-  const subject = `Nieuwe indiening in dossier: ${params.caseName}`;
+  const subject = `Nieuwe indiening in dossier "${params.caseName}"`;
 
   let message = '';
   message +=
@@ -75,7 +75,56 @@ function caseSubmittedSubmitterEmail(params) {
     `\t\nAanvullende informatie voor IKW-groep: ${params.ikwComment}\t\n`;
 
   return {
-    subject: subject,
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
+function caseSendBackEmail(params) {
+  const subject = `Indiening voor het dossier ${params.caseName} werd teruggestuurd.`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd met de volgende opmerking: \n` +
+    `"${params.comment}"\t\n` +
+    `U kunt de indiening hier bekijken: ${params.submissionUrl}`
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
+function caseResubmittedSubmitterEmail(params) {
+  const subject = `Herindiening in het dossier "${params.caseName}"`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Uw herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" met opmerking "${params.comment}", is goed ontvangen.\n` +
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
+function caseResubmittedEmail(params) {
+  const subject = `Herindiening in het dossier "${params.caseName}"`;
+
+  let message = '';
+  message +=
+    'Beste,\n' +
+    '\n' +
+    `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" met opmerking "${params.comment}".\n` +
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+
+  return {
+    subject,
     message: [message, footer].join('\n\n'),
   };
 }
@@ -84,4 +133,7 @@ export {
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
+  caseSendBackEmail,
+  caseResubmittedSubmitterEmail,
+  caseResubmittedEmail
 };

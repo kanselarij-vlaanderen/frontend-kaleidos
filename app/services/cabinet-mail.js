@@ -1,6 +1,9 @@
 import Service, { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import {
+  caseResubmittedEmail,
+  caseResubmittedSubmitterEmail,
+  caseSendBackEmail,
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
@@ -12,12 +15,106 @@ export default class CabinetMailService extends Service {
   @service toaster;
   @service intl;
 
+  async sendBackToSubmitterMail(submission, comment) {
+    const [mailSettings, outbox] = await Promise.all([
+      this.store.queryOne('email-notification-setting'),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+    ]);
+
+    if (!(mailSettings && outbox)) {
+      this.toaster.warning(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      return;
+    }
+
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.router.urlFor(
+      'cases.submissions.submission',
+      submission
+    );
+
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      submissionTitle: submission.shortTitle,
+      caseName: submission.title,
+      comment,
+    };
+
+    const mail = caseSendBackEmail(params);
+
+    const mailResource = this.store.createRecord('email', {
+      to: submission.creator.email,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: mail.subject,
+      message: mail.message,
+    });
+
+    await mailResource.save();
+  }
+
+  async sendResubmissionMails(submission, comment) {
+    const [mailSettings, outbox] = await Promise.all([
+      this.store.queryOne('email-notification-setting'),
+      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
+    ]);
+
+    if (!(mailSettings && outbox)) {
+      this.toaster.warning(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      return;
+    }
+
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.router.urlFor(
+      'cases.submissions.submission',
+      submission
+    );
+
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      submissionTitle: submission.shortTitle,
+      caseName: submission.title,
+      comment,
+    };
+
+    const notificationEmail = caseResubmittedEmail(params);
+    const submitterEmail = caseResubmittedSubmitterEmail(params);
+
+    const notificationEmailResources = [
+      ...submission.approvedBy,
+      ...submission.notified,
+    ].map((address) =>
+      this.store.createRecord('email', {
+        to: address,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
+        subject: notificationEmail.subject,
+        message: notificationEmail.message,
+      })
+    );
+
+    const submitterEmailResource = this.store.createRecord('email', {
+      to: submission.creator.email,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: submitterEmail.subject,
+      message: submitterEmail.message,
+    });
+
+    await Promise.all([
+      ...notificationEmailResources.map((resource) => resource.save()),
+      submitterEmailResource.save(),
+    ]);
+  }
+
   async sendFirstSubmissionMails(
     mailSettings,
     submission,
-    submitter,
-    approverAddresses,
-    notifiedAddresses
   ) {
     const outbox = await this.store.findRecordByUri(
       'mail-folder',
@@ -42,7 +139,7 @@ export default class CabinetMailService extends Service {
     const ikwMail = caseSubmittedIkwEmail(params);
     const submitterMail = caseSubmittedSubmitterEmail(params);
 
-    const approversMailResources = approverAddresses.map((address) =>
+    const approversMailResources = submission.approvedBy.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,
@@ -52,7 +149,7 @@ export default class CabinetMailService extends Service {
       })
     );
 
-    const ikwMailResources = notifiedAddresses.map((address) =>
+    const ikwMailResources = submission.notified.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,
@@ -62,8 +159,9 @@ export default class CabinetMailService extends Service {
       })
     );
 
+    const creator = await submission.creator;
     const submitterMailResource = this.store.createRecord('email', {
-      to: submitter.email,
+      to: creator.email,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       subject: submitterMail.subject,
