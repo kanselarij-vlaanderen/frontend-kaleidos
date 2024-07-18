@@ -1433,5 +1433,6 @@
   "ikw": "IKW",
   "ikw-confidential": "IKW Vertrouwelijk",
   "secretary-mail": "Secretarie",
-  "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden."
+  "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden.",
+  "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?"
 }

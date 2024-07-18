@@ -31,7 +31,8 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
 
     if (!activity || !startedAt || !status) return '';
 
-    const date = dateFormat(startedAt, 'dd-MM-yyyy');
+    const at = "om";
+    const date = dateFormat(startedAt, `dd-MM-yyyy '${at}' HH:mm`);
     const comment = activity.comment ? `: '${activity.comment}'` : '';
 
     const intlKey = this.intlKeyMap[status.uri];

@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /*
  * @argument subcase
@@ -11,6 +12,7 @@ import { task } from 'ember-concurrency';
 export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
+  @service currentSession;
   @service router;
   @service toaster;
   @service intl;
@@ -31,6 +33,10 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     super(...arguments);
 
     this.loadData.perform();
+  }
+
+  get mayCreateNewSubmission() {
+    return isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions');
   }
 
   @task

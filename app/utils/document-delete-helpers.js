@@ -18,10 +18,10 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
     }
     while (latestPiece) {
       const previousPiece = await latestPiece.previousPiece;
-      if (latestPiece.constructor.modelName === 'piece') {
+      const modelName = latestPiece.constructor.modelName;
+      if (modelName === 'piece' || modelName === 'draft-piece') {
         await deletePiece(latestPiece);
-      } else if (latestPiece.constructor.modelName === 'report'
-                || latestPiece.constructor.modelName === 'minutes') {
+      } else if (modelName === 'report' || modelName === 'minutes') {
         await deletePieceWithPieceParts(latestPiece);
       } else {
         console.debug(

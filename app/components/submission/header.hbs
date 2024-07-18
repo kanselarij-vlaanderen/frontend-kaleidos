@@ -84,12 +84,24 @@
 </ConfirmationModal>
 
 {{#if (and (not this.loadAgenda.isRunning) this.isOpenCreateSubcaseModal)}}
-  <Cases::Subcases::ProposableAgendasModal
-    @onCancel={{this.toggleCreateSubcaseModal}}
-    @onConfirm={{queue (perform this.createSubcase) this.toggleCreateSubcaseModal}}
-    @defaultAgenda={{this.selectedAgenda}}
-    @showSaveWithoutAgenda={{true}}
-  />
+  {{#if this.isUpdate}}
+    <ConfirmationModal
+      @modalOpen={{this.isOpenCreateSubcaseModal}}
+      @onCancel={{this.toggleCreateSubcaseModal}}
+      @title={{t "create-subcase"}}
+      @onConfirm={{perform this.createSubcase false null false null}}
+      @alert={{true}}
+      @loading={{this.createSubcase.isRunning}}
+      @message={{t "confirm-accept-subcase-update"}}
+    />
+  {{else}}
+    <Cases::Subcases::ProposableAgendasModal
+      @onCancel={{this.toggleCreateSubcaseModal}}
+      @onConfirm={{perform this.createSubcase}}
+      @defaultAgenda={{this.selectedAgenda}}
+      @showSaveWithoutAgenda={{true}}
+    />
+  {{/if}}
 {{/if}}
 
 <ConfirmationModal

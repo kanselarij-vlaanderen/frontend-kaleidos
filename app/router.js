@@ -46,7 +46,11 @@ Router.map(function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
       this.route('publication-flow', { path: '/publicatie/:publication_id'});
       this.route('subcases', { path: '/deeldossiers', }, function() {
-        this.route('subcase', { path: ':subcase_id', }, function() {});
+        this.route('subcase', { path: ':subcase_id', }, function() {
+          if (isEnabledCabinetSubmissions()) {
+            this.route('new-submission', { path: '/nieuwe-indiening' });
+          }
+        });
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
         if (isEnabledCabinetSubmissions())
           this.route('new-submission', { path: '/nieuwe-indiening' });

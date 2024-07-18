@@ -32,6 +32,8 @@ export default class SubmissionModel extends Model {
   @belongsTo('mandatee', { inverse: null, async: true })
   requestedBy;
   @belongsTo('user', { inverse: null, async: true })
+  creator;
+  @belongsTo('user', { inverse: null, async: true })
   modifiedBy;
   @belongsTo('user', { inverse: null, async: true })
   beingTreatedBy;
@@ -74,6 +76,13 @@ export default class SubmissionModel extends Model {
     return (
       this.status?.get('uri') ===
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD
+    );
+  }
+
+  get isUpdateSubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
     );
   }
 

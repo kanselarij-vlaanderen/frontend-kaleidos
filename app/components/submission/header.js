@@ -14,6 +14,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service router;
   @service store;
   @service toaster;
+  @service pieceUpload;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -47,6 +48,10 @@ export default class SubmissionHeaderComponent extends Component {
     ];
   }
 
+  get isUpdate() {
+    return !!this.args.submission.subcase?.get('id');
+  }
+
   get canResubmitSubmission() {
     return (
       this.args.submission.isSentBack &&
@@ -64,7 +69,8 @@ export default class SubmissionHeaderComponent extends Component {
   get canTakeInTreatment() {
     return (
       (this.args.submission.isSubmitted ||
-        this.args.submission.isResubmitted) &&
+        this.args.submission.isResubmitted ||
+        this.args.submission.isUpdateSubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
@@ -164,25 +170,44 @@ export default class SubmissionHeaderComponent extends Component {
         await decisionmakingFlow.save();
       }
 
-      const subcase = this.store.createRecord('subcase', {
-        shortTitle: this.args.submission.shortTitle,
-        created: this.args.submission.created,
-        modified: now,
-        confidential: this.args.submission.confidential,
-        type,
-        decisionmakingFlow,
-        requestedBy,
-        agendaItemType,
-        mandatees,
-        governmentAreas,
-      });
-      await subcase.save();
+      let subcase = await this.args.submission.subcase;
+      if (!subcase) {
+        subcase = this.store.createRecord('subcase', {
+          shortTitle: this.args.submission.shortTitle,
+          created: this.args.submission.created,
+          modified: now,
+          confidential: this.args.submission.confidential,
+          type,
+          decisionmakingFlow,
+          requestedBy,
+          agendaItemType,
+          mandatees,
+          governmentAreas,
+        });
+        await subcase.save();
+      }
 
       const pieces = await Promise.all(
         draftPieces.map(async (draftPiece) => {
-          const draftDocumentContainer = await draftPiece.documentContainer;
-          const type = await draftDocumentContainer.type;
+          const previousPiece = await draftPiece.previousPiece;
           const accessLevel = await draftPiece.accessLevel;
+          let documentContainer;
+
+          if (!previousPiece) {
+            const draftDocumentContainer = await draftPiece.documentContainer;
+            const type = await draftDocumentContainer.type;
+            documentContainer = this.store.createRecord(
+              'document-container',
+              {
+                position: draftDocumentContainer.position,
+                created: draftDocumentContainer.created,
+                type,
+              }
+            );
+            await documentContainer.save();
+          } else {
+            documentContainer = await previousPiece.documentContainer;
+          }
 
           const draftFile = await draftPiece.file;
           const draftDerivedFile = await draftFile.derived;
@@ -198,20 +223,11 @@ export default class SubmissionHeaderComponent extends Component {
             await file.save();
           }
 
-          const documentContainer = this.store.createRecord(
-            'document-container',
-            {
-              position: draftDocumentContainer.position,
-              created: draftDocumentContainer.created,
-              type,
-            }
-          );
-          await documentContainer.save();
-
           const piece = this.store.createRecord('piece', {
             name: draftPiece.name,
             created: draftPiece.created,
             modified: now,
+            previousPiece,
             accessLevel,
             file,
             documentContainer,
@@ -221,15 +237,13 @@ export default class SubmissionHeaderComponent extends Component {
         })
       );
 
-      const submissionActivity = this.store.createRecord(
-        'submission-activity',
-        {
-          startDate: now,
-          subcase: subcase,
-          pieces,
-        }
-      );
-      await submissionActivity.save();
+      const agendaActivity = await this.pieceUpload.getAgendaActivity(subcase);
+      if (agendaActivity) {
+        await this.pieceUpload.createSubmissionActivity(pieces, subcase, agendaActivity);
+        await this.pieceUpload.updateRelatedAgendaitems.perform(pieces, subcase);
+      } else {
+        await this.pieceUpload.updateSubmissionActivity(pieces, subcase);
+      }
 
       if (meeting) {
         try {
@@ -251,6 +265,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.AANVAARD);
+      this.toggleCreateSubcaseModal();
 
       this.router.transitionTo(
         'cases.case.subcases.subcase',

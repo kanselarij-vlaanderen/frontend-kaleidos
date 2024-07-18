@@ -7,7 +7,6 @@ import { task } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
   @service conceptStore;
@@ -24,6 +23,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
+  @tracked highlightedPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
 
   statusChangeActivities;
@@ -52,12 +52,6 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       return d1?.position - d2?.position || p1.created - p2.created;
     });
   }
-
-  filterSubcaseTypes = (subcaseTypes) => {
-    return subcaseTypes.filter(
-      (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING
-    );
-  };
 
   disableMandatee = (mandatee) => {
     return this.currentLinkedMandatee.id === mandatee.id;
@@ -114,6 +108,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       submission: this.model,
     });
     this.newPieces.push(piece);
+    this.highlightedPieces.push(piece);
   }
 
   savePieces = task(async () => {

@@ -53,7 +53,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   }
 
   get isDraftPiece() {
-    return this.args.piece.constructor.name === 'DraftPiece';
+    return this.args.piece.constructor.modelName === 'draft-piece';
   }
 
   // @piece.downloadlinkPromise does not recalculate after edit of this.args.piece.name

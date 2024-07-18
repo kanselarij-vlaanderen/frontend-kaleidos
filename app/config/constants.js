@@ -12,6 +12,7 @@ export default {
     DECISION_RESULT_CODES: 'http://themis.vlaanderen.be/id/concept-scheme/43052680-1c88-47f1-b081-99087afc4497',
     SIGNFLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/ebfe253c-0537-11ee-bb35-ee395168dcf7',
     PARLIAMENT_FLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/bfa3671b-68c1-4371-aa00-63840b7c9901',
+    SUBMISSION_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/9ee8c485-e750-4982-a2b7-3f17d390331d',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
