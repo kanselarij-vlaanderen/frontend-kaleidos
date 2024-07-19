@@ -14,6 +14,11 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
   constructor() {
     super(...arguments);
     this.selectedDecisionmakingFlow = this.args.selectedDecisionmakingFlow;
+    if (this.selectedDecisionmakingFlow) {
+      this.decisionmakingFlowTitle = this.selectedDecisionmakingFlow?.case?.title;
+    } else {
+      this.decisionmakingFlowTitle = this.args.selectedDecisionmakingFlowTitle;
+    }
   }
 
   get decisionmakingFlowOrTitle() {

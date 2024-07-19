@@ -25,7 +25,11 @@
               @skin="naked"
               {{on "click" (toggle "isOpenCreateSubcaseModal" this)}}
             >
-              {{t "create-subcase-and-put-on-agenda"}}
+              {{#if this.isUpdate}}
+                {{t "accept-update-and-put-on-agenda"}}
+              {{else}}
+                {{t "create-subcase-and-put-on-agenda"}}
+              {{/if}}
             </AuButton>
           {{/if}}
           {{#if this.canTakeInTreatment}}

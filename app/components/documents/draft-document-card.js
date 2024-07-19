@@ -30,6 +30,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service store;
   @service toaster;
   @service intl;
+  @service pieceAccessLevelService;
 
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
@@ -212,6 +213,10 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
     yield deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
 
   @action
