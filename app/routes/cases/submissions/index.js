@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+// import CONSTANTS from 'frontend-kaleidos/config/constants';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 
 export default class CasesSubmissionsIndexRoute extends Route {
@@ -38,14 +38,14 @@ export default class CasesSubmissionsIndexRoute extends Route {
   };
 
   async model(params) {
-    const statusIds = (
-      await this.conceptStore.queryAllByConceptScheme(
-        CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
-      )
-    ).map((status) => status.id);
+    // const statusIds = (
+    //   await this.conceptStore.queryAllByConceptScheme(
+    //     CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
+    //   )
+    // ).map((status) => status.id);
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      'filter[status][:id:]': statusIds.join(','),
+      // 'filter[status][:id:]': statusIds.join(','), // TODO: update (BIS) submissions are not shown for some reason
       'filter[:has-no:submission-activities]': 't',
       include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
       sort: params.sort + ',-modified',

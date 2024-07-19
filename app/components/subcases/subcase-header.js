@@ -38,6 +38,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   get maySubmitNewDocuments() {
     return isEnabledCabinetSubmissions() &&
+      this.loadData.isIdle &&
       this.currentSession.may('create-submissions') &&
       this.args.subcase.submissions?.length > 0 &&
       !this.meetingIsClosed;
