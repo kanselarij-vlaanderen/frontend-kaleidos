@@ -1432,5 +1432,12 @@
   "error-while-searching-document-naming-job": "Er is geen lopende VR nummering job gevonden.",
   "error-while-stamping-document": "Er ging iets fout tijdens het stempelen van de documenten.",
   "succes-stamping-documents": "De documenten zijn gestempeld.",
-  "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?"
+  "cabinet-submissions": "Kabinetten Indienen",
+  "ikw": "IKW",
+  "ikw-confidential": "IKW Vertrouwelijk",
+  "secretary-mail": "Secretarie",
+  "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden.",
+  "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?",
+  "no-submission-approval-addresses-selected": "Geen goedkeurder adressen gekozen",
+  "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen"
 }

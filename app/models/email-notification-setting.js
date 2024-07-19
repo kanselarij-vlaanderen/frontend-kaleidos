@@ -12,4 +12,7 @@ export default class EmailNotificationSetting extends Model {
   @attr('string') publicationRequestToEmail;
   @attr('string') publicationRequestCcEmail;
   @attr('string') publicationRequestReplyToEmail;
+  @attr('string') cabinetSubmissionsSecretaryEmail;
+  @attr('string') cabinetSubmissionsIkwEmail;
+  @attr('string') cabinetSubmissionsIkwConfidentialEmail;
 }

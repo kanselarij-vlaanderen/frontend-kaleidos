@@ -8,6 +8,7 @@ import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class SubmissionHeaderComponent extends Component {
   @service agendaService;
+  @service cabinetMail;
   @service currentSession;
   @service documentService;
   @service intl;
@@ -135,6 +136,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
       this.comment
     );
+    this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
   });
 
   createSubcase = dropTask(
@@ -300,6 +302,10 @@ export default class SubmissionHeaderComponent extends Component {
   sendBackToSubmitter = task(async () => {
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
+      this.comment
+    );
+    this.cabinetMail.sendBackToSubmitterMail(
+      this.args.submission,
       this.comment
     );
   });

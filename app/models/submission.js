@@ -14,9 +14,9 @@ export default class SubmissionModel extends Model {
   @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
-  @attr('string-set', { defaultValue: () => [] }) approvedBy;
+  @attr('string-set', { defaultValue: () => [] }) approvalAddresses;
   @attr approvalComment;
-  @attr('string-set', { defaultValue: () => [] }) notified;
+  @attr('string-set', { defaultValue: () => [] }) notificationAddresses;
   @attr notificationComment;
 
   @belongsTo('decisionmaking-flow', { inverse: 'submissions', async: true })
