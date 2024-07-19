@@ -236,7 +236,13 @@ export default class PieceAccessLevelService extends Service {
 
   async canViewConfidentialPiece(piece) {
     const accessLevel = await piece?.accessLevel;
-    if (this.currentSession.may('view-only-specific-confidential-documents') && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+    const mayViewConfidentialPiece = this.currentSession.may(
+      'view-only-specific-confidential-documents'
+    );
+    if (
+      mayViewConfidentialPiece &&
+      accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+    ) {
       const submissionActivity = await this.store.queryOne('submission-activity', {
         filter: {
           pieces: {
@@ -286,9 +292,19 @@ export default class PieceAccessLevelService extends Service {
         }
       }
     } else {
-      // default to standard behaviour (if confidential doc is in your graph it can be accessed normally)
+      // careful with submissions access/permissions, all confidential files are in the submissions graph
+      const mayViewAllConfidentialPieces = this.currentSession.may(
+        'view-all-confidential-documents'
+      );
+      // TODO will there ever be intern secretarie document in the submissions??
+      if (!mayViewAllConfidentialPieces && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+        // specifically cabinet medewerker needs this for submission graph docs, other profiles don't have confidential in their graph
+        return false;
+      }
+      // default to standard behaviour (if non confidential doc is in your graph it can be accessed normally)
       return true;
     }
+    // dossierbeheerder looking at a confidential doc that is not theirs
     return false;
   }
 }
