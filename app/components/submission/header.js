@@ -245,7 +245,7 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
-            originalName: draftPiece.originalName,
+            originalName: previousPiece.originalName,
           });
           await piece.save();
           this.piecesMovedCounter++;
