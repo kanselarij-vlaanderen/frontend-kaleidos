@@ -106,55 +106,63 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{#each @model as |submission|}}
-                    {{! template-lint-disable no-invalid-interactive }}
-                    <tr
-                      class="auk-u-text-align--center auk-table--clickable-rows"
-                      {{on "click" (fn this.navigateToSubmission submission)}}
-                    >
-                      <td>
-                        <p>
-                          {{#if submission.shortTitle}}
-                            {{submission.shortTitle}}
+                  {{#if this.isLoadingModel}}
+                    <tr>
+                      <td colspan="6">
+                        {{t "loading"}}
+                      </td>
+                    </tr>
+                  {{else}}
+                    {{#each @model as |submission|}}
+                      {{! template-lint-disable no-invalid-interactive }}
+                      <tr
+                        class="auk-u-text-align--center auk-table--clickable-rows"
+                        {{on "click" (fn this.navigateToSubmission submission)}}
+                      >
+                        <td>
+                          <p>
+                            {{#if submission.shortTitle}}
+                              {{submission.shortTitle}}
+                            {{else}}
+                              -
+                            {{/if}}
+                          </p>
+                        </td>
+                        <td>
+                          {{date submission.plannedStart}}
+                        </td>
+                        <td>
+                          {{#if submission.type.label}}
+                            <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
+                          {{else if submission.type.altLabel}}
+                            <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.altLabel}}</AuPill>
                           {{else}}
                             -
                           {{/if}}
-                        </p>
-                      </td>
-                      <td>
-                        {{date submission.plannedStart}}
-                      </td>
-                      <td>
-                        {{#if submission.type.label}}
-                          <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
-                        {{else if submission.type.altLabel}}
-                          <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.altLabel}}</AuPill>
-                        {{else}}
-                          -
-                        {{/if}}
-                      </td>
-                      <td>
-                        {{#if submission.status.label}}
-                          <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
-                        {{else if submission.status.altLabel}}
-                          <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
-                        {{else}}
-                          -
-                        {{/if}}
-                      </td>
-                      <td class="auk-u-text-align--right">
-                        <AuLink
-                          @skin="button-naked"
-                          @icon="chevron-right"
-                          @hideText={{true}}
-                          @route="cases.submissions.submission"
-                          @model={{submission.id}}
-                        >
-                          {{t "open"}}
-                        </AuLink>
-                      </td>
-                    </tr>
-                  {{/each}}
+                        </td>
+                        <td>
+                          {{#if submission.status.label}}
+                            <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
+                          {{else if submission.status.altLabel}}
+                            <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
+                          {{else}}
+                            -
+                          {{/if}}
+                        </td>
+                        <td class="auk-u-text-align--right">
+                          <AuLink
+                            @skin="button-naked"
+                            @icon="chevron-right"
+                            @hideText={{true}}
+                            @route="cases.submissions.submission"
+                            @model={{submission.id}}
+                          >
+                            {{t "open"}}
+                          </AuLink>
+                        </td>
+                      </tr>
+                    {{/each}}
+                  {{/if}}
                 </tbody>
               </table>
             </div>

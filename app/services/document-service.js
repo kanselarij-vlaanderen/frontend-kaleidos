@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
+import { all } from 'ember-concurrency';
 
 export default class DocumentService extends Service {
   @service jobMonitor;
@@ -173,5 +174,25 @@ export default class DocumentService extends Service {
         });
       }
     });
+  }
+
+  async enforceDocType(pieces) {
+    if (pieces?.length) {
+      // enforce all new pieces must have type on document container
+      const typesPromises = pieces.map(async (piece) => {
+        const container = await piece.documentContainer;
+        const type = await container.type;
+        return type;
+      });
+      const types = await all(typesPromises);
+      if (types.some(type => !type)) {
+        this.toaster.error(
+          this.intl.t('document-type-required'),
+          this.intl.t('warning-title'),
+        );
+        return true;
+      }
+    }
+    return false;
   }
 }

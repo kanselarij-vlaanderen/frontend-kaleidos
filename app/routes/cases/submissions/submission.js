@@ -52,6 +52,13 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     await submission.requestedBy;
+    const decisionmakingFlow = await submission.decisionmakingFlow;
+    const subcases = await decisionmakingFlow?.subcases;
+    const sortedSubcases = subcases?.slice()
+      .sort((s1, s2) => s2.created.getTime() - s1.created.getTime())
+    if (sortedSubcases?.length) {
+      this.previousSubcase = sortedSubcases[0];
+    }
 
     const mandatees = await submission.mandatees;
     this.mandatees = mandatees
@@ -124,7 +131,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     this.pieces = await sortPieces(pieces);
-    this.highlightedPieces = newPieces;
+    this.newDraftPieces = newPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
@@ -147,9 +154,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
-    controller.highlightedPieces = this.highlightedPieces;
+    controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.previousSubcase = this.previousSubcase;
   }
 }

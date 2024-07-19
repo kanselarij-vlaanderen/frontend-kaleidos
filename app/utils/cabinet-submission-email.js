@@ -1,5 +1,3 @@
-import { dateFormat } from 'frontend-kaleidos/utils/date-format';
-
 // * NOTES *
 // 1. single new line: '\t\n' (multiple just n x '\n')
 // => prevent Outlook from removing extra line breaks with just '\n'

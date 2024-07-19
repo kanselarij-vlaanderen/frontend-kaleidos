@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
@@ -16,11 +16,13 @@ export default class SubmissionHeaderComponent extends Component {
   @service store;
   @service toaster;
   @service pieceUpload;
+  @service subcaseService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
   @tracked isOpenSendBackModal;
   @tracked isOpenDeleteModal;
+  @tracked piecesMovedCounter = 0;
 
   @tracked comment;
 
@@ -89,11 +91,15 @@ export default class SubmissionHeaderComponent extends Component {
 
   get hasActions() {
     return (
-      this.canResubmitSubmission ||
-      this.canCreateSubcase ||
       this.canTakeInTreatment ||
-      this.canSendBackToSubmitter ||
-      this.canDeleteSubmission
+      (this.args.hasActions &&
+        (
+          this.canResubmitSubmission ||
+          this.canCreateSubcase ||
+          this.canSendBackToSubmitter ||
+          this.canDeleteSubmission
+        )
+      )
     );
   }
 
@@ -133,15 +139,15 @@ export default class SubmissionHeaderComponent extends Component {
     this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
   });
 
-  createSubcase = task(
+  createSubcase = dropTask(
     async (
       _fullCopy = false, // unused
       meeting = null,
       isFormallyOk = false,
       privateComment = null
     ) => {
+      this.toggleCreateSubcaseModal();
       const now = new Date();
-
       const type = await this.args.submission.type;
       const agendaItemType = await this.args.submission.agendaItemType;
       const requestedBy = await this.args.submission.requestedBy;
@@ -174,11 +180,18 @@ export default class SubmissionHeaderComponent extends Component {
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
+        let linkedPieces = [];
+        if (this.args.previousSubcase) {
+          linkedPieces = await this.subcaseService.loadSubcasePieces(
+            this.args.previousSubcase
+          );
+        }
         subcase = this.store.createRecord('subcase', {
           shortTitle: this.args.submission.shortTitle,
           created: this.args.submission.created,
           modified: now,
           confidential: this.args.submission.confidential,
+          linkedPieces,
           type,
           decisionmakingFlow,
           requestedBy,
@@ -189,6 +202,7 @@ export default class SubmissionHeaderComponent extends Component {
         await subcase.save();
       }
 
+      this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
         draftPieces.map(async (draftPiece) => {
           const previousPiece = await draftPiece.previousPiece;
@@ -233,18 +247,21 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
+            originalName: previousPiece.originalName,
           });
           await piece.save();
+          this.piecesMovedCounter++;
           return piece;
         })
       );
 
       const agendaActivity = await this.pieceUpload.getAgendaActivity(subcase);
+
       if (agendaActivity) {
-        await this.pieceUpload.createSubmissionActivity(pieces, subcase, agendaActivity);
+        await this.pieceUpload.createSubmissionActivity(pieces, subcase, agendaActivity, this.args.submission);
         await this.pieceUpload.updateRelatedAgendaitems.perform(pieces, subcase);
       } else {
-        await this.pieceUpload.updateSubmissionActivity(pieces, subcase);
+        await this.pieceUpload.updateSubmissionActivity(pieces, subcase, this.args.submission);
       }
 
       if (meeting) {
@@ -267,7 +284,6 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.AANVAARD);
-      this.toggleCreateSubcaseModal();
 
       this.router.transitionTo(
         'cases.case.subcases.subcase',

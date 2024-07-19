@@ -10,6 +10,8 @@
 
 <Submission::Header
   @submission={{@model}}
+  @previousSubcase={{this.previousSubcase}}
+  @hasActions={{this.mayEdit}}
 />
 
 <div class="auk-scroll-wrapper__body">
@@ -76,7 +78,8 @@
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
               @hideAccessLevel={{true}}
-              @highlightedPieces={{this.highlightedPieces}}
+              @highlightedPieces={{this.newDraftPieces}}
+              @didDeleteContainer={{this.refresh}}
             />
           {{else}}
             <div>

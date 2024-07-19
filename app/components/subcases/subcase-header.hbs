@@ -6,7 +6,7 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if this.mayCreateNewSubmission}}
+      {{#if (and this.loadData.isIdle this.maySubmitNewDocuments)}}
         <Auk::Toolbar::Item>
           <AuLink
             @skin="button-secondary"

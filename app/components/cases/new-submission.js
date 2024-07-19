@@ -11,7 +11,10 @@ import {
   removeObjects,
 } from 'frontend-kaleidos/utils/array-helpers';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-
+/**
+ * @param decisionmakingFlow
+ * @param latestSubcase
+ */
 export default class CasesNewSubmissionComponent extends Component {
   @service agendaService;
   @service cabinetMail;
@@ -22,6 +25,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @service store;
   @service toaster;
   @service currentSession;
+  @service documentService;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
@@ -49,6 +53,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked pieces = new TrackedArray([]);
   @tracked isUploadingFiles;
   @tracked emailSettings;
+  @tracked piecesCreatedCounter = 0;
 
   @tracked showProposableAgendaModal = false;
 
@@ -60,6 +65,8 @@ export default class CasesNewSubmissionComponent extends Component {
     this.selectedDecisionmakingFlow = this.args.decisionmakingFlow;
     this.submitter = this.args.submitter;
     this.mandatees = this.args.mandatees;
+    this.latestSubcase = this.args.latestSubcase;
+    this.loadLatestSubcaseData.perform();
   }
 
   loadEmailSettings = task(async () => {
@@ -85,6 +92,23 @@ export default class CasesNewSubmissionComponent extends Component {
   get CCAddresses() {
     return [this.defaultCCAddress, ...this.addedCCAddresses];
   }
+  loadLatestSubcaseData = task(async () => {
+    if (this.latestSubcase) {
+      this.agendaItemType = await this.latestSubcase.agendaItemType;
+      this.confidential = this.latestSubcase.confidential;
+      this.shortTitle = this.latestSubcase.shortTitle;
+      this.type = await this.latestSubcase.type;
+      this.governmentAreas = await this.latestSubcase.governmentAreas;
+      for (const governmentArea of this.governmentAreas) {
+        await governmentArea.broader;
+        if (governmentArea.broader) {
+          this.selectedGovernmentFields.push(governmentArea);
+        } else {
+          this.selectedGovernmentDomains.push(governmentArea);
+        }
+      }
+    }
+  })
 
   get saveIsDisabled() {
     const decisionmakingFlowSet =
@@ -161,7 +185,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   createSubmission = dropTask(async (meeting, comment) => {
     const now = new Date();
-
+    this.showProposableAgendaModal = false;
     const submitted = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
@@ -299,22 +323,9 @@ export default class CasesNewSubmissionComponent extends Component {
   });
 
   openProposableAgendaModal = task(async () => {
-    if (this.pieces.length) {
-      // enforce all new pieces must have type on document container
-      const typesPromises = this.pieces.map(async (piece) => {
-        const container = await piece.documentContainer;
-        const type = await container.type;
-        return type;
-      });
-      const types = await Promise.all(typesPromises);
-      if (types.some(type => !type)) {
-        this.toaster.error(
-          this.intl.t('document-type-required'),
-          this.intl.t('warning-title'),
-        );
-        return;
-      }
-    }
+    const typesRequired = await this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
+
     this.showProposableAgendaModal = true;
   });
 }
