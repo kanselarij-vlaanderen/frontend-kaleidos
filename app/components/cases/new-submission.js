@@ -52,6 +52,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked isUploadingFiles;
+  @tracked mailsEnabled;
   @tracked emailSettings;
   @tracked piecesCreatedCounter = 0;
 
@@ -73,11 +74,20 @@ export default class CasesNewSubmissionComponent extends Component {
     this.emailSettings = await this.store.queryOne(
       'email-notification-setting'
     );
-    if (this.emailSettings.cabinetSubmissionsSecretaryEmail) {
-      this.currentApprovalAddresses = [
-        this.emailSettings.cabinetSubmissionsSecretaryEmail,
-        ...this.currentApprovalAddresses,
-      ];
+    if (this.emailSettings) {
+      if (this.emailSettings.cabinetSubmissionsSecretaryEmail) {
+        this.currentApprovalAddresses = [
+          this.emailSettings.cabinetSubmissionsSecretaryEmail,
+          ...this.currentApprovalAddresses,
+        ];
+      }
+      this.mailsEnabled = true;
+    } else {
+      this.toaster.warning(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      this.mailsEnabled = false;
     }
   });
 
@@ -263,18 +273,12 @@ export default class CasesNewSubmissionComponent extends Component {
   });
 
   createNotificationMailResources() {
-    if (!this.emailSettings) {
-      this.toaster.warning(
-        this.intl.t('notification-mails-could-not-be-sent'),
-        this.intl.t('warning-title')
+    if (this.mailsEnabled) {
+      this.cabinetMail.sendFirstSubmissionMails(
+        this.emailSettings,
+        this.submission,
       );
-      return;
     }
-
-    this.cabinetMail.sendFirstSubmissionMails(
-      this.emailSettings,
-      this.submission,
-    );
   }
 
   savePieces = task(async () => {

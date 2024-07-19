@@ -80,8 +80,7 @@ function caseSendBackEmail(params) {
   message +=
     'Beste,\n' +
     '\n' +
-    `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd met de volgende opmerking: \n` +
-    `"${params.comment}"\t\n` +
+    `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd."\t\n` +
     `U kunt de indiening hier bekijken: ${params.submissionUrl}`;
 
   return {
@@ -97,7 +96,7 @@ function caseResubmittedSubmitterEmail(params) {
   message +=
     'Beste,\n' +
     '\n' +
-    `Uw herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" met opmerking "${params.comment}", is goed ontvangen.\n` +
+    `Uw herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" is goed ontvangen.\n` +
     `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
 
   return {
@@ -113,7 +112,7 @@ function caseResubmittedEmail(params) {
   message +=
     'Beste,\n' +
     '\n' +
-    `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" met opmerking "${params.comment}".\n` +
+    `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}".\n` +
     `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
 
   return {

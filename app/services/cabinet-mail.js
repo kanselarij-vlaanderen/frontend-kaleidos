@@ -18,7 +18,7 @@ export default class CabinetMailService extends Service {
   @service toaster;
   @service intl;
 
-  async sendBackToSubmitterMail(submission, comment) {
+  async loadSettings() {
     const [mailSettings, outbox] = await Promise.all([
       this.store.queryOne('email-notification-setting'),
       this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
@@ -29,220 +29,200 @@ export default class CabinetMailService extends Service {
         this.intl.t('notification-mails-could-not-be-sent'),
         this.intl.t('warning-title')
       );
-      return;
+      return {};
     }
+    return { mailSettings, outbox };
+  }
 
-    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-    const submissionUrl = this.router.urlFor(
+  getSubmissionUrl(submission) {
+    return this.router.urlFor(
       'cases.submissions.submission',
       submission
     );
+  }
 
-    const params = {
-      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      submissionTitle: submission.shortTitle,
-      caseName: submission.title,
-      comment,
-    };
+  async sendBackToSubmitterMail(submission, comment) {
+    const { mailSettings, outbox } = await this.loadSettings();
+    if (mailSettings && outbox) {
+      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+      const submissionUrl = this.getSubmissionUrl(submission);
 
-    const mail = caseSendBackEmail(params);
+      const params = {
+        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+        submissionTitle: submission.shortTitle,
+        caseName: submission.title,
+        comment,
+      };
 
-    const mailResource = this.store.createRecord('email', {
-      to: submission.creator.email,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      subject: mail.subject,
-      message: mail.message,
-    });
+      const mail = caseSendBackEmail(params);
 
-    await mailResource.save();
+      const mailResource = this.store.createRecord('email', {
+        to: submission.creator.email,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
+        subject: mail.subject,
+        message: mail.message,
+      });
+
+      await mailResource.save();
+    }
   }
 
   async sendResubmissionMails(submission, comment) {
-    const [mailSettings, outbox] = await Promise.all([
-      this.store.queryOne('email-notification-setting'),
-      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
-    ]);
+    const { mailSettings, outbox } = await this.loadSettings();
+    if (mailSettings && outbox) {
+      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+      const submissionUrl = this.getSubmissionUrl(submission);
 
-    if (!(mailSettings && outbox)) {
-      this.toaster.warning(
-        this.intl.t('notification-mails-could-not-be-sent'),
-        this.intl.t('warning-title')
+      const params = {
+        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+        submissionTitle: submission.shortTitle,
+        caseName: submission.title,
+        comment,
+      };
+
+      const notificationEmail = caseResubmittedEmail(params);
+      const submitterEmail = caseResubmittedSubmitterEmail(params);
+
+      const notificationEmailResources = [
+        ...submission.approvalAddresses,
+        ...submission.notificationAddresses,
+      ].map((address) =>
+        this.store.createRecord('email', {
+          to: address,
+          from: mailSettings.defaultFromEmail,
+          folder: outbox,
+          subject: notificationEmail.subject,
+          message: notificationEmail.message,
+        })
       );
-      return;
-    }
 
-    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-    const submissionUrl = this.router.urlFor(
-      'cases.submissions.submission',
-      submission
-    );
-
-    const params = {
-      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      submissionTitle: submission.shortTitle,
-      caseName: submission.title,
-      comment,
-    };
-
-    const notificationEmail = caseResubmittedEmail(params);
-    const submitterEmail = caseResubmittedSubmitterEmail(params);
-
-    const notificationEmailResources = [
-      ...submission.approvalAddresses,
-      ...submission.notificationAddresses,
-    ].map((address) =>
-      this.store.createRecord('email', {
-        to: address,
+      const submitterEmailResource = this.store.createRecord('email', {
+        to: submission.creator.email,
         from: mailSettings.defaultFromEmail,
         folder: outbox,
-        subject: notificationEmail.subject,
-        message: notificationEmail.message,
-      })
-    );
+        subject: submitterEmail.subject,
+        message: submitterEmail.message,
+      });
 
-    const submitterEmailResource = this.store.createRecord('email', {
-      to: submission.creator.email,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      subject: submitterEmail.subject,
-      message: submitterEmail.message,
-    });
-
-    await Promise.all([
-      ...notificationEmailResources.map((resource) => resource.save()),
-      submitterEmailResource.save(),
-    ]);
+      await Promise.all([
+        ...notificationEmailResources.map((resource) => resource.save()),
+        submitterEmailResource.save(),
+      ]);
+    }
   }
 
   async sendFirstSubmissionMails(
     mailSettings,
     submission,
   ) {
-    const outbox = await this.store.findRecordByUri(
-      'mail-folder',
-      PUBLICATION_EMAIL.OUTBOX
-    );
+    const { outbox } = await this.loadSettings();
+    if (outbox) {
+      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+      const submissionUrl = this.getSubmissionUrl(submission);
 
-    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-    const submissionUrl = this.router.urlFor(
-      'cases.submissions.submission',
-      submission
-    );
+      const params = {
+        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+        submissionTitle: submission.shortTitle,
+        caseName: submission.title,
+        approvalComment: submission.approvalComment,
+        notificationComment: submission.notificationComment,
+      };
 
-    const params = {
-      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      submissionTitle: submission.shortTitle,
-      caseName: submission.title,
-      approvalComment: submission.approvalComment,
-      notificationComment: submission.notificationComment,
-    };
+      const approversMail = caseSubmittedApproversEmail(params);
+      const ikwMail = caseSubmittedIkwEmail(params);
+      const submitterMail = caseSubmittedSubmitterEmail(params);
 
-    const approversMail = caseSubmittedApproversEmail(params);
-    const ikwMail = caseSubmittedIkwEmail(params);
-    const submitterMail = caseSubmittedSubmitterEmail(params);
+      const approversMailResources = submission.approvalAddresses.map((address) =>
+        this.store.createRecord('email', {
+          to: address,
+          from: mailSettings.defaultFromEmail,
+          folder: outbox,
+          subject: approversMail.subject,
+          message: approversMail.message,
+        })
+      );
 
-    const approversMailResources = submission.approvalAddresses.map((address) =>
-      this.store.createRecord('email', {
-        to: address,
+      const ikwMailResources = submission.notificationAddresses.map((address) =>
+        this.store.createRecord('email', {
+          to: address,
+          from: mailSettings.defaultFromEmail,
+          folder: outbox,
+          subject: ikwMail.subject,
+          message: ikwMail.message,
+        })
+      );
+
+      const creator = await submission.creator;
+      const submitterMailResource = this.store.createRecord('email', {
+        to: creator.email,
         from: mailSettings.defaultFromEmail,
         folder: outbox,
-        subject: approversMail.subject,
-        message: approversMail.message,
-      })
-    );
+        subject: submitterMail.subject,
+        message: submitterMail.message,
+      });
 
-    const ikwMailResources = submission.notificationAddresses.map((address) =>
-      this.store.createRecord('email', {
-        to: address,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: ikwMail.subject,
-        message: ikwMail.message,
-      })
-    );
-
-    const creator = await submission.creator;
-    const submitterMailResource = this.store.createRecord('email', {
-      to: creator.email,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      subject: submitterMail.subject,
-      message: submitterMail.message,
-    });
-
-    await Promise.all([
-      ...approversMailResources.map((resource) => resource.save()),
-      ...ikwMailResources.map((resource) => resource.save()),
-      submitterMailResource.save(),
-    ]);
+      await Promise.all([
+        ...approversMailResources.map((resource) => resource.save()),
+        ...ikwMailResources.map((resource) => resource.save()),
+        submitterMailResource.save(),
+      ]);
+    }
   }
 
   async sendUpdateSubmissionMails(submission) {
-    const [mailSettings, outbox] = await Promise.all([
-      this.store.queryOne('email-notification-setting'),
-      this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX),
-    ]);
+    const { mailSettings, outbox } = await this.loadSettings();
 
-    if (!(mailSettings && outbox)) {
-      this.toaster.warning(
-        this.intl.t('notification-mails-could-not-be-sent'),
-        this.intl.t('warning-title')
+    if (mailSettings && outbox) {
+      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+      const submissionUrl = this.getSubmissionUrl(submission);
+
+      const params = {
+        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+        submissionTitle: submission.shortTitle,
+        caseName: submission.title,
+        approvalComment: submission.approvalComment,
+        notificationComment: submission.notificationComment,
+      };
+
+      const approversMail = caseUpdateSubmissionApproversEmail(params);
+      const ikwMail = caseUpdateSubmissionIkwEmail(params);
+      const submitterMail = caseUpdateSubmissionSubmitterEmail(params);
+
+      const approversMailResources = submission.approvalAddresses.map((address) =>
+        this.store.createRecord('email', {
+          to: address,
+          from: mailSettings.defaultFromEmail,
+          folder: outbox,
+          subject: approversMail.subject,
+          message: approversMail.message,
+        })
       );
-      return;
+
+      const ikwMailResources = submission.notificationAddresses.map((address) =>
+        this.store.createRecord('email', {
+          to: address,
+          from: mailSettings.defaultFromEmail,
+          folder: outbox,
+          subject: ikwMail.subject,
+          message: ikwMail.message,
+        })
+      );
+
+      const creator = await submission.creator;
+      const submitterMailResource = this.store.createRecord('email', {
+        to: creator.email,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
+        subject: submitterMail.subject,
+        message: submitterMail.message,
+      });
+
+      await Promise.all([
+        ...approversMailResources.map((resource) => resource.save()),
+        ...ikwMailResources.map((resource) => resource.save()),
+        submitterMailResource.save(),
+      ]);
     }
-
-    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-    const submissionUrl = this.router.urlFor(
-      'cases.submissions.submission',
-      submission
-    );
-
-    const params = {
-      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      submissionTitle: submission.shortTitle,
-      caseName: submission.title,
-      approvalComment: submission.approvalComment,
-      notificationComment: submission.notificationComment,
-    };
-
-    const approversMail = caseUpdateSubmissionApproversEmail(params);
-    const ikwMail = caseUpdateSubmissionIkwEmail(params);
-    const submitterMail = caseUpdateSubmissionSubmitterEmail(params);
-
-    const approversMailResources = submission.approvalAddresses.map((address) =>
-      this.store.createRecord('email', {
-        to: address,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: approversMail.subject,
-        message: approversMail.message,
-      })
-    );
-
-    const ikwMailResources = submission.notificationAddresses.map((address) =>
-      this.store.createRecord('email', {
-        to: address,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: ikwMail.subject,
-        message: ikwMail.message,
-      })
-    );
-
-    const creator = await submission.creator;
-    const submitterMailResource = this.store.createRecord('email', {
-      to: creator.email,
-      from: mailSettings.defaultFromEmail,
-      folder: outbox,
-      subject: submitterMail.subject,
-      message: submitterMail.message,
-    });
-
-    await Promise.all([
-      ...approversMailResources.map((resource) => resource.save()),
-      ...ikwMailResources.map((resource) => resource.save()),
-      submitterMailResource.save(),
-    ]);
   }
 }
