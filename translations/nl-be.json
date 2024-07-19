@@ -1437,5 +1437,7 @@
   "ikw-confidential": "IKW Vertrouwelijk",
   "secretary-mail": "Secretarie",
   "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden.",
-  "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?"
+  "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?",
+  "no-submission-approval-addresses-selected": "Geen goedkeurder adressen gekozen",
+  "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen"
 }

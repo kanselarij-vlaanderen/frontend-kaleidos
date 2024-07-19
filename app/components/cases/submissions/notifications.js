@@ -6,44 +6,44 @@ import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 export default class CasesSubmissionsNotificationsComponent extends Component {
 
   @tracked showNotifiersModal = false;
-  @tracked showCCModal = false;
+  @tracked showNotificationModal = false;
 
-  addedNotificationAddresses = new Set();
+  addedApprovalAddresses = new Set();
 
   @action
-  isDefaultNotificationAddress(address) {
-    return !this.addedNotificationAddresses.has(address);
+  isDefaultApprovalAddress(address) {
+    return !this.addedApprovalAddresses.has(address);
   }
 
   @action
-  saveNotificationAddress(address) {
-    this.addedNotificationAddresses.add(address);
-    const copy = this.args.notificationAddresses?.slice() ?? [];
+  saveApprovalAddress(address) {
+    this.addedApprovalAddresses.add(address);
+    const copy = this.args.approvalAddresses?.slice() ?? [];
     addObject(copy, address);
-    this.args.onChangeNotificationAddresses?.(copy);
+    this.args.onChangeApprovalAddresses?.(copy);
     this.showNotifiersModal = false;
   }
 
   @action
-  removeNotificationAddress(address) {
-    this.addedNotificationAddresses.delete(address);
-    const copy = this.args.notificationAddresses?.slice() ?? [];
+  removeApprovalAddress(address) {
+    this.addedApprovalAddresses.delete(address);
+    const copy = this.args.approvalAddresses?.slice() ?? [];
     removeObject(copy, address);
-    this.args.onChangeNotificationAddresses?.(copy);
+    this.args.onChangeApprovalAddresses?.(copy);
   }
 
   @action
-  saveCCAddress(address) {
+  saveNotificationAddress(address) {
     const copy = this.args.ccAddresses?.slice() ?? [];
     addObject(copy, address);
-    this.args.onChangeCCAddresses?.(copy);
-    this.showCCModal = false;
+    this.args.onChangeNotificationAddresses?.(copy);
+    this.showNotificationModal = false;
   }
 
   @action
-  removeCCAddress(address) {
+  removeNotificationAddress(address) {
     const copy = this.args.ccAddresses?.slice() ?? [];
     removeObject(copy, address);
-    this.args.onChangeCCAddresses?.(copy);
+    this.args.onChangeNotificationAddresses?.(copy);
   }
 }

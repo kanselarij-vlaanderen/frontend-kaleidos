@@ -8,14 +8,7 @@
 // 2. no mulitline string:
 // => ensure exact representation
 
-const footer =
-  'Met vriendelijke groet,\n' +
-  '\n' +
-  'Vlaamse overheid\t\n' +
-  'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n' +
-  'Team Ondersteuning Vlaamse Regering\t\n' +
-  'publicatiesBS@vlaanderen.be\t\n' +
-  'Koolstraat 35, 1000 Brussel\t\n';
+const footer = '';
 
 function caseSubmittedEmail(params) {
   let message = '';
@@ -32,9 +25,9 @@ function caseSubmittedApproversEmail(params) {
   const subject = `Nieuwe indiening in dossier "${params.caseName}"`;
 
   let message = caseSubmittedEmail(params);
-  if (params.approversComment) {
+  if (params.approvalComment) {
     message +=
-      `\t\n` + `Aanvullende informatie: "${params.approversComment}"\t\n`;
+      `\t\n` + `Aanvullende informatie: "${params.approvalComment}"\t\n`;
   }
 
   return {
@@ -48,8 +41,8 @@ function caseSubmittedIkwEmail(params) {
 
   let message = caseSubmittedEmail(params);
 
-  if (params.ikwComment) {
-    message += `\t\n` + `Aanvullende informatie: "${params.ikwComment}"\t\n`;
+  if (params.notificationComment) {
+    message += `\t\n` + `Aanvullende informatie: "${params.notificationComment}"\t\n`;
   }
 
   return {
@@ -66,9 +59,13 @@ function caseSubmittedSubmitterEmail(params) {
     'Beste,\n' +
     '\n' +
     `Uw nieuwe indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, is goed ontvangen.\n` +
-    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
-    `Aanvullende informatie voor goedkeuring: ${params.approversComment}\t\n` +
-    `\t\nAanvullende informatie voor IKW-groep: ${params.ikwComment}\t\n`;
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+  if (params.approvalComment) {
+    message += `Aanvullende informatie voor goedkeuring: ${params.approvalComment}\t\n`;
+  }
+  if (params.notificationComment) {
+    message += `\t\nAanvullende informatie voor IKW-groep: ${params.notificationComment}\t\n`;
+  }
 
   return {
     subject,
@@ -134,8 +131,10 @@ function caseUpdateSubmissionApproversEmail(params) {
     'Beste,\n' +
     '\n' +
     `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}".\n` +
-    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
-    `Aanvullende informatie: "${params.approversComment}"\t\n`;
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+  if (params.approvalComment) {
+    message += `Aanvullende informatie voor goedkeuring: ${params.approvalComment}\t\n`;
+  }
 
   return {
     subject,
@@ -152,8 +151,11 @@ function caseUpdateSubmissionIkwEmail(params) {
     'Beste,\n' +
     '\n' +
     `Er is een herindiening "${params.submissionTitle}" in het dossier "${params.caseName}".\n` +
-    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
-    `Aanvullende informatie: "${params.ikwComment}"\t\n`;
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+
+  if (params.notificationComment) {
+    message += `\t\nAanvullende informatie voor IKW-groep: ${params.notificationComment}\t\n`;
+  }
 
   return {
     subject,
@@ -170,9 +172,13 @@ function caseUpdateSubmissionSubmitterEmail(params) {
     'Beste,\n' +
     '\n' +
     `Uw herindiening "${params.submissionTitle}" in het dossier "${params.caseName}" werd goed ontvangen.\n` +
-    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n` +
-    `Aanvullende informatie: "${params.approversComment}"\t\n` +
-    `Aanvullende informatie voor IKW: "${params.ikwComment}"\t\n`;
+    `U kunt deze hier bekijken: ${params.submissionUrl}\t\n`;
+  if (params.approvalComment) {
+    message += `Aanvullende informatie voor goedkeuring: ${params.approvalComment}\t\n`;
+  }
+  if (params.notificationComment) {
+    message += `\t\nAanvullende informatie voor IKW-groep: ${params.notificationComment}\t\n`;
+  }
 
   return {
     subject,

@@ -89,8 +89,8 @@ export default class CabinetMailService extends Service {
     const submitterEmail = caseResubmittedSubmitterEmail(params);
 
     const notificationEmailResources = [
-      ...submission.approvedBy,
-      ...submission.notified,
+      ...submission.approvalAddresses,
+      ...submission.notificationAddresses,
     ].map((address) =>
       this.store.createRecord('email', {
         to: address,
@@ -134,15 +134,15 @@ export default class CabinetMailService extends Service {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       submissionTitle: submission.shortTitle,
       caseName: submission.title,
-      approversComment: submission.approvalComment,
-      ikwComment: submission.notificationComment,
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
     };
 
     const approversMail = caseSubmittedApproversEmail(params);
     const ikwMail = caseSubmittedIkwEmail(params);
     const submitterMail = caseSubmittedSubmitterEmail(params);
 
-    const approversMailResources = submission.approvedBy.map((address) =>
+    const approversMailResources = submission.approvalAddresses.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,
@@ -152,7 +152,7 @@ export default class CabinetMailService extends Service {
       })
     );
 
-    const ikwMailResources = submission.notified.map((address) =>
+    const ikwMailResources = submission.notificationAddresses.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,
@@ -202,15 +202,15 @@ export default class CabinetMailService extends Service {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       submissionTitle: submission.shortTitle,
       caseName: submission.title,
-      approversComment: submission.approvalComment,
-      ikwComment: submission.notificationComment,
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
     };
 
     const approversMail = caseUpdateSubmissionApproversEmail(params);
     const ikwMail = caseUpdateSubmissionIkwEmail(params);
     const submitterMail = caseUpdateSubmissionSubmitterEmail(params);
 
-    const approversMailResources = submission.approvedBy.map((address) =>
+    const approversMailResources = submission.approvalAddresses.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,
@@ -220,7 +220,7 @@ export default class CabinetMailService extends Service {
       })
     );
 
-    const ikwMailResources = submission.notified.map((address) =>
+    const ikwMailResources = submission.notificationAddresses.map((address) =>
       this.store.createRecord('email', {
         to: address,
         from: mailSettings.defaultFromEmail,

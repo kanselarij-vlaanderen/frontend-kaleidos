@@ -36,10 +36,10 @@ export default class CasesNewSubmissionComponent extends Component {
 
   @tracked type;
 
-  @tracked notificationAddresses = [];
-  @tracked notificationMessage;
-  @tracked addedCCAddresses = [];
-  @tracked CCMessage;
+  @tracked currentApprovalAddresses = [];
+  @tracked approvalComment;
+  @tracked addedNotificationAddresses = [];
+  @tracked notificationComment;
 
   @tracked showAgendaModal = false;
   @tracked hasAgenda = false;
@@ -74,14 +74,14 @@ export default class CasesNewSubmissionComponent extends Component {
       'email-notification-setting'
     );
     if (this.emailSettings.cabinetSubmissionsSecretaryEmail) {
-      this.notificationAddresses = [
+      this.currentApprovalAddresses = [
         this.emailSettings.cabinetSubmissionsSecretaryEmail,
-        ...this.notificationAddresses,
+        ...this.currentApprovalAddresses,
       ];
     }
   });
 
-  get defaultCCAddress() {
+  get defaultNotificationAddress() {
     if (this.confidential) {
       return this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail;
     } else {
@@ -89,8 +89,11 @@ export default class CasesNewSubmissionComponent extends Component {
     }
   }
 
-  get CCAddresses() {
-    return [this.defaultCCAddress, ...this.addedCCAddresses];
+  get currentNotificationAddresses() {
+    if (this.defaultNotificationAddress) {
+      return [this.defaultNotificationAddress, ...this.addedNotificationAddresses];
+    }
+    return [...this.addedNotificationAddresses];
   }
   loadLatestSubcaseData = task(async () => {
     if (this.latestSubcase) {
@@ -207,10 +210,10 @@ export default class CasesNewSubmissionComponent extends Component {
       agendaItemType: this.agendaItemType,
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       creator: creator,
-      approvedBy: this.notificationAddresses,
-      approvalComment: trimText(this.notificationMessage),
-      notified: this.CCAddresses,
-      notificationComment: trimText(this.CCMessage),
+      approvalAddresses: this.currentApprovalAddresses,
+      approvalComment: trimText(this.approvalComment),
+      notificationAddresses: this.currentNotificationAddresses,
+      notificationComment: trimText(this.notificationComment),
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
       governmentAreas: [
