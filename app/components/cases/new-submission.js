@@ -83,11 +83,19 @@ export default class CasesNewSubmissionComponent extends Component {
     }
   })
 
+  // TODO short title of submission should be mandatory
+  // also when choosing an existing case, we could copy shortTitle of Case into submission shortTitle
   get saveIsDisabled() {
     const decisionmakingFlowSet =
       !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitle;
     const subcaseTypeSet = !!this.type;
-    return !decisionmakingFlowSet || !subcaseTypeSet || this.isUploadingFiles;
+    return (
+      !decisionmakingFlowSet ||
+      !subcaseTypeSet ||
+      this.isUploadingFiles ||
+      !this.pieces.length ||
+      this.createSubmission.isRunning
+    );
   }
 
   get sortedPieces() {
