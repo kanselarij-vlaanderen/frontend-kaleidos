@@ -18,7 +18,6 @@ export default class SubCasesOverviewHeader extends Component {
   constructor() {
     super(...arguments);
     this.loadData.perform();
-    this.loadLinkedMandatees.perform();
   }
 
   loadLinkedMandatees = task(async () => {
@@ -31,13 +30,17 @@ export default class SubCasesOverviewHeader extends Component {
   });
 
   get mayCreateSubmissions() {
-    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
+    return this.currentSession.may('create-submissions') &&
+            this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
+            this.linkedMandatees?.length &&
+            isEnabledCabinetSubmissions();
   }
 
   @task
   *loadData() {
     this.case = yield this.args.decisionmakingFlow.case;
     this.publicationFlows = yield this.case.publicationFlows;
+    yield this.loadLinkedMandatees.perform();
   }
 
   @action

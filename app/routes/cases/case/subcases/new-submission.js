@@ -26,13 +26,36 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   }
 
   async model() {
-    const { decisionmakingFlow } = this.modelFor('cases.case');
-    return decisionmakingFlow;
+    const { decisionmakingFlow, subcases} = this.modelFor('cases.case');
+    let latestSubcase;
+    if (decisionmakingFlow && subcases?.length) {
+      latestSubcase = subcases[subcases.length - 1];
+    }
+    return { decisionmakingFlow, latestSubcase };
+  }
+
+  async afterModel(model) {
+    if (model.latestSubcase) {
+      const subcaseMandatees = await model.latestSubcase.mandatees;
+      for (const subcaseMandatee of subcaseMandatees) {
+        let found = false;
+        for (const existingMandatee of this.mandatees) {
+          if (existingMandatee.id === subcaseMandatee.id) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          this.mandatees.push(subcaseMandatee);
+        }
+      }
+    }
   }
 
   setupController(controller, _model, _transition) {
     super.setupController(...arguments);
     controller.submitter = this.submitter;
     controller.mandatees = this.mandatees;
+    controller.latestSubcase = this.latestSubcase;
   }
 }

@@ -11,7 +11,10 @@ import {
   removeObjects,
 } from 'frontend-kaleidos/utils/array-helpers';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-
+/**
+ * @param decisionmakingFlow
+ * @param latestSubcase
+ */
 export default class CasesNewSubmissionComponent extends Component {
   @service agendaService;
   @service conceptStore;
@@ -56,7 +59,27 @@ export default class CasesNewSubmissionComponent extends Component {
     this.selectedDecisionmakingFlow = this.args.decisionmakingFlow;
     this.submitter = this.args.submitter;
     this.mandatees = this.args.mandatees;
+    this.latestSubcase = this.args.latestSubcase;
+    this.loadLatestSubcaseData.perform();
   }
+
+  loadLatestSubcaseData = task(async () => {
+    if (this.latestSubcase) {
+      this.agendaItemType = await this.latestSubcase.agendaItemType;
+      this.confidential = this.latestSubcase.confidential;
+      this.shortTitle = this.latestSubcase.shortTitle;
+      this.type = await this.latestSubcase.type;
+      this.governmentAreas = await this.latestSubcase.governmentAreas;
+      for (const governmentArea of this.governmentAreas) {
+        await governmentArea.broader;
+        if (governmentArea.broader) {
+          this.selectedGovernmentFields.push(governmentArea);
+        } else {
+          this.selectedGovernmentDomains.push(governmentArea);
+        }
+      }
+    }
+  })
 
   get saveIsDisabled() {
     const decisionmakingFlowSet =

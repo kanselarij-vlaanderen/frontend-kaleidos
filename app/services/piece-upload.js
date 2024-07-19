@@ -21,19 +21,20 @@ export default class PieceUploadService extends Service {
     });
   }
 
-  createSubmissionActivity = async (pieces, subcase, agendaActivity = null) => {
+  createSubmissionActivity = async (pieces, subcase, agendaActivity = null, submission = null) => {
     let submissionActivity = this.store.createRecord('submission-activity', {
       startDate: new Date(),
       subcase,
       pieces,
       agendaActivity,
+      submission
     });
 
     submissionActivity = await submissionActivity.save();
     return submissionActivity;
   };
-  
-  updateSubmissionActivity = async (pieces, subcase) => {
+
+  updateSubmissionActivity = async (pieces, subcase, submission = null) => {
     const submissionActivity = await this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
       'filter[:has-no:agenda-activity]': true,
@@ -42,10 +43,11 @@ export default class PieceUploadService extends Service {
     if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = await submissionActivity.pieces;
       addObjects(submissionPieces, pieces);
+      submissionActivity.submission = submission;
       await submissionActivity.save();
       return submissionActivity;
     } else { // Create first submission activity to add pieces on
-      return this.createSubmissionActivity(pieces, subcase);
+      return this.createSubmissionActivity(pieces, subcase, null, submission);
     }
   };
 
