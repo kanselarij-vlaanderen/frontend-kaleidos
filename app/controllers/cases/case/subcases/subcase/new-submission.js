@@ -10,6 +10,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
+  @service cabinetMail;
   @service conceptStore;
   @service intl;
   @service router;
@@ -18,6 +19,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service fileConversionService;
   @service documentService;
   @service agendaService;
+  @service currentSession;
 
   defaultAccessLevel;
 
@@ -148,7 +150,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     await this.deleteDraftPieces.perform();
     this.router.transitionTo('cases.case.subcases.subcase');
   });
-  
+
   cancelCreateSubmission = () => {
     this.isOpenCreateSubmissionModal = false;
     this.approvalComment = null;
@@ -183,11 +185,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const meeting = await originalSubmission.meeting;
 
     const status = originalSubmission ? updateSubmitted : submitted;
+    const creator = await this.currentSession.user;
 
     this.submission = this.store.createRecord('submission', {
       created: now,
+      creator,
       modified: now,
       shortTitle: trimText(this.model.shortTitle),
+      title: originalSubmission?.title,
       confidential: this.model.confidential,
       subcase: this.model,
       type,
@@ -230,10 +235,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        this.router.transitionTo(
-          'cases.submissions.submission',
-          this.submission.id
-        );
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-while-submitting-subcase-on-meeting', {
@@ -243,5 +244,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
         );
       }
     }
+    this.cabinetMail.sendUpdateSubmissionMails(this.submission);
+    this.router.transitionTo('cases.submissions.submission', this.submission.id);
   });
 }
