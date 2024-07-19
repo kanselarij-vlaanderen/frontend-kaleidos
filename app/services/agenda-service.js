@@ -181,6 +181,7 @@ export default class AgendaService extends Service {
         submission: submission.uri,
       })
     });
+    await submission.belongsTo('meeting').reload();
     if (!response.ok) {
       throw new Error(
         `Backend response contained an error (status: ${

@@ -194,7 +194,6 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
       file: file,
       previousPiece: previousPiece,
       documentContainer: documentContainer,
-      originalName: previousPiece.originalName,
       accessLevel,
     });
   }

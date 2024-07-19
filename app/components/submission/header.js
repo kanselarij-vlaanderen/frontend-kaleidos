@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
@@ -21,6 +21,7 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked isOpenCreateSubcaseModal;
   @tracked isOpenSendBackModal;
   @tracked isOpenDeleteModal;
+  @tracked piecesMovedCounter = 0;
 
   @tracked comment;
 
@@ -136,15 +137,15 @@ export default class SubmissionHeaderComponent extends Component {
     );
   });
 
-  createSubcase = task(
+  createSubcase = dropTask(
     async (
       _fullCopy = false, // unused
       meeting = null,
       isFormallyOk = false,
       privateComment = null
     ) => {
+      this.toggleCreateSubcaseModal();
       const now = new Date();
-
       const type = await this.args.submission.type;
       const agendaItemType = await this.args.submission.agendaItemType;
       const requestedBy = await this.args.submission.requestedBy;
@@ -198,6 +199,8 @@ export default class SubmissionHeaderComponent extends Component {
         });
         await subcase.save();
       }
+
+      this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
         draftPieces.map(async (draftPiece) => {
           const previousPiece = await draftPiece.previousPiece;
@@ -242,8 +245,10 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
+            originalName: previousPiece.originalName,
           });
           await piece.save();
+          this.piecesMovedCounter++;
           return piece;
         })
       );
@@ -277,7 +282,6 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.AANVAARD);
-      this.toggleCreateSubcaseModal();
 
       this.router.transitionTo(
         'cases.case.subcases.subcase',

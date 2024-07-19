@@ -49,7 +49,7 @@ export default class CasesSubmissionsIndexController extends Controller {
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];
-
+  @tracked isLoadingModel;
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
 
@@ -73,6 +73,10 @@ export default class CasesSubmissionsIndexController extends Controller {
   onToggleFilters(open) {
     this.filtersOpen = open;
   }
+
+  selectSize = (size) => (this.size = size);
+  nextPage = () => (this.page += 1);
+  prevPage = () => (this.page -= 1);
 
   setDateFrom = (date) => (this.dateFrom = formatDate(date));
   setDateTo = (date) => (this.dateTo = formatDate(date));

@@ -131,7 +131,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     this.pieces = await sortPieces(pieces);
-    this.highlightedPieces = newPieces;
+    this.newDraftPieces = newPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
@@ -154,7 +154,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
-    controller.highlightedPieces = this.highlightedPieces;
+    controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.defaultAccessLevel = this.defaultAccessLevel;

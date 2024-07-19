@@ -78,7 +78,8 @@
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
               @hideAccessLevel={{true}}
-              @highlightedPieces={{this.highlightedPieces}}
+              @highlightedPieces={{this.newDraftPieces}}
+              @didDeleteContainer={{this.refresh}}
             />
           {{else}}
             <div>

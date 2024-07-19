@@ -27,6 +27,7 @@ export default class NewSubcaseForm extends Component {
   @service agendaService;
   @service plausible;
   @service intl;
+  @service documentService;
   @service subcaseService;
 
   @tracked filter = Object.freeze({
@@ -391,22 +392,9 @@ export default class NewSubcaseForm extends Component {
 
   @task
   *openProposableAgendaModal() {
-    if (this.pieces.length) {
-      // enforce all new pieces must have type on document container
-      const typesPromises = this.pieces.map(async (piece) => {
-        const container = await piece.documentContainer;
-        const type = await container.type;
-        return type;
-      });
-      const types = yield all(typesPromises);
-      if (types.some(type => !type)) {
-        this.toaster.error(
-          this.intl.t('document-type-required'),
-          this.intl.t('warning-title'),
-        );
-        return;
-      }
-    }
+    const typesRequired = yield this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
+
     this.showProposableAgendaModal = true;
   }
 }

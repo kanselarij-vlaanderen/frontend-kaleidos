@@ -30,10 +30,13 @@ export default class SubCasesOverviewHeader extends Component {
   });
 
   get mayCreateSubmissions() {
-    return this.currentSession.may('create-submissions') &&
-            this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
-            this.linkedMandatees?.length &&
-            isEnabledCabinetSubmissions();
+    return (
+      this.currentSession.may('create-submissions') &&
+      this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
+      this.loadLinkedMandatees.isIdle &&
+      this.linkedMandatees?.length &&
+      isEnabledCabinetSubmissions()
+    );
   }
 
   @task

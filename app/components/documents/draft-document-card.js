@@ -180,7 +180,6 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       file: file,
       previousPiece: previousPiece,
       documentContainer: this.documentContainer,
-      originalName: previousPiece.originalName,
     });
   }
 

@@ -19,7 +19,7 @@
       @skin="link"
       @icon="add"
       class="au-u-margin-top-small"
-      {{on "click" (toggle "isAddingNewDecisionmakingFlow" this)}}
+      {{on "click" (queue (toggle "isAddingNewDecisionmakingFlow" this) this.setFocus)}}
     >
       {{t "add-new-case"}}
     </AuButton>
@@ -29,16 +29,18 @@
 <ConfirmationModal
   @modalOpen={{this.isAddingNewDecisionmakingFlow}}
   @title={{t "add-new-case"}}
-  @onConfirm={{toggle "isAddingNewDecisionmakingFlow" this}}
-  @onCancel={{toggle "isAddingNewDecisionmakingFlow" this}}
+  @onConfirm={{this.onConfirmDecisionmakingFlowTitle}}
+  @onCancel={{this.onCancelDecisionmakingFlowTitle}}
+  @disabled={{not this.decisionmakingFlowTitle.length}}
   @confirmMessage={{t "add-case"}}
 >
   <:body>
     <div>
       <AuLabel>{{t "case-name"}}</AuLabel>
       <AuInput
+        id="searchCaseId"
         @width="block"
-        {{on "change" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
+        {{on "input" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
       />
     </div>
   </:body>
