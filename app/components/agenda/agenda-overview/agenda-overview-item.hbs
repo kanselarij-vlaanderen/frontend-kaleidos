@@ -218,17 +218,21 @@
           <div class="vlc-agenda-items__icons">
             <div class="vlc-agenda-meta__status-holder">
               {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus)}}
-                <span
-                  class={{@agendaitem.formallyOkToShow.classNames}}
-                  data-test-agenda-overview-item-status
-                >
-                  <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} />
-                  {{@agendaitem.formallyOkToShow.label}}
-                </span>
+                {{#if (not this.isEditingFormallyOk)}}
+                  <Agenda::FormallyOkPill
+                    @formallyOk={{@agendaitem.formallyOkToShow}}
+                    @onEdit={{this.toggleIsEditingFormallyOk}}
+                  />
+                {{else}}
+                  <Agenda::FormallyOkEdit
+                    @selectedFormallyOk={{@agendaitem.formallyOkToShow}}
+                    @cancelEdit={{this.toggleIsEditingFormallyOk}}
+                    @onSave={{this.setAndSaveFormallyOkStatus}}
+                  />
+                {{/if}}
               {{/if}}
             </div>
           </div>
-
         </div>
       {{/unless}}
     </div>

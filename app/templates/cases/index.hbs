@@ -4,10 +4,38 @@
   @onSetFilter={{this.setCaseFilter}}
   @caseFilter={{this.caseFilter}}
 />
-<AuMainContainer class="l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
+<AuMainContainer
+  class="l-search-container
+    {{if
+      (and this.hasToggleableFilters this.filtersOpen)
+      'auk-u-scroll-no-overflow'
+    }}"
+  as |m|
+>
   <m.sidebar>
-    <div class="au-c-sidebar">
+    <div class="au-c-sidebar auk-u-overflow-initial">
       <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+        <nav>
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
+            {{t "content"}}
+          </AuHeading>
+          <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
+            <Auk::Tab
+              @route="cases"
+              @current-when="cases.index"
+            >
+              {{t "cases"}}
+            </Auk::Tab>
+            {{#if this.mayShowSubmissionsTab}}
+              <Auk::Tab
+                @route="cases.submissions"
+                @current-when="cases.submissions"
+              >
+                {{t "submissions"}}
+              </Auk::Tab>
+            {{/if}}
+          </Auk::Tabs>
+        </nav>
         <Auk::MobileFilters
           @toggleLabel="Filters"
           @toggleIcon="filter"

@@ -145,6 +145,7 @@
           {{#if
             (and
               (user-may "manage-documents")
+              (not this.isDraftPiece)
               (or
                 this.canEditPieceWithSignFlow
                 (user-may "edit-documents-with-ongoing-signature")

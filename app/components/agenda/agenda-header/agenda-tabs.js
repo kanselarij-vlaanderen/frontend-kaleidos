@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task, lastValue } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   /**
@@ -15,6 +16,10 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadFirstAgendaitem.perform();
+  }
+
+  get isEnabledCabinetSubmissions() {
+    return isEnabledCabinetSubmissions();
   }
 
   @task
