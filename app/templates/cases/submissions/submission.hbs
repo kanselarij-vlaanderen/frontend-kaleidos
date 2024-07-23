@@ -171,10 +171,11 @@
 
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
-    @pieces={{this.pieces}}
+    @pieces={{this.newDraftPieces}}
     @onCancel={{toggle "isOpenBatchDetailsModal" this}}
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
     @allowEditing={{this.mayEdit}}
+    @disableEditingPosition={{true}}
   />
 {{/if}}

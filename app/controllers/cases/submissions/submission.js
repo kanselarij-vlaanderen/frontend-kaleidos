@@ -24,6 +24,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
+  @tracked documentContainerIds = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
 
@@ -94,11 +95,12 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     const now = new Date();
     const confidential = this.model.confidential || false;
+    const numberOfContainers = this.documentContainerIds.length;
     const documentContainer = this.store.createRecord(
       'draft-document-container',
       {
         created: now,
-        position: parsed.index,
+        position: parsed.index || (numberOfContainers + 1),
         type,
       }
     );
@@ -137,7 +139,9 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
   savePiece = task(async (piece, index) => {
     const documentContainer = await piece.documentContainer;
-    documentContainer.position = index + 1 + (this.pieces?.length ?? 0);
+    if (!documentContainer.position) {
+      documentContainer.position = index + 1 + (this.documentContainerIds?.length ?? 0);
+    }
     await documentContainer.save();
     piece.name = piece.name.trim();
     await piece.save();

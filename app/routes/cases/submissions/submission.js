@@ -82,6 +82,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const newPieces = await submission.pieces;
     let pieces = [];
+    let documentContainerIds = [];
     const subcase = await submission.subcase;
     if (subcase) {
       const submissionActivitiesWithoutActivity = await this.store.query(
@@ -123,6 +124,12 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
         let submissionPieces = await submissionActivity.pieces;
         submissionPieces = submissionPieces.slice();
         pieces.push(...submissionPieces);
+        for (const submissionPiece of submissionPieces) {
+          const documentContainer = await submissionPiece.documentContainer;
+          if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
+            documentContainerIds.push(documentContainer.id);
+          }
+        }
       }
 
       for (const piece of newPieces) {
@@ -139,6 +146,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
           // }
         } else {
           pieces.push(piece);
+          const documentContainer = await piece.documentContainer;
+          if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
+            documentContainerIds.push(documentContainer.id);
+          }
         }
       }
     } else {
@@ -146,6 +157,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     this.pieces = await sortPieces(pieces);
+    this.documentContainerIds = documentContainerIds;
     this.newDraftPieces = newPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
@@ -173,6 +185,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
+    controller.documentContainerIds = this.documentContainerIds;
     controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;

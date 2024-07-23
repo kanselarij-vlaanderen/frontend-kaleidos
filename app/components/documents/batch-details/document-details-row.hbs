@@ -6,12 +6,14 @@
     distane="30"}}
 >
   <td class="auk-table-drag-col">
-    <AuIcon
-      class="auk-u-cursor-grab auk-u-text-muted"
-      @icon="drag-handle-2"
-      @size="large"
-      {{sortable-handle}}
-    />
+    {{#unless @disableEditingPosition}}
+      <AuIcon
+        class="auk-u-cursor-grab auk-u-text-muted"
+        @icon="drag-handle-2"
+        @size="large"
+        {{sortable-handle}}
+      />
+    {{/unless}}
   </td>
   {{#if @isEditingEnabled}}
     <td class="auk-table-checkbox-col">

@@ -158,9 +158,11 @@ export default class BatchDocumentsDetailsModal extends Component {
           hasChanged = true;
           documentContainer.type = row.documentType;
         }
-        if (documentContainer.position !== index + 1) {
-          hasChanged = true;
-          documentContainer.position = index + 1;
+        if (!this.args.disableEditingPosition) {
+          if (documentContainer.position !== index + 1) {
+            hasChanged = true;
+            documentContainer.position = index + 1;
+          }
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
