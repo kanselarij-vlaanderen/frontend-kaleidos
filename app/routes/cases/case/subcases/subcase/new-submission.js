@@ -10,6 +10,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
 
   pieces;
   defaultAccessLevel;
+  requestedBy;
+  mandatees;
 
   async model() {
     const { subcase } = this.modelFor('cases.case.subcases.subcase');
@@ -72,6 +74,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       isPreKaleidos: this.latestMeeting?.isPreKaleidos,
     });
 
+    this.requestedBy = await subcase.requestedBy;
+    this.mandatees = await subcase.mandatees;
     return subcase;
   }
 
@@ -79,5 +83,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.pieces = new TrackedArray(this.pieces.slice());
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.requestedBy = this.requestedBy;
+    controller.mandatees = this.mandatees;
   }
 }

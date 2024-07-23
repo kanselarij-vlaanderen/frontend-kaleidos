@@ -199,8 +199,17 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees,
           governmentAreas,
         });
-        await subcase.save();
+      } else {
+        subcase.shortTitle = this.args.submission.shortTitle;
+        subcase.confidential = this.args.submission.confidential;
+        subcase.requestedBy = requestedBy;
+        subcase.decisionmakingFlow = decisionmakingFlow;
+        subcase.type = type;
+        subcase.agendaItemType = agendaItemType;
+        subcase.mandatees = mandatees;
+        subcase.governmentAreas = governmentAreas;
       }
+      await subcase.save();
 
       this.piecesMovedCounter = 0;
       const pieces = await Promise.all(

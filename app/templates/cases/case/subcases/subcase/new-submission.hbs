@@ -45,9 +45,13 @@
 
     <div class="auk-u-mb-4">
       <Mandatees::MandateesPanel
+        @onSave={{this.onMandateeDataChanged}}
+        @referenceDate={{@model.created}}
         @submitter={{await @model.requestedBy}}
-        @mandatees={{@model.mandatees}}
-        @allowEditing={{false}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{true}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
       />
     </div>
 

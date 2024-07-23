@@ -32,6 +32,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked pieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
+  @tracked requestedBy = null;
+  @tracked mandatees = new TrackedArray([]);
 
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
@@ -41,6 +43,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       return d1.position - d2.position || p1.created - p2.created;
     });
   }
+
+  disableMandatee = (mandatee) => {
+    return this.requestedBy.id === mandatee.id;
+  };
 
   onAddNewPieceVersion = async (piece, newVersion) => {
     const documentContainer = await newVersion.documentContainer;
@@ -157,6 +163,15 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = null;
   }
 
+  onMandateeDataChanged = async ({ submitter, mandatees }) => {
+    this.mandatees = mandatees;
+    this.requestedBy = submitter;
+
+    this.mandatees = this.mandatees
+      .slice()
+      .sort((m1, m2) => m1.priority - m2.priority);
+  };
+
   createSubmission = dropTask(async () => {
     const now = new Date();
     this.isOpenCreateSubmissionModal = false;
@@ -173,8 +188,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
     const decisionmakingFlow = await this.model.decisionmakingFlow;
-    const mandatees = await this.model.mandatees;
-    const requestedBy = await this.model.requestedBy;
+    const mandatees = await this.mandatees;
+    const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
 
     const submissions = await this.model.submissions;
@@ -182,10 +197,13 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       .slice()
       .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
       .at(0);
-    const meeting = await originalSubmission.meeting;
+    const meeting = await originalSubmission?.meeting;
 
     const status = originalSubmission ? updateSubmitted : submitted;
+
     const creator = await this.currentSession.user;
+    // TODO fix cache issue that leaves meeting null for KDB
+    const plannedStart = meeting?.plannedStart || originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
       created: now,
@@ -207,7 +225,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       governmentAreas,
       status,
       pieces: this.newDraftPieces,
-      plannedStart: meeting.plannedStart,
+      plannedStart
     });
 
     await this.submission.save();
