@@ -23,8 +23,8 @@
                 class="auk-u-mb-4"
                 @disableEdit={{@disableEdit}}
                 @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
-                @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}
-                @onChangeSelected={{fn (mut this.selectedDecisionmakingFlow)}}
+                @onChangeTitle={{this.onDecisionmakingFlowTitleChanged}}
+                @onChangeSelected={{this.onDecisionmakingFlowChanged}}
               />
               <Cases::Submissions::AgendaItemTypeSelector
                 class="auk-u-mb-4"

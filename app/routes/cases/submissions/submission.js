@@ -17,6 +17,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   defaultAccessLevel;
 
   async beforeModel(_transition) {
+    if (!this.currentSession.may('view-submissions')) {
+      this.router.transitionTo('index');
+    }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
       'filter[:has-no:end]': true,
@@ -51,7 +54,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       }
     }
 
-    await submission.requestedBy;
     const decisionmakingFlow = await submission.decisionmakingFlow;
     const subcases = await decisionmakingFlow?.subcases;
     const sortedSubcases = subcases?.slice()
@@ -64,6 +66,19 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.mandatees = mandatees
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
+
+    await submission.requestedBy;
+
+    if (!this.currentSession.may('view-all-submissions')) {
+      if (this.currentLinkedMandatee && this.mandatees.length) {
+        const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
+        if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
+          this.router.transitionTo('cases.submissions');
+        }
+      } else {
+        this.router.transitionTo('cases.submissions');
+      }
+    }
 
     const newPieces = await submission.pieces;
     let pieces = [];
@@ -147,6 +162,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
+
+    const creator = await submission.creator;
+    this.creatorName = `${creator?.firstName} ${creator?.lastName}`;
+
     return submission;
   }
 
@@ -159,5 +178,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.previousSubcase = this.previousSubcase;
+    controller.creatorName = this.creatorName;
   }
 }

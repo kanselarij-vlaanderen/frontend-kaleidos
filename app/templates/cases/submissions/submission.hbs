@@ -115,7 +115,7 @@
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <h4 class="auk-panel__title">
-                  {{t "agenda-activities"}}
+                  {{t "submission-history"}}
                 </h4>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
@@ -126,6 +126,7 @@
             {{#each this.statusChangeActivities as |activity|}}
               <Submission::StatusChangeActivity
                 @activity={{activity}}
+                @creatorName={{this.creatorName}}
                 @beingTreatedByName={{@model.beingTreatedBy.fullName}}
               />
             {{/each}}

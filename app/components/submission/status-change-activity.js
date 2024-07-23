@@ -26,18 +26,20 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
 
   get label() {
     const activity = this.args.activity;
+    const creatorName = this.args.creatorName;
     const startedAt = activity.startedAt;
     const status = activity.belongsTo('status').value(); // Status should be loaded in parent
 
     if (!activity || !startedAt || !status) return '';
 
-    const at = "om";
-    const date = dateFormat(startedAt, `dd-MM-yyyy '${at}' HH:mm`);
+    const date = dateFormat(startedAt, `dd-MM-yyyy`);
+    const hour = dateFormat(startedAt, `HH:mm`);
     const comment = activity.comment ? `: '${activity.comment}'` : '';
+    const userName = this.args.beingTreatedByName || creatorName;
 
     const intlKey = this.intlKeyMap[status.uri];
     const label = intlKey
-      ? this.intl.t(intlKey, { user: this.args.beingTreatedByName, date })
+      ? this.intl.t(intlKey, { userName, date, hour })
       : '';
 
     return label + comment;

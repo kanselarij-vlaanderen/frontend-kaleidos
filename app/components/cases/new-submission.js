@@ -148,6 +148,21 @@ export default class CasesNewSubmissionComponent extends Component {
     });
   }
 
+  onDecisionmakingFlowChanged = async (decisionmakingFlow) => {
+    this.selectedDecisionmakingFlow = decisionmakingFlow;
+    if (!this.shortTitle) {
+      const decisionmakingFlowCase = await decisionmakingFlow.case;
+      this.shortTitle = decisionmakingFlowCase.shortTitle;
+    }
+  }
+
+  onDecisionmakingFlowTitleChanged = (decisionmakingFlowTitle) => {
+    this.decisionmakingFlowTitle = decisionmakingFlowTitle;
+    if (!this.shortTitle) {
+      this.shortTitle = decisionmakingFlowTitle;
+    }
+  }
+
   filterSubcaseTypes = (subcaseTypes) => {
     return subcaseTypes.filter(
       (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING

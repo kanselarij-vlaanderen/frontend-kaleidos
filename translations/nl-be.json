@@ -1414,12 +1414,12 @@
   "delete-submission": "Verwijder indiening",
   "this-submission-is-being-treated-by-user": "Deze indiening is in behandeling genomen door {user}",
   "resubmit-submission": "Dien opnieuw in",
-  "submitted-on": "Ingediend op {date}",
-  "resubmitted-on": "Opnieuw ingediend op {date}",
-  "sent-back-on": "Teruggestuurd op {date}",
-  "in-treatment-by-user-on": "Behandeld door {user} op {date}",
-  "update-submitted-on": "Update ingediend op {date}",
-  "accepted-on": "Aanvaard op {date}",
+  "submitted-on": "Ingediend door {userName} op {date} om {hour}",
+  "resubmitted-on": "Opnieuw ingediend door {userName} op {date} om {hour}",
+  "sent-back-on": "Teruggestuurd op {date} om {hour}",
+  "in-treatment-by-user-on": "Behandeld door {userName} op {date} om {hour}",
+  "update-submitted-on": "Update ingediend door {userName} op {date} om {hour}",
+  "accepted-on": "Aanvaard op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
   "submit-new-documents": "Dien nieuwe documenten in",
   "submit-new-case": "Nieuw dossier indienen",
@@ -1439,5 +1439,6 @@
   "notification-mails-could-not-be-sent": "Notificatie mails konden niet verstuurd worden.",
   "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?",
   "no-submission-approval-addresses-selected": "Geen goedkeurder adressen gekozen",
-  "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen"
+  "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen",
+  "submission-history": "Historiek"
 }
