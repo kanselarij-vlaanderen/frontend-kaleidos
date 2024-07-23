@@ -127,7 +127,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
       for (const piece of newPieces) {
         const previousPiece = await piece.previousPiece;
-        if (previousPiece && previousPiece.constructor.name === 'Piece') {
+        if (previousPiece && previousPiece.constructor.modelName === 'piece') {
           for (let i = 0; i < pieces.length; i++) {
             if (pieces[i].id === previousPiece.id) {
               pieces[i] = piece;

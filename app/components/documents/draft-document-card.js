@@ -52,7 +52,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   get mayEdit() {
-    return this.args.isEditable && this.args.piece.constructor.name === 'DraftPiece';
+    return this.args.isEditable && this.args.piece.constructor.modelName === 'draft-piece';
   }
 
   get dateToShowLabel() {
@@ -79,7 +79,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @task
   *loadPieceRelatedData() {
     const loadPiece = (id) =>
-      this.store.queryOne(this.piece.constructor.name, {
+      this.store.queryOne(this.piece.constructor.modelName, {
         'filter[:id:]': id,
         include: 'document-container.type',
       });
@@ -118,7 +118,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
-        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
       );
     }
   }
@@ -131,7 +131,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   @task
   *loadVersionHistory() {
-    if (this.piece.constructor.name === 'Piece') {
+    if (this.piece.constructor.modelName === 'piece') {
       const piecesFromModel = yield this.documentContainer
         .hasMany('pieces')
         .reload();
