@@ -3,7 +3,9 @@
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
   {{sortable-item
     model=@row
-    distane="30"}}
+    distance="30"
+    disabled=@disableEditingPosition
+  }}
 >
   <td class="auk-table-drag-col">
     {{#unless @disableEditingPosition}}

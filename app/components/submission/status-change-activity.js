@@ -35,7 +35,10 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
     const date = dateFormat(startedAt, `dd-MM-yyyy`);
     const hour = dateFormat(startedAt, `HH:mm`);
     const comment = activity.comment ? `: '${activity.comment}'` : '';
-    const userName = this.args.beingTreatedByName || creatorName;
+    let userName = creatorName;
+    if (status.uri === IN_BEHANDELING) {
+      userName = this.args.beingTreatedByName;
+    }
 
     const intlKey = this.intlKeyMap[status.uri];
     const label = intlKey

@@ -1,13 +1,13 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
   @service router;
   @service store;
+  @service submissionService;
 
   newPieces;
   pieces;
@@ -42,8 +42,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     );
 
     const status = await submission.status;
+    const subcase = await submission.subcase;
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.AANVAARD) {
-      const subcase = await submission.subcase;
       if (subcase)  {
         const decisionmakingFlow = await subcase.decisionmakingFlow;
         return this.router.transitionTo(
@@ -82,81 +82,21 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const newPieces = await submission.pieces;
     let pieces = [];
-    let documentContainerIds = [];
-    const subcase = await submission.subcase;
     if (subcase) {
-      const submissionActivitiesWithoutActivity = await this.store.query(
-        'submission-activity',
-        {
-          'filter[subcase][:id:]': subcase.id,
-          'filter[:has-no:agenda-activity]': true,
-          include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
-        }
-      );
-      let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
-      // Get the submission from latest meeting if applicable
-      const agendaActivities = await subcase.agendaActivities;
-      const latestActivity = agendaActivities
-        .slice()
-        .sort((a1, a2) => a1.startDate - a2.startDate)
-        .at(-1);
-      if (latestActivity) {
-        this.latestMeeting = await this.store.queryOne('meeting', {
-          'filter[agendas][agendaitems][agenda-activity][:id:]':
-            latestActivity.id,
-          sort: '-planned-start',
-        });
-        const submissionActivitiesFromLatestMeeting = await this.store.query(
-          'submission-activity',
-          {
-            'filter[subcase][:id:]': subcase.id,
-            'filter[agenda-activity][:id:]': latestActivity.id,
-            include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
-          }
-        );
-        addObjects(
-          submissionActivities,
-          submissionActivitiesFromLatestMeeting.slice()
-        );
-      }
-
-      for (const submissionActivity of submissionActivities.slice()) {
-        let submissionPieces = await submissionActivity.pieces;
-        submissionPieces = submissionPieces.slice();
-        pieces.push(...submissionPieces);
-        for (const submissionPiece of submissionPieces) {
-          const documentContainer = await submissionPiece.documentContainer;
-          if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
-            documentContainerIds.push(documentContainer.id);
-          }
-        }
-      }
-
-      for (const piece of newPieces) {
-        const previousPiece = await piece.previousPiece;
-        if (previousPiece && previousPiece.constructor.modelName === 'piece') {
-          for (let i = 0; i < pieces.length; i++) {
-            if (pieces[i].id === previousPiece.id) {
-              pieces[i] = piece;
-            }
-          }
-          // const index = pieces.indexOf((p) => p.id === previousPiece.id);
-          // if (index >= 0) {
-          //   pieces[index] = piece;
-          // }
-        } else {
-          pieces.push(piece);
-          const documentContainer = await piece.documentContainer;
-          if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
-            documentContainerIds.push(documentContainer.id);
-          }
-        }
-      }
+      pieces = await this.submissionService.loadSubmissionPieces(subcase, newPieces);
     } else {
       pieces = newPieces.slice();
     }
 
     this.pieces = await sortPieces(pieces);
+
+    let documentContainerIds = [];
+    for (const piece of this.pieces) {
+      const documentContainer = await piece.documentContainer;
+      if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
+        documentContainerIds.push(documentContainer.id);
+      }
+    }
     this.documentContainerIds = documentContainerIds;
     this.newDraftPieces = newPieces;
 

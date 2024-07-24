@@ -47,7 +47,7 @@
       <Mandatees::MandateesPanel
         @onSave={{this.onMandateeDataChanged}}
         @referenceDate={{@model.created}}
-        @submitter={{await @model.requestedBy}}
+        @submitter={{this.requestedBy}}
         @mandatees={{this.mandatees}}
         @allowEditing={{true}}
         @disableMandatee={{this.disableMandatee}}

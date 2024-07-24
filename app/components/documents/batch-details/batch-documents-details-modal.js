@@ -40,7 +40,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get hasDraftPieces() {
-    return this.args.pieces.any(
+    return this.args.pieces.some(
       (piece) => piece.constructor.modelName === 'draft-piece'
     );
   }
@@ -92,7 +92,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        if (this.isSignaturesEnabled) {
+        if (piece.constructor.modelName === 'piece' && this.isSignaturesEnabled) {
           row.signMarkingActivity = await piece.signMarkingActivity;
           row.signedPiece = await piece.signedPiece;
           row.showSignature = isPresent(this.args.decisionActivity);

@@ -1418,7 +1418,7 @@
   "submitted-on": "Ingediend door {userName} op {date} om {hour}",
   "resubmitted-on": "Opnieuw ingediend door {userName} op {date} om {hour}",
   "sent-back-on": "Teruggestuurd op {date} om {hour}",
-  "in-treatment-by-user-on": "Behandeld door {userName} op {date} om {hour}",
+  "in-treatment-by-user-on": "In behandeling genomen door {userName} op {date} om {hour}",
   "update-submitted-on": "Update ingediend door {userName} op {date} om {hour}",
   "accepted-on": "Aanvaard op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",

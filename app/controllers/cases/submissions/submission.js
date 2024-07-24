@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
   @service conceptStore;
@@ -17,6 +18,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @service toaster;
   @service intl;
   @service documentService;
+  @service submissionService;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
@@ -79,12 +81,46 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
-    this.router.refresh();
+    this.reloadPieces();
     this.isOpenBatchDetailsModal = false;
   };
 
-  refresh = () => {
-    this.router.refresh();
+  reloadPieces = async () => {
+    const subcase = await this.model.subcase;
+    const newPieces = await this.model.pieces;
+    let pieces = [];
+    if (subcase) {
+      pieces = await this.submissionService.loadSubmissionPieces(subcase, newPieces);
+    } else {
+      pieces = newPieces.slice();
+    }
+
+    this.pieces = await sortPieces(pieces);
+
+    let documentContainerIds = [];
+    for (const piece of this.pieces) {
+      const documentContainer = await piece.documentContainer;
+      if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
+        documentContainerIds.push(documentContainer.id);
+      }
+    }
+    this.documentContainerIds = documentContainerIds;
+    this.newDraftPieces = newPieces;
+  }
+
+  updateDraftPiecePositions = async () => {
+    await this.reloadPieces();
+    for (const piece of this.pieces) {
+      if (piece.constructor.modelName === 'draft-piece') {
+        let draftDocumentContainer = await piece.documentContainer;
+        let currentPosition = this.documentContainerIds.indexOf(draftDocumentContainer.id) + 1;
+        if (draftDocumentContainer.position !== currentPosition) {
+          draftDocumentContainer.position = currentPosition;
+          draftDocumentContainer.save();
+        }
+      }
+    }
+    this.reloadPieces();
   };
 
   @action
@@ -134,7 +170,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.router.refresh();
+    this.reloadPieces();
   });
 
   savePiece = task(async (piece, index) => {

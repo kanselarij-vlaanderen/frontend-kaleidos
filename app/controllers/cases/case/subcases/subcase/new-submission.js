@@ -235,6 +235,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       return p.save();
     }));
 
+    this.newDraftPieces = new TrackedArray([]);
+
     // Create submission change
     const submissionStatusChange = this.store.createRecord(
       'submission-status-change-activity',
