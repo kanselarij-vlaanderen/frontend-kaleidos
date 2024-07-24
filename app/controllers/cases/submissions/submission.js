@@ -48,6 +48,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     return mayIfAdmin || mayIfSecretarie || mayIfKabinet;
   }
 
+  get isUpdate() {
+    return this.model.belongsTo('subcase').value()?.id;
+  }
+
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
       const d1 = p1.belongsTo('documentContainer').value();

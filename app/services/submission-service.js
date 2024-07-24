@@ -45,7 +45,12 @@ export default class SubmissionService extends Service {
       for (const submissionActivity of submissionActivities.slice()) {
         let submissionPieces = await submissionActivity.pieces;
         submissionPieces = submissionPieces.slice();
-        pieces.push(...submissionPieces);
+        for (const submissionPiece of submissionPieces) {
+          const nextPiece = await submissionPiece.nextPiece;
+          if (!nextPiece) {
+            pieces.push(submissionPiece);
+          }
+        }
       }
       if (newPieces) {
         for (const piece of newPieces) {

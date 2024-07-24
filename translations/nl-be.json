@@ -1441,5 +1441,7 @@
   "confirm-accept-subcase-update": "Bent u zeker dat u de nieuwe documenten op de procedurestap wil plaatsen?",
   "no-submission-approval-addresses-selected": "Geen goedkeurder adressen gekozen",
   "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen",
-  "submission-history": "Historiek"
+  "submission-history": "Historiek",
+  "this-submission-is-an-update-title": "Deze indiening betreft een update",
+  "this-submission-is-an-update": "Bij aanvaarding zullen de documenten en ministers van de bestaande procedurestap worden aangepast."
 }

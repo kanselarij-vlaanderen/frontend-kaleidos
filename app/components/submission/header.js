@@ -200,14 +200,10 @@ export default class SubmissionHeaderComponent extends Component {
           governmentAreas,
         });
       } else {
-        subcase.shortTitle = this.args.submission.shortTitle;
-        subcase.confidential = this.args.submission.confidential;
+        await subcase.belongsTo('requestedBy')?.reload();
+        await subcase.hasMany('mandatees')?.reload();
         subcase.requestedBy = requestedBy;
-        subcase.decisionmakingFlow = decisionmakingFlow;
-        subcase.type = type;
-        subcase.agendaItemType = agendaItemType;
         subcase.mandatees = mandatees;
-        subcase.governmentAreas = governmentAreas;
       }
       await subcase.save();
 

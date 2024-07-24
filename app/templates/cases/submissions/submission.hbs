@@ -13,13 +13,22 @@
   @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
 />
-
+{{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+  <AuAlert
+    @skin="warning"
+    @icon="alert-triangle"
+    @title={{t "this-submission-is-an-update-title"}}
+  >
+    <p>{{t "this-submission-is-an-update"}}</p>
+  </AuAlert>
+{{/if}}
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-responsive-margin">
+
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
-        @mayEdit={{this.mayEdit}}
+        @mayEdit={{and this.mayEdit (not this.isUpdate)}}
       />
     </div>
 
@@ -39,7 +48,7 @@
       class="auk-u-mb-4"
       @referenceDate={{@model.created}}
       @governmentAreas={{@model.governmentAreas}}
-      @allowEditing={{this.mayEdit}}
+      @allowEditing={{and this.mayEdit (not this.isUpdate)}}
       @subcase={{@model}}
       @onSave={{this.saveGovernmentAreas}}
     />
