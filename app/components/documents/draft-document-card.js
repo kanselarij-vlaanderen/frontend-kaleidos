@@ -81,11 +81,12 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     const loadPiece = (id) =>
       this.store.queryOne(this.piece.constructor.modelName, {
         'filter[:id:]': id,
-        include: 'document-container.type',
+        include: 'document-container.type,access-level',
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
+      yield this.piece.accessLevel;
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
       // check for alternative label
@@ -222,5 +223,21 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
     this.isEditingPiece = false;
+  }
+
+  @action
+  async changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
+  }
+
+  @action
+  async saveAccessLevel() {
+    await this.piece.save();
+    await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  async cancelChangeAccessLevel() {
+    await this.loadPieceRelatedData.perform();
   }
 }

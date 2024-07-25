@@ -44,11 +44,16 @@ export default class SubmissionHeaderComponent extends Component {
   });
 
   get items() {
-    return [
+    const items = [
       { elementId: 'submission', label: this.intl.t('overview') },
-      { elementId: 'documents', label: this.intl.t('documents') },
-      { elementId: 'agenda', label: this.intl.t('agenda-activities') },
+      { elementId: 'documents', label: this.intl.t('documents') }
     ];
+    if (!this.args.disableHistory) {
+      items.push({
+        elementId: 'history', label: this.intl.t('submission-history')
+      });
+    }
+    return items;
   }
 
   get isUpdate() {

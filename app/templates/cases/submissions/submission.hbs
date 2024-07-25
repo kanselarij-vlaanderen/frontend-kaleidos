@@ -13,16 +13,16 @@
   @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
 />
-{{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
-  <AuAlert
-    @skin="warning"
-    @icon="alert-triangle"
-    @title={{t "this-submission-is-an-update-title"}}
-  >
-    <p>{{t "this-submission-is-an-update"}}</p>
-  </AuAlert>
-{{/if}}
 <div class="auk-scroll-wrapper__body">
+  {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "this-submission-is-an-update-title"}}
+    >
+      <p>{{t "this-submission-is-an-update"}}</p>
+    </AuAlert>
+  {{/if}}
   <div class="auk-u-responsive-margin">
 
     <div id="submission" class="auk-u-mb-4">
@@ -86,7 +86,7 @@
             <Documents::DraftDocumentCardList
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
-              @hideAccessLevel={{true}}
+              @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
             />
@@ -117,7 +117,7 @@
       </Auk::Panel>
     </div>
 
-    <div id="agenda">
+    <div id="history">
       <Auk::Panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
@@ -170,6 +170,8 @@
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @disableInternSecretarie={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}

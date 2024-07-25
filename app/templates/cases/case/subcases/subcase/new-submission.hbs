@@ -30,6 +30,7 @@
 
 <Submission::Header
   @submission={{@model}}
+  @disableHistory={{true}}
 />
 
 <div class="auk-scroll-wrapper">
@@ -158,6 +159,8 @@
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @disableInternSecretarie={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}
