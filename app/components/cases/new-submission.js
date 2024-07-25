@@ -325,7 +325,9 @@ export default class CasesNewSubmissionComponent extends Component {
           ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
           : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
       );
-      piece.accessLevel = defaultAccessLevel;
+      if (!piece.accessLevel) {
+        piece.accessLevel = defaultAccessLevel;
+      }
       piece.accessLevelLastModified = new Date();
       piece.name = piece.name.trim();
       piece.submission = this.submission;

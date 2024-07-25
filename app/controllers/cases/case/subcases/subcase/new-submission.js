@@ -62,6 +62,9 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
     const type = await findDocType(this.conceptStore, parsed.type);
+    const accessLevel = parsed.confidential ? await this.store.findRecordByUri(
+      'concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+    ) : this.defaultAccessLevel;
 
     const now = new Date();
     const documentContainer = this.store.createRecord('draft-document-container', {
@@ -73,7 +76,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       created: now,
       modified: now,
       file: file,
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: accessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
     });
