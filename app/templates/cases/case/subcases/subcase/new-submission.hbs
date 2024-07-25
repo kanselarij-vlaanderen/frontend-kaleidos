@@ -30,6 +30,7 @@
 
 <Submission::Header
   @submission={{@model}}
+  @disableHistory={{true}}
 />
 
 <div class="auk-scroll-wrapper">
@@ -45,9 +46,13 @@
 
     <div class="auk-u-mb-4">
       <Mandatees::MandateesPanel
-        @submitter={{await @model.requestedBy}}
-        @mandatees={{@model.mandatees}}
-        @allowEditing={{false}}
+        @onSave={{this.onMandateeDataChanged}}
+        @referenceDate={{@model.created}}
+        @submitter={{this.requestedBy}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{true}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
       />
     </div>
 
@@ -154,6 +159,8 @@
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @disableInternSecretarie={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}

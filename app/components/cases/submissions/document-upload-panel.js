@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsDocumentUploadPanelComponent extends Component {
   @service store;
@@ -14,6 +15,12 @@ export default class CasesSubmissionsDocumentUploadPanelComponent extends Compon
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
     const type = await findDocType(this.conceptStore, parsed.type);
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      (this.confidential || parsed.confidential)
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
 
     const now = new Date();
     const documentContainer = this.store.createRecord('draft-document-container', {
@@ -27,6 +34,7 @@ export default class CasesSubmissionsDocumentUploadPanelComponent extends Compon
       file: file,
       name: parsed.subject,
       documentContainer: documentContainer,
+      accessLevel: defaultAccessLevel
     });
     this.args.onAddPiece(piece);
   }

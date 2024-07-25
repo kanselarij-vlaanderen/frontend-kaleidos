@@ -7,9 +7,28 @@ import { TrackedArray } from 'tracked-built-ins';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service store;
+  @service currentSession;
 
   pieces;
   defaultAccessLevel;
+  submitter;
+  mandatees;
+
+  async beforeModel(_transition) {
+    const linkedMandatees = await this.store.queryAll('mandatee', {
+      'filter[user-organizations][:id:]': this.currentSession.organization.id,
+      'filter[:has-no:end]': true,
+      include: 'mandate.role',
+      sort: 'start',
+    });
+    const ministerPresident = linkedMandatees.find((mandatee) => {
+      const mandate = mandatee.belongsTo('mandate').value();
+      const role = mandate?.belongsTo('role')?.value();
+      return role?.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT;
+    });
+    this.submitter = ministerPresident ?? linkedMandatees.slice().at(0);
+    this.mandatees = this.submitter ? [this.submitter] : [];
+  }
 
   async model() {
     const { subcase } = this.modelFor('cases.case.subcases.subcase');
@@ -72,6 +91,19 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       isPreKaleidos: this.latestMeeting?.isPreKaleidos,
     });
 
+    const subcaseMandatees = await subcase.mandatees;
+    for (const subcaseMandatee of subcaseMandatees) {
+      let found = false;
+      for (const mandatee of this.mandatees) {
+        if (mandatee.id === subcaseMandatee.id) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        this.mandatees.push(subcaseMandatee);
+      }
+    }
     return subcase;
   }
 
@@ -79,5 +111,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     super.setupController(...arguments);
     controller.pieces = new TrackedArray(this.pieces.slice());
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.requestedBy = this.submitter;
+    controller.mandatees = this.mandatees;
   }
 }

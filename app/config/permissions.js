@@ -61,7 +61,8 @@ const {
 // - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 // - create-submissions: Allow the creation of submissions (by cabinets)
-// - view-submissions: Allow the viewing of submissions
+// - view-submissions-on-agenda: Allow the viewing of submissions on the agenda
+// - view-submissions: Allow the viewing of submissions in general
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
 // - always-edit-submissions: Allow editing submissions regardless of status
 // - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
@@ -115,6 +116,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
+      'view-submissions-on-agenda',
       'view-all-submissions',
       'always-edit-submissions',
       'edit-in-treatment-submissions',
@@ -158,6 +160,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
+      'view-submissions-on-agenda',
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
@@ -196,6 +199,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
+      'view-submissions-on-agenda',
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
@@ -250,6 +254,8 @@ const groups = [
       'view-documents-postponed-and-retracted',
       'view-all-confidential-documents',
       // TODO minister should be able to view only the submissions
+      'view-submissions',
+      'view-all-submissions',
     ],
   },
   {
@@ -264,6 +270,7 @@ const groups = [
       'view-only-specific-confidential-documents',
       'send-only-specific-cases-to-vp',
       'view-documents-postponed-and-retracted',
+      'view-submissions',
       'create-submissions',
       'edit-sent-back-submissions',
     ],
@@ -276,6 +283,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-documents-postponed-and-retracted',
+      'view-submissions',
     ],
   },
   {

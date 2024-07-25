@@ -40,7 +40,7 @@ export default class BatchDocumentsDetailsModal extends Component {
   }
 
   get hasDraftPieces() {
-    return this.args.pieces.any(
+    return this.args.pieces.some(
       (piece) => piece.constructor.modelName === 'draft-piece'
     );
   }
@@ -92,7 +92,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        if (this.isSignaturesEnabled) {
+        if (piece.constructor.modelName === 'piece' && this.isSignaturesEnabled) {
           row.signMarkingActivity = await piece.signMarkingActivity;
           row.signedPiece = await piece.signedPiece;
           row.showSignature = isPresent(this.args.decisionActivity);
@@ -158,9 +158,11 @@ export default class BatchDocumentsDetailsModal extends Component {
           hasChanged = true;
           documentContainer.type = row.documentType;
         }
-        if (documentContainer.position !== index + 1) {
-          hasChanged = true;
-          documentContainer.position = index + 1;
+        if (!this.args.disableEditingPosition) {
+          if (documentContainer.position !== index + 1) {
+            hasChanged = true;
+            documentContainer.position = index + 1;
+          }
         }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
