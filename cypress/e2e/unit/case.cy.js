@@ -380,7 +380,7 @@ context('Create case as Admin user', () => {
     cy.openDetailOfAgendaitem(newShortTitle);
 
     cy.get(agenda.agendaitemTitlesView.type).contains(agendaType);
-    cy.get(agenda.agendaitemTitlesView.formallyOk).contains('Formeel OK');
+    cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
 
     cy.get(mandatee.mandateePanelView.rows).as('listItemsMandatee2');
     cy.get('@listItemsMandatee2').should('have.length', 2, {
