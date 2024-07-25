@@ -1,0 +1,101 @@
+<Auk::Panel class="auk-panel--editing" ...attributes>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "overview"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="au-c-form">
+      {{#if this.loadDecisionmakingFlow.isIdle}}
+        <Cases::Submissions::DecisionmakingFlowSelector
+          class="auk-u-mb-4"
+          @selectedDecisionmakingFlow={{this.decisionmakingFlow}}
+          @selectedDecisionmakingFlowTitle={{this.decisionmakingFlowTitle}}
+          @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}
+          @onChangeSelected={{fn (mut this.decisionmakingFlow)}}
+        />
+      {{/if}}
+      <AuFormRow>
+        <AuFieldset as |Fieldset|>
+          <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+          <Fieldset.content>
+            <AuRadioGroup
+              @alignment="inline"
+              @selected={{this.agendaItemType}}
+              @onChange={{this.onChangeAgendaItemType}}
+              as |Group|
+            >
+              {{#each this.agendaItemTypes as |type|}}
+                <Group.Radio @value={{type}}>
+                  {{type.label}}
+                </Group.Radio>
+              {{/each}}
+            </AuRadioGroup>
+          </Fieldset.content>
+        </AuFieldset>
+      </AuFormRow>
+      <AuFormRow>
+        <AuLabel for="submission-confidential">
+          {{t "limited-access"}}</AuLabel>
+        <AuToggleSwitch
+          id="submission-confidential"
+          @checked={{@submission.confidential}}
+          @onChange={{queue
+            (set @submission "confidential")
+            (set this "confidentialChanged" true)
+          }}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <AuLabel for="short-title-submission">
+          {{t "name-subcase"}}</AuLabel>
+        <AuTextarea
+          id="short-title-submission"
+          rows="2"
+          value={{@submission.shortTitle}}
+          @width="block"
+          {{on "input" (pick "target.value" (set @submission "shortTitle"))}}
+        />
+      </AuFormRow>
+      <AuFormRow>
+        <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
+        <Utils::ModelSelector
+          @modelName="subcase-type"
+          @sortField="label"
+          @displayField="label"
+          @selected={{this.subcaseType}}
+          @onChange={{this.selectSubcaseType}}
+          @filterOptions={{this.filterSubcaseTypes}}
+        />
+      </AuFormRow>
+    </div>
+  </Auk::Panel::Body>
+  <Auk::Panel::Footer>
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <AuButton @skin="naked" {{on "click" this.cancelEditing}}>
+            {{t "cancel"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <AuButton
+            @skin="primary"
+            @loading={{this.isSaving}}
+            {{on "click" this.saveChanges}}
+          >
+            {{t "save"}}
+          </AuButton>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Footer>
+</Auk::Panel>

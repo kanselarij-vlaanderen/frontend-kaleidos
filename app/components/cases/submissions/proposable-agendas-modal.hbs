@@ -1,0 +1,82 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title={{t "agenda-activity"}}
+    @closeDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
+    <div class="au-c-form">
+      <AuFormRow>
+        {{#if this.loadAgendas.isRunning}}
+          <Auk::Loader @message={{t "loading"}} />
+        {{else if this.agendas.length}}
+          <table class="auk-table auk-table--striped">
+            <thead>
+              <tr>
+                <th class="auk-table__col--1"></th>
+                <th class="auk-table__col--3">{{t "meeting-date"}}</th>
+                <th class="auk-table__col--3">{{t "title"}}</th>
+                <th class="auk-table__col--5">{{t "kind"}}</th>
+              </tr>
+            </thead>
+            <tbody class="auk-table--clickable-rows">
+              {{#each this.agendas as |agenda|}}
+                {{! template-lint-disable no-invalid-interactive }}
+                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
+                  <td class="auk-table__col--1">
+                    <AuRadio
+                      @checked={{this.isSelectedAgenda agenda}}
+                    />
+                  </td>
+                  <td class="auk-table__col--3">
+                    {{date agenda.createdFor.plannedStart}}
+                  </td>
+                  <td class="auk-table__col--3">
+                    <strong>{{t "design-agenda"}}</strong>
+                    <AuPill @skin="ongoing" @draft={{true}}>
+                      {{agenda.serialnumber}}
+                    </AuPill>
+                  </td>
+                  <td class="auk-table__col--5">
+                    {{agenda.createdFor.kind.label}}
+                  </td>
+                </tr>
+                {{! template-lint-enable no-invalid-interactive }}
+              {{/each}}
+            </tbody>
+          </table>
+        {{else}}
+          <Auk::EmptyState @message={{t "no-meetings"}} />
+        {{/if}}
+      </AuFormRow>
+      <AuHr />
+      <AuFormRow>
+        <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
+        <AuTextarea
+          id="remarks"
+          rows="4"
+          value={{this.remarks}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "remarks"))}}
+        />
+      </AuFormRow>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
+    @onCancel={{@onCancel}}
+  >
+    <AuButton
+      data-test-proposable-agendas-modal-place-on-agenda
+      @skin="primary"
+      @disabled={{not this.selectedAgenda}}
+      @loading={{or
+        this.loadAgendas.isRunning
+        (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
+      }}
+      {{on "click" (perform this.saveSubcaseAndSubmitToAgenda)}}
+    >
+      {{t "propose-for-agenda"}}
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>

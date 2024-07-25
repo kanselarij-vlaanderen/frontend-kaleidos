@@ -26,13 +26,16 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
   // piece or file downloadlinks for not suitable for switch between source and derived
   // we want the piece name + the correct file download
   get downloadLink() {
-    const filename = `${this.selectedVersion.name}.${this.file.extension}`;
-    const downloadFilename = sanitize(filename, {
-      replacement: '_',
-    });
-    return `${this.file.downloadLink}?name=${encodeURIComponent(
-      downloadFilename
-    )}`;
+    if (this.file?.extension) {
+      const filename = `${this.selectedVersion.name}.${this.file.extension}`;
+      const downloadFilename = sanitize(filename, {
+        replacement: '_',
+      });
+      return `${this.file.downloadLink}?name=${encodeURIComponent(
+        downloadFilename
+      )}`;
+    }
+    return 'route-not-found';
   }
 
   get inlineViewLink() {

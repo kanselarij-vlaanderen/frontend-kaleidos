@@ -43,6 +43,7 @@
                 </td>
                 <td data-test-mandatee-panel-edit-row-submitter>
                   <AuToggleSwitch
+                    @disabled={{@disableSubmitter}}
                     @checked={{eq mandatee this.submitterBuffer}}
                     @onChange={{fn this.toggleIsSubmitter mandatee}}
                   />
@@ -54,6 +55,7 @@
                     @alert={{true}}
                     @icon="trash"
                     @hideText={{true}}
+                    @disabled={{@disableMandatee mandatee}}
                     {{on "click" (fn this.removeMandatee mandatee)}}
                   >
                     {{t "delete"}}

@@ -12,6 +12,7 @@ export default {
     DECISION_RESULT_CODES: 'http://themis.vlaanderen.be/id/concept-scheme/43052680-1c88-47f1-b081-99087afc4497',
     SIGNFLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/ebfe253c-0537-11ee-bb35-ee395168dcf7',
     PARLIAMENT_FLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/bfa3671b-68c1-4371-aa00-63840b7c9901',
+    SUBMISSION_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/9ee8c485-e750-4982-a2b7-3f17d390331d',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
@@ -19,6 +20,13 @@ export default {
     INTERN_REGERING: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/13ae94b0-6188-49df-8ecd-4c4a17511d6d',
     INTERN_OVERHEID: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/634f438e-0d62-4ae4-923a-b63460f6bc46',
     PUBLIEK: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/c3de9c70-391e-4031-a85e-4b03433d6266',
+  },
+  ACCESS_LEVEL_IDS: {
+    INTERN_SECRETARIE: '66804c35-4652-4ff4-b927-16982a3b6de8',
+    VERTROUWELIJK: '9692ba4f-f59b-422b-9402-fcbd30a46d17',
+    INTERN_REGERING: '13ae94b0-6188-49df-8ecd-4c4a17511d6d',
+    INTERN_OVERHEID: '634f438e-0d62-4ae4-923a-b63460f6bc46',
+    PUBLIEK: 'c3de9c70-391e-4031-a85e-4b03433d6266',
   },
   USER_ROLES: {
     ADMIN: 'http://themis.vlaanderen.be/id/gebruikersrol/9a969b13-e80b-424f-8a82-a402bcb42bc5',
@@ -189,6 +197,14 @@ export default {
     FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
     FORMALLY_NOT_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
     NOT_YET_FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+  },
+  SUBMISSION_STATUSES: {
+    INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b8a0cec4-60d5-431e-b27f-9696bde22552",
+    IN_BEHANDELING: "http://themis.vlaanderen.be/id/indieningstatus/1fa83eac-e995-4d0f-8a02-6c6e66ade185",
+    TERUGGESTUURD: "http://themis.vlaanderen.be/id/indieningstatus/b6e33771-665b-4af2-9f1d-41405d1a24d3",
+    OPNIEUW_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b27cd825-72ae-44b0-b1ea-9dafdebe4e85",
+    UPDATE_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/11c6fd4b-c4d9-4cd4-9a8a-2fa2820e9353",
+    AANVAARD: "http://themis.vlaanderen.be/id/indieningstatus/dd4f1819-a70d-453f-95cb-ab5ade98563e",
   },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {

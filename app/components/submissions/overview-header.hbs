@@ -1,0 +1,35 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @size="large" @responsive={{true}}>
+    <Auk::Toolbar::Group @position="left" @responsive={{true}}>
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+        <AuLink
+          @skin="button-naked"
+          @icon="hierarchical-back"
+          @route="cases.submissions"
+          class="au-u-padding-left-none"
+        >
+          {{t "all-submissions"}}
+        </AuLink>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+        <div>
+          <span class="auk-overline auk-u-block">
+            {{t "submission"}}
+          </span>
+          <h4 class="auk-toolbar-complex__title au-u-padding-none">
+            <Auk::AbbreviatedText
+              @text={{or @submission.shortTitle "-"}}
+              @maxLength={{250}}
+            />
+          </h4>
+          {{#if @submission.beingTreatedBy}}
+            <span class="auk-u-block">
+              {{t "this-submission-is-being-treated-by-user"
+                  user=@submission.beingTreatedBy.fullName}}
+            </span>
+          {{/if}}
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>

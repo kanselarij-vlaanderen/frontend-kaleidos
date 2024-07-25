@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class CasesIndexController extends Controller {
   // Services
@@ -79,6 +80,10 @@ export default class CasesIndexController extends Controller {
   @action
   onToggleFilters(open) {
     this.filtersOpen = open;
+  }
+
+  get mayShowSubmissionsTab() {
+    return isEnabledCabinetSubmissions();
   }
 
   setCaseFilter = (value) => (this.caseFilter = value);

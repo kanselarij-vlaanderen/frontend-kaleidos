@@ -347,6 +347,7 @@
         {{on "input" (pick "target.value" (set this "newPiece.name"))}}
       />
       <Documents::UploadedDocument
+        @allowEditPieceAccessLevel={{true}}
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}
       />

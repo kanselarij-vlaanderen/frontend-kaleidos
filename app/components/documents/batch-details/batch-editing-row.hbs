@@ -15,17 +15,19 @@
       @onChange={{this.setDocumentType}}
     />
   </td>
-  <td>
-    <Utils::AccessLevelSelector
-      data-test-batch-editing-row-access-level
-      @allowClear={{true}}
-      @displayField="label"
-      @sortField="position"
-      @disabled={{this.isDisabled}}
-      @selected={{this.accessLevel}}
-      @onChange={{this.setAccessLevel}}
-    />
-  </td>
+  {{#if @isAccessLevelEnabled}}
+    <td>
+      <Utils::AccessLevelSelector
+        data-test-batch-editing-row-access-level
+        @allowClear={{true}}
+        @displayField="label"
+        @sortField="position"
+        @disabled={{this.isDisabled}}
+        @selected={{this.accessLevel}}
+        @onChange={{this.setAccessLevel}}
+      />
+    </td>
+  {{/if}}
   {{#if (and @isSignaturesEnabled @decisionActivity)}}
     <td>
       <AuToggleSwitch
