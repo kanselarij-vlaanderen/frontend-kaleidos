@@ -1,0 +1,160 @@
+<AuBodyContainer>
+  <div class="auk-scroll-wrapper">
+    <div class="auk-scroll-wrapper__body">
+      {{#if @model.length}}
+        <div>
+          <table
+            class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
+          >
+            <thead>
+              <tr>
+                <Utils::ThSortable
+                  class="auk-table__col--8 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="title"
+                  @label={{t "name"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="requested-by.person.name"
+                  @label={{t "cabinet-submitter"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <th class="auk-table__header-title">{{t "co-submitters"}}</th>
+                <Utils::ThSortable
+                  class="auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="type.label"
+                  @label={{t "subcase-type"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="status.label"
+                  @label={{t "status"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="treated-by"
+                  @label={{t "treated-by"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each @model as |submission|}}
+                {{! template-lint-disable no-invalid-interactive }}
+                <tr
+                  class="auk-table--clickable-rows"
+                  {{on "click" (fn this.navigateToSubmission submission)}}
+                >
+                  <td>
+                    <p>
+                      {{#if submission.shortTitle}}
+                        {{submission.shortTitle}}
+                      {{else}}
+                        -
+                      {{/if}}
+                    </p>
+                  </td>
+                  <td>
+                    {{or submission.requestedBy.person.fullName "-"}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getMandateeNames submission)) as |names|}}
+                      {{#if names}}
+                        {{join ", " names}}
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                  <td>
+                    {{#if submission.type.label}}
+                      <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
+                    {{else if submission.type.altLabel}}
+                      <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.altLabel}}</AuPill>
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{#if submission.status.label}}
+                      <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
+                    {{else if submission.status.altLabel}}
+                      <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{#if submission.beingTreatedBy}}
+                      {{submission.beingTreatedBy.fullName}}
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td class="auk-u-text-align--right">
+                    <AuLink
+                      @skin="button-naked"
+                      @icon="chevron-right"
+                      @hideText={{true}}
+                      @route="cases.submissions.submission"
+                      @model={{submission.id}}
+                    >
+                      {{t "open"}}
+                    </AuLink>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{else}}
+        <Auk::Panel>
+          <Auk::Panel::Body>
+            <Auk::EmptyState
+              @message={{t "no-results-found"}}
+            />
+          </Auk::Panel::Body>
+        </Auk::Panel>
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <hr />
+  </div>
+  <div class="auk-u-mx-4">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Pagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{@model.length}}
+            @total={{@model.meta.count}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.prevPage}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{t "amount-per-page"}}
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <WebComponents::AuPageSize
+            @selectedSize={{this.size}}
+            @onChange={{fn (mut this.size)}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </div>
+</AuBodyContainer>

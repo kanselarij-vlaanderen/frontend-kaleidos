@@ -2,7 +2,6 @@
 
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-const Funnel = require('broccoli-funnel');
 const webpack = require('webpack');
 
 module.exports = function (defaults) {
@@ -73,11 +72,5 @@ module.exports = function (defaults) {
     ],
   });
 
-  const fontAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-css', {
-    srcDir: '/fonts',
-    include: ['*.woff2', '*.woff'],
-    destDir: '/assets/fonts'
-  });
-
-  return app.toTree([fontAssets]);
+  return app.toTree();
 };

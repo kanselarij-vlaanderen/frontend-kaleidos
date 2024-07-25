@@ -1,0 +1,212 @@
+{{page-title (t "submissions")}}
+<Cases::CasesHeader
+  @didCreateNewCase={{this.navigateToDecisionmakingFlow}}
+  @onSetFilter={{this.setCaseFilter}}
+  @caseFilter={{this.caseFilter}}
+/>
+<AuMainContainer
+  class="l-search-container
+    {{if
+      (and this.hasToggleableFilters this.filtersOpen)
+      'auk-u-scroll-no-overflow'
+    }}"
+  as |m|
+>
+  <m.sidebar>
+    <div class="au-c-sidebar auk-u-overflow-initial">
+      <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+        <nav>
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
+            {{t "content"}}
+          </AuHeading>
+          <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
+            <Auk::Tab
+              @route="cases"
+              @current-when="cases.index"
+            >
+              {{t "cases"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="cases.submissions"
+              @current-when="cases.submissions"
+            >
+              {{t "submissions"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </nav>
+        <Auk::MobileFilters
+          @toggleLabel="Filters"
+          @toggleIcon="filter"
+          @onToggle={{this.onToggleFilters}}
+        >
+          <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+            <Search::DateRangeFilter
+              @dateFrom={{this.dateFrom}}
+              @dateTo={{this.dateTo}}
+              @onDateFromChange={{this.setDateFrom}}
+              @onDateToChange={{this.setDateTo}}
+              @onDateFromClear={{set this "dateFrom" undefined}}
+              @onDateToClear={{set this "dateTo" undefined}}
+            />
+            {{#if this.mayShowMinisterFilter}}
+              <div class="au-c-card au-o-box au-o-box--small">
+                <AuLabel>{{t "submitter"}}</AuLabel>
+                <Search::MinisterFilter
+                  @selected={{this.submitters}}
+                  @onChange={{set this "submitters"}}
+                  @showPastMinisters={{true}}
+                />
+              </div>
+            {{/if}}
+          </div>
+        </Auk::MobileFilters>
+      </div>
+    </div>
+  </m.sidebar>
+  <m.content @scroll={{false}}>
+    <AuBodyContainer>
+      <div class="auk-scroll-wrapper">
+        <div class="auk-scroll-wrapper__body">
+          {{#if @model.length}}
+            <div>
+              <table
+                class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
+              >
+                <thead>
+                  <tr>
+                    <Utils::ThSortable
+                      class="auk-table__col--8 auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="title"
+                      @label={{t "name"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <Utils::ThSortable
+                      class="auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="planned-start"
+                      @label={{t "date-put-on-agenda"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <Utils::ThSortable
+                      class="auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="type.label"
+                      @label={{t "subcase-type"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <Utils::ThSortable
+                      class="auk-table__header-title"
+                      @currentSorting={{this.sort}}
+                      @field="status.label"
+                      @label={{t "status"}}
+                      @onChange={{fn (mut this.sort)}}
+                    />
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#if this.isLoadingModel}}
+                    <tr>
+                      <td colspan="6">
+                        {{t "loading"}}
+                      </td>
+                    </tr>
+                  {{else}}
+                    {{#each @model as |submission|}}
+                      {{! template-lint-disable no-invalid-interactive }}
+                      <tr
+                        class="auk-table--clickable-rows"
+                        {{on "click" (fn this.navigateToSubmission submission)}}
+                      >
+                        <td>
+                          <p>
+                            {{#if submission.shortTitle}}
+                              {{submission.shortTitle}}
+                            {{else}}
+                              -
+                            {{/if}}
+                          </p>
+                        </td>
+                        <td>
+                          {{date submission.plannedStart}}
+                        </td>
+                        <td>
+                          {{#if submission.type.label}}
+                            <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
+                          {{else if submission.type.altLabel}}
+                            <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.altLabel}}</AuPill>
+                          {{else}}
+                            -
+                          {{/if}}
+                        </td>
+                        <td>
+                          {{#if submission.status.label}}
+                            <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
+                          {{else if submission.status.altLabel}}
+                            <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
+                          {{else}}
+                            -
+                          {{/if}}
+                        </td>
+                        <td class="auk-u-text-align--right">
+                          <AuLink
+                            @skin="button-naked"
+                            @icon="chevron-right"
+                            @hideText={{true}}
+                            @route="cases.submissions.submission"
+                            @model={{submission.id}}
+                          >
+                            {{t "open"}}
+                          </AuLink>
+                        </td>
+                      </tr>
+                    {{/each}}
+                  {{/if}}
+                </tbody>
+              </table>
+            </div>
+          {{else}}
+            <Auk::Panel>
+              <Auk::Panel::Body>
+                <Auk::EmptyState
+                  @message={{t "no-results-found"}}
+                />
+              </Auk::Panel::Body>
+            </Auk::Panel>
+          {{/if}}
+        </div>
+      </div>
+      <div>
+        <hr />
+      </div>
+      <div class="auk-u-mx-4">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Pagination
+                @page={{this.page}}
+                @size={{this.size}}
+                @nbOfItems={{@model.length}}
+                @total={{@model.meta.count}}
+                @onNextPage={{this.nextPage}}
+                @onPreviousPage={{this.prevPage}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              {{t "amount-per-page"}}
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item>
+              <WebComponents::AuPageSize
+                @selectedSize={{this.size}}
+                @onChange={{fn (mut this.size)}}
+              />
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </div>
+    </AuBodyContainer>
+  </m.content>
+</AuMainContainer>

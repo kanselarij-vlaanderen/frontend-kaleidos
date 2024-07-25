@@ -42,7 +42,8 @@ async function generateBetreft(
   title = null,
   isApproval,
   documents,
-  subcaseName = null
+  subcaseName = null,
+  agendaitemType,
 ) {
   const documentsWithoutBijlageTerInzage = await Promise.all(documents.map(async (document) => {
     const documentContainer = await document.documentContainer;
@@ -53,11 +54,12 @@ async function generateBetreft(
     }
     return document;
   }))
+  const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
   const filteredDocuments = documentsWithoutBijlageTerInzage.filter((document) => document !== null);
   let betreft = '';
   betreft += `${shortTitle}`;
   betreft += title ? `<br/>${title}` : '';
-  betreft += subcaseName ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
+  betreft += (isNota && subcaseName) ? `<br/>${capitalizeFirstLetter(subcaseName)}` : '';
   betreft +=
     documents && documents.length
       ? `<br/>${formatDocuments(filteredDocuments, isApproval)}`

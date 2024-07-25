@@ -442,11 +442,6 @@ $au-label-color: var(--au-gray-700);
   background-color: $au-white;
 }
 
-// Fix missing noactions class
-.auk-table--noactions .data-table__actions--top {
-  display: none;
-}
-
 // Fieldset
 
 .au-c-fieldset {
