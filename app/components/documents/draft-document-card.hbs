@@ -83,6 +83,22 @@
           </Group.Item>
         </Toolbar.Group>
         <Toolbar.Group @position="right" as |Group|>
+          <Group.Item
+            class="auk-o-flex auk-o-flex--vertical-center"
+          >
+            {{#unless (or this.loadPieceRelatedData.isRunning)}}
+              {{#unless @hideAccessLevel}}
+                <AccessLevelPill
+                  @accessLevel={{this.piece.accessLevel}}
+                  @isEditable={{this.mayEdit}}
+                  @isDraft={{eq this.piece.constructor.modelName 'draft-piece'}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.cancelChangeAccessLevel}}
+                />
+              {{/unless}}
+            {{/unless}}
+          </Group.Item>
           {{#if this.mayEdit}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"

@@ -52,7 +52,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   get mayEdit() {
-    return this.args.isEditable && this.args.piece.constructor.name === 'DraftPiece';
+    return this.args.isEditable && this.args.piece.constructor.modelName === 'draft-piece';
   }
 
   get dateToShowLabel() {
@@ -79,13 +79,14 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @task
   *loadPieceRelatedData() {
     const loadPiece = (id) =>
-      this.store.queryOne(this.piece.constructor.name, {
+      this.store.queryOne(this.piece.constructor.modelName, {
         'filter[:id:]': id,
-        include: 'document-container.type',
+        include: 'document-container.type,access-level',
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
+      yield this.piece.accessLevel;
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
       // check for alternative label
@@ -118,7 +119,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
-        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
       );
     }
   }
@@ -131,7 +132,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   @task
   *loadVersionHistory() {
-    if (this.piece.constructor.name === 'Piece') {
+    if (this.piece.constructor.modelName === 'piece') {
       const piecesFromModel = yield this.documentContainer
         .hasMany('pieces')
         .reload();
@@ -222,5 +223,21 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
     this.isEditingPiece = false;
+  }
+
+  @action
+  async changeAccessLevel(accessLevel) {
+    this.piece.accessLevel = accessLevel;
+  }
+
+  @action
+  async saveAccessLevel() {
+    await this.piece.save();
+    await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  async cancelChangeAccessLevel() {
+    await this.loadPieceRelatedData.perform();
   }
 }

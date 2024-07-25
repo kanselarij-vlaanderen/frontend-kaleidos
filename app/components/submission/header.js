@@ -44,11 +44,16 @@ export default class SubmissionHeaderComponent extends Component {
   });
 
   get items() {
-    return [
+    const items = [
       { elementId: 'submission', label: this.intl.t('overview') },
-      { elementId: 'documents', label: this.intl.t('documents') },
-      { elementId: 'agenda', label: this.intl.t('agenda-activities') },
+      { elementId: 'documents', label: this.intl.t('documents') }
     ];
+    if (!this.args.disableHistory) {
+      items.push({
+        elementId: 'history', label: this.intl.t('submission-history')
+      });
+    }
+    return items;
   }
 
   get isUpdate() {
@@ -199,8 +204,13 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees,
           governmentAreas,
         });
-        await subcase.save();
+      } else {
+        await subcase.belongsTo('requestedBy')?.reload();
+        await subcase.hasMany('mandatees')?.reload();
+        subcase.requestedBy = requestedBy;
+        subcase.mandatees = mandatees;
       }
+      await subcase.save();
 
       this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
@@ -247,7 +257,7 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
-            originalName: previousPiece.originalName,
+            originalName: previousPiece?.originalName,
           });
           await piece.save();
           this.piecesMovedCounter++;

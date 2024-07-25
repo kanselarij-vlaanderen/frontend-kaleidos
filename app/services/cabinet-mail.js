@@ -55,9 +55,9 @@ export default class CabinetMailService extends Service {
       };
 
       const mail = caseSendBackEmail(params);
-
+      const creator = await submission.creator;
       const mailResource = this.store.createRecord('email', {
-        to: submission.creator.email,
+        to: creator.email,
         from: mailSettings.defaultFromEmail,
         folder: outbox,
         subject: mail.subject,
@@ -96,9 +96,9 @@ export default class CabinetMailService extends Service {
           message: notificationEmail.message,
         })
       );
-
+      const creator = await submission.creator;
       const submitterEmailResource = this.store.createRecord('email', {
-        to: submission.creator.email,
+        to: creator.email,
         from: mailSettings.defaultFromEmail,
         folder: outbox,
         subject: submitterEmail.subject,

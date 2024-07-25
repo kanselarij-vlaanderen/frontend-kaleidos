@@ -12,6 +12,7 @@
     <div class="upload-container">
       {{#each @pieces as |piece|}}
         <Documents::UploadedDocument
+          @allowEditPieceAccessLevel={{true}}
           @piece={{piece}}
           @allowDocumentContainerEdit={{true}}
           @onDelete={{perform this.deletePiece piece}}
