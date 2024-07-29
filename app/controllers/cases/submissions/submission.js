@@ -29,8 +29,8 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked documentContainerIds = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
+  @tracked statusChangeActivities = new TrackedArray([]);
 
-  statusChangeActivities;
   currentLinkedMandatee;
 
   get mayEdit() {
@@ -85,11 +85,24 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
-    this.reloadPieces();
+    this.reloadPieces.perform();
     this.isOpenBatchDetailsModal = false;
   };
 
-  reloadPieces = async () => {
+  onStatusUpdated = () => {
+    this.reloadHistory.perform();
+  }
+
+  reloadHistory = task(async () => {
+    const statusChangeActivities = await this.model.statusChangeActivities.reload();
+    this.statusChangeActivities = statusChangeActivities
+      .slice()
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
+      .reverse();
+    await Promise.all(this.statusChangeActivities.map((a) => a.status));
+  });
+
+  reloadPieces = task(async () => {
     const subcase = await this.model.subcase;
     const newPieces = await this.model.pieces;
     let pieces = [];
@@ -110,10 +123,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     }
     this.documentContainerIds = documentContainerIds;
     this.newDraftPieces = newPieces;
-  }
+  });
 
   updateDraftPiecePositions = async () => {
-    await this.reloadPieces();
+    await this.reloadPieces.perform();
     for (const piece of this.pieces) {
       if (piece.constructor.modelName === 'draft-piece') {
         let draftDocumentContainer = await piece.documentContainer;
@@ -124,7 +137,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         }
       }
     }
-    this.reloadPieces();
+    this.reloadPieces.perform();
   };
 
   @action
@@ -180,7 +193,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.reloadPieces();
+    this.reloadPieces.perform();
   });
 
   savePiece = task(async (piece, index) => {
