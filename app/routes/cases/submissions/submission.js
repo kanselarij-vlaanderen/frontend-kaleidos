@@ -14,7 +14,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   mandatees;
   statusChangeActivities;
   currentLinkedMandatee;
-  defaultAccessLevel;
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
@@ -113,14 +112,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       .reverse();
     await Promise.all(this.statusChangeActivities.map((a) => a.status));
 
-    this.defaultAccessLevel = await this.store.findRecordByUri(
-      'concept',
-      submission.confidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
-
-
     const creator = await submission.creator;
     this.creatorName = `${creator?.firstName} ${creator?.lastName}`;
 
@@ -135,7 +126,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
-    controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.previousSubcase = this.previousSubcase;
     controller.creatorName = this.creatorName;
   }

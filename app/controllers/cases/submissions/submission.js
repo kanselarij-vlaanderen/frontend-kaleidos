@@ -8,6 +8,7 @@ import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
   @service conceptStore;
@@ -23,7 +24,6 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
 
-  @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked documentContainerIds = new TrackedArray([]);
@@ -144,12 +144,18 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         type,
       }
     );
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      (this.confidential || parsed.confidential)
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
     const piece = this.store.createRecord('draft-piece', {
       created: now,
       modified: now,
       file: file,
       confidential: confidential,
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: defaultAccessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
       submission: this.model,
