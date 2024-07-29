@@ -98,7 +98,13 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       }
     }
     this.documentContainerIds = documentContainerIds;
-    this.newDraftPieces = newPieces;
+    for (const newPiece of newPieces) {
+      await newPiece.documentContainer;
+    }
+    const sortedNewPieces = newPieces?.slice().sort(
+      (p1, p2) => p1.documentContainer.get('position') - p2.documentContainer.get('position')
+    );
+    this.newDraftPieces = sortedNewPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
