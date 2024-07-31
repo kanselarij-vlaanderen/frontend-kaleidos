@@ -31,6 +31,7 @@ export default class AgendaitemControls extends Component {
   @tracked decisionActivity;
   @tracked showVPModal = false;
   @tracked canSendToVP = false;
+  @tracked isSendingBackToSubmitter = false;
 
   constructor() {
     super(...arguments);
@@ -184,6 +185,7 @@ export default class AgendaitemControls extends Component {
 
   @action
   async verifySendBackToSubmitter(agendaitem) {
+    this.isSendingBackToSubmitter = true;
     const submission = this.submissions.at(0);
     await submission.updateStatus(CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD);
     await this.deleteItem(agendaitem);
@@ -204,6 +206,7 @@ export default class AgendaitemControls extends Component {
     // Delete submission activity
     const submissionActivities = await submission.submissionActivities;
     await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    this.isSendingBackToSubmitter = false;
   }
 
   @task

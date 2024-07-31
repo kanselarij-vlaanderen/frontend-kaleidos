@@ -16,19 +16,24 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
         break;
       }
     }
+    let firstDeletedPieceModelName = latestPiece.constructor.modelName;
     while (latestPiece) {
       const previousPiece = await latestPiece.previousPiece;
       const modelName = latestPiece.constructor.modelName;
-      if (modelName === 'piece' || modelName === 'draft-piece') {
-        await deletePiece(latestPiece);
-      } else if (modelName === 'report' || modelName === 'minutes') {
-        await deletePieceWithPieceParts(latestPiece);
+      if (modelName === firstDeletedPieceModelName) {
+        if (modelName === 'piece' || modelName === 'draft-piece') {
+          await deletePiece(latestPiece);
+        } else if (modelName === 'report' || modelName === 'minutes') {
+          await deletePieceWithPieceParts(latestPiece);
+        } else {
+          console.debug(
+            'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
+          );
+        }
+        latestPiece = previousPiece;
       } else {
-        console.debug(
-          'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
-        );
+        latestPiece = null;
       }
-      latestPiece = previousPiece;
     }
   }
 }

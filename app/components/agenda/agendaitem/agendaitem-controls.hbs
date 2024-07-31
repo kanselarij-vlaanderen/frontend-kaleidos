@@ -102,6 +102,8 @@
   @confirmMessage={{t "delete"}}
   @confirmIcon="trash"
   @alert={{true}}
+  @disabled={{this.isSendingBackToSubmitter}}
+  @loading={{this.isSendingBackToSubmitter}}
 />
 
 {{#if this.showVPModal}}

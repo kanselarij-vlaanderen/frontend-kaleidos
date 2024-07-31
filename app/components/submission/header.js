@@ -5,6 +5,7 @@ import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent } from '@ember/utils';
 
 export default class SubmissionHeaderComponent extends Component {
   @service agendaService;
@@ -44,11 +45,16 @@ export default class SubmissionHeaderComponent extends Component {
   });
 
   get items() {
-    return [
+    const items = [
       { elementId: 'submission', label: this.intl.t('overview') },
-      { elementId: 'documents', label: this.intl.t('documents') },
-      { elementId: 'agenda', label: this.intl.t('agenda-activities') },
+      { elementId: 'documents', label: this.intl.t('documents') }
     ];
+    if (!this.args.disableHistory) {
+      items.push({
+        elementId: 'history', label: this.intl.t('submission-history')
+      });
+    }
+    return items;
   }
 
   get isUpdate() {
@@ -128,7 +134,7 @@ export default class SubmissionHeaderComponent extends Component {
    * @private
    */
   _updateSubmission = async (statusUri, comment) => {
-    this.args.submission.updateStatus(statusUri, comment);
+    await this.args.submission.updateStatus(statusUri, comment);
   };
 
   resubmitSubmission = task(async () => {
@@ -137,6 +143,9 @@ export default class SubmissionHeaderComponent extends Component {
       this.comment
     );
     this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 
   createSubcase = dropTask(
@@ -199,8 +208,13 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees,
           governmentAreas,
         });
-        await subcase.save();
+      } else {
+        await subcase.belongsTo('requestedBy')?.reload();
+        await subcase.hasMany('mandatees')?.reload();
+        subcase.requestedBy = requestedBy;
+        subcase.mandatees = mandatees;
       }
+      await subcase.save();
 
       this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
@@ -247,7 +261,8 @@ export default class SubmissionHeaderComponent extends Component {
             accessLevel,
             file,
             documentContainer,
-            originalName: previousPiece.originalName,
+            originalName: previousPiece?.originalName,
+            draftPiece: draftPiece
           });
           await piece.save();
           this.piecesMovedCounter++;
@@ -297,6 +312,9 @@ export default class SubmissionHeaderComponent extends Component {
     const currentUser = this.currentSession.user;
     this.args.submission.beingTreatedBy = currentUser;
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   };
 
   sendBackToSubmitter = task(async () => {
@@ -308,6 +326,9 @@ export default class SubmissionHeaderComponent extends Component {
       this.args.submission,
       this.comment
     );
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 
   deleteSubmission = task(async () => {

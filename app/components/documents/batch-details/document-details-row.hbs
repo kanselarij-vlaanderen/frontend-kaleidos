@@ -3,15 +3,19 @@
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
   {{sortable-item
     model=@row
-    distane="30"}}
+    distance="30"
+    disabled=@disableEditingPosition
+  }}
 >
   <td class="auk-table-drag-col">
-    <AuIcon
-      class="auk-u-cursor-grab auk-u-text-muted"
-      @icon="drag-handle-2"
-      @size="large"
-      {{sortable-handle}}
-    />
+    {{#unless @disableEditingPosition}}
+      <AuIcon
+        class="auk-u-cursor-grab auk-u-text-muted"
+        @icon="drag-handle-2"
+        @size="large"
+        {{sortable-handle}}
+      />
+    {{/unless}}
   </td>
   {{#if @isEditingEnabled}}
     <td class="auk-table-checkbox-col">

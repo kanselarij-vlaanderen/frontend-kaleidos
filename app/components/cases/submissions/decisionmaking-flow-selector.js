@@ -44,8 +44,6 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
   onChangeDecisionmakingFlowTitle = (title) => {
     this.decisionmakingFlowTitle = title;
     this.selectedDecisionmakingFlow = null;
-    this.args.onChangeTitle?.(title);
-    this.args.onChangeSelected?.(null);
 
   }
   onConfirmDecisionmakingFlowTitle = () => {

@@ -68,7 +68,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   @task
   *loadPieceRelatedData() {
     const loadPiece = (id) =>
-      this.store.queryOne(this.piece.constructor.name, {
+      this.store.queryOne(this.piece.constructor.modelName, {
         'filter[:id:]': id,
         include: 'document-container.type',
       });
@@ -107,7 +107,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
       this.piece = yield loadPiece(lastPiece.id);
     } else {
       throw new Error(
-        `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
+        `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
       );
     }
   }
@@ -120,7 +120,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
 
   @task
   *loadVersionHistory() {
-    if (this.piece.constructor.name === 'Piece') {
+    if (this.piece.constructor.modelName === 'piece') {
       const piecesFromModel = yield this.documentContainer
         .hasMany('pieces')
         .reload();
@@ -141,7 +141,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   }
 
   get mayShowDropdown() {
-    return this.piece.constructor.name === 'Piece';
+    return this.piece.constructor.modelName === 'piece';
   }
 
   get sortedPieces() {

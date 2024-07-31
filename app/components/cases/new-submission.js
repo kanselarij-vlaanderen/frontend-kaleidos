@@ -148,6 +148,21 @@ export default class CasesNewSubmissionComponent extends Component {
     });
   }
 
+  onDecisionmakingFlowChanged = async (decisionmakingFlow) => {
+    this.selectedDecisionmakingFlow = decisionmakingFlow;
+    if (!this.shortTitle) {
+      const decisionmakingFlowCase = await decisionmakingFlow.case;
+      this.shortTitle = decisionmakingFlowCase.shortTitle;
+    }
+  }
+
+  onDecisionmakingFlowTitleChanged = (decisionmakingFlowTitle) => {
+    this.decisionmakingFlowTitle = decisionmakingFlowTitle;
+    if (!this.shortTitle) {
+      this.shortTitle = decisionmakingFlowTitle;
+    }
+  }
+
   filterSubcaseTypes = (subcaseTypes) => {
     return subcaseTypes.filter(
       (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING
@@ -310,7 +325,9 @@ export default class CasesNewSubmissionComponent extends Component {
           ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
           : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
       );
-      piece.accessLevel = defaultAccessLevel;
+      if (!piece.accessLevel) {
+        piece.accessLevel = defaultAccessLevel;
+      }
       piece.accessLevelLastModified = new Date();
       piece.name = piece.name.trim();
       piece.submission = this.submission;

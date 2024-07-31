@@ -12,14 +12,24 @@
   @submission={{@model}}
   @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
+  @onStatusUpdated={{this.onStatusUpdated}}
 />
-
 <div class="auk-scroll-wrapper__body">
+  {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "this-submission-is-an-update-title"}}
+    >
+      <p>{{t "this-submission-is-an-update"}}</p>
+    </AuAlert>
+  {{/if}}
   <div class="auk-u-responsive-margin">
+
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
-        @mayEdit={{this.mayEdit}}
+        @mayEdit={{and this.mayEdit (not this.isUpdate)}}
       />
     </div>
 
@@ -39,7 +49,7 @@
       class="auk-u-mb-4"
       @referenceDate={{@model.created}}
       @governmentAreas={{@model.governmentAreas}}
-      @allowEditing={{this.mayEdit}}
+      @allowEditing={{and this.mayEdit (not this.isUpdate)}}
       @subcase={{@model}}
       @onSave={{this.saveGovernmentAreas}}
     />
@@ -77,9 +87,9 @@
             <Documents::DraftDocumentCardList
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
-              @hideAccessLevel={{true}}
+              @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
-              @didDeleteContainer={{this.refresh}}
+              @didDeleteContainer={{this.updateDraftPiecePositions}}
             />
           {{else}}
             <div>
@@ -108,28 +118,31 @@
       </Auk::Panel>
     </div>
 
-    <div id="agenda">
+    <div id="history">
       <Auk::Panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <h4 class="auk-panel__title">
-                  {{t "agenda-activities"}}
+                  {{t "submission-history"}}
                 </h4>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="auk-u-bg-alt">
-          <ul class="vlc-status-timeline">
-            {{#each this.statusChangeActivities as |activity|}}
-              <Submission::StatusChangeActivity
-                @activity={{activity}}
-                @beingTreatedByName={{@model.beingTreatedBy.fullName}}
-              />
-            {{/each}}
-          </ul>
+          {{#if this.reloadHistory.isIdle}}
+            <ul class="vlc-status-timeline">
+              {{#each this.statusChangeActivities as |activity|}}
+                <Submission::StatusChangeActivity
+                  @activity={{activity}}
+                  @creatorName={{this.creatorName}}
+                  @beingTreatedByName={{@model.beingTreatedBy.fullName}}
+                />
+              {{/each}}
+            </ul>
+          {{/if}}
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>
@@ -160,6 +173,8 @@
           <Documents::UploadedDocument
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @disableInternSecretarie={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}
@@ -170,10 +185,11 @@
 
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
-    @pieces={{this.pieces}}
+    @pieces={{this.newDraftPieces}}
     @onCancel={{toggle "isOpenBatchDetailsModal" this}}
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
     @allowEditing={{this.mayEdit}}
+    @disableEditingPosition={{true}}
   />
 {{/if}}

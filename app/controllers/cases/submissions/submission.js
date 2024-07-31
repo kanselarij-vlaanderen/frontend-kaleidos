@@ -7,6 +7,8 @@ import { task } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
   @service conceptStore;
@@ -17,17 +19,18 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @service toaster;
   @service intl;
   @service documentService;
+  @service submissionService;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
 
-  @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
+  @tracked documentContainerIds = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
+  @tracked statusChangeActivities = new TrackedArray([]);
 
-  statusChangeActivities;
   currentLinkedMandatee;
 
   get mayEdit() {
@@ -43,6 +46,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.currentLinkedMandatee?.id ===
         this.model.belongsTo('requestedBy').value().id; // requestedBy is loaded in the route
     return mayIfAdmin || mayIfSecretarie || mayIfKabinet;
+  }
+
+  get isUpdate() {
+    return this.model.belongsTo('subcase').value()?.id;
   }
 
   get sortedNewPieces() {
@@ -78,12 +85,59 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
-    this.router.refresh();
+    this.reloadPieces.perform();
     this.isOpenBatchDetailsModal = false;
   };
 
-  refresh = () => {
-    this.router.refresh();
+  onStatusUpdated = () => {
+    this.reloadHistory.perform();
+  }
+
+  reloadHistory = task(async () => {
+    const statusChangeActivities = await this.model.statusChangeActivities.reload();
+    this.statusChangeActivities = statusChangeActivities
+      .slice()
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
+      .reverse();
+    await Promise.all(this.statusChangeActivities.map((a) => a.status));
+  });
+
+  reloadPieces = task(async () => {
+    const subcase = await this.model.subcase;
+    const newPieces = await this.model.pieces;
+    let pieces = [];
+    if (subcase) {
+      pieces = await this.submissionService.loadSubmissionPieces(subcase, newPieces);
+    } else {
+      pieces = newPieces.slice();
+    }
+
+    this.pieces = await sortPieces(pieces);
+
+    let documentContainerIds = [];
+    for (const piece of this.pieces) {
+      const documentContainer = await piece.documentContainer;
+      if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
+        documentContainerIds.push(documentContainer.id);
+      }
+    }
+    this.documentContainerIds = documentContainerIds;
+    this.newDraftPieces = newPieces;
+  });
+
+  updateDraftPiecePositions = async () => {
+    await this.reloadPieces.perform();
+    for (const piece of this.pieces) {
+      if (piece.constructor.modelName === 'draft-piece') {
+        let draftDocumentContainer = await piece.documentContainer;
+        let currentPosition = this.documentContainerIds.indexOf(draftDocumentContainer.id) + 1;
+        if (draftDocumentContainer.position !== currentPosition) {
+          draftDocumentContainer.position = currentPosition;
+          draftDocumentContainer.save();
+        }
+      }
+    }
+    this.reloadPieces.perform();
   };
 
   @action
@@ -94,20 +148,27 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     const now = new Date();
     const confidential = this.model.confidential || false;
+    const numberOfContainers = this.documentContainerIds.length;
     const documentContainer = this.store.createRecord(
       'draft-document-container',
       {
         created: now,
-        position: parsed.index,
+        position: parsed.index || (numberOfContainers + 1),
         type,
       }
+    );
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      (this.confidential || parsed.confidential)
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
     const piece = this.store.createRecord('draft-piece', {
       created: now,
       modified: now,
       file: file,
       confidential: confidential,
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: defaultAccessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
       submission: this.model,
@@ -132,12 +193,14 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.router.refresh();
+    this.reloadPieces.perform();
   });
 
   savePiece = task(async (piece, index) => {
     const documentContainer = await piece.documentContainer;
-    documentContainer.position = index + 1 + (this.pieces?.length ?? 0);
+    if (!documentContainer.position) {
+      documentContainer.position = index + 1 + (this.documentContainerIds?.length ?? 0);
+    }
     await documentContainer.save();
     piece.name = piece.name.trim();
     await piece.save();
