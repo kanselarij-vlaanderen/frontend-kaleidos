@@ -14,7 +14,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   mandatees;
   statusChangeActivities;
   currentLinkedMandatee;
-  defaultAccessLevel;
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
@@ -98,7 +97,13 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       }
     }
     this.documentContainerIds = documentContainerIds;
-    this.newDraftPieces = newPieces;
+    for (const newPiece of newPieces) {
+      await newPiece.documentContainer;
+    }
+    const sortedNewPieces = newPieces?.slice().sort(
+      (p1, p2) => p1.documentContainer.get('position') - p2.documentContainer.get('position')
+    );
+    this.newDraftPieces = sortedNewPieces;
 
     const statusChangeActivities = await submission.statusChangeActivities;
     this.statusChangeActivities = statusChangeActivities
@@ -106,14 +111,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
       .reverse();
     await Promise.all(this.statusChangeActivities.map((a) => a.status));
-
-    this.defaultAccessLevel = await this.store.findRecordByUri(
-      'concept',
-      submission.confidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
-
 
     const creator = await submission.creator;
     this.creatorName = `${creator?.firstName} ${creator?.lastName}`;
@@ -129,7 +126,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
-    controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.previousSubcase = this.previousSubcase;
     controller.creatorName = this.creatorName;
   }

@@ -39,16 +39,11 @@ export default class CasesSubmissionsIndexRoute extends Route {
   };
 
   async model(params) {
-    // const statusIds = (
-    //   await this.conceptStore.queryAllByConceptScheme(
-    //     CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
-    //   )
-    // ).map((status) => status.id);
     // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      // 'filter[status][:id:]': statusIds.join(','), // TODO: update (BIS) submissions are not shown for some reason
-      'filter[:has-no:submission-activities]': 't',
+      'filter[:or:][pieces][:has-no:accepted-piece]': 't',
+      'filter[:or:][pieces][accepted-piece][:has-no:agendaitems]': 't',
       include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
       sort: params.sort + ',-modified',
       page: {
