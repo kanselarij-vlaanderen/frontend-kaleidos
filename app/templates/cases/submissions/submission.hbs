@@ -12,6 +12,7 @@
   @submission={{@model}}
   @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
+  @onStatusUpdated={{this.onStatusUpdated}}
 />
 <div class="auk-scroll-wrapper__body">
   {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
@@ -131,15 +132,17 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="auk-u-bg-alt">
-          <ul class="vlc-status-timeline">
-            {{#each this.statusChangeActivities as |activity|}}
-              <Submission::StatusChangeActivity
-                @activity={{activity}}
-                @creatorName={{this.creatorName}}
-                @beingTreatedByName={{@model.beingTreatedBy.fullName}}
-              />
-            {{/each}}
-          </ul>
+          {{#if this.reloadHistory.isIdle}}
+            <ul class="vlc-status-timeline">
+              {{#each this.statusChangeActivities as |activity|}}
+                <Submission::StatusChangeActivity
+                  @activity={{activity}}
+                  @creatorName={{this.creatorName}}
+                  @beingTreatedByName={{@model.beingTreatedBy.fullName}}
+                />
+              {{/each}}
+            </ul>
+          {{/if}}
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>
