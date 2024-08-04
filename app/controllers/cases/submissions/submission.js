@@ -30,6 +30,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
   @tracked statusChangeActivities = new TrackedArray([]);
+  @tracked approvalAddresses = new TrackedArray([]);
+  @tracked notificationAddresses = new TrackedArray([]);
+  @tracked approvalComment;
+  @tracked notificationComment;
 
   currentLinkedMandatee;
 
@@ -59,6 +63,21 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
       return d1?.position - d2?.position || p1.created - p2.created;
     });
+  }
+
+  onNotificationDataChanged = async (newNotificationData) => {
+    this.approvalAddresses = newNotificationData.approvalAddresses;
+    this.approvalComment = newNotificationData.approvalComment;
+    this.notificationAddresses = newNotificationData.notificationAddresses;
+    this.notificationComment = newNotificationData.notificationComment;
+  };
+
+  onSaveNotificationData = async () => {
+    this.model.approvalAddresses = this.approvalAddresses;
+    this.model.approvalComment = this.approvalComment;
+    this.model.notificationAddresses = this.notificationAddresses;
+    this.model.notificationComment = this.notificationComment;
+    await this.model.save();
   }
 
   disableMandatee = (mandatee) => {

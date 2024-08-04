@@ -80,7 +80,11 @@
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <AuButton @skin="naked" {{on "click" this.cancelEditing}}>
+          <AuButton
+            @skin="naked"
+            @disabled={{this.isSaving}}
+            {{on "click" this.cancelEditing}}
+          >
             {{t "cancel"}}
           </AuButton>
         </Auk::Toolbar::Item>
