@@ -1,4 +1,6 @@
-<Auk::Panel ...attributes class="{{if this.isEditing 'auk-panel--editing' ''}}">
+<Auk::Panel ...attributes
+  class="{{if (and this.isEditing (not @hideEditingControls)) 'auk-panel--editing' ''}}"
+>
   <Auk::Panel::Header @size="auto">
     <Auk::Toolbar @auto={{true}} as |Toolbar|>
       <Toolbar.Group @position="left">
@@ -6,7 +8,7 @@
           {{t "notifications-submission"}}
         </h4>
       </Toolbar.Group>
-      {{#if (and @enableEditing (not this.isEditing))}}
+      {{#if (and @allowEditing (not this.isEditing) (not @hideEditingControls))}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
@@ -172,7 +174,7 @@
       </Auk::Panel>
     </Utils::LoadableContent>
   </Auk::Panel::Body>
-  {{#if this.isEditing}}
+  {{#if (and this.isEditing (not @hideEditingControls))}}
     <Auk::Panel::Footer>
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="left">

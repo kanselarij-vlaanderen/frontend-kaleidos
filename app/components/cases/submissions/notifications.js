@@ -16,6 +16,9 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
 
   constructor() {
     super(...arguments);
+    if (this.args.isEditing) {
+      this.isEditing = true;
+    }
     this.loadEmailSettings.perform();
   }
 
