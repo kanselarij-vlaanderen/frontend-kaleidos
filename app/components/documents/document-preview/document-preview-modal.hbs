@@ -32,7 +32,7 @@
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
-          @isOpen={{this.sidebarIsOpen}}
+          @isOpen={{or this.sidebarIsOpen (responsive "isMobile")}}
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
