@@ -8,6 +8,7 @@ import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
   @service conceptStore;
@@ -23,14 +24,17 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
 
-  @tracked defaultAccessLevel;
   @tracked mandatees = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked documentContainerIds = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
+  @tracked statusChangeActivities = new TrackedArray([]);
+  @tracked approvalAddresses = new TrackedArray([]);
+  @tracked notificationAddresses = new TrackedArray([]);
+  @tracked approvalComment;
+  @tracked notificationComment;
 
-  statusChangeActivities;
   currentLinkedMandatee;
 
   get mayEdit() {
@@ -61,6 +65,21 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     });
   }
 
+  onNotificationDataChanged = async (newNotificationData) => {
+    this.approvalAddresses = newNotificationData.approvalAddresses;
+    this.approvalComment = newNotificationData.approvalComment;
+    this.notificationAddresses = newNotificationData.notificationAddresses;
+    this.notificationComment = newNotificationData.notificationComment;
+  };
+
+  onSaveNotificationData = async () => {
+    this.model.approvalAddresses = this.approvalAddresses;
+    this.model.approvalComment = this.approvalComment;
+    this.model.notificationAddresses = this.notificationAddresses;
+    this.model.notificationComment = this.notificationComment;
+    await this.model.save();
+  }
+
   disableMandatee = (mandatee) => {
     return this.currentLinkedMandatee.id === mandatee.id;
   };
@@ -85,11 +104,24 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
-    this.reloadPieces();
+    this.reloadPieces.perform();
     this.isOpenBatchDetailsModal = false;
   };
 
-  reloadPieces = async () => {
+  onStatusUpdated = () => {
+    this.reloadHistory.perform();
+  }
+
+  reloadHistory = task(async () => {
+    const statusChangeActivities = await this.model.statusChangeActivities.reload();
+    this.statusChangeActivities = statusChangeActivities
+      .slice()
+      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
+      .reverse();
+    await Promise.all(this.statusChangeActivities.map((a) => a.status));
+  });
+
+  reloadPieces = task(async () => {
     const subcase = await this.model.subcase;
     const newPieces = await this.model.pieces;
     let pieces = [];
@@ -110,10 +142,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     }
     this.documentContainerIds = documentContainerIds;
     this.newDraftPieces = newPieces;
-  }
+  });
 
   updateDraftPiecePositions = async () => {
-    await this.reloadPieces();
+    await this.reloadPieces.perform();
     for (const piece of this.pieces) {
       if (piece.constructor.modelName === 'draft-piece') {
         let draftDocumentContainer = await piece.documentContainer;
@@ -124,7 +156,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         }
       }
     }
-    this.reloadPieces();
+    this.reloadPieces.perform();
   };
 
   @action
@@ -144,12 +176,18 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         type,
       }
     );
+    const defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      (this.confidential || parsed.confidential)
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
     const piece = this.store.createRecord('draft-piece', {
       created: now,
       modified: now,
       file: file,
       confidential: confidential,
-      accessLevel: this.defaultAccessLevel,
+      accessLevel: defaultAccessLevel,
       name: parsed.subject,
       documentContainer: documentContainer,
       submission: this.model,
@@ -174,7 +212,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.reloadPieces();
+    this.reloadPieces.perform();
   });
 
   savePiece = task(async (piece, index) => {

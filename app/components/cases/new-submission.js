@@ -36,13 +36,13 @@ export default class CasesNewSubmissionComponent extends Component {
 
   @tracked type;
 
-  @tracked currentApprovalAddresses = [];
-  @tracked approvalComment;
-  @tracked addedNotificationAddresses = [];
-  @tracked notificationComment;
-
   @tracked showAgendaModal = false;
   @tracked hasAgenda = false;
+
+  @tracked approvalAddresses = new TrackedArray([]);
+  @tracked approvalComment;
+  @tracked notificationAddresses = new TrackedArray([]);
+  @tracked notificationComment;
 
   @tracked submitter;
   @tracked mandatees;
@@ -52,16 +52,12 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked selectedGovernmentFields = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked isUploadingFiles;
-  @tracked mailsEnabled;
-  @tracked emailSettings;
   @tracked piecesCreatedCounter = 0;
 
   @tracked showProposableAgendaModal = false;
 
   constructor() {
     super(...arguments);
-
-    this.loadEmailSettings.perform();
 
     this.selectedDecisionmakingFlow = this.args.decisionmakingFlow;
     this.submitter = this.args.submitter;
@@ -70,41 +66,6 @@ export default class CasesNewSubmissionComponent extends Component {
     this.loadLatestSubcaseData.perform();
   }
 
-  loadEmailSettings = task(async () => {
-    this.emailSettings = await this.store.queryOne(
-      'email-notification-setting'
-    );
-    if (this.emailSettings) {
-      if (this.emailSettings.cabinetSubmissionsSecretaryEmail) {
-        this.currentApprovalAddresses = [
-          this.emailSettings.cabinetSubmissionsSecretaryEmail,
-          ...this.currentApprovalAddresses,
-        ];
-      }
-      this.mailsEnabled = true;
-    } else {
-      this.toaster.warning(
-        this.intl.t('notification-mails-could-not-be-sent'),
-        this.intl.t('warning-title')
-      );
-      this.mailsEnabled = false;
-    }
-  });
-
-  get defaultNotificationAddress() {
-    if (this.confidential) {
-      return this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail;
-    } else {
-      return this.emailSettings?.cabinetSubmissionsIkwEmail;
-    }
-  }
-
-  get currentNotificationAddresses() {
-    if (this.defaultNotificationAddress) {
-      return [this.defaultNotificationAddress, ...this.addedNotificationAddresses];
-    }
-    return [...this.addedNotificationAddresses];
-  }
   loadLatestSubcaseData = task(async () => {
     if (this.latestSubcase) {
       this.agendaItemType = await this.latestSubcase.agendaItemType;
@@ -133,7 +94,6 @@ export default class CasesNewSubmissionComponent extends Component {
       !decisionmakingFlowSet ||
       !subcaseTypeSet ||
       this.isUploadingFiles ||
-      this.loadEmailSettings.isRunning ||
       !this.pieces.length ||
       this.createSubmission.isRunning
     );
@@ -161,6 +121,13 @@ export default class CasesNewSubmissionComponent extends Component {
     if (!this.shortTitle) {
       this.shortTitle = decisionmakingFlowTitle;
     }
+  }
+
+  onNotificationDataChanged = (newSubmissionData) =>  {
+    this.approvalAddresses = newSubmissionData.approvalAddresses;
+    this.approvalComment = newSubmissionData.approvalComment;
+    this.notificationAddresses = newSubmissionData.notificationAddresses;
+    this.notificationComment = newSubmissionData.notificationComment;
   }
 
   filterSubcaseTypes = (subcaseTypes) => {
@@ -239,10 +206,10 @@ export default class CasesNewSubmissionComponent extends Component {
       agendaItemType: this.agendaItemType,
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       creator: creator,
-      approvalAddresses: this.currentApprovalAddresses,
-      approvalComment: trimText(this.approvalComment),
-      notificationAddresses: this.currentNotificationAddresses,
-      notificationComment: trimText(this.notificationComment),
+      approvalAddresses: this.approvalAddresses,
+      approvalComment: this.approvalComment,
+      notificationAddresses:this.notificationAddresses,
+      notificationComment: this.notificationComment,
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
       governmentAreas: [
@@ -292,11 +259,8 @@ export default class CasesNewSubmissionComponent extends Component {
   });
 
   createNotificationMailResources() {
-    if (this.mailsEnabled) {
-      this.cabinetMail.sendFirstSubmissionMails(
-        this.emailSettings,
-        this.submission,
-      );
+    if (this.approvalAddresses.length && this.notificationAddresses.length) {
+      this.cabinetMail.sendFirstSubmissionMails(this.submission);
     }
   }
 

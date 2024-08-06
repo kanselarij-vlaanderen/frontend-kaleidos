@@ -12,6 +12,7 @@
   @submission={{@model}}
   @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
+  @onStatusUpdated={{this.onStatusUpdated}}
 />
 <div class="auk-scroll-wrapper__body">
   {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
@@ -51,6 +52,18 @@
       @allowEditing={{and this.mayEdit (not this.isUpdate)}}
       @subcase={{@model}}
       @onSave={{this.saveGovernmentAreas}}
+    />
+
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @allowEditing={{this.mayEdit}}
+      @confidential={{@model.confidential}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.onNotificationDataChanged}}
+      @onSaveNotificationData={{this.onSaveNotificationData}}
     />
 
     <div id="documents" class="auk-u-mb-4">
@@ -131,15 +144,17 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="auk-u-bg-alt">
-          <ul class="vlc-status-timeline">
-            {{#each this.statusChangeActivities as |activity|}}
-              <Submission::StatusChangeActivity
-                @activity={{activity}}
-                @creatorName={{this.creatorName}}
-                @beingTreatedByName={{@model.beingTreatedBy.fullName}}
-              />
-            {{/each}}
-          </ul>
+          {{#if this.reloadHistory.isIdle}}
+            <ul class="vlc-status-timeline">
+              {{#each this.statusChangeActivities as |activity|}}
+                <Submission::StatusChangeActivity
+                  @activity={{activity}}
+                  @creatorName={{this.creatorName}}
+                  @beingTreatedByName={{@model.beingTreatedBy.fullName}}
+                />
+              {{/each}}
+            </ul>
+          {{/if}}
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>

@@ -5,6 +5,7 @@ import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { isPresent } from '@ember/utils';
 
 export default class SubmissionHeaderComponent extends Component {
   @service agendaService;
@@ -133,7 +134,7 @@ export default class SubmissionHeaderComponent extends Component {
    * @private
    */
   _updateSubmission = async (statusUri, comment) => {
-    this.args.submission.updateStatus(statusUri, comment);
+    await this.args.submission.updateStatus(statusUri, comment);
   };
 
   resubmitSubmission = task(async () => {
@@ -142,6 +143,9 @@ export default class SubmissionHeaderComponent extends Component {
       this.comment
     );
     this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 
   createSubcase = dropTask(
@@ -258,6 +262,7 @@ export default class SubmissionHeaderComponent extends Component {
             file,
             documentContainer,
             originalName: previousPiece?.originalName,
+            draftPiece: draftPiece
           });
           await piece.save();
           this.piecesMovedCounter++;
@@ -307,6 +312,9 @@ export default class SubmissionHeaderComponent extends Component {
     const currentUser = this.currentSession.user;
     this.args.submission.beingTreatedBy = currentUser;
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   };
 
   sendBackToSubmitter = task(async () => {
@@ -318,6 +326,9 @@ export default class SubmissionHeaderComponent extends Component {
       this.args.submission,
       this.comment
     );
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 
   deleteSubmission = task(async () => {
