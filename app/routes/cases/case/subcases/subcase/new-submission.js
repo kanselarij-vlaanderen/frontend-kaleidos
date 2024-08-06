@@ -13,6 +13,11 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   defaultAccessLevel;
   submitter;
   mandatees;
+  originalSubmission;
+  approvalAddresses;
+  approvalComment;
+  notificationAddresses;
+  notificationComment;
 
   async beforeModel(_transition) {
     const linkedMandatees = await this.store.queryAll('mandatee', {
@@ -94,8 +99,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     const subcaseMandatees = await subcase.mandatees;
     for (const subcaseMandatee of subcaseMandatees) {
       let found = false;
+      const subcaseMandateePerson = await subcaseMandatee.person;
       for (const mandatee of this.mandatees) {
-        if (mandatee.id === subcaseMandatee.id) {
+        const existingMandateePerson = await mandatee.person;
+        if (existingMandateePerson.id === subcaseMandateePerson.id) {
           found = true;
           break;
         }
@@ -104,6 +111,20 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
         this.mandatees.push(subcaseMandatee);
       }
     }
+
+    const submissions = await subcase.submissions;
+    this.originalSubmission = submissions
+      .slice()
+      .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
+      .at(0);
+
+    if (this.originalSubmission) {
+      this.approvalAddresses = this.originalSubmission.approvalAddresses;
+      this.approvalComment = this.originalSubmission.approvalComment;
+      this.notificationAddresses = this.originalSubmission.notificationAddresses;
+      this.notificationComment = this.originalSubmission.notificationComment;
+    }
+
     return subcase;
   }
 
@@ -113,5 +134,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.requestedBy = this.submitter;
     controller.mandatees = this.mandatees;
+    controller.originalSubmission = this.originalSubmission;
+    controller.approvalAddresses = this.approvalAddresses;
+    controller.approvalComment = this.approvalComment;
+    controller.notificationAddresses = this.notificationAddresses;
+    controller.notificationComment = this.notificationComment;
   }
 }

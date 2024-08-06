@@ -39,8 +39,10 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
       const subcaseMandatees = await model.latestSubcase.mandatees;
       for (const subcaseMandatee of subcaseMandatees) {
         let found = false;
+        const subcaseMandateePerson = await subcaseMandatee.person;
         for (const existingMandatee of this.mandatees) {
-          if (existingMandatee.id === subcaseMandatee.id) {
+          const existingMandateePerson = await existingMandatee.person;
+          if (existingMandateePerson.id === subcaseMandateePerson.id) {
             found = true;
             break;
           }

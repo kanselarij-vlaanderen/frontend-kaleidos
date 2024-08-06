@@ -22,6 +22,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service agendaService;
 
   defaultAccessLevel;
+  originalSubmission;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenCreateSubmissionModal = false;
@@ -29,6 +30,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked comment;
   @tracked approvalComment;
   @tracked notificationComment;
+  @tracked approvalAddresses = new TrackedArray([]);
+  @tracked notificationAddresses = new TrackedArray([]);
   @tracked pieces = new TrackedArray([]);
   @tracked newPieces = new TrackedArray([]);
   @tracked newDraftPieces = new TrackedArray([]);
@@ -175,6 +178,13 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       .sort((m1, m2) => m1.priority - m2.priority);
   };
 
+  onNotificationDataChanged = async (newNotificationData) => {
+    this.approvalAddresses = newNotificationData.approvalAddresses;
+    this.approvalComment = newNotificationData.approvalComment;
+    this.notificationAddresses = newNotificationData.notificationAddresses;
+    this.notificationComment = newNotificationData.notificationComment;
+  };
+
   createSubmission = dropTask(async () => {
     const now = new Date();
     this.isOpenCreateSubmissionModal = false;
@@ -195,33 +205,28 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
 
-    const submissions = await this.model.submissions;
-    const originalSubmission = submissions
-      .slice()
-      .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
-      .at(0);
-    const meeting = await originalSubmission?.meeting;
+    const meeting = await this.originalSubmission?.meeting;
 
-    const status = originalSubmission ? updateSubmitted : submitted;
+    const status = this.originalSubmission ? updateSubmitted : submitted;
 
     const creator = await this.currentSession.user;
     // TODO fix cache issue that leaves meeting null for KDB
-    const plannedStart = meeting?.plannedStart || originalSubmission?.plannedStart;
+    const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
       created: now,
       creator,
       modified: now,
       shortTitle: trimText(this.model.shortTitle),
-      title: originalSubmission?.title,
+      title: this.originalSubmission?.title,
       confidential: this.model.confidential,
       subcase: this.model,
       type,
       agendaItemType,
       decisionmakingFlow,
-      approvalAddresses: originalSubmission?.approvalAddresses,
+      approvalAddresses: this.approvalAddresses,
       approvalComment: trimText(this.approvalComment),
-      notificationAddresses: originalSubmission?.notificationAddresses,
+      notificationAddresses: this.notificationAddresses,
       notificationComment: trimText(this.notificationComment),
       mandatees,
       requestedBy,
