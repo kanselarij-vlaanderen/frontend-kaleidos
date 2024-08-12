@@ -85,7 +85,7 @@ context('signatures shortlist overview tests', () => {
     .day(5);
 
   const primeMandatee = mandateeNames.current.first;
-  const mandatee1 = mandateeNames.current.third; // 'Gwendolyn Rutten'
+  const mandatee1 = mandateeNames.current.third; // 'Lydia Peeters'
   const mandatee2 = mandateeNames.current.fourth; // 'Ben Weyts';
   const mandatee3 = mandateeNames.current.fifth; // 'Zuhal Demir'
 
