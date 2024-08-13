@@ -6,7 +6,9 @@
 >
   <:title>
     <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-      {{this.selectedVersion.name}}
+      <span class={{if (responsive "isMobile") "au-u-word-break-all" ""}}>
+        {{this.selectedVersion.name}}
+      </span>
       {{#unless this.loadFile.isRunning}}
         {{#if (and this.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
@@ -14,7 +16,9 @@
             {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
             @iconAlignment="left"
+            @hideText={{(responsive "isMobile")}}
             href={{this.downloadLink}}
+            class="auk-u-mr-2"
             download
           >{{t "download-2"}}</AuLinkExternal>
         {{/if}}
@@ -32,7 +36,7 @@
       </div>
       <div class="auk-panel-layout__sidebar">
         <Documents::DocumentPreview::DocumentPreviewSidebar
-          @isOpen={{or this.sidebarIsOpen (responsive "isMobile")}}
+          @isOpen={{this.sidebarIsOpen}}
           @onCollapse={{this.toggleSidebar}}
           @onOpen={{this.toggleSidebar}}
           @piece={{this.selectedVersion}}
