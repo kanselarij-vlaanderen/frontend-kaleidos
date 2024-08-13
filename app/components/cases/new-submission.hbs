@@ -65,16 +65,6 @@
           </Auk::Panel::Body>
         </Auk::Panel>
 
-        <Cases::Submissions::Notifications
-          class="auk-u-mb-2"
-          @approvalAddresses={{this.currentApprovalAddresses}}
-          @notificationAddresses={{this.addedNotificationAddresses}}
-          @defaultNotificationAddress={{this.defaultNotificationAddress}}
-          @onChangeApprovalAddresses={{fn (mut this.currentApprovalAddresses)}}
-          @onChangeApprovalComment={{fn (mut this.approvalComment)}}
-          @onChangeNotificationAddresses={{fn (mut this.addedNotificationAddresses)}}
-          @onChangeNotificationComment={{fn (mut this.notificationComment)}}
-        />
         <Cases::Subcases::MandateeSelectorPanel
           @mandatees={{this.mandatees}}
           @submitter={{this.submitter}}
@@ -92,6 +82,17 @@
           @onSelectDomains={{this.selectDomain}}
           @onDeselectDomains={{this.deselectDomain}}
           @disabled={{this.createSubcase.isRunning}}
+        />
+        <Cases::Submissions::Notifications
+          class="auk-u-mb-2"
+          @isEditing={{true}}
+          @hideEditingControls={{true}}
+          @confidential={{this.confidential}}
+          @approvalAddresses={{this.approvalAddresses}}
+          @approvalComment={{this.approvalComment}}
+          @notificationAddresses={{this.notificationAddresses}}
+          @notificationComment={{this.notificationComment}}
+          @onNotificationDataChanged={{this.onNotificationDataChanged}}
         />
         <Cases::Submissions::DocumentUploadPanel
           @pieces={{this.sortedPieces}}
