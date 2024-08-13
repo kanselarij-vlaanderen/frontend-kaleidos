@@ -4,8 +4,8 @@ LABEL maintainer="info@redpencil.io"
 
 WORKDIR /app
 COPY .npmrc .
-COPY package.json .
-RUN CYPRESS_INSTALL_BINARY=0 npm install
+COPY package.json package-lock.json ./
+RUN CYPRESS_INSTALL_BINARY=0 npm ci
 COPY . .
 
 RUN ember build -prod
