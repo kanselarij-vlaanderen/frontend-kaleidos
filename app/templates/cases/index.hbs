@@ -7,8 +7,8 @@
 <AuMainContainer
   class="l-search-container
     {{if
-      (and this.hasToggleableFilters this.filtersOpen)
-      'auk-u-scroll-no-overflow'
+      (and (responsive "isMobile") this.filtersOpen)
+      "auk-u-scroll-no-overflow"
     }}"
   as |m|
 >

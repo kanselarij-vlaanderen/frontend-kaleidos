@@ -63,6 +63,18 @@
       @subcase={{@model}}
     />
 
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @isEditing={{true}}
+      @hideEditingControls={{true}}
+      @confidential={{@model.confidential}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.onNotificationDataChanged}}
+    />
+
     <div id="documents" class="auk-u-mb-4">
       <Auk::Panel>
         <Auk::Panel::Header>
@@ -186,26 +198,6 @@
       value=""
       @width="block"
       {{on "input" (pick "target.value" (set this "comment"))}}
-    />
-    <AuLabel for="approvalComment">
-      {{t "additional-information"}}
-    </AuLabel>
-    <AuTextarea
-      @width="block"
-      rows="4"
-      @value=""
-      id="approvalComment"
-      {{on "change" (pick "target.value" (set this "approvalComment"))}}
-    />
-    <AuLabel for="ccComment">
-      {{t "additional-information-for-ikw-group"}}
-    </AuLabel>
-    <AuTextarea
-      @width="block"
-      rows="4"
-      @value=""
-      id="ccComment"
-      {{on "change" (pick "target.value" (set this "notificationComment"))}}
     />
   </:body>
 </ConfirmationModal>

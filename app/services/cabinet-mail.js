@@ -112,10 +112,8 @@ export default class CabinetMailService extends Service {
     }
   }
 
-  async sendFirstSubmissionMails(
-    mailSettings,
-    submission,
-  ) {
+  async sendFirstSubmissionMails(submission) {
+    const { mailSettings } = await this.loadSettings();
     const { outbox } = await this.loadSettings();
     if (outbox) {
       const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
