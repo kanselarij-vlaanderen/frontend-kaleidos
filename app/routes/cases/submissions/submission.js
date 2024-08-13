@@ -128,5 +128,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.previousSubcase = this.previousSubcase;
     controller.creatorName = this.creatorName;
+    controller.approvalAddresses = _model.approvalAddresses;
+    controller.notificationAddresses = _model.notificationAddresses;
+    controller.approvalComment = _model.approvalComment;
+    controller.notificationComment = _model.notificationComment;
   }
 }
