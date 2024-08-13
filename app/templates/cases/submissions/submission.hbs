@@ -54,6 +54,18 @@
       @onSave={{this.saveGovernmentAreas}}
     />
 
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @allowEditing={{this.mayEdit}}
+      @confidential={{@model.confidential}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.onNotificationDataChanged}}
+      @onSaveNotificationData={{this.onSaveNotificationData}}
+    />
+
     <div id="documents" class="auk-u-mb-4">
       <Auk::Panel>
         <Auk::Panel::Header>

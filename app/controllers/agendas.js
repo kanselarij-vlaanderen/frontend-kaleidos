@@ -17,7 +17,6 @@ export default class AgendasController extends Controller {
   @service store;
   @service router;
   @service mandatees;
-
   defaultPublicationActivityStatus;
   @tracked newMeeting;
   @tracked publicationActivities = [];
