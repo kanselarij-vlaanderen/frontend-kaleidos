@@ -18,6 +18,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service toaster;
   @service pieceUpload;
   @service subcaseService;
+  @service agendaitemAndSubcasePropertiesSync
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -208,13 +209,24 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees,
           governmentAreas,
         });
+        await subcase.save();
       } else {
         await subcase.belongsTo('requestedBy')?.reload();
         await subcase.hasMany('mandatees')?.reload();
-        subcase.requestedBy = requestedBy;
-        subcase.mandatees = mandatees;
+        const propertiesToSetOnAgendaitem = {
+          mandatees: mandatees,
+        };
+        const propertiesToSetOnSubcase = {
+          mandatees: mandatees,
+          requestedBy: requestedBy,
+        };
+        await this.agendaitemAndSubcasePropertiesSync.saveChanges(
+          subcase,
+          propertiesToSetOnAgendaitem,
+          propertiesToSetOnSubcase,
+          true,
+        );
       }
-      await subcase.save();
 
       this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
