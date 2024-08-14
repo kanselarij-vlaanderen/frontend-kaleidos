@@ -20,6 +20,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service currentSession;
   @service documentService;
   @service agendaService;
+  @service draftSubmissionService;
 
   defaultAccessLevel;
   originalSubmission;
@@ -186,7 +187,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   };
 
   createSubmission = dropTask(async () => {
-    const now = new Date();
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
@@ -209,14 +209,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
 
-    const creator = await this.currentSession.user;
     // TODO fix cache issue that leaves meeting null for KDB
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
-      created: now,
-      creator,
-      modified: now,
       shortTitle: trimText(this.model.shortTitle),
       title: this.originalSubmission?.title,
       confidential: this.model.confidential,
@@ -246,16 +242,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.newDraftPieces = new TrackedArray([]);
 
     // Create submission change
-    const submissionStatusChange = this.store.createRecord(
-      'submission-status-change-activity',
-      {
-        startedAt: now,
-        comment: this.comment,
-        submission: this.submission,
-        status,
-      }
-    );
-    await submissionStatusChange.save();
+    await this.draftSubmissionService.createStatusChange(this.submission, status.uri, this.comment);
 
     if (meeting) {
       try {
