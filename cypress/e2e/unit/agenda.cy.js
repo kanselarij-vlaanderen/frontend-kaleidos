@@ -220,9 +220,9 @@ context('Agenda tests', () => {
     // This should technicaly fail but we simulate whitespace before of the actual value for readability
     cy.get('@longTitle').contains(subcaseTitleLong);
     // comment is not trimmed
-    cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
+    cy.get(agenda.agendaitemTitlesView.comment).contains(whitespace + comment + whitespace);
     // privatec comment is not trimmed
-    cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
+    cy.get(agenda.agendaitemTitlesView.privateComment).contains(whitespace + privateComment + whitespace);
     cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
 
     // rollback confidentiality should work
