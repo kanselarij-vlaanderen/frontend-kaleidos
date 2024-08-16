@@ -52,7 +52,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
       'filter[:or:][pieces][:has-no:accepted-piece]': 't',
       'filter[:or:][pieces][accepted-piece][:has-no:agendaitems]': 't',
       include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
-      sort: params.sort + ',-modified',
+      sort: params.sort + (params.sort ? ',' : '') + '-modified',
       page: {
         number: params.page,
         size: params.size,
