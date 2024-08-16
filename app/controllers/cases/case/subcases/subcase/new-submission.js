@@ -209,7 +209,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     if (this.originalSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
       meeting = await this.store.queryOne('meeting', {
-        'filter[:has:plannedStart]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+        'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
         'filter[submissions][:id:]': this.originalSubmission.id
       });
     }
