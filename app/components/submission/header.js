@@ -169,7 +169,7 @@ export default class SubmissionHeaderComponent extends Component {
       let decisionmakingFlow = await this.args.submission.decisionmakingFlow;
       if (!decisionmakingFlow) {
         decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
-          title: this.args.submission.title,
+          title: this.args.submission.decisionmakingFlowTitle,
           opened: this.args.submission.created,
           governmentAreas,
           submissions: [this.args.submission],
@@ -177,7 +177,7 @@ export default class SubmissionHeaderComponent extends Component {
         await decisionmakingFlow.save();
 
         const _case = this.store.createRecord('case', {
-          shortTitle: this.args.submission.title,
+          shortTitle: this.args.submission.decisionmakingFlowTitle,
           created: this.args.submission.created,
           decisionmakingFlow,
         });
@@ -198,6 +198,8 @@ export default class SubmissionHeaderComponent extends Component {
         }
         subcase = this.store.createRecord('subcase', {
           shortTitle: this.args.submission.shortTitle,
+          title: this.args.submission.title,
+          subcaseName: this.args.submission.subcaseName,
           created: this.args.submission.created,
           modified: now,
           confidential: this.args.submission.confidential,

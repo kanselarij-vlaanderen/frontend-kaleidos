@@ -215,6 +215,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
+    const title = this.originalSubmission ? this.originalSubmission.title : this.model.title;
+    const subcaseName = this.originalSubmission ? this.originalSubmission.subcaseName : this.model.subcaseName;
 
     const creator = await this.currentSession.user;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
@@ -224,7 +226,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       creator,
       modified: now,
       shortTitle: trimText(this.model.shortTitle),
-      title: this.originalSubmission?.title,
+      title: trimText(title),
+      subcaseName,
       confidential: this.model.confidential,
       subcase: this.model,
       type,

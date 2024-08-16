@@ -33,6 +33,8 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked agendaItemType;
   @tracked confidential = false;
   @tracked shortTitle;
+  @tracked title;
+  @tracked subcaseName;
 
   @tracked type;
 
@@ -72,6 +74,8 @@ export default class CasesNewSubmissionComponent extends Component {
       this.confidential = this.latestSubcase.confidential;
       this.shortTitle = this.latestSubcase.shortTitle;
       this.type = await this.latestSubcase.type;
+      this.title = this.latestSubcase.title;
+      this.subcaseName = this.latestSubcase.subcaseName;
       this.governmentAreas = await this.latestSubcase.governmentAreas;
       for (const governmentArea of this.governmentAreas) {
         await governmentArea.broader;
@@ -200,10 +204,13 @@ export default class CasesNewSubmissionComponent extends Component {
       created: now,
       modified: now,
       shortTitle: trimText(this.shortTitle ?? decisionmakingFlowTitle),
-      title: trimText(decisionmakingFlowTitle),
+      title: trimText(this.title),
+      subcaseName: this.subcaseName,
       confidential: this.confidential,
       type: this.type,
       agendaItemType: this.agendaItemType,
+      // either we set the decisionmakingFlowTitle or the decisionmakingFlow, never both
+      decisionmakingFlowTitle: this.selectedDecisionmakingFlow ? '' : trimText(decisionmakingFlowTitle),
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       creator: creator,
       approvalAddresses: this.approvalAddresses,

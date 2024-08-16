@@ -1407,6 +1407,8 @@
   "remarks-for-secretary-about-submission": "Opmerkingen voor de secretarie over de indiening",
   "date-put-on-agenda": "Datum agendering",
   "submission": "Indiening",
+  "submission-new-case": "Indiening voor nieuw dossier",
+  "submission-existing-case": "Indiening voor bestaand dossier",
   "all-submissions": "Alle indieningen",
   "take-in-treatment": "Neem in behandeling",
   "create-subcase-and-put-on-agenda": "Maak procedurestap en agendeer",
