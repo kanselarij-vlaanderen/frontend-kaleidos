@@ -61,6 +61,15 @@
                       {{else}}
                         -
                       {{/if}}
+                      {{#if submission.confidential}}
+                        <AuPill
+                          @size="small"
+                          @skin="warning"
+                          @icon="lock-closed"
+                        >
+                          {{t "limited-access"}} 
+                        </AuPill>
+                      {{/if}}
                     </p>
                   </td>
                   <td>
