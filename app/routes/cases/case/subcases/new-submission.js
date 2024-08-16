@@ -5,6 +5,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   @service currentSession;
   @service store;
+  @service router;
 
   submitter;
   mandatees;

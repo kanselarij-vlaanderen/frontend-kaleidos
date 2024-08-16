@@ -8,6 +8,7 @@ import { TrackedArray } from 'tracked-built-ins';
 export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
 
   pieces;
   defaultAccessLevel;
