@@ -10,6 +10,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
   @service currentSession;
   @service conceptStore;
   @service store;
+  @service router;
 
   queryParams = {
     page: {
@@ -37,6 +38,12 @@ export default class CasesSubmissionsIndexRoute extends Route {
       as: 'indieners',
     },
   };
+
+  async beforeModel() {
+    if (!this.currentSession.may('view-submissions')) {
+      this.router.transitionTo('cases');
+    }
+  }
 
   async model(params) {
     // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second

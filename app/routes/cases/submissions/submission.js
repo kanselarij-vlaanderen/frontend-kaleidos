@@ -17,7 +17,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
-      this.router.transitionTo('index');
+      this.router.transitionTo('cases');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
