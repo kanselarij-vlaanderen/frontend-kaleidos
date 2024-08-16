@@ -1424,7 +1424,7 @@
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
   "submit-new-documents": "Dien nieuwe documenten in",
   "submit-new-case": "Nieuw dossier indienen",
-  "submit-new-subcase": "Nieuwe procedurestap indienen",
+  "submit-new-agendaitem": "Nieuw agendapunt indienen",
   "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen?",
   "document-naming--toast-generating--message": "De VR nummers worden toegepast.",
   "error-while-fetching-document-naming-mapping": "Er ging iets fout tijdens het berekenen van de VR nummers.",
