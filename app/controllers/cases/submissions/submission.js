@@ -141,7 +141,13 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       }
     }
     this.documentContainerIds = documentContainerIds;
-    this.newDraftPieces = newPieces;
+    for (const newPiece of newPieces) {
+      await newPiece.documentContainer;
+    }
+    const sortedNewPieces = newPieces?.slice().sort(
+      (p1, p2) => p1.documentContainer.get('position') - p2.documentContainer.get('position')
+    );
+    this.newDraftPieces = sortedNewPieces;
   });
 
   updateDraftPiecePositions = async () => {
@@ -156,7 +162,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         }
       }
     }
-    this.reloadPieces.perform();
+    await this.reloadPieces.perform();
   };
 
   @action
@@ -209,10 +215,9 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       }
     });
     await Promise.all(savePromises);
-
+    await this.updateDraftPiecePositions();
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-    this.reloadPieces.perform();
   });
 
   savePiece = task(async (piece, index) => {

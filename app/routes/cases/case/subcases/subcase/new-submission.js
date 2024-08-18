@@ -20,6 +20,9 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   notificationComment;
 
   async beforeModel(_transition) {
+    if (!this.currentSession.may('create-submissions')) {
+      this.router.transitionTo('cases.submissions');
+    }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
       'filter[:has-no:end]': true,

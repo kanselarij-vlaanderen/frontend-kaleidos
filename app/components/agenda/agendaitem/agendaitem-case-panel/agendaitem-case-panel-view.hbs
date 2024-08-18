@@ -141,39 +141,32 @@
     </div>
   </Auk::Panel::Body>
   {{#if @agendaitem.comment}}
-    <Auk::Panel::Footer class="auk-u-maximize-height">
-      <Auk::Toolbar as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
-          <Group.Item>
-            <pre
-              class="auk-u-text-pre-line"
-              data-test-agendaitem-titles-comment
-            >
-              {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
-              {{! prettier-ignore }}
-              <strong class="auk-u-text-bold">{{t "comment-title"}}: </strong>{{@agendaitem.comment}}
-            </pre>
-          </Group.Item>
-        </Toolbar.Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Footer>
+    <Auk::Panel::Body class="auk-u-maximize-height au-u-padding-top-small au-u-padding-bottom-small">
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-start">
+        <div class="au-u-flex-item--fixed auk-u-text-bold">{{t "comment-title"}}:</div>
+        <pre
+          class="auk-u-text-pre-line"
+          data-test-agendaitem-titles-comment
+        >
+          {{@agendaitem.comment}}
+        </pre>
+      </div>
+    </Auk::Panel::Body>
   {{/if}}
   {{#if @agendaitem.privateComment}}
-    <Auk::Panel::Footer class="auk-u-maximize-height auk-u-bg-alt">
-      <Auk::Toolbar as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
-          <Group.Item>
-            <pre
-              class="auk-u-text-pre-line auk-u-text-muted"
-              data-test-agendaitem-titles-private-comment
-            >
-              {{! Strong opening and closing on 1 line to prevent whitespace to be rendered. }}
-              {{! prettier-ignore }}
-              <strong class="auk-u-text-bold"><AuIcon @icon="lock-closed" />{{t "private-comment-title"}}: </strong>{{@agendaitem.privateComment}}
-            </pre>
-          </Group.Item>
-        </Toolbar.Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Footer>
+    <Auk::Panel::Body class="auk-u-maximize-height auk-u-bg-alt au-u-padding-top-small au-u-padding-bottom-small">
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-start">
+        <div class="au-u-flex-item--fixed au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">
+          <AuIcon @icon="lock-closed" />
+          <span>{{t "private-comment-title"}}:</span>
+        </div>
+        <pre
+          class="au-u-flex-item--fill auk-u-text-pre-line auk-u-text-muted"
+          data-test-agendaitem-titles-private-comment
+        >
+          {{@agendaitem.privateComment}}
+        </pre>
+      </div>
+    </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>

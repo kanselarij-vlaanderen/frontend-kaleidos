@@ -205,12 +205,18 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
 
-    const meeting = await this.originalSubmission?.meeting;
+    let meeting;
+    if (this.originalSubmission) {
+      // this fixes a cache issue that leaves meeting null for KDB
+      meeting = await this.store.queryOne('meeting', {
+        'filter[:has:plannedStart]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+        'filter[submissions][:id:]': this.originalSubmission.id
+      });
+    }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
 
     const creator = await this.currentSession.user;
-    // TODO fix cache issue that leaves meeting null for KDB
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
