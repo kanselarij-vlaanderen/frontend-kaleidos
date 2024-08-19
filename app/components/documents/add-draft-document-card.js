@@ -227,8 +227,6 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
       yield deletePiece(this.piece);
       if (isPresent(this.args.onDeletePiece)) {
         yield this.args.onDeletePiece(this.piece, previousPiece);
-        yield this.loadPieceRelatedData.perform();
-        this.loadFiles.perform();
       }
     }
   }

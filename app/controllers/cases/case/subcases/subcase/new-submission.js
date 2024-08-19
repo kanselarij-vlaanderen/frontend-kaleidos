@@ -69,6 +69,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       } else {
         this.pieces.splice(index, 1);
       }
+      this.pieces = [...this.pieces];
       removeObject(this.newDraftPieces, piece);
     }
   };
