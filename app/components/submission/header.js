@@ -144,7 +144,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
       this.comment
     );
-    this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -333,7 +333,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
       this.comment
     );
-    this.cabinetMail.sendBackToSubmitterMail(
+    await this.cabinetMail.sendBackToSubmitterMail(
       this.args.submission,
       this.comment
     );
