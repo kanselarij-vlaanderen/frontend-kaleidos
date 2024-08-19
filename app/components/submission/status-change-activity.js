@@ -9,7 +9,7 @@ const {
   OPNIEUW_INGEDIEND,
   UPDATE_INGEDIEND,
   TERUGGESTUURD,
-  AANVAARD,
+  BEHANDELD,
 } = CONSTANTS.SUBMISSION_STATUSES;
 
 export default class SubmissionStatusChangeActivityComponent extends Component {
@@ -21,7 +21,7 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
     [TERUGGESTUURD]: 'sent-back-on',
     [IN_BEHANDELING]: 'in-treatment-by-user-on',
     [UPDATE_INGEDIEND]: 'update-submitted-on',
-    [AANVAARD]: 'accepted-on',
+    [BEHANDELD]: 'treated-on',
   };
 
   get label() {

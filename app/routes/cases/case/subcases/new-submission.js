@@ -5,13 +5,17 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   @service currentSession;
   @service store;
+  @service router;
 
   submitter;
   mandatees;
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
-      this.router.transitionTo('cases.submissions');
+      if (this.currentSession.may('view-submissions')) {
+        return this.router.transitionTo('cases.submissions');
+      }
+      return this.router.transitionTo('cases');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,

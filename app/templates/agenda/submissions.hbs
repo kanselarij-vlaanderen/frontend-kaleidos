@@ -61,6 +61,21 @@
                       {{else}}
                         -
                       {{/if}}
+                      {{#if (not submission.decisionmakingFlow.id)}}
+                        <span class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+                          <Auk::ColorBadge @skin="success" />
+                          {{t "new-case"}}
+                        </span>
+                      {{/if}}
+                      {{#if submission.confidential}}
+                        <AuPill
+                          @size="small"
+                          @skin="warning"
+                          @icon="lock-closed"
+                        >
+                          {{t "limited-access"}} 
+                        </AuPill>
+                      {{/if}}
                     </p>
                   </td>
                   <td>

@@ -9,7 +9,9 @@ export default class SubmissionModel extends Model {
   @attr uri;
   @attr shortTitle;
   @attr title;
+  @attr decisionmakingFlowTitle;
   @attr('boolean') confidential;
+  @attr subcaseName;
   @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
