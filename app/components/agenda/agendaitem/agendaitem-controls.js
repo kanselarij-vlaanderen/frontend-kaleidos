@@ -23,6 +23,7 @@ export default class AgendaitemControls extends Component {
   @service decisionReportGeneration;
   @service parliamentService;
   @service newsletterService;
+  @service draftSubmissionService;
 
   @tracked isVerifying = false;
   @tracked isVerifyingSendBack = false;
@@ -187,7 +188,9 @@ export default class AgendaitemControls extends Component {
   async verifySendBackToSubmitter(agendaitem) {
     this.isSendingBackToSubmitter = true;
     const submission = this.submissions.at(0);
-    await submission.updateStatus(CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD);
+    // needs an option for a comment, Tom was doing this?
+    const comment = '' //placeholder
+    await this.draftSubmissionService.updateSubmissionStatus(submission, CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD, comment);
     await this.deleteItem(agendaitem);
     const subcase = await submission.subcase;
     // If decisionmaking flow & case are new & they don't have other subcases

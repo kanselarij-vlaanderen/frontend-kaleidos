@@ -5,6 +5,7 @@ import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class AgendaSubmissionsController extends Controller {
   @service router;
+  @service draftSubmissionService;
 
   queryParams = [
     {
@@ -46,5 +47,9 @@ export default class AgendaSubmissionsController extends Controller {
         .map((mandatee) => mandatee.person)
     );
     return persons.map((person) => person.fullName);
+  };
+
+  getTreatedBy = async (submission) => {
+    return await this.draftSubmissionService.getLatestTreatedBy(submission);
   };
 }

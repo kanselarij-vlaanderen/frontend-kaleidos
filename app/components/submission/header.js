@@ -18,7 +18,8 @@ export default class SubmissionHeaderComponent extends Component {
   @service toaster;
   @service pieceUpload;
   @service subcaseService;
-  @service agendaitemAndSubcasePropertiesSync
+  @service agendaitemAndSubcasePropertiesSync;
+  @service draftSubmissionService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -135,7 +136,7 @@ export default class SubmissionHeaderComponent extends Component {
    * @private
    */
   _updateSubmission = async (statusUri, comment) => {
-    await this.args.submission.updateStatus(statusUri, comment);
+    await this.draftSubmissionService.updateSubmissionStatus(this.args.submission, statusUri, comment);
   };
 
   resubmitSubmission = task(async () => {
@@ -143,7 +144,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
       this.comment
     );
-    this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -321,8 +322,6 @@ export default class SubmissionHeaderComponent extends Component {
   );
 
   takeInTreatment = async () => {
-    const currentUser = this.currentSession.user;
-    this.args.submission.beingTreatedBy = currentUser;
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
@@ -334,7 +333,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
       this.comment
     );
-    this.cabinetMail.sendBackToSubmitterMail(
+    await this.cabinetMail.sendBackToSubmitterMail(
       this.args.submission,
       this.comment
     );
@@ -346,6 +345,11 @@ export default class SubmissionHeaderComponent extends Component {
   deleteSubmission = task(async () => {
     const pieces = await this.args.submission.pieces;
     await Promise.all(pieces.map(async (piece) => deletePiece(piece)));
+
+    const statusChangeActivities = await this.args.submission.hasMany('statusChangeActivities').reload();
+    await statusChangeActivities?.map(async (activity) => {
+      await activity.destroyRecord();
+    });
 
     await this.args.submission.destroyRecord();
 
