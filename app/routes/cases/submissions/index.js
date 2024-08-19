@@ -51,7 +51,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[:or:][pieces][:has-no:accepted-piece]': 't',
       'filter[:or:][pieces][accepted-piece][:has-no:agendaitems]': 't',
-      include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
+      include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities,decisionmaking-flow',
       sort: params.sort + (params.sort ? ',' : '') + '-modified',
       page: {
         number: params.page,
