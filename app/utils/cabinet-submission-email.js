@@ -79,9 +79,14 @@ function caseSendBackEmail(params) {
   let message = '';
   message +=
     'Beste,\n' +
-    '\n' +
-    `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd."\t\n` +
-    `U kunt de indiening hier bekijken: ${params.submissionUrl}`;
+    '\n';
+  if (params.comment) {
+    message += `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd met volgende opmerking:"\n` +
+      `${params.comment}\n`;
+  } else {
+    message += `Uw indiening "${params.submissionTitle}" in het dossier: ${params.caseName}, werd teruggestuurd.\n`;
+  }
+  message += `U kunt de indiening hier bekijken: ${params.submissionUrl}`;
 
   return {
     subject,
