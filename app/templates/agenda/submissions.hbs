@@ -109,11 +109,13 @@
                     {{/if}}
                   </td>
                   <td>
-                    {{#if submission.beingTreatedBy}}
-                      {{submission.beingTreatedBy.fullName}}
-                    {{else}}
-                      -
-                    {{/if}}
+                    {{#let (await (this.getTreatedBy submission)) as |beingTreatedBy|}}
+                      {{#if beingTreatedBy}}
+                        {{beingTreatedBy.fullName}}
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
                   </td>
                   <td class="auk-u-text-align--right">
                     <AuLink

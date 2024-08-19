@@ -20,6 +20,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @service intl;
   @service documentService;
   @service submissionService;
+  @service draftSubmissionService;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
@@ -34,6 +35,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked notificationAddresses = new TrackedArray([]);
   @tracked approvalComment;
   @tracked notificationComment;
+  @tracked beingTreatedBy;
 
   currentLinkedMandatee;
 
@@ -113,12 +115,8 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   reloadHistory = task(async () => {
-    const statusChangeActivities = await this.model.statusChangeActivities.reload();
-    this.statusChangeActivities = statusChangeActivities
-      .slice()
-      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
-      .reverse();
-    await Promise.all(this.statusChangeActivities.map((a) => a.status));
+    this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(this.model);
+    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(this.model);
   });
 
   reloadPieces = task(async () => {

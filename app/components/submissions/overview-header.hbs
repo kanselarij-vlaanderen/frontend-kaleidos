@@ -33,10 +33,10 @@
                 />
               {{/if}}
             </h4>
-            {{#if @submission.beingTreatedBy}}
+            {{#if @beingTreatedBy}}
               <span class="auk-u-block">
                 {{t "this-submission-is-being-treated-by-user"
-                    user=@submission.beingTreatedBy.fullName}}
+                    user=@beingTreatedBy.fullName}}
               </span>
             {{/if}}
           {{/unless}}
