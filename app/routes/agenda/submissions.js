@@ -42,7 +42,7 @@ export default class AgendaSubmissionsRoute extends Route{
     const options = {
       'filter[meeting][:id:]': meeting.id,
       'filter[status][:id:]': statusIds.join(','),
-      include: 'type,status,mandatees.person,mandatees.person.organization,being-treated-by,decisionmaking-flow',
+      include: 'type,status,mandatees.person,mandatees.person.organization,decisionmaking-flow',
       sort: params.sort,
       page: {
         number: params.page,
