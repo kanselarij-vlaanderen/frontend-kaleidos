@@ -1422,7 +1422,7 @@
   "sent-back-on": "Teruggestuurd op {date} om {hour}",
   "in-treatment-by-user-on": "In behandeling genomen door {userName} op {date} om {hour}",
   "update-submitted-on": "Update ingediend door {userName} op {date} om {hour}",
-  "accepted-on": "Aanvaard op {date} om {hour}",
+  "treated-on": "Behandeld op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
   "submit-new-documents": "Dien nieuwe documenten in",
   "submit-new-case": "Nieuw dossier indienen",

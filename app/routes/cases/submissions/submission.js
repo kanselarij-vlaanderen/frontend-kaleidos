@@ -42,7 +42,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const status = await submission.status;
     const subcase = await submission.subcase;
-    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.AANVAARD) {
+    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (subcase)  {
         const decisionmakingFlow = await subcase.decisionmakingFlow;
         return this.router.transitionTo(
