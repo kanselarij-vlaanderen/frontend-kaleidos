@@ -5,6 +5,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
+import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
@@ -31,6 +32,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   @tracked documentContainer;
 
   @tracked isOpenUploadModal = false;
+  @tracked isOpenVerifyDeleteModal = false;
   @tracked uploadedFile;
   @tracked newPiece;
   @tracked pieces = new TrackedArray([]);
@@ -140,8 +142,12 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
     }
   }
 
-  get mayShowDropdown() {
+  get mayShowAddNewVersion() {
     return this.piece.constructor.modelName === 'piece';
+  }
+
+  get mayShowDeleteDraftPiece() {
+    return this.piece.constructor.modelName === 'draft-piece';
   }
 
   get sortedPieces() {
@@ -211,5 +217,30 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   *cancelUploadPiece() {
     yield this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
+  }
+
+  @task
+  *deleteDraftPiece() {
+    if (this.piece) {
+      const previousPiece = yield this.piece.previousPiece;
+      removeObject(this.pieces, this.piece);
+      yield deletePiece(this.piece);
+      if (isPresent(this.args.onDeletePiece)) {
+        yield this.args.onDeletePiece(this.piece, previousPiece);
+        yield this.loadPieceRelatedData.perform();
+        this.loadFiles.perform();
+      }
+    }
+  }
+
+  @action
+  async verifyDeleteDraftPiece() {
+    await this.deleteDraftPiece.perform();
+    this.isOpenVerifyDeleteModal = false;
+  }
+
+  @action
+  cancelDeleteDraftPiece() {
+    this.isOpenVerifyDeleteModal = false;
   }
 }

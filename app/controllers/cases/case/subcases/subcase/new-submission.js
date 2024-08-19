@@ -61,6 +61,18 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     addObject(this.newDraftPieces, newVersion);
   };
 
+  onDeletePiece = async (piece, previousPiece) => {
+    const index = this.pieces.indexOf(piece);
+    if (index > -1) {
+      if (previousPiece) {
+        this.pieces[index] = previousPiece;
+      } else {
+        this.pieces.splice(index, 1);
+      }
+      removeObject(this.newDraftPieces, piece);
+    }
+  };
+
   uploadPiece = async (file) => {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
