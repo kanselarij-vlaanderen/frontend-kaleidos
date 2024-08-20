@@ -10,6 +10,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
   @service currentSession;
   @service conceptStore;
   @service store;
+  @service router;
 
   queryParams = {
     page: {
@@ -38,14 +39,20 @@ export default class CasesSubmissionsIndexRoute extends Route {
     },
   };
 
+  async beforeModel() {
+    if (!this.currentSession.may('view-submissions')) {
+      this.router.transitionTo('cases');
+    }
+  }
+
   async model(params) {
     // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[:or:][pieces][:has-no:accepted-piece]': 't',
       'filter[:or:][pieces][accepted-piece][:has-no:agendaitems]': 't',
-      include: 'type,status,requested-by,mandatees.person,being-treated-by,submission-activities',
-      sort: params.sort + ',-modified',
+      include: 'type,status,requested-by,mandatees.person,submission-activities,decisionmaking-flow',
+      sort: params.sort + (params.sort ? ',' : '') + '-modified',
       page: {
         number: params.page,
         size: params.size,

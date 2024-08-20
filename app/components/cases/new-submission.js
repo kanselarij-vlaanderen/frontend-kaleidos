@@ -26,6 +26,7 @@ export default class CasesNewSubmissionComponent extends Component {
   @service toaster;
   @service currentSession;
   @service documentService;
+  @service draftSubmissionService;
 
   @tracked selectedDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
@@ -33,6 +34,8 @@ export default class CasesNewSubmissionComponent extends Component {
   @tracked agendaItemType;
   @tracked confidential = false;
   @tracked shortTitle;
+  @tracked title;
+  @tracked subcaseName;
 
   @tracked type;
 
@@ -72,6 +75,8 @@ export default class CasesNewSubmissionComponent extends Component {
       this.confidential = this.latestSubcase.confidential;
       this.shortTitle = this.latestSubcase.shortTitle;
       this.type = await this.latestSubcase.type;
+      this.title = this.latestSubcase.title;
+      this.subcaseName = this.latestSubcase.subcaseName;
       this.governmentAreas = await this.latestSubcase.governmentAreas;
       for (const governmentArea of this.governmentAreas) {
         await governmentArea.broader;
@@ -183,7 +188,6 @@ export default class CasesNewSubmissionComponent extends Component {
   };
 
   createSubmission = dropTask(async (meeting, comment) => {
-    const now = new Date();
     this.showProposableAgendaModal = false;
     const submitted = await this.store.findRecordByUri(
       'concept',
@@ -195,17 +199,16 @@ export default class CasesNewSubmissionComponent extends Component {
       this.decisionmakingFlowTitle ??
       _case?.shortTitle ??
       '';
-    const creator = await this.currentSession.user;
     this.submission = this.store.createRecord('submission', {
-      created: now,
-      modified: now,
       shortTitle: trimText(this.shortTitle ?? decisionmakingFlowTitle),
-      title: trimText(decisionmakingFlowTitle),
+      title: trimText(this.title),
+      subcaseName: this.subcaseName,
       confidential: this.confidential,
       type: this.type,
       agendaItemType: this.agendaItemType,
+      // either we set the decisionmakingFlowTitle or the decisionmakingFlow, never both
+      decisionmakingFlowTitle: this.selectedDecisionmakingFlow ? '' : trimText(decisionmakingFlowTitle),
       decisionmakingFlow: this.selectedDecisionmakingFlow,
-      creator: creator,
       approvalAddresses: this.approvalAddresses,
       approvalComment: this.approvalComment,
       notificationAddresses:this.notificationAddresses,
@@ -225,17 +228,8 @@ export default class CasesNewSubmissionComponent extends Component {
     await this.savePieces.perform();
 
     // Create submission change
-    const submissionStatusChange = this.store.createRecord(
-      'submission-status-change-activity',
-      {
-        startedAt: now,
-        comment,
-        submission: this.submission,
-        status: submitted,
-      }
-    );
-    await submissionStatusChange.save();
-    this.createNotificationMailResources();
+    await this.draftSubmissionService.createStatusChange(this.submission, submitted.uri, comment);
+    await this.createNotificationMailResources();
 
     if (meeting) {
       try {
@@ -258,9 +252,9 @@ export default class CasesNewSubmissionComponent extends Component {
     }
   });
 
-  createNotificationMailResources() {
+  async createNotificationMailResources() {
     if (this.approvalAddresses.length && this.notificationAddresses.length) {
-      this.cabinetMail.sendFirstSubmissionMails(this.submission);
+      await this.cabinetMail.sendFirstSubmissionMails(this.submission);
     }
   }
 

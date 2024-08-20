@@ -13,21 +13,33 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
         <div>
-          <span class="auk-overline auk-u-block">
-            {{t "submission"}}
-          </span>
-          <h4 class="auk-toolbar-complex__title au-u-padding-none">
-            <Auk::AbbreviatedText
-              @text={{or @submission.shortTitle "-"}}
-              @maxLength={{250}}
-            />
-          </h4>
-          {{#if @submission.beingTreatedBy}}
-            <span class="auk-u-block">
-              {{t "this-submission-is-being-treated-by-user"
-                  user=@submission.beingTreatedBy.fullName}}
+          {{#unless this.loadData.isRunning}}
+            <span class="auk-overline auk-u-block">
+              {{t (if this.case "submission-existing-case" "submission-new-case")}}
             </span>
-          {{/if}}
+            <h4 class="auk-toolbar-complex__title au-u-padding-none">
+              {{#if this.case}}
+                <AuLink
+                  class="au-u-padding-none card-link"
+                  @route="cases.case.subcases"
+                  @model={{this.decisionmakingFlow.id}}
+                >
+                  {{or this.case.shortTitle this.case.title}}
+                </AuLink>
+              {{else}}
+                <Auk::AbbreviatedText
+                  @text={{or @submission.decisionmakingFlowTitle}}
+                  @maxLength={{250}}
+                />
+              {{/if}}
+            </h4>
+            {{#if @beingTreatedBy}}
+              <span class="auk-u-block">
+                {{t "this-submission-is-being-treated-by-user"
+                    user=@beingTreatedBy.fullName}}
+              </span>
+            {{/if}}
+          {{/unless}}
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

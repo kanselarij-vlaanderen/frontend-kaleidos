@@ -17,6 +17,7 @@ export default class CabinetMailService extends Service {
   @service router;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
 
   async loadSettings() {
     const [mailSettings, outbox] = await Promise.all([
@@ -50,12 +51,12 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.title,
+        caseName: submission.decisionmakingFlowTitle,
         comment,
       };
 
       const mail = caseSendBackEmail(params);
-      const creator = await submission.creator;
+      const creator = await this.draftSubmissionService.getCreator(submission);
       const mailResource = this.store.createRecord('email', {
         to: creator.email,
         from: mailSettings.defaultFromEmail,
@@ -77,7 +78,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.title,
+        caseName: submission.decisionmakingFlowTitle,
         comment,
       };
 
@@ -96,7 +97,7 @@ export default class CabinetMailService extends Service {
           message: notificationEmail.message,
         })
       );
-      const creator = await submission.creator;
+      const creator = await this.draftSubmissionService.getCreator(submission);
       const submitterEmailResource = this.store.createRecord('email', {
         to: creator.email,
         from: mailSettings.defaultFromEmail,
@@ -122,7 +123,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.title,
+        caseName: submission.decisionmakingFlowTitle,
         approvalComment: submission.approvalComment,
         notificationComment: submission.notificationComment,
       };
@@ -151,7 +152,7 @@ export default class CabinetMailService extends Service {
         })
       );
 
-      const creator = await submission.creator;
+      const creator = await this.draftSubmissionService.getCreator(submission);
       const submitterMailResource = this.store.createRecord('email', {
         to: creator.email,
         from: mailSettings.defaultFromEmail,
@@ -178,7 +179,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.title,
+        caseName: submission.decisionmakingFlowTitle,
         approvalComment: submission.approvalComment,
         notificationComment: submission.notificationComment,
       };
@@ -207,7 +208,7 @@ export default class CabinetMailService extends Service {
         })
       );
 
-      const creator = await submission.creator;
+      const creator = await this.draftSubmissionService.getCreator(submission);
       const submitterMailResource = this.store.createRecord('email', {
         to: creator.email,
         from: mailSettings.defaultFromEmail,

@@ -19,22 +19,23 @@
           <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
             {{t "content"}}
           </AuHeading>
-          <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
-            <Auk::Tab
-              @route="cases"
-              @current-when="cases.index"
-            >
-              {{t "cases"}}
-            </Auk::Tab>
-            {{#if this.mayShowSubmissionsTab}}
+          {{#if this.mayShowSubmissionsTab}}
+          {{! if viewing submissions is not allowed, it doesn't make sense to add a singular tab for cases}}
+            <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
+              <Auk::Tab
+                @route="cases"
+                @current-when="cases.index"
+              >
+                {{t "cases"}}
+              </Auk::Tab>
               <Auk::Tab
                 @route="cases.submissions"
                 @current-when="cases.submissions"
               >
                 {{t "submissions"}}
               </Auk::Tab>
-            {{/if}}
-          </Auk::Tabs>
+            </Auk::Tabs>
+          {{/if}}
         </nav>
         <Auk::MobileFilters
           @toggleLabel="Filters"

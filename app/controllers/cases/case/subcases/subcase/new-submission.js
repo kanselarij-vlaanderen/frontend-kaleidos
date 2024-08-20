@@ -20,6 +20,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service currentSession;
   @service documentService;
   @service agendaService;
+  @service draftSubmissionService;
 
   defaultAccessLevel;
   originalSubmission;
@@ -186,7 +187,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   };
 
   createSubmission = dropTask(async () => {
-    const now = new Date();
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
@@ -215,16 +215,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
-
-    const creator = await this.currentSession.user;
+    const title = this.originalSubmission ? this.originalSubmission.title : this.model.title;
+    const subcaseName = this.originalSubmission ? this.originalSubmission.subcaseName : this.model.subcaseName;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
-      created: now,
-      creator,
-      modified: now,
       shortTitle: trimText(this.model.shortTitle),
-      title: this.originalSubmission?.title,
+      title: trimText(title),
+      subcaseName,
       confidential: this.model.confidential,
       subcase: this.model,
       type,
@@ -252,16 +250,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.newDraftPieces = new TrackedArray([]);
 
     // Create submission change
-    const submissionStatusChange = this.store.createRecord(
-      'submission-status-change-activity',
-      {
-        startedAt: now,
-        comment: this.comment,
-        submission: this.submission,
-        status,
-      }
-    );
-    await submissionStatusChange.save();
+    await this.draftSubmissionService.createStatusChange(this.submission, status.uri, this.comment);
 
     if (meeting) {
       try {
@@ -269,7 +258,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        this.cabinetMail.sendUpdateSubmissionMails(this.submission);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission);
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
         this.toaster.error(
