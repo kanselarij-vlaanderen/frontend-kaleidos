@@ -1,7 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class SubmissionModel extends Model {
   @service currentSession;
@@ -10,7 +9,9 @@ export default class SubmissionModel extends Model {
   @attr uri;
   @attr shortTitle;
   @attr title;
+  @attr decisionmakingFlowTitle;
   @attr('boolean') confidential;
+  @attr subcaseName;
   @attr('datetime') plannedStart;
   @attr('datetime') created;
   @attr('datetime') modified;
@@ -32,11 +33,7 @@ export default class SubmissionModel extends Model {
   @belongsTo('mandatee', { inverse: null, async: true })
   requestedBy;
   @belongsTo('user', { inverse: null, async: true })
-  creator;
-  @belongsTo('user', { inverse: null, async: true })
   modifiedBy;
-  @belongsTo('user', { inverse: null, async: true })
-  beingTreatedBy;
   @belongsTo('meeting', { inverse: 'submissions', async: true })
   meeting;
 
@@ -44,7 +41,7 @@ export default class SubmissionModel extends Model {
   mandatees;
   @hasMany('submission-activity', { inverse: 'submission', async: true })
   submissionActivities;
-  @hasMany('submission-status-change-activity', { inverse: null, async: true })
+  @hasMany('submission-status-change-activity', { inverse: 'submission', async: true })
   statusChangeActivities;
   @hasMany('concept', { inverse: null, async: true })
   governmentAreas;
@@ -86,28 +83,19 @@ export default class SubmissionModel extends Model {
     );
   }
 
-  async updateStatus(statusUri, comment) {
-    const now = new Date();
+  save() {
+    const dirtyType = this.dirtyType;
     const currentUser = this.currentSession.user;
-    const newStatus = await this.store.findRecordByUri('concept', statusUri);
-
-    const submissionStatusChange = this.store.createRecord(
-      'submission-status-change-activity',
-      {
-        startedAt: now,
-        comment,
-        submission: this,
-        status: newStatus,
+    if (dirtyType != 'deleted') {
+      const now = new Date();
+      this.modified = now;
+      this.modifiedBy = currentUser;
+      if (dirtyType == 'created') {
+        // When saving a newly created record force the creation date to equal
+        // the modified date.
+        this.created = now;
       }
-    );
-    await submissionStatusChange.save();
-
-    this.status = newStatus;
-    this.modified = now;
-    this.modifiedBy = currentUser;
-    const statusChangeActivities = await this.statusChangeActivities;
-    addObject(statusChangeActivities, submissionStatusChange);
-
-    await this.save();
+    }
+    return super.save(...arguments);
   }
 }
