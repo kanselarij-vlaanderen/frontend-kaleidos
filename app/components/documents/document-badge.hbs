@@ -8,7 +8,7 @@
         <p class="vlc-document-list__position">{{documentContainer.position}}.&nbsp;</p>
       {{/if}}
     {{/let}}
-    <AuIcon @icon={{if @isHighlighted "document-added" "document"}} class="au-u-flex-item--fixed" />
+    <AuIcon @icon={{if @isHighlighted "document-added" "document"}} class="au-u-flex-item--fixed vlc-document-badge__icon" />
     <span>
     {{@doc.name}}
     </span>

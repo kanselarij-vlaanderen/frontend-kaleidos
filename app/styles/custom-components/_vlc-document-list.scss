@@ -14,7 +14,7 @@
   padding-left: 1.25rem;
   position: relative;
 
-  .vlc-document-list__position { 
+  .vlc-document-list__position {
     flex: none;
     position: absolute;
     top: .25ex;
@@ -46,11 +46,6 @@
     &:focus {
       color: $auk-color-primary;
     }
-  }
-
-  .au-c-icon {
-    margin-right: 0.5rem;
-    bottom: -.5ex;
   }
 
   .au-c-pill {
